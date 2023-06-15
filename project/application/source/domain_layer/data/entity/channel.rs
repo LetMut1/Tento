@@ -1,5 +1,9 @@
+use extern_crate::serde::Serialize;
 use std::borrow::Cow;
 use super::application_user::ApplicationUser_Id;
+
+#[cfg(feature = "facilitate_non_automatic_functional_testing")]
+use extern_crate::serde::Deserialize;
 
 pub use self::AccessModifier as Channel_AccessModifier;
 pub use self::AccessModifier_ as Channel_AccessModifier_;
@@ -17,7 +21,9 @@ pub use self::ViewingQuantity as Channel_ViewingQuantity;
 pub use self::VisabilityModifier as Channel_VisabilityModifier;
 pub use self::VisabilityModifier_ as Channel_VisabilityModifier_;
 
-#[derive(Clone, Copy)]
+#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[derive(Clone, Copy, Serialize)]
+#[serde(crate = "extern_crate::serde")]
 pub struct Id(i64);
 
 impl Id {
@@ -30,7 +36,9 @@ impl Id {
     }
 }
 
-#[derive(Clone)]
+#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[derive(Clone, Serialize)]
+#[serde(crate = "extern_crate::serde")]
 pub struct Name(String);
 
 impl Name {
@@ -43,6 +51,9 @@ impl Name {
     }
 }
 
+#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[derive(Serialize)]
+#[serde(crate = "extern_crate::serde")]
 pub struct LinkedName(String);
 
 impl LinkedName {
@@ -67,7 +78,9 @@ impl Description {
     }
 }
 
-#[derive(Clone, Copy)]
+#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[derive(Clone, Copy, Serialize)]
+#[serde(crate = "extern_crate::serde")]
 pub struct AccessModifier(i16);
 
 impl AccessModifier {
@@ -90,7 +103,9 @@ pub enum AccessModifier_ {
     Close
 }
 
-#[derive(Clone, Copy)]
+#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[derive(Clone, Copy, Serialize)]
+#[serde(crate = "extern_crate::serde")]
 pub struct VisabilityModifier(i16);
 
 impl VisabilityModifier {
@@ -125,6 +140,9 @@ impl Orientation {
     }
 }
 
+#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[derive(Serialize)]
+#[serde(crate = "extern_crate::serde")]
 pub struct CoverImagePath(String);
 
 impl CoverImagePath {
@@ -137,6 +155,9 @@ impl CoverImagePath {
     }
 }
 
+#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[derive(Serialize)]
+#[serde(crate = "extern_crate::serde")]
 pub struct BackgroundImagePath(String);
 
 impl BackgroundImagePath {

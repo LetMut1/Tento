@@ -1,4 +1,18 @@
 use crate::domain_layer::data::entity::channel::Channel_AccessModifier_;
+use crate::domain_layer::data::entity::channel::Channel_AccessModifier;
+use crate::domain_layer::data::entity::channel::Channel_BackgroundImagePath;
+use crate::domain_layer::data::entity::channel::Channel_CoverImagePath;
+use crate::domain_layer::data::entity::channel::Channel_CreatedAt;
+use crate::domain_layer::data::entity::channel::Channel_Description;
+use crate::domain_layer::data::entity::channel::Channel_Id;
+use crate::domain_layer::data::entity::channel::Channel_LinkedName;
+use crate::domain_layer::data::entity::channel::Channel_MarksQuantity;
+use crate::domain_layer::data::entity::channel::Channel_Name;
+use crate::domain_layer::data::entity::channel::Channel_Orientation;
+use crate::domain_layer::data::entity::channel::Channel_SubscribersQuantity;
+use crate::domain_layer::data::entity::channel::Channel_ViewingQuantity;
+use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
+use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier;
 use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier_;
 use crate::domain_layer::data::entity::channel::Channel;
 use crate::domain_layer::functionality::service::channel__access_modifier_resolver::Channel_AccessModifierResolver;
@@ -9,23 +23,52 @@ use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
-use extern_crate::serde::Deserialize;
 use extern_crate::serde::Serialize;
 use extern_crate::tokio_postgres::Client as Connection;
 use extern_crate::tokio_postgres::types::Type;
 use std::borrow::Cow;
 use super::postgresql_repository::PostgresqlRepository;
 
-// TODO  TODO  TODO  TODO  TODO  Имена ПрепСТейтентов, их отмена - нужно ли это все? TODO  TODO  TODO
-// TODO !!!!!!!1  TODO  TODO  TODO  TODO  Если извне оборачивать в транзакцию, что будет с декларирование подготовленного запроса? То есть: Бегин- создать препэрэд стэйстмент - иполнить пр ст- коммит/роллбэу
+#[cfg(feature = "facilitate_non_automatic_functional_testing")]
+use extern_crate::serde::Deserialize;
 
 impl PostgresqlRepository<Channel<'_>> {
     pub async fn create<'a>(database_1_connection: &'a Connection, insert: Insert) -> Result<Channel<'static>, ErrorAuditor> {
+        let channel_owner = insert.channel_owner.get();
+
+        let channel_name = insert.channel_name.get();
+
+        let channel_linked_name = insert.channel_linked_name.get();
+
+        let channel_description = match insert.channel_description {
+            Some(ref channel_description_) => Some(channel_description_.get()),
+            None => None
+        };
+
+        let channel_access_modifier = Channel_AccessModifierResolver::from_representation(insert.channel_access_modifier).get();
+
+        let channel_visability_modifier = Channel_VisabilityModifierResolver::from_representation(insert.channel_visability_modifier).get();
+
+        let channel_orientation = insert.channel_orientation.get();
+
+        let channel_cover_image_path = match insert.channel_cover_image_path {
+            Some(ref channel_cover_image_path_) => Some(channel_cover_image_path_.get()),
+            None => None
+        };
+
+        let channel_background_image_path = match insert.channel_background_image_path {
+            Some(ref channel_background_image_path_) => Some(channel_background_image_path_.get()),
+            None => None
+        };
+
+        let channel_subscribers_quantity = insert.channel_subscribers_quantity.get();
+
+        let channel_marks_quantity = insert.channel_marks_quantity.get();
+
+        let channel_viewing_quantity = insert.channel_viewing_quantity.get();
+
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let channel_access_modifier = Channel_AccessModifierResolver::from_representation(insert.channel_access_modifier);
-
-        let channel_visability_modifier = Channel_VisabilityModifierResolver::from_representation(insert.channel_visability_modifier);
         let query =
             "INSERT INTO public.channel AS c ( \
                 id, \
@@ -63,18 +106,18 @@ impl PostgresqlRepository<Channel<'_>> {
                 c.created_at::TEXT AS ca;";
 
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&insert.channel_owner, Type::INT8)
-            .add_parameter(&insert.channel_name, Type::TEXT)
-            .add_parameter(&insert.channel_linked_name, Type::TEXT)
-            .add_parameter(&insert.channel_description, Type::TEXT)
+            .add_parameter(&channel_owner, Type::INT8)
+            .add_parameter(&channel_name, Type::TEXT)
+            .add_parameter(&channel_linked_name, Type::TEXT)
+            .add_parameter(&channel_description, Type::TEXT)
             .add_parameter(&channel_access_modifier, Type::INT2)
             .add_parameter(&channel_visability_modifier, Type::INT2)
-            .add_parameter(&insert.channel_orientation, Type::INT2_ARRAY)
-            .add_parameter(&insert.channel_cover_image_path, Type::TEXT)
-            .add_parameter(&insert.channel_background_image_path, Type::TEXT)
-            .add_parameter(&insert.channel_subscribers_quantity, Type::INT8)
-            .add_parameter(&insert.channel_marks_quantity, Type::INT8)
-            .add_parameter(&insert.channel_viewing_quantity, Type::INT8);
+            .add_parameter(&channel_orientation, Type::INT2_ARRAY)
+            .add_parameter(&channel_cover_image_path, Type::TEXT)
+            .add_parameter(&channel_background_image_path, Type::TEXT)
+            .add_parameter(&channel_subscribers_quantity, Type::INT8)
+            .add_parameter(&channel_marks_quantity, Type::INT8)
+            .add_parameter(&channel_viewing_quantity, Type::INT8);
 
         let statement = match database_1_connection.prepare_typed(
             query,
@@ -107,7 +150,7 @@ impl PostgresqlRepository<Channel<'_>> {
         };
 
         let channel_id = match row_registry[0].try_get::<'_, usize, i64>(0) {
-            Ok(channel_id_) => channel_id_,
+            Ok(channel_id_) => Channel_Id::new(channel_id_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -119,7 +162,7 @@ impl PostgresqlRepository<Channel<'_>> {
         };
 
         let channel_created_at = match row_registry[0].try_get::<'_, usize, String>(1) {
-            Ok(channel_created_at_) => channel_created_at_,
+            Ok(channel_created_at_) => Channel_CreatedAt::new(channel_created_at_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -137,8 +180,8 @@ impl PostgresqlRepository<Channel<'_>> {
                 Cow::Owned(insert.channel_name),
                 insert.channel_linked_name,
                 insert.channel_description,
-                channel_access_modifier,
-                channel_visability_modifier,
+                Channel_AccessModifier::new(channel_access_modifier),
+                Channel_VisabilityModifier::new(channel_visability_modifier),
                 insert.channel_orientation,
                 insert.channel_cover_image_path,
                 insert.channel_background_image_path,
@@ -150,7 +193,9 @@ impl PostgresqlRepository<Channel<'_>> {
         );
     }
 
-    pub async fn find_1<'a>(database_1_connection: &'a Connection, channel_id: i64) -> Result<Option<Channel<'static>>, ErrorAuditor> {
+    pub async fn find_1<'a>(database_1_connection: &'a Connection, channel_id: Channel_Id) -> Result<Option<Channel<'static>>, ErrorAuditor> {
+        let channel_id_ = channel_id.get();
+
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =
@@ -171,7 +216,7 @@ impl PostgresqlRepository<Channel<'_>> {
             FROM public.channel c \
             WHERE c.id = $1;";
 
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&channel_id, Type::INT8);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&channel_id_, Type::INT8);
 
         let statement = match database_1_connection.prepare_typed(
             query,
@@ -208,7 +253,7 @@ impl PostgresqlRepository<Channel<'_>> {
         }
 
         let channel_owner = match row_registry[0].try_get::<'_, usize, i64>(0) {
-            Ok(channel_owner) => channel_owner,
+            Ok(channel_owner) => ApplicationUser_Id::new(channel_owner),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -220,7 +265,7 @@ impl PostgresqlRepository<Channel<'_>> {
         };
 
         let channel_name = match row_registry[0].try_get::<'_, usize, String>(1) {
-            Ok(channel_name_) => channel_name_,
+            Ok(channel_name_) => Channel_Name::new(channel_name_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -232,7 +277,7 @@ impl PostgresqlRepository<Channel<'_>> {
         };
 
         let channel_linked_name = match row_registry[0].try_get::<'_, usize, String>(2) {
-            Ok(channel_linked_name_) => channel_linked_name_,
+            Ok(channel_linked_name_) => Channel_LinkedName::new(channel_linked_name_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -244,7 +289,12 @@ impl PostgresqlRepository<Channel<'_>> {
         };
 
         let channel_description = match row_registry[0].try_get::<'_, usize, Option<String>>(3) {
-            Ok(channel_description_) => channel_description_,
+            Ok(channel_description_) => {
+                match channel_description_ {
+                    Some(channel_desciption__) => Some (Channel_Description::new(channel_desciption__)),
+                    None => None
+                }
+            },
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -256,7 +306,7 @@ impl PostgresqlRepository<Channel<'_>> {
         };
 
         let channel_access_modifier = match row_registry[0].try_get::<'_, usize, i16>(4) {
-            Ok(channel_access_modifier_) => channel_access_modifier_,
+            Ok(channel_access_modifier_) => Channel_AccessModifier::new(channel_access_modifier_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -268,7 +318,7 @@ impl PostgresqlRepository<Channel<'_>> {
         };
 
         let channel_visability_modifier = match row_registry[0].try_get::<'_, usize, i16>(5) {
-            Ok(channel_visability_modifier_) => channel_visability_modifier_,
+            Ok(channel_visability_modifier_) => Channel_VisabilityModifier::new(channel_visability_modifier_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -280,7 +330,7 @@ impl PostgresqlRepository<Channel<'_>> {
         };
 
         let channel_orientation = match row_registry[0].try_get::<'_, usize, Vec<i16>>(6) {
-            Ok(channel_orientation_) => channel_orientation_,
+            Ok(channel_orientation_) => Channel_Orientation::new(channel_orientation_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -292,7 +342,12 @@ impl PostgresqlRepository<Channel<'_>> {
         };
 
         let channel_cover_image_path = match row_registry[0].try_get::<'_, usize, Option<String>>(7) {
-            Ok(channel_cover_image_path_) => channel_cover_image_path_,
+            Ok(channel_cover_image_path_) => {
+                match channel_cover_image_path_ {
+                    Some(channel_cover_image_path__) => Some(Channel_CoverImagePath::new(channel_cover_image_path__)),
+                    None => None
+                }
+            },
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -304,7 +359,12 @@ impl PostgresqlRepository<Channel<'_>> {
         };
 
         let channel_background_image_path = match row_registry[0].try_get::<'_, usize, Option<String>>(8) {
-            Ok(channel_background_image_path_) => channel_background_image_path_,
+            Ok(channel_background_image_path_) => {
+                match channel_background_image_path_ {
+                    Some(channel_background_image_path__) => Some(Channel_BackgroundImagePath::new(channel_background_image_path__)),
+                    None => None
+                }
+            },
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -316,7 +376,7 @@ impl PostgresqlRepository<Channel<'_>> {
         };
 
         let channel_subscribers_quantity = match row_registry[0].try_get::<'_, usize, i64>(9) {
-            Ok(channel_subscribers_quantity_) => channel_subscribers_quantity_,
+            Ok(channel_subscribers_quantity_) => Channel_SubscribersQuantity::new(channel_subscribers_quantity_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -328,7 +388,7 @@ impl PostgresqlRepository<Channel<'_>> {
         };
 
         let channel_marks_quantity = match row_registry[0].try_get::<'_, usize, i64>(10) {
-            Ok(channel_marks_quantity_) => channel_marks_quantity_,
+            Ok(channel_marks_quantity_) => Channel_MarksQuantity::new(channel_marks_quantity_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -340,7 +400,7 @@ impl PostgresqlRepository<Channel<'_>> {
         };
 
         let channel_viewing_quantity = match row_registry[0].try_get::<'_, usize, i64>(11) {
-            Ok(channel_viewing_quantity_) => channel_viewing_quantity_,
+            Ok(channel_viewing_quantity_) => Channel_ViewingQuantity::new(channel_viewing_quantity_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -352,7 +412,7 @@ impl PostgresqlRepository<Channel<'_>> {
         };
 
         let channel_created_at = match row_registry[0].try_get::<'_, usize, String>(12) {
-            Ok(channel_created_at_) => channel_created_at_,
+            Ok(channel_created_at_) => Channel_CreatedAt::new(channel_created_at_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -385,7 +445,9 @@ impl PostgresqlRepository<Channel<'_>> {
         );
     }
 
-    pub async fn find_2<'a>(database_1_connection: &'a Connection, channel_name: &'a str) -> Result<Option<Channel<'a>>, ErrorAuditor> {
+    pub async fn find_2<'a>(database_1_connection: &'a Connection, channel_name: &'a Channel_Name) -> Result<Option<Channel<'a>>, ErrorAuditor> {
+        let channel_name_ = channel_name.get();
+
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =
@@ -406,7 +468,7 @@ impl PostgresqlRepository<Channel<'_>> {
             FROM public.channel c \
             WHERE c.name = $1;";
 
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&channel_name, Type::TEXT);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&channel_name_, Type::TEXT);
 
         let statement = match database_1_connection.prepare_typed(
             query,
@@ -443,7 +505,7 @@ impl PostgresqlRepository<Channel<'_>> {
         }
 
         let channel_id = match row_registry[0].try_get::<'_, usize, i64>(0) {
-            Ok(channel_id_) => channel_id_,
+            Ok(channel_id_) => Channel_Id::new(channel_id_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -455,7 +517,7 @@ impl PostgresqlRepository<Channel<'_>> {
         };
 
         let channel_owner = match row_registry[0].try_get::<'_, usize, i64>(1) {
-            Ok(channel_owner_) => channel_owner_,
+            Ok(channel_owner_) => ApplicationUser_Id::new(channel_owner_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -467,7 +529,7 @@ impl PostgresqlRepository<Channel<'_>> {
         };
 
         let channel_linked_name = match row_registry[0].try_get::<'_, usize, String>(2) {
-            Ok(channel_linked_name_) => channel_linked_name_,
+            Ok(channel_linked_name_) => Channel_LinkedName::new(channel_linked_name_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -479,7 +541,12 @@ impl PostgresqlRepository<Channel<'_>> {
         };
 
         let channel_description = match row_registry[0].try_get::<'_, usize, Option<String>>(3) {
-            Ok(channel_description_) => channel_description_,
+            Ok(channel_description_) => {
+                match channel_description_ {
+                    Some(channel_desciption__) => Some (Channel_Description::new(channel_desciption__)),
+                    None => None
+                }
+            },
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -491,7 +558,7 @@ impl PostgresqlRepository<Channel<'_>> {
         };
 
         let channel_access_modifier = match row_registry[0].try_get::<'_, usize, i16>(4) {
-            Ok(channel_access_modifier_) => channel_access_modifier_,
+            Ok(channel_access_modifier_) => Channel_AccessModifier::new(channel_access_modifier_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -503,7 +570,7 @@ impl PostgresqlRepository<Channel<'_>> {
         };
 
         let channel_visability_modifier = match row_registry[0].try_get::<'_, usize, i16>(5) {
-            Ok(channel_visability_modifier_) => channel_visability_modifier_,
+            Ok(channel_visability_modifier_) => Channel_VisabilityModifier::new(channel_visability_modifier_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -515,7 +582,7 @@ impl PostgresqlRepository<Channel<'_>> {
         };
 
         let channel_orientation = match row_registry[0].try_get::<'_, usize, Vec<i16>>(6) {
-            Ok(channel_orientation_) => channel_orientation_,
+            Ok(channel_orientation_) => Channel_Orientation::new(channel_orientation_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -527,7 +594,12 @@ impl PostgresqlRepository<Channel<'_>> {
         };
 
         let channel_cover_image_path = match row_registry[0].try_get::<'_, usize, Option<String>>(7) {
-            Ok(channel_cover_image_path_) => channel_cover_image_path_,
+            Ok(channel_cover_image_path_) => {
+                match channel_cover_image_path_ {
+                    Some(channel_cover_image_path__) => Some(Channel_CoverImagePath::new(channel_cover_image_path__)),
+                    None => None
+                }
+            },
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -539,7 +611,12 @@ impl PostgresqlRepository<Channel<'_>> {
         };
 
         let channel_background_image_path = match row_registry[0].try_get::<'_, usize, Option<String>>(8) {
-            Ok(channel_background_image_path_) => channel_background_image_path_,
+            Ok(channel_background_image_path_) => {
+                match channel_background_image_path_ {
+                    Some(channel_background_image_path__) => Some(Channel_BackgroundImagePath::new(channel_background_image_path__)),
+                    None => None
+                }
+            },
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -551,7 +628,7 @@ impl PostgresqlRepository<Channel<'_>> {
         };
 
         let channel_subscribers_quantity = match row_registry[0].try_get::<'_, usize, i64>(9) {
-            Ok(channel_subscribers_quantity_) => channel_subscribers_quantity_,
+            Ok(channel_subscribers_quantity_) => Channel_SubscribersQuantity::new(channel_subscribers_quantity_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -563,7 +640,7 @@ impl PostgresqlRepository<Channel<'_>> {
         };
 
         let channel_marks_quantity = match row_registry[0].try_get::<'_, usize, i64>(10) {
-            Ok(channel_marks_quantity_) => channel_marks_quantity_,
+            Ok(channel_marks_quantity_) => Channel_MarksQuantity::new(channel_marks_quantity_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -575,7 +652,7 @@ impl PostgresqlRepository<Channel<'_>> {
         };
 
         let channel_viewing_quantity = match row_registry[0].try_get::<'_, usize, i64>(11) {
-            Ok(channel_viewing_quantity_) => channel_viewing_quantity_,
+            Ok(channel_viewing_quantity_) => Channel_ViewingQuantity::new(channel_viewing_quantity_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -587,7 +664,7 @@ impl PostgresqlRepository<Channel<'_>> {
         };
 
         let channel_created_at = match row_registry[0].try_get::<'_, usize, String>(12) {
-            Ok(channel_created_at_) => channel_created_at_,
+            Ok(channel_created_at_) => Channel_CreatedAt::new(channel_created_at_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -622,29 +699,29 @@ impl PostgresqlRepository<Channel<'_>> {
 }
 
 pub struct Insert {
-    pub channel_owner: i64,
-    pub channel_name: String,
-    pub channel_linked_name: String,
-    pub channel_description: Option<String>,
+    pub channel_owner: ApplicationUser_Id,
+    pub channel_name: Channel_Name,
+    pub channel_linked_name: Channel_LinkedName,
+    pub channel_description: Option<Channel_Description>,
     pub channel_access_modifier: Channel_AccessModifier_,
     pub channel_visability_modifier: Channel_VisabilityModifier_,
-    pub channel_orientation: Vec<i16>,
-    pub channel_cover_image_path: Option<String>,
-    pub channel_background_image_path: Option<String>,
-    pub channel_subscribers_quantity: i64,
-    pub channel_marks_quantity: i64,
-    pub channel_viewing_quantity: i64,
+    pub channel_orientation: Channel_Orientation,
+    pub channel_cover_image_path: Option<Channel_CoverImagePath>,
+    pub channel_background_image_path: Option<Channel_BackgroundImagePath>,
+    pub channel_subscribers_quantity: Channel_SubscribersQuantity,
+    pub channel_marks_quantity: Channel_MarksQuantity,
+    pub channel_viewing_quantity: Channel_ViewingQuantity,
 }
 
 #[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Channel1 {
-    pub channel_id: i64,
-    pub channel_name: String,
-    pub channel_linked_name: String,
-    pub channel_access_modifier: i16,
-    pub channel_visability_modifier: i16,
-    pub channel_cover_image_path: Option<String>,
-    pub channel_background_image_path: Option<String>
+    pub channel_id: Channel_Id,
+    pub channel_name: Channel_Name,
+    pub channel_linked_name: Channel_LinkedName,
+    pub channel_access_modifier: Channel_AccessModifier,
+    pub channel_visability_modifier: Channel_VisabilityModifier,
+    pub channel_cover_image_path: Option<Channel_CoverImagePath>,
+    pub channel_background_image_path: Option<Channel_BackgroundImagePath>
 }

@@ -1,3 +1,7 @@
+use crate::domain_layer::data::entity::channel_outer_link::ChannelOuterLink_Address;
+use crate::domain_layer::data::entity::channel_outer_link::ChannelOuterLink_Alias;
+use crate::domain_layer::data::entity::channel_outer_link::ChannelOuterLink_CreatedAt;
+use crate::domain_layer::data::entity::channel::Channel_Id;
 use crate::domain_layer::data::entity::channel_outer_link::ChannelOuterLink;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
@@ -5,14 +9,22 @@ use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
-use extern_crate::serde::Deserialize;
 use extern_crate::serde::Serialize;
 use extern_crate::tokio_postgres::Client as Connection;
 use extern_crate::tokio_postgres::types::Type;
 use super::postgresql_repository::PostgresqlRepository;
 
+#[cfg(feature = "facilitate_non_automatic_functional_testing")]
+use extern_crate::serde::Deserialize;
+
 impl PostgresqlRepository<ChannelOuterLink> {
     pub async fn create<'a>(database_1_connection: &'a Connection, insert: Insert) -> Result<ChannelOuterLink, ErrorAuditor> {
+        let channel_outer_link_from = insert.channel_outer_link_from.get();
+
+        let channel_outer_link_alias = insert.channel_outer_link_alias.get();
+
+        let channel_outer_link_address = insert.channel_outer_link_address.get();
+
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =
@@ -31,9 +43,9 @@ impl PostgresqlRepository<ChannelOuterLink> {
                 cs.created_at::TEXT AS ca;";
 
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&insert.channel_outer_link_from, Type::INT8)
-            .add_parameter(&insert.channel_outer_link_alias, Type::TEXT)
-            .add_parameter(&insert.channel_outer_link_address, Type::TEXT);
+            .add_parameter(&channel_outer_link_from, Type::INT8)
+            .add_parameter(&channel_outer_link_alias, Type::TEXT)
+            .add_parameter(&channel_outer_link_address, Type::TEXT);
 
         let statement = match database_1_connection.prepare_typed(
             query,
@@ -66,7 +78,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
         };
 
         let channel_outer_link_created_at = match row_registry[0].try_get::<'_, usize, String>(0) {
-            Ok(channel_outer_link_created_at_) => channel_outer_link_created_at_,
+            Ok(channel_outer_link_created_at_) => ChannelOuterLink_CreatedAt::new(channel_outer_link_created_at_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -89,9 +101,11 @@ impl PostgresqlRepository<ChannelOuterLink> {
 
     pub async fn find_1<'a>(
         database_1_connection: &'a Connection,
-        channel_outer_link_from: i64,
+        channel_outer_link_from: Channel_Id,
         limit: i16
     ) -> Result<Vec<ChannelOuterLink1>, ErrorAuditor> {
+        let channel_outer_link_from_ = channel_outer_link_from.get();
+
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =
@@ -103,7 +117,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
             LIMIT $2";
 
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&channel_outer_link_from, Type::INT8)
+            .add_parameter(&channel_outer_link_from_, Type::INT8)
             .add_parameter(&limit, Type::INT2);
 
         let statement = match database_1_connection.prepare_typed(
@@ -144,7 +158,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
 
         '_a: for row in row_registry.iter() {
             let channel_outer_link_alias = match row.try_get::<'_, usize, String>(0) {
-                Ok(channel_outer_link_alias_) => channel_outer_link_alias_,
+                Ok(channel_outer_link_alias_) => ChannelOuterLink_Alias::new(channel_outer_link_alias_),
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(
@@ -156,7 +170,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
             };
 
             let channel_outer_link_address = match row.try_get::<'_, usize, String>(1) {
-                Ok(channel_outer_link_address_) => channel_outer_link_address_,
+                Ok(channel_outer_link_address_) => ChannelOuterLink_Address::new(channel_outer_link_address_),
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(
@@ -180,15 +194,15 @@ impl PostgresqlRepository<ChannelOuterLink> {
 }
 
 pub struct Insert {
-    pub channel_outer_link_from: i64,
-    pub channel_outer_link_alias: String,
-    pub channel_outer_link_address: String,
+    pub channel_outer_link_from: Channel_Id,
+    pub channel_outer_link_alias: ChannelOuterLink_Alias,
+    pub channel_outer_link_address: ChannelOuterLink_Address,
 }
 
 #[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct ChannelOuterLink1 {
-    pub channel_outer_link_alias: String,
-    pub channel_outer_link_address: String
+    pub channel_outer_link_alias: ChannelOuterLink_Alias,
+    pub channel_outer_link_address: ChannelOuterLink_Address
 }

@@ -1,4 +1,7 @@
+use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
+use crate::domain_layer::data::entity::channel_subscription::ChannelSubscription_CreatedAt;
 use crate::domain_layer::data::entity::channel_subscription::ChannelSubscription;
+use crate::domain_layer::data::entity::channel::Channel_Id;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -11,6 +14,10 @@ use super::postgresql_repository::PostgresqlRepository;
 
 impl PostgresqlRepository<ChannelSubscription> {
     pub async fn create<'a>(database_1_connection: &'a Connection, insert: Insert) -> Result<ChannelSubscription, ErrorAuditor> {
+        let application_user_id = insert.application_user_id.get();
+
+        let channel_id = insert.channel_id.get();
+
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =
@@ -27,8 +34,8 @@ impl PostgresqlRepository<ChannelSubscription> {
                 cs.created_at::TEXT AS ca;";
 
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&insert.application_user_id, Type::INT8)
-            .add_parameter(&insert.channel_id, Type::INT8);
+            .add_parameter(&application_user_id, Type::INT8)
+            .add_parameter(&channel_id, Type::INT8);
 
         let statement = match database_1_connection.prepare_typed(
             query,
@@ -61,7 +68,7 @@ impl PostgresqlRepository<ChannelSubscription> {
         };
 
         let channel_subscription_created_at = match row_registry[0].try_get::<'_, usize, String>(0) {
-            Ok(channel_subscription_created_at_) => channel_subscription_created_at_,
+            Ok(channel_subscription_created_at_) => ChannelSubscription_CreatedAt::new(channel_subscription_created_at_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -83,9 +90,13 @@ impl PostgresqlRepository<ChannelSubscription> {
 
     pub async fn is_exist<'a>(
         database_1_connection: &'a Connection,
-        application_user_id: i64,
-        channel_id: i64
+        application_user_id: ApplicationUser_Id,
+        channel_id: Channel_Id
     ) -> Result<bool, ErrorAuditor> {
+        let application_user_id_ = application_user_id.get();
+
+        let channel_id_ = channel_id.get();
+
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =
@@ -95,8 +106,8 @@ impl PostgresqlRepository<ChannelSubscription> {
             WHERE cs.application_user_id = $1 AND cs.channel_id = $2;";
 
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&application_user_id, Type::INT8)
-            .add_parameter(&channel_id, Type::INT8);
+            .add_parameter(&application_user_id_, Type::INT8)
+            .add_parameter(&channel_id_, Type::INT8);
 
         let statement = match database_1_connection.prepare_typed(
             query,
@@ -137,6 +148,6 @@ impl PostgresqlRepository<ChannelSubscription> {
 }
 
 pub struct Insert {
-    pub application_user_id: i64,
-    pub channel_id: i64
+    pub application_user_id: ApplicationUser_Id,
+    pub channel_id: Channel_Id
 }

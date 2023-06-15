@@ -1,9 +1,16 @@
 use super::channel::Channel_Id;
+use extern_crate::serde::Serialize;
+
+#[cfg(feature = "facilitate_non_automatic_functional_testing")]
+use extern_crate::serde::Deserialize;
 
 pub use self::Alias as ChannelOuterLink_Alias;
 pub use self::Address as ChannelOuterLink_Address;
 pub use self::CreatedAt as ChannelOuterLink_CreatedAt;
 
+#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[derive(Serialize)]
+#[serde(crate = "extern_crate::serde")]
 pub struct Alias(String);
 
 impl Alias {
@@ -16,6 +23,9 @@ impl Alias {
     }
 }
 
+#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[derive(Serialize)]
+#[serde(crate = "extern_crate::serde")]
 pub struct Address(String);
 
 impl Address {

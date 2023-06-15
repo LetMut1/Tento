@@ -1,18 +1,26 @@
+use crate::domain_layer::data::entity::channel_inner_link::ChannelInnerLink_CreatedAt;
 use crate::domain_layer::data::entity::channel_inner_link::ChannelInnerLink;
+use crate::domain_layer::data::entity::channel::Channel_Id;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
-use extern_crate::serde::Deserialize;
 use extern_crate::serde::Serialize;
 use extern_crate::tokio_postgres::Client as Connection;
 use extern_crate::tokio_postgres::types::Type;
 use super::postgresql_repository::PostgresqlRepository;
 
+#[cfg(feature = "facilitate_non_automatic_functional_testing")]
+use extern_crate::serde::Deserialize;
+
 impl PostgresqlRepository<ChannelInnerLink> {
     pub async fn create<'a>(database_1_connection: &'a Connection, insert: Insert) -> Result<ChannelInnerLink, ErrorAuditor> {
+        let channel_inner_link_from = insert.channel_inner_link_from.get();
+
+        let channel_inner_link_to = insert.channel_inner_link_to.get();
+
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =
@@ -29,8 +37,8 @@ impl PostgresqlRepository<ChannelInnerLink> {
                 cs.created_at::TEXT AS ca;";
 
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&insert.channel_inner_link_from, Type::INT8)
-            .add_parameter(&insert.channel_inner_link_to, Type::INT8);
+            .add_parameter(&channel_inner_link_from, Type::INT8)
+            .add_parameter(&channel_inner_link_to, Type::INT8);
 
         let statement = match database_1_connection.prepare_typed(
             query,
@@ -63,7 +71,7 @@ impl PostgresqlRepository<ChannelInnerLink> {
         };
 
         let channel_inner_link_created_at = match row_registry[0].try_get::<'_, usize, String>(0) {
-            Ok(channel_inner_link_created_at_) => channel_inner_link_created_at_,
+            Ok(channel_inner_link_created_at_) => ChannelInnerLink_CreatedAt::new(channel_inner_link_created_at_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -85,9 +93,11 @@ impl PostgresqlRepository<ChannelInnerLink> {
 
     pub async fn find_1<'a>(
         database_1_connection: &'a Connection,
-        channel_inner_link_from: i64,
+        channel_inner_link_from: Channel_Id,
         limit: i16
     ) -> Result<Vec<ChannelInnerLink1>, ErrorAuditor> {
+        let channel_inner_link_from_ = channel_inner_link_from.get();
+
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query =
@@ -98,7 +108,7 @@ impl PostgresqlRepository<ChannelInnerLink> {
             LIMIT $2";
 
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&channel_inner_link_from, Type::INT8)
+            .add_parameter(&channel_inner_link_from_, Type::INT8)
             .add_parameter(&limit, Type::INT2);
 
         let statement = match database_1_connection.prepare_typed(
@@ -139,7 +149,7 @@ impl PostgresqlRepository<ChannelInnerLink> {
 
         '_a: for row in row_registry.iter() {
             let channel_inner_link_to = match row.try_get::<'_, usize, i64>(0) {
-                Ok(channel_inner_link_to_) => channel_inner_link_to_,
+                Ok(channel_inner_link_to_) => Channel_Id::new(channel_inner_link_to_),
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(
@@ -162,13 +172,13 @@ impl PostgresqlRepository<ChannelInnerLink> {
 }
 
 pub struct Insert {
-    pub channel_inner_link_from: i64,
-    pub channel_inner_link_to: i64
+    pub channel_inner_link_from: Channel_Id,
+    pub channel_inner_link_to: Channel_Id
 }
 
 #[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct ChannelInnerLink1 {
-    pub channel_inner_link_to: i64
+    pub channel_inner_link_to: Channel_Id
 }
