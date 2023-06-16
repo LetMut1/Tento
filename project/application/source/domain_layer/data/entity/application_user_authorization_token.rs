@@ -12,6 +12,10 @@ pub use self::WrongEnterTriesQuantity as ApplicationUserAuthorizationToken_Wrong
 pub use self::ExpiresAt as ApplicationUserAuthorizationToken_ExpiresAt;
 pub use self::CanBeResentFrom as ApplicationUserAuthorizationToken_CanBeResentFrom;
 
+#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Serialize))]
+#[derive(PartialEq, Eq, Deserialize)]
+#[serde(crate = "extern_crate::serde")]
+#[serde(transparent)]
 pub struct Value(String);
 
 impl Value {

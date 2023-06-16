@@ -11,6 +11,7 @@ use crate::domain_layer::data::entity::application_user_access_token::Applicatio
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_2;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_4;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_Value;
+use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_WrongEnterTriesQuantity;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice;
@@ -66,7 +67,7 @@ impl ActionProcessor {
         }
 
         let is_valid_value = match Validator::<ApplicationUserAuthorizationToken_Value>::is_valid(
-            incoming.application_user_authorization_token_value.as_str()
+            &incoming.application_user_authorization_token_value
         ) {
             Ok(is_valid_value_) => is_valid_value_,
             Err(mut error) => {
@@ -80,7 +81,7 @@ impl ActionProcessor {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserAuthorizationToken_Value });
         }
 
-        if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming.application_user_device_id.as_str()) {
+        if !Validator::<ApplicationUserDevice_Id>::is_valid(&incoming.application_user_device_id) {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserDevice_Id });
         }
 
@@ -100,7 +101,7 @@ impl ActionProcessor {
         let application_user_authorization_token = match PostgresqlRepository::<ApplicationUserAuthorizationToken_2>::find_1(
             database_2_postgresql_connection,
             incoming.application_user_id,
-            incoming.application_user_device_id.as_str()
+            &incoming.application_user_device_id
         ).await {
             Ok(application_user_authorization_token_) => application_user_authorization_token_,
             Err(mut error) => {
@@ -123,11 +124,11 @@ impl ActionProcessor {
             }
         };
 
-        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token_.get_expires_at()) {
+        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token_.get_expires_at().get()) {
             if let Err(mut error) = PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::delete(
                 database_2_postgresql_connection,
                 incoming.application_user_id,
-                incoming.application_user_device_id.as_str()
+                &incoming.application_user_device_id
             ).await {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -143,8 +144,8 @@ impl ActionProcessor {
             );
         }
 
-        if application_user_authorization_token_.get_value() != incoming.application_user_authorization_token_value.as_str() {
-            let application_user_authorization_token_wrong_enter_tries_quantity = match application_user_authorization_token_.get_wrong_enter_tries_quantity()
+        if *application_user_authorization_token_.get_value() != incoming.application_user_authorization_token_value {
+            let application_user_authorization_token_wrong_enter_tries_quantity = match application_user_authorization_token_.get_wrong_enter_tries_quantity().get()
                 .checked_add(1) {
                 Some(application_user_authorization_token_wrong_enter_tries_quantity_) => application_user_authorization_token_wrong_enter_tries_quantity_,
                 None => {
@@ -158,13 +159,15 @@ impl ActionProcessor {
             };
 
             if application_user_authorization_token_wrong_enter_tries_quantity <= ApplicationUserAuthorizationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
-                application_user_authorization_token_.set_wrong_enter_tries_quantity(application_user_authorization_token_wrong_enter_tries_quantity);
+                application_user_authorization_token_.set_wrong_enter_tries_quantity(
+                    ApplicationUserAuthorizationToken_WrongEnterTriesQuantity::new(application_user_authorization_token_wrong_enter_tries_quantity)
+                );
 
                 if let Err(mut error) = PostgresqlRepository::<ApplicationUserAuthorizationToken_4>::update(
                     database_2_postgresql_connection,
                     &application_user_authorization_token_,
                     incoming.application_user_id,
-                    incoming.application_user_device_id.as_str()
+                    &incoming.application_user_device_id
                 ).await {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -174,7 +177,7 @@ impl ActionProcessor {
                 if let Err(mut error) = PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::delete(
                     database_2_postgresql_connection,
                     incoming.application_user_id,
-                    incoming.application_user_device_id.as_str()
+                    &incoming.application_user_device_id
                 ).await {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -239,14 +242,14 @@ impl ActionProcessor {
         let application_user_access_token = ApplicationUserAccessToken::new(
             Generator::<ApplicationUserAccessToken_Id>::generate(),
             incoming.application_user_id,
-            Cow::Borrowed(incoming.application_user_device_id.as_str()),
+            Cow::Borrowed(&incoming.application_user_device_id),
             expires_at
         );
 
         let application_user_access_refresh_token = match PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::find_1(
             database_2_postgresql_connection,
             incoming.application_user_id,
-            incoming.application_user_device_id.as_str()
+            &incoming.application_user_device_id
         ).await {
             Ok(application_user_access_refresh_token_) => application_user_access_refresh_token_,
             Err(mut error) => {
@@ -283,7 +286,7 @@ impl ActionProcessor {
                     database_2_postgresql_connection,
                     &application_user_access_refresh_token__,
                     incoming.application_user_id,
-                    incoming.application_user_device_id.as_str()
+                    &incoming.application_user_device_id
                 ).await {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -295,7 +298,7 @@ impl ActionProcessor {
             None => {
                 let application_user_access_refresh_token_insert = ApplicationUserAccessRefreshTokenInsert {
                     application_user_id: incoming.application_user_id,
-                    application_user_device_id: Cow::Borrowed(incoming.application_user_device_id.as_str()),
+                    application_user_device_id: Cow::Borrowed(&incoming.application_user_device_id),
                     application_user_access_token_id,
                     application_user_access_refresh_token_obfuscation_value,
                     application_user_access_refresh_token_expires_at,
@@ -321,7 +324,7 @@ impl ActionProcessor {
         if let Err(mut error) = PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::delete(
             database_2_postgresql_connection,
             incoming.application_user_id,
-            incoming.application_user_device_id.as_str()
+            &incoming.application_user_device_id
         ).await {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -383,9 +386,9 @@ impl ActionProcessor {
 #[derive(Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Incoming {
-    application_user_id: i64,
-    application_user_device_id: String,
-    application_user_authorization_token_value: String
+    application_user_id: ApplicationUser_Id,
+    application_user_device_id: ApplicationUserDevice_Id,
+    application_user_authorization_token_value: ApplicationUserAuthorizationToken_Value
 }
 
 #[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]

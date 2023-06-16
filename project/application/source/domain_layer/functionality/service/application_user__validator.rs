@@ -11,8 +11,8 @@ use extern_crate::regex::Regex;
 use super::validator::Validator;
 
 impl Validator<ApplicationUser_Id> {
-    pub fn is_valid<'a>(application_user_id: i64) -> bool {
-        return application_user_id >= 0;
+    pub fn is_valid<'a>(application_user_id: ApplicationUser_Id) -> bool {
+        return application_user_id.get() >= 0;
     }
 }
 
