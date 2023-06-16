@@ -6,11 +6,13 @@ use crate::domain_layer::data::entity::application_user_authorization_token::App
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_CanBeResentFrom;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_Value;
+use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_WrongEnterTriesQuantity;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_1;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_2;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
+use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Nickname;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Password;
 use crate::domain_layer::functionality::service::email_sender::EmailSender;
@@ -58,17 +60,17 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        if !Validator::<ApplicationUser_Password>::is_valid(incoming.application_user_password.as_str()) {
+        if !Validator::<ApplicationUser_Password>::is_valid(&incoming.application_user_password) {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUser_Password });
         }
 
-        if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming.application_user_device_id.as_str()) {
+        if !Validator::<ApplicationUserDevice_Id>::is_valid(&incoming.application_user_device_id) {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserDevice_Id });
         }
 
-        let is_valid_email = match Validator::<ApplicationUser_Email>::is_valid(
-            incoming.application_user_email_or_application_user_nickname.as_str()
-        ) {
+        let application_user_email = ApplicationUser_Email::new(incoming.application_user_email_or_application_user_nickname);
+
+        let is_valid_email = match Validator::<ApplicationUser_Email>::is_valid(&application_user_email) {
             Ok(is_valid_email_) => is_valid_email_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -94,7 +96,7 @@ impl ActionProcessor {
         let application_user_aggregator = if is_valid_email {
             let application_user_ = match PostgresqlRepository::<ApplicationUser_2>::find_2(
                 database_1_postgresql_connection,
-                incoming.application_user_email_or_application_user_nickname.as_str()
+                &application_user_email
             ).await {
                 Ok(application_user__) => application_user__,
                 Err(mut error) => {
@@ -117,12 +119,17 @@ impl ActionProcessor {
                 }
             };
 
-            ApplicationUser_Aggregator::Second { application_user: application_user__ }
+            ApplicationUser_Aggregator::Second {
+                application_user: application_user__,
+                application_user_email
+            }
         } else {
-            if Validator::<ApplicationUser_Nickname>::is_valid(incoming.application_user_email_or_application_user_nickname.as_str()) {
+            let application_user_nickname = ApplicationUser_Nickname::new(application_user_email.into_inner());
+
+            if Validator::<ApplicationUser_Nickname>::is_valid(&application_user_nickname) {
                 let application_user_ = match PostgresqlRepository::<ApplicationUser_1>::find_1(
                     database_1_postgresql_connection,
-                    incoming.application_user_email_or_application_user_nickname.as_str()
+                    &application_user_nickname
                 ).await {
                     Ok(application_user__) => application_user__,
                     Err(mut error) => {
@@ -153,11 +160,11 @@ impl ActionProcessor {
 
         let application_user_password_hash = match application_user_aggregator {
             ApplicationUser_Aggregator::First { ref application_user } => application_user.get_password_hash(),
-            ApplicationUser_Aggregator::Second { ref application_user } => application_user.get_password_hash()
+            ApplicationUser_Aggregator::Second { ref application_user, application_user_email: _ } => application_user.get_password_hash()
         };
 
         let is_valid = match Encoder::<ApplicationUser_Password>::is_valid(
-            incoming.application_user_password.as_str(),
+            &incoming.application_user_password,
             application_user_password_hash
         ) {
             Ok(is_valid_) => is_valid_,
@@ -192,7 +199,7 @@ impl ActionProcessor {
 
         let application_user_id = match application_user_aggregator {
             ApplicationUser_Aggregator::First { ref application_user } => application_user.get_id(),
-            ApplicationUser_Aggregator::Second { ref application_user } => application_user.get_id()
+            ApplicationUser_Aggregator::Second { ref application_user, application_user_email: _ } => application_user.get_id()
         };
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
@@ -200,7 +207,7 @@ impl ActionProcessor {
         let application_user_authorization_token = match PostgresqlRepository::<ApplicationUserAuthorizationToken_1>::find_1(
             database_2_postgresql_connection,
             application_user_id,
-            incoming.application_user_device_id.as_str()
+            &incoming.application_user_device_id
         ).await {
             Ok(application_user_authorization_token_) => application_user_authorization_token_,
             Err(mut error) => {
@@ -213,7 +220,7 @@ impl ActionProcessor {
         let (application_user_authorization_token_aggregator, can_send) = match application_user_authorization_token {
             Some(mut application_user_authorization_token_) => {
                 let (can_send_, need_to_update_1) = if ExpirationTimeChecker::<UnixTime>::is_expired(
-                    application_user_authorization_token_.get_can_be_resent_from()
+                    application_user_authorization_token_.get_can_be_resent_from().get()
                 ) {
                     let application_user_authorization_token_can_be_resent_from = match Generator::<ApplicationUserAuthorizationToken_CanBeResentFrom>::generate() {
                         Ok(application_user_authorization_token_can_be_resent_from_) => application_user_authorization_token_can_be_resent_from_,
@@ -231,7 +238,9 @@ impl ActionProcessor {
                     (false, false)
                 };
 
-                let need_to_update_2 = if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token_.get_expires_at()) {
+                let need_to_update_2 = if ExpirationTimeChecker::<UnixTime>::is_expired(
+                    application_user_authorization_token_.get_expires_at().get()
+                ) {
                     let application_user_authorization_token_expires_at = match Generator::<ApplicationUserAuthorizationToken_ExpiresAt>::generate() {
                         Ok(application_user_authorization_token_expires_at_) => application_user_authorization_token_expires_at_,
                         Err(mut error) => {
@@ -243,7 +252,7 @@ impl ActionProcessor {
 
                     application_user_authorization_token_
                         .set_value(Generator::<ApplicationUserAuthorizationToken_Value>::generate())
-                        .set_wrong_enter_tries_quantity(0)
+                        .set_wrong_enter_tries_quantity(ApplicationUserAuthorizationToken_WrongEnterTriesQuantity::new(0))
                         .set_expires_at(application_user_authorization_token_expires_at);
 
                     true
@@ -256,7 +265,7 @@ impl ActionProcessor {
                         database_2_postgresql_connection,
                         &application_user_authorization_token_,
                         application_user_id,
-                        incoming.application_user_device_id.as_str()
+                        &incoming.application_user_device_id
                     ).await {
                         error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -268,7 +277,7 @@ impl ActionProcessor {
                             database_2_postgresql_connection,
                             &application_user_authorization_token_,
                             application_user_id,
-                            incoming.application_user_device_id.as_str()
+                            &incoming.application_user_device_id
                         ).await {
                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -281,7 +290,7 @@ impl ActionProcessor {
                             database_2_postgresql_connection,
                             &application_user_authorization_token_,
                             application_user_id,
-                            incoming.application_user_device_id.as_str()
+                            &incoming.application_user_device_id
                         ).await {
                             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -318,15 +327,16 @@ impl ActionProcessor {
 
                 let insert = Insert {
                     application_user_id,
-                    application_user_device_id: Cow::Borrowed(incoming.application_user_device_id.as_str()),
+                    application_user_device_id: Cow::Borrowed(&incoming.application_user_device_id),
                     application_user_authorization_token_value: Generator::<ApplicationUserAuthorizationToken_Value>::generate(),
-                    application_user_authorization_token_wrong_enter_tries_quantity: 0,
+                    application_user_authorization_token_wrong_enter_tries_quantity: ApplicationUserAuthorizationToken_WrongEnterTriesQuantity::new(0),
                     application_user_authorization_token_expires_at,
                     application_user_authorization_token_can_be_resent_from
                 };
 
                 let application_user_authorization_token_ = match PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::create(
-                    database_2_postgresql_connection, insert
+                    database_2_postgresql_connection,
+                    insert
                 ).await {
                     Ok(application_user_authorization_token__) => application_user_authorization_token__,
                     Err(mut error) => {
@@ -347,7 +357,10 @@ impl ActionProcessor {
 
         let application_user_email = match application_user_aggregator {
             ApplicationUser_Aggregator::First { ref application_user } => application_user.get_email(),
-            ApplicationUser_Aggregator::Second { application_user: _ } => incoming.application_user_email_or_application_user_nickname.as_str()
+            ApplicationUser_Aggregator::Second {
+                application_user: _,
+                application_user_email: ref application_user_email_
+            } => application_user_email_
         };
 
         if can_send {
@@ -360,7 +373,7 @@ impl ActionProcessor {
                 environment_configuration,
                 application_user_authorization_token_value,
                 application_user_email,
-                incoming.application_user_device_id.as_str()
+                &incoming.application_user_device_id
             ) {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -387,18 +400,18 @@ impl ActionProcessor {
 #[derive(Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Incoming {
-    application_user_device_id: String,
+    application_user_device_id: ApplicationUserDevice_Id,
     application_user_email_or_application_user_nickname: String,
-    application_user_password: String
+    application_user_password: ApplicationUser_Password
 }
 
 #[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Outcoming {
-    application_user_id: i64,
+    application_user_id: ApplicationUser_Id,
     verification_message_sent: bool,
-    application_user_authorization_token_can_be_resent_from: i64
+    application_user_authorization_token_can_be_resent_from: ApplicationUserAuthorizationToken_CanBeResentFrom
 }
 
 enum ApplicationUser_Aggregator {
@@ -406,7 +419,8 @@ enum ApplicationUser_Aggregator {
         application_user: ApplicationUser_1
     },
     Second {
-        application_user: ApplicationUser_2
+        application_user: ApplicationUser_2,
+        application_user_email: ApplicationUser_Email
     }
 }
 

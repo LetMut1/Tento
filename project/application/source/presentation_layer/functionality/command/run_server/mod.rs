@@ -113,8 +113,5 @@ fn main() -> () {
 
 // &'a (dyn ToSql + Sync) -> +'static
 
-// TODO проверитть, как SERIALIZE Действует на NewType Pattern.
-
-
 // СДелал оптимизацию запросов для:
 // - application_user_authorization. // ToDo ДОделать остальные. и сделать репозиторий по новым правилам.
