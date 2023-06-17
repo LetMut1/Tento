@@ -4,7 +4,9 @@ use crate::domain_layer::data::entity::application_user_device::ApplicationUserD
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_3;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_4;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_5;
+use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_IsApproved;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_Value;
+use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_WrongEnterTriesQuantity;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::domain_layer::functionality::service::validator::Validator;
@@ -50,7 +52,7 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        let is_valid_email = match Validator::<ApplicationUser_Email>::is_valid(incoming.application_user_email.as_str()) {
+        let is_valid_email = match Validator::<ApplicationUser_Email>::is_valid(&incoming.application_user_email) {
             Ok(is_valid_email_) => is_valid_email_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -63,11 +65,11 @@ impl ActionProcessor {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUser_Email });
         }
 
-        if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming.application_user_device_id.as_str()) {
+        if !Validator::<ApplicationUserDevice_Id>::is_valid(&incoming.application_user_device_id) {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserDevice_Id });
         }
 
-        let is_valid_value = match Validator::<ApplicationUserRegistrationToken_Value>::is_valid(incoming.application_user_registration_token_value.as_str()) {
+        let is_valid_value = match Validator::<ApplicationUserRegistrationToken_Value>::is_valid(&incoming.application_user_registration_token_value) {
             Ok(is_valid_value_) => is_valid_value_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -96,8 +98,8 @@ impl ActionProcessor {
 
         let application_user_registration_token = match PostgresqlRepository::<ApplicationUserRegistrationToken_3>::find_1(
             database_2_postgresql_connection,
-            incoming.application_user_email.as_str(),
-            incoming.application_user_device_id.as_str()
+            &incoming.application_user_email,
+            &incoming.application_user_device_id
         ).await {
             Ok(application_user_registration_token_) => application_user_registration_token_,
             Err(mut error) => {
@@ -120,11 +122,11 @@ impl ActionProcessor {
             }
         };
 
-        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token_.get_expires_at()) {
+        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token_.get_expires_at().get()) {
             if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete(
                 database_2_postgresql_connection,
-                incoming.application_user_email.as_str(),
-                incoming.application_user_device_id.as_str()
+                &incoming.application_user_email,
+                &incoming.application_user_device_id
             ).await {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -140,7 +142,7 @@ impl ActionProcessor {
             );
         }
 
-        if application_user_registration_token_.get_is_approved() {
+        if application_user_registration_token_.get_is_approved().get() {
             return Ok(
                 ArgumentResult::Ok {
                     subject: ActionProcessorResult::UserWorkflowPrecedent {
@@ -150,8 +152,8 @@ impl ActionProcessor {
             );
         }
 
-        if application_user_registration_token_.get_value() != incoming.application_user_registration_token_value.as_str() {
-            let application_user_registration_token_wrong_enter_tries_quantity = match application_user_registration_token_.get_wrong_enter_tries_quantity()
+        if application_user_registration_token_.get_value().get() != incoming.application_user_registration_token_value.get() {
+            let application_user_registration_token_wrong_enter_tries_quantity = match application_user_registration_token_.get_wrong_enter_tries_quantity().get()
                 .checked_add(1) {
                 Some(application_user_registration_token_wrong_enter_tries_quantity_) => application_user_registration_token_wrong_enter_tries_quantity_,
                 None => {
@@ -165,13 +167,15 @@ impl ActionProcessor {
             };
 
             if application_user_registration_token_wrong_enter_tries_quantity <= ApplicationUserRegistrationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
-                application_user_registration_token_.set_wrong_enter_tries_quantity(application_user_registration_token_wrong_enter_tries_quantity);
+                application_user_registration_token_.set_wrong_enter_tries_quantity(
+                    ApplicationUserRegistrationToken_WrongEnterTriesQuantity::new(application_user_registration_token_wrong_enter_tries_quantity)
+                );
 
                 if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken_4>::update(
                     database_2_postgresql_connection,
                     &application_user_registration_token_,
-                    incoming.application_user_email.as_str(),
-                    incoming.application_user_device_id.as_str()
+                    &incoming.application_user_email,
+                    &incoming.application_user_device_id
                 ).await {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -180,8 +184,8 @@ impl ActionProcessor {
             } else {
                 if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete(
                     database_2_postgresql_connection,
-                    incoming.application_user_email.as_str(),
-                    incoming.application_user_device_id.as_str()
+                    &incoming.application_user_email,
+                    &incoming.application_user_device_id
                 ).await {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -198,13 +202,13 @@ impl ActionProcessor {
             );
         }
 
-        application_user_registration_token_.set_is_approved(true);
+        application_user_registration_token_.set_is_approved(ApplicationUserRegistrationToken_IsApproved::new(true));
 
         if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken_5>::update(
             database_2_postgresql_connection,
             &application_user_registration_token_,
-            incoming.application_user_email.as_str(),
-            incoming.application_user_device_id.as_str()
+            &incoming.application_user_email,
+            &incoming.application_user_device_id
         ).await {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -219,7 +223,7 @@ impl ActionProcessor {
 #[derive(Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Incoming {
-    application_user_email: String,
-    application_user_device_id: String,
-    application_user_registration_token_value: String
+    application_user_email: ApplicationUser_Email,
+    application_user_device_id: ApplicationUserDevice_Id,
+    application_user_registration_token_value: ApplicationUserRegistrationToken_Value
 }

@@ -113,5 +113,9 @@ fn main() -> () {
 
 // &'a (dyn ToSql + Sync) -> +'static
 
+// application_user_access_token_serialized_form: String, ( и подобные ) -> может быть, сделать НьюТайп в сервисе, где этои генеририуется.
+
+// application_user_reset_password_token_wrong_enter_tries_quantity = match application_user_reset_password_token_.get_wrong_enter_tries_quantity().get() - Incrementor сервис написать.
+
 // СДелал оптимизацию запросов для:
 // - application_user_authorization. // ToDo ДОделать остальные. и сделать репозиторий по новым правилам.

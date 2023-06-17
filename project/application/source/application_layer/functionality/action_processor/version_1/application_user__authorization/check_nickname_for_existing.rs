@@ -39,7 +39,7 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        if !Validator::<ApplicationUser_Nickname>::is_valid(incoming.application_user_nickname.as_str()) {
+        if !Validator::<ApplicationUser_Nickname>::is_valid(&incoming.application_user_nickname) {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUser_Nickname });
         }
 
@@ -56,7 +56,8 @@ impl ActionProcessor {
         };
 
         let is_exist = match PostgresqlRepository::<ApplicationUser<'_>>::is_exist_1(
-            &*database_1_postgresql_pooled_connection, incoming.application_user_nickname.as_str()
+            &*database_1_postgresql_pooled_connection,
+            &incoming.application_user_nickname
         ).await {
             Ok(is_exist_) => is_exist_,
             Err(mut error) => {
@@ -74,7 +75,7 @@ impl ActionProcessor {
 #[derive(Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Incoming {
-    application_user_nickname: String
+    application_user_nickname: ApplicationUser_Nickname
 }
 
 #[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]

@@ -48,7 +48,7 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        let is_valid_email = match Validator::<ApplicationUser_Email>::is_valid(incoming.application_user_email.as_str()) {
+        let is_valid_email = match Validator::<ApplicationUser_Email>::is_valid(&incoming.application_user_email) {
             Ok(is_valid_email_) => is_valid_email_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -61,7 +61,7 @@ impl ActionProcessor {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUser_Email });
         }
 
-        if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming.application_user_device_id.as_str()) {
+        if !Validator::<ApplicationUserDevice_Id>::is_valid(&incoming.application_user_device_id) {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserDevice_Id });
         }
 
@@ -81,8 +81,8 @@ impl ActionProcessor {
 
         let application_user_registration_token = match PostgresqlRepository::<ApplicationUserRegistrationToken_6>::find_1(
             database_2_postgresql_connection,
-            incoming.application_user_email.as_str(),
-            incoming.application_user_device_id.as_str()
+            &incoming.application_user_email,
+            &incoming.application_user_device_id
         ).await {
             Ok(application_user_registration_token_) => application_user_registration_token_,
             Err(mut error) => {
@@ -105,11 +105,11 @@ impl ActionProcessor {
             }
         };
 
-        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token_.get_expires_at()) {
+        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token_.get_expires_at().get()) {
             if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete(
                 database_2_postgresql_connection,
-                incoming.application_user_email.as_str(),
-                incoming.application_user_device_id.as_str()
+                &incoming.application_user_email,
+                &incoming.application_user_device_id
             ).await {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -125,7 +125,7 @@ impl ActionProcessor {
             );
         }
 
-        if application_user_registration_token_.get_is_approved() {
+        if application_user_registration_token_.get_is_approved().get() {
             return Ok(
                 ArgumentResult::Ok {
                     subject: ActionProcessorResult::UserWorkflowPrecedent {
@@ -135,7 +135,7 @@ impl ActionProcessor {
             );
         }
 
-        if !ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token_.get_can_be_resent_from()) {
+        if !ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token_.get_can_be_resent_from().get()) {
             return Ok(
                 ArgumentResult::Ok {
                     subject: ActionProcessorResult::UserWorkflowPrecedent {
@@ -159,8 +159,8 @@ impl ActionProcessor {
         if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken_2>::update(
             database_2_postgresql_connection,
             &application_user_registration_token_,
-            incoming.application_user_email.as_str(),
-            incoming.application_user_device_id.as_str()
+            &incoming.application_user_email,
+            &incoming.application_user_device_id
         ).await {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -171,8 +171,8 @@ impl ActionProcessor {
         if let Err(mut error) = EmailSender::<ApplicationUserRegistrationToken<'_>>::send(
             environment_configuration,
             application_user_registration_token_.get_value(),
-            incoming.application_user_email.as_str(),
-            incoming.application_user_device_id.as_str()
+            &incoming.application_user_email,
+            &incoming.application_user_device_id
         ) {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -191,13 +191,13 @@ impl ActionProcessor {
 #[derive(Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Incoming {
-    application_user_email: String,
-    application_user_device_id: String
+    application_user_email: ApplicationUser_Email,
+    application_user_device_id: ApplicationUserDevice_Id
 }
 
 #[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Outcoming {
-    application_user_registration_token_can_be_resent_from: i64
+    application_user_registration_token_can_be_resent_from: ApplicationUserRegistrationToken_CanBeResentFrom
 }

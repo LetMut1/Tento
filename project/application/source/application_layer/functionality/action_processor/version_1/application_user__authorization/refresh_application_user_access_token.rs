@@ -124,11 +124,11 @@ impl ActionProcessor {
         };
 
         if !is_valid
-            || application_user_access_token_.get_id() != application_user_access_refresh_token_.get_application_user_access_token_id() {
+            || application_user_access_token_.get_id().get() != application_user_access_refresh_token_.get_application_user_access_token_id().get() {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserAccessRefreshToken_DeserializedForm });
         }
 
-        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_access_refresh_token_.get_expires_at()) {
+        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_access_refresh_token_.get_expires_at().get()) {
             if let Err(mut error) = PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::delete_1(
                 database_2_postgresql_connection,
                 application_user_access_refresh_token_.get_application_user_id(),

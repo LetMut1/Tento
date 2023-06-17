@@ -26,7 +26,9 @@ impl Id {
     }
 }
 
-#[derive(Clone)]
+#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Serialize))]
+#[derive(Clone, Deserialize)]
+#[serde(crate = "extern_crate::serde")]
 pub struct Email(String);
 
 impl Email {
@@ -43,7 +45,9 @@ impl Email {
     }
 }
 
-#[derive(Clone)]
+#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Serialize))]
+#[derive(Clone, Deserialize)]
+#[serde(crate = "extern_crate::serde")]
 pub struct Nickname(String);
 
 impl Nickname {

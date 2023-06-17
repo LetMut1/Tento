@@ -49,7 +49,7 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming.application_user_device_id.as_str()) {
+        if !Validator::<ApplicationUserDevice_Id>::is_valid(&incoming.application_user_device_id) {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserDevice_Id });
         }
 
@@ -111,7 +111,7 @@ impl ActionProcessor {
         let application_user_authorization_token = match PostgresqlRepository::<ApplicationUserAuthorizationToken_5>::find_1(
             database_2_postgresql_connection,
             incoming.application_user_id,
-            incoming.application_user_device_id.as_str()
+            &incoming.application_user_device_id
         ).await {
             Ok(application_user_authorization_token_) => application_user_authorization_token_,
             Err(mut error) => {
@@ -134,11 +134,11 @@ impl ActionProcessor {
             }
         };
 
-        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token_.get_expires_at()) {
+        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token_.get_expires_at().get()) {
             if let Err(mut error) = PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::delete(
                 database_2_postgresql_connection,
                 incoming.application_user_id,
-                incoming.application_user_device_id.as_str()
+                &incoming.application_user_device_id
             ).await {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -154,7 +154,7 @@ impl ActionProcessor {
             );
         }
 
-        if !ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token_.get_can_be_resent_from()) {
+        if !ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token_.get_can_be_resent_from().get()) {
             return Ok(
                 ArgumentResult::Ok {
                     subject: ActionProcessorResult::UserWorkflowPrecedent {
@@ -179,7 +179,7 @@ impl ActionProcessor {
             database_2_postgresql_connection,
             &application_user_authorization_token_,
             incoming.application_user_id,
-            incoming.application_user_device_id.as_str()
+            &incoming.application_user_device_id
         ).await {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -190,7 +190,7 @@ impl ActionProcessor {
             environment_configuration,
             application_user_authorization_token_.get_value(),
             application_user_.get_email(),
-            incoming.application_user_device_id.as_str()
+            &incoming.application_user_device_id
         ) {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -209,13 +209,13 @@ impl ActionProcessor {
 #[derive(Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Incoming {
-    application_user_device_id: String,
-    application_user_id: i64
+    application_user_device_id: ApplicationUserDevice_Id,
+    application_user_id: ApplicationUser_Id
 }
 
 #[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Outcoming {
-    application_user_authorization_token_can_be_resent_from: i64
+    application_user_authorization_token_can_be_resent_from: ApplicationUserAuthorizationToken_CanBeResentFrom
 }

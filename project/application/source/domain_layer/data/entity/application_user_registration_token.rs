@@ -1,7 +1,11 @@
 use crate::domain_layer::functionality::service::getter::Getter;
+use extern_crate::serde::Serialize;
 use std::borrow::Cow;
 use super::application_user_device::ApplicationUserDevice_Id;
 use super::application_user::ApplicationUser_Email;
+
+#[cfg(feature = "facilitate_non_automatic_functional_testing")]
+use extern_crate::serde::Deserialize;
 
 pub use self::Value as ApplicationUserRegistrationToken_Value;
 pub use self::WrongEnterTriesQuantity as ApplicationUserRegistrationToken_WrongEnterTriesQuantity;
@@ -9,6 +13,9 @@ pub use self::IsApproved as ApplicationUserRegistrationToken_IsApproved;
 pub use self::ExpiresAt as ApplicationUserRegistrationToken_ExpiresAt;
 pub use self::CanBeResentFrom as ApplicationUserRegistrationToken_CanBeResentFrom;
 
+#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Serialize))]
+#[derive(Deserialize)]
+#[serde(crate = "extern_crate::serde")]
 pub struct Value(String);
 
 impl Value {
@@ -61,6 +68,9 @@ impl ExpiresAt {
 }
 
 #[derive(Clone, Copy)]
+#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[derive(Serialize)]
+#[serde(crate = "extern_crate::serde")]
 pub struct CanBeResentFrom(i64);
 
 impl CanBeResentFrom {

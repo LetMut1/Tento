@@ -39,7 +39,7 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        let is_valid_email = match Validator::<ApplicationUser_Email>::is_valid(incoming.application_user_email.as_str()) {
+        let is_valid_email = match Validator::<ApplicationUser_Email>::is_valid(&incoming.application_user_email) {
             Ok(is_valid_email_) => is_valid_email_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -65,7 +65,8 @@ impl ActionProcessor {
         };
 
         let is_exist = match PostgresqlRepository::<ApplicationUser<'_>>::is_exist_2(
-            &*database_1_postgresql_pooled_connection, incoming.application_user_email.as_str()
+            &*database_1_postgresql_pooled_connection,
+            &incoming.application_user_email
         ).await {
             Ok(is_exist_) => is_exist_,
             Err(mut error) => {
@@ -83,7 +84,7 @@ impl ActionProcessor {
 #[derive(Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Incoming {
-    application_user_email: String
+    application_user_email: ApplicationUser_Email
 }
 
 #[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
