@@ -1,12 +1,24 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
+use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
 use crate::domain_layer::data::entity::channel_inner_link::ChannelInnerLink;
 use crate::domain_layer::data::entity::channel_outer_link::ChannelOuterLink;
 use crate::domain_layer::data::entity::channel_subscription::ChannelSubscription;
 use crate::domain_layer::data::entity::channel::Channel as EntityChannel;
 use crate::domain_layer::data::entity::channel::Channel_AccessModifier_;
+use crate::domain_layer::data::entity::channel::Channel_AccessModifier;
+use crate::domain_layer::data::entity::channel::Channel_BackgroundImagePath;
+use crate::domain_layer::data::entity::channel::Channel_CoverImagePath;
+use crate::domain_layer::data::entity::channel::Channel_Description;
 use crate::domain_layer::data::entity::channel::Channel_Id;
+use crate::domain_layer::data::entity::channel::Channel_LinkedName;
+use crate::domain_layer::data::entity::channel::Channel_MarksQuantity;
+use crate::domain_layer::data::entity::channel::Channel_Name;
+use crate::domain_layer::data::entity::channel::Channel_Orientation;
+use crate::domain_layer::data::entity::channel::Channel_SubscribersQuantity;
+use crate::domain_layer::data::entity::channel::Channel_ViewingQuantity;
+use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier;
 use crate::domain_layer::functionality::service::application_user_access_token__extractor::ExtractorResult;
 use crate::domain_layer::functionality::service::channel__access_modifier_resolver::Channel_AccessModifierResolver;
 use crate::domain_layer::functionality::service::extractor::Extractor;
@@ -147,7 +159,7 @@ impl ActionProcessor {
             };
 
             if !is_exist
-                && application_user_access_token.get_application_user_id() != channel_.get_owner() {
+                && application_user_access_token.get_application_user_id().get() != channel_.get_owner().get() {
                 return Ok(
                     ArgumentResult::Ok {
                         subject: ActionProcessorResult::UserWorkflowPrecedent {
@@ -227,7 +239,7 @@ impl ActionProcessor {
 #[serde(crate = "extern_crate::serde")]
 pub struct Incoming {
     application_user_access_token_serialized_form: String,
-    channel_id: i64
+    channel_id: Channel_Id
 }
 
 #[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
@@ -243,16 +255,16 @@ pub struct Outcoming {
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 struct Channel {
-    channel_owner: i64,
-    channel_name: String,
-    channel_linked_name: String,
-    channel_description: Option<String>,
-    channel_access_modifier: i16,
-    channel_visability_modifier: i16,
-    channel_orientation: Vec<i16>,
-    channel_cover_image_path: Option<String>,
-    channel_background_image_path: Option<String>,
-    channel_subscribers_quantity: i64,
-    channel_marks_quantity: i64,
-    channel_viewing_quantity: i64
+    channel_owner: ApplicationUser_Id,
+    channel_name: Channel_Name,
+    channel_linked_name: Channel_LinkedName,
+    channel_description: Option<Channel_Description>,
+    channel_access_modifier: Channel_AccessModifier,
+    channel_visability_modifier: Channel_VisabilityModifier,
+    channel_orientation: Channel_Orientation,
+    channel_cover_image_path: Option<Channel_CoverImagePath>,
+    channel_background_image_path: Option<Channel_BackgroundImagePath>,
+    channel_subscribers_quantity: Channel_SubscribersQuantity,
+    channel_marks_quantity: Channel_MarksQuantity,
+    channel_viewing_quantity: Channel_ViewingQuantity
 }

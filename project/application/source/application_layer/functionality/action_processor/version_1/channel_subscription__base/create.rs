@@ -109,7 +109,8 @@ impl ActionProcessor {
         let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
 
         let channel = match PostgresqlRepository::<Channel<'_>>::find_1(
-            database_1_postgresql_connection, incoming.channel_id
+            database_1_postgresql_connection,
+            incoming.channel_id
         ).await {
             Ok(channel_) => channel_,
             Err(mut error) => {
@@ -132,7 +133,7 @@ impl ActionProcessor {
             }
         };
 
-        if channel_.get_owner() == application_user_access_token.get_application_user_id() {
+        if channel_.get_owner().get() == application_user_access_token.get_application_user_id().get() {
             return Ok(
                 ArgumentResult::Ok {
                     subject: ActionProcessorResult::UserWorkflowPrecedent {
@@ -176,5 +177,5 @@ impl ActionProcessor {
 #[serde(crate = "extern_crate::serde")]
 pub struct Incoming {
     application_user_access_token_serialized_form: String,
-    channel_id: i64
+    channel_id: Channel_Id
 }

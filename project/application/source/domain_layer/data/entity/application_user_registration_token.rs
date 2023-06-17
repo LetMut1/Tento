@@ -16,6 +16,7 @@ pub use self::CanBeResentFrom as ApplicationUserRegistrationToken_CanBeResentFro
 #[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Serialize))]
 #[derive(Deserialize)]
 #[serde(crate = "extern_crate::serde")]
+#[serde(transparent)]
 pub struct Value(String);
 
 impl Value {
@@ -71,6 +72,7 @@ impl ExpiresAt {
 #[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
+#[serde(transparent)]
 pub struct CanBeResentFrom(i64);
 
 impl CanBeResentFrom {

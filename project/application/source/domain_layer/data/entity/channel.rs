@@ -1,9 +1,7 @@
 use extern_crate::serde::Serialize;
+use extern_crate::serde::Deserialize;
 use std::borrow::Cow;
 use super::application_user::ApplicationUser_Id;
-
-#[cfg(feature = "facilitate_non_automatic_functional_testing")]
-use extern_crate::serde::Deserialize;
 
 pub use self::AccessModifier as Channel_AccessModifier;
 pub use self::AccessModifier_ as Channel_AccessModifier_;
@@ -21,8 +19,7 @@ pub use self::ViewingQuantity as Channel_ViewingQuantity;
 pub use self::VisabilityModifier as Channel_VisabilityModifier;
 pub use self::VisabilityModifier_ as Channel_VisabilityModifier_;
 
-#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
-#[derive(Clone, Copy, Serialize)]
+#[derive(Clone, Copy, Serialize, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct Id(i64);
@@ -37,8 +34,7 @@ impl Id {
     }
 }
 
-#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
-#[derive(Clone, Serialize)]
+#[derive(Clone, Serialize, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct Name(String);
@@ -69,6 +65,10 @@ impl LinkedName {
     }
 }
 
+#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[derive(Serialize)]
+#[serde(crate = "extern_crate::serde")]
+#[serde(transparent)]
 pub struct Description(String);
 
 impl Description {
@@ -133,6 +133,10 @@ pub enum VisabilityModifier_ {
     Private
 }
 
+#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[derive(Serialize)]
+#[serde(crate = "extern_crate::serde")]
+#[serde(transparent)]
 pub struct Orientation(Vec<i16>);
 
 impl Orientation {
@@ -177,7 +181,10 @@ impl BackgroundImagePath {
     }
 }
 
-#[derive(Clone, Copy)]
+#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[derive(Clone, Copy, Serialize)]
+#[serde(crate = "extern_crate::serde")]
+#[serde(transparent)]
 pub struct SubscribersQuantity(i64);
 
 impl SubscribersQuantity {
@@ -190,7 +197,9 @@ impl SubscribersQuantity {
     }
 }
 
-#[derive(Clone, Copy)]
+#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[derive(Clone, Copy, Serialize)]
+#[serde(crate = "extern_crate::serde")]
 pub struct MarksQuantity(i64);
 
 impl MarksQuantity {
@@ -203,7 +212,10 @@ impl MarksQuantity {
     }
 }
 
-#[derive(Clone, Copy)]
+#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[derive(Clone, Copy, Serialize)]
+#[serde(crate = "extern_crate::serde")]
+#[serde(transparent)]
 pub struct ViewingQuantity(i64);
 
 impl ViewingQuantity {

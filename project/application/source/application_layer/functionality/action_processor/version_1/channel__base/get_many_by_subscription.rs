@@ -132,7 +132,7 @@ impl ActionProcessor {
 #[serde(crate = "extern_crate::serde")]
 pub struct Incoming {
     application_user_access_token_serialized_form: String,
-    requery_channel_id: Option<i64>,
+    requery_channel_id: Option<Channel_Id>,
     limit: i16
 }
 

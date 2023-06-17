@@ -91,12 +91,12 @@ impl ActionProcessor {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::Limit });
         }
 
-        if !Validator::<Channel_Name>::is_valid(incoming.channel_name.as_str()) {
+        if !Validator::<Channel_Name>::is_valid(&incoming.channel_name) {
             return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::Channel_Name });
         }
 
         if let Some(ref requery_channel_name_) = incoming.requery_channel_name {
-            if !Validator::<Channel_Name>::is_valid(requery_channel_name_.as_str()) {
+            if !Validator::<Channel_Name>::is_valid(requery_channel_name_) {
                 return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::Channel_Name });
             }
         }
@@ -116,7 +116,7 @@ impl ActionProcessor {
         let common_registry = match PostgresqlRepository::<Common1>::find_1(
             &*database_1_postgresql_pooled_connection,
             application_user_access_token.get_application_user_id(),
-            incoming.channel_name.as_str(),
+            &incoming.channel_name,
             &incoming.requery_channel_name,
             incoming.limit
         ).await {
@@ -137,8 +137,8 @@ impl ActionProcessor {
 #[serde(crate = "extern_crate::serde")]
 pub struct Incoming {
     application_user_access_token_serialized_form: String,
-    channel_name: String,
-    requery_channel_name: Option<String>,
+    channel_name: Channel_Name,
+    requery_channel_name: Option<Channel_Name>,
     limit: i16
 }
 

@@ -29,6 +29,7 @@ impl Id {
 #[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Serialize))]
 #[derive(Clone, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
+#[serde(transparent)]
 pub struct Email(String);
 
 impl Email {
@@ -48,6 +49,7 @@ impl Email {
 #[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Serialize))]
 #[derive(Clone, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
+#[serde(transparent)]
 pub struct Nickname(String);
 
 impl Nickname {
