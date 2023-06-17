@@ -458,19 +458,19 @@ impl ApplicationUserRegistrationToken_6 {
     }
 
     pub fn get_value<'b>(&'b self) -> &'b Value {
-        return self.get_value();
+        return &self.value;
     }
 
     pub fn get_is_approved<'b>(&'b self) -> IsApproved {
-        return self.get_is_approved();
+        return self.is_approved;
     }
 
     pub fn get_expires_at<'b>(&'b self) -> ExpiresAt {
-        return self.get_expires_at();
+        return self.expires_at;
     }
 
     pub fn get_can_be_resent_from<'b>(&'b self) -> CanBeResentFrom {
-        return self.get_can_be_resent_from();
+        return self.can_be_resent_from;
     }
 
     pub fn set_can_be_resent_from<'b>(&'b mut self, can_be_resent_from: CanBeResentFrom) -> &'b mut Self {
