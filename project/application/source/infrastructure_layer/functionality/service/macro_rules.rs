@@ -1,19 +1,21 @@
-macro_rules! create_enum {
-    ($(($e:ident :: $var:ident $(, { $($field:ident : $typ:ty),* $(,)? })?)),* $(,)? ) => {
-        const _: () = { {$(
-            let _ = |e: $e| {
-                match e {
-                    $e :: $var => (),
-                    _ => (),
-                }
-            };
-        )*}};
+macro_rules! r#enum {
+    ($(($enum:ident :: $enum_variant:ident $({ $($enum_variant_field:ident : $enum_variant_field_type:ty),* $(,)? })?)),* $(,)?) => {
+        const _: () = {
+            $(
+                let _ = |e: $enum| -> () {
+                    match e {
+                        $enum :: $enum_variant => (),
+                        _ => (),
+                    }
+                };
+            )*
+
+            ()
+        };
 
         #[derive(Debug)]
         enum Name {
-            $($var $({ $(
-                $field: $typ,
-            )*})?,)*
+            $($enum_variant $({ $($enum_variant_field: $enum_variant_field_type,)* })?,)*
         }
     }
 }
