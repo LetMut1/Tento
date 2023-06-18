@@ -68,7 +68,7 @@ impl GetManyPublicByName {
                 );
             }
             ActionProcessorResult::Outcoming { outcoming } => {
-                return Ok(UnifiedReport::data(outcoming));
+                return Ok(UnifiedReport::filled(outcoming));
             }
             ActionProcessorResult::Precedent { precedent } => {
                 match precedent {

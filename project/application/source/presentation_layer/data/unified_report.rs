@@ -22,11 +22,11 @@ where
     S: Serialize
 {
     pub fn empty() -> Self {
-        return Self::Data { data: Data::Empty };
+        return Self::Target { data: Data::Empty };
     }
 
-    pub fn data(data: S) -> Self {
-        return Self::Data { data: Data::Filled { data }};
+    pub fn filled(data: S) -> Self {
+        return Self::Target { data: Data::Filled { data }};
     }
 
     pub fn communication_code(communication_code: i64) -> Self {
@@ -43,7 +43,7 @@ where
         return Self::Target { data: Data::Empty };
     }
 
-    pub fn data(data: S) -> Self {
+    pub fn filled(data: S) -> Self {
         return Self::Target { data: Data::Filled { data }};
     }
 
