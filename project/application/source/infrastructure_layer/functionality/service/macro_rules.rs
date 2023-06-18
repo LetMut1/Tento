@@ -1,5 +1,5 @@
 macro_rules! r#enum {
-    ($($enum:ident :: $enum_variant:ident $({ $($enum_variant_field:ident : $enum_variant_field_type:ty),* $(,)? })?),* $(,)?) => {
+    ($enum_name:ident {$($enum:ident :: $enum_variant:ident $({ $($enum_variant_field:ident : $enum_variant_field_type:ty),* $(,)? })?),* $(,)? }) => {
         const _: () = {
             $(
                 let _ = |e: $enum| -> () {
@@ -14,7 +14,7 @@ macro_rules! r#enum {
         };
 
         #[derive(Debug)]
-        enum Name {
+        pub enum $enum_name {
             $($enum_variant $({ $($enum_variant_field: $enum_variant_field_type,)* })?,)*
         }
     }
