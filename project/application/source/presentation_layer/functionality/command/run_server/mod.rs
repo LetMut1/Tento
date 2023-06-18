@@ -115,7 +115,7 @@ fn main() -> () {
 
 // application_user_reset_password_token_wrong_enter_tries_quantity = match application_user_reset_password_token_.get_wrong_enter_tries_quantity().get() - Incrementor сервис написать.
 
-
+// impl<S> UnifiedReport<S> -> сделать через трейт,
 
 
 
