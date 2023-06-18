@@ -1,5 +1,5 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
+use crate::application_layer::data::action_processor_result::WorkflowPrecedent;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ObfuscationValue;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_UpdatedAt;
@@ -132,8 +132,8 @@ impl ActionProcessor {
         if is_exist_1 {
             return Ok(
                 ArgumentResult::Ok {
-                    subject: ActionProcessorResult::UserWorkflowPrecedent {
-                        user_workflow_precedent: UserWorkflowPrecedent::ApplicationUser_NicknameAlreadyExist
+                    subject: ActionProcessorResult::WorkflowPrecedent {
+                        workflow_precedent: WorkflowPrecedent::ApplicationUser_NicknameAlreadyExist
                     }
                 }
             );
@@ -154,8 +154,8 @@ impl ActionProcessor {
         if is_exist_2 {
             return Ok(
                 ArgumentResult::Ok {
-                    subject: ActionProcessorResult::UserWorkflowPrecedent {
-                        user_workflow_precedent: UserWorkflowPrecedent::ApplicationUser_EmailAlreadyExist
+                    subject: ActionProcessorResult::WorkflowPrecedent {
+                        workflow_precedent: WorkflowPrecedent::ApplicationUser_EmailAlreadyExist
                     }
                 }
             );
@@ -193,8 +193,8 @@ impl ActionProcessor {
             None => {
                 return Ok(
                     ArgumentResult::Ok {
-                        subject: ActionProcessorResult::UserWorkflowPrecedent {
-                            user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserRegistrationToken_NotFound
+                        subject: ActionProcessorResult::WorkflowPrecedent {
+                            workflow_precedent: WorkflowPrecedent::ApplicationUserRegistrationToken_NotFound
                         }
                     }
                 );
@@ -214,8 +214,8 @@ impl ActionProcessor {
 
             return Ok(
                 ArgumentResult::Ok {
-                    subject: ActionProcessorResult::UserWorkflowPrecedent {
-                        user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserRegistrationToken_AlreadyExpired
+                    subject: ActionProcessorResult::WorkflowPrecedent {
+                        workflow_precedent: WorkflowPrecedent::ApplicationUserRegistrationToken_AlreadyExpired
                     }
                 }
             );
@@ -224,8 +224,8 @@ impl ActionProcessor {
         if !application_user_registration_token_.get_is_approved().get() {
             return Ok(
                 ArgumentResult::Ok {
-                    subject: ActionProcessorResult::UserWorkflowPrecedent {
-                        user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserRegistrationToken_IsNotApproved
+                    subject: ActionProcessorResult::WorkflowPrecedent {
+                        workflow_precedent: WorkflowPrecedent::ApplicationUserRegistrationToken_IsNotApproved
                     }
                 }
             );
@@ -274,8 +274,8 @@ impl ActionProcessor {
 
             return Ok(
                 ArgumentResult::Ok {
-                    subject: ActionProcessorResult::UserWorkflowPrecedent {
-                        user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserRegistrationToken_WrongValue
+                    subject: ActionProcessorResult::WorkflowPrecedent {
+                        workflow_precedent: WorkflowPrecedent::ApplicationUserRegistrationToken_WrongValue
                     }
                 }
             );

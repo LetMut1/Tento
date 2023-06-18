@@ -1,5 +1,5 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
+use crate::application_layer::data::action_processor_result::WorkflowPrecedent;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_1;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ObfuscationValue;
@@ -116,8 +116,8 @@ impl ActionProcessor {
             None => {
                 return Ok(
                     ArgumentResult::Ok {
-                        subject: ActionProcessorResult::UserWorkflowPrecedent {
-                            user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAuthorizationToken_NotFound
+                        subject: ActionProcessorResult::WorkflowPrecedent {
+                            workflow_precedent: WorkflowPrecedent::ApplicationUserAuthorizationToken_NotFound
                         }
                     }
                 );
@@ -137,8 +137,8 @@ impl ActionProcessor {
 
             return Ok(
                 ArgumentResult::Ok {
-                    subject: ActionProcessorResult::UserWorkflowPrecedent {
-                        user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAuthorizationToken_AlreadyExpired
+                    subject: ActionProcessorResult::WorkflowPrecedent {
+                        workflow_precedent: WorkflowPrecedent::ApplicationUserAuthorizationToken_AlreadyExpired
                     }
                 }
             );
@@ -187,8 +187,8 @@ impl ActionProcessor {
 
             return Ok(
                 ArgumentResult::Ok {
-                    subject: ActionProcessorResult::UserWorkflowPrecedent {
-                        user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAuthorizationToken_WrongValue
+                    subject: ActionProcessorResult::WorkflowPrecedent {
+                        workflow_precedent: WorkflowPrecedent::ApplicationUserAuthorizationToken_WrongValue
                     }
                 }
             );
@@ -223,8 +223,8 @@ impl ActionProcessor {
         if !is_exist {
             return Ok(
                 ArgumentResult::Ok {
-                    subject: ActionProcessorResult::UserWorkflowPrecedent {
-                        user_workflow_precedent: UserWorkflowPrecedent::ApplicationUser_NotFound
+                    subject: ActionProcessorResult::WorkflowPrecedent {
+                        workflow_precedent: WorkflowPrecedent::ApplicationUser_NotFound
                     }
                 }
             );

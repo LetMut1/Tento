@@ -68,7 +68,7 @@ impl CheckNicknameForExisting {
             ActionProcessorResult::Outcoming { outcoming } => {
                 return Ok(UnifiedReport::data(outcoming));
             }
-            ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent: _ } => {
+            ActionProcessorResult::WorkflowPrecedent { workflow_precedent: _ } => {
                 return Err(
                     ErrorAuditor::new(
                         BaseError::create_unreachable_state(),

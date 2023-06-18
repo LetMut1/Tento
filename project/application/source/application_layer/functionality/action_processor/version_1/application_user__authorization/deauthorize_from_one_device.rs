@@ -1,5 +1,5 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
+use crate::application_layer::data::action_processor_result::WorkflowPrecedent;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::functionality::service::application_user_access_token__extractor::ExtractorResult;
@@ -61,8 +61,8 @@ impl ActionProcessor {
                     ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
                         return Ok(
                             ArgumentResult::Ok {
-                                subject: ActionProcessorResult::UserWorkflowPrecedent {
-                                    user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAccessToken_AlreadyExpired
+                                subject: ActionProcessorResult::WorkflowPrecedent {
+                                    workflow_precedent: WorkflowPrecedent::ApplicationUserAccessToken_AlreadyExpired
                                 }
                             }
                         );
@@ -70,8 +70,8 @@ impl ActionProcessor {
                     ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
                         return Ok(
                             ArgumentResult::Ok {
-                                subject: ActionProcessorResult::UserWorkflowPrecedent {
-                                    user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList
+                                subject: ActionProcessorResult::WorkflowPrecedent {
+                                    workflow_precedent: WorkflowPrecedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList
                                 }
                             }
                         );

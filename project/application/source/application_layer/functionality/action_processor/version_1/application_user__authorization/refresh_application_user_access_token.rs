@@ -1,5 +1,5 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
+use crate::application_layer::data::action_processor_result::WorkflowPrecedent;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_1;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ObfuscationValue;
@@ -102,8 +102,8 @@ impl ActionProcessor {
             None => {
                 return Ok(
                     ArgumentResult::Ok {
-                        subject: ActionProcessorResult::UserWorkflowPrecedent {
-                            user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAccessRefreshToken_NotFound
+                        subject: ActionProcessorResult::WorkflowPrecedent {
+                            workflow_precedent: WorkflowPrecedent::ApplicationUserAccessRefreshToken_NotFound
                         }
                     }
                 );
@@ -141,8 +141,8 @@ impl ActionProcessor {
 
             return Ok(
                 ArgumentResult::Ok {
-                    subject: ActionProcessorResult::UserWorkflowPrecedent {
-                        user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserAccessRefreshToken_AlreadyExpired
+                    subject: ActionProcessorResult::WorkflowPrecedent {
+                        workflow_precedent: WorkflowPrecedent::ApplicationUserAccessRefreshToken_AlreadyExpired
                     }
                 }
             );

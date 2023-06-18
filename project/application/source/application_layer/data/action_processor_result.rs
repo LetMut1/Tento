@@ -8,12 +8,12 @@ where
     Outcoming {
         outcoming: T
     },
-    UserWorkflowPrecedent {
-        user_workflow_precedent: UserWorkflowPrecedent
+    WorkflowPrecedent {
+        workflow_precedent: WorkflowPrecedent
     }
 }
 
-pub enum UserWorkflowPrecedent {
+pub enum WorkflowPrecedent {
     ApplicationUser_EmailAlreadyExist,
     ApplicationUser_IsChannelOwner,
     ApplicationUser_NicknameAlreadyExist,

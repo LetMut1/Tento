@@ -1,5 +1,5 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
+use crate::application_layer::data::action_processor_result::WorkflowPrecedent;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_3;
@@ -113,8 +113,8 @@ impl ActionProcessor {
             None => {
                 return Ok(
                     ArgumentResult::Ok {
-                        subject: ActionProcessorResult::UserWorkflowPrecedent {
-                            user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserResetPasswordToken_NotFound
+                        subject: ActionProcessorResult::WorkflowPrecedent {
+                            workflow_precedent: WorkflowPrecedent::ApplicationUserResetPasswordToken_NotFound
                         }
                     }
                 );
@@ -134,8 +134,8 @@ impl ActionProcessor {
 
             return Ok(
                 ArgumentResult::Ok {
-                    subject: ActionProcessorResult::UserWorkflowPrecedent {
-                        user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserResetPasswordToken_AlreadyExpired
+                    subject: ActionProcessorResult::WorkflowPrecedent {
+                        workflow_precedent: WorkflowPrecedent::ApplicationUserResetPasswordToken_AlreadyExpired
                     }
                 }
             );
@@ -144,8 +144,8 @@ impl ActionProcessor {
         if !application_user_reset_password_token_.get_is_approved().get() {
             return Ok(
                 ArgumentResult::Ok {
-                    subject: ActionProcessorResult::UserWorkflowPrecedent {
-                        user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserResetPasswordToken_IsNotApproved
+                    subject: ActionProcessorResult::WorkflowPrecedent {
+                        workflow_precedent: WorkflowPrecedent::ApplicationUserResetPasswordToken_IsNotApproved
                     }
                 }
             );
@@ -194,8 +194,8 @@ impl ActionProcessor {
 
             return Ok(
                 ArgumentResult::Ok {
-                    subject: ActionProcessorResult::UserWorkflowPrecedent {
-                        user_workflow_precedent: UserWorkflowPrecedent::ApplicationUserResetPasswordToken_WrongValue
+                    subject: ActionProcessorResult::WorkflowPrecedent {
+                        workflow_precedent: WorkflowPrecedent::ApplicationUserResetPasswordToken_WrongValue
                     }
                 }
             );
@@ -232,8 +232,8 @@ impl ActionProcessor {
             None => {
                 return Ok(
                     ArgumentResult::Ok {
-                        subject: ActionProcessorResult::UserWorkflowPrecedent {
-                            user_workflow_precedent: UserWorkflowPrecedent::ApplicationUser_NotFound
+                        subject: ActionProcessorResult::WorkflowPrecedent {
+                            workflow_precedent: WorkflowPrecedent::ApplicationUser_NotFound
                         }
                     }
                 );

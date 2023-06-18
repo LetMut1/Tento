@@ -1,5 +1,5 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
+use crate::application_layer::data::action_processor_result::WorkflowPrecedent;
 use crate::application_layer::functionality::action_processor::version_1::channel__base::get_one_by_id::ActionProcessor;
 use crate::application_layer::functionality::action_processor::version_1::channel__base::get_one_by_id::Incoming;
 use crate::application_layer::functionality::action_processor::version_1::channel__base::get_one_by_id::Outcoming;
@@ -70,30 +70,30 @@ impl GetOneByID{
             ActionProcessorResult::Outcoming { outcoming } => {
                 return Ok(UnifiedReport::data(outcoming));
             }
-            ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent } => {
-                match user_workflow_precedent {
-                    UserWorkflowPrecedent::ApplicationUserAccessToken_AlreadyExpired => {
+            ActionProcessorResult::WorkflowPrecedent { workflow_precedent } => {
+                match workflow_precedent {
+                    WorkflowPrecedent::ApplicationUserAccessToken_AlreadyExpired => {
                         return Ok(
                             UnifiedReport::communication_code(
                                 CommunicationCodeRegistry::APPLICATION_USER_ACCESS_TOKEN__ALREADY_EXPIRED
                             )
                         );
                     }
-                    UserWorkflowPrecedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList => {
+                    WorkflowPrecedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList => {
                         return Ok(
                             UnifiedReport::communication_code(
                                 CommunicationCodeRegistry::APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST
                             )
                         );
                     }
-                    UserWorkflowPrecedent::Channel_NotFound => {
+                    WorkflowPrecedent::Channel_NotFound => {
                         return Ok(
                             UnifiedReport::communication_code(
                                 CommunicationCodeRegistry::CHANNEL__NOT_FOUND
                             )
                         );
                     }
-                    UserWorkflowPrecedent::Channel_IsClosed => {
+                    WorkflowPrecedent::Channel_IsClosed => {
                         return Ok(
                             UnifiedReport::communication_code(
                                 CommunicationCodeRegistry::CHANNEL__IS_CLOSED

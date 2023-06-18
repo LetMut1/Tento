@@ -1,5 +1,5 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
+use crate::application_layer::data::action_processor_result::WorkflowPrecedent;
 use crate::application_layer::functionality::action_processor::version_1::channel__base::get_many_by_name_in_subscriptions::ActionProcessor;
 use crate::application_layer::functionality::action_processor::version_1::channel__base::get_many_by_name_in_subscriptions::Incoming;
 use crate::application_layer::functionality::action_processor::version_1::channel__base::get_many_by_name_in_subscriptions::Outcoming;
@@ -70,16 +70,16 @@ impl GetManyByNameInSubscriptions {
             ActionProcessorResult::Outcoming { outcoming } => {
                 return Ok(UnifiedReport::data(outcoming));
             }
-            ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent } => {
-                match user_workflow_precedent {
-                    UserWorkflowPrecedent::ApplicationUserAccessToken_AlreadyExpired => {
+            ActionProcessorResult::WorkflowPrecedent { workflow_precedent } => {
+                match workflow_precedent {
+                    WorkflowPrecedent::ApplicationUserAccessToken_AlreadyExpired => {
                         return Ok(
                             UnifiedReport::communication_code(
                                 CommunicationCodeRegistry::APPLICATION_USER_ACCESS_TOKEN__ALREADY_EXPIRED
                             )
                         );
                     }
-                    UserWorkflowPrecedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList => {
+                    WorkflowPrecedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList => {
                         return Ok(
                             UnifiedReport::communication_code(
                                 CommunicationCodeRegistry::APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST

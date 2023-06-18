@@ -1,5 +1,5 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
+use crate::application_layer::data::action_processor_result::WorkflowPrecedent;
 use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::send_email_for_register::ActionProcessor;
 use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::send_email_for_register::Incoming;
 use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::send_email_for_register::Outcoming;
@@ -70,30 +70,30 @@ impl SendEmailForRegister {
             ActionProcessorResult::Outcoming { outcoming } => {
                 return Ok(UnifiedReport::data(outcoming));
             }
-            ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent } => {
-                match user_workflow_precedent {
-                    UserWorkflowPrecedent::ApplicationUserRegistrationToken_NotFound => {
+            ActionProcessorResult::WorkflowPrecedent { workflow_precedent } => {
+                match workflow_precedent {
+                    WorkflowPrecedent::ApplicationUserRegistrationToken_NotFound => {
                         return Ok(
                             UnifiedReport::communication_code(
                                 CommunicationCodeRegistry::APPLICATION_USER_REGISTRATION_TOKEN__NOT_FOUND
                             )
                         );
                     }
-                    UserWorkflowPrecedent::ApplicationUserRegistrationToken_AlreadyExpired => {
+                    WorkflowPrecedent::ApplicationUserRegistrationToken_AlreadyExpired => {
                         return Ok(
                             UnifiedReport::communication_code(
                                 CommunicationCodeRegistry::APPLICATION_USER_REGISTRATION_TOKEN__ALREADY_EXPIRED
                             )
                         );
                     }
-                    UserWorkflowPrecedent::ApplicationUserRegistrationToken_AlreadyApproved => {
+                    WorkflowPrecedent::ApplicationUserRegistrationToken_AlreadyApproved => {
                         return Ok(
                             UnifiedReport::communication_code(
                                 CommunicationCodeRegistry::APPLICATION_USER_REGISTRATION_TOKEN__ALREADY_APPROVED
                             )
                         );
                     }
-                    UserWorkflowPrecedent::ApplicationUserRegistrationToken_TimeToResendHasNotCome => {
+                    WorkflowPrecedent::ApplicationUserRegistrationToken_TimeToResendHasNotCome => {
                         return Ok(
                             UnifiedReport::communication_code(
                                 CommunicationCodeRegistry::APPLICATION_USER_REGISTRATION_TOKEN__TIME_TO_RESEND_HAS_NOT_COME

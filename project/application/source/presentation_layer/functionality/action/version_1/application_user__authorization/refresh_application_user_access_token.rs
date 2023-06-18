@@ -1,5 +1,5 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
+use crate::application_layer::data::action_processor_result::WorkflowPrecedent;
 use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::refresh_application_user_access_token::ActionProcessor;
 use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::refresh_application_user_access_token::Incoming;
 use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::refresh_application_user_access_token::Outcoming;
@@ -70,16 +70,16 @@ impl RefreshApplicationUserAccessToken {
             ActionProcessorResult::Outcoming { outcoming } => {
                 return Ok(UnifiedReport::data(outcoming));
             }
-            ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent } => {
-                match user_workflow_precedent {
-                    UserWorkflowPrecedent::ApplicationUserAccessRefreshToken_NotFound => {
+            ActionProcessorResult::WorkflowPrecedent { workflow_precedent } => {
+                match workflow_precedent {
+                    WorkflowPrecedent::ApplicationUserAccessRefreshToken_NotFound => {
                         return Ok(
                             UnifiedReport::communication_code(
                                 CommunicationCodeRegistry::APPLICATION_USER_ACCESS_REFRESH_TOKEN__NOT_FOUND
                             )
                         );
                     }
-                    UserWorkflowPrecedent::ApplicationUserAccessRefreshToken_AlreadyExpired => {
+                    WorkflowPrecedent::ApplicationUserAccessRefreshToken_AlreadyExpired => {
                         return Ok(
                             UnifiedReport::communication_code(
                                 CommunicationCodeRegistry::APPLICATION_USER_ACCESS_REFRESH_TOKEN__ALREADY_EXPIRED

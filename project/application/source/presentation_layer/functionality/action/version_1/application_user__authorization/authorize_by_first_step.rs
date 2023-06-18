@@ -1,5 +1,5 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::action_processor_result::UserWorkflowPrecedent;
+use crate::application_layer::data::action_processor_result::WorkflowPrecedent;
 use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::authorize_by_first_step::ActionProcessor;
 use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::authorize_by_first_step::Incoming;
 use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::authorize_by_first_step::Outcoming;
@@ -70,10 +70,10 @@ impl AuthorizeByFirstStep {
             ActionProcessorResult::Outcoming { outcoming } => {
                 return Ok(UnifiedReport::data(outcoming));
             }
-            ActionProcessorResult::UserWorkflowPrecedent { user_workflow_precedent } => {
-                match user_workflow_precedent {
-                    UserWorkflowPrecedent::ApplicationUser_NotFound |
-                    UserWorkflowPrecedent::ApplicationUser_WrongPassword => {
+            ActionProcessorResult::WorkflowPrecedent { workflow_precedent } => {
+                match workflow_precedent {
+                    WorkflowPrecedent::ApplicationUser_NotFound |
+                    WorkflowPrecedent::ApplicationUser_WrongPassword => {
                         return Ok(
                             UnifiedReport::communication_code(
                                 CommunicationCodeRegistry::APPLICATION_USER__WRONG_EMAIL_OR_NICKNAME_OR_PASSWORD
