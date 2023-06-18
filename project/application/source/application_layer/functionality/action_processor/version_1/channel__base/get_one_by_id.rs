@@ -23,8 +23,8 @@ use crate::domain_layer::functionality::service::application_user_access_token__
 use crate::domain_layer::functionality::service::channel__access_modifier_resolver::Channel_AccessModifierResolver;
 use crate::domain_layer::functionality::service::extractor::Extractor;
 use crate::domain_layer::functionality::service::validator::Validator;
-use crate::infrastructure_layer::data::argument_result::ArgumentResult;
-use crate::infrastructure_layer::data::argument_result::InvalidArgument;
+use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
+use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
@@ -55,7 +55,7 @@ impl ActionProcessor {
         _database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _redis_connection_pool: &'a Pool<RedisConnectionManager>,
         incoming: Incoming
-    ) -> Result<ArgumentResult<ActionProcessorResult<Outcoming>>, ErrorAuditor>
+    ) -> Result<InvalidArgumentResult<ActionProcessorResult<Outcoming>>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -74,12 +74,12 @@ impl ActionProcessor {
         };
 
         let application_user_access_token = match extractor_result {
-            ArgumentResult::Ok { subject: extractor_result_ } => {
+            InvalidArgumentResult::Ok { subject: extractor_result_ } => {
                 let application_user_access_token_ = match extractor_result_ {
                     ExtractorResult::ApplicationUserAccessToken { application_user_access_token: application_user_access_token__ } => application_user_access_token__,
                     ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
                         return Ok(
-                            ArgumentResult::Ok {
+                            InvalidArgumentResult::Ok {
                                 subject: ActionProcessorResult::Precedent {
                                     precedent: Precedent::ApplicationUserAccessToken_AlreadyExpired
                                 }
@@ -88,7 +88,7 @@ impl ActionProcessor {
                     }
                     ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
                         return Ok(
-                            ArgumentResult::Ok {
+                            InvalidArgumentResult::Ok {
                                 subject: ActionProcessorResult::Precedent {
                                     precedent: Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList
                                 }
@@ -99,13 +99,13 @@ impl ActionProcessor {
 
                 application_user_access_token_
             }
-            ArgumentResult::InvalidArgument { invalid_argument } => {
-                return Ok(ArgumentResult::InvalidArgument { invalid_argument });
+            InvalidArgumentResult::InvalidArgument { invalid_argument } => {
+                return Ok(InvalidArgumentResult::InvalidArgument { invalid_argument });
             }
         };
 
         if !Validator::<Channel_Id>::is_valid(incoming.channel_id) {
-            return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::Channel_Id });
+            return Ok(InvalidArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::Channel_Id });
         }
 
         let database_1_postgresql_pooled_connection = match database_1_postgresql_connection_pool.get().await {
@@ -135,7 +135,7 @@ impl ActionProcessor {
             Some(channel_) => channel_,
             None => {
                 return Ok(
-                    ArgumentResult::Ok {
+                    InvalidArgumentResult::Ok {
                         subject: ActionProcessorResult::Precedent {
                             precedent: Precedent::Channel_NotFound
                         }
@@ -161,7 +161,7 @@ impl ActionProcessor {
             if !is_exist
                 && application_user_access_token.get_application_user_id().get() != channel_.get_owner().get() {
                 return Ok(
-                    ArgumentResult::Ok {
+                    InvalidArgumentResult::Ok {
                         subject: ActionProcessorResult::Precedent {
                             precedent: Precedent::Channel_IsClosed
                         }
@@ -230,7 +230,7 @@ impl ActionProcessor {
             channel_outer_link_registry
         };
 
-        return Ok(ArgumentResult::Ok { subject: ActionProcessorResult::Outcoming { outcoming } });
+        return Ok(InvalidArgumentResult::Ok { subject: ActionProcessorResult::Outcoming { outcoming } });
     }
 }
 

@@ -22,8 +22,8 @@ use crate::domain_layer::functionality::service::encoder::Encoder;
 use crate::domain_layer::functionality::service::generator::Generator;
 use crate::domain_layer::functionality::service::serialization_form_resolver::SerializationFormResolver;
 use crate::domain_layer::functionality::service::validator::Validator;
-use crate::infrastructure_layer::data::argument_result::ArgumentResult;
-use crate::infrastructure_layer::data::argument_result::InvalidArgument;
+use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
+use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
@@ -58,7 +58,7 @@ impl ActionProcessor {
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _redis_connection_pool: &'a Pool<RedisConnectionManager>,
         incoming: Incoming
-    ) -> Result<ArgumentResult<ActionProcessorResult<Outcoming>>, ErrorAuditor>
+    ) -> Result<InvalidArgumentResult<ActionProcessorResult<Outcoming>>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -66,11 +66,11 @@ impl ActionProcessor {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
         if !Validator::<ApplicationUser_Password>::is_valid(&incoming.application_user_password) {
-            return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUser_Password });
+            return Ok(InvalidArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUser_Password });
         }
 
         if !Validator::<ApplicationUser_Nickname>::is_valid(&incoming.application_user_nickname) {
-            return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUser_Nickname });
+            return Ok(InvalidArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUser_Nickname });
         }
 
         let is_valid_email = match Validator::<ApplicationUser_Email>::is_valid(&incoming.application_user_email) {
@@ -83,7 +83,7 @@ impl ActionProcessor {
         };
 
         if !is_valid_email {
-            return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUser_Email });
+            return Ok(InvalidArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUser_Email });
         }
 
         let is_valid_value = match Validator::<ApplicationUserRegistrationToken_Value>::is_valid(&incoming.application_user_registration_token_value) {
@@ -96,11 +96,11 @@ impl ActionProcessor {
         };
 
         if !is_valid_value {
-            return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserRegistrationToken_Value });
+            return Ok(InvalidArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserRegistrationToken_Value });
         }
 
         if !Validator::<ApplicationUserDevice_Id>::is_valid(&incoming.application_user_device_id) {
-            return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserDevice_Id });
+            return Ok(InvalidArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserDevice_Id });
         }
 
         let database_1_postgresql_pooled_connection = match database_1_postgresql_connection_pool.get().await {
@@ -131,7 +131,7 @@ impl ActionProcessor {
 
         if is_exist_1 {
             return Ok(
-                ArgumentResult::Ok {
+                InvalidArgumentResult::Ok {
                     subject: ActionProcessorResult::Precedent {
                         precedent: Precedent::ApplicationUser_NicknameAlreadyExist
                     }
@@ -153,7 +153,7 @@ impl ActionProcessor {
 
         if is_exist_2 {
             return Ok(
-                ArgumentResult::Ok {
+                InvalidArgumentResult::Ok {
                     subject: ActionProcessorResult::Precedent {
                         precedent: Precedent::ApplicationUser_EmailAlreadyExist
                     }
@@ -192,7 +192,7 @@ impl ActionProcessor {
             Some(application_user_registration_token__) => application_user_registration_token__,
             None => {
                 return Ok(
-                    ArgumentResult::Ok {
+                    InvalidArgumentResult::Ok {
                         subject: ActionProcessorResult::Precedent {
                             precedent: Precedent::ApplicationUserRegistrationToken_NotFound
                         }
@@ -213,7 +213,7 @@ impl ActionProcessor {
             }
 
             return Ok(
-                ArgumentResult::Ok {
+                InvalidArgumentResult::Ok {
                     subject: ActionProcessorResult::Precedent {
                         precedent: Precedent::ApplicationUserRegistrationToken_AlreadyExpired
                     }
@@ -223,7 +223,7 @@ impl ActionProcessor {
 
         if !application_user_registration_token_.get_is_approved().get() {
             return Ok(
-                ArgumentResult::Ok {
+                InvalidArgumentResult::Ok {
                     subject: ActionProcessorResult::Precedent {
                         precedent: Precedent::ApplicationUserRegistrationToken_IsNotApproved
                     }
@@ -273,7 +273,7 @@ impl ActionProcessor {
             }
 
             return Ok(
-                ArgumentResult::Ok {
+                InvalidArgumentResult::Ok {
                     subject: ActionProcessorResult::Precedent {
                         precedent: Precedent::ApplicationUserRegistrationToken_WrongValue
                     }
@@ -408,7 +408,7 @@ impl ActionProcessor {
         };
 
         return Ok(
-            ArgumentResult::Ok {
+            InvalidArgumentResult::Ok {
                 subject: ActionProcessorResult::Outcoming {
                     outcoming: Outcoming {
                         application_user_access_token_serialized_form,

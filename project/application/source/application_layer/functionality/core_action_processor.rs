@@ -1,8 +1,8 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
 use crate::domain_layer::data::entity::action_round_register::ActionRoundRegister;
 use crate::domain_layer::functionality::service::writer::Writer;
-use crate::infrastructure_layer::data::argument_result::ArgumentResult;
-use crate::infrastructure_layer::data::argument_result::InvalidArgument;
+use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
+use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::control_type_registry::Request;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
@@ -56,7 +56,7 @@ impl CoreActionProcessor {
             &'a Pool<RedisConnectionManager>,
             API
         ) -> F,
-        F: Future<Output = Result<ArgumentResult<ActionProcessorResult<APO>>, ErrorAuditor>>,
+        F: Future<Output = Result<InvalidArgumentResult<ActionProcessorResult<APO>>, ErrorAuditor>>,
         API: for<'de> Deserialize<'de>,
         APO: SerdeSerialize,
         APRR: FnOnce(ActionProcessorResult<APO>) -> Result<UnifiedReport<APO>, ErrorAuditor>
@@ -157,8 +157,8 @@ impl CoreActionProcessor {
         };
 
         let action_processor_result_ = match action_processor_result {
-            ArgumentResult::Ok { subject: action_processor_result__ } => action_processor_result__,
-            ArgumentResult::InvalidArgument { invalid_argument } => {
+            InvalidArgumentResult::Ok { subject: action_processor_result__ } => action_processor_result__,
+            InvalidArgumentResult::InvalidArgument { invalid_argument } => {
                 let response = Creator::<Response>::create_bad_request();
 
                 if let Err(mut error) = Writer::<ActionRoundRegister>::write_with_context(

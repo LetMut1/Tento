@@ -1,7 +1,7 @@
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::functionality::service::encoder::Encoder;
-use crate::infrastructure_layer::data::argument_result::ArgumentResult;
-use crate::infrastructure_layer::data::argument_result::InvalidArgument;
+use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
+use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
@@ -52,13 +52,13 @@ impl SerializationFormResolver<ApplicationUserAccessToken<'_>> {
     pub fn deserialize<'a>(
         environment_configuration: &'a EnvironmentConfiguration,
         application_user_access_token_serialized_form: &'a str
-    ) -> Result<ArgumentResult<ApplicationUserAccessToken<'static>>, ErrorAuditor> {
+    ) -> Result<InvalidArgumentResult<ApplicationUserAccessToken<'static>>, ErrorAuditor> {
         let token_part_registry = application_user_access_token_serialized_form.split::<'_, &'_ str>(Self::TOKEN_PARTS_SEPARATOR)
             .collect::<Vec<&'_ str>>();         // TODO проверить, правильно ли вот тут вообще
 
         if token_part_registry.len() != 2
             || !Encoder::<Signature>::is_valid(environment_configuration, token_part_registry[0], token_part_registry[1]) {
-            return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserAccessToken_DeserializedForm });
+            return Ok(InvalidArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserAccessToken_DeserializedForm });
         }
 
         let data = match Encoder_::<Base64>::decode(token_part_registry[0].as_bytes()) {
@@ -82,7 +82,7 @@ impl SerializationFormResolver<ApplicationUserAccessToken<'_>> {
             }
         };
 
-        return Ok(ArgumentResult::Ok { subject: application_user_access_token });
+        return Ok(InvalidArgumentResult::Ok { subject: application_user_access_token });
     }
 }
 

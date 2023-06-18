@@ -19,8 +19,8 @@ use crate::domain_layer::functionality::service::email_sender::EmailSender;
 use crate::domain_layer::functionality::service::encoder::Encoder;
 use crate::domain_layer::functionality::service::generator::Generator;
 use crate::domain_layer::functionality::service::validator::Validator;
-use crate::infrastructure_layer::data::argument_result::ArgumentResult;
-use crate::infrastructure_layer::data::argument_result::InvalidArgument;
+use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
+use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
@@ -53,7 +53,7 @@ impl ActionProcessor {
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _redis_connection_pool: &'a Pool<RedisConnectionManager>,
         incoming: Incoming
-    ) -> Result<ArgumentResult<ActionProcessorResult<Outcoming>>, ErrorAuditor>
+    ) -> Result<InvalidArgumentResult<ActionProcessorResult<Outcoming>>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -61,11 +61,11 @@ impl ActionProcessor {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
         if !Validator::<ApplicationUser_Password>::is_valid(&incoming.application_user_password) {
-            return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUser_Password });
+            return Ok(InvalidArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUser_Password });
         }
 
         if !Validator::<ApplicationUserDevice_Id>::is_valid(&incoming.application_user_device_id) {
-            return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserDevice_Id });
+            return Ok(InvalidArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserDevice_Id });
         }
 
         let application_user_email = ApplicationUser_Email::new(incoming.application_user_email_or_application_user_nickname);
@@ -110,7 +110,7 @@ impl ActionProcessor {
                 Some(application_user___) => application_user___,
                 None => {
                     return Ok(
-                        ArgumentResult::Ok {
+                        InvalidArgumentResult::Ok {
                             subject: ActionProcessorResult::Precedent {
                                 precedent: Precedent::ApplicationUser_NotFound
                             }
@@ -143,7 +143,7 @@ impl ActionProcessor {
                     Some(application_user___) => application_user___,
                     None => {
                         return Ok(
-                            ArgumentResult::Ok {
+                            InvalidArgumentResult::Ok {
                                 subject: ActionProcessorResult::Precedent {
                                     precedent: Precedent::ApplicationUser_NotFound
                                 }
@@ -154,7 +154,7 @@ impl ActionProcessor {
 
                 ApplicationUser_Aggregator::First { application_user: application_user__ }
             } else {
-                return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUser_Nickname });
+                return Ok(InvalidArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUser_Nickname });
             }
         };
 
@@ -177,7 +177,7 @@ impl ActionProcessor {
 
         if !is_valid {
             return Ok(
-                ArgumentResult::Ok {
+                InvalidArgumentResult::Ok {
                     subject: ActionProcessorResult::Precedent {
                         precedent: Precedent::ApplicationUser_WrongPassword
                     }
@@ -392,7 +392,7 @@ impl ActionProcessor {
             application_user_authorization_token_can_be_resent_from
         };
 
-        return Ok(ArgumentResult::Ok { subject: ActionProcessorResult::Outcoming { outcoming } });
+        return Ok(InvalidArgumentResult::Ok { subject: ActionProcessorResult::Outcoming { outcoming } });
     }
 }
 

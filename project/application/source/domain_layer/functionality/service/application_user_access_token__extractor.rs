@@ -1,6 +1,6 @@
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::functionality::service::serialization_form_resolver::SerializationFormResolver;
-use crate::infrastructure_layer::data::argument_result::ArgumentResult;
+use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -12,7 +12,7 @@ impl Extractor<ApplicationUserAccessToken<'_>> {
     pub async fn extract<'a>(
         environment_configuration: &'a EnvironmentConfiguration,
         application_user_access_token_serialized_form: &'a str
-    ) -> Result<ArgumentResult<ExtractorResult>, ErrorAuditor> {
+    ) -> Result<InvalidArgumentResult<ExtractorResult>, ErrorAuditor> {
         let application_user_access_token = match SerializationFormResolver::<ApplicationUserAccessToken<'_>>::deserialize(
             environment_configuration,
             application_user_access_token_serialized_form
@@ -26,18 +26,18 @@ impl Extractor<ApplicationUserAccessToken<'_>> {
         };
 
         let application_user_access_token_ = match application_user_access_token {
-            ArgumentResult::Ok { subject: application_user_access_token__ } => application_user_access_token__,
-            ArgumentResult::InvalidArgument { invalid_argument } => {
-                return Ok(ArgumentResult::InvalidArgument { invalid_argument });
+            InvalidArgumentResult::Ok { subject: application_user_access_token__ } => application_user_access_token__,
+            InvalidArgumentResult::InvalidArgument { invalid_argument } => {
+                return Ok(InvalidArgumentResult::InvalidArgument { invalid_argument });
             }
         };
 
         if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_access_token_.get_expires_at().get()) {
-            return Ok(ArgumentResult::Ok { subject: ExtractorResult::ApplicationUserAccessTokenAlreadyExpired });
+            return Ok(InvalidArgumentResult::Ok { subject: ExtractorResult::ApplicationUserAccessTokenAlreadyExpired });
         }
 
         return Ok(
-            ArgumentResult::Ok {
+            InvalidArgumentResult::Ok {
                 subject: ExtractorResult::ApplicationUserAccessToken { application_user_access_token: application_user_access_token_ }
             }
         );

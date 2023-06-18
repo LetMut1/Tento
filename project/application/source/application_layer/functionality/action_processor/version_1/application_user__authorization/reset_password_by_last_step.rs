@@ -12,8 +12,8 @@ use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Password;
 use crate::domain_layer::functionality::service::encoder::Encoder;
 use crate::domain_layer::functionality::service::validator::Validator;
-use crate::infrastructure_layer::data::argument_result::ArgumentResult;
-use crate::infrastructure_layer::data::argument_result::InvalidArgument;
+use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
+use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
@@ -49,7 +49,7 @@ impl ActionProcessor {
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _redis_connection_pool: &'a Pool<RedisConnectionManager>,
         incoming: Incoming
-    ) -> Result<ArgumentResult<ActionProcessorResult<Void>>, ErrorAuditor>
+    ) -> Result<InvalidArgumentResult<ActionProcessorResult<Void>>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -66,19 +66,19 @@ impl ActionProcessor {
         };
 
         if !is_valid_value {
-            return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserResetPasswordToken_Value });
+            return Ok(InvalidArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserResetPasswordToken_Value });
         }
 
         if !Validator::<ApplicationUser_Id>::is_valid(incoming.application_user_id) {
-            return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUser_Id });
+            return Ok(InvalidArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUser_Id });
         }
 
         if !Validator::<ApplicationUser_Password>::is_valid(&incoming.application_user_password) {
-            return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUser_Password });
+            return Ok(InvalidArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUser_Password });
         }
 
         if !Validator::<ApplicationUserDevice_Id>::is_valid(&incoming.application_user_device_id) {
-            return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserDevice_Id });
+            return Ok(InvalidArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserDevice_Id });
         }
 
         let database_2_postgresql_pooled_connection = match database_2_postgresql_connection_pool.get().await {
@@ -112,7 +112,7 @@ impl ActionProcessor {
             Some(application_user_reset_password_token__) => application_user_reset_password_token__,
             None => {
                 return Ok(
-                    ArgumentResult::Ok {
+                    InvalidArgumentResult::Ok {
                         subject: ActionProcessorResult::Precedent {
                             precedent: Precedent::ApplicationUserResetPasswordToken_NotFound
                         }
@@ -133,7 +133,7 @@ impl ActionProcessor {
             }
 
             return Ok(
-                ArgumentResult::Ok {
+                InvalidArgumentResult::Ok {
                     subject: ActionProcessorResult::Precedent {
                         precedent: Precedent::ApplicationUserResetPasswordToken_AlreadyExpired
                     }
@@ -143,7 +143,7 @@ impl ActionProcessor {
 
         if !application_user_reset_password_token_.get_is_approved().get() {
             return Ok(
-                ArgumentResult::Ok {
+                InvalidArgumentResult::Ok {
                     subject: ActionProcessorResult::Precedent {
                         precedent: Precedent::ApplicationUserResetPasswordToken_IsNotApproved
                     }
@@ -193,7 +193,7 @@ impl ActionProcessor {
             }
 
             return Ok(
-                ArgumentResult::Ok {
+                InvalidArgumentResult::Ok {
                     subject: ActionProcessorResult::Precedent {
                         precedent: Precedent::ApplicationUserResetPasswordToken_WrongValue
                     }
@@ -231,7 +231,7 @@ impl ActionProcessor {
             Some(application_user__) => application_user__,
             None => {
                 return Ok(
-                    ArgumentResult::Ok {
+                    InvalidArgumentResult::Ok {
                         subject: ActionProcessorResult::Precedent {
                             precedent: Precedent::ApplicationUser_NotFound
                         }
@@ -284,7 +284,7 @@ impl ActionProcessor {
 
         Resolver::<CloudMessage>::deauthorize_application_user_from_all_devices();
 
-        return Ok(ArgumentResult::Ok { subject: ActionProcessorResult::Void });
+        return Ok(InvalidArgumentResult::Ok { subject: ActionProcessorResult::Void });
     }
 }
 

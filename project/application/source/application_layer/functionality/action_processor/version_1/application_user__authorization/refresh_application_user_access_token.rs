@@ -10,8 +10,8 @@ use crate::domain_layer::data::entity::application_user_access_token::Applicatio
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::functionality::service::generator::Generator;
 use crate::domain_layer::functionality::service::serialization_form_resolver::SerializationFormResolver;
-use crate::infrastructure_layer::data::argument_result::ArgumentResult;
-use crate::infrastructure_layer::data::argument_result::InvalidArgument;
+use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
+use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
@@ -43,7 +43,7 @@ impl ActionProcessor {
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _redis_connection_pool: &'a Pool<RedisConnectionManager>,
         incoming: Incoming
-    ) -> Result<ArgumentResult<ActionProcessorResult<Outcoming>>, ErrorAuditor>
+    ) -> Result<InvalidArgumentResult<ActionProcessorResult<Outcoming>>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -62,9 +62,9 @@ impl ActionProcessor {
         };
 
         let application_user_access_token_ = match application_user_access_token {
-            ArgumentResult::Ok { subject: application_user_access_token__ } => application_user_access_token__,
-            ArgumentResult::InvalidArgument { invalid_argument } => {
-                return Ok(ArgumentResult::InvalidArgument { invalid_argument });
+            InvalidArgumentResult::Ok { subject: application_user_access_token__ } => application_user_access_token__,
+            InvalidArgumentResult::InvalidArgument { invalid_argument } => {
+                return Ok(InvalidArgumentResult::InvalidArgument { invalid_argument });
             }
         };
 
@@ -101,7 +101,7 @@ impl ActionProcessor {
             Some(application_user_access_refresh_token__) => application_user_access_refresh_token__,
             None => {
                 return Ok(
-                    ArgumentResult::Ok {
+                    InvalidArgumentResult::Ok {
                         subject: ActionProcessorResult::Precedent {
                             precedent: Precedent::ApplicationUserAccessRefreshToken_NotFound
                         }
@@ -125,7 +125,7 @@ impl ActionProcessor {
 
         if !is_valid
             || application_user_access_token_.get_id().get() != application_user_access_refresh_token_.get_application_user_access_token_id().get() {
-            return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserAccessRefreshToken_DeserializedForm });
+            return Ok(InvalidArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserAccessRefreshToken_DeserializedForm });
         }
 
         if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_access_refresh_token_.get_expires_at().get()) {
@@ -140,7 +140,7 @@ impl ActionProcessor {
             }
 
             return Ok(
-                ArgumentResult::Ok {
+                InvalidArgumentResult::Ok {
                     subject: ActionProcessorResult::Precedent {
                         precedent: Precedent::ApplicationUserAccessRefreshToken_AlreadyExpired
                     }
@@ -214,7 +214,7 @@ impl ActionProcessor {
         };
 
         return Ok(
-            ArgumentResult::Ok {
+            InvalidArgumentResult::Ok {
                 subject: ActionProcessorResult::Outcoming {
                     outcoming: Outcoming {
                        application_user_access_token_serialized_form: application_user_access_token_serialized_form_new,

@@ -4,7 +4,7 @@ use crate::domain_layer::data::entity::application_user_access_refresh_token::Ap
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::functionality::service::application_user_access_token__extractor::ExtractorResult;
 use crate::domain_layer::functionality::service::extractor::Extractor;
-use crate::infrastructure_layer::data::argument_result::ArgumentResult;
+use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
@@ -38,7 +38,7 @@ impl ActionProcessor {
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _redis_connection_pool: &'a Pool<RedisConnectionManager>,
         incoming: Incoming
-    ) -> Result<ArgumentResult<ActionProcessorResult<Void>>, ErrorAuditor>
+    ) -> Result<InvalidArgumentResult<ActionProcessorResult<Void>>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -57,12 +57,12 @@ impl ActionProcessor {
         };
 
         let application_user_access_token = match extractor_result {
-            ArgumentResult::Ok { subject: extractor_result_ } => {
+            InvalidArgumentResult::Ok { subject: extractor_result_ } => {
                 let application_user_access_token_ = match extractor_result_ {
                     ExtractorResult::ApplicationUserAccessToken { application_user_access_token: application_user_access_token__ } => application_user_access_token__,
                     ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
                         return Ok(
-                            ArgumentResult::Ok {
+                            InvalidArgumentResult::Ok {
                                 subject: ActionProcessorResult::Precedent {
                                     precedent: Precedent::ApplicationUserAccessToken_AlreadyExpired
                                 }
@@ -71,7 +71,7 @@ impl ActionProcessor {
                     }
                     ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
                         return Ok(
-                            ArgumentResult::Ok {
+                            InvalidArgumentResult::Ok {
                                 subject: ActionProcessorResult::Precedent {
                                     precedent: Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList
                                 }
@@ -82,8 +82,8 @@ impl ActionProcessor {
 
                 application_user_access_token_
             }
-            ArgumentResult::InvalidArgument { invalid_argument } => {
-                return Ok(ArgumentResult::InvalidArgument { invalid_argument });
+            InvalidArgumentResult::InvalidArgument { invalid_argument } => {
+                return Ok(InvalidArgumentResult::InvalidArgument { invalid_argument });
             }
         };
 
@@ -109,7 +109,7 @@ impl ActionProcessor {
 
         Resolver::<CloudMessage>::deauthorize_application_user_from_all_devices();
 
-        return Ok(ArgumentResult::Ok { subject: ActionProcessorResult::Void });
+        return Ok(InvalidArgumentResult::Ok { subject: ActionProcessorResult::Void });
     }
 }
 

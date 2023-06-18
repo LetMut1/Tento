@@ -5,8 +5,8 @@ use crate::domain_layer::data::entity::channel::Channel_Name;
 use crate::domain_layer::functionality::service::application_user_access_token__extractor::ExtractorResult;
 use crate::domain_layer::functionality::service::extractor::Extractor;
 use crate::domain_layer::functionality::service::validator::Validator;
-use crate::infrastructure_layer::data::argument_result::ArgumentResult;
-use crate::infrastructure_layer::data::argument_result::InvalidArgument;
+use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
+use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
@@ -38,7 +38,7 @@ impl ActionProcessor {
         _database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _redis_connection_pool: &'a Pool<RedisConnectionManager>,
         incoming: Incoming
-    ) -> Result<ArgumentResult<ActionProcessorResult<Outcoming>>, ErrorAuditor>
+    ) -> Result<InvalidArgumentResult<ActionProcessorResult<Outcoming>>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -57,12 +57,12 @@ impl ActionProcessor {
         };
 
         let application_user_access_token = match extractor_result {
-            ArgumentResult::Ok { subject: extractor_result_ } => {
+            InvalidArgumentResult::Ok { subject: extractor_result_ } => {
                 let application_user_access_token_ = match extractor_result_ {
                     ExtractorResult::ApplicationUserAccessToken { application_user_access_token: application_user_access_token__ } => application_user_access_token__,
                     ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
                         return Ok(
-                            ArgumentResult::Ok {
+                            InvalidArgumentResult::Ok {
                                 subject: ActionProcessorResult::Precedent {
                                     precedent: Precedent::ApplicationUserAccessToken_AlreadyExpired
                                 }
@@ -71,7 +71,7 @@ impl ActionProcessor {
                     }
                     ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
                         return Ok(
-                            ArgumentResult::Ok {
+                            InvalidArgumentResult::Ok {
                                 subject: ActionProcessorResult::Precedent {
                                     precedent: Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList
                                 }
@@ -82,22 +82,22 @@ impl ActionProcessor {
 
                 application_user_access_token_
             }
-            ArgumentResult::InvalidArgument { invalid_argument } => {
-                return Ok(ArgumentResult::InvalidArgument { invalid_argument });
+            InvalidArgumentResult::InvalidArgument { invalid_argument } => {
+                return Ok(InvalidArgumentResult::InvalidArgument { invalid_argument });
             }
         };
 
         if incoming.limit <= 0 || incoming.limit > Self::LIMIT {
-            return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::Limit });
+            return Ok(InvalidArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::Limit });
         }
 
         if !Validator::<Channel_Name>::is_valid(&incoming.channel_name) {
-            return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::Channel_Name });
+            return Ok(InvalidArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::Channel_Name });
         }
 
         if let Some(ref requery_channel_name_) = incoming.requery_channel_name {
             if !Validator::<Channel_Name>::is_valid(requery_channel_name_) {
-                return Ok(ArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::Channel_Name });
+                return Ok(InvalidArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::Channel_Name });
             }
         }
 
@@ -128,7 +128,7 @@ impl ActionProcessor {
             }
         };
 
-        return Ok(ArgumentResult::Ok { subject: ActionProcessorResult::Outcoming { outcoming: Outcoming { common_registry } } });
+        return Ok(InvalidArgumentResult::Ok { subject: ActionProcessorResult::Outcoming { outcoming: Outcoming { common_registry } } });
     }
 }
 
