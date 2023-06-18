@@ -1,11 +1,9 @@
 use crate::domain_layer::functionality::service::getter::Getter;
 use extern_crate::serde::Serialize;
+use extern_crate::serde::Deserialize;
 use std::borrow::Cow;
 use super::application_user_device::ApplicationUserDevice_Id;
 use super::application_user::ApplicationUser_Email;
-
-#[cfg(feature = "facilitate_non_automatic_functional_testing")]
-use extern_crate::serde::Deserialize;
 
 pub use self::Value as ApplicationUserRegistrationToken_Value;
 pub use self::WrongEnterTriesQuantity as ApplicationUserRegistrationToken_WrongEnterTriesQuantity;
