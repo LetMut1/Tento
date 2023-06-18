@@ -1,5 +1,5 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::action_processor_result::WorkflowPrecedent;
+use crate::application_layer::data::action_processor_result::Precedent;
 use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::authorize_by_last_step::ActionProcessor;
 use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::authorize_by_last_step::Incoming;
 use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::authorize_by_last_step::Outcoming;
@@ -70,30 +70,30 @@ impl AuthorizeByLastStep {
             ActionProcessorResult::Outcoming { outcoming } => {
                 return Ok(UnifiedReport::data(outcoming));
             }
-            ActionProcessorResult::WorkflowPrecedent { workflow_precedent } => {
-                match workflow_precedent {
-                    WorkflowPrecedent::ApplicationUserAuthorizationToken_NotFound => {
+            ActionProcessorResult::Precedent { precedent } => {
+                match precedent {
+                    Precedent::ApplicationUserAuthorizationToken_NotFound => {
                         return Ok(
                             UnifiedReport::communication_code(
                                 CommunicationCodeRegistry::APPLICATION_USER_AUTHORIZATION_TOKEN__NOT_FOUND
                             )
                         );
                     }
-                    WorkflowPrecedent::ApplicationUserAuthorizationToken_AlreadyExpired => {
+                    Precedent::ApplicationUserAuthorizationToken_AlreadyExpired => {
                         return Ok(
                             UnifiedReport::communication_code(
                                 CommunicationCodeRegistry::APPLICATION_USER_AUTHORIZATION_TOKEN__ALREADY_EXPIRED
                             )
                         );
                     }
-                    WorkflowPrecedent::ApplicationUserAuthorizationToken_WrongValue => {
+                    Precedent::ApplicationUserAuthorizationToken_WrongValue => {
                         return Ok(
                             UnifiedReport::communication_code(
                                 CommunicationCodeRegistry::APPLICATION_USER_AUTHORIZATION_TOKEN__WRONG_VALUE
                             )
                         );
                     }
-                    WorkflowPrecedent::ApplicationUser_NotFound => {
+                    Precedent::ApplicationUser_NotFound => {
                         return Ok(
                             UnifiedReport::communication_code(
                                 CommunicationCodeRegistry::APPLICATION_USER__NOT_FOUND

@@ -68,7 +68,7 @@ impl CheckEmailForExisting {
             ActionProcessorResult::Outcoming { outcoming } => {
                 return Ok(UnifiedReport::data(outcoming));
             }
-            ActionProcessorResult::WorkflowPrecedent { workflow_precedent: _ } => {
+            ActionProcessorResult::Precedent { precedent: _ } => {
                 return Err(
                     ErrorAuditor::new(
                         BaseError::create_unreachable_state(),

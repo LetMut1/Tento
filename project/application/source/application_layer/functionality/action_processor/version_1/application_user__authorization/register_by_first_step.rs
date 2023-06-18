@@ -1,5 +1,5 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::action_processor_result::WorkflowPrecedent;
+use crate::application_layer::data::action_processor_result::Precedent;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_1;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_2;
@@ -100,8 +100,8 @@ impl ActionProcessor {
         if is_exist_2 {
             return Ok(
                 ArgumentResult::Ok {
-                    subject: ActionProcessorResult::WorkflowPrecedent {
-                        workflow_precedent: WorkflowPrecedent::ApplicationUser_EmailAlreadyExist
+                    subject: ActionProcessorResult::Precedent {
+                        precedent: Precedent::ApplicationUser_EmailAlreadyExist
                     }
                 }
             );

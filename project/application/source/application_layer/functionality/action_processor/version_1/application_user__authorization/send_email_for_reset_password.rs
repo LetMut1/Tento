@@ -1,5 +1,5 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::action_processor_result::WorkflowPrecedent;
+use crate::application_layer::data::action_processor_result::Precedent;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_2;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_6;
@@ -86,8 +86,8 @@ impl ActionProcessor {
             None => {
                 return Ok(
                     ArgumentResult::Ok {
-                        subject: ActionProcessorResult::WorkflowPrecedent {
-                            workflow_precedent: WorkflowPrecedent::ApplicationUser_NotFound
+                        subject: ActionProcessorResult::Precedent {
+                            precedent: Precedent::ApplicationUser_NotFound
                         }
                     }
                 );
@@ -126,8 +126,8 @@ impl ActionProcessor {
             None => {
                 return Ok(
                     ArgumentResult::Ok {
-                        subject: ActionProcessorResult::WorkflowPrecedent {
-                            workflow_precedent: WorkflowPrecedent::ApplicationUserResetPasswordToken_NotFound
+                        subject: ActionProcessorResult::Precedent {
+                            precedent: Precedent::ApplicationUserResetPasswordToken_NotFound
                         }
                     }
                 );
@@ -147,8 +147,8 @@ impl ActionProcessor {
 
             return Ok(
                 ArgumentResult::Ok {
-                    subject: ActionProcessorResult::WorkflowPrecedent {
-                        workflow_precedent: WorkflowPrecedent::ApplicationUserResetPasswordToken_AlreadyExpired
+                    subject: ActionProcessorResult::Precedent {
+                        precedent: Precedent::ApplicationUserResetPasswordToken_AlreadyExpired
                     }
                 }
             );
@@ -157,8 +157,8 @@ impl ActionProcessor {
         if application_user_reset_password_token_.get_is_approved().get() {
             return Ok(
                 ArgumentResult::Ok {
-                    subject: ActionProcessorResult::WorkflowPrecedent {
-                        workflow_precedent: WorkflowPrecedent::ApplicationUserResetPasswordToken_AlreadyApproved
+                    subject: ActionProcessorResult::Precedent {
+                        precedent: Precedent::ApplicationUserResetPasswordToken_AlreadyApproved
                     }
                 }
             );
@@ -167,8 +167,8 @@ impl ActionProcessor {
         if !ExpirationTimeChecker::<UnixTime>::is_expired(application_user_reset_password_token_.get_can_be_resent_from().get()) {
             return Ok(
                 ArgumentResult::Ok {
-                    subject: ActionProcessorResult::WorkflowPrecedent {
-                        workflow_precedent: WorkflowPrecedent::ApplicationUserResetPasswordToken_TimeToResendHasNotCome
+                    subject: ActionProcessorResult::Precedent {
+                        precedent: Precedent::ApplicationUserResetPasswordToken_TimeToResendHasNotCome
                     }
                 }
             );

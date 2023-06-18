@@ -1,5 +1,5 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::action_processor_result::WorkflowPrecedent;
+use crate::application_layer::data::action_processor_result::Precedent;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
 use crate::domain_layer::data::entity::channel_inner_link::ChannelInnerLink;
@@ -80,8 +80,8 @@ impl ActionProcessor {
                     ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
                         return Ok(
                             ArgumentResult::Ok {
-                                subject: ActionProcessorResult::WorkflowPrecedent {
-                                    workflow_precedent: WorkflowPrecedent::ApplicationUserAccessToken_AlreadyExpired
+                                subject: ActionProcessorResult::Precedent {
+                                    precedent: Precedent::ApplicationUserAccessToken_AlreadyExpired
                                 }
                             }
                         );
@@ -89,8 +89,8 @@ impl ActionProcessor {
                     ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
                         return Ok(
                             ArgumentResult::Ok {
-                                subject: ActionProcessorResult::WorkflowPrecedent {
-                                    workflow_precedent: WorkflowPrecedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList
+                                subject: ActionProcessorResult::Precedent {
+                                    precedent: Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList
                                 }
                             }
                         );
@@ -136,8 +136,8 @@ impl ActionProcessor {
             None => {
                 return Ok(
                     ArgumentResult::Ok {
-                        subject: ActionProcessorResult::WorkflowPrecedent {
-                            workflow_precedent: WorkflowPrecedent::Channel_NotFound
+                        subject: ActionProcessorResult::Precedent {
+                            precedent: Precedent::Channel_NotFound
                         }
                     }
                 );
@@ -162,8 +162,8 @@ impl ActionProcessor {
                 && application_user_access_token.get_application_user_id().get() != channel_.get_owner().get() {
                 return Ok(
                     ArgumentResult::Ok {
-                        subject: ActionProcessorResult::WorkflowPrecedent {
-                            workflow_precedent: WorkflowPrecedent::Channel_IsClosed
+                        subject: ActionProcessorResult::Precedent {
+                            precedent: Precedent::Channel_IsClosed
                         }
                     }
                 );

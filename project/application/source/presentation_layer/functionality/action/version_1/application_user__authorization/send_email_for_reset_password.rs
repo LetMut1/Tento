@@ -1,5 +1,5 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::action_processor_result::WorkflowPrecedent;
+use crate::application_layer::data::action_processor_result::Precedent;
 use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::send_email_for_reset_password::ActionProcessor;
 use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::send_email_for_reset_password::Incoming;
 use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::send_email_for_reset_password::Outcoming;
@@ -70,37 +70,37 @@ impl SendEmailForResetPassword {
             ActionProcessorResult::Outcoming { outcoming } => {
                 return Ok(UnifiedReport::data(outcoming));
             }
-            ActionProcessorResult::WorkflowPrecedent { workflow_precedent } => {
-                match workflow_precedent {
-                    WorkflowPrecedent::ApplicationUser_NotFound => {
+            ActionProcessorResult::Precedent { precedent } => {
+                match precedent {
+                    Precedent::ApplicationUser_NotFound => {
                         return Ok(
                             UnifiedReport::communication_code(
                                 CommunicationCodeRegistry::APPLICATION_USER__NOT_FOUND
                             )
                         );
                     }
-                    WorkflowPrecedent::ApplicationUserResetPasswordToken_NotFound => {
+                    Precedent::ApplicationUserResetPasswordToken_NotFound => {
                         return Ok(
                             UnifiedReport::communication_code(
                                 CommunicationCodeRegistry::APPLICATION_USER_RESET_PASSWORD_TOKEN__NOT_FOUND
                             )
                         );
                     }
-                    WorkflowPrecedent::ApplicationUserResetPasswordToken_AlreadyExpired => {
+                    Precedent::ApplicationUserResetPasswordToken_AlreadyExpired => {
                         return Ok(
                             UnifiedReport::communication_code(
                                 CommunicationCodeRegistry::APPLICATION_USER_RESET_PASSWORD_TOKEN__ALREADY_EXPIRED
                             )
                         );
                     }
-                    WorkflowPrecedent::ApplicationUserResetPasswordToken_AlreadyApproved => {
+                    Precedent::ApplicationUserResetPasswordToken_AlreadyApproved => {
                         return Ok(
                             UnifiedReport::communication_code(
                                 CommunicationCodeRegistry::APPLICATION_USER_RESET_PASSWORD_TOKEN__ALREADY_APPROVED
                             )
                         );
                     }
-                    WorkflowPrecedent::ApplicationUserResetPasswordToken_TimeToResendHasNotCome => {
+                    Precedent::ApplicationUserResetPasswordToken_TimeToResendHasNotCome => {
                         return Ok(
                             UnifiedReport::communication_code(
                                 CommunicationCodeRegistry::APPLICATION_USER_RESET_PASSWORD_TOKEN__TIME_TO_RESEND_HAS_NOT_COME

@@ -1,5 +1,5 @@
 use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::action_processor_result::WorkflowPrecedent;
+use crate::application_layer::data::action_processor_result::Precedent;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_1;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_2;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_3;
@@ -111,8 +111,8 @@ impl ActionProcessor {
                 None => {
                     return Ok(
                         ArgumentResult::Ok {
-                            subject: ActionProcessorResult::WorkflowPrecedent {
-                                workflow_precedent: WorkflowPrecedent::ApplicationUser_NotFound
+                            subject: ActionProcessorResult::Precedent {
+                                precedent: Precedent::ApplicationUser_NotFound
                             }
                         }
                     );
@@ -144,8 +144,8 @@ impl ActionProcessor {
                     None => {
                         return Ok(
                             ArgumentResult::Ok {
-                                subject: ActionProcessorResult::WorkflowPrecedent {
-                                    workflow_precedent: WorkflowPrecedent::ApplicationUser_NotFound
+                                subject: ActionProcessorResult::Precedent {
+                                    precedent: Precedent::ApplicationUser_NotFound
                                 }
                             }
                         );
@@ -178,8 +178,8 @@ impl ActionProcessor {
         if !is_valid {
             return Ok(
                 ArgumentResult::Ok {
-                    subject: ActionProcessorResult::WorkflowPrecedent {
-                        workflow_precedent: WorkflowPrecedent::ApplicationUser_WrongPassword
+                    subject: ActionProcessorResult::Precedent {
+                        precedent: Precedent::ApplicationUser_WrongPassword
                     }
                 }
             );
