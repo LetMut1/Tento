@@ -8,7 +8,7 @@ use extern_crate::serde::Deserialize;
 #[serde(crate = "extern_crate::serde")]
 pub enum UnifiedReport<S>
 {
-    Data {
+    Target {
         data: Data<S>
     },
     CommunicationCode {
@@ -40,11 +40,11 @@ where
     S: Serialize + for<'de> Deserialize<'de>
 {
     pub fn empty() -> Self {
-        return Self::Data { data: Data::Empty };
+        return Self::Target { data: Data::Empty };
     }
 
     pub fn data(data: S) -> Self {
-        return Self::Data { data: Data::Filled { data }};
+        return Self::Target { data: Data::Filled { data }};
     }
 
     pub fn communication_code(communication_code: i64) -> Self {
