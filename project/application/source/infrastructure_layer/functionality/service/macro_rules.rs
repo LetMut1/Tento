@@ -1,5 +1,5 @@
 macro_rules! r#enum {
-    ($enum_name:ident {$($enum:ident :: $enum_variant:ident $({ $($enum_variant_field:ident : $enum_variant_field_type:ty),* $(,)? })?),* $(,)? }) => {
+    ($visability:vis $enum_name:ident { $($enum:ident :: $enum_variant:ident $({ $($enum_variant_field:ident : $enum_variant_field_type:ty),* $(,)? })?),* $(,)? }) => {
         const _: () = {
             $(
                 let _ = |r#enum: $enum| -> () {
@@ -13,8 +13,10 @@ macro_rules! r#enum {
             ()
         };
 
-        #[derive(Debug)]
-        pub enum $enum_name {
+        #[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
+        #[derive(Serialize)]
+        #[serde(crate = "extern_crate::serde")]
+        $visability enum $enum_name {
             $($enum_variant $({ $($enum_variant_field: $enum_variant_field_type,)* })?,)*
         }
     }
