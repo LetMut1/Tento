@@ -1,18 +1,19 @@
-use crate::application_layer::data::common_precedent::ActionProcessorResult;
 use crate::application_layer::data::common_precedent::CommonPrecedent;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::functionality::service::application_user_access_token__extractor::ExtractorResult;
 use crate::domain_layer::functionality::service::extractor::Extractor;
-use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
+use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
+use crate::infrastructure_layer::functionality::service::macro_rules::r#enum;
+use crate::presentation_layer::data::unified_report::UnifiedReport;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::bb8::Pool;
@@ -36,7 +37,7 @@ impl ActionProcessor {
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _redis_connection_pool: &'a Pool<RedisConnectionManager>,
         incoming: Incoming
-    ) -> Result<InvalidArgumentResult<ActionProcessorResult<Void>>, ErrorAuditor>
+    ) -> Result<InvalidArgumentResult<UnifiedReport<Void, Precedent>>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -61,18 +62,14 @@ impl ActionProcessor {
                     ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
                         return Ok(
                             InvalidArgumentResult::Ok {
-                                subject: ActionProcessorResult::Precedent {
-                                    precedent: CommonPrecedent::ApplicationUserAccessToken_AlreadyExpired
-                                }
+                                subject: UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_AlreadyExpired)
                             }
                         );
                     }
                     ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
                         return Ok(
                             InvalidArgumentResult::Ok {
-                                subject: ActionProcessorResult::Precedent {
-                                    precedent: CommonPrecedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList
-                                }
+                                subject: UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList)
                             }
                         );
                     }
@@ -107,7 +104,7 @@ impl ActionProcessor {
             return Err(error);
         }
 
-        return Ok(InvalidArgumentResult::Ok { subject: ActionProcessorResult::Void });
+        return Ok(InvalidArgumentResult::Ok { subject: UnifiedReport::empty() });
     }
 }
 
@@ -117,3 +114,10 @@ impl ActionProcessor {
 pub struct Incoming {
     application_user_access_token_serialized_form: String
 }
+
+r#enum!(
+    pub enum Precedent {
+        CommonPrecedent::ApplicationUserAccessToken_AlreadyExpired,
+        CommonPrecedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList
+    }
+);

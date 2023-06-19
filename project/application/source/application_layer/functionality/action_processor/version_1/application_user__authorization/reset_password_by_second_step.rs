@@ -1,4 +1,3 @@
-use crate::application_layer::data::common_precedent::ActionProcessorResult;
 use crate::application_layer::data::common_precedent::CommonPrecedent;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_3;
@@ -10,18 +9,20 @@ use crate::domain_layer::data::entity::application_user_reset_password_token::Ap
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
 use crate::domain_layer::functionality::service::validator::Validator;
-use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
-use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
+use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
+use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::UnixTime;
+use crate::infrastructure_layer::functionality::service::macro_rules::r#enum;
+use crate::presentation_layer::data::unified_report::UnifiedReport;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::bb8::Pool;
@@ -45,7 +46,7 @@ impl ActionProcessor {
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _redis_connection_pool: &'a Pool<RedisConnectionManager>,
         incoming: Incoming
-    ) -> Result<InvalidArgumentResult<ActionProcessorResult<Void>>, ErrorAuditor>
+    ) -> Result<InvalidArgumentResult<UnifiedReport<Void, Precedent>>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -107,9 +108,7 @@ impl ActionProcessor {
             None => {
                 return Ok(
                     InvalidArgumentResult::Ok {
-                        subject: ActionProcessorResult::Precedent {
-                            precedent: CommonPrecedent::ApplicationUserResetPasswordToken_NotFound
-                        }
+                        subject: UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_NotFound)
                     }
                 );
             }
@@ -128,9 +127,7 @@ impl ActionProcessor {
 
             return Ok(
                 InvalidArgumentResult::Ok {
-                    subject: ActionProcessorResult::Precedent {
-                        precedent: CommonPrecedent::ApplicationUserResetPasswordToken_AlreadyExpired
-                    }
+                    subject: UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_AlreadyExpired)
                 }
             );
         }
@@ -138,9 +135,7 @@ impl ActionProcessor {
         if application_user_reset_password_token_.get_is_approved().get() {
             return Ok(
                 InvalidArgumentResult::Ok {
-                    subject: ActionProcessorResult::Precedent {
-                        precedent: CommonPrecedent::ApplicationUserResetPasswordToken_AlreadyApproved
-                    }
+                    subject: UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_AlreadyApproved)
                 }
             );
         }
@@ -188,9 +183,7 @@ impl ActionProcessor {
 
             return Ok(
                 InvalidArgumentResult::Ok {
-                    subject: ActionProcessorResult::Precedent {
-                        precedent: CommonPrecedent::ApplicationUserResetPasswordToken_WrongValue
-                    }
+                    subject: UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_WrongValue)
                 }
             );
         }
@@ -208,7 +201,7 @@ impl ActionProcessor {
             return Err(error);
         }
 
-        return Ok(InvalidArgumentResult::Ok { subject: ActionProcessorResult::Void });
+        return Ok(InvalidArgumentResult::Ok { subject: UnifiedReport::empty() });
     }
 }
 
@@ -220,3 +213,12 @@ pub struct Incoming {
     application_user_device_id: ApplicationUserDevice_Id,
     application_user_reset_password_token_value: ApplicationUserResetPasswordToken_Value
 }
+
+r#enum!(
+    pub enum Precedent {
+        CommonPrecedent::ApplicationUserResetPasswordToken_NotFound,
+        CommonPrecedent::ApplicationUserResetPasswordToken_AlreadyExpired,
+        CommonPrecedent::ApplicationUserResetPasswordToken_AlreadyApproved,
+        CommonPrecedent::ApplicationUserResetPasswordToken_WrongValue
+    }
+);

@@ -1,4 +1,3 @@
-use crate::application_layer::data::common_precedent::ActionProcessorResult;
 use crate::application_layer::data::common_precedent::CommonPrecedent;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
@@ -23,17 +22,19 @@ use crate::domain_layer::functionality::service::application_user_access_token__
 use crate::domain_layer::functionality::service::channel__access_modifier_resolver::Channel_AccessModifierResolver;
 use crate::domain_layer::functionality::service::extractor::Extractor;
 use crate::domain_layer::functionality::service::validator::Validator;
-use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
-use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
+use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
+use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::functionality::repository::channel_inner_link__postgresql_repository::ChannelInnerLink1;
 use crate::infrastructure_layer::functionality::repository::channel_outer_link__postgresql_repository::ChannelOuterLink1;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
+use crate::infrastructure_layer::functionality::service::macro_rules::r#enum;
+use crate::presentation_layer::data::unified_report::UnifiedReport;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::bb8::Pool;
@@ -55,7 +56,7 @@ impl ActionProcessor {
         _database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _redis_connection_pool: &'a Pool<RedisConnectionManager>,
         incoming: Incoming
-    ) -> Result<InvalidArgumentResult<ActionProcessorResult<Outcoming>>, ErrorAuditor>
+    ) -> Result<InvalidArgumentResult<UnifiedReport<Outcoming, Precedent>>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -80,18 +81,14 @@ impl ActionProcessor {
                     ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
                         return Ok(
                             InvalidArgumentResult::Ok {
-                                subject: ActionProcessorResult::Precedent {
-                                    precedent: CommonPrecedent::ApplicationUserAccessToken_AlreadyExpired
-                                }
+                                subject: UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_AlreadyExpired)
                             }
                         );
                     }
                     ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
                         return Ok(
                             InvalidArgumentResult::Ok {
-                                subject: ActionProcessorResult::Precedent {
-                                    precedent: CommonPrecedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList
-                                }
+                                subject: UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList)
                             }
                         );
                     }
@@ -136,9 +133,7 @@ impl ActionProcessor {
             None => {
                 return Ok(
                     InvalidArgumentResult::Ok {
-                        subject: ActionProcessorResult::Precedent {
-                            precedent: CommonPrecedent::Channel_NotFound
-                        }
+                        subject: UnifiedReport::precedent(Precedent::Channel_NotFound)
                     }
                 );
             }
@@ -162,9 +157,7 @@ impl ActionProcessor {
                 && application_user_access_token.get_application_user_id().get() != channel_.get_owner().get() {
                 return Ok(
                     InvalidArgumentResult::Ok {
-                        subject: ActionProcessorResult::Precedent {
-                            precedent: CommonPrecedent::Channel_IsClosed
-                        }
+                        subject: UnifiedReport::precedent(Precedent::Channel_IsClosed)
                     }
                 );
             }
@@ -230,7 +223,7 @@ impl ActionProcessor {
             channel_outer_link_registry
         };
 
-        return Ok(InvalidArgumentResult::Ok { subject: ActionProcessorResult::Outcoming { outcoming } });
+        return Ok(InvalidArgumentResult::Ok { subject: UnifiedReport::filled(outcoming) });
     }
 }
 
@@ -268,3 +261,12 @@ struct Channel {
     channel_marks_quantity: Channel_MarksQuantity,
     channel_viewing_quantity: Channel_ViewingQuantity
 }
+
+r#enum!(
+    pub enum Precedent {
+        CommonPrecedent::ApplicationUserAccessToken_AlreadyExpired,
+        CommonPrecedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList,
+        CommonPrecedent::Channel_NotFound,
+        CommonPrecedent::Channel_IsClosed
+    }
+);

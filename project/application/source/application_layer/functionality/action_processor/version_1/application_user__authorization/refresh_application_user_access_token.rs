@@ -1,4 +1,3 @@
-use crate::application_layer::data::common_precedent::ActionProcessorResult;
 use crate::application_layer::data::common_precedent::CommonPrecedent;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_1;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ExpiresAt;
@@ -10,17 +9,19 @@ use crate::domain_layer::data::entity::application_user_access_token::Applicatio
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::functionality::service::generator::Generator;
 use crate::domain_layer::functionality::service::serialization_form_resolver::SerializationFormResolver;
-use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
-use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
+use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
+use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::UnixTime;
+use crate::infrastructure_layer::functionality::service::macro_rules::r#enum;
+use crate::presentation_layer::data::unified_report::UnifiedReport;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::bb8::Pool;
@@ -43,7 +44,7 @@ impl ActionProcessor {
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _redis_connection_pool: &'a Pool<RedisConnectionManager>,
         incoming: Incoming
-    ) -> Result<InvalidArgumentResult<ActionProcessorResult<Outcoming>>, ErrorAuditor>
+    ) -> Result<InvalidArgumentResult<UnifiedReport<Outcoming, Precedent>>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -102,9 +103,7 @@ impl ActionProcessor {
             None => {
                 return Ok(
                     InvalidArgumentResult::Ok {
-                        subject: ActionProcessorResult::Precedent {
-                            precedent: CommonPrecedent::ApplicationUserAccessRefreshToken_NotFound
-                        }
+                        subject: UnifiedReport::precedent(Precedent::ApplicationUserAccessRefreshToken_NotFound)
                     }
                 );
             }
@@ -141,9 +140,7 @@ impl ActionProcessor {
 
             return Ok(
                 InvalidArgumentResult::Ok {
-                    subject: ActionProcessorResult::Precedent {
-                        precedent: CommonPrecedent::ApplicationUserAccessRefreshToken_AlreadyExpired
-                    }
+                    subject: UnifiedReport::precedent(Precedent::ApplicationUserAccessRefreshToken_AlreadyExpired)
                 }
             );
         }
@@ -213,14 +210,14 @@ impl ActionProcessor {
             }
         };
 
+        let outcoming = Outcoming {
+            application_user_access_token_serialized_form: application_user_access_token_serialized_form_new,
+            application_user_access_refresh_token_serialized_form: application_user_access_refresh_token_serialized_form_new
+        };
+
         return Ok(
             InvalidArgumentResult::Ok {
-                subject: ActionProcessorResult::Outcoming {
-                    outcoming: Outcoming {
-                       application_user_access_token_serialized_form: application_user_access_token_serialized_form_new,
-                       application_user_access_refresh_token_serialized_form: application_user_access_refresh_token_serialized_form_new
-                    }
-                }
+                subject: UnifiedReport::filled(outcoming)
             }
         );
     }
@@ -241,3 +238,10 @@ pub struct Outcoming {
     application_user_access_token_serialized_form: String,
     application_user_access_refresh_token_serialized_form: String
 }
+
+r#enum!(
+    pub enum Precedent {
+        CommonPrecedent::ApplicationUserAccessRefreshToken_NotFound,
+        CommonPrecedent::ApplicationUserAccessRefreshToken_AlreadyExpired,
+    }
+);

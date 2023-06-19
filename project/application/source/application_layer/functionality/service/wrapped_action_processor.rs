@@ -38,7 +38,7 @@ pub struct WrappedActionProcessor;
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
 impl WrappedActionProcessor {
-    pub async fn process<'a, SF, WSF, T, WA, F, API, APO>(
+    pub async fn process<'a, SF, WSF, T, WA, F, API, APO, APP>(
         environment_configuration: &'a EnvironmentConfiguration,
         mut request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -62,7 +62,8 @@ impl WrappedActionProcessor {
         ) -> F,
         F: Future<Output = Response>,
         API: SerdeSerialize + for<'de> Deserialize<'de>,
-        APO: SerdeSerialize + for<'de> Deserialize<'de>
+        APO: SerdeSerialize + for<'de> Deserialize<'de>,
+        APP: SerdeSerialize + for<'de> Deserialize<'de>
     {
         if !Validator::<Request>::is_valid(&request) {
             return Creator::<Response>::create_bad_request();
@@ -82,7 +83,7 @@ impl WrappedActionProcessor {
             }
         };
 
-        let action_processing_delegator_result = match ActionDelegator::delegate::<'_, WSF, _, _, _, API, APO>(
+        let action_processing_delegator_result = match ActionDelegator::delegate::<'_, WSF, _, _, _, API, APO, APP>(
             environment_configuration,
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
@@ -123,14 +124,14 @@ struct ActionDelegator;
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
 impl ActionDelegator {
-    async fn delegate<'a, SF, T, A, F, API, APO>(
+    async fn delegate<'a, SF, T, A, F, API, APO, APP>(
         environment_configuration: &'a EnvironmentConfiguration,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: &'a Pool<RedisConnectionManager>,
         incoming: ConvertibleParts<API>,
         action: A
-    ) -> Result<ActionProcessingDelegatorResult<APO>, ErrorAuditor>
+    ) -> Result<ActionProcessingDelegatorResult<APO, APP>, ErrorAuditor>
     where
         Serializer<SF>: Serialize,
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -146,7 +147,8 @@ impl ActionDelegator {
         ) -> F,
         F: Future<Output = Response>,
         API: SerdeSerialize + for<'de> Deserialize<'de>,
-        APO: SerdeSerialize + for<'de> Deserialize<'de>
+        APO: SerdeSerialize + for<'de> Deserialize<'de>,
+        APP: SerdeSerialize + for<'de> Deserialize<'de>
     {
         let data = match Serializer::<SF>::serialize(&incoming.action_processor_incoming) {
             Ok(data_) => data_,
@@ -158,7 +160,9 @@ impl ActionDelegator {
         };
 
         let mut request_parts = incoming.request.into_parts().0;
+
         request_parts.headers.remove(header::CONTENT_LENGTH);
+
         request_parts.headers.append(header::CONTENT_LENGTH, HeaderValue::from(data.len() as u64));
 
         let request = Request::from_parts(request_parts, Body::from(data));
@@ -189,7 +193,7 @@ impl ActionDelegator {
                 }
             };
 
-            let unified_report = match Serializer::<SF>::deserialize::<'_, UnifiedReport<APO>>(bytes.chunk()) {
+            let unified_report = match Serializer::<SF>::deserialize::<'_, UnifiedReport<APO, APP>>(bytes.chunk()) {
                 Ok(unified_report_) => unified_report_,
                 Err(mut error) => {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -217,10 +221,11 @@ where
 }
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
-struct ActionProcessingDelegatorResult<T>
+struct ActionProcessingDelegatorResult<T, P>
 where
-    T: SerdeSerialize + for<'de> Deserialize<'de>
+    T: SerdeSerialize + for<'de> Deserialize<'de>,
+    P: SerdeSerialize + for<'de> Deserialize<'de>
 {
     response_parts: Parts,
-    unified_report: Option<UnifiedReport<T>>
+    unified_report: Option<UnifiedReport<T, P>>
 }

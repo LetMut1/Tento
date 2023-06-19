@@ -1,16 +1,17 @@
-use crate::application_layer::data::common_precedent::ActionProcessorResult;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::functionality::service::validator::Validator;
-use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
-use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
+use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
+use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
+use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
+use crate::presentation_layer::data::unified_report::UnifiedReport;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::bb8::Pool;
@@ -32,7 +33,7 @@ impl ActionProcessor {
         _database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _redis_connection_pool: &'a Pool<RedisConnectionManager>,
         incoming: Incoming
-    ) -> Result<InvalidArgumentResult<ActionProcessorResult<Outcoming>>, ErrorAuditor>
+    ) -> Result<InvalidArgumentResult<UnifiedReport<Outcoming, Void>>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -76,7 +77,9 @@ impl ActionProcessor {
             }
         };
 
-        return Ok(InvalidArgumentResult::Ok { subject: ActionProcessorResult::Outcoming { outcoming: Outcoming { result: is_exist } } });
+        let outcoming = Outcoming { result: is_exist };
+
+        return Ok(InvalidArgumentResult::Ok { subject: UnifiedReport::filled(outcoming) });
     }
 }
 

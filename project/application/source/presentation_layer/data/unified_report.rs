@@ -6,58 +6,60 @@ use extern_crate::serde::Deserialize;
 #[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
-pub enum UnifiedReport<S>
+pub enum UnifiedReport<T, P>
 {
     Target {
-        data: Data<S>
+        data: Data<T>
     },
-    CommunicationCode {
-        communication_code: i64
+    Precedent {
+        precedent: P
     }
 }
 
 #[cfg(not(feature = "facilitate_non_automatic_functional_testing"))]
-impl<S> UnifiedReport<S>
+impl<T, P> UnifiedReport<T, P>
 where
-    S: Serialize
+    T: Serialize,
+    P: Serialize
 {
     pub fn empty() -> Self {
         return Self::Target { data: Data::Empty };
     }
 
-    pub fn filled(data: S) -> Self {
+    pub fn filled(data: T) -> Self {
         return Self::Target { data: Data::Filled { data }};
     }
 
-    pub fn communication_code(communication_code: i64) -> Self {
-        return Self::CommunicationCode { communication_code };
+    pub fn precedent(precedent: P) -> Self {
+        return Self::Precedent { precedent };
     }
 }
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
-impl<S> UnifiedReport<S>
+impl<T, P> UnifiedReport<T, P>
 where
-    S: Serialize + for<'de> Deserialize<'de>
+    T: Serialize + for<'de> Deserialize<'de>,
+    P: Serialize + for<'de> Deserialize<'de>
 {
     pub fn empty() -> Self {
         return Self::Target { data: Data::Empty };
     }
 
-    pub fn filled(data: S) -> Self {
+    pub fn filled(data: T) -> Self {
         return Self::Target { data: Data::Filled { data }};
     }
 
-    pub fn communication_code(communication_code: i64) -> Self {
-        return Self::CommunicationCode { communication_code };
+    pub fn precedent(precedent: P) -> Self {
+        return Self::Precedent { precedent };
     }
 }
 
 #[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
-pub enum Data<S> {
+pub enum Data<D> {
     Empty,
     Filled {
-        data: S
+        data: D
     }
 }

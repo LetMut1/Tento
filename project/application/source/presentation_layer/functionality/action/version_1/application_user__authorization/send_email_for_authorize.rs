@@ -1,18 +1,12 @@
-use crate::application_layer::data::common_precedent::ActionProcessorResult;
-use crate::application_layer::data::common_precedent::CommonPrecedent;
 use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::send_email_for_authorize::ActionProcessor;
 use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::send_email_for_authorize::Incoming;
 use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::send_email_for_authorize::Outcoming;
+use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::send_email_for_authorize::Precedent;
 use crate::application_layer::functionality::core_action_processor::CoreActionProcessor;
 use crate::infrastructure_layer::data::control_type_registry::Request;
 use crate::infrastructure_layer::data::control_type_registry::Response;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
-use crate::infrastructure_layer::data::error_auditor::BacktracePart;
-use crate::infrastructure_layer::data::error_auditor::BaseError;
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::functionality::service::serializer::MessagePack;
-use crate::presentation_layer::data::communication_code_registry::CommunicationCodeRegistry;
-use crate::presentation_layer::data::unified_report::UnifiedReport;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::bb8::Pool;
@@ -44,73 +38,14 @@ impl SendEmailForAuthorize {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        return CoreActionProcessor::process::<'_, MessagePack, _, _, _, Incoming, Outcoming, _>(
+        return CoreActionProcessor::process::<'_, MessagePack, _, _, _, Incoming, Outcoming, Precedent>(
             environment_configuration,
             request,
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
             redis_connection_pool,
-            ActionProcessor::process,
-            Self::resolve
+            ActionProcessor::process
         ).await;
-    }
-
-    fn resolve(
-        action_processor_result: ActionProcessorResult<Outcoming>
-    ) -> Result<UnifiedReport<Outcoming>, ErrorAuditor> {
-        match action_processor_result {
-            ActionProcessorResult::Void => {
-                return Err(
-                    ErrorAuditor::new(
-                        BaseError::create_unreachable_state(),
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
-            }
-            ActionProcessorResult::Outcoming { outcoming } => {
-                return Ok(UnifiedReport::filled(outcoming));
-            }
-            ActionProcessorResult::Precedent { precedent } => {
-                match precedent {
-                    CommonPrecedent::ApplicationUser_NotFound => {
-                        return Ok(
-                            UnifiedReport::communication_code(
-                                CommunicationCodeRegistry::APPLICATION_USER__NOT_FOUND
-                            )
-                        );
-                    }
-                    CommonPrecedent::ApplicationUserAuthorizationToken_NotFound => {
-                        return Ok(
-                            UnifiedReport::communication_code(
-                                CommunicationCodeRegistry::APPLICATION_USER_AUTHORIZATION_TOKEN__NOT_FOUND
-                            )
-                        );
-                    }
-                    CommonPrecedent::ApplicationUserAuthorizationToken_AlreadyExpired => {
-                        return Ok(
-                            UnifiedReport::communication_code(
-                                CommunicationCodeRegistry::APPLICATION_USER_AUTHORIZATION_TOKEN__ALREADY_EXPIRED
-                            )
-                        );
-                    }
-                    CommonPrecedent::ApplicationUserAuthorizationToken_TimeToResendHasNotCome => {
-                        return Ok(
-                            UnifiedReport::communication_code(
-                                CommunicationCodeRegistry::APPLICATION_USER_AUTHORIZATION_TOKEN__TIME_TO_RESEND_HAS_NOT_COME
-                            )
-                        );
-                    }
-                    _ => {
-                        return Err(
-                            ErrorAuditor::new(
-                                BaseError::create_unreachable_state(),
-                                BacktracePart::new(line!(), file!(), None)
-                            )
-                        );
-                    }
-                }
-            }
-        }
     }
 }
 
@@ -129,7 +64,7 @@ impl SendEmailForAuthorize {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        return WrappedActionProcessor::process::<'_, Json, MessagePack, _, _, _, Incoming, Outcoming>(
+        return WrappedActionProcessor::process::<'_, Json, MessagePack, _, _, _, Incoming, Outcoming, Precedent>(
             environment_configuration,
             request,
             database_1_postgresql_connection_pool,

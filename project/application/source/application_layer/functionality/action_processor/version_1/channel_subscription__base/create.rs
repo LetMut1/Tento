@@ -1,4 +1,3 @@
-use crate::application_layer::data::common_precedent::ActionProcessorResult;
 use crate::application_layer::data::common_precedent::CommonPrecedent;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::data::entity::channel_subscription::ChannelSubscription;
@@ -9,17 +8,19 @@ use crate::domain_layer::functionality::service::application_user_access_token__
 use crate::domain_layer::functionality::service::channel__access_modifier_resolver::Channel_AccessModifierResolver;
 use crate::domain_layer::functionality::service::extractor::Extractor;
 use crate::domain_layer::functionality::service::validator::Validator;
-use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
-use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
+use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
+use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::repository::channel_subscription__postgresql_repository::Insert;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
+use crate::infrastructure_layer::functionality::service::macro_rules::r#enum;
+use crate::presentation_layer::data::unified_report::UnifiedReport;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::bb8::Pool;
@@ -43,7 +44,7 @@ impl ActionProcessor {
         _database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _redis_connection_pool: &'a Pool<RedisConnectionManager>,
         incoming: Incoming
-    ) -> Result<InvalidArgumentResult<ActionProcessorResult<Void>>, ErrorAuditor>
+    ) -> Result<InvalidArgumentResult<UnifiedReport<Void, Precedent>>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -68,18 +69,14 @@ impl ActionProcessor {
                     ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
                         return Ok(
                             InvalidArgumentResult::Ok {
-                                subject: ActionProcessorResult::Precedent {
-                                    precedent: CommonPrecedent::ApplicationUserAccessToken_AlreadyExpired
-                                }
+                                subject: UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_AlreadyExpired)
                             }
                         );
                     }
                     ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
                         return Ok(
                             InvalidArgumentResult::Ok {
-                                subject: ActionProcessorResult::Precedent {
-                                    precedent: CommonPrecedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList
-                                }
+                                subject: UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList)
                             }
                         );
                     }
@@ -127,9 +124,7 @@ impl ActionProcessor {
             None => {
                 return Ok(
                     InvalidArgumentResult::Ok {
-                        subject: ActionProcessorResult::Precedent {
-                            precedent: CommonPrecedent::Channel_NotFound
-                        }
+                        subject: UnifiedReport::precedent(Precedent::Channel_NotFound)
                     }
                 );
             }
@@ -138,9 +133,7 @@ impl ActionProcessor {
         if channel_.get_owner().get() == application_user_access_token.get_application_user_id().get() {
             return Ok(
                 InvalidArgumentResult::Ok {
-                    subject: ActionProcessorResult::Precedent {
-                        precedent: CommonPrecedent::ApplicationUser_IsChannelOwner
-                    }
+                    subject: UnifiedReport::precedent(Precedent::ApplicationUser_IsChannelOwner)
                 }
             );
         }
@@ -150,9 +143,7 @@ impl ActionProcessor {
         if let Channel_AccessModifier_::Close = channel_access_modifier {
             return Ok(
                 InvalidArgumentResult::Ok {
-                    subject: ActionProcessorResult::Precedent {
-                        precedent: CommonPrecedent::Channel_IsClosed
-                    }
+                    subject: UnifiedReport::precedent(Precedent::Channel_IsClosed)
                 }
             );
         }
@@ -170,7 +161,7 @@ impl ActionProcessor {
             return Err(error);
         }
 
-        return Ok(InvalidArgumentResult::Ok { subject: ActionProcessorResult::Void });
+        return Ok(InvalidArgumentResult::Ok { subject: UnifiedReport::empty() });
     }
 }
 
@@ -181,3 +172,13 @@ pub struct Incoming {
     application_user_access_token_serialized_form: String,
     channel_id: Channel_Id
 }
+
+r#enum!(
+    pub enum Precedent {
+        CommonPrecedent::ApplicationUserAccessToken_AlreadyExpired,
+        CommonPrecedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList,
+        CommonPrecedent::Channel_NotFound,
+        CommonPrecedent::Channel_IsClosed,
+        CommonPrecedent::ApplicationUser_IsChannelOwner
+    }
+);

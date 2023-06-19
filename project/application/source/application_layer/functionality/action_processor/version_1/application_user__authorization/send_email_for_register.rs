@@ -1,4 +1,3 @@
-use crate::application_layer::data::common_precedent::ActionProcessorResult;
 use crate::application_layer::data::common_precedent::CommonPrecedent;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_2;
@@ -9,17 +8,19 @@ use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::domain_layer::functionality::service::email_sender::EmailSender;
 use crate::domain_layer::functionality::service::generator::Generator;
 use crate::domain_layer::functionality::service::validator::Validator;
-use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
-use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
+use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
+use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::UnixTime;
+use crate::infrastructure_layer::functionality::service::macro_rules::r#enum;
+use crate::presentation_layer::data::unified_report::UnifiedReport;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::bb8::Pool;
@@ -41,7 +42,7 @@ impl ActionProcessor {
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _redis_connection_pool: &'a Pool<RedisConnectionManager>,
         incoming: Incoming
-    ) -> Result<InvalidArgumentResult<ActionProcessorResult<Outcoming>>, ErrorAuditor>
+    ) -> Result<InvalidArgumentResult<UnifiedReport<Outcoming, Precedent>>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -97,9 +98,7 @@ impl ActionProcessor {
             None => {
                 return Ok(
                     InvalidArgumentResult::Ok {
-                        subject: ActionProcessorResult::Precedent {
-                            precedent: CommonPrecedent::ApplicationUserRegistrationToken_NotFound
-                        }
+                        subject: UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_NotFound)
                     }
                 );
             }
@@ -118,9 +117,7 @@ impl ActionProcessor {
 
             return Ok(
                 InvalidArgumentResult::Ok {
-                    subject: ActionProcessorResult::Precedent {
-                        precedent: CommonPrecedent::ApplicationUserRegistrationToken_AlreadyExpired
-                    }
+                    subject: UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_AlreadyExpired)
                 }
             );
         }
@@ -128,9 +125,7 @@ impl ActionProcessor {
         if application_user_registration_token_.get_is_approved().get() {
             return Ok(
                 InvalidArgumentResult::Ok {
-                    subject: ActionProcessorResult::Precedent {
-                        precedent: CommonPrecedent::ApplicationUserRegistrationToken_AlreadyApproved
-                    }
+                    subject: UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_AlreadyApproved)
                 }
             );
         }
@@ -138,9 +133,7 @@ impl ActionProcessor {
         if !ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token_.get_can_be_resent_from().get()) {
             return Ok(
                 InvalidArgumentResult::Ok {
-                    subject: ActionProcessorResult::Precedent {
-                        precedent: CommonPrecedent::ApplicationUserRegistrationToken_TimeToResendHasNotCome
-                    }
+                    subject: UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_TimeToResendHasNotCome)
                 }
             );
         }
@@ -183,7 +176,7 @@ impl ActionProcessor {
             application_user_registration_token_can_be_resent_from: application_user_registration_token_.get_can_be_resent_from()
         };
 
-        return Ok(InvalidArgumentResult::Ok { subject: ActionProcessorResult::Outcoming { outcoming } });
+        return Ok(InvalidArgumentResult::Ok { subject: UnifiedReport::filled(outcoming) });
     }
 }
 
@@ -201,3 +194,12 @@ pub struct Incoming {
 pub struct Outcoming {
     application_user_registration_token_can_be_resent_from: ApplicationUserRegistrationToken_CanBeResentFrom
 }
+
+r#enum!(
+    pub enum Precedent {
+        CommonPrecedent::ApplicationUserRegistrationToken_NotFound,
+        CommonPrecedent::ApplicationUserRegistrationToken_AlreadyExpired,
+        CommonPrecedent::ApplicationUserRegistrationToken_AlreadyApproved,
+        CommonPrecedent::ApplicationUserRegistrationToken_TimeToResendHasNotCome
+    }
+);

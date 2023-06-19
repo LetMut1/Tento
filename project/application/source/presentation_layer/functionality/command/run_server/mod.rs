@@ -121,7 +121,7 @@ fn main() -> () {
 
 // pub -> pub(crate), там, где надо.
 
-
+// UnifiedReport -> application layer.
 
 
 

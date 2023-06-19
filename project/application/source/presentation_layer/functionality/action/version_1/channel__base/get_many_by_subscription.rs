@@ -1,18 +1,12 @@
-use crate::application_layer::data::common_precedent::ActionProcessorResult;
-use crate::application_layer::data::common_precedent::CommonPrecedent;
 use crate::application_layer::functionality::action_processor::version_1::channel__base::get_many_by_subscription::ActionProcessor;
 use crate::application_layer::functionality::action_processor::version_1::channel__base::get_many_by_subscription::Incoming;
 use crate::application_layer::functionality::action_processor::version_1::channel__base::get_many_by_subscription::Outcoming;
+use crate::application_layer::functionality::action_processor::version_1::channel__base::get_many_by_subscription::Precedent;
 use crate::application_layer::functionality::core_action_processor::CoreActionProcessor;
 use crate::infrastructure_layer::data::control_type_registry::Request;
 use crate::infrastructure_layer::data::control_type_registry::Response;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
-use crate::infrastructure_layer::data::error_auditor::BacktracePart;
-use crate::infrastructure_layer::data::error_auditor::BaseError;
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::functionality::service::serializer::MessagePack;
-use crate::presentation_layer::data::communication_code_registry::CommunicationCodeRegistry;
-use crate::presentation_layer::data::unified_report::UnifiedReport;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::bb8::Pool;
@@ -44,59 +38,14 @@ impl GetManyBySubscription {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        return CoreActionProcessor::process::<'_, MessagePack, _, _, _, Incoming, Outcoming, _>(
+        return CoreActionProcessor::process::<'_, MessagePack, _, _, _, Incoming, Outcoming, Precedent>(
             environment_configuration,
             request,
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
             redis_connection_pool,
-            ActionProcessor::process,
-            Self::resolve
+            ActionProcessor::process
         ).await;
-    }
-
-    fn resolve(
-        action_processor_result: ActionProcessorResult<Outcoming>
-    ) -> Result<UnifiedReport<Outcoming>, ErrorAuditor> {
-        match action_processor_result {
-            ActionProcessorResult::Void => {
-                return Err(
-                    ErrorAuditor::new(
-                        BaseError::create_unreachable_state(),
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
-            }
-            ActionProcessorResult::Outcoming { outcoming } => {
-                return Ok(UnifiedReport::filled(outcoming));
-            }
-            ActionProcessorResult::Precedent { precedent } => {
-                match precedent {
-                    CommonPrecedent::ApplicationUserAccessToken_AlreadyExpired => {
-                        return Ok(
-                            UnifiedReport::communication_code(
-                                CommunicationCodeRegistry::APPLICATION_USER_ACCESS_TOKEN__ALREADY_EXPIRED
-                            )
-                        );
-                    }
-                    CommonPrecedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList => {
-                        return Ok(
-                            UnifiedReport::communication_code(
-                                CommunicationCodeRegistry::APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST
-                            )
-                        );
-                    }
-                    _ => {
-                        return Err(
-                            ErrorAuditor::new(
-                                BaseError::create_unreachable_state(),
-                                BacktracePart::new(line!(), file!(), None)
-                            )
-                        );
-                    }
-                }
-            }
-        }
     }
 }
 
@@ -115,7 +64,7 @@ impl GetManyBySubscription {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
-        return WrappedActionProcessor::process::<'_, Json, MessagePack, _, _, _, Incoming, Outcoming>(
+        return WrappedActionProcessor::process::<'_, Json, MessagePack, _, _, _, Incoming, Outcoming, Precedent>(
             environment_configuration,
             request,
             database_1_postgresql_connection_pool,

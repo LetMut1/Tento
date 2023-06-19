@@ -293,7 +293,7 @@ impl RunServerProcessor {
             }
             // GET functional.
             (HttpRouteRegistry::VERSION_1__CHANNEL__GET_ONE_BY_ID, &Method::POST) => {
-                return channel__base::get_by_id::GetOneByID::run(
+                return channel__base::get_one_by_id::GetOneByID::run(
                     environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                 ).await;
             }
@@ -410,7 +410,7 @@ impl RunServerProcessor {
                     }
                     // GET functional.
                     (HttpRouteRegistry::VERSION_1__CHANNEL__GET_ONE_BY_ID_, &Method::POST) => {
-                        return channel__base::get_by_id::GetOneByID::run_(
+                        return channel__base::get_one_by_id::GetOneByID::run_(
                             environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
                         ).await;
                     }

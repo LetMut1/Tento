@@ -1,4 +1,3 @@
-use crate::application_layer::data::common_precedent::ActionProcessorResult;
 use crate::domain_layer::data::entity::action_round_register::ActionRoundRegister;
 use crate::domain_layer::functionality::service::writer::Writer;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
@@ -34,14 +33,13 @@ use std::marker::Sync;
 pub struct CoreActionProcessor;
 
 impl CoreActionProcessor {
-    pub async fn process<'a, SF, T, AP, F, API, APO, APRR>(
+    pub async fn process<'a, SF, T, AP, F, API, APO, APP>(
         environment_configuration: &'a EnvironmentConfiguration,
         mut request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: &'a Pool<RedisConnectionManager>,
-        action_processor: AP,
-        action_processor_result_resolver: APRR
+        action_processor: AP
     ) -> Response
     where
         Serializer<SF>: Serialize,
@@ -56,16 +54,19 @@ impl CoreActionProcessor {
             &'a Pool<RedisConnectionManager>,
             API
         ) -> F,
-        F: Future<Output = Result<InvalidArgumentResult<ActionProcessorResult<APO>>, ErrorAuditor>>,
+        F: Future<Output = Result<InvalidArgumentResult<UnifiedReport<APO, APP>>, ErrorAuditor>>,
         API: for<'de> Deserialize<'de>,
         APO: SerdeSerialize,
-        APRR: FnOnce(ActionProcessorResult<APO>) -> Result<UnifiedReport<APO>, ErrorAuditor>
+        APP: SerdeSerialize
     {
         if !Validator::<Request>::is_valid(&request) {
             let response = Creator::<Response>::create_bad_request();
 
             if let Err(mut error) = Writer::<ActionRoundRegister>::write_with_context(
-                database_2_postgresql_connection_pool, &request, &response, &InvalidArgument::HttpHeaders
+                database_2_postgresql_connection_pool,
+                &request,
+                &response,
+                &InvalidArgument::HttpHeaders
             ).await {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -90,7 +91,10 @@ impl CoreActionProcessor {
                 let response = Creator::<Response>::create_internal_server_error();
 
                 if let Err(mut error__) = Writer::<ActionRoundRegister>::write_with_context(
-                    database_2_postgresql_connection_pool, &request, &response, &error_
+                    database_2_postgresql_connection_pool,
+                    &request,
+                    &response,
+                    &error_
                 ).await {
                     error__.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -112,7 +116,10 @@ impl CoreActionProcessor {
                 let response = Creator::<Response>::create_internal_server_error();
 
                 if let Err(mut error_) = Writer::<ActionRoundRegister>::write_with_context(
-                    database_2_postgresql_connection_pool, &request, &response, &error
+                    database_2_postgresql_connection_pool,
+                    &request,
+                    &response,
+                    &error
                 ).await {
                     error_.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -128,19 +135,22 @@ impl CoreActionProcessor {
             }
         };
 
-        let action_processor_result = match action_processor(
+        let unified_report = match action_processor(
             environment_configuration,
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
             redis_connection_pool,
             action_processor_incoming
         ).await {
-            Ok(action_processor_result_) => action_processor_result_,
+            Ok(unified_report_) => unified_report_,
             Err(error) => {
                 let response = Creator::<Response>::create_internal_server_error();
 
                 if let Err(mut error_) = Writer::<ActionRoundRegister>::write_with_context(
-                    database_2_postgresql_connection_pool, &request, &response, &error
+                    database_2_postgresql_connection_pool,
+                    &request,
+                    &response,
+                    &error
                 ).await {
                     error_.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -156,13 +166,16 @@ impl CoreActionProcessor {
             }
         };
 
-        let action_processor_result_ = match action_processor_result {
-            InvalidArgumentResult::Ok { subject: action_processor_result__ } => action_processor_result__,
+        let unified_report_ = match unified_report {
+            InvalidArgumentResult::Ok { subject: unified_report__ } => unified_report__,
             InvalidArgumentResult::InvalidArgument { invalid_argument } => {
                 let response = Creator::<Response>::create_bad_request();
 
                 if let Err(mut error) = Writer::<ActionRoundRegister>::write_with_context(
-                    database_2_postgresql_connection_pool, &request, &response, &invalid_argument
+                    database_2_postgresql_connection_pool,
+                    &request,
+                    &response,
+                    &invalid_argument
                 ).await {
                     error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -177,51 +190,16 @@ impl CoreActionProcessor {
             }
         };
 
-        let response = match action_processor_result_resolver(action_processor_result_) {
-            Ok(unified_report) => {
-                let data = match Serializer::<SF>::serialize(&unified_report) {
-                    Ok(data_) => data_,
-                    Err(error) => {
-                        let response = Creator::<Response>::create_internal_server_error();
-
-                        if let Err(mut error_) = Writer::<ActionRoundRegister>::write_with_context(
-                            database_2_postgresql_connection_pool, &request, &response, &error
-                        ).await {
-                            error_.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                            unreachable!(
-                                "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
-                                process does not wait for another write process, and writes immediately.",
-                                &error,
-                                &error_
-                            );
-                        }
-
-                        return response;
-                    }
-                };
-
-                let response = Creator::<Response>::create_ok(data);
-
-                if let Err(mut error) = Writer::<ActionRoundRegister>::write(
-                    database_2_postgresql_connection_pool, &request, &response
-                ).await {
-                    error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
-
-                    unreachable!(
-                        "{}. TODO: Write in concurrent way. It is also necessary that the write
-                        process does not wait for another write process, and writes immediately.",
-                        &error
-                    );
-                }
-
-                response
-            },
+        let data = match Serializer::<SF>::serialize(&unified_report_) {
+            Ok(data_) => data_,
             Err(error) => {
                 let response = Creator::<Response>::create_internal_server_error();
 
                 if let Err(mut error_) = Writer::<ActionRoundRegister>::write_with_context(
-                    database_2_postgresql_connection_pool, &request, &response, &error
+                    database_2_postgresql_connection_pool,
+                    &request,
+                    &response,
+                    &error
                 ).await {
                     error_.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -233,9 +211,25 @@ impl CoreActionProcessor {
                     );
                 }
 
-                response
+                return response;
             }
         };
+
+        let response = Creator::<Response>::create_ok(data);
+
+        if let Err(mut error) = Writer::<ActionRoundRegister>::write(
+            database_2_postgresql_connection_pool,
+            &request,
+            &response
+        ).await {
+            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+
+            unreachable!(
+                "{}. TODO: Write in concurrent way. It is also necessary that the write
+                process does not wait for another write process, and writes immediately.",
+                &error
+            );
+        }
 
         return response;
     }

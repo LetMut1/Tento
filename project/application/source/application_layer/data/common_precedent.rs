@@ -1,23 +1,9 @@
-use extern_crate::serde::Serialize;
-
-pub enum ActionProcessorResult<T>
-where
-    T: Serialize
-{
-    Void,
-    Outcoming {
-        outcoming: T
-    },
-    Precedent {
-        precedent: CommonPrecedent
-    }
-}
-
 pub enum CommonPrecedent {
     ApplicationUser_EmailAlreadyExist,
     ApplicationUser_IsChannelOwner,
     ApplicationUser_NicknameAlreadyExist,
     ApplicationUser_NotFound,
+    ApplicationUser_WrongEmailOrNicknameOrPassword,
     ApplicationUser_WrongPassword,
     ApplicationUserAccessRefreshToken_AlreadyExpired,
     ApplicationUserAccessRefreshToken_NotFound,

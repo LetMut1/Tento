@@ -1,4 +1,3 @@
-use crate::application_layer::data::common_precedent::ActionProcessorResult;
 use crate::application_layer::data::common_precedent::CommonPrecedent;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ObfuscationValue;
@@ -22,20 +21,22 @@ use crate::domain_layer::functionality::service::encoder::Encoder;
 use crate::domain_layer::functionality::service::generator::Generator;
 use crate::domain_layer::functionality::service::serialization_form_resolver::SerializationFormResolver;
 use crate::domain_layer::functionality::service::validator::Validator;
-use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
-use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
+use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
+use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::functionality::repository::application_user__postgresql_repository::Insert as ApplicationUserInsert;
 use crate::infrastructure_layer::functionality::repository::application_user_access_refresh_token__postgresql_repository::Insert as ApplicationUserAccessRefreshTokenInsert;
 use crate::infrastructure_layer::functionality::repository::application_user_device__postgresql_repository::Insert as ApplicationUserDeviceInsert;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::UnixTime;
+use crate::infrastructure_layer::functionality::service::macro_rules::r#enum;
+use crate::presentation_layer::data::unified_report::UnifiedReport;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::bb8::Pool;
@@ -58,7 +59,7 @@ impl ActionProcessor {
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _redis_connection_pool: &'a Pool<RedisConnectionManager>,
         incoming: Incoming
-    ) -> Result<InvalidArgumentResult<ActionProcessorResult<Outcoming>>, ErrorAuditor>
+    ) -> Result<InvalidArgumentResult<UnifiedReport<Outcoming, Precedent>>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -132,9 +133,7 @@ impl ActionProcessor {
         if is_exist_1 {
             return Ok(
                 InvalidArgumentResult::Ok {
-                    subject: ActionProcessorResult::Precedent {
-                        precedent: CommonPrecedent::ApplicationUser_NicknameAlreadyExist
-                    }
+                    subject: UnifiedReport::precedent(Precedent::ApplicationUser_NicknameAlreadyExist)
                 }
             );
         }
@@ -154,9 +153,7 @@ impl ActionProcessor {
         if is_exist_2 {
             return Ok(
                 InvalidArgumentResult::Ok {
-                    subject: ActionProcessorResult::Precedent {
-                        precedent: CommonPrecedent::ApplicationUser_EmailAlreadyExist
-                    }
+                    subject: UnifiedReport::precedent(Precedent::ApplicationUser_EmailAlreadyExist)
                 }
             );
         }
@@ -193,9 +190,7 @@ impl ActionProcessor {
             None => {
                 return Ok(
                     InvalidArgumentResult::Ok {
-                        subject: ActionProcessorResult::Precedent {
-                            precedent: CommonPrecedent::ApplicationUserRegistrationToken_NotFound
-                        }
+                        subject: UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_NotFound)
                     }
                 );
             }
@@ -214,9 +209,7 @@ impl ActionProcessor {
 
             return Ok(
                 InvalidArgumentResult::Ok {
-                    subject: ActionProcessorResult::Precedent {
-                        precedent: CommonPrecedent::ApplicationUserRegistrationToken_AlreadyExpired
-                    }
+                    subject: UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_AlreadyExpired)
                 }
             );
         }
@@ -224,9 +217,7 @@ impl ActionProcessor {
         if !application_user_registration_token_.get_is_approved().get() {
             return Ok(
                 InvalidArgumentResult::Ok {
-                    subject: ActionProcessorResult::Precedent {
-                        precedent: CommonPrecedent::ApplicationUserRegistrationToken_IsNotApproved
-                    }
+                    subject: UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_IsNotApproved)
                 }
             );
         }
@@ -274,9 +265,7 @@ impl ActionProcessor {
 
             return Ok(
                 InvalidArgumentResult::Ok {
-                    subject: ActionProcessorResult::Precedent {
-                        precedent: CommonPrecedent::ApplicationUserRegistrationToken_WrongValue
-                    }
+                    subject: UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_WrongValue)
                 }
             );
         }
@@ -407,14 +396,14 @@ impl ActionProcessor {
             }
         };
 
+        let outcoming = Outcoming {
+            application_user_access_token_serialized_form,
+            application_user_access_refresh_token_serialized_form
+        };
+
         return Ok(
             InvalidArgumentResult::Ok {
-                subject: ActionProcessorResult::Outcoming {
-                    outcoming: Outcoming {
-                        application_user_access_token_serialized_form,
-                        application_user_access_refresh_token_serialized_form
-                    }
-                }
+                subject: UnifiedReport::filled(outcoming)
             }
         );
     }
@@ -438,3 +427,14 @@ pub struct Outcoming {
     application_user_access_token_serialized_form: String,
     application_user_access_refresh_token_serialized_form: String
 }
+
+r#enum!(
+    pub enum Precedent {
+        CommonPrecedent::ApplicationUser_NicknameAlreadyExist,
+        CommonPrecedent::ApplicationUser_EmailAlreadyExist,
+        CommonPrecedent::ApplicationUserRegistrationToken_NotFound,
+        CommonPrecedent::ApplicationUserRegistrationToken_AlreadyExpired,
+        CommonPrecedent::ApplicationUserRegistrationToken_IsNotApproved,
+        CommonPrecedent::ApplicationUserRegistrationToken_WrongValue
+    }
+);
