@@ -267,6 +267,6 @@ r#enum!(
         CommonPrecedent::ApplicationUserAccessToken_AlreadyExpired,
         CommonPrecedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList,
         CommonPrecedent::Channel_NotFound,
-        CommonPrecedent::Channel_IsClosed
+        CommonPrecedent::Channel_IsClosed,
     }
 );

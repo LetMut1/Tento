@@ -179,6 +179,6 @@ r#enum!(
         CommonPrecedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList,
         CommonPrecedent::Channel_NotFound,
         CommonPrecedent::Channel_IsClosed,
-        CommonPrecedent::ApplicationUser_IsChannelOwner
+        CommonPrecedent::ApplicationUser_IsChannelOwner,
     }
 );

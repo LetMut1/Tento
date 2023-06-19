@@ -397,6 +397,6 @@ r#enum!(
         CommonPrecedent::ApplicationUserAuthorizationToken_NotFound,
         CommonPrecedent::ApplicationUserAuthorizationToken_AlreadyExpired,
         CommonPrecedent::ApplicationUserAuthorizationToken_WrongValue,
-        CommonPrecedent::ApplicationUser_NotFound
+        CommonPrecedent::ApplicationUser_NotFound,
     }
 );

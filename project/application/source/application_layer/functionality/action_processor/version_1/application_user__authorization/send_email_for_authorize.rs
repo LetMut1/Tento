@@ -218,6 +218,6 @@ r#enum!(
         CommonPrecedent::ApplicationUser_NotFound,
         CommonPrecedent::ApplicationUserAuthorizationToken_NotFound,
         CommonPrecedent::ApplicationUserAuthorizationToken_AlreadyExpired,
-        CommonPrecedent::ApplicationUserAuthorizationToken_TimeToResendHasNotCome
+        CommonPrecedent::ApplicationUserAuthorizationToken_TimeToResendHasNotCome,
     }
 );

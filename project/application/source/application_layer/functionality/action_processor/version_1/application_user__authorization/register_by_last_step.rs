@@ -435,6 +435,6 @@ r#enum!(
         CommonPrecedent::ApplicationUserRegistrationToken_NotFound,
         CommonPrecedent::ApplicationUserRegistrationToken_AlreadyExpired,
         CommonPrecedent::ApplicationUserRegistrationToken_IsNotApproved,
-        CommonPrecedent::ApplicationUserRegistrationToken_WrongValue
+        CommonPrecedent::ApplicationUserRegistrationToken_WrongValue,
     }
 );

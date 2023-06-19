@@ -200,6 +200,6 @@ r#enum!(
         CommonPrecedent::ApplicationUserRegistrationToken_NotFound,
         CommonPrecedent::ApplicationUserRegistrationToken_AlreadyExpired,
         CommonPrecedent::ApplicationUserRegistrationToken_AlreadyApproved,
-        CommonPrecedent::ApplicationUserRegistrationToken_TimeToResendHasNotCome
+        CommonPrecedent::ApplicationUserRegistrationToken_TimeToResendHasNotCome,
     }
 );

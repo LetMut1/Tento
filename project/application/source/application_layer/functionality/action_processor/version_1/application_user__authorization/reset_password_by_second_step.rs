@@ -219,6 +219,6 @@ r#enum!(
         CommonPrecedent::ApplicationUserResetPasswordToken_NotFound,
         CommonPrecedent::ApplicationUserResetPasswordToken_AlreadyExpired,
         CommonPrecedent::ApplicationUserResetPasswordToken_AlreadyApproved,
-        CommonPrecedent::ApplicationUserResetPasswordToken_WrongValue
+        CommonPrecedent::ApplicationUserResetPasswordToken_WrongValue,
     }
 );

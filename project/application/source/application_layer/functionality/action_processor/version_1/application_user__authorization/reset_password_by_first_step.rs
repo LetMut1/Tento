@@ -328,7 +328,7 @@ pub struct Outcoming {
 
 r#enum!(
     pub enum Precedent {
-        CommonPrecedent::ApplicationUser_NotFound
+        CommonPrecedent::ApplicationUser_NotFound,
     }
 );
 
