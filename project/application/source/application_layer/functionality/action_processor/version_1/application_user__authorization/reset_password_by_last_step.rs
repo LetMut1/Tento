@@ -1,5 +1,5 @@
-use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::action_processor_result::Precedent;
+use crate::application_layer::data::common_precedent::ActionProcessorResult;
+use crate::application_layer::data::common_precedent::CommonPrecedent;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_3;
@@ -114,7 +114,7 @@ impl ActionProcessor {
                 return Ok(
                     InvalidArgumentResult::Ok {
                         subject: ActionProcessorResult::Precedent {
-                            precedent: Precedent::ApplicationUserResetPasswordToken_NotFound
+                            precedent: CommonPrecedent::ApplicationUserResetPasswordToken_NotFound
                         }
                     }
                 );
@@ -135,7 +135,7 @@ impl ActionProcessor {
             return Ok(
                 InvalidArgumentResult::Ok {
                     subject: ActionProcessorResult::Precedent {
-                        precedent: Precedent::ApplicationUserResetPasswordToken_AlreadyExpired
+                        precedent: CommonPrecedent::ApplicationUserResetPasswordToken_AlreadyExpired
                     }
                 }
             );
@@ -145,7 +145,7 @@ impl ActionProcessor {
             return Ok(
                 InvalidArgumentResult::Ok {
                     subject: ActionProcessorResult::Precedent {
-                        precedent: Precedent::ApplicationUserResetPasswordToken_IsNotApproved
+                        precedent: CommonPrecedent::ApplicationUserResetPasswordToken_IsNotApproved
                     }
                 }
             );
@@ -195,7 +195,7 @@ impl ActionProcessor {
             return Ok(
                 InvalidArgumentResult::Ok {
                     subject: ActionProcessorResult::Precedent {
-                        precedent: Precedent::ApplicationUserResetPasswordToken_WrongValue
+                        precedent: CommonPrecedent::ApplicationUserResetPasswordToken_WrongValue
                     }
                 }
             );
@@ -233,7 +233,7 @@ impl ActionProcessor {
                 return Ok(
                     InvalidArgumentResult::Ok {
                         subject: ActionProcessorResult::Precedent {
-                            precedent: Precedent::ApplicationUser_NotFound
+                            precedent: CommonPrecedent::ApplicationUser_NotFound
                         }
                     }
                 );

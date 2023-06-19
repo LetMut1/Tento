@@ -1,5 +1,5 @@
-use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::action_processor_result::Precedent;
+use crate::application_layer::data::common_precedent::ActionProcessorResult;
+use crate::application_layer::data::common_precedent::CommonPrecedent;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_1;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_2;
@@ -104,7 +104,7 @@ impl ActionProcessor {
                 return Ok(
                     InvalidArgumentResult::Ok {
                         subject: ActionProcessorResult::Precedent {
-                            precedent: Precedent::ApplicationUser_NotFound
+                            precedent: CommonPrecedent::ApplicationUser_NotFound
                         }
                     }
                 );

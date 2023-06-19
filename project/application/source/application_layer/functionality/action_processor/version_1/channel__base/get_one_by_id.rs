@@ -1,5 +1,5 @@
-use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::action_processor_result::Precedent;
+use crate::application_layer::data::common_precedent::ActionProcessorResult;
+use crate::application_layer::data::common_precedent::CommonPrecedent;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
 use crate::domain_layer::data::entity::channel_inner_link::ChannelInnerLink;
@@ -81,7 +81,7 @@ impl ActionProcessor {
                         return Ok(
                             InvalidArgumentResult::Ok {
                                 subject: ActionProcessorResult::Precedent {
-                                    precedent: Precedent::ApplicationUserAccessToken_AlreadyExpired
+                                    precedent: CommonPrecedent::ApplicationUserAccessToken_AlreadyExpired
                                 }
                             }
                         );
@@ -90,7 +90,7 @@ impl ActionProcessor {
                         return Ok(
                             InvalidArgumentResult::Ok {
                                 subject: ActionProcessorResult::Precedent {
-                                    precedent: Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList
+                                    precedent: CommonPrecedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList
                                 }
                             }
                         );
@@ -137,7 +137,7 @@ impl ActionProcessor {
                 return Ok(
                     InvalidArgumentResult::Ok {
                         subject: ActionProcessorResult::Precedent {
-                            precedent: Precedent::Channel_NotFound
+                            precedent: CommonPrecedent::Channel_NotFound
                         }
                     }
                 );
@@ -163,7 +163,7 @@ impl ActionProcessor {
                 return Ok(
                     InvalidArgumentResult::Ok {
                         subject: ActionProcessorResult::Precedent {
-                            precedent: Precedent::Channel_IsClosed
+                            precedent: CommonPrecedent::Channel_IsClosed
                         }
                     }
                 );

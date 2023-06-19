@@ -1,5 +1,5 @@
-use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::action_processor_result::Precedent;
+use crate::application_layer::data::common_precedent::ActionProcessorResult;
+use crate::application_layer::data::common_precedent::CommonPrecedent;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_1;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_2;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_3;
@@ -112,7 +112,7 @@ impl ActionProcessor {
                     return Ok(
                         InvalidArgumentResult::Ok {
                             subject: ActionProcessorResult::Precedent {
-                                precedent: Precedent::ApplicationUser_NotFound
+                                precedent: CommonPrecedent::ApplicationUser_NotFound
                             }
                         }
                     );
@@ -145,7 +145,7 @@ impl ActionProcessor {
                         return Ok(
                             InvalidArgumentResult::Ok {
                                 subject: ActionProcessorResult::Precedent {
-                                    precedent: Precedent::ApplicationUser_NotFound
+                                    precedent: CommonPrecedent::ApplicationUser_NotFound
                                 }
                             }
                         );
@@ -179,7 +179,7 @@ impl ActionProcessor {
             return Ok(
                 InvalidArgumentResult::Ok {
                     subject: ActionProcessorResult::Precedent {
-                        precedent: Precedent::ApplicationUser_WrongPassword
+                        precedent: CommonPrecedent::ApplicationUser_WrongPassword
                     }
                 }
             );

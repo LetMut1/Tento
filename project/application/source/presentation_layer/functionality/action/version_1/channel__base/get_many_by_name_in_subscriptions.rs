@@ -1,5 +1,5 @@
-use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::action_processor_result::Precedent;
+use crate::application_layer::data::common_precedent::ActionProcessorResult;
+use crate::application_layer::data::common_precedent::CommonPrecedent;
 use crate::application_layer::functionality::action_processor::version_1::channel__base::get_many_by_name_in_subscriptions::ActionProcessor;
 use crate::application_layer::functionality::action_processor::version_1::channel__base::get_many_by_name_in_subscriptions::Incoming;
 use crate::application_layer::functionality::action_processor::version_1::channel__base::get_many_by_name_in_subscriptions::Outcoming;
@@ -72,14 +72,14 @@ impl GetManyByNameInSubscriptions {
             }
             ActionProcessorResult::Precedent { precedent } => {
                 match precedent {
-                    Precedent::ApplicationUserAccessToken_AlreadyExpired => {
+                    CommonPrecedent::ApplicationUserAccessToken_AlreadyExpired => {
                         return Ok(
                             UnifiedReport::communication_code(
                                 CommunicationCodeRegistry::APPLICATION_USER_ACCESS_TOKEN__ALREADY_EXPIRED
                             )
                         );
                     }
-                    Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList => {
+                    CommonPrecedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList => {
                         return Ok(
                             UnifiedReport::communication_code(
                                 CommunicationCodeRegistry::APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST

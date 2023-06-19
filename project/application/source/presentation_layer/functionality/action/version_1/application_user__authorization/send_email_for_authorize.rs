@@ -1,5 +1,5 @@
-use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::action_processor_result::Precedent;
+use crate::application_layer::data::common_precedent::ActionProcessorResult;
+use crate::application_layer::data::common_precedent::CommonPrecedent;
 use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::send_email_for_authorize::ActionProcessor;
 use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::send_email_for_authorize::Incoming;
 use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::send_email_for_authorize::Outcoming;
@@ -72,28 +72,28 @@ impl SendEmailForAuthorize {
             }
             ActionProcessorResult::Precedent { precedent } => {
                 match precedent {
-                    Precedent::ApplicationUser_NotFound => {
+                    CommonPrecedent::ApplicationUser_NotFound => {
                         return Ok(
                             UnifiedReport::communication_code(
                                 CommunicationCodeRegistry::APPLICATION_USER__NOT_FOUND
                             )
                         );
                     }
-                    Precedent::ApplicationUserAuthorizationToken_NotFound => {
+                    CommonPrecedent::ApplicationUserAuthorizationToken_NotFound => {
                         return Ok(
                             UnifiedReport::communication_code(
                                 CommunicationCodeRegistry::APPLICATION_USER_AUTHORIZATION_TOKEN__NOT_FOUND
                             )
                         );
                     }
-                    Precedent::ApplicationUserAuthorizationToken_AlreadyExpired => {
+                    CommonPrecedent::ApplicationUserAuthorizationToken_AlreadyExpired => {
                         return Ok(
                             UnifiedReport::communication_code(
                                 CommunicationCodeRegistry::APPLICATION_USER_AUTHORIZATION_TOKEN__ALREADY_EXPIRED
                             )
                         );
                     }
-                    Precedent::ApplicationUserAuthorizationToken_TimeToResendHasNotCome => {
+                    CommonPrecedent::ApplicationUserAuthorizationToken_TimeToResendHasNotCome => {
                         return Ok(
                             UnifiedReport::communication_code(
                                 CommunicationCodeRegistry::APPLICATION_USER_AUTHORIZATION_TOKEN__TIME_TO_RESEND_HAS_NOT_COME

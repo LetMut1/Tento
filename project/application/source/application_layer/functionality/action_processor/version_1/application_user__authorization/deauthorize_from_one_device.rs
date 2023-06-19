@@ -1,5 +1,5 @@
-use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::action_processor_result::Precedent;
+use crate::application_layer::data::common_precedent::ActionProcessorResult;
+use crate::application_layer::data::common_precedent::CommonPrecedent;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::functionality::service::application_user_access_token__extractor::ExtractorResult;
@@ -62,7 +62,7 @@ impl ActionProcessor {
                         return Ok(
                             InvalidArgumentResult::Ok {
                                 subject: ActionProcessorResult::Precedent {
-                                    precedent: Precedent::ApplicationUserAccessToken_AlreadyExpired
+                                    precedent: CommonPrecedent::ApplicationUserAccessToken_AlreadyExpired
                                 }
                             }
                         );
@@ -71,7 +71,7 @@ impl ActionProcessor {
                         return Ok(
                             InvalidArgumentResult::Ok {
                                 subject: ActionProcessorResult::Precedent {
-                                    precedent: Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList
+                                    precedent: CommonPrecedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList
                                 }
                             }
                         );

@@ -1,5 +1,5 @@
-use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::action_processor_result::Precedent;
+use crate::application_layer::data::common_precedent::ActionProcessorResult;
+use crate::application_layer::data::common_precedent::CommonPrecedent;
 use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::reset_password_by_first_step::ActionProcessor;
 use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::reset_password_by_first_step::Incoming;
 use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::reset_password_by_first_step::Outcoming;
@@ -72,7 +72,7 @@ impl ResetPasswordByFirstStep {
             }
             ActionProcessorResult::Precedent { precedent } => {
                 match precedent {
-                    Precedent::ApplicationUser_NotFound => {
+                    CommonPrecedent::ApplicationUser_NotFound => {
                         return Ok(
                             UnifiedReport::communication_code(
                                 CommunicationCodeRegistry::APPLICATION_USER__NOT_FOUND

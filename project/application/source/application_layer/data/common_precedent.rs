@@ -9,11 +9,11 @@ where
         outcoming: T
     },
     Precedent {
-        precedent: Precedent
+        precedent: CommonPrecedent
     }
 }
 
-pub enum Precedent {
+pub enum CommonPrecedent {
     ApplicationUser_EmailAlreadyExist,
     ApplicationUser_IsChannelOwner,
     ApplicationUser_NicknameAlreadyExist,

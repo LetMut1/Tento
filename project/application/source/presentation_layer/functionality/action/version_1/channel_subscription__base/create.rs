@@ -1,5 +1,5 @@
-use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::action_processor_result::Precedent;
+use crate::application_layer::data::common_precedent::ActionProcessorResult;
+use crate::application_layer::data::common_precedent::CommonPrecedent;
 use crate::application_layer::functionality::action_processor::version_1::channel_subscription__base::create::ActionProcessor;
 use crate::application_layer::functionality::action_processor::version_1::channel_subscription__base::create::Incoming;
 use crate::application_layer::functionality::core_action_processor::CoreActionProcessor;
@@ -72,35 +72,35 @@ impl Create {
             }
             ActionProcessorResult::Precedent { precedent } => {
                 match precedent {
-                    Precedent::ApplicationUserAccessToken_AlreadyExpired => {
+                    CommonPrecedent::ApplicationUserAccessToken_AlreadyExpired => {
                         return Ok(
                             UnifiedReport::communication_code(
                                 CommunicationCodeRegistry::APPLICATION_USER_ACCESS_TOKEN__ALREADY_EXPIRED
                             )
                         );
                     }
-                    Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList => {
+                    CommonPrecedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList => {
                         return Ok(
                             UnifiedReport::communication_code(
                                 CommunicationCodeRegistry::APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST
                             )
                         );
                     }
-                    Precedent::Channel_NotFound => {
+                    CommonPrecedent::Channel_NotFound => {
                         return Ok(
                             UnifiedReport::communication_code(
                                 CommunicationCodeRegistry::CHANNEL__NOT_FOUND
                             )
                         );
                     }
-                    Precedent::Channel_IsClosed => {
+                    CommonPrecedent::Channel_IsClosed => {
                         return Ok(
                             UnifiedReport::communication_code(
                                 CommunicationCodeRegistry::CHANNEL__IS_CLOSED
                             )
                         );
                     }
-                    Precedent::ApplicationUser_IsChannelOwner => {
+                    CommonPrecedent::ApplicationUser_IsChannelOwner => {
                         return Ok(
                             UnifiedReport::communication_code(
                                 CommunicationCodeRegistry::APPLICATION_USER__IS_CHANNEL_OWNER

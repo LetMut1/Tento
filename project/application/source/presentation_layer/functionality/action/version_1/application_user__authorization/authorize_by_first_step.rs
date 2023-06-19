@@ -1,5 +1,5 @@
-use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::action_processor_result::Precedent;
+use crate::application_layer::data::common_precedent::ActionProcessorResult;
+use crate::application_layer::data::common_precedent::CommonPrecedent;
 use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::authorize_by_first_step::ActionProcessor;
 use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::authorize_by_first_step::Incoming;
 use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::authorize_by_first_step::Outcoming;
@@ -72,8 +72,8 @@ impl AuthorizeByFirstStep {
             }
             ActionProcessorResult::Precedent { precedent } => {
                 match precedent {
-                    Precedent::ApplicationUser_NotFound |
-                    Precedent::ApplicationUser_WrongPassword => {
+                    CommonPrecedent::ApplicationUser_NotFound |
+                    CommonPrecedent::ApplicationUser_WrongPassword => {
                         return Ok(
                             UnifiedReport::communication_code(
                                 CommunicationCodeRegistry::APPLICATION_USER__WRONG_EMAIL_OR_NICKNAME_OR_PASSWORD

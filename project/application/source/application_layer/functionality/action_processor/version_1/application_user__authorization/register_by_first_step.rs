@@ -1,5 +1,5 @@
-use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::action_processor_result::Precedent;
+use crate::application_layer::data::common_precedent::ActionProcessorResult;
+use crate::application_layer::data::common_precedent::CommonPrecedent;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_1;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_2;
@@ -101,7 +101,7 @@ impl ActionProcessor {
             return Ok(
                 InvalidArgumentResult::Ok {
                     subject: ActionProcessorResult::Precedent {
-                        precedent: Precedent::ApplicationUser_EmailAlreadyExist
+                        precedent: CommonPrecedent::ApplicationUser_EmailAlreadyExist
                     }
                 }
             );

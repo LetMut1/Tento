@@ -1,5 +1,5 @@
-use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::action_processor_result::Precedent;
+use crate::application_layer::data::common_precedent::ActionProcessorResult;
+use crate::application_layer::data::common_precedent::CommonPrecedent;
 use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::authorize_by_last_step::ActionProcessor;
 use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::authorize_by_last_step::Incoming;
 use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::authorize_by_last_step::Outcoming;
@@ -72,28 +72,28 @@ impl AuthorizeByLastStep {
             }
             ActionProcessorResult::Precedent { precedent } => {
                 match precedent {
-                    Precedent::ApplicationUserAuthorizationToken_NotFound => {
+                    CommonPrecedent::ApplicationUserAuthorizationToken_NotFound => {
                         return Ok(
                             UnifiedReport::communication_code(
                                 CommunicationCodeRegistry::APPLICATION_USER_AUTHORIZATION_TOKEN__NOT_FOUND
                             )
                         );
                     }
-                    Precedent::ApplicationUserAuthorizationToken_AlreadyExpired => {
+                    CommonPrecedent::ApplicationUserAuthorizationToken_AlreadyExpired => {
                         return Ok(
                             UnifiedReport::communication_code(
                                 CommunicationCodeRegistry::APPLICATION_USER_AUTHORIZATION_TOKEN__ALREADY_EXPIRED
                             )
                         );
                     }
-                    Precedent::ApplicationUserAuthorizationToken_WrongValue => {
+                    CommonPrecedent::ApplicationUserAuthorizationToken_WrongValue => {
                         return Ok(
                             UnifiedReport::communication_code(
                                 CommunicationCodeRegistry::APPLICATION_USER_AUTHORIZATION_TOKEN__WRONG_VALUE
                             )
                         );
                     }
-                    Precedent::ApplicationUser_NotFound => {
+                    CommonPrecedent::ApplicationUser_NotFound => {
                         return Ok(
                             UnifiedReport::communication_code(
                                 CommunicationCodeRegistry::APPLICATION_USER__NOT_FOUND

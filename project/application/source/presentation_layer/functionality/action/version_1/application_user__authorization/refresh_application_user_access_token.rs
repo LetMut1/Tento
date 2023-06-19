@@ -1,5 +1,5 @@
-use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::action_processor_result::Precedent;
+use crate::application_layer::data::common_precedent::ActionProcessorResult;
+use crate::application_layer::data::common_precedent::CommonPrecedent;
 use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::refresh_application_user_access_token::ActionProcessor;
 use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::refresh_application_user_access_token::Incoming;
 use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::refresh_application_user_access_token::Outcoming;
@@ -72,14 +72,14 @@ impl RefreshApplicationUserAccessToken {
             }
             ActionProcessorResult::Precedent { precedent } => {
                 match precedent {
-                    Precedent::ApplicationUserAccessRefreshToken_NotFound => {
+                    CommonPrecedent::ApplicationUserAccessRefreshToken_NotFound => {
                         return Ok(
                             UnifiedReport::communication_code(
                                 CommunicationCodeRegistry::APPLICATION_USER_ACCESS_REFRESH_TOKEN__NOT_FOUND
                             )
                         );
                     }
-                    Precedent::ApplicationUserAccessRefreshToken_AlreadyExpired => {
+                    CommonPrecedent::ApplicationUserAccessRefreshToken_AlreadyExpired => {
                         return Ok(
                             UnifiedReport::communication_code(
                                 CommunicationCodeRegistry::APPLICATION_USER_ACCESS_REFRESH_TOKEN__ALREADY_EXPIRED

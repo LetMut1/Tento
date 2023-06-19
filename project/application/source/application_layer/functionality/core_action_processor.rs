@@ -1,4 +1,4 @@
-use crate::application_layer::data::action_processor_result::ActionProcessorResult;
+use crate::application_layer::data::common_precedent::ActionProcessorResult;
 use crate::domain_layer::data::entity::action_round_register::ActionRoundRegister;
 use crate::domain_layer::functionality::service::writer::Writer;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;

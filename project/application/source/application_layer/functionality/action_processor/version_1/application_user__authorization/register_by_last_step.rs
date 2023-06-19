@@ -1,5 +1,5 @@
-use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::action_processor_result::Precedent;
+use crate::application_layer::data::common_precedent::ActionProcessorResult;
+use crate::application_layer::data::common_precedent::CommonPrecedent;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ObfuscationValue;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_UpdatedAt;
@@ -133,7 +133,7 @@ impl ActionProcessor {
             return Ok(
                 InvalidArgumentResult::Ok {
                     subject: ActionProcessorResult::Precedent {
-                        precedent: Precedent::ApplicationUser_NicknameAlreadyExist
+                        precedent: CommonPrecedent::ApplicationUser_NicknameAlreadyExist
                     }
                 }
             );
@@ -155,7 +155,7 @@ impl ActionProcessor {
             return Ok(
                 InvalidArgumentResult::Ok {
                     subject: ActionProcessorResult::Precedent {
-                        precedent: Precedent::ApplicationUser_EmailAlreadyExist
+                        precedent: CommonPrecedent::ApplicationUser_EmailAlreadyExist
                     }
                 }
             );
@@ -194,7 +194,7 @@ impl ActionProcessor {
                 return Ok(
                     InvalidArgumentResult::Ok {
                         subject: ActionProcessorResult::Precedent {
-                            precedent: Precedent::ApplicationUserRegistrationToken_NotFound
+                            precedent: CommonPrecedent::ApplicationUserRegistrationToken_NotFound
                         }
                     }
                 );
@@ -215,7 +215,7 @@ impl ActionProcessor {
             return Ok(
                 InvalidArgumentResult::Ok {
                     subject: ActionProcessorResult::Precedent {
-                        precedent: Precedent::ApplicationUserRegistrationToken_AlreadyExpired
+                        precedent: CommonPrecedent::ApplicationUserRegistrationToken_AlreadyExpired
                     }
                 }
             );
@@ -225,7 +225,7 @@ impl ActionProcessor {
             return Ok(
                 InvalidArgumentResult::Ok {
                     subject: ActionProcessorResult::Precedent {
-                        precedent: Precedent::ApplicationUserRegistrationToken_IsNotApproved
+                        precedent: CommonPrecedent::ApplicationUserRegistrationToken_IsNotApproved
                     }
                 }
             );
@@ -275,7 +275,7 @@ impl ActionProcessor {
             return Ok(
                 InvalidArgumentResult::Ok {
                     subject: ActionProcessorResult::Precedent {
-                        precedent: Precedent::ApplicationUserRegistrationToken_WrongValue
+                        precedent: CommonPrecedent::ApplicationUserRegistrationToken_WrongValue
                     }
                 }
             );

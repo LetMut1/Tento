@@ -1,5 +1,5 @@
-use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::action_processor_result::Precedent;
+use crate::application_layer::data::common_precedent::ActionProcessorResult;
+use crate::application_layer::data::common_precedent::CommonPrecedent;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_3;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_5;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_CanBeResentFrom;
@@ -87,7 +87,7 @@ impl ActionProcessor {
                 return Ok(
                     InvalidArgumentResult::Ok {
                         subject: ActionProcessorResult::Precedent {
-                            precedent: Precedent::ApplicationUser_NotFound
+                            precedent: CommonPrecedent::ApplicationUser_NotFound
                         }
                     }
                 );
@@ -127,7 +127,7 @@ impl ActionProcessor {
                 return Ok(
                     InvalidArgumentResult::Ok {
                         subject: ActionProcessorResult::Precedent {
-                            precedent: Precedent::ApplicationUserAuthorizationToken_NotFound
+                            precedent: CommonPrecedent::ApplicationUserAuthorizationToken_NotFound
                         }
                     }
                 );
@@ -148,7 +148,7 @@ impl ActionProcessor {
             return Ok(
                 InvalidArgumentResult::Ok {
                     subject: ActionProcessorResult::Precedent {
-                        precedent: Precedent::ApplicationUserAuthorizationToken_AlreadyExpired
+                        precedent: CommonPrecedent::ApplicationUserAuthorizationToken_AlreadyExpired
                     }
                 }
             );
@@ -158,7 +158,7 @@ impl ActionProcessor {
             return Ok(
                 InvalidArgumentResult::Ok {
                     subject: ActionProcessorResult::Precedent {
-                        precedent: Precedent::ApplicationUserAuthorizationToken_TimeToResendHasNotCome
+                        precedent: CommonPrecedent::ApplicationUserAuthorizationToken_TimeToResendHasNotCome
                     }
                 }
             );

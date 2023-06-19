@@ -1,4 +1,4 @@
-use crate::application_layer::data::action_processor_result::ActionProcessorResult;
+use crate::application_layer::data::common_precedent::ActionProcessorResult;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::functionality::service::validator::Validator;

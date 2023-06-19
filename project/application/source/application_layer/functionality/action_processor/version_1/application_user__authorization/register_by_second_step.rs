@@ -1,5 +1,5 @@
-use crate::application_layer::data::action_processor_result::ActionProcessorResult;
-use crate::application_layer::data::action_processor_result::Precedent;
+use crate::application_layer::data::common_precedent::ActionProcessorResult;
+use crate::application_layer::data::common_precedent::CommonPrecedent;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_3;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_4;
@@ -115,7 +115,7 @@ impl ActionProcessor {
                 return Ok(
                     InvalidArgumentResult::Ok {
                         subject: ActionProcessorResult::Precedent {
-                            precedent: Precedent::ApplicationUserRegistrationToken_NotFound
+                            precedent: CommonPrecedent::ApplicationUserRegistrationToken_NotFound
                         }
                     }
                 );
@@ -136,7 +136,7 @@ impl ActionProcessor {
             return Ok(
                 InvalidArgumentResult::Ok {
                     subject: ActionProcessorResult::Precedent {
-                        precedent: Precedent::ApplicationUserRegistrationToken_AlreadyExpired
+                        precedent: CommonPrecedent::ApplicationUserRegistrationToken_AlreadyExpired
                     }
                 }
             );
@@ -146,7 +146,7 @@ impl ActionProcessor {
             return Ok(
                 InvalidArgumentResult::Ok {
                     subject: ActionProcessorResult::Precedent {
-                        precedent: Precedent::ApplicationUserRegistrationToken_AlreadyApproved
+                        precedent: CommonPrecedent::ApplicationUserRegistrationToken_AlreadyApproved
                     }
                 }
             );
@@ -196,7 +196,7 @@ impl ActionProcessor {
             return Ok(
                 InvalidArgumentResult::Ok {
                     subject: ActionProcessorResult::Precedent {
-                        precedent: Precedent::ApplicationUserRegistrationToken_WrongValue
+                        precedent: CommonPrecedent::ApplicationUserRegistrationToken_WrongValue
                     }
                 }
             );
