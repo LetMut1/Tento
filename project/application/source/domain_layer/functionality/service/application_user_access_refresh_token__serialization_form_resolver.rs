@@ -27,7 +27,7 @@ impl SerializationFormResolver<ApplicationUserAccessRefreshToken<'_>> {
         let mut hmac_encoded_data: Vec<u8> = vec![];
 
         Encoder_::<Hmac>::encode(
-            pushable_environment_configuration.get_security_auart_encoding_private_key().as_bytes(),
+            pushable_environment_configuration.get_application_user_access_refresh_token_private_key().as_bytes(),
             data.as_slice(),
             hmac_encoded_data.as_mut_slice()
         );

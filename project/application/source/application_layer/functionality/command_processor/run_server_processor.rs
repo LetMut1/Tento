@@ -113,7 +113,7 @@ impl RunServerProcessor {
 
         let redis_connection_pool = match Creator::<RedisConnectonPool>::create(
             environment,
-            environment_configuration.get_redis_url()
+            environment_configuration.get_database_1_redis_connection_info()
         ).await {
             Ok(redis_connection_pool_) => redis_connection_pool_,
             Err(mut error) => {

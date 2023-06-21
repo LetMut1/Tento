@@ -96,7 +96,7 @@ impl Encoder<Signature> {
         let mut hmac_encoded_data: Vec<u8> = vec![];
 
         Encoder_::<Hmac>::encode(
-            pushable_environment_configuration.get_security_auat_signature_encoding_private_key().as_bytes(),
+            pushable_environment_configuration.get_application_user_access_token_private_key().as_bytes(),
             application_user_access_token_serialized_form.as_bytes(),
             hmac_encoded_data.as_mut_slice()
         );

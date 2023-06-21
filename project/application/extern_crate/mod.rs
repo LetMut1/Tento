@@ -18,6 +18,7 @@ pub use rmp_serde;
 pub use serde;
 pub use tokio_postgres;
 pub use tokio;
+pub use toml;
 pub use uuid;
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]

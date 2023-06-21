@@ -1,0 +1,15 @@
+[socket_address]
+application_server = "0.0.0.0:80"
+email_server = "mailhog:1025"
+
+[resource_url]
+[resource_url.postgresql]
+database_1 = "postgres://root:password@database_1_postgresql/tento"
+database_2 = "postgres://root:password@database_2_postgresql/tento"
+[resource_url.redis]
+database_1 = "redis://redis"
+
+[encryption]
+[encryption.private_key]
+application_user_access_token = "JJJDffsFi3sc8Mz2udB0qRbz8zH12asu4S1ksSsZ6e2v8cs5fFm6dcfLksWeYY2i"
+application_user_access_refresh_token = "SSSDffsFi3sc8Mz2idB0qRbz8zH12asu4S1wsSsZ6e2v8cs5fFm6dcfLksWeYY0i"
