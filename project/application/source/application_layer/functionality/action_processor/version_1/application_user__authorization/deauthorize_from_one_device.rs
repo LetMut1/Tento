@@ -12,21 +12,19 @@ use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
-use crate::infrastructure_layer::functionality::service::macro_rules::r#enum;
 use crate::application_layer::data::unified_report::UnifiedReport;
+use crate::infrastructure_layer::functionality::service::macro_rules::r#enum;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::bb8::Pool;
 use extern_crate::serde::Deserialize;
+use extern_crate::serde::Serialize;
 use extern_crate::tokio_postgres::Socket;
 use extern_crate::tokio_postgres::tls::MakeTlsConnect;
 use extern_crate::tokio_postgres::tls::TlsConnect;
 use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
-
-#[cfg(feature = "facilitate_non_automatic_functional_testing")]
-use extern_crate::serde::Serialize;
 
 pub struct ActionProcessor;
 

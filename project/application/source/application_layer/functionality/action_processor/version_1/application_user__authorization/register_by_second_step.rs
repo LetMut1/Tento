@@ -33,8 +33,6 @@ use extern_crate::tokio_postgres::tls::TlsConnect;
 use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
-
-#[cfg(feature = "facilitate_non_automatic_functional_testing")]
 use extern_crate::serde::Serialize;
 
 pub struct ActionProcessor;
