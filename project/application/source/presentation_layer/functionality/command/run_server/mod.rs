@@ -123,7 +123,7 @@ fn main() -> () {
 
 // UnifiedReport -> application layer.
 
-
+// clippy/ cargo-fmt.
 
 
 // TODO Возвращать количество возможных отправок инвалидного кода валидации.

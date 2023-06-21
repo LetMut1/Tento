@@ -34,7 +34,7 @@ use crate::infrastructure_layer::functionality::repository::channel_inner_link__
 use crate::infrastructure_layer::functionality::repository::channel_outer_link__postgresql_repository::ChannelOuterLink1;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::macro_rules::r#enum;
-use crate::presentation_layer::data::unified_report::UnifiedReport;
+use crate::application_layer::data::unified_report::UnifiedReport;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::bb8::Pool;

@@ -26,7 +26,7 @@ use crate::infrastructure_layer::functionality::service::expiration_time_checker
 use crate::infrastructure_layer::functionality::service::macro_rules::r#enum;
 use crate::infrastructure_layer::functionality::service::resolver::CloudMessage;
 use crate::infrastructure_layer::functionality::service::resolver::Resolver;
-use crate::presentation_layer::data::unified_report::UnifiedReport;
+use crate::application_layer::data::unified_report::UnifiedReport;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::bb8::Pool;
