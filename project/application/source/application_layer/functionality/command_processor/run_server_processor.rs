@@ -35,6 +35,7 @@ use extern_crate::tokio::signal;
 use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
+use std::sync::Arc;
 
 pub struct RunServerProcessor;
 
@@ -64,7 +65,7 @@ impl RunServerProcessor {
         };
 
         if let Err(mut error) = runtime.block_on(
-            Self::run_http_server(&environment_configuration)
+            Self::run_http_server(environment_configuration)
         ) {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -74,7 +75,7 @@ impl RunServerProcessor {
         return Ok(());
     }
 
-    async fn run_http_server<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<(), ErrorAuditor> {     // TODO  TODO  TODO ---- create HTTP2 (h2).   // TODO HTTP3 (QUICK) (h3), когда будет готов.!!!!!!!!!!!
+    async fn run_http_server(environment_configuration: EnvironmentConfiguration) -> Result<(), ErrorAuditor> {     // TODO  TODO  TODO ---- create HTTP2 (h2).   // TODO HTTP3 (QUICK) (h3), когда будет готов.!!!!!!!!!!!
         let environment = environment_configuration.get_pushable_environment_configuration().get_environment();
 
         let postgresql_connection_pool_aggregator = match *environment {
@@ -123,12 +124,26 @@ impl RunServerProcessor {
             }
         };
 
-        let builder = Server::bind(environment_configuration.get_application_server_socket_address());
+        let builder = match Server::try_bind(environment_configuration.get_application_server_socket_address()) {
+            Ok(builder_) => builder_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
 
-        // TODO  TODO  TODO ---------  убрать Замыкания, написав и стипизировав функцию (https://docs.rs/futures/latest/futures/future/type.BoxFuture.html может помочь). Либо так https://github.com/hyperium/hyper/blob/master/examples/tower_server.rs Но здесь сущает future::Ready<>.
+        let environment_configuration_ = Arc::new(environment_configuration);
+
+        // TODO  TODO  TODO ---------  убрать Замыкания, написав и стипизировав функцию (https://docs.rs/futures/latest/futures/future/type.BoxFuture.html может помочь).
+        // Либо так https://github.com/hyperium/hyper/blob/master/examples/tower_server.rs Но здесь сущает future::Ready<>.
+        // https://stackoverflow.com/questions/55606450/how-to-share-immutable-configuration-data-with-hyper-request-handlers
         let service = make_service_fn(
             move |_: &AddrStream| {
-                let environment_configuration_ = environment_configuration.clone();
+                let environment_configuration__ = environment_configuration_.clone();
 
                 let postgresql_connection_pool_aggregator_ = postgresql_connection_pool_aggregator.clone();
 
@@ -138,7 +153,7 @@ impl RunServerProcessor {
                     return Ok::<_, HyperError>(
                         service_fn(
                             move |requset| {
-                                let environment_configuration__ = environment_configuration_.clone();
+                                let environment_configuration___ = environment_configuration__.clone();
 
                                 let postgresql_connection_pool_aggregator__ = postgresql_connection_pool_aggregator_.clone();
 
@@ -153,7 +168,7 @@ impl RunServerProcessor {
 
                                     return Ok::<_, HyperError>(
                                         Self::resolve(
-                                            environment_configuration__.get_pushable_environment_configuration(), // TODO TODO TODO Возможно ли как-то передать &'a environment_configuration без клонирования.. Если реализовать трейт Клон для этго объекта с println, то на каждый запрос пишется 2 строки. Это нужно исправить.
+                                            environment_configuration___.get_pushable_environment_configuration(), // TODO TODO TODO Возможно ли как-то передать &'a environment_configuration без клонирования.. Если реализовать трейт Клон для этго объекта с println, то на каждый запрос пишется 2 строки. Это нужно исправить.
                                             requset,
                                             &database_1_postgresql_connection_pool_,
                                             &database_2_postgresql_connection_pool_,
@@ -192,7 +207,7 @@ impl RunServerProcessor {
         return ();
     }
 
-    async fn resolve<'a, T>(   // TODO Можно ли пробростить ЛОггер как объект? Нужно ли?  (Лог4рс делает так, чтобы все крееты, на основе этого лога могли писать в общий лог) // TODO TODO  TODO Пути через константы?
+    async fn resolve<'a, T>(
         pushable_environment_configuration: &'a PushableEnvironmentConfiguration,
         request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
