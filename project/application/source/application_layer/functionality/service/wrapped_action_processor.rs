@@ -1,7 +1,7 @@
 use crate::application_layer::data::unified_report::UnifiedReport;
 use crate::infrastructure_layer::data::control_type_registry::Request;
 use crate::infrastructure_layer::data::control_type_registry::Response;
-use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
+use crate::infrastructure_layer::data::environment_configuration::PushableEnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -39,7 +39,7 @@ pub struct WrappedActionProcessor;
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
 impl WrappedActionProcessor {
     pub async fn process<'a, SF, WSF, T, WA, F, API, APO, APP>(
-        environment_configuration: &'a EnvironmentConfiguration,
+        pushable_environment_configuration: &'a PushableEnvironmentConfiguration,
         mut request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -54,7 +54,7 @@ impl WrappedActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
         WA: FnOnce(
-            &'a EnvironmentConfiguration,
+            &'a PushableEnvironmentConfiguration,
             Request,
             &'a Pool<PostgresqlConnectionManager<T>>,
             &'a Pool<PostgresqlConnectionManager<T>>,
@@ -84,7 +84,7 @@ impl WrappedActionProcessor {
         };
 
         let action_processing_delegator_result = match ActionDelegator::delegate::<'_, WSF, _, _, _, API, APO, APP>(
-            environment_configuration,
+            pushable_environment_configuration,
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
             redis_connection_pool,
@@ -125,7 +125,7 @@ struct ActionDelegator;
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
 impl ActionDelegator {
     async fn delegate<'a, SF, T, A, F, API, APO, APP>(
-        environment_configuration: &'a EnvironmentConfiguration,
+        pushable_environment_configuration: &'a PushableEnvironmentConfiguration,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         redis_connection_pool: &'a Pool<RedisConnectionManager>,
@@ -139,7 +139,7 @@ impl ActionDelegator {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
         A: FnOnce(
-            &'a EnvironmentConfiguration,
+            &'a PushableEnvironmentConfiguration,
             Request,
             &'a Pool<PostgresqlConnectionManager<T>>,
             &'a Pool<PostgresqlConnectionManager<T>>,
@@ -168,7 +168,7 @@ impl ActionDelegator {
         let request = Request::from_parts(request_parts, Body::from(data));
 
         let response = action(
-            environment_configuration,
+            pushable_environment_configuration,
             request,
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,

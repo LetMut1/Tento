@@ -21,7 +21,7 @@ use crate::domain_layer::functionality::service::encoder::Encoder;
 use crate::domain_layer::functionality::service::generator::Generator;
 use crate::domain_layer::functionality::service::serialization_form_resolver::SerializationFormResolver;
 use crate::domain_layer::functionality::service::validator::Validator;
-use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
+use crate::infrastructure_layer::data::environment_configuration::PushableEnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -54,7 +54,7 @@ pub struct ActionProcessor;
 
 impl ActionProcessor {
     pub async fn process<'a, T>(
-        environment_configuration: &'a EnvironmentConfiguration,
+        pushable_environment_configuration: &'a PushableEnvironmentConfiguration,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _redis_connection_pool: &'a Pool<RedisConnectionManager>,
@@ -373,7 +373,7 @@ impl ActionProcessor {
         };
 
         let application_user_access_token_serialized_form = match SerializationFormResolver::<ApplicationUserAccessToken<'_>>::serialize(
-            environment_configuration,
+            pushable_environment_configuration,
             &application_user_access_token
         ) {
             Ok(application_user_access_token_serialized_form_) => application_user_access_token_serialized_form_,
@@ -385,7 +385,7 @@ impl ActionProcessor {
         };
 
         let application_user_access_refresh_token_serialized_form = match SerializationFormResolver::<ApplicationUserAccessRefreshToken<'_>>::serialize(
-            environment_configuration,
+            pushable_environment_configuration,
             &application_user_access_refresh_token
         ) {
             Ok(application_user_access_refresh_token_serialized_form_) => application_user_access_refresh_token_serialized_form_,

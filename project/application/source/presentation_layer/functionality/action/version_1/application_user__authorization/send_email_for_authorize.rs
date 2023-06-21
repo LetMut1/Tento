@@ -5,7 +5,7 @@ use crate::application_layer::functionality::action_processor::version_1::applic
 use crate::application_layer::functionality::core_action_processor::CoreActionProcessor;
 use crate::infrastructure_layer::data::control_type_registry::Request;
 use crate::infrastructure_layer::data::control_type_registry::Response;
-use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
+use crate::infrastructure_layer::data::environment_configuration::PushableEnvironmentConfiguration;
 use crate::infrastructure_layer::functionality::service::serializer::MessagePack;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
@@ -26,7 +26,7 @@ pub struct SendEmailForAuthorize;
 
 impl SendEmailForAuthorize {
     pub async fn run<'a, T>(
-        environment_configuration: &'a EnvironmentConfiguration,
+        pushable_environment_configuration: &'a PushableEnvironmentConfiguration,
         request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -39,7 +39,7 @@ impl SendEmailForAuthorize {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
         return CoreActionProcessor::process::<'_, MessagePack, _, _, _, Incoming, Outcoming, Precedent>(
-            environment_configuration,
+            pushable_environment_configuration,
             request,
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
@@ -52,7 +52,7 @@ impl SendEmailForAuthorize {
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
 impl SendEmailForAuthorize {
     pub async fn run_<'a, T>(
-        environment_configuration: &'a EnvironmentConfiguration,
+        pushable_environment_configuration: &'a PushableEnvironmentConfiguration,
         request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -65,7 +65,7 @@ impl SendEmailForAuthorize {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
         return WrappedActionProcessor::process::<'_, Json, MessagePack, _, _, _, Incoming, Outcoming, Precedent>(
-            environment_configuration,
+            pushable_environment_configuration,
             request,
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,

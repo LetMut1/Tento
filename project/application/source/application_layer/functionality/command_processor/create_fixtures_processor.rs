@@ -65,7 +65,7 @@ impl CreateFixturesProcessor {
             }
         };
 
-        if let Environment::Production = *environment_configuration.get_environment() {
+        if let Environment::Production = *environment_configuration.get_pushable_environment_configuration().get_environment() {
             return Err(
                 ErrorAuditor::new(
                     BaseError::LogicError { message: "CreateFixturesProcessor should process only not in production environment." },
@@ -101,7 +101,7 @@ impl CreateFixturesProcessor {
 
     async fn create_fixtures<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<(), ErrorAuditor> {
         let database_1_postgresql_connection_pool = match Creator::<PostgresqlConnectionPoolNoTls>::create(
-            environment_configuration.get_environment(),
+            environment_configuration.get_pushable_environment_configuration().get_environment(),
             environment_configuration.get_database_1_postgresql_configuration()
         ).await {
             Ok(database_1_postgresql_connection_pool_) => database_1_postgresql_connection_pool_,

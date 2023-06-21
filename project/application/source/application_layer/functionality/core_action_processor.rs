@@ -2,7 +2,7 @@ use crate::application_layer::data::unified_report::UnifiedReport;
 use crate::domain_layer::data::entity::action_round_register::ActionRoundRegister;
 use crate::domain_layer::functionality::service::writer::Writer;
 use crate::infrastructure_layer::data::control_type_registry::Request;
-use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
+use crate::infrastructure_layer::data::environment_configuration::PushableEnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -34,7 +34,7 @@ pub struct CoreActionProcessor;
 
 impl CoreActionProcessor {
     pub async fn process<'a, SF, T, AP, F, API, APO, APP>(
-        environment_configuration: &'a EnvironmentConfiguration,
+        pushable_environment_configuration: &'a PushableEnvironmentConfiguration,
         mut request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -48,7 +48,7 @@ impl CoreActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
         AP: FnOnce(
-            &'a EnvironmentConfiguration,
+            &'a PushableEnvironmentConfiguration,
             &'a Pool<PostgresqlConnectionManager<T>>,
             &'a Pool<PostgresqlConnectionManager<T>>,
             &'a Pool<RedisConnectionManager>,
@@ -136,7 +136,7 @@ impl CoreActionProcessor {
         };
 
         let unified_report = match action_processor(
-            environment_configuration,
+            pushable_environment_configuration,
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
             redis_connection_pool,

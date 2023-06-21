@@ -9,7 +9,7 @@ use crate::domain_layer::data::entity::application_user_access_token::Applicatio
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::functionality::service::generator::Generator;
 use crate::domain_layer::functionality::service::serialization_form_resolver::SerializationFormResolver;
-use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
+use crate::infrastructure_layer::data::environment_configuration::PushableEnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -39,7 +39,7 @@ pub struct ActionProcessor;
 
 impl ActionProcessor {
     pub async fn process<'a, T>(
-        environment_configuration: &'a EnvironmentConfiguration,
+        pushable_environment_configuration: &'a PushableEnvironmentConfiguration,
         _database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _redis_connection_pool: &'a Pool<RedisConnectionManager>,
@@ -52,7 +52,8 @@ impl ActionProcessor {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
     {
         let application_user_access_token = match SerializationFormResolver::<ApplicationUserAccessToken<'_>>::deserialize(
-            environment_configuration, incoming.application_user_access_token_serialized_form.as_str()
+            pushable_environment_configuration,
+            incoming.application_user_access_token_serialized_form.as_str()
         ) {
             Ok(application_user_access_token_) => application_user_access_token_,
             Err(mut error) => {
@@ -88,7 +89,9 @@ impl ActionProcessor {
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
         let application_user_access_refresh_token = match PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::find_1(
-            database_2_postgresql_connection, application_user_access_token_.get_application_user_id(), application_user_access_token_.get_application_user_device_id()
+            database_2_postgresql_connection,
+            application_user_access_token_.get_application_user_id(),
+            application_user_access_token_.get_application_user_device_id()
         ).await {
             Ok(application_user_access_refresh_token_) => application_user_access_refresh_token_,
             Err(mut error) => {
@@ -110,7 +113,7 @@ impl ActionProcessor {
         };
 
         let is_valid = match SerializationFormResolver::<ApplicationUserAccessRefreshToken<'_>>::is_valid(
-            environment_configuration,
+            pushable_environment_configuration,
             &application_user_access_refresh_token_,
             incoming.application_user_access_refresh_token_serialized_form.as_str()
         ) {
@@ -187,7 +190,7 @@ impl ActionProcessor {
         }
 
         let application_user_access_token_serialized_form_new = match SerializationFormResolver::<ApplicationUserAccessToken<'_>>::serialize(
-            environment_configuration,
+            pushable_environment_configuration,
             &application_user_access_token_new
         ) {
             Ok(application_user_access_token_serialized_form_new_) => application_user_access_token_serialized_form_new_,
@@ -199,7 +202,7 @@ impl ActionProcessor {
         };
 
         let application_user_access_refresh_token_serialized_form_new = match SerializationFormResolver::<ApplicationUserAccessRefreshToken<'_>>::serialize(
-            environment_configuration,
+            pushable_environment_configuration,
             &application_user_access_refresh_token_
         ) {
             Ok(application_user_access_refresh_token_serialized_form_new_) => application_user_access_refresh_token_serialized_form_new_,

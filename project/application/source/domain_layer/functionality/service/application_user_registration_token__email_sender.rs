@@ -2,7 +2,7 @@ use crate::domain_layer::data::entity::application_user_device::ApplicationUserD
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_Value;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
-use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
+use crate::infrastructure_layer::data::environment_configuration::PushableEnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::functionality::service::sender::Email;
@@ -11,7 +11,7 @@ use super::email_sender::EmailSender;
 
 impl EmailSender<ApplicationUserRegistrationToken<'_>> {
     pub fn send<'a>(
-        environment_configuration: &'a EnvironmentConfiguration,
+        pushable_environment_configuration: &'a PushableEnvironmentConfiguration,
         application_user_registration_token_value: &'a ApplicationUserRegistrationToken_Value,
         application_user_email: &'a ApplicationUser_Email,
         application_user_device_id: &'a ApplicationUserDevice_Id
@@ -23,7 +23,7 @@ impl EmailSender<ApplicationUserRegistrationToken<'_>> {
         );
 
         if let Err(mut error) = Sender::<Email>::send(
-            environment_configuration,
+            pushable_environment_configuration,
             "Registration confirmation",
             message_body,
             application_user_email.get()

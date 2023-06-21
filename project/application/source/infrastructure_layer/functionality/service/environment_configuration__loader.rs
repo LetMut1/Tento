@@ -268,13 +268,13 @@ impl Loader<EnvironmentConfiguration> {
 
         return Ok(
             EnvironmentConfiguration::new(
-                environment,
                 application_server_socket_address_,
-                security_auart_encoding_private_key,
-                security_auat_signature_encoding_private_key,
                 resource_database_1_postgresql_configuration,
                 resource_database_2_postgresql_configuration,
                 resource_redis_connection_info,
+                environment,
+                security_auart_encoding_private_key,
+                security_auat_signature_encoding_private_key,
                 resource_email_server_socket_address_
             )
         );

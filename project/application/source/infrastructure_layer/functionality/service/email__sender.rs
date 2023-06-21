@@ -1,5 +1,5 @@
 use crate::infrastructure_layer::data::environment_configuration::Environment;
-use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
+use crate::infrastructure_layer::data::environment_configuration::PushableEnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::EmailServerError;
@@ -21,7 +21,7 @@ pub use crate::infrastructure_layer::data::control_type_registry::Email;
 
 impl Sender<Email> {   // TODO В предпродакшене, когда будет smtp-ссервер, настройить все через константы и енв
     pub fn send<'a>(
-        environment_configuration: &'a EnvironmentConfiguration,
+        pushable_environment_configuration: &'a PushableEnvironmentConfiguration,
         subject: &'a str,
         body: String,
         to: &'a str
@@ -51,7 +51,7 @@ impl Sender<Email> {   // TODO В предпродакшене, когда бу�
             }
         };
 
-        let smtp_client = match *environment_configuration.get_environment() {
+        let smtp_client = match *pushable_environment_configuration.get_environment() {
             Environment::Production => {
                 todo!();
                 // let smtp_client_= match SmtpClient::new_simple("TODO") {                         // TODO НАСТРОИТЬ В Препроде!!!!!!!!!!!!!!!!!!!!!
@@ -83,7 +83,7 @@ impl Sender<Email> {   // TODO В предпродакшене, когда бу�
             Environment::Development |
             Environment::LocalDevelopment => {
                 let smtp_client_ = match SmtpClient::new(
-                    *environment_configuration.get_email_server_socket_address(), ClientSecurity::None
+                    *pushable_environment_configuration.get_email_server_socket_address(), ClientSecurity::None
                 ) {
                     Ok(smtp_client__) => smtp_client__,
                     Err(error) => {

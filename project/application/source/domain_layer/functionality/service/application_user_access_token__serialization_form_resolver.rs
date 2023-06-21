@@ -2,7 +2,7 @@ use crate::domain_layer::data::entity::application_user_access_token::Applicatio
 use crate::domain_layer::functionality::service::encoder::Encoder;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
-use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
+use crate::infrastructure_layer::data::environment_configuration::PushableEnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -20,7 +20,7 @@ impl SerializationFormResolver<ApplicationUserAccessToken<'_>> {
     const TOKEN_PARTS_SEPARATOR: &'static str = ".";
 
     pub fn serialize<'a>(
-        environment_configuration: &'a EnvironmentConfiguration,
+        pushable_environment_configuration: &'a PushableEnvironmentConfiguration,
         application_user_access_token: &'a ApplicationUserAccessToken<'_>
     ) -> Result<String, ErrorAuditor> {
         let data = match Serializer::<MessagePack>::serialize(application_user_access_token) {
@@ -35,7 +35,7 @@ impl SerializationFormResolver<ApplicationUserAccessToken<'_>> {
         let application_user_access_token_serialized = Encoder_::<Base64>::encode(data.as_slice());
 
         let application_user_access_token_signature = Encoder::<Signature>::encode(
-            environment_configuration,
+            pushable_environment_configuration,
             application_user_access_token_serialized.as_str()
         );
 
@@ -50,14 +50,14 @@ impl SerializationFormResolver<ApplicationUserAccessToken<'_>> {
     }
 
     pub fn deserialize<'a>(
-        environment_configuration: &'a EnvironmentConfiguration,
+        pushable_environment_configuration: &'a PushableEnvironmentConfiguration,
         application_user_access_token_serialized_form: &'a str
     ) -> Result<InvalidArgumentResult<ApplicationUserAccessToken<'static>>, ErrorAuditor> {
         let token_part_registry = application_user_access_token_serialized_form.split::<'_, &'_ str>(Self::TOKEN_PARTS_SEPARATOR)
             .collect::<Vec<&'_ str>>();         // TODO проверить, правильно ли вот тут вообще
 
         if token_part_registry.len() != 2
-            || !Encoder::<Signature>::is_valid(environment_configuration, token_part_registry[0], token_part_registry[1]) {
+            || !Encoder::<Signature>::is_valid(pushable_environment_configuration, token_part_registry[0], token_part_registry[1]) {
             return Ok(InvalidArgumentResult::InvalidArgument { invalid_argument: InvalidArgument::ApplicationUserAccessToken_DeserializedForm });
         }
 
@@ -90,13 +90,13 @@ struct Signature;
 
 impl Encoder<Signature> {
     fn encode<'a>(
-        environment_configuration: &'a EnvironmentConfiguration,
+        pushable_environment_configuration: &'a PushableEnvironmentConfiguration,
         application_user_access_token_serialized_form: &'a str
     ) -> String {
         let mut hmac_encoded_data: Vec<u8> = vec![];
 
         Encoder_::<Hmac>::encode(
-            environment_configuration.get_security_auat_signature_encoding_private_key().as_bytes(),
+            pushable_environment_configuration.get_security_auat_signature_encoding_private_key().as_bytes(),
             application_user_access_token_serialized_form.as_bytes(),
             hmac_encoded_data.as_mut_slice()
         );
@@ -105,11 +105,11 @@ impl Encoder<Signature> {
     }
 
     fn is_valid<'a>(
-        environment_configuration: &'a EnvironmentConfiguration,
+        pushable_environment_configuration: &'a PushableEnvironmentConfiguration,
         application_user_access_token_serialized: &'a str,
         application_user_access_token_signature: &'a str
     ) -> bool {
-        return Self::encode(environment_configuration, application_user_access_token_serialized).as_str()
+        return Self::encode(pushable_environment_configuration, application_user_access_token_serialized).as_str()
             == application_user_access_token_signature;
     }
 }
