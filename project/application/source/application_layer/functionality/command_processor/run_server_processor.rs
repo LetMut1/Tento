@@ -142,7 +142,7 @@ impl RunServerProcessor {
         // Либо так https://github.com/hyperium/hyper/blob/master/examples/tower_server.rs Но здесь сущает future::Ready<>.
         // https://stackoverflow.com/questions/55606450/how-to-share-immutable-configuration-data-with-hyper-request-handlers
         let service = make_service_fn(
-            move |_: &AddrStream| {
+            move |_: &'_ AddrStream| {
                 let environment_configuration__ = environment_configuration_.clone();
 
                 let postgresql_connection_pool_aggregator_ = postgresql_connection_pool_aggregator.clone();
@@ -152,7 +152,7 @@ impl RunServerProcessor {
                 async move {
                     return Ok::<_, HyperError>(
                         service_fn(
-                            move |requset| {
+                            move |request| {
                                 let environment_configuration___ = environment_configuration__.clone();
 
                                 let postgresql_connection_pool_aggregator__ = postgresql_connection_pool_aggregator_.clone();
@@ -168,8 +168,8 @@ impl RunServerProcessor {
 
                                     return Ok::<_, HyperError>(
                                         Self::resolve(
-                                            environment_configuration___.get_pushable_environment_configuration(), // TODO TODO TODO Возможно ли как-то передать &'a environment_configuration без клонирования.. Если реализовать трейт Клон для этго объекта с println, то на каждый запрос пишется 2 строки. Это нужно исправить.
-                                            requset,
+                                            environment_configuration___.get_pushable_environment_configuration(),
+                                            request,
                                             &database_1_postgresql_connection_pool_,
                                             &database_2_postgresql_connection_pool_,
                                             &redis_connection_pool__
