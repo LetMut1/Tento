@@ -43,7 +43,7 @@ impl WrappedActionProcessor {
         mut request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
-        redis_connection_pool: &'a Pool<RedisConnectionManager>,
+        database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
         action: WA
     ) -> Response
     where
@@ -87,7 +87,7 @@ impl WrappedActionProcessor {
             pushable_environment_configuration,
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
-            redis_connection_pool,
+            database_1_redis_connection_pool,
             ConvertibleParts {
                 request,
                 action_processor_incoming: incoming
@@ -128,7 +128,7 @@ impl ActionDelegator {
         pushable_environment_configuration: &'a PushableEnvironmentConfiguration,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
-        redis_connection_pool: &'a Pool<RedisConnectionManager>,
+        database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
         incoming: ConvertibleParts<API>,
         action: A
     ) -> Result<ActionProcessingDelegatorResult<APO, APP>, ErrorAuditor>
@@ -172,7 +172,7 @@ impl ActionDelegator {
             request,
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
-            redis_connection_pool
+            database_1_redis_connection_pool
         ).await;
 
         let (

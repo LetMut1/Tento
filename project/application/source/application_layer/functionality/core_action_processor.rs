@@ -38,7 +38,7 @@ impl CoreActionProcessor {
         mut request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
-        redis_connection_pool: &'a Pool<RedisConnectionManager>,
+        database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
         action_processor: AP
     ) -> Response
     where
@@ -139,7 +139,7 @@ impl CoreActionProcessor {
             pushable_environment_configuration,
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
-            redis_connection_pool,
+            database_1_redis_connection_pool,
             action_processor_incoming
         ).await {
             Ok(unified_report_) => unified_report_,

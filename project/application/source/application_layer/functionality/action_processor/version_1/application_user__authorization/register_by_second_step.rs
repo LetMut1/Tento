@@ -42,7 +42,7 @@ impl ActionProcessor {
         _pushable_environment_configuration: &'a PushableEnvironmentConfiguration,
         _database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
-        _redis_connection_pool: &'a Pool<RedisConnectionManager>,
+        _database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
         incoming: Incoming
     ) -> Result<InvalidArgumentResult<UnifiedReport<Void, Precedent>>, ErrorAuditor>
     where

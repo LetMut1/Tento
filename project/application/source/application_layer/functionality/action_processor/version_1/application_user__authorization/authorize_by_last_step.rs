@@ -54,7 +54,7 @@ impl ActionProcessor {
         pushable_environment_configuration: &'a PushableEnvironmentConfiguration,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,             // TODO  TODO  TODO  TODO  TODO МОжет ли хакер войти на этом шаге, если пользователь сделал первый шаг.
-        _redis_connection_pool: &'a Pool<RedisConnectionManager>,
+        _database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
         incoming: Incoming
     ) -> Result<InvalidArgumentResult<UnifiedReport<Outcoming, Precedent>>, ErrorAuditor>
     where

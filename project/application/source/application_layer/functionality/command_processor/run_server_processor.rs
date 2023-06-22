@@ -112,11 +112,11 @@ impl RunServerProcessor {
             }
         };
 
-        let redis_connection_pool = match Creator::<RedisConnectonPool>::create(
+        let database_1_redis_connection_pool = match Creator::<RedisConnectonPool>::create(
             environment,
             environment_configuration.get_database_1_redis_connection_info()
         ).await {
-            Ok(redis_connection_pool_) => redis_connection_pool_,
+            Ok(database_1_redis_connection_pool_) => database_1_redis_connection_pool_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
@@ -142,24 +142,24 @@ impl RunServerProcessor {
         // Либо так https://github.com/hyperium/hyper/blob/master/examples/tower_server.rs Но здесь сущает future::Ready<>.
         // https://stackoverflow.com/questions/55606450/how-to-share-immutable-configuration-data-with-hyper-request-handlers
         let service = make_service_fn(
-            move |_: &'_ AddrStream| {
+            move |_: &'_ AddrStream| {  // TODO ->
                 let environment_configuration__ = environment_configuration_.clone();
 
                 let postgresql_connection_pool_aggregator_ = postgresql_connection_pool_aggregator.clone();
 
-                let redis_connection_pool_ = redis_connection_pool.clone();
+                let database_1_redis_connection_pool_ = database_1_redis_connection_pool.clone();
 
                 async move {
                     return Ok::<_, HyperError>(
                         service_fn(
-                            move |request| {
+                            move |request: Request| {
                                 let environment_configuration___ = environment_configuration__.clone();
 
                                 let postgresql_connection_pool_aggregator__ = postgresql_connection_pool_aggregator_.clone();
 
-                                let redis_connection_pool__ = redis_connection_pool_.clone();
+                                let database_1_redis_connection_pool__ = database_1_redis_connection_pool_.clone();
 
-                                return async move {
+                                let future = async move {
                                     let (database_1_postgresql_connection_pool_, database_2_postgresql_connection_pool_) = match postgresql_connection_pool_aggregator__ {
                                         PostgresqlConnectionPoolAggregator::LocalDevelopment {
                                             database_1_postgresql_connection_pool, database_2_postgresql_connection_pool
@@ -172,10 +172,12 @@ impl RunServerProcessor {
                                             request,
                                             &database_1_postgresql_connection_pool_,
                                             &database_2_postgresql_connection_pool_,
-                                            &redis_connection_pool__
+                                            &database_1_redis_connection_pool__
                                         ).await
                                     );
                                 };
+
+                                return future;
                             }
                         )
                     );
@@ -212,7 +214,7 @@ impl RunServerProcessor {
         request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
-        redis_connection_pool: &'a Pool<RedisConnectionManager>
+        database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>
     ) -> Response
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -229,113 +231,113 @@ impl RunServerProcessor {
             // GET functional.
             (HttpRouteRegistry::VERSION_1__APPLICATION_USER__CHECK_NICKNAME_FOR_EXISTING, &Method::POST) => {
                 return application_user__authorization::check_nickname_for_existing::CheckNicknameForExisting::run(
-                    pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                    pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
                 ).await;
             }
             // GET functional.
             (HttpRouteRegistry::VERSION_1__APPLICATION_USER__CHECK_EMAIL_FOR_EXISTING, &Method::POST) => {
                 return application_user__authorization::check_email_for_existing::CheckEmailForExisting::run(
-                    pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                    pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
                 ).await;
             }
             (HttpRouteRegistry::VERSION_1__APPLICATION_USER__REGISTER_BY_FIRST_STEP, &Method::POST) => {
                 return application_user__authorization::register_by_first_step::RegisterByFirstStep::run(
-                    pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                    pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
                 ).await;
             }
             (HttpRouteRegistry::VERSION_1__APPLICATION_USER__REGISTER_BY_SECOND_STEP, &Method::POST) => {
                 return application_user__authorization::register_by_second_step::RegisterBySecondStep::run(
-                    pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                    pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
                 ).await;
             }
             (HttpRouteRegistry::VERSION_1__APPLICATION_USER__REGISTER_BY_LAST_STEP, &Method::POST) => {
                 return application_user__authorization::register_by_last_step::RegisterByLastStep::run(
-                    pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                    pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
                 ).await;
             }
             (HttpRouteRegistry::VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_REGISTER, &Method::POST) => {
                 return application_user__authorization::send_email_for_register::SendEmailForRegister::run(
-                    pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                    pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
                 ).await;
             }
             (HttpRouteRegistry::VERSION_1__APPLICATION_USER__AUTHORIZE_BY_FIRST_STEP, &Method::POST) => {
                 return application_user__authorization::authorize_by_first_step::AuthorizeByFirstStep::run(
-                    pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                    pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
                 ).await;
             }
             (HttpRouteRegistry::VERSION_1__APPLICATION_USER__AUTHORIZE_BY_LAST_STEP, &Method::POST) => {
                 return application_user__authorization::authorize_by_last_step::AuthorizeByLastStep::run(
-                    pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                    pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
                 ).await;
             }
             (HttpRouteRegistry::VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_AUTHORIZE, &Method::POST) => {
                 return application_user__authorization::send_email_for_authorize::SendEmailForAuthorize::run(
-                    pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                    pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
                 ).await;
             }
             (HttpRouteRegistry::VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_FIRST_STEP, &Method::POST) => {
                 return application_user__authorization::reset_password_by_first_step::ResetPasswordByFirstStep::run(
-                    pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                    pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
                 ).await;
             }
             (HttpRouteRegistry::VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_SECOND_STEP, &Method::POST) => {
                 return application_user__authorization::reset_password_by_second_step::ResetPasswordBySecondStep::run(
-                    pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                    pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
                 ).await;
             }
             (HttpRouteRegistry::VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_LAST_STEP, &Method::POST) => {
                 return application_user__authorization::reset_password_by_last_step::ResetPasswordByLastStep::run(
-                    pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                    pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
                 ).await;
             }
             (HttpRouteRegistry::VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_RESET_PASSWORD, &Method::POST) => {
                 return application_user__authorization::send_email_for_reset_password::SendEmailForResetPassword::run(
-                    pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                    pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
                 ).await;
             }
             (HttpRouteRegistry::VERSION_1__APPLICATION_USER__REFRESH_APPLICATION_USER_ACCESS_TOKEN, &Method::POST) => {
                 return application_user__authorization::refresh_application_user_access_token::RefreshApplicationUserAccessToken::run(
-                    pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                    pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
                 ).await;
             }
             // Area for existing routes with authorized user.
             (HttpRouteRegistry::VERSION_1__APPLICATION_USER__DEAUTHORIZE_FROM_ONE_DEVICE, &Method::POST) => {
                 return application_user__authorization::deauthorize_from_one_device::DeauthorizeFromOneDevice::run(
-                    pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                    pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
                 ).await;
             }
             (HttpRouteRegistry::VERSION_1__APPLICATION_USER__DEAUTHORIZE_FROM_ALL_DEVICE, &Method::POST) => {
                 return application_user__authorization::deauthorize_from_all_devices::DeauthorizeFromAllDevices::run(
-                    pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                    pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
                 ).await;
             }
             // GET functional.
             (HttpRouteRegistry::VERSION_1__CHANNEL__GET_ONE_BY_ID, &Method::POST) => {
                 return channel__base::get_one_by_id::GetOneByID::run(
-                    pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                    pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
                 ).await;
             }
             // GET functional.
             (HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_BY_NAME_IN_SUBSCRIPTIONS, &Method::POST) => {
                 return channel__base::get_many_by_name_in_subscriptions::GetManyByNameInSubscriptions::run(
-                    pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                    pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
                 ).await;
             }
             // GET functional.
             (HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_BY_SUBSCRIPTION, &Method::POST) => {
                 return channel__base::get_many_by_subscription::GetManyBySubscription::run(
-                    pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                    pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
                 ).await;
             }
             // GET functional.
             (HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_PUBLIC_BY_NAME, &Method::POST) => {
                 return channel__base::get_many_public_by_name::GetManyPublicByName::run(
-                    pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                    pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
                 ).await;
             }
             (HttpRouteRegistry::VERSION_1__CHANNEL_SUBSCRIPTION__CREATE, &Method::POST) => {
                 return channel_subscription__base::create::Create::run(
-                    pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                    pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
                 ).await;
             }
             // Area for not existing routes.
@@ -346,113 +348,113 @@ impl RunServerProcessor {
                     // GET functional.
                     (HttpRouteRegistry::VERSION_1__APPLICATION_USER__CHECK_NICKNAME_FOR_EXISTING_, &Method::POST) => {
                         return application_user__authorization::check_nickname_for_existing::CheckNicknameForExisting::run_(
-                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
                         ).await;
                     }
                     // GET functional.
                     (HttpRouteRegistry::VERSION_1__APPLICATION_USER__CHECK_EMAIL_FOR_EXISTING_, &Method::POST) => {
                         return application_user__authorization::check_email_for_existing::CheckEmailForExisting::run_(
-                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
                         ).await;
                     }
                     (HttpRouteRegistry::VERSION_1__APPLICATION_USER__REGISTER_BY_FIRST_STEP_, &Method::POST) => {
                         return application_user__authorization::register_by_first_step::RegisterByFirstStep::run_(
-                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
                         ).await;
                     }
                     (HttpRouteRegistry::VERSION_1__APPLICATION_USER__REGISTER_BY_SECOND_STEP_, &Method::POST) => {
                         return application_user__authorization::register_by_second_step::RegisterBySecondStep::run_(
-                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
                         ).await;
                     }
                     (HttpRouteRegistry::VERSION_1__APPLICATION_USER__REGISTER_BY_LAST_STEP_, &Method::POST) => {
                         return application_user__authorization::register_by_last_step::RegisterByLastStep::run_(
-                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
                         ).await;
                     }
                     (HttpRouteRegistry::VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_REGISTER_, &Method::POST) => {
                         return application_user__authorization::send_email_for_register::SendEmailForRegister::run_(
-                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
                         ).await;
                     }
                     (HttpRouteRegistry::VERSION_1__APPLICATION_USER__AUTHORIZE_BY_FIRST_STEP_, &Method::POST) => {
                         return application_user__authorization::authorize_by_first_step::AuthorizeByFirstStep::run_(
-                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
                         ).await;
                     }
                     (HttpRouteRegistry::VERSION_1__APPLICATION_USER__AUTHORIZE_BY_LAST_STEP_, &Method::POST) => {
                         return application_user__authorization::authorize_by_last_step::AuthorizeByLastStep::run_(
-                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
                         ).await;
                     }
                     (HttpRouteRegistry::VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_AUTHORIZE_, &Method::POST) => {
                         return application_user__authorization::send_email_for_authorize::SendEmailForAuthorize::run_(
-                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
                         ).await;
                     }
                     (HttpRouteRegistry::VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_FIRST_STEP_, &Method::POST) => {
                         return application_user__authorization::reset_password_by_first_step::ResetPasswordByFirstStep::run_(
-                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
                         ).await;
                     }
                     (HttpRouteRegistry::VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_SECOND_STEP_, &Method::POST) => {
                         return application_user__authorization::reset_password_by_second_step::ResetPasswordBySecondStep::run_(
-                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
                         ).await;
                     }
                     (HttpRouteRegistry::VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_LAST_STEP_, &Method::POST) => {
                         return application_user__authorization::reset_password_by_last_step::ResetPasswordByLastStep::run_(
-                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
                         ).await;
                     }
                     (HttpRouteRegistry::VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_RESET_PASSWORD_, &Method::POST) => {
                         return application_user__authorization::send_email_for_reset_password::SendEmailForResetPassword::run_(
-                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
                         ).await;
                     }
                     (HttpRouteRegistry::VERSION_1__APPLICATION_USER__REFRESH_APPLICATION_USER_ACCESS_TOKEN_, &Method::POST) => {
                         return application_user__authorization::refresh_application_user_access_token::RefreshApplicationUserAccessToken::run_(
-                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
                         ).await;
                     }
                     // Area for existing routes with authorized user.
                     (HttpRouteRegistry::VERSION_1__APPLICATION_USER__DEAUTHORIZE_FROM_ONE_DEVICE_, &Method::POST) => {
                         return application_user__authorization::deauthorize_from_one_device::DeauthorizeFromOneDevice::run_(
-                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
                         ).await;
                     }
                     (HttpRouteRegistry::VERSION_1__APPLICATION_USER__DEAUTHORIZE_FROM_ALL_DEVICE_, &Method::POST) => {
                         return application_user__authorization::deauthorize_from_all_devices::DeauthorizeFromAllDevices::run_(
-                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
                         ).await;
                     }
                     // GET functional.
                     (HttpRouteRegistry::VERSION_1__CHANNEL__GET_ONE_BY_ID_, &Method::POST) => {
                         return channel__base::get_one_by_id::GetOneByID::run_(
-                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
                         ).await;
                     }
                     // GET functional.
                     (HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_BY_NAME_IN_SUBSCRIPTIONS_, &Method::POST) => {
                         return channel__base::get_many_by_name_in_subscriptions::GetManyByNameInSubscriptions::run_(
-                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
                         ).await;
                     }
                     // GET functional.
                     (HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_BY_SUBSCRIPTION_, &Method::POST) => {
                         return channel__base::get_many_by_subscription::GetManyBySubscription::run_(
-                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
                         ).await;
                     }
                     // GET functional.
                     (HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_PUBLIC_BY_NAME_, &Method::POST) => {
                         return channel__base::get_many_public_by_name::GetManyPublicByName::run_(
-                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
                         ).await;
                     }
                     (HttpRouteRegistry::VERSION_1__CHANNEL_SUBSCRIPTION__CREATE_, &Method::POST) => {
                         return channel_subscription__base::create::Create::run_(
-                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
                         ).await;
                     }
                     // Area for not existing routes.
@@ -460,7 +462,7 @@ impl RunServerProcessor {
                 }
 
                 return route_not_found::route_not_found(
-                    pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, redis_connection_pool
+                    pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
                 ).await;
             }
         }

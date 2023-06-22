@@ -30,7 +30,7 @@ impl CheckEmailForExisting {
         request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
-        redis_connection_pool: &'a Pool<RedisConnectionManager>
+        database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>
     ) -> Response
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -43,7 +43,7 @@ impl CheckEmailForExisting {
             request,
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
-            redis_connection_pool,
+            database_1_redis_connection_pool,
             ActionProcessor::process
         ).await;
     }
@@ -56,7 +56,7 @@ impl CheckEmailForExisting {
         request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
-        redis_connection_pool: &'a Pool<RedisConnectionManager>
+        database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>
     ) -> Response
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -69,7 +69,7 @@ impl CheckEmailForExisting {
             request,
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
-            redis_connection_pool,
+            database_1_redis_connection_pool,
             Self::run
         ).await;
     }
