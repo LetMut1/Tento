@@ -129,7 +129,7 @@ impl ActionDelegator {
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
-        incoming: ConvertibleParts<API>,
+        convertible_parts: ConvertibleParts<API>,
         action: A
     ) -> Result<ActionProcessingDelegatorResult<APO, APP>, ErrorAuditor>
     where
@@ -150,7 +150,7 @@ impl ActionDelegator {
         APO: SerdeSerialize + for<'de> Deserialize<'de>,
         APP: SerdeSerialize + for<'de> Deserialize<'de>
     {
-        let data = match Serializer::<SF>::serialize(&incoming.action_processor_incoming) {
+        let data = match Serializer::<SF>::serialize(&convertible_parts.action_processor_incoming) {
             Ok(data_) => data_,
             Err(mut error) => {
                 error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
@@ -159,7 +159,7 @@ impl ActionDelegator {
             }
         };
 
-        let mut request_parts = incoming.request.into_parts().0;
+        let mut request_parts = convertible_parts.request.into_parts().0;
 
         request_parts.headers.remove(header::CONTENT_LENGTH);
 
