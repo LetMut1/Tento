@@ -115,7 +115,7 @@ impl Loader<EnvironmentConfiguration> {
             }
         };
 
-        let mut application_server_socket_address_registry = match environment_file_configuration.socket_address.application_server.to_socket_addrs() {
+        let mut application_server_socket_address_registry = match environment_file_configuration.application.socket_address.to_socket_addrs() {
             Ok(application_server_socket_address_registry_) => application_server_socket_address_registry_,
             Err(error) => {
                 return Err(
@@ -140,7 +140,7 @@ impl Loader<EnvironmentConfiguration> {
         };
 
         let database_1_postgresql_configuration = match PostgresqlConfiguration::from_str(
-            environment_file_configuration.resource_url.postgresql.database_1.as_str()
+            environment_file_configuration.resource.postgresql.database_1_url.as_str()
         ) {
             Ok(database_1_postgresql_configuration_) => database_1_postgresql_configuration_,
             Err(error) => {
@@ -154,7 +154,7 @@ impl Loader<EnvironmentConfiguration> {
         };
 
         let database_2_postgresql_configuration = match PostgresqlConfiguration::from_str(
-            environment_file_configuration.resource_url.postgresql.database_2.as_str()
+            environment_file_configuration.resource.postgresql.database_2_url.as_str()
         ) {
             Ok(database_2_postgresql_configuration_) => database_2_postgresql_configuration_,
             Err(error) => {
@@ -168,7 +168,7 @@ impl Loader<EnvironmentConfiguration> {
         };
 
         let database_1_redis_connection_info = match ConnectionInfo::from_str(
-            environment_file_configuration.resource_url.redis.database_1.as_str()
+            environment_file_configuration.resource.redis.database_1_url.as_str()
         ) {
             Ok(database_1_redis_connection_info_) => database_1_redis_connection_info_,
             Err(error) => {
@@ -181,7 +181,7 @@ impl Loader<EnvironmentConfiguration> {
             }
         };
 
-        let mut email_server_socket_address_registry = match environment_file_configuration.socket_address.email_server.to_socket_addrs() {
+        let mut email_server_socket_address_registry = match environment_file_configuration.resource.email_server.socket_address.to_socket_addrs() {
             Ok(email_server_socket_address_registry_) => email_server_socket_address_registry_,
             Err(error) => {
                 return Err(
@@ -223,36 +223,42 @@ impl Loader<EnvironmentConfiguration> {
 #[derive(Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 struct EnvironmentFileConfiguration {
-    socket_address: SocketAddress,
-    resource_url: ResourceUrl,
+    application: Application,
+    resource: Resource,
     encryption: Encryption
 }
 
 #[derive(Deserialize)]
 #[serde(crate = "extern_crate::serde")]
-struct SocketAddress {
-    application_server: String,
-    email_server: String
+struct Application {
+    socket_address: String
 }
 
 #[derive(Deserialize)]
 #[serde(crate = "extern_crate::serde")]
-struct ResourceUrl {
+struct Resource {
     postgresql: Postgresql,
-    redis: Redis
+    redis: Redis,
+    email_server: EmailServer
 }
 
 #[derive(Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 struct Postgresql {
-    database_1: String,
-    database_2: String
+    database_1_url: String,
+    database_2_url: String
 }
 
 #[derive(Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 struct Redis {
-    database_1: String
+    database_1_url: String
+}
+
+#[derive(Deserialize)]
+#[serde(crate = "extern_crate::serde")]
+struct EmailServer {
+    socket_address: String
 }
 
 #[derive(Deserialize)]

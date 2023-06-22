@@ -184,7 +184,9 @@ impl RunServerProcessor {
             }
         );
 
-        if let Err(error) = builder       // TODO TODO TODO TODO TODO Настроить сервер для продакшна
+        if let Err(error) = builder
+            .http2_adaptive_window(false)
+            // .http2_initial_connection_window_size(sz)
             .serve(service)
             .with_graceful_shutdown(Self::create_shutdown_signal())
             .await {
