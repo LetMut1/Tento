@@ -1,13 +1,14 @@
 use crate::infrastructure_layer::data::environment_configuration::Environment;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
-use crate::infrastructure_layer::data::environment_configuration::PushableEnvironmentConfiguration;
 use crate::infrastructure_layer::data::control_type_registry::Request;
 use crate::infrastructure_layer::data::control_type_registry::Response;
+use crate::infrastructure_layer::data::environment_configuration::PushableEnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
+use crate::infrastructure_layer::data::void::ErrorVoid;
 use crate::infrastructure_layer::environment_configuration::ENVIRONMENT_CONFIGURATION_FILE_PATH;
 use crate::infrastructure_layer::functionality::service::creator::Creator;
 use crate::infrastructure_layer::functionality::service::creator::PostgresqlConnectionPoolNoTls;
@@ -21,7 +22,6 @@ use crate::presentation_layer::functionality::action::version_1::channel_subscri
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::bb8::Pool;
-use extern_crate::hyper::Error as HyperError;
 use extern_crate::hyper::Method;
 use extern_crate::hyper::Server;
 use extern_crate::hyper::server::conn::AddrStream;
@@ -75,12 +75,12 @@ impl RunServerProcessor {
         return Ok(());
     }
 
-    async fn run_http_server(environment_configuration: EnvironmentConfiguration) -> Result<(), ErrorAuditor> {     // TODO  TODO  TODO ---- create HTTP2 (h2).   // TODO HTTP3 (QUICK) (h3), когда будет готов.!!!!!!!!!!!
+    async fn run_http_server(environment_configuration: EnvironmentConfiguration) -> Result<(), ErrorAuditor> {   // TODO HTTP3 (QUICK) (h3), когда будет готов.!!!!!!!!!!!
         let environment = environment_configuration.get_pushable_environment_configuration().get_environment();
 
         let postgresql_connection_pool_aggregator = match *environment {
             Environment::Production => {
-                todo!();           // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
+                todo!("TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ");
             }
             Environment::Development |
             Environment::LocalDevelopment => {
@@ -138,53 +138,51 @@ impl RunServerProcessor {
 
         let environment_configuration_ = Arc::new(environment_configuration);
 
-        // TODO  TODO  TODO ---------  убрать Замыкания, написав и стипизировав функцию (https://docs.rs/futures/latest/futures/future/type.BoxFuture.html может помочь).
-        // Либо так https://github.com/hyperium/hyper/blob/master/examples/tower_server.rs Но здесь сущает future::Ready<>.
-        // https://stackoverflow.com/questions/55606450/how-to-share-immutable-configuration-data-with-hyper-request-handlers
         let service = make_service_fn(
-            move |_: &'_ AddrStream| {  // TODO ->
+            move |_: &'_ AddrStream| -> _ {
                 let environment_configuration__ = environment_configuration_.clone();
 
                 let postgresql_connection_pool_aggregator_ = postgresql_connection_pool_aggregator.clone();
 
                 let database_1_redis_connection_pool_ = database_1_redis_connection_pool.clone();
 
-                async move {
-                    return Ok::<_, HyperError>(
-                        service_fn(
-                            move |request: Request| {
-                                let environment_configuration___ = environment_configuration__.clone();
+                let future = async move {
+                    let service_fn = service_fn(
+                        move |request: Request| -> _ {
+                            let environment_configuration___ = environment_configuration__.clone();
 
-                                let postgresql_connection_pool_aggregator__ = postgresql_connection_pool_aggregator_.clone();
+                            let postgresql_connection_pool_aggregator__ = postgresql_connection_pool_aggregator_.clone();
 
-                                let database_1_redis_connection_pool__ = database_1_redis_connection_pool_.clone();
+                            let database_1_redis_connection_pool__ = database_1_redis_connection_pool_.clone();
 
-                                let future = async move {
-                                    let (database_1_postgresql_connection_pool_, database_2_postgresql_connection_pool_) = match postgresql_connection_pool_aggregator__ {
-                                        PostgresqlConnectionPoolAggregator::LocalDevelopment {
-                                            database_1_postgresql_connection_pool, database_2_postgresql_connection_pool
-                                        } => (database_1_postgresql_connection_pool, database_2_postgresql_connection_pool)
-                                    };
+                            let (database_1_postgresql_connection_pool_, database_2_postgresql_connection_pool_) = match postgresql_connection_pool_aggregator__ {
+                                PostgresqlConnectionPoolAggregator::LocalDevelopment {
+                                    database_1_postgresql_connection_pool, database_2_postgresql_connection_pool
+                                } => (database_1_postgresql_connection_pool, database_2_postgresql_connection_pool)
+                            };
 
-                                    return Ok::<_, HyperError>(
-                                        Self::resolve(
-                                            environment_configuration___.get_pushable_environment_configuration(),
-                                            request,
-                                            &database_1_postgresql_connection_pool_,
-                                            &database_2_postgresql_connection_pool_,
-                                            &database_1_redis_connection_pool__
-                                        ).await
-                                    );
-                                };
+                            let future_ = async move {
+                                let response = Self::resolve(
+                                    environment_configuration___.get_pushable_environment_configuration(),
+                                    request,
+                                    &database_1_postgresql_connection_pool_,
+                                    &database_2_postgresql_connection_pool_,
+                                    &database_1_redis_connection_pool__
+                                ).await;
 
-                                return future;
-                            }
-                        )
+                                Ok::<_, ErrorVoid>(response)
+                            };
+
+                            return future_;
+                        }
                     );
-                }
+
+                    Ok::<_, ErrorVoid>(service_fn)
+                };
+
+                return future;
             }
         );
-        // TODO  TODO  TODO ------------------------------------------------------------------------------------------------------------------
 
         if let Err(error) = builder       // TODO TODO TODO TODO TODO Настроить сервер для продакшна
             .serve(service)
