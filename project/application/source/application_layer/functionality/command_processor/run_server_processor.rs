@@ -44,8 +44,8 @@ use std::marker::Send;
 use std::marker::Sync;
 use std::net::ToSocketAddrs;
 use std::str::FromStr;
-use std::time::Duration;
 use std::sync::Arc;
+use std::time::Duration;
 
 pub struct RunServerProcessor;
 
@@ -74,9 +74,7 @@ impl RunServerProcessor {
             }
         };
 
-        if let Err(mut error) = runtime.block_on(
-            Self::run_http_server(environment_configuration)
-        ) {
+        if let Err(mut error) = runtime.block_on(Self::run_http_server(environment_configuration)) {
             error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
 
             return Err(error);
@@ -174,8 +172,7 @@ impl RunServerProcessor {
                     Duration::from_secs(environment_configuration.environment_file_configuration.application.http.keep_alive.timeout_seconds.value)
                 )
         } else {
-            server_builder
-                .http2_keep_alive_interval(None)
+            server_builder.http2_keep_alive_interval(None)
         };
 
         let database_1_postgresql_configuration = match PostgresqlConfiguration::from_str(
@@ -329,11 +326,11 @@ impl RunServerProcessor {
             }
         );
 
-        if let Err(error) = server_builder
-            .serve(service)
-            .with_graceful_shutdown(Self::create_shutdown_signal())
-            .await {
-                return Err(
+        let mut result = Ok(());
+
+        let graceful_shutdown_future = async {
+            if let Err(error) = signal::ctrl_c().await {
+                result = Err(
                     ErrorAuditor::new(
                         BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
                         BacktracePart::new(line!(), file!(), None)
@@ -341,15 +338,22 @@ impl RunServerProcessor {
                 );
             }
 
-        return Ok(());
-    }
+            ()
+        };
 
-    async fn create_shutdown_signal() -> () {    // TODO  TODO  TODO  УБрать expect. Перерегистрировать с помощью ТОКИО (без использования .with_graceful_shutdown()) ----------
-        signal::ctrl_c()
-            .await
-            .expect("Failed to install gracefully shutdown signal");
+        if let Err(error) = server_builder
+            .serve(service)
+            .with_graceful_shutdown(graceful_shutdown_future)
+            .await {
+            return Err(
+                ErrorAuditor::new(
+                    BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
+                    BacktracePart::new(line!(), file!(), None)
+                )
+            );
+        }
 
-        return ();
+        return result;
     }
 
     async fn resolve<'a, T>(

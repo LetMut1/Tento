@@ -5,8 +5,13 @@ use application::infrastructure_layer::functionality::service::formatter::Format
 use application::infrastructure_layer::functionality::service::formatter::Formatter;
 
 fn main() -> () {
-    if let Err(error) = RunServerProcessor::process() {
-        println!("{}", Formatter::prepare(&error));
+    match RunServerProcessor::process() {
+        Ok(_) => {
+            println!("Graceful shutdown.");
+        }
+        Err(error) => {
+            println!("{}", Formatter::prepare(&error));
+        }
     }
 
     return ();
