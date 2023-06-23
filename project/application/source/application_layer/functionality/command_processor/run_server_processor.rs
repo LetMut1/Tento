@@ -329,7 +329,7 @@ impl RunServerProcessor {
         let mut result = Ok(());
 
         let graceful_shutdown_future = async {
-            if let Err(error) = signal::ctrl_c().await {
+            if let Err(error) = signal::ctrl_c().await {    // TODO TODO TODO  понять, происходит ли GravefullShutdown, если убить процесс (kill ...) и можно ли повторить Ctrl+C c помощью kill.
                 result = Err(
                     ErrorAuditor::new(
                         BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
