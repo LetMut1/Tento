@@ -1,7 +1,7 @@
 use crate::application_layer::functionality::action_processor::route_not_found::ActionProcessor;
 use crate::infrastructure_layer::data::control_type_registry::Request;
 use crate::infrastructure_layer::data::control_type_registry::Response;
-use crate::infrastructure_layer::data::environment_configuration::PushableEnvironmentConfiguration;
+use crate::infrastructure_layer::data::pushable_environment_configuration::PushableEnvironmentConfiguration;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::bb8::Pool;

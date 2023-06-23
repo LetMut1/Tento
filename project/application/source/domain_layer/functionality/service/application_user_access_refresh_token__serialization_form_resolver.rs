@@ -1,5 +1,5 @@
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
-use crate::infrastructure_layer::data::environment_configuration::PushableEnvironmentConfiguration;
+use crate::infrastructure_layer::data::pushable_environment_configuration::PushableEnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::functionality::service::encoder::Base64;
@@ -27,7 +27,7 @@ impl SerializationFormResolver<ApplicationUserAccessRefreshToken<'_>> {
         let mut hmac_encoded_data: Vec<u8> = vec![];
 
         Encoder_::<Hmac>::encode(
-            pushable_environment_configuration.get_application_user_access_refresh_token_private_key().as_bytes(),
+            pushable_environment_configuration.encryption.private_key.application_user_access_refresh_token.as_bytes(),
             data.as_slice(),
             hmac_encoded_data.as_mut_slice()
         );

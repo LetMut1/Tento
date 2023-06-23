@@ -1,92 +1,127 @@
-use extern_crate::redis::ConnectionInfo;
-use extern_crate::tokio_postgres::config::Config;
-use std::clone::Clone;
-use std::net::SocketAddr;
+use extern_crate::serde::Deserialize;
 
-#[derive(Clone)]
 pub struct EnvironmentConfiguration {
-    application_server_socket_address: SocketAddr,
-    database_1_postgresql_configuration: Config,
-    database_2_postgresql_configuration: Config,
-    database_1_redis_connection_info: ConnectionInfo,
-    pushable_environment_configuration: PushableEnvironmentConfiguration
+    pub environment: Environment,
+    pub environment_file_configuration: EnvironmentFileConfiguration
 }
 
-impl EnvironmentConfiguration {
-    pub fn new(
-        application_server_socket_address: SocketAddr,
-        database_1_postgresql_configuration: Config,
-        database_2_postgresql_configuration: Config,
-        database_1_redis_connection_info: ConnectionInfo,
-        environment: Environment,
-        application_user_access_refresh_token_private_key: String,
-        application_user_access_token_private_key: String,
-        email_server_socket_address: SocketAddr,
-    ) -> Self {
-        return Self {
-            application_server_socket_address,
-            database_1_postgresql_configuration,
-            database_2_postgresql_configuration,
-            database_1_redis_connection_info,
-            pushable_environment_configuration: PushableEnvironmentConfiguration {
-                environment,
-                application_user_access_refresh_token_private_key,
-                application_user_access_token_private_key,
-                email_server_socket_address
-            }
-        };
-    }
-
-    pub fn get_application_server_socket_address<'a>(&'a self) -> &'a SocketAddr {
-        return &self.application_server_socket_address;
-    }
-
-    pub fn get_database_1_postgresql_configuration<'a>(&'a self) -> &'a Config {
-        return &self.database_1_postgresql_configuration;
-    }
-
-    pub fn get_database_2_postgresql_configuration<'a>(&'a self) -> &'a Config {
-        return &self.database_2_postgresql_configuration;
-    }
-
-    pub fn get_database_1_redis_connection_info<'a>(&'a self) -> &'a ConnectionInfo {
-        return &self.database_1_redis_connection_info;
-    }
-
-    pub fn get_pushable_environment_configuration<'a>(&'a self) -> &'a PushableEnvironmentConfiguration {
-        return &self.pushable_environment_configuration;
-    }
-}
-
-#[derive(Clone)]
-pub struct PushableEnvironmentConfiguration {
-    environment: Environment,
-    application_user_access_refresh_token_private_key: String,
-    application_user_access_token_private_key: String,
-    email_server_socket_address: SocketAddr
-}
-
-impl PushableEnvironmentConfiguration {
-    pub fn get_environment<'a>(&'a self) -> &'a Environment {
-        return &self.environment;
-    }
-
-    pub fn get_application_user_access_refresh_token_private_key<'a>(&'a self) -> &'a str {
-        return self.application_user_access_refresh_token_private_key.as_str();
-    }
-
-    pub fn get_application_user_access_token_private_key<'a>(&'a self) -> &'a str {
-        return self.application_user_access_token_private_key.as_str();
-    }
-
-    pub fn get_email_server_socket_address<'a>(&'a self) -> &'a SocketAddr {
-        return &self.email_server_socket_address;
-    }
-}
-
-#[derive(Clone)]
 pub enum Environment {
     Production,
     Development,
     LocalDevelopment
+}
+
+#[derive(Deserialize)]
+#[serde(crate = "extern_crate::serde")]
+pub struct EnvironmentFileConfiguration {
+    pub application: Application,
+    pub resource: Resource,
+    pub encryption: Encryption
+}
+
+#[derive(Deserialize)]
+#[serde(crate = "extern_crate::serde")]
+pub struct Application {
+    pub tcp: Tcp,
+    pub http: Http
+}
+
+#[derive(Deserialize)]
+#[serde(crate = "extern_crate::serde")]
+pub struct Tcp {
+    pub socket_address: String_,
+    pub nodelay: Bool,
+    pub sleep_on_accept_errors: Bool,
+    pub keepalive_seconds: U64Active
+}
+
+#[derive(Deserialize)]
+#[serde(crate = "extern_crate::serde")]
+pub struct Http {
+    pub adaptive_window: Bool,
+    pub connection_window_size: U32,
+    pub stream_window_size: U32,
+    pub maximum_frame_size: U32,
+    pub maximum_sending_buffer_size: U32,
+    pub http2_only: Bool,
+    pub keep_alive: KeepAlive
+}
+
+#[derive(Deserialize)]
+#[serde(crate = "extern_crate::serde")]
+pub struct KeepAlive {
+    pub is_active: bool,
+    pub interval_seconds: U64,
+    pub timeout_seconds: U64
+}
+
+#[derive(Deserialize)]
+#[serde(crate = "extern_crate::serde")]
+pub struct Resource {
+    pub postgresql: Postgresql,
+    pub redis: Redis,
+    pub email_server: EmailServer
+}
+
+#[derive(Deserialize)]
+#[serde(crate = "extern_crate::serde")]
+pub struct Postgresql {
+    pub database_1_url: String_,
+    pub database_2_url: String_
+}
+
+#[derive(Deserialize)]
+#[serde(crate = "extern_crate::serde")]
+pub struct Redis {
+    pub database_1_url: String_
+}
+
+#[derive(Deserialize)]
+#[serde(crate = "extern_crate::serde")]
+pub struct EmailServer {
+    pub socket_address: String_
+}
+
+#[derive(Deserialize)]
+#[serde(crate = "extern_crate::serde")]
+pub struct Encryption {
+    pub private_key: PrivateKey
+}
+
+#[derive(Deserialize)]
+#[serde(crate = "extern_crate::serde")]
+pub struct PrivateKey {
+    pub application_user_access_token: String_,
+    pub application_user_access_refresh_token: String_
+}
+
+#[derive(Deserialize)]
+#[serde(crate = "extern_crate::serde")]
+pub struct String_ {
+    pub value: String
+}
+
+#[derive(Deserialize)]
+#[serde(crate = "extern_crate::serde")]
+pub struct Bool {
+    pub value: bool
+}
+
+#[derive(Deserialize)]
+#[serde(crate = "extern_crate::serde")]
+pub struct U64Active {
+    pub value: u64,
+    pub is_active: bool
+}
+
+#[derive(Deserialize)]
+#[serde(crate = "extern_crate::serde")]
+pub struct U64 {
+    pub value: u64
+}
+
+#[derive(Deserialize)]
+#[serde(crate = "extern_crate::serde")]
+pub struct U32 {
+    pub value: u32
 }

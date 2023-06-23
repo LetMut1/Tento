@@ -1,19 +1,14 @@
 use crate::infrastructure_layer::data::environment_configuration::Environment;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
+use crate::infrastructure_layer::data::environment_configuration::EnvironmentFileConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
-use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use extern_crate::redis::ConnectionInfo;
-use extern_crate::serde::Deserialize;
-use extern_crate::tokio_postgres::Config as PostgresqlConfiguration;
 use extern_crate::toml::from_str as toml_from_str;
 use std::fs::read_to_string;
-use std::net::ToSocketAddrs;
 use std::path::Path;
-use std::str::FromStr;
 use super::loader::Loader;
 
 impl Loader<EnvironmentConfiguration> {
@@ -115,161 +110,11 @@ impl Loader<EnvironmentConfiguration> {
             }
         };
 
-        let mut application_server_socket_address_registry = match environment_file_configuration.application.socket_address.to_socket_addrs() {
-            Ok(application_server_socket_address_registry_) => application_server_socket_address_registry_,
-            Err(error) => {
-                return Err(
-                    ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
-            }
+        let environment_configuration = EnvironmentConfiguration {
+            environment,
+            environment_file_configuration
         };
 
-        let application_server_socket_address_ = match application_server_socket_address_registry.next() {
-            Some(application_server_socket_address__) => application_server_socket_address__,
-            None => {
-                return Err(
-                    ErrorAuditor::new(
-                        BaseError::LogicError { message: "Invalid socket address." },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
-            }
-        };
-
-        let database_1_postgresql_configuration = match PostgresqlConfiguration::from_str(
-            environment_file_configuration.resource.postgresql.database_1_url.as_str()
-        ) {
-            Ok(database_1_postgresql_configuration_) => database_1_postgresql_configuration_,
-            Err(error) => {
-                return Err(
-                    ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
-            }
-        };
-
-        let database_2_postgresql_configuration = match PostgresqlConfiguration::from_str(
-            environment_file_configuration.resource.postgresql.database_2_url.as_str()
-        ) {
-            Ok(database_2_postgresql_configuration_) => database_2_postgresql_configuration_,
-            Err(error) => {
-                return Err(
-                    ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
-            }
-        };
-
-        let database_1_redis_connection_info = match ConnectionInfo::from_str(
-            environment_file_configuration.resource.redis.database_1_url.as_str()
-        ) {
-            Ok(database_1_redis_connection_info_) => database_1_redis_connection_info_,
-            Err(error) => {
-                return Err(
-                    ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::RedisError { redis_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
-            }
-        };
-
-        let mut email_server_socket_address_registry = match environment_file_configuration.resource.email_server.socket_address.to_socket_addrs() {
-            Ok(email_server_socket_address_registry_) => email_server_socket_address_registry_,
-            Err(error) => {
-                return Err(
-                    ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
-            }
-        };
-
-        let email_server_socket_address_ = match email_server_socket_address_registry.next() {
-            Some(email_server_socket_address__) => email_server_socket_address__,
-            None => {
-                return Err(
-                    ErrorAuditor::new(
-                        BaseError::LogicError { message: "Invalid socket address." },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
-            }
-        };
-
-        return Ok(
-            EnvironmentConfiguration::new(
-                application_server_socket_address_,
-                database_1_postgresql_configuration,
-                database_2_postgresql_configuration,
-                database_1_redis_connection_info,
-                environment,
-                environment_file_configuration.encryption.private_key.application_user_access_refresh_token,
-                environment_file_configuration.encryption.private_key.application_user_access_token,
-                email_server_socket_address_
-            )
-        );
+        return Ok(environment_configuration);
     }
-}
-
-#[derive(Deserialize)]
-#[serde(crate = "extern_crate::serde")]
-struct EnvironmentFileConfiguration {
-    application: Application,
-    resource: Resource,
-    encryption: Encryption
-}
-
-#[derive(Deserialize)]
-#[serde(crate = "extern_crate::serde")]
-struct Application {
-    socket_address: String
-}
-
-#[derive(Deserialize)]
-#[serde(crate = "extern_crate::serde")]
-struct Resource {
-    postgresql: Postgresql,
-    redis: Redis,
-    email_server: EmailServer
-}
-
-#[derive(Deserialize)]
-#[serde(crate = "extern_crate::serde")]
-struct Postgresql {
-    database_1_url: String,
-    database_2_url: String
-}
-
-#[derive(Deserialize)]
-#[serde(crate = "extern_crate::serde")]
-struct Redis {
-    database_1_url: String
-}
-
-#[derive(Deserialize)]
-#[serde(crate = "extern_crate::serde")]
-struct EmailServer {
-    socket_address: String
-}
-
-#[derive(Deserialize)]
-#[serde(crate = "extern_crate::serde")]
-struct Encryption {
-    private_key: PrivateKey
-}
-
-#[derive(Deserialize)]
-#[serde(crate = "extern_crate::serde")]
-struct PrivateKey {
-    application_user_access_token: String,
-    application_user_access_refresh_token: String
 }

@@ -1,12 +1,17 @@
 use crate::infrastructure_layer::data::environment_configuration::Environment;
-use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::control_type_registry::Request;
 use crate::infrastructure_layer::data::control_type_registry::Response;
-use crate::infrastructure_layer::data::environment_configuration::PushableEnvironmentConfiguration;
+use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
+use crate::infrastructure_layer::data::pushable_environment_configuration::EmailServer;
+use crate::infrastructure_layer::data::pushable_environment_configuration::Encryption;
+use crate::infrastructure_layer::data::pushable_environment_configuration::PrivateKey;
+use crate::infrastructure_layer::data::pushable_environment_configuration::PushableEnvironmentConfiguration;
+use crate::infrastructure_layer::data::pushable_environment_configuration::Resource;
+use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::data::void::ErrorVoid;
 use crate::infrastructure_layer::environment_configuration::ENVIRONMENT_CONFIGURATION_FILE_PATH;
@@ -27,6 +32,8 @@ use extern_crate::hyper::Server;
 use extern_crate::hyper::server::conn::AddrStream;
 use extern_crate::hyper::service::make_service_fn;
 use extern_crate::hyper::service::service_fn;
+use extern_crate::redis::ConnectionInfo;
+use extern_crate::tokio_postgres::Config as PostgresqlConfiguration;
 use extern_crate::tokio_postgres::Socket;
 use extern_crate::tokio_postgres::tls::MakeTlsConnect;
 use extern_crate::tokio_postgres::tls::TlsConnect;
@@ -35,6 +42,9 @@ use extern_crate::tokio::signal;
 use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
+use std::net::ToSocketAddrs;
+use std::str::FromStr;
+use std::time::Duration;
 use std::sync::Arc;
 
 pub struct RunServerProcessor;
@@ -76,17 +86,149 @@ impl RunServerProcessor {
     }
 
     async fn run_http_server(environment_configuration: EnvironmentConfiguration) -> Result<(), ErrorAuditor> {   // TODO HTTP3 (QUICK) (h3), когда будет готов.!!!!!!!!!!!
-        let environment = environment_configuration.get_pushable_environment_configuration().get_environment();
+        let mut application_http_socket_address_registry = match environment_configuration.environment_file_configuration.application.tcp.socket_address.value.to_socket_addrs() {
+            Ok(application_http_socket_address_registry_) => application_http_socket_address_registry_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
 
-        let postgresql_connection_pool_aggregator = match *environment {
+        let application_http_socket_address = match application_http_socket_address_registry.next() {
+            Some(application_http_socket_address_) => application_http_socket_address_,
+            None => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::LogicError { message: "Invalid socket address." },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        let mut email_server_socket_address_registry = match environment_configuration.environment_file_configuration.resource.email_server.socket_address.value.to_socket_addrs() {
+            Ok(email_server_socket_address_registry_) => email_server_socket_address_registry_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        let email_server_socket_address = match email_server_socket_address_registry.next() {
+            Some(email_server_socket_address_) => email_server_socket_address_,
+            None => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::LogicError { message: "Invalid socket address." },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        let mut server_builder = match Server::try_bind(&application_http_socket_address) {
+            Ok(builder_) => builder_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        server_builder = server_builder
+            .tcp_nodelay(environment_configuration.environment_file_configuration.application.tcp.nodelay.value)
+            .tcp_sleep_on_accept_errors(environment_configuration.environment_file_configuration.application.tcp.sleep_on_accept_errors.value)
+            .http2_only(environment_configuration.environment_file_configuration.application.http.http2_only.value)
+            .http2_adaptive_window(environment_configuration.environment_file_configuration.application.http.adaptive_window.value)
+            .http2_initial_connection_window_size(Some(environment_configuration.environment_file_configuration.application.http.connection_window_size.value))
+            .http2_initial_stream_window_size(Some(environment_configuration.environment_file_configuration.application.http.stream_window_size.value))
+            .http2_max_concurrent_streams(u32::MAX)
+            .http2_max_frame_size(Some(environment_configuration.environment_file_configuration.application.http.maximum_frame_size.value))
+            .http2_max_send_buf_size(environment_configuration.environment_file_configuration.application.http.maximum_sending_buffer_size.value as usize);
+
+        server_builder = if environment_configuration.environment_file_configuration.application.tcp.keepalive_seconds.is_active {
+            server_builder.tcp_keepalive(
+                Some(Duration::from_secs(environment_configuration.environment_file_configuration.application.tcp.keepalive_seconds.value))
+            )
+        } else {
+            server_builder.tcp_keepalive(None)
+        };
+
+        server_builder = if environment_configuration.environment_file_configuration.application.http.keep_alive.is_active {
+            server_builder
+                .http2_keep_alive_interval(
+                    Some(Duration::from_secs(environment_configuration.environment_file_configuration.application.http.keep_alive.interval_seconds.value))
+                )
+                .http2_keep_alive_timeout(
+                    Duration::from_secs(environment_configuration.environment_file_configuration.application.http.keep_alive.timeout_seconds.value)
+                )
+        } else {
+            server_builder
+                .http2_keep_alive_interval(None)
+        };
+
+        let database_1_postgresql_configuration = match PostgresqlConfiguration::from_str(
+            environment_configuration.environment_file_configuration.resource.postgresql.database_1_url.value.as_str()
+        ) {
+            Ok(database_1_postgresql_configuration_) => database_1_postgresql_configuration_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        let database_2_postgresql_configuration = match PostgresqlConfiguration::from_str(
+            environment_configuration.environment_file_configuration.resource.postgresql.database_2_url.value.as_str()
+        ) {
+            Ok(database_2_postgresql_configuration_) => database_2_postgresql_configuration_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        let database_1_redis_connection_info = match ConnectionInfo::from_str(
+            environment_configuration.environment_file_configuration.resource.redis.database_1_url.value.as_str()
+        ) {
+            Ok(database_1_redis_connection_info_) => database_1_redis_connection_info_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::RedisError { redis_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
+        let postgresql_connection_pool_aggregator = match environment_configuration.environment {
             Environment::Production => {
                 todo!("TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ");
             }
             Environment::Development |
             Environment::LocalDevelopment => {
                 let database_1_postgresql_connection_pool = match Creator::<PostgresqlConnectionPoolNoTls>::create(
-                    environment,
-                    environment_configuration.get_database_1_postgresql_configuration()
+                    &environment_configuration.environment,
+                    &database_1_postgresql_configuration
                 ).await {
                     Ok(database_1_postgresql_connection_pool_) => database_1_postgresql_connection_pool_,
                     Err(mut error) => {
@@ -97,8 +239,8 @@ impl RunServerProcessor {
                 };
 
                 let database_2_postgresql_connection_pool = match Creator::<PostgresqlConnectionPoolNoTls>::create(
-                    environment,
-                    environment_configuration.get_database_2_postgresql_configuration()
+                    &environment_configuration.environment,
+                    &database_2_postgresql_configuration
                 ).await {
                     Ok(database_2_postgresql_connection_pool_) => database_2_postgresql_connection_pool_,
                     Err(mut error) => {
@@ -113,8 +255,8 @@ impl RunServerProcessor {
         };
 
         let database_1_redis_connection_pool = match Creator::<RedisConnectonPool>::create(
-            environment,
-            environment_configuration.get_database_1_redis_connection_info()
+            &environment_configuration.environment,
+            &database_1_redis_connection_info
         ).await {
             Ok(database_1_redis_connection_pool_) => database_1_redis_connection_pool_,
             Err(mut error) => {
@@ -124,23 +266,26 @@ impl RunServerProcessor {
             }
         };
 
-        let builder = match Server::try_bind(environment_configuration.get_application_server_socket_address()) {
-            Ok(builder_) => builder_,
-            Err(error) => {
-                return Err(
-                    ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::OtherError { other_error: OtherError::new(error) } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
-                );
+        let pushable_environment_configuration = PushableEnvironmentConfiguration {
+            environment: environment_configuration.environment,
+            encryption: Encryption {
+                private_key: PrivateKey {
+                    application_user_access_token: environment_configuration.environment_file_configuration.encryption.private_key.application_user_access_token.value,
+                    application_user_access_refresh_token: environment_configuration.environment_file_configuration.encryption.private_key.application_user_access_refresh_token.value
+                }
+            },
+            resource: Resource {
+                email_server: EmailServer {
+                    socket_address: email_server_socket_address
+                }
             }
         };
 
-        let environment_configuration_ = Arc::new(environment_configuration);
+        let pushable_environment_configuration_ = Arc::new(pushable_environment_configuration);
 
         let service = make_service_fn(
             move |_: &'_ AddrStream| -> _ {
-                let environment_configuration__ = environment_configuration_.clone();
+                let pushable_environment_configuration__ = pushable_environment_configuration_.clone();
 
                 let postgresql_connection_pool_aggregator_ = postgresql_connection_pool_aggregator.clone();
 
@@ -149,7 +294,7 @@ impl RunServerProcessor {
                 let future = async move {
                     let service_fn = service_fn(
                         move |request: Request| -> _ {
-                            let environment_configuration___ = environment_configuration__.clone();
+                            let pushable_environment_configuration___ = pushable_environment_configuration__.clone();
 
                             let postgresql_connection_pool_aggregator__ = postgresql_connection_pool_aggregator_.clone();
 
@@ -163,7 +308,7 @@ impl RunServerProcessor {
 
                             let future_ = async move {
                                 let response = Self::resolve(
-                                    environment_configuration___.get_pushable_environment_configuration(),
+                                    pushable_environment_configuration___.as_ref(),
                                     request,
                                     &database_1_postgresql_connection_pool_,
                                     &database_2_postgresql_connection_pool_,
@@ -184,9 +329,7 @@ impl RunServerProcessor {
             }
         );
 
-        if let Err(error) = builder
-            .http2_adaptive_window(false)
-            // .http2_initial_connection_window_size(sz)
+        if let Err(error) = server_builder
             .serve(service)
             .with_graceful_shutdown(Self::create_shutdown_signal())
             .await {

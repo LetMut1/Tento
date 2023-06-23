@@ -31,10 +31,12 @@ use crate::infrastructure_layer::functionality::repository::application_user__po
 use crate::infrastructure_layer::functionality::repository::application_user_device__postgresql_repository::Insert as ApplicationUserDeviceInsert;
 use crate::infrastructure_layer::functionality::repository::channel__postgresql_repository::Insert as ChannelInsert;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
-use crate::infrastructure_layer::functionality::service::loader::Loader;
 use crate::infrastructure_layer::functionality::service::creator::Creator;
 use crate::infrastructure_layer::functionality::service::creator::PostgresqlConnectionPoolNoTls;
+use crate::infrastructure_layer::functionality::service::loader::Loader;
 use extern_crate::rand::Rng;
+use extern_crate::tokio_postgres::Config as PostgresqlConfiguration;
+use std::str::FromStr;
 use extern_crate::rand::thread_rng;
 use extern_crate::tokio::runtime::Builder;
 
@@ -65,7 +67,7 @@ impl CreateFixturesProcessor {
             }
         };
 
-        if let Environment::Production = *environment_configuration.get_pushable_environment_configuration().get_environment() {
+        if let Environment::Production = environment_configuration.environment {
             return Err(
                 ErrorAuditor::new(
                     BaseError::LogicError { message: "CreateFixturesProcessor should process only not in production environment." },
@@ -100,9 +102,23 @@ impl CreateFixturesProcessor {
     }
 
     async fn create_fixtures<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<(), ErrorAuditor> {
+        let database_1_postgresql_configuration = match PostgresqlConfiguration::from_str(
+            environment_configuration.environment_file_configuration.resource.postgresql.database_1_url.value.as_str()
+        ) {
+            Ok(database_1_postgresql_configuration_) => database_1_postgresql_configuration_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
+                        BacktracePart::new(line!(), file!(), None)
+                    )
+                );
+            }
+        };
+
         let database_1_postgresql_connection_pool = match Creator::<PostgresqlConnectionPoolNoTls>::create(
-            environment_configuration.get_pushable_environment_configuration().get_environment(),
-            environment_configuration.get_database_1_postgresql_configuration()
+            &environment_configuration.environment,
+            &database_1_postgresql_configuration
         ).await {
             Ok(database_1_postgresql_connection_pool_) => database_1_postgresql_connection_pool_,
             Err(mut error) => {
