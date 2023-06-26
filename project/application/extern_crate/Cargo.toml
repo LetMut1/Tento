@@ -41,12 +41,16 @@ tokio_postgres = { package = "tokio-postgres", version = "^0.7", default-feature
 toml = { package = "toml", version = "^0.7.4", default-features = true, features = [], optional = false }
 uuid = { package = "uuid", version = "^0.8", default-features = true, features = ["v4"], optional = false }
 
-const_format = { version = "^0.2.30", default-features = true, features = [], optional = true }
-serde_json = { version = "^1.0", default-features = true, features = [], optional = true }
+const_format = { package = "const_format", version = "^0.2.30", default-features = true, features = [], optional = true }
+serde_json = { package = "serde_json", version = "^1.0", default-features = true, features = [], optional = true }
+tls-listener = { package = "tls-listener", version = "^0.7.0", default-features = true, features = [], optional = true }
 
 [features]
 default = []
 facilitate_non_automatic_functional_testing = [
     "const_format",
     "serde_json"
+]
+transport_layer_security = [
+    "tls-listener"
 ]
