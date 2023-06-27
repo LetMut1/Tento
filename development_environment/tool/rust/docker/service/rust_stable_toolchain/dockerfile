@@ -5,6 +5,7 @@ mkdir -p /_tento && \
 rustup default stable && \
 rustup component add \
     clippy \
+    rustfmt \
     rust-src && \
 rustup target add \
     aarch64-apple-ios \
