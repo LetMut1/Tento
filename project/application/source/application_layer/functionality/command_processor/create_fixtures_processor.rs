@@ -49,26 +49,24 @@ impl CreateFixturesProcessor {
     const APPLICATION_USER__PASSWORD: &'static str = "passworD1";
     const APPLICATION_USER_DEVICE__ID_PART: &'static str = "device";
     const ASCII_CHARACTER_REGISTRY: [char; 26] = [
-        'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
-        'w', 'x', 'y', 'z',
+        'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
     ];
 
     pub fn process() -> Result<(), ErrorAuditor> {
-        let environment_configuration =
-            match Loader::<EnvironmentConfiguration>::load_from_file(ENVIRONMENT_CONFIGURATION_FILE_PATH) {
-                Ok(environment_configuration_) => environment_configuration_,
-                Err(mut error) => {
-                    error.add_backtrace_part(
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    );
+        let environment_configuration = match Loader::<EnvironmentConfiguration>::load_from_file(ENVIRONMENT_CONFIGURATION_FILE_PATH) {
+            Ok(environment_configuration_) => environment_configuration_,
+            Err(mut error) => {
+                error.add_backtrace_part(
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                );
 
-                    return Err(error);
-                }
-            };
+                return Err(error);
+            }
+        };
 
         if let Environment::Production = environment_configuration.environment {
             return Err(
@@ -188,21 +186,20 @@ impl CreateFixturesProcessor {
             );
         }
 
-        let application_user_password_hash =
-            match Encoder::<ApplicationUser_Password>::encode(&application_user_password) {
-                Ok(application_user_password_hash_) => application_user_password_hash_,
-                Err(mut error) => {
-                    error.add_backtrace_part(
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    );
+        let application_user_password_hash = match Encoder::<ApplicationUser_Password>::encode(&application_user_password) {
+            Ok(application_user_password_hash_) => application_user_password_hash_,
+            Err(mut error) => {
+                error.add_backtrace_part(
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                );
 
-                    return Err(error);
-                }
-            };
+                return Err(error);
+            }
+        };
 
         let database_1_postgresql_pooled_connection = match database_1_postgresql_connection_pool.get().await {
             Ok(database_1_postgresql_pooled_connection_) => database_1_postgresql_pooled_connection_,
@@ -230,11 +227,8 @@ impl CreateFixturesProcessor {
         '_a: for _ in 1..=Self::QUANTITY_OF_APPLICATION_USERS {
             let mut application_user_nickname = ApplicationUser_Nickname::new(String::new());
 
-            '_b: for _ in
-                1..=thread_rng().gen_range::<usize, _>(1..=Validator::<ApplicationUser_Nickname>::MAXIMUM_LENGTH)
-            {
-                let character = Self::ASCII_CHARACTER_REGISTRY
-                    [thread_rng().gen_range::<usize, _>(0..Self::ASCII_CHARACTER_REGISTRY.len())];
+            '_b: for _ in 1..=thread_rng().gen_range::<usize, _>(1..=Validator::<ApplicationUser_Nickname>::MAXIMUM_LENGTH) {
+                let character = Self::ASCII_CHARACTER_REGISTRY[thread_rng().gen_range::<usize, _>(0..Self::ASCII_CHARACTER_REGISTRY.len())];
 
                 application_user_nickname = ApplicationUser_Nickname::new(
                     format!(
@@ -399,8 +393,7 @@ impl CreateFixturesProcessor {
                 let mut channel_name = Channel_Name::new(String::new());
 
                 '_c: for _ in 1..=thread_rng().gen_range::<usize, _>(1..=Validator::<Channel_Name>::MAXIMUM_LENGTH) {
-                    let character = Self::ASCII_CHARACTER_REGISTRY
-                        [thread_rng().gen_range::<usize, _>(0..Self::ASCII_CHARACTER_REGISTRY.len())];
+                    let character = Self::ASCII_CHARACTER_REGISTRY[thread_rng().gen_range::<usize, _>(0..Self::ASCII_CHARACTER_REGISTRY.len())];
 
                     channel_name = Channel_Name::new(
                         format!(
@@ -446,11 +439,8 @@ impl CreateFixturesProcessor {
                 let channel_description = if thread_rng().gen_range::<i8, _>(0..=1) == 1 {
                     let mut channel_description_ = Channel_Description::new(String::new());
 
-                    '_c: for _ in
-                        1..=thread_rng().gen_range::<usize, _>(1..=Validator::<Channel_Description>::MAXIMUM_LENGTH)
-                    {
-                        let character = Self::ASCII_CHARACTER_REGISTRY
-                            [thread_rng().gen_range::<usize, _>(0..Self::ASCII_CHARACTER_REGISTRY.len())];
+                    '_c: for _ in 1..=thread_rng().gen_range::<usize, _>(1..=Validator::<Channel_Description>::MAXIMUM_LENGTH) {
+                        let character = Self::ASCII_CHARACTER_REGISTRY[thread_rng().gen_range::<usize, _>(0..Self::ASCII_CHARACTER_REGISTRY.len())];
 
                         channel_description_ = Channel_Description::new(
                             format!(
@@ -481,9 +471,11 @@ impl CreateFixturesProcessor {
                     None
                 };
 
-                let channel_orientation = Channel_Orientation::new(vec![
-                    0, 1, 2,
-                ]);
+                let channel_orientation = Channel_Orientation::new(
+                    vec![
+                        0, 1, 2,
+                    ],
+                );
 
                 if !Validator::<Channel_Orientation>::is_valid(&channel_orientation) {
                     return Err(
@@ -534,9 +526,7 @@ impl CreateFixturesProcessor {
                             channel_visability_modifier: Channel_VisabilityModifier_::Public,
                             channel_orientation,
                             channel_cover_image_path: Some(Channel_CoverImagePath::new(Self::STUB.to_string())),
-                            channel_background_image_path: Some(
-                                Channel_BackgroundImagePath::new(Self::STUB.to_string()),
-                            ),
+                            channel_background_image_path: Some(Channel_BackgroundImagePath::new(Self::STUB.to_string())),
                             channel_subscribers_quantity: Channel_SubscribersQuantity::new(0),
                             channel_marks_quantity: Channel_MarksQuantity::new(0),
                             channel_viewing_quantity: Channel_ViewingQuantity::new(0),

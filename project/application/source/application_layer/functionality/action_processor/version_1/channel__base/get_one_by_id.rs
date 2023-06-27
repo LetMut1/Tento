@@ -103,9 +103,7 @@ impl ActionProcessor {
                     ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
                         return Ok(
                             InvalidArgumentResult::Ok {
-                                subject: UnifiedReport::precedent(
-                                    Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList,
-                                ),
+                                subject: UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList),
                             },
                         );
                     }

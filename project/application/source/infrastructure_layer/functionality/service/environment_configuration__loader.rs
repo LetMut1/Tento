@@ -63,13 +63,39 @@ impl Loader<EnvironmentConfiguration> {
                 environment_file_data_,
             )
         } else {
-            let local_development_environment_file_path_buffer =
-                file_path.join(Path::new(Self::LOCAL_DEVELOPMENT_ENVIRONMENT_FILE_NAME));
+            let local_development_environment_file_path_buffer = file_path.join(Path::new(Self::LOCAL_DEVELOPMENT_ENVIRONMENT_FILE_NAME));
 
             if local_development_environment_file_path_buffer.exists() {
-                let environment_file_data_ =
-                    match read_to_string(local_development_environment_file_path_buffer.as_path()) {
-                        Ok(environment_file_data__) => environment_file_data__,
+                let environment_file_data_ = match read_to_string(local_development_environment_file_path_buffer.as_path()) {
+                    Ok(environment_file_data__) => environment_file_data__,
+                    Err(error) => {
+                        return Err(
+                            ErrorAuditor::new(
+                                BaseError::RuntimeError {
+                                    runtime_error: RuntimeError::OtherError {
+                                        other_error: OtherError::new(error),
+                                    },
+                                },
+                                BacktracePart::new(
+                                    line!(),
+                                    file!(),
+                                    None,
+                                ),
+                            ),
+                        );
+                    }
+                };
+
+                (
+                    Environment::LocalDevelopment,
+                    environment_file_data_,
+                )
+            } else {
+                let development_environment_file_path_buffer = file_path.join(Path::new(Self::DEVELOPMENT_ENVIRONMENT_FILE_NAME));
+
+                let environment_file_data_ = if development_environment_file_path_buffer.exists() {
+                    let environment_file_data__ = match read_to_string(development_environment_file_path_buffer.as_path()) {
+                        Ok(environment_file_data___) => environment_file_data___,
                         Err(error) => {
                             return Err(
                                 ErrorAuditor::new(
@@ -87,36 +113,6 @@ impl Loader<EnvironmentConfiguration> {
                             );
                         }
                     };
-
-                (
-                    Environment::LocalDevelopment,
-                    environment_file_data_,
-                )
-            } else {
-                let development_environment_file_path_buffer =
-                    file_path.join(Path::new(Self::DEVELOPMENT_ENVIRONMENT_FILE_NAME));
-
-                let environment_file_data_ = if development_environment_file_path_buffer.exists() {
-                    let environment_file_data__ =
-                        match read_to_string(development_environment_file_path_buffer.as_path()) {
-                            Ok(environment_file_data___) => environment_file_data___,
-                            Err(error) => {
-                                return Err(
-                                    ErrorAuditor::new(
-                                        BaseError::RuntimeError {
-                                            runtime_error: RuntimeError::OtherError {
-                                                other_error: OtherError::new(error),
-                                            },
-                                        },
-                                        BacktracePart::new(
-                                            line!(),
-                                            file!(),
-                                            None,
-                                        ),
-                                    ),
-                                );
-                            }
-                        };
 
                     environment_file_data__
                 } else {
@@ -141,26 +137,25 @@ impl Loader<EnvironmentConfiguration> {
             }
         };
 
-        let environment_file_configuration =
-            match toml_from_str::<EnvironmentFileConfiguration>(environment_file_data.as_str()) {
-                Ok(environment_file_configuration_) => environment_file_configuration_,
-                Err(error) => {
-                    return Err(
-                        ErrorAuditor::new(
-                            BaseError::RuntimeError {
-                                runtime_error: RuntimeError::OtherError {
-                                    other_error: OtherError::new(error),
-                                },
+        let environment_file_configuration = match toml_from_str::<EnvironmentFileConfiguration>(environment_file_data.as_str()) {
+            Ok(environment_file_configuration_) => environment_file_configuration_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::OtherError {
+                                other_error: OtherError::new(error),
                             },
-                            BacktracePart::new(
-                                line!(),
-                                file!(),
-                                None,
-                            ),
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
                         ),
-                    );
-                }
-            };
+                    ),
+                );
+            }
+        };
 
         let environment_configuration = EnvironmentConfiguration {
             environment,

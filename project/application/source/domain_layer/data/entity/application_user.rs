@@ -170,7 +170,10 @@ impl<'a> ApplicationUser<'a> {
         return &self.created_at;
     }
 
-    pub fn set_password_hash<'b>(&'b mut self, password_hash: PasswordHash) -> &'b mut Self {
+    pub fn set_password_hash<'b>(
+        &'b mut self,
+        password_hash: PasswordHash,
+    ) -> &'b mut Self {
         self.password_hash = password_hash;
 
         return self;
@@ -214,7 +217,11 @@ pub struct ApplicationUser_1 {
 }
 
 impl ApplicationUser_1 {
-    pub fn new(id: Id, email: Email, password_hash: PasswordHash) -> Self {
+    pub fn new(
+        id: Id,
+        email: Email,
+        password_hash: PasswordHash,
+    ) -> Self {
         return Self {
             id,
             email,
@@ -241,7 +248,10 @@ pub struct ApplicationUser_2 {
 }
 
 impl ApplicationUser_2 {
-    pub fn new(id: Id, password_hash: PasswordHash) -> Self {
+    pub fn new(
+        id: Id,
+        password_hash: PasswordHash,
+    ) -> Self {
         return Self {
             id,
             password_hash,
@@ -288,7 +298,10 @@ impl ApplicationUser_4 {
         return &self.password_hash;
     }
 
-    pub fn set_password_hash<'b>(&'b mut self, password_hash: PasswordHash) -> &'b mut Self {
+    pub fn set_password_hash<'b>(
+        &'b mut self,
+        password_hash: PasswordHash,
+    ) -> &'b mut Self {
         self.password_hash = password_hash;
 
         return self;

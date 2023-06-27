@@ -14,9 +14,11 @@ use extern_crate::tokio_postgres::types::Type;
 use extern_crate::tokio_postgres::Client as Connection;
 
 impl PostgresqlRepository<ActionRoundRegister<'_>> {
-    pub async fn create<'a, 'b>(database_2_connection: &'a Connection, insert: Insert<'b>) -> Result<(), ErrorAuditor> {
-        let mut prepared_statemant_parameter_convertation_resolver =
-            PreparedStatementParameterConvertationResolver::new();
+    pub async fn create<'a, 'b>(
+        database_2_connection: &'a Connection,
+        insert: Insert<'b>,
+    ) -> Result<(), ErrorAuditor> {
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let action_round_register_route = insert.action_round_register_route.get();
 

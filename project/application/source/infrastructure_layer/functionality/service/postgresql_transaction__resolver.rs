@@ -68,7 +68,10 @@ impl Resolver<PostgresqlTransaction> {
         return Ok(Self::new());
     }
 
-    pub async fn commit<'a>(self, connection: &'a Connection) -> Result<(), ErrorAuditor> {
+    pub async fn commit<'a>(
+        self,
+        connection: &'a Connection,
+    ) -> Result<(), ErrorAuditor> {
         let query = "COMMIT;";
 
         if let Err(error) = connection
@@ -99,7 +102,10 @@ impl Resolver<PostgresqlTransaction> {
         return Ok(());
     }
 
-    pub async fn rollback<'a>(self, connection: &'a Connection) -> Result<(), ErrorAuditor> {
+    pub async fn rollback<'a>(
+        self,
+        connection: &'a Connection,
+    ) -> Result<(), ErrorAuditor> {
         let query = "ROLLBACK;";
 
         if let Err(error) = connection

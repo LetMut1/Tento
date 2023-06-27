@@ -51,26 +51,25 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let application_user_access_token =
-            match SerializationFormResolver::<ApplicationUserAccessToken<'_>>::deserialize(
-                pushable_environment_configuration,
-                incoming
-                    .application_user_access_token_serialized_form
-                    .as_str(),
-            ) {
-                Ok(application_user_access_token_) => application_user_access_token_,
-                Err(mut error) => {
-                    error.add_backtrace_part(
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    );
+        let application_user_access_token = match SerializationFormResolver::<ApplicationUserAccessToken<'_>>::deserialize(
+            pushable_environment_configuration,
+            incoming
+                .application_user_access_token_serialized_form
+                .as_str(),
+        ) {
+            Ok(application_user_access_token_) => application_user_access_token_,
+            Err(mut error) => {
+                error.add_backtrace_part(
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                );
 
-                    return Err(error);
-                }
-            };
+                return Err(error);
+            }
+        };
 
         let application_user_access_token_ = match application_user_access_token {
             InvalidArgumentResult::Ok {
@@ -111,27 +110,26 @@ impl ActionProcessor {
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
-        let application_user_access_refresh_token =
-            match PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::find_1(
-                database_2_postgresql_connection,
-                application_user_access_token_.get_application_user_id(),
-                application_user_access_token_.get_application_user_device_id(),
-            )
-            .await
-            {
-                Ok(application_user_access_refresh_token_) => application_user_access_refresh_token_,
-                Err(mut error) => {
-                    error.add_backtrace_part(
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    );
+        let application_user_access_refresh_token = match PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::find_1(
+            database_2_postgresql_connection,
+            application_user_access_token_.get_application_user_id(),
+            application_user_access_token_.get_application_user_device_id(),
+        )
+        .await
+        {
+            Ok(application_user_access_refresh_token_) => application_user_access_refresh_token_,
+            Err(mut error) => {
+                error.add_backtrace_part(
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                );
 
-                    return Err(error);
-                }
-            };
+                return Err(error);
+            }
+        };
 
         let mut application_user_access_refresh_token_ = match application_user_access_refresh_token {
             Some(application_user_access_refresh_token__) => application_user_access_refresh_token__,
@@ -229,10 +227,7 @@ impl ActionProcessor {
             expires_at,
         );
 
-        let application_user_access_refresh_token_expires_at = match Generator::<
-            ApplicationUserAccessRefreshToken_ExpiresAt,
-        >::generate()
-        {
+        let application_user_access_refresh_token_expires_at = match Generator::<ApplicationUserAccessRefreshToken_ExpiresAt>::generate() {
             Ok(application_user_access_refresh_token_expires_at_) => application_user_access_refresh_token_expires_at_,
             Err(mut error) => {
                 error.add_backtrace_part(
@@ -272,52 +267,45 @@ impl ActionProcessor {
             return Err(error);
         }
 
-        let application_user_access_token_serialized_form_new =
-            match SerializationFormResolver::<ApplicationUserAccessToken<'_>>::serialize(
-                pushable_environment_configuration,
-                &application_user_access_token_new,
-            ) {
-                Ok(application_user_access_token_serialized_form_new_) => {
-                    application_user_access_token_serialized_form_new_
-                }
-                Err(mut error) => {
-                    error.add_backtrace_part(
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    );
+        let application_user_access_token_serialized_form_new = match SerializationFormResolver::<ApplicationUserAccessToken<'_>>::serialize(
+            pushable_environment_configuration,
+            &application_user_access_token_new,
+        ) {
+            Ok(application_user_access_token_serialized_form_new_) => application_user_access_token_serialized_form_new_,
+            Err(mut error) => {
+                error.add_backtrace_part(
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                );
 
-                    return Err(error);
-                }
-            };
+                return Err(error);
+            }
+        };
 
-        let application_user_access_refresh_token_serialized_form_new =
-            match SerializationFormResolver::<ApplicationUserAccessRefreshToken<'_>>::serialize(
-                pushable_environment_configuration,
-                &application_user_access_refresh_token_,
-            ) {
-                Ok(application_user_access_refresh_token_serialized_form_new_) => {
-                    application_user_access_refresh_token_serialized_form_new_
-                }
-                Err(mut error) => {
-                    error.add_backtrace_part(
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    );
+        let application_user_access_refresh_token_serialized_form_new = match SerializationFormResolver::<ApplicationUserAccessRefreshToken<'_>>::serialize(
+            pushable_environment_configuration,
+            &application_user_access_refresh_token_,
+        ) {
+            Ok(application_user_access_refresh_token_serialized_form_new_) => application_user_access_refresh_token_serialized_form_new_,
+            Err(mut error) => {
+                error.add_backtrace_part(
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                );
 
-                    return Err(error);
-                }
-            };
+                return Err(error);
+            }
+        };
 
         let outcoming = Outcoming {
             application_user_access_token_serialized_form: application_user_access_token_serialized_form_new,
-            application_user_access_refresh_token_serialized_form:
-                application_user_access_refresh_token_serialized_form_new,
+            application_user_access_refresh_token_serialized_form: application_user_access_refresh_token_serialized_form_new,
         };
 
         return Ok(

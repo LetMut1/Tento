@@ -97,21 +97,20 @@ impl SerializationFormResolver<ApplicationUserAccessToken<'_>> {
             }
         };
 
-        let application_user_access_token =
-            match Serializer::<MessagePack>::deserialize::<'_, ApplicationUserAccessToken<'static>>(data.as_slice()) {
-                Ok(application_user_access_token_) => application_user_access_token_,
-                Err(mut error) => {
-                    error.add_backtrace_part(
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    );
+        let application_user_access_token = match Serializer::<MessagePack>::deserialize::<'_, ApplicationUserAccessToken<'static>>(data.as_slice()) {
+            Ok(application_user_access_token_) => application_user_access_token_,
+            Err(mut error) => {
+                error.add_backtrace_part(
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                );
 
-                    return Err(error);
-                }
-            };
+                return Err(error);
+            }
+        };
 
         return Ok(
             InvalidArgumentResult::Ok {

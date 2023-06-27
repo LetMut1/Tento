@@ -29,7 +29,10 @@ pub struct ApplicationUserDevice {
 }
 
 impl ApplicationUserDevice {
-    pub fn new(id: Id, application_user_id: ApplicationUser_Id) -> Self {
+    pub fn new(
+        id: Id,
+        application_user_id: ApplicationUser_Id,
+    ) -> Self {
         return Self {
             id,
             application_user_id,

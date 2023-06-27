@@ -43,9 +43,7 @@ impl Validator<ApplicationUser_Email> {
             }
         };
 
-        return Ok(
-            regex.is_match(application_user_email_) && application_user_email_.chars().count() <= Self::MAXIMUM_LENGTH,
-        );
+        return Ok(regex.is_match(application_user_email_) && application_user_email_.chars().count() <= Self::MAXIMUM_LENGTH);
     }
 }
 

@@ -143,27 +143,26 @@ impl ActionProcessor {
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
-        let application_user_authorization_token =
-            match PostgresqlRepository::<ApplicationUserAuthorizationToken_5>::find_1(
-                database_2_postgresql_connection,
-                incoming.application_user_id,
-                &incoming.application_user_device_id,
-            )
-            .await
-            {
-                Ok(application_user_authorization_token_) => application_user_authorization_token_,
-                Err(mut error) => {
-                    error.add_backtrace_part(
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    );
+        let application_user_authorization_token = match PostgresqlRepository::<ApplicationUserAuthorizationToken_5>::find_1(
+            database_2_postgresql_connection,
+            incoming.application_user_id,
+            &incoming.application_user_device_id,
+        )
+        .await
+        {
+            Ok(application_user_authorization_token_) => application_user_authorization_token_,
+            Err(mut error) => {
+                error.add_backtrace_part(
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                );
 
-                    return Err(error);
-                }
-            };
+                return Err(error);
+            }
+        };
 
         let mut application_user_authorization_token_ = match application_user_authorization_token {
             Some(application_user_authorization_token__) => application_user_authorization_token__,
@@ -209,33 +208,27 @@ impl ActionProcessor {
         ) {
             return Ok(
                 InvalidArgumentResult::Ok {
-                    subject: UnifiedReport::precedent(
-                        Precedent::ApplicationUserAuthorizationToken_TimeToResendHasNotCome,
-                    ),
+                    subject: UnifiedReport::precedent(Precedent::ApplicationUserAuthorizationToken_TimeToResendHasNotCome),
                 },
             );
         }
 
-        let application_user_authorization_token_can_be_resent_from =
-            match Generator::<ApplicationUserAuthorizationToken_CanBeResentFrom>::generate() {
-                Ok(application_user_authorization_token_can_be_resent_from_) => {
-                    application_user_authorization_token_can_be_resent_from_
-                }
-                Err(mut error) => {
-                    error.add_backtrace_part(
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    );
+        let application_user_authorization_token_can_be_resent_from = match Generator::<ApplicationUserAuthorizationToken_CanBeResentFrom>::generate() {
+            Ok(application_user_authorization_token_can_be_resent_from_) => application_user_authorization_token_can_be_resent_from_,
+            Err(mut error) => {
+                error.add_backtrace_part(
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                );
 
-                    return Err(error);
-                }
-            };
+                return Err(error);
+            }
+        };
 
-        application_user_authorization_token_
-            .set_can_be_resent_from(application_user_authorization_token_can_be_resent_from);
+        application_user_authorization_token_.set_can_be_resent_from(application_user_authorization_token_can_be_resent_from);
 
         if let Err(mut error) = PostgresqlRepository::<ApplicationUserAuthorizationToken_3>::update(
             database_2_postgresql_connection,
@@ -274,8 +267,7 @@ impl ActionProcessor {
         }
 
         let outcoming = Outcoming {
-            application_user_authorization_token_can_be_resent_from: application_user_authorization_token_
-                .get_can_be_resent_from(),
+            application_user_authorization_token_can_be_resent_from: application_user_authorization_token_.get_can_be_resent_from(),
         };
 
         return Ok(

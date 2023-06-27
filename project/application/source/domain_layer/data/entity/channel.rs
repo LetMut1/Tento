@@ -342,7 +342,7 @@ impl<'a> Channel<'a> {
     }
 
     pub fn into_inner(
-        self,
+        self
     ) -> (
         Id,
         ApplicationUser_Id,

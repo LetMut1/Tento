@@ -159,7 +159,10 @@ impl<'a> ApplicationUserResetPasswordToken<'a> {
         return self.can_be_resent_from;
     }
 
-    pub fn set_value<'b>(&'b mut self, value: Value) -> &'b mut Self {
+    pub fn set_value<'b>(
+        &'b mut self,
+        value: Value,
+    ) -> &'b mut Self {
         self.value = value;
 
         return self;
@@ -174,19 +177,28 @@ impl<'a> ApplicationUserResetPasswordToken<'a> {
         return self;
     }
 
-    pub fn set_is_approved<'b>(&'b mut self, is_approved: IsApproved) -> &'b mut Self {
+    pub fn set_is_approved<'b>(
+        &'b mut self,
+        is_approved: IsApproved,
+    ) -> &'b mut Self {
         self.is_approved = is_approved;
 
         return self;
     }
 
-    pub fn set_expires_at<'b>(&'b mut self, expires_at: ExpiresAt) -> &'b mut Self {
+    pub fn set_expires_at<'b>(
+        &'b mut self,
+        expires_at: ExpiresAt,
+    ) -> &'b mut Self {
         self.expires_at = expires_at;
 
         return self;
     }
 
-    pub fn set_can_be_resent_from<'b>(&'b mut self, can_be_resent_from: CanBeResentFrom) -> &'b mut Self {
+    pub fn set_can_be_resent_from<'b>(
+        &'b mut self,
+        can_be_resent_from: CanBeResentFrom,
+    ) -> &'b mut Self {
         self.can_be_resent_from = can_be_resent_from;
 
         return self;
@@ -280,7 +292,10 @@ impl ApplicationUserResetPasswordToken_1 {
         return self.can_be_resent_from;
     }
 
-    pub fn set_value<'a>(&'a mut self, value: Value) -> &'a mut Self {
+    pub fn set_value<'a>(
+        &'a mut self,
+        value: Value,
+    ) -> &'a mut Self {
         self.value = value;
 
         return self;
@@ -295,19 +310,28 @@ impl ApplicationUserResetPasswordToken_1 {
         return self;
     }
 
-    pub fn set_is_approved<'a>(&'a mut self, is_approved: IsApproved) -> &'a mut Self {
+    pub fn set_is_approved<'a>(
+        &'a mut self,
+        is_approved: IsApproved,
+    ) -> &'a mut Self {
         self.is_approved = is_approved;
 
         return self;
     }
 
-    pub fn set_expires_at<'a>(&'a mut self, expires_at: ExpiresAt) -> &'a mut Self {
+    pub fn set_expires_at<'a>(
+        &'a mut self,
+        expires_at: ExpiresAt,
+    ) -> &'a mut Self {
         self.expires_at = expires_at;
 
         return self;
     }
 
-    pub fn set_can_be_resent_from<'a>(&'a mut self, can_be_resent_from: CanBeResentFrom) -> &'a mut Self {
+    pub fn set_can_be_resent_from<'a>(
+        &'a mut self,
+        can_be_resent_from: CanBeResentFrom,
+    ) -> &'a mut Self {
         self.can_be_resent_from = can_be_resent_from;
 
         return self;
@@ -386,7 +410,10 @@ impl ApplicationUserResetPasswordToken_3 {
         return self.expires_at;
     }
 
-    pub fn set_value<'b>(&'b mut self, value: Value) -> &'b mut Self {
+    pub fn set_value<'b>(
+        &'b mut self,
+        value: Value,
+    ) -> &'b mut Self {
         self.value = value;
 
         return self;
@@ -401,13 +428,19 @@ impl ApplicationUserResetPasswordToken_3 {
         return self;
     }
 
-    pub fn set_is_approved<'b>(&'b mut self, is_approved: IsApproved) -> &'b mut Self {
+    pub fn set_is_approved<'b>(
+        &'b mut self,
+        is_approved: IsApproved,
+    ) -> &'b mut Self {
         self.is_approved = is_approved;
 
         return self;
     }
 
-    pub fn set_expires_at<'b>(&'b mut self, expires_at: ExpiresAt) -> &'b mut Self {
+    pub fn set_expires_at<'b>(
+        &'b mut self,
+        expires_at: ExpiresAt,
+    ) -> &'b mut Self {
         self.expires_at = expires_at;
 
         return self;
@@ -484,7 +517,10 @@ impl ApplicationUserResetPasswordToken_6 {
         return self.can_be_resent_from;
     }
 
-    pub fn set_can_be_resent_from<'a>(&'a mut self, can_be_resent_from: CanBeResentFrom) -> &'a mut Self {
+    pub fn set_can_be_resent_from<'a>(
+        &'a mut self,
+        can_be_resent_from: CanBeResentFrom,
+    ) -> &'a mut Self {
         self.can_be_resent_from = can_be_resent_from;
 
         return self;

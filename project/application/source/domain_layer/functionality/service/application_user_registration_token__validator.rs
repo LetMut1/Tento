@@ -10,9 +10,7 @@ use extern_crate::regex::Regex;
 impl Validator<ApplicationUserRegistrationToken_Value> {
     const REGULAR_EXPRESSION: &'static str = r#"^[0-9]{6}$"#;
 
-    pub fn is_valid<'a>(
-        application_user_authorization_token_value: &'a ApplicationUserRegistrationToken_Value,
-    ) -> Result<bool, ErrorAuditor> {
+    pub fn is_valid<'a>(application_user_authorization_token_value: &'a ApplicationUserRegistrationToken_Value) -> Result<bool, ErrorAuditor> {
         let regex = match Regex::new(Self::REGULAR_EXPRESSION) {
             Ok(regex_) => regex_,
             Err(error) => {

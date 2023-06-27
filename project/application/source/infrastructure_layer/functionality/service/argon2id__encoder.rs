@@ -46,7 +46,10 @@ impl Encoder<Argon2Id> {
         return Ok(value);
     }
 
-    pub fn is_valid<'a>(data: &'a [u8], encoded_data: &'a str) -> Result<bool, ErrorAuditor> {
+    pub fn is_valid<'a>(
+        data: &'a [u8],
+        encoded_data: &'a str,
+    ) -> Result<bool, ErrorAuditor> {
         let value = match verify_encoded(
             encoded_data,
             data,

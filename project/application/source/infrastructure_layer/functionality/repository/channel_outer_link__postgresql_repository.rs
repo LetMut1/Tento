@@ -28,8 +28,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
 
         let channel_outer_link_address = insert.channel_outer_link_address.get();
 
-        let mut prepared_statemant_parameter_convertation_resolver =
-            PreparedStatementParameterConvertationResolver::new();
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "INSERT INTO public.channel_inner_link AS cil ( \
                 from_, \
@@ -154,8 +153,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
     ) -> Result<Vec<ChannelOuterLink1>, ErrorAuditor> {
         let channel_outer_link_from_ = channel_outer_link_from.get();
 
-        let mut prepared_statemant_parameter_convertation_resolver =
-            PreparedStatementParameterConvertationResolver::new();
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "SELECT \
                 col.alias AS al, \

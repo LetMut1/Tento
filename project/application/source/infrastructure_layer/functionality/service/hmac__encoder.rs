@@ -7,7 +7,11 @@ pub use crate::infrastructure_layer::data::control_type_registry::Hmac;
 
 impl Encoder<Hmac> {
     // TODO https://docs.rs/hmac/latest/hmac/ - этот hmac может верифицировать.
-    pub fn encode<'a>(salt: &'a [u8], data: &'a [u8], encoded_data: &'a mut [u8]) -> () {
+    pub fn encode<'a>(
+        salt: &'a [u8],
+        data: &'a [u8],
+        encoded_data: &'a mut [u8],
+    ) -> () {
         let mut hmac = Hmac_::new(
             Sha512::new(),
             salt,

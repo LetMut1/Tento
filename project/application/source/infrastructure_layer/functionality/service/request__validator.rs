@@ -27,9 +27,7 @@ impl Validator<Request> {
             }
         };
 
-        if header_value_x_content_type_options.as_bytes()
-            != Creator::<Response>::HEADER_VALUE_X_CONTENT_TYPE_OPTIONS.as_bytes()
-        {
+        if header_value_x_content_type_options.as_bytes() != Creator::<Response>::HEADER_VALUE_X_CONTENT_TYPE_OPTIONS.as_bytes() {
             return false;
         }
 

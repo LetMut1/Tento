@@ -36,8 +36,7 @@ impl PostgresqlRepository<Common1> {
 
         let channel_name_ = channel_name.get();
 
-        let mut prepared_statemant_parameter_convertation_resolver =
-            PreparedStatementParameterConvertationResolver::new();
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let mut counter = Counter::<i16>::new_classic();
 
@@ -90,8 +89,7 @@ impl PostgresqlRepository<Common1> {
             }
         };
 
-        let channel_visability_modifier =
-            Channel_VisabilityModifierResolver::from_representation(Channel_VisabilityModifier_::Public);
+        let channel_visability_modifier = Channel_VisabilityModifierResolver::from_representation(Channel_VisabilityModifier_::Public);
 
         let channel_visability_modifier_ = channel_visability_modifier.get();
 
@@ -443,8 +441,7 @@ impl PostgresqlRepository<Common1> {
 
         let channel_name_ = channel_name.get();
 
-        let mut prepared_statemant_parameter_convertation_resolver =
-            PreparedStatementParameterConvertationResolver::new();
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let mut counter = Counter::<i16>::new_classic();
 
@@ -816,8 +813,7 @@ impl PostgresqlRepository<Common1> {
     ) -> Result<Vec<Common1>, ErrorAuditor> {
         let application_user_id_ = application_user_id.get();
 
-        let mut prepared_statemant_parameter_convertation_resolver =
-            PreparedStatementParameterConvertationResolver::new();
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let mut counter = Counter::<i16>::new_classic();
 

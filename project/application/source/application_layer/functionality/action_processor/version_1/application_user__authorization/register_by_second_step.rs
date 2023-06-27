@@ -82,9 +82,7 @@ impl ActionProcessor {
             );
         }
 
-        let is_valid_value = match Validator::<ApplicationUserRegistrationToken_Value>::is_valid(
-            &incoming.application_user_registration_token_value,
-        ) {
+        let is_valid_value = match Validator::<ApplicationUserRegistrationToken_Value>::is_valid(&incoming.application_user_registration_token_value) {
             Ok(is_valid_value_) => is_valid_value_,
             Err(mut error) => {
                 error.add_backtrace_part(
@@ -131,27 +129,26 @@ impl ActionProcessor {
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
-        let application_user_registration_token =
-            match PostgresqlRepository::<ApplicationUserRegistrationToken_3>::find_1(
-                database_2_postgresql_connection,
-                &incoming.application_user_email,
-                &incoming.application_user_device_id,
-            )
-            .await
-            {
-                Ok(application_user_registration_token_) => application_user_registration_token_,
-                Err(mut error) => {
-                    error.add_backtrace_part(
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    );
+        let application_user_registration_token = match PostgresqlRepository::<ApplicationUserRegistrationToken_3>::find_1(
+            database_2_postgresql_connection,
+            &incoming.application_user_email,
+            &incoming.application_user_device_id,
+        )
+        .await
+        {
+            Ok(application_user_registration_token_) => application_user_registration_token_,
+            Err(mut error) => {
+                error.add_backtrace_part(
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                );
 
-                    return Err(error);
-                }
-            };
+                return Err(error);
+            }
+        };
 
         let mut application_user_registration_token_ = match application_user_registration_token {
             Some(application_user_registration_token__) => application_user_registration_token__,
@@ -198,40 +195,29 @@ impl ActionProcessor {
             );
         }
 
-        if application_user_registration_token_.get_value().get()
-            != incoming.application_user_registration_token_value.get()
-        {
-            let application_user_registration_token_wrong_enter_tries_quantity =
-                match application_user_registration_token_
-                    .get_wrong_enter_tries_quantity()
-                    .get()
-                    .checked_add(1)
-                {
-                    Some(application_user_registration_token_wrong_enter_tries_quantity_) => {
-                        application_user_registration_token_wrong_enter_tries_quantity_
-                    }
-                    None => {
-                        return Err(
-                            ErrorAuditor::new(
-                                BaseError::create_out_of_range(),
-                                BacktracePart::new(
-                                    line!(),
-                                    file!(),
-                                    None,
-                                ),
-                            ),
-                        );
-                    }
-                };
-
-            if application_user_registration_token_wrong_enter_tries_quantity
-                <= ApplicationUserRegistrationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT
+        if application_user_registration_token_.get_value().get() != incoming.application_user_registration_token_value.get() {
+            let application_user_registration_token_wrong_enter_tries_quantity = match application_user_registration_token_
+                .get_wrong_enter_tries_quantity()
+                .get()
+                .checked_add(1)
             {
-                application_user_registration_token_.set_wrong_enter_tries_quantity(
-                    ApplicationUserRegistrationToken_WrongEnterTriesQuantity::new(
-                        application_user_registration_token_wrong_enter_tries_quantity,
-                    ),
-                );
+                Some(application_user_registration_token_wrong_enter_tries_quantity_) => application_user_registration_token_wrong_enter_tries_quantity_,
+                None => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::create_out_of_range(),
+                            BacktracePart::new(
+                                line!(),
+                                file!(),
+                                None,
+                            ),
+                        ),
+                    );
+                }
+            };
+
+            if application_user_registration_token_wrong_enter_tries_quantity <= ApplicationUserRegistrationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
+                application_user_registration_token_.set_wrong_enter_tries_quantity(ApplicationUserRegistrationToken_WrongEnterTriesQuantity::new(application_user_registration_token_wrong_enter_tries_quantity));
 
                 if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken_4>::update(
                     database_2_postgresql_connection,

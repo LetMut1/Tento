@@ -48,11 +48,9 @@ impl PostgresqlRepository<Channel<'_>> {
             None => None,
         };
 
-        let channel_access_modifier =
-            Channel_AccessModifierResolver::from_representation(insert.channel_access_modifier).get();
+        let channel_access_modifier = Channel_AccessModifierResolver::from_representation(insert.channel_access_modifier).get();
 
-        let channel_visability_modifier =
-            Channel_VisabilityModifierResolver::from_representation(insert.channel_visability_modifier).get();
+        let channel_visability_modifier = Channel_VisabilityModifierResolver::from_representation(insert.channel_visability_modifier).get();
 
         let channel_orientation = insert.channel_orientation.get();
 
@@ -72,8 +70,7 @@ impl PostgresqlRepository<Channel<'_>> {
 
         let channel_viewing_quantity = insert.channel_viewing_quantity.get();
 
-        let mut prepared_statemant_parameter_convertation_resolver =
-            PreparedStatementParameterConvertationResolver::new();
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "INSERT INTO public.channel AS c ( \
                 id, \
@@ -286,8 +283,7 @@ impl PostgresqlRepository<Channel<'_>> {
     ) -> Result<Option<Channel<'static>>, ErrorAuditor> {
         let channel_id_ = channel_id.get();
 
-        let mut prepared_statemant_parameter_convertation_resolver =
-            PreparedStatementParameterConvertationResolver::new();
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "SELECT \
                 c.owner AS ow, \
@@ -657,24 +653,26 @@ impl PostgresqlRepository<Channel<'_>> {
             }
         };
 
-        return Ok(Some(
-            Channel::new(
-                channel_id,
-                channel_owner,
-                Cow::Owned(channel_name),
-                channel_linked_name,
-                channel_description,
-                channel_access_modifier,
-                channel_visability_modifier,
-                channel_orientation,
-                channel_cover_image_path,
-                channel_background_image_path,
-                channel_subscribers_quantity,
-                channel_marks_quantity,
-                channel_viewing_quantity,
-                channel_created_at,
+        return Ok(
+            Some(
+                Channel::new(
+                    channel_id,
+                    channel_owner,
+                    Cow::Owned(channel_name),
+                    channel_linked_name,
+                    channel_description,
+                    channel_access_modifier,
+                    channel_visability_modifier,
+                    channel_orientation,
+                    channel_cover_image_path,
+                    channel_background_image_path,
+                    channel_subscribers_quantity,
+                    channel_marks_quantity,
+                    channel_viewing_quantity,
+                    channel_created_at,
+                ),
             ),
-        ));
+        );
     }
 
     pub async fn find_2<'a>(
@@ -683,8 +681,7 @@ impl PostgresqlRepository<Channel<'_>> {
     ) -> Result<Option<Channel<'a>>, ErrorAuditor> {
         let channel_name_ = channel_name.get();
 
-        let mut prepared_statemant_parameter_convertation_resolver =
-            PreparedStatementParameterConvertationResolver::new();
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "SELECT \
                 c.id AS i, \
@@ -1054,24 +1051,26 @@ impl PostgresqlRepository<Channel<'_>> {
             }
         };
 
-        return Ok(Some(
-            Channel::new(
-                channel_id,
-                channel_owner,
-                Cow::Borrowed(channel_name),
-                channel_linked_name,
-                channel_description,
-                channel_access_modifier,
-                channel_visability_modifier,
-                channel_orientation,
-                channel_cover_image_path,
-                channel_background_image_path,
-                channel_subscribers_quantity,
-                channel_marks_quantity,
-                channel_viewing_quantity,
-                channel_created_at,
+        return Ok(
+            Some(
+                Channel::new(
+                    channel_id,
+                    channel_owner,
+                    Cow::Borrowed(channel_name),
+                    channel_linked_name,
+                    channel_description,
+                    channel_access_modifier,
+                    channel_visability_modifier,
+                    channel_orientation,
+                    channel_cover_image_path,
+                    channel_background_image_path,
+                    channel_subscribers_quantity,
+                    channel_marks_quantity,
+                    channel_viewing_quantity,
+                    channel_created_at,
+                ),
             ),
-        ));
+        );
     }
 }
 

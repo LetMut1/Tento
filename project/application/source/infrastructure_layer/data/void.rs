@@ -23,7 +23,10 @@ pub struct ErrorVoid(Void);
 impl Error for ErrorVoid {}
 
 impl Display for ErrorVoid {
-    fn fmt<'a>(&'a self, _: &'a mut Formatter<'_>) -> Result<(), FmtError> {
+    fn fmt<'a>(
+        &'a self,
+        _: &'a mut Formatter<'_>,
+    ) -> Result<(), FmtError> {
         return Err(FmtError);
     }
 }

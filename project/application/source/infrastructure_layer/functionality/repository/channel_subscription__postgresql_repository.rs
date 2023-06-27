@@ -21,8 +21,7 @@ impl PostgresqlRepository<ChannelSubscription> {
 
         let channel_id = insert.channel_id.get();
 
-        let mut prepared_statemant_parameter_convertation_resolver =
-            PreparedStatementParameterConvertationResolver::new();
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "INSERT INTO public.channel_subscription AS cs ( \
                 application_user_id, \
@@ -103,9 +102,7 @@ impl PostgresqlRepository<ChannelSubscription> {
         };
 
         let channel_subscription_created_at = match row_registry[0].try_get::<'_, usize, String>(0) {
-            Ok(channel_subscription_created_at_) => {
-                ChannelSubscription_CreatedAt::new(channel_subscription_created_at_)
-            }
+            Ok(channel_subscription_created_at_) => ChannelSubscription_CreatedAt::new(channel_subscription_created_at_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -144,8 +141,7 @@ impl PostgresqlRepository<ChannelSubscription> {
 
         let channel_id_ = channel_id.get();
 
-        let mut prepared_statemant_parameter_convertation_resolver =
-            PreparedStatementParameterConvertationResolver::new();
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "SELECT \
                 cs.application_user_id AS aui \

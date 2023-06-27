@@ -7,9 +7,7 @@ impl Channel_VisabilityModifierResolver {
     pub fn from_representation(channel_visability_modifier: Channel_VisabilityModifier_) -> Channel_VisabilityModifier {
         return match channel_visability_modifier {
             Channel_VisabilityModifier_::Public => Channel_VisabilityModifier::new(Channel_VisabilityModifier::PUBLIC),
-            Channel_VisabilityModifier_::Private => {
-                Channel_VisabilityModifier::new(Channel_VisabilityModifier::PRIVATE)
-            }
+            Channel_VisabilityModifier_::Private => Channel_VisabilityModifier::new(Channel_VisabilityModifier::PRIVATE),
         };
     }
 

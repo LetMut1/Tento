@@ -104,27 +104,26 @@ impl ActionProcessor {
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
-        let application_user_registration_token =
-            match PostgresqlRepository::<ApplicationUserRegistrationToken_6>::find_1(
-                database_2_postgresql_connection,
-                &incoming.application_user_email,
-                &incoming.application_user_device_id,
-            )
-            .await
-            {
-                Ok(application_user_registration_token_) => application_user_registration_token_,
-                Err(mut error) => {
-                    error.add_backtrace_part(
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    );
+        let application_user_registration_token = match PostgresqlRepository::<ApplicationUserRegistrationToken_6>::find_1(
+            database_2_postgresql_connection,
+            &incoming.application_user_email,
+            &incoming.application_user_device_id,
+        )
+        .await
+        {
+            Ok(application_user_registration_token_) => application_user_registration_token_,
+            Err(mut error) => {
+                error.add_backtrace_part(
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                );
 
-                    return Err(error);
-                }
-            };
+                return Err(error);
+            }
+        };
 
         let mut application_user_registration_token_ = match application_user_registration_token {
             Some(application_user_registration_token__) => application_user_registration_token__,
@@ -178,33 +177,27 @@ impl ActionProcessor {
         ) {
             return Ok(
                 InvalidArgumentResult::Ok {
-                    subject: UnifiedReport::precedent(
-                        Precedent::ApplicationUserRegistrationToken_TimeToResendHasNotCome,
-                    ),
+                    subject: UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_TimeToResendHasNotCome),
                 },
             );
         }
 
-        let application_user_registration_token_can_be_resent_from =
-            match Generator::<ApplicationUserRegistrationToken_CanBeResentFrom>::generate() {
-                Ok(application_user_registration_token_can_be_resent_from_) => {
-                    application_user_registration_token_can_be_resent_from_
-                }
-                Err(mut error) => {
-                    error.add_backtrace_part(
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    );
+        let application_user_registration_token_can_be_resent_from = match Generator::<ApplicationUserRegistrationToken_CanBeResentFrom>::generate() {
+            Ok(application_user_registration_token_can_be_resent_from_) => application_user_registration_token_can_be_resent_from_,
+            Err(mut error) => {
+                error.add_backtrace_part(
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                );
 
-                    return Err(error);
-                }
-            };
+                return Err(error);
+            }
+        };
 
-        application_user_registration_token_
-            .set_can_be_resent_from(application_user_registration_token_can_be_resent_from);
+        application_user_registration_token_.set_can_be_resent_from(application_user_registration_token_can_be_resent_from);
 
         if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken_2>::update(
             database_2_postgresql_connection,
@@ -243,8 +236,7 @@ impl ActionProcessor {
         }
 
         let outcoming = Outcoming {
-            application_user_registration_token_can_be_resent_from: application_user_registration_token_
-                .get_can_be_resent_from(),
+            application_user_registration_token_can_be_resent_from: application_user_registration_token_.get_can_be_resent_from(),
         };
 
         return Ok(

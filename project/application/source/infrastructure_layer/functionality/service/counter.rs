@@ -10,7 +10,10 @@ pub struct Counter<T> {
 impl Counter<i16> {
     const CLASSIC_STEP_SIZE: i16 = 1;
 
-    pub fn new(value: i16, step_size: i16) -> Self {
+    pub fn new(
+        value: i16,
+        step_size: i16,
+    ) -> Self {
         return Self {
             value,
             step_size,

@@ -17,7 +17,10 @@ impl Creator<Response> {
     pub const HEADER_VALUE_CONTENT_TYPE: &'static str = "application/octet-stream"; // TODO В файл с константами
     pub const HEADER_VALUE_X_CONTENT_TYPE_OPTIONS: &'static str = "nosniff"; // TODO В файл с константами
 
-    fn create(status_code: StatusCode, data: Option<Vec<u8>>) -> Response {
+    fn create(
+        status_code: StatusCode,
+        data: Option<Vec<u8>>,
+    ) -> Response {
         // TODO Посмотреть, что за дефолтные ответ. НАстроить необходимое
         let mut header_map = HeaderMap::new();
         header_map.append(
@@ -89,7 +92,10 @@ impl Creator<Response> {
 
 #[cfg(feature = "manual_testing")]
 impl Creator<Response> {
-    pub fn create_from_response_parts(response_parts: Parts, data: Option<Vec<u8>>) -> Response {
+    pub fn create_from_response_parts(
+        response_parts: Parts,
+        data: Option<Vec<u8>>,
+    ) -> Response {
         match data {
             Some(data_) => {
                 return Response::from_parts(

@@ -10,29 +10,26 @@ use crate::infrastructure_layer::functionality::service::encoder::Argon2Id;
 use crate::infrastructure_layer::functionality::service::encoder::Encoder as Encoder_;
 
 impl Encoder<ApplicationUser_Password> {
-    pub fn encode<'a>(
-        application_user_password: &'a ApplicationUser_Password,
-    ) -> Result<ApplicationUser_PasswordHash, ErrorAuditor> {
-        let application_user_password_hash =
-            match Encoder_::<Argon2Id>::encode(application_user_password.get().as_bytes()) {
-                Ok(application_user_password_hash_) => application_user_password_hash_,
-                Err(error) => {
-                    return Err(
-                        ErrorAuditor::new(
-                            BaseError::RuntimeError {
-                                runtime_error: RuntimeError::OtherError {
-                                    other_error: OtherError::new(error),
-                                },
+    pub fn encode<'a>(application_user_password: &'a ApplicationUser_Password) -> Result<ApplicationUser_PasswordHash, ErrorAuditor> {
+        let application_user_password_hash = match Encoder_::<Argon2Id>::encode(application_user_password.get().as_bytes()) {
+            Ok(application_user_password_hash_) => application_user_password_hash_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::OtherError {
+                                other_error: OtherError::new(error),
                             },
-                            BacktracePart::new(
-                                line!(),
-                                file!(),
-                                None,
-                            ),
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
                         ),
-                    );
-                }
-            };
+                    ),
+                );
+            }
+        };
 
         return Ok(ApplicationUser_PasswordHash::new(application_user_password_hash));
     }

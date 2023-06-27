@@ -13,24 +13,23 @@ impl Extractor<ApplicationUserAccessToken<'_>> {
         pushable_environment_configuration: &'a PushableEnvironmentConfiguration,
         application_user_access_token_serialized_form: &'a str,
     ) -> Result<InvalidArgumentResult<ExtractorResult>, ErrorAuditor> {
-        let application_user_access_token =
-            match SerializationFormResolver::<ApplicationUserAccessToken<'_>>::deserialize(
-                pushable_environment_configuration,
-                application_user_access_token_serialized_form,
-            ) {
-                Ok(application_user_access_token_) => application_user_access_token_,
-                Err(mut error) => {
-                    error.add_backtrace_part(
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    );
+        let application_user_access_token = match SerializationFormResolver::<ApplicationUserAccessToken<'_>>::deserialize(
+            pushable_environment_configuration,
+            application_user_access_token_serialized_form,
+        ) {
+            Ok(application_user_access_token_) => application_user_access_token_,
+            Err(mut error) => {
+                error.add_backtrace_part(
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                );
 
-                    return Err(error);
-                }
-            };
+                return Err(error);
+            }
+        };
 
         let application_user_access_token_ = match application_user_access_token {
             InvalidArgumentResult::Ok {

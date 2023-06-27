@@ -51,21 +51,20 @@ pub struct RunServerProcessor;
 
 impl RunServerProcessor {
     pub fn process() -> Result<(), ErrorAuditor> {
-        let environment_configuration =
-            match Loader::<EnvironmentConfiguration>::load_from_file(ENVIRONMENT_CONFIGURATION_FILE_PATH) {
-                Ok(environment_configuration_) => environment_configuration_,
-                Err(mut error) => {
-                    error.add_backtrace_part(
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    );
+        let environment_configuration = match Loader::<EnvironmentConfiguration>::load_from_file(ENVIRONMENT_CONFIGURATION_FILE_PATH) {
+            Ok(environment_configuration_) => environment_configuration_,
+            Err(mut error) => {
+                error.add_backtrace_part(
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                );
 
-                    return Err(error);
-                }
-            };
+                return Err(error);
+            }
+        };
 
         let runtime = match Builder::new_multi_thread().enable_all().build() {
             Ok(runtime_) => runtime_,
@@ -247,31 +246,37 @@ impl RunServerProcessor {
                     .adaptive_window
                     .value,
             )
-            .http2_initial_connection_window_size(Some(
-                environment_configuration
-                    .environment_file_configuration
-                    .application
-                    .http
-                    .connection_window_size
-                    .value,
-            ))
-            .http2_initial_stream_window_size(Some(
-                environment_configuration
-                    .environment_file_configuration
-                    .application
-                    .http
-                    .stream_window_size
-                    .value,
-            ))
+            .http2_initial_connection_window_size(
+                Some(
+                    environment_configuration
+                        .environment_file_configuration
+                        .application
+                        .http
+                        .connection_window_size
+                        .value,
+                ),
+            )
+            .http2_initial_stream_window_size(
+                Some(
+                    environment_configuration
+                        .environment_file_configuration
+                        .application
+                        .http
+                        .stream_window_size
+                        .value,
+                ),
+            )
             .http2_max_concurrent_streams(u32::MAX)
-            .http2_max_frame_size(Some(
-                environment_configuration
-                    .environment_file_configuration
-                    .application
-                    .http
-                    .maximum_frame_size
-                    .value,
-            ))
+            .http2_max_frame_size(
+                Some(
+                    environment_configuration
+                        .environment_file_configuration
+                        .application
+                        .http
+                        .maximum_frame_size
+                        .value,
+                ),
+            )
             .http2_max_send_buf_size(
                 environment_configuration
                     .environment_file_configuration
@@ -288,16 +293,18 @@ impl RunServerProcessor {
             .keepalive_seconds
             .is_active
         {
-            server_builder.tcp_keepalive(Some(
-                Duration::from_secs(
-                    environment_configuration
-                        .environment_file_configuration
-                        .application
-                        .tcp
-                        .keepalive_seconds
-                        .value,
+            server_builder.tcp_keepalive(
+                Some(
+                    Duration::from_secs(
+                        environment_configuration
+                            .environment_file_configuration
+                            .application
+                            .tcp
+                            .keepalive_seconds
+                            .value,
+                    ),
                 ),
-            ))
+            )
         } else {
             server_builder.tcp_keepalive(None)
         };
@@ -310,17 +317,19 @@ impl RunServerProcessor {
             .is_active
         {
             server_builder
-                .http2_keep_alive_interval(Some(
-                    Duration::from_secs(
-                        environment_configuration
-                            .environment_file_configuration
-                            .application
-                            .http
-                            .keep_alive
-                            .interval_seconds
-                            .value,
+                .http2_keep_alive_interval(
+                    Some(
+                        Duration::from_secs(
+                            environment_configuration
+                                .environment_file_configuration
+                                .application
+                                .http
+                                .keep_alive
+                                .interval_seconds
+                                .value,
+                        ),
                     ),
-                ))
+                )
                 .http2_keep_alive_timeout(
                     Duration::from_secs(
                         environment_configuration
@@ -543,21 +552,19 @@ impl RunServerProcessor {
                         move |request: Request| -> _ {
                             let pushable_environment_configuration___ = pushable_environment_configuration__.clone();
 
-                            let postgresql_connection_pool_aggregator__ =
-                                postgresql_connection_pool_aggregator_.clone();
+                            let postgresql_connection_pool_aggregator__ = postgresql_connection_pool_aggregator_.clone();
 
                             let database_1_redis_connection_pool__ = database_1_redis_connection_pool_.clone();
 
-                            let (database_1_postgresql_connection_pool_, database_2_postgresql_connection_pool_) =
-                                match postgresql_connection_pool_aggregator__ {
-                                    PostgresqlConnectionPoolAggregator::LocalDevelopment {
-                                        database_1_postgresql_connection_pool,
-                                        database_2_postgresql_connection_pool,
-                                    } => (
-                                        database_1_postgresql_connection_pool,
-                                        database_2_postgresql_connection_pool,
-                                    ),
-                                };
+                            let (database_1_postgresql_connection_pool_, database_2_postgresql_connection_pool_) = match postgresql_connection_pool_aggregator__ {
+                                PostgresqlConnectionPoolAggregator::LocalDevelopment {
+                                    database_1_postgresql_connection_pool,
+                                    database_2_postgresql_connection_pool,
+                                } => (
+                                    database_1_postgresql_connection_pool,
+                                    database_2_postgresql_connection_pool,
+                                ),
+                            };
 
                             let future_ = async move {
                                 let response = Self::resolve(
@@ -878,10 +885,7 @@ impl RunServerProcessor {
                     ) {
                         // Area for existing routes with not authorized user.
                         // GET functional.
-                        (
-                            HttpRouteRegistry::VERSION_1__APPLICATION_USER__CHECK_NICKNAME_FOR_EXISTING_,
-                            &Method::POST,
-                        ) => {
+                        (HttpRouteRegistry::VERSION_1__APPLICATION_USER__CHECK_NICKNAME_FOR_EXISTING_, &Method::POST) => {
                             return application_user__authorization::check_nickname_for_existing::CheckNicknameForExisting::run_(
                                 pushable_environment_configuration,
                                 request,
@@ -972,10 +976,7 @@ impl RunServerProcessor {
                             )
                             .await;
                         }
-                        (
-                            HttpRouteRegistry::VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_FIRST_STEP_,
-                            &Method::POST,
-                        ) => {
+                        (HttpRouteRegistry::VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_FIRST_STEP_, &Method::POST) => {
                             return application_user__authorization::reset_password_by_first_step::ResetPasswordByFirstStep::run_(
                                 pushable_environment_configuration,
                                 request,
@@ -985,10 +986,7 @@ impl RunServerProcessor {
                             )
                             .await;
                         }
-                        (
-                            HttpRouteRegistry::VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_SECOND_STEP_,
-                            &Method::POST,
-                        ) => {
+                        (HttpRouteRegistry::VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_SECOND_STEP_, &Method::POST) => {
                             return application_user__authorization::reset_password_by_second_step::ResetPasswordBySecondStep::run_(
                                 pushable_environment_configuration,
                                 request,
@@ -998,10 +996,7 @@ impl RunServerProcessor {
                             )
                             .await;
                         }
-                        (
-                            HttpRouteRegistry::VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_LAST_STEP_,
-                            &Method::POST,
-                        ) => {
+                        (HttpRouteRegistry::VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_LAST_STEP_, &Method::POST) => {
                             return application_user__authorization::reset_password_by_last_step::ResetPasswordByLastStep::run_(
                                 pushable_environment_configuration,
                                 request,
@@ -1011,10 +1006,7 @@ impl RunServerProcessor {
                             )
                             .await;
                         }
-                        (
-                            HttpRouteRegistry::VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_RESET_PASSWORD_,
-                            &Method::POST,
-                        ) => {
+                        (HttpRouteRegistry::VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_RESET_PASSWORD_, &Method::POST) => {
                             return application_user__authorization::send_email_for_reset_password::SendEmailForResetPassword::run_(
                                 pushable_environment_configuration,
                                 request,
@@ -1024,10 +1016,7 @@ impl RunServerProcessor {
                             )
                             .await;
                         }
-                        (
-                            HttpRouteRegistry::VERSION_1__APPLICATION_USER__REFRESH_APPLICATION_USER_ACCESS_TOKEN_,
-                            &Method::POST,
-                        ) => {
+                        (HttpRouteRegistry::VERSION_1__APPLICATION_USER__REFRESH_APPLICATION_USER_ACCESS_TOKEN_, &Method::POST) => {
                             return application_user__authorization::refresh_application_user_access_token::RefreshApplicationUserAccessToken::run_(
                                 pushable_environment_configuration,
                                 request,
@@ -1038,10 +1027,7 @@ impl RunServerProcessor {
                             .await;
                         }
                         // Area for existing routes with authorized user.
-                        (
-                            HttpRouteRegistry::VERSION_1__APPLICATION_USER__DEAUTHORIZE_FROM_ONE_DEVICE_,
-                            &Method::POST,
-                        ) => {
+                        (HttpRouteRegistry::VERSION_1__APPLICATION_USER__DEAUTHORIZE_FROM_ONE_DEVICE_, &Method::POST) => {
                             return application_user__authorization::deauthorize_from_one_device::DeauthorizeFromOneDevice::run_(
                                 pushable_environment_configuration,
                                 request,
@@ -1051,10 +1037,7 @@ impl RunServerProcessor {
                             )
                             .await;
                         }
-                        (
-                            HttpRouteRegistry::VERSION_1__APPLICATION_USER__DEAUTHORIZE_FROM_ALL_DEVICE_,
-                            &Method::POST,
-                        ) => {
+                        (HttpRouteRegistry::VERSION_1__APPLICATION_USER__DEAUTHORIZE_FROM_ALL_DEVICE_, &Method::POST) => {
                             return application_user__authorization::deauthorize_from_all_devices::DeauthorizeFromAllDevices::run_(
                                 pushable_environment_configuration,
                                 request,

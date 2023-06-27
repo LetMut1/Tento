@@ -24,8 +24,7 @@ impl PostgresqlRepository<ChannelInnerLink> {
 
         let channel_inner_link_to = insert.channel_inner_link_to.get();
 
-        let mut prepared_statemant_parameter_convertation_resolver =
-            PreparedStatementParameterConvertationResolver::new();
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "INSERT INTO public.channel_inner_link AS cil ( \
                 from_, \
@@ -143,8 +142,7 @@ impl PostgresqlRepository<ChannelInnerLink> {
     ) -> Result<Vec<ChannelInnerLink1>, ErrorAuditor> {
         let channel_inner_link_from_ = channel_inner_link_from.get();
 
-        let mut prepared_statemant_parameter_convertation_resolver =
-            PreparedStatementParameterConvertationResolver::new();
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "SELECT \
                 cil.to_ AS t \

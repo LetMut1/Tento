@@ -32,8 +32,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
 
         let application_user_password_hash = insert.application_user_password_hash.get();
 
-        let mut prepared_statemant_parameter_convertation_resolver =
-            PreparedStatementParameterConvertationResolver::new();
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "INSERT INTO public.application_user AS au ( \
                 id, \
@@ -183,8 +182,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
     ) -> Result<bool, ErrorAuditor> {
         let application_user_nickname_ = application_user_nickname.get();
 
-        let mut prepared_statemant_parameter_convertation_resolver =
-            PreparedStatementParameterConvertationResolver::new();
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "SELECT \
                 au.id AS i \
@@ -265,8 +263,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
     ) -> Result<bool, ErrorAuditor> {
         let application_user_email_ = application_user_email.get();
 
-        let mut prepared_statemant_parameter_convertation_resolver =
-            PreparedStatementParameterConvertationResolver::new();
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "SELECT \
                 au.id AS i \
@@ -347,8 +344,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
     ) -> Result<bool, ErrorAuditor> {
         let application_user_id_ = application_user_id.get();
 
-        let mut prepared_statemant_parameter_convertation_resolver =
-            PreparedStatementParameterConvertationResolver::new();
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "SELECT \
                 au.id AS i \
@@ -429,8 +425,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
     ) -> Result<Option<ApplicationUser<'a>>, ErrorAuditor> {
         let application_user_nickname_ = application_user_nickname.get();
 
-        let mut prepared_statemant_parameter_convertation_resolver =
-            PreparedStatementParameterConvertationResolver::new();
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "SELECT \
                 au.id AS i, \
@@ -593,15 +588,17 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             }
         };
 
-        return Ok(Some(
-            ApplicationUser::new(
-                application_user_id,
-                Cow::Owned(application_user_email),
-                Cow::Borrowed(application_user_nickname),
-                application_user_password_hash,
-                application_user_created_at,
+        return Ok(
+            Some(
+                ApplicationUser::new(
+                    application_user_id,
+                    Cow::Owned(application_user_email),
+                    Cow::Borrowed(application_user_nickname),
+                    application_user_password_hash,
+                    application_user_created_at,
+                ),
             ),
-        ));
+        );
     }
 }
 
@@ -612,8 +609,7 @@ impl PostgresqlRepository<ApplicationUser_1> {
     ) -> Result<Option<ApplicationUser_1>, ErrorAuditor> {
         let application_user_nickname_ = application_user_nickname.get();
 
-        let mut prepared_statemant_parameter_convertation_resolver =
-            PreparedStatementParameterConvertationResolver::new();
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "SELECT \
                 au.id AS i, \
@@ -753,13 +749,15 @@ impl PostgresqlRepository<ApplicationUser_1> {
             }
         };
 
-        return Ok(Some(
-            ApplicationUser_1::new(
-                application_user_id,
-                application_user_email,
-                application_user_password_hash,
+        return Ok(
+            Some(
+                ApplicationUser_1::new(
+                    application_user_id,
+                    application_user_email,
+                    application_user_password_hash,
+                ),
             ),
-        ));
+        );
     }
 }
 
@@ -770,8 +768,7 @@ impl PostgresqlRepository<ApplicationUser_2> {
     ) -> Result<Option<ApplicationUser_2>, ErrorAuditor> {
         let application_user_email_ = application_user_email.get();
 
-        let mut prepared_statemant_parameter_convertation_resolver =
-            PreparedStatementParameterConvertationResolver::new();
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "SELECT \
                 au.id AS i, \
@@ -888,12 +885,14 @@ impl PostgresqlRepository<ApplicationUser_2> {
             }
         };
 
-        return Ok(Some(
-            ApplicationUser_2::new(
-                application_user_id,
-                application_user_password_hash,
+        return Ok(
+            Some(
+                ApplicationUser_2::new(
+                    application_user_id,
+                    application_user_password_hash,
+                ),
             ),
-        ));
+        );
     }
 }
 
@@ -904,8 +903,7 @@ impl PostgresqlRepository<ApplicationUser_3> {
     ) -> Result<Option<ApplicationUser_3>, ErrorAuditor> {
         let application_user_email_ = application_user_email.get();
 
-        let mut prepared_statemant_parameter_convertation_resolver =
-            PreparedStatementParameterConvertationResolver::new();
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "SELECT \
                 au.id AS i \
@@ -999,9 +997,7 @@ impl PostgresqlRepository<ApplicationUser_3> {
             }
         };
 
-        return Ok(Some(
-            ApplicationUser_3::new(application_user_id),
-        ));
+        return Ok(Some(ApplicationUser_3::new(application_user_id)));
     }
 }
 
@@ -1018,8 +1014,7 @@ impl PostgresqlRepository<ApplicationUser_4> {
 
         let application_user_password_hash = <T as Getter<'a, &'a ApplicationUser_PasswordHash>>::get(subject).get();
 
-        let mut prepared_statemant_parameter_convertation_resolver =
-            PreparedStatementParameterConvertationResolver::new();
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "UPDATE ONLY public.application_user AS au \
             SET ( \
@@ -1103,8 +1098,7 @@ impl PostgresqlRepository<ApplicationUser_4> {
     ) -> Result<Option<ApplicationUser_4>, ErrorAuditor> {
         let application_user_id_ = application_user_id.get();
 
-        let mut prepared_statemant_parameter_convertation_resolver =
-            PreparedStatementParameterConvertationResolver::new();
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "SELECT \
                 au.password_hash AS ph \
@@ -1198,9 +1192,7 @@ impl PostgresqlRepository<ApplicationUser_4> {
             }
         };
 
-        return Ok(Some(
-            ApplicationUser_4::new(application_user_password_hash),
-        ));
+        return Ok(Some(ApplicationUser_4::new(application_user_password_hash)));
     }
 }
 
@@ -1211,8 +1203,7 @@ impl PostgresqlRepository<ApplicationUser_5> {
     ) -> Result<Option<ApplicationUser_5>, ErrorAuditor> {
         let application_user_id_ = application_user_id.get();
 
-        let mut prepared_statemant_parameter_convertation_resolver =
-            PreparedStatementParameterConvertationResolver::new();
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "SELECT \
                 au.email AS e \
@@ -1306,9 +1297,7 @@ impl PostgresqlRepository<ApplicationUser_5> {
             }
         };
 
-        return Ok(Some(
-            ApplicationUser_5::new(application_user_email),
-        ));
+        return Ok(Some(ApplicationUser_5::new(application_user_email)));
     }
 }
 

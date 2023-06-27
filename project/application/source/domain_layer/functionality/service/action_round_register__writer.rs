@@ -110,23 +110,20 @@ impl Writer<ActionRoundRegister<'_>> {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let action_round_register_status_code =
-            match <Converter as Convert<u16, i16>>::convert(response.status().as_u16()) {
-                Ok(action_round_register_status_code_) => {
-                    ActionRoundRegister_StatusCode::new(action_round_register_status_code_)
-                }
-                Err(mut error) => {
-                    error.add_backtrace_part(
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    );
+        let action_round_register_status_code = match <Converter as Convert<u16, i16>>::convert(response.status().as_u16()) {
+            Ok(action_round_register_status_code_) => ActionRoundRegister_StatusCode::new(action_round_register_status_code_),
+            Err(mut error) => {
+                error.add_backtrace_part(
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                );
 
-                    return Err(error);
-                }
-            };
+                return Err(error);
+            }
+        };
 
         let action_round_register_route = ActionRoundRegister_Route::new(Cow::Borrowed(request.uri().path()));
 

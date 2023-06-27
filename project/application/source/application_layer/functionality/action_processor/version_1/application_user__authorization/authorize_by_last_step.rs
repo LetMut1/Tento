@@ -71,9 +71,7 @@ impl ActionProcessor {
             );
         }
 
-        let is_valid_value = match Validator::<ApplicationUserAuthorizationToken_Value>::is_valid(
-            &incoming.application_user_authorization_token_value,
-        ) {
+        let is_valid_value = match Validator::<ApplicationUserAuthorizationToken_Value>::is_valid(&incoming.application_user_authorization_token_value) {
             Ok(is_valid_value_) => is_valid_value_,
             Err(mut error) => {
                 error.add_backtrace_part(
@@ -127,27 +125,26 @@ impl ActionProcessor {
         };
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
-        let application_user_authorization_token =
-            match PostgresqlRepository::<ApplicationUserAuthorizationToken_2>::find_1(
-                database_2_postgresql_connection,
-                incoming.application_user_id,
-                &incoming.application_user_device_id,
-            )
-            .await
-            {
-                Ok(application_user_authorization_token_) => application_user_authorization_token_,
-                Err(mut error) => {
-                    error.add_backtrace_part(
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    );
+        let application_user_authorization_token = match PostgresqlRepository::<ApplicationUserAuthorizationToken_2>::find_1(
+            database_2_postgresql_connection,
+            incoming.application_user_id,
+            &incoming.application_user_device_id,
+        )
+        .await
+        {
+            Ok(application_user_authorization_token_) => application_user_authorization_token_,
+            Err(mut error) => {
+                error.add_backtrace_part(
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                );
 
-                    return Err(error);
-                }
-            };
+                return Err(error);
+            }
+        };
 
         let mut application_user_authorization_token_ = match application_user_authorization_token {
             Some(application_user_authorization_token__) => application_user_authorization_token__,
@@ -186,40 +183,29 @@ impl ActionProcessor {
             );
         }
 
-        if application_user_authorization_token_.get_value().get()
-            != incoming.application_user_authorization_token_value.get()
-        {
-            let application_user_authorization_token_wrong_enter_tries_quantity =
-                match application_user_authorization_token_
-                    .get_wrong_enter_tries_quantity()
-                    .get()
-                    .checked_add(1)
-                {
-                    Some(application_user_authorization_token_wrong_enter_tries_quantity_) => {
-                        application_user_authorization_token_wrong_enter_tries_quantity_
-                    }
-                    None => {
-                        return Err(
-                            ErrorAuditor::new(
-                                BaseError::create_out_of_range(),
-                                BacktracePart::new(
-                                    line!(),
-                                    file!(),
-                                    None,
-                                ),
-                            ),
-                        );
-                    }
-                };
-
-            if application_user_authorization_token_wrong_enter_tries_quantity
-                <= ApplicationUserAuthorizationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT
+        if application_user_authorization_token_.get_value().get() != incoming.application_user_authorization_token_value.get() {
+            let application_user_authorization_token_wrong_enter_tries_quantity = match application_user_authorization_token_
+                .get_wrong_enter_tries_quantity()
+                .get()
+                .checked_add(1)
             {
-                application_user_authorization_token_.set_wrong_enter_tries_quantity(
-                    ApplicationUserAuthorizationToken_WrongEnterTriesQuantity::new(
-                        application_user_authorization_token_wrong_enter_tries_quantity,
-                    ),
-                );
+                Some(application_user_authorization_token_wrong_enter_tries_quantity_) => application_user_authorization_token_wrong_enter_tries_quantity_,
+                None => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::create_out_of_range(),
+                            BacktracePart::new(
+                                line!(),
+                                file!(),
+                                None,
+                            ),
+                        ),
+                    );
+                }
+            };
+
+            if application_user_authorization_token_wrong_enter_tries_quantity <= ApplicationUserAuthorizationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
+                application_user_authorization_token_.set_wrong_enter_tries_quantity(ApplicationUserAuthorizationToken_WrongEnterTriesQuantity::new(application_user_authorization_token_wrong_enter_tries_quantity));
 
                 if let Err(mut error) = PostgresqlRepository::<ApplicationUserAuthorizationToken_4>::update(
                     database_2_postgresql_connection,
@@ -340,37 +326,32 @@ impl ActionProcessor {
             expires_at,
         );
 
-        let application_user_access_refresh_token =
-            match PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::find_1(
-                database_2_postgresql_connection,
-                incoming.application_user_id,
-                &incoming.application_user_device_id,
-            )
-            .await
-            {
-                Ok(application_user_access_refresh_token_) => application_user_access_refresh_token_,
-                Err(mut error) => {
-                    error.add_backtrace_part(
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    );
+        let application_user_access_refresh_token = match PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::find_1(
+            database_2_postgresql_connection,
+            incoming.application_user_id,
+            &incoming.application_user_device_id,
+        )
+        .await
+        {
+            Ok(application_user_access_refresh_token_) => application_user_access_refresh_token_,
+            Err(mut error) => {
+                error.add_backtrace_part(
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                );
 
-                    return Err(error);
-                }
-            };
+                return Err(error);
+            }
+        };
 
         let application_user_access_token_id = Cow::Borrowed(application_user_access_token.get_id());
 
-        let application_user_access_refresh_token_obfuscation_value =
-            Generator::<ApplicationUserAccessRefreshToken_ObfuscationValue>::generate();
+        let application_user_access_refresh_token_obfuscation_value = Generator::<ApplicationUserAccessRefreshToken_ObfuscationValue>::generate();
 
-        let application_user_access_refresh_token_expires_at = match Generator::<
-            ApplicationUserAccessRefreshToken_ExpiresAt,
-        >::generate()
-        {
+        let application_user_access_refresh_token_expires_at = match Generator::<ApplicationUserAccessRefreshToken_ExpiresAt>::generate() {
             Ok(application_user_access_refresh_token_expires_at_) => application_user_access_refresh_token_expires_at_,
             Err(mut error) => {
                 error.add_backtrace_part(
@@ -385,8 +366,7 @@ impl ActionProcessor {
             }
         };
 
-        let application_user_access_refresh_token_updated_at =
-            Generator::<ApplicationUserAccessRefreshToken_UpdatedAt>::generate();
+        let application_user_access_refresh_token_updated_at = Generator::<ApplicationUserAccessRefreshToken_UpdatedAt>::generate();
         // TODO  TRANZACTION
         let application_user_access_refresh_token_ = match application_user_access_refresh_token {
             Some(mut application_user_access_refresh_token__) => {
@@ -427,26 +407,25 @@ impl ActionProcessor {
                     application_user_access_refresh_token_updated_at,
                 };
 
-                let application_user_access_refresh_token__ =
-                    match PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::create(
-                        database_2_postgresql_connection,
-                        application_user_access_refresh_token_insert,
-                    )
-                    .await
-                    {
-                        Ok(application_user_access_refresh_token___) => application_user_access_refresh_token___,
-                        Err(mut error) => {
-                            error.add_backtrace_part(
-                                BacktracePart::new(
-                                    line!(),
-                                    file!(),
-                                    None,
-                                ),
-                            );
+                let application_user_access_refresh_token__ = match PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::create(
+                    database_2_postgresql_connection,
+                    application_user_access_refresh_token_insert,
+                )
+                .await
+                {
+                    Ok(application_user_access_refresh_token___) => application_user_access_refresh_token___,
+                    Err(mut error) => {
+                        error.add_backtrace_part(
+                            BacktracePart::new(
+                                line!(),
+                                file!(),
+                                None,
+                            ),
+                        );
 
-                            return Err(error);
-                        }
-                    };
+                        return Err(error);
+                    }
+                };
 
                 application_user_access_refresh_token__
             }
@@ -470,45 +449,41 @@ impl ActionProcessor {
             return Err(error);
         }
         // TODO  TRANZACTION
-        let application_user_access_token_serialized_form =
-            match SerializationFormResolver::<ApplicationUserAccessToken<'_>>::serialize(
-                pushable_environment_configuration,
-                &application_user_access_token,
-            ) {
-                Ok(application_user_access_token_serialized_form_) => application_user_access_token_serialized_form_,
-                Err(mut error) => {
-                    error.add_backtrace_part(
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    );
+        let application_user_access_token_serialized_form = match SerializationFormResolver::<ApplicationUserAccessToken<'_>>::serialize(
+            pushable_environment_configuration,
+            &application_user_access_token,
+        ) {
+            Ok(application_user_access_token_serialized_form_) => application_user_access_token_serialized_form_,
+            Err(mut error) => {
+                error.add_backtrace_part(
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                );
 
-                    return Err(error);
-                }
-            };
+                return Err(error);
+            }
+        };
 
-        let application_user_access_refresh_token_serialized_form =
-            match SerializationFormResolver::<ApplicationUserAccessRefreshToken<'_>>::serialize(
-                pushable_environment_configuration,
-                &application_user_access_refresh_token_,
-            ) {
-                Ok(application_user_access_refresh_token_serialized_form_) => {
-                    application_user_access_refresh_token_serialized_form_
-                }
-                Err(mut error) => {
-                    error.add_backtrace_part(
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    );
+        let application_user_access_refresh_token_serialized_form = match SerializationFormResolver::<ApplicationUserAccessRefreshToken<'_>>::serialize(
+            pushable_environment_configuration,
+            &application_user_access_refresh_token_,
+        ) {
+            Ok(application_user_access_refresh_token_serialized_form_) => application_user_access_refresh_token_serialized_form_,
+            Err(mut error) => {
+                error.add_backtrace_part(
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                );
 
-                    return Err(error);
-                }
-            };
+                return Err(error);
+            }
+        };
 
         let application_user_device_insert = ApplicationUserDeviceInsert {
             application_user_device_id: incoming.application_user_device_id,

@@ -15,14 +15,20 @@ pub struct ErrorAuditor {
 }
 
 impl ErrorAuditor {
-    pub fn new(base_error: BaseError, backtrace_part: BacktracePart) -> Self {
+    pub fn new(
+        base_error: BaseError,
+        backtrace_part: BacktracePart,
+    ) -> Self {
         return Self {
             base_error,
             backtrace: Backtrace::new(backtrace_part),
         };
     }
 
-    pub fn add_backtrace_part<'a>(&'a mut self, backtrace_part: BacktracePart) -> () {
+    pub fn add_backtrace_part<'a>(
+        &'a mut self,
+        backtrace_part: BacktracePart,
+    ) -> () {
         self.backtrace.add(backtrace_part);
 
         return ();
@@ -38,7 +44,10 @@ impl ErrorAuditor {
 }
 
 impl Display for ErrorAuditor {
-    fn fmt<'a, 'b>(&'a self, _: &'b mut Formatter<'_>) -> Result<(), FormatError> {
+    fn fmt<'a, 'b>(
+        &'a self,
+        _: &'b mut Formatter<'_>,
+    ) -> Result<(), FormatError> {
         return Ok(());
     }
 }
@@ -70,7 +79,10 @@ impl BaseError {
 }
 
 impl Display for BaseError {
-    fn fmt<'a, 'b>(&'a self, _: &'b mut Formatter<'_>) -> Result<(), FormatError> {
+    fn fmt<'a, 'b>(
+        &'a self,
+        _: &'b mut Formatter<'_>,
+    ) -> Result<(), FormatError> {
         return Ok(());
     }
 }
@@ -86,7 +98,10 @@ pub enum RuntimeError {
 }
 
 impl Display for RuntimeError {
-    fn fmt<'a, 'b>(&'a self, _: &'b mut Formatter<'_>) -> Result<(), FormatError> {
+    fn fmt<'a, 'b>(
+        &'a self,
+        _: &'b mut Formatter<'_>,
+    ) -> Result<(), FormatError> {
         return Ok(());
     }
 }
@@ -115,7 +130,10 @@ impl OtherError {
 }
 
 impl Display for OtherError {
-    fn fmt<'a, 'b>(&'a self, _: &'b mut Formatter<'_>) -> Result<(), FormatError> {
+    fn fmt<'a, 'b>(
+        &'a self,
+        _: &'b mut Formatter<'_>,
+    ) -> Result<(), FormatError> {
         return Ok(());
     }
 }
@@ -140,7 +158,10 @@ pub enum ResourceError {
 }
 
 impl Display for ResourceError {
-    fn fmt<'a, 'b>(&'a self, _: &'b mut Formatter<'_>) -> Result<(), FormatError> {
+    fn fmt<'a, 'b>(
+        &'a self,
+        _: &'b mut Formatter<'_>,
+    ) -> Result<(), FormatError> {
         return Ok(());
     }
 }
@@ -156,7 +177,10 @@ pub enum EmailServerError {
 }
 
 impl Display for EmailServerError {
-    fn fmt<'a, 'b>(&'a self, _: &'b mut Formatter<'_>) -> Result<(), FormatError> {
+    fn fmt<'a, 'b>(
+        &'a self,
+        _: &'b mut Formatter<'_>,
+    ) -> Result<(), FormatError> {
         return Ok(());
     }
 }
@@ -173,7 +197,10 @@ impl Backtrace {
         };
     }
 
-    pub fn add<'a>(&'a mut self, backtrace_part: BacktracePart) -> () {
+    pub fn add<'a>(
+        &'a mut self,
+        backtrace_part: BacktracePart,
+    ) -> () {
         self.backtrace_part_registry.push(backtrace_part);
 
         return ();
@@ -185,7 +212,10 @@ impl Backtrace {
 }
 
 impl Display for Backtrace {
-    fn fmt<'a, 'b>(&'a self, _: &'b mut Formatter<'_>) -> Result<(), FormatError> {
+    fn fmt<'a, 'b>(
+        &'a self,
+        _: &'b mut Formatter<'_>,
+    ) -> Result<(), FormatError> {
         return Ok(());
     }
 }
@@ -198,7 +228,11 @@ pub struct BacktracePart {
 }
 
 impl BacktracePart {
-    pub fn new(line_number: u32, file_path: &'static str, context: Option<String>) -> Self {
+    pub fn new(
+        line_number: u32,
+        file_path: &'static str,
+        context: Option<String>,
+    ) -> Self {
         return Self {
             line_number,
             file_path,

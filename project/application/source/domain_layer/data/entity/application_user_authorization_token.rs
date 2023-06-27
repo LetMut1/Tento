@@ -136,7 +136,10 @@ impl<'a> ApplicationUserAuthorizationToken<'a> {
         return self.can_be_resent_from;
     }
 
-    pub fn set_value<'b>(&'b mut self, value: Value) -> &'b mut Self {
+    pub fn set_value<'b>(
+        &'b mut self,
+        value: Value,
+    ) -> &'b mut Self {
         self.value = value;
 
         return self;
@@ -151,13 +154,19 @@ impl<'a> ApplicationUserAuthorizationToken<'a> {
         return self;
     }
 
-    pub fn set_expires_at<'b>(&'b mut self, expires_at: ExpiresAt) -> &'b mut Self {
+    pub fn set_expires_at<'b>(
+        &'b mut self,
+        expires_at: ExpiresAt,
+    ) -> &'b mut Self {
         self.expires_at = expires_at;
 
         return self;
     }
 
-    pub fn set_can_be_resent_from<'b>(&'b mut self, can_be_resent_from: CanBeResentFrom) -> &'b mut Self {
+    pub fn set_can_be_resent_from<'b>(
+        &'b mut self,
+        can_be_resent_from: CanBeResentFrom,
+    ) -> &'b mut Self {
         self.can_be_resent_from = can_be_resent_from;
 
         return self;
@@ -238,7 +247,10 @@ impl ApplicationUserAuthorizationToken_1 {
         return self.can_be_resent_from;
     }
 
-    pub fn set_value<'b>(&'b mut self, value: Value) -> &'b mut Self {
+    pub fn set_value<'b>(
+        &'b mut self,
+        value: Value,
+    ) -> &'b mut Self {
         self.value = value;
 
         return self;
@@ -253,13 +265,19 @@ impl ApplicationUserAuthorizationToken_1 {
         return self;
     }
 
-    pub fn set_expires_at<'b>(&'b mut self, expires_at: ExpiresAt) -> &'b mut Self {
+    pub fn set_expires_at<'b>(
+        &'b mut self,
+        expires_at: ExpiresAt,
+    ) -> &'b mut Self {
         self.expires_at = expires_at;
 
         return self;
     }
 
-    pub fn set_can_be_resent_from<'b>(&'b mut self, can_be_resent_from: CanBeResentFrom) -> &'b mut Self {
+    pub fn set_can_be_resent_from<'b>(
+        &'b mut self,
+        can_be_resent_from: CanBeResentFrom,
+    ) -> &'b mut Self {
         self.can_be_resent_from = can_be_resent_from;
 
         return self;
@@ -297,7 +315,11 @@ pub struct ApplicationUserAuthorizationToken_2 {
 }
 
 impl ApplicationUserAuthorizationToken_2 {
-    pub fn new(value: Value, wrong_enter_tries_quantity: WrongEnterTriesQuantity, expires_at: ExpiresAt) -> Self {
+    pub fn new(
+        value: Value,
+        wrong_enter_tries_quantity: WrongEnterTriesQuantity,
+        expires_at: ExpiresAt,
+    ) -> Self {
         return Self {
             value,
             wrong_enter_tries_quantity,
@@ -317,7 +339,10 @@ impl ApplicationUserAuthorizationToken_2 {
         return self.expires_at;
     }
 
-    pub fn set_value<'b>(&'b mut self, value: Value) -> &'b mut Self {
+    pub fn set_value<'b>(
+        &'b mut self,
+        value: Value,
+    ) -> &'b mut Self {
         self.value = value;
 
         return self;
@@ -332,7 +357,10 @@ impl ApplicationUserAuthorizationToken_2 {
         return self;
     }
 
-    pub fn set_expires_at<'b>(&'b mut self, expires_at: ExpiresAt) -> &'b mut Self {
+    pub fn set_expires_at<'b>(
+        &'b mut self,
+        expires_at: ExpiresAt,
+    ) -> &'b mut Self {
         self.expires_at = expires_at;
 
         return self;
@@ -372,7 +400,11 @@ pub struct ApplicationUserAuthorizationToken_5 {
 }
 
 impl ApplicationUserAuthorizationToken_5 {
-    pub fn new(value: Value, expires_at: ExpiresAt, can_be_resent_from: CanBeResentFrom) -> Self {
+    pub fn new(
+        value: Value,
+        expires_at: ExpiresAt,
+        can_be_resent_from: CanBeResentFrom,
+    ) -> Self {
         return Self {
             value,
             expires_at,
@@ -392,13 +424,19 @@ impl ApplicationUserAuthorizationToken_5 {
         return self.can_be_resent_from;
     }
 
-    pub fn set_expires_at<'b>(&'b mut self, expires_at: ExpiresAt) -> &'b mut Self {
+    pub fn set_expires_at<'b>(
+        &'b mut self,
+        expires_at: ExpiresAt,
+    ) -> &'b mut Self {
         self.expires_at = expires_at;
 
         return self;
     }
 
-    pub fn set_can_be_resent_from<'b>(&'b mut self, can_be_resent_from: CanBeResentFrom) -> &'b mut Self {
+    pub fn set_can_be_resent_from<'b>(
+        &'b mut self,
+        can_be_resent_from: CanBeResentFrom,
+    ) -> &'b mut Self {
         self.can_be_resent_from = can_be_resent_from;
 
         return self;

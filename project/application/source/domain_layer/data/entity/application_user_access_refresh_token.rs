@@ -136,19 +136,28 @@ impl<'a> ApplicationUserAccessRefreshToken<'a> {
         return self;
     }
 
-    pub fn set_obfuscation_value<'b>(&'b mut self, obfuscation_value: ObfuscationValue) -> &'b mut Self {
+    pub fn set_obfuscation_value<'b>(
+        &'b mut self,
+        obfuscation_value: ObfuscationValue,
+    ) -> &'b mut Self {
         self.obfuscation_value = obfuscation_value;
 
         return self;
     }
 
-    pub fn set_expires_at<'b>(&'b mut self, expires_at: ExpiresAt) -> &'b mut Self {
+    pub fn set_expires_at<'b>(
+        &'b mut self,
+        expires_at: ExpiresAt,
+    ) -> &'b mut Self {
         self.expires_at = expires_at;
 
         return self;
     }
 
-    pub fn set_updated_at<'b>(&'b mut self, updated_at: UpdatedAt) -> &'b mut Self {
+    pub fn set_updated_at<'b>(
+        &'b mut self,
+        updated_at: UpdatedAt,
+    ) -> &'b mut Self {
         self.updated_at = updated_at;
 
         return self;
