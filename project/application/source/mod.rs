@@ -25,7 +25,7 @@
     clippy::type_complexity,
     clippy::explicit_auto_deref,
     clippy::redundant_static_lifetimes,
-    // clippy::manual_map
+    clippy::manual_map
 )]
 #![deny(
     clippy::unnecessary_cast,
