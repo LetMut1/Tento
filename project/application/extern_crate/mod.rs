@@ -21,8 +21,6 @@ pub use tokio;
 pub use toml;
 pub use uuid;
 
-#[cfg(feature = "transport_layer_security")]
-pub use tls_listener;
 
 #[cfg(feature = "facilitate_non_automatic_functional_testing")]
 pub use const_format;
