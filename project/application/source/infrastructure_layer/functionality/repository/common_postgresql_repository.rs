@@ -341,16 +341,7 @@ impl PostgresqlRepository<Common1> {
             };
 
             let channel_cover_image_path = match row.try_get::<'_, usize, Option<String>>(4) {
-                Ok(channel_cover_image_path_) => {
-                    let channel_cover_image_path__ = match channel_cover_image_path_ {
-                        Some(channel_cover_image_path___) => {
-                            Some(Channel_CoverImagePath::new(channel_cover_image_path___))
-                        }
-                        None => None,
-                    };
-
-                    channel_cover_image_path__
-                }
+                Ok(channel_cover_image_path_) => channel_cover_image_path_.map(Channel_CoverImagePath::new),
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(
@@ -372,16 +363,7 @@ impl PostgresqlRepository<Common1> {
             };
 
             let channel_background_image_path = match row.try_get::<'_, usize, Option<String>>(5) {
-                Ok(channel_background_image_path_) => {
-                    let channel_background_image_path__ = match channel_background_image_path_ {
-                        Some(channel_background_image_path___) => {
-                            Some(Channel_BackgroundImagePath::new(channel_background_image_path___))
-                        }
-                        None => None,
-                    };
-
-                    channel_background_image_path__
-                }
+                Ok(channel_background_image_path_) => channel_background_image_path_.map(Channel_BackgroundImagePath::new),
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(
@@ -762,16 +744,7 @@ impl PostgresqlRepository<Common1> {
             };
 
             let channel_cover_image_path = match row.try_get::<'_, usize, Option<String>>(5) {
-                Ok(channel_cover_image_path_) => {
-                    let channel_cover_image_path__ = match channel_cover_image_path_ {
-                        Some(channel_cover_image_path___) => {
-                            Some(Channel_CoverImagePath::new(channel_cover_image_path___))
-                        }
-                        None => None,
-                    };
-
-                    channel_cover_image_path__
-                }
+                Ok(channel_cover_image_path_) => channel_cover_image_path_.map(Channel_CoverImagePath::new),
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(
@@ -793,16 +766,7 @@ impl PostgresqlRepository<Common1> {
             };
 
             let channel_background_image_path = match row.try_get::<'_, usize, Option<String>>(6) {
-                Ok(channel_background_image_path_) => {
-                    let channel_background_image_path__ = match channel_background_image_path_ {
-                        Some(channel_background_image_path___) => {
-                            Some(Channel_BackgroundImagePath::new(channel_background_image_path___))
-                        }
-                        None => None,
-                    };
-
-                    channel_background_image_path__
-                }
+                Ok(channel_background_image_path_) => channel_background_image_path_.map(Channel_BackgroundImagePath::new),
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(
@@ -1126,16 +1090,7 @@ impl PostgresqlRepository<Common1> {
             };
 
             let channel_cover_image_path = match row.try_get::<'_, usize, Option<String>>(5) {
-                Ok(channel_cover_image_path_) => {
-                    let channel_cover_image_path__ = match channel_cover_image_path_ {
-                        Some(channel_cover_image_path___) => {
-                            Some(Channel_CoverImagePath::new(channel_cover_image_path___))
-                        }
-                        None => None,
-                    };
-
-                    channel_cover_image_path__
-                }
+                Ok(channel_cover_image_path_) => channel_cover_image_path_.map(Channel_CoverImagePath::new),
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(
@@ -1157,16 +1112,7 @@ impl PostgresqlRepository<Common1> {
             };
 
             let channel_background_image_path = match row.try_get::<'_, usize, Option<String>>(6) {
-                Ok(channel_background_image_path_) => {
-                    let channel_background_image_path__ = match channel_background_image_path_ {
-                        Some(channel_background_image_path___) => {
-                            Some(Channel_BackgroundImagePath::new(channel_background_image_path___))
-                        }
-                        None => None,
-                    };
-
-                    channel_background_image_path__
-                }
+                Ok(channel_background_image_path_) => channel_background_image_path_.map(Channel_BackgroundImagePath::new),
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(

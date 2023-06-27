@@ -25,10 +25,9 @@
     clippy::type_complexity,
     clippy::explicit_auto_deref,
     clippy::redundant_static_lifetimes,
-    clippy::manual_map                      // TODO TODO TODO TODO TODO
+    // clippy::manual_map
 )]
 #![deny(
-    unused_variables,
     clippy::unnecessary_cast,
     clippy::await_holding_lock,
     clippy::char_lit_as_u8,

@@ -438,10 +438,7 @@ impl PostgresqlRepository<Channel<'_>> {
         };
 
         let channel_description = match row_registry[0].try_get::<'_, usize, Option<String>>(3) {
-            Ok(channel_description_) => match channel_description_ {
-                Some(channel_desciption__) => Some(Channel_Description::new(channel_desciption__)),
-                None => None,
-            },
+            Ok(channel_description_) => channel_description_.map(Channel_Description::new),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -529,10 +526,7 @@ impl PostgresqlRepository<Channel<'_>> {
         };
 
         let channel_cover_image_path = match row_registry[0].try_get::<'_, usize, Option<String>>(7) {
-            Ok(channel_cover_image_path_) => match channel_cover_image_path_ {
-                Some(channel_cover_image_path__) => Some(Channel_CoverImagePath::new(channel_cover_image_path__)),
-                None => None,
-            },
+            Ok(channel_cover_image_path_) => channel_cover_image_path_.map(Channel_CoverImagePath::new),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -554,12 +548,7 @@ impl PostgresqlRepository<Channel<'_>> {
         };
 
         let channel_background_image_path = match row_registry[0].try_get::<'_, usize, Option<String>>(8) {
-            Ok(channel_background_image_path_) => match channel_background_image_path_ {
-                Some(channel_background_image_path__) => {
-                    Some(Channel_BackgroundImagePath::new(channel_background_image_path__))
-                }
-                None => None,
-            },
+            Ok(channel_background_image_path_) => channel_background_image_path_.map(Channel_BackgroundImagePath::new),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -846,10 +835,7 @@ impl PostgresqlRepository<Channel<'_>> {
         };
 
         let channel_description = match row_registry[0].try_get::<'_, usize, Option<String>>(3) {
-            Ok(channel_description_) => match channel_description_ {
-                Some(channel_desciption__) => Some(Channel_Description::new(channel_desciption__)),
-                None => None,
-            },
+            Ok(channel_description_) => channel_description_.map(Channel_Description::new),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -937,10 +923,7 @@ impl PostgresqlRepository<Channel<'_>> {
         };
 
         let channel_cover_image_path = match row_registry[0].try_get::<'_, usize, Option<String>>(7) {
-            Ok(channel_cover_image_path_) => match channel_cover_image_path_ {
-                Some(channel_cover_image_path__) => Some(Channel_CoverImagePath::new(channel_cover_image_path__)),
-                None => None,
-            },
+            Ok(channel_cover_image_path_) => channel_cover_image_path_.map(Channel_CoverImagePath::new),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -962,12 +945,7 @@ impl PostgresqlRepository<Channel<'_>> {
         };
 
         let channel_background_image_path = match row_registry[0].try_get::<'_, usize, Option<String>>(8) {
-            Ok(channel_background_image_path_) => match channel_background_image_path_ {
-                Some(channel_background_image_path__) => {
-                    Some(Channel_BackgroundImagePath::new(channel_background_image_path__))
-                }
-                None => None,
-            },
+            Ok(channel_background_image_path_) => channel_background_image_path_.map(Channel_BackgroundImagePath::new),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
