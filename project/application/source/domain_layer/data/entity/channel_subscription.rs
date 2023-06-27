@@ -18,19 +18,15 @@ impl CreatedAt {
 pub struct ChannelSubscription {
     application_user_id: ApplicationUser_Id,
     channel_id: Channel_Id,
-    created_at: CreatedAt
+    created_at: CreatedAt,
 }
 
 impl ChannelSubscription {
-    pub fn new(
-        application_user_id: ApplicationUser_Id,
-        channel_id: Channel_Id,
-        created_at: CreatedAt
-    ) -> Self {
+    pub fn new(application_user_id: ApplicationUser_Id, channel_id: Channel_Id, created_at: CreatedAt) -> Self {
         return Self {
             application_user_id,
             channel_id,
-            created_at
+            created_at,
         };
     }
 }

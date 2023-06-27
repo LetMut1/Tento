@@ -5,5 +5,5 @@ pub use super::base64__encoder::Base64;
 pub use super::hmac__encoder::Hmac;
 
 pub struct Encoder<S> {
-    _subject: PhantomData<S>
+    _subject: PhantomData<S>,
 }

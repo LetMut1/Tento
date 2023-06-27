@@ -7,5 +7,5 @@ pub extern "C" fn test1(x: c_long) -> bool {
         return true;
     }
 
-    return false
+    return false;
 }

@@ -4,5 +4,5 @@ pub struct ApplicationUserDirectMessagePublication {
     application_user_id: i64,
     channel_feed_publication_id: i64,
     channel_feed_publication_reaction_id: i64,
-    created_at: String
+    created_at: String,
 }

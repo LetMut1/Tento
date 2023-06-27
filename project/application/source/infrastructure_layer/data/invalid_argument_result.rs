@@ -1,10 +1,10 @@
 pub enum InvalidArgumentResult<T> {
     Ok {
-        subject: T
+        subject: T,
     },
     InvalidArgument {
-        invalid_argument: InvalidArgument
-    }
+        invalid_argument: InvalidArgument,
+    },
 }
 
 pub enum InvalidArgument {
@@ -27,5 +27,5 @@ pub enum InvalidArgument {
     Limit,
     SearchParameter,
     SortOrderRepresentation,
-    Timestamp
+    Timestamp,
 }

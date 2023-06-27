@@ -19,69 +19,137 @@ impl Format<ErrorAuditor> for Formatter {
             .get_backtrace()
             .get_backtrace_part_registry()
             .iter()
-            .enumerate() {
-
+            .enumerate()
+        {
             if index == 0 {
                 backtrace_message = match backtrace_part.get_context() {
                     Some(context) => {
-                        format!("({}) {}:{} ({}).\n", index, backtrace_part.get_file_path(), backtrace_part.get_line_number(), context)
+                        format!(
+                            "({}) {}:{} ({}).\n",
+                            index,
+                            backtrace_part.get_file_path(),
+                            backtrace_part.get_line_number(),
+                            context
+                        )
                     }
                     None => {
-                        format!("({}) {}:{}.\n", index, backtrace_part.get_file_path(), backtrace_part.get_line_number())
+                        format!(
+                            "({}) {}:{}.\n",
+                            index,
+                            backtrace_part.get_file_path(),
+                            backtrace_part.get_line_number()
+                        )
                     }
                 };
             } else {
                 backtrace_message = match backtrace_part.get_context() {
                     Some(context) => {
-                        format!("{}({}) {}:{} ({})\n.", backtrace_message.as_str(), index, backtrace_part.get_file_path(), backtrace_part.get_line_number(), context)
+                        format!(
+                            "{}({}) {}:{} ({})\n.",
+                            backtrace_message.as_str(),
+                            index,
+                            backtrace_part.get_file_path(),
+                            backtrace_part.get_line_number(),
+                            context
+                        )
                     }
                     None => {
-                        format!("{}({}) {}:{}.\n", backtrace_message.as_str(), index, backtrace_part.get_file_path(), backtrace_part.get_line_number())
+                        format!(
+                            "{}({}) {}:{}.\n",
+                            backtrace_message.as_str(),
+                            index,
+                            backtrace_part.get_file_path(),
+                            backtrace_part.get_line_number()
+                        )
                     }
                 }
             };
         }
 
         let error_message = match *subject.get_base_error() {
-            BaseError::LogicError { message } => {
-                format!("Error, logic: {}.", message)
+            BaseError::LogicError {
+                message,
+            } => {
+                format!(
+                    "Error, logic: {}.",
+                    message
+                )
             }
-            BaseError::RuntimeError { runtime_error: ref run_time_error } => {
-                match *run_time_error {
-                    RuntimeError::OtherError { ref other_error } => {
-                        format!("Error, runtime, other: {}.", other_error.get_message())
-                    }
-                    RuntimeError::ResourceError { ref resource_error } => {
-                        match *resource_error {
-                            ResourceError::ConnectionPoolRedisError { ref bb8_redis_error } => {
-                                format!("Error, runtime, resource, Redis connection pool : {}.", bb8_redis_error)
-                            }
-                            ResourceError::ConnectionPoolPostgresqlError { ref bb8_postgresql_error } => {
-                                format!("Error, runtime, resource, Postgresql connection pool : {}.", bb8_postgresql_error)
-                            }
-                            ResourceError::EmailServerError { ref email_server_error } => {
-                                match *email_server_error {
-                                    EmailServerError::EmailError { ref email_error } => {
-                                        format!("Error, runtime, resource, email : {}.", email_error)
-                                    }
-                                    EmailServerError::SmtpError { ref smtp_error } => {
-                                        format!("Error, runtime, resource, email : {}.", smtp_error)
-                                    }
-                                }
-                            }
-                            ResourceError::PostgresqlError { ref postgresql_error } => {
-                                format!("Error, runtime, resource, Postgresql : {}.", postgresql_error)
-                            }
-                            ResourceError::RedisError { ref redis_error } => {
-                                format!("Error, runtime, resource, Redis : {}.", redis_error)
-                            }
-                        }
-                    }
+            BaseError::RuntimeError {
+                runtime_error: ref run_time_error,
+            } => match *run_time_error {
+                RuntimeError::OtherError {
+                    ref other_error,
+                } => {
+                    format!(
+                        "Error, runtime, other: {}.",
+                        other_error.get_message()
+                    )
                 }
-            }
+                RuntimeError::ResourceError {
+                    ref resource_error,
+                } => match *resource_error {
+                    ResourceError::ConnectionPoolRedisError {
+                        ref bb8_redis_error,
+                    } => {
+                        format!(
+                            "Error, runtime, resource, Redis connection pool : {}.",
+                            bb8_redis_error
+                        )
+                    }
+                    ResourceError::ConnectionPoolPostgresqlError {
+                        ref bb8_postgresql_error,
+                    } => {
+                        format!(
+                            "Error, runtime, resource, Postgresql connection pool : {}.",
+                            bb8_postgresql_error
+                        )
+                    }
+                    ResourceError::EmailServerError {
+                        ref email_server_error,
+                    } => match *email_server_error {
+                        EmailServerError::EmailError {
+                            ref email_error,
+                        } => {
+                            format!(
+                                "Error, runtime, resource, email : {}.",
+                                email_error
+                            )
+                        }
+                        EmailServerError::SmtpError {
+                            ref smtp_error,
+                        } => {
+                            format!(
+                                "Error, runtime, resource, email : {}.",
+                                smtp_error
+                            )
+                        }
+                    },
+                    ResourceError::PostgresqlError {
+                        ref postgresql_error,
+                    } => {
+                        format!(
+                            "Error, runtime, resource, Postgresql : {}.",
+                            postgresql_error
+                        )
+                    }
+                    ResourceError::RedisError {
+                        ref redis_error,
+                    } => {
+                        format!(
+                            "Error, runtime, resource, Redis : {}.",
+                            redis_error
+                        )
+                    }
+                },
+            },
         };
 
-        return format!("{} > {}", backtrace_message.as_str(), error_message.as_str());
+        return format!(
+            "{} > {}",
+            backtrace_message.as_str(),
+            error_message.as_str()
+        );
     }
 }
 
@@ -94,8 +162,12 @@ impl Format<InvalidArgument> for Formatter {
             InvalidArgument::ApplicationUser_Nickname => "ApplicationUser_Nickname",
             InvalidArgument::ApplicationUser_Password => "ApplicationUser_Password",
             InvalidArgument::ApplicationUser_VisabilityModifier => "VisabilityModifier",
-            InvalidArgument::ApplicationUserAccessRefreshToken_DeserializedForm => "ApplicationUserAccessRefreshToken_DeserializedForm",
-            InvalidArgument::ApplicationUserAccessToken_DeserializedForm => "ApplicationUserAccessToken_DeserializedForm",
+            InvalidArgument::ApplicationUserAccessRefreshToken_DeserializedForm => {
+                "ApplicationUserAccessRefreshToken_DeserializedForm"
+            }
+            InvalidArgument::ApplicationUserAccessToken_DeserializedForm => {
+                "ApplicationUserAccessToken_DeserializedForm"
+            }
             InvalidArgument::ApplicationUserAuthorizationToken_Value => "ApplicationUserAuthorizationToken_Value",
             InvalidArgument::ApplicationUserDevice_Id => "ApplicationUserDevice_Id",
             InvalidArgument::ApplicationUserRegistrationToken_Value => "ApplicationUserRegistrationToken_Value",
@@ -107,9 +179,12 @@ impl Format<InvalidArgument> for Formatter {
             InvalidArgument::Limit => "Limit",
             InvalidArgument::SearchParameter => "SearchParameter",
             InvalidArgument::SortOrderRepresentation => "SortOrderRepresentation",
-            InvalidArgument::Timestamp => "Timestamp"
+            InvalidArgument::Timestamp => "Timestamp",
         };
 
-        return format!("Invalid argument: {}.", message_part);
+        return format!(
+            "Invalid argument: {}.",
+            message_part
+        );
     }
 }

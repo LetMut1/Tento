@@ -3,21 +3,21 @@ use extern_crate::tokio_postgres::types::Type;
 
 pub struct PreparedStatementParameterConvertationResolver<'a> {
     parameter_registry: Vec<&'a (dyn ToSql + Sync)>,
-    parameter_type_registry: Vec<Type>
+    parameter_type_registry: Vec<Type>,
 }
 
 impl<'a> PreparedStatementParameterConvertationResolver<'a> {
     pub fn new() -> Self {
         return Self {
             parameter_registry: vec![],
-            parameter_type_registry: vec![]
+            parameter_type_registry: vec![],
         };
     }
 
     pub fn add_parameter<'b>(
-        &'b mut self, parameter_value:
-        &'a (dyn ToSql + Sync),
-        patameter_type: Type
+        &'b mut self,
+        parameter_value: &'a (dyn ToSql + Sync),
+        patameter_type: Type,
     ) -> &'b mut Self {
         self.parameter_registry.push(parameter_value);
         self.parameter_type_registry.push(patameter_type);

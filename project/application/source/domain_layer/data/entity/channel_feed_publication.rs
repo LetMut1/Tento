@@ -12,6 +12,5 @@ pub struct ChannelFeedPublication {
     status: u8,
     visible_from: String,
     delete_on: Option<String>,
-    created_at: String
-
+    created_at: String,
 }

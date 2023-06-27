@@ -1,3 +1,5 @@
+#![allow(clippy::unused_unit)]
+
 extern crate application;
 
 use application::application_layer::functionality::command_processor::create_fixtures_processor::CreateFixturesProcessor;
@@ -6,7 +8,10 @@ use application::infrastructure_layer::functionality::service::formatter::Format
 
 fn main() -> () {
     if let Err(error) = CreateFixturesProcessor::process() {
-        println!("{}", Formatter::prepare(&error));
+        println!(
+            "{}",
+            Formatter::prepare(&error)
+        );
     }
 
     return ();

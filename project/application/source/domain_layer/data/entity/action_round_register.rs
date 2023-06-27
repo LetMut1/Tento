@@ -1,10 +1,10 @@
 use std::borrow::Cow;
 
-pub use self::Route as ActionRoundRegister_Route;
-pub use self::Method as ActionRoundRegister_Method;
-pub use self::StatusCode as ActionRoundRegister_StatusCode;
 pub use self::Context as ActionRoundRegister_Context;
 pub use self::CreatedAt as ActionRoundRegister_CreatedAt;
+pub use self::Method as ActionRoundRegister_Method;
+pub use self::Route as ActionRoundRegister_Route;
+pub use self::StatusCode as ActionRoundRegister_StatusCode;
 
 pub struct Route<'a>(Cow<'a, str>);
 
@@ -30,7 +30,9 @@ impl<'a> Method<'a> {
     }
 }
 
-#[derive(Clone, Copy)]
+#[derive(
+    Clone, Copy
+)]
 pub struct StatusCode(i16);
 
 impl StatusCode {
@@ -62,5 +64,5 @@ pub struct ActionRoundRegister<'a> {
     method: Method<'a>,
     status_code: StatusCode,
     context: Option<Context>,
-    created_at: CreatedAt
+    created_at: CreatedAt,
 }

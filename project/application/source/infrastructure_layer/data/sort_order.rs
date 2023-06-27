@@ -1,6 +1,6 @@
 pub enum SortOrder {
     Asc,
-    Desc
+    Desc,
 }
 
 impl SortOrder {
@@ -11,16 +11,15 @@ impl SortOrder {
 
     pub fn new(sort_order_representation: i8) -> Self {
         return match sort_order_representation {
-            Self::ASC_REPRESENTATION => SortOrder::Asc,
             Self::DESC_REPRESENTATION => SortOrder::Desc,
-            _ => SortOrder::Asc
-        }
+            _ => SortOrder::Asc,
+        };
     }
 
     pub fn convert(self) -> &'static str {
         return match self {
             Self::Asc => Self::ASC,
-            Self::Desc => Self::DESC
-        }
+            Self::Desc => Self::DESC,
+        };
     }
 }

@@ -30,25 +30,88 @@ impl HttpRouteRegistry {
 #[cfg(feature = "manual_testing")]
 impl HttpRouteRegistry {
     const CONCATENATING_PART: &'static str = "_";
-    pub const VERSION_1__APPLICATION_USER__CHECK_NICKNAME_FOR_EXISTING_: &'static str = concatcp!(HttpRouteRegistry::VERSION_1__APPLICATION_USER__CHECK_NICKNAME_FOR_EXISTING, HttpRouteRegistry::CONCATENATING_PART);
-    pub const VERSION_1__APPLICATION_USER__CHECK_EMAIL_FOR_EXISTING_: &'static str = concatcp!(HttpRouteRegistry::VERSION_1__APPLICATION_USER__CHECK_EMAIL_FOR_EXISTING, HttpRouteRegistry::CONCATENATING_PART);
-    pub const VERSION_1__APPLICATION_USER__REGISTER_BY_FIRST_STEP_: &'static str = concatcp!(HttpRouteRegistry::VERSION_1__APPLICATION_USER__REGISTER_BY_FIRST_STEP, HttpRouteRegistry::CONCATENATING_PART);
-    pub const VERSION_1__APPLICATION_USER__REGISTER_BY_SECOND_STEP_: &'static str = concatcp!(HttpRouteRegistry::VERSION_1__APPLICATION_USER__REGISTER_BY_SECOND_STEP, HttpRouteRegistry::CONCATENATING_PART);
-    pub const VERSION_1__APPLICATION_USER__REGISTER_BY_LAST_STEP_: &'static str = concatcp!(HttpRouteRegistry::VERSION_1__APPLICATION_USER__REGISTER_BY_LAST_STEP, HttpRouteRegistry::CONCATENATING_PART);
-    pub const VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_REGISTER_: &'static str = concatcp!(HttpRouteRegistry::VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_REGISTER, HttpRouteRegistry::CONCATENATING_PART);
-    pub const VERSION_1__APPLICATION_USER__AUTHORIZE_BY_FIRST_STEP_: &'static str = concatcp!(HttpRouteRegistry::VERSION_1__APPLICATION_USER__AUTHORIZE_BY_FIRST_STEP, HttpRouteRegistry::CONCATENATING_PART);
-    pub const VERSION_1__APPLICATION_USER__AUTHORIZE_BY_LAST_STEP_: &'static str = concatcp!(HttpRouteRegistry::VERSION_1__APPLICATION_USER__AUTHORIZE_BY_LAST_STEP, HttpRouteRegistry::CONCATENATING_PART);
-    pub const VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_AUTHORIZE_: &'static str = concatcp!(HttpRouteRegistry::VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_AUTHORIZE, HttpRouteRegistry::CONCATENATING_PART);
-    pub const VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_FIRST_STEP_: &'static str = concatcp!(HttpRouteRegistry::VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_FIRST_STEP, HttpRouteRegistry::CONCATENATING_PART);
-    pub const VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_SECOND_STEP_: &'static str = concatcp!(HttpRouteRegistry::VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_SECOND_STEP, HttpRouteRegistry::CONCATENATING_PART);
-    pub const VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_LAST_STEP_: &'static str = concatcp!(HttpRouteRegistry::VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_LAST_STEP, HttpRouteRegistry::CONCATENATING_PART);
-    pub const VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_RESET_PASSWORD_: &'static str = concatcp!(HttpRouteRegistry::VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_RESET_PASSWORD, HttpRouteRegistry::CONCATENATING_PART);
-    pub const VERSION_1__APPLICATION_USER__REFRESH_APPLICATION_USER_ACCESS_TOKEN_: &'static str = concatcp!(HttpRouteRegistry::VERSION_1__APPLICATION_USER__REFRESH_APPLICATION_USER_ACCESS_TOKEN, HttpRouteRegistry::CONCATENATING_PART);
-    pub const VERSION_1__APPLICATION_USER__DEAUTHORIZE_FROM_ONE_DEVICE_: &'static str = concatcp!(HttpRouteRegistry::VERSION_1__APPLICATION_USER__DEAUTHORIZE_FROM_ONE_DEVICE, HttpRouteRegistry::CONCATENATING_PART);
-    pub const VERSION_1__APPLICATION_USER__DEAUTHORIZE_FROM_ALL_DEVICE_: &'static str = concatcp!(HttpRouteRegistry::VERSION_1__APPLICATION_USER__DEAUTHORIZE_FROM_ALL_DEVICE, HttpRouteRegistry::CONCATENATING_PART);
-    pub const VERSION_1__CHANNEL__GET_ONE_BY_ID_: &'static str = concatcp!(HttpRouteRegistry::VERSION_1__CHANNEL__GET_ONE_BY_ID, HttpRouteRegistry::CONCATENATING_PART);
-    pub const VERSION_1__CHANNEL__GET_MANY_BY_NAME_IN_SUBSCRIPTIONS_: &'static str = concatcp!(HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_BY_NAME_IN_SUBSCRIPTIONS, HttpRouteRegistry::CONCATENATING_PART);
-    pub const VERSION_1__CHANNEL__GET_MANY_BY_SUBSCRIPTION_: &'static str = concatcp!(HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_BY_SUBSCRIPTION, HttpRouteRegistry::CONCATENATING_PART);
-    pub const VERSION_1__CHANNEL__GET_MANY_PUBLIC_BY_NAME_: &'static str = concatcp!(HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_PUBLIC_BY_NAME, HttpRouteRegistry::CONCATENATING_PART);
-    pub const VERSION_1__CHANNEL_SUBSCRIPTION__CREATE_: &'static str = concatcp!(HttpRouteRegistry::VERSION_1__CHANNEL_SUBSCRIPTION__CREATE, HttpRouteRegistry::CONCATENATING_PART);
+    pub const VERSION_1__APPLICATION_USER__CHECK_NICKNAME_FOR_EXISTING_: &'static str = concatcp!(
+        HttpRouteRegistry::VERSION_1__APPLICATION_USER__CHECK_NICKNAME_FOR_EXISTING,
+        HttpRouteRegistry::CONCATENATING_PART
+    );
+    pub const VERSION_1__APPLICATION_USER__CHECK_EMAIL_FOR_EXISTING_: &'static str = concatcp!(
+        HttpRouteRegistry::VERSION_1__APPLICATION_USER__CHECK_EMAIL_FOR_EXISTING,
+        HttpRouteRegistry::CONCATENATING_PART
+    );
+    pub const VERSION_1__APPLICATION_USER__REGISTER_BY_FIRST_STEP_: &'static str = concatcp!(
+        HttpRouteRegistry::VERSION_1__APPLICATION_USER__REGISTER_BY_FIRST_STEP,
+        HttpRouteRegistry::CONCATENATING_PART
+    );
+    pub const VERSION_1__APPLICATION_USER__REGISTER_BY_SECOND_STEP_: &'static str = concatcp!(
+        HttpRouteRegistry::VERSION_1__APPLICATION_USER__REGISTER_BY_SECOND_STEP,
+        HttpRouteRegistry::CONCATENATING_PART
+    );
+    pub const VERSION_1__APPLICATION_USER__REGISTER_BY_LAST_STEP_: &'static str = concatcp!(
+        HttpRouteRegistry::VERSION_1__APPLICATION_USER__REGISTER_BY_LAST_STEP,
+        HttpRouteRegistry::CONCATENATING_PART
+    );
+    pub const VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_REGISTER_: &'static str = concatcp!(
+        HttpRouteRegistry::VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_REGISTER,
+        HttpRouteRegistry::CONCATENATING_PART
+    );
+    pub const VERSION_1__APPLICATION_USER__AUTHORIZE_BY_FIRST_STEP_: &'static str = concatcp!(
+        HttpRouteRegistry::VERSION_1__APPLICATION_USER__AUTHORIZE_BY_FIRST_STEP,
+        HttpRouteRegistry::CONCATENATING_PART
+    );
+    pub const VERSION_1__APPLICATION_USER__AUTHORIZE_BY_LAST_STEP_: &'static str = concatcp!(
+        HttpRouteRegistry::VERSION_1__APPLICATION_USER__AUTHORIZE_BY_LAST_STEP,
+        HttpRouteRegistry::CONCATENATING_PART
+    );
+    pub const VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_AUTHORIZE_: &'static str = concatcp!(
+        HttpRouteRegistry::VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_AUTHORIZE,
+        HttpRouteRegistry::CONCATENATING_PART
+    );
+    pub const VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_FIRST_STEP_: &'static str = concatcp!(
+        HttpRouteRegistry::VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_FIRST_STEP,
+        HttpRouteRegistry::CONCATENATING_PART
+    );
+    pub const VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_SECOND_STEP_: &'static str = concatcp!(
+        HttpRouteRegistry::VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_SECOND_STEP,
+        HttpRouteRegistry::CONCATENATING_PART
+    );
+    pub const VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_LAST_STEP_: &'static str = concatcp!(
+        HttpRouteRegistry::VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_LAST_STEP,
+        HttpRouteRegistry::CONCATENATING_PART
+    );
+    pub const VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_RESET_PASSWORD_: &'static str = concatcp!(
+        HttpRouteRegistry::VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_RESET_PASSWORD,
+        HttpRouteRegistry::CONCATENATING_PART
+    );
+    pub const VERSION_1__APPLICATION_USER__REFRESH_APPLICATION_USER_ACCESS_TOKEN_: &'static str = concatcp!(
+        HttpRouteRegistry::VERSION_1__APPLICATION_USER__REFRESH_APPLICATION_USER_ACCESS_TOKEN,
+        HttpRouteRegistry::CONCATENATING_PART
+    );
+    pub const VERSION_1__APPLICATION_USER__DEAUTHORIZE_FROM_ONE_DEVICE_: &'static str = concatcp!(
+        HttpRouteRegistry::VERSION_1__APPLICATION_USER__DEAUTHORIZE_FROM_ONE_DEVICE,
+        HttpRouteRegistry::CONCATENATING_PART
+    );
+    pub const VERSION_1__APPLICATION_USER__DEAUTHORIZE_FROM_ALL_DEVICE_: &'static str = concatcp!(
+        HttpRouteRegistry::VERSION_1__APPLICATION_USER__DEAUTHORIZE_FROM_ALL_DEVICE,
+        HttpRouteRegistry::CONCATENATING_PART
+    );
+    pub const VERSION_1__CHANNEL__GET_ONE_BY_ID_: &'static str = concatcp!(
+        HttpRouteRegistry::VERSION_1__CHANNEL__GET_ONE_BY_ID,
+        HttpRouteRegistry::CONCATENATING_PART
+    );
+    pub const VERSION_1__CHANNEL__GET_MANY_BY_NAME_IN_SUBSCRIPTIONS_: &'static str = concatcp!(
+        HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_BY_NAME_IN_SUBSCRIPTIONS,
+        HttpRouteRegistry::CONCATENATING_PART
+    );
+    pub const VERSION_1__CHANNEL__GET_MANY_BY_SUBSCRIPTION_: &'static str = concatcp!(
+        HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_BY_SUBSCRIPTION,
+        HttpRouteRegistry::CONCATENATING_PART
+    );
+    pub const VERSION_1__CHANNEL__GET_MANY_PUBLIC_BY_NAME_: &'static str = concatcp!(
+        HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_PUBLIC_BY_NAME,
+        HttpRouteRegistry::CONCATENATING_PART
+    );
+    pub const VERSION_1__CHANNEL_SUBSCRIPTION__CREATE_: &'static str = concatcp!(
+        HttpRouteRegistry::VERSION_1__CHANNEL_SUBSCRIPTION__CREATE,
+        HttpRouteRegistry::CONCATENATING_PART
+    );
 }

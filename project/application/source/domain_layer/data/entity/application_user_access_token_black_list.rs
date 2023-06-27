@@ -9,5 +9,5 @@ use super::application_user_access_token::ApplicationUserAccessToken_Id;
 /// Wherever the validity of a token is checked, you need to check if this token is in this
 /// entity, and block the action if it is.
 pub struct ApplicationUserAccessTokenBlackList {
-    application_user_access_token_id: ApplicationUserAccessToken_Id
+    application_user_access_token_id: ApplicationUserAccessToken_Id,
 }

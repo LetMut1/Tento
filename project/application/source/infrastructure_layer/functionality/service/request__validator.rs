@@ -1,7 +1,7 @@
+use super::validator::Validator;
 use crate::infrastructure_layer::functionality::service::creator::Creator;
 use crate::infrastructure_layer::functionality::service::creator::Response;
 use extern_crate::http::header;
-use super::validator::Validator;
 
 pub use crate::infrastructure_layer::data::control_type_registry::Request;
 
@@ -27,11 +27,14 @@ impl Validator<Request> {
             }
         };
 
-        if header_value_x_content_type_options.as_bytes() != Creator::<Response>::HEADER_VALUE_X_CONTENT_TYPE_OPTIONS.as_bytes() {
+        if header_value_x_content_type_options.as_bytes()
+            != Creator::<Response>::HEADER_VALUE_X_CONTENT_TYPE_OPTIONS.as_bytes()
+        {
             return false;
         }
 
-        if let None = header_map.get(header::CONTENT_LENGTH) {              // TODO  TODO TODO Как понять, что значение хедера верное? Если значение больше, чем есть на самом желе, то процесс обработки будет ждать дополнительную дату, пока значение из хедера и значение по факту из Боди не сравняется
+        if let None = header_map.get(header::CONTENT_LENGTH) {
+            // TODO  TODO TODO Как понять, что значение хедера верное? Если значение больше, чем есть на самом желе, то процесс обработки будет ждать дополнительную дату, пока значение из хедера и значение по факту из Боди не сравняется
             return false;
         }
 

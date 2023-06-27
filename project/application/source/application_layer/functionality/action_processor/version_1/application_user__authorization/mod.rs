@@ -1,4 +1,3 @@
-
 pub mod authorize_by_first_step;
 pub mod authorize_by_last_step;
 pub mod check_email_for_existing;

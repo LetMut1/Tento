@@ -1,13 +1,11 @@
-max_width = 240
-attr_fn_like_width = 40
-fn_call_width = 40
+max_width = 120
+attr_fn_like_width = 0
+fn_call_width = 5
 array_width = 0
 chain_width = 60
 single_line_if_else_max_width = 0
-inline_attribute_width = 0
 struct_lit_width = 0
 struct_variant_width = 0
-use_small_heuristics = "Off"
 merge_derives = false
 
 

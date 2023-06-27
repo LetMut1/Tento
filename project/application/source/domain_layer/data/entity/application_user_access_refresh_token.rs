@@ -1,16 +1,19 @@
+use super::application_user::ApplicationUser_Id;
+use super::application_user_access_token::ApplicationUserAccessToken_Id;
+use super::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::functionality::service::getter::Getter;
 use extern_crate::serde::Deserialize;
 use extern_crate::serde::Serialize;
 use std::borrow::Cow;
-use super::application_user_access_token::ApplicationUserAccessToken_Id;
-use super::application_user_device::ApplicationUserDevice_Id;
-use super::application_user::ApplicationUser_Id;
 
-pub use self::ObfuscationValue as ApplicationUserAccessRefreshToken_ObfuscationValue;
 pub use self::ExpiresAt as ApplicationUserAccessRefreshToken_ExpiresAt;
+pub use self::ObfuscationValue as ApplicationUserAccessRefreshToken_ObfuscationValue;
 pub use self::UpdatedAt as ApplicationUserAccessRefreshToken_UpdatedAt;
 
-#[derive(Serialize, Deserialize)]
+#[derive(
+    Serialize,
+    Deserialize
+)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct ObfuscationValue(String);
@@ -25,7 +28,12 @@ impl ObfuscationValue {
     }
 }
 
-#[derive(Clone, Copy, Serialize, Deserialize)]
+#[derive(
+    Clone,
+    Copy,
+    Serialize,
+    Deserialize
+)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct ExpiresAt(i64);
@@ -40,7 +48,12 @@ impl ExpiresAt {
     }
 }
 
-#[derive(Clone, Copy, Serialize, Deserialize)]
+#[derive(
+    Clone,
+    Copy,
+    Serialize,
+    Deserialize
+)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct UpdatedAt(i64);
@@ -55,7 +68,10 @@ impl UpdatedAt {
     }
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(
+    Serialize,
+    Deserialize
+)]
 #[serde(crate = "extern_crate::serde")]
 pub struct ApplicationUserAccessRefreshToken<'a> {
     application_user_id: ApplicationUser_Id,
@@ -63,7 +79,7 @@ pub struct ApplicationUserAccessRefreshToken<'a> {
     application_user_access_token_id: Cow<'a, ApplicationUserAccessToken_Id>,
     obfuscation_value: ObfuscationValue,
     expires_at: ExpiresAt,
-    updated_at: UpdatedAt
+    updated_at: UpdatedAt,
 }
 
 impl<'a> ApplicationUserAccessRefreshToken<'a> {
@@ -75,7 +91,7 @@ impl<'a> ApplicationUserAccessRefreshToken<'a> {
         application_user_access_token_id: Cow<'a, ApplicationUserAccessToken_Id>,
         obfuscation_value: ObfuscationValue,
         expires_at: ExpiresAt,
-        updated_at: UpdatedAt
+        updated_at: UpdatedAt,
     ) -> Self {
         return Self {
             application_user_id,
@@ -83,7 +99,7 @@ impl<'a> ApplicationUserAccessRefreshToken<'a> {
             application_user_access_token_id,
             obfuscation_value,
             expires_at,
-            updated_at
+            updated_at,
         };
     }
 
@@ -111,9 +127,9 @@ impl<'a> ApplicationUserAccessRefreshToken<'a> {
         return self.updated_at;
     }
 
-    pub fn set_application_user_access_token_id<'b >(
+    pub fn set_application_user_access_token_id<'b>(
         &'b mut self,
-        application_user_access_token_id: Cow<'a, ApplicationUserAccessToken_Id>
+        application_user_access_token_id: Cow<'a, ApplicationUserAccessToken_Id>,
     ) -> &'b mut Self {
         self.application_user_access_token_id = application_user_access_token_id;
 
@@ -179,5 +195,5 @@ pub struct ApplicationUserAccessRefreshToken_1 {
     application_user_access_token_id: ApplicationUserAccessToken_Id,
     obfuscation_value: ObfuscationValue,
     expires_at: ExpiresAt,
-    updated_at: UpdatedAt
+    updated_at: UpdatedAt,
 }

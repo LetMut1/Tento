@@ -3,7 +3,7 @@ use crate::infrastructure_layer::functionality::service::resolver::Resolver;
 use std::marker::PhantomData;
 
 pub struct ExpirationTimeChecker<S> {
-    _subject: PhantomData<S>
+    _subject: PhantomData<S>,
 }
 
 pub struct UnixTime;

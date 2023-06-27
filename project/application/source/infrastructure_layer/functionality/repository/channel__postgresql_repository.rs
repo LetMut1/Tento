@@ -1,5 +1,8 @@
-use crate::domain_layer::data::entity::channel::Channel_AccessModifier_;
+use super::postgresql_repository::PostgresqlRepository;
+use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
+use crate::domain_layer::data::entity::channel::Channel;
 use crate::domain_layer::data::entity::channel::Channel_AccessModifier;
+use crate::domain_layer::data::entity::channel::Channel_AccessModifier_;
 use crate::domain_layer::data::entity::channel::Channel_BackgroundImagePath;
 use crate::domain_layer::data::entity::channel::Channel_CoverImagePath;
 use crate::domain_layer::data::entity::channel::Channel_CreatedAt;
@@ -11,10 +14,8 @@ use crate::domain_layer::data::entity::channel::Channel_Name;
 use crate::domain_layer::data::entity::channel::Channel_Orientation;
 use crate::domain_layer::data::entity::channel::Channel_SubscribersQuantity;
 use crate::domain_layer::data::entity::channel::Channel_ViewingQuantity;
-use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
 use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier;
 use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier_;
-use crate::domain_layer::data::entity::channel::Channel;
 use crate::domain_layer::functionality::service::channel__access_modifier_resolver::Channel_AccessModifierResolver;
 use crate::domain_layer::functionality::service::channel__visability_modifier_resolver::Channel_VisabilityModifierResolver;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
@@ -24,16 +25,18 @@ use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 use extern_crate::serde::Serialize;
-use extern_crate::tokio_postgres::Client as Connection;
 use extern_crate::tokio_postgres::types::Type;
+use extern_crate::tokio_postgres::Client as Connection;
 use std::borrow::Cow;
-use super::postgresql_repository::PostgresqlRepository;
 
 #[cfg(feature = "manual_testing")]
 use extern_crate::serde::Deserialize;
 
 impl PostgresqlRepository<Channel<'_>> {
-    pub async fn create<'a>(database_1_connection: &'a Connection, insert: Insert) -> Result<Channel<'static>, ErrorAuditor> {
+    pub async fn create<'a>(
+        database_1_connection: &'a Connection,
+        insert: Insert,
+    ) -> Result<Channel<'static>, ErrorAuditor> {
         let channel_owner = insert.channel_owner.get();
 
         let channel_name = insert.channel_name.get();
@@ -42,23 +45,25 @@ impl PostgresqlRepository<Channel<'_>> {
 
         let channel_description = match insert.channel_description {
             Some(ref channel_description_) => Some(channel_description_.get()),
-            None => None
+            None => None,
         };
 
-        let channel_access_modifier = Channel_AccessModifierResolver::from_representation(insert.channel_access_modifier).get();
+        let channel_access_modifier =
+            Channel_AccessModifierResolver::from_representation(insert.channel_access_modifier).get();
 
-        let channel_visability_modifier = Channel_VisabilityModifierResolver::from_representation(insert.channel_visability_modifier).get();
+        let channel_visability_modifier =
+            Channel_VisabilityModifierResolver::from_representation(insert.channel_visability_modifier).get();
 
         let channel_orientation = insert.channel_orientation.get();
 
         let channel_cover_image_path = match insert.channel_cover_image_path {
             Some(ref channel_cover_image_path_) => Some(channel_cover_image_path_.get()),
-            None => None
+            None => None,
         };
 
         let channel_background_image_path = match insert.channel_background_image_path {
             Some(ref channel_background_image_path_) => Some(channel_background_image_path_.get()),
-            None => None
+            None => None,
         };
 
         let channel_subscribers_quantity = insert.channel_subscribers_quantity.get();
@@ -67,10 +72,10 @@ impl PostgresqlRepository<Channel<'_>> {
 
         let channel_viewing_quantity = insert.channel_viewing_quantity.get();
 
-        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
+        let mut prepared_statemant_parameter_convertation_resolver =
+            PreparedStatementParameterConvertationResolver::new();
 
-        let query =
-            "INSERT INTO public.channel AS c ( \
+        let query = "INSERT INTO public.channel AS c ( \
                 id, \
                 owner, \
                 name, \
@@ -106,45 +111,107 @@ impl PostgresqlRepository<Channel<'_>> {
                 c.created_at::TEXT AS ca;";
 
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&channel_owner, Type::INT8)
-            .add_parameter(&channel_name, Type::TEXT)
-            .add_parameter(&channel_linked_name, Type::TEXT)
-            .add_parameter(&channel_description, Type::TEXT)
-            .add_parameter(&channel_access_modifier, Type::INT2)
-            .add_parameter(&channel_visability_modifier, Type::INT2)
-            .add_parameter(&channel_orientation, Type::INT2_ARRAY)
-            .add_parameter(&channel_cover_image_path, Type::TEXT)
-            .add_parameter(&channel_background_image_path, Type::TEXT)
-            .add_parameter(&channel_subscribers_quantity, Type::INT8)
-            .add_parameter(&channel_marks_quantity, Type::INT8)
-            .add_parameter(&channel_viewing_quantity, Type::INT8);
+            .add_parameter(
+                &channel_owner,
+                Type::INT8,
+            )
+            .add_parameter(
+                &channel_name,
+                Type::TEXT,
+            )
+            .add_parameter(
+                &channel_linked_name,
+                Type::TEXT,
+            )
+            .add_parameter(
+                &channel_description,
+                Type::TEXT,
+            )
+            .add_parameter(
+                &channel_access_modifier,
+                Type::INT2,
+            )
+            .add_parameter(
+                &channel_visability_modifier,
+                Type::INT2,
+            )
+            .add_parameter(
+                &channel_orientation,
+                Type::INT2_ARRAY,
+            )
+            .add_parameter(
+                &channel_cover_image_path,
+                Type::TEXT,
+            )
+            .add_parameter(
+                &channel_background_image_path,
+                Type::TEXT,
+            )
+            .add_parameter(
+                &channel_subscribers_quantity,
+                Type::INT8,
+            )
+            .add_parameter(
+                &channel_marks_quantity,
+                Type::INT8,
+            )
+            .add_parameter(
+                &channel_viewing_quantity,
+                Type::INT8,
+            );
 
-        let statement = match database_1_connection.prepare_typed(
-            query,
-            prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
-        ).await {
+        let statement = match database_1_connection
+            .prepare_typed(
+                query,
+                prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
+            )
+            .await
+        {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::ResourceError {
+                                resource_error: ResourceError::PostgresqlError {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
                 );
             }
         };
 
-        let row_registry = match database_1_connection.query(
-            &statement,
-            prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
-        ).await {
+        let row_registry = match database_1_connection
+            .query(
+                &statement,
+                prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
+            )
+            .await
+        {
             Ok(row_registry_) => row_registry_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::ResourceError {
+                                resource_error: ResourceError::PostgresqlError {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
                 );
             }
         };
@@ -154,9 +221,19 @@ impl PostgresqlRepository<Channel<'_>> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::ResourceError {
+                                resource_error: ResourceError::PostgresqlError {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
                 );
             }
         };
@@ -166,9 +243,19 @@ impl PostgresqlRepository<Channel<'_>> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::ResourceError {
+                                resource_error: ResourceError::PostgresqlError {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
                 );
             }
         };
@@ -188,18 +275,21 @@ impl PostgresqlRepository<Channel<'_>> {
                 insert.channel_subscribers_quantity,
                 insert.channel_marks_quantity,
                 insert.channel_viewing_quantity,
-                channel_created_at
-            )
+                channel_created_at,
+            ),
         );
     }
 
-    pub async fn find_1<'a>(database_1_connection: &'a Connection, channel_id: Channel_Id) -> Result<Option<Channel<'static>>, ErrorAuditor> {
+    pub async fn find_1<'a>(
+        database_1_connection: &'a Connection,
+        channel_id: Channel_Id,
+    ) -> Result<Option<Channel<'static>>, ErrorAuditor> {
         let channel_id_ = channel_id.get();
 
-        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
+        let mut prepared_statemant_parameter_convertation_resolver =
+            PreparedStatementParameterConvertationResolver::new();
 
-        let query =
-            "SELECT \
+        let query = "SELECT \
                 c.owner AS ow, \
                 c.name AS n, \
                 c.linked_name AS ln, \
@@ -216,34 +306,63 @@ impl PostgresqlRepository<Channel<'_>> {
             FROM public.channel c \
             WHERE c.id = $1;";
 
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&channel_id_, Type::INT8);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(
+            &channel_id_,
+            Type::INT8,
+        );
 
-        let statement = match database_1_connection.prepare_typed(
-            query,
-            prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
-        ).await {
+        let statement = match database_1_connection
+            .prepare_typed(
+                query,
+                prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
+            )
+            .await
+        {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::ResourceError {
+                                resource_error: ResourceError::PostgresqlError {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
                 );
             }
         };
 
-        let row_registry = match database_1_connection.query(
-            &statement,
-            prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
-        ).await {
+        let row_registry = match database_1_connection
+            .query(
+                &statement,
+                prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
+            )
+            .await
+        {
             Ok(row_registry_) => row_registry_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::ResourceError {
+                                resource_error: ResourceError::PostgresqlError {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
                 );
             }
         };
@@ -257,9 +376,19 @@ impl PostgresqlRepository<Channel<'_>> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::ResourceError {
+                                resource_error: ResourceError::PostgresqlError {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
                 );
             }
         };
@@ -269,9 +398,19 @@ impl PostgresqlRepository<Channel<'_>> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::ResourceError {
+                                resource_error: ResourceError::PostgresqlError {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
                 );
             }
         };
@@ -281,26 +420,44 @@ impl PostgresqlRepository<Channel<'_>> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::ResourceError {
+                                resource_error: ResourceError::PostgresqlError {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
                 );
             }
         };
 
         let channel_description = match row_registry[0].try_get::<'_, usize, Option<String>>(3) {
-            Ok(channel_description_) => {
-                match channel_description_ {
-                    Some(channel_desciption__) => Some (Channel_Description::new(channel_desciption__)),
-                    None => None
-                }
+            Ok(channel_description_) => match channel_description_ {
+                Some(channel_desciption__) => Some(Channel_Description::new(channel_desciption__)),
+                None => None,
             },
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::ResourceError {
+                                resource_error: ResourceError::PostgresqlError {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
                 );
             }
         };
@@ -310,9 +467,19 @@ impl PostgresqlRepository<Channel<'_>> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::ResourceError {
+                                resource_error: ResourceError::PostgresqlError {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
                 );
             }
         };
@@ -322,9 +489,19 @@ impl PostgresqlRepository<Channel<'_>> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::ResourceError {
+                                resource_error: ResourceError::PostgresqlError {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
                 );
             }
         };
@@ -334,43 +511,71 @@ impl PostgresqlRepository<Channel<'_>> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::ResourceError {
+                                resource_error: ResourceError::PostgresqlError {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
                 );
             }
         };
 
         let channel_cover_image_path = match row_registry[0].try_get::<'_, usize, Option<String>>(7) {
-            Ok(channel_cover_image_path_) => {
-                match channel_cover_image_path_ {
-                    Some(channel_cover_image_path__) => Some(Channel_CoverImagePath::new(channel_cover_image_path__)),
-                    None => None
-                }
+            Ok(channel_cover_image_path_) => match channel_cover_image_path_ {
+                Some(channel_cover_image_path__) => Some(Channel_CoverImagePath::new(channel_cover_image_path__)),
+                None => None,
             },
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::ResourceError {
+                                resource_error: ResourceError::PostgresqlError {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
                 );
             }
         };
 
         let channel_background_image_path = match row_registry[0].try_get::<'_, usize, Option<String>>(8) {
-            Ok(channel_background_image_path_) => {
-                match channel_background_image_path_ {
-                    Some(channel_background_image_path__) => Some(Channel_BackgroundImagePath::new(channel_background_image_path__)),
-                    None => None
+            Ok(channel_background_image_path_) => match channel_background_image_path_ {
+                Some(channel_background_image_path__) => {
+                    Some(Channel_BackgroundImagePath::new(channel_background_image_path__))
                 }
+                None => None,
             },
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::ResourceError {
+                                resource_error: ResourceError::PostgresqlError {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
                 );
             }
         };
@@ -380,9 +585,19 @@ impl PostgresqlRepository<Channel<'_>> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::ResourceError {
+                                resource_error: ResourceError::PostgresqlError {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
                 );
             }
         };
@@ -392,9 +607,19 @@ impl PostgresqlRepository<Channel<'_>> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::ResourceError {
+                                resource_error: ResourceError::PostgresqlError {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
                 );
             }
         };
@@ -404,9 +629,19 @@ impl PostgresqlRepository<Channel<'_>> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::ResourceError {
+                                resource_error: ResourceError::PostgresqlError {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
                 );
             }
         };
@@ -416,42 +651,53 @@ impl PostgresqlRepository<Channel<'_>> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::ResourceError {
+                                resource_error: ResourceError::PostgresqlError {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
                 );
             }
         };
 
-        return Ok(
-            Some(
-                Channel::new(
-                    channel_id,
-                    channel_owner,
-                    Cow::Owned(channel_name),
-                    channel_linked_name,
-                    channel_description,
-                    channel_access_modifier,
-                    channel_visability_modifier,
-                    channel_orientation,
-                    channel_cover_image_path,
-                    channel_background_image_path,
-                    channel_subscribers_quantity,
-                    channel_marks_quantity,
-                    channel_viewing_quantity,
-                    channel_created_at
-                )
-            )
-        );
+        return Ok(Some(
+            Channel::new(
+                channel_id,
+                channel_owner,
+                Cow::Owned(channel_name),
+                channel_linked_name,
+                channel_description,
+                channel_access_modifier,
+                channel_visability_modifier,
+                channel_orientation,
+                channel_cover_image_path,
+                channel_background_image_path,
+                channel_subscribers_quantity,
+                channel_marks_quantity,
+                channel_viewing_quantity,
+                channel_created_at,
+            ),
+        ));
     }
 
-    pub async fn find_2<'a>(database_1_connection: &'a Connection, channel_name: &'a Channel_Name) -> Result<Option<Channel<'a>>, ErrorAuditor> {
+    pub async fn find_2<'a>(
+        database_1_connection: &'a Connection,
+        channel_name: &'a Channel_Name,
+    ) -> Result<Option<Channel<'a>>, ErrorAuditor> {
         let channel_name_ = channel_name.get();
 
-        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
+        let mut prepared_statemant_parameter_convertation_resolver =
+            PreparedStatementParameterConvertationResolver::new();
 
-        let query =
-            "SELECT \
+        let query = "SELECT \
                 c.id AS i, \
                 c.owner AS ow, \
                 c.linked_name AS ln, \
@@ -468,34 +714,63 @@ impl PostgresqlRepository<Channel<'_>> {
             FROM public.channel c \
             WHERE c.name = $1;";
 
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&channel_name_, Type::TEXT);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(
+            &channel_name_,
+            Type::TEXT,
+        );
 
-        let statement = match database_1_connection.prepare_typed(
-            query,
-            prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry()
-        ).await {
+        let statement = match database_1_connection
+            .prepare_typed(
+                query,
+                prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
+            )
+            .await
+        {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::ResourceError {
+                                resource_error: ResourceError::PostgresqlError {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
                 );
             }
         };
 
-        let row_registry = match database_1_connection.query(
-            &statement,
-            prepared_statemant_parameter_convertation_resolver.get_parameter_registry()
-        ).await {
+        let row_registry = match database_1_connection
+            .query(
+                &statement,
+                prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
+            )
+            .await
+        {
             Ok(row_registry_) => row_registry_,
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::ResourceError {
+                                resource_error: ResourceError::PostgresqlError {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
                 );
             }
         };
@@ -509,9 +784,19 @@ impl PostgresqlRepository<Channel<'_>> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::ResourceError {
+                                resource_error: ResourceError::PostgresqlError {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
                 );
             }
         };
@@ -521,9 +806,19 @@ impl PostgresqlRepository<Channel<'_>> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::ResourceError {
+                                resource_error: ResourceError::PostgresqlError {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
                 );
             }
         };
@@ -533,26 +828,44 @@ impl PostgresqlRepository<Channel<'_>> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::ResourceError {
+                                resource_error: ResourceError::PostgresqlError {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
                 );
             }
         };
 
         let channel_description = match row_registry[0].try_get::<'_, usize, Option<String>>(3) {
-            Ok(channel_description_) => {
-                match channel_description_ {
-                    Some(channel_desciption__) => Some (Channel_Description::new(channel_desciption__)),
-                    None => None
-                }
+            Ok(channel_description_) => match channel_description_ {
+                Some(channel_desciption__) => Some(Channel_Description::new(channel_desciption__)),
+                None => None,
             },
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::ResourceError {
+                                resource_error: ResourceError::PostgresqlError {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
                 );
             }
         };
@@ -562,9 +875,19 @@ impl PostgresqlRepository<Channel<'_>> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::ResourceError {
+                                resource_error: ResourceError::PostgresqlError {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
                 );
             }
         };
@@ -574,9 +897,19 @@ impl PostgresqlRepository<Channel<'_>> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::ResourceError {
+                                resource_error: ResourceError::PostgresqlError {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
                 );
             }
         };
@@ -586,43 +919,71 @@ impl PostgresqlRepository<Channel<'_>> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::ResourceError {
+                                resource_error: ResourceError::PostgresqlError {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
                 );
             }
         };
 
         let channel_cover_image_path = match row_registry[0].try_get::<'_, usize, Option<String>>(7) {
-            Ok(channel_cover_image_path_) => {
-                match channel_cover_image_path_ {
-                    Some(channel_cover_image_path__) => Some(Channel_CoverImagePath::new(channel_cover_image_path__)),
-                    None => None
-                }
+            Ok(channel_cover_image_path_) => match channel_cover_image_path_ {
+                Some(channel_cover_image_path__) => Some(Channel_CoverImagePath::new(channel_cover_image_path__)),
+                None => None,
             },
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::ResourceError {
+                                resource_error: ResourceError::PostgresqlError {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
                 );
             }
         };
 
         let channel_background_image_path = match row_registry[0].try_get::<'_, usize, Option<String>>(8) {
-            Ok(channel_background_image_path_) => {
-                match channel_background_image_path_ {
-                    Some(channel_background_image_path__) => Some(Channel_BackgroundImagePath::new(channel_background_image_path__)),
-                    None => None
+            Ok(channel_background_image_path_) => match channel_background_image_path_ {
+                Some(channel_background_image_path__) => {
+                    Some(Channel_BackgroundImagePath::new(channel_background_image_path__))
                 }
+                None => None,
             },
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::ResourceError {
+                                resource_error: ResourceError::PostgresqlError {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
                 );
             }
         };
@@ -632,9 +993,19 @@ impl PostgresqlRepository<Channel<'_>> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::ResourceError {
+                                resource_error: ResourceError::PostgresqlError {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
                 );
             }
         };
@@ -644,9 +1015,19 @@ impl PostgresqlRepository<Channel<'_>> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::ResourceError {
+                                resource_error: ResourceError::PostgresqlError {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
                 );
             }
         };
@@ -656,9 +1037,19 @@ impl PostgresqlRepository<Channel<'_>> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::ResourceError {
+                                resource_error: ResourceError::PostgresqlError {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
                 );
             }
         };
@@ -668,33 +1059,41 @@ impl PostgresqlRepository<Channel<'_>> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::ResourceError {
+                                resource_error: ResourceError::PostgresqlError {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
                 );
             }
         };
 
-        return Ok(
-            Some(
-                Channel::new(
-                    channel_id,
-                    channel_owner,
-                    Cow::Borrowed(channel_name),
-                    channel_linked_name,
-                    channel_description,
-                    channel_access_modifier,
-                    channel_visability_modifier,
-                    channel_orientation,
-                    channel_cover_image_path,
-                    channel_background_image_path,
-                    channel_subscribers_quantity,
-                    channel_marks_quantity,
-                    channel_viewing_quantity,
-                    channel_created_at
-                )
-            )
-        );
+        return Ok(Some(
+            Channel::new(
+                channel_id,
+                channel_owner,
+                Cow::Borrowed(channel_name),
+                channel_linked_name,
+                channel_description,
+                channel_access_modifier,
+                channel_visability_modifier,
+                channel_orientation,
+                channel_cover_image_path,
+                channel_background_image_path,
+                channel_subscribers_quantity,
+                channel_marks_quantity,
+                channel_viewing_quantity,
+                channel_created_at,
+            ),
+        ));
     }
 }
 
@@ -713,7 +1112,10 @@ pub struct Insert {
     pub channel_viewing_quantity: Channel_ViewingQuantity,
 }
 
-#[cfg_attr(feature = "manual_testing", derive(Deserialize))]
+#[cfg_attr(
+    feature = "manual_testing",
+    derive(Deserialize)
+)]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Channel1 {
@@ -723,5 +1125,5 @@ pub struct Channel1 {
     pub channel_access_modifier: Channel_AccessModifier,
     pub channel_visability_modifier: Channel_VisabilityModifier,
     pub channel_cover_image_path: Option<Channel_CoverImagePath>,
-    pub channel_background_image_path: Option<Channel_BackgroundImagePath>
+    pub channel_background_image_path: Option<Channel_BackgroundImagePath>,
 }

@@ -7,8 +7,13 @@ use std::fmt::Formatter;
 #[cfg(feature = "manual_testing")]
 use extern_crate::serde::Deserialize;
 
-#[cfg_attr(feature = "manual_testing", derive(Deserialize))]
-#[derive(Debug, Serialize)]
+#[cfg_attr(
+    feature = "manual_testing",
+    derive(Deserialize)
+)]
+#[derive(
+    Debug, Serialize
+)]
 #[serde(crate = "extern_crate::serde")]
 pub enum Void {}
 

@@ -1,17 +1,17 @@
+use super::resolver::Resolver;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use extern_crate::tokio_postgres::Client as Connection;
-use super::resolver::Resolver;
 
 pub use crate::infrastructure_layer::data::control_type_registry::PostgresqlTransaction;
 
 impl Resolver<PostgresqlTransaction> {
     pub async fn start<'a>(
         connection: &'a Connection,
-        transaction_isolation_level: TransactionIsolationLevel
+        transaction_isolation_level: TransactionIsolationLevel,
     ) -> Result<Self, ErrorAuditor> {
         let mut query = "START TRANSACTION ISOLATION LEVEL".to_string();
 
@@ -22,7 +22,10 @@ impl Resolver<PostgresqlTransaction> {
             TransactionIsolationLevel::RepeatableRead => {
                 query += " REPEATABLE READ, READ WRITE, NOT DEFERRABLE;";
             }
-            TransactionIsolationLevel::Serializable { read_only, deferrable } => {
+            TransactionIsolationLevel::Serializable {
+                read_only,
+                deferrable,
+            } => {
                 query += " SERIALIZABLE,";
                 if read_only {
                     query += " READ ONLY,";
@@ -37,12 +40,28 @@ impl Resolver<PostgresqlTransaction> {
             }
         }
 
-        if let Err(error) = connection.execute(query.as_str(), &[]).await {
+        if let Err(error) = connection
+            .execute(
+                query.as_str(),
+                &[],
+            )
+            .await
+        {
             return Err(
                 ErrorAuditor::new(
-                    BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                    BacktracePart::new(line!(), file!(), None)
-                )
+                    BaseError::RuntimeError {
+                        runtime_error: RuntimeError::ResourceError {
+                            resource_error: ResourceError::PostgresqlError {
+                                postgresql_error: error,
+                            },
+                        },
+                    },
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                ),
             );
         }
 
@@ -52,12 +71,28 @@ impl Resolver<PostgresqlTransaction> {
     pub async fn commit<'a>(self, connection: &'a Connection) -> Result<(), ErrorAuditor> {
         let query = "COMMIT;";
 
-        if let Err(error) = connection.execute(query, &[]).await {
+        if let Err(error) = connection
+            .execute(
+                query,
+                &[],
+            )
+            .await
+        {
             return Err(
                 ErrorAuditor::new(
-                    BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                    BacktracePart::new(line!(), file!(), None)
-                )
+                    BaseError::RuntimeError {
+                        runtime_error: RuntimeError::ResourceError {
+                            resource_error: ResourceError::PostgresqlError {
+                                postgresql_error: error,
+                            },
+                        },
+                    },
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                ),
             );
         }
 
@@ -67,12 +102,28 @@ impl Resolver<PostgresqlTransaction> {
     pub async fn rollback<'a>(self, connection: &'a Connection) -> Result<(), ErrorAuditor> {
         let query = "ROLLBACK;";
 
-        if let Err(error) = connection.execute(query, &[]).await {
+        if let Err(error) = connection
+            .execute(
+                query,
+                &[],
+            )
+            .await
+        {
             return Err(
                 ErrorAuditor::new(
-                    BaseError::RuntimeError { runtime_error: RuntimeError::ResourceError { resource_error: ResourceError::PostgresqlError { postgresql_error: error } } },
-                    BacktracePart::new(line!(), file!(), None)
-                )
+                    BaseError::RuntimeError {
+                        runtime_error: RuntimeError::ResourceError {
+                            resource_error: ResourceError::PostgresqlError {
+                                postgresql_error: error,
+                            },
+                        },
+                    },
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                ),
             );
         }
 
@@ -85,6 +136,6 @@ pub enum TransactionIsolationLevel {
     RepeatableRead,
     Serializable {
         read_only: bool,
-        deferrable: bool
-    }
+        deferrable: bool,
+    },
 }

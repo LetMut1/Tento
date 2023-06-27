@@ -1,15 +1,15 @@
 use crate::domain_layer::data::entity::action_round_register::ActionRoundRegister;
 use crate::domain_layer::functionality::service::writer::Writer;
-use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::control_type_registry::Request;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
+use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::functionality::service::creator::Creator;
 use crate::infrastructure_layer::functionality::service::creator::Response;
-use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8::Pool;
-use extern_crate::tokio_postgres::Socket;
+use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::tokio_postgres::tls::MakeTlsConnect;
 use extern_crate::tokio_postgres::tls::TlsConnect;
+use extern_crate::tokio_postgres::Socket;
 use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
@@ -19,20 +19,31 @@ pub struct ActionProcessor;
 impl ActionProcessor {
     pub async fn process<'a, T>(
         request: Request,
-        database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>
+        database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
     ) -> Response
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
-        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
         let response = Creator::<Response>::create_not_found();
 
         if let Err(mut error) = Writer::<ActionRoundRegister>::write_with_context(
-            database_2_postgresql_connection_pool, &request, &response, &InvalidArgument::HttpRoute
-        ).await {
-            error.add_backtrace_part(BacktracePart::new(line!(), file!(), None));
+            database_2_postgresql_connection_pool,
+            &request,
+            &response,
+            &InvalidArgument::HttpRoute,
+        )
+        .await
+        {
+            error.add_backtrace_part(
+                BacktracePart::new(
+                    line!(),
+                    file!(),
+                    None,
+                ),
+            );
 
             unreachable!(
                 "{}. TODO: Write in concurrent way. It is also necessary that the write

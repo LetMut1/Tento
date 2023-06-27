@@ -17,21 +17,17 @@ impl CreatedAt {
 pub struct ChannelInnerLink {
     from: Channel_Id,
     to: Channel_Id,
-    created_at: CreatedAt
+    created_at: CreatedAt,
 }
 
 impl ChannelInnerLink {
     pub const MAXIMUM_QUANTITY: i16 = 10;
 
-    pub fn new(
-        from: Channel_Id,
-        to: Channel_Id,
-        created_at: CreatedAt
-    ) -> Self {
+    pub fn new(from: Channel_Id, to: Channel_Id, created_at: CreatedAt) -> Self {
         return Self {
             from,
             to,
-            created_at
+            created_at,
         };
     }
 }

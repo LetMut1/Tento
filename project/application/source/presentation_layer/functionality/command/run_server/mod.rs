@@ -1,3 +1,5 @@
+#![allow(clippy::unused_unit)]
+
 extern crate application;
 
 use application::application_layer::functionality::command_processor::run_server_processor::RunServerProcessor;
@@ -10,22 +12,15 @@ fn main() -> () {
             println!("Graceful shutdown.");
         }
         Err(error) => {
-            println!("{}", Formatter::prepare(&error));
+            println!(
+                "{}",
+                Formatter::prepare(&error)
+            );
         }
     }
 
     return ();
 }
-
-
-
-
-
-
-
-
-
-
 
 // Основной TODO лист, помимо TODO, проставленных в коде:
 
@@ -130,11 +125,9 @@ fn main() -> () {
 
 // clippy/ cargo-fmt.
 
-
 // TODO Возвращать количество возможных отправок инвалидного кода валидации.
 // Переделать формат ответа на Enam.
 // Написать сервис для интеграции с мобильными устройствами.
-
 
 // СДелал оптимизацию запросов для:
 // - application_user_authorization. // ToDo ДОделать остальные. и сделать репозиторий по новым правилам.

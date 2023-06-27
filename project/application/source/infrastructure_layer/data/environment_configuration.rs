@@ -2,13 +2,13 @@ use extern_crate::serde::Deserialize;
 
 pub struct EnvironmentConfiguration {
     pub environment: Environment,
-    pub environment_file_configuration: EnvironmentFileConfiguration
+    pub environment_file_configuration: EnvironmentFileConfiguration,
 }
 
 pub enum Environment {
     Production,
     Development,
-    LocalDevelopment
+    LocalDevelopment,
 }
 
 #[derive(Deserialize)]
@@ -16,14 +16,14 @@ pub enum Environment {
 pub struct EnvironmentFileConfiguration {
     pub application: Application,
     pub resource: Resource,
-    pub encryption: Encryption
+    pub encryption: Encryption,
 }
 
 #[derive(Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Application {
     pub tcp: Tcp,
-    pub http: Http
+    pub http: Http,
 }
 
 #[derive(Deserialize)]
@@ -32,7 +32,7 @@ pub struct Tcp {
     pub socket_address: String_,
     pub nodelay: Bool,
     pub sleep_on_accept_errors: Bool,
-    pub keepalive_seconds: U64Active
+    pub keepalive_seconds: U64Active,
 }
 
 #[derive(Deserialize)]
@@ -44,7 +44,7 @@ pub struct Http {
     pub maximum_frame_size: U32,
     pub maximum_sending_buffer_size: U32,
     pub http2_only: Bool,
-    pub keep_alive: KeepAlive
+    pub keep_alive: KeepAlive,
 }
 
 #[derive(Deserialize)]
@@ -52,7 +52,7 @@ pub struct Http {
 pub struct KeepAlive {
     pub is_active: bool,
     pub interval_seconds: U64,
-    pub timeout_seconds: U64
+    pub timeout_seconds: U64,
 }
 
 #[derive(Deserialize)]
@@ -60,68 +60,68 @@ pub struct KeepAlive {
 pub struct Resource {
     pub postgresql: Postgresql,
     pub redis: Redis,
-    pub email_server: EmailServer
+    pub email_server: EmailServer,
 }
 
 #[derive(Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Postgresql {
     pub database_1_url: String_,
-    pub database_2_url: String_
+    pub database_2_url: String_,
 }
 
 #[derive(Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Redis {
-    pub database_1_url: String_
+    pub database_1_url: String_,
 }
 
 #[derive(Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct EmailServer {
-    pub socket_address: String_
+    pub socket_address: String_,
 }
 
 #[derive(Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Encryption {
-    pub private_key: PrivateKey
+    pub private_key: PrivateKey,
 }
 
 #[derive(Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct PrivateKey {
     pub application_user_access_token: String_,
-    pub application_user_access_refresh_token: String_
+    pub application_user_access_refresh_token: String_,
 }
 
 #[derive(Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct String_ {
-    pub value: String
+    pub value: String,
 }
 
 #[derive(Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Bool {
-    pub value: bool
+    pub value: bool,
 }
 
 #[derive(Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct U64Active {
     pub value: u64,
-    pub is_active: bool
+    pub is_active: bool,
 }
 
 #[derive(Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct U64 {
-    pub value: u64
+    pub value: u64,
 }
 
 #[derive(Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct U32 {
-    pub value: u32
+    pub value: u32,
 }

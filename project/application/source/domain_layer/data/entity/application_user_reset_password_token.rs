@@ -1,17 +1,20 @@
+use super::application_user::ApplicationUser_Id;
+use super::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::functionality::service::getter::Getter;
 use extern_crate::serde::Deserialize;
 use extern_crate::serde::Serialize;
 use std::borrow::Cow;
-use super::application_user_device::ApplicationUserDevice_Id;
-use super::application_user::ApplicationUser_Id;
 
+pub use self::CanBeResentFrom as ApplicationUserResetPasswordToken_CanBeResentFrom;
+pub use self::ExpiresAt as ApplicationUserResetPasswordToken_ExpiresAt;
+pub use self::IsApproved as ApplicationUserResetPasswordToken_IsApproved;
 pub use self::Value as ApplicationUserResetPasswordToken_Value;
 pub use self::WrongEnterTriesQuantity as ApplicationUserResetPasswordToken_WrongEnterTriesQuantity;
-pub use self::IsApproved as ApplicationUserResetPasswordToken_IsApproved;
-pub use self::ExpiresAt as ApplicationUserResetPasswordToken_ExpiresAt;
-pub use self::CanBeResentFrom as ApplicationUserResetPasswordToken_CanBeResentFrom;
 
-#[cfg_attr(feature = "manual_testing", derive(Serialize))]
+#[cfg_attr(
+    feature = "manual_testing",
+    derive(Serialize)
+)]
 #[derive(Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
@@ -27,7 +30,9 @@ impl Value {
     }
 }
 
-#[derive(Clone, Copy)]
+#[derive(
+    Clone, Copy
+)]
 pub struct WrongEnterTriesQuantity(i16);
 
 impl WrongEnterTriesQuantity {
@@ -40,7 +45,9 @@ impl WrongEnterTriesQuantity {
     }
 }
 
-#[derive(Clone, Copy)]
+#[derive(
+    Clone, Copy
+)]
 pub struct IsApproved(bool);
 
 impl IsApproved {
@@ -53,7 +60,9 @@ impl IsApproved {
     }
 }
 
-#[derive(Clone, Copy)]
+#[derive(
+    Clone, Copy
+)]
 pub struct ExpiresAt(i64);
 
 impl ExpiresAt {
@@ -66,8 +75,13 @@ impl ExpiresAt {
     }
 }
 
-#[cfg_attr(feature = "manual_testing", derive(Deserialize))]
-#[derive(Clone, Copy, Serialize)]
+#[cfg_attr(
+    feature = "manual_testing",
+    derive(Deserialize)
+)]
+#[derive(
+    Clone, Copy, Serialize
+)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct CanBeResentFrom(i64);
@@ -89,7 +103,7 @@ pub struct ApplicationUserResetPasswordToken<'a> {
     wrong_enter_tries_quantity: WrongEnterTriesQuantity,
     is_approved: IsApproved,
     expires_at: ExpiresAt,
-    can_be_resent_from: CanBeResentFrom
+    can_be_resent_from: CanBeResentFrom,
 }
 
 impl<'a> ApplicationUserResetPasswordToken<'a> {
@@ -104,7 +118,7 @@ impl<'a> ApplicationUserResetPasswordToken<'a> {
         wrong_enter_tries_quantity: WrongEnterTriesQuantity,
         is_approved: IsApproved,
         expires_at: ExpiresAt,
-        can_be_resent_from: CanBeResentFrom
+        can_be_resent_from: CanBeResentFrom,
     ) -> Self {
         return Self {
             application_user_id,
@@ -113,7 +127,7 @@ impl<'a> ApplicationUserResetPasswordToken<'a> {
             wrong_enter_tries_quantity,
             is_approved,
             expires_at,
-            can_be_resent_from
+            can_be_resent_from,
         };
     }
 
@@ -153,7 +167,7 @@ impl<'a> ApplicationUserResetPasswordToken<'a> {
 
     pub fn set_wrong_enter_tries_quantity<'b>(
         &'b mut self,
-        wrong_enter_tries_quantity: WrongEnterTriesQuantity
+        wrong_enter_tries_quantity: WrongEnterTriesQuantity,
     ) -> &'b mut Self {
         self.wrong_enter_tries_quantity = wrong_enter_tries_quantity;
 
@@ -226,74 +240,74 @@ pub struct ApplicationUserResetPasswordToken_1 {
     wrong_enter_tries_quantity: WrongEnterTriesQuantity,
     is_approved: IsApproved,
     expires_at: ExpiresAt,
-    can_be_resent_from: CanBeResentFrom
+    can_be_resent_from: CanBeResentFrom,
 }
 
-impl<'a> ApplicationUserResetPasswordToken_1 {
+impl ApplicationUserResetPasswordToken_1 {
     pub fn new(
         value: Value,
         wrong_enter_tries_quantity: WrongEnterTriesQuantity,
         is_approved: IsApproved,
         expires_at: ExpiresAt,
-        can_be_resent_from: CanBeResentFrom
+        can_be_resent_from: CanBeResentFrom,
     ) -> Self {
         return Self {
             value,
             wrong_enter_tries_quantity,
             is_approved,
             expires_at,
-            can_be_resent_from
+            can_be_resent_from,
         };
     }
 
-    pub fn get_value<'b>(&'b self) -> &'b Value {
+    pub fn get_value<'a>(&'a self) -> &'a Value {
         return &self.value;
     }
 
-    pub fn get_wrong_enter_tries_quantity<'b>(&'b self) -> WrongEnterTriesQuantity {
+    pub fn get_wrong_enter_tries_quantity<'a>(&'a self) -> WrongEnterTriesQuantity {
         return self.wrong_enter_tries_quantity;
     }
 
-    pub fn get_is_approved<'b>(&'b self) -> IsApproved {
+    pub fn get_is_approved<'a>(&'a self) -> IsApproved {
         return self.is_approved;
     }
 
-    pub fn get_expires_at<'b>(&'b self) -> ExpiresAt {
+    pub fn get_expires_at<'a>(&'a self) -> ExpiresAt {
         return self.expires_at;
     }
 
-    pub fn get_can_be_resent_from<'b>(&'b self) -> CanBeResentFrom {
+    pub fn get_can_be_resent_from<'a>(&'a self) -> CanBeResentFrom {
         return self.can_be_resent_from;
     }
 
-    pub fn set_value<'b>(&'b mut self, value: Value) -> &'b mut Self {
+    pub fn set_value<'a>(&'a mut self, value: Value) -> &'a mut Self {
         self.value = value;
 
         return self;
     }
 
-    pub fn set_wrong_enter_tries_quantity<'b>(
-        &'b mut self,
-        wrong_enter_tries_quantity: WrongEnterTriesQuantity
-    ) -> &'b mut Self {
+    pub fn set_wrong_enter_tries_quantity<'a>(
+        &'a mut self,
+        wrong_enter_tries_quantity: WrongEnterTriesQuantity,
+    ) -> &'a mut Self {
         self.wrong_enter_tries_quantity = wrong_enter_tries_quantity;
 
         return self;
     }
 
-    pub fn set_is_approved<'b>(&'b mut self, is_approved: IsApproved) -> &'b mut Self {
+    pub fn set_is_approved<'a>(&'a mut self, is_approved: IsApproved) -> &'a mut Self {
         self.is_approved = is_approved;
 
         return self;
     }
 
-    pub fn set_expires_at<'b>(&'b mut self, expires_at: ExpiresAt) -> &'b mut Self {
+    pub fn set_expires_at<'a>(&'a mut self, expires_at: ExpiresAt) -> &'a mut Self {
         self.expires_at = expires_at;
 
         return self;
     }
 
-    pub fn set_can_be_resent_from<'b>(&'b mut self, can_be_resent_from: CanBeResentFrom) -> &'b mut Self {
+    pub fn set_can_be_resent_from<'a>(&'a mut self, can_be_resent_from: CanBeResentFrom) -> &'a mut Self {
         self.can_be_resent_from = can_be_resent_from;
 
         return self;
@@ -331,14 +345,14 @@ impl<'a> Getter<'a, CanBeResentFrom> for ApplicationUserResetPasswordToken_1 {
 }
 
 pub struct ApplicationUserResetPasswordToken_2 {
-    can_be_resent_from: CanBeResentFrom
+    can_be_resent_from: CanBeResentFrom,
 }
 
 pub struct ApplicationUserResetPasswordToken_3 {
     value: Value,
     wrong_enter_tries_quantity: WrongEnterTriesQuantity,
     is_approved: IsApproved,
-    expires_at: ExpiresAt
+    expires_at: ExpiresAt,
 }
 
 impl ApplicationUserResetPasswordToken_3 {
@@ -346,13 +360,13 @@ impl ApplicationUserResetPasswordToken_3 {
         value: Value,
         wrong_enter_tries_quantity: WrongEnterTriesQuantity,
         is_approved: IsApproved,
-        expires_at: ExpiresAt
+        expires_at: ExpiresAt,
     ) -> Self {
         return Self {
             value,
             wrong_enter_tries_quantity,
             is_approved,
-            expires_at
+            expires_at,
         };
     }
 
@@ -380,7 +394,7 @@ impl ApplicationUserResetPasswordToken_3 {
 
     pub fn set_wrong_enter_tries_quantity<'b>(
         &'b mut self,
-        wrong_enter_tries_quantity: WrongEnterTriesQuantity
+        wrong_enter_tries_quantity: WrongEnterTriesQuantity,
     ) -> &'b mut Self {
         self.wrong_enter_tries_quantity = wrong_enter_tries_quantity;
 
@@ -425,52 +439,52 @@ impl<'a> Getter<'a, ExpiresAt> for ApplicationUserResetPasswordToken_3 {
 }
 
 pub struct ApplicationUserResetPasswordToken_4 {
-    wrong_enter_tries_quantity: WrongEnterTriesQuantity
+    wrong_enter_tries_quantity: WrongEnterTriesQuantity,
 }
 
 pub struct ApplicationUserResetPasswordToken_5 {
-    is_approved: IsApproved
+    is_approved: IsApproved,
 }
 
 pub struct ApplicationUserResetPasswordToken_6 {
     value: Value,
     is_approved: IsApproved,
     expires_at: ExpiresAt,
-    can_be_resent_from: CanBeResentFrom
+    can_be_resent_from: CanBeResentFrom,
 }
 
-impl<'a> ApplicationUserResetPasswordToken_6 {
+impl ApplicationUserResetPasswordToken_6 {
     pub fn new(
         value: Value,
         is_approved: IsApproved,
         expires_at: ExpiresAt,
-        can_be_resent_from: CanBeResentFrom
+        can_be_resent_from: CanBeResentFrom,
     ) -> Self {
         return Self {
             value,
             is_approved,
             expires_at,
-            can_be_resent_from
+            can_be_resent_from,
         };
     }
 
-    pub fn get_value<'b>(&'b self) -> &'b Value {
+    pub fn get_value<'a>(&'a self) -> &'a Value {
         return &self.value;
     }
 
-    pub fn get_is_approved<'b>(&'b self) -> IsApproved {
+    pub fn get_is_approved<'a>(&'a self) -> IsApproved {
         return self.is_approved;
     }
 
-    pub fn get_expires_at<'b>(&'b self) -> ExpiresAt {
+    pub fn get_expires_at<'a>(&'a self) -> ExpiresAt {
         return self.expires_at;
     }
 
-    pub fn get_can_be_resent_from<'b>(&'b self) -> CanBeResentFrom {
+    pub fn get_can_be_resent_from<'a>(&'a self) -> CanBeResentFrom {
         return self.can_be_resent_from;
     }
 
-    pub fn set_can_be_resent_from<'b>(&'b mut self, can_be_resent_from: CanBeResentFrom) -> &'b mut Self {
+    pub fn set_can_be_resent_from<'a>(&'a mut self, can_be_resent_from: CanBeResentFrom) -> &'a mut Self {
         self.can_be_resent_from = can_be_resent_from;
 
         return self;

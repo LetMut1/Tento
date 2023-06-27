@@ -1,6 +1,6 @@
 use extern_crate::bb8::RunError as Bb8Error;
-use extern_crate::lettre_email::error::Error as EmailError;
 use extern_crate::lettre::smtp::error::Error as SmtpError;
+use extern_crate::lettre_email::error::Error as EmailError;
 use extern_crate::redis::RedisError;
 use extern_crate::tokio_postgres::Error as PostgresqlError;
 use std::error::Error;
@@ -11,14 +11,14 @@ use std::fmt::Formatter;
 #[derive(Debug)]
 pub struct ErrorAuditor {
     base_error: BaseError,
-    backtrace: Backtrace
+    backtrace: Backtrace,
 }
 
 impl ErrorAuditor {
     pub fn new(base_error: BaseError, backtrace_part: BacktracePart) -> Self {
         return Self {
             base_error,
-            backtrace: Backtrace::new(backtrace_part)
+            backtrace: Backtrace::new(backtrace_part),
         };
     }
 
@@ -48,20 +48,24 @@ impl Error for ErrorAuditor {}
 #[derive(Debug)]
 pub enum BaseError {
     LogicError {
-        message: &'static str
+        message: &'static str,
     },
     RuntimeError {
-        runtime_error: RuntimeError
-    }
+        runtime_error: RuntimeError,
+    },
 }
 
 impl BaseError {
     pub fn create_unreachable_state() -> Self {
-        return Self::LogicError { message: "Unreachable state." }
+        return Self::LogicError {
+            message: "Unreachable state.",
+        };
     }
 
     pub fn create_out_of_range() -> Self {
-        return Self::LogicError { message: "Out of range." }
+        return Self::LogicError {
+            message: "Out of range.",
+        };
     }
 }
 
@@ -74,11 +78,11 @@ impl Display for BaseError {
 #[derive(Debug)]
 pub enum RuntimeError {
     OtherError {
-        other_error: OtherError
+        other_error: OtherError,
     },
     ResourceError {
-        resource_error: ResourceError
-    }
+        resource_error: ResourceError,
+    },
 }
 
 impl Display for RuntimeError {
@@ -89,16 +93,19 @@ impl Display for RuntimeError {
 
 #[derive(Debug)]
 pub struct OtherError {
-    message: String
+    message: String,
 }
 
 impl OtherError {
     pub fn new<E>(error: E) -> Self
     where
-        E: Error
+        E: Error,
     {
         return Self {
-            message: format!("{}", error)
+            message: format!(
+                "{}",
+                error
+            ),
         };
     }
 
@@ -116,20 +123,20 @@ impl Display for OtherError {
 #[derive(Debug)]
 pub enum ResourceError {
     ConnectionPoolRedisError {
-        bb8_redis_error: Bb8Error<RedisError>
+        bb8_redis_error: Bb8Error<RedisError>,
     },
     ConnectionPoolPostgresqlError {
-        bb8_postgresql_error: Bb8Error<PostgresqlError>
+        bb8_postgresql_error: Bb8Error<PostgresqlError>,
     },
     EmailServerError {
-        email_server_error: EmailServerError
+        email_server_error: EmailServerError,
     },
     PostgresqlError {
-        postgresql_error: PostgresqlError
+        postgresql_error: PostgresqlError,
     },
     RedisError {
-        redis_error: RedisError
-    }
+        redis_error: RedisError,
+    },
 }
 
 impl Display for ResourceError {
@@ -141,11 +148,11 @@ impl Display for ResourceError {
 #[derive(Debug)]
 pub enum EmailServerError {
     EmailError {
-        email_error: EmailError
+        email_error: EmailError,
     },
     SmtpError {
-        smtp_error: SmtpError
-    }
+        smtp_error: SmtpError,
+    },
 }
 
 impl Display for EmailServerError {
@@ -156,13 +163,13 @@ impl Display for EmailServerError {
 
 #[derive(Debug)]
 pub struct Backtrace {
-    backtrace_part_registry: Vec<BacktracePart>
+    backtrace_part_registry: Vec<BacktracePart>,
 }
 
 impl Backtrace {
     pub fn new(backtrace_part: BacktracePart) -> Self {
         return Self {
-            backtrace_part_registry: vec![backtrace_part]
+            backtrace_part_registry: vec![backtrace_part],
         };
     }
 
@@ -187,7 +194,7 @@ impl Display for Backtrace {
 pub struct BacktracePart {
     line_number: u32,
     file_path: &'static str,
-    context: Option<String>
+    context: Option<String>,
 }
 
 impl BacktracePart {
@@ -195,8 +202,8 @@ impl BacktracePart {
         return Self {
             line_number,
             file_path,
-            context
-        }
+            context,
+        };
     }
 
     pub fn get_line_number<'a>(&'a self) -> u32 {

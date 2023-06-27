@@ -4,14 +4,19 @@ use extern_crate::serde::Serialize;
 use std::borrow::Cow;
 use std::marker::PhantomData;
 
-pub use self::Id as ApplicationUser_Id;
+pub use self::CreatedAt as ApplicationUser_CreatedAt;
 pub use self::Email as ApplicationUser_Email;
+pub use self::Id as ApplicationUser_Id;
 pub use self::Nickname as ApplicationUser_Nickname;
 pub use self::Password as ApplicationUser_Password;
 pub use self::PasswordHash as ApplicationUser_PasswordHash;
-pub use self::CreatedAt as ApplicationUser_CreatedAt;
 
-#[derive(Clone, Copy, Serialize, Deserialize)]
+#[derive(
+    Clone,
+    Copy,
+    Serialize,
+    Deserialize
+)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct Id(i64);
@@ -26,8 +31,14 @@ impl Id {
     }
 }
 
-#[cfg_attr(feature = "manual_testing", derive(Serialize))]
-#[derive(Clone, Deserialize)]
+#[cfg_attr(
+    feature = "manual_testing",
+    derive(Serialize)
+)]
+#[derive(
+    Clone,
+    Deserialize
+)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct Email(String);
@@ -46,8 +57,14 @@ impl Email {
     }
 }
 
-#[cfg_attr(feature = "manual_testing", derive(Serialize))]
-#[derive(Clone, Deserialize)]
+#[cfg_attr(
+    feature = "manual_testing",
+    derive(Serialize)
+)]
+#[derive(
+    Clone,
+    Deserialize
+)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct Nickname(String);
@@ -62,7 +79,10 @@ impl Nickname {
     }
 }
 
-#[cfg_attr(feature = "manual_testing", derive(Serialize))]
+#[cfg_attr(
+    feature = "manual_testing",
+    derive(Serialize)
+)]
 #[derive(Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
@@ -109,7 +129,7 @@ pub struct ApplicationUser<'a> {
     nickname: Cow<'a, Nickname>,
     _password: PhantomData<Password>,
     password_hash: PasswordHash,
-    created_at: CreatedAt
+    created_at: CreatedAt,
 }
 
 impl<'a> ApplicationUser<'a> {
@@ -118,7 +138,7 @@ impl<'a> ApplicationUser<'a> {
         email: Cow<'a, Email>,
         nickname: Cow<'a, Nickname>,
         password_hash: PasswordHash,
-        created_at: CreatedAt
+        created_at: CreatedAt,
     ) -> Self {
         return Self {
             id,
@@ -126,7 +146,7 @@ impl<'a> ApplicationUser<'a> {
             nickname,
             _password: PhantomData,
             password_hash,
-            created_at
+            created_at,
         };
     }
 
@@ -147,7 +167,7 @@ impl<'a> ApplicationUser<'a> {
     }
 
     pub fn get_created_at<'b>(&'b self) -> &'b CreatedAt {
-        return &self.created_at
+        return &self.created_at;
     }
 
     pub fn set_password_hash<'b>(&'b mut self, password_hash: PasswordHash) -> &'b mut Self {
@@ -190,19 +210,15 @@ impl<'a> Getter<'a, &'a CreatedAt> for ApplicationUser<'_> {
 pub struct ApplicationUser_1 {
     id: Id,
     email: Email,
-    password_hash: PasswordHash
+    password_hash: PasswordHash,
 }
 
 impl ApplicationUser_1 {
-    pub fn new(
-        id: Id,
-        email: Email,
-        password_hash: PasswordHash
-    ) -> Self {
+    pub fn new(id: Id, email: Email, password_hash: PasswordHash) -> Self {
         return Self {
             id,
             email,
-            password_hash
+            password_hash,
         };
     }
 
@@ -221,17 +237,14 @@ impl ApplicationUser_1 {
 
 pub struct ApplicationUser_2 {
     id: Id,
-    password_hash: PasswordHash
+    password_hash: PasswordHash,
 }
 
 impl ApplicationUser_2 {
-    pub fn new(
-        id: Id,
-        password_hash: PasswordHash
-    ) -> Self {
+    pub fn new(id: Id, password_hash: PasswordHash) -> Self {
         return Self {
             id,
-            password_hash
+            password_hash,
         };
     }
 
@@ -245,15 +258,13 @@ impl ApplicationUser_2 {
 }
 
 pub struct ApplicationUser_3 {
-    id: Id
+    id: Id,
 }
 
 impl ApplicationUser_3 {
-    pub fn new(
-        id: Id
-    ) -> Self {
+    pub fn new(id: Id) -> Self {
         return Self {
-            id
+            id,
         };
     }
 
@@ -263,15 +274,13 @@ impl ApplicationUser_3 {
 }
 
 pub struct ApplicationUser_4 {
-    password_hash: PasswordHash
+    password_hash: PasswordHash,
 }
 
 impl ApplicationUser_4 {
-    pub fn new(
-        password_hash: PasswordHash
-    ) -> Self {
+    pub fn new(password_hash: PasswordHash) -> Self {
         return Self {
-            password_hash
+            password_hash,
         };
     }
 
@@ -293,15 +302,13 @@ impl<'a> Getter<'a, &'a PasswordHash> for ApplicationUser_4 {
 }
 
 pub struct ApplicationUser_5 {
-    email: Email
+    email: Email,
 }
 
 impl ApplicationUser_5 {
-    pub fn new(
-        email: Email
-    ) -> Self {
+    pub fn new(email: Email) -> Self {
         return Self {
-            email
+            email,
         };
     }
 

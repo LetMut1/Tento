@@ -1,17 +1,20 @@
-use crate::domain_layer::functionality::service::getter::Getter;
-use extern_crate::serde::Serialize;
-use extern_crate::serde::Deserialize;
-use std::borrow::Cow;
-use super::application_user_device::ApplicationUserDevice_Id;
 use super::application_user::ApplicationUser_Email;
+use super::application_user_device::ApplicationUserDevice_Id;
+use crate::domain_layer::functionality::service::getter::Getter;
+use extern_crate::serde::Deserialize;
+use extern_crate::serde::Serialize;
+use std::borrow::Cow;
 
+pub use self::CanBeResentFrom as ApplicationUserRegistrationToken_CanBeResentFrom;
+pub use self::ExpiresAt as ApplicationUserRegistrationToken_ExpiresAt;
+pub use self::IsApproved as ApplicationUserRegistrationToken_IsApproved;
 pub use self::Value as ApplicationUserRegistrationToken_Value;
 pub use self::WrongEnterTriesQuantity as ApplicationUserRegistrationToken_WrongEnterTriesQuantity;
-pub use self::IsApproved as ApplicationUserRegistrationToken_IsApproved;
-pub use self::ExpiresAt as ApplicationUserRegistrationToken_ExpiresAt;
-pub use self::CanBeResentFrom as ApplicationUserRegistrationToken_CanBeResentFrom;
 
-#[cfg_attr(feature = "manual_testing", derive(Serialize))]
+#[cfg_attr(
+    feature = "manual_testing",
+    derive(Serialize)
+)]
 #[derive(Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
@@ -27,7 +30,9 @@ impl Value {
     }
 }
 
-#[derive(Clone, Copy)]
+#[derive(
+    Clone, Copy
+)]
 pub struct WrongEnterTriesQuantity(i16);
 
 impl WrongEnterTriesQuantity {
@@ -40,7 +45,9 @@ impl WrongEnterTriesQuantity {
     }
 }
 
-#[derive(Clone, Copy)]
+#[derive(
+    Clone, Copy
+)]
 pub struct IsApproved(bool);
 
 impl IsApproved {
@@ -53,7 +60,9 @@ impl IsApproved {
     }
 }
 
-#[derive(Clone, Copy)]
+#[derive(
+    Clone, Copy
+)]
 pub struct ExpiresAt(i64);
 
 impl ExpiresAt {
@@ -66,8 +75,13 @@ impl ExpiresAt {
     }
 }
 
-#[derive(Clone, Copy)]
-#[cfg_attr(feature = "manual_testing", derive(Deserialize))]
+#[derive(
+    Clone, Copy
+)]
+#[cfg_attr(
+    feature = "manual_testing",
+    derive(Deserialize)
+)]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
@@ -90,7 +104,7 @@ pub struct ApplicationUserRegistrationToken<'a> {
     wrong_enter_tries_quantity: WrongEnterTriesQuantity,
     is_approved: IsApproved,
     expires_at: ExpiresAt,
-    can_be_resent_from: CanBeResentFrom
+    can_be_resent_from: CanBeResentFrom,
 }
 
 impl<'a> ApplicationUserRegistrationToken<'a> {
@@ -105,7 +119,7 @@ impl<'a> ApplicationUserRegistrationToken<'a> {
         wrong_enter_tries_quantity: WrongEnterTriesQuantity,
         is_approved: IsApproved,
         expires_at: ExpiresAt,
-        can_be_resent_from: CanBeResentFrom
+        can_be_resent_from: CanBeResentFrom,
     ) -> Self {
         return Self {
             application_user_email,
@@ -114,7 +128,7 @@ impl<'a> ApplicationUserRegistrationToken<'a> {
             wrong_enter_tries_quantity,
             is_approved,
             expires_at,
-            can_be_resent_from
+            can_be_resent_from,
         };
     }
 
@@ -154,7 +168,7 @@ impl<'a> ApplicationUserRegistrationToken<'a> {
 
     pub fn set_wrong_enter_tries_quantity<'b>(
         &'b mut self,
-        wrong_enter_tries_quantity: WrongEnterTriesQuantity
+        wrong_enter_tries_quantity: WrongEnterTriesQuantity,
     ) -> &'b mut Self {
         self.wrong_enter_tries_quantity = wrong_enter_tries_quantity;
 
@@ -227,7 +241,7 @@ pub struct ApplicationUserRegistrationToken_1 {
     wrong_enter_tries_quantity: WrongEnterTriesQuantity,
     is_approved: IsApproved,
     expires_at: ExpiresAt,
-    can_be_resent_from: CanBeResentFrom
+    can_be_resent_from: CanBeResentFrom,
 }
 
 impl ApplicationUserRegistrationToken_1 {
@@ -236,14 +250,14 @@ impl ApplicationUserRegistrationToken_1 {
         wrong_enter_tries_quantity: WrongEnterTriesQuantity,
         is_approved: IsApproved,
         expires_at: ExpiresAt,
-        can_be_resent_from: CanBeResentFrom
+        can_be_resent_from: CanBeResentFrom,
     ) -> Self {
         return Self {
             value,
             wrong_enter_tries_quantity,
             is_approved,
             expires_at,
-            can_be_resent_from
+            can_be_resent_from,
         };
     }
 
@@ -275,7 +289,7 @@ impl ApplicationUserRegistrationToken_1 {
 
     pub fn set_wrong_enter_tries_quantity<'b>(
         &'b mut self,
-        wrong_enter_tries_quantity: WrongEnterTriesQuantity
+        wrong_enter_tries_quantity: WrongEnterTriesQuantity,
     ) -> &'b mut Self {
         self.wrong_enter_tries_quantity = wrong_enter_tries_quantity;
 
@@ -332,14 +346,14 @@ impl<'a> Getter<'a, CanBeResentFrom> for ApplicationUserRegistrationToken_1 {
 }
 
 pub struct ApplicationUserRegistrationToken_2 {
-    can_be_resent_from: CanBeResentFrom
+    can_be_resent_from: CanBeResentFrom,
 }
 
 pub struct ApplicationUserRegistrationToken_3 {
     value: Value,
     wrong_enter_tries_quantity: WrongEnterTriesQuantity,
     is_approved: IsApproved,
-    expires_at: ExpiresAt
+    expires_at: ExpiresAt,
 }
 
 impl ApplicationUserRegistrationToken_3 {
@@ -347,13 +361,13 @@ impl ApplicationUserRegistrationToken_3 {
         value: Value,
         wrong_enter_tries_quantity: WrongEnterTriesQuantity,
         is_approved: IsApproved,
-        expires_at: ExpiresAt
+        expires_at: ExpiresAt,
     ) -> Self {
         return Self {
             value,
             wrong_enter_tries_quantity,
             is_approved,
-            expires_at
+            expires_at,
         };
     }
 
@@ -381,7 +395,7 @@ impl ApplicationUserRegistrationToken_3 {
 
     pub fn set_wrong_enter_tries_quantity<'b>(
         &'b mut self,
-        wrong_enter_tries_quantity: WrongEnterTriesQuantity
+        wrong_enter_tries_quantity: WrongEnterTriesQuantity,
     ) -> &'b mut Self {
         self.wrong_enter_tries_quantity = wrong_enter_tries_quantity;
 
@@ -426,18 +440,18 @@ impl<'a> Getter<'a, ExpiresAt> for ApplicationUserRegistrationToken_3 {
 }
 
 pub struct ApplicationUserRegistrationToken_4 {
-    wrong_enter_tries_quantity: WrongEnterTriesQuantity
+    wrong_enter_tries_quantity: WrongEnterTriesQuantity,
 }
 
 pub struct ApplicationUserRegistrationToken_5 {
-    is_approved: IsApproved
+    is_approved: IsApproved,
 }
 
 pub struct ApplicationUserRegistrationToken_6 {
     value: Value,
     is_approved: IsApproved,
     expires_at: ExpiresAt,
-    can_be_resent_from: CanBeResentFrom
+    can_be_resent_from: CanBeResentFrom,
 }
 
 impl ApplicationUserRegistrationToken_6 {
@@ -445,13 +459,13 @@ impl ApplicationUserRegistrationToken_6 {
         value: Value,
         is_approved: IsApproved,
         expires_at: ExpiresAt,
-        can_be_resent_from: CanBeResentFrom
+        can_be_resent_from: CanBeResentFrom,
     ) -> Self {
         return Self {
             value,
             is_approved,
             expires_at,
-            can_be_resent_from
+            can_be_resent_from,
         };
     }
 

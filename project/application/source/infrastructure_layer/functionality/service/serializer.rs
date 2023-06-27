@@ -9,7 +9,7 @@ pub use super::message_pack__serializer::MessagePack;
 pub use super::json__serializer::Json;
 
 pub struct Serializer<T> {
-    _format: PhantomData<T>
+    _format: PhantomData<T>,
 }
 
 pub trait Serialize {

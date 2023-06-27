@@ -1,13 +1,17 @@
+use super::application_user::ApplicationUser_Id;
+use super::application_user_device::ApplicationUserDevice_Id;
 use extern_crate::serde::Deserialize;
 use extern_crate::serde::Serialize;
 use std::borrow::Cow;
-use super::application_user_device::ApplicationUserDevice_Id;
-use super::application_user::ApplicationUser_Id;
 
-pub use self::Id as ApplicationUserAccessToken_Id;
 pub use self::ExpiresAt as ApplicationUserAccessToken_ExpiresAt;
+pub use self::Id as ApplicationUserAccessToken_Id;
 
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(
+    Clone,
+    Serialize,
+    Deserialize
+)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct Id(String);
@@ -22,7 +26,12 @@ impl Id {
     }
 }
 
-#[derive(Clone, Copy, Serialize, Deserialize)]
+#[derive(
+    Clone,
+    Copy,
+    Serialize,
+    Deserialize
+)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct ExpiresAt(i64);
@@ -37,13 +46,16 @@ impl ExpiresAt {
     }
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(
+    Serialize,
+    Deserialize
+)]
 #[serde(crate = "extern_crate::serde")]
 pub struct ApplicationUserAccessToken<'a> {
     id: Id,
     application_user_id: ApplicationUser_Id,
     application_user_device_id: Cow<'a, ApplicationUserDevice_Id>,
-    expires_at: ExpiresAt
+    expires_at: ExpiresAt,
 }
 
 impl<'a> ApplicationUserAccessToken<'a> {
@@ -53,13 +65,13 @@ impl<'a> ApplicationUserAccessToken<'a> {
         id: Id,
         application_user_id: ApplicationUser_Id,
         application_user_device_id: Cow<'a, ApplicationUserDevice_Id>,
-        expires_at: ExpiresAt
+        expires_at: ExpiresAt,
     ) -> Self {
         return Self {
             id,
             application_user_id,
             application_user_device_id,
-            expires_at
+            expires_at,
         };
     }
 

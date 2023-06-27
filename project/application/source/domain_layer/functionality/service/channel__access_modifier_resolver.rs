@@ -1,5 +1,5 @@
-use crate::domain_layer::data::entity::channel::Channel_AccessModifier_;
 use crate::domain_layer::data::entity::channel::Channel_AccessModifier;
+use crate::domain_layer::data::entity::channel::Channel_AccessModifier_;
 
 pub struct Channel_AccessModifierResolver;
 
@@ -14,8 +14,7 @@ impl Channel_AccessModifierResolver {
     pub fn to_representation(channel_access_modifier: Channel_AccessModifier) -> Channel_AccessModifier_ {
         return match channel_access_modifier.get() {
             Channel_AccessModifier::OPEN => Channel_AccessModifier_::Open,
-            Channel_AccessModifier::CLOSE => Channel_AccessModifier_::Close,
-            _ => Channel_AccessModifier_::Close
+            _ => Channel_AccessModifier_::Close,
         };
     }
 }

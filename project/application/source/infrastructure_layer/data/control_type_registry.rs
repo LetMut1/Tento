@@ -1,6 +1,6 @@
+use extern_crate::bb8::Pool;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
-use extern_crate::bb8::Pool;
 use extern_crate::hyper::Body;
 use extern_crate::hyper::Request as HyperRequest;
 use extern_crate::hyper::Response as HyperResponse;

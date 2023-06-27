@@ -1,37 +1,39 @@
 use crate::infrastructure_layer::data::environment_configuration::Environment;
-use crate::infrastructure_layer::data::pushable_environment_configuration::PushableEnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::EmailServerError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use extern_crate::lettre_email::EmailBuilder;
+use crate::infrastructure_layer::data::pushable_environment_configuration::PushableEnvironmentConfiguration;
 use extern_crate::lettre::ClientSecurity;
+use extern_crate::lettre_email::EmailBuilder;
 // use extern_crate::lettre::smtp::authentication::Credentials;
 // use extern_crate::lettre::smtp::authentication::Mechanism;
 // use extern_crate::lettre::smtp::ConnectionReuseParameters;
 // use extern_crate::lettre::smtp::extension::ClientId;
+use super::sender::Sender;
 use extern_crate::lettre::smtp::SmtpClient;
 use extern_crate::lettre::Transport;
 use std::convert::Into;
-use super::sender::Sender;
 
 pub use crate::infrastructure_layer::data::control_type_registry::Email;
 
-impl Sender<Email> {   // TODO В предпродакшене, когда будет smtp-ссервер, настройить все через константы и енв
+impl Sender<Email> {
+    // TODO В предпродакшене, когда будет smtp-ссервер, настройить все через константы и енв
     pub fn send<'a>(
         pushable_environment_configuration: &'a PushableEnvironmentConfiguration,
         subject: &'a str,
         body: String,
-        to: &'a str
+        to: &'a str,
     ) -> Result<(), ErrorAuditor> {
-        let email = match EmailBuilder::new()      //TODO
+        let email = match EmailBuilder::new() //TODO
             .subject(subject)
             .text(body)
             .from("from_changethis@yandex.ru".to_string())
             .to(to)
-            .build() {
+            .build()
+        {
             Ok(email_) => email_,
             Err(error) => {
                 return Err(
@@ -40,13 +42,17 @@ impl Sender<Email> {   // TODO В предпродакшене, когда бу�
                             runtime_error: RuntimeError::ResourceError {
                                 resource_error: ResourceError::EmailServerError {
                                     email_server_error: EmailServerError::EmailError {
-                                        email_error: error
-                                    }
-                                }
-                            }
+                                        email_error: error,
+                                    },
+                                },
+                            },
                         },
-                        BacktracePart::new(line!(), file!(), None)
-                    )
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
                 );
             }
         };
@@ -80,10 +86,13 @@ impl Sender<Email> {   // TODO В предпродакшене, когда бу�
                 //     .authentication_mechanism(Mechanism::Plain)// TODO
                 //     .connection_reuse(ConnectionReuseParameters::NoReuse)// TODO
             }
-            Environment::Development |
-            Environment::LocalDevelopment => {
+            Environment::Development | Environment::LocalDevelopment => {
                 let smtp_client_ = match SmtpClient::new(
-                    pushable_environment_configuration.resource.email_server.socket_address, ClientSecurity::None
+                    pushable_environment_configuration
+                        .resource
+                        .email_server
+                        .socket_address,
+                    ClientSecurity::None,
                 ) {
                     Ok(smtp_client__) => smtp_client__,
                     Err(error) => {
@@ -93,13 +102,17 @@ impl Sender<Email> {   // TODO В предпродакшене, когда бу�
                                     runtime_error: RuntimeError::ResourceError {
                                         resource_error: ResourceError::EmailServerError {
                                             email_server_error: EmailServerError::SmtpError {
-                                                smtp_error: error
-                                            }
-                                        }
-                                    }
+                                                smtp_error: error,
+                                            },
+                                        },
+                                    },
                                 },
-                                BacktracePart::new(line!(), file!(), None)
-                            )
+                                BacktracePart::new(
+                                    line!(),
+                                    file!(),
+                                    None,
+                                ),
+                            ),
                         );
                     }
                 };
@@ -108,22 +121,24 @@ impl Sender<Email> {   // TODO В предпродакшене, когда бу�
             }
         };
 
-        if let Err(error) = smtp_client
-            .transport()
-            .send(email.into()) {
+        if let Err(error) = smtp_client.transport().send(email.into()) {
             return Err(
                 ErrorAuditor::new(
                     BaseError::RuntimeError {
                         runtime_error: RuntimeError::ResourceError {
                             resource_error: ResourceError::EmailServerError {
                                 email_server_error: EmailServerError::SmtpError {
-                                    smtp_error: error
-                                }
-                            }
-                        }
+                                    smtp_error: error,
+                                },
+                            },
+                        },
                     },
-                    BacktracePart::new(line!(), file!(), None)
-                )
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                ),
             );
         }
 

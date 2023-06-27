@@ -1,7 +1,7 @@
-use extern_crate::serde::Serialize;
-use extern_crate::serde::Deserialize;
-use std::borrow::Cow;
 use super::application_user::ApplicationUser_Id;
+use extern_crate::serde::Deserialize;
+use extern_crate::serde::Serialize;
+use std::borrow::Cow;
 
 pub use self::AccessModifier as Channel_AccessModifier;
 pub use self::AccessModifier_ as Channel_AccessModifier_;
@@ -19,7 +19,12 @@ pub use self::ViewingQuantity as Channel_ViewingQuantity;
 pub use self::VisabilityModifier as Channel_VisabilityModifier;
 pub use self::VisabilityModifier_ as Channel_VisabilityModifier_;
 
-#[derive(Clone, Copy, Serialize, Deserialize)]
+#[derive(
+    Clone,
+    Copy,
+    Serialize,
+    Deserialize
+)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct Id(i64);
@@ -34,7 +39,11 @@ impl Id {
     }
 }
 
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(
+    Clone,
+    Serialize,
+    Deserialize
+)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct Name(String);
@@ -49,7 +58,10 @@ impl Name {
     }
 }
 
-#[cfg_attr(feature = "manual_testing", derive(Deserialize))]
+#[cfg_attr(
+    feature = "manual_testing",
+    derive(Deserialize)
+)]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
@@ -65,7 +77,10 @@ impl LinkedName {
     }
 }
 
-#[cfg_attr(feature = "manual_testing", derive(Deserialize))]
+#[cfg_attr(
+    feature = "manual_testing",
+    derive(Deserialize)
+)]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
@@ -81,8 +96,13 @@ impl Description {
     }
 }
 
-#[cfg_attr(feature = "manual_testing", derive(Deserialize))]
-#[derive(Clone, Copy, Serialize)]
+#[cfg_attr(
+    feature = "manual_testing",
+    derive(Deserialize)
+)]
+#[derive(
+    Clone, Copy, Serialize
+)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct AccessModifier(i16);
@@ -104,11 +124,16 @@ pub enum AccessModifier_ {
     /// 0 in integer representation.
     Open,
     /// 1 in integer representation.
-    Close
+    Close,
 }
 
-#[cfg_attr(feature = "manual_testing", derive(Deserialize))]
-#[derive(Clone, Copy, Serialize)]
+#[cfg_attr(
+    feature = "manual_testing",
+    derive(Deserialize)
+)]
+#[derive(
+    Clone, Copy, Serialize
+)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct VisabilityModifier(i16);
@@ -130,10 +155,13 @@ pub enum VisabilityModifier_ {
     /// 0 in integer representation.
     Public,
     /// 1 in integer representation.
-    Private
+    Private,
 }
 
-#[cfg_attr(feature = "manual_testing", derive(Deserialize))]
+#[cfg_attr(
+    feature = "manual_testing",
+    derive(Deserialize)
+)]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
@@ -149,7 +177,10 @@ impl Orientation {
     }
 }
 
-#[cfg_attr(feature = "manual_testing", derive(Deserialize))]
+#[cfg_attr(
+    feature = "manual_testing",
+    derive(Deserialize)
+)]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
@@ -165,7 +196,10 @@ impl CoverImagePath {
     }
 }
 
-#[cfg_attr(feature = "manual_testing", derive(Deserialize))]
+#[cfg_attr(
+    feature = "manual_testing",
+    derive(Deserialize)
+)]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
@@ -181,8 +215,13 @@ impl BackgroundImagePath {
     }
 }
 
-#[cfg_attr(feature = "manual_testing", derive(Deserialize))]
-#[derive(Clone, Copy, Serialize)]
+#[cfg_attr(
+    feature = "manual_testing",
+    derive(Deserialize)
+)]
+#[derive(
+    Clone, Copy, Serialize
+)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct SubscribersQuantity(i64);
@@ -197,8 +236,13 @@ impl SubscribersQuantity {
     }
 }
 
-#[cfg_attr(feature = "manual_testing", derive(Deserialize))]
-#[derive(Clone, Copy, Serialize)]
+#[cfg_attr(
+    feature = "manual_testing",
+    derive(Deserialize)
+)]
+#[derive(
+    Clone, Copy, Serialize
+)]
 #[serde(crate = "extern_crate::serde")]
 pub struct MarksQuantity(i64);
 
@@ -212,8 +256,13 @@ impl MarksQuantity {
     }
 }
 
-#[cfg_attr(feature = "manual_testing", derive(Deserialize))]
-#[derive(Clone, Copy, Serialize)]
+#[cfg_attr(
+    feature = "manual_testing",
+    derive(Deserialize)
+)]
+#[derive(
+    Clone, Copy, Serialize
+)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct ViewingQuantity(i64);
@@ -254,7 +303,7 @@ pub struct Channel<'a> {
     subscribers_quantity: SubscribersQuantity,
     marks_quantity: MarksQuantity,
     viewing_quantity: ViewingQuantity,
-    created_at: CreatedAt
+    created_at: CreatedAt,
 }
 
 impl<'a> Channel<'a> {
@@ -272,7 +321,7 @@ impl<'a> Channel<'a> {
         subscribers_quantity: SubscribersQuantity,
         marks_quantity: MarksQuantity,
         viewing_quantity: ViewingQuantity,
-        created_at: CreatedAt
+        created_at: CreatedAt,
     ) -> Self {
         return Self {
             id,
@@ -288,11 +337,13 @@ impl<'a> Channel<'a> {
             subscribers_quantity,
             marks_quantity,
             viewing_quantity,
-            created_at
+            created_at,
         };
     }
 
-    pub fn into_inner(self) -> (
+    pub fn into_inner(
+        self,
+    ) -> (
         Id,
         ApplicationUser_Id,
         Cow<'a, Name>,
@@ -306,7 +357,7 @@ impl<'a> Channel<'a> {
         SubscribersQuantity,
         MarksQuantity,
         ViewingQuantity,
-        CreatedAt
+        CreatedAt,
     ) {
         return (
             self.id,
@@ -322,7 +373,7 @@ impl<'a> Channel<'a> {
             self.subscribers_quantity,
             self.marks_quantity,
             self.viewing_quantity,
-            self.created_at
+            self.created_at,
         );
     }
 

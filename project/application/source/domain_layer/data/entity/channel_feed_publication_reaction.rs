@@ -5,5 +5,5 @@ pub struct ChannelFeedPublicationReaction {
     content_type: u8,
     content_type_component: String,
     public_marks_quantity: i64,
-    created_at: String
+    created_at: String,
 }

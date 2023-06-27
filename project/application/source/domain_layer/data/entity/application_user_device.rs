@@ -1,10 +1,14 @@
+use super::application_user::ApplicationUser_Id;
 use extern_crate::serde::Deserialize;
 use extern_crate::serde::Serialize;
-use super::application_user::ApplicationUser_Id;
 
 pub use self::Id as ApplicationUserDevice_Id;
 
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(
+    Clone,
+    Serialize,
+    Deserialize
+)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct Id(String);
@@ -21,17 +25,14 @@ impl Id {
 
 pub struct ApplicationUserDevice {
     id: Id,
-    application_user_id: ApplicationUser_Id
+    application_user_id: ApplicationUser_Id,
 }
 
 impl ApplicationUserDevice {
-    pub fn new(
-        id: Id,
-        application_user_id: ApplicationUser_Id
-    ) -> Self {
+    pub fn new(id: Id, application_user_id: ApplicationUser_Id) -> Self {
         return Self {
             id,
-            application_user_id
+            application_user_id,
         };
     }
 

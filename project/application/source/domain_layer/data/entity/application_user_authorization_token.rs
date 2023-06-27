@@ -1,16 +1,19 @@
+use super::application_user::ApplicationUser_Id;
+use super::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::functionality::service::getter::Getter;
 use extern_crate::serde::Deserialize;
 use extern_crate::serde::Serialize;
 use std::borrow::Cow;
-use super::application_user_device::ApplicationUserDevice_Id;
-use super::application_user::ApplicationUser_Id;
 
+pub use self::CanBeResentFrom as ApplicationUserAuthorizationToken_CanBeResentFrom;
+pub use self::ExpiresAt as ApplicationUserAuthorizationToken_ExpiresAt;
 pub use self::Value as ApplicationUserAuthorizationToken_Value;
 pub use self::WrongEnterTriesQuantity as ApplicationUserAuthorizationToken_WrongEnterTriesQuantity;
-pub use self::ExpiresAt as ApplicationUserAuthorizationToken_ExpiresAt;
-pub use self::CanBeResentFrom as ApplicationUserAuthorizationToken_CanBeResentFrom;
 
-#[cfg_attr(feature = "manual_testing", derive(Serialize))]
+#[cfg_attr(
+    feature = "manual_testing",
+    derive(Serialize)
+)]
 #[derive(Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
@@ -26,7 +29,9 @@ impl Value {
     }
 }
 
-#[derive(Clone, Copy)]
+#[derive(
+    Clone, Copy
+)]
 pub struct WrongEnterTriesQuantity(i16);
 
 impl WrongEnterTriesQuantity {
@@ -39,7 +44,9 @@ impl WrongEnterTriesQuantity {
     }
 }
 
-#[derive(Clone, Copy)]
+#[derive(
+    Clone, Copy
+)]
 pub struct ExpiresAt(i64);
 
 impl ExpiresAt {
@@ -52,8 +59,13 @@ impl ExpiresAt {
     }
 }
 
-#[cfg_attr(feature = "manual_testing", derive(Deserialize))]
-#[derive(Clone, Copy, Serialize)]
+#[cfg_attr(
+    feature = "manual_testing",
+    derive(Deserialize)
+)]
+#[derive(
+    Clone, Copy, Serialize
+)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct CanBeResentFrom(i64);
@@ -74,7 +86,7 @@ pub struct ApplicationUserAuthorizationToken<'a> {
     value: Value,
     wrong_enter_tries_quantity: WrongEnterTriesQuantity,
     expires_at: ExpiresAt,
-    can_be_resent_from: CanBeResentFrom
+    can_be_resent_from: CanBeResentFrom,
 }
 
 impl<'a> ApplicationUserAuthorizationToken<'a> {
@@ -88,7 +100,7 @@ impl<'a> ApplicationUserAuthorizationToken<'a> {
         value: Value,
         wrong_enter_tries_quantity: WrongEnterTriesQuantity,
         expires_at: ExpiresAt,
-        can_be_resent_from: CanBeResentFrom
+        can_be_resent_from: CanBeResentFrom,
     ) -> Self {
         return Self {
             application_user_id,
@@ -96,7 +108,7 @@ impl<'a> ApplicationUserAuthorizationToken<'a> {
             value,
             wrong_enter_tries_quantity,
             expires_at,
-            can_be_resent_from
+            can_be_resent_from,
         };
     }
 
@@ -109,7 +121,7 @@ impl<'a> ApplicationUserAuthorizationToken<'a> {
     }
 
     pub fn get_value<'b>(&'b self) -> &'b Value {
-        return &self.value
+        return &self.value;
     }
 
     pub fn get_wrong_enter_tries_quantity<'b>(&'b self) -> WrongEnterTriesQuantity {
@@ -132,7 +144,7 @@ impl<'a> ApplicationUserAuthorizationToken<'a> {
 
     pub fn set_wrong_enter_tries_quantity<'b>(
         &'b mut self,
-        wrong_enter_tries_quantity: WrongEnterTriesQuantity
+        wrong_enter_tries_quantity: WrongEnterTriesQuantity,
     ) -> &'b mut Self {
         self.wrong_enter_tries_quantity = wrong_enter_tries_quantity;
 
@@ -192,7 +204,7 @@ pub struct ApplicationUserAuthorizationToken_1 {
     value: Value,
     wrong_enter_tries_quantity: WrongEnterTriesQuantity,
     expires_at: ExpiresAt,
-    can_be_resent_from: CanBeResentFrom
+    can_be_resent_from: CanBeResentFrom,
 }
 
 impl ApplicationUserAuthorizationToken_1 {
@@ -200,18 +212,18 @@ impl ApplicationUserAuthorizationToken_1 {
         value: Value,
         wrong_enter_tries_quantity: WrongEnterTriesQuantity,
         expires_at: ExpiresAt,
-        can_be_resent_from: CanBeResentFrom
+        can_be_resent_from: CanBeResentFrom,
     ) -> Self {
         return Self {
             value,
             wrong_enter_tries_quantity,
             expires_at,
-            can_be_resent_from
+            can_be_resent_from,
         };
     }
 
     pub fn get_value<'b>(&'b self) -> &'b Value {
-        return &self.value
+        return &self.value;
     }
 
     pub fn get_wrong_enter_tries_quantity<'b>(&'b self) -> WrongEnterTriesQuantity {
@@ -234,7 +246,7 @@ impl ApplicationUserAuthorizationToken_1 {
 
     pub fn set_wrong_enter_tries_quantity<'b>(
         &'b mut self,
-        wrong_enter_tries_quantity: WrongEnterTriesQuantity
+        wrong_enter_tries_quantity: WrongEnterTriesQuantity,
     ) -> &'b mut Self {
         self.wrong_enter_tries_quantity = wrong_enter_tries_quantity;
 
@@ -281,24 +293,20 @@ impl<'a> Getter<'a, CanBeResentFrom> for ApplicationUserAuthorizationToken_1 {
 pub struct ApplicationUserAuthorizationToken_2 {
     value: Value,
     wrong_enter_tries_quantity: WrongEnterTriesQuantity,
-    expires_at: ExpiresAt
+    expires_at: ExpiresAt,
 }
 
 impl ApplicationUserAuthorizationToken_2 {
-    pub fn new(
-        value: Value,
-        wrong_enter_tries_quantity: WrongEnterTriesQuantity,
-        expires_at: ExpiresAt
-    ) -> Self {
+    pub fn new(value: Value, wrong_enter_tries_quantity: WrongEnterTriesQuantity, expires_at: ExpiresAt) -> Self {
         return Self {
             value,
             wrong_enter_tries_quantity,
-            expires_at
+            expires_at,
         };
     }
 
     pub fn get_value<'b>(&'b self) -> &'b Value {
-        return &self.value
+        return &self.value;
     }
 
     pub fn get_wrong_enter_tries_quantity<'b>(&'b self) -> WrongEnterTriesQuantity {
@@ -317,7 +325,7 @@ impl ApplicationUserAuthorizationToken_2 {
 
     pub fn set_wrong_enter_tries_quantity<'b>(
         &'b mut self,
-        wrong_enter_tries_quantity: WrongEnterTriesQuantity
+        wrong_enter_tries_quantity: WrongEnterTriesQuantity,
     ) -> &'b mut Self {
         self.wrong_enter_tries_quantity = wrong_enter_tries_quantity;
 
@@ -350,34 +358,30 @@ impl<'a> Getter<'a, ExpiresAt> for ApplicationUserAuthorizationToken_2 {
 }
 
 pub struct ApplicationUserAuthorizationToken_3 {
-    can_be_resent_from: CanBeResentFrom
+    can_be_resent_from: CanBeResentFrom,
 }
 
 pub struct ApplicationUserAuthorizationToken_4 {
-    wrong_enter_tries_quantity: WrongEnterTriesQuantity
+    wrong_enter_tries_quantity: WrongEnterTriesQuantity,
 }
 
 pub struct ApplicationUserAuthorizationToken_5 {
     value: Value,
     expires_at: ExpiresAt,
-    can_be_resent_from: CanBeResentFrom
+    can_be_resent_from: CanBeResentFrom,
 }
 
 impl ApplicationUserAuthorizationToken_5 {
-    pub fn new(
-        value: Value,
-        expires_at: ExpiresAt,
-        can_be_resent_from: CanBeResentFrom
-    ) -> Self {
+    pub fn new(value: Value, expires_at: ExpiresAt, can_be_resent_from: CanBeResentFrom) -> Self {
         return Self {
             value,
             expires_at,
-            can_be_resent_from
+            can_be_resent_from,
         };
     }
 
     pub fn get_value<'b>(&'b self) -> &'b Value {
-        return &self.value
+        return &self.value;
     }
 
     pub fn get_expires_at<'b>(&'b self) -> ExpiresAt {
