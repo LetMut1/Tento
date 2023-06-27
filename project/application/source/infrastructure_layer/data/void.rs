@@ -4,10 +4,10 @@ use std::fmt::Display;
 use std::fmt::Error as FmtError;
 use std::fmt::Formatter;
 
-#[cfg(feature = "facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "manual_testing")]
 use extern_crate::serde::Deserialize;
 
-#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[cfg_attr(feature = "manual_testing", derive(Deserialize))]
 #[derive(Debug, Serialize)]
 #[serde(crate = "extern_crate::serde")]
 pub enum Void {}

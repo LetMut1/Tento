@@ -27,5 +27,5 @@ pub mod sender;
 pub mod serializer;
 pub mod validator;
 
-#[cfg(feature = "facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "manual_testing")]
 pub mod json__serializer;

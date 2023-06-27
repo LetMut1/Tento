@@ -1,14 +1,14 @@
 use super::channel::Channel_Id;
 use extern_crate::serde::Serialize;
 
-#[cfg(feature = "facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "manual_testing")]
 use extern_crate::serde::Deserialize;
 
 pub use self::Alias as ChannelOuterLink_Alias;
 pub use self::Address as ChannelOuterLink_Address;
 pub use self::CreatedAt as ChannelOuterLink_CreatedAt;
 
-#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[cfg_attr(feature = "manual_testing", derive(Deserialize))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
@@ -24,7 +24,7 @@ impl Alias {
     }
 }
 
-#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[cfg_attr(feature = "manual_testing", derive(Deserialize))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]

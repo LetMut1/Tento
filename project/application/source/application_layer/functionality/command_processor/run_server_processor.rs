@@ -175,6 +175,11 @@ impl RunServerProcessor {
             server_builder.http2_keep_alive_interval(None)
         };
 
+        #[cfg(feature = "manual_testing")]
+        {
+            server_builder = server_builder.http2_only(false)
+        }
+
         let database_1_postgresql_configuration = match PostgresqlConfiguration::from_str(
             environment_configuration.environment_file_configuration.resource.postgresql.database_1_url.value.as_str()
         ) {
@@ -489,123 +494,125 @@ impl RunServerProcessor {
             }
             // Area for not existing routes.
             _ => {
-                #[cfg(feature = "facilitate_non_automatic_functional_testing")]
-                match (route, method) {
-                    // Area for existing routes with not authorized user.
-                    // GET functional.
-                    (HttpRouteRegistry::VERSION_1__APPLICATION_USER__CHECK_NICKNAME_FOR_EXISTING_, &Method::POST) => {
-                        return application_user__authorization::check_nickname_for_existing::CheckNicknameForExisting::run_(
-                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
-                        ).await;
+                #[cfg(feature = "manual_testing")]
+                {
+                    match (route, method) {
+                        // Area for existing routes with not authorized user.
+                        // GET functional.
+                        (HttpRouteRegistry::VERSION_1__APPLICATION_USER__CHECK_NICKNAME_FOR_EXISTING_, &Method::POST) => {
+                            return application_user__authorization::check_nickname_for_existing::CheckNicknameForExisting::run_(
+                                pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
+                            ).await;
+                        }
+                        // GET functional.
+                        (HttpRouteRegistry::VERSION_1__APPLICATION_USER__CHECK_EMAIL_FOR_EXISTING_, &Method::POST) => {
+                            return application_user__authorization::check_email_for_existing::CheckEmailForExisting::run_(
+                                pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
+                            ).await;
+                        }
+                        (HttpRouteRegistry::VERSION_1__APPLICATION_USER__REGISTER_BY_FIRST_STEP_, &Method::POST) => {
+                            return application_user__authorization::register_by_first_step::RegisterByFirstStep::run_(
+                                pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
+                            ).await;
+                        }
+                        (HttpRouteRegistry::VERSION_1__APPLICATION_USER__REGISTER_BY_SECOND_STEP_, &Method::POST) => {
+                            return application_user__authorization::register_by_second_step::RegisterBySecondStep::run_(
+                                pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
+                            ).await;
+                        }
+                        (HttpRouteRegistry::VERSION_1__APPLICATION_USER__REGISTER_BY_LAST_STEP_, &Method::POST) => {
+                            return application_user__authorization::register_by_last_step::RegisterByLastStep::run_(
+                                pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
+                            ).await;
+                        }
+                        (HttpRouteRegistry::VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_REGISTER_, &Method::POST) => {
+                            return application_user__authorization::send_email_for_register::SendEmailForRegister::run_(
+                                pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
+                            ).await;
+                        }
+                        (HttpRouteRegistry::VERSION_1__APPLICATION_USER__AUTHORIZE_BY_FIRST_STEP_, &Method::POST) => {
+                            return application_user__authorization::authorize_by_first_step::AuthorizeByFirstStep::run_(
+                                pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
+                            ).await;
+                        }
+                        (HttpRouteRegistry::VERSION_1__APPLICATION_USER__AUTHORIZE_BY_LAST_STEP_, &Method::POST) => {
+                            return application_user__authorization::authorize_by_last_step::AuthorizeByLastStep::run_(
+                                pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
+                            ).await;
+                        }
+                        (HttpRouteRegistry::VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_AUTHORIZE_, &Method::POST) => {
+                            return application_user__authorization::send_email_for_authorize::SendEmailForAuthorize::run_(
+                                pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
+                            ).await;
+                        }
+                        (HttpRouteRegistry::VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_FIRST_STEP_, &Method::POST) => {
+                            return application_user__authorization::reset_password_by_first_step::ResetPasswordByFirstStep::run_(
+                                pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
+                            ).await;
+                        }
+                        (HttpRouteRegistry::VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_SECOND_STEP_, &Method::POST) => {
+                            return application_user__authorization::reset_password_by_second_step::ResetPasswordBySecondStep::run_(
+                                pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
+                            ).await;
+                        }
+                        (HttpRouteRegistry::VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_LAST_STEP_, &Method::POST) => {
+                            return application_user__authorization::reset_password_by_last_step::ResetPasswordByLastStep::run_(
+                                pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
+                            ).await;
+                        }
+                        (HttpRouteRegistry::VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_RESET_PASSWORD_, &Method::POST) => {
+                            return application_user__authorization::send_email_for_reset_password::SendEmailForResetPassword::run_(
+                                pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
+                            ).await;
+                        }
+                        (HttpRouteRegistry::VERSION_1__APPLICATION_USER__REFRESH_APPLICATION_USER_ACCESS_TOKEN_, &Method::POST) => {
+                            return application_user__authorization::refresh_application_user_access_token::RefreshApplicationUserAccessToken::run_(
+                                pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
+                            ).await;
+                        }
+                        // Area for existing routes with authorized user.
+                        (HttpRouteRegistry::VERSION_1__APPLICATION_USER__DEAUTHORIZE_FROM_ONE_DEVICE_, &Method::POST) => {
+                            return application_user__authorization::deauthorize_from_one_device::DeauthorizeFromOneDevice::run_(
+                                pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
+                            ).await;
+                        }
+                        (HttpRouteRegistry::VERSION_1__APPLICATION_USER__DEAUTHORIZE_FROM_ALL_DEVICE_, &Method::POST) => {
+                            return application_user__authorization::deauthorize_from_all_devices::DeauthorizeFromAllDevices::run_(
+                                pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
+                            ).await;
+                        }
+                        // GET functional.
+                        (HttpRouteRegistry::VERSION_1__CHANNEL__GET_ONE_BY_ID_, &Method::POST) => {
+                            return channel__base::get_one_by_id::GetOneByID::run_(
+                                pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
+                            ).await;
+                        }
+                        // GET functional.
+                        (HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_BY_NAME_IN_SUBSCRIPTIONS_, &Method::POST) => {
+                            return channel__base::get_many_by_name_in_subscriptions::GetManyByNameInSubscriptions::run_(
+                                pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
+                            ).await;
+                        }
+                        // GET functional.
+                        (HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_BY_SUBSCRIPTION_, &Method::POST) => {
+                            return channel__base::get_many_by_subscription::GetManyBySubscription::run_(
+                                pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
+                            ).await;
+                        }
+                        // GET functional.
+                        (HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_PUBLIC_BY_NAME_, &Method::POST) => {
+                            return channel__base::get_many_public_by_name::GetManyPublicByName::run_(
+                                pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
+                            ).await;
+                        }
+                        (HttpRouteRegistry::VERSION_1__CHANNEL_SUBSCRIPTION__CREATE_, &Method::POST) => {
+                            return channel_subscription__base::create::Create::run_(
+                                pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
+                            ).await;
+                        }
+                        // Area for not existing routes.
+                        _ => {}
                     }
-                    // GET functional.
-                    (HttpRouteRegistry::VERSION_1__APPLICATION_USER__CHECK_EMAIL_FOR_EXISTING_, &Method::POST) => {
-                        return application_user__authorization::check_email_for_existing::CheckEmailForExisting::run_(
-                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
-                        ).await;
-                    }
-                    (HttpRouteRegistry::VERSION_1__APPLICATION_USER__REGISTER_BY_FIRST_STEP_, &Method::POST) => {
-                        return application_user__authorization::register_by_first_step::RegisterByFirstStep::run_(
-                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
-                        ).await;
-                    }
-                    (HttpRouteRegistry::VERSION_1__APPLICATION_USER__REGISTER_BY_SECOND_STEP_, &Method::POST) => {
-                        return application_user__authorization::register_by_second_step::RegisterBySecondStep::run_(
-                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
-                        ).await;
-                    }
-                    (HttpRouteRegistry::VERSION_1__APPLICATION_USER__REGISTER_BY_LAST_STEP_, &Method::POST) => {
-                        return application_user__authorization::register_by_last_step::RegisterByLastStep::run_(
-                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
-                        ).await;
-                    }
-                    (HttpRouteRegistry::VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_REGISTER_, &Method::POST) => {
-                        return application_user__authorization::send_email_for_register::SendEmailForRegister::run_(
-                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
-                        ).await;
-                    }
-                    (HttpRouteRegistry::VERSION_1__APPLICATION_USER__AUTHORIZE_BY_FIRST_STEP_, &Method::POST) => {
-                        return application_user__authorization::authorize_by_first_step::AuthorizeByFirstStep::run_(
-                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
-                        ).await;
-                    }
-                    (HttpRouteRegistry::VERSION_1__APPLICATION_USER__AUTHORIZE_BY_LAST_STEP_, &Method::POST) => {
-                        return application_user__authorization::authorize_by_last_step::AuthorizeByLastStep::run_(
-                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
-                        ).await;
-                    }
-                    (HttpRouteRegistry::VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_AUTHORIZE_, &Method::POST) => {
-                        return application_user__authorization::send_email_for_authorize::SendEmailForAuthorize::run_(
-                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
-                        ).await;
-                    }
-                    (HttpRouteRegistry::VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_FIRST_STEP_, &Method::POST) => {
-                        return application_user__authorization::reset_password_by_first_step::ResetPasswordByFirstStep::run_(
-                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
-                        ).await;
-                    }
-                    (HttpRouteRegistry::VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_SECOND_STEP_, &Method::POST) => {
-                        return application_user__authorization::reset_password_by_second_step::ResetPasswordBySecondStep::run_(
-                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
-                        ).await;
-                    }
-                    (HttpRouteRegistry::VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_LAST_STEP_, &Method::POST) => {
-                        return application_user__authorization::reset_password_by_last_step::ResetPasswordByLastStep::run_(
-                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
-                        ).await;
-                    }
-                    (HttpRouteRegistry::VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_RESET_PASSWORD_, &Method::POST) => {
-                        return application_user__authorization::send_email_for_reset_password::SendEmailForResetPassword::run_(
-                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
-                        ).await;
-                    }
-                    (HttpRouteRegistry::VERSION_1__APPLICATION_USER__REFRESH_APPLICATION_USER_ACCESS_TOKEN_, &Method::POST) => {
-                        return application_user__authorization::refresh_application_user_access_token::RefreshApplicationUserAccessToken::run_(
-                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
-                        ).await;
-                    }
-                    // Area for existing routes with authorized user.
-                    (HttpRouteRegistry::VERSION_1__APPLICATION_USER__DEAUTHORIZE_FROM_ONE_DEVICE_, &Method::POST) => {
-                        return application_user__authorization::deauthorize_from_one_device::DeauthorizeFromOneDevice::run_(
-                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
-                        ).await;
-                    }
-                    (HttpRouteRegistry::VERSION_1__APPLICATION_USER__DEAUTHORIZE_FROM_ALL_DEVICE_, &Method::POST) => {
-                        return application_user__authorization::deauthorize_from_all_devices::DeauthorizeFromAllDevices::run_(
-                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
-                        ).await;
-                    }
-                    // GET functional.
-                    (HttpRouteRegistry::VERSION_1__CHANNEL__GET_ONE_BY_ID_, &Method::POST) => {
-                        return channel__base::get_one_by_id::GetOneByID::run_(
-                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
-                        ).await;
-                    }
-                    // GET functional.
-                    (HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_BY_NAME_IN_SUBSCRIPTIONS_, &Method::POST) => {
-                        return channel__base::get_many_by_name_in_subscriptions::GetManyByNameInSubscriptions::run_(
-                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
-                        ).await;
-                    }
-                    // GET functional.
-                    (HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_BY_SUBSCRIPTION_, &Method::POST) => {
-                        return channel__base::get_many_by_subscription::GetManyBySubscription::run_(
-                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
-                        ).await;
-                    }
-                    // GET functional.
-                    (HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_PUBLIC_BY_NAME_, &Method::POST) => {
-                        return channel__base::get_many_public_by_name::GetManyPublicByName::run_(
-                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
-                        ).await;
-                    }
-                    (HttpRouteRegistry::VERSION_1__CHANNEL_SUBSCRIPTION__CREATE_, &Method::POST) => {
-                        return channel_subscription__base::create::Create::run_(
-                            pushable_environment_configuration, request, database_1_postgresql_connection_pool, database_2_postgresql_connection_pool, database_1_redis_connection_pool
-                        ).await;
-                    }
-                    // Area for not existing routes.
-                    _ => {}
                 }
 
                 return route_not_found::route_not_found(

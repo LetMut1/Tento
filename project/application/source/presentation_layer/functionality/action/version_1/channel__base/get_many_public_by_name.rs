@@ -17,9 +17,9 @@ use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
 
-#[cfg(feature = "facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "manual_testing")]
 use crate::application_layer::functionality::service::wrapped_action_processor::WrappedActionProcessor;
-#[cfg(feature = "facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "manual_testing")]
 use crate::infrastructure_layer::functionality::service::serializer::Json;
 
 pub struct GetManyPublicByName;
@@ -49,7 +49,7 @@ impl GetManyPublicByName {
     }
 }
 
-#[cfg(feature = "facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "manual_testing")]
 impl GetManyPublicByName {
     pub async fn run_<'a, T>(
         pushable_environment_configuration: &'a PushableEnvironmentConfiguration,

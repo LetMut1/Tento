@@ -11,7 +11,7 @@ pub use self::IsApproved as ApplicationUserResetPasswordToken_IsApproved;
 pub use self::ExpiresAt as ApplicationUserResetPasswordToken_ExpiresAt;
 pub use self::CanBeResentFrom as ApplicationUserResetPasswordToken_CanBeResentFrom;
 
-#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Serialize))]
+#[cfg_attr(feature = "manual_testing", derive(Serialize))]
 #[derive(Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
@@ -66,7 +66,7 @@ impl ExpiresAt {
     }
 }
 
-#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[cfg_attr(feature = "manual_testing", derive(Deserialize))]
 #[derive(Clone, Copy, Serialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]

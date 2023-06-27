@@ -22,4 +22,4 @@ extern_crate = { path = "./../extern_crate", package = "extern_crate", version =
 
 [features]
 default = []
-facilitate_non_automatic_functional_testing = ["extern_crate/facilitate_non_automatic_functional_testing"]
+manual_testing = ["extern_crate/manual_testing"]

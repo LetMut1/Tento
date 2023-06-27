@@ -32,5 +32,5 @@ pub type Request = HyperRequest<Body>;
 
 pub type Response = HyperResponse<Body>;
 
-#[cfg(feature = "facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "manual_testing")]
 pub struct Json;

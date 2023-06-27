@@ -5,7 +5,7 @@ use std::marker::PhantomData;
 
 pub use super::message_pack__serializer::MessagePack;
 
-#[cfg(feature = "facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "manual_testing")]
 pub use super::json__serializer::Json;
 
 pub struct Serializer<T> {

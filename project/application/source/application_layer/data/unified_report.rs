@@ -1,9 +1,9 @@
 use extern_crate::serde::Serialize;
 
-#[cfg(feature = "facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "manual_testing")]
 use extern_crate::serde::Deserialize;
 
-#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[cfg_attr(feature = "manual_testing", derive(Deserialize))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 pub enum UnifiedReport<T, P>
@@ -16,7 +16,7 @@ pub enum UnifiedReport<T, P>
     }
 }
 
-#[cfg(not(feature = "facilitate_non_automatic_functional_testing"))]
+#[cfg(not(feature = "manual_testing"))]
 impl<T, P> UnifiedReport<T, P>
 where
     T: Serialize,
@@ -35,7 +35,7 @@ where
     }
 }
 
-#[cfg(feature = "facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "manual_testing")]
 impl<T, P> UnifiedReport<T, P>
 where
     T: Serialize + for<'de> Deserialize<'de>,
@@ -54,7 +54,7 @@ where
     }
 }
 
-#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[cfg_attr(feature = "manual_testing", derive(Deserialize))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 pub enum Data<D> {

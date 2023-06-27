@@ -1,4 +1,4 @@
-#[cfg(feature = "facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "manual_testing")]
 use extern_crate::const_format::concatcp;
 
 pub struct HttpRouteRegistry;
@@ -27,7 +27,7 @@ impl HttpRouteRegistry {
     pub const VERSION_1__CHANNEL_SUBSCRIPTION__CREATE: &'static str = "/1/21";
 }
 
-#[cfg(feature = "facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "manual_testing")]
 impl HttpRouteRegistry {
     const CONCATENATING_PART: &'static str = "_";
     pub const VERSION_1__APPLICATION_USER__CHECK_NICKNAME_FOR_EXISTING_: &'static str = concatcp!(HttpRouteRegistry::VERSION_1__APPLICATION_USER__CHECK_NICKNAME_FOR_EXISTING, HttpRouteRegistry::CONCATENATING_PART);

@@ -13,7 +13,7 @@ macro_rules! r#enum {
             ()
         };
 
-        #[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
+        #[cfg_attr(feature = "manual_testing", derive(Deserialize))]
         #[derive(Serialize)]
         #[serde(crate = "extern_crate::serde")]
         $visability enum $enum_name {

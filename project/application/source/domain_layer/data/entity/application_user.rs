@@ -26,7 +26,7 @@ impl Id {
     }
 }
 
-#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Serialize))]
+#[cfg_attr(feature = "manual_testing", derive(Serialize))]
 #[derive(Clone, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
@@ -46,7 +46,7 @@ impl Email {
     }
 }
 
-#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Serialize))]
+#[cfg_attr(feature = "manual_testing", derive(Serialize))]
 #[derive(Clone, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
@@ -62,7 +62,7 @@ impl Nickname {
     }
 }
 
-#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Serialize))]
+#[cfg_attr(feature = "manual_testing", derive(Serialize))]
 #[derive(Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]

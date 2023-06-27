@@ -46,7 +46,7 @@ serde_json = { package = "serde_json", version = "^1.0", default-features = true
 
 [features]
 default = []
-facilitate_non_automatic_functional_testing = [
+manual_testing = [
     "const_format",
     "serde_json"
 ]

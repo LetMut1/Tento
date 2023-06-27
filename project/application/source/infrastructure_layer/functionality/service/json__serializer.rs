@@ -9,10 +9,10 @@ use extern_crate::serde::Serialize as SerdeSerialize;
 use super::serializer::Serialize;
 use super::serializer::Serializer;
 
-#[cfg(feature = "facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "manual_testing")]
 pub use crate::infrastructure_layer::data::control_type_registry::Json;
 
-#[cfg(feature = "facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "manual_testing")]
 impl Serialize for Serializer<Json> {
     fn serialize<'a, T>(subject: &'a T) -> Result<Vec<u8>, ErrorAuditor>
     where

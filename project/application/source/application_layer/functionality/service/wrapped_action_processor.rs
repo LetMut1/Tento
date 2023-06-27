@@ -33,10 +33,10 @@ use std::marker::Send;
 use std::marker::Sync;
 use std::ops::FnOnce;
 
-#[cfg(feature = "facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "manual_testing")]
 pub struct WrappedActionProcessor;
 
-#[cfg(feature = "facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "manual_testing")]
 impl WrappedActionProcessor {
     pub async fn process<'a, SF, WSF, T, WA, F, API, APO, APP>(
         pushable_environment_configuration: &'a PushableEnvironmentConfiguration,
@@ -119,10 +119,10 @@ impl WrappedActionProcessor {
 }
 
 
-#[cfg(feature = "facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "manual_testing")]
 struct ActionDelegator;
 
-#[cfg(feature = "facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "manual_testing")]
 impl ActionDelegator {
     async fn delegate<'a, SF, T, A, F, API, APO, APP>(
         pushable_environment_configuration: &'a PushableEnvironmentConfiguration,
@@ -211,7 +211,7 @@ impl ActionDelegator {
     }
 }
 
-#[cfg(feature = "facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "manual_testing")]
 struct ConvertibleParts<T>
 where
     T: SerdeSerialize + for<'de> Deserialize<'de>
@@ -220,7 +220,7 @@ where
     action_processor_incoming: T
 }
 
-#[cfg(feature = "facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "manual_testing")]
 struct ActionProcessingDelegatorResult<T, P>
 where
     T: SerdeSerialize + for<'de> Deserialize<'de>,

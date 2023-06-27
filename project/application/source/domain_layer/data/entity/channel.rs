@@ -49,7 +49,7 @@ impl Name {
     }
 }
 
-#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[cfg_attr(feature = "manual_testing", derive(Deserialize))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
@@ -65,7 +65,7 @@ impl LinkedName {
     }
 }
 
-#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[cfg_attr(feature = "manual_testing", derive(Deserialize))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
@@ -81,7 +81,7 @@ impl Description {
     }
 }
 
-#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[cfg_attr(feature = "manual_testing", derive(Deserialize))]
 #[derive(Clone, Copy, Serialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
@@ -107,7 +107,7 @@ pub enum AccessModifier_ {
     Close
 }
 
-#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[cfg_attr(feature = "manual_testing", derive(Deserialize))]
 #[derive(Clone, Copy, Serialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
@@ -133,7 +133,7 @@ pub enum VisabilityModifier_ {
     Private
 }
 
-#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[cfg_attr(feature = "manual_testing", derive(Deserialize))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
@@ -149,7 +149,7 @@ impl Orientation {
     }
 }
 
-#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[cfg_attr(feature = "manual_testing", derive(Deserialize))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
@@ -165,7 +165,7 @@ impl CoverImagePath {
     }
 }
 
-#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[cfg_attr(feature = "manual_testing", derive(Deserialize))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
@@ -181,7 +181,7 @@ impl BackgroundImagePath {
     }
 }
 
-#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[cfg_attr(feature = "manual_testing", derive(Deserialize))]
 #[derive(Clone, Copy, Serialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
@@ -197,7 +197,7 @@ impl SubscribersQuantity {
     }
 }
 
-#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[cfg_attr(feature = "manual_testing", derive(Deserialize))]
 #[derive(Clone, Copy, Serialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct MarksQuantity(i64);
@@ -212,7 +212,7 @@ impl MarksQuantity {
     }
 }
 
-#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[cfg_attr(feature = "manual_testing", derive(Deserialize))]
 #[derive(Clone, Copy, Serialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]

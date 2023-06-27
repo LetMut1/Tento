@@ -107,7 +107,7 @@ impl ActionProcessor {
     }
 }
 
-#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Serialize))]
+#[cfg_attr(feature = "manual_testing", derive(Serialize))]
 #[derive(Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Incoming {

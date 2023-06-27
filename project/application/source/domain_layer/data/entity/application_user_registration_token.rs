@@ -11,7 +11,7 @@ pub use self::IsApproved as ApplicationUserRegistrationToken_IsApproved;
 pub use self::ExpiresAt as ApplicationUserRegistrationToken_ExpiresAt;
 pub use self::CanBeResentFrom as ApplicationUserRegistrationToken_CanBeResentFrom;
 
-#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Serialize))]
+#[cfg_attr(feature = "manual_testing", derive(Serialize))]
 #[derive(Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
@@ -67,7 +67,7 @@ impl ExpiresAt {
 }
 
 #[derive(Clone, Copy)]
-#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[cfg_attr(feature = "manual_testing", derive(Deserialize))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]

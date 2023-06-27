@@ -14,7 +14,7 @@ use extern_crate::tokio_postgres::Client as Connection;
 use extern_crate::tokio_postgres::types::Type;
 use super::postgresql_repository::PostgresqlRepository;
 
-#[cfg(feature = "facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "manual_testing")]
 use extern_crate::serde::Deserialize;
 
 impl PostgresqlRepository<ChannelOuterLink> {
@@ -199,7 +199,7 @@ pub struct Insert {
     pub channel_outer_link_address: ChannelOuterLink_Address,
 }
 
-#[cfg_attr(feature = "facilitate_non_automatic_functional_testing", derive(Deserialize))]
+#[cfg_attr(feature = "manual_testing", derive(Deserialize))]
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct ChannelOuterLink1 {

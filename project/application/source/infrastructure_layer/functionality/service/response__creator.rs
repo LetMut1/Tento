@@ -8,7 +8,7 @@ use extern_crate::hyper::StatusCode;
 use std::convert::From;
 use super::creator::Creator;
 
-#[cfg(feature = "facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "manual_testing")]
 use extern_crate::http::response::Parts;
 
 pub use crate::infrastructure_layer::data::control_type_registry::Response;
@@ -60,7 +60,7 @@ impl Creator<Response> {
     }
 }
 
-#[cfg(feature = "facilitate_non_automatic_functional_testing")]
+#[cfg(feature = "manual_testing")]
 impl Creator<Response> {
     pub fn create_from_response_parts(response_parts: Parts, data: Option<Vec<u8>>) -> Response {
         match data {
