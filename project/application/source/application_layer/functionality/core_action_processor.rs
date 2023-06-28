@@ -60,7 +60,7 @@ impl CoreActionProcessor {
                 database_2_postgresql_connection_pool,
                 &request,
                 &response,
-                &InvalidArgument::HttpHeaders,
+                &InvalidArgument::HttpHeader,
             )
             .await
             {

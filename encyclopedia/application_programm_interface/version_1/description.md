@@ -412,7 +412,7 @@ struct Incoming {
 Result data:
 struct Outcoming {
     application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
-    application_user_access_refresh_token_serialized_form: String
+    application_user_access_refresh_token_encrypted: ApplicationUserAccessRefreshTokenEncrypted
 }
 ```
 ```
@@ -493,7 +493,7 @@ struct Incoming {
 Result data:
 struct Outcoming {
     application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
-    application_user_access_refresh_token_serialized_form: String
+    application_user_access_refresh_token_encrypted: ApplicationUserAccessRefreshTokenEncrypted
 }
 ```
 ```
@@ -629,14 +629,14 @@ Refreshs application user access token.
 Request data:
 struct Incoming {
     application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
-    application_user_access_refresh_token_serialized_form: String
+    application_user_access_refresh_token_encrypted: ApplicationUserAccessRefreshTokenEncrypted
 }
 ```
 ```
 Result data:
 struct Outcoming {
     application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
-    application_user_access_refresh_token_serialized_form: String
+    application_user_access_refresh_token_encrypted: ApplicationUserAccessRefreshTokenEncrypted
 }
 ```
 ```

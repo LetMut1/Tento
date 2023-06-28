@@ -14,6 +14,7 @@ use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
+use crate::domain_layer::data::entity::application_user_access_refresh_token_encrypted::ApplicationUserAccessRefreshTokenEncrypted;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::domain_layer::data::entity::application_user_access_token_encrypted::ApplicationUserAccessTokenEncrypted;
@@ -144,9 +145,7 @@ impl ActionProcessor {
         let is_valid = match SerializationFormResolver::<ApplicationUserAccessRefreshToken<'_>>::is_valid(
             pushable_environment_configuration,
             &application_user_access_refresh_token_,
-            incoming
-                .application_user_access_refresh_token_serialized_form
-                .as_str(),
+            &incoming.application_user_access_refresh_token_encrypted,
         ) {
             Ok(is_valid_) => is_valid_,
             Err(mut error) => {
@@ -170,7 +169,7 @@ impl ActionProcessor {
         {
             return Ok(
                 InvalidArgumentResult::InvalidArgument {
-                    invalid_argument: InvalidArgument::ApplicationUserAccessRefreshToken_DeserializedForm,
+                    invalid_argument: InvalidArgument::ApplicationUserAccessRefreshTokenEncrypted,
                 },
             );
         }
@@ -284,11 +283,11 @@ impl ActionProcessor {
             }
         };
 
-        let application_user_access_refresh_token_serialized_form_new = match SerializationFormResolver::<ApplicationUserAccessRefreshToken<'_>>::serialize(
+        let application_user_access_refresh_token_encrypted_new = match SerializationFormResolver::<ApplicationUserAccessRefreshToken<'_>>::serialize(
             pushable_environment_configuration,
             &application_user_access_refresh_token_,
         ) {
-            Ok(application_user_access_refresh_token_serialized_form_new_) => application_user_access_refresh_token_serialized_form_new_,
+            Ok(application_user_access_refresh_token_encrypted_new_) => application_user_access_refresh_token_encrypted_new_,
             Err(mut error) => {
                 error.add_backtrace_part(
                     BacktracePart::new(
@@ -304,7 +303,7 @@ impl ActionProcessor {
 
         let outcoming = Outcoming {
             application_user_access_token_encrypted: application_user_access_token_encrypted_new,
-            application_user_access_refresh_token_serialized_form: application_user_access_refresh_token_serialized_form_new,
+            application_user_access_refresh_token_encrypted: application_user_access_refresh_token_encrypted_new,
         };
 
         return Ok(
@@ -323,7 +322,7 @@ impl ActionProcessor {
 #[serde(crate = "extern_crate::serde")]
 pub struct Incoming {
     application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
-    application_user_access_refresh_token_serialized_form: String,
+    application_user_access_refresh_token_encrypted: ApplicationUserAccessRefreshTokenEncrypted,
 }
 
 #[cfg_attr(
@@ -334,7 +333,7 @@ pub struct Incoming {
 #[serde(crate = "extern_crate::serde")]
 pub struct Outcoming {
     application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
-    application_user_access_refresh_token_serialized_form: String,
+    application_user_access_refresh_token_encrypted: ApplicationUserAccessRefreshTokenEncrypted,
 }
 
 r#enum!(

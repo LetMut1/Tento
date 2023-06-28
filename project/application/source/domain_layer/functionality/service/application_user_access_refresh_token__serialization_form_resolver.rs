@@ -1,5 +1,6 @@
 use super::serialization_form_resolver::SerializationFormResolver;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
+use crate::domain_layer::data::entity::application_user_access_refresh_token_encrypted::ApplicationUserAccessRefreshTokenEncrypted;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::pushable_environment_configuration::PushableEnvironmentConfiguration;
@@ -14,7 +15,7 @@ impl SerializationFormResolver<ApplicationUserAccessRefreshToken<'_>> {
     pub fn serialize<'a>(
         pushable_environment_configuration: &'a PushableEnvironmentConfiguration,
         application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>,
-    ) -> Result<String, ErrorAuditor> {
+    ) -> Result<ApplicationUserAccessRefreshTokenEncrypted, ErrorAuditor> {
         let data = match Serializer::<MessagePack>::serialize(application_user_access_refresh_token) {
             Ok(data_) => data_,
             Err(mut error) => {
@@ -42,21 +43,23 @@ impl SerializationFormResolver<ApplicationUserAccessRefreshToken<'_>> {
             hmac_encoded_data.as_mut_slice(),
         );
 
-        let application_user_access_refresh_token_serialized_form = Encoder_::<Base64>::encode(hmac_encoded_data.as_slice());
+        let application_user_access_refresh_token_encrypted = Encoder_::<Base64>::encode(hmac_encoded_data.as_slice());
 
-        return Ok(application_user_access_refresh_token_serialized_form);
+        return Ok(
+            ApplicationUserAccessRefreshTokenEncrypted::new(application_user_access_refresh_token_encrypted)
+        );
     }
 
     pub fn is_valid<'a>(
         pushable_environment_configuration: &'a PushableEnvironmentConfiguration,
         application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>,
-        application_user_access_refresh_token_serialized_form: &'a str,
+        application_user_access_refresh_token_encrypted: &'a ApplicationUserAccessRefreshTokenEncrypted,
     ) -> Result<bool, ErrorAuditor> {
-        let application_user_access_refresh_token_serialized_form_ = match Self::serialize(
+        let application_user_access_refresh_token_encrypted_ = match Self::serialize(
             pushable_environment_configuration,
             application_user_access_refresh_token,
         ) {
-            Ok(application_user_access_refresh_token_serialized_form__) => application_user_access_refresh_token_serialized_form__,
+            Ok(application_user_access_refresh_token_encrypted__) => application_user_access_refresh_token_encrypted__,
             Err(mut error) => {
                 error.add_backtrace_part(
                     BacktracePart::new(
@@ -70,6 +73,6 @@ impl SerializationFormResolver<ApplicationUserAccessRefreshToken<'_>> {
             }
         };
 
-        return Ok(application_user_access_refresh_token_serialized_form_.as_str() == application_user_access_refresh_token_serialized_form);
+        return Ok(application_user_access_refresh_token_encrypted_.get() == application_user_access_refresh_token_encrypted.get());
     }
 }
