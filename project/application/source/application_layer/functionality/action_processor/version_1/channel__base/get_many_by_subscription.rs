@@ -20,6 +20,7 @@ use extern_crate::bb8::Pool;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::serde::Deserialize;
+use crate::domain_layer::data::entity::application_user_access_token_encrypted::ApplicationUserAccessTokenEncrypted;
 use extern_crate::serde::Serialize;
 use extern_crate::tokio_postgres::tls::MakeTlsConnect;
 use extern_crate::tokio_postgres::tls::TlsConnect;
@@ -48,9 +49,7 @@ impl ActionProcessor {
     {
         let extractor_result = match Extractor::<ApplicationUserAccessToken<'_>>::extract(
             pushable_environment_configuration,
-            incoming
-                .application_user_access_token_serialized_form
-                .as_str(),
+            &incoming.application_user_access_token_encrypted
         )
         .await
         {
@@ -186,7 +185,7 @@ impl ActionProcessor {
 #[derive(Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Incoming {
-    application_user_access_token_serialized_form: String,
+    application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
     requery_channel_id: Option<Channel_Id>,
     limit: i16,
 }

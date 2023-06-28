@@ -113,17 +113,12 @@ fn main() -> () {
 
 // &'a (dyn ToSql + Sync) -> +'static
 
-// application_user_access_token_serialized_form: String, ( и подобные ) -> может быть, сделать НьюТайп в сервисе, где этои генеририуется.
+// SerializationFormResolver -> переназвать что то с Encrypted/...
 
 // application_user_reset_password_token_wrong_enter_tries_quantity = match application_user_reset_password_token_.get_wrong_enter_tries_quantity().get() - Incrementor сервис написать.
 
 // impl<S> UnifiedReport<S> -> сделать через трейт,
 
-// Перенести некоторую инфраструктуру на Крейты. То, что может быть хорошо переиспользовано.
-
-// pub -> pub(crate), там, где надо.
-
-// clippy/ cargo-fmt.
 
 // TODO Возвращать количество возможных отправок инвалидного кода валидации.
 // Переделать формат ответа на Enam.

@@ -23,6 +23,7 @@ use crate::domain_layer::functionality::service::generator::Generator;
 use crate::domain_layer::functionality::service::serialization_form_resolver::SerializationFormResolver;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
+use crate::domain_layer::data::entity::application_user_access_token_encrypted::ApplicationUserAccessTokenEncrypted;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
@@ -526,11 +527,11 @@ impl ActionProcessor {
             }
         };
 
-        let application_user_access_token_serialized_form = match SerializationFormResolver::<ApplicationUserAccessToken<'_>>::serialize(
+        let application_user_access_token_encrypted = match SerializationFormResolver::<ApplicationUserAccessToken<'_>>::serialize(
             pushable_environment_configuration,
             &application_user_access_token,
         ) {
-            Ok(application_user_access_token_serialized_form_) => application_user_access_token_serialized_form_,
+            Ok(application_user_access_token_encrypted_) => application_user_access_token_encrypted_,
             Err(mut error) => {
                 error.add_backtrace_part(
                     BacktracePart::new(
@@ -563,7 +564,7 @@ impl ActionProcessor {
         };
 
         let outcoming = Outcoming {
-            application_user_access_token_serialized_form,
+            application_user_access_token_encrypted,
             application_user_access_refresh_token_serialized_form,
         };
 
@@ -596,7 +597,7 @@ pub struct Incoming {
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Outcoming {
-    application_user_access_token_serialized_form: String,
+    application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
     application_user_access_refresh_token_serialized_form: String,
 }
 

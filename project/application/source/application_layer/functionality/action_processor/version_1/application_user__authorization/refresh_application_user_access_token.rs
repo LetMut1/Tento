@@ -16,6 +16,7 @@ use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
+use crate::domain_layer::data::entity::application_user_access_token_encrypted::ApplicationUserAccessTokenEncrypted;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::data::pushable_environment_configuration::PushableEnvironmentConfiguration;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
@@ -53,9 +54,7 @@ impl ActionProcessor {
     {
         let application_user_access_token = match SerializationFormResolver::<ApplicationUserAccessToken<'_>>::deserialize(
             pushable_environment_configuration,
-            incoming
-                .application_user_access_token_serialized_form
-                .as_str(),
+            &incoming.application_user_access_token_encrypted
         ) {
             Ok(application_user_access_token_) => application_user_access_token_,
             Err(mut error) => {
@@ -267,11 +266,11 @@ impl ActionProcessor {
             return Err(error);
         }
 
-        let application_user_access_token_serialized_form_new = match SerializationFormResolver::<ApplicationUserAccessToken<'_>>::serialize(
+        let application_user_access_token_encrypted_new = match SerializationFormResolver::<ApplicationUserAccessToken<'_>>::serialize(
             pushable_environment_configuration,
             &application_user_access_token_new,
         ) {
-            Ok(application_user_access_token_serialized_form_new_) => application_user_access_token_serialized_form_new_,
+            Ok(application_user_access_token_encrypted_new_) => application_user_access_token_encrypted_new_,
             Err(mut error) => {
                 error.add_backtrace_part(
                     BacktracePart::new(
@@ -304,7 +303,7 @@ impl ActionProcessor {
         };
 
         let outcoming = Outcoming {
-            application_user_access_token_serialized_form: application_user_access_token_serialized_form_new,
+            application_user_access_token_encrypted: application_user_access_token_encrypted_new,
             application_user_access_refresh_token_serialized_form: application_user_access_refresh_token_serialized_form_new,
         };
 
@@ -323,7 +322,7 @@ impl ActionProcessor {
 #[derive(Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Incoming {
-    application_user_access_token_serialized_form: String,
+    application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
     application_user_access_refresh_token_serialized_form: String,
 }
 
@@ -334,7 +333,7 @@ pub struct Incoming {
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct Outcoming {
-    application_user_access_token_serialized_form: String,
+    application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
     application_user_access_refresh_token_serialized_form: String,
 }
 

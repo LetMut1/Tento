@@ -15,7 +15,7 @@ pub enum InvalidArgument {
     ApplicationUser_Password,
     ApplicationUser_VisabilityModifier,
     ApplicationUserAccessRefreshToken_DeserializedForm,
-    ApplicationUserAccessToken_DeserializedForm,
+    ApplicationUserAccessTokenEncrypted,
     ApplicationUserAuthorizationToken_Value,
     ApplicationUserDevice_Id,
     ApplicationUserRegistrationToken_Value,

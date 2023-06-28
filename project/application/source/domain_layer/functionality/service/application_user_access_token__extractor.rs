@@ -1,5 +1,6 @@
 use super::extractor::Extractor;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
+use crate::domain_layer::data::entity::application_user_access_token_encrypted::ApplicationUserAccessTokenEncrypted;
 use crate::domain_layer::functionality::service::serialization_form_resolver::SerializationFormResolver;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -11,11 +12,11 @@ use crate::infrastructure_layer::functionality::service::expiration_time_checker
 impl Extractor<ApplicationUserAccessToken<'_>> {
     pub async fn extract<'a>(
         pushable_environment_configuration: &'a PushableEnvironmentConfiguration,
-        application_user_access_token_serialized_form: &'a str,
+        application_user_access_token_encrypted: &'a ApplicationUserAccessTokenEncrypted,
     ) -> Result<InvalidArgumentResult<ExtractorResult>, ErrorAuditor> {
         let application_user_access_token = match SerializationFormResolver::<ApplicationUserAccessToken<'_>>::deserialize(
             pushable_environment_configuration,
-            application_user_access_token_serialized_form,
+            application_user_access_token_encrypted,
         ) {
             Ok(application_user_access_token_) => application_user_access_token_,
             Err(mut error) => {

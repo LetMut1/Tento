@@ -163,7 +163,7 @@ impl Format<InvalidArgument> for Formatter {
             InvalidArgument::ApplicationUser_Password => "ApplicationUser_Password",
             InvalidArgument::ApplicationUser_VisabilityModifier => "VisabilityModifier",
             InvalidArgument::ApplicationUserAccessRefreshToken_DeserializedForm => "ApplicationUserAccessRefreshToken_DeserializedForm",
-            InvalidArgument::ApplicationUserAccessToken_DeserializedForm => "ApplicationUserAccessToken_DeserializedForm",
+            InvalidArgument::ApplicationUserAccessTokenEncrypted => "ApplicationUserAccessTokenEncrypted",
             InvalidArgument::ApplicationUserAuthorizationToken_Value => "ApplicationUserAuthorizationToken_Value",
             InvalidArgument::ApplicationUserDevice_Id => "ApplicationUserDevice_Id",
             InvalidArgument::ApplicationUserRegistrationToken_Value => "ApplicationUserRegistrationToken_Value",
