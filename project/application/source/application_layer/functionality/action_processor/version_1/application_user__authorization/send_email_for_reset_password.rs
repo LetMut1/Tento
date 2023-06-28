@@ -175,11 +175,7 @@ impl ActionProcessor {
             }
         };
 
-        if ExpirationTimeChecker::<UnixTime>::is_expired(
-            application_user_reset_password_token_
-                .get_expires_at()
-                .get(),
-        ) {
+        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_reset_password_token_.get_expires_at().get()) {
             if let Err(mut error) = PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete(
                 database_2_postgresql_connection,
                 incoming.application_user_id,
@@ -205,10 +201,7 @@ impl ActionProcessor {
             );
         }
 
-        if application_user_reset_password_token_
-            .get_is_approved()
-            .get()
-        {
+        if application_user_reset_password_token_.get_is_approved().get() {
             return Ok(
                 InvalidArgumentResult::Ok {
                     subject: UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_AlreadyApproved),
@@ -216,11 +209,7 @@ impl ActionProcessor {
             );
         }
 
-        if !ExpirationTimeChecker::<UnixTime>::is_expired(
-            application_user_reset_password_token_
-                .get_can_be_resent_from()
-                .get(),
-        ) {
+        if !ExpirationTimeChecker::<UnixTime>::is_expired(application_user_reset_password_token_.get_can_be_resent_from().get()) {
             return Ok(
                 InvalidArgumentResult::Ok {
                     subject: UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_TimeToResendHasNotCome),

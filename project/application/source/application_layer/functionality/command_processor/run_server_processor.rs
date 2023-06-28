@@ -103,14 +103,7 @@ impl RunServerProcessor {
 
     async fn run_http_server(environment_configuration: EnvironmentConfiguration) -> Result<(), ErrorAuditor> {
         // TODO HTTP3 (QUICK) (h3), когда будет готов.!!!!!!!!!!!
-        let mut application_http_socket_address_registry = match environment_configuration
-            .environment_file_configuration
-            .application
-            .tcp
-            .socket_address
-            .value
-            .to_socket_addrs()
-        {
+        let mut application_http_socket_address_registry = match environment_configuration.environment_file_configuration.application.tcp.socket_address.value.to_socket_addrs() {
             Ok(application_http_socket_address_registry_) => application_http_socket_address_registry_,
             Err(error) => {
                 return Err(
@@ -148,14 +141,7 @@ impl RunServerProcessor {
             }
         };
 
-        let mut email_server_socket_address_registry = match environment_configuration
-            .environment_file_configuration
-            .resource
-            .email_server
-            .socket_address
-            .value
-            .to_socket_addrs()
-        {
+        let mut email_server_socket_address_registry = match environment_configuration.environment_file_configuration.resource.email_server.socket_address.value.to_socket_addrs() {
             Ok(email_server_socket_address_registry_) => email_server_socket_address_registry_,
             Err(error) => {
                 return Err(
@@ -214,133 +200,26 @@ impl RunServerProcessor {
         };
 
         server_builder = server_builder
-            .tcp_nodelay(
-                environment_configuration
-                    .environment_file_configuration
-                    .application
-                    .tcp
-                    .nodelay
-                    .value,
-            )
-            .tcp_sleep_on_accept_errors(
-                environment_configuration
-                    .environment_file_configuration
-                    .application
-                    .tcp
-                    .sleep_on_accept_errors
-                    .value,
-            )
-            .http2_only(
-                environment_configuration
-                    .environment_file_configuration
-                    .application
-                    .http
-                    .http2_only
-                    .value,
-            )
-            .http2_adaptive_window(
-                environment_configuration
-                    .environment_file_configuration
-                    .application
-                    .http
-                    .adaptive_window
-                    .value,
-            )
-            .http2_initial_connection_window_size(
-                Some(
-                    environment_configuration
-                        .environment_file_configuration
-                        .application
-                        .http
-                        .connection_window_size
-                        .value,
-                ),
-            )
-            .http2_initial_stream_window_size(
-                Some(
-                    environment_configuration
-                        .environment_file_configuration
-                        .application
-                        .http
-                        .stream_window_size
-                        .value,
-                ),
-            )
+            .tcp_nodelay(environment_configuration.environment_file_configuration.application.tcp.nodelay.value)
+            .tcp_sleep_on_accept_errors(environment_configuration.environment_file_configuration.application.tcp.sleep_on_accept_errors.value)
+            .http2_only(environment_configuration.environment_file_configuration.application.http.http2_only.value)
+            .http2_adaptive_window(environment_configuration.environment_file_configuration.application.http.adaptive_window.value)
+            .http2_initial_connection_window_size(Some(environment_configuration.environment_file_configuration.application.http.connection_window_size.value))
+            .http2_initial_stream_window_size(Some(environment_configuration.environment_file_configuration.application.http.stream_window_size.value))
             .http2_max_concurrent_streams(u32::MAX)
-            .http2_max_frame_size(
-                Some(
-                    environment_configuration
-                        .environment_file_configuration
-                        .application
-                        .http
-                        .maximum_frame_size
-                        .value,
-                ),
-            )
-            .http2_max_send_buf_size(
-                environment_configuration
-                    .environment_file_configuration
-                    .application
-                    .http
-                    .maximum_sending_buffer_size
-                    .value as usize,
-            );
+            .http2_max_frame_size(Some(environment_configuration.environment_file_configuration.application.http.maximum_frame_size.value))
+            .http2_max_send_buf_size(environment_configuration.environment_file_configuration.application.http.maximum_sending_buffer_size.value as usize);
 
-        server_builder = if environment_configuration
-            .environment_file_configuration
-            .application
-            .tcp
-            .keepalive_seconds
-            .is_active
-        {
-            server_builder.tcp_keepalive(
-                Some(
-                    Duration::from_secs(
-                        environment_configuration
-                            .environment_file_configuration
-                            .application
-                            .tcp
-                            .keepalive_seconds
-                            .value,
-                    ),
-                ),
-            )
+        server_builder = if environment_configuration.environment_file_configuration.application.tcp.keepalive_seconds.is_active {
+            server_builder.tcp_keepalive(Some(Duration::from_secs(environment_configuration.environment_file_configuration.application.tcp.keepalive_seconds.value)))
         } else {
             server_builder.tcp_keepalive(None)
         };
 
-        server_builder = if environment_configuration
-            .environment_file_configuration
-            .application
-            .http
-            .keep_alive
-            .is_active
-        {
+        server_builder = if environment_configuration.environment_file_configuration.application.http.keep_alive.is_active {
             server_builder
-                .http2_keep_alive_interval(
-                    Some(
-                        Duration::from_secs(
-                            environment_configuration
-                                .environment_file_configuration
-                                .application
-                                .http
-                                .keep_alive
-                                .interval_seconds
-                                .value,
-                        ),
-                    ),
-                )
-                .http2_keep_alive_timeout(
-                    Duration::from_secs(
-                        environment_configuration
-                            .environment_file_configuration
-                            .application
-                            .http
-                            .keep_alive
-                            .timeout_seconds
-                            .value,
-                    ),
-                )
+                .http2_keep_alive_interval(Some(Duration::from_secs(environment_configuration.environment_file_configuration.application.http.keep_alive.interval_seconds.value)))
+                .http2_keep_alive_timeout(Duration::from_secs(environment_configuration.environment_file_configuration.application.http.keep_alive.timeout_seconds.value))
         } else {
             server_builder.http2_keep_alive_interval(None)
         };
@@ -350,15 +229,7 @@ impl RunServerProcessor {
             server_builder = server_builder.http2_only(false)
         }
 
-        let database_1_postgresql_configuration = match PostgresqlConfiguration::from_str(
-            environment_configuration
-                .environment_file_configuration
-                .resource
-                .postgresql
-                .database_1_url
-                .value
-                .as_str(),
-        ) {
+        let database_1_postgresql_configuration = match PostgresqlConfiguration::from_str(environment_configuration.environment_file_configuration.resource.postgresql.database_1_url.value.as_str()) {
             Ok(database_1_postgresql_configuration_) => database_1_postgresql_configuration_,
             Err(error) => {
                 return Err(
@@ -380,15 +251,7 @@ impl RunServerProcessor {
             }
         };
 
-        let database_2_postgresql_configuration = match PostgresqlConfiguration::from_str(
-            environment_configuration
-                .environment_file_configuration
-                .resource
-                .postgresql
-                .database_2_url
-                .value
-                .as_str(),
-        ) {
+        let database_2_postgresql_configuration = match PostgresqlConfiguration::from_str(environment_configuration.environment_file_configuration.resource.postgresql.database_2_url.value.as_str()) {
             Ok(database_2_postgresql_configuration_) => database_2_postgresql_configuration_,
             Err(error) => {
                 return Err(
@@ -410,15 +273,7 @@ impl RunServerProcessor {
             }
         };
 
-        let database_1_redis_connection_info = match ConnectionInfo::from_str(
-            environment_configuration
-                .environment_file_configuration
-                .resource
-                .redis
-                .database_1_url
-                .value
-                .as_str(),
-        ) {
+        let database_1_redis_connection_info = match ConnectionInfo::from_str(environment_configuration.environment_file_configuration.resource.redis.database_1_url.value.as_str()) {
             Ok(database_1_redis_connection_info_) => database_1_redis_connection_info_,
             Err(error) => {
                 return Err(
@@ -516,18 +371,8 @@ impl RunServerProcessor {
             environment: environment_configuration.environment,
             encryption: Encryption {
                 private_key: PrivateKey {
-                    application_user_access_token: environment_configuration
-                        .environment_file_configuration
-                        .encryption
-                        .private_key
-                        .application_user_access_token
-                        .value,
-                    application_user_access_refresh_token: environment_configuration
-                        .environment_file_configuration
-                        .encryption
-                        .private_key
-                        .application_user_access_refresh_token
-                        .value,
+                    application_user_access_token: environment_configuration.environment_file_configuration.encryption.private_key.application_user_access_token.value,
+                    application_user_access_refresh_token: environment_configuration.environment_file_configuration.encryption.private_key.application_user_access_refresh_token.value,
                 },
             },
             resource: Resource {
@@ -614,11 +459,7 @@ impl RunServerProcessor {
             ()
         };
 
-        if let Err(error) = server_builder
-            .serve(service)
-            .with_graceful_shutdown(graceful_shutdown_future)
-            .await
-        {
+        if let Err(error) = server_builder.serve(service).with_graceful_shutdown(graceful_shutdown_future).await {
             return Err(
                 ErrorAuditor::new(
                     BaseError::RuntimeError {

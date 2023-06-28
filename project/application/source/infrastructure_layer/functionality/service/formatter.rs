@@ -15,12 +15,7 @@ impl Format<ErrorAuditor> for Formatter {
     fn prepare<'a>(subject: &'a ErrorAuditor) -> String {
         let mut backtrace_message = String::new();
 
-        '_a: for (index, backtrace_part) in subject
-            .get_backtrace()
-            .get_backtrace_part_registry()
-            .iter()
-            .enumerate()
-        {
+        '_a: for (index, backtrace_part) in subject.get_backtrace().get_backtrace_part_registry().iter().enumerate() {
             if index == 0 {
                 backtrace_message = match backtrace_part.get_context() {
                     Some(context) => {

@@ -29,19 +29,13 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
 
         let application_user_access_token_id = insert.application_user_access_token_id.as_ref().get();
 
-        let application_user_access_refresh_token_obfuscation_value = insert
-            .application_user_access_refresh_token_obfuscation_value
-            .get();
+        let application_user_access_refresh_token_obfuscation_value = insert.application_user_access_refresh_token_obfuscation_value.get();
 
-        let application_user_access_refresh_token_expires_at = insert
-            .application_user_access_refresh_token_expires_at
-            .get();
+        let application_user_access_refresh_token_expires_at = insert.application_user_access_refresh_token_expires_at.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let application_user_access_refresh_token_updated_at = insert
-            .application_user_access_refresh_token_updated_at
-            .get();
+        let application_user_access_refresh_token_updated_at = insert.application_user_access_refresh_token_updated_at.get();
 
         let query = "INSERT INTO public.application_user_access_refresh_token AS auart ( \
                 application_user_id, \

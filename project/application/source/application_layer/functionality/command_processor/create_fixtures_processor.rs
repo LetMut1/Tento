@@ -119,15 +119,7 @@ impl CreateFixturesProcessor {
     }
 
     async fn create_fixtures<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<(), ErrorAuditor> {
-        let database_1_postgresql_configuration = match PostgresqlConfiguration::from_str(
-            environment_configuration
-                .environment_file_configuration
-                .resource
-                .postgresql
-                .database_1_url
-                .value
-                .as_str(),
-        ) {
+        let database_1_postgresql_configuration = match PostgresqlConfiguration::from_str(environment_configuration.environment_file_configuration.resource.postgresql.database_1_url.value.as_str()) {
             Ok(database_1_postgresql_configuration_) => database_1_postgresql_configuration_,
             Err(error) => {
                 return Err(

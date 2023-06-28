@@ -295,11 +295,7 @@ impl ActionProcessor {
 
         let (application_user_authorization_token_aggregator, can_send) = match application_user_authorization_token {
             Some(mut application_user_authorization_token_) => {
-                let (can_send_, need_to_update_1) = if ExpirationTimeChecker::<UnixTime>::is_expired(
-                    application_user_authorization_token_
-                        .get_can_be_resent_from()
-                        .get(),
-                ) {
+                let (can_send_, need_to_update_1) = if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token_.get_can_be_resent_from().get()) {
                     let application_user_authorization_token_can_be_resent_from = match Generator::<ApplicationUserAuthorizationToken_CanBeResentFrom>::generate() {
                         Ok(application_user_authorization_token_can_be_resent_from_) => application_user_authorization_token_can_be_resent_from_,
                         Err(mut error) => {

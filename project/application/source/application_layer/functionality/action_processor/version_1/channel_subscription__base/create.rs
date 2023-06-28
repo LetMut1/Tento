@@ -1,6 +1,7 @@
 use crate::application_layer::data::common_precedent::CommonPrecedent;
 use crate::application_layer::data::unified_report::UnifiedReport;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
+use crate::domain_layer::data::entity::application_user_access_token_encrypted::ApplicationUserAccessTokenEncrypted;
 use crate::domain_layer::data::entity::channel::Channel;
 use crate::domain_layer::data::entity::channel::Channel_AccessModifier_;
 use crate::domain_layer::data::entity::channel::Channel_Id;
@@ -24,7 +25,6 @@ use crate::infrastructure_layer::functionality::service::macro_rules::r#enum;
 use extern_crate::bb8::Pool;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
-use crate::domain_layer::data::entity::application_user_access_token_encrypted::ApplicationUserAccessTokenEncrypted;
 use extern_crate::serde::Deserialize;
 use extern_crate::serde::Serialize;
 use extern_crate::tokio_postgres::tls::MakeTlsConnect;
@@ -52,7 +52,7 @@ impl ActionProcessor {
     {
         let extractor_result = match Extractor::<ApplicationUserAccessToken<'_>>::extract(
             pushable_environment_configuration,
-            &incoming.application_user_access_token_encrypted
+            &incoming.application_user_access_token_encrypted,
         )
         .await
         {
@@ -170,11 +170,7 @@ impl ActionProcessor {
             }
         };
 
-        if channel_.get_owner().get()
-            == application_user_access_token
-                .get_application_user_id()
-                .get()
-        {
+        if channel_.get_owner().get() == application_user_access_token.get_application_user_id().get() {
             return Ok(
                 InvalidArgumentResult::Ok {
                     subject: UnifiedReport::precedent(Precedent::ApplicationUser_IsChannelOwner),

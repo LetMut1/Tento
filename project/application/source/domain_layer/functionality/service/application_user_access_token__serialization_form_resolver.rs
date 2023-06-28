@@ -1,5 +1,6 @@
-use crate::domain_layer::data::entity::application_user_access_token_encrypted::ApplicationUserAccessTokenEncrypted;
+use super::serialization_form_resolver::SerializationFormResolver;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
+use crate::domain_layer::data::entity::application_user_access_token_encrypted::ApplicationUserAccessTokenEncrypted;
 use crate::domain_layer::functionality::service::encoder::Encoder;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
@@ -15,7 +16,6 @@ use crate::infrastructure_layer::functionality::service::encoder::Hmac;
 use crate::infrastructure_layer::functionality::service::serializer::MessagePack;
 use crate::infrastructure_layer::functionality::service::serializer::Serialize;
 use crate::infrastructure_layer::functionality::service::serializer::Serializer;
-use super::serialization_form_resolver::SerializationFormResolver;
 
 impl SerializationFormResolver<ApplicationUserAccessToken<'_>> {
     const TOKEN_PARTS_SEPARATOR: &'static str = ".";
@@ -53,18 +53,17 @@ impl SerializationFormResolver<ApplicationUserAccessToken<'_>> {
             application_user_access_token_signature.as_str()
         );
 
-        return Ok(
-            ApplicationUserAccessTokenEncrypted::new(application_user_access_token_encrypted)
-        );
+        return Ok(ApplicationUserAccessTokenEncrypted::new(application_user_access_token_encrypted));
     }
 
     pub fn deserialize<'a>(
         pushable_environment_configuration: &'a PushableEnvironmentConfiguration,
         application_user_access_token_encrypted: &'a ApplicationUserAccessTokenEncrypted,
     ) -> Result<InvalidArgumentResult<ApplicationUserAccessToken<'static>>, ErrorAuditor> {
-        let mut token_part_registry = application_user_access_token_encrypted
-            .get()
-            .splitn::<'_, &'_ str>(2, Self::TOKEN_PARTS_SEPARATOR);
+        let mut token_part_registry = application_user_access_token_encrypted.get().splitn::<'_, &'_ str>(
+            2,
+            Self::TOKEN_PARTS_SEPARATOR,
+        );
 
         let invalid_argument_result = InvalidArgumentResult::InvalidArgument {
             invalid_argument: InvalidArgument::ApplicationUserAccessTokenEncrypted,
@@ -147,11 +146,7 @@ impl Encoder<Signature> {
         let mut hmac_encoded_data: Vec<u8> = vec![];
 
         Encoder_::<Hmac>::encode(
-            pushable_environment_configuration
-                .encryption
-                .private_key
-                .application_user_access_token
-                .as_bytes(),
+            pushable_environment_configuration.encryption.private_key.application_user_access_token.as_bytes(),
             application_user_access_token_serialized.as_bytes(),
             hmac_encoded_data.as_mut_slice(),
         );

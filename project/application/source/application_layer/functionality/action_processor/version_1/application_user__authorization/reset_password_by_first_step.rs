@@ -189,11 +189,7 @@ impl ActionProcessor {
 
         let (application_user_reset_password_token_aggregator, can_send) = match application_user_reset_password_token {
             Some(mut application_user_reset_password_token_) => {
-                let (can_send_, need_to_update_1) = if ExpirationTimeChecker::<UnixTime>::is_expired(
-                    application_user_reset_password_token_
-                        .get_can_be_resent_from()
-                        .get(),
-                ) {
+                let (can_send_, need_to_update_1) = if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_reset_password_token_.get_can_be_resent_from().get()) {
                     let application_user_reset_password_token_can_be_resent_from = match Generator::<ApplicationUserResetPasswordToken_CanBeResentFrom>::generate() {
                         Ok(application_user_reset_password_token_can_be_resent_from_) => application_user_reset_password_token_can_be_resent_from_,
                         Err(mut error) => {
@@ -220,14 +216,7 @@ impl ActionProcessor {
                     )
                 };
 
-                let need_to_update_2 = if ExpirationTimeChecker::<UnixTime>::is_expired(
-                    application_user_reset_password_token_
-                        .get_expires_at()
-                        .get(),
-                ) || application_user_reset_password_token_
-                    .get_is_approved()
-                    .get()
-                {
+                let need_to_update_2 = if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_reset_password_token_.get_expires_at().get()) || application_user_reset_password_token_.get_is_approved().get() {
                     let application_user_reset_password_token_expires_at = match Generator::<ApplicationUserResetPasswordToken_ExpiresAt>::generate() {
                         Ok(application_user_reset_password_token_expires_at_) => application_user_reset_password_token_expires_at_,
                         Err(mut error) => {

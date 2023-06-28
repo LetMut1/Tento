@@ -196,11 +196,7 @@ impl ActionProcessor {
         }
 
         if application_user_registration_token_.get_value().get() != incoming.application_user_registration_token_value.get() {
-            let application_user_registration_token_wrong_enter_tries_quantity = match application_user_registration_token_
-                .get_wrong_enter_tries_quantity()
-                .get()
-                .checked_add(1)
-            {
+            let application_user_registration_token_wrong_enter_tries_quantity = match application_user_registration_token_.get_wrong_enter_tries_quantity().get().checked_add(1) {
                 Some(application_user_registration_token_wrong_enter_tries_quantity_) => application_user_registration_token_wrong_enter_tries_quantity_,
                 None => {
                     return Err(

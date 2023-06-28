@@ -34,20 +34,14 @@ impl SerializationFormResolver<ApplicationUserAccessRefreshToken<'_>> {
         let mut hmac_encoded_data: Vec<u8> = vec![];
 
         Encoder_::<Hmac>::encode(
-            pushable_environment_configuration
-                .encryption
-                .private_key
-                .application_user_access_refresh_token
-                .as_bytes(),
+            pushable_environment_configuration.encryption.private_key.application_user_access_refresh_token.as_bytes(),
             data.as_slice(),
             hmac_encoded_data.as_mut_slice(),
         );
 
         let application_user_access_refresh_token_encrypted = Encoder_::<Base64>::encode(hmac_encoded_data.as_slice());
 
-        return Ok(
-            ApplicationUserAccessRefreshTokenEncrypted::new(application_user_access_refresh_token_encrypted)
-        );
+        return Ok(ApplicationUserAccessRefreshTokenEncrypted::new(application_user_access_refresh_token_encrypted));
     }
 
     pub fn is_valid<'a>(

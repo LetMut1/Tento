@@ -88,10 +88,7 @@ impl Sender<Email> {
             }
             Environment::Development | Environment::LocalDevelopment => {
                 let smtp_client_ = match SmtpClient::new(
-                    pushable_environment_configuration
-                        .resource
-                        .email_server
-                        .socket_address,
+                    pushable_environment_configuration.resource.email_server.socket_address,
                     ClientSecurity::None,
                 ) {
                     Ok(smtp_client__) => smtp_client__,

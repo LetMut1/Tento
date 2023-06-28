@@ -1,6 +1,6 @@
 array_width = 0
 attr_fn_like_width = 0
-chain_width = 0
+chain_width = 240
 fn_params_layout = "Vertical"
 fn_call_width = 0
 max_width = 300

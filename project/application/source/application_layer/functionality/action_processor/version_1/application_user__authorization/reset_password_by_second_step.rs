@@ -146,11 +146,7 @@ impl ActionProcessor {
             }
         };
 
-        if ExpirationTimeChecker::<UnixTime>::is_expired(
-            application_user_reset_password_token_
-                .get_expires_at()
-                .get(),
-        ) {
+        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_reset_password_token_.get_expires_at().get()) {
             if let Err(mut error) = PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete(
                 database_2_postgresql_connection,
                 incoming.application_user_id,
@@ -176,10 +172,7 @@ impl ActionProcessor {
             );
         }
 
-        if application_user_reset_password_token_
-            .get_is_approved()
-            .get()
-        {
+        if application_user_reset_password_token_.get_is_approved().get() {
             return Ok(
                 InvalidArgumentResult::Ok {
                     subject: UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_AlreadyApproved),
@@ -188,11 +181,7 @@ impl ActionProcessor {
         }
 
         if application_user_reset_password_token_.get_value().get() != incoming.application_user_reset_password_token_value.get() {
-            let application_user_reset_password_token_wrong_enter_tries_quantity = match application_user_reset_password_token_
-                .get_wrong_enter_tries_quantity()
-                .get()
-                .checked_add(1)
-            {
+            let application_user_reset_password_token_wrong_enter_tries_quantity = match application_user_reset_password_token_.get_wrong_enter_tries_quantity().get().checked_add(1) {
                 Some(application_user_reset_password_token_wrong_enter_tries_quantity_) => application_user_reset_password_token_wrong_enter_tries_quantity_,
                 None => {
                     return Err(

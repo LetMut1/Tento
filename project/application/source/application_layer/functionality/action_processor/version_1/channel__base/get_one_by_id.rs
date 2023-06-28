@@ -2,6 +2,7 @@ use crate::application_layer::data::common_precedent::CommonPrecedent;
 use crate::application_layer::data::unified_report::UnifiedReport;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
+use crate::domain_layer::data::entity::application_user_access_token_encrypted::ApplicationUserAccessTokenEncrypted;
 use crate::domain_layer::data::entity::channel::Channel as EntityChannel;
 use crate::domain_layer::data::entity::channel::Channel_AccessModifier;
 use crate::domain_layer::data::entity::channel::Channel_AccessModifier_;
@@ -41,7 +42,6 @@ use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::serde::Deserialize;
 use extern_crate::serde::Serialize;
 use extern_crate::tokio_postgres::tls::MakeTlsConnect;
-use crate::domain_layer::data::entity::application_user_access_token_encrypted::ApplicationUserAccessTokenEncrypted;
 use extern_crate::tokio_postgres::tls::TlsConnect;
 use extern_crate::tokio_postgres::Socket;
 use std::clone::Clone;
@@ -66,7 +66,7 @@ impl ActionProcessor {
     {
         let extractor_result = match Extractor::<ApplicationUserAccessToken<'_>>::extract(
             pushable_environment_configuration,
-            &incoming.application_user_access_token_encrypted
+            &incoming.application_user_access_token_encrypted,
         )
         .await
         {
@@ -206,12 +206,7 @@ impl ActionProcessor {
                 }
             };
 
-            if !is_exist
-                && application_user_access_token
-                    .get_application_user_id()
-                    .get()
-                    != channel_.get_owner().get()
-            {
+            if !is_exist && application_user_access_token.get_application_user_id().get() != channel_.get_owner().get() {
                 return Ok(
                     InvalidArgumentResult::Ok {
                         subject: UnifiedReport::precedent(Precedent::Channel_IsClosed),

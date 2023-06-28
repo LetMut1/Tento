@@ -37,21 +37,13 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
 
         let application_user_reset_password_token_value = insert.application_user_reset_password_token_value.get();
 
-        let application_user_reset_password_token_wrong_enter_tries_quantity = insert
-            .application_user_reset_password_token_wrong_enter_tries_quantity
-            .get();
+        let application_user_reset_password_token_wrong_enter_tries_quantity = insert.application_user_reset_password_token_wrong_enter_tries_quantity.get();
 
-        let application_user_reset_password_token_is_approved = insert
-            .application_user_reset_password_token_is_approved
-            .get();
+        let application_user_reset_password_token_is_approved = insert.application_user_reset_password_token_is_approved.get();
 
-        let application_user_reset_password_token_expires_at = insert
-            .application_user_reset_password_token_expires_at
-            .get();
+        let application_user_reset_password_token_expires_at = insert.application_user_reset_password_token_expires_at.get();
 
-        let application_user_reset_password_token_can_be_resent_from = insert
-            .application_user_reset_password_token_can_be_resent_from
-            .get();
+        let application_user_reset_password_token_can_be_resent_from = insert.application_user_reset_password_token_can_be_resent_from.get();
 
         let query = "INSERT INTO public.application_user_reset_password_token AS aurpt ( \
                 application_user_id, \

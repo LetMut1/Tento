@@ -2,6 +2,7 @@ use crate::application_layer::data::common_precedent::CommonPrecedent;
 use crate::application_layer::data::unified_report::UnifiedReport;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
+use crate::domain_layer::data::entity::application_user_access_token_encrypted::ApplicationUserAccessTokenEncrypted;
 use crate::domain_layer::functionality::service::application_user_access_token__extractor::ExtractorResult;
 use crate::domain_layer::functionality::service::extractor::Extractor;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
@@ -17,7 +18,6 @@ use crate::infrastructure_layer::functionality::service::macro_rules::r#enum;
 use crate::infrastructure_layer::functionality::service::resolver::CloudMessage;
 use crate::infrastructure_layer::functionality::service::resolver::Resolver;
 use extern_crate::bb8::Pool;
-use crate::domain_layer::data::entity::application_user_access_token_encrypted::ApplicationUserAccessTokenEncrypted;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::serde::Deserialize;
@@ -49,7 +49,7 @@ impl ActionProcessor {
     {
         let extractor_result = match Extractor::<ApplicationUserAccessToken<'_>>::extract(
             pushable_environment_configuration,
-            &incoming.application_user_access_token_encrypted
+            &incoming.application_user_access_token_encrypted,
         )
         .await
         {

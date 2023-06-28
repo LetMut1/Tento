@@ -35,17 +35,13 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
 
         let application_user_registration_token_value = insert.application_user_registration_token_value.get();
 
-        let application_user_registration_token_wrong_enter_tries_quantity = insert
-            .application_user_registration_token_wrong_enter_tries_quantity
-            .get();
+        let application_user_registration_token_wrong_enter_tries_quantity = insert.application_user_registration_token_wrong_enter_tries_quantity.get();
 
         let application_user_registration_token_is_approved = insert.application_user_registration_token_is_approved.get();
 
         let application_user_registration_token_expires_at = insert.application_user_registration_token_expires_at.get();
 
-        let application_user_registration_token_can_be_resent_from = insert
-            .application_user_registration_token_can_be_resent_from
-            .get();
+        let application_user_registration_token_can_be_resent_from = insert.application_user_registration_token_can_be_resent_from.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
