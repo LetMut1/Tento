@@ -1,14 +1,15 @@
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
+use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
+use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Nickname;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Password;
-use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice;
-use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
-use crate::domain_layer::data::entity::channel::Channel;
+use crate::domain_layer::data::entity::channel::AccessModifier;
 use crate::domain_layer::data::entity::channel::Channel_AccessModifier_;
 use crate::domain_layer::data::entity::channel::Channel_BackgroundImagePath;
 use crate::domain_layer::data::entity::channel::Channel_CoverImagePath;
 use crate::domain_layer::data::entity::channel::Channel_Description;
+use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier;
 use crate::domain_layer::data::entity::channel::Channel_LinkedName;
 use crate::domain_layer::data::entity::channel::Channel_MarksQuantity;
 use crate::domain_layer::data::entity::channel::Channel_Name;
@@ -16,9 +17,9 @@ use crate::domain_layer::data::entity::channel::Channel_Orientation;
 use crate::domain_layer::data::entity::channel::Channel_SubscribersQuantity;
 use crate::domain_layer::data::entity::channel::Channel_ViewingQuantity;
 use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier_;
-use crate::domain_layer::functionality::service::channel__access_modifier_resolver::Channel_AccessModifierResolver;
-use crate::domain_layer::functionality::service::channel__visability_modifier_resolver::Channel_VisabilityModifierResolver;
+use crate::domain_layer::data::entity::channel::Channel;
 use crate::domain_layer::functionality::service::encoder::Encoder;
+use crate::domain_layer::functionality::service::form_resolver::FormResolver;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::environment_configuration::Environment;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
@@ -516,8 +517,8 @@ impl CreateFixturesProcessor {
                             channel_name,
                             channel_linked_name,
                             channel_description,
-                            channel_access_modifier: Channel_AccessModifierResolver::from_representation(Channel_AccessModifier_::Open),
-                            channel_visability_modifier: Channel_VisabilityModifierResolver::from_representation(Channel_VisabilityModifier_::Public),
+                            channel_access_modifier: FormResolver::<AccessModifier>::from_representation(Channel_AccessModifier_::Open),
+                            channel_visability_modifier: FormResolver::<Channel_VisabilityModifier>::from_representation(Channel_VisabilityModifier_::Public),
                             channel_orientation,
                             channel_cover_image_path: Some(Channel_CoverImagePath::new(Self::STUB.to_string())),
                             channel_background_image_path: Some(Channel_BackgroundImagePath::new(Self::STUB.to_string())),

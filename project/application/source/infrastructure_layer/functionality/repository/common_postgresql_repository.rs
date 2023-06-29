@@ -7,8 +7,6 @@ use crate::domain_layer::data::entity::channel::Channel_Id;
 use crate::domain_layer::data::entity::channel::Channel_LinkedName;
 use crate::domain_layer::data::entity::channel::Channel_Name;
 use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier;
-use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier_;
-use crate::domain_layer::functionality::service::channel__visability_modifier_resolver::Channel_VisabilityModifierResolver;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -30,6 +28,7 @@ impl PostgresqlRepository<Common1> {
         application_user_id: ApplicationUser_Id,
         channel_name: &'a Channel_Name,
         requery_channel_name: &'a Option<Channel_Name>,
+        channel_visability_modifier: Channel_VisabilityModifier,
         limit: i16,
     ) -> Result<Vec<Common1>, ErrorAuditor> {
         let application_user_id_ = application_user_id.get();
@@ -88,8 +87,6 @@ impl PostgresqlRepository<Common1> {
                 return Err(error);
             }
         };
-
-        let channel_visability_modifier = Channel_VisabilityModifierResolver::from_representation(Channel_VisabilityModifier_::Public);
 
         let channel_visability_modifier_ = channel_visability_modifier.get();
 

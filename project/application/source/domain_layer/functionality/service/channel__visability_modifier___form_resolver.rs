@@ -1,9 +1,8 @@
 use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier;
 use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier_;
+use super::form_resolver::FormResolver;
 
-pub struct Channel_VisabilityModifierResolver;
-
-impl Channel_VisabilityModifierResolver {
+impl FormResolver<Channel_VisabilityModifier> {
     pub fn from_representation(channel_visability_modifier: Channel_VisabilityModifier_) -> Channel_VisabilityModifier {
         return match channel_visability_modifier {
             Channel_VisabilityModifier_::Public => Channel_VisabilityModifier::new(Channel_VisabilityModifier::PUBLIC),

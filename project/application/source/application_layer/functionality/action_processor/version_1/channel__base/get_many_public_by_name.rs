@@ -3,8 +3,11 @@ use crate::application_layer::data::unified_report::UnifiedReport;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::data::entity::application_user_access_token_encrypted::ApplicationUserAccessTokenEncrypted;
 use crate::domain_layer::data::entity::channel::Channel_Name;
+use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier;
+use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier_;
 use crate::domain_layer::functionality::service::application_user_access_token___extractor::ExtractorResult;
 use crate::domain_layer::functionality::service::extractor::Extractor;
+use crate::domain_layer::functionality::service::form_resolver::FormResolver;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
@@ -157,6 +160,7 @@ impl ActionProcessor {
             application_user_access_token.get_application_user_id(),
             &incoming.channel_name,
             &incoming.requery_channel_name,
+            FormResolver::<Channel_VisabilityModifier>::from_representation(Channel_VisabilityModifier_::Public),
             incoming.limit,
         )
         .await

@@ -1,9 +1,8 @@
 use crate::domain_layer::data::entity::channel::Channel_AccessModifier;
 use crate::domain_layer::data::entity::channel::Channel_AccessModifier_;
+use super::form_resolver::FormResolver;
 
-pub struct Channel_AccessModifierResolver;
-
-impl Channel_AccessModifierResolver {
+impl FormResolver<Channel_AccessModifier> {
     pub fn from_representation(channel_access_modifier: Channel_AccessModifier_) -> Channel_AccessModifier {
         return match channel_access_modifier {
             Channel_AccessModifier_::Open => Channel_AccessModifier::new(Channel_AccessModifier::OPEN),

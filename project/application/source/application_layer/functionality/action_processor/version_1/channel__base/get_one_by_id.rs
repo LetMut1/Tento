@@ -21,8 +21,8 @@ use crate::domain_layer::data::entity::channel_inner_link::ChannelInnerLink;
 use crate::domain_layer::data::entity::channel_outer_link::ChannelOuterLink;
 use crate::domain_layer::data::entity::channel_subscription::ChannelSubscription;
 use crate::domain_layer::functionality::service::application_user_access_token___extractor::ExtractorResult;
-use crate::domain_layer::functionality::service::channel__access_modifier_resolver::Channel_AccessModifierResolver;
 use crate::domain_layer::functionality::service::extractor::Extractor;
+use crate::domain_layer::functionality::service::form_resolver::FormResolver;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
@@ -182,7 +182,7 @@ impl ActionProcessor {
             }
         };
 
-        let channel_access_modifier = Channel_AccessModifierResolver::to_representation(channel_.get_access_modifier());
+        let channel_access_modifier = FormResolver::<Channel_AccessModifier>::to_representation(channel_.get_access_modifier());
 
         if let Channel_AccessModifier_::Close = channel_access_modifier {
             let is_exist = match PostgresqlRepository::<ChannelSubscription>::is_exist(
