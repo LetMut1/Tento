@@ -1,4 +1,4 @@
-use super::serialization_form_resolver::SerializationFormResolver;
+use super::form_resolver::FormResolver;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
 use crate::domain_layer::data::entity::application_user_access_refresh_token_encrypted::ApplicationUserAccessRefreshTokenEncrypted;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
@@ -11,8 +11,8 @@ use crate::infrastructure_layer::functionality::service::serializer::MessagePack
 use crate::infrastructure_layer::functionality::service::serializer::Serialize;
 use crate::infrastructure_layer::functionality::service::serializer::Serializer;
 
-impl SerializationFormResolver<ApplicationUserAccessRefreshToken<'_>> {
-    pub fn serialize<'a>(
+impl FormResolver<ApplicationUserAccessRefreshToken<'_>> {
+    pub fn to_encrypted<'a>(
         pushable_environment_configuration: &'a PushableEnvironmentConfiguration,
         application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>,
     ) -> Result<ApplicationUserAccessRefreshTokenEncrypted, ErrorAuditor> {
@@ -49,7 +49,7 @@ impl SerializationFormResolver<ApplicationUserAccessRefreshToken<'_>> {
         application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>,
         application_user_access_refresh_token_encrypted: &'a ApplicationUserAccessRefreshTokenEncrypted,
     ) -> Result<bool, ErrorAuditor> {
-        let application_user_access_refresh_token_encrypted_ = match Self::serialize(
+        let application_user_access_refresh_token_encrypted_ = match Self::to_encrypted(
             pushable_environment_configuration,
             application_user_access_refresh_token,
         ) {

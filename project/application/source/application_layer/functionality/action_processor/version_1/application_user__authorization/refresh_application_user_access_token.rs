@@ -11,7 +11,7 @@ use crate::domain_layer::data::entity::application_user_access_token::Applicatio
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken_Id;
 use crate::domain_layer::data::entity::application_user_access_token_encrypted::ApplicationUserAccessTokenEncrypted;
 use crate::domain_layer::functionality::service::generator::Generator;
-use crate::domain_layer::functionality::service::serialization_form_resolver::SerializationFormResolver;
+use crate::domain_layer::functionality::service::form_resolver::FormResolver;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -53,7 +53,7 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let application_user_access_token = match SerializationFormResolver::<ApplicationUserAccessToken<'_>>::deserialize(
+        let application_user_access_token = match FormResolver::<ApplicationUserAccessToken<'_>>::from_encrypted(
             pushable_environment_configuration,
             &incoming.application_user_access_token_encrypted,
         ) {
@@ -142,7 +142,7 @@ impl ActionProcessor {
             }
         };
 
-        let is_valid = match SerializationFormResolver::<ApplicationUserAccessRefreshToken<'_>>::is_valid(
+        let is_valid = match FormResolver::<ApplicationUserAccessRefreshToken<'_>>::is_valid(
             pushable_environment_configuration,
             &application_user_access_refresh_token_,
             &incoming.application_user_access_refresh_token_encrypted,
@@ -256,7 +256,7 @@ impl ActionProcessor {
             return Err(error);
         }
 
-        let application_user_access_token_encrypted_new = match SerializationFormResolver::<ApplicationUserAccessToken<'_>>::serialize(
+        let application_user_access_token_encrypted_new = match FormResolver::<ApplicationUserAccessToken<'_>>::to_encrypted(
             pushable_environment_configuration,
             &application_user_access_token_new,
         ) {
@@ -274,7 +274,7 @@ impl ActionProcessor {
             }
         };
 
-        let application_user_access_refresh_token_encrypted_new = match SerializationFormResolver::<ApplicationUserAccessRefreshToken<'_>>::serialize(
+        let application_user_access_refresh_token_encrypted_new = match FormResolver::<ApplicationUserAccessRefreshToken<'_>>::to_encrypted(
             pushable_environment_configuration,
             &application_user_access_refresh_token_,
         ) {

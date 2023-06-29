@@ -1,7 +1,7 @@
 use super::extractor::Extractor;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::data::entity::application_user_access_token_encrypted::ApplicationUserAccessTokenEncrypted;
-use crate::domain_layer::functionality::service::serialization_form_resolver::SerializationFormResolver;
+use crate::domain_layer::functionality::service::form_resolver::FormResolver;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
@@ -14,7 +14,7 @@ impl Extractor<ApplicationUserAccessToken<'_>> {
         pushable_environment_configuration: &'a PushableEnvironmentConfiguration,
         application_user_access_token_encrypted: &'a ApplicationUserAccessTokenEncrypted,
     ) -> Result<InvalidArgumentResult<ExtractorResult>, ErrorAuditor> {
-        let application_user_access_token = match SerializationFormResolver::<ApplicationUserAccessToken<'_>>::deserialize(
+        let application_user_access_token = match FormResolver::<ApplicationUserAccessToken<'_>>::from_encrypted(
             pushable_environment_configuration,
             application_user_access_token_encrypted,
         ) {

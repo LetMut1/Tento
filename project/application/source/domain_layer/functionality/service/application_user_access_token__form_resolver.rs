@@ -1,4 +1,4 @@
-use super::serialization_form_resolver::SerializationFormResolver;
+use super::form_resolver::FormResolver;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::data::entity::application_user_access_token_encrypted::ApplicationUserAccessTokenEncrypted;
 use crate::domain_layer::functionality::service::encoder::Encoder;
@@ -17,10 +17,10 @@ use crate::infrastructure_layer::functionality::service::serializer::MessagePack
 use crate::infrastructure_layer::functionality::service::serializer::Serialize;
 use crate::infrastructure_layer::functionality::service::serializer::Serializer;
 
-impl SerializationFormResolver<ApplicationUserAccessToken<'_>> {
+impl FormResolver<ApplicationUserAccessToken<'_>> {
     const TOKEN_PARTS_SEPARATOR: &'static str = ".";
 
-    pub fn serialize<'a>(
+    pub fn to_encrypted<'a>(
         pushable_environment_configuration: &'a PushableEnvironmentConfiguration,
         application_user_access_token: &'a ApplicationUserAccessToken<'_>,
     ) -> Result<ApplicationUserAccessTokenEncrypted, ErrorAuditor> {
@@ -56,7 +56,7 @@ impl SerializationFormResolver<ApplicationUserAccessToken<'_>> {
         return Ok(ApplicationUserAccessTokenEncrypted::new(application_user_access_token_encrypted));
     }
 
-    pub fn deserialize<'a>(
+    pub fn from_encrypted<'a>(
         pushable_environment_configuration: &'a PushableEnvironmentConfiguration,
         application_user_access_token_encrypted: &'a ApplicationUserAccessTokenEncrypted,
     ) -> Result<InvalidArgumentResult<ApplicationUserAccessToken<'static>>, ErrorAuditor> {

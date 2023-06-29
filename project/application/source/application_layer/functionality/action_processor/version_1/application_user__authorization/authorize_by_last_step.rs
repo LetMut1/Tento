@@ -20,7 +20,7 @@ use crate::domain_layer::data::entity::application_user_authorization_token::App
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::functionality::service::generator::Generator;
-use crate::domain_layer::functionality::service::serialization_form_resolver::SerializationFormResolver;
+use crate::domain_layer::functionality::service::form_resolver::FormResolver;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
@@ -447,7 +447,7 @@ impl ActionProcessor {
             return Err(error);
         }
         // TODO  TRANZACTION
-        let application_user_access_token_encrypted = match SerializationFormResolver::<ApplicationUserAccessToken<'_>>::serialize(
+        let application_user_access_token_encrypted = match FormResolver::<ApplicationUserAccessToken<'_>>::to_encrypted(
             pushable_environment_configuration,
             &application_user_access_token,
         ) {
@@ -465,7 +465,7 @@ impl ActionProcessor {
             }
         };
 
-        let application_user_access_refresh_token_encrypted = match SerializationFormResolver::<ApplicationUserAccessRefreshToken<'_>>::serialize(
+        let application_user_access_refresh_token_encrypted = match FormResolver::<ApplicationUserAccessRefreshToken<'_>>::to_encrypted(
             pushable_environment_configuration,
             &application_user_access_refresh_token_,
         ) {

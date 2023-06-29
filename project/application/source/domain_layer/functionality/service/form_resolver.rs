@@ -1,5 +1,5 @@
 use std::marker::PhantomData;
 
-pub struct SerializationFormResolver<S> {
+pub struct FormResolver<S> {
     _subject: PhantomData<S>,
 }
