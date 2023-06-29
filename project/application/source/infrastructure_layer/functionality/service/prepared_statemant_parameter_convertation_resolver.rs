@@ -2,7 +2,7 @@ use extern_crate::tokio_postgres::types::ToSql;
 use extern_crate::tokio_postgres::types::Type;
 
 pub struct PreparedStatementParameterConvertationResolver<'a> {
-    parameter_registry: Vec<&'a (dyn ToSql + Sync)>,
+    parameter_registry: Vec<&'a (dyn ToSql + Sync + 'a)>,
     parameter_type_registry: Vec<Type>,
 }
 
@@ -16,7 +16,7 @@ impl<'a> PreparedStatementParameterConvertationResolver<'a> {
 
     pub fn add_parameter<'b>(
         &'b mut self,
-        parameter_value: &'a (dyn ToSql + Sync),
+        parameter_value: &'a (dyn ToSql + Sync + 'a),
         patameter_type: Type,
     ) -> &'b mut Self {
         self.parameter_registry.push(parameter_value);
@@ -25,7 +25,7 @@ impl<'a> PreparedStatementParameterConvertationResolver<'a> {
         return self;
     }
 
-    pub fn get_parameter_registry<'b>(&'b self) -> &'b [&'a (dyn ToSql + Sync)] {
+    pub fn get_parameter_registry<'b>(&'b self) -> &'b [&'a (dyn ToSql + Sync + 'a)] {
         return &self.parameter_registry;
     }
 

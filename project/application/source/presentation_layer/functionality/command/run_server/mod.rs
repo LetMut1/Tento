@@ -109,10 +109,6 @@ fn main() -> () {
 
 // TODO  TODO  TODO  TODO  TODO  Имена PreparedStatement, их отмена - нужно ли это все?  Если извне оборачивать в транзакцию, что будет с декларирование подготовленного запроса? То есть: Бегин- создать препэрэд стэйстмент - иполнить пр ст- коммит/роллбэу
 
-// &'a (dyn ToSql + Sync) -> +'static
-
-// SerializationFormResolver -> переназвать что то с Encrypted/...
-
 // application_user_reset_password_token_wrong_enter_tries_quantity = match application_user_reset_password_token_.get_wrong_enter_tries_quantity().get() - Incrementor сервис написать.
 
 // impl<S> UnifiedReport<S> -> сделать через трейт,
