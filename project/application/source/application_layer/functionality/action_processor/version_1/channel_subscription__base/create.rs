@@ -20,7 +20,7 @@ use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::data::pushable_environment_configuration::PushableEnvironmentConfiguration;
 use crate::infrastructure_layer::data::void::Void;
-use crate::infrastructure_layer::functionality::repository::channel_subscription__postgresql_repository::Insert;
+use crate::infrastructure_layer::functionality::repository::channel_subscription___postgresql_repository::Insert;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::macro_rules::r#enum;
 use extern_crate::bb8::Pool;
