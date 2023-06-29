@@ -16,6 +16,8 @@ use crate::domain_layer::data::entity::channel::Channel_Orientation;
 use crate::domain_layer::data::entity::channel::Channel_SubscribersQuantity;
 use crate::domain_layer::data::entity::channel::Channel_ViewingQuantity;
 use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier_;
+use crate::domain_layer::functionality::service::channel__access_modifier_resolver::Channel_AccessModifierResolver;
+use crate::domain_layer::functionality::service::channel__visability_modifier_resolver::Channel_VisabilityModifierResolver;
 use crate::domain_layer::functionality::service::encoder::Encoder;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::environment_configuration::Environment;
@@ -514,8 +516,8 @@ impl CreateFixturesProcessor {
                             channel_name,
                             channel_linked_name,
                             channel_description,
-                            channel_access_modifier: Channel_AccessModifier_::Open,
-                            channel_visability_modifier: Channel_VisabilityModifier_::Public,
+                            channel_access_modifier: Channel_AccessModifierResolver::from_representation(Channel_AccessModifier_::Open),
+                            channel_visability_modifier: Channel_VisabilityModifierResolver::from_representation(Channel_VisabilityModifier_::Public),
                             channel_orientation,
                             channel_cover_image_path: Some(Channel_CoverImagePath::new(Self::STUB.to_string())),
                             channel_background_image_path: Some(Channel_BackgroundImagePath::new(Self::STUB.to_string())),

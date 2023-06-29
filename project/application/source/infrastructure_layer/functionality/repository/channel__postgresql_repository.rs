@@ -2,7 +2,6 @@ use super::postgresql_repository::PostgresqlRepository;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
 use crate::domain_layer::data::entity::channel::Channel;
 use crate::domain_layer::data::entity::channel::Channel_AccessModifier;
-use crate::domain_layer::data::entity::channel::Channel_AccessModifier_;
 use crate::domain_layer::data::entity::channel::Channel_BackgroundImagePath;
 use crate::domain_layer::data::entity::channel::Channel_CoverImagePath;
 use crate::domain_layer::data::entity::channel::Channel_CreatedAt;
@@ -15,9 +14,6 @@ use crate::domain_layer::data::entity::channel::Channel_Orientation;
 use crate::domain_layer::data::entity::channel::Channel_SubscribersQuantity;
 use crate::domain_layer::data::entity::channel::Channel_ViewingQuantity;
 use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier;
-use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier_;
-use crate::domain_layer::functionality::service::channel__access_modifier_resolver::Channel_AccessModifierResolver;
-use crate::domain_layer::functionality::service::channel__visability_modifier_resolver::Channel_VisabilityModifierResolver;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -48,9 +44,9 @@ impl PostgresqlRepository<Channel<'_>> {
             None => None,
         };
 
-        let channel_access_modifier = Channel_AccessModifierResolver::from_representation(insert.channel_access_modifier).get();
+        let channel_access_modifier = insert.channel_access_modifier.get();
 
-        let channel_visability_modifier = Channel_VisabilityModifierResolver::from_representation(insert.channel_visability_modifier).get();
+        let channel_visability_modifier = insert.channel_visability_modifier.get();
 
         let channel_orientation = insert.channel_orientation.get();
 
@@ -1079,8 +1075,8 @@ pub struct Insert {
     pub channel_name: Channel_Name,
     pub channel_linked_name: Channel_LinkedName,
     pub channel_description: Option<Channel_Description>,
-    pub channel_access_modifier: Channel_AccessModifier_,
-    pub channel_visability_modifier: Channel_VisabilityModifier_,
+    pub channel_access_modifier: Channel_AccessModifier,
+    pub channel_visability_modifier: Channel_VisabilityModifier,
     pub channel_orientation: Channel_Orientation,
     pub channel_cover_image_path: Option<Channel_CoverImagePath>,
     pub channel_background_image_path: Option<Channel_BackgroundImagePath>,
