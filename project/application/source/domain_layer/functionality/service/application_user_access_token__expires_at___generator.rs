@@ -1,12 +1,10 @@
 use super::generator::Generator;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken_ExpiresAt;
-use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken_Id;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::functionality::service::resolver::DateTime;
 use crate::infrastructure_layer::functionality::service::resolver::Resolver;
-use extern_crate::uuid::Uuid;
 
 impl Generator<ApplicationUserAccessToken_ExpiresAt> {
     pub fn generate() -> Result<ApplicationUserAccessToken_ExpiresAt, ErrorAuditor> {
@@ -26,11 +24,5 @@ impl Generator<ApplicationUserAccessToken_ExpiresAt> {
         };
 
         return Ok(ApplicationUserAccessToken_ExpiresAt::new(application_user_access_token_expires_at));
-    }
-}
-
-impl Generator<ApplicationUserAccessToken_Id> {
-    pub fn generate() -> ApplicationUserAccessToken_Id {
-        return ApplicationUserAccessToken_Id::new(Uuid::new_v4().to_string());
     }
 }

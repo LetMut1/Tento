@@ -6,7 +6,7 @@ use crate::domain_layer::data::entity::channel::Channel;
 use crate::domain_layer::data::entity::channel::Channel_AccessModifier_;
 use crate::domain_layer::data::entity::channel::Channel_Id;
 use crate::domain_layer::data::entity::channel_subscription::ChannelSubscription;
-use crate::domain_layer::functionality::service::application_user_access_token__extractor::ExtractorResult;
+use crate::domain_layer::functionality::service::application_user_access_token___extractor::ExtractorResult;
 use crate::domain_layer::functionality::service::channel__access_modifier_resolver::Channel_AccessModifierResolver;
 use crate::domain_layer::functionality::service::extractor::Extractor;
 use crate::domain_layer::functionality::service::validator::Validator;

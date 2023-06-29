@@ -3,7 +3,7 @@ use crate::application_layer::data::unified_report::UnifiedReport;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::data::entity::application_user_access_token_encrypted::ApplicationUserAccessTokenEncrypted;
-use crate::domain_layer::functionality::service::application_user_access_token__extractor::ExtractorResult;
+use crate::domain_layer::functionality::service::application_user_access_token___extractor::ExtractorResult;
 use crate::domain_layer::functionality::service::extractor::Extractor;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
