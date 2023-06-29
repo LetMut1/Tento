@@ -1,6 +1,6 @@
-pub mod action_round_register__context_creator;
+pub mod action_round_register__creator;
 pub mod action_round_register__writer;
-pub mod application_user__password_encoder;
+pub mod application_user__encoder;
 pub mod application_user__validator;
 pub mod application_user_access_refresh_token__generator;
 pub mod application_user_access_refresh_token__form_resolver;
@@ -19,7 +19,7 @@ pub mod application_user_reset_password_token__generator;
 pub mod application_user_reset_password_token__validator;
 pub mod channel__access_modifier_resolver;
 pub mod channel__visability_modifier_resolver;
-pub mod channel_validator;
+pub mod channel__validator;
 pub mod creator;
 pub mod email_sender;
 pub mod encoder;
