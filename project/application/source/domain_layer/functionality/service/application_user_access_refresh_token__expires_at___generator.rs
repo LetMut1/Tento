@@ -1,19 +1,10 @@
-use super::generator::Generator;
-use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ExpiresAt;
-use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ObfuscationValue;
-use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_UpdatedAt;
+use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::functionality::service::resolver::DateTime;
 use crate::infrastructure_layer::functionality::service::resolver::Resolver;
-use extern_crate::uuid::Uuid;
-
-impl Generator<ApplicationUserAccessRefreshToken_ObfuscationValue> {
-    pub fn generate() -> ApplicationUserAccessRefreshToken_ObfuscationValue {
-        return ApplicationUserAccessRefreshToken_ObfuscationValue::new(Uuid::new_v4().to_string());
-    }
-}
+use super::generator::Generator;
 
 impl Generator<ApplicationUserAccessRefreshToken_ExpiresAt> {
     pub fn generate() -> Result<ApplicationUserAccessRefreshToken_ExpiresAt, ErrorAuditor> {
@@ -33,11 +24,5 @@ impl Generator<ApplicationUserAccessRefreshToken_ExpiresAt> {
         };
 
         return Ok(ApplicationUserAccessRefreshToken_ExpiresAt::new(application_user_access_refresh_token_expires_at));
-    }
-}
-
-impl Generator<ApplicationUserAccessRefreshToken_UpdatedAt> {
-    pub fn generate() -> ApplicationUserAccessRefreshToken_UpdatedAt {
-        return ApplicationUserAccessRefreshToken_UpdatedAt::new(Resolver::<DateTime>::unixtime_get_now());
     }
 }
