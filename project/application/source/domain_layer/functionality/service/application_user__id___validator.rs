@@ -1,0 +1,8 @@
+use super::validator::Validator;
+use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
+
+impl Validator<ApplicationUser_Id> {
+    pub fn is_valid(application_user_id: ApplicationUser_Id) -> bool {
+        return application_user_id.get() >= 0;
+    }
+}
