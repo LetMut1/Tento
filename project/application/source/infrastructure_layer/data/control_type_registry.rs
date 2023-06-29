@@ -16,6 +16,8 @@ pub struct CloudMessage;
 
 pub struct DateTime;
 
+pub struct UnixTime;
+
 pub struct Email;
 
 pub struct MessagePack;

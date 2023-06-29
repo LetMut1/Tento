@@ -3,10 +3,10 @@ use extern_crate::serde::Deserialize;
 use extern_crate::serde::Serialize as SerdeSerialize;
 use std::marker::PhantomData;
 
-pub use super::message_pack__serializer::MessagePack;
+pub use super::message_pack___serializer::MessagePack;
 
 #[cfg(feature = "manual_testing")]
-pub use super::json__serializer::Json;
+pub use super::json___serializer::Json;
 
 pub struct Serializer<T> {
     _format: PhantomData<T>,

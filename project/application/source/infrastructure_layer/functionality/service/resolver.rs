@@ -1,8 +1,8 @@
 use std::marker::PhantomData;
 
-pub use super::cloud_message__resolver::CloudMessage;
-pub use super::date_time__resolver::DateTime;
-pub use super::postgresql_transaction__resolver::PostgresqlTransaction;
+pub use super::cloud_message___resolver::CloudMessage;
+pub use super::date_time___resolver::DateTime;
+pub use super::postgresql_transaction___resolver::PostgresqlTransaction;
 
 pub struct Resolver<S> {
     _subject: PhantomData<S>,
