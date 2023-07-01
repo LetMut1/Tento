@@ -1,6 +1,6 @@
+use super::form_resolver::FormResolver;
 use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier;
 use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier_;
-use super::form_resolver::FormResolver;
 
 impl FormResolver<Channel_VisabilityModifier> {
     pub fn from_representation(channel_visability_modifier: Channel_VisabilityModifier_) -> Channel_VisabilityModifier {

@@ -11,6 +11,7 @@ pub use http;
 pub use hyper;
 pub use lettre;
 pub use lettre_email;
+pub use macro_rules;
 pub use rand;
 pub use redis;
 pub use regex;
@@ -20,7 +21,6 @@ pub use tokio;
 pub use tokio_postgres;
 pub use toml;
 pub use uuid;
-pub use macro_rules;
 
 #[cfg(feature = "manual_testing")]
 pub use const_format;

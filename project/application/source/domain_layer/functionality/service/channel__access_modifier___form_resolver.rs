@@ -1,6 +1,6 @@
+use super::form_resolver::FormResolver;
 use crate::domain_layer::data::entity::channel::Channel_AccessModifier;
 use crate::domain_layer::data::entity::channel::Channel_AccessModifier_;
-use super::form_resolver::FormResolver;
 
 impl FormResolver<Channel_AccessModifier> {
     pub fn from_representation(channel_access_modifier: Channel_AccessModifier_) -> Channel_AccessModifier {

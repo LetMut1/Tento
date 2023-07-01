@@ -16,10 +16,10 @@ use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentR
 use crate::infrastructure_layer::data::pushable_environment_configuration::PushableEnvironmentConfiguration;
 use crate::infrastructure_layer::functionality::repository::common_postgresql_repository::Common1;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
-use extern_crate::macro_rules::r#enum;
 use extern_crate::bb8::Pool;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
+use extern_crate::macro_rules::r#enum;
 use extern_crate::serde::Deserialize;
 use extern_crate::serde::Serialize;
 use extern_crate::tokio_postgres::tls::MakeTlsConnect;
