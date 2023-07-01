@@ -33,7 +33,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let application_user_device_id = insert.application_user_device_id.as_ref().get();
+        let application_user_device_id = insert.application_user_device_id.get();
 
         let application_user_reset_password_token_value = insert.application_user_reset_password_token_value.get();
 
@@ -149,7 +149,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
         return Ok(
             ApplicationUserResetPasswordToken::new(
                 insert.application_user_id,
-                insert.application_user_device_id,
+                Cow::Borrowed(insert.application_user_device_id),
                 insert.application_user_reset_password_token_value,
                 insert.application_user_reset_password_token_wrong_enter_tries_quantity,
                 insert.application_user_reset_password_token_is_approved,
@@ -1383,7 +1383,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken_6> {
 
 pub struct Insert<'a> {
     pub application_user_id: ApplicationUser_Id,
-    pub application_user_device_id: Cow<'a, ApplicationUserDevice_Id>,
+    pub application_user_device_id: &'a ApplicationUserDevice_Id,
     pub application_user_reset_password_token_value: ApplicationUserResetPasswordToken_Value,
     pub application_user_reset_password_token_wrong_enter_tries_quantity: ApplicationUserResetPasswordToken_WrongEnterTriesQuantity,
     pub application_user_reset_password_token_is_approved: ApplicationUserResetPasswordToken_IsApproved,
