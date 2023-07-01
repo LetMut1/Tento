@@ -25,9 +25,9 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
     ) -> Result<ApplicationUserAccessRefreshToken<'b>, ErrorAuditor> {
         let application_user_id = insert.application_user_id.get();
 
-        let application_user_device_id = insert.application_user_device_id.as_ref().get();
+        let application_user_device_id = insert.application_user_device_id.get();
 
-        let application_user_access_token_id = insert.application_user_access_token_id.as_ref().get();
+        let application_user_access_token_id = insert.application_user_access_token_id.get();
 
         let application_user_access_refresh_token_obfuscation_value = insert.application_user_access_refresh_token_obfuscation_value.get();
 
@@ -135,8 +135,8 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
         return Ok(
             ApplicationUserAccessRefreshToken::new(
                 insert.application_user_id,
-                insert.application_user_device_id,
-                insert.application_user_access_token_id,
+                Cow::Borrowed(insert.application_user_device_id),
+                Cow::Borrowed(insert.application_user_access_token_id),
                 insert.application_user_access_refresh_token_obfuscation_value,
                 insert.application_user_access_refresh_token_expires_at,
                 insert.application_user_access_refresh_token_updated_at,
@@ -614,8 +614,8 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken_1> {
 
 pub struct Insert<'a> {
     pub application_user_id: ApplicationUser_Id,
-    pub application_user_device_id: Cow<'a, ApplicationUserDevice_Id>,
-    pub application_user_access_token_id: Cow<'a, ApplicationUserAccessToken_Id>,
+    pub application_user_device_id: &'a ApplicationUserDevice_Id,
+    pub application_user_access_token_id: &'a ApplicationUserAccessToken_Id,
     pub application_user_access_refresh_token_obfuscation_value: ApplicationUserAccessRefreshToken_ObfuscationValue,
     pub application_user_access_refresh_token_expires_at: ApplicationUserAccessRefreshToken_ExpiresAt,
     pub application_user_access_refresh_token_updated_at: ApplicationUserAccessRefreshToken_UpdatedAt,

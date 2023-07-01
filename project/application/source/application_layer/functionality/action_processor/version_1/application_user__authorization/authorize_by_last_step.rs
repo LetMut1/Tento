@@ -340,7 +340,7 @@ impl ActionProcessor {
             }
         };
 
-        let application_user_access_token_id = Cow::Borrowed(application_user_access_token.get_id());
+        let application_user_access_token_id = application_user_access_token.get_id();
 
         let application_user_access_refresh_token_obfuscation_value = Generator::<ApplicationUserAccessRefreshToken_ObfuscationValue>::generate();
 
@@ -364,7 +364,7 @@ impl ActionProcessor {
         let application_user_access_refresh_token_ = match application_user_access_refresh_token {
             Some(mut application_user_access_refresh_token__) => {
                 application_user_access_refresh_token__
-                    .set_application_user_access_token_id(application_user_access_token_id)
+                    .set_application_user_access_token_id(Cow::Borrowed(application_user_access_token_id))
                     .set_obfuscation_value(application_user_access_refresh_token_obfuscation_value)
                     .set_expires_at(application_user_access_refresh_token_expires_at)
                     .set_updated_at(application_user_access_refresh_token_updated_at);
@@ -393,7 +393,7 @@ impl ActionProcessor {
             None => {
                 let application_user_access_refresh_token_insert = ApplicationUserAccessRefreshTokenInsert {
                     application_user_id: incoming.application_user_id,
-                    application_user_device_id: Cow::Borrowed(&incoming.application_user_device_id),
+                    application_user_device_id: &incoming.application_user_device_id,
                     application_user_access_token_id,
                     application_user_access_refresh_token_obfuscation_value,
                     application_user_access_refresh_token_expires_at,

@@ -492,8 +492,8 @@ impl ActionProcessor {
         // TODO  TRANZACTION посмотреть, необходимо ли здесь сделать транзакцию
         let application_user_access_refresh_token_insert = ApplicationUserAccessRefreshTokenInsert {
             application_user_id: application_user.get_id(),
-            application_user_device_id: Cow::Borrowed(application_user_device.get_id()),
-            application_user_access_token_id: Cow::Borrowed(application_user_access_token.get_id()),
+            application_user_device_id: application_user_device.get_id(),
+            application_user_access_token_id: application_user_access_token.get_id(),
             application_user_access_refresh_token_obfuscation_value: Generator::<ApplicationUserAccessRefreshToken_ObfuscationValue>::generate(),
             application_user_access_refresh_token_expires_at,
             application_user_access_refresh_token_updated_at: Generator::<ApplicationUserAccessRefreshToken_UpdatedAt>::generate(),
