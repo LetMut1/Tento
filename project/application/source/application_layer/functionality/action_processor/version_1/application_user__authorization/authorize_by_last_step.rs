@@ -21,6 +21,7 @@ use crate::domain_layer::data::entity::application_user_device::ApplicationUserD
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::functionality::service::generator::Generator;
 use crate::domain_layer::functionality::service::form_resolver::FormResolver;
+use crate::domain_layer::functionality::service::incrementor::Incrementor;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
@@ -186,25 +187,19 @@ impl ActionProcessor {
         }
 
         if application_user_authorization_token_.get_value().get() != incoming.application_user_authorization_token_value.get() {
-            let application_user_authorization_token_wrong_enter_tries_quantity = match application_user_authorization_token_.get_wrong_enter_tries_quantity().get().checked_add(1) {
-                Some(application_user_authorization_token_wrong_enter_tries_quantity_) => application_user_authorization_token_wrong_enter_tries_quantity_,
-                None => {
-                    return Err(
-                        ErrorAuditor::new(
-                            BaseError::create_out_of_range(),
-                            BacktracePart::new(
-                                line!(),
-                                file!(),
-                                None,
-                            ),
-                        ),
-                    );
-                }
-            };
+            if let Err(mut error) = Incrementor::<ApplicationUserAuthorizationToken_WrongEnterTriesQuantity>::increment(application_user_authorization_token_.get_wrong_enter_tries_quantity_()) {
+                error.add_backtrace_part(
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                );
 
-            if application_user_authorization_token_wrong_enter_tries_quantity <= ApplicationUserAuthorizationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
-                application_user_authorization_token_.set_wrong_enter_tries_quantity(ApplicationUserAuthorizationToken_WrongEnterTriesQuantity::new(application_user_authorization_token_wrong_enter_tries_quantity));
+                return Err(error);
+            }
 
+            if application_user_authorization_token_.get_wrong_enter_tries_quantity().get() <= ApplicationUserAuthorizationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
                 if let Err(mut error) = PostgresqlRepository::<ApplicationUserAuthorizationToken_4>::update(
                     database_2_postgresql_connection,
                     &application_user_authorization_token_,

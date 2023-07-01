@@ -26,6 +26,7 @@ pub mod application_user_reset_password_token__expires_at___generator;
 pub mod creator;
 pub mod application_user_registration_token__wrong_enter_tries_quantity___incrementor;
 pub mod channel__name___validator;
+pub mod application_user_authorization_token__wrong_enter_tries_quantity___incrementor;
 pub mod email_sender;
 pub mod channel__linked_name___validator;
 pub mod channel__id___validator;

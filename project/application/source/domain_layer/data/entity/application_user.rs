@@ -298,10 +298,10 @@ impl ApplicationUser_4 {
         return &self.password_hash;
     }
 
-    pub fn set_password_hash<'b>(
-        &'b mut self,
+    pub fn set_password_hash<'a>(
+        &'a mut self,
         password_hash: PasswordHash,
-    ) -> &'b mut Self {
+    ) -> &'a mut Self {
         self.password_hash = password_hash;
 
         return self;
