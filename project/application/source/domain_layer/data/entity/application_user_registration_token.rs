@@ -395,53 +395,57 @@ impl ApplicationUserRegistrationToken_3 {
         };
     }
 
-    pub fn get_value<'b>(&'b self) -> &'b Value {
+    pub fn get_value<'a>(&'a self) -> &'a Value {
         return &self.value;
     }
 
-    pub fn get_wrong_enter_tries_quantity<'b>(&'b self) -> WrongEnterTriesQuantity {
+    pub fn get_wrong_enter_tries_quantity<'a>(&'a self) -> WrongEnterTriesQuantity {
         return self.wrong_enter_tries_quantity;
     }
 
-    pub fn get_is_approved<'b>(&'b self) -> IsApproved {
+    pub fn get_wrong_enter_tries_quantity_<'a>(&'a mut self) -> &'a mut WrongEnterTriesQuantity {
+        return &mut self.wrong_enter_tries_quantity;
+    }
+
+    pub fn get_is_approved<'a>(&'a self) -> IsApproved {
         return self.is_approved;
     }
 
-    pub fn get_expires_at<'b>(&'b self) -> ExpiresAt {
+    pub fn get_expires_at<'a>(&'a self) -> ExpiresAt {
         return self.expires_at;
     }
 
-    pub fn set_value<'b>(
-        &'b mut self,
+    pub fn set_value<'a>(
+        &'a mut self,
         value: Value,
-    ) -> &'b mut Self {
+    ) -> &'a mut Self {
         self.value = value;
 
         return self;
     }
 
-    pub fn set_wrong_enter_tries_quantity<'b>(
-        &'b mut self,
+    pub fn set_wrong_enter_tries_quantity<'a>(
+        &'a mut self,
         wrong_enter_tries_quantity: WrongEnterTriesQuantity,
-    ) -> &'b mut Self {
+    ) -> &'a mut Self {
         self.wrong_enter_tries_quantity = wrong_enter_tries_quantity;
 
         return self;
     }
 
-    pub fn set_is_approved<'b>(
-        &'b mut self,
+    pub fn set_is_approved<'a>(
+        &'a mut self,
         is_approved: IsApproved,
-    ) -> &'b mut Self {
+    ) -> &'a mut Self {
         self.is_approved = is_approved;
 
         return self;
     }
 
-    pub fn set_expires_at<'b>(
-        &'b mut self,
+    pub fn set_expires_at<'a>(
+        &'a mut self,
         expires_at: ExpiresAt,
-    ) -> &'b mut Self {
+    ) -> &'a mut Self {
         self.expires_at = expires_at;
 
         return self;
@@ -502,26 +506,26 @@ impl ApplicationUserRegistrationToken_6 {
         };
     }
 
-    pub fn get_value<'b>(&'b self) -> &'b Value {
+    pub fn get_value<'a>(&'a self) -> &'a Value {
         return &self.value;
     }
 
-    pub fn get_is_approved<'b>(&'b self) -> IsApproved {
+    pub fn get_is_approved<'a>(&'a self) -> IsApproved {
         return self.is_approved;
     }
 
-    pub fn get_expires_at<'b>(&'b self) -> ExpiresAt {
+    pub fn get_expires_at<'a>(&'a self) -> ExpiresAt {
         return self.expires_at;
     }
 
-    pub fn get_can_be_resent_from<'b>(&'b self) -> CanBeResentFrom {
+    pub fn get_can_be_resent_from<'a>(&'a self) -> CanBeResentFrom {
         return self.can_be_resent_from;
     }
 
-    pub fn set_can_be_resent_from<'b>(
-        &'b mut self,
+    pub fn set_can_be_resent_from<'a>(
+        &'a mut self,
         can_be_resent_from: CanBeResentFrom,
-    ) -> &'b mut Self {
+    ) -> &'a mut Self {
         self.can_be_resent_from = can_be_resent_from;
 
         return self;

@@ -7,7 +7,7 @@ use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 impl Incrementor<ApplicationUserResetPasswordToken_WrongEnterTriesQuantity> {
     pub fn increment<'a>(application_user_reset_password_token_wrong_enter_tries_quantity: &'a mut ApplicationUserResetPasswordToken_WrongEnterTriesQuantity) -> Result<(), ErrorAuditor> {
         let application_user_reset_password_token_wrong_enter_tries_quantity_ = match application_user_reset_password_token_wrong_enter_tries_quantity.get().checked_add(1) {
-            Some(application_user_reset_password_token_wrong_enter_tries_quantity_) => application_user_reset_password_token_wrong_enter_tries_quantity_,
+            Some(application_user_reset_password_token_wrong_enter_tries_quantity__) => application_user_reset_password_token_wrong_enter_tries_quantity__,
             None => {
                 return Err(
                     ErrorAuditor::new(
