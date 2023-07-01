@@ -406,6 +406,7 @@ dependencies = [
  "hyper",
  "lettre",
  "lettre_email",
+ "macro_rules",
  "rand 0.8.5",
  "redis",
  "regex",
@@ -810,6 +811,10 @@ checksum = "51b9bbe6c47d51fc3e1a9b945965946b4c44142ab8792c50835a980d362c2710"
 dependencies = [
  "cfg-if",
 ]
+
+[[package]]
+name = "macro_rules"
+version = "1.0.0"
 
 [[package]]
 name = "matches"

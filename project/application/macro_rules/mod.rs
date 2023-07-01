@@ -1,3 +1,4 @@
+#[macro_export]
 macro_rules! r#enum {
     ($visability:vis enum $enum_name:ident { $($enum:ident :: $enum_variant:ident $({ $($enum_variant_field:ident : $enum_variant_field_type:ty),* $(,)? })?),* $(,)? }) => {
         const _: () = {
@@ -21,5 +22,3 @@ macro_rules! r#enum {
         }
     }
 }
-
-pub(crate) use r#enum;

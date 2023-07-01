@@ -20,6 +20,7 @@ pub use tokio;
 pub use tokio_postgres;
 pub use toml;
 pub use uuid;
+pub use macro_rules;
 
 #[cfg(feature = "manual_testing")]
 pub use const_format;

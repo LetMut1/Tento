@@ -13,7 +13,6 @@ pub mod formatter;
 pub mod generator;
 pub mod hmac___encoder;
 pub mod loader;
-pub mod macro_rules;
 pub mod message_pack___serializer;
 pub mod number_row___generator;
 pub mod postgresql_connection_pool___creator;
