@@ -29,7 +29,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
     ) -> Result<ApplicationUserAuthorizationToken<'a>, ErrorAuditor> {
         let application_user_id = insert.application_user_id.get();
 
-        let application_user_device_id = insert.application_user_device_id.as_ref().get();
+        let application_user_device_id = insert.application_user_device_id.get();
 
         let application_user_authorization_token_value = insert.application_user_authorization_token_value.get();
 
@@ -139,7 +139,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
         return Ok(
             ApplicationUserAuthorizationToken::new(
                 insert.application_user_id,
-                insert.application_user_device_id,
+                Cow::Borrowed(insert.application_user_device_id),
                 insert.application_user_authorization_token_value,
                 insert.application_user_authorization_token_wrong_enter_tries_quantity,
                 insert.application_user_authorization_token_expires_at,
@@ -1185,7 +1185,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken_5> {
 
 pub struct Insert<'a> {
     pub application_user_id: ApplicationUser_Id,
-    pub application_user_device_id: Cow<'a, ApplicationUserDevice_Id>,
+    pub application_user_device_id: &'a ApplicationUserDevice_Id,
     pub application_user_authorization_token_value: ApplicationUserAuthorizationToken_Value,
     pub application_user_authorization_token_wrong_enter_tries_quantity: ApplicationUserAuthorizationToken_WrongEnterTriesQuantity,
     pub application_user_authorization_token_expires_at: ApplicationUserAuthorizationToken_ExpiresAt,
