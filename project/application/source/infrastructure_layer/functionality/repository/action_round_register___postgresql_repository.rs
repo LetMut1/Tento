@@ -14,9 +14,9 @@ use extern_crate::tokio_postgres::types::Type;
 use extern_crate::tokio_postgres::Client as Connection;
 
 impl PostgresqlRepository<ActionRoundRegister<'_>> {
-    pub async fn create<'a, 'b>(
+    pub async fn create<'a>(
         database_2_connection: &'a Connection,
-        insert: Insert<'b>,
+        insert: Insert<'a>,
     ) -> Result<(), ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 

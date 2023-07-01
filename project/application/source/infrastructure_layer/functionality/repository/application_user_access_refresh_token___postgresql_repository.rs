@@ -19,10 +19,10 @@ use extern_crate::tokio_postgres::Client as Connection;
 use std::borrow::Cow;
 
 impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
-    pub async fn create<'a, 'b>(
+    pub async fn create<'a>(
         database_2_connection: &'a Connection,
-        insert: Insert<'b>,
-    ) -> Result<ApplicationUserAccessRefreshToken<'b>, ErrorAuditor> {
+        insert: Insert<'a>,
+    ) -> Result<ApplicationUserAccessRefreshToken<'a>, ErrorAuditor> {
         let application_user_id = insert.application_user_id.get();
 
         let application_user_device_id = insert.application_user_device_id.get();
