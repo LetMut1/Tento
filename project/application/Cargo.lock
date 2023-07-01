@@ -13,7 +13,7 @@ dependencies = [
 
 [[package]]
 name = "application"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "extern_crate",
 ]
@@ -265,7 +265,7 @@ dependencies = [
 
 [[package]]
 name = "create_fixtures"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "application",
 ]
@@ -392,7 +392,7 @@ checksum = "a246d82be1c9d791c5dfde9a2bd045fc3cbba3fa2b11ad558f27d01712f00569"
 
 [[package]]
 name = "extern_crate"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "base64 0.13.0",
  "bb8",
@@ -732,7 +732,7 @@ dependencies = [
 
 [[package]]
 name = "integration_module"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "application",
 ]
@@ -1320,7 +1320,7 @@ dependencies = [
 
 [[package]]
 name = "remove_incomplite_state"
-version = "0.1.0"
+version = "1.0.0"
 
 [[package]]
 name = "rmp"
@@ -1345,7 +1345,7 @@ dependencies = [
 
 [[package]]
 name = "run_server"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "application",
 ]

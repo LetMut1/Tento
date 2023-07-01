@@ -1,0 +1,18 @@
+[package]
+name = "macro_rules"
+version = "1.0.0"
+authors.workspace = true
+edition = "2021"
+
+[lib]
+name = "macro_rules"
+path = "./mod.rs"
+test = true
+doctest = true
+bench = true
+doc = true
+proc-macro = false
+harness = true
+edition = "2021"
+crate-type = ["lib"]
+required-features = []
