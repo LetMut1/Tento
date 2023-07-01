@@ -36,7 +36,6 @@ use extern_crate::serde::Serialize;
 use extern_crate::tokio_postgres::tls::MakeTlsConnect;
 use extern_crate::tokio_postgres::tls::TlsConnect;
 use extern_crate::tokio_postgres::Socket;
-use std::borrow::Cow;
 use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
@@ -341,8 +340,8 @@ impl ActionProcessor {
                 };
 
                 let insert = Insert {
-                    application_user_email: Cow::Borrowed(&incoming.application_user_email),
-                    application_user_device_id: Cow::Borrowed(&incoming.application_user_device_id),
+                    application_user_email: &incoming.application_user_email,
+                    application_user_device_id: &incoming.application_user_device_id,
                     application_user_registration_token_value: Generator::<ApplicationUserRegistrationToken_Value>::generate(),
                     application_user_registration_token_wrong_enter_tries_quantity: ApplicationUserRegistrationToken_WrongEnterTriesQuantity::new(0),
                     application_user_registration_token_is_approved: ApplicationUserRegistrationToken_IsApproved::new(false),

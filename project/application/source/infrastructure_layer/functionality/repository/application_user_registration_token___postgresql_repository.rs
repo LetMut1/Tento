@@ -29,9 +29,9 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
         database_2_connection: &'a Connection,
         insert: Insert<'a>,
     ) -> Result<ApplicationUserRegistrationToken<'a>, ErrorAuditor> {
-        let application_user_email = insert.application_user_email.as_ref().get();
+        let application_user_email = insert.application_user_email.get();
 
-        let application_user_device_id = insert.application_user_device_id.as_ref().get();
+        let application_user_device_id = insert.application_user_device_id.get();
 
         let application_user_registration_token_value = insert.application_user_registration_token_value.get();
 
@@ -148,8 +148,8 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
 
         return Ok(
             ApplicationUserRegistrationToken::new(
-                insert.application_user_email,
-                insert.application_user_device_id,
+                Cow::Borrowed(insert.application_user_email),
+                Cow::Borrowed(insert.application_user_device_id),
                 insert.application_user_registration_token_value,
                 insert.application_user_registration_token_wrong_enter_tries_quantity,
                 insert.application_user_registration_token_is_approved,
@@ -1382,8 +1382,8 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken_6> {
 }
 
 pub struct Insert<'a> {
-    pub application_user_email: Cow<'a, ApplicationUser_Email>,
-    pub application_user_device_id: Cow<'a, ApplicationUserDevice_Id>,
+    pub application_user_email: &'a ApplicationUser_Email,
+    pub application_user_device_id: &'a ApplicationUserDevice_Id,
     pub application_user_registration_token_value: ApplicationUserRegistrationToken_Value,
     pub application_user_registration_token_wrong_enter_tries_quantity: ApplicationUserRegistrationToken_WrongEnterTriesQuantity,
     pub application_user_registration_token_is_approved: ApplicationUserRegistrationToken_IsApproved,
