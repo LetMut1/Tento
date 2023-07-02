@@ -15,6 +15,7 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::By3;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::data::pushable_environment_configuration::PushableEnvironmentConfiguration;
@@ -90,7 +91,9 @@ impl ActionProcessor {
 
         let application_user = match PostgresqlRepository::<ApplicationUser5>::find_3(
             &*database_1_postgresql_pooled_connection,
-            incoming.application_user_id,
+            &By3 {
+                application_user_id: incoming.application_user_id,
+            },
         )
         .await
         {

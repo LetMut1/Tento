@@ -15,6 +15,7 @@ use crate::domain_layer::data::entity::application_user_registration_token::Appl
 use crate::domain_layer::functionality::service::email_sender::EmailSender;
 use crate::domain_layer::functionality::service::generator::Generator;
 use crate::domain_layer::functionality::service::validator::Validator;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::By2;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -111,7 +112,9 @@ impl ActionProcessor {
 
         let is_exist_2 = match PostgresqlRepository::<ApplicationUser<'_>>::is_exist_2(
             &*database_1_postgresql_pooled_connection,
-            &incoming.application_user_email,
+            &By2 {
+                application_user_email: &incoming.application_user_email,
+            },
         )
         .await
         {

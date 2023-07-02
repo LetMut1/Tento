@@ -1,4 +1,7 @@
 use super::postgresql_repository::PostgresqlRepository;
+use super::postgresql_repository::By1;
+use super::postgresql_repository::By2;
+use super::postgresql_repository::By3;
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::data::entity::application_user::ApplicationUser1;
 use crate::domain_layer::data::entity::application_user::ApplicationUser2;
@@ -178,9 +181,9 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
 
     pub async fn is_exist_1<'a>(
         database_1_connection: &'a Connection,
-        application_user_nickname: &'a ApplicationUser_Nickname,
+        by: &'a By1<'_>,
     ) -> Result<bool, ErrorAuditor> {
-        let application_user_nickname_ = application_user_nickname.get();
+        let application_user_nickname = by.application_user_nickname.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -190,7 +193,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             WHERE au.nickname = $1;";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(
-            &application_user_nickname_,
+            &application_user_nickname,
             Type::TEXT,
         );
 
@@ -259,9 +262,9 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
 
     pub async fn is_exist_2<'a>(
         database_1_connection: &'a Connection,
-        application_user_email: &'a ApplicationUser_Email,
+        by: &'a By2<'_>,
     ) -> Result<bool, ErrorAuditor> {
-        let application_user_email_ = application_user_email.get();
+        let application_user_email = by.application_user_email.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -271,7 +274,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             WHERE au.email = $1;";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(
-            &application_user_email_,
+            &application_user_email,
             Type::TEXT,
         );
 
@@ -340,9 +343,9 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
 
     pub async fn is_exist_3<'a>(
         database_1_connection: &'a Connection,
-        application_user_id: ApplicationUser_Id,
+        by: &'a By3,
     ) -> Result<bool, ErrorAuditor> {
-        let application_user_id_ = application_user_id.get();
+        let application_user_id = by.application_user_id.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -352,7 +355,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             WHERE au.id = $1;";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(
-            &application_user_id_,
+            &application_user_id,
             Type::INT8,
         );
 
@@ -421,9 +424,9 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
 
     pub async fn find_1<'a>(
         database_1_connection: &'a Connection,
-        application_user_nickname: &'a ApplicationUser_Nickname,
+        by: &'a By1<'_>,
     ) -> Result<Option<ApplicationUser<'a>>, ErrorAuditor> {
-        let application_user_nickname_ = application_user_nickname.get();
+        let application_user_nickname = by.application_user_nickname.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -436,7 +439,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             WHERE au.nickname = $1;";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(
-            &application_user_nickname_,
+            &application_user_nickname,
             Type::TEXT,
         );
 
@@ -593,7 +596,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 ApplicationUser::new(
                     application_user_id,
                     Cow::Owned(application_user_email),
-                    Cow::Borrowed(application_user_nickname),
+                    Cow::Borrowed(by.application_user_nickname),
                     application_user_password_hash,
                     application_user_created_at,
                 ),
@@ -605,9 +608,9 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
 impl PostgresqlRepository<ApplicationUser1> {
     pub async fn find_1<'a>(
         database_1_connection: &'a Connection,
-        application_user_nickname: &'a ApplicationUser_Nickname,
+        by: &'a By1<'_>,
     ) -> Result<Option<ApplicationUser1>, ErrorAuditor> {
-        let application_user_nickname_ = application_user_nickname.get();
+        let application_user_nickname = by.application_user_nickname.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -619,7 +622,7 @@ impl PostgresqlRepository<ApplicationUser1> {
             WHERE au.nickname = $1;";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(
-            &application_user_nickname_,
+            &application_user_nickname,
             Type::TEXT,
         );
 
@@ -764,9 +767,9 @@ impl PostgresqlRepository<ApplicationUser1> {
 impl PostgresqlRepository<ApplicationUser2> {
     pub async fn find_2<'a>(
         database_1_connection: &'a Connection,
-        application_user_email: &'a ApplicationUser_Email,
+        by: &'a By2<'_>,
     ) -> Result<Option<ApplicationUser2>, ErrorAuditor> {
-        let application_user_email_ = application_user_email.get();
+        let application_user_email = by.application_user_email.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -777,7 +780,7 @@ impl PostgresqlRepository<ApplicationUser2> {
             WHERE au.email = $1;";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(
-            &application_user_email_,
+            &application_user_email,
             Type::TEXT,
         );
 
@@ -899,9 +902,9 @@ impl PostgresqlRepository<ApplicationUser2> {
 impl PostgresqlRepository<ApplicationUser3> {
     pub async fn find_2<'a>(
         database_1_connection: &'a Connection,
-        application_user_email: &'a ApplicationUser_Email,
+        by: &'a By2<'_>,
     ) -> Result<Option<ApplicationUser3>, ErrorAuditor> {
-        let application_user_email_ = application_user_email.get();
+        let application_user_email = by.application_user_email.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -911,7 +914,7 @@ impl PostgresqlRepository<ApplicationUser3> {
             WHERE au.email = $1;";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(
-            &application_user_email_,
+            &application_user_email,
             Type::TEXT,
         );
 
@@ -1005,12 +1008,12 @@ impl PostgresqlRepository<ApplicationUser4> {
     pub async fn update<'a, T>(
         database_1_connection: &'a Connection,
         subject: &'a T,
-        application_user_id: ApplicationUser_Id,
+        by: &'a By3,
     ) -> Result<(), ErrorAuditor>
     where
         T: Getter<'a, &'a ApplicationUser_PasswordHash>,
     {
-        let application_user_id_ = application_user_id.get();
+        let application_user_id = by.application_user_id.get();
 
         let application_user_password_hash = <T as Getter<'a, &'a ApplicationUser_PasswordHash>>::get(subject).get();
 
@@ -1032,7 +1035,7 @@ impl PostgresqlRepository<ApplicationUser4> {
                 Type::TEXT,
             )
             .add_parameter(
-                &application_user_id_,
+                &application_user_id,
                 Type::INT8,
             );
 
@@ -1094,9 +1097,9 @@ impl PostgresqlRepository<ApplicationUser4> {
 
     pub async fn find_3<'a>(
         database_1_connection: &'a Connection,
-        application_user_id: ApplicationUser_Id,
+        by: &'a By3,
     ) -> Result<Option<ApplicationUser4>, ErrorAuditor> {
-        let application_user_id_ = application_user_id.get();
+        let application_user_id = by.application_user_id.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -1106,7 +1109,7 @@ impl PostgresqlRepository<ApplicationUser4> {
             WHERE au.id = $1;";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(
-            &application_user_id_,
+            &application_user_id,
             Type::INT8,
         );
 
@@ -1199,9 +1202,9 @@ impl PostgresqlRepository<ApplicationUser4> {
 impl PostgresqlRepository<ApplicationUser5> {
     pub async fn find_3<'a>(
         database_1_connection: &'a Connection,
-        application_user_id: ApplicationUser_Id,
+        by: &'a By3,
     ) -> Result<Option<ApplicationUser5>, ErrorAuditor> {
-        let application_user_id_ = application_user_id.get();
+        let application_user_id = by.application_user_id.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -1211,7 +1214,7 @@ impl PostgresqlRepository<ApplicationUser5> {
             WHERE au.id = $1;";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(
-            &application_user_id_,
+            &application_user_id,
             Type::INT8,
         );
 

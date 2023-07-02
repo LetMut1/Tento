@@ -29,6 +29,7 @@ use crate::infrastructure_layer::functionality::repository::postgresql_repositor
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::UnixTime;
 use extern_crate::bb8::Pool;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::By2;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::macro_rules::r#enum;
@@ -112,7 +113,9 @@ impl ActionProcessor {
 
         let application_user = match PostgresqlRepository::<ApplicationUser3>::find_2(
             &*database_1_postgresql_pooled_connection,
-            &incoming.application_user_email,
+            &By2 {
+                application_user_email: &incoming.application_user_email,
+            },
         )
         .await
         {

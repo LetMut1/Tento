@@ -23,6 +23,7 @@ use crate::domain_layer::functionality::service::form_resolver::FormResolver;
 use crate::domain_layer::functionality::service::generator::Generator;
 use crate::domain_layer::functionality::service::incrementor::Incrementor;
 use crate::domain_layer::functionality::service::validator::Validator;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::By3;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -271,7 +272,9 @@ impl ActionProcessor {
 
         let is_exist = match PostgresqlRepository::<ApplicationUser<'_>>::is_exist_3(
             database_1_postgresql_connection,
-            incoming.application_user_id,
+            &By3 {
+                application_user_id: incoming.application_user_id
+            },
         )
         .await
         {

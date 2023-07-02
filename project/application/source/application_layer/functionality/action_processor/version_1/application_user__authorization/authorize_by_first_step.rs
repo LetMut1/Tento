@@ -18,6 +18,8 @@ use crate::domain_layer::data::entity::application_user_device::ApplicationUserD
 use crate::domain_layer::functionality::service::email_sender::EmailSender;
 use crate::domain_layer::functionality::service::encoder::Encoder;
 use crate::domain_layer::functionality::service::generator::Generator;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::By1;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::By2;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
@@ -121,7 +123,9 @@ impl ActionProcessor {
         let application_user_aggregator = if is_valid_email {
             let application_user_ = match PostgresqlRepository::<ApplicationUser2>::find_2(
                 database_1_postgresql_connection,
-                &application_user_email,
+                &By2 {
+                    application_user_email: &application_user_email
+                },
             )
             .await
             {
@@ -160,7 +164,9 @@ impl ActionProcessor {
             if Validator::<ApplicationUser_Nickname>::is_valid(&application_user_nickname) {
                 let application_user_ = match PostgresqlRepository::<ApplicationUser1>::find_1(
                     database_1_postgresql_connection,
-                    &application_user_nickname,
+                    &By1 {
+                        application_user_nickname: &application_user_nickname
+                    },
                 )
                 .await
                 {

@@ -16,6 +16,7 @@ use extern_crate::bb8::Pool;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::serde::Deserialize;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::By2;
 use extern_crate::serde::Serialize;
 use extern_crate::tokio_postgres::tls::MakeTlsConnect;
 use extern_crate::tokio_postgres::tls::TlsConnect;
@@ -87,7 +88,9 @@ impl ActionProcessor {
 
         let is_exist = match PostgresqlRepository::<ApplicationUser<'_>>::is_exist_2(
             &*database_1_postgresql_pooled_connection,
-            &incoming.application_user_email,
+            &By2 {
+                application_user_email: &incoming.application_user_email,
+            },
         )
         .await
         {

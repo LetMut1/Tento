@@ -34,6 +34,7 @@ use crate::infrastructure_layer::functionality::repository::application_user___p
 use crate::infrastructure_layer::functionality::repository::application_user_device___postgresql_repository::Insert as ApplicationUserDeviceInsert;
 use crate::infrastructure_layer::functionality::repository::channel___postgresql_repository::Insert as ChannelInsert;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::By1;
 use crate::infrastructure_layer::functionality::service::creator::Creator;
 use crate::infrastructure_layer::functionality::service::creator::PostgresqlConnectionPoolNoTls;
 use crate::infrastructure_layer::functionality::service::loader::Loader;
@@ -286,9 +287,13 @@ impl CreateFixturesProcessor {
                 );
             }
 
+            let by = By1 {
+                application_user_nickname: &application_user_nickname,
+            };
+
             let application_user = match PostgresqlRepository::<ApplicationUser<'_>>::find_1(
                 database_1_postgresql_connection,
-                &application_user_nickname,
+                &by,
             )
             .await
             {
