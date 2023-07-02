@@ -170,7 +170,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
 
         let application_user = ApplicationUser::new(
             application_user_id,
-            Cow::Owned(insert.application_user_email),
+            insert.application_user_email,
             Cow::Owned(insert.application_user_nickname),
             insert.application_user_password_hash,
             application_user_created_at,
@@ -595,7 +595,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             Some(
                 ApplicationUser::new(
                     application_user_id,
-                    Cow::Owned(application_user_email),
+                    application_user_email,
                     Cow::Borrowed(by_1.application_user_nickname),
                     application_user_password_hash,
                     application_user_created_at,

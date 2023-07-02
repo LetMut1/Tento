@@ -125,7 +125,7 @@ impl CreatedAt {
 
 pub struct ApplicationUser<'a> {
     id: Id,
-    email: Cow<'a, Email>,
+    email: Email,
     nickname: Cow<'a, Nickname>,
     _password: PhantomData<Password>,
     password_hash: PasswordHash,
@@ -135,7 +135,7 @@ pub struct ApplicationUser<'a> {
 impl<'a> ApplicationUser<'a> {
     pub fn new(
         id: Id,
-        email: Cow<'a, Email>,
+        email: Email,
         nickname: Cow<'a, Nickname>,
         password_hash: PasswordHash,
         created_at: CreatedAt,
@@ -155,7 +155,7 @@ impl<'a> ApplicationUser<'a> {
     }
 
     pub fn get_email<'b>(&'b self) -> &'b Email {
-        return self.email.as_ref();
+        return &self.email;
     }
 
     pub fn get_nickname<'b>(&'b self) -> &'b Nickname {
