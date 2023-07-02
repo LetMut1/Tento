@@ -24,6 +24,7 @@ use crate::domain_layer::functionality::service::generator::Generator;
 use crate::domain_layer::functionality::service::incrementor::Incrementor;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::By3;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::By4;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -322,10 +323,14 @@ impl ActionProcessor {
             expires_at,
         );
 
+        let by_4 = By4 {
+            application_user_id: incoming.application_user_id,
+            application_user_device_id: &incoming.application_user_device_id,
+        };
+
         let application_user_access_refresh_token = match PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::find_1(
             database_2_postgresql_connection,
-            incoming.application_user_id,
-            &incoming.application_user_device_id,
+            &by_4,
         )
         .await
         {
@@ -375,8 +380,7 @@ impl ActionProcessor {
                 if let Err(mut error) = PostgresqlRepository::<ApplicationUserAccessRefreshToken1>::update(
                     database_2_postgresql_connection,
                     &application_user_access_refresh_token__,
-                    incoming.application_user_id,
-                    &incoming.application_user_device_id,
+                    &by_4
                 )
                 .await
                 {

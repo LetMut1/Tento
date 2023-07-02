@@ -106,6 +106,14 @@ fn main() -> () {
 // Возможно RequestValidator/ ResponseCreator должен быть в слое презентации?
 
 
+
+// let application_user_access_refresh_token = match PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::find_1( // TODO
+// 2 поля не используются
+
+
+
+
+
 // - Разбить код на микросервисы. Использовать Features, чтобы можно было, например, скомпилировать только работу с каналами, но не с токенами.
 
 // что если. вместо конфигурационных файлов, использовать файлы Раста с объектом константой? ЧТобы не прокидывыть конфигурации постоянно. Использовать build-script.

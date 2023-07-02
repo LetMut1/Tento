@@ -253,6 +253,10 @@ impl ActionProcessor {
             );
         }
 
+        let by_3 = By3 {
+            application_user_id: incoming.application_user_id,
+        };
+
         let database_1_postgresql_pooled_connection = match database_1_postgresql_connection_pool.get().await {
             Ok(database_1_postgresql_pooled_connection_) => database_1_postgresql_pooled_connection_,
             Err(error) => {
@@ -279,9 +283,7 @@ impl ActionProcessor {
 
         let application_user = match PostgresqlRepository::<ApplicationUser4>::find_3(
             database_1_postgresql_connection,
-            &By3 {
-                application_user_id: incoming.application_user_id,
-            },
+            &by_3,
         )
         .await
         {
@@ -330,9 +332,7 @@ impl ActionProcessor {
         if let Err(mut error) = PostgresqlRepository::<ApplicationUser4>::update(
             database_1_postgresql_connection,
             &application_user_,
-            &By3 {
-                application_user_id: incoming.application_user_id,
-            },
+            &by_3,
         )
         .await
         {
@@ -367,7 +367,7 @@ impl ActionProcessor {
 
         if let Err(mut error) = PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::delete_2(
             &*database_2_postgresql_pooled_connection,
-            incoming.application_user_id,
+            &by_3,
         )
         .await
         {

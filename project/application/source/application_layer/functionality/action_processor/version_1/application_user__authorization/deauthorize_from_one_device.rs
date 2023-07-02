@@ -14,6 +14,7 @@ use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentR
 use crate::infrastructure_layer::data::pushable_environment_configuration::PushableEnvironmentConfiguration;
 use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::By4;
 use extern_crate::bb8::Pool;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
@@ -124,8 +125,10 @@ impl ActionProcessor {
 
         if let Err(mut error) = PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::delete_1(
             &*database_2_postgresql_pooled_connection,
-            application_user_access_token.get_application_user_id(),
-            application_user_access_token.get_application_user_device_id(),
+            &By4 {
+                application_user_id: application_user_access_token.get_application_user_id(),
+                application_user_device_id: application_user_access_token.get_application_user_device_id(),
+            },
         )
         .await
         {
