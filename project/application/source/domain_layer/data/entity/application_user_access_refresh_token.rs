@@ -200,7 +200,7 @@ impl<'a> Getter<'a, UpdatedAt> for ApplicationUserAccessRefreshToken<'_> {
     }
 }
 
-pub struct ApplicationUserAccessRefreshToken_1 {
+pub struct ApplicationUserAccessRefreshToken1 {
     application_user_access_token_id: ApplicationUserAccessToken_Id,
     obfuscation_value: ObfuscationValue,
     expires_at: ExpiresAt,

@@ -3,8 +3,8 @@ use crate::application_layer::data::unified_report::UnifiedReport;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken;
-use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_2;
-use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_6;
+use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken2;
+use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken6;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_CanBeResentFrom;
 use crate::domain_layer::functionality::service::email_sender::EmailSender;
 use crate::domain_layer::functionality::service::generator::Generator;
@@ -104,7 +104,7 @@ impl ActionProcessor {
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
-        let application_user_registration_token = match PostgresqlRepository::<ApplicationUserRegistrationToken_6>::find_1(
+        let application_user_registration_token = match PostgresqlRepository::<ApplicationUserRegistrationToken6>::find_1(
             database_2_postgresql_connection,
             &incoming.application_user_email,
             &incoming.application_user_device_id,
@@ -195,7 +195,7 @@ impl ActionProcessor {
 
         application_user_registration_token_.set_can_be_resent_from(application_user_registration_token_can_be_resent_from);
 
-        if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken_2>::update(
+        if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken2>::update(
             database_2_postgresql_connection,
             &application_user_registration_token_,
             &incoming.application_user_email,

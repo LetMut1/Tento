@@ -248,7 +248,7 @@ impl<'a> Getter<'a, CanBeResentFrom> for ApplicationUserRegistrationToken<'_> {
     }
 }
 
-pub struct ApplicationUserRegistrationToken_1 {
+pub struct ApplicationUserRegistrationToken1 {
     value: Value,
     wrong_enter_tries_quantity: WrongEnterTriesQuantity,
     is_approved: IsApproved,
@@ -256,7 +256,7 @@ pub struct ApplicationUserRegistrationToken_1 {
     can_be_resent_from: CanBeResentFrom,
 }
 
-impl ApplicationUserRegistrationToken_1 {
+impl ApplicationUserRegistrationToken1 {
     pub fn new(
         value: Value,
         wrong_enter_tries_quantity: WrongEnterTriesQuantity,
@@ -339,48 +339,48 @@ impl ApplicationUserRegistrationToken_1 {
     }
 }
 
-impl<'a> Getter<'a, &'a Value> for ApplicationUserRegistrationToken_1 {
+impl<'a> Getter<'a, &'a Value> for ApplicationUserRegistrationToken1 {
     fn get(&'a self) -> &'a Value {
         return self.get_value();
     }
 }
 
-impl<'a> Getter<'a, WrongEnterTriesQuantity> for ApplicationUserRegistrationToken_1 {
+impl<'a> Getter<'a, WrongEnterTriesQuantity> for ApplicationUserRegistrationToken1 {
     fn get(&'a self) -> WrongEnterTriesQuantity {
         return self.get_wrong_enter_tries_quantity();
     }
 }
 
-impl<'a> Getter<'a, IsApproved> for ApplicationUserRegistrationToken_1 {
+impl<'a> Getter<'a, IsApproved> for ApplicationUserRegistrationToken1 {
     fn get(&'a self) -> IsApproved {
         return self.get_is_approved();
     }
 }
 
-impl<'a> Getter<'a, ExpiresAt> for ApplicationUserRegistrationToken_1 {
+impl<'a> Getter<'a, ExpiresAt> for ApplicationUserRegistrationToken1 {
     fn get(&'a self) -> ExpiresAt {
         return self.get_expires_at();
     }
 }
 
-impl<'a> Getter<'a, CanBeResentFrom> for ApplicationUserRegistrationToken_1 {
+impl<'a> Getter<'a, CanBeResentFrom> for ApplicationUserRegistrationToken1 {
     fn get(&'a self) -> CanBeResentFrom {
         return self.get_can_be_resent_from();
     }
 }
 
-pub struct ApplicationUserRegistrationToken_2 {
+pub struct ApplicationUserRegistrationToken2 {
     can_be_resent_from: CanBeResentFrom,
 }
 
-pub struct ApplicationUserRegistrationToken_3 {
+pub struct ApplicationUserRegistrationToken3 {
     value: Value,
     wrong_enter_tries_quantity: WrongEnterTriesQuantity,
     is_approved: IsApproved,
     expires_at: ExpiresAt,
 }
 
-impl ApplicationUserRegistrationToken_3 {
+impl ApplicationUserRegistrationToken3 {
     pub fn new(
         value: Value,
         wrong_enter_tries_quantity: WrongEnterTriesQuantity,
@@ -452,46 +452,46 @@ impl ApplicationUserRegistrationToken_3 {
     }
 }
 
-impl<'a> Getter<'a, &'a Value> for ApplicationUserRegistrationToken_3 {
+impl<'a> Getter<'a, &'a Value> for ApplicationUserRegistrationToken3 {
     fn get(&'a self) -> &'a Value {
         return self.get_value();
     }
 }
 
-impl<'a> Getter<'a, WrongEnterTriesQuantity> for ApplicationUserRegistrationToken_3 {
+impl<'a> Getter<'a, WrongEnterTriesQuantity> for ApplicationUserRegistrationToken3 {
     fn get(&'a self) -> WrongEnterTriesQuantity {
         return self.get_wrong_enter_tries_quantity();
     }
 }
 
-impl<'a> Getter<'a, IsApproved> for ApplicationUserRegistrationToken_3 {
+impl<'a> Getter<'a, IsApproved> for ApplicationUserRegistrationToken3 {
     fn get(&'a self) -> IsApproved {
         return self.get_is_approved();
     }
 }
 
-impl<'a> Getter<'a, ExpiresAt> for ApplicationUserRegistrationToken_3 {
+impl<'a> Getter<'a, ExpiresAt> for ApplicationUserRegistrationToken3 {
     fn get(&'a self) -> ExpiresAt {
         return self.get_expires_at();
     }
 }
 
-pub struct ApplicationUserRegistrationToken_4 {
+pub struct ApplicationUserRegistrationToken4 {
     wrong_enter_tries_quantity: WrongEnterTriesQuantity,
 }
 
-pub struct ApplicationUserRegistrationToken_5 {
+pub struct ApplicationUserRegistrationToken5 {
     is_approved: IsApproved,
 }
 
-pub struct ApplicationUserRegistrationToken_6 {
+pub struct ApplicationUserRegistrationToken6 {
     value: Value,
     is_approved: IsApproved,
     expires_at: ExpiresAt,
     can_be_resent_from: CanBeResentFrom,
 }
 
-impl ApplicationUserRegistrationToken_6 {
+impl ApplicationUserRegistrationToken6 {
     pub fn new(
         value: Value,
         is_approved: IsApproved,
@@ -532,25 +532,25 @@ impl ApplicationUserRegistrationToken_6 {
     }
 }
 
-impl<'a> Getter<'a, &'a Value> for ApplicationUserRegistrationToken_6 {
+impl<'a> Getter<'a, &'a Value> for ApplicationUserRegistrationToken6 {
     fn get(&'a self) -> &'a Value {
         return self.get_value();
     }
 }
 
-impl<'a> Getter<'a, IsApproved> for ApplicationUserRegistrationToken_6 {
+impl<'a> Getter<'a, IsApproved> for ApplicationUserRegistrationToken6 {
     fn get(&'a self) -> IsApproved {
         return self.get_is_approved();
     }
 }
 
-impl<'a> Getter<'a, ExpiresAt> for ApplicationUserRegistrationToken_6 {
+impl<'a> Getter<'a, ExpiresAt> for ApplicationUserRegistrationToken6 {
     fn get(&'a self) -> ExpiresAt {
         return self.get_expires_at();
     }
 }
 
-impl<'a> Getter<'a, CanBeResentFrom> for ApplicationUserRegistrationToken_6 {
+impl<'a> Getter<'a, CanBeResentFrom> for ApplicationUserRegistrationToken6 {
     fn get(&'a self) -> CanBeResentFrom {
         return self.get_can_be_resent_from();
     }

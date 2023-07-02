@@ -1,7 +1,7 @@
 use crate::application_layer::data::common_precedent::CommonPrecedent;
 use crate::application_layer::data::unified_report::UnifiedReport;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
-use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_1;
+use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken1;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ObfuscationValue;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_UpdatedAt;
@@ -237,7 +237,7 @@ impl ActionProcessor {
             .set_expires_at(application_user_access_refresh_token_expires_at)
             .set_updated_at(Generator::<ApplicationUserAccessRefreshToken_UpdatedAt>::generate());
 
-        if let Err(mut error) = PostgresqlRepository::<ApplicationUserAccessRefreshToken_1>::update(
+        if let Err(mut error) = PostgresqlRepository::<ApplicationUserAccessRefreshToken1>::update(
             database_2_postgresql_connection,
             &application_user_access_refresh_token_,
             application_user_access_token_.get_application_user_id(),

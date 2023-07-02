@@ -2,12 +2,12 @@ use super::postgresql_repository::PostgresqlRepository;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken;
-use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_1;
-use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_2;
-use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_3;
-use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_4;
-use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_5;
-use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_6;
+use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken1;
+use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken2;
+use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken3;
+use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken4;
+use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken5;
+use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken6;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_CanBeResentFrom;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_IsApproved;
@@ -240,7 +240,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
     }
 }
 
-impl PostgresqlRepository<ApplicationUserRegistrationToken_1> {
+impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
     pub async fn update<'a, T>(
         database_2_connection: &'a Connection,
         subject: &'a T,
@@ -376,7 +376,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken_1> {
         database_2_connection: &'a Connection,
         application_user_email: &'a ApplicationUser_Email,
         application_user_device_id: &'a ApplicationUserDevice_Id,
-    ) -> Result<Option<ApplicationUserRegistrationToken_1>, ErrorAuditor> {
+    ) -> Result<Option<ApplicationUserRegistrationToken1>, ErrorAuditor> {
         let application_user_email_ = application_user_email.get();
 
         let application_user_device_id_ = application_user_device_id.get();
@@ -574,7 +574,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken_1> {
 
         return Ok(
             Some(
-                ApplicationUserRegistrationToken_1::new(
+                ApplicationUserRegistrationToken1::new(
                     application_user_registration_token_value,
                     application_user_registration_token_wrong_enter_tries_quantity,
                     application_user_registration_token_is_approved,
@@ -586,7 +586,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken_1> {
     }
 }
 
-impl PostgresqlRepository<ApplicationUserRegistrationToken_2> {
+impl PostgresqlRepository<ApplicationUserRegistrationToken2> {
     pub async fn update<'a, T>(
         database_2_connection: &'a Connection,
         subject: &'a T,
@@ -683,7 +683,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken_2> {
     }
 }
 
-impl PostgresqlRepository<ApplicationUserRegistrationToken_3> {
+impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
     pub async fn update<'a, T>(
         database_2_connection: &'a Connection,
         subject: &'a T,
@@ -810,7 +810,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken_3> {
         database_2_connection: &'a Connection,
         application_user_email: &'a ApplicationUser_Email,
         application_user_device_id: &'a ApplicationUserDevice_Id,
-    ) -> Result<Option<ApplicationUserRegistrationToken_3>, ErrorAuditor> {
+    ) -> Result<Option<ApplicationUserRegistrationToken3>, ErrorAuditor> {
         let application_user_email_ = application_user_email.get();
 
         let application_user_device_id_ = application_user_device_id.get();
@@ -985,7 +985,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken_3> {
 
         return Ok(
             Some(
-                ApplicationUserRegistrationToken_3::new(
+                ApplicationUserRegistrationToken3::new(
                     application_user_registration_token_value,
                     application_user_registration_token_wrong_enter_tries_quantity,
                     application_user_registration_token_is_approved,
@@ -996,7 +996,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken_3> {
     }
 }
 
-impl PostgresqlRepository<ApplicationUserRegistrationToken_4> {
+impl PostgresqlRepository<ApplicationUserRegistrationToken4> {
     pub async fn update<'a, T>(
         database_2_connection: &'a Connection,
         subject: &'a T,
@@ -1093,7 +1093,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken_4> {
     }
 }
 
-impl PostgresqlRepository<ApplicationUserRegistrationToken_5> {
+impl PostgresqlRepository<ApplicationUserRegistrationToken5> {
     pub async fn update<'a, T>(
         database_2_connection: &'a Connection,
         subject: &'a T,
@@ -1190,12 +1190,12 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken_5> {
     }
 }
 
-impl PostgresqlRepository<ApplicationUserRegistrationToken_6> {
+impl PostgresqlRepository<ApplicationUserRegistrationToken6> {
     pub async fn find_1<'a>(
         database_2_connection: &'a Connection,
         application_user_email: &'a ApplicationUser_Email,
         application_user_device_id: &'a ApplicationUserDevice_Id,
-    ) -> Result<Option<ApplicationUserRegistrationToken_6>, ErrorAuditor> {
+    ) -> Result<Option<ApplicationUserRegistrationToken6>, ErrorAuditor> {
         let application_user_email_ = application_user_email.get();
 
         let application_user_device_id_ = application_user_device_id.get();
@@ -1370,7 +1370,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken_6> {
 
         return Ok(
             Some(
-                ApplicationUserRegistrationToken_6::new(
+                ApplicationUserRegistrationToken6::new(
                     application_user_registration_token_value,
                     application_user_registration_token_is_approved,
                     application_user_registration_token_expires_at,

@@ -3,9 +3,9 @@ use crate::application_layer::data::unified_report::UnifiedReport;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken;
-use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_3;
-use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_4;
-use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_5;
+use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken3;
+use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken4;
+use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken5;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_IsApproved;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_Value;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_WrongEnterTriesQuantity;
@@ -130,7 +130,7 @@ impl ActionProcessor {
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
-        let application_user_registration_token = match PostgresqlRepository::<ApplicationUserRegistrationToken_3>::find_1(
+        let application_user_registration_token = match PostgresqlRepository::<ApplicationUserRegistrationToken3>::find_1(
             database_2_postgresql_connection,
             &incoming.application_user_email,
             &incoming.application_user_device_id,
@@ -210,7 +210,7 @@ impl ActionProcessor {
             };
 
             if application_user_registration_token_.get_wrong_enter_tries_quantity().get() <= ApplicationUserRegistrationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
-                if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken_4>::update(
+                if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken4>::update(
                     database_2_postgresql_connection,
                     &application_user_registration_token_,
                     &incoming.application_user_email,
@@ -257,7 +257,7 @@ impl ActionProcessor {
 
         application_user_registration_token_.set_is_approved(ApplicationUserRegistrationToken_IsApproved::new(true));
 
-        if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken_5>::update(
+        if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken5>::update(
             database_2_postgresql_connection,
             &application_user_registration_token_,
             &incoming.application_user_email,

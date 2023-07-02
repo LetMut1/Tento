@@ -210,13 +210,13 @@ impl<'a> Getter<'a, &'a CreatedAt> for ApplicationUser<'_> {
     }
 }
 
-pub struct ApplicationUser_1 {
+pub struct ApplicationUser1 {
     id: Id,
     email: Email,
     password_hash: PasswordHash,
 }
 
-impl ApplicationUser_1 {
+impl ApplicationUser1 {
     pub fn new(
         id: Id,
         email: Email,
@@ -242,12 +242,12 @@ impl ApplicationUser_1 {
     }
 }
 
-pub struct ApplicationUser_2 {
+pub struct ApplicationUser2 {
     id: Id,
     password_hash: PasswordHash,
 }
 
-impl ApplicationUser_2 {
+impl ApplicationUser2 {
     pub fn new(
         id: Id,
         password_hash: PasswordHash,
@@ -267,11 +267,11 @@ impl ApplicationUser_2 {
     }
 }
 
-pub struct ApplicationUser_3 {
+pub struct ApplicationUser3 {
     id: Id,
 }
 
-impl ApplicationUser_3 {
+impl ApplicationUser3 {
     pub fn new(id: Id) -> Self {
         return Self {
             id,
@@ -283,11 +283,11 @@ impl ApplicationUser_3 {
     }
 }
 
-pub struct ApplicationUser_4 {
+pub struct ApplicationUser4 {
     password_hash: PasswordHash,
 }
 
-impl ApplicationUser_4 {
+impl ApplicationUser4 {
     pub fn new(password_hash: PasswordHash) -> Self {
         return Self {
             password_hash,
@@ -308,17 +308,17 @@ impl ApplicationUser_4 {
     }
 }
 
-impl<'a> Getter<'a, &'a PasswordHash> for ApplicationUser_4 {
+impl<'a> Getter<'a, &'a PasswordHash> for ApplicationUser4 {
     fn get(&'a self) -> &'a PasswordHash {
         return self.get_password_hash();
     }
 }
 
-pub struct ApplicationUser_5 {
+pub struct ApplicationUser5 {
     email: Email,
 }
 
-impl ApplicationUser_5 {
+impl ApplicationUser5 {
     pub fn new(email: Email) -> Self {
         return Self {
             email,
@@ -330,7 +330,7 @@ impl ApplicationUser_5 {
     }
 }
 
-impl<'a> Getter<'a, &'a Email> for ApplicationUser_5 {
+impl<'a> Getter<'a, &'a Email> for ApplicationUser5 {
     fn get(&'a self) -> &'a Email {
         return self.get_email();
     }

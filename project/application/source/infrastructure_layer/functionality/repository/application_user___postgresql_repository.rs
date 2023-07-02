@@ -1,10 +1,10 @@
 use super::postgresql_repository::PostgresqlRepository;
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
-use crate::domain_layer::data::entity::application_user::ApplicationUser_1;
-use crate::domain_layer::data::entity::application_user::ApplicationUser_2;
-use crate::domain_layer::data::entity::application_user::ApplicationUser_3;
-use crate::domain_layer::data::entity::application_user::ApplicationUser_4;
-use crate::domain_layer::data::entity::application_user::ApplicationUser_5;
+use crate::domain_layer::data::entity::application_user::ApplicationUser1;
+use crate::domain_layer::data::entity::application_user::ApplicationUser2;
+use crate::domain_layer::data::entity::application_user::ApplicationUser3;
+use crate::domain_layer::data::entity::application_user::ApplicationUser4;
+use crate::domain_layer::data::entity::application_user::ApplicationUser5;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_CreatedAt;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
@@ -602,11 +602,11 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
     }
 }
 
-impl PostgresqlRepository<ApplicationUser_1> {
+impl PostgresqlRepository<ApplicationUser1> {
     pub async fn find_1<'a>(
         database_1_connection: &'a Connection,
         application_user_nickname: &'a ApplicationUser_Nickname,
-    ) -> Result<Option<ApplicationUser_1>, ErrorAuditor> {
+    ) -> Result<Option<ApplicationUser1>, ErrorAuditor> {
         let application_user_nickname_ = application_user_nickname.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -751,7 +751,7 @@ impl PostgresqlRepository<ApplicationUser_1> {
 
         return Ok(
             Some(
-                ApplicationUser_1::new(
+                ApplicationUser1::new(
                     application_user_id,
                     application_user_email,
                     application_user_password_hash,
@@ -761,11 +761,11 @@ impl PostgresqlRepository<ApplicationUser_1> {
     }
 }
 
-impl PostgresqlRepository<ApplicationUser_2> {
+impl PostgresqlRepository<ApplicationUser2> {
     pub async fn find_2<'a>(
         database_1_connection: &'a Connection,
         application_user_email: &'a ApplicationUser_Email,
-    ) -> Result<Option<ApplicationUser_2>, ErrorAuditor> {
+    ) -> Result<Option<ApplicationUser2>, ErrorAuditor> {
         let application_user_email_ = application_user_email.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -887,7 +887,7 @@ impl PostgresqlRepository<ApplicationUser_2> {
 
         return Ok(
             Some(
-                ApplicationUser_2::new(
+                ApplicationUser2::new(
                     application_user_id,
                     application_user_password_hash,
                 ),
@@ -896,11 +896,11 @@ impl PostgresqlRepository<ApplicationUser_2> {
     }
 }
 
-impl PostgresqlRepository<ApplicationUser_3> {
+impl PostgresqlRepository<ApplicationUser3> {
     pub async fn find_2<'a>(
         database_1_connection: &'a Connection,
         application_user_email: &'a ApplicationUser_Email,
-    ) -> Result<Option<ApplicationUser_3>, ErrorAuditor> {
+    ) -> Result<Option<ApplicationUser3>, ErrorAuditor> {
         let application_user_email_ = application_user_email.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -997,11 +997,11 @@ impl PostgresqlRepository<ApplicationUser_3> {
             }
         };
 
-        return Ok(Some(ApplicationUser_3::new(application_user_id)));
+        return Ok(Some(ApplicationUser3::new(application_user_id)));
     }
 }
 
-impl PostgresqlRepository<ApplicationUser_4> {
+impl PostgresqlRepository<ApplicationUser4> {
     pub async fn update<'a, T>(
         database_1_connection: &'a Connection,
         subject: &'a T,
@@ -1095,7 +1095,7 @@ impl PostgresqlRepository<ApplicationUser_4> {
     pub async fn find_3<'a>(
         database_1_connection: &'a Connection,
         application_user_id: ApplicationUser_Id,
-    ) -> Result<Option<ApplicationUser_4>, ErrorAuditor> {
+    ) -> Result<Option<ApplicationUser4>, ErrorAuditor> {
         let application_user_id_ = application_user_id.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -1192,15 +1192,15 @@ impl PostgresqlRepository<ApplicationUser_4> {
             }
         };
 
-        return Ok(Some(ApplicationUser_4::new(application_user_password_hash)));
+        return Ok(Some(ApplicationUser4::new(application_user_password_hash)));
     }
 }
 
-impl PostgresqlRepository<ApplicationUser_5> {
+impl PostgresqlRepository<ApplicationUser5> {
     pub async fn find_3<'a>(
         database_1_connection: &'a Connection,
         application_user_id: ApplicationUser_Id,
-    ) -> Result<Option<ApplicationUser_5>, ErrorAuditor> {
+    ) -> Result<Option<ApplicationUser5>, ErrorAuditor> {
         let application_user_id_ = application_user_id.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -1297,7 +1297,7 @@ impl PostgresqlRepository<ApplicationUser_5> {
             }
         };
 
-        return Ok(Some(ApplicationUser_5::new(application_user_email)));
+        return Ok(Some(ApplicationUser5::new(application_user_email)));
     }
 }
 

@@ -3,7 +3,7 @@ use crate::application_layer::data::unified_report::UnifiedReport;
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
-use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_1;
+use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken1;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ObfuscationValue;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_UpdatedAt;
@@ -13,8 +13,8 @@ use crate::domain_layer::data::entity::application_user_access_token::Applicatio
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken_Id;
 use crate::domain_layer::data::entity::application_user_access_token_encrypted::ApplicationUserAccessTokenEncrypted;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken;
-use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_2;
-use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_4;
+use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken2;
+use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken4;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_Value;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_WrongEnterTriesQuantity;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice;
@@ -128,7 +128,7 @@ impl ActionProcessor {
         };
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
-        let application_user_authorization_token = match PostgresqlRepository::<ApplicationUserAuthorizationToken_2>::find_1(
+        let application_user_authorization_token = match PostgresqlRepository::<ApplicationUserAuthorizationToken2>::find_1(
             database_2_postgresql_connection,
             incoming.application_user_id,
             &incoming.application_user_device_id,
@@ -200,7 +200,7 @@ impl ActionProcessor {
             }
 
             if application_user_authorization_token_.get_wrong_enter_tries_quantity().get() <= ApplicationUserAuthorizationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
-                if let Err(mut error) = PostgresqlRepository::<ApplicationUserAuthorizationToken_4>::update(
+                if let Err(mut error) = PostgresqlRepository::<ApplicationUserAuthorizationToken4>::update(
                     database_2_postgresql_connection,
                     &application_user_authorization_token_,
                     incoming.application_user_id,
@@ -369,7 +369,7 @@ impl ActionProcessor {
                     .set_expires_at(application_user_access_refresh_token_expires_at)
                     .set_updated_at(application_user_access_refresh_token_updated_at);
 
-                if let Err(mut error) = PostgresqlRepository::<ApplicationUserAccessRefreshToken_1>::update(
+                if let Err(mut error) = PostgresqlRepository::<ApplicationUserAccessRefreshToken1>::update(
                     database_2_postgresql_connection,
                     &application_user_access_refresh_token__,
                     incoming.application_user_id,

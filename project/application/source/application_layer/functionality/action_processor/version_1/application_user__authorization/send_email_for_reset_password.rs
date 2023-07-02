@@ -1,11 +1,11 @@
 use crate::application_layer::data::common_precedent::CommonPrecedent;
 use crate::application_layer::data::unified_report::UnifiedReport;
-use crate::domain_layer::data::entity::application_user::ApplicationUser_5;
+use crate::domain_layer::data::entity::application_user::ApplicationUser5;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
-use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_2;
-use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_6;
+use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken2;
+use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken6;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_CanBeResentFrom;
 use crate::domain_layer::functionality::service::email_sender::EmailSender;
 use crate::domain_layer::functionality::service::generator::Generator;
@@ -88,7 +88,7 @@ impl ActionProcessor {
             }
         };
 
-        let application_user = match PostgresqlRepository::<ApplicationUser_5>::find_3(
+        let application_user = match PostgresqlRepository::<ApplicationUser5>::find_3(
             &*database_1_postgresql_pooled_connection,
             incoming.application_user_id,
         )
@@ -143,7 +143,7 @@ impl ActionProcessor {
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
-        let application_user_reset_password_token = match PostgresqlRepository::<ApplicationUserResetPasswordToken_6>::find_1(
+        let application_user_reset_password_token = match PostgresqlRepository::<ApplicationUserResetPasswordToken6>::find_1(
             database_2_postgresql_connection,
             incoming.application_user_id,
             &incoming.application_user_device_id,
@@ -234,7 +234,7 @@ impl ActionProcessor {
 
         application_user_reset_password_token_.set_can_be_resent_from(application_user_reset_password_token_can_be_resent_from);
 
-        if let Err(mut error) = PostgresqlRepository::<ApplicationUserResetPasswordToken_2>::update(
+        if let Err(mut error) = PostgresqlRepository::<ApplicationUserResetPasswordToken2>::update(
             database_2_postgresql_connection,
             &application_user_reset_password_token_,
             incoming.application_user_id,

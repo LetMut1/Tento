@@ -209,14 +209,14 @@ impl<'a> Getter<'a, CanBeResentFrom> for ApplicationUserAuthorizationToken<'_> {
     }
 }
 
-pub struct ApplicationUserAuthorizationToken_1 {
+pub struct ApplicationUserAuthorizationToken1 {
     value: Value,
     wrong_enter_tries_quantity: WrongEnterTriesQuantity,
     expires_at: ExpiresAt,
     can_be_resent_from: CanBeResentFrom,
 }
 
-impl ApplicationUserAuthorizationToken_1 {
+impl ApplicationUserAuthorizationToken1 {
     pub fn new(
         value: Value,
         wrong_enter_tries_quantity: WrongEnterTriesQuantity,
@@ -284,37 +284,37 @@ impl ApplicationUserAuthorizationToken_1 {
     }
 }
 
-impl<'a> Getter<'a, &'a Value> for ApplicationUserAuthorizationToken_1 {
+impl<'a> Getter<'a, &'a Value> for ApplicationUserAuthorizationToken1 {
     fn get(&'a self) -> &'a Value {
         return self.get_value();
     }
 }
 
-impl<'a> Getter<'a, WrongEnterTriesQuantity> for ApplicationUserAuthorizationToken_1 {
+impl<'a> Getter<'a, WrongEnterTriesQuantity> for ApplicationUserAuthorizationToken1 {
     fn get(&'a self) -> WrongEnterTriesQuantity {
         return self.get_wrong_enter_tries_quantity();
     }
 }
 
-impl<'a> Getter<'a, ExpiresAt> for ApplicationUserAuthorizationToken_1 {
+impl<'a> Getter<'a, ExpiresAt> for ApplicationUserAuthorizationToken1 {
     fn get(&'a self) -> ExpiresAt {
         return self.get_expires_at();
     }
 }
 
-impl<'a> Getter<'a, CanBeResentFrom> for ApplicationUserAuthorizationToken_1 {
+impl<'a> Getter<'a, CanBeResentFrom> for ApplicationUserAuthorizationToken1 {
     fn get(&'a self) -> CanBeResentFrom {
         return self.get_can_be_resent_from();
     }
 }
 
-pub struct ApplicationUserAuthorizationToken_2 {
+pub struct ApplicationUserAuthorizationToken2 {
     value: Value,
     wrong_enter_tries_quantity: WrongEnterTriesQuantity,
     expires_at: ExpiresAt,
 }
 
-impl ApplicationUserAuthorizationToken_2 {
+impl ApplicationUserAuthorizationToken2 {
     pub fn new(
         value: Value,
         wrong_enter_tries_quantity: WrongEnterTriesQuantity,
@@ -371,39 +371,39 @@ impl ApplicationUserAuthorizationToken_2 {
     }
 }
 
-impl<'a> Getter<'a, &'a Value> for ApplicationUserAuthorizationToken_2 {
+impl<'a> Getter<'a, &'a Value> for ApplicationUserAuthorizationToken2 {
     fn get(&'a self) -> &'a Value {
         return self.get_value();
     }
 }
 
-impl<'a> Getter<'a, WrongEnterTriesQuantity> for ApplicationUserAuthorizationToken_2 {
+impl<'a> Getter<'a, WrongEnterTriesQuantity> for ApplicationUserAuthorizationToken2 {
     fn get(&'a self) -> WrongEnterTriesQuantity {
         return self.get_wrong_enter_tries_quantity();
     }
 }
 
-impl<'a> Getter<'a, ExpiresAt> for ApplicationUserAuthorizationToken_2 {
+impl<'a> Getter<'a, ExpiresAt> for ApplicationUserAuthorizationToken2 {
     fn get(&'a self) -> ExpiresAt {
         return self.expires_at;
     }
 }
 
-pub struct ApplicationUserAuthorizationToken_3 {
+pub struct ApplicationUserAuthorizationToken3 {
     can_be_resent_from: CanBeResentFrom,
 }
 
-pub struct ApplicationUserAuthorizationToken_4 {
+pub struct ApplicationUserAuthorizationToken4 {
     wrong_enter_tries_quantity: WrongEnterTriesQuantity,
 }
 
-pub struct ApplicationUserAuthorizationToken_5 {
+pub struct ApplicationUserAuthorizationToken5 {
     value: Value,
     expires_at: ExpiresAt,
     can_be_resent_from: CanBeResentFrom,
 }
 
-impl ApplicationUserAuthorizationToken_5 {
+impl ApplicationUserAuthorizationToken5 {
     pub fn new(
         value: Value,
         expires_at: ExpiresAt,
@@ -447,19 +447,19 @@ impl ApplicationUserAuthorizationToken_5 {
     }
 }
 
-impl<'a> Getter<'a, &'a Value> for ApplicationUserAuthorizationToken_5 {
+impl<'a> Getter<'a, &'a Value> for ApplicationUserAuthorizationToken5 {
     fn get(&'a self) -> &'a Value {
         return self.get_value();
     }
 }
 
-impl<'a> Getter<'a, ExpiresAt> for ApplicationUserAuthorizationToken_5 {
+impl<'a> Getter<'a, ExpiresAt> for ApplicationUserAuthorizationToken5 {
     fn get(&'a self) -> ExpiresAt {
         return self.get_expires_at();
     }
 }
 
-impl<'a> Getter<'a, CanBeResentFrom> for ApplicationUserAuthorizationToken_5 {
+impl<'a> Getter<'a, CanBeResentFrom> for ApplicationUserAuthorizationToken5 {
     fn get(&'a self) -> CanBeResentFrom {
         return self.get_can_be_resent_from();
     }

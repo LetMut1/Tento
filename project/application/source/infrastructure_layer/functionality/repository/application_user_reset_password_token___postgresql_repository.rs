@@ -2,12 +2,12 @@ use super::postgresql_repository::PostgresqlRepository;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
-use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_1;
-use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_2;
-use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_3;
-use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_4;
-use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_5;
-use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_6;
+use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken1;
+use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken2;
+use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken3;
+use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken4;
+use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken5;
+use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken6;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_CanBeResentFrom;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_IsApproved;
@@ -240,7 +240,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
     }
 }
 
-impl PostgresqlRepository<ApplicationUserResetPasswordToken_1> {
+impl PostgresqlRepository<ApplicationUserResetPasswordToken1> {
     pub async fn update<'a, T>(
         database_2_connection: &'a Connection,
         subject: &'a T,
@@ -376,7 +376,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken_1> {
         database_2_connection: &'a Connection,
         application_user_id: ApplicationUser_Id,
         application_user_device_id: &'a ApplicationUserDevice_Id,
-    ) -> Result<Option<ApplicationUserResetPasswordToken_1>, ErrorAuditor> {
+    ) -> Result<Option<ApplicationUserResetPasswordToken1>, ErrorAuditor> {
         let application_user_id_ = application_user_id.get();
 
         let application_user_device_id_ = application_user_device_id.get();
@@ -574,7 +574,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken_1> {
 
         return Ok(
             Some(
-                ApplicationUserResetPasswordToken_1::new(
+                ApplicationUserResetPasswordToken1::new(
                     application_user_reset_password_token_value,
                     application_user_reset_password_token_wrong_enter_tries_quantity,
                     application_user_reset_password_token_is_approved,
@@ -586,7 +586,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken_1> {
     }
 }
 
-impl PostgresqlRepository<ApplicationUserResetPasswordToken_2> {
+impl PostgresqlRepository<ApplicationUserResetPasswordToken2> {
     pub async fn update<'a, T>(
         database_2_connection: &'a Connection,
         subject: &'a T,
@@ -683,7 +683,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken_2> {
     }
 }
 
-impl PostgresqlRepository<ApplicationUserResetPasswordToken_3> {
+impl PostgresqlRepository<ApplicationUserResetPasswordToken3> {
     pub async fn update<'a, T>(
         database_2_connection: &'a Connection,
         subject: &'a T,
@@ -810,7 +810,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken_3> {
         database_2_connection: &'a Connection,
         application_user_id: ApplicationUser_Id,
         application_user_device_id: &'a ApplicationUserDevice_Id,
-    ) -> Result<Option<ApplicationUserResetPasswordToken_3>, ErrorAuditor> {
+    ) -> Result<Option<ApplicationUserResetPasswordToken3>, ErrorAuditor> {
         let application_user_id_ = application_user_id.get();
 
         let application_user_device_id_ = application_user_device_id.get();
@@ -985,7 +985,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken_3> {
 
         return Ok(
             Some(
-                ApplicationUserResetPasswordToken_3::new(
+                ApplicationUserResetPasswordToken3::new(
                     application_user_reset_password_token_value,
                     application_user_reset_password_token_wrong_enter_tries_quantity,
                     application_user_reset_password_token_is_approved,
@@ -996,7 +996,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken_3> {
     }
 }
 
-impl PostgresqlRepository<ApplicationUserResetPasswordToken_4> {
+impl PostgresqlRepository<ApplicationUserResetPasswordToken4> {
     pub async fn update<'a, T>(
         database_2_connection: &'a Connection,
         subject: &'a T,
@@ -1093,7 +1093,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken_4> {
     }
 }
 
-impl PostgresqlRepository<ApplicationUserResetPasswordToken_5> {
+impl PostgresqlRepository<ApplicationUserResetPasswordToken5> {
     pub async fn update<'a, T>(
         database_2_connection: &'a Connection,
         subject: &'a T,
@@ -1190,12 +1190,12 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken_5> {
     }
 }
 
-impl PostgresqlRepository<ApplicationUserResetPasswordToken_6> {
+impl PostgresqlRepository<ApplicationUserResetPasswordToken6> {
     pub async fn find_1<'a>(
         database_2_connection: &'a Connection,
         application_user_id: ApplicationUser_Id,
         application_user_device_id: &'a ApplicationUserDevice_Id,
-    ) -> Result<Option<ApplicationUserResetPasswordToken_6>, ErrorAuditor> {
+    ) -> Result<Option<ApplicationUserResetPasswordToken6>, ErrorAuditor> {
         let application_user_id_ = application_user_id.get();
 
         let application_user_device_id_ = application_user_device_id.get();
@@ -1370,7 +1370,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken_6> {
 
         return Ok(
             Some(
-                ApplicationUserResetPasswordToken_6::new(
+                ApplicationUserResetPasswordToken6::new(
                     application_user_reset_password_token_value,
                     application_user_reset_password_token_is_approved,
                     application_user_reset_password_token_expires_at,

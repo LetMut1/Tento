@@ -1,13 +1,13 @@
 use crate::application_layer::data::common_precedent::CommonPrecedent;
 use crate::application_layer::data::unified_report::UnifiedReport;
-use crate::domain_layer::data::entity::application_user::ApplicationUser_3;
+use crate::domain_layer::data::entity::application_user::ApplicationUser3;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
-use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_1;
-use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_2;
-use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_3;
+use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken1;
+use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken2;
+use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken3;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_CanBeResentFrom;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_IsApproved;
@@ -110,7 +110,7 @@ impl ActionProcessor {
             }
         };
 
-        let application_user = match PostgresqlRepository::<ApplicationUser_3>::find_2(
+        let application_user = match PostgresqlRepository::<ApplicationUser3>::find_2(
             &*database_1_postgresql_pooled_connection,
             &incoming.application_user_email,
         )
@@ -165,7 +165,7 @@ impl ActionProcessor {
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
-        let application_user_reset_password_token = match PostgresqlRepository::<ApplicationUserResetPasswordToken_1>::find_1(
+        let application_user_reset_password_token = match PostgresqlRepository::<ApplicationUserResetPasswordToken1>::find_1(
             database_2_postgresql_connection,
             application_user_.get_id(),
             &incoming.application_user_device_id,
@@ -243,7 +243,7 @@ impl ActionProcessor {
                 };
 
                 if need_to_update_1 && need_to_update_2 {
-                    if let Err(mut error) = PostgresqlRepository::<ApplicationUserResetPasswordToken_1>::update(
+                    if let Err(mut error) = PostgresqlRepository::<ApplicationUserResetPasswordToken1>::update(
                         database_2_postgresql_connection,
                         &application_user_reset_password_token_,
                         application_user_.get_id(),
@@ -263,7 +263,7 @@ impl ActionProcessor {
                     }
                 } else {
                     if need_to_update_1 {
-                        if let Err(mut error) = PostgresqlRepository::<ApplicationUserResetPasswordToken_2>::update(
+                        if let Err(mut error) = PostgresqlRepository::<ApplicationUserResetPasswordToken2>::update(
                             database_2_postgresql_connection,
                             &application_user_reset_password_token_,
                             application_user_.get_id(),
@@ -284,7 +284,7 @@ impl ActionProcessor {
                     }
 
                     if need_to_update_2 {
-                        if let Err(mut error) = PostgresqlRepository::<ApplicationUserResetPasswordToken_3>::update(
+                        if let Err(mut error) = PostgresqlRepository::<ApplicationUserResetPasswordToken3>::update(
                             database_2_postgresql_connection,
                             &application_user_reset_password_token_,
                             application_user_.get_id(),
@@ -467,6 +467,6 @@ enum ApplicationUserResetPasswordToken_Aggregator<'a> {
         application_user_reset_password_token: ApplicationUserResetPasswordToken<'a>,
     },
     Second {
-        application_user_reset_password_token: ApplicationUserResetPasswordToken_1,
+        application_user_reset_password_token: ApplicationUserResetPasswordToken1,
     },
 }

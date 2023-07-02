@@ -1,11 +1,11 @@
 use super::postgresql_repository::PostgresqlRepository;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken;
-use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_1;
-use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_2;
-use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_3;
-use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_4;
-use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_5;
+use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken1;
+use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken2;
+use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken3;
+use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken4;
+use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken5;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_CanBeResentFrom;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_Value;
@@ -229,7 +229,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
     }
 }
 
-impl PostgresqlRepository<ApplicationUserAuthorizationToken_1> {
+impl PostgresqlRepository<ApplicationUserAuthorizationToken1> {
     pub async fn update<'a, T>(
         database_2_connection: &'a Connection,
         subject: &'a T,
@@ -356,7 +356,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken_1> {
         database_2_connection: &'a Connection,
         application_user_id: ApplicationUser_Id,
         application_user_device_id: &'a ApplicationUserDevice_Id,
-    ) -> Result<Option<ApplicationUserAuthorizationToken_1>, ErrorAuditor> {
+    ) -> Result<Option<ApplicationUserAuthorizationToken1>, ErrorAuditor> {
         let application_user_id_ = application_user_id.get();
 
         let application_user_device_id_ = application_user_device_id.get();
@@ -531,7 +531,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken_1> {
 
         return Ok(
             Some(
-                ApplicationUserAuthorizationToken_1::new(
+                ApplicationUserAuthorizationToken1::new(
                     application_user_authorization_token_value,
                     application_user_authorization_token_wrong_enter_tries_quantity,
                     application_user_authorization_token_expires_at,
@@ -542,7 +542,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken_1> {
     }
 }
 
-impl PostgresqlRepository<ApplicationUserAuthorizationToken_2> {
+impl PostgresqlRepository<ApplicationUserAuthorizationToken2> {
     pub async fn update<'a, T>(
         database_2_connection: &'a Connection,
         subject: &'a T,
@@ -660,7 +660,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken_2> {
         database_2_connection: &'a Connection,
         application_user_id: ApplicationUser_Id,
         application_user_device_id: &'a ApplicationUserDevice_Id,
-    ) -> Result<Option<ApplicationUserAuthorizationToken_2>, ErrorAuditor> {
+    ) -> Result<Option<ApplicationUserAuthorizationToken2>, ErrorAuditor> {
         let application_user_id_ = application_user_id.get();
 
         let application_user_device_id_ = application_user_device_id.get();
@@ -812,7 +812,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken_2> {
 
         return Ok(
             Some(
-                ApplicationUserAuthorizationToken_2::new(
+                ApplicationUserAuthorizationToken2::new(
                     application_user_authorization_token_value,
                     application_user_authorization_token_wrong_enter_tries_quantity,
                     application_user_authorization_token_expires_at,
@@ -822,7 +822,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken_2> {
     }
 }
 
-impl PostgresqlRepository<ApplicationUserAuthorizationToken_3> {
+impl PostgresqlRepository<ApplicationUserAuthorizationToken3> {
     pub async fn update<'a, T>(
         database_2_connection: &'a Connection,
         subject: &'a T,
@@ -919,7 +919,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken_3> {
     }
 }
 
-impl PostgresqlRepository<ApplicationUserAuthorizationToken_4> {
+impl PostgresqlRepository<ApplicationUserAuthorizationToken4> {
     pub async fn update<'a, T>(
         database_2_connection: &'a Connection,
         subject: &'a T,
@@ -1016,12 +1016,12 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken_4> {
     }
 }
 
-impl PostgresqlRepository<ApplicationUserAuthorizationToken_5> {
+impl PostgresqlRepository<ApplicationUserAuthorizationToken5> {
     pub async fn find_1<'a>(
         database_2_connection: &'a Connection,
         application_user_id: ApplicationUser_Id,
         application_user_device_id: &'a ApplicationUserDevice_Id,
-    ) -> Result<Option<ApplicationUserAuthorizationToken_5>, ErrorAuditor> {
+    ) -> Result<Option<ApplicationUserAuthorizationToken5>, ErrorAuditor> {
         let application_user_id_ = application_user_id.get();
 
         let application_user_device_id_ = application_user_device_id.get();
@@ -1173,7 +1173,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken_5> {
 
         return Ok(
             Some(
-                ApplicationUserAuthorizationToken_5::new(
+                ApplicationUserAuthorizationToken5::new(
                     application_user_authorization_token_value,
                     application_user_authorization_token_expires_at,
                     application_user_authorization_token_can_be_resent_from,

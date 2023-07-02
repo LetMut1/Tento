@@ -1,15 +1,15 @@
 use crate::application_layer::data::common_precedent::CommonPrecedent;
 use crate::application_layer::data::unified_report::UnifiedReport;
-use crate::domain_layer::data::entity::application_user::ApplicationUser_1;
-use crate::domain_layer::data::entity::application_user::ApplicationUser_2;
+use crate::domain_layer::data::entity::application_user::ApplicationUser1;
+use crate::domain_layer::data::entity::application_user::ApplicationUser2;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Nickname;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Password;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken;
-use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_1;
-use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_2;
-use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_3;
+use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken1;
+use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken2;
+use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken3;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_CanBeResentFrom;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_Value;
@@ -119,7 +119,7 @@ impl ActionProcessor {
         let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
 
         let application_user_aggregator = if is_valid_email {
-            let application_user_ = match PostgresqlRepository::<ApplicationUser_2>::find_2(
+            let application_user_ = match PostgresqlRepository::<ApplicationUser2>::find_2(
                 database_1_postgresql_connection,
                 &application_user_email,
             )
@@ -158,7 +158,7 @@ impl ActionProcessor {
             let application_user_nickname = ApplicationUser_Nickname::new(application_user_email.into_inner());
 
             if Validator::<ApplicationUser_Nickname>::is_valid(&application_user_nickname) {
-                let application_user_ = match PostgresqlRepository::<ApplicationUser_1>::find_1(
+                let application_user_ = match PostgresqlRepository::<ApplicationUser1>::find_1(
                     database_1_postgresql_connection,
                     &application_user_nickname,
                 )
@@ -271,7 +271,7 @@ impl ActionProcessor {
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
-        let application_user_authorization_token = match PostgresqlRepository::<ApplicationUserAuthorizationToken_1>::find_1(
+        let application_user_authorization_token = match PostgresqlRepository::<ApplicationUserAuthorizationToken1>::find_1(
             database_2_postgresql_connection,
             application_user_id,
             &incoming.application_user_device_id,
@@ -348,7 +348,7 @@ impl ActionProcessor {
                 };
 
                 if need_to_update_1 && need_to_update_2 {
-                    if let Err(mut error) = PostgresqlRepository::<ApplicationUserAuthorizationToken_1>::update(
+                    if let Err(mut error) = PostgresqlRepository::<ApplicationUserAuthorizationToken1>::update(
                         database_2_postgresql_connection,
                         &application_user_authorization_token_,
                         application_user_id,
@@ -368,7 +368,7 @@ impl ActionProcessor {
                     }
                 } else {
                     if need_to_update_1 {
-                        if let Err(mut error) = PostgresqlRepository::<ApplicationUserAuthorizationToken_3>::update(
+                        if let Err(mut error) = PostgresqlRepository::<ApplicationUserAuthorizationToken3>::update(
                             database_2_postgresql_connection,
                             &application_user_authorization_token_,
                             application_user_id,
@@ -389,7 +389,7 @@ impl ActionProcessor {
                     }
 
                     if need_to_update_2 {
-                        if let Err(mut error) = PostgresqlRepository::<ApplicationUserAuthorizationToken_2>::update(
+                        if let Err(mut error) = PostgresqlRepository::<ApplicationUserAuthorizationToken2>::update(
                             database_2_postgresql_connection,
                             &application_user_authorization_token_,
                             application_user_id,
@@ -579,10 +579,10 @@ r#enum!(
 
 enum ApplicationUser_Aggregator {
     First {
-        application_user: ApplicationUser_1,
+        application_user: ApplicationUser1,
     },
     Second {
-        application_user: ApplicationUser_2,
+        application_user: ApplicationUser2,
         application_user_email: ApplicationUser_Email,
     },
 }
@@ -592,6 +592,6 @@ enum ApplicationUserAuthorizationToken_Aggregator<'a> {
         application_user_authorization_token: ApplicationUserAuthorizationToken<'a>,
     },
     Second {
-        application_user_authorization_token: ApplicationUserAuthorizationToken_1,
+        application_user_authorization_token: ApplicationUserAuthorizationToken1,
     },
 }
