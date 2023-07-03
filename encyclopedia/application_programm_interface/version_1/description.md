@@ -36,11 +36,11 @@ struct Data<S>
 - `Result data` structures written under each API endpoint will be nested in the `data` field in the `struct Data<S>`.
 - Existing `communication_code`s can be founded here:
 ```
-/project/application/source/presentation_layer/data/communication_code_registry.rs
+/application/application/source/presentation_layer/data/communication_code_registry.rs
 ```
 - Existing `http_route`s can be founded here:
 ```
-/project/application/source/presentation_layer/data/http_route_registry.rs
+/application/application/source/presentation_layer/data/http_route_registry.rs
 ```
 - `HTTP status code` unequal to `200` (it is [`400`, `599`]) have not got `HTTP body`.
 
