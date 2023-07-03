@@ -1,22 +1,22 @@
 [workspace]
 resolver = "2"
 members = [
-    "./extern_crate",
     "./integration_module",
-    "./macro_rules",
     "./source",
-    "./source/presentation_layer/functionality/command/create_fixtures",
-    "./source/presentation_layer/functionality/command/remove_incomplite_state",
-    "./source/presentation_layer/functionality/command/run_server"
+    "./source/extern_crate",
+    "./source/macro_rules",
+    "./source/source/presentation_layer/functionality/command/create_fixtures",
+    "./source/source/presentation_layer/functionality/command/remove_incomplite_state",
+    "./source/source/presentation_layer/functionality/command/run_server"
 ]
 default-members = [
-    "./extern_crate",
     "./integration_module",
-    "./macro_rules",
     "./source",
-    "./source/presentation_layer/functionality/command/create_fixtures",
-    "./source/presentation_layer/functionality/command/remove_incomplite_state",
-    "./source/presentation_layer/functionality/command/run_server"
+    "./source/extern_crate",
+    "./source/macro_rules",
+    "./source/source/presentation_layer/functionality/command/create_fixtures",
+    "./source/source/presentation_layer/functionality/command/remove_incomplite_state",
+    "./source/source/presentation_layer/functionality/command/run_server"
 ]
 
 [workspace.package]

@@ -7,7 +7,7 @@ build = "build.rs"
 
 [lib]
 name = "application"
-path = "./mod.rs"
+path = "./source/mod.rs"
 test = true
 doctest = true
 bench = true
@@ -19,7 +19,7 @@ crate-type = ["lib"]
 required-features = []
 
 [dependencies]
-extern_crate = { path = "./../extern_crate", package = "extern_crate", version = "1.0.0", default-features = true, features = [], optional = false }
+extern_crate = { path = "./extern_crate", package = "extern_crate", version = "1.0.0", default-features = true, features = [], optional = false }
 
 [features]
 default = []
