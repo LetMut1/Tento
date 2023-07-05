@@ -3,7 +3,7 @@ name = "application"
 version = "1.0.0"
 authors.workspace = true
 edition = "2021"
-build = "build.rs"
+build = "./build_script/mod.rs"
 
 [lib]
 name = "application"
@@ -19,6 +19,9 @@ crate-type = ["lib"]
 required-features = []
 
 [dependencies]
+extern_crate = { path = "./extern_crate", package = "extern_crate", version = "1.0.0", default-features = true, features = [], optional = false }
+
+[build-dependencies]
 extern_crate = { path = "./extern_crate", package = "extern_crate", version = "1.0.0", default-features = true, features = [], optional = false }
 
 [features]
