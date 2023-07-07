@@ -3,7 +3,7 @@ use extern_crate::crypto::hmac::Hmac as Hmac_;
 use extern_crate::crypto::mac::Mac;
 use extern_crate::crypto::sha2::Sha512;
 
-pub use crate::infrastructure_layer::data::control_type_registry::Hmac;
+pub use crate::infrastructure_layer::data::control_type::Hmac;
 
 impl Encoder<Hmac> {
     // TODO https://docs.rs/hmac/latest/hmac/ - этот hmac может верифицировать.

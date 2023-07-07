@@ -6,7 +6,7 @@ use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use extern_crate::tokio_postgres::Client as Connection;
 
-pub use crate::infrastructure_layer::data::control_type_registry::PostgresqlTransaction;
+pub use crate::infrastructure_layer::data::control_type::PostgresqlTransaction;
 
 impl Resolver<PostgresqlTransaction> {
     pub async fn start<'a>(

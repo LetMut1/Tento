@@ -9,7 +9,7 @@ use extern_crate::base64::encode_config;
 use extern_crate::base64::Config;
 use extern_crate::base64::STANDARD;
 
-pub use crate::infrastructure_layer::data::control_type_registry::Base64;
+pub use crate::infrastructure_layer::data::control_type::Base64;
 
 impl Encoder<Base64> {
     const BASE64_STANDARD_CONFIGURATION: Config = STANDARD; // TODO подходит ли?  // TODO TODO TODO TODO TODO Можно ли здесь использовать Бэйс64 на байтф мессаджПака?

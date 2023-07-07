@@ -10,7 +10,7 @@ use extern_crate::serde::Serialize as SerdeSerialize;
 use extern_crate::serde_json;
 
 #[cfg(feature = "manual_testing")]
-pub use crate::infrastructure_layer::data::control_type_registry::Json;
+pub use crate::infrastructure_layer::data::control_type::Json;
 
 #[cfg(feature = "manual_testing")]
 impl Serialize for Serializer<Json> {

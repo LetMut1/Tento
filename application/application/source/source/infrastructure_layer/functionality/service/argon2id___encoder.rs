@@ -9,7 +9,7 @@ use extern_crate::argon2::verify_encoded;
 use extern_crate::argon2::Config;
 use extern_crate::uuid::Uuid;
 
-pub use crate::infrastructure_layer::data::control_type_registry::Argon2Id;
+pub use crate::infrastructure_layer::data::control_type::Argon2Id;
 
 impl Encoder<Argon2Id> {
     // TODO отрабатывает за 320 млсекунд, как увеличить скорость, https://users.rust-lang.org/t/which-crate-should-i-use-for-argon2/26090

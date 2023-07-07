@@ -2,7 +2,7 @@ use super::expiration_time_checker::ExpirationTimeChecker;
 use crate::infrastructure_layer::functionality::service::resolver::DateTime;
 use crate::infrastructure_layer::functionality::service::resolver::Resolver;
 
-pub use crate::infrastructure_layer::data::control_type_registry::UnixTime;
+pub use crate::infrastructure_layer::data::control_type::UnixTime;
 
 impl ExpirationTimeChecker<UnixTime> {
     pub fn is_expired(date_time: i64) -> bool {

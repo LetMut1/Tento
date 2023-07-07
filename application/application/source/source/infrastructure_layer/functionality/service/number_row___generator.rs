@@ -1,6 +1,6 @@
 use super::generator::Generator;
 
-pub use crate::infrastructure_layer::data::control_type_registry::NumberRow;
+pub use crate::infrastructure_layer::data::control_type::NumberRow;
 
 impl Generator<NumberRow> {
     pub fn generate_6() -> String {

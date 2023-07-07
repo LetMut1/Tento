@@ -1,6 +1,6 @@
 [package]
 name = "application"
-version = "1.0.0"
+version = "0.1.0"
 authors.workspace = true
 edition = "2021"
 build = "./build_script/mod.rs"
@@ -19,10 +19,10 @@ crate-type = ["lib"]
 required-features = []
 
 [dependencies]
-extern_crate = { path = "./extern_crate", package = "extern_crate", version = "1.0.0", default-features = true, features = [], optional = false }
+extern_crate = { path = "./extern_crate", package = "extern_crate", version = "0.1.0", default-features = true, features = [], optional = false }
 
 [build-dependencies]
-extern_crate = { path = "./extern_crate", package = "extern_crate", version = "1.0.0", default-features = true, features = [], optional = false }
+extern_crate = { path = "./extern_crate", package = "extern_crate", version = "0.1.0", default-features = true, features = [], optional = false }
 
 [features]
 default = []

@@ -29,7 +29,6 @@ use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use crate::infrastructure_layer::environment_configuration::ENVIRONMENT_CONFIGURATION_FILE_PATH;
 use crate::infrastructure_layer::functionality::repository::application_user___postgresql_repository::Insert as ApplicationUserInsert;
 use crate::infrastructure_layer::functionality::repository::application_user_device___postgresql_repository::Insert as ApplicationUserDeviceInsert;
 use crate::infrastructure_layer::functionality::repository::channel___postgresql_repository::Insert as ChannelInsert;
@@ -37,9 +36,9 @@ use crate::infrastructure_layer::functionality::repository::postgresql_repositor
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::By1;
 use crate::infrastructure_layer::functionality::service::creator::Creator;
 use crate::infrastructure_layer::functionality::service::creator::PostgresqlConnectionPoolNoTls;
-use crate::infrastructure_layer::functionality::service::loader::Loader;
 use extern_crate::rand::thread_rng;
 use extern_crate::rand::Rng;
+use crate::infrastructure_layer::data::environment_configuration::ENVIRONMENT_CONFIGURATION;
 use extern_crate::tokio::runtime::Builder;
 use extern_crate::tokio_postgres::Config as PostgresqlConfiguration;
 use std::str::FromStr;
@@ -57,21 +56,6 @@ impl CreateFixturesProcessor {
     ];
 
     pub fn process() -> Result<(), ErrorAuditor> {
-        let environment_configuration = match Loader::<EnvironmentConfiguration>::load_from_file(ENVIRONMENT_CONFIGURATION_FILE_PATH) {
-            Ok(environment_configuration_) => environment_configuration_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                        None,
-                    ),
-                );
-
-                return Err(error);
-            }
-        };
-
         if let Environment::Production = environment_configuration.environment {
             return Err(
                 ErrorAuditor::new(

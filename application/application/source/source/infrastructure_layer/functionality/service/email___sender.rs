@@ -17,7 +17,7 @@ use extern_crate::lettre::smtp::SmtpClient;
 use extern_crate::lettre::Transport;
 use std::convert::Into;
 
-pub use crate::infrastructure_layer::data::control_type_registry::Email;
+pub use crate::infrastructure_layer::data::control_type::Email;
 
 impl Sender<Email> {
     // TODO В предпродакшене, когда будет smtp-ссервер, настройить все через константы и енв

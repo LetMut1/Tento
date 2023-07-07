@@ -11,7 +11,7 @@ use std::convert::From;
 #[cfg(feature = "manual_testing")]
 use extern_crate::http::response::Parts;
 
-pub use crate::infrastructure_layer::data::control_type_registry::Response;
+pub use crate::infrastructure_layer::data::control_type::Response;
 
 impl Creator<Response> {
     pub const HEADER_VALUE_CONTENT_TYPE: &'static str = "application/octet-stream"; // TODO В файл с константами

@@ -10,7 +10,7 @@ use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::redis::ConnectionInfo;
 use std::clone::Clone;
 
-pub use crate::infrastructure_layer::data::control_type_registry::RedisConnectonPool;
+pub use crate::infrastructure_layer::data::control_type::RedisConnectonPool;
 
 impl Creator<RedisConnectonPool> {
     pub async fn create<'a>(

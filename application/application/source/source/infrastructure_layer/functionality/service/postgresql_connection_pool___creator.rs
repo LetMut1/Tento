@@ -11,7 +11,7 @@ use extern_crate::tokio_postgres::config::Config;
 use extern_crate::tokio_postgres::NoTls;
 use std::clone::Clone;
 
-pub use crate::infrastructure_layer::data::control_type_registry::PostgresqlConnectionPoolNoTls;
+pub use crate::infrastructure_layer::data::control_type::PostgresqlConnectionPoolNoTls;
 
 impl Creator<PostgresqlConnectionPoolNoTls> {
     pub async fn create<'a>(

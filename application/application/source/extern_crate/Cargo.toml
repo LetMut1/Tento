@@ -1,6 +1,6 @@
 [package]
 name = "extern_crate"
-version = "1.0.0"
+version = "0.1.0"
 authors.workspace = true
 edition = "2021"
 
@@ -24,15 +24,17 @@ bb8 = { package = "bb8", version = "^0.7", default-features = true, features = [
 bb8_postgres = { package = "bb8-postgres", version = "^0.7", default-features = true, features = [], optional = false }
 bb8_redis = { package = "bb8-redis", version = "^0.10", default-features = true, features = [], optional = false }
 build_const = { package = "build_const", version = "^0.2.2", default-features = true, features = [], optional = false }
+build_script_constant = { path = "./build_script_constant", package = "build_script_constant", version = "0.1.0", default-features = true, features = [], optional = false }
 bytes = { package = "bytes", version = "^1.1", default-features = true, features = [], optional = false }
 chrono = { package = "chrono", version = "^0.4", default-features = true, features = [], optional = false }
 crypto = { package = "rust-crypto", version = "^0.2", default-features = true, features = [], optional = false }
 dotenv = { package = "dotenv", version = "^0.15", default-features = true, features = [], optional = false }
+environment_configuration = { path = "./environment_configuration", package = "environment_configuration", version = "0.1.0", default-features = true, features = [], optional = false }
 http = { package = "http", version = "^0.2", default-features = true, features = [], optional = false }
 hyper = { package = "hyper", version = "^0.14", default-features = true, features = ["full"], optional = false }  # // TODO Убрать фичу Full и понять , какие нужны
 lettre = { package = "lettre", version = "^0.9", default-features = true, features = [], optional = false }
 lettre_email = { package = "lettre_email", version = "^0.9", default-features = true, features = [], optional = false }
-macro_rules = { path = "./../macro_rules", package = "macro_rules", version = "1.0.0", default-features = true, features = [], optional = false }
+macro_rules = { path = "./../macro_rules", package = "macro_rules", version = "0.1.0", default-features = true, features = [], optional = false }
 rand = { package = "rand", version = "0.8.5", default-features = true, features = [], optional = false }
 redis = { package = "redis", version = "^0.21", default-features = true, features = ["tokio-comp", "tokio-native-tls-comp"], optional = false }
 regex = { package = "regex", version = "^1.4", default-features = true, features = [], optional = false }

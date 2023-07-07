@@ -3,7 +3,7 @@ use crate::infrastructure_layer::functionality::service::creator::Creator;
 use crate::infrastructure_layer::functionality::service::creator::Response;
 use extern_crate::http::header;
 
-pub use crate::infrastructure_layer::data::control_type_registry::Request;
+pub use crate::infrastructure_layer::data::control_type::Request;
 
 impl Validator<Request> {
     pub fn is_valid<'a>(request: &'a Request) -> bool {

@@ -1,6 +1,6 @@
 use crate::application_layer::data::unified_report::UnifiedReport;
-use crate::infrastructure_layer::data::control_type_registry::Request;
-use crate::infrastructure_layer::data::control_type_registry::Response;
+use crate::infrastructure_layer::data::control_type::Request;
+use crate::infrastructure_layer::data::control_type::Response;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;

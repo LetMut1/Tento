@@ -3,8 +3,8 @@ use crate::application_layer::functionality::action_processor::version_1::applic
 use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::register_by_first_step::Outcoming;
 use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::register_by_first_step::Precedent;
 use crate::application_layer::functionality::core_action_processor::CoreActionProcessor;
-use crate::infrastructure_layer::data::control_type_registry::Request;
-use crate::infrastructure_layer::data::control_type_registry::Response;
+use crate::infrastructure_layer::data::control_type::Request;
+use crate::infrastructure_layer::data::control_type::Response;
 use crate::infrastructure_layer::data::pushable_environment_configuration::PushableEnvironmentConfiguration;
 use crate::infrastructure_layer::functionality::service::serializer::MessagePack;
 use extern_crate::bb8::Pool;
