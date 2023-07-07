@@ -96,17 +96,29 @@ pub mod environment_configuration {
     }
 
     impl Debug for Environment {
-        fn fmt<'a>(&'a self, formatter: &'a mut Formatter<'_>) -> Result<(), Error> {
+        fn fmt<'a>(
+            &'a self,
+            formatter: &'a mut Formatter<'_>,
+        ) -> Result<(), Error> {
             match self {
                 Self::Production => {
-                    return write!(formatter, "Environment::Production");
-                },
+                    return write!(
+                        formatter,
+                        "Environment::Production"
+                    );
+                }
                 Self::Development => {
-                    return write!(formatter, "Environment::Development");
-                },
+                    return write!(
+                        formatter,
+                        "Environment::Development"
+                    );
+                }
                 Self::LocalDevelopment => {
-                    return write!(formatter, "Environment::LocalDevelopment");
-                },
+                    return write!(
+                        formatter,
+                        "Environment::LocalDevelopment"
+                    );
+                }
             }
         }
     }
@@ -218,11 +230,23 @@ pub mod error {
             formatter: &'b mut Formatter<'_>,
         ) -> Result<(), FormatError> {
             match *self {
-                Self::LogicError { ref message } => {
-                    return write!(formatter, "Error, logic: {}.", message);
+                Self::LogicError {
+                    ref message,
+                } => {
+                    return write!(
+                        formatter,
+                        "Error, logic: {}.",
+                        message
+                    );
                 }
-                Self::OtherError { ref other_error } => {
-                    return write!(formatter, "Error, other: {}.", other_error.get_message());
+                Self::OtherError {
+                    ref other_error,
+                } => {
+                    return write!(
+                        formatter,
+                        "Error, other: {}.",
+                        other_error.get_message()
+                    );
                 }
             }
         }
@@ -264,13 +288,13 @@ pub mod error {
 }
 
 pub mod loader {
-    use std::fs::read_to_string;
-    use std::path::Path;
-    use super::error::OtherError;
     use super::environment_configuration::Environment;
     use super::environment_configuration::EnvironmentConfiguration;
     use super::environment_configuration::EnvironmentConfigurationFile;
     use super::error::Error;
+    use super::error::OtherError;
+    use std::fs::read_to_string;
+    use std::path::Path;
     use toml::from_str;
 
     pub struct Loader;
@@ -291,8 +315,8 @@ pub mod loader {
                     Err(error) => {
                         return Err(
                             Error::OtherError {
-                                other_error: OtherError::new(error)
-                            }
+                                other_error: OtherError::new(error),
+                            },
                         );
                     }
                 };
@@ -310,8 +334,8 @@ pub mod loader {
                         Err(error) => {
                             return Err(
                                 Error::OtherError {
-                                    other_error: OtherError::new(error)
-                                }
+                                    other_error: OtherError::new(error),
+                                },
                             );
                         }
                     };
@@ -329,8 +353,8 @@ pub mod loader {
                             Err(error) => {
                                 return Err(
                                     Error::OtherError {
-                                        other_error: OtherError::new(error)
-                                    }
+                                        other_error: OtherError::new(error),
+                                    },
                                 );
                             }
                         };
@@ -339,8 +363,8 @@ pub mod loader {
                     } else {
                         return Err(
                             Error::LogicError {
-                                message: "Environment configuration files does not exist."
-                            }
+                                message: "Environment configuration files does not exist.",
+                            },
                         );
                     };
 
@@ -356,8 +380,8 @@ pub mod loader {
                 Err(error) => {
                     return Err(
                         Error::OtherError {
-                            other_error: OtherError::new(error)
-                        }
+                            other_error: OtherError::new(error),
+                        },
                     );
                 }
             };

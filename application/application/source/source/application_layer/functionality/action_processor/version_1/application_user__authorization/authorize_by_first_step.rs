@@ -18,8 +18,6 @@ use crate::domain_layer::data::entity::application_user_device::ApplicationUserD
 use crate::domain_layer::functionality::service::email_sender::EmailSender;
 use crate::domain_layer::functionality::service::encoder::Encoder;
 use crate::domain_layer::functionality::service::generator::Generator;
-use crate::infrastructure_layer::functionality::repository::postgresql_repository::By1;
-use crate::infrastructure_layer::functionality::repository::postgresql_repository::By2;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
@@ -28,7 +26,8 @@ use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
-
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::By1;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::By2;
 use crate::infrastructure_layer::functionality::repository::application_user_authorization_token___postgresql_repository::Insert;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
@@ -123,7 +122,7 @@ impl ActionProcessor {
             let application_user_ = match PostgresqlRepository::<ApplicationUser2>::find_2(
                 database_1_postgresql_connection,
                 &By2 {
-                    application_user_email: &application_user_email
+                    application_user_email: &application_user_email,
                 },
             )
             .await
@@ -164,7 +163,7 @@ impl ActionProcessor {
                 let application_user_ = match PostgresqlRepository::<ApplicationUser1>::find_1(
                     database_1_postgresql_connection,
                     &By1 {
-                        application_user_nickname: &application_user_nickname
+                        application_user_nickname: &application_user_nickname,
                     },
                 )
                 .await
@@ -512,7 +511,6 @@ impl ActionProcessor {
             };
 
             if let Err(mut error) = EmailSender::<ApplicationUserAuthorizationToken<'_>>::send(
-
                 application_user_authorization_token_value,
                 application_user_email,
                 &incoming.application_user_device_id,

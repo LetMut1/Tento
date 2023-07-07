@@ -5,6 +5,6 @@ pub mod environment_configuration {
     macro_rules! ENVIRONMENT_CONFIGURATION_CONSTANT_MODULE_NAME {
         () => {
             "environment_configuration_constant"
-        }
+        };
     }
 }

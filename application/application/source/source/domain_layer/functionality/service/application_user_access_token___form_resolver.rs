@@ -2,6 +2,7 @@ use super::form_resolver::FormResolver;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::data::entity::application_user_access_token_encrypted::ApplicationUserAccessTokenEncrypted;
 use crate::domain_layer::functionality::service::encoder::Encoder;
+use crate::infrastructure_layer::data::environment_configuration::ENVIRONMENT_CONFIGURATION;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -9,7 +10,6 @@ use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
-use crate::infrastructure_layer::data::environment_configuration::ENVIRONMENT_CONFIGURATION;
 use crate::infrastructure_layer::functionality::service::encoder::Base64;
 use crate::infrastructure_layer::functionality::service::encoder::Encoder as Encoder_;
 use crate::infrastructure_layer::functionality::service::encoder::Hmac;
@@ -20,10 +20,7 @@ use crate::infrastructure_layer::functionality::service::serializer::Serializer;
 impl FormResolver<ApplicationUserAccessToken<'_>> {
     const TOKEN_PARTS_SEPARATOR: &'static str = ".";
 
-    pub fn to_encrypted<'a>(
-
-        application_user_access_token: &'a ApplicationUserAccessToken<'_>,
-    ) -> Result<ApplicationUserAccessTokenEncrypted, ErrorAuditor> {
+    pub fn to_encrypted<'a>(application_user_access_token: &'a ApplicationUserAccessToken<'_>) -> Result<ApplicationUserAccessTokenEncrypted, ErrorAuditor> {
         let data = match Serializer::<MessagePack>::serialize(application_user_access_token) {
             Ok(data_) => data_,
             Err(mut error) => {
@@ -41,9 +38,7 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
 
         let application_user_access_token_serialized = Encoder_::<Base64>::encode(data.as_slice());
 
-        let application_user_access_token_signature = Encoder::<Signature>::encode(
-            application_user_access_token_serialized.as_str(),
-        );
+        let application_user_access_token_signature = Encoder::<Signature>::encode(application_user_access_token_serialized.as_str());
 
         let application_user_access_token_encrypted = format!(
             "{}{}{}",
@@ -55,10 +50,7 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
         return Ok(ApplicationUserAccessTokenEncrypted::new(application_user_access_token_encrypted));
     }
 
-    pub fn from_encrypted<'a>(
-
-        application_user_access_token_encrypted: &'a ApplicationUserAccessTokenEncrypted,
-    ) -> Result<InvalidArgumentResult<ApplicationUserAccessToken<'static>>, ErrorAuditor> {
+    pub fn from_encrypted<'a>(application_user_access_token_encrypted: &'a ApplicationUserAccessTokenEncrypted) -> Result<InvalidArgumentResult<ApplicationUserAccessToken<'static>>, ErrorAuditor> {
         let mut token_part_registry = application_user_access_token_encrypted.get().splitn::<'_, &'_ str>(
             2,
             Self::TOKEN_PARTS_SEPARATOR,
@@ -137,10 +129,7 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
 struct Signature;
 
 impl Encoder<Signature> {
-    fn encode<'a>(
-
-        application_user_access_token_serialized: &'a str,
-    ) -> String {
+    fn encode<'a>(application_user_access_token_serialized: &'a str) -> String {
         let mut hmac_encoded_data: Vec<u8> = vec![];
 
         Encoder_::<Hmac>::encode(
@@ -153,13 +142,10 @@ impl Encoder<Signature> {
     }
 
     fn is_valid<'a>(
-
         application_user_access_token_serialized: &'a str,
         application_user_access_token_signature: &'a str,
     ) -> bool {
-        let application_user_access_token_signature_ = Self::encode(
-            application_user_access_token_serialized,
-        );
+        let application_user_access_token_signature_ = Self::encode(application_user_access_token_serialized);
 
         return application_user_access_token_signature_.as_str() == application_user_access_token_signature;
     }

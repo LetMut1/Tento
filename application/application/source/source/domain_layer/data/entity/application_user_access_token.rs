@@ -7,11 +7,7 @@ use std::borrow::Cow;
 pub use self::ExpiresAt as ApplicationUserAccessToken_ExpiresAt;
 pub use self::Id as ApplicationUserAccessToken_Id;
 
-#[derive(
-    Clone,
-    Serialize,
-    Deserialize
-)]
+#[derive(Clone, Serialize, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct Id(String);
@@ -26,12 +22,7 @@ impl Id {
     }
 }
 
-#[derive(
-    Clone,
-    Copy,
-    Serialize,
-    Deserialize
-)]
+#[derive(Clone, Copy, Serialize, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct ExpiresAt(i64);
@@ -46,10 +37,7 @@ impl ExpiresAt {
     }
 }
 
-#[derive(
-    Serialize,
-    Deserialize
-)]
+#[derive(Serialize, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct ApplicationUserAccessToken<'a> {
     id: Id,

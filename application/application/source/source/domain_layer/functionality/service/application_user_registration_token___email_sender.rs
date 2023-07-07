@@ -11,7 +11,6 @@ use crate::infrastructure_layer::functionality::service::sender::Sender;
 
 impl EmailSender<ApplicationUserRegistrationToken<'_>> {
     pub fn send<'a>(
-
         application_user_registration_token_value: &'a ApplicationUserRegistrationToken_Value,
         application_user_email: &'a ApplicationUser_Email,
         application_user_device_id: &'a ApplicationUserDevice_Id,

@@ -11,12 +11,7 @@ pub use self::Nickname as ApplicationUser_Nickname;
 pub use self::Password as ApplicationUser_Password;
 pub use self::PasswordHash as ApplicationUser_PasswordHash;
 
-#[derive(
-    Clone,
-    Copy,
-    Serialize,
-    Deserialize
-)]
+#[derive(Clone, Copy, Serialize, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct Id(i64);
@@ -35,10 +30,7 @@ impl Id {
     feature = "manual_testing",
     derive(Serialize)
 )]
-#[derive(
-    Clone,
-    Deserialize
-)]
+#[derive(Clone, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct Email(String);
@@ -61,10 +53,7 @@ impl Email {
     feature = "manual_testing",
     derive(Serialize)
 )]
-#[derive(
-    Clone,
-    Deserialize
-)]
+#[derive(Clone, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct Nickname(String);

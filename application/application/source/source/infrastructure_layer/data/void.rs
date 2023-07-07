@@ -11,9 +11,7 @@ use extern_crate::serde::Deserialize;
     feature = "manual_testing",
     derive(Deserialize)
 )]
-#[derive(
-    Debug, Serialize
-)]
+#[derive(Debug, Serialize)]
 #[serde(crate = "extern_crate::serde")]
 pub enum Void {}
 

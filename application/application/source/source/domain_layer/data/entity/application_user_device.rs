@@ -4,11 +4,7 @@ use extern_crate::serde::Serialize;
 
 pub use self::Id as ApplicationUserDevice_Id;
 
-#[derive(
-    Clone,
-    Serialize,
-    Deserialize
-)]
+#[derive(Clone, Serialize, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct Id(String);

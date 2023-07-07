@@ -30,9 +30,7 @@ impl<'a> Method<'a> {
     }
 }
 
-#[derive(
-    Clone, Copy
-)]
+#[derive(Clone, Copy)]
 pub struct StatusCode(i16);
 
 impl StatusCode {

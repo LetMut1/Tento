@@ -23,8 +23,6 @@ use crate::domain_layer::functionality::service::form_resolver::FormResolver;
 use crate::domain_layer::functionality::service::generator::Generator;
 use crate::domain_layer::functionality::service::incrementor::Incrementor;
 use crate::domain_layer::functionality::service::validator::Validator;
-use crate::infrastructure_layer::functionality::repository::postgresql_repository::By3;
-use crate::infrastructure_layer::functionality::repository::postgresql_repository::By4;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -32,7 +30,8 @@ use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
-
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::By3;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::By4;
 use crate::infrastructure_layer::functionality::repository::application_user_access_refresh_token___postgresql_repository::Insert as ApplicationUserAccessRefreshTokenInsert;
 use crate::infrastructure_layer::functionality::repository::application_user_device___postgresql_repository::Insert as ApplicationUserDeviceInsert;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
@@ -56,7 +55,6 @@ pub struct ActionProcessor;
 
 impl ActionProcessor {
     pub async fn process<'a, T>(
-
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>, // TODO  TODO  TODO  TODO  TODO МОжет ли хакер войти на этом шаге, если пользователь сделал первый шаг.
         _database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
@@ -274,7 +272,7 @@ impl ActionProcessor {
         let is_exist = match PostgresqlRepository::<ApplicationUser<'_>>::is_exist_3(
             database_1_postgresql_connection,
             &By3 {
-                application_user_id: incoming.application_user_id
+                application_user_id: incoming.application_user_id,
             },
         )
         .await
@@ -380,7 +378,7 @@ impl ActionProcessor {
                 if let Err(mut error) = PostgresqlRepository::<ApplicationUserAccessRefreshToken1>::update(
                     database_2_postgresql_connection,
                     &application_user_access_refresh_token__,
-                    &by_4
+                    &by_4,
                 )
                 .await
                 {
@@ -449,10 +447,7 @@ impl ActionProcessor {
             return Err(error);
         }
         // TODO  TRANZACTION
-        let application_user_access_token_encrypted = match FormResolver::<ApplicationUserAccessToken<'_>>::to_encrypted(
-
-            &application_user_access_token,
-        ) {
+        let application_user_access_token_encrypted = match FormResolver::<ApplicationUserAccessToken<'_>>::to_encrypted(&application_user_access_token) {
             Ok(application_user_access_token_encrypted_) => application_user_access_token_encrypted_,
             Err(mut error) => {
                 error.add_backtrace_part(
@@ -467,10 +462,7 @@ impl ActionProcessor {
             }
         };
 
-        let application_user_access_refresh_token_encrypted = match FormResolver::<ApplicationUserAccessRefreshToken<'_>>::to_encrypted(
-
-            &application_user_access_refresh_token_,
-        ) {
+        let application_user_access_refresh_token_encrypted = match FormResolver::<ApplicationUserAccessRefreshToken<'_>>::to_encrypted(&application_user_access_refresh_token_) {
             Ok(application_user_access_refresh_token_encrypted_) => application_user_access_refresh_token_encrypted_,
             Err(mut error) => {
                 error.add_backtrace_part(

@@ -9,10 +9,9 @@ use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
-
 use crate::infrastructure_layer::data::void::Void;
-use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::By1;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use extern_crate::bb8::Pool;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
@@ -73,7 +72,7 @@ impl ActionProcessor {
         let is_exist = match PostgresqlRepository::<ApplicationUser<'_>>::is_exist_1(
             &*database_1_postgresql_pooled_connection,
             &By1 {
-                application_user_nickname: &incoming.application_user_nickname
+                application_user_nickname: &incoming.application_user_nickname,
             },
         )
         .await

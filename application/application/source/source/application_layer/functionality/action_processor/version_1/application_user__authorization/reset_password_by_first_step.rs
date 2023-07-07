@@ -23,13 +23,12 @@ use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
-
 use crate::infrastructure_layer::functionality::repository::application_user_reset_password_token___postgresql_repository::Insert;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::By2;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::UnixTime;
 use extern_crate::bb8::Pool;
-use crate::infrastructure_layer::functionality::repository::postgresql_repository::By2;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::macro_rules::r#enum;
@@ -46,7 +45,6 @@ pub struct ActionProcessor;
 
 impl ActionProcessor {
     pub async fn process<'a, T>(
-
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
@@ -396,7 +394,6 @@ impl ActionProcessor {
             };
 
             if let Err(mut error) = EmailSender::<ApplicationUserResetPasswordToken<'_>>::send(
-
                 application_user_reset_password_token_value,
                 &incoming.application_user_email,
                 &incoming.application_user_device_id,

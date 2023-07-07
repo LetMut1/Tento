@@ -23,10 +23,8 @@ use crate::domain_layer::data::entity::application_user_registration_token::Appl
 use crate::domain_layer::functionality::service::encoder::Encoder;
 use crate::domain_layer::functionality::service::form_resolver::FormResolver;
 use crate::domain_layer::functionality::service::generator::Generator;
-use crate::infrastructure_layer::functionality::repository::postgresql_repository::By2;
 use crate::domain_layer::functionality::service::incrementor::Incrementor;
 use crate::domain_layer::functionality::service::validator::Validator;
-use crate::infrastructure_layer::functionality::repository::postgresql_repository::By1;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -34,7 +32,8 @@ use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
-
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::By1;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::By2;
 use crate::infrastructure_layer::functionality::repository::application_user___postgresql_repository::Insert as ApplicationUserInsert;
 use crate::infrastructure_layer::functionality::repository::application_user_access_refresh_token___postgresql_repository::Insert as ApplicationUserAccessRefreshTokenInsert;
 use crate::infrastructure_layer::functionality::repository::application_user_device___postgresql_repository::Insert as ApplicationUserDeviceInsert;
@@ -59,7 +58,6 @@ pub struct ActionProcessor;
 
 impl ActionProcessor {
     pub async fn process<'a, T>(
-
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
@@ -168,7 +166,7 @@ impl ActionProcessor {
         let is_exist_1 = match PostgresqlRepository::<ApplicationUser<'_>>::is_exist_1(
             database_1_postgresql_connection,
             &By1 {
-                application_user_nickname: &incoming.application_user_nickname
+                application_user_nickname: &incoming.application_user_nickname,
             },
         )
         .await
@@ -499,7 +497,7 @@ impl ActionProcessor {
         let application_user_access_refresh_token_insert = ApplicationUserAccessRefreshTokenInsert {
             application_user_id: application_user.get_id(),
             application_user_device_id: application_user_device.get_id(),
-            application_user_access_token_id: application_user_access_token.get_id()    ,
+            application_user_access_token_id: application_user_access_token.get_id(),
             application_user_access_refresh_token_obfuscation_value: Generator::<ApplicationUserAccessRefreshToken_ObfuscationValue>::generate(),
             application_user_access_refresh_token_expires_at,
             application_user_access_refresh_token_updated_at: Generator::<ApplicationUserAccessRefreshToken_UpdatedAt>::generate(),
@@ -525,10 +523,7 @@ impl ActionProcessor {
             }
         };
 
-        let application_user_access_token_encrypted = match FormResolver::<ApplicationUserAccessToken<'_>>::to_encrypted(
-
-            &application_user_access_token,
-        ) {
+        let application_user_access_token_encrypted = match FormResolver::<ApplicationUserAccessToken<'_>>::to_encrypted(&application_user_access_token) {
             Ok(application_user_access_token_encrypted_) => application_user_access_token_encrypted_,
             Err(mut error) => {
                 error.add_backtrace_part(
@@ -543,10 +538,7 @@ impl ActionProcessor {
             }
         };
 
-        let application_user_access_refresh_token_encrypted = match FormResolver::<ApplicationUserAccessRefreshToken<'_>>::to_encrypted(
-
-            &application_user_access_refresh_token,
-        ) {
+        let application_user_access_refresh_token_encrypted = match FormResolver::<ApplicationUserAccessRefreshToken<'_>>::to_encrypted(&application_user_access_refresh_token) {
             Ok(application_user_access_refresh_token_encrypted_) => application_user_access_refresh_token_encrypted_,
             Err(mut error) => {
                 error.add_backtrace_part(

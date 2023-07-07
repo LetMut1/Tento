@@ -29,9 +29,7 @@ impl Value {
     }
 }
 
-#[derive(
-    Clone, Copy
-)]
+#[derive(Clone, Copy)]
 pub struct WrongEnterTriesQuantity(i16);
 
 impl WrongEnterTriesQuantity {
@@ -44,9 +42,7 @@ impl WrongEnterTriesQuantity {
     }
 }
 
-#[derive(
-    Clone, Copy
-)]
+#[derive(Clone, Copy)]
 pub struct ExpiresAt(i64);
 
 impl ExpiresAt {
@@ -63,9 +59,7 @@ impl ExpiresAt {
     feature = "manual_testing",
     derive(Deserialize)
 )]
-#[derive(
-    Clone, Copy, Serialize
-)]
+#[derive(Clone, Copy, Serialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct CanBeResentFrom(i64);

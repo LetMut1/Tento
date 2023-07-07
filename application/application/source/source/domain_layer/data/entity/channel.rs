@@ -19,12 +19,7 @@ pub use self::ViewingQuantity as Channel_ViewingQuantity;
 pub use self::VisabilityModifier as Channel_VisabilityModifier;
 pub use self::VisabilityModifier_ as Channel_VisabilityModifier_;
 
-#[derive(
-    Clone,
-    Copy,
-    Serialize,
-    Deserialize
-)]
+#[derive(Clone, Copy, Serialize, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct Id(i64);
@@ -39,11 +34,7 @@ impl Id {
     }
 }
 
-#[derive(
-    Clone,
-    Serialize,
-    Deserialize
-)]
+#[derive(Clone, Serialize, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct Name(String);
@@ -100,9 +91,7 @@ impl Description {
     feature = "manual_testing",
     derive(Deserialize)
 )]
-#[derive(
-    Clone, Copy, Serialize
-)]
+#[derive(Clone, Copy, Serialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct AccessModifier(i16);
@@ -131,9 +120,7 @@ pub enum AccessModifier_ {
     feature = "manual_testing",
     derive(Deserialize)
 )]
-#[derive(
-    Clone, Copy, Serialize
-)]
+#[derive(Clone, Copy, Serialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct VisabilityModifier(i16);
@@ -219,9 +206,7 @@ impl BackgroundImagePath {
     feature = "manual_testing",
     derive(Deserialize)
 )]
-#[derive(
-    Clone, Copy, Serialize
-)]
+#[derive(Clone, Copy, Serialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct SubscribersQuantity(i64);
@@ -240,9 +225,7 @@ impl SubscribersQuantity {
     feature = "manual_testing",
     derive(Deserialize)
 )]
-#[derive(
-    Clone, Copy, Serialize
-)]
+#[derive(Clone, Copy, Serialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct MarksQuantity(i64);
 
@@ -260,9 +243,7 @@ impl MarksQuantity {
     feature = "manual_testing",
     derive(Deserialize)
 )]
-#[derive(
-    Clone, Copy, Serialize
-)]
+#[derive(Clone, Copy, Serialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct ViewingQuantity(i64);

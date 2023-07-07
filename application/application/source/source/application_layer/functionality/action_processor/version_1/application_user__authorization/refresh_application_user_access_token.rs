@@ -17,10 +17,9 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use crate::infrastructure_layer::functionality::repository::postgresql_repository::By4;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
-
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::By4;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::UnixTime;
@@ -42,7 +41,6 @@ pub struct ActionProcessor;
 
 impl ActionProcessor {
     pub async fn process<'a, T>(
-
         _database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
@@ -54,10 +52,7 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let application_user_access_token = match FormResolver::<ApplicationUserAccessToken<'_>>::from_encrypted(
-
-            &incoming.application_user_access_token_encrypted,
-        ) {
+        let application_user_access_token = match FormResolver::<ApplicationUserAccessToken<'_>>::from_encrypted(&incoming.application_user_access_token_encrypted) {
             Ok(application_user_access_token_) => application_user_access_token_,
             Err(mut error) => {
                 error.add_backtrace_part(
@@ -116,9 +111,10 @@ impl ActionProcessor {
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
-        let application_user_access_refresh_token = match PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::find_1( // TODO
+        let application_user_access_refresh_token = match PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::find_1(
+            // TODO
             database_2_postgresql_connection,
-            &by_4
+            &by_4,
         )
         .await
         {
@@ -148,7 +144,6 @@ impl ActionProcessor {
         };
 
         let is_valid = match FormResolver::<ApplicationUserAccessRefreshToken<'_>>::is_valid(
-
             &application_user_access_refresh_token_,
             &incoming.application_user_access_refresh_token_encrypted,
         ) {
@@ -244,7 +239,7 @@ impl ActionProcessor {
         if let Err(mut error) = PostgresqlRepository::<ApplicationUserAccessRefreshToken1>::update(
             database_2_postgresql_connection,
             &application_user_access_refresh_token_,
-            &by_4
+            &by_4,
         )
         .await
         {
@@ -259,10 +254,7 @@ impl ActionProcessor {
             return Err(error);
         }
 
-        let application_user_access_token_encrypted_new = match FormResolver::<ApplicationUserAccessToken<'_>>::to_encrypted(
-
-            &application_user_access_token_new,
-        ) {
+        let application_user_access_token_encrypted_new = match FormResolver::<ApplicationUserAccessToken<'_>>::to_encrypted(&application_user_access_token_new) {
             Ok(application_user_access_token_encrypted_new_) => application_user_access_token_encrypted_new_,
             Err(mut error) => {
                 error.add_backtrace_part(
@@ -277,10 +269,7 @@ impl ActionProcessor {
             }
         };
 
-        let application_user_access_refresh_token_encrypted_new = match FormResolver::<ApplicationUserAccessRefreshToken<'_>>::to_encrypted(
-
-            &application_user_access_refresh_token_,
-        ) {
+        let application_user_access_refresh_token_encrypted_new = match FormResolver::<ApplicationUserAccessRefreshToken<'_>>::to_encrypted(&application_user_access_refresh_token_) {
             Ok(application_user_access_refresh_token_encrypted_new_) => application_user_access_refresh_token_encrypted_new_,
             Err(mut error) => {
                 error.add_backtrace_part(

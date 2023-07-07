@@ -1,8 +1,8 @@
 #![allow(clippy::unused_unit)]
 
 use extern_crate::build_const::ConstWriter;
-use extern_crate::build_script_constant::ENVIRONMENT_CONFIGURATION_CONSTANT_MODULE_NAME;
 use extern_crate::build_script_constant::environment_configuration::ENVIRONMENT_CONFIGURATION_CONSTANT_NAME;
+use extern_crate::build_script_constant::ENVIRONMENT_CONFIGURATION_CONSTANT_MODULE_NAME;
 use extern_crate::environment_configuration::environment_configuration::Application;
 use extern_crate::environment_configuration::environment_configuration::EmailServer;
 use extern_crate::environment_configuration::environment_configuration::Encryption;
@@ -17,10 +17,13 @@ use extern_crate::environment_configuration::environment_configuration::Tcp;
 use extern_crate::environment_configuration::loader::Loader;
 use std::env::var;
 use std::error::Error;
-                                        // TODO как сделать так, чтобы был постоянно перезапуск. ВОзможно, записывать время в файл во время запуска скрипта.
+// TODO как сделать так, чтобы был постоянно перезапуск. ВОзможно, записывать время в файл во время запуска скрипта.
 fn main() -> () {
     if let Err(error) = Processor::process() {
-        println!("{}", error);
+        println!(
+            "{}",
+            error
+        );
     }
 
     return ();
@@ -40,7 +43,7 @@ impl Processor {
 
         let environment_configuration = Loader::load_from_file(environment_configuration_file_path.as_str())?;
 
-        let environment_configuration_ : EnvironmentConfiguration<&'_ str> = EnvironmentConfiguration {
+        let environment_configuration_: EnvironmentConfiguration<&'_ str> = EnvironmentConfiguration {
             environment: environment_configuration.environment,
             environment_configuration_file: EnvironmentConfigurationFile {
                 application: Application {
@@ -71,8 +74,8 @@ impl Processor {
                     email_server: EmailServer {
                         socket_address: SimpleType {
                             value: environment_configuration.environment_configuration_file.resource.email_server.socket_address.value.as_str(),
-                        }
-                    }
+                        },
+                    },
                 },
                 encryption: Encryption {
                     private_key: PrivateKey {
@@ -81,10 +84,10 @@ impl Processor {
                         },
                         application_user_access_refresh_token: SimpleType {
                             value: environment_configuration.environment_configuration_file.encryption.private_key.application_user_access_refresh_token.value.as_str(),
-                        }
-                    }
+                        },
+                    },
                 },
-            }
+            },
         };
 
         let mut constant_writer = ConstWriter::for_build(ENVIRONMENT_CONFIGURATION_CONSTANT_MODULE_NAME!())?;
@@ -121,7 +124,11 @@ impl Processor {
 
         let mut constant_value_writer = constant_writer.finish_dependencies();
 
-        constant_value_writer.add_value(ENVIRONMENT_CONFIGURATION_CONSTANT_NAME, "EnvironmentConfiguration<&'static str>", environment_configuration_);
+        constant_value_writer.add_value(
+            ENVIRONMENT_CONFIGURATION_CONSTANT_NAME,
+            "EnvironmentConfiguration<&'static str>",
+            environment_configuration_,
+        );
 
         constant_value_writer.finish();
 
@@ -136,7 +143,10 @@ impl Processor {
             }
         };
 
-        environment_configuration_file_path = format!("{}/../environment_configuration", &environment_configuration_file_path);
+        environment_configuration_file_path = format!(
+            "{}/../environment_configuration",
+            &environment_configuration_file_path
+        );
 
         return Ok(environment_configuration_file_path);
     }

@@ -5,7 +5,6 @@ use crate::application_layer::functionality::action_processor::version_1::channe
 use crate::application_layer::functionality::core_action_processor::CoreActionProcessor;
 use crate::infrastructure_layer::data::control_type::Request;
 use crate::infrastructure_layer::data::control_type::Response;
-
 use crate::infrastructure_layer::functionality::service::serializer::MessagePack;
 use extern_crate::bb8::Pool;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
@@ -26,7 +25,6 @@ pub struct GetOneByID;
 
 impl GetOneByID {
     pub async fn run<'a, T>(
-
         request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -39,7 +37,6 @@ impl GetOneByID {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
         return CoreActionProcessor::process::<'_, MessagePack, _, _, _, Incoming, Outcoming, Precedent>(
-
             request,
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
@@ -53,7 +50,6 @@ impl GetOneByID {
 #[cfg(feature = "manual_testing")]
 impl GetOneByID {
     pub async fn run_<'a, T>(
-
         request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -66,7 +62,6 @@ impl GetOneByID {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
         return WrappedActionProcessor::process::<'_, Json, MessagePack, _, _, _, Incoming, Outcoming, Precedent>(
-
             request,
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,

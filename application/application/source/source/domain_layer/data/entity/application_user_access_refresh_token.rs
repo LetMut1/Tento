@@ -10,10 +10,7 @@ pub use self::ExpiresAt as ApplicationUserAccessRefreshToken_ExpiresAt;
 pub use self::ObfuscationValue as ApplicationUserAccessRefreshToken_ObfuscationValue;
 pub use self::UpdatedAt as ApplicationUserAccessRefreshToken_UpdatedAt;
 
-#[derive(
-    Serialize,
-    Deserialize
-)]
+#[derive(Serialize, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct ObfuscationValue(String);
@@ -28,12 +25,7 @@ impl ObfuscationValue {
     }
 }
 
-#[derive(
-    Clone,
-    Copy,
-    Serialize,
-    Deserialize
-)]
+#[derive(Clone, Copy, Serialize, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct ExpiresAt(i64);
@@ -48,12 +40,7 @@ impl ExpiresAt {
     }
 }
 
-#[derive(
-    Clone,
-    Copy,
-    Serialize,
-    Deserialize
-)]
+#[derive(Clone, Copy, Serialize, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct UpdatedAt(i64);
@@ -68,10 +55,7 @@ impl UpdatedAt {
     }
 }
 
-#[derive(
-    Serialize,
-    Deserialize
-)]
+#[derive(Serialize, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct ApplicationUserAccessRefreshToken<'a> {
     application_user_id: ApplicationUser_Id,

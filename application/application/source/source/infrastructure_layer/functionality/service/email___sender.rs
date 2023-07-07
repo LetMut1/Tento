@@ -1,25 +1,25 @@
+use super::sender::Sender;
 use crate::infrastructure_layer::data::environment_configuration::Environment;
+use crate::infrastructure_layer::data::environment_configuration::ENVIRONMENT_CONFIGURATION;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::EmailServerError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::data::error_auditor::ResourceError;
-use std::net::ToSocketAddrs;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
+use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use crate::infrastructure_layer::data::environment_configuration::ENVIRONMENT_CONFIGURATION;
-use extern_crate::lettre::ClientSecurity;
-use extern_crate::lettre_email::EmailBuilder;
-use super::sender::Sender;
 use extern_crate::lettre::smtp::SmtpClient;
+use extern_crate::lettre::ClientSecurity;
 use extern_crate::lettre::Transport;
+use extern_crate::lettre_email::EmailBuilder;
 use std::convert::Into;
+use std::net::ToSocketAddrs;
 
 pub use crate::infrastructure_layer::data::control_type::Email;
 
-impl Sender<Email> {    // TODO Возможно, сразу можно положить объект в константу.  // TODO В предпродакшене, когда будет smtp-ссервер, настройить все через константы и енв
+impl Sender<Email> {
+    // TODO Возможно, сразу можно положить объект в константу.  // TODO В предпродакшене, когда будет smtp-ссервер, настройить все через константы и енв
     pub fn send<'a>(
-
         subject: &'a str,
         body: String,
         to: &'a str,

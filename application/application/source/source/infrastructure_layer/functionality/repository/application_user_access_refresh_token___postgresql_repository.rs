@@ -148,7 +148,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
 
     pub async fn delete_1<'a>(
         database_2_connection: &'a Connection,
-        by_4: &'a By4<'_>
+        by_4: &'a By4<'_>,
     ) -> Result<(), ErrorAuditor> {
         let application_user_id = by_4.application_user_id.get();
 
@@ -299,7 +299,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
 
     pub async fn find_1<'a, 'b>(
         database_2_connection: &'a Connection,
-        by_4: &'a By4<'b>
+        by_4: &'a By4<'b>,
     ) -> Result<Option<ApplicationUserAccessRefreshToken<'b>>, ErrorAuditor> {
         let application_user_id = by_4.application_user_id.get();
 
@@ -492,7 +492,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken1> {
     pub async fn update<'a, T>(
         database_2_connection: &'a Connection,
         subject: &'a T,
-        by_4: &'a By4<'_>
+        by_4: &'a By4<'_>,
     ) -> Result<(), ErrorAuditor>
     where
         T: Getter<'a, &'a ApplicationUserAccessToken_Id>,
