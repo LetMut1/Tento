@@ -22,7 +22,6 @@ use crate::domain_layer::functionality::service::encoder::Encoder;
 use crate::domain_layer::functionality::service::form_resolver::FormResolver;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::environment_configuration::Environment;
-use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -56,7 +55,7 @@ impl CreateFixturesProcessor {
     ];
 
     pub fn process() -> Result<(), ErrorAuditor> {
-        if let Environment::Production = environment_configuration.environment {
+        if let Environment::Production = ENVIRONMENT_CONFIGURATION.environment {
             return Err(
                 ErrorAuditor::new(
                     BaseError::LogicError {
@@ -91,7 +90,7 @@ impl CreateFixturesProcessor {
             }
         };
 
-        if let Err(mut error) = runtime.block_on(Self::create_fixtures(&environment_configuration)) {
+        if let Err(mut error) = runtime.block_on(Self::create_fixtures()) {
             error.add_backtrace_part(
                 BacktracePart::new(
                     line!(),
@@ -106,8 +105,8 @@ impl CreateFixturesProcessor {
         return Ok(());
     }
 
-    async fn create_fixtures<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<(), ErrorAuditor> {
-        let database_1_postgresql_configuration = match PostgresqlConfiguration::from_str(environment_configuration.environment_file_configuration.resource.postgresql.database_1_url.value.as_str()) {
+    async fn create_fixtures<'a>() -> Result<(), ErrorAuditor> {
+        let database_1_postgresql_configuration = match PostgresqlConfiguration::from_str(ENVIRONMENT_CONFIGURATION.environment_configuration_file.resource.postgresql.database_1_url.value) {
             Ok(database_1_postgresql_configuration_) => database_1_postgresql_configuration_,
             Err(error) => {
                 return Err(
@@ -130,7 +129,7 @@ impl CreateFixturesProcessor {
         };
 
         let database_1_postgresql_connection_pool = match Creator::<PostgresqlConnectionPoolNoTls>::create(
-            &environment_configuration.environment,
+            &ENVIRONMENT_CONFIGURATION.environment,
             &database_1_postgresql_configuration,
         )
         .await

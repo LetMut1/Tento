@@ -34,7 +34,7 @@ use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
-use crate::infrastructure_layer::data::pushable_environment_configuration::PushableEnvironmentConfiguration;
+
 use crate::infrastructure_layer::functionality::repository::application_user___postgresql_repository::Insert as ApplicationUserInsert;
 use crate::infrastructure_layer::functionality::repository::application_user_access_refresh_token___postgresql_repository::Insert as ApplicationUserAccessRefreshTokenInsert;
 use crate::infrastructure_layer::functionality::repository::application_user_device___postgresql_repository::Insert as ApplicationUserDeviceInsert;
@@ -59,7 +59,7 @@ pub struct ActionProcessor;
 
 impl ActionProcessor {
     pub async fn process<'a, T>(
-        pushable_environment_configuration: &'a PushableEnvironmentConfiguration,
+
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
@@ -526,7 +526,7 @@ impl ActionProcessor {
         };
 
         let application_user_access_token_encrypted = match FormResolver::<ApplicationUserAccessToken<'_>>::to_encrypted(
-            pushable_environment_configuration,
+
             &application_user_access_token,
         ) {
             Ok(application_user_access_token_encrypted_) => application_user_access_token_encrypted_,
@@ -544,7 +544,7 @@ impl ActionProcessor {
         };
 
         let application_user_access_refresh_token_encrypted = match FormResolver::<ApplicationUserAccessRefreshToken<'_>>::to_encrypted(
-            pushable_environment_configuration,
+
             &application_user_access_refresh_token,
         ) {
             Ok(application_user_access_refresh_token_encrypted_) => application_user_access_refresh_token_encrypted_,

@@ -5,17 +5,16 @@ use crate::domain_layer::functionality::service::form_resolver::FormResolver;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
-use crate::infrastructure_layer::data::pushable_environment_configuration::PushableEnvironmentConfiguration;
+
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::UnixTime;
 
 impl Extractor<ApplicationUserAccessToken<'_>> {
     pub async fn extract<'a>(
-        pushable_environment_configuration: &'a PushableEnvironmentConfiguration,
+
         application_user_access_token_encrypted: &'a ApplicationUserAccessTokenEncrypted,
     ) -> Result<InvalidArgumentResult<ExtractorResult>, ErrorAuditor> {
         let application_user_access_token = match FormResolver::<ApplicationUserAccessToken<'_>>::from_encrypted(
-            pushable_environment_configuration,
             application_user_access_token_encrypted,
         ) {
             Ok(application_user_access_token_) => application_user_access_token_,

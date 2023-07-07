@@ -9,7 +9,6 @@ use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
-use crate::infrastructure_layer::data::pushable_environment_configuration::PushableEnvironmentConfiguration;
 use crate::infrastructure_layer::functionality::service::creator::Creator;
 use crate::infrastructure_layer::functionality::service::creator::Response;
 use crate::infrastructure_layer::functionality::service::serializer::Serialize;
@@ -34,7 +33,6 @@ pub struct CoreActionProcessor;
 
 impl CoreActionProcessor {
     pub async fn process<'a, SF, T, AP, F, API, APO, APP>(
-        pushable_environment_configuration: &'a PushableEnvironmentConfiguration,
         mut request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -47,7 +45,7 @@ impl CoreActionProcessor {
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
-        AP: FnOnce(&'a PushableEnvironmentConfiguration, &'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<RedisConnectionManager>, API) -> F,
+        AP: FnOnce(&'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<RedisConnectionManager>, API) -> F,
         F: Future<Output = Result<InvalidArgumentResult<UnifiedReport<APO, APP>>, ErrorAuditor>>,
         API: for<'de> Deserialize<'de>,
         APO: SerdeSerialize,
@@ -160,7 +158,6 @@ impl CoreActionProcessor {
         };
 
         let unified_report = match action_processor(
-            pushable_environment_configuration,
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
             database_1_redis_connection_pool,

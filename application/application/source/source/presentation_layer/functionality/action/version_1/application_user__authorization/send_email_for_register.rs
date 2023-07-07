@@ -5,7 +5,7 @@ use crate::application_layer::functionality::action_processor::version_1::applic
 use crate::application_layer::functionality::core_action_processor::CoreActionProcessor;
 use crate::infrastructure_layer::data::control_type::Request;
 use crate::infrastructure_layer::data::control_type::Response;
-use crate::infrastructure_layer::data::pushable_environment_configuration::PushableEnvironmentConfiguration;
+
 use crate::infrastructure_layer::functionality::service::serializer::MessagePack;
 use extern_crate::bb8::Pool;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
@@ -26,7 +26,7 @@ pub struct SendEmailForRegister;
 
 impl SendEmailForRegister {
     pub async fn run<'a, T>(
-        pushable_environment_configuration: &'a PushableEnvironmentConfiguration,
+
         request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -39,7 +39,7 @@ impl SendEmailForRegister {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
         return CoreActionProcessor::process::<'_, MessagePack, _, _, _, Incoming, Outcoming, Precedent>(
-            pushable_environment_configuration,
+
             request,
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
@@ -53,7 +53,7 @@ impl SendEmailForRegister {
 #[cfg(feature = "manual_testing")]
 impl SendEmailForRegister {
     pub async fn run_<'a, T>(
-        pushable_environment_configuration: &'a PushableEnvironmentConfiguration,
+
         request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -66,7 +66,7 @@ impl SendEmailForRegister {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
         return WrappedActionProcessor::process::<'_, Json, MessagePack, _, _, _, Incoming, Outcoming, Precedent>(
-            pushable_environment_configuration,
+
             request,
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,

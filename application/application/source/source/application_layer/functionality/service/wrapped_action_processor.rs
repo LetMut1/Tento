@@ -6,7 +6,6 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use crate::infrastructure_layer::data::pushable_environment_configuration::PushableEnvironmentConfiguration;
 use crate::infrastructure_layer::functionality::service::creator::Creator;
 use crate::infrastructure_layer::functionality::service::serializer::Serialize;
 use crate::infrastructure_layer::functionality::service::serializer::Serializer;
@@ -39,7 +38,6 @@ pub struct WrappedActionProcessor;
 #[cfg(feature = "manual_testing")]
 impl WrappedActionProcessor {
     pub async fn process<'a, SF, WSF, T, WA, F, API, APO, APP>(
-        pushable_environment_configuration: &'a PushableEnvironmentConfiguration,
         mut request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -53,7 +51,7 @@ impl WrappedActionProcessor {
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
-        WA: FnOnce(&'a PushableEnvironmentConfiguration, Request, &'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<RedisConnectionManager>) -> F,
+        WA: FnOnce(Request, &'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<RedisConnectionManager>) -> F,
         F: Future<Output = Response>,
         API: SerdeSerialize + for<'de> Deserialize<'de>,
         APO: SerdeSerialize + for<'de> Deserialize<'de>,
@@ -78,7 +76,6 @@ impl WrappedActionProcessor {
         };
 
         let action_processing_delegator_result = match ActionDelegator::delegate::<'_, WSF, _, _, _, API, APO, APP>(
-            pushable_environment_configuration,
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
             database_1_redis_connection_pool,
@@ -126,7 +123,6 @@ struct ActionDelegator;
 #[cfg(feature = "manual_testing")]
 impl ActionDelegator {
     async fn delegate<'a, SF, T, A, F, API, APO, APP>(
-        pushable_environment_configuration: &'a PushableEnvironmentConfiguration,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
@@ -139,7 +135,7 @@ impl ActionDelegator {
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
-        A: FnOnce(&'a PushableEnvironmentConfiguration, Request, &'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<RedisConnectionManager>) -> F,
+        A: FnOnce(Request, &'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<RedisConnectionManager>) -> F,
         F: Future<Output = Response>,
         API: SerdeSerialize + for<'de> Deserialize<'de>,
         APO: SerdeSerialize + for<'de> Deserialize<'de>,
@@ -175,7 +171,6 @@ impl ActionDelegator {
         );
 
         let response = action(
-            pushable_environment_configuration,
             request,
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,

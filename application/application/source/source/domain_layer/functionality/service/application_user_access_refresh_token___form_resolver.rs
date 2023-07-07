@@ -3,7 +3,7 @@ use crate::domain_layer::data::entity::application_user_access_refresh_token::Ap
 use crate::domain_layer::data::entity::application_user_access_refresh_token_encrypted::ApplicationUserAccessRefreshTokenEncrypted;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::data::pushable_environment_configuration::PushableEnvironmentConfiguration;
+use crate::infrastructure_layer::data::environment_configuration::ENVIRONMENT_CONFIGURATION;
 use crate::infrastructure_layer::functionality::service::encoder::Base64;
 use crate::infrastructure_layer::functionality::service::encoder::Encoder as Encoder_;
 use crate::infrastructure_layer::functionality::service::encoder::Hmac;
@@ -13,7 +13,7 @@ use crate::infrastructure_layer::functionality::service::serializer::Serializer;
 
 impl FormResolver<ApplicationUserAccessRefreshToken<'_>> {
     pub fn to_encrypted<'a>(
-        pushable_environment_configuration: &'a PushableEnvironmentConfiguration,
+
         application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>,
     ) -> Result<ApplicationUserAccessRefreshTokenEncrypted, ErrorAuditor> {
         let data = match Serializer::<MessagePack>::serialize(application_user_access_refresh_token) {
@@ -34,7 +34,7 @@ impl FormResolver<ApplicationUserAccessRefreshToken<'_>> {
         let mut hmac_encoded_data: Vec<u8> = vec![];
 
         Encoder_::<Hmac>::encode(
-            pushable_environment_configuration.encryption.private_key.application_user_access_refresh_token.as_bytes(),
+            ENVIRONMENT_CONFIGURATION.environment_configuration_file.encryption.private_key.application_user_access_refresh_token.value.as_bytes(),
             data.as_slice(),
             hmac_encoded_data.as_mut_slice(),
         );
@@ -45,12 +45,11 @@ impl FormResolver<ApplicationUserAccessRefreshToken<'_>> {
     }
 
     pub fn is_valid<'a>(
-        pushable_environment_configuration: &'a PushableEnvironmentConfiguration,
+
         application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>,
         application_user_access_refresh_token_encrypted: &'a ApplicationUserAccessRefreshTokenEncrypted,
     ) -> Result<bool, ErrorAuditor> {
         let application_user_access_refresh_token_encrypted_ = match Self::to_encrypted(
-            pushable_environment_configuration,
             application_user_access_refresh_token,
         ) {
             Ok(application_user_access_refresh_token_encrypted__) => application_user_access_refresh_token_encrypted__,

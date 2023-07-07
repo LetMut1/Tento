@@ -1,7 +1,6 @@
 use crate::application_layer::functionality::action_processor::route_not_found::ActionProcessor;
 use crate::infrastructure_layer::data::control_type::Request;
 use crate::infrastructure_layer::data::control_type::Response;
-use crate::infrastructure_layer::data::pushable_environment_configuration::PushableEnvironmentConfiguration;
 use extern_crate::bb8::Pool;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
@@ -13,7 +12,6 @@ use std::marker::Send;
 use std::marker::Sync;
 
 pub async fn route_not_found<'a, T>(
-    _pushable_environment_configuration: &'a PushableEnvironmentConfiguration,
     request: Request,
     _database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
     database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,

@@ -9,7 +9,7 @@ use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
-use crate::infrastructure_layer::data::pushable_environment_configuration::PushableEnvironmentConfiguration;
+use crate::infrastructure_layer::data::environment_configuration::ENVIRONMENT_CONFIGURATION;
 use crate::infrastructure_layer::functionality::service::encoder::Base64;
 use crate::infrastructure_layer::functionality::service::encoder::Encoder as Encoder_;
 use crate::infrastructure_layer::functionality::service::encoder::Hmac;
@@ -21,7 +21,7 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
     const TOKEN_PARTS_SEPARATOR: &'static str = ".";
 
     pub fn to_encrypted<'a>(
-        pushable_environment_configuration: &'a PushableEnvironmentConfiguration,
+
         application_user_access_token: &'a ApplicationUserAccessToken<'_>,
     ) -> Result<ApplicationUserAccessTokenEncrypted, ErrorAuditor> {
         let data = match Serializer::<MessagePack>::serialize(application_user_access_token) {
@@ -42,7 +42,6 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
         let application_user_access_token_serialized = Encoder_::<Base64>::encode(data.as_slice());
 
         let application_user_access_token_signature = Encoder::<Signature>::encode(
-            pushable_environment_configuration,
             application_user_access_token_serialized.as_str(),
         );
 
@@ -57,7 +56,7 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
     }
 
     pub fn from_encrypted<'a>(
-        pushable_environment_configuration: &'a PushableEnvironmentConfiguration,
+
         application_user_access_token_encrypted: &'a ApplicationUserAccessTokenEncrypted,
     ) -> Result<InvalidArgumentResult<ApplicationUserAccessToken<'static>>, ErrorAuditor> {
         let mut token_part_registry = application_user_access_token_encrypted.get().splitn::<'_, &'_ str>(
@@ -84,7 +83,6 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
         };
 
         let is_valid = Encoder::<Signature>::is_valid(
-            pushable_environment_configuration,
             application_user_access_token_serialized,
             application_user_access_token_signature,
         );
@@ -140,13 +138,13 @@ struct Signature;
 
 impl Encoder<Signature> {
     fn encode<'a>(
-        pushable_environment_configuration: &'a PushableEnvironmentConfiguration,
+
         application_user_access_token_serialized: &'a str,
     ) -> String {
         let mut hmac_encoded_data: Vec<u8> = vec![];
 
         Encoder_::<Hmac>::encode(
-            pushable_environment_configuration.encryption.private_key.application_user_access_token.as_bytes(),
+            ENVIRONMENT_CONFIGURATION.environment_configuration_file.encryption.private_key.application_user_access_token.value.as_bytes(),
             application_user_access_token_serialized.as_bytes(),
             hmac_encoded_data.as_mut_slice(),
         );
@@ -155,12 +153,11 @@ impl Encoder<Signature> {
     }
 
     fn is_valid<'a>(
-        pushable_environment_configuration: &'a PushableEnvironmentConfiguration,
+
         application_user_access_token_serialized: &'a str,
         application_user_access_token_signature: &'a str,
     ) -> bool {
         let application_user_access_token_signature_ = Self::encode(
-            pushable_environment_configuration,
             application_user_access_token_serialized,
         );
 

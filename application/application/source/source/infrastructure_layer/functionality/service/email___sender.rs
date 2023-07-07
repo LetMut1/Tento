@@ -4,14 +4,12 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::EmailServerError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
+use std::net::ToSocketAddrs;
+use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use crate::infrastructure_layer::data::pushable_environment_configuration::PushableEnvironmentConfiguration;
+use crate::infrastructure_layer::data::environment_configuration::ENVIRONMENT_CONFIGURATION;
 use extern_crate::lettre::ClientSecurity;
 use extern_crate::lettre_email::EmailBuilder;
-// use extern_crate::lettre::smtp::authentication::Credentials;
-// use extern_crate::lettre::smtp::authentication::Mechanism;
-// use extern_crate::lettre::smtp::ConnectionReuseParameters;
-// use extern_crate::lettre::smtp::extension::ClientId;
 use super::sender::Sender;
 use extern_crate::lettre::smtp::SmtpClient;
 use extern_crate::lettre::Transport;
@@ -19,10 +17,9 @@ use std::convert::Into;
 
 pub use crate::infrastructure_layer::data::control_type::Email;
 
-impl Sender<Email> {
-    // TODO В предпродакшене, когда будет smtp-ссервер, настройить все через константы и енв
+impl Sender<Email> {    // TODO Возможно, сразу можно положить объект в константу.  // TODO В предпродакшене, когда будет smtp-ссервер, настройить все через константы и енв
     pub fn send<'a>(
-        pushable_environment_configuration: &'a PushableEnvironmentConfiguration,
+
         subject: &'a str,
         body: String,
         to: &'a str,
@@ -57,38 +54,51 @@ impl Sender<Email> {
             }
         };
 
-        let smtp_client = match pushable_environment_configuration.environment {
+        let mut email_server_socket_address_registry = match ENVIRONMENT_CONFIGURATION.environment_configuration_file.resource.email_server.socket_address.value.to_socket_addrs() {
+            Ok(email_server_socket_address_registry_) => email_server_socket_address_registry_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::OtherError {
+                                other_error: OtherError::new(error),
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+        };
+
+        let email_server_socket_address = match email_server_socket_address_registry.next() {
+            Some(email_server_socket_address_) => email_server_socket_address_,
+            None => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::LogicError {
+                            message: "Invalid socket address.",
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+        };
+
+        let smtp_client = match ENVIRONMENT_CONFIGURATION.environment {
             Environment::Production => {
                 todo!();
-                // let smtp_client_= match SmtpClient::new_simple("TODO") {                         // TODO НАСТРОИТЬ В Препроде!!!!!!!!!!!!!!!!!!!!!
-                //     Ok(smtp_client__) => smtp_client__,
-                //     Err(error) => {
-                //         return Err(
-                //             ErrorAuditor::new(
-                //                 BaseError::RuntimeError {
-                //                     runtime_error: RuntimeError::ResourceError {
-                //                         resource_error: ResourceError::EmailServerError {
-                //                             email_server_error: EmailServerError::SmtpError {
-                //                                 smtp_error: error
-                //                             }
-                //                         }
-                //                     }
-                //                 },
-                //                 BacktracePart::new(line!(), file!(), None)
-                //             )
-                //         );
-                //     }
-                // };
-
-                // smtp_client_.hello_name(ClientId::Domain("TODO".to_string())) // TODO
-                //     .credentials(Credentials::new("usToDO".to_string(), "pasTODO".to_string())) // TODO
-                //     .smtp_utf8(true)
-                //     .authentication_mechanism(Mechanism::Plain)// TODO
-                //     .connection_reuse(ConnectionReuseParameters::NoReuse)// TODO
             }
             Environment::Development | Environment::LocalDevelopment => {
                 let smtp_client_ = match SmtpClient::new(
-                    pushable_environment_configuration.resource.email_server.socket_address,
+                    &email_server_socket_address,
                     ClientSecurity::None,
                 ) {
                     Ok(smtp_client__) => smtp_client__,

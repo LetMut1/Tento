@@ -18,7 +18,7 @@ use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
-use crate::infrastructure_layer::data::pushable_environment_configuration::PushableEnvironmentConfiguration;
+
 use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::repository::channel_subscription___postgresql_repository::Insert;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
@@ -39,7 +39,7 @@ pub struct ActionProcessor;
 
 impl ActionProcessor {
     pub async fn process<'a, T>(
-        pushable_environment_configuration: &'a PushableEnvironmentConfiguration,
+
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
@@ -52,7 +52,7 @@ impl ActionProcessor {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
         let extractor_result = match Extractor::<ApplicationUserAccessToken<'_>>::extract(
-            pushable_environment_configuration,
+
             &incoming.application_user_access_token_encrypted,
         )
         .await

@@ -351,8 +351,8 @@ pub mod loader {
                 }
             };
 
-            let environment_file_configuration = match from_str::<EnvironmentConfigurationFile<String>>(environment_file_data.as_str()) {
-                Ok(environment_file_configuration_) => environment_file_configuration_,
+            let environment_configuration_file = match from_str::<EnvironmentConfigurationFile<String>>(environment_file_data.as_str()) {
+                Ok(environment_configuration_file_) => environment_configuration_file_,
                 Err(error) => {
                     return Err(
                         Error::OtherError {
@@ -364,7 +364,7 @@ pub mod loader {
 
             let environment_configuration = EnvironmentConfiguration {
                 environment,
-                environment_configuration_file: environment_file_configuration,
+                environment_configuration_file,
             };
 
             return Ok(environment_configuration);
