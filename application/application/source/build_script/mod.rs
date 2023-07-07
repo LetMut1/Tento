@@ -17,7 +17,11 @@ use extern_crate::environment_configuration::environment_configuration::Tcp;
 use extern_crate::environment_configuration::loader::Loader;
 use std::env::var;
 use std::error::Error;
-// TODO как сделать так, чтобы был постоянно перезапуск. ВОзможно, записывать время в файл во время запуска скрипта.
+use extern_crate::uuid::Uuid;
+use std::fs::File;
+use std::io::Write;
+use std::path::Path;
+
 fn main() -> () {
     if let Err(error) = Processor::process() {
         println!(
@@ -32,14 +36,50 @@ fn main() -> () {
 struct Processor;
 
 impl Processor {
+    const CARGO_MANIFEST_DIR: &'static str = "CARGO_MANIFEST_DIR";
+    const CARGO_OUT_DIR: &'static str = "OUT_DIR";
+    const SCRIPT_RERUN_FILE_NAME: &'static str = "rerun.txt";
+    const ENVIRONMENT_CONFIGURATION_DIRECTORY_NAME: &'static str = "environment_configuration";
+
     fn process() -> Result<(), Box<dyn Error + 'static>> {
+        Self::create_rerun_condition()?;
+
         Self::create_environment_configuration_constant()?;
 
         return Ok(());
     }
 
+    fn create_rerun_condition() -> Result<(), Box<dyn Error + 'static>> {
+        let mut file_path = var(Self::CARGO_OUT_DIR)?;
+
+        file_path = format!(
+            "{}/{}",
+            file_path.as_str(),
+            Self::SCRIPT_RERUN_FILE_NAME
+        );
+
+        let file_path_ = Path::new(file_path.as_str());
+
+        let mut file = File::create(&file_path_)?;
+
+        file.write_all(Uuid::new_v4().as_bytes().as_slice())?;
+
+        println!(
+            "cargo:rerun-if-changed={}",
+            file_path.as_str()
+        );
+
+        return Ok(());
+    }
+
     fn create_environment_configuration_constant() -> Result<(), Box<dyn Error + 'static>> {
-        let environment_configuration_file_path = Self::get_environment_configuration_file_path()?;
+        let mut environment_configuration_file_path = var(Self::CARGO_MANIFEST_DIR)?;
+
+        environment_configuration_file_path = format!(
+            "{}/../{}",
+            environment_configuration_file_path.as_str(),
+            Self::ENVIRONMENT_CONFIGURATION_DIRECTORY_NAME
+        );
 
         let environment_configuration = Loader::load_from_file(environment_configuration_file_path.as_str())?;
 
@@ -133,21 +173,5 @@ impl Processor {
         constant_value_writer.finish();
 
         return Ok(());
-    }
-
-    fn get_environment_configuration_file_path() -> Result<String, Box<dyn Error + 'static>> {
-        let mut environment_configuration_file_path = match var("CARGO_MANIFEST_DIR") {
-            Ok(environment_configuration_file_path_) => environment_configuration_file_path_,
-            Err(error) => {
-                return Err(Box::new(error));
-            }
-        };
-
-        environment_configuration_file_path = format!(
-            "{}/../environment_configuration",
-            &environment_configuration_file_path
-        );
-
-        return Ok(environment_configuration_file_path);
     }
 }
