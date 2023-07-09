@@ -83,6 +83,8 @@ pub mod environment_configuration {
     use std::fmt::Error;
     use std::fmt::Formatter;
 
+    // pub struct String_(pub String);
+
     #[derive(Debug)]
     pub struct EnvironmentConfiguration<T> {
         pub environment: Environment,

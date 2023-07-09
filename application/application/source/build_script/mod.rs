@@ -18,9 +18,6 @@ use extern_crate::environment_configuration::loader::Loader;
 use std::env::var;
 use std::error::Error;
 use extern_crate::uuid::Uuid;
-use std::fs::File;
-use std::io::Write;
-use std::path::Path;
 
 fn main() -> () {
     if let Err(error) = Processor::process() {
@@ -38,31 +35,29 @@ struct Processor;
 impl Processor {
     const CARGO_MANIFEST_DIR: &'static str = "CARGO_MANIFEST_DIR";
     const CARGO_OUT_DIR: &'static str = "OUT_DIR";
-    const SCRIPT_RERUN_FILE_NAME: &'static str = "rerun.txt";
     const ENVIRONMENT_CONFIGURATION_DIRECTORY_NAME: &'static str = "environment_configuration";
 
     fn process() -> Result<(), Box<dyn Error + 'static>> {
-        Self::create_rerun_condition()?;
+        Self::create_rerun_instruction()?;
 
         Self::create_environment_configuration_constant()?;
 
         return Ok(());
     }
 
-    fn create_rerun_condition() -> Result<(), Box<dyn Error + 'static>> {
+    // It is necessary that the build-script be run on each compilation command,
+    // so we specify in the instructions that the Cargo watch for a non-existent
+    // file with `cargo:rerun-if-changed=non_existent_file` command.
+    fn create_rerun_instruction() -> Result<(), Box<dyn Error + 'static>> {
         let mut file_path = var(Self::CARGO_OUT_DIR)?;
 
+        let file_name = Uuid::new_v4().to_string();
+
         file_path = format!(
-            "{}/{}",
+            "{}/{}.txt",
             file_path.as_str(),
-            Self::SCRIPT_RERUN_FILE_NAME
+            file_name.as_str()
         );
-
-        let file_path_ = Path::new(file_path.as_str());
-
-        let mut file = File::create(&file_path_)?;
-
-        file.write_all(Uuid::new_v4().as_bytes().as_slice())?;
 
         println!(
             "cargo:rerun-if-changed={}",
