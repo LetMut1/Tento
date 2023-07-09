@@ -82,11 +82,13 @@ pub mod environment_configuration {
     use std::fmt::Debug;
     use std::fmt::Error;
     use std::fmt::Formatter;
-
-    // pub struct String_(pub String);
+    use self::sealed::Sealed;
 
     #[derive(Debug)]
-    pub struct EnvironmentConfiguration<T> {
+    pub struct EnvironmentConfiguration<T>
+    where
+        T: Sealed
+    {
         pub environment: Environment,
         pub environment_configuration_file: EnvironmentConfigurationFile<T>,
     }
@@ -126,20 +128,29 @@ pub mod environment_configuration {
     }
 
     #[derive(Debug, Deserialize)]
-    pub struct EnvironmentConfigurationFile<T> {
+    pub struct EnvironmentConfigurationFile<T>
+    where
+        T: Sealed
+    {
         pub application: Application<T>,
         pub resource: Resource<T>,
         pub encryption: Encryption<T>,
     }
 
     #[derive(Debug, Deserialize)]
-    pub struct Application<T> {
+    pub struct Application<T>
+    where
+        T: Sealed
+    {
         pub tcp: Tcp<T>,
         pub http: Http,
     }
 
     #[derive(Debug, Deserialize)]
-    pub struct Tcp<T> {
+    pub struct Tcp<T>
+    where
+        T: Sealed
+    {
         pub socket_address: SimpleType<T>,
         pub nodelay: SimpleType<bool>,
         pub sleep_on_accept_errors: SimpleType<bool>,
@@ -165,35 +176,53 @@ pub mod environment_configuration {
     }
 
     #[derive(Debug, Deserialize)]
-    pub struct Resource<T> {
+    pub struct Resource<T>
+    where
+        T: Sealed
+    {
         pub postgresql: Postgresql<T>,
         pub redis: Redis<T>,
         pub email_server: EmailServer<T>,
     }
 
     #[derive(Debug, Deserialize)]
-    pub struct Postgresql<T> {
+    pub struct Postgresql<T>
+    where
+        T: Sealed
+    {
         pub database_1_url: SimpleType<T>,
         pub database_2_url: SimpleType<T>,
     }
 
     #[derive(Debug, Deserialize)]
-    pub struct Redis<T> {
+    pub struct Redis<T>
+    where
+        T: Sealed
+    {
         pub database_1_url: SimpleType<T>,
     }
 
     #[derive(Debug, Deserialize)]
-    pub struct EmailServer<T> {
+    pub struct EmailServer<T>
+    where
+        T: Sealed
+    {
         pub socket_address: SimpleType<T>,
     }
 
     #[derive(Debug, Deserialize)]
-    pub struct Encryption<T> {
+    pub struct Encryption<T>
+    where
+        T: Sealed
+    {
         pub private_key: PrivateKey<T>,
     }
 
     #[derive(Debug, Deserialize)]
-    pub struct PrivateKey<T> {
+    pub struct PrivateKey<T>
+    where
+        T: Sealed
+    {
         pub application_user_access_token: SimpleType<T>,
         pub application_user_access_refresh_token: SimpleType<T>,
     }
@@ -207,6 +236,45 @@ pub mod environment_configuration {
     #[derive(Debug, Deserialize)]
     pub struct SimpleType<T> {
         pub value: T,
+    }
+
+    #[derive(Debug, Deserialize)]
+    #[serde(transparent)]
+    pub struct String_(String);
+
+    impl String_ {
+        pub fn new(inner: String) -> Self {
+            return Self(inner);
+        }
+
+        pub fn get<'a>(&'a self) -> &'a str {
+            return self.0.as_str();
+        }
+    }
+
+    #[derive(Debug, Deserialize)]
+    #[serde(transparent)]
+    pub struct Str<'a>(&'a str);
+
+    impl<'a> Str<'a> {
+        pub fn new(inner: &'a str) -> Self {
+            return Self(inner);
+        }
+
+        pub fn get<'b>(&'b self) -> &'b str {
+            return self.0;
+        }
+    }
+
+    mod sealed {
+        use super::Str;
+        use super::String_;
+
+        pub trait Sealed {}
+
+        impl<'a> Sealed for Str<'a> {}
+
+        impl Sealed for String_ {}
     }
 }
 
@@ -296,6 +364,7 @@ pub mod loader {
     use super::error::Error;
     use super::error::OtherError;
     use std::fs::read_to_string;
+    use super::environment_configuration::String_;
     use std::path::Path;
     use toml::from_str;
 
@@ -306,7 +375,7 @@ pub mod loader {
         const DEVELOPMENT_ENVIRONMENT_FILE_NAME: &'static str = "environment.development.toml";
         const LOCAL_DEVELOPMENT_ENVIRONMENT_FILE_NAME: &'static str = "environment.development.local.toml";
 
-        pub fn load_from_file<'a>(environment_configuration_file_path: &'a str) -> Result<EnvironmentConfiguration<String>, Error> {
+        pub fn load_from_file<'a>(environment_configuration_file_path: &'a str) -> Result<EnvironmentConfiguration<String_>, Error> {
             let file_path = Path::new(environment_configuration_file_path);
 
             let production_environment_file_path_buffer = file_path.join(Path::new(Self::PRODUCTION_ENVIRONMENT_FILE_NAME));
@@ -377,7 +446,7 @@ pub mod loader {
                 }
             };
 
-            let environment_configuration_file = match from_str::<EnvironmentConfigurationFile<String>>(environment_file_data.as_str()) {
+            let environment_configuration_file = match from_str::<EnvironmentConfigurationFile<String_>>(environment_file_data.as_str()) {
                 Ok(environment_configuration_file_) => environment_configuration_file_,
                 Err(error) => {
                     return Err(

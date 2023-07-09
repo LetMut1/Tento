@@ -14,6 +14,7 @@ use extern_crate::environment_configuration::environment_configuration::Redis;
 use extern_crate::environment_configuration::environment_configuration::Resource;
 use extern_crate::environment_configuration::environment_configuration::SimpleType;
 use extern_crate::environment_configuration::environment_configuration::Tcp;
+use extern_crate::environment_configuration::environment_configuration::Str;
 use extern_crate::environment_configuration::loader::Loader;
 use std::env::var;
 use std::error::Error;
@@ -78,13 +79,15 @@ impl Processor {
 
         let environment_configuration = Loader::load_from_file(environment_configuration_file_path.as_str())?;
 
-        let environment_configuration_: EnvironmentConfiguration<&'_ str> = EnvironmentConfiguration {
+        let environment_configuration_: EnvironmentConfiguration<Str<'_>> = EnvironmentConfiguration {
             environment: environment_configuration.environment,
             environment_configuration_file: EnvironmentConfigurationFile {
                 application: Application {
                     tcp: Tcp {
                         socket_address: SimpleType {
-                            value: environment_configuration.environment_configuration_file.application.tcp.socket_address.value.as_str(),
+                            value: Str::new(
+                                environment_configuration.environment_configuration_file.application.tcp.socket_address.value.get(),
+                            ),
                         },
                         nodelay: environment_configuration.environment_configuration_file.application.tcp.nodelay,
                         sleep_on_accept_errors: environment_configuration.environment_configuration_file.application.tcp.sleep_on_accept_errors,
@@ -95,30 +98,42 @@ impl Processor {
                 resource: Resource {
                     postgresql: Postgresql {
                         database_1_url: SimpleType {
-                            value: environment_configuration.environment_configuration_file.resource.postgresql.database_1_url.value.as_str(),
+                            value: Str::new(
+                                environment_configuration.environment_configuration_file.resource.postgresql.database_1_url.value.get(),
+                            ),
                         },
                         database_2_url: SimpleType {
-                            value: environment_configuration.environment_configuration_file.resource.postgresql.database_2_url.value.as_str(),
+                            value: Str::new(
+                                environment_configuration.environment_configuration_file.resource.postgresql.database_2_url.value.get(),
+                            ),
                         },
                     },
                     redis: Redis {
                         database_1_url: SimpleType {
-                            value: environment_configuration.environment_configuration_file.resource.redis.database_1_url.value.as_str(),
+                            value: Str::new(
+                                environment_configuration.environment_configuration_file.resource.redis.database_1_url.value.get(),
+                            ),
                         },
                     },
                     email_server: EmailServer {
                         socket_address: SimpleType {
-                            value: environment_configuration.environment_configuration_file.resource.email_server.socket_address.value.as_str(),
+                            value: Str::new(
+                                environment_configuration.environment_configuration_file.resource.email_server.socket_address.value.get(),
+                            ),
                         },
                     },
                 },
                 encryption: Encryption {
                     private_key: PrivateKey {
                         application_user_access_token: SimpleType {
-                            value: environment_configuration.environment_configuration_file.encryption.private_key.application_user_access_token.value.as_str(),
+                            value: Str::new(
+                                environment_configuration.environment_configuration_file.encryption.private_key.application_user_access_token.value.get(),
+                            ),
                         },
                         application_user_access_refresh_token: SimpleType {
-                            value: environment_configuration.environment_configuration_file.encryption.private_key.application_user_access_refresh_token.value.as_str(),
+                            value: Str::new(
+                                environment_configuration.environment_configuration_file.encryption.private_key.application_user_access_refresh_token.value.get(),
+                            ),
                         },
                     },
                 },
@@ -157,11 +172,13 @@ impl Processor {
 
         constant_writer.add_dependency("extern_crate::environment_configuration::environment_configuration::Tcp");
 
+        constant_writer.add_dependency("extern_crate::environment_configuration::environment_configuration::Str");
+
         let mut constant_value_writer = constant_writer.finish_dependencies();
 
         constant_value_writer.add_value(
             ENVIRONMENT_CONFIGURATION_CONSTANT_NAME,
-            "EnvironmentConfiguration<&'static str>",
+            "EnvironmentConfiguration<Str<'static>>",
             environment_configuration_,
         );
 

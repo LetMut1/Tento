@@ -54,7 +54,7 @@ impl Sender<Email> {
             }
         };
 
-        let mut email_server_socket_address_registry = match ENVIRONMENT_CONFIGURATION.environment_configuration_file.resource.email_server.socket_address.value.to_socket_addrs() {
+        let mut email_server_socket_address_registry = match ENVIRONMENT_CONFIGURATION.environment_configuration_file.resource.email_server.socket_address.value.get().to_socket_addrs() {
             Ok(email_server_socket_address_registry_) => email_server_socket_address_registry_,
             Err(error) => {
                 return Err(

@@ -115,6 +115,8 @@ fn main() -> () {
 
 // в роутах _ _ -> _ _ _
 
+// SetGet для NewType, может быть, сделать через macro_build?
+
 // Там, где нужно ограничить String str сделать Ньютайп на эти типы и Sealed trait.
 
 // let application_user_access_refresh_token = match PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::find_1( // TODO
