@@ -45,7 +45,8 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "INSERT INTO public.application_user_registration_token AS aurt ( \
+        let query = "\
+            INSERT INTO public.application_user_registration_token AS aurt ( \
                 application_user_email, \
                 application_user_device_id, \
                 value, \
@@ -170,7 +171,8 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "DELETE FROM ONLY public.application_user_registration_token AS aurt \
+        let query = "\
+            DELETE FROM ONLY public.application_user_registration_token AS aurt \
             WHERE aurt.application_user_email = $1 AND aurt.application_user_device_id = $2;";
 
         prepared_statemant_parameter_convertation_resolver
@@ -270,7 +272,8 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "UPDATE ONLY public.application_user_registration_token AS aurt
+        let query = "\
+            UPDATE ONLY public.application_user_registration_token AS aurt
             SET ( \
                 value, \
                 wrong_enter_tries_quantity, \
@@ -383,7 +386,8 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "SELECT \
+        let query = "\
+            SELECT \
                 aurt.value AS v, \
                 aurt.wrong_enter_tries_quantity AS wetq, \
                 aurt.is_approved AS ia, \
@@ -604,7 +608,8 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken2> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "UPDATE ONLY public.application_user_registration_token AS aurt
+        let query = "\
+            UPDATE ONLY public.application_user_registration_token AS aurt
             SET ( \
                 can_be_resent_from \
             ) = ROW( \
@@ -710,7 +715,8 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "UPDATE ONLY public.application_user_registration_token AS aurt
+        let query = "\
+            UPDATE ONLY public.application_user_registration_token AS aurt
             SET ( \
                 value, \
                 wrong_enter_tries_quantity, \
@@ -817,7 +823,8 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "SELECT \
+        let query = "\
+            SELECT \
                 aurt.value AS v, \
                 aurt.wrong_enter_tries_quantity AS wetq, \
                 aurt.is_approved AS ia, \
@@ -1014,7 +1021,8 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken4> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "UPDATE ONLY public.application_user_registration_token AS aurt
+        let query = "\
+            UPDATE ONLY public.application_user_registration_token AS aurt
             SET ( \
                 wrong_enter_tries_quantity \
             ) = ROW( \
@@ -1111,7 +1119,8 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken5> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "UPDATE ONLY public.application_user_registration_token AS aurt
+        let query = "\
+            UPDATE ONLY public.application_user_registration_token AS aurt
             SET ( \
                 is_approved \
             ) = ROW( \
@@ -1202,7 +1211,8 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken6> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "SELECT \
+        let query = "\
+            SELECT \
                 aurt.value AS v, \
                 aurt.is_approved AS ia, \
                 aurt.expires_at AS ea, \

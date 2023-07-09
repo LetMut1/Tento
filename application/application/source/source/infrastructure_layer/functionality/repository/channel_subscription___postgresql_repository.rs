@@ -23,7 +23,8 @@ impl PostgresqlRepository<ChannelSubscription> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "INSERT INTO public.channel_subscription AS cs ( \
+        let query = "\
+            INSERT INTO public.channel_subscription AS cs ( \
                 application_user_id, \
                 channel_id, \
                 created_at \
@@ -143,7 +144,8 @@ impl PostgresqlRepository<ChannelSubscription> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "SELECT \
+        let query = "\
+            SELECT \
                 cs.application_user_id AS aui \
             FROM public.channel_subscription cs \
             WHERE cs.application_user_id = $1 AND cs.channel_id = $2;";

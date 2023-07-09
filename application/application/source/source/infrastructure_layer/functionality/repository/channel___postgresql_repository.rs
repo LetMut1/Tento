@@ -68,7 +68,8 @@ impl PostgresqlRepository<Channel<'_>> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "INSERT INTO public.channel AS c ( \
+        let query = "\
+            INSERT INTO public.channel AS c ( \
                 id, \
                 owner, \
                 name, \
@@ -281,7 +282,8 @@ impl PostgresqlRepository<Channel<'_>> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "SELECT \
+        let query = "\
+            SELECT \
                 c.owner AS ow, \
                 c.name AS n, \
                 c.linked_name AS ln, \
@@ -679,7 +681,8 @@ impl PostgresqlRepository<Channel<'_>> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "SELECT \
+        let query = "\
+            SELECT \
                 c.id AS i, \
                 c.owner AS ow, \
                 c.linked_name AS ln, \

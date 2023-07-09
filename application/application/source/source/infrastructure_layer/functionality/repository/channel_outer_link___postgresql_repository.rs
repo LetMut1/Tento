@@ -30,7 +30,8 @@ impl PostgresqlRepository<ChannelOuterLink> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "INSERT INTO public.channel_inner_link AS cil ( \
+        let query = "\
+            INSERT INTO public.channel_inner_link AS cil ( \
                 from_, \
                 alias, \
                 address, \
@@ -155,7 +156,8 @@ impl PostgresqlRepository<ChannelOuterLink> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "SELECT \
+        let query = "\
+            SELECT \
                 col.alias AS al, \
                 col.address AS ad \
             FROM public.channel_outer_link col \

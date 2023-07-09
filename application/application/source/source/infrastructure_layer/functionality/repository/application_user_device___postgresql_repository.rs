@@ -22,7 +22,8 @@ impl PostgresqlRepository<ApplicationUserDevice> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "INSERT INTO public.application_user_device AS aud ( \
+        let query = "\
+            INSERT INTO public.application_user_device AS aud ( \
                 id, \
                 application_user_id \
             ) VALUES ( \

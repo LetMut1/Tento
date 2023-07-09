@@ -26,7 +26,8 @@ impl PostgresqlRepository<ChannelInnerLink> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "INSERT INTO public.channel_inner_link AS cil ( \
+        let query = "\
+            INSERT INTO public.channel_inner_link AS cil ( \
                 from_, \
                 to_, \
                 created_at \
@@ -144,7 +145,8 @@ impl PostgresqlRepository<ChannelInnerLink> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "SELECT \
+        let query = "\
+            SELECT \
                 cil.to_ AS t \
             FROM public.channel_inner_link cil \
             WHERE cil.from_ = $1 \

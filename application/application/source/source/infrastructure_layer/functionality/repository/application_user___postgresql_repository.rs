@@ -37,7 +37,8 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "INSERT INTO public.application_user AS au ( \
+        let query = "\
+            INSERT INTO public.application_user AS au ( \
                 id, \
                 email, \
                 nickname, \
@@ -187,7 +188,8 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "SELECT \
+        let query = "\
+            SELECT \
                 au.id AS i \
             FROM public.application_user au \
             WHERE au.nickname = $1;";
@@ -268,7 +270,8 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "SELECT \
+        let query = "\
+            SELECT \
                 au.id AS i \
             FROM public.application_user au \
             WHERE au.email = $1;";
@@ -349,7 +352,8 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "SELECT \
+        let query = "\
+            SELECT \
                 au.id AS i \
             FROM public.application_user au \
             WHERE au.id = $1;";
@@ -430,7 +434,8 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "SELECT \
+        let query = "\
+            SELECT \
                 au.id AS i, \
                 au.email AS e, \
                 au.password_hash AS ph, \
@@ -614,7 +619,8 @@ impl PostgresqlRepository<ApplicationUser1> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "SELECT \
+        let query = "\
+            SELECT \
                 au.id AS i, \
                 au.email AS e, \
                 au.password_hash AS ph \
@@ -773,7 +779,8 @@ impl PostgresqlRepository<ApplicationUser2> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "SELECT \
+        let query = "\
+            SELECT \
                 au.id AS i, \
                 au.password_hash AS ph \
             FROM public.application_user au \
@@ -908,7 +915,8 @@ impl PostgresqlRepository<ApplicationUser3> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "SELECT \
+        let query = "\
+            SELECT \
                 au.id AS i \
             FROM public.application_user au \
             WHERE au.email = $1;";
@@ -1019,7 +1027,8 @@ impl PostgresqlRepository<ApplicationUser4> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "UPDATE ONLY public.application_user AS au \
+        let query = "\
+            UPDATE ONLY public.application_user AS au \
             SET ( \
                 password_hash \
             ) = ROW( \
@@ -1103,7 +1112,8 @@ impl PostgresqlRepository<ApplicationUser4> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "SELECT \
+        let query = "\
+            SELECT \
                 au.password_hash AS ph \
             FROM public.application_user au \
             WHERE au.id = $1;";
@@ -1208,7 +1218,8 @@ impl PostgresqlRepository<ApplicationUser5> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "SELECT \
+        let query = "\
+            SELECT \
                 au.email AS e \
             FROM public.application_user au \
             WHERE au.id = $1;";

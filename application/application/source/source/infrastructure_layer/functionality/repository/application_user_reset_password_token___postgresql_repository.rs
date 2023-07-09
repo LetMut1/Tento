@@ -45,7 +45,8 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
 
         let application_user_reset_password_token_can_be_resent_from = insert.application_user_reset_password_token_can_be_resent_from.get();
 
-        let query = "INSERT INTO public.application_user_reset_password_token AS aurpt ( \
+        let query = "\
+            INSERT INTO public.application_user_reset_password_token AS aurpt ( \
                 application_user_id, \
                 application_user_device_id, \
                 value, \
@@ -170,7 +171,8 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "DELETE FROM ONLY public.application_user_reset_password_token AS aurpt \
+        let query = "\
+            DELETE FROM ONLY public.application_user_reset_password_token AS aurpt \
             WHERE aurpt.application_user_id = $1 AND aurpt.application_user_device_id = $2;";
 
         prepared_statemant_parameter_convertation_resolver
@@ -270,7 +272,8 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken1> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "UPDATE ONLY public.application_user_reset_password_token AS aurpt
+        let query = "\
+            UPDATE ONLY public.application_user_reset_password_token AS aurpt
             SET ( \
                 value, \
                 wrong_enter_tries_quantity, \
@@ -383,7 +386,8 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken1> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "SELECT \
+        let query = "\
+            SELECT \
                 aurpt.value AS v, \
                 aurpt.wrong_enter_tries_quantity AS wetq, \
                 aurpt.is_approved AS ia, \
@@ -604,7 +608,8 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken2> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "UPDATE ONLY public.application_user_reset_password_token AS aurpt
+        let query = "\
+            UPDATE ONLY public.application_user_reset_password_token AS aurpt
             SET ( \
                 can_be_resent_from \
             ) = ROW( \
@@ -710,7 +715,8 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken3> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "UPDATE ONLY public.application_user_reset_password_token AS aurpt
+        let query = "\
+            UPDATE ONLY public.application_user_reset_password_token AS aurpt
             SET ( \
                 value, \
                 wrong_enter_tries_quantity, \
@@ -817,7 +823,8 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken3> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "SELECT \
+        let query = "\
+            SELECT \
                 aurpt.value AS v, \
                 aurpt.wrong_enter_tries_quantity AS wetq, \
                 aurpt.is_approved AS ia, \
@@ -1014,7 +1021,8 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken4> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "UPDATE ONLY public.application_user_reset_password_token AS aurpt
+        let query = "\
+            UPDATE ONLY public.application_user_reset_password_token AS aurpt
             SET ( \
                 wrong_enter_tries_quantity \
             ) = ROW( \
@@ -1111,7 +1119,8 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken5> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "UPDATE ONLY public.application_user_reset_password_token AS aurpt
+        let query = "\
+            UPDATE ONLY public.application_user_reset_password_token AS aurpt
             SET ( \
                 is_approved \
             ) = ROW( \
@@ -1202,7 +1211,8 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken6> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "SELECT \
+        let query = "\
+            SELECT \
                 aurpt.value AS v, \
                 aurpt.is_approved AS ia, \
                 aurpt.expires_at AS ea,

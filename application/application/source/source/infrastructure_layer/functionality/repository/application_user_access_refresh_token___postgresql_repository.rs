@@ -39,7 +39,8 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
 
         let application_user_access_refresh_token_updated_at = insert.application_user_access_refresh_token_updated_at.get();
 
-        let query = "INSERT INTO public.application_user_access_refresh_token AS auart ( \
+        let query = "\
+            INSERT INTO public.application_user_access_refresh_token AS auart ( \
                 application_user_id, \
                 application_user_device_id, \
                 application_user_access_token_id, \
@@ -233,7 +234,8 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "DELETE FROM ONLY public.application_user_access_refresh_token AS auart  \
+        let query = "\
+            DELETE FROM ONLY public.application_user_access_refresh_token AS auart  \
             WHERE auart.application_user_id = $1;";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(
@@ -307,7 +309,8 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "SELECT \
+        let query = "\
+            SELECT \
                 auart.application_user_access_token_id AS auati, \
                 auart.obfuscation_value AS ov, \
                 auart.expires_at AS ea, \
@@ -514,7 +517,8 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken1> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "UPDATE ONLY public.application_user_access_refresh_token AS auart \
+        let query = "\
+            UPDATE ONLY public.application_user_access_refresh_token AS auart \
             SET ( \
                 application_user_access_token_id, \
                 obfuscation_value, \

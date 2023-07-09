@@ -41,7 +41,8 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "INSERT INTO public.application_user_authorization_token AS auat ( \
+        let query = "\
+            INSERT INTO public.application_user_authorization_token AS auat ( \
                 application_user_id, \
                 application_user_device_id, \
                 value, \
@@ -159,7 +160,8 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "DELETE FROM ONLY public.application_user_authorization_token AS auat \
+        let query = "\
+            DELETE FROM ONLY public.application_user_authorization_token AS auat \
             WHERE auat.application_user_id = $1 AND auat.application_user_device_id = $2;";
 
         prepared_statemant_parameter_convertation_resolver
@@ -256,7 +258,8 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken1> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "UPDATE ONLY public.application_user_authorization_token AS auat \
+        let query = "\
+            UPDATE ONLY public.application_user_authorization_token AS auat \
             SET ( \
                 value, \
                 wrong_enter_tries_quantity, \
@@ -363,7 +366,8 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken1> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "SELECT \
+        let query = "\
+            SELECT \
                 auat.value AS v, \
                 auat.wrong_enter_tries_quantity AS wetq, \
                 auat.expires_at AS ea, \
@@ -566,7 +570,8 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken2> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "UPDATE ONLY public.application_user_authorization_token AS auat \
+        let query = "\
+            UPDATE ONLY public.application_user_authorization_token AS auat \
             SET ( \
                 value, \
                 wrong_enter_tries_quantity, \
@@ -667,7 +672,8 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken2> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "SELECT \
+        let query = "\
+            SELECT \
                 auat.value AS v, \
                 auat.wrong_enter_tries_quantity AS wetq, \
                 auat.expires_at AS ea \
@@ -840,7 +846,8 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken3> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "UPDATE ONLY public.application_user_authorization_token AS auat \
+        let query = "\
+            UPDATE ONLY public.application_user_authorization_token AS auat \
             SET ( \
                 can_be_resent_from \
             ) = ROW( \
@@ -937,7 +944,8 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken4> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "UPDATE ONLY public.application_user_authorization_token AS auat \
+        let query = "\
+            UPDATE ONLY public.application_user_authorization_token AS auat \
             SET ( \
                 wrong_enter_tries_quantity \
             ) = ROW( \
@@ -1028,7 +1036,8 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken5> {
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let query = "SELECT \
+        let query = "\
+            SELECT \
                 auat.value AS v, \
                 auat.expires_at AS ea, \
                 auat.can_be_resent_from AS cbrf \

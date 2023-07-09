@@ -31,7 +31,8 @@ impl PostgresqlRepository<ActionRoundRegister<'_>> {
             None => None,
         };
 
-        let query = "INSERT INTO public.action_round_register AS arr ( \
+        let query = "\
+            INSERT INTO public.action_round_register AS arr ( \
                 route, \
                 method, \
                 status_code, \
