@@ -23,7 +23,6 @@ base64 = { package = "base64", version = "^0.13", default-features = true, featu
 bb8 = { package = "bb8", version = "^0.7", default-features = true, features = [], optional = false }
 bb8_postgres = { package = "bb8-postgres", version = "^0.7", default-features = true, features = [], optional = false }
 bb8_redis = { package = "bb8-redis", version = "^0.10", default-features = true, features = [], optional = false }
-build_const = { package = "build_const", version = "^0.2.2", default-features = true, features = [], optional = false }
 build_script_constant = { path = "./build_script_constant", package = "build_script_constant", version = "0.1.0", default-features = true, features = [], optional = false }
 bytes = { package = "bytes", version = "^1.1", default-features = true, features = [], optional = false }
 chrono = { package = "chrono", version = "^0.4", default-features = true, features = [], optional = false }

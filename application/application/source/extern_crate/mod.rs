@@ -3,7 +3,6 @@ pub use base64;
 pub use bb8;
 pub use bb8_postgres;
 pub use bb8_redis;
-pub use build_const;
 pub use build_script_constant;
 pub use bytes;
 pub use chrono;

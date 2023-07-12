@@ -1,8 +1,7 @@
 #![allow(clippy::unused_unit)]
 
-use extern_crate::build_const::ConstWriter;
 use extern_crate::build_script_constant::environment_configuration::ENVIRONMENT_CONFIGURATION_CONSTANT_NAME;
-use extern_crate::build_script_constant::ENVIRONMENT_CONFIGURATION_CONSTANT_MODULE_NAME;
+use extern_crate::build_script_constant::environment_configuration_constant_file_name;
 use extern_crate::environment_configuration::environment_configuration::Environment;
 use extern_crate::environment_configuration::loader::Loader;
 use std::env::var;
@@ -26,9 +25,8 @@ fn main() -> () {
 struct Processor;
 
 impl Processor {
-    const CARGO_MANIFEST_DIR: &'static str = "CARGO_MANIFEST_DIR";
     const CARGO_OUT_DIR: &'static str = "OUT_DIR";
-    const ENVIRONMENT_CONFIGURATION_DIRECTORY_NAME: &'static str = "environment_configuration";
+    const ENVIRONMENT_CONFIGURATION_DIRECTORY_PATH: &'static str = "environment_configuration";
 
     fn process() -> Result<(), Box<dyn Error + 'static>> {
         Self::create_rerun_instruction()?;
@@ -61,12 +59,12 @@ impl Processor {
     }
 
     fn create_environment_configuration_constant() -> Result<(), Box<dyn Error + 'static>> {
-        let mut environment_configuration_file_path = var(Self::CARGO_MANIFEST_DIR)?;
+        let mut environment_configuration_file_path = var("CARGO_MANIFEST_DIR")?;
 
         environment_configuration_file_path = format!(
             "{}/../{}",
             environment_configuration_file_path.as_str(),
-            Self::ENVIRONMENT_CONFIGURATION_DIRECTORY_NAME
+            Self::ENVIRONMENT_CONFIGURATION_DIRECTORY_PATH
         );
 
         let environment_configuration = Loader::load_from_file(environment_configuration_file_path.as_str())?;
@@ -205,9 +203,9 @@ impl Processor {
         let mut build_file = var(Self::CARGO_OUT_DIR)?;
 
         build_file = format!(
-            "{}/{}.rs",
+            "{}/{}",
             build_file.as_str(),
-            ENVIRONMENT_CONFIGURATION_CONSTANT_MODULE_NAME!()
+            environment_configuration_constant_file_name!()
         );
 
         let mut file = File::create(Path::new(build_file.as_str()))?;

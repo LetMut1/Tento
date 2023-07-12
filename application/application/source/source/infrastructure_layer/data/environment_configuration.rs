@@ -1,4 +1,4 @@
-use extern_crate::build_const::build_const;
-use extern_crate::build_script_constant::ENVIRONMENT_CONFIGURATION_CONSTANT_MODULE_NAME;
+use extern_crate::build_script_constant::build_environment_configuration;
+use extern_crate::build_script_constant::environment_configuration_constant_file_name;
 
-build_const!(ENVIRONMENT_CONFIGURATION_CONSTANT_MODULE_NAME!());
+build_environment_configuration!();
