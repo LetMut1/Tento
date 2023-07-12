@@ -79,12 +79,8 @@
 
 pub mod environment_configuration {
     use serde::Deserialize;
-    use std::fmt::Debug;
-    use std::fmt::Error;
-    use std::fmt::Formatter;
     use self::sealed::Sealed;
 
-    #[derive(Debug)]
     pub struct EnvironmentConfiguration<T>
     where
         T: Sealed
@@ -99,35 +95,7 @@ pub mod environment_configuration {
         LocalDevelopment,
     }
 
-    impl Debug for Environment {
-        fn fmt<'a>(
-            &'a self,
-            formatter: &'a mut Formatter<'_>,
-        ) -> Result<(), Error> {
-            match self {
-                Self::Production => {
-                    return write!(
-                        formatter,
-                        "Environment::Production"
-                    );
-                }
-                Self::Development => {
-                    return write!(
-                        formatter,
-                        "Environment::Development"
-                    );
-                }
-                Self::LocalDevelopment => {
-                    return write!(
-                        formatter,
-                        "Environment::LocalDevelopment"
-                    );
-                }
-            }
-        }
-    }
-
-    #[derive(Debug, Deserialize)]
+    #[derive(Deserialize)]
     pub struct EnvironmentConfigurationFile<T>
     where
         T: Sealed
@@ -137,7 +105,7 @@ pub mod environment_configuration {
         pub encryption: Encryption<T>,
     }
 
-    #[derive(Debug, Deserialize)]
+    #[derive(Deserialize)]
     pub struct Application<T>
     where
         T: Sealed
@@ -146,7 +114,7 @@ pub mod environment_configuration {
         pub http: Http,
     }
 
-    #[derive(Debug, Deserialize)]
+    #[derive(Deserialize)]
     pub struct Tcp<T>
     where
         T: Sealed
@@ -157,7 +125,7 @@ pub mod environment_configuration {
         pub keepalive_seconds: SimpleTypeActive<u64>,
     }
 
-    #[derive(Debug, Deserialize)]
+    #[derive(Deserialize)]
     pub struct Http {
         pub adaptive_window: SimpleType<bool>,
         pub connection_window_size: SimpleType<u32>,
@@ -168,14 +136,14 @@ pub mod environment_configuration {
         pub keep_alive: KeepAlive,
     }
 
-    #[derive(Debug, Deserialize)]
+    #[derive(Deserialize)]
     pub struct KeepAlive {
         pub is_active: bool,
         pub interval_seconds: SimpleType<u64>,
         pub timeout_seconds: SimpleType<u64>,
     }
 
-    #[derive(Debug, Deserialize)]
+    #[derive(Deserialize)]
     pub struct Resource<T>
     where
         T: Sealed
@@ -185,7 +153,7 @@ pub mod environment_configuration {
         pub email_server: EmailServer<T>,
     }
 
-    #[derive(Debug, Deserialize)]
+    #[derive(Deserialize)]
     pub struct Postgresql<T>
     where
         T: Sealed
@@ -194,7 +162,7 @@ pub mod environment_configuration {
         pub database_2_url: SimpleType<T>,
     }
 
-    #[derive(Debug, Deserialize)]
+    #[derive(Deserialize)]
     pub struct Redis<T>
     where
         T: Sealed
@@ -202,7 +170,7 @@ pub mod environment_configuration {
         pub database_1_url: SimpleType<T>,
     }
 
-    #[derive(Debug, Deserialize)]
+    #[derive(Deserialize)]
     pub struct EmailServer<T>
     where
         T: Sealed
@@ -210,7 +178,7 @@ pub mod environment_configuration {
         pub socket_address: SimpleType<T>,
     }
 
-    #[derive(Debug, Deserialize)]
+    #[derive(Deserialize)]
     pub struct Encryption<T>
     where
         T: Sealed
@@ -218,7 +186,7 @@ pub mod environment_configuration {
         pub private_key: PrivateKey<T>,
     }
 
-    #[derive(Debug, Deserialize)]
+    #[derive(Deserialize)]
     pub struct PrivateKey<T>
     where
         T: Sealed
@@ -227,44 +195,24 @@ pub mod environment_configuration {
         pub application_user_access_refresh_token: SimpleType<T>,
     }
 
-    #[derive(Debug, Deserialize)]
+    #[derive(Deserialize)]
     pub struct SimpleTypeActive<T> {
         pub value: T,
         pub is_active: bool,
     }
 
-    #[derive(Debug, Deserialize)]
+    #[derive(Deserialize)]
     pub struct SimpleType<T> {
         pub value: T,
     }
 
-    #[derive(Debug, Deserialize)]
+    #[derive(Deserialize)]
     #[serde(transparent)]
-    pub struct String_(String);
+    pub struct String_(pub String);
 
-    impl String_ {
-        pub fn new(inner: String) -> Self {
-            return Self(inner);
-        }
-
-        pub fn get<'a>(&'a self) -> &'a str {
-            return self.0.as_str();
-        }
-    }
-
-    #[derive(Debug, Deserialize)]
+    #[derive(Deserialize)]
     #[serde(transparent)]
-    pub struct Str<'a>(&'a str);
-
-    impl<'a> Str<'a> {
-        pub fn new(inner: &'a str) -> Self {
-            return Self(inner);
-        }
-
-        pub fn get<'b>(&'b self) -> &'b str {
-            return self.0;
-        }
-    }
+    pub struct Str(pub &'static str);
 
     mod sealed {
         use super::Str;
@@ -272,7 +220,7 @@ pub mod environment_configuration {
 
         pub trait Sealed {}
 
-        impl<'a> Sealed for Str<'a> {}
+        impl Sealed for Str {}
 
         impl Sealed for String_ {}
     }

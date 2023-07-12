@@ -80,7 +80,7 @@ impl RunServerProcessor {
 
     async fn run_http_server() -> Result<(), ErrorAuditor> {
         // TODO HTTP3 (QUICK) (h3), когда будет готов.!!!!!!!!!!!
-        let mut application_http_socket_address_registry = match ENVIRONMENT_CONFIGURATION.environment_configuration_file.application.tcp.socket_address.value.get().to_socket_addrs() {
+        let mut application_http_socket_address_registry = match ENVIRONMENT_CONFIGURATION.environment_configuration_file.application.tcp.socket_address.value.0.to_socket_addrs() {
             Ok(application_http_socket_address_registry_) => application_http_socket_address_registry_,
             Err(error) => {
                 return Err(
@@ -168,7 +168,7 @@ impl RunServerProcessor {
             server_builder = server_builder.http2_only(false)
         }
 
-        let database_1_postgresql_configuration = match PostgresqlConfiguration::from_str(ENVIRONMENT_CONFIGURATION.environment_configuration_file.resource.postgresql.database_1_url.value.get()) {
+        let database_1_postgresql_configuration = match PostgresqlConfiguration::from_str(ENVIRONMENT_CONFIGURATION.environment_configuration_file.resource.postgresql.database_1_url.value.0) {
             Ok(database_1_postgresql_configuration_) => database_1_postgresql_configuration_,
             Err(error) => {
                 return Err(
@@ -190,7 +190,7 @@ impl RunServerProcessor {
             }
         };
 
-        let database_2_postgresql_configuration = match PostgresqlConfiguration::from_str(ENVIRONMENT_CONFIGURATION.environment_configuration_file.resource.postgresql.database_2_url.value.get()) {
+        let database_2_postgresql_configuration = match PostgresqlConfiguration::from_str(ENVIRONMENT_CONFIGURATION.environment_configuration_file.resource.postgresql.database_2_url.value.0) {
             Ok(database_2_postgresql_configuration_) => database_2_postgresql_configuration_,
             Err(error) => {
                 return Err(
@@ -212,7 +212,7 @@ impl RunServerProcessor {
             }
         };
 
-        let database_1_redis_connection_info = match ConnectionInfo::from_str(ENVIRONMENT_CONFIGURATION.environment_configuration_file.resource.redis.database_1_url.value.get()) {
+        let database_1_redis_connection_info = match ConnectionInfo::from_str(ENVIRONMENT_CONFIGURATION.environment_configuration_file.resource.redis.database_1_url.value.0) {
             Ok(database_1_redis_connection_info_) => database_1_redis_connection_info_,
             Err(error) => {
                 return Err(

@@ -133,7 +133,7 @@ impl Encoder<Signature> {
         let mut hmac_encoded_data: Vec<u8> = vec![];
 
         Encoder_::<Hmac>::encode(
-            ENVIRONMENT_CONFIGURATION.environment_configuration_file.encryption.private_key.application_user_access_token.value.get().as_bytes(),
+            ENVIRONMENT_CONFIGURATION.environment_configuration_file.encryption.private_key.application_user_access_token.value.0.as_bytes(),
             application_user_access_token_serialized.as_bytes(),
             hmac_encoded_data.as_mut_slice(),
         );
