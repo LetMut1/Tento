@@ -7,19 +7,4 @@ pub mod environment_configuration {
             "environment_configuration_constant.rs"
         };
     }
-
-    #[macro_export]
-    macro_rules! build_environment_configuration {
-        () => {
-            include!(
-                concat!(
-                    env!("OUT_DIR"),
-                    concat!(
-                        "/",
-                        environment_configuration_constant_file_name!()
-                    )
-                )
-            );
-        };
-    }
 }

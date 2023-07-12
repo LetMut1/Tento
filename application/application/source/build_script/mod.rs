@@ -25,9 +25,6 @@ fn main() -> () {
 struct Processor;
 
 impl Processor {
-    const CARGO_OUT_DIR: &'static str = "OUT_DIR";
-    const ENVIRONMENT_CONFIGURATION_DIRECTORY_PATH: &'static str = "environment_configuration";
-
     fn process() -> Result<(), Box<dyn Error + 'static>> {
         Self::create_rerun_instruction()?;
 
@@ -40,13 +37,11 @@ impl Processor {
     // so we specify in the instructions that the Cargo watch for a non-existent
     // file with `cargo:rerun-if-changed=non_existent_file` command.
     fn create_rerun_instruction() -> Result<(), Box<dyn Error + 'static>> {
-        let mut file_path = var(Self::CARGO_OUT_DIR)?;
-
         let file_name = Uuid::new_v4().to_string();
 
-        file_path = format!(
+        let file_path = format!(
             "{}/{}.txt",
-            file_path.as_str(),
+            var("OUT_DIR")?.as_str(),
             file_name.as_str()
         );
 
@@ -59,12 +54,9 @@ impl Processor {
     }
 
     fn create_environment_configuration_constant() -> Result<(), Box<dyn Error + 'static>> {
-        let mut environment_configuration_file_path = var("CARGO_MANIFEST_DIR")?;
-
-        environment_configuration_file_path = format!(
-            "{}/../{}",
-            environment_configuration_file_path.as_str(),
-            Self::ENVIRONMENT_CONFIGURATION_DIRECTORY_PATH
+        let environment_configuration_file_path = format!(
+            "{}/../environment_configuration",
+            var("CARGO_MANIFEST_DIR")?.as_str(),
         );
 
         let environment_configuration = Loader::load_from_file(environment_configuration_file_path.as_str())?;
@@ -200,11 +192,9 @@ impl Processor {
             environment_configuration.environment_configuration_file.encryption.private_key.application_user_access_refresh_token.value.0.as_str()
         );
 
-        let mut build_file = var(Self::CARGO_OUT_DIR)?;
-
-        build_file = format!(
+        let build_file = format!(
             "{}/{}",
-            build_file.as_str(),
+            var("OUT_DIR")?.as_str(),
             environment_configuration_constant_file_name!()
         );
 
