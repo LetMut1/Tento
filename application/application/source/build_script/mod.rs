@@ -42,12 +42,12 @@ impl Processor {
         let file_path = format!(
             "{}/{}.txt",
             var("OUT_DIR")?.as_str(),
-            file_name.as_str()
+            file_name.as_str(),
         );
 
         println!(
             "cargo:rerun-if-changed={}",
-            file_path.as_str()
+            file_path.as_str(),
         );
 
         return Ok(());
@@ -189,13 +189,13 @@ impl Processor {
             environment_configuration.environment_configuration_file.resource.redis.database_1_url.value.0.as_str(),
             environment_configuration.environment_configuration_file.resource.email_server.socket_address.value.0.as_str(),
             environment_configuration.environment_configuration_file.encryption.private_key.application_user_access_token.value.0.as_str(),
-            environment_configuration.environment_configuration_file.encryption.private_key.application_user_access_refresh_token.value.0.as_str()
+            environment_configuration.environment_configuration_file.encryption.private_key.application_user_access_refresh_token.value.0.as_str(),
         );
 
         let build_file = format!(
             "{}/{}",
             var("OUT_DIR")?.as_str(),
-            environment_configuration_constant_file_name!()
+            environment_configuration_constant_file_name!(),
         );
 
         let mut file = File::create(Path::new(build_file.as_str()))?;

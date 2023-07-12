@@ -227,10 +227,13 @@ pub mod environment_configuration {
 }
 
 pub mod error {
+    use std::convert::From;
     use std::error::Error as StdError;
     use std::fmt::Display;
     use std::fmt::Error as FormatError;
     use std::fmt::Formatter;
+    use std::io::Error as IOError;
+    use toml::de::Error as TomlError;
 
     #[derive(Debug)]
     pub enum Error {
@@ -272,6 +275,22 @@ pub mod error {
 
     impl StdError for Error {}
 
+    impl From<IOError> for Error {
+        fn from(value: IOError) -> Self {
+            return Self::OtherError {
+                other_error: OtherError::new(&value),
+            };
+        }
+    }
+
+    impl From<TomlError> for Error {
+        fn from(value: TomlError) -> Self {
+            return Self::OtherError {
+                other_error: OtherError::new(&value),
+            };
+        }
+    }
+
     #[derive(Debug)]
     pub struct OtherError {
         message: String,
@@ -310,7 +329,6 @@ pub mod loader {
     use super::environment_configuration::EnvironmentConfiguration;
     use super::environment_configuration::EnvironmentConfigurationFile;
     use super::error::Error;
-    use super::error::OtherError;
     use std::fs::read_to_string;
     use super::environment_configuration::String_;
     use std::path::Path;
@@ -319,91 +337,67 @@ pub mod loader {
     pub struct Loader;
 
     impl Loader {
-        const PRODUCTION_ENVIRONMENT_FILE_NAME: &'static str = "environment.production.toml";
-        const DEVELOPMENT_ENVIRONMENT_FILE_NAME: &'static str = "environment.development.toml";
-        const LOCAL_DEVELOPMENT_ENVIRONMENT_FILE_NAME: &'static str = "environment.development.local.toml";
+        const PRODUCTION_ENVIRONMENT_DIRECTORY_NAME: &'static str = "production";
+        const DEVELOPMENT_ENVIRONMENT_DIRECTORY_NAME: &'static str = "development";
+        const LOCAL_DEVELOPMENT_ENVIRONMENT_DIRECTORY_NAME: &'static str = "local_development";
+        const ENVIRONMENT_FILE_NAME: &'static str = "environment.toml";
 
-        pub fn load_from_file<'a>(environment_configuration_file_path: &'a str) -> Result<EnvironmentConfiguration<String_>, Error> {
-            let file_path = Path::new(environment_configuration_file_path);
+        pub fn load_from_file<'a>(environment_configuration_directory_path: &'a str) -> Result<EnvironmentConfiguration<String_>, Error> {
+            let production_environment_file_path = format!(
+                "{}/{}/{}",
+                environment_configuration_directory_path,
+                Self::PRODUCTION_ENVIRONMENT_DIRECTORY_NAME,
+                Self::ENVIRONMENT_FILE_NAME,
+            );
 
-            let production_environment_file_path_buffer = file_path.join(Path::new(Self::PRODUCTION_ENVIRONMENT_FILE_NAME));
+            let production_environment_file_path_ = Path::new(production_environment_file_path.as_str());
 
-            let (environment, environment_file_data) = if production_environment_file_path_buffer.exists() {
-                let environment_file_data_ = match read_to_string(production_environment_file_path_buffer.as_path()) {
-                    Ok(environment_file_data__) => environment_file_data__,
-                    Err(error) => {
-                        return Err(
-                            Error::OtherError {
-                                other_error: OtherError::new(error),
-                            },
-                        );
-                    }
-                };
-
+            let (environment, environment_file_data) = if production_environment_file_path_.try_exists()? {
                 (
                     Environment::Production,
-                    environment_file_data_,
+                    read_to_string(production_environment_file_path_)?,
                 )
             } else {
-                let local_development_environment_file_path_buffer = file_path.join(Path::new(Self::LOCAL_DEVELOPMENT_ENVIRONMENT_FILE_NAME));
+                let local_development_environment_file_path = format!(
+                    "{}/{}/{}",
+                    environment_configuration_directory_path,
+                    Self::LOCAL_DEVELOPMENT_ENVIRONMENT_DIRECTORY_NAME,
+                    Self::ENVIRONMENT_FILE_NAME,
+                );
 
-                if local_development_environment_file_path_buffer.exists() {
-                    let environment_file_data_ = match read_to_string(local_development_environment_file_path_buffer.as_path()) {
-                        Ok(environment_file_data__) => environment_file_data__,
-                        Err(error) => {
-                            return Err(
-                                Error::OtherError {
-                                    other_error: OtherError::new(error),
-                                },
-                            );
-                        }
-                    };
+                let local_development_environment_file_path_ = Path::new(local_development_environment_file_path.as_str());
 
+                if local_development_environment_file_path_.try_exists()? {
                     (
                         Environment::LocalDevelopment,
-                        environment_file_data_,
+                        read_to_string(local_development_environment_file_path_)?,
                     )
                 } else {
-                    let development_environment_file_path_buffer = file_path.join(Path::new(Self::DEVELOPMENT_ENVIRONMENT_FILE_NAME));
+                    let development_environment_file_path = format!(
+                        "{}/{}/{}",
+                        environment_configuration_directory_path,
+                        Self::DEVELOPMENT_ENVIRONMENT_DIRECTORY_NAME,
+                        Self::ENVIRONMENT_FILE_NAME,
+                    );
 
-                    let environment_file_data_ = if development_environment_file_path_buffer.exists() {
-                        let environment_file_data__ = match read_to_string(development_environment_file_path_buffer.as_path()) {
-                            Ok(environment_file_data___) => environment_file_data___,
-                            Err(error) => {
-                                return Err(
-                                    Error::OtherError {
-                                        other_error: OtherError::new(error),
-                                    },
-                                );
-                            }
-                        };
+                    let development_environment_file_path_ = Path::new(development_environment_file_path.as_str());
 
-                        environment_file_data__
+                    if development_environment_file_path_.try_exists()? {
+                        (
+                            Environment::Development,
+                            read_to_string(development_environment_file_path_)?
+                        )
                     } else {
                         return Err(
                             Error::LogicError {
                                 message: "Environment configuration files does not exist.",
                             },
                         );
-                    };
-
-                    (
-                        Environment::Development,
-                        environment_file_data_,
-                    )
+                    }
                 }
             };
 
-            let environment_configuration_file = match from_str::<EnvironmentConfigurationFile<String_>>(environment_file_data.as_str()) {
-                Ok(environment_configuration_file_) => environment_configuration_file_,
-                Err(error) => {
-                    return Err(
-                        Error::OtherError {
-                            other_error: OtherError::new(error),
-                        },
-                    );
-                }
-            };
+            let environment_configuration_file = from_str::<EnvironmentConfigurationFile<String_>>(environment_file_data.as_str())?;
 
             let environment_configuration = EnvironmentConfiguration {
                 environment,
