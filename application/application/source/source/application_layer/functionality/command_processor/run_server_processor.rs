@@ -78,9 +78,9 @@ impl RunServerProcessor {
         return Ok(());
     }
 
+                        // TODO HTTP3 (QUICK) (h3), когда будет готов.!!!!!!!!!!!
     async fn run_http_server() -> Result<(), ErrorAuditor> {
-        // TODO HTTP3 (QUICK) (h3), когда будет готов.!!!!!!!!!!!
-        let mut application_http_socket_address_registry = match ENVIRONMENT_CONFIGURATION.environment_configuration_file.application.tcp.socket_address.value.0.to_socket_addrs() {
+        let mut application_http_socket_address_registry = match ENVIRONMENT_CONFIGURATION.application_server.tcp.socket_address.0.to_socket_addrs() {
             Ok(application_http_socket_address_registry_) => application_http_socket_address_registry_,
             Err(error) => {
                 return Err(
@@ -139,36 +139,42 @@ impl RunServerProcessor {
         };
 
         server_builder = server_builder
-            .tcp_nodelay(ENVIRONMENT_CONFIGURATION.environment_configuration_file.application.tcp.nodelay.value)
-            .tcp_sleep_on_accept_errors(ENVIRONMENT_CONFIGURATION.environment_configuration_file.application.tcp.sleep_on_accept_errors.value)
-            .http2_only(ENVIRONMENT_CONFIGURATION.environment_configuration_file.application.http.http2_only.value)
-            .http2_adaptive_window(ENVIRONMENT_CONFIGURATION.environment_configuration_file.application.http.adaptive_window.value)
-            .http2_initial_connection_window_size(Some(ENVIRONMENT_CONFIGURATION.environment_configuration_file.application.http.connection_window_size.value))
-            .http2_initial_stream_window_size(Some(ENVIRONMENT_CONFIGURATION.environment_configuration_file.application.http.stream_window_size.value))
+            .tcp_nodelay(ENVIRONMENT_CONFIGURATION.application_server.tcp.nodelay)
+            .tcp_sleep_on_accept_errors(ENVIRONMENT_CONFIGURATION.application_server.tcp.sleep_on_accept_errors)
+            .http2_only(ENVIRONMENT_CONFIGURATION.application_server.http.http2_only)
+            .http2_adaptive_window(ENVIRONMENT_CONFIGURATION.application_server.http.adaptive_window)
+            .http2_initial_connection_window_size(Some(ENVIRONMENT_CONFIGURATION.application_server.http.connection_window_size))
+            .http2_initial_stream_window_size(Some(ENVIRONMENT_CONFIGURATION.application_server.http.stream_window_size))
             .http2_max_concurrent_streams(u32::MAX)
-            .http2_max_frame_size(Some(ENVIRONMENT_CONFIGURATION.environment_configuration_file.application.http.maximum_frame_size.value))
-            .http2_max_send_buf_size(ENVIRONMENT_CONFIGURATION.environment_configuration_file.application.http.maximum_sending_buffer_size.value as usize);
+            .http2_max_frame_size(Some(ENVIRONMENT_CONFIGURATION.application_server.http.maximum_frame_size))
+            .http2_max_send_buf_size(ENVIRONMENT_CONFIGURATION.application_server.http.maximum_sending_buffer_size as usize);
 
-        server_builder = if ENVIRONMENT_CONFIGURATION.environment_configuration_file.application.tcp.keepalive_seconds.is_exist {
-            server_builder.tcp_keepalive(Some(Duration::from_secs(ENVIRONMENT_CONFIGURATION.environment_configuration_file.application.tcp.keepalive_seconds.value)))
-        } else {
-            server_builder.tcp_keepalive(None)
+        server_builder = match ENVIRONMENT_CONFIGURATION.application_server.tcp.keepalive_seconds {
+            Some(keepalive_seconds_) => {
+                server_builder.tcp_keepalive(Some(Duration::from_secs(keepalive_seconds_)))
+            }
+            None => {
+                server_builder.tcp_keepalive(None)
+            }
         };
 
-        server_builder = if ENVIRONMENT_CONFIGURATION.environment_configuration_file.application.http.keep_alive.is_exist {
-            server_builder
-                .http2_keep_alive_interval(Some(Duration::from_secs(ENVIRONMENT_CONFIGURATION.environment_configuration_file.application.http.keep_alive.interval_seconds.value)))
-                .http2_keep_alive_timeout(Duration::from_secs(ENVIRONMENT_CONFIGURATION.environment_configuration_file.application.http.keep_alive.timeout_seconds.value))
-        } else {
-            server_builder.http2_keep_alive_interval(None)
+        server_builder = match ENVIRONMENT_CONFIGURATION.application_server.http.keepalive {
+            Some(ref keepalive_) => {
+                server_builder
+                    .http2_keep_alive_interval(Some(Duration::from_secs(keepalive_.interval_seconds)))
+                    .http2_keep_alive_timeout(Duration::from_secs(keepalive_.timeout_seconds))
+            }
+            None => {
+                server_builder.http2_keep_alive_interval(None)
+            }
         };
 
         #[cfg(feature = "manual_testing")]
         {
-            server_builder = server_builder.http2_only(false)
+            server_builder = server_builder.http2_only(false);
         }
 
-        let database_1_postgresql_configuration = match PostgresqlConfiguration::from_str(ENVIRONMENT_CONFIGURATION.environment_configuration_file.resource.postgresql.database_1_url.value.0) {
+        let database_1_postgresql_configuration = match PostgresqlConfiguration::from_str(ENVIRONMENT_CONFIGURATION.resource.postgresql.database_1_url.0) {
             Ok(database_1_postgresql_configuration_) => database_1_postgresql_configuration_,
             Err(error) => {
                 return Err(
@@ -190,7 +196,7 @@ impl RunServerProcessor {
             }
         };
 
-        let database_2_postgresql_configuration = match PostgresqlConfiguration::from_str(ENVIRONMENT_CONFIGURATION.environment_configuration_file.resource.postgresql.database_2_url.value.0) {
+        let database_2_postgresql_configuration = match PostgresqlConfiguration::from_str(ENVIRONMENT_CONFIGURATION.resource.postgresql.database_2_url.0) {
             Ok(database_2_postgresql_configuration_) => database_2_postgresql_configuration_,
             Err(error) => {
                 return Err(
@@ -212,7 +218,7 @@ impl RunServerProcessor {
             }
         };
 
-        let database_1_redis_connection_info = match ConnectionInfo::from_str(ENVIRONMENT_CONFIGURATION.environment_configuration_file.resource.redis.database_1_url.value.0) {
+        let database_1_redis_connection_info = match ConnectionInfo::from_str(ENVIRONMENT_CONFIGURATION.resource.redis.database_1_url.0) {
             Ok(database_1_redis_connection_info_) => database_1_redis_connection_info_,
             Err(error) => {
                 return Err(

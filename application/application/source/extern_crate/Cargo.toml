@@ -53,6 +53,3 @@ manual_testing = [
     "const_format",
     "serde_json"
 ]
-tls = [
-    "environment_configuration/tls"
-]

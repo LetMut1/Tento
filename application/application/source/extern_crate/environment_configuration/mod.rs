@@ -77,17 +77,8 @@
     clippy::zero_sized_map_values
 )]
 
-pub mod environment_configuration {
-    use serde::Deserialize;
+pub mod environment_configuration { // TODO TODO ssl_protocols       TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;  ssl_ciphers         HIGH:!aNULL:!MD5;
     use self::sealed::Sealed;
-
-    pub struct EnvironmentConfiguration<T>
-    where
-        T: Sealed
-    {
-        pub environment: Environment,
-        pub environment_configuration_file: EnvironmentConfigurationFile<T>,
-    }
 
     pub enum Environment {
         Production,
@@ -95,55 +86,61 @@ pub mod environment_configuration {
         LocalDevelopment,
     }
 
-    #[derive(Deserialize)]
-    pub struct EnvironmentConfigurationFile<T>
+    pub struct EnvironmentConfiguration<T>
     where
         T: Sealed
     {
-        pub application: Application<T>,
+        pub environment: Environment,
+        pub application_server: ApplicationServer<T>,
         pub resource: Resource<T>,
         pub encryption: Encryption<T>,
     }
 
-    #[derive(Deserialize)]
-    pub struct Application<T>
+    pub struct ApplicationServer<T>
     where
         T: Sealed
     {
         pub tcp: Tcp<T>,
-        pub http: Http,
+        pub http: Http<T>,
     }
 
-    #[derive(Deserialize)]
     pub struct Tcp<T>
     where
         T: Sealed
     {
-        pub socket_address: SimpleType<T>,
-        pub nodelay: SimpleType<bool>,
-        pub sleep_on_accept_errors: SimpleType<bool>,
-        pub keepalive_seconds: SimpleTypeActive<u64>,
+        pub socket_address: T,
+        pub nodelay: bool,
+        pub sleep_on_accept_errors: bool,
+        pub keepalive_seconds: Option<u64>,
     }
 
-    #[derive(Deserialize)]
-    pub struct Http {
-        pub adaptive_window: SimpleType<bool>,
-        pub connection_window_size: SimpleType<u32>,
-        pub stream_window_size: SimpleType<u32>,
-        pub maximum_frame_size: SimpleType<u32>,
-        pub maximum_sending_buffer_size: SimpleType<u32>,
-        pub http2_only: SimpleType<bool>,
-        pub keep_alive: KeepAlive,
+    pub struct Http<T>
+    where
+        T: Sealed
+    {
+        pub adaptive_window: bool,
+        pub connection_window_size: u32,
+        pub stream_window_size: u32,
+        pub maximum_frame_size: u32,
+        pub maximum_sending_buffer_size: u32,
+        pub http2_only: bool,
+        pub keepalive: Option<Keepalive>,
+        pub tls: Option<Tls<T>>
     }
 
-    #[derive(Deserialize)]
-    pub struct KeepAlive {
-        pub is_exist: bool,
-        pub interval_seconds: SimpleType<u64>,
-        pub timeout_seconds: SimpleType<u64>,
+    pub struct Keepalive {
+        pub interval_seconds: u64,
+        pub timeout_seconds: u64,
     }
 
-    #[derive(Deserialize)]
+    pub struct Tls<T>
+    where
+        T: Sealed
+    {
+        pub certificate_crt_path: T,
+        pub certificate_key_path: T,
+    }
+
     pub struct Resource<T>
     where
         T: Sealed
@@ -153,32 +150,28 @@ pub mod environment_configuration {
         pub email_server: EmailServer<T>,
     }
 
-    #[derive(Deserialize)]
     pub struct Postgresql<T>
     where
         T: Sealed
     {
-        pub database_1_url: SimpleType<T>,
-        pub database_2_url: SimpleType<T>,
+        pub database_1_url: T,
+        pub database_2_url: T,
     }
 
-    #[derive(Deserialize)]
     pub struct Redis<T>
     where
         T: Sealed
     {
-        pub database_1_url: SimpleType<T>,
+        pub database_1_url: T,
     }
 
-    #[derive(Deserialize)]
     pub struct EmailServer<T>
     where
         T: Sealed
     {
-        pub socket_address: SimpleType<T>,
+        pub socket_address: T,
     }
 
-    #[derive(Deserialize)]
     pub struct Encryption<T>
     where
         T: Sealed
@@ -186,43 +179,123 @@ pub mod environment_configuration {
         pub private_key: PrivateKey<T>,
     }
 
-    #[derive(Deserialize)]
     pub struct PrivateKey<T>
     where
         T: Sealed
     {
-        pub application_user_access_token: SimpleType<T>,
-        pub application_user_access_refresh_token: SimpleType<T>,
+        pub application_user_access_token: T,
+        pub application_user_access_refresh_token: T,
     }
 
-    #[derive(Deserialize)]
-    pub struct SimpleTypeActive<T> {
-        pub value: T,
-        pub is_exist: bool,
-    }
-
-    #[derive(Deserialize)]
-    pub struct SimpleType<T> {
-        pub value: T,
-    }
-
-    #[derive(Deserialize)]
-    #[serde(transparent)]
     pub struct String_(pub String);
 
-    #[derive(Deserialize)]
-    #[serde(transparent)]
-    pub struct Str(pub &'static str);
+    pub struct StringLiteral(pub &'static str);
 
     mod sealed {
-        use super::Str;
+        use super::StringLiteral;
         use super::String_;
 
         pub trait Sealed {}
 
-        impl Sealed for Str {}
+        impl Sealed for StringLiteral {}
 
         impl Sealed for String_ {}
+    }
+
+    pub(crate) mod environment_configuration_file {
+        use serde::Deserialize;
+
+        #[derive(Deserialize)]
+        pub struct EnvironmentConfigurationFile {
+            pub application_server: ApplicationServer,
+            pub resource: Resource,
+            pub encryption: Encryption,
+        }
+
+        #[derive(Deserialize)]
+        pub struct ApplicationServer {
+            pub tcp: Tcp,
+            pub http: Http,
+        }
+
+        #[derive(Deserialize)]
+        pub struct Tcp {
+            pub socket_address: Value<String>,
+            pub nodelay: Value<bool>,
+            pub sleep_on_accept_errors: Value<bool>,
+            pub keepalive_seconds: ValueExist<u64>,
+        }
+
+        #[derive(Deserialize)]
+        pub struct Http {
+            pub adaptive_window: Value<bool>,
+            pub connection_window_size: Value<u32>,
+            pub stream_window_size: Value<u32>,
+            pub maximum_frame_size: Value<u32>,
+            pub maximum_sending_buffer_size: Value<u32>,
+            pub http2_only: Value<bool>,
+            pub keepalive: Keepalive,
+            pub tls: Tls
+        }
+
+        #[derive(Deserialize)]
+        pub struct Keepalive {
+            pub is_exist: bool,
+            pub interval_seconds: Value<u64>,
+            pub timeout_seconds: Value<u64>,
+        }
+
+        #[derive(Deserialize)]
+        pub struct Tls {
+            pub is_exist: bool,
+            pub certificate_crt_path: Value<String>,
+            pub certificate_key_path: Value<String>,
+        }
+
+        #[derive(Deserialize)]
+        pub struct Resource {
+            pub postgresql: Postgresql,
+            pub redis: Redis,
+            pub email_server: EmailServer,
+        }
+
+        #[derive(Deserialize)]
+        pub struct Postgresql {
+            pub database_1_url: Value<String>,
+            pub database_2_url: Value<String>,
+        }
+
+        #[derive(Deserialize)]
+        pub struct Redis {
+            pub database_1_url: Value<String>,
+        }
+
+        #[derive(Deserialize)]
+        pub struct EmailServer {
+            pub socket_address: Value<String>,
+        }
+
+        #[derive(Deserialize)]
+        pub struct Encryption {
+            pub private_key: PrivateKey,
+        }
+
+        #[derive(Deserialize)]
+        pub struct PrivateKey {
+            pub application_user_access_token: Value<String>,
+            pub application_user_access_refresh_token: Value<String>,
+        }
+
+        #[derive(Deserialize)]
+        pub struct Value<T> {
+            pub value: T,
+        }
+
+        #[derive(Deserialize)]
+        pub struct ValueExist<T> {
+            pub value: T,
+            pub is_exist: bool,
+        }
     }
 }
 
@@ -325,12 +398,23 @@ pub mod error {
 }
 
 pub mod loader {
+    use super::environment_configuration::Keepalive;
+    use super::environment_configuration::String_;
+    use super::environment_configuration::Tcp;
+    use super::environment_configuration::Http;
     use super::environment_configuration::Environment;
     use super::environment_configuration::EnvironmentConfiguration;
-    use super::environment_configuration::EnvironmentConfigurationFile;
+    use super::environment_configuration::Tls;
+    use super::environment_configuration::EmailServer;
+    use super::environment_configuration::Encryption;
+    use super::environment_configuration::Postgresql;
+    use super::environment_configuration::PrivateKey;
+    use super::environment_configuration::Redis;
+    use super::environment_configuration::Resource;
+    use super::environment_configuration::ApplicationServer;
+    use super::environment_configuration::environment_configuration_file::EnvironmentConfigurationFile;
     use super::error::Error;
     use std::fs::read_to_string;
-    use super::environment_configuration::String_;
     use std::path::Path;
     use toml::from_str;
 
@@ -397,11 +481,92 @@ pub mod loader {
                 }
             };
 
-            let environment_configuration_file = from_str::<EnvironmentConfigurationFile<String_>>(environment_file_data.as_str())?;
+            let environment_configuration_file = from_str::<EnvironmentConfigurationFile>(environment_file_data.as_str())?;
 
-            let environment_configuration = EnvironmentConfiguration {
-                environment,
-                environment_configuration_file,
+            let environment_configuration = {
+                let application_server = {
+                    let tcp = {
+                        let keepalive_seconds = if environment_configuration_file.application_server.tcp.keepalive_seconds.is_exist {
+                            Some(environment_configuration_file.application_server.tcp.keepalive_seconds.value)
+                        } else {
+                            None
+                        };
+
+                        Tcp {
+                            socket_address: String_(environment_configuration_file.application_server.tcp.socket_address.value),
+                            nodelay: environment_configuration_file.application_server.tcp.nodelay.value,
+                            sleep_on_accept_errors: environment_configuration_file.application_server.tcp.sleep_on_accept_errors.value,
+                            keepalive_seconds
+                        }
+                    };
+
+                    let http = {
+                        let keepalive = if environment_configuration_file.application_server.http.keepalive.is_exist {
+                            Some(
+                                Keepalive {
+                                    interval_seconds: environment_configuration_file.application_server.http.keepalive.interval_seconds.value,
+                                    timeout_seconds: environment_configuration_file.application_server.http.keepalive.timeout_seconds.value,
+                                }
+                            )
+                        } else {
+                            None
+                        };
+
+                        let tls = if environment_configuration_file.application_server.http.tls.is_exist {
+                            Some(
+                                Tls {
+                                    certificate_crt_path: String_(environment_configuration_file.application_server.http.tls.certificate_crt_path.value),
+                                    certificate_key_path: String_(environment_configuration_file.application_server.http.tls.certificate_key_path.value),
+                                }
+                            )
+                        } else {
+                            None
+                        };
+
+                        Http {
+                            adaptive_window: environment_configuration_file.application_server.http.adaptive_window.value,
+                            connection_window_size: environment_configuration_file.application_server.http.connection_window_size.value,
+                            stream_window_size: environment_configuration_file.application_server.http.stream_window_size.value,
+                            maximum_frame_size: environment_configuration_file.application_server.http.maximum_frame_size.value,
+                            maximum_sending_buffer_size: environment_configuration_file.application_server.http.maximum_sending_buffer_size.value,
+                            http2_only: environment_configuration_file.application_server.http.http2_only.value,
+                            keepalive,
+                            tls
+                        }
+                    };
+
+                    ApplicationServer {
+                        tcp,
+                        http
+                    }
+                };
+
+                let resource = Resource {
+                    postgresql: Postgresql {
+                        database_1_url: String_(environment_configuration_file.resource.postgresql.database_1_url.value),
+                        database_2_url: String_(environment_configuration_file.resource.postgresql.database_2_url.value),
+                    },
+                    redis: Redis {
+                        database_1_url: String_(environment_configuration_file.resource.redis.database_1_url.value),
+                    },
+                    email_server: EmailServer {
+                        socket_address: String_(environment_configuration_file.resource.email_server.socket_address.value),
+                    },
+                };
+
+                let encryption = Encryption {
+                    private_key: PrivateKey {
+                        application_user_access_token: String_(environment_configuration_file.encryption.private_key.application_user_access_token.value),
+                        application_user_access_refresh_token: String_(environment_configuration_file.encryption.private_key.application_user_access_refresh_token.value),
+                    },
+                };
+
+                EnvironmentConfiguration {
+                    environment,
+                    application_server,
+                    resource,
+                    encryption
+                }
             };
 
             return Ok(environment_configuration);

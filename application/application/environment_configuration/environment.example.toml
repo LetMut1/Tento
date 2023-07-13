@@ -1,48 +1,57 @@
-[application]
+[application_server]
 
-[application.tcp]
+[application_server.tcp]
 
-[application.tcp.socket_address]
+[application_server.tcp.socket_address]
 value = "0.0.0.0:80"
 
-[application.tcp.nodelay]
+[application_server.tcp.nodelay]
 value = false
 
-[application.tcp.sleep_on_accept_errors]
+[application_server.tcp.sleep_on_accept_errors]
 value = false
 
-[application.tcp.keepalive_seconds]
+[application_server.tcp.keepalive_seconds]
 value = 60
 is_exist = false
 
-[application.http]
+[application_server.http]
 
-[application.http.adaptive_window]
+[application_server.http.adaptive_window]
 value = false
 
-[application.http.connection_window_size]
+[application_server.http.connection_window_size]
 value = 1048576    #1MB
 
-[application.http.stream_window_size]
+[application_server.http.stream_window_size]
 value = 1048576    #1MB
 
-[application.http.maximum_frame_size]
+[application_server.http.maximum_frame_size]
 value = 16384  #16KB
 
-[application.http.maximum_sending_buffer_size]
+[application_server.http.maximum_sending_buffer_size]
 value = 409600    #400KB
 
-[application.http.http2_only]
+[application_server.http.http2_only]
 value = true
 
-[application.http.keep_alive]
+[application_server.http.keepalive]
 is_exist = false
 
-[application.http.keep_alive.interval_seconds]
+[application_server.http.keepalive.interval_seconds]
 value = 5
 
-[application.http.keep_alive.timeout_seconds]
+[application_server.http.keepalive.timeout_seconds]
 value = 20
+
+[application_server.http.tls]
+is_exist = false
+
+[application_server.http.tls.certificate_crt_path]
+value = ""
+
+[application_server.http.tls.certificate_key_path]
+value = ""
 
 [resource]
 

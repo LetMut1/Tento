@@ -67,129 +67,129 @@ impl Processor {
             Environment::LocalDevelopment => "Environment::LocalDevelopment"
         };
 
+        let keepalive_seconds = match environment_configuration.application_server.tcp.keepalive_seconds {
+            Some(keepalive_seconds_) => {
+                format!(
+                    "Some({})",
+                    keepalive_seconds_,
+                )
+            }
+            None => "None".to_string()
+        };
+
+        let keepalive = match environment_configuration.application_server.http.keepalive {
+            Some(ref keepalive_) => {
+                format!(
+                    "\
+                        Some( \
+                            Keepalive {{ \
+                                interval_seconds: {}, \
+                                timeout_seconds: {}, \
+                            }} \
+                        ) \
+                    ",
+                    keepalive_.interval_seconds,
+                    keepalive_.timeout_seconds,
+                )
+            }
+            None => "None".to_string()
+        };
+
+        let tls = match environment_configuration.application_server.http.tls {
+            Some(ref tls_) => {
+                format!(
+                    "\
+                        Some( \
+                            Tls {{ \
+                                certificate_crt_path: {}, \
+                                certificate_key_path: {}, \
+                            }} \
+                        ) \
+                    ",
+                    tls_.certificate_crt_path.0.as_str(),
+                    tls_.certificate_key_path.0.as_str(),
+                )
+            }
+            None => "None".to_string()
+        };
+
         let build_file_content = format!(
             "\
-                pub use extern_crate::environment_configuration::environment_configuration::Application; \n\
+                pub use extern_crate::environment_configuration::environment_configuration::ApplicationServer; \n\
                 pub use extern_crate::environment_configuration::environment_configuration::EmailServer; \n\
                 pub use extern_crate::environment_configuration::environment_configuration::Encryption; \n\
                 pub use extern_crate::environment_configuration::environment_configuration::Environment; \n\
                 pub use extern_crate::environment_configuration::environment_configuration::EnvironmentConfiguration; \n\
-                pub use extern_crate::environment_configuration::environment_configuration::EnvironmentConfigurationFile; \n\
                 pub use extern_crate::environment_configuration::environment_configuration::Http; \n\
-                pub use extern_crate::environment_configuration::environment_configuration::KeepAlive; \n\
+                pub use extern_crate::environment_configuration::environment_configuration::Keepalive; \n\
                 pub use extern_crate::environment_configuration::environment_configuration::Postgresql; \n\
                 pub use extern_crate::environment_configuration::environment_configuration::PrivateKey; \n\
                 pub use extern_crate::environment_configuration::environment_configuration::Redis; \n\
                 pub use extern_crate::environment_configuration::environment_configuration::Resource; \n\
-                pub use extern_crate::environment_configuration::environment_configuration::SimpleType; \n\
-                pub use extern_crate::environment_configuration::environment_configuration::SimpleTypeActive; \n\
-                pub use extern_crate::environment_configuration::environment_configuration::Str; \n\
+                pub use extern_crate::environment_configuration::environment_configuration::StringLiteral; \n\
                 pub use extern_crate::environment_configuration::environment_configuration::Tcp; \n\
+                pub use extern_crate::environment_configuration::environment_configuration::Tls; \n\
                 \n\
-                pub const {}: EnvironmentConfiguration<Str> = EnvironmentConfiguration {{ \n\t\
+                pub const {}: EnvironmentConfiguration<StringLiteral> = EnvironmentConfiguration {{ \n\t\
                     environment: {}, \n\t\
-                    environment_configuration_file: EnvironmentConfigurationFile {{ \n\t\t\
-                        application: Application {{ \n\t\t\t\
-                            tcp: Tcp {{ \n\t\t\t\t\
-                                socket_address: SimpleType {{ \n\t\t\t\t\t\
-                                    value: Str(\"{}\"), \n\t\t\t\t\
-                                }}, \n\t\t\t\t\
-                                nodelay: SimpleType {{ \n\t\t\t\t\t\
-                                    value: {}, \n\t\t\t\t\
-                                }}, \n\t\t\t\t\
-                                sleep_on_accept_errors: SimpleType {{ \n\t\t\t\t\t\
-                                    value: {}, \n\t\t\t\t\
-                                }}, \n\t\t\t\t\
-                                keepalive_seconds: SimpleTypeActive {{ \n\t\t\t\t\t\
-                                    value: {}, \n\t\t\t\t\t\
-                                    is_exist: {} \n\t\t\t\t\
-                                }}, \n\t\t\t\
-                            }}, \n\t\t\t\
-                            http: Http {{ \n\t\t\t\t\
-                                adaptive_window: SimpleType {{ \n\t\t\t\t\t\
-                                    value: {}, \n\t\t\t\t\
-                                }}, \n\t\t\t\t\
-                                connection_window_size: SimpleType {{ \n\t\t\t\t\t\
-                                    value: {}, \n\t\t\t\t\
-                                }}, \n\t\t\t\t\
-                                stream_window_size: SimpleType {{ \n\t\t\t\t\t\
-                                    value: {}, \n\t\t\t\t\
-                                }}, \n\t\t\t\t\
-                                maximum_frame_size: SimpleType {{ \n\t\t\t\t\t\
-                                    value: {}, \n\t\t\t\t\
-                                }}, \n\t\t\t\t\
-                                maximum_sending_buffer_size: SimpleType {{ \n\t\t\t\t\t\
-                                    value: {}, \n\t\t\t\t\
-                                }}, \n\t\t\t\t\
-                                http2_only: SimpleType {{ \n\t\t\t\t\t\
-                                    value: {}, \n\t\t\t\t\
-                                }}, \n\t\t\t\t\
-                                keep_alive: KeepAlive {{ \n\t\t\t\t\t\
-                                    is_exist: {}, \n\t\t\t\t\t\
-                                    interval_seconds: SimpleType {{ \n\t\t\t\t\t\t\
-                                        value: {}, \n\t\t\t\t\t\
-                                    }}, \n\t\t\t\t\t\
-                                    timeout_seconds: SimpleType {{ \n\t\t\t\t\t\t\
-                                        value: {}, \n\t\t\t\t\t\
-                                    }}, \n\t\t\t\t\
-                                }}, \n\t\t\t\
-                            }}, \n\t\t\
+                    application_server: ApplicationServer {{ \n\t\t\
+                        tcp: Tcp {{ \n\t\t\t\
+                            socket_address: StringLiteral(\"{}\"), \n\t\t\t\
+                            nodelay: {}, \n\t\t\t\
+                            sleep_on_accept_errors: {}, \n\t\t\t\
+                            keepalive_seconds: {}, \n\t\t\
                         }}, \n\t\t\
-                        resource: Resource {{ \n\t\t\t\
-                            postgresql: Postgresql {{ \n\t\t\t\t\
-                                database_1_url: SimpleType {{ \n\t\t\t\t\t\
-                                    value: Str(\"{}\"), \n\t\t\t\t\
-                                }}, \n\t\t\t\t\
-                                database_2_url: SimpleType {{ \n\t\t\t\t\t\
-                                    value: Str(\"{}\"), \n\t\t\t\t\
-                                }}, \n\t\t\t\
-                            }}, \n\t\t\t\
-                            redis: Redis {{ \n\t\t\t\t\
-                                database_1_url: SimpleType {{ \n\t\t\t\t\t\
-                                    value: Str(\"{}\"), \n\t\t\t\t\
-                                }}, \n\t\t\t\
-                            }}, \n\t\t\t\
-                            email_server: EmailServer {{ \n\t\t\t\t\
-                                socket_address: SimpleType {{ \n\t\t\t\t\t\
-                                    value: Str(\"{}\"), \n\t\t\t\t\
-                                }}, \n\t\t\t\
-                            }}, \n\t\t\
-                        }}, \n\t\t\
-                        encryption: Encryption {{ \n\t\t\t\
-                            private_key: PrivateKey {{ \n\t\t\t\t\
-                                application_user_access_token: SimpleType {{ \n\t\t\t\t\t\
-                                    value: Str(\"{}\"), \n\t\t\t\t\
-                                }}, \n\t\t\t\t\
-                                application_user_access_refresh_token: SimpleType {{ \n\t\t\t\t\t\
-                                    value: Str(\"{}\"), \n\t\t\t\t\
-                                }}, \n\t\t\t\
-                            }}, \n\t\t\
+                        http: Http {{ \n\t\t\t\
+                            adaptive_window: {}, \n\t\t\t\
+                            connection_window_size: {}, \n\t\t\t\
+                            stream_window_size: {}, \n\t\t\t\
+                            maximum_frame_size: {}, \n\t\t\t\
+                            maximum_sending_buffer_size: {}, \n\t\t\t\
+                            http2_only: {}, \n\t\t\t\
+                            keepalive: {}, \n\t\t\t\
+                            tls: {}, \n\t\t\
                         }}, \n\t\
+                    }}, \n\t\
+                    resource: Resource {{ \n\t\t\
+                        postgresql: Postgresql {{ \n\t\t\t\
+                            database_1_url: StringLiteral(\"{}\"), \n\t\t\t\
+                            database_2_url: StringLiteral(\"{}\"), \n\t\t\
+                        }}, \n\t\t\
+                        redis: Redis {{ \n\t\t\t\
+                            database_1_url: StringLiteral(\"{}\"), \n\t\t\
+                        }}, \n\t\t\
+                        email_server: EmailServer {{ \n\t\t\t\
+                            socket_address: StringLiteral(\"{}\"), \n\t\t\
+                        }}, \n\t\
+                    }}, \n\t\
+                    encryption: Encryption {{ \n\t\t\
+                        private_key: PrivateKey {{ \n\t\t\t\
+                            application_user_access_token: StringLiteral(\"{}\"), \n\t\t\t\
+                            application_user_access_refresh_token: StringLiteral(\"{}\"), \n\t\t\
+                        }}, \n\t
                     }}, \n\
                 }}; \n
             ",
             ENVIRONMENT_CONFIGURATION_CONSTANT_NAME,
             environment,
-            environment_configuration.environment_configuration_file.application.tcp.socket_address.value.0.as_str(),
-            environment_configuration.environment_configuration_file.application.tcp.nodelay.value,
-            environment_configuration.environment_configuration_file.application.tcp.sleep_on_accept_errors.value,
-            environment_configuration.environment_configuration_file.application.tcp.keepalive_seconds.value,
-            environment_configuration.environment_configuration_file.application.tcp.keepalive_seconds.is_exist,
-            environment_configuration.environment_configuration_file.application.http.adaptive_window.value,
-            environment_configuration.environment_configuration_file.application.http.connection_window_size.value,
-            environment_configuration.environment_configuration_file.application.http.stream_window_size.value,
-            environment_configuration.environment_configuration_file.application.http.maximum_frame_size.value,
-            environment_configuration.environment_configuration_file.application.http.maximum_sending_buffer_size.value,
-            environment_configuration.environment_configuration_file.application.http.http2_only.value,
-            environment_configuration.environment_configuration_file.application.http.keep_alive.is_exist,
-            environment_configuration.environment_configuration_file.application.http.keep_alive.interval_seconds.value,
-            environment_configuration.environment_configuration_file.application.http.keep_alive.timeout_seconds.value,
-            environment_configuration.environment_configuration_file.resource.postgresql.database_1_url.value.0.as_str(),
-            environment_configuration.environment_configuration_file.resource.postgresql.database_2_url.value.0.as_str(),
-            environment_configuration.environment_configuration_file.resource.redis.database_1_url.value.0.as_str(),
-            environment_configuration.environment_configuration_file.resource.email_server.socket_address.value.0.as_str(),
-            environment_configuration.environment_configuration_file.encryption.private_key.application_user_access_token.value.0.as_str(),
-            environment_configuration.environment_configuration_file.encryption.private_key.application_user_access_refresh_token.value.0.as_str(),
+            environment_configuration.application_server.tcp.socket_address.0.as_str(),
+            environment_configuration.application_server.tcp.nodelay,
+            environment_configuration.application_server.tcp.sleep_on_accept_errors,
+            keepalive_seconds,
+            environment_configuration.application_server.http.adaptive_window,
+            environment_configuration.application_server.http.connection_window_size,
+            environment_configuration.application_server.http.stream_window_size,
+            environment_configuration.application_server.http.maximum_frame_size,
+            environment_configuration.application_server.http.maximum_sending_buffer_size,
+            environment_configuration.application_server.http.http2_only,
+            keepalive.as_str(),
+            tls.as_str(),
+            environment_configuration.resource.postgresql.database_1_url.0.as_str(),
+            environment_configuration.resource.postgresql.database_2_url.0.as_str(),
+            environment_configuration.resource.redis.database_1_url.0.as_str(),
+            environment_configuration.resource.email_server.socket_address.0.as_str(),
+            environment_configuration.encryption.private_key.application_user_access_token.0.as_str(),
+            environment_configuration.encryption.private_key.application_user_access_refresh_token.0.as_str(),
         );
 
         let build_file = format!(
