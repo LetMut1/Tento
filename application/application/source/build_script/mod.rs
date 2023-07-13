@@ -81,12 +81,12 @@ impl Processor {
             Some(ref keepalive_) => {
                 format!(
                     "\
-                        Some( \
-                            Keepalive {{ \
-                                interval_seconds: {}, \
-                                timeout_seconds: {}, \
-                            }} \
-                        ) \
+                        Some( \n\t\t\t\t\
+                            Keepalive {{ \n\t\t\t\t\t\
+                                interval_seconds: {}, \n\t\t\t\t\t\
+                                timeout_seconds: {}, \n\t\t\t\t\
+                            }} \n\t\t\t\
+                        )\
                     ",
                     keepalive_.interval_seconds,
                     keepalive_.timeout_seconds,
@@ -99,12 +99,12 @@ impl Processor {
             Some(ref tls_) => {
                 format!(
                     "\
-                        Some( \
-                            Tls {{ \
-                                certificate_crt_path: {}, \
-                                certificate_key_path: {}, \
-                            }} \
-                        ) \
+                        Some( \n\t\t\t\t\
+                            Tls {{ \n\t\t\t\t\t\
+                                certificate_crt_path: StringLiteral(\"{}\"), \n\t\t\t\t\t\
+                                certificate_key_path: StringLiteral(\"{}\"), \n\t\t\t\t\
+                            }} \n\t\t\t\
+                        )\
                     ",
                     tls_.certificate_crt_path.0.as_str(),
                     tls_.certificate_key_path.0.as_str(),
@@ -166,9 +166,9 @@ impl Processor {
                         private_key: PrivateKey {{ \n\t\t\t\
                             application_user_access_token: StringLiteral(\"{}\"), \n\t\t\t\
                             application_user_access_refresh_token: StringLiteral(\"{}\"), \n\t\t\
-                        }}, \n\t
+                        }}, \n\t\
                     }}, \n\
-                }}; \n
+                }}; \
             ",
             ENVIRONMENT_CONFIGURATION_CONSTANT_NAME,
             environment,
