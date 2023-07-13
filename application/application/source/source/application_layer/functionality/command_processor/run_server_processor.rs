@@ -149,13 +149,13 @@ impl RunServerProcessor {
             .http2_max_frame_size(Some(ENVIRONMENT_CONFIGURATION.environment_configuration_file.application.http.maximum_frame_size.value))
             .http2_max_send_buf_size(ENVIRONMENT_CONFIGURATION.environment_configuration_file.application.http.maximum_sending_buffer_size.value as usize);
 
-        server_builder = if ENVIRONMENT_CONFIGURATION.environment_configuration_file.application.tcp.keepalive_seconds.is_active {
+        server_builder = if ENVIRONMENT_CONFIGURATION.environment_configuration_file.application.tcp.keepalive_seconds.is_exist {
             server_builder.tcp_keepalive(Some(Duration::from_secs(ENVIRONMENT_CONFIGURATION.environment_configuration_file.application.tcp.keepalive_seconds.value)))
         } else {
             server_builder.tcp_keepalive(None)
         };
 
-        server_builder = if ENVIRONMENT_CONFIGURATION.environment_configuration_file.application.http.keep_alive.is_active {
+        server_builder = if ENVIRONMENT_CONFIGURATION.environment_configuration_file.application.http.keep_alive.is_exist {
             server_builder
                 .http2_keep_alive_interval(Some(Duration::from_secs(ENVIRONMENT_CONFIGURATION.environment_configuration_file.application.http.keep_alive.interval_seconds.value)))
                 .http2_keep_alive_timeout(Duration::from_secs(ENVIRONMENT_CONFIGURATION.environment_configuration_file.application.http.keep_alive.timeout_seconds.value))

@@ -138,7 +138,7 @@ pub mod environment_configuration {
 
     #[derive(Deserialize)]
     pub struct KeepAlive {
-        pub is_active: bool,
+        pub is_exist: bool,
         pub interval_seconds: SimpleType<u64>,
         pub timeout_seconds: SimpleType<u64>,
     }
@@ -198,7 +198,7 @@ pub mod environment_configuration {
     #[derive(Deserialize)]
     pub struct SimpleTypeActive<T> {
         pub value: T,
-        pub is_active: bool,
+        pub is_exist: bool,
     }
 
     #[derive(Deserialize)]
@@ -390,7 +390,7 @@ pub mod loader {
                     } else {
                         return Err(
                             Error::LogicError {
-                                message: "Environment configuration files does not exist.",
+                                message: "The environment.toml file does not exist.",
                             },
                         );
                     }

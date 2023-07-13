@@ -102,7 +102,7 @@ impl Processor {
                                 }}, \n\t\t\t\t\
                                 keepalive_seconds: SimpleTypeActive {{ \n\t\t\t\t\t\
                                     value: {}, \n\t\t\t\t\t\
-                                    is_active: {} \n\t\t\t\t\
+                                    is_exist: {} \n\t\t\t\t\
                                 }}, \n\t\t\t\
                             }}, \n\t\t\t\
                             http: Http {{ \n\t\t\t\t\
@@ -125,7 +125,7 @@ impl Processor {
                                     value: {}, \n\t\t\t\t\
                                 }}, \n\t\t\t\t\
                                 keep_alive: KeepAlive {{ \n\t\t\t\t\t\
-                                    is_active: {}, \n\t\t\t\t\t\
+                                    is_exist: {}, \n\t\t\t\t\t\
                                     interval_seconds: SimpleType {{ \n\t\t\t\t\t\t\
                                         value: {}, \n\t\t\t\t\t\
                                     }}, \n\t\t\t\t\t\
@@ -174,14 +174,14 @@ impl Processor {
             environment_configuration.environment_configuration_file.application.tcp.nodelay.value,
             environment_configuration.environment_configuration_file.application.tcp.sleep_on_accept_errors.value,
             environment_configuration.environment_configuration_file.application.tcp.keepalive_seconds.value,
-            environment_configuration.environment_configuration_file.application.tcp.keepalive_seconds.is_active,
+            environment_configuration.environment_configuration_file.application.tcp.keepalive_seconds.is_exist,
             environment_configuration.environment_configuration_file.application.http.adaptive_window.value,
             environment_configuration.environment_configuration_file.application.http.connection_window_size.value,
             environment_configuration.environment_configuration_file.application.http.stream_window_size.value,
             environment_configuration.environment_configuration_file.application.http.maximum_frame_size.value,
             environment_configuration.environment_configuration_file.application.http.maximum_sending_buffer_size.value,
             environment_configuration.environment_configuration_file.application.http.http2_only.value,
-            environment_configuration.environment_configuration_file.application.http.keep_alive.is_active,
+            environment_configuration.environment_configuration_file.application.http.keep_alive.is_exist,
             environment_configuration.environment_configuration_file.application.http.keep_alive.interval_seconds.value,
             environment_configuration.environment_configuration_file.application.http.keep_alive.timeout_seconds.value,
             environment_configuration.environment_configuration_file.resource.postgresql.database_1_url.value.0.as_str(),

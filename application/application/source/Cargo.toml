@@ -26,4 +26,6 @@ extern_crate = { path = "./extern_crate", package = "extern_crate", version = "0
 
 [features]
 default = []
-manual_testing = ["extern_crate/manual_testing"]
+manual_testing = [
+    "extern_crate/manual_testing"
+]
