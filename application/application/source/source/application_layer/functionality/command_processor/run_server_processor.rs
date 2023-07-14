@@ -364,58 +364,56 @@ impl RunServerProcessor {
             },
         );
 
-        let mut result = Ok(());
+        let signal_interrupt_future = match signal(SignalKind::interrupt()) {
+            Ok(mut signal) => {
+                async move {
+                    signal.recv().await;
 
-        let signal_interrupt_future = async {                           // TODO на recv
-            match signal(SignalKind::interrupt()) {
-                Ok(mut signal_) => {
-                    signal_.recv().await;
-                }
-                Err(error) => {
-                    result = Err(
-                        ErrorAuditor::new(
-                            BaseError::RuntimeError {
-                                runtime_error: RuntimeError::OtherError {
-                                    other_error: OtherError::new(error),
-                                },
-                            },
-                            BacktracePart::new(
-                                line!(),
-                                file!(),
-                                None,
-                            ),
-                        ),
-                    );
+                    ()
                 }
             }
-
-            ()
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::OtherError {
+                                other_error: OtherError::new(error),
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
         };
 
-        let signal_terminate_future = async {
-            match signal(SignalKind::terminate()) {
-                Ok(mut signal_) => {
-                    signal_.recv().await;
-                }
-                Err(error) => {
-                    result = Err(
-                        ErrorAuditor::new(
-                            BaseError::RuntimeError {
-                                runtime_error: RuntimeError::OtherError {
-                                    other_error: OtherError::new(error),
-                                },
-                            },
-                            BacktracePart::new(
-                                line!(),
-                                file!(),
-                                None,
-                            ),
-                        ),
-                    );
+        let signal_terminate_future = match signal(SignalKind::terminate()) {
+            Ok(mut signal) => {
+                async move {
+                    signal.recv().await;
+
+                    ()
                 }
             }
-
-            ()
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::OtherError {
+                                other_error: OtherError::new(error),
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
         };
 
         let graceful_shutdown_signal = async {
@@ -452,7 +450,7 @@ impl RunServerProcessor {
             );
         }
 
-        return result;
+        return Ok(());
     }
 
     async fn resolve<'a, T>(
