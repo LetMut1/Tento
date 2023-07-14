@@ -23,6 +23,7 @@ use extern_crate::bb8::Pool;
 use extern_crate::hyper::Method;
 use extern_crate::hyper::Server;
 use extern_crate::hyper::server::conn::AddrStream;
+use std::future::Future;
 use extern_crate::tokio::select;
 use extern_crate::hyper::service::make_service_fn;
 use extern_crate::hyper::service::service_fn;
@@ -364,55 +365,33 @@ impl RunServerProcessor {
             },
         );
 
-        let signal_interrupt_future = match signal(SignalKind::interrupt()) {
-            Ok(mut signal) => {
-                async move {
-                    signal.recv().await;
-
-                    ()
-                }
-            }
-            Err(error) => {
-                return Err(
-                    ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::OtherError {
-                                other_error: OtherError::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
+        let signal_interrupt_future = match Self::create_signal(SignalKind::interrupt()) {
+            Ok(signal_interrupt_future_) => signal_interrupt_future_,
+            Err(mut error) => {
+                error.add_backtrace_part(
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
                     ),
                 );
+
+                return Err(error);
             }
         };
 
-        let signal_terminate_future = match signal(SignalKind::terminate()) {
-            Ok(mut signal) => {
-                async move {
-                    signal.recv().await;
-
-                    ()
-                }
-            }
-            Err(error) => {
-                return Err(
-                    ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::OtherError {
-                                other_error: OtherError::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
+        let signal_terminate_future = match Self::create_signal(SignalKind::terminate()) {
+            Ok(signal_terminate_future_) => signal_terminate_future_,
+            Err(mut error) => {
+                error.add_backtrace_part(
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
                     ),
                 );
+
+                return Err(error);
             }
         };
 
@@ -423,7 +402,7 @@ impl RunServerProcessor {
             }
         };
 
-        // #[cfg(unix)]
+        // #[cfg(unix)]     // TODO запусскать только для линукса в начале кода
         // {
 
         // };
@@ -886,6 +865,36 @@ impl RunServerProcessor {
                 .await;
             }
         }
+    }
+
+    fn create_signal(signal_kind: SignalKind) -> Result<impl Future<Output = ()>, ErrorAuditor> {
+        let signal = match signal(signal_kind) {
+            Ok(mut signal) => {
+                async move {
+                    signal.recv().await;
+
+                    ()
+                }
+            }
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::OtherError {
+                                other_error: OtherError::new(error),
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+        };
+
+        return Ok(signal);
     }
 }
 
