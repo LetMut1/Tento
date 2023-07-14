@@ -22,6 +22,7 @@ use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::By3;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::By4;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::UnixTime;
@@ -102,6 +103,11 @@ impl ActionProcessor {
             );
         }
 
+        let by_4 = By4 {
+            application_user_id: incoming.application_user_id,
+            application_user_device_id: &incoming.application_user_device_id,
+        };
+
         let database_2_postgresql_pooled_connection = match database_2_postgresql_connection_pool.get().await {
             Ok(database_2_postgresql_pooled_connection_) => database_2_postgresql_pooled_connection_,
             Err(error) => {
@@ -128,8 +134,7 @@ impl ActionProcessor {
 
         let application_user_reset_password_token = match PostgresqlRepository::<ApplicationUserResetPasswordToken3>::find_1(
             database_2_postgresql_connection,
-            incoming.application_user_id,
-            &incoming.application_user_device_id,
+            &by_4,
         )
         .await
         {
@@ -161,8 +166,7 @@ impl ActionProcessor {
         if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_reset_password_token_.get_expires_at().get()) {
             if let Err(mut error) = PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete(
                 database_2_postgresql_connection,
-                incoming.application_user_id,
-                &incoming.application_user_device_id,
+                &by_4,
             )
             .await
             {
@@ -209,8 +213,7 @@ impl ActionProcessor {
                 if let Err(mut error) = PostgresqlRepository::<ApplicationUserResetPasswordToken4>::update(
                     database_2_postgresql_connection,
                     &application_user_reset_password_token_,
-                    incoming.application_user_id,
-                    &incoming.application_user_device_id,
+                    &by_4,
                 )
                 .await
                 {
@@ -227,8 +230,7 @@ impl ActionProcessor {
             } else {
                 if let Err(mut error) = PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete(
                     database_2_postgresql_connection,
-                    incoming.application_user_id,
-                    &incoming.application_user_device_id,
+                    &by_4,
                 )
                 .await
                 {
@@ -347,8 +349,7 @@ impl ActionProcessor {
 
         if let Err(mut error) = PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete(
             database_2_postgresql_connection,
-            incoming.application_user_id,
-            &incoming.application_user_device_id,
+            &by_4,
         )
         .await
         {

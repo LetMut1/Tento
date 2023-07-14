@@ -82,6 +82,11 @@ impl ActionProcessor {
             }
         };
 
+        let by_4 = By4 {
+            application_user_id: application_user_access_token_.get_application_user_id(),
+            application_user_device_id: application_user_access_token_.get_application_user_device_id(),
+        };
+
         let database_2_postgresql_pooled_connection = match database_2_postgresql_connection_pool.get().await {
             Ok(database_2_postgresql_pooled_connection_) => database_2_postgresql_pooled_connection_,
             Err(error) => {
@@ -102,11 +107,6 @@ impl ActionProcessor {
                     ),
                 );
             }
-        };
-
-        let by_4 = By4 {
-            application_user_id: application_user_access_token_.get_application_user_id(),
-            application_user_device_id: application_user_access_token_.get_application_user_device_id(),
         };
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;

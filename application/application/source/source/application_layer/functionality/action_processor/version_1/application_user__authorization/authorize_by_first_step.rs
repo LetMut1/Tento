@@ -242,6 +242,21 @@ impl ActionProcessor {
             );
         }
 
+        let application_user_id = match application_user_aggregator {
+            ApplicationUser_Aggregator::First {
+                ref application_user,
+            } => application_user.get_id(),
+            ApplicationUser_Aggregator::Second {
+                ref application_user,
+                application_user_email: _,
+            } => application_user.get_id(),
+        };
+
+        let by_4 = By4 {
+            application_user_id,
+            application_user_device_id: &incoming.application_user_device_id,
+        };
+
         let database_2_postgresql_pooled_connection = match database_2_postgresql_connection_pool.get().await {
             Ok(database_2_postgresql_pooled_connection_) => database_2_postgresql_pooled_connection_,
             Err(error) => {
@@ -262,21 +277,6 @@ impl ActionProcessor {
                     ),
                 );
             }
-        };
-
-        let application_user_id = match application_user_aggregator {
-            ApplicationUser_Aggregator::First {
-                ref application_user,
-            } => application_user.get_id(),
-            ApplicationUser_Aggregator::Second {
-                ref application_user,
-                application_user_email: _,
-            } => application_user.get_id(),
-        };
-
-        let by_4 = By4 {
-            application_user_id,
-            application_user_device_id: &incoming.application_user_device_id,
         };
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
