@@ -12,6 +12,7 @@ use crate::domain_layer::data::entity::application_user_authorization_token::App
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_WrongEnterTriesQuantity;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::functionality::service::getter::Getter;
+use super::postgresql_repository::By4;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -151,12 +152,11 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
 
     pub async fn delete<'a>(
         database_2_connection: &'a Connection,
-        application_user_id: ApplicationUser_Id,
-        application_user_device_id: &'a ApplicationUserDevice_Id,
+        by_4: &'a By4<'_>
     ) -> Result<(), ErrorAuditor> {
-        let application_user_id_ = application_user_id.get();
+        let application_user_id = by_4.application_user_id.get();
 
-        let application_user_device_id_ = application_user_device_id.get();
+        let application_user_device_id = by_4.application_user_device_id.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -166,11 +166,11 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &application_user_id_,
+                &application_user_id,
                 Type::INT8,
             )
             .add_parameter(
-                &application_user_device_id_,
+                &application_user_device_id,
                 Type::TEXT,
             );
 
@@ -235,8 +235,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken1> {
     pub async fn update<'a, T>(
         database_2_connection: &'a Connection,
         subject: &'a T,
-        application_user_id: ApplicationUser_Id,
-        application_user_device_id: &'a ApplicationUserDevice_Id,
+        by_4: &'a By4<'_>
     ) -> Result<(), ErrorAuditor>
     where
         T: Getter<'a, &'a ApplicationUserAuthorizationToken_Value>,
@@ -244,9 +243,9 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken1> {
         T: Getter<'a, ApplicationUserAuthorizationToken_ExpiresAt>,
         T: Getter<'a, ApplicationUserAuthorizationToken_CanBeResentFrom>,
     {
-        let application_user_id_ = application_user_id.get();
+        let application_user_id = by_4.application_user_id.get();
 
-        let application_user_device_id_ = application_user_device_id.get();
+        let application_user_device_id = by_4.application_user_device_id.get();
 
         let application_user_authorization_token_value = <T as Getter<'a, &'a ApplicationUserAuthorizationToken_Value>>::get(subject).get();
 
@@ -291,11 +290,11 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken1> {
                 Type::INT8,
             )
             .add_parameter(
-                &application_user_id_,
+                &application_user_id,
                 Type::INT8,
             )
             .add_parameter(
-                &application_user_device_id_,
+                &application_user_device_id,
                 Type::TEXT,
             );
 
@@ -357,12 +356,11 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken1> {
 
     pub async fn find_1<'a>(
         database_2_connection: &'a Connection,
-        application_user_id: ApplicationUser_Id,
-        application_user_device_id: &'a ApplicationUserDevice_Id,
+        by_4: &'a By4<'_>
     ) -> Result<Option<ApplicationUserAuthorizationToken1>, ErrorAuditor> {
-        let application_user_id_ = application_user_id.get();
+        let application_user_id = by_4.application_user_id.get();
 
-        let application_user_device_id_ = application_user_device_id.get();
+        let application_user_device_id = by_4.application_user_device_id.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -377,11 +375,11 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken1> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &application_user_id_,
+                &application_user_id,
                 Type::INT8,
             )
             .add_parameter(
-                &application_user_device_id_,
+                &application_user_device_id,
                 Type::TEXT,
             );
 
@@ -550,17 +548,16 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken2> {
     pub async fn update<'a, T>(
         database_2_connection: &'a Connection,
         subject: &'a T,
-        application_user_id: ApplicationUser_Id,
-        application_user_device_id: &'a ApplicationUserDevice_Id,
+        by_4: &'a By4<'_>
     ) -> Result<(), ErrorAuditor>
     where
         T: Getter<'a, &'a ApplicationUserAuthorizationToken_Value>,
         T: Getter<'a, ApplicationUserAuthorizationToken_WrongEnterTriesQuantity>,
         T: Getter<'a, ApplicationUserAuthorizationToken_ExpiresAt>,
     {
-        let application_user_id_ = application_user_id.get();
+        let application_user_id = by_4.application_user_id.get();
 
-        let application_user_device_id_ = application_user_device_id.get();
+        let application_user_device_id = by_4.application_user_device_id.get();
 
         let application_user_authorization_token_value = <T as Getter<'a, &'a ApplicationUserAuthorizationToken_Value>>::get(subject).get();
 
@@ -597,11 +594,11 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken2> {
                 Type::INT8,
             )
             .add_parameter(
-                &application_user_id_,
+                &application_user_id,
                 Type::INT8,
             )
             .add_parameter(
-                &application_user_device_id_,
+                &application_user_device_id,
                 Type::TEXT,
             );
 
@@ -663,12 +660,11 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken2> {
 
     pub async fn find_1<'a>(
         database_2_connection: &'a Connection,
-        application_user_id: ApplicationUser_Id,
-        application_user_device_id: &'a ApplicationUserDevice_Id,
+        by_4: &'a By4<'_>
     ) -> Result<Option<ApplicationUserAuthorizationToken2>, ErrorAuditor> {
-        let application_user_id_ = application_user_id.get();
+        let application_user_id = by_4.application_user_id.get();
 
-        let application_user_device_id_ = application_user_device_id.get();
+        let application_user_device_id = by_4.application_user_device_id.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -682,11 +678,11 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken2> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &application_user_id_,
+                &application_user_id,
                 Type::INT8,
             )
             .add_parameter(
-                &application_user_device_id_,
+                &application_user_device_id,
                 Type::TEXT,
             );
 
@@ -832,15 +828,14 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken3> {
     pub async fn update<'a, T>(
         database_2_connection: &'a Connection,
         subject: &'a T,
-        application_user_id: ApplicationUser_Id,
-        application_user_device_id: &'a ApplicationUserDevice_Id,
+        by_4: &'a By4<'_>
     ) -> Result<(), ErrorAuditor>
     where
         T: Getter<'a, ApplicationUserAuthorizationToken_CanBeResentFrom>,
     {
-        let application_user_id_ = application_user_id.get();
+        let application_user_id = by_4.application_user_id.get();
 
-        let application_user_device_id_ = application_user_device_id.get();
+        let application_user_device_id = by_4.application_user_device_id.get();
 
         let application_user_authorization_token_can_be_resent_from = <T as Getter<'a, ApplicationUserAuthorizationToken_CanBeResentFrom>>::get(subject).get();
 
@@ -861,11 +856,11 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken3> {
                 Type::INT8,
             )
             .add_parameter(
-                &application_user_id_,
+                &application_user_id,
                 Type::INT8,
             )
             .add_parameter(
-                &application_user_device_id_,
+                &application_user_device_id,
                 Type::TEXT,
             );
 
@@ -930,15 +925,14 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken4> {
     pub async fn update<'a, T>(
         database_2_connection: &'a Connection,
         subject: &'a T,
-        application_user_id: ApplicationUser_Id,
-        application_user_device_id: &'a ApplicationUserDevice_Id,
+        by_4: &'a By4<'_>
     ) -> Result<(), ErrorAuditor>
     where
         T: Getter<'a, ApplicationUserAuthorizationToken_WrongEnterTriesQuantity>,
     {
-        let application_user_id_ = application_user_id.get();
+        let application_user_id = by_4.application_user_id.get();
 
-        let application_user_device_id_ = application_user_device_id.get();
+        let application_user_device_id = by_4.application_user_device_id.get();
 
         let application_user_authorization_token_wrong_enter_tries_quantity = <T as Getter<'a, ApplicationUserAuthorizationToken_WrongEnterTriesQuantity>>::get(subject).get();
 
@@ -959,11 +953,11 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken4> {
                 Type::INT2,
             )
             .add_parameter(
-                &application_user_id_,
+                &application_user_id,
                 Type::INT8,
             )
             .add_parameter(
-                &application_user_device_id_,
+                &application_user_device_id,
                 Type::TEXT,
             );
 
@@ -1027,12 +1021,11 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken4> {
 impl PostgresqlRepository<ApplicationUserAuthorizationToken5> {
     pub async fn find_1<'a>(
         database_2_connection: &'a Connection,
-        application_user_id: ApplicationUser_Id,
-        application_user_device_id: &'a ApplicationUserDevice_Id,
+        by_4: &'a By4<'_>
     ) -> Result<Option<ApplicationUserAuthorizationToken5>, ErrorAuditor> {
-        let application_user_id_ = application_user_id.get();
+        let application_user_id = by_4.application_user_id.get();
 
-        let application_user_device_id_ = application_user_device_id.get();
+        let application_user_device_id = by_4.application_user_device_id.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -1046,11 +1039,11 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken5> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &application_user_id_,
+                &application_user_id,
                 Type::INT8,
             )
             .add_parameter(
-                &application_user_device_id_,
+                &application_user_device_id,
                 Type::TEXT,
             );
 

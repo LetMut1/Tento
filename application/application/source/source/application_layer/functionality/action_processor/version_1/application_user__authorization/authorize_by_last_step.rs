@@ -126,12 +126,17 @@ impl ActionProcessor {
                 );
             }
         };
+
+        let by_4 = By4 {
+            application_user_id: incoming.application_user_id,
+            application_user_device_id: &incoming.application_user_device_id,
+        };
+
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
         let application_user_authorization_token = match PostgresqlRepository::<ApplicationUserAuthorizationToken2>::find_1(
             database_2_postgresql_connection,
-            incoming.application_user_id,
-            &incoming.application_user_device_id,
+            &by_4,
         )
         .await
         {
@@ -163,8 +168,7 @@ impl ActionProcessor {
         if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token_.get_expires_at().get()) {
             if let Err(mut error) = PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::delete(
                 database_2_postgresql_connection,
-                incoming.application_user_id,
-                &incoming.application_user_device_id,
+                &by_4
             )
             .await
             {
@@ -203,8 +207,7 @@ impl ActionProcessor {
                 if let Err(mut error) = PostgresqlRepository::<ApplicationUserAuthorizationToken4>::update(
                     database_2_postgresql_connection,
                     &application_user_authorization_token_,
-                    incoming.application_user_id,
-                    &incoming.application_user_device_id,
+                    &by_4,
                 )
                 .await
                 {
@@ -221,8 +224,7 @@ impl ActionProcessor {
             } else {
                 if let Err(mut error) = PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::delete(
                     database_2_postgresql_connection,
-                    incoming.application_user_id,
-                    &incoming.application_user_device_id,
+                    &by_4,
                 )
                 .await
                 {
@@ -320,11 +322,6 @@ impl ActionProcessor {
             Cow::Borrowed(&incoming.application_user_device_id),
             expires_at,
         );
-
-        let by_4 = By4 {
-            application_user_id: incoming.application_user_id,
-            application_user_device_id: &incoming.application_user_device_id,
-        };
 
         let application_user_access_refresh_token = match PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::find_1(
             database_2_postgresql_connection,
@@ -431,8 +428,7 @@ impl ActionProcessor {
 
         if let Err(mut error) = PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::delete(
             database_2_postgresql_connection,
-            incoming.application_user_id,
-            &incoming.application_user_device_id,
+            &by_4,
         )
         .await
         {
