@@ -169,6 +169,10 @@ impl RunServerProcessor {
             }
         };
 
+        if let Some(ref tls) = ENVIRONMENT_CONFIGURATION.application_server.http.tls {
+            todo!("// TODO ssl_protocolsTLSv1 TLSv1.1 TLSv1.2 TLSv1.3;  ssl_ciphers HIGH:!aNULL:!MD5;")
+        }
+
         #[cfg(feature = "manual_testing")]
         {
             server_builder = server_builder.http2_only(false);
