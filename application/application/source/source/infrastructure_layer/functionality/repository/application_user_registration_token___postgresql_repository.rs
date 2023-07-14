@@ -17,6 +17,7 @@ use crate::domain_layer::functionality::service::getter::Getter;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
+use super::postgresql_repository::By5;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
@@ -162,12 +163,11 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
 
     pub async fn delete<'a>(
         database_2_connection: &'a Connection,
-        application_user_email: &'a ApplicationUser_Email,
-        application_user_device_id: &'a ApplicationUserDevice_Id,
+        by_5: &'a By5<'_>
     ) -> Result<(), ErrorAuditor> {
-        let application_user_email_ = application_user_email.get();
+        let application_user_email = by_5.application_user_email.get();
 
-        let application_user_device_id_ = application_user_device_id.get();
+        let application_user_device_id = by_5.application_user_device_id.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -177,11 +177,11 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &application_user_email_,
+                &application_user_email,
                 Type::TEXT,
             )
             .add_parameter(
-                &application_user_device_id_,
+                &application_user_device_id,
                 Type::TEXT,
             );
 
@@ -246,8 +246,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
     pub async fn update<'a, T>(
         database_2_connection: &'a Connection,
         subject: &'a T,
-        application_user_email: &'a ApplicationUser_Email,
-        application_user_device_id: &'a ApplicationUserDevice_Id,
+        by_5: &'a By5<'_>,
     ) -> Result<(), ErrorAuditor>
     where
         T: Getter<'a, &'a ApplicationUserRegistrationToken_Value>,
@@ -256,9 +255,9 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
         T: Getter<'a, ApplicationUserRegistrationToken_ExpiresAt>,
         T: Getter<'a, ApplicationUserRegistrationToken_CanBeResentFrom>,
     {
-        let application_user_email_ = application_user_email.get();
+        let application_user_email = by_5.application_user_email.get();
 
-        let application_user_device_id_ = application_user_device_id.get();
+        let application_user_device_id = by_5.application_user_device_id.get();
 
         let application_user_registration_token_value = <T as Getter<'a, &'a ApplicationUserRegistrationToken_Value>>::get(subject).get();
 
@@ -311,11 +310,11 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
                 Type::INT8,
             )
             .add_parameter(
-                &application_user_email_,
+                &application_user_email,
                 Type::TEXT,
             )
             .add_parameter(
-                &application_user_device_id_,
+                &application_user_device_id,
                 Type::TEXT,
             );
 
@@ -377,12 +376,11 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
 
     pub async fn find_1<'a>(
         database_2_connection: &'a Connection,
-        application_user_email: &'a ApplicationUser_Email,
-        application_user_device_id: &'a ApplicationUserDevice_Id,
+        by_5: &'a By5<'_>,
     ) -> Result<Option<ApplicationUserRegistrationToken1>, ErrorAuditor> {
-        let application_user_email_ = application_user_email.get();
+        let application_user_email = by_5.application_user_email.get();
 
-        let application_user_device_id_ = application_user_device_id.get();
+        let application_user_device_id = by_5.application_user_device_id.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -398,11 +396,11 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &application_user_email_,
+                &application_user_email,
                 Type::TEXT,
             )
             .add_parameter(
-                &application_user_device_id_,
+                &application_user_device_id,
                 Type::TEXT,
             );
 
@@ -594,15 +592,14 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken2> {
     pub async fn update<'a, T>(
         database_2_connection: &'a Connection,
         subject: &'a T,
-        application_user_email: &'a ApplicationUser_Email,
-        application_user_device_id: &'a ApplicationUserDevice_Id,
+        by_5: &'a By5<'_>,
     ) -> Result<(), ErrorAuditor>
     where
         T: Getter<'a, ApplicationUserRegistrationToken_CanBeResentFrom>,
     {
-        let application_user_email_ = application_user_email.get();
+        let application_user_email = by_5.application_user_email.get();
 
-        let application_user_device_id_ = application_user_device_id.get();
+        let application_user_device_id = by_5.application_user_device_id.get();
 
         let application_user_registration_token_can_be_resent_from = <T as Getter<'a, ApplicationUserRegistrationToken_CanBeResentFrom>>::get(subject).get();
 
@@ -623,11 +620,11 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken2> {
                 Type::INT8,
             )
             .add_parameter(
-                &application_user_email_,
+                &application_user_email,
                 Type::TEXT,
             )
             .add_parameter(
-                &application_user_device_id_,
+                &application_user_device_id,
                 Type::TEXT,
             );
 
@@ -692,8 +689,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
     pub async fn update<'a, T>(
         database_2_connection: &'a Connection,
         subject: &'a T,
-        application_user_email: &'a ApplicationUser_Email,
-        application_user_device_id: &'a ApplicationUserDevice_Id,
+        by_5: &'a By5<'_>,
     ) -> Result<(), ErrorAuditor>
     where
         T: Getter<'a, &'a ApplicationUserRegistrationToken_Value>,
@@ -701,9 +697,9 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
         T: Getter<'a, ApplicationUserRegistrationToken_IsApproved>,
         T: Getter<'a, ApplicationUserRegistrationToken_ExpiresAt>,
     {
-        let application_user_email_ = application_user_email.get();
+        let application_user_email = by_5.application_user_email.get();
 
-        let application_user_device_id_ = application_user_device_id.get();
+        let application_user_device_id = by_5.application_user_device_id.get();
 
         let application_user_registration_token_value = <T as Getter<'a, &'a ApplicationUserRegistrationToken_Value>>::get(subject).get();
 
@@ -748,11 +744,11 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
                 Type::INT8,
             )
             .add_parameter(
-                &application_user_email_,
+                &application_user_email,
                 Type::TEXT,
             )
             .add_parameter(
-                &application_user_device_id_,
+                &application_user_device_id,
                 Type::TEXT,
             );
 
@@ -814,12 +810,11 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
 
     pub async fn find_1<'a>(
         database_2_connection: &'a Connection,
-        application_user_email: &'a ApplicationUser_Email,
-        application_user_device_id: &'a ApplicationUserDevice_Id,
+        by_5: &'a By5<'_>,
     ) -> Result<Option<ApplicationUserRegistrationToken3>, ErrorAuditor> {
-        let application_user_email_ = application_user_email.get();
+        let application_user_email = by_5.application_user_email.get();
 
-        let application_user_device_id_ = application_user_device_id.get();
+        let application_user_device_id = by_5.application_user_device_id.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -834,11 +829,11 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &application_user_email_,
+                &application_user_email,
                 Type::TEXT,
             )
             .add_parameter(
-                &application_user_device_id_,
+                &application_user_device_id,
                 Type::TEXT,
             );
 
@@ -1007,15 +1002,14 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken4> {
     pub async fn update<'a, T>(
         database_2_connection: &'a Connection,
         subject: &'a T,
-        application_user_email: &'a ApplicationUser_Email,
-        application_user_device_id: &'a ApplicationUserDevice_Id,
+        by_5: &'a By5<'_>,
     ) -> Result<(), ErrorAuditor>
     where
         T: Getter<'a, ApplicationUserRegistrationToken_WrongEnterTriesQuantity>,
     {
-        let application_user_email_ = application_user_email.get();
+        let application_user_email = by_5.application_user_email.get();
 
-        let application_user_device_id_ = application_user_device_id.get();
+        let application_user_device_id = by_5.application_user_device_id.get();
 
         let application_user_registration_token_wrong_enter_tries_quantity = <T as Getter<'a, ApplicationUserRegistrationToken_WrongEnterTriesQuantity>>::get(subject).get();
 
@@ -1036,11 +1030,11 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken4> {
                 Type::INT2,
             )
             .add_parameter(
-                &application_user_email_,
+                &application_user_email,
                 Type::TEXT,
             )
             .add_parameter(
-                &application_user_device_id_,
+                &application_user_device_id,
                 Type::TEXT,
             );
 
@@ -1105,15 +1099,14 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken5> {
     pub async fn update<'a, T>(
         database_2_connection: &'a Connection,
         subject: &'a T,
-        application_user_email: &'a ApplicationUser_Email,
-        application_user_device_id: &'a ApplicationUserDevice_Id,
+        by_5: &'a By5<'_>,
     ) -> Result<(), ErrorAuditor>
     where
         T: Getter<'a, ApplicationUserRegistrationToken_IsApproved>,
     {
-        let application_user_email_ = application_user_email.get();
+        let application_user_email = by_5.application_user_email.get();
 
-        let application_user_device_id_ = application_user_device_id.get();
+        let application_user_device_id = by_5.application_user_device_id.get();
 
         let application_user_registration_token_is_approved = <T as Getter<'a, ApplicationUserRegistrationToken_IsApproved>>::get(subject).get();
 
@@ -1134,11 +1127,11 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken5> {
                 Type::BOOL,
             )
             .add_parameter(
-                &application_user_email_,
+                &application_user_email,
                 Type::TEXT,
             )
             .add_parameter(
-                &application_user_device_id_,
+                &application_user_device_id,
                 Type::TEXT,
             );
 
@@ -1202,12 +1195,11 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken5> {
 impl PostgresqlRepository<ApplicationUserRegistrationToken6> {
     pub async fn find_1<'a>(
         database_2_connection: &'a Connection,
-        application_user_email: &'a ApplicationUser_Email,
-        application_user_device_id: &'a ApplicationUserDevice_Id,
+        by_5: &'a By5<'_>,
     ) -> Result<Option<ApplicationUserRegistrationToken6>, ErrorAuditor> {
-        let application_user_email_ = application_user_email.get();
+        let application_user_email = by_5.application_user_email.get();
 
-        let application_user_device_id_ = application_user_device_id.get();
+        let application_user_device_id = by_5.application_user_device_id.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -1222,11 +1214,11 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken6> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &application_user_email_,
+                &application_user_email,
                 Type::TEXT,
             )
             .add_parameter(
-                &application_user_device_id_,
+                &application_user_device_id,
                 Type::TEXT,
             );
 

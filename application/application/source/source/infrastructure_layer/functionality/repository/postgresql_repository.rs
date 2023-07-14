@@ -24,3 +24,8 @@ pub struct By4<'a> {
     pub application_user_id: ApplicationUser_Id,
     pub application_user_device_id: &'a ApplicationUserDevice_Id,
 }
+
+pub struct By5<'a> {
+    pub application_user_email: &'a ApplicationUser_Email,
+    pub application_user_device_id: &'a ApplicationUserDevice_Id,
+}

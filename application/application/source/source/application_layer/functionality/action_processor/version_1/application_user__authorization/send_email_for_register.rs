@@ -14,6 +14,7 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::By5;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
@@ -100,12 +101,16 @@ impl ActionProcessor {
             }
         };
 
+        let by_5 = By5 {
+            application_user_email: &incoming.application_user_email,
+            application_user_device_id: &incoming.application_user_device_id,
+        };
+
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
         let application_user_registration_token = match PostgresqlRepository::<ApplicationUserRegistrationToken6>::find_1(
             database_2_postgresql_connection,
-            &incoming.application_user_email,
-            &incoming.application_user_device_id,
+            &by_5,
         )
         .await
         {
@@ -137,8 +142,7 @@ impl ActionProcessor {
         if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token_.get_expires_at().get()) {
             if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete(
                 database_2_postgresql_connection,
-                &incoming.application_user_email,
-                &incoming.application_user_device_id,
+                &by_5,
             )
             .await
             {
@@ -196,8 +200,7 @@ impl ActionProcessor {
         if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken2>::update(
             database_2_postgresql_connection,
             &application_user_registration_token_,
-            &incoming.application_user_email,
-            &incoming.application_user_device_id,
+            &by_5,
         )
         .await
         {

@@ -270,13 +270,13 @@ impl CreateFixturesProcessor {
                 );
             }
 
-            let by = By1 {
+            let by_1 = By1 {
                 application_user_nickname: &application_user_nickname,
             };
 
             let application_user = match PostgresqlRepository::<ApplicationUser<'_>>::find_1(
                 database_1_postgresql_connection,
-                &by,
+                &by_1,
             )
             .await
             {
