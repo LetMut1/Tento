@@ -33,6 +33,7 @@ use crate::infrastructure_layer::functionality::repository::application_user___p
 use crate::infrastructure_layer::functionality::repository::application_user_device___postgresql_repository::Insert as ApplicationUserDeviceInsert;
 use crate::infrastructure_layer::functionality::repository::channel___postgresql_repository::Insert as ChannelInsert;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::By1;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::By7;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::creator::Creator;
 use crate::infrastructure_layer::functionality::service::creator::PostgresqlConnectionPoolNoTls;
@@ -477,7 +478,9 @@ impl CreateFixturesProcessor {
 
                 let channel = match PostgresqlRepository::<Channel<'_>>::find_2(
                     database_1_postgresql_connection,
-                    &channel_name,
+                    & By7 {
+                        channel_name: &channel_name,
+                    },
                 )
                 .await
                 {

@@ -29,6 +29,7 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::By6;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::functionality::repository::channel_inner_link___postgresql_repository::ChannelInnerLink1;
@@ -146,7 +147,9 @@ impl ActionProcessor {
 
         let channel = match PostgresqlRepository::<EntityChannel<'_>>::find_1(
             &*database_1_postgresql_pooled_connection,
-            incoming.channel_id,
+            &By6 {
+                channel_id: incoming.channel_id,
+            },
         )
         .await
         {

@@ -13,11 +13,13 @@ use crate::domain_layer::data::entity::channel::Channel_Name;
 use crate::domain_layer::data::entity::channel::Channel_Orientation;
 use crate::domain_layer::data::entity::channel::Channel_SubscribersQuantity;
 use crate::domain_layer::data::entity::channel::Channel_ViewingQuantity;
+use super::postgresql_repository::By7;
 use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
+use super::postgresql_repository::By6;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 use extern_crate::serde::Serialize;
@@ -276,9 +278,9 @@ impl PostgresqlRepository<Channel<'_>> {
 
     pub async fn find_1<'a>(
         database_1_connection: &'a Connection,
-        channel_id: Channel_Id,
+        by_6: &'a By6,
     ) -> Result<Option<Channel<'static>>, ErrorAuditor> {
-        let channel_id_ = channel_id.get();
+        let channel_id = by_6.channel_id.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -301,7 +303,7 @@ impl PostgresqlRepository<Channel<'_>> {
             WHERE c.id = $1;";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(
-            &channel_id_,
+            &channel_id,
             Type::INT8,
         );
 
@@ -654,7 +656,7 @@ impl PostgresqlRepository<Channel<'_>> {
         return Ok(
             Some(
                 Channel::new(
-                    channel_id,
+                    by_6.channel_id,
                     channel_owner,
                     Cow::Owned(channel_name),
                     channel_linked_name,
@@ -673,11 +675,11 @@ impl PostgresqlRepository<Channel<'_>> {
         );
     }
 
-    pub async fn find_2<'a>(
+    pub async fn find_2<'a, 'b>(
         database_1_connection: &'a Connection,
-        channel_name: &'a Channel_Name,
-    ) -> Result<Option<Channel<'a>>, ErrorAuditor> {
-        let channel_name_ = channel_name.get();
+        by_7: &'a By7<'b>
+    ) -> Result<Option<Channel<'b>>, ErrorAuditor> {
+        let channel_name = by_7.channel_name.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -700,7 +702,7 @@ impl PostgresqlRepository<Channel<'_>> {
             WHERE c.name = $1;";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(
-            &channel_name_,
+            &channel_name,
             Type::TEXT,
         );
 
@@ -1055,7 +1057,7 @@ impl PostgresqlRepository<Channel<'_>> {
                 Channel::new(
                     channel_id,
                     channel_owner,
-                    Cow::Borrowed(channel_name),
+                    Cow::Borrowed(by_7.channel_name),
                     channel_linked_name,
                     channel_description,
                     channel_access_modifier,
