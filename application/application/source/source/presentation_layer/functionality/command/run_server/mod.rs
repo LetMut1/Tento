@@ -9,7 +9,7 @@ use application::infrastructure_layer::functionality::service::formatter::Format
 fn main() -> () {
     match RunServerProcessor::process() {
         Ok(_) => {
-            println!("Graceful shutdown.");
+            println!("\n Graceful shutdown.");
         }
         Err(error) => {
             println!(

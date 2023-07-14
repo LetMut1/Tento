@@ -17,21 +17,23 @@ use crate::presentation_layer::functionality::action::route_not_found;
 use crate::presentation_layer::functionality::action::version_1::application_user__authorization;
 use crate::presentation_layer::functionality::action::version_1::channel__base;
 use crate::presentation_layer::functionality::action::version_1::channel_subscription__base;
-use extern_crate::bb8::Pool;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
-use extern_crate::hyper::server::conn::AddrStream;
-use extern_crate::hyper::service::make_service_fn;
-use extern_crate::hyper::service::service_fn;
+use extern_crate::bb8::Pool;
 use extern_crate::hyper::Method;
 use extern_crate::hyper::Server;
+use extern_crate::hyper::server::conn::AddrStream;
+use extern_crate::tokio::select;
+use extern_crate::hyper::service::make_service_fn;
+use extern_crate::hyper::service::service_fn;
 use extern_crate::redis::ConnectionInfo;
-use extern_crate::tokio::runtime::Builder;
-use extern_crate::tokio::signal;
-use extern_crate::tokio_postgres::tls::MakeTlsConnect;
-use extern_crate::tokio_postgres::tls::TlsConnect;
 use extern_crate::tokio_postgres::Config as PostgresqlConfiguration;
 use extern_crate::tokio_postgres::Socket;
+use extern_crate::tokio_postgres::tls::MakeTlsConnect;
+use extern_crate::tokio_postgres::tls::TlsConnect;
+use extern_crate::tokio::runtime::Builder;
+use extern_crate::tokio::signal::unix::signal;
+use extern_crate::tokio::signal::unix::SignalKind;
 use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
@@ -364,29 +366,76 @@ impl RunServerProcessor {
 
         let mut result = Ok(());
 
-        let graceful_shutdown_future = async {
-            if let Err(error) = signal::ctrl_c().await {
-                // TODO TODO TODO  понять, происходит ли GravefullShutdown, если убить процесс (kill ...) и можно ли повторить Ctrl+C c помощью kill.
-                result = Err(
-                    ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::OtherError {
-                                other_error: OtherError::new(error),
+        let signal_interrupt_future = async {                           // TODO на recv
+            match signal(SignalKind::interrupt()) {
+                Ok(mut signal_) => {
+                    signal_.recv().await;
+                }
+                Err(error) => {
+                    result = Err(
+                        ErrorAuditor::new(
+                            BaseError::RuntimeError {
+                                runtime_error: RuntimeError::OtherError {
+                                    other_error: OtherError::new(error),
+                                },
                             },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
+                            BacktracePart::new(
+                                line!(),
+                                file!(),
+                                None,
+                            ),
                         ),
-                    ),
-                );
+                    );
+                }
             }
 
             ()
         };
 
-        if let Err(error) = server_builder.serve(service).with_graceful_shutdown(graceful_shutdown_future).await {
+        let signal_terminate_future = async {
+            match signal(SignalKind::terminate()) {
+                Ok(mut signal_) => {
+                    signal_.recv().await;
+                }
+                Err(error) => {
+                    result = Err(
+                        ErrorAuditor::new(
+                            BaseError::RuntimeError {
+                                runtime_error: RuntimeError::OtherError {
+                                    other_error: OtherError::new(error),
+                                },
+                            },
+                            BacktracePart::new(
+                                line!(),
+                                file!(),
+                                None,
+                            ),
+                        ),
+                    );
+                }
+            }
+
+            ()
+        };
+
+        let graceful_shutdown_signal = async {
+            select! {
+                _ = signal_interrupt_future => {},
+                _ = signal_terminate_future => {},
+            }
+        };
+
+
+        // #[cfg(unix)]
+        // {
+
+        // };
+        // #[cfg(not(unix))]
+        // {
+        //     std::future::pending::<()>()
+        // };
+
+        if let Err(error) = server_builder.serve(service).with_graceful_shutdown(graceful_shutdown_signal).await {
             return Err(
                 ErrorAuditor::new(
                     BaseError::RuntimeError {
