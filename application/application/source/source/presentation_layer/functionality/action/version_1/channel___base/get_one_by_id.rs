@@ -1,10 +1,10 @@
-use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::deauthorize_from_all_devices::ActionProcessor;
-use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::deauthorize_from_all_devices::Incoming;
-use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::deauthorize_from_all_devices::Precedent;
+use crate::application_layer::functionality::action_processor::version_1::channel___base::get_one_by_id::ActionProcessor;
+use crate::application_layer::functionality::action_processor::version_1::channel___base::get_one_by_id::Incoming;
+use crate::application_layer::functionality::action_processor::version_1::channel___base::get_one_by_id::Outcoming;
+use crate::application_layer::functionality::action_processor::version_1::channel___base::get_one_by_id::Precedent;
 use crate::application_layer::functionality::core_action_processor::CoreActionProcessor;
 use crate::infrastructure_layer::data::control_type::Request;
 use crate::infrastructure_layer::data::control_type::Response;
-use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::service::serializer::MessagePack;
 use extern_crate::bb8::Pool;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
@@ -21,9 +21,9 @@ use crate::application_layer::functionality::service::wrapped_action_processor::
 #[cfg(feature = "manual_testing")]
 use crate::infrastructure_layer::functionality::service::serializer::Json;
 
-pub struct DeauthorizeFromAllDevices;
+pub struct GetOneByID;
 
-impl DeauthorizeFromAllDevices {
+impl GetOneByID {
     pub async fn run<'a, T>(
         request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -36,7 +36,7 @@ impl DeauthorizeFromAllDevices {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        return CoreActionProcessor::process::<'_, MessagePack, _, _, _, Incoming, Void, Precedent>(
+        return CoreActionProcessor::process::<'_, MessagePack, _, _, _, Incoming, Outcoming, Precedent>(
             request,
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
@@ -48,7 +48,7 @@ impl DeauthorizeFromAllDevices {
 }
 
 #[cfg(feature = "manual_testing")]
-impl DeauthorizeFromAllDevices {
+impl GetOneByID {
     pub async fn run_<'a, T>(
         request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -61,7 +61,7 @@ impl DeauthorizeFromAllDevices {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        return WrappedActionProcessor::process::<'_, Json, MessagePack, _, _, _, Incoming, Void, Precedent>(
+        return WrappedActionProcessor::process::<'_, Json, MessagePack, _, _, _, Incoming, Outcoming, Precedent>(
             request,
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,

@@ -1,7 +1,7 @@
-use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::authorize_by_last_step::ActionProcessor;
-use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::authorize_by_last_step::Incoming;
-use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::authorize_by_last_step::Outcoming;
-use crate::application_layer::functionality::action_processor::version_1::application_user__authorization::authorize_by_last_step::Precedent;
+use crate::application_layer::functionality::action_processor::version_1::application_user___authorization::refresh_application_user_access_token::ActionProcessor;
+use crate::application_layer::functionality::action_processor::version_1::application_user___authorization::refresh_application_user_access_token::Incoming;
+use crate::application_layer::functionality::action_processor::version_1::application_user___authorization::refresh_application_user_access_token::Outcoming;
+use crate::application_layer::functionality::action_processor::version_1::application_user___authorization::refresh_application_user_access_token::Precedent;
 use crate::application_layer::functionality::core_action_processor::CoreActionProcessor;
 use crate::infrastructure_layer::data::control_type::Request;
 use crate::infrastructure_layer::data::control_type::Response;
@@ -21,9 +21,9 @@ use crate::application_layer::functionality::service::wrapped_action_processor::
 #[cfg(feature = "manual_testing")]
 use crate::infrastructure_layer::functionality::service::serializer::Json;
 
-pub struct AuthorizeByLastStep;
+pub struct RefreshApplicationUserAccessToken;
 
-impl AuthorizeByLastStep {
+impl RefreshApplicationUserAccessToken {
     pub async fn run<'a, T>(
         request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -48,7 +48,7 @@ impl AuthorizeByLastStep {
 }
 
 #[cfg(feature = "manual_testing")]
-impl AuthorizeByLastStep {
+impl RefreshApplicationUserAccessToken {
     pub async fn run_<'a, T>(
         request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,

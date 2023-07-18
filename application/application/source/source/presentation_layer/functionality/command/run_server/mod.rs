@@ -119,8 +119,6 @@ fn main() -> () {
 
 // SetGet для NewType, может быть, сделать через macro_build?
 
-// let application_user_access_refresh_token = match PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::find_1( // TODO
-// 2 поля не используются
 
 // В крейтах везде зафиксировать точную версию. 0.0.0
 

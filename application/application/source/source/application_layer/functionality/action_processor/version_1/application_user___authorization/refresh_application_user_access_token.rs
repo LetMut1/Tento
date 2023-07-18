@@ -112,7 +112,6 @@ impl ActionProcessor {
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
         let application_user_access_refresh_token = match PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::find_1(
-            // TODO
             database_2_postgresql_connection,
             &by_4,
         )
