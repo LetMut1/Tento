@@ -144,7 +144,7 @@ impl RunServerProcessor {
         server_builder = server_builder
             .tcp_nodelay(ENVIRONMENT_CONFIGURATION.application_server.tcp.nodelay)
             .tcp_sleep_on_accept_errors(ENVIRONMENT_CONFIGURATION.application_server.tcp.sleep_on_accept_errors)
-            .http2_only(ENVIRONMENT_CONFIGURATION.application_server.http.http2_only)
+            .http2_only(true)
             .http2_adaptive_window(ENVIRONMENT_CONFIGURATION.application_server.http.adaptive_window)
             .http2_initial_connection_window_size(Some(ENVIRONMENT_CONFIGURATION.application_server.http.connection_window_size))
             .http2_initial_stream_window_size(Some(ENVIRONMENT_CONFIGURATION.application_server.http.stream_window_size))

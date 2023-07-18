@@ -123,7 +123,6 @@ pub mod environment_configuration {
         pub stream_window_size: u32,
         pub maximum_frame_size: u32,
         pub maximum_sending_buffer_size: u32,
-        pub http2_only: bool,
         pub keepalive: Option<Keepalive>,
         pub tls: Option<Tls<T>>
     }
@@ -233,7 +232,6 @@ pub mod environment_configuration {
             pub stream_window_size: Value<u32>,
             pub maximum_frame_size: Value<u32>,
             pub maximum_sending_buffer_size: Value<u32>,
-            pub http2_only: Value<bool>,
             pub keepalive: Keepalive,
             pub tls: Tls
         }
@@ -529,7 +527,6 @@ pub mod loader {
                             stream_window_size: environment_configuration_file.application_server.http.stream_window_size.value,
                             maximum_frame_size: environment_configuration_file.application_server.http.maximum_frame_size.value,
                             maximum_sending_buffer_size: environment_configuration_file.application_server.http.maximum_sending_buffer_size.value,
-                            http2_only: environment_configuration_file.application_server.http.http2_only.value,
                             keepalive,
                             tls
                         }

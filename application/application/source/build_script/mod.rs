@@ -145,7 +145,6 @@ impl Processor {
                             stream_window_size: {}, \n\t\t\t\
                             maximum_frame_size: {}, \n\t\t\t\
                             maximum_sending_buffer_size: {}, \n\t\t\t\
-                            http2_only: {}, \n\t\t\t\
                             keepalive: {}, \n\t\t\t\
                             tls: {}, \n\t\t\
                         }}, \n\t\
@@ -181,7 +180,6 @@ impl Processor {
             environment_configuration.application_server.http.stream_window_size,
             environment_configuration.application_server.http.maximum_frame_size,
             environment_configuration.application_server.http.maximum_sending_buffer_size,
-            environment_configuration.application_server.http.http2_only,
             keepalive.as_str(),
             tls.as_str(),
             environment_configuration.resource.postgresql.database_1_url.0.as_str(),

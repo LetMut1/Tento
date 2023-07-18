@@ -32,9 +32,6 @@ value = 16384  #16KB
 [application_server.http.maximum_sending_buffer_size]
 value = 409600    #400KB
 
-[application_server.http.http2_only]
-value = true
-
 [application_server.http.keepalive]
 is_exist = false
 
