@@ -1,5 +1,4 @@
 use super::postgresql_repository::PostgresqlRepository;
-use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
 use crate::domain_layer::data::entity::channel::Channel_AccessModifier;
 use crate::domain_layer::data::entity::channel::Channel_BackgroundImagePath;
 use crate::domain_layer::data::entity::channel::Channel_CoverImagePath;
@@ -11,6 +10,9 @@ use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
+use super::postgresql_repository::By11;
+use super::postgresql_repository::By12;
+use super::postgresql_repository::By13;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::repository::channel___postgresql_repository::Channel1;
 use crate::infrastructure_layer::functionality::service::counter::Counter;
@@ -25,15 +27,12 @@ use extern_crate::serde::Deserialize;
 impl PostgresqlRepository<Common1> {
     pub async fn find_1<'a>(
         database_1_connection: &'a Connection,
-        application_user_id: ApplicationUser_Id,
-        channel_name: &'a Channel_Name,
-        requery_channel_name: &'a Option<Channel_Name>,
-        channel_visability_modifier: Channel_VisabilityModifier,
+        by_11: &'a By11<'_>,
         limit: i16,
     ) -> Result<Vec<Common1>, ErrorAuditor> {
-        let application_user_id_ = application_user_id.get();
+        let application_user_id = by_11.application_user_id.get();
 
-        let channel_name_ = channel_name.get();
+        let channel_name = by_11.channel_name.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -88,7 +87,7 @@ impl PostgresqlRepository<Common1> {
             }
         };
 
-        let channel_visability_modifier_ = channel_visability_modifier.get();
+        let channel_visability_modifier = by_11.channel_visability_modifier.get();
 
         let mut query = format!(
             "SELECT \
@@ -107,16 +106,16 @@ impl PostgresqlRepository<Common1> {
 
         let wildcard = format!(
             "{}%",
-            channel_name_
+            channel_name
         );
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &application_user_id_,
+                &application_user_id,
                 Type::INT8,
             )
             .add_parameter(
-                &channel_visability_modifier_,
+                &channel_visability_modifier,
                 Type::INT2,
             )
             .add_parameter(
@@ -124,10 +123,10 @@ impl PostgresqlRepository<Common1> {
                 Type::TEXT,
             );
 
-        let requery_channel_name_: &'_ str;
+        let requery_channel_name: &'_ str;
 
-        if let Some(requery_channel_name__) = requery_channel_name {
-            requery_channel_name_ = requery_channel_name__.get();
+        if let Some(requery_channel_name_) = by_11.requery_channel_name {
+            requery_channel_name = requery_channel_name_.get();
 
             counter_value = match counter.get_next_value() {
                 Ok(counter_value_) => counter_value_,
@@ -151,7 +150,7 @@ impl PostgresqlRepository<Common1> {
             );
 
             prepared_statemant_parameter_convertation_resolver.add_parameter(
-                &requery_channel_name_,
+                &requery_channel_name,
                 Type::TEXT,
             );
         }
@@ -406,7 +405,7 @@ impl PostgresqlRepository<Common1> {
                 channel_name: channel_name_,
                 channel_linked_name,
                 channel_access_modifier,
-                channel_visability_modifier,
+                channel_visability_modifier: by_11.channel_visability_modifier,
                 channel_cover_image_path,
                 channel_background_image_path,
             };
@@ -429,14 +428,12 @@ impl PostgresqlRepository<Common1> {
 
     pub async fn find_2<'a>(
         database_1_connection: &'a Connection,
-        application_user_id: ApplicationUser_Id,
-        channel_name: &'a Channel_Name,
-        requery_channel_name: &'a Option<Channel_Name>,
+        by_12: &'a By12<'_>,
         limit: i16,
     ) -> Result<Vec<Common1>, ErrorAuditor> {
-        let application_user_id_ = application_user_id.get();
+        let application_user_id = by_12.application_user_id.get();
 
-        let channel_name_ = channel_name.get();
+        let channel_name = by_12.channel_name.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -491,12 +488,12 @@ impl PostgresqlRepository<Common1> {
 
         let wildcard = format!(
             "{}%",
-            channel_name_
+            channel_name
         );
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &application_user_id_,
+                &application_user_id,
                 Type::INT8,
             )
             .add_parameter(
@@ -504,10 +501,10 @@ impl PostgresqlRepository<Common1> {
                 Type::TEXT,
             );
 
-        let requery_channel_name_: &'_ str;
+        let requery_channel_name: &'_ str;
 
-        if let Some(requery_channel_name__) = requery_channel_name {
-            requery_channel_name_ = requery_channel_name__.get();
+        if let Some(requery_channel_name_) = by_12.requery_channel_name {
+            requery_channel_name = requery_channel_name_.get();
 
             counter_value = match counter.get_next_value() {
                 Ok(counter_value_) => counter_value_,
@@ -531,7 +528,7 @@ impl PostgresqlRepository<Common1> {
             );
 
             prepared_statemant_parameter_convertation_resolver.add_parameter(
-                &requery_channel_name_,
+                &requery_channel_name,
                 Type::TEXT,
             );
         }
@@ -804,11 +801,10 @@ impl PostgresqlRepository<Common1> {
 
     pub async fn find_3<'a>(
         database_1_connection: &'a Connection,
-        application_user_id: ApplicationUser_Id,
-        requery_channel_id: Option<Channel_Id>,
+        by_13: &'a By13,
         limit: i16,
     ) -> Result<Vec<Common1>, ErrorAuditor> {
-        let application_user_id_ = application_user_id.get();
+        let application_user_id = by_13.application_user_id.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -844,14 +840,14 @@ impl PostgresqlRepository<Common1> {
         );
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(
-            &application_user_id_,
+            &application_user_id,
             Type::INT8,
         );
 
-        let requery_channel_id_: i64;
+        let requery_channel_id: i64;
 
-        if let Some(requery_channel_id__) = requery_channel_id {
-            requery_channel_id_ = requery_channel_id__.get();
+        if let Some(requery_channel_id_) = by_13.requery_channel_id {
+            requery_channel_id = requery_channel_id_.get();
 
             counter_value = match counter.get_next_value() {
                 Ok(counter_value_) => counter_value_,
@@ -876,7 +872,7 @@ impl PostgresqlRepository<Common1> {
             );
 
             prepared_statemant_parameter_convertation_resolver.add_parameter(
-                &requery_channel_id_,
+                &requery_channel_id,
                 Type::INT8,
             );
         }

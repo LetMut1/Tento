@@ -3,6 +3,7 @@ use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Nickname;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::data::entity::channel::Channel_Id;
+use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier;
 use crate::domain_layer::data::entity::channel::Channel_Name;
 use std::marker::PhantomData;
 
@@ -51,4 +52,22 @@ pub struct By9 {
 pub struct By10 {
     pub application_user_id: ApplicationUser_Id,
     pub channel_id: Channel_Id,
+}
+
+pub struct By11<'a> {
+    pub application_user_id: ApplicationUser_Id,
+    pub channel_name: &'a Channel_Name,
+    pub requery_channel_name: &'a Option<Channel_Name>,
+    pub channel_visability_modifier: Channel_VisabilityModifier,
+}
+
+pub struct By12<'a> {
+    pub application_user_id: ApplicationUser_Id,
+    pub channel_name: &'a Channel_Name,
+    pub requery_channel_name: &'a Option<Channel_Name>,
+}
+
+pub struct By13 {
+    pub application_user_id: ApplicationUser_Id,
+    pub requery_channel_id: Option<Channel_Id>,
 }

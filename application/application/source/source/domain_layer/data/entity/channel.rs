@@ -110,10 +110,8 @@ impl AccessModifier {
 }
 
 pub enum AccessModifier_ {
-    /// 0 in integer representation.
-    Open,
-    /// 1 in integer representation.
-    Close,
+    Open = AccessModifier::OPEN as isize,
+    Close = AccessModifier::CLOSE as isize,
 }
 
 #[cfg_attr(
@@ -139,10 +137,8 @@ impl VisabilityModifier {
 }
 
 pub enum VisabilityModifier_ {
-    /// 0 in integer representation.
-    Public,
-    /// 1 in integer representation.
-    Private,
+    Public = VisabilityModifier::PUBLIC as isize,
+    Private = VisabilityModifier::PRIVATE as isize,
 }
 
 #[cfg_attr(

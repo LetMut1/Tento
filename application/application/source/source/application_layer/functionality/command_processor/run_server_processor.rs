@@ -402,15 +402,6 @@ impl RunServerProcessor {
             }
         };
 
-        // #[cfg(unix)]     // TODO запусскать только для линукса в начале кода
-        // {
-
-        // };
-        // #[cfg(not(unix))]
-        // {
-        //     std::future::pending::<()>()
-        // };
-
         if let Err(error) = server_builder.serve(service).with_graceful_shutdown(graceful_shutdown_signal).await {
             return Err(
                 ErrorAuditor::new(

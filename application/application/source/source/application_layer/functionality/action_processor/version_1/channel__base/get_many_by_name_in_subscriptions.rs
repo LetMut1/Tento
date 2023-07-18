@@ -20,6 +20,7 @@ use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectio
 use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::macro_rules::r#enum;
 use extern_crate::serde::Deserialize;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::By12;
 use extern_crate::serde::Serialize;
 use extern_crate::tokio_postgres::tls::MakeTlsConnect;
 use extern_crate::tokio_postgres::tls::TlsConnect;
@@ -147,9 +148,11 @@ impl ActionProcessor {
 
         let common_registry = match PostgresqlRepository::<Common1>::find_2(
             &*database_1_postgresql_pooled_connection,
-            application_user_access_token.get_application_user_id(),
-            &incoming.channel_name,
-            &incoming.requery_channel_name,
+            &By12 {
+                application_user_id: application_user_access_token.get_application_user_id(),
+                channel_name: &incoming.channel_name,
+                requery_channel_name: &incoming.requery_channel_name,
+            },
             incoming.limit,
         )
         .await

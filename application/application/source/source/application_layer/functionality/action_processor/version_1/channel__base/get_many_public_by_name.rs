@@ -18,6 +18,7 @@ use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::functionality::repository::common_postgresql_repository::Common1;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::By11;
 use extern_crate::bb8::Pool;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
@@ -150,10 +151,12 @@ impl ActionProcessor {
 
         let common_registry = match PostgresqlRepository::<Common1>::find_1(
             &*database_1_postgresql_pooled_connection,
-            application_user_access_token.get_application_user_id(),
-            &incoming.channel_name,
-            &incoming.requery_channel_name,
-            FormResolver::<Channel_VisabilityModifier>::from_representation(Channel_VisabilityModifier_::Public),
+            &By11 {
+                application_user_id: application_user_access_token.get_application_user_id(),
+                channel_name: &incoming.channel_name,
+                requery_channel_name: &incoming.requery_channel_name,
+                channel_visability_modifier: FormResolver::<Channel_VisabilityModifier>::from_representation(Channel_VisabilityModifier_::Public),
+            },
             incoming.limit,
         )
         .await
