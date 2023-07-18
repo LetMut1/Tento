@@ -30,6 +30,9 @@ use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::By6;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::By8;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::By9;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::By10;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::functionality::repository::channel_inner_link___postgresql_repository::ChannelInnerLink1;
@@ -183,8 +186,10 @@ impl ActionProcessor {
         if let Channel_AccessModifier_::Close = channel_access_modifier {
             let is_exist = match PostgresqlRepository::<ChannelSubscription>::is_exist(
                 &*database_1_postgresql_pooled_connection,
-                application_user_access_token.get_application_user_id(),
-                channel_.get_id(),
+                &By10 {
+                    application_user_id: application_user_access_token.get_application_user_id(),
+                    channel_id: channel_.get_id(),
+                },
             )
             .await
             {
@@ -213,7 +218,9 @@ impl ActionProcessor {
 
         let channel_inner_link_registry = match PostgresqlRepository::<ChannelInnerLink>::find_1(
             &*database_1_postgresql_pooled_connection,
-            channel_.get_id(),
+            &By8 {
+                channel_inner_link_from: channel_.get_id(),
+            },
             ChannelInnerLink::MAXIMUM_QUANTITY,
         )
         .await
@@ -234,7 +241,9 @@ impl ActionProcessor {
 
         let channel_outer_link_registry = match PostgresqlRepository::<ChannelOuterLink>::find_1(
             &*database_1_postgresql_pooled_connection,
-            channel_.get_id(),
+            &By9 {
+                channel_outer_link_from: channel_.get_id(),
+            },
             ChannelOuterLink::MAXIMUM_QUANTITY,
         )
         .await

@@ -6,6 +6,7 @@ use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
+use super::postgresql_repository::By8;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 use extern_crate::serde::Serialize;
@@ -138,10 +139,10 @@ impl PostgresqlRepository<ChannelInnerLink> {
 
     pub async fn find_1<'a>(
         database_1_connection: &'a Connection,
-        channel_inner_link_from: Channel_Id,
+        by_8: &'a By8,
         limit: i16,
     ) -> Result<Vec<ChannelInnerLink1>, ErrorAuditor> {
-        let channel_inner_link_from_ = channel_inner_link_from.get();
+        let channel_inner_link_from = by_8.channel_inner_link_from.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -154,7 +155,7 @@ impl PostgresqlRepository<ChannelInnerLink> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &channel_inner_link_from_,
+                &channel_inner_link_from,
                 Type::INT8,
             )
             .add_parameter(

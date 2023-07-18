@@ -39,3 +39,16 @@ pub struct By6 {
 pub struct By7<'a> {
     pub channel_name: &'a Channel_Name,
 }
+
+pub struct By8 {
+    pub channel_inner_link_from: Channel_Id,
+}
+
+pub struct By9 {
+    pub channel_outer_link_from: Channel_Id,
+}
+
+pub struct By10 {
+    pub application_user_id: ApplicationUser_Id,
+    pub channel_id: Channel_Id,
+}

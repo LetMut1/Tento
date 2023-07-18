@@ -11,6 +11,7 @@ use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 use extern_crate::serde::Serialize;
+use super::postgresql_repository::By9;
 use extern_crate::tokio_postgres::types::Type;
 use extern_crate::tokio_postgres::Client as Connection;
 
@@ -149,10 +150,10 @@ impl PostgresqlRepository<ChannelOuterLink> {
 
     pub async fn find_1<'a>(
         database_1_connection: &'a Connection,
-        channel_outer_link_from: Channel_Id,
+        by_9: &'a By9,
         limit: i16,
     ) -> Result<Vec<ChannelOuterLink1>, ErrorAuditor> {
-        let channel_outer_link_from_ = channel_outer_link_from.get();
+        let channel_outer_link_from = by_9.channel_outer_link_from.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -166,7 +167,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &channel_outer_link_from_,
+                &channel_outer_link_from,
                 Type::INT8,
             )
             .add_parameter(

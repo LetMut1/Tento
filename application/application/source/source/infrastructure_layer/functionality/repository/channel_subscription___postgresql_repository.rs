@@ -7,6 +7,7 @@ use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
+use super::postgresql_repository::By10;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 use extern_crate::tokio_postgres::types::Type;
@@ -135,12 +136,11 @@ impl PostgresqlRepository<ChannelSubscription> {
 
     pub async fn is_exist<'a>(
         database_1_connection: &'a Connection,
-        application_user_id: ApplicationUser_Id,
-        channel_id: Channel_Id,
+        by_10: &'a By10,
     ) -> Result<bool, ErrorAuditor> {
-        let application_user_id_ = application_user_id.get();
+        let application_user_id = by_10.application_user_id.get();
 
-        let channel_id_ = channel_id.get();
+        let channel_id = by_10.channel_id.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -152,11 +152,11 @@ impl PostgresqlRepository<ChannelSubscription> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &application_user_id_,
+                &application_user_id,
                 Type::INT8,
             )
             .add_parameter(
-                &channel_id_,
+                &channel_id,
                 Type::INT8,
             );
 
