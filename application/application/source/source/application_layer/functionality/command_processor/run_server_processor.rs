@@ -143,14 +143,7 @@ impl RunServerProcessor {
 
         server_builder = server_builder
             .tcp_nodelay(ENVIRONMENT_CONFIGURATION.application_server.tcp.nodelay)
-            .tcp_sleep_on_accept_errors(ENVIRONMENT_CONFIGURATION.application_server.tcp.sleep_on_accept_errors)
-            .http2_only(true)
-            .http2_adaptive_window(ENVIRONMENT_CONFIGURATION.application_server.http.adaptive_window)
-            .http2_initial_connection_window_size(Some(ENVIRONMENT_CONFIGURATION.application_server.http.connection_window_size))
-            .http2_initial_stream_window_size(Some(ENVIRONMENT_CONFIGURATION.application_server.http.stream_window_size))
-            .http2_max_concurrent_streams(u32::MAX)
-            .http2_max_frame_size(Some(ENVIRONMENT_CONFIGURATION.application_server.http.maximum_frame_size))
-            .http2_max_send_buf_size(ENVIRONMENT_CONFIGURATION.application_server.http.maximum_sending_buffer_size as usize);
+            .tcp_sleep_on_accept_errors(ENVIRONMENT_CONFIGURATION.application_server.tcp.sleep_on_accept_errors);
 
         server_builder = match ENVIRONMENT_CONFIGURATION.application_server.tcp.keepalive_seconds {
             Some(keepalive_seconds_) => {
@@ -160,6 +153,15 @@ impl RunServerProcessor {
                 server_builder.tcp_keepalive(None)
             }
         };
+
+        server_builder = server_builder
+            .http2_only(true)
+            .http2_adaptive_window(ENVIRONMENT_CONFIGURATION.application_server.http.adaptive_window)
+            .http2_initial_connection_window_size(Some(ENVIRONMENT_CONFIGURATION.application_server.http.connection_window_size))
+            .http2_initial_stream_window_size(Some(ENVIRONMENT_CONFIGURATION.application_server.http.stream_window_size))
+            .http2_max_concurrent_streams(u32::MAX)
+            .http2_max_frame_size(Some(ENVIRONMENT_CONFIGURATION.application_server.http.maximum_frame_size))
+            .http2_max_send_buf_size(ENVIRONMENT_CONFIGURATION.application_server.http.maximum_sending_buffer_size as usize);
 
         server_builder = match ENVIRONMENT_CONFIGURATION.application_server.http.keepalive {
             Some(ref keepalive_) => {
