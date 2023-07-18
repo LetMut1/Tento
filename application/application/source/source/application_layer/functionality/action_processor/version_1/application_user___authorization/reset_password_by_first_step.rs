@@ -110,7 +110,7 @@ impl ActionProcessor {
             }
         };
 
-        let application_user = match PostgresqlRepository::<ApplicationUser3>::find_2(
+        let application_user = match PostgresqlRepository::<ApplicationUser3>::find_1(
             &*database_1_postgresql_pooled_connection,
             &By2 {
                 application_user_email: &incoming.application_user_email,

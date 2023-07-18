@@ -151,21 +151,6 @@ impl CreateFixturesProcessor {
 
         let application_user_password = ApplicationUser_Password::new(Self::APPLICATION_USER__PASSWORD.to_string());
 
-        if !Validator::<ApplicationUser_Password>::is_valid(&application_user_password) {
-            return Err(
-                ErrorAuditor::new(
-                    BaseError::LogicError {
-                        message: "Application_user_password should be valid.",
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                        None,
-                    ),
-                ),
-            );
-        }
-
         let application_user_password_hash = match Encoder::<ApplicationUser_Password>::encode(&application_user_password) {
             Ok(application_user_password_hash_) => application_user_password_hash_,
             Err(mut error) => {
@@ -202,6 +187,7 @@ impl CreateFixturesProcessor {
                 );
             }
         };
+
         let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
 
         '_a: for _ in 1..=Self::QUANTITY_OF_APPLICATION_USERS {
@@ -261,6 +247,25 @@ impl CreateFixturesProcessor {
                     ErrorAuditor::new(
                         BaseError::LogicError {
                             message: "Application_user email should be valid.",
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+
+            if !Validator::<ApplicationUser_Password>::is_valid(
+                &application_user_password,
+                &application_user_email,
+                &application_user_nickname,
+            ) {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::LogicError {
+                            message: "Application_user_password should be valid.",
                         },
                         BacktracePart::new(
                             line!(),

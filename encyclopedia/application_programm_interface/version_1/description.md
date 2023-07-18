@@ -686,6 +686,10 @@ Can not be empty.
 65 - maximum number of characters.
 
 Can not contain whitespace character.
+
+Can not be equal to application_user_email.
+
+Can not be equal to application_user_nickname.
 ```
  - ## channel_id
 ```

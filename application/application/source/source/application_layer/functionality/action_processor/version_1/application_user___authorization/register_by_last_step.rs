@@ -70,7 +70,11 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        if !Validator::<ApplicationUser_Password>::is_valid(&incoming.application_user_password) {
+        if !Validator::<ApplicationUser_Password>::is_valid(
+            &incoming.application_user_password,
+            &incoming.application_user_email,
+            &incoming.application_user_nickname,
+        ) {
             return Ok(
                 InvalidArgumentResult::InvalidArgument {
                     invalid_argument: InvalidArgument::ApplicationUser_Password,

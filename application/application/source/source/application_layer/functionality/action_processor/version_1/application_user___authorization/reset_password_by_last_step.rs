@@ -87,7 +87,7 @@ impl ActionProcessor {
             );
         }
 
-        if !Validator::<ApplicationUser_Password>::is_valid(&incoming.application_user_password) {
+        if !Validator::<ApplicationUser_Password>::is_valid_part_1(&incoming.application_user_password) {
             return Ok(
                 InvalidArgumentResult::InvalidArgument {
                     invalid_argument: InvalidArgument::ApplicationUser_Password,
@@ -281,7 +281,7 @@ impl ActionProcessor {
 
         let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
 
-        let application_user = match PostgresqlRepository::<ApplicationUser4>::find_3(
+        let application_user = match PostgresqlRepository::<ApplicationUser4>::find_1(
             database_1_postgresql_connection,
             &by_3,
         )
@@ -311,6 +311,18 @@ impl ActionProcessor {
                 );
             }
         };
+
+        if !Validator::<ApplicationUser_Password>::is_valid_part_2(
+            &incoming.application_user_password,
+            application_user_.get_email(),
+            application_user_.get_nickname(),
+        ) {
+            return Ok(
+                InvalidArgumentResult::InvalidArgument {
+                    invalid_argument: InvalidArgument::ApplicationUser_Password,
+                },
+            );
+        }
 
         let password_hash = match Encoder::<ApplicationUser_Password>::encode(&incoming.application_user_password) {
             Ok(password_hash_) => password_hash_,

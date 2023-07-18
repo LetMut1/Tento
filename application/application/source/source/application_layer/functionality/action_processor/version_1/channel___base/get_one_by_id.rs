@@ -184,7 +184,7 @@ impl ActionProcessor {
         let channel_access_modifier = FormResolver::<Channel_AccessModifier>::to_representation(channel_.get_access_modifier());
 
         if let Channel_AccessModifier_::Close = channel_access_modifier {
-            let is_exist = match PostgresqlRepository::<ChannelSubscription>::is_exist(
+            let is_exist = match PostgresqlRepository::<ChannelSubscription>::is_exist_1(
                 &*database_1_postgresql_pooled_connection,
                 &By10 {
                     application_user_id: application_user_access_token.get_application_user_id(),

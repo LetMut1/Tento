@@ -771,7 +771,7 @@ impl PostgresqlRepository<ApplicationUser1> {
 }
 
 impl PostgresqlRepository<ApplicationUser2> {
-    pub async fn find_2<'a>(
+    pub async fn find_1<'a>(
         database_1_connection: &'a Connection,
         by_2: &'a By2<'_>,
     ) -> Result<Option<ApplicationUser2>, ErrorAuditor> {
@@ -782,6 +782,7 @@ impl PostgresqlRepository<ApplicationUser2> {
         let query = "\
             SELECT \
                 au.id AS i, \
+                au.nickname AS n, \
                 au.password_hash AS ph \
             FROM public.application_user au \
             WHERE au.email = $1;";
@@ -873,7 +874,29 @@ impl PostgresqlRepository<ApplicationUser2> {
             }
         };
 
-        let application_user_password_hash = match row_registry[0].try_get::<'_, usize, String>(1) {
+        let application_user_nickname = match row_registry[0].try_get::<'_, usize, String>(1) {
+            Ok(application_user_nickname_) => ApplicationUser_Nickname::new(application_user_nickname_),
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::ResourceError {
+                                resource_error: ResourceError::PostgresqlError {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+        };
+
+        let application_user_password_hash = match row_registry[0].try_get::<'_, usize, String>(2) {
             Ok(application_user_password_hash_) => ApplicationUser_PasswordHash::new(application_user_password_hash_),
             Err(error) => {
                 return Err(
@@ -899,6 +922,7 @@ impl PostgresqlRepository<ApplicationUser2> {
             Some(
                 ApplicationUser2::new(
                     application_user_id,
+                    application_user_nickname,
                     application_user_password_hash,
                 ),
             ),
@@ -907,7 +931,7 @@ impl PostgresqlRepository<ApplicationUser2> {
 }
 
 impl PostgresqlRepository<ApplicationUser3> {
-    pub async fn find_2<'a>(
+    pub async fn find_1<'a>(
         database_1_connection: &'a Connection,
         by_2: &'a By2<'_>,
     ) -> Result<Option<ApplicationUser3>, ErrorAuditor> {
@@ -1104,7 +1128,7 @@ impl PostgresqlRepository<ApplicationUser4> {
         return Ok(());
     }
 
-    pub async fn find_3<'a>(
+    pub async fn find_1<'a>(
         database_1_connection: &'a Connection,
         by_3: &'a By3,
     ) -> Result<Option<ApplicationUser4>, ErrorAuditor> {
@@ -1114,6 +1138,8 @@ impl PostgresqlRepository<ApplicationUser4> {
 
         let query = "\
             SELECT \
+                au.email AS e, \
+                au.nickname AS n, \
                 au.password_hash AS ph \
             FROM public.application_user au \
             WHERE au.id = $1;";
@@ -1183,7 +1209,51 @@ impl PostgresqlRepository<ApplicationUser4> {
             return Ok(None);
         }
 
-        let application_user_password_hash = match row_registry[0].try_get::<'_, usize, String>(0) {
+        let application_user_email = match row_registry[0].try_get::<'_, usize, String>(0) {
+            Ok(application_user_password_email_) => ApplicationUser_Email::new(application_user_password_email_),
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::ResourceError {
+                                resource_error: ResourceError::PostgresqlError {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+        };
+
+        let application_user_password_nickname = match row_registry[0].try_get::<'_, usize, String>(1) {
+            Ok(application_user_password_nickanme_) => ApplicationUser_Nickname::new(application_user_password_nickanme_),
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::ResourceError {
+                                resource_error: ResourceError::PostgresqlError {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+        };
+
+        let application_user_password_hash = match row_registry[0].try_get::<'_, usize, String>(2) {
             Ok(application_user_password_hash_) => ApplicationUser_PasswordHash::new(application_user_password_hash_),
             Err(error) => {
                 return Err(
@@ -1205,12 +1275,20 @@ impl PostgresqlRepository<ApplicationUser4> {
             }
         };
 
-        return Ok(Some(ApplicationUser4::new(application_user_password_hash)));
+        return Ok(
+            Some(
+                ApplicationUser4::new(
+                    application_user_email,
+                    application_user_password_nickname,
+                    application_user_password_hash,
+                )
+            )
+        );
     }
 }
 
 impl PostgresqlRepository<ApplicationUser5> {
-    pub async fn find_3<'a>(
+    pub async fn find_1<'a>(
         database_1_connection: &'a Connection,
         by_3: &'a By3,
     ) -> Result<Option<ApplicationUser5>, ErrorAuditor> {

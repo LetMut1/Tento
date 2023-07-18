@@ -134,7 +134,7 @@ impl PostgresqlRepository<ChannelSubscription> {
         return Ok(channel_subscription);
     }
 
-    pub async fn is_exist<'a>(
+    pub async fn is_exist_1<'a>(
         database_1_connection: &'a Connection,
         by_10: &'a By10,
     ) -> Result<bool, ErrorAuditor> {

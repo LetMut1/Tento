@@ -233,22 +233,29 @@ impl ApplicationUser1 {
 
 pub struct ApplicationUser2 {
     id: Id,
+    nickname: Nickname,
     password_hash: PasswordHash,
 }
 
 impl ApplicationUser2 {
     pub fn new(
         id: Id,
+        nickname: Nickname,
         password_hash: PasswordHash,
     ) -> Self {
         return Self {
             id,
+            nickname,
             password_hash,
         };
     }
 
     pub fn get_id<'a>(&'a self) -> Id {
         return self.id;
+    }
+
+    pub fn get_nickname<'a>(&'a self) -> &'a Nickname {
+        return &self.nickname;
     }
 
     pub fn get_password_hash<'a>(&'a self) -> &'a PasswordHash {
@@ -273,14 +280,30 @@ impl ApplicationUser3 {
 }
 
 pub struct ApplicationUser4 {
+    email: Email,
+    nickname: Nickname,
     password_hash: PasswordHash,
 }
 
 impl ApplicationUser4 {
-    pub fn new(password_hash: PasswordHash) -> Self {
+    pub fn new(
+        email: Email,
+        nickname: Nickname,
+        password_hash: PasswordHash,
+    ) -> Self {
         return Self {
+            email,
+            nickname,
             password_hash,
         };
+    }
+
+    pub fn get_email<'a>(&'a self) -> &'a Email {
+        return &self.email;
+    }
+
+    pub fn get_nickname<'a>(&'a self) -> &'a Nickname {
+        return &self.nickname;
     }
 
     pub fn get_password_hash<'a>(&'a self) -> &'a PasswordHash {

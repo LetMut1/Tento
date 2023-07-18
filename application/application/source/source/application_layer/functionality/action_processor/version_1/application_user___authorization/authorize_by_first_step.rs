@@ -62,7 +62,7 @@ impl ActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        if !Validator::<ApplicationUser_Password>::is_valid(&incoming.application_user_password) {
+        if !Validator::<ApplicationUser_Password>::is_valid_part_1(&incoming.application_user_password) {
             return Ok(
                 InvalidArgumentResult::InvalidArgument {
                     invalid_argument: InvalidArgument::ApplicationUser_Password,
@@ -120,7 +120,7 @@ impl ActionProcessor {
         let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
 
         let application_user_aggregator = if is_valid_email {
-            let application_user_ = match PostgresqlRepository::<ApplicationUser2>::find_2(
+            let application_user_ = match PostgresqlRepository::<ApplicationUser2>::find_1(
                 database_1_postgresql_connection,
                 &By2 {
                     application_user_email: &application_user_email,
@@ -196,6 +196,7 @@ impl ActionProcessor {
 
                 ApplicationUser_Aggregator::First {
                     application_user: application_user__,
+                    application_user_nickname
                 }
             } else {
                 return Ok(
@@ -206,9 +207,33 @@ impl ActionProcessor {
             }
         };
 
+        let (application_user_email, application_user_nickname,)  = match application_user_aggregator {
+            ApplicationUser_Aggregator::First {
+                ref application_user,
+                application_user_nickname: ref application_user_nickname_,
+            } => (application_user.get_email(), application_user_nickname_),
+            ApplicationUser_Aggregator::Second {
+                ref application_user,
+                application_user_email: ref application_user_email_,
+            } => (application_user_email_, application_user.get_nickname())
+        };
+
+        if !Validator::<ApplicationUser_Password>::is_valid_part_2(
+            &incoming.application_user_password,
+            &application_user_email,
+            &application_user_nickname,
+        ) {
+            return Ok(
+                InvalidArgumentResult::InvalidArgument {
+                    invalid_argument: InvalidArgument::ApplicationUser_Password,
+                },
+            );
+        }
+
         let application_user_password_hash = match application_user_aggregator {
             ApplicationUser_Aggregator::First {
                 ref application_user,
+                application_user_nickname: _,
             } => application_user.get_password_hash(),
             ApplicationUser_Aggregator::Second {
                 ref application_user,
@@ -245,6 +270,7 @@ impl ActionProcessor {
         let application_user_id = match application_user_aggregator {
             ApplicationUser_Aggregator::First {
                 ref application_user,
+                application_user_nickname: _,
             } => application_user.get_id(),
             ApplicationUser_Aggregator::Second {
                 ref application_user,
@@ -492,16 +518,6 @@ impl ActionProcessor {
             }
         };
 
-        let application_user_email = match application_user_aggregator {
-            ApplicationUser_Aggregator::First {
-                ref application_user,
-            } => application_user.get_email(),
-            ApplicationUser_Aggregator::Second {
-                application_user: _,
-                application_user_email: ref application_user_email_,
-            } => application_user_email_,
-        };
-
         if can_send {
             let application_user_authorization_token_value = match application_user_authorization_token_aggregator {
                 ApplicationUserAuthorizationToken_Aggregator::First {
@@ -585,6 +601,7 @@ r#enum!(
 enum ApplicationUser_Aggregator {
     First {
         application_user: ApplicationUser1,
+        application_user_nickname: ApplicationUser_Nickname,
     },
     Second {
         application_user: ApplicationUser2,
