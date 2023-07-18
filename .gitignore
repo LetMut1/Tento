@@ -1,5 +1,5 @@
 target
 /development_environment/resource/docker/docker-compose.override.yaml
-/application/environment_configuration/development/
-/application/environment_configuration/local_development/
-/application/environment_configuration/production/
+/application/application/environment_configuration/development/
+/application/application/environment_configuration/local_development/
+/application/application/environment_configuration/production/
