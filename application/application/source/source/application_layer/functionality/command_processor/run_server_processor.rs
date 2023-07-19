@@ -143,19 +143,30 @@ impl RunServerProcessor {
 
         server_builder = server_builder
             .tcp_nodelay(ENVIRONMENT_CONFIGURATION.application_server.tcp.nodelay)
-            .tcp_sleep_on_accept_errors(ENVIRONMENT_CONFIGURATION.application_server.tcp.sleep_on_accept_errors);
+            .tcp_sleep_on_accept_errors(ENVIRONMENT_CONFIGURATION.application_server.tcp.sleep_on_accept_errors)
+            .tcp_keepalive_retries(ENVIRONMENT_CONFIGURATION.application_server.tcp.keepalive.retries_quantity);
 
-        server_builder = match ENVIRONMENT_CONFIGURATION.application_server.tcp.keepalive_seconds {
-            Some(keepalive_seconds_) => {
-                server_builder.tcp_keepalive(Some(Duration::from_secs(keepalive_seconds_)))
+        server_builder = match ENVIRONMENT_CONFIGURATION.application_server.tcp.keepalive.duration {
+            Some(duration) => {
+                server_builder.tcp_keepalive(Some(Duration::from_secs(duration)))
             }
             None => {
                 server_builder.tcp_keepalive(None)
             }
         };
 
+        server_builder = match ENVIRONMENT_CONFIGURATION.application_server.tcp.keepalive.interval_duration {
+            Some(interval_duration) => {
+                server_builder.tcp_keepalive_interval(Some(Duration::from_secs(interval_duration)))
+            }
+            None => {
+                server_builder.tcp_keepalive_interval(None)
+            }
+        };
+
         server_builder = server_builder
             .http2_only(true)
+            .http2_max_header_list_size(ENVIRONMENT_CONFIGURATION.application_server.http.maximum_header_list_size)
             .http2_adaptive_window(ENVIRONMENT_CONFIGURATION.application_server.http.adaptive_window)
             .http2_initial_connection_window_size(Some(ENVIRONMENT_CONFIGURATION.application_server.http.connection_window_size))
             .http2_initial_stream_window_size(Some(ENVIRONMENT_CONFIGURATION.application_server.http.stream_window_size))
@@ -163,14 +174,27 @@ impl RunServerProcessor {
             .http2_max_frame_size(Some(ENVIRONMENT_CONFIGURATION.application_server.http.maximum_frame_size))
             .http2_max_send_buf_size(ENVIRONMENT_CONFIGURATION.application_server.http.maximum_sending_buffer_size as usize);
 
+        if ENVIRONMENT_CONFIGURATION.application_server.http.enable_connect_protocol {
+            server_builder = server_builder.http2_enable_connect_protocol();
+        };
+
         server_builder = match ENVIRONMENT_CONFIGURATION.application_server.http.keepalive {
             Some(ref keepalive_) => {
                 server_builder
-                    .http2_keep_alive_interval(Some(Duration::from_secs(keepalive_.interval_seconds)))
-                    .http2_keep_alive_timeout(Duration::from_secs(keepalive_.timeout_seconds))
+                    .http2_keep_alive_interval(Some(Duration::from_secs(keepalive_.interval_duration)))
+                    .http2_keep_alive_timeout(Duration::from_secs(keepalive_.timeout_duration))
             }
             None => {
                 server_builder.http2_keep_alive_interval(None)
+            }
+        };
+
+        server_builder = match ENVIRONMENT_CONFIGURATION.application_server.http.maximum_pending_accept_reset_streams {
+            Some(maximum_pending_accept_reset_streams_) => {
+                server_builder.http2_max_pending_accept_reset_streams(Some(maximum_pending_accept_reset_streams_))
+            }
+            None => {
+                server_builder.http2_max_pending_accept_reset_streams(None)
             }
         };
 

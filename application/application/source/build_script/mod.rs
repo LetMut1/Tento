@@ -67,11 +67,41 @@ impl Processor {
             Environment::LocalDevelopment => "Environment::LocalDevelopment"
         };
 
-        let keepalive_seconds = match environment_configuration.application_server.tcp.keepalive_seconds {
-            Some(keepalive_seconds_) => {
+        let keepalive_duration = match environment_configuration.application_server.tcp.keepalive.duration {
+            Some(keepalive_duration_) => {
                 format!(
                     "Some({})",
-                    keepalive_seconds_,
+                    keepalive_duration_,
+                )
+            }
+            None => "None".to_string()
+        };
+
+        let keepalive_interval_duration = match environment_configuration.application_server.tcp.keepalive.interval_duration {
+            Some(keepalive_interval_duration_) => {
+                format!(
+                    "Some({})",
+                    keepalive_interval_duration_,
+                )
+            }
+            None => "None".to_string()
+        };
+
+        let keepalive_retries_quantity = match environment_configuration.application_server.tcp.keepalive.retries_quantity {
+            Some(keepalive_retries_quantity_) => {
+                format!(
+                    "Some({})",
+                    keepalive_retries_quantity_,
+                )
+            }
+            None => "None".to_string()
+        };
+
+        let http_maximum_pending_accept_reset_streams = match environment_configuration.application_server.http.maximum_pending_accept_reset_streams {
+            Some(http_maximum_pending_accept_reset_streams_) => {
+                format!(
+                    "Some({})",
+                    http_maximum_pending_accept_reset_streams_,
                 )
             }
             None => "None".to_string()
@@ -82,14 +112,14 @@ impl Processor {
                 format!(
                     "\
                         Some( \n\t\t\t\t\
-                            Keepalive {{ \n\t\t\t\t\t\
-                                interval_seconds: {}, \n\t\t\t\t\t\
-                                timeout_seconds: {}, \n\t\t\t\t\
+                            HttpKeepalive {{ \n\t\t\t\t\t\
+                                interval_duration: {}, \n\t\t\t\t\t\
+                                timeout_duration: {}, \n\t\t\t\t\
                             }} \n\t\t\t\
                         )\
                     ",
-                    keepalive_.interval_seconds,
-                    keepalive_.timeout_seconds,
+                    keepalive_.interval_duration,
+                    keepalive_.timeout_duration,
                 )
             }
             None => "None".to_string()
@@ -121,13 +151,14 @@ impl Processor {
                 pub use extern_crate::environment_configuration::environment_configuration::Environment; \n\
                 pub use extern_crate::environment_configuration::environment_configuration::EnvironmentConfiguration; \n\
                 pub use extern_crate::environment_configuration::environment_configuration::Http; \n\
-                pub use extern_crate::environment_configuration::environment_configuration::Keepalive; \n\
+                pub use extern_crate::environment_configuration::environment_configuration::HttpKeepalive; \n\
                 pub use extern_crate::environment_configuration::environment_configuration::Postgresql; \n\
                 pub use extern_crate::environment_configuration::environment_configuration::PrivateKey; \n\
                 pub use extern_crate::environment_configuration::environment_configuration::Redis; \n\
                 pub use extern_crate::environment_configuration::environment_configuration::Resource; \n\
                 pub use extern_crate::environment_configuration::environment_configuration::StringLiteral; \n\
                 pub use extern_crate::environment_configuration::environment_configuration::Tcp; \n\
+                pub use extern_crate::environment_configuration::environment_configuration::TcpKeepalive; \n\
                 pub use extern_crate::environment_configuration::environment_configuration::Tls; \n\
                 \n\
                 pub const {}: EnvironmentConfiguration<StringLiteral> = EnvironmentConfiguration {{ \n\t\
@@ -137,7 +168,11 @@ impl Processor {
                             socket_address: StringLiteral(\"{}\"), \n\t\t\t\
                             nodelay: {}, \n\t\t\t\
                             sleep_on_accept_errors: {}, \n\t\t\t\
-                            keepalive_seconds: {}, \n\t\t\
+                            keepalive: TcpKeepalive {{ \n\t\t\t\t\
+                                duration: {}, \n\t\t\t\t\
+                                interval_duration: {}, \n\t\t\t\t\
+                                retries_quantity: {}, \n\t\t\t\
+                            }}, \n\t\t\
                         }}, \n\t\t\
                         http: Http {{ \n\t\t\t\
                             adaptive_window: {}, \n\t\t\t\
@@ -145,6 +180,9 @@ impl Processor {
                             stream_window_size: {}, \n\t\t\t\
                             maximum_frame_size: {}, \n\t\t\t\
                             maximum_sending_buffer_size: {}, \n\t\t\t\
+                            enable_connect_protocol: {}, \n\t\t\t\
+                            maximum_header_list_size: {}, \n\t\t\t\
+                            maximum_pending_accept_reset_streams: {}, \n\t\t\t\
                             keepalive: {}, \n\t\t\t\
                             tls: {}, \n\t\t\
                         }}, \n\t\
@@ -174,12 +212,17 @@ impl Processor {
             environment_configuration.application_server.tcp.socket_address.0.as_str(),
             environment_configuration.application_server.tcp.nodelay,
             environment_configuration.application_server.tcp.sleep_on_accept_errors,
-            keepalive_seconds,
+            keepalive_duration.as_str(),
+            keepalive_interval_duration.as_str(),
+            keepalive_retries_quantity.as_str(),
             environment_configuration.application_server.http.adaptive_window,
             environment_configuration.application_server.http.connection_window_size,
             environment_configuration.application_server.http.stream_window_size,
             environment_configuration.application_server.http.maximum_frame_size,
             environment_configuration.application_server.http.maximum_sending_buffer_size,
+            environment_configuration.application_server.http.enable_connect_protocol,
+            environment_configuration.application_server.http.maximum_header_list_size,
+            http_maximum_pending_accept_reset_streams.as_str(),
             keepalive.as_str(),
             tls.as_str(),
             environment_configuration.resource.postgresql.database_1_url.0.as_str(),

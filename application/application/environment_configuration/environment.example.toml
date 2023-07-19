@@ -11,8 +11,18 @@ value = false
 [application_server.tcp.sleep_on_accept_errors]
 value = false
 
-[application_server.tcp.keepalive_seconds]
-value = 60
+[application_server.tcp.keepalive]
+
+[application_server.tcp.keepalive.duration]
+value = 3
+is_exist = false
+
+[application_server.tcp.keepalive.interval_duration]
+value = 1
+is_exist = false
+
+[application_server.tcp.keepalive.retries_quantity]
+value = 3
 is_exist = false
 
 [application_server.http]
@@ -32,13 +42,23 @@ value = 16384  #16KB
 [application_server.http.maximum_sending_buffer_size]
 value = 409600    #400KB
 
+[application_server.http.enable_connect_protocol]
+value = false
+
+[application_server.http.maximum_header_list_size]
+value = 1048576    #1MB
+
+[application_server.http.maximum_pending_accept_reset_streams]
+value = 20
+is_exist = false
+
 [application_server.http.keepalive]
 is_exist = false
 
-[application_server.http.keepalive.interval_seconds]
+[application_server.http.keepalive.interval_duration]
 value = 5
 
-[application_server.http.keepalive.timeout_seconds]
+[application_server.http.keepalive.timeout_duration]
 value = 20
 
 [application_server.http.tls]

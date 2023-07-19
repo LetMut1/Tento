@@ -111,7 +111,13 @@ pub mod environment_configuration {
         pub socket_address: T,
         pub nodelay: bool,
         pub sleep_on_accept_errors: bool,
-        pub keepalive_seconds: Option<u64>,
+        pub keepalive: TcpKeepalive,
+    }
+
+    pub struct TcpKeepalive {
+        pub duration: Option<u64>,
+        pub interval_duration: Option<u64>,
+        pub retries_quantity: Option<u32>,
     }
 
     pub struct Http<T>
@@ -123,13 +129,16 @@ pub mod environment_configuration {
         pub stream_window_size: u32,
         pub maximum_frame_size: u32,
         pub maximum_sending_buffer_size: u32,
-        pub keepalive: Option<Keepalive>,
+        pub enable_connect_protocol: bool,
+        pub maximum_header_list_size: u32,
+        pub maximum_pending_accept_reset_streams: Option<usize>,
+        pub keepalive: Option<HttpKeepalive>,
         pub tls: Option<Tls<T>>
     }
 
-    pub struct Keepalive {
-        pub interval_seconds: u64,
-        pub timeout_seconds: u64,
+    pub struct HttpKeepalive {
+        pub interval_duration: u64,
+        pub timeout_duration: u64,
     }
 
     pub struct Tls<T>
@@ -222,7 +231,14 @@ pub mod environment_configuration {
             pub socket_address: Value<String>,
             pub nodelay: Value<bool>,
             pub sleep_on_accept_errors: Value<bool>,
-            pub keepalive_seconds: ValueExist<u64>,
+            pub keepalive: TcpKeepalive,
+        }
+
+        #[derive(Deserialize)]
+        pub struct TcpKeepalive {
+            pub duration: ValueExist<u64>,
+            pub interval_duration: ValueExist<u64>,
+            pub retries_quantity: ValueExist<u32>,
         }
 
         #[derive(Deserialize)]
@@ -232,15 +248,18 @@ pub mod environment_configuration {
             pub stream_window_size: Value<u32>,
             pub maximum_frame_size: Value<u32>,
             pub maximum_sending_buffer_size: Value<u32>,
-            pub keepalive: Keepalive,
+            pub enable_connect_protocol: Value<bool>,
+            pub maximum_header_list_size: Value<u32>,
+            pub maximum_pending_accept_reset_streams: ValueExist<usize>,
+            pub keepalive: HttpKeepalive,
             pub tls: Tls
         }
 
         #[derive(Deserialize)]
-        pub struct Keepalive {
+        pub struct HttpKeepalive {
             pub is_exist: bool,
-            pub interval_seconds: Value<u64>,
-            pub timeout_seconds: Value<u64>,
+            pub interval_duration: Value<u64>,
+            pub timeout_duration: Value<u64>,
         }
 
         #[derive(Deserialize)]
@@ -396,7 +415,7 @@ pub mod error {
 }
 
 pub mod loader {
-    use super::environment_configuration::Keepalive;
+    use super::environment_configuration::HttpKeepalive;
     use super::environment_configuration::String_;
     use super::environment_configuration::Tcp;
     use super::environment_configuration::Http;
@@ -407,6 +426,7 @@ pub mod loader {
     use super::environment_configuration::Encryption;
     use super::environment_configuration::Postgresql;
     use super::environment_configuration::PrivateKey;
+    use super::environment_configuration::TcpKeepalive;
     use super::environment_configuration::Redis;
     use super::environment_configuration::Resource;
     use super::environment_configuration::ApplicationServer;
@@ -484,26 +504,46 @@ pub mod loader {
             let environment_configuration = {
                 let application_server = {
                     let tcp = {
-                        let keepalive_seconds = if environment_configuration_file.application_server.tcp.keepalive_seconds.is_exist {
-                            Some(environment_configuration_file.application_server.tcp.keepalive_seconds.value)
-                        } else {
-                            None
+                        let keepalive = {
+                            let duration = if environment_configuration_file.application_server.tcp.keepalive.duration.is_exist {
+                                Some(environment_configuration_file.application_server.tcp.keepalive.duration.value)
+                            } else {
+                                None
+                            };
+
+                            let interval_duration = if environment_configuration_file.application_server.tcp.keepalive.interval_duration.is_exist {
+                                Some(environment_configuration_file.application_server.tcp.keepalive.interval_duration.value)
+                            } else {
+                                None
+                            };
+
+                            let retries_quantity = if environment_configuration_file.application_server.tcp.keepalive.retries_quantity.is_exist {
+                                Some(environment_configuration_file.application_server.tcp.keepalive.retries_quantity.value)
+                            } else {
+                                None
+                            };
+
+                            TcpKeepalive {
+                                duration,
+                                interval_duration,
+                                retries_quantity,
+                            }
                         };
 
                         Tcp {
                             socket_address: String_(environment_configuration_file.application_server.tcp.socket_address.value),
                             nodelay: environment_configuration_file.application_server.tcp.nodelay.value,
                             sleep_on_accept_errors: environment_configuration_file.application_server.tcp.sleep_on_accept_errors.value,
-                            keepalive_seconds
+                            keepalive
                         }
                     };
 
                     let http = {
                         let keepalive = if environment_configuration_file.application_server.http.keepalive.is_exist {
                             Some(
-                                Keepalive {
-                                    interval_seconds: environment_configuration_file.application_server.http.keepalive.interval_seconds.value,
-                                    timeout_seconds: environment_configuration_file.application_server.http.keepalive.timeout_seconds.value,
+                                HttpKeepalive {
+                                    interval_duration: environment_configuration_file.application_server.http.keepalive.interval_duration.value,
+                                    timeout_duration: environment_configuration_file.application_server.http.keepalive.timeout_duration.value,
                                 }
                             )
                         } else {
@@ -521,12 +561,21 @@ pub mod loader {
                             None
                         };
 
+                        let maximum_pending_accept_reset_streams = if environment_configuration_file.application_server.http.maximum_pending_accept_reset_streams.is_exist {
+                            Some(environment_configuration_file.application_server.http.maximum_pending_accept_reset_streams.value)
+                        } else {
+                            None
+                        };
+
                         Http {
                             adaptive_window: environment_configuration_file.application_server.http.adaptive_window.value,
                             connection_window_size: environment_configuration_file.application_server.http.connection_window_size.value,
                             stream_window_size: environment_configuration_file.application_server.http.stream_window_size.value,
                             maximum_frame_size: environment_configuration_file.application_server.http.maximum_frame_size.value,
                             maximum_sending_buffer_size: environment_configuration_file.application_server.http.maximum_sending_buffer_size.value,
+                            enable_connect_protocol:environment_configuration_file.application_server.http.enable_connect_protocol.value,
+                            maximum_header_list_size:environment_configuration_file.application_server.http.maximum_header_list_size.value,
+                            maximum_pending_accept_reset_streams,
                             keepalive,
                             tls
                         }
