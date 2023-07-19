@@ -17,7 +17,7 @@ impl HttpRouteRegistry {
     pub const VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_SECOND_STEP: &'static str = "/1/11";
     pub const VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_LAST_STEP: &'static str = "/1/12";
     pub const VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_RESET_PASSWORD: &'static str = "/1/13";
-    pub const VERSION_1__APPLICATION_USER__REFRESH_APPLICATION_USER_ACCESS_TOKEN: &'static str = "/1/14";
+    pub const VERSION_1__APPLICATION_USER__REFRESH_ACCESS_TOKEN: &'static str = "/1/14";
     pub const VERSION_1__APPLICATION_USER__DEAUTHORIZE_FROM_ONE_DEVICE: &'static str = "/1/15";
     pub const VERSION_1__APPLICATION_USER__DEAUTHORIZE_FROM_ALL_DEVICE: &'static str = "/1/16";
     pub const VERSION_1__CHANNEL__GET_ONE_BY_ID: &'static str = "/1/17";
@@ -82,8 +82,8 @@ impl HttpRouteRegistry {
         HttpRouteRegistry::VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_RESET_PASSWORD,
         HttpRouteRegistry::CONCATENATING_PART
     );
-    pub const VERSION_1__APPLICATION_USER__REFRESH_APPLICATION_USER_ACCESS_TOKEN_: &'static str = concatcp!(
-        HttpRouteRegistry::VERSION_1__APPLICATION_USER__REFRESH_APPLICATION_USER_ACCESS_TOKEN,
+    pub const VERSION_1__APPLICATION_USER__REFRESH_ACCESS_TOKEN_: &'static str = concatcp!(
+        HttpRouteRegistry::VERSION_1__APPLICATION_USER__REFRESH_ACCESS_TOKEN,
         HttpRouteRegistry::CONCATENATING_PART
     );
     pub const VERSION_1__APPLICATION_USER__DEAUTHORIZE_FROM_ONE_DEVICE_: &'static str = concatcp!(

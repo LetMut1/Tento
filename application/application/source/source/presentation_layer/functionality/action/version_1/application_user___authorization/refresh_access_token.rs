@@ -1,7 +1,7 @@
-use crate::application_layer::functionality::action_processor::version_1::application_user___authorization::refresh_application_user_access_token::ActionProcessor;
-use crate::application_layer::functionality::action_processor::version_1::application_user___authorization::refresh_application_user_access_token::Incoming;
-use crate::application_layer::functionality::action_processor::version_1::application_user___authorization::refresh_application_user_access_token::Outcoming;
-use crate::application_layer::functionality::action_processor::version_1::application_user___authorization::refresh_application_user_access_token::Precedent;
+use crate::application_layer::functionality::action_processor::version_1::application_user___authorization::refresh_access_token::ActionProcessor;
+use crate::application_layer::functionality::action_processor::version_1::application_user___authorization::refresh_access_token::Incoming;
+use crate::application_layer::functionality::action_processor::version_1::application_user___authorization::refresh_access_token::Outcoming;
+use crate::application_layer::functionality::action_processor::version_1::application_user___authorization::refresh_access_token::Precedent;
 use crate::application_layer::functionality::action_processor::core_action_processor::CoreActionProcessor;
 use crate::infrastructure_layer::data::control_type::Request;
 use crate::infrastructure_layer::data::control_type::Response;

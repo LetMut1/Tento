@@ -563,8 +563,8 @@ impl RunServerProcessor {
                 )
                 .await;
             }
-            (HttpRouteRegistry::VERSION_1__APPLICATION_USER__REFRESH_APPLICATION_USER_ACCESS_TOKEN, &Method::POST) => {
-                return application_user___authorization::refresh_application_user_access_token::RefreshApplicationUserAccessToken::run(
+            (HttpRouteRegistry::VERSION_1__APPLICATION_USER__REFRESH_ACCESS_TOKEN, &Method::POST) => {
+                return application_user___authorization::refresh_access_token::RefreshApplicationUserAccessToken::run(
                     request,
                     database_1_postgresql_connection_pool,
                     database_2_postgresql_connection_pool,
@@ -767,8 +767,8 @@ impl RunServerProcessor {
                             )
                             .await;
                         }
-                        (HttpRouteRegistry::VERSION_1__APPLICATION_USER__REFRESH_APPLICATION_USER_ACCESS_TOKEN_, &Method::POST) => {
-                            return application_user___authorization::refresh_application_user_access_token::RefreshApplicationUserAccessToken::run_(
+                        (HttpRouteRegistry::VERSION_1__APPLICATION_USER__REFRESH_ACCESS_TOKEN_, &Method::POST) => {
+                            return application_user___authorization::refresh_access_token::RefreshApplicationUserAccessToken::run_(
                                 request,
                                 database_1_postgresql_connection_pool,
                                 database_2_postgresql_connection_pool,
