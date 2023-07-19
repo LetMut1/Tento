@@ -81,7 +81,6 @@ impl RunServerProcessor {
         return Ok(());
     }
 
-                        // TODO HTTP3 (QUICK) (h3), когда будет готов.!!!!!!!!!!!
     async fn run_http_server() -> Result<(), ErrorAuditor> {
         let mut application_http_socket_address_registry = match ENVIRONMENT_CONFIGURATION.application_server.tcp.socket_address.0.to_socket_addrs() {
             Ok(application_http_socket_address_registry_) => application_http_socket_address_registry_,
