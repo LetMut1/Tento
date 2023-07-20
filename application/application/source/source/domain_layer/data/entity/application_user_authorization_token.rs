@@ -1,6 +1,5 @@
 use super::application_user::ApplicationUser_Id;
 use super::application_user_device::ApplicationUserDevice_Id;
-use crate::domain_layer::functionality::service::getter::Getter;
 use extern_crate::serde::Deserialize;
 use extern_crate::serde::Serialize;
 use std::borrow::Cow;
@@ -167,42 +166,6 @@ impl<'a> ApplicationUserAuthorizationToken<'a> {
     }
 }
 
-impl<'a> Getter<'a, ApplicationUser_Id> for ApplicationUserAuthorizationToken<'_> {
-    fn get(&'a self) -> ApplicationUser_Id {
-        return self.get_application_user_id();
-    }
-}
-
-impl<'a> Getter<'a, &'a ApplicationUserDevice_Id> for ApplicationUserAuthorizationToken<'_> {
-    fn get(&'a self) -> &'a ApplicationUserDevice_Id {
-        return self.get_application_user_device_id();
-    }
-}
-
-impl<'a> Getter<'a, &'a Value> for ApplicationUserAuthorizationToken<'_> {
-    fn get(&'a self) -> &'a Value {
-        return self.get_value();
-    }
-}
-
-impl<'a> Getter<'a, WrongEnterTriesQuantity> for ApplicationUserAuthorizationToken<'_> {
-    fn get(&'a self) -> WrongEnterTriesQuantity {
-        return self.get_wrong_enter_tries_quantity();
-    }
-}
-
-impl<'a> Getter<'a, ExpiresAt> for ApplicationUserAuthorizationToken<'_> {
-    fn get(&'a self) -> ExpiresAt {
-        return self.get_expires_at();
-    }
-}
-
-impl<'a> Getter<'a, CanBeResentFrom> for ApplicationUserAuthorizationToken<'_> {
-    fn get(&'a self) -> CanBeResentFrom {
-        return self.get_can_be_resent_from();
-    }
-}
-
 pub struct ApplicationUserAuthorizationToken1 {
     value: Value,
     wrong_enter_tries_quantity: WrongEnterTriesQuantity,
@@ -278,30 +241,6 @@ impl ApplicationUserAuthorizationToken1 {
     }
 }
 
-impl<'a> Getter<'a, &'a Value> for ApplicationUserAuthorizationToken1 {
-    fn get(&'a self) -> &'a Value {
-        return self.get_value();
-    }
-}
-
-impl<'a> Getter<'a, WrongEnterTriesQuantity> for ApplicationUserAuthorizationToken1 {
-    fn get(&'a self) -> WrongEnterTriesQuantity {
-        return self.get_wrong_enter_tries_quantity();
-    }
-}
-
-impl<'a> Getter<'a, ExpiresAt> for ApplicationUserAuthorizationToken1 {
-    fn get(&'a self) -> ExpiresAt {
-        return self.get_expires_at();
-    }
-}
-
-impl<'a> Getter<'a, CanBeResentFrom> for ApplicationUserAuthorizationToken1 {
-    fn get(&'a self) -> CanBeResentFrom {
-        return self.get_can_be_resent_from();
-    }
-}
-
 pub struct ApplicationUserAuthorizationToken2 {
     value: Value,
     wrong_enter_tries_quantity: WrongEnterTriesQuantity,
@@ -365,24 +304,6 @@ impl ApplicationUserAuthorizationToken2 {
     }
 }
 
-impl<'a> Getter<'a, &'a Value> for ApplicationUserAuthorizationToken2 {
-    fn get(&'a self) -> &'a Value {
-        return self.get_value();
-    }
-}
-
-impl<'a> Getter<'a, WrongEnterTriesQuantity> for ApplicationUserAuthorizationToken2 {
-    fn get(&'a self) -> WrongEnterTriesQuantity {
-        return self.get_wrong_enter_tries_quantity();
-    }
-}
-
-impl<'a> Getter<'a, ExpiresAt> for ApplicationUserAuthorizationToken2 {
-    fn get(&'a self) -> ExpiresAt {
-        return self.expires_at;
-    }
-}
-
 pub struct ApplicationUserAuthorizationToken3 {
     can_be_resent_from: CanBeResentFrom,
 }
@@ -438,23 +359,5 @@ impl ApplicationUserAuthorizationToken5 {
         self.can_be_resent_from = can_be_resent_from;
 
         return self;
-    }
-}
-
-impl<'a> Getter<'a, &'a Value> for ApplicationUserAuthorizationToken5 {
-    fn get(&'a self) -> &'a Value {
-        return self.get_value();
-    }
-}
-
-impl<'a> Getter<'a, ExpiresAt> for ApplicationUserAuthorizationToken5 {
-    fn get(&'a self) -> ExpiresAt {
-        return self.get_expires_at();
-    }
-}
-
-impl<'a> Getter<'a, CanBeResentFrom> for ApplicationUserAuthorizationToken5 {
-    fn get(&'a self) -> CanBeResentFrom {
-        return self.get_can_be_resent_from();
     }
 }

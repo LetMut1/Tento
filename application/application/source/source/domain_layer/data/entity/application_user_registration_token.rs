@@ -1,6 +1,5 @@
 use super::application_user::ApplicationUser_Email;
 use super::application_user_device::ApplicationUserDevice_Id;
-use crate::domain_layer::functionality::service::getter::Getter;
 use extern_crate::serde::Deserialize;
 use extern_crate::serde::Serialize;
 use std::borrow::Cow;
@@ -198,48 +197,6 @@ impl<'a> ApplicationUserRegistrationToken<'a> {
     }
 }
 
-impl<'a> Getter<'a, &'a ApplicationUser_Email> for ApplicationUserRegistrationToken<'_> {
-    fn get(&'a self) -> &'a ApplicationUser_Email {
-        return self.get_application_user_email();
-    }
-}
-
-impl<'a> Getter<'a, &'a ApplicationUserDevice_Id> for ApplicationUserRegistrationToken<'_> {
-    fn get(&'a self) -> &'a ApplicationUserDevice_Id {
-        return self.get_application_user_device_id();
-    }
-}
-
-impl<'a> Getter<'a, &'a Value> for ApplicationUserRegistrationToken<'_> {
-    fn get(&'a self) -> &'a Value {
-        return self.get_value();
-    }
-}
-
-impl<'a> Getter<'a, WrongEnterTriesQuantity> for ApplicationUserRegistrationToken<'_> {
-    fn get(&'a self) -> WrongEnterTriesQuantity {
-        return self.get_wrong_enter_tries_quantity();
-    }
-}
-
-impl<'a> Getter<'a, IsApproved> for ApplicationUserRegistrationToken<'_> {
-    fn get(&'a self) -> IsApproved {
-        return self.get_is_approved();
-    }
-}
-
-impl<'a> Getter<'a, ExpiresAt> for ApplicationUserRegistrationToken<'_> {
-    fn get(&'a self) -> ExpiresAt {
-        return self.get_expires_at();
-    }
-}
-
-impl<'a> Getter<'a, CanBeResentFrom> for ApplicationUserRegistrationToken<'_> {
-    fn get(&'a self) -> CanBeResentFrom {
-        return self.get_can_be_resent_from();
-    }
-}
-
 pub struct ApplicationUserRegistrationToken1 {
     value: Value,
     wrong_enter_tries_quantity: WrongEnterTriesQuantity,
@@ -331,36 +288,6 @@ impl ApplicationUserRegistrationToken1 {
     }
 }
 
-impl<'a> Getter<'a, &'a Value> for ApplicationUserRegistrationToken1 {
-    fn get(&'a self) -> &'a Value {
-        return self.get_value();
-    }
-}
-
-impl<'a> Getter<'a, WrongEnterTriesQuantity> for ApplicationUserRegistrationToken1 {
-    fn get(&'a self) -> WrongEnterTriesQuantity {
-        return self.get_wrong_enter_tries_quantity();
-    }
-}
-
-impl<'a> Getter<'a, IsApproved> for ApplicationUserRegistrationToken1 {
-    fn get(&'a self) -> IsApproved {
-        return self.get_is_approved();
-    }
-}
-
-impl<'a> Getter<'a, ExpiresAt> for ApplicationUserRegistrationToken1 {
-    fn get(&'a self) -> ExpiresAt {
-        return self.get_expires_at();
-    }
-}
-
-impl<'a> Getter<'a, CanBeResentFrom> for ApplicationUserRegistrationToken1 {
-    fn get(&'a self) -> CanBeResentFrom {
-        return self.get_can_be_resent_from();
-    }
-}
-
 pub struct ApplicationUserRegistrationToken2 {
     can_be_resent_from: CanBeResentFrom,
 }
@@ -444,30 +371,6 @@ impl ApplicationUserRegistrationToken3 {
     }
 }
 
-impl<'a> Getter<'a, &'a Value> for ApplicationUserRegistrationToken3 {
-    fn get(&'a self) -> &'a Value {
-        return self.get_value();
-    }
-}
-
-impl<'a> Getter<'a, WrongEnterTriesQuantity> for ApplicationUserRegistrationToken3 {
-    fn get(&'a self) -> WrongEnterTriesQuantity {
-        return self.get_wrong_enter_tries_quantity();
-    }
-}
-
-impl<'a> Getter<'a, IsApproved> for ApplicationUserRegistrationToken3 {
-    fn get(&'a self) -> IsApproved {
-        return self.get_is_approved();
-    }
-}
-
-impl<'a> Getter<'a, ExpiresAt> for ApplicationUserRegistrationToken3 {
-    fn get(&'a self) -> ExpiresAt {
-        return self.get_expires_at();
-    }
-}
-
 pub struct ApplicationUserRegistrationToken4 {
     wrong_enter_tries_quantity: WrongEnterTriesQuantity,
 }
@@ -521,29 +424,5 @@ impl ApplicationUserRegistrationToken6 {
         self.can_be_resent_from = can_be_resent_from;
 
         return self;
-    }
-}
-
-impl<'a> Getter<'a, &'a Value> for ApplicationUserRegistrationToken6 {
-    fn get(&'a self) -> &'a Value {
-        return self.get_value();
-    }
-}
-
-impl<'a> Getter<'a, IsApproved> for ApplicationUserRegistrationToken6 {
-    fn get(&'a self) -> IsApproved {
-        return self.get_is_approved();
-    }
-}
-
-impl<'a> Getter<'a, ExpiresAt> for ApplicationUserRegistrationToken6 {
-    fn get(&'a self) -> ExpiresAt {
-        return self.get_expires_at();
-    }
-}
-
-impl<'a> Getter<'a, CanBeResentFrom> for ApplicationUserRegistrationToken6 {
-    fn get(&'a self) -> CanBeResentFrom {
-        return self.get_can_be_resent_from();
     }
 }

@@ -1,6 +1,5 @@
 use super::application_user::ApplicationUser_Id;
 use super::application_user_device::ApplicationUserDevice_Id;
-use crate::domain_layer::functionality::service::getter::Getter;
 use extern_crate::serde::Deserialize;
 use extern_crate::serde::Serialize;
 use std::borrow::Cow;
@@ -197,48 +196,6 @@ impl<'a> ApplicationUserResetPasswordToken<'a> {
     }
 }
 
-impl<'a> Getter<'a, ApplicationUser_Id> for ApplicationUserResetPasswordToken<'_> {
-    fn get(&'a self) -> ApplicationUser_Id {
-        return self.get_application_user_id();
-    }
-}
-
-impl<'a> Getter<'a, &'a ApplicationUserDevice_Id> for ApplicationUserResetPasswordToken<'_> {
-    fn get(&'a self) -> &'a ApplicationUserDevice_Id {
-        return self.get_application_user_device_id();
-    }
-}
-
-impl<'a> Getter<'a, &'a Value> for ApplicationUserResetPasswordToken<'_> {
-    fn get(&'a self) -> &'a Value {
-        return self.get_value();
-    }
-}
-
-impl<'a> Getter<'a, WrongEnterTriesQuantity> for ApplicationUserResetPasswordToken<'_> {
-    fn get(&'a self) -> WrongEnterTriesQuantity {
-        return self.get_wrong_enter_tries_quantity();
-    }
-}
-
-impl<'a> Getter<'a, IsApproved> for ApplicationUserResetPasswordToken<'_> {
-    fn get(&'a self) -> IsApproved {
-        return self.get_is_approved();
-    }
-}
-
-impl<'a> Getter<'a, ExpiresAt> for ApplicationUserResetPasswordToken<'_> {
-    fn get(&'a self) -> ExpiresAt {
-        return self.get_expires_at();
-    }
-}
-
-impl<'a> Getter<'a, CanBeResentFrom> for ApplicationUserResetPasswordToken<'_> {
-    fn get(&'a self) -> CanBeResentFrom {
-        return self.get_can_be_resent_from();
-    }
-}
-
 pub struct ApplicationUserResetPasswordToken1 {
     value: Value,
     wrong_enter_tries_quantity: WrongEnterTriesQuantity,
@@ -330,36 +287,6 @@ impl ApplicationUserResetPasswordToken1 {
     }
 }
 
-impl<'a> Getter<'a, &'a Value> for ApplicationUserResetPasswordToken1 {
-    fn get(&'a self) -> &'a Value {
-        return self.get_value();
-    }
-}
-
-impl<'a> Getter<'a, WrongEnterTriesQuantity> for ApplicationUserResetPasswordToken1 {
-    fn get(&'a self) -> WrongEnterTriesQuantity {
-        return self.get_wrong_enter_tries_quantity();
-    }
-}
-
-impl<'a> Getter<'a, IsApproved> for ApplicationUserResetPasswordToken1 {
-    fn get(&'a self) -> IsApproved {
-        return self.get_is_approved();
-    }
-}
-
-impl<'a> Getter<'a, ExpiresAt> for ApplicationUserResetPasswordToken1 {
-    fn get(&'a self) -> ExpiresAt {
-        return self.get_expires_at();
-    }
-}
-
-impl<'a> Getter<'a, CanBeResentFrom> for ApplicationUserResetPasswordToken1 {
-    fn get(&'a self) -> CanBeResentFrom {
-        return self.get_can_be_resent_from();
-    }
-}
-
 pub struct ApplicationUserResetPasswordToken2 {
     can_be_resent_from: CanBeResentFrom,
 }
@@ -443,30 +370,6 @@ impl ApplicationUserResetPasswordToken3 {
     }
 }
 
-impl<'a> Getter<'a, &'a Value> for ApplicationUserResetPasswordToken3 {
-    fn get(&'a self) -> &'a Value {
-        return self.get_value();
-    }
-}
-
-impl<'a> Getter<'a, WrongEnterTriesQuantity> for ApplicationUserResetPasswordToken3 {
-    fn get(&'a self) -> WrongEnterTriesQuantity {
-        return self.get_wrong_enter_tries_quantity();
-    }
-}
-
-impl<'a> Getter<'a, IsApproved> for ApplicationUserResetPasswordToken3 {
-    fn get(&'a self) -> IsApproved {
-        return self.get_is_approved();
-    }
-}
-
-impl<'a> Getter<'a, ExpiresAt> for ApplicationUserResetPasswordToken3 {
-    fn get(&'a self) -> ExpiresAt {
-        return self.get_expires_at();
-    }
-}
-
 pub struct ApplicationUserResetPasswordToken4 {
     wrong_enter_tries_quantity: WrongEnterTriesQuantity,
 }
@@ -520,29 +423,5 @@ impl ApplicationUserResetPasswordToken6 {
         self.can_be_resent_from = can_be_resent_from;
 
         return self;
-    }
-}
-
-impl<'a> Getter<'a, &'a Value> for ApplicationUserResetPasswordToken6 {
-    fn get(&'a self) -> &'a Value {
-        return self.get_value();
-    }
-}
-
-impl<'a> Getter<'a, IsApproved> for ApplicationUserResetPasswordToken6 {
-    fn get(&'a self) -> IsApproved {
-        return self.get_is_approved();
-    }
-}
-
-impl<'a> Getter<'a, ExpiresAt> for ApplicationUserResetPasswordToken6 {
-    fn get(&'a self) -> ExpiresAt {
-        return self.get_expires_at();
-    }
-}
-
-impl<'a> Getter<'a, CanBeResentFrom> for ApplicationUserResetPasswordToken6 {
-    fn get(&'a self) -> CanBeResentFrom {
-        return self.get_can_be_resent_from();
     }
 }

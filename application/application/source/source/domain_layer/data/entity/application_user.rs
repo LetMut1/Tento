@@ -1,4 +1,3 @@
-use crate::domain_layer::functionality::service::getter::Getter;
 use extern_crate::serde::Deserialize;
 use extern_crate::serde::Serialize;
 use std::borrow::Cow;
@@ -169,36 +168,6 @@ impl<'a> ApplicationUser<'a> {
     }
 }
 
-impl<'a> Getter<'a, Id> for ApplicationUser<'_> {
-    fn get(&'a self) -> Id {
-        return self.get_id();
-    }
-}
-
-impl<'a> Getter<'a, &'a Email> for ApplicationUser<'_> {
-    fn get(&'a self) -> &'a Email {
-        return self.get_email();
-    }
-}
-
-impl<'a> Getter<'a, &'a Nickname> for ApplicationUser<'_> {
-    fn get(&'a self) -> &'a Nickname {
-        return self.get_nickname();
-    }
-}
-
-impl<'a> Getter<'a, &'a PasswordHash> for ApplicationUser<'_> {
-    fn get(&'a self) -> &'a PasswordHash {
-        return self.get_password_hash();
-    }
-}
-
-impl<'a> Getter<'a, &'a CreatedAt> for ApplicationUser<'_> {
-    fn get(&'a self) -> &'a CreatedAt {
-        return self.get_created_at();
-    }
-}
-
 pub struct ApplicationUser1 {
     id: Id,
     email: Email,
@@ -320,12 +289,6 @@ impl ApplicationUser4 {
     }
 }
 
-impl<'a> Getter<'a, &'a PasswordHash> for ApplicationUser4 {
-    fn get(&'a self) -> &'a PasswordHash {
-        return self.get_password_hash();
-    }
-}
-
 pub struct ApplicationUser5 {
     email: Email,
 }
@@ -339,11 +302,5 @@ impl ApplicationUser5 {
 
     pub fn get_email<'a>(&'a self) -> &'a Email {
         return &self.email;
-    }
-}
-
-impl<'a> Getter<'a, &'a Email> for ApplicationUser5 {
-    fn get(&'a self) -> &'a Email {
-        return self.get_email();
     }
 }
