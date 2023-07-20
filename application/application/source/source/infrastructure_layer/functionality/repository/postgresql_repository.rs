@@ -76,13 +76,17 @@ pub mod by {
 }
 
 pub mod update {
-    use crate::domain_layer::data::entity::application_user::ApplicationUser_PasswordHash;
-    use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
-    use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken1;
     use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ExpiresAt;
     use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ObfuscationValue;
     use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_UpdatedAt;
     use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken_Id;
+    use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_CanBeResentFrom;
+    use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_ExpiresAt;
+    use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_Value;
+    use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_WrongEnterTriesQuantity;
+    use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
+    use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
+    use crate::domain_layer::data::entity::application_user::ApplicationUser_PasswordHash;
 
     pub struct Update1<'a> {
         pub application_user_password_hash: &'a ApplicationUser_PasswordHash,
@@ -93,5 +97,26 @@ pub mod update {
         pub application_user_access_refresh_token_obfuscation_value: &'a ApplicationUserAccessRefreshToken_ObfuscationValue,
         pub application_user_access_refresh_token_expires_at: ApplicationUserAccessRefreshToken_ExpiresAt,
         pub application_user_access_refresh_token_updated_at: ApplicationUserAccessRefreshToken_UpdatedAt,
+    }
+
+    pub struct Update3<'a> {
+        pub application_user_authorization_token_value: &'a ApplicationUserAuthorizationToken_Value,
+        pub application_user_authorization_token_wrong_enter_tries_quantity: ApplicationUserAuthorizationToken_WrongEnterTriesQuantity,
+        pub application_user_authorization_token_expires_at: ApplicationUserAuthorizationToken_ExpiresAt,
+        pub application_user_authorization_token_can_be_resent_from: ApplicationUserAuthorizationToken_CanBeResentFrom
+    }
+
+    pub struct Update4<'a> {
+        pub application_user_authorization_token_value: &'a ApplicationUserAuthorizationToken_Value,
+        pub application_user_authorization_token_wrong_enter_tries_quantity: ApplicationUserAuthorizationToken_WrongEnterTriesQuantity,
+        pub application_user_authorization_token_expires_at: ApplicationUserAuthorizationToken_ExpiresAt,
+    }
+
+    pub struct Update5 {
+        pub application_user_authorization_token_can_be_resent_from: ApplicationUserAuthorizationToken_CanBeResentFrom
+    }
+
+    pub struct Update6 {
+        pub application_user_authorization_token_wrong_enter_tries_quantity: ApplicationUserAuthorizationToken_WrongEnterTriesQuantity,
     }
 }

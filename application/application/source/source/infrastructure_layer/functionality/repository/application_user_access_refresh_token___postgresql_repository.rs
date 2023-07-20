@@ -10,7 +10,6 @@ use crate::domain_layer::data::entity::application_user_access_refresh_token::Ap
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_UpdatedAt;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken_Id;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
-use crate::domain_layer::functionality::service::getter::Getter;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;

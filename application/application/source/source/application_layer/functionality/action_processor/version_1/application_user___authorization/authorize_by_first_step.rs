@@ -16,6 +16,9 @@ use crate::domain_layer::data::entity::application_user_authorization_token::App
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_WrongEnterTriesQuantity;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By4;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::update::Update3;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::update::Update4;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::update::Update5;
 use crate::domain_layer::functionality::service::email_sender::EmailSender;
 use crate::domain_layer::functionality::service::encoder::Encoder;
 use crate::domain_layer::functionality::service::generator::Generator;
@@ -385,7 +388,12 @@ impl ActionProcessor {
                 if need_to_update_1 && need_to_update_2 {
                     if let Err(mut error) = PostgresqlRepository::<ApplicationUserAuthorizationToken1>::update(
                         database_2_postgresql_connection,
-                        &application_user_authorization_token_,
+                        &Update3 {
+                            application_user_authorization_token_value: application_user_authorization_token_.get_value(),
+                            application_user_authorization_token_wrong_enter_tries_quantity: application_user_authorization_token_.get_wrong_enter_tries_quantity(),
+                            application_user_authorization_token_expires_at: application_user_authorization_token_.get_expires_at(),
+                            application_user_authorization_token_can_be_resent_from: application_user_authorization_token_.get_can_be_resent_from(),
+                        },
                         &by_4,
                     )
                     .await
@@ -404,7 +412,9 @@ impl ActionProcessor {
                     if need_to_update_1 {
                         if let Err(mut error) = PostgresqlRepository::<ApplicationUserAuthorizationToken3>::update(
                             database_2_postgresql_connection,
-                            &application_user_authorization_token_,
+                            &Update5 {
+                                application_user_authorization_token_can_be_resent_from: application_user_authorization_token_.get_can_be_resent_from(),
+                            },
                             &by_4,
                         )
                         .await
@@ -424,7 +434,11 @@ impl ActionProcessor {
                     if need_to_update_2 {
                         if let Err(mut error) = PostgresqlRepository::<ApplicationUserAuthorizationToken2>::update(
                             database_2_postgresql_connection,
-                            &application_user_authorization_token_,
+                            &Update4 {
+                                application_user_authorization_token_value: application_user_authorization_token_.get_value(),
+                                application_user_authorization_token_wrong_enter_tries_quantity: application_user_authorization_token_.get_wrong_enter_tries_quantity(),
+                                application_user_authorization_token_expires_at: application_user_authorization_token_.get_expires_at(),
+                            },
                             &by_4,
                         )
                         .await
