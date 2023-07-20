@@ -35,9 +35,9 @@ use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentR
 use crate::infrastructure_layer::functionality::repository::application_user___postgresql_repository::Insert as ApplicationUserInsert;
 use crate::infrastructure_layer::functionality::repository::application_user_access_refresh_token___postgresql_repository::Insert as ApplicationUserAccessRefreshTokenInsert;
 use crate::infrastructure_layer::functionality::repository::application_user_device___postgresql_repository::Insert as ApplicationUserDeviceInsert;
-use crate::infrastructure_layer::functionality::repository::postgresql_repository::By1;
-use crate::infrastructure_layer::functionality::repository::postgresql_repository::By2;
-use crate::infrastructure_layer::functionality::repository::postgresql_repository::By5;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By1;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By2;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By5;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::UnixTime;

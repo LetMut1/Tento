@@ -1,6 +1,6 @@
-use super::postgresql_repository::By1;
-use super::postgresql_repository::By2;
-use super::postgresql_repository::By3;
+use super::postgresql_repository::by::By1;
+use super::postgresql_repository::by::By2;
+use super::postgresql_repository::by::By3;
 use super::postgresql_repository::PostgresqlRepository;
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::data::entity::application_user::ApplicationUser1;

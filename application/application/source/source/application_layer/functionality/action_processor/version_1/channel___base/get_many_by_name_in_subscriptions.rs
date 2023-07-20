@@ -20,7 +20,7 @@ use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectio
 use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::macro_rules::r#enum;
 use extern_crate::serde::Deserialize;
-use crate::infrastructure_layer::functionality::repository::postgresql_repository::By12;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By12;
 use extern_crate::serde::Serialize;
 use extern_crate::tokio_postgres::tls::MakeTlsConnect;
 use extern_crate::tokio_postgres::tls::TlsConnect;
