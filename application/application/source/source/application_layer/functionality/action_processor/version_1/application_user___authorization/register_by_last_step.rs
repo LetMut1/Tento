@@ -38,6 +38,7 @@ use crate::infrastructure_layer::functionality::repository::application_user_dev
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By1;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By2;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By5;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::update::Update10;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::UnixTime;
@@ -337,7 +338,9 @@ impl ActionProcessor {
             if application_user_registration_token_.get_wrong_enter_tries_quantity().get() <= ApplicationUserRegistrationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
                 if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken4>::update(
                     database_2_postgresql_connection,
-                    &application_user_registration_token_,
+                    &Update10 {
+                        application_user_registration_token_wrong_enter_tries_quantity: application_user_registration_token_.get_wrong_enter_tries_quantity(),
+                    },
                     &by_5,
                 )
                 .await

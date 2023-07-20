@@ -11,6 +11,7 @@ use crate::domain_layer::functionality::service::generator::Generator;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::update::Update8;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
@@ -199,7 +200,9 @@ impl ActionProcessor {
 
         if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken2>::update(
             database_2_postgresql_connection,
-            &application_user_registration_token_,
+            &Update8 {
+                application_user_registration_token_can_be_resent_from: application_user_registration_token_.get_can_be_resent_from(),
+            },
             &by_5,
         )
         .await

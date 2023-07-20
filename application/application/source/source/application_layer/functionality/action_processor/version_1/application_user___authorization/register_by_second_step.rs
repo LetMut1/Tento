@@ -12,6 +12,8 @@ use crate::domain_layer::data::entity::application_user_registration_token::Appl
 use crate::domain_layer::functionality::service::incrementor::Incrementor;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::update::Update10;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::update::Update11;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
@@ -214,7 +216,9 @@ impl ActionProcessor {
             if application_user_registration_token_.get_wrong_enter_tries_quantity().get() <= ApplicationUserRegistrationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
                 if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken4>::update(
                     database_2_postgresql_connection,
-                    &application_user_registration_token_,
+                    &Update10 {
+                        application_user_registration_token_wrong_enter_tries_quantity: application_user_registration_token_.get_wrong_enter_tries_quantity(),
+                    },
                     &by_5,
                 )
                 .await
@@ -259,7 +263,9 @@ impl ActionProcessor {
 
         if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken5>::update(
             database_2_postgresql_connection,
-            &application_user_registration_token_,
+            &Update11 {
+                application_user_registration_token_is_approved: application_user_registration_token_.get_is_approved(),
+            },
             &by_5,
         )
         .await

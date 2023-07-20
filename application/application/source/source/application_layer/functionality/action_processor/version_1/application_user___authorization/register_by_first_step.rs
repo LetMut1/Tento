@@ -25,6 +25,9 @@ use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentR
 use crate::infrastructure_layer::functionality::repository::application_user_registration_token___postgresql_repository::Insert;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By2;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By5;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::update::Update7;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::update::Update8;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::update::Update9;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::UnixTime;
@@ -247,7 +250,13 @@ impl ActionProcessor {
                 if need_to_update_1 && need_to_update_2 {
                     if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken1>::update(
                         database_2_postgresql_connection,
-                        &application_user_registration_token_,
+                        &Update7 {
+                            application_user_registration_token_value: application_user_registration_token_.get_value(),
+                            application_user_registration_token_wrong_enter_tries_quantity: application_user_registration_token_.get_wrong_enter_tries_quantity(),
+                            application_user_registration_token_is_approved: application_user_registration_token_.get_is_approved(),
+                            application_user_registration_token_expires_at: application_user_registration_token_.get_expires_at(),
+                            application_user_registration_token_can_be_resent_from: application_user_registration_token_.get_can_be_resent_from(),
+                        },
                         &by_5,
                     )
                     .await
@@ -266,7 +275,9 @@ impl ActionProcessor {
                     if need_to_update_1 {
                         if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken2>::update(
                             database_2_postgresql_connection,
-                            &application_user_registration_token_,
+                            &Update8 {
+                                application_user_registration_token_can_be_resent_from: application_user_registration_token_.get_can_be_resent_from(),
+                            },
                             &by_5,
                         )
                         .await
@@ -286,7 +297,12 @@ impl ActionProcessor {
                     if need_to_update_2 {
                         if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken3>::update(
                             database_2_postgresql_connection,
-                            &application_user_registration_token_,
+                            &Update9 {
+                                application_user_registration_token_value: application_user_registration_token_.get_value(),
+                                application_user_registration_token_wrong_enter_tries_quantity: application_user_registration_token_.get_wrong_enter_tries_quantity(),
+                                application_user_registration_token_is_approved: application_user_registration_token_.get_is_approved(),
+                                application_user_registration_token_expires_at: application_user_registration_token_.get_expires_at(),
+                            },
                             &by_5,
                         )
                         .await
