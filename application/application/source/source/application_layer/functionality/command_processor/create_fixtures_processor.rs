@@ -29,9 +29,9 @@ use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use crate::infrastructure_layer::functionality::repository::application_user___postgresql_repository::Insert as ApplicationUserInsert;
-use crate::infrastructure_layer::functionality::repository::application_user_device___postgresql_repository::Insert as ApplicationUserDeviceInsert;
-use crate::infrastructure_layer::functionality::repository::channel___postgresql_repository::Insert as ChannelInsert;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::insert::Insert1;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::insert::Insert4;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::insert::Insert7;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By1;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By7;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
@@ -303,15 +303,13 @@ impl CreateFixturesProcessor {
             let application_user_ = match application_user {
                 Some(application_user__) => application_user__,
                 None => {
-                    let application_user_insert = ApplicationUserInsert {
-                        application_user_email,
-                        application_user_nickname,
-                        application_user_password_hash: application_user_password_hash.clone(),
-                    };
-
                     let application_user__ = match PostgresqlRepository::<ApplicationUser<'_>>::create(
                         database_1_postgresql_connection,
-                        application_user_insert,
+                        Insert1 {
+                            application_user_email,
+                            application_user_nickname,
+                            application_user_password_hash: application_user_password_hash.clone(),
+                        },
                     )
                     .await
                     {
@@ -356,14 +354,12 @@ impl CreateFixturesProcessor {
                 );
             }
 
-            let application_user_device_insert = ApplicationUserDeviceInsert {
-                application_user_device_id,
-                application_user_id: application_user_.get_id(),
-            };
-
             if let Err(mut error) = PostgresqlRepository::<ApplicationUserDevice>::create(
                 database_1_postgresql_connection,
-                application_user_device_insert,
+                Insert4 {
+                    application_user_device_id,
+                    application_user_id: application_user_.get_id(),
+                },
             )
             .await
             {
@@ -508,24 +504,22 @@ impl CreateFixturesProcessor {
                         continue 'b;
                     }
                     None => {
-                        let channel_insert = ChannelInsert {
-                            channel_owner: application_user_.get_id(),
-                            channel_name,
-                            channel_linked_name,
-                            channel_description,
-                            channel_access_modifier: FormResolver::<AccessModifier>::from_representation(Channel_AccessModifier_::Open),
-                            channel_visability_modifier: FormResolver::<Channel_VisabilityModifier>::from_representation(Channel_VisabilityModifier_::Public),
-                            channel_orientation,
-                            channel_cover_image_path: Some(Channel_CoverImagePath::new(Self::STUB.to_string())),
-                            channel_background_image_path: Some(Channel_BackgroundImagePath::new(Self::STUB.to_string())),
-                            channel_subscribers_quantity: Channel_SubscribersQuantity::new(0),
-                            channel_marks_quantity: Channel_MarksQuantity::new(0),
-                            channel_viewing_quantity: Channel_ViewingQuantity::new(0),
-                        };
-
                         if let Err(mut error) = PostgresqlRepository::<Channel<'_>>::create(
                             database_1_postgresql_connection,
-                            channel_insert,
+                            Insert7 {
+                                channel_owner: application_user_.get_id(),
+                                channel_name,
+                                channel_linked_name,
+                                channel_description,
+                                channel_access_modifier: FormResolver::<AccessModifier>::from_representation(Channel_AccessModifier_::Open),
+                                channel_visability_modifier: FormResolver::<Channel_VisabilityModifier>::from_representation(Channel_VisabilityModifier_::Public),
+                                channel_orientation,
+                                channel_cover_image_path: Some(Channel_CoverImagePath::new(Self::STUB.to_string())),
+                                channel_background_image_path: Some(Channel_BackgroundImagePath::new(Self::STUB.to_string())),
+                                channel_subscribers_quantity: Channel_SubscribersQuantity::new(0),
+                                channel_marks_quantity: Channel_MarksQuantity::new(0),
+                                channel_viewing_quantity: Channel_ViewingQuantity::new(0),
+                            },
                         )
                         .await
                         {

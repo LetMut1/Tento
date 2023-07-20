@@ -23,7 +23,7 @@ use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
-use crate::infrastructure_layer::functionality::repository::application_user_reset_password_token___postgresql_repository::Insert;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::insert::Insert6;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By2;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By4;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::update::Update12;
@@ -362,19 +362,17 @@ impl ActionProcessor {
                     }
                 };
 
-                let insert = Insert {
-                    application_user_id: application_user_.get_id(),
-                    application_user_device_id: &incoming.application_user_device_id,
-                    application_user_reset_password_token_value: Generator::<ApplicationUserResetPasswordToken_Value>::generate(),
-                    application_user_reset_password_token_wrong_enter_tries_quantity: ApplicationUserResetPasswordToken_WrongEnterTriesQuantity::new(0),
-                    application_user_reset_password_token_is_approved: ApplicationUserResetPasswordToken_IsApproved::new(false),
-                    application_user_reset_password_token_expires_at,
-                    application_user_reset_password_token_can_be_resent_from,
-                };
-
                 let application_user_reset_password_token_ = match PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::create(
                     database_2_postgresql_connection,
-                    insert,
+                    Insert6 {
+                        application_user_id: application_user_.get_id(),
+                        application_user_device_id: &incoming.application_user_device_id,
+                        application_user_reset_password_token_value: Generator::<ApplicationUserResetPasswordToken_Value>::generate(),
+                        application_user_reset_password_token_wrong_enter_tries_quantity: ApplicationUserResetPasswordToken_WrongEnterTriesQuantity::new(0),
+                        application_user_reset_password_token_is_approved: ApplicationUserResetPasswordToken_IsApproved::new(false),
+                        application_user_reset_password_token_expires_at,
+                        application_user_reset_password_token_can_be_resent_from,
+                    },
                 )
                 .await
                 {

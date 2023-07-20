@@ -22,7 +22,7 @@ use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
-use crate::infrastructure_layer::functionality::repository::application_user_registration_token___postgresql_repository::Insert;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::insert::Insert5;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By2;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By5;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::update::Update7;
@@ -358,19 +358,17 @@ impl ActionProcessor {
                     }
                 };
 
-                let insert = Insert {
-                    application_user_email: &incoming.application_user_email,
-                    application_user_device_id: &incoming.application_user_device_id,
-                    application_user_registration_token_value: Generator::<ApplicationUserRegistrationToken_Value>::generate(),
-                    application_user_registration_token_wrong_enter_tries_quantity: ApplicationUserRegistrationToken_WrongEnterTriesQuantity::new(0),
-                    application_user_registration_token_is_approved: ApplicationUserRegistrationToken_IsApproved::new(false),
-                    application_user_registration_token_expires_at,
-                    application_user_registration_token_can_be_resent_from,
-                };
-
                 let application_user_registration_token_ = match PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::create(
                     database_2_postgresql_connection,
-                    insert,
+                    Insert5 {
+                        application_user_email: &incoming.application_user_email,
+                        application_user_device_id: &incoming.application_user_device_id,
+                        application_user_registration_token_value: Generator::<ApplicationUserRegistrationToken_Value>::generate(),
+                        application_user_registration_token_wrong_enter_tries_quantity: ApplicationUserRegistrationToken_WrongEnterTriesQuantity::new(0),
+                        application_user_registration_token_is_approved: ApplicationUserRegistrationToken_IsApproved::new(false),
+                        application_user_registration_token_expires_at,
+                        application_user_registration_token_can_be_resent_from,
+                    },
                 )
                 .await
                 {

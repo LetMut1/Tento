@@ -13,7 +13,7 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use crate::infrastructure_layer::functionality::repository::action_round_register___postgresql_repository::Insert;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::insert::Insert11;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::converter::Convert;
 use crate::infrastructure_layer::functionality::service::converter::Converter;
@@ -129,13 +129,6 @@ impl Writer<ActionRoundRegister<'_>> {
 
         let action_round_register_method = ActionRoundRegister_Method::new(Cow::Borrowed(request.method().as_str()));
 
-        let insert = Insert {
-            action_round_register_route,
-            action_round_register_method,
-            action_round_register_status_code,
-            action_round_register_context,
-        };
-
         let database_2_postgresql_pooled_connection = match database_2_postgresql_connection_pool.get().await {
             Ok(database_2_postgresql_pooled_connection_) => database_2_postgresql_pooled_connection_,
             Err(error) => {
@@ -160,7 +153,12 @@ impl Writer<ActionRoundRegister<'_>> {
 
         if let Err(mut error) = PostgresqlRepository::<ActionRoundRegister>::create(
             &*database_2_postgresql_pooled_connection,
-            insert,
+            Insert11 {
+                action_round_register_route,
+                action_round_register_method,
+                action_round_register_status_code,
+                action_round_register_context,
+            },
         )
         .await
         {

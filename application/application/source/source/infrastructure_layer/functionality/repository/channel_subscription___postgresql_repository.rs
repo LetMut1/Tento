@@ -1,6 +1,4 @@
 use super::postgresql_repository::PostgresqlRepository;
-use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
-use crate::domain_layer::data::entity::channel::Channel_Id;
 use crate::domain_layer::data::entity::channel_subscription::ChannelSubscription;
 use crate::domain_layer::data::entity::channel_subscription::ChannelSubscription_CreatedAt;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
@@ -8,6 +6,7 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use super::postgresql_repository::by::By10;
+use super::postgresql_repository::insert::Insert10;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 use extern_crate::tokio_postgres::types::Type;
@@ -16,11 +15,11 @@ use extern_crate::tokio_postgres::Client as Connection;
 impl PostgresqlRepository<ChannelSubscription> {
     pub async fn create<'a>(
         database_1_connection: &'a Connection,
-        insert: Insert,
+        insert_10: Insert10,
     ) -> Result<ChannelSubscription, ErrorAuditor> {
-        let application_user_id = insert.application_user_id.get();
+        let application_user_id = insert_10.application_user_id.get();
 
-        let channel_id = insert.channel_id.get();
+        let channel_id = insert_10.channel_id.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -126,8 +125,8 @@ impl PostgresqlRepository<ChannelSubscription> {
         };
 
         let channel_subscription = ChannelSubscription::new(
-            insert.application_user_id,
-            insert.channel_id,
+            insert_10.application_user_id,
+            insert_10.channel_id,
             channel_subscription_created_at,
         );
 
@@ -222,9 +221,4 @@ impl PostgresqlRepository<ChannelSubscription> {
 
         return Ok(true);
     }
-}
-
-pub struct Insert {
-    pub application_user_id: ApplicationUser_Id,
-    pub channel_id: Channel_Id,
 }

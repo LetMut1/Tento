@@ -1,5 +1,4 @@
 use super::postgresql_repository::PostgresqlRepository;
-use crate::domain_layer::data::entity::channel::Channel_Id;
 use crate::domain_layer::data::entity::channel_outer_link::ChannelOuterLink;
 use crate::domain_layer::data::entity::channel_outer_link::ChannelOuterLink_Address;
 use crate::domain_layer::data::entity::channel_outer_link::ChannelOuterLink_Alias;
@@ -12,6 +11,7 @@ use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 use extern_crate::serde::Serialize;
 use super::postgresql_repository::by::By9;
+use super::postgresql_repository::insert::Insert9;
 use extern_crate::tokio_postgres::types::Type;
 use extern_crate::tokio_postgres::Client as Connection;
 
@@ -21,13 +21,13 @@ use extern_crate::serde::Deserialize;
 impl PostgresqlRepository<ChannelOuterLink> {
     pub async fn create<'a>(
         database_1_connection: &'a Connection,
-        insert: Insert,
+        insert_9: Insert9,
     ) -> Result<ChannelOuterLink, ErrorAuditor> {
-        let channel_outer_link_from = insert.channel_outer_link_from.get();
+        let channel_outer_link_from = insert_9.channel_outer_link_from.get();
 
-        let channel_outer_link_alias = insert.channel_outer_link_alias.get();
+        let channel_outer_link_alias = insert_9.channel_outer_link_alias.get();
 
-        let channel_outer_link_address = insert.channel_outer_link_address.get();
+        let channel_outer_link_address = insert_9.channel_outer_link_address.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -139,9 +139,9 @@ impl PostgresqlRepository<ChannelOuterLink> {
         };
 
         let channel_outer_link = ChannelOuterLink::new(
-            insert.channel_outer_link_from,
-            insert.channel_outer_link_alias,
-            insert.channel_outer_link_address,
+            insert_9.channel_outer_link_from,
+            insert_9.channel_outer_link_alias,
+            insert_9.channel_outer_link_address,
             channel_outer_link_created_at,
         );
 
@@ -292,12 +292,6 @@ impl PostgresqlRepository<ChannelOuterLink> {
 
         return Ok(channel_outer_link_registry);
     }
-}
-
-pub struct Insert {
-    pub channel_outer_link_from: Channel_Id,
-    pub channel_outer_link_alias: ChannelOuterLink_Alias,
-    pub channel_outer_link_address: ChannelOuterLink_Address,
 }
 
 #[cfg_attr(

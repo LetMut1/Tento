@@ -15,6 +15,7 @@ use crate::domain_layer::data::entity::application_user::ApplicationUser_Nicknam
 use crate::domain_layer::data::entity::application_user::ApplicationUser_PasswordHash;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use super::postgresql_repository::update::Update1;
+use super::postgresql_repository::insert::Insert1;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
@@ -27,13 +28,13 @@ use std::borrow::Cow;
 impl PostgresqlRepository<ApplicationUser<'_>> {
     pub async fn create<'a>(
         database_1_connection: &'a Connection,
-        insert: Insert,
+        insert_1: Insert1,
     ) -> Result<ApplicationUser<'static>, ErrorAuditor> {
-        let application_user_email = insert.application_user_email.get();
+        let application_user_email = insert_1.application_user_email.get();
 
-        let application_user_nickname = insert.application_user_nickname.get();
+        let application_user_nickname = insert_1.application_user_nickname.get();
 
-        let application_user_password_hash = insert.application_user_password_hash.get();
+        let application_user_password_hash = insert_1.application_user_password_hash.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -171,9 +172,9 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
 
         let application_user = ApplicationUser::new(
             application_user_id,
-            insert.application_user_email,
-            Cow::Owned(insert.application_user_nickname),
-            insert.application_user_password_hash,
+            insert_1.application_user_email,
+            Cow::Owned(insert_1.application_user_nickname),
+            insert_1.application_user_password_hash,
             application_user_created_at,
         );
 
@@ -1388,10 +1389,4 @@ impl PostgresqlRepository<ApplicationUser5> {
 
         return Ok(Some(ApplicationUser5::new(application_user_email)));
     }
-}
-
-pub struct Insert {
-    pub application_user_email: ApplicationUser_Email,
-    pub application_user_nickname: ApplicationUser_Nickname,
-    pub application_user_password_hash: ApplicationUser_PasswordHash,
 }

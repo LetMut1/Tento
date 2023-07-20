@@ -31,8 +31,8 @@ use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
-use crate::infrastructure_layer::functionality::repository::application_user_access_refresh_token___postgresql_repository::Insert as ApplicationUserAccessRefreshTokenInsert;
-use crate::infrastructure_layer::functionality::repository::application_user_device___postgresql_repository::Insert as ApplicationUserDeviceInsert;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::insert::Insert2;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::insert::Insert4;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By3;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By4;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::update::Update6;
@@ -402,18 +402,16 @@ impl ActionProcessor {
                 application_user_access_refresh_token__
             }
             None => {
-                let application_user_access_refresh_token_insert = ApplicationUserAccessRefreshTokenInsert {
-                    application_user_id: incoming.application_user_id,
-                    application_user_device_id: &incoming.application_user_device_id,
-                    application_user_access_token_id,
-                    application_user_access_refresh_token_obfuscation_value,
-                    application_user_access_refresh_token_expires_at,
-                    application_user_access_refresh_token_updated_at,
-                };
-
                 let application_user_access_refresh_token__ = match PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::create(
                     database_2_postgresql_connection,
-                    application_user_access_refresh_token_insert,
+                    Insert2 {
+                        application_user_id: incoming.application_user_id,
+                        application_user_device_id: &incoming.application_user_device_id,
+                        application_user_access_token_id,
+                        application_user_access_refresh_token_obfuscation_value,
+                        application_user_access_refresh_token_expires_at,
+                        application_user_access_refresh_token_updated_at,
+                    },
                 )
                 .await
                 {
@@ -482,14 +480,12 @@ impl ActionProcessor {
             }
         };
 
-        let application_user_device_insert = ApplicationUserDeviceInsert {
-            application_user_device_id: incoming.application_user_device_id,
-            application_user_id: incoming.application_user_id,
-        };
-
         if let Err(mut error) = PostgresqlRepository::<ApplicationUserDevice>::create(
             database_1_postgresql_connection,
-            application_user_device_insert,
+            Insert4 {
+                application_user_device_id: incoming.application_user_device_id,
+                application_user_id: incoming.application_user_id,
+            },
         )
         .await
         {

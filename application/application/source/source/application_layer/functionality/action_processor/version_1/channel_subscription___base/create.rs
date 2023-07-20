@@ -20,7 +20,7 @@ use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::data::void::Void;
-use crate::infrastructure_layer::functionality::repository::channel_subscription___postgresql_repository::Insert;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::insert::Insert10;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use extern_crate::bb8::Pool;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
@@ -185,14 +185,12 @@ impl ActionProcessor {
             );
         }
 
-        let insert = Insert {
-            application_user_id: application_user_access_token.get_application_user_id(),
-            channel_id: channel_.get_id(),
-        };
-
         if let Err(mut error) = PostgresqlRepository::<ChannelSubscription>::create(
             database_1_postgresql_connection,
-            insert,
+            Insert10 {
+                application_user_id: application_user_access_token.get_application_user_id(),
+                channel_id: channel_.get_id(),
+            },
         )
         .await
         {

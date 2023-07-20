@@ -2,14 +2,13 @@ use super::postgresql_repository::by::By3;
 use super::postgresql_repository::by::By4;
 use super::postgresql_repository::update::Update2;
 use super::postgresql_repository::PostgresqlRepository;
-use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
+use super::postgresql_repository::insert::Insert2;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken1;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ObfuscationValue;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_UpdatedAt;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken_Id;
-use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -23,21 +22,21 @@ use std::borrow::Cow;
 impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
     pub async fn create<'a>(
         database_2_connection: &'a Connection,
-        insert: Insert<'a>,
+        insert_2: Insert2<'a>,
     ) -> Result<ApplicationUserAccessRefreshToken<'a>, ErrorAuditor> {
-        let application_user_id = insert.application_user_id.get();
+        let application_user_id = insert_2.application_user_id.get();
 
-        let application_user_device_id = insert.application_user_device_id.get();
+        let application_user_device_id = insert_2.application_user_device_id.get();
 
-        let application_user_access_token_id = insert.application_user_access_token_id.get();
+        let application_user_access_token_id = insert_2.application_user_access_token_id.get();
 
-        let application_user_access_refresh_token_obfuscation_value = insert.application_user_access_refresh_token_obfuscation_value.get();
+        let application_user_access_refresh_token_obfuscation_value = insert_2.application_user_access_refresh_token_obfuscation_value.get();
 
-        let application_user_access_refresh_token_expires_at = insert.application_user_access_refresh_token_expires_at.get();
+        let application_user_access_refresh_token_expires_at = insert_2.application_user_access_refresh_token_expires_at.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let application_user_access_refresh_token_updated_at = insert.application_user_access_refresh_token_updated_at.get();
+        let application_user_access_refresh_token_updated_at = insert_2.application_user_access_refresh_token_updated_at.get();
 
         let query = "\
             INSERT INTO public.application_user_access_refresh_token AS auart ( \
@@ -137,12 +136,12 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
 
         return Ok(
             ApplicationUserAccessRefreshToken::new(
-                insert.application_user_id,
-                Cow::Borrowed(insert.application_user_device_id),
-                Cow::Borrowed(insert.application_user_access_token_id),
-                insert.application_user_access_refresh_token_obfuscation_value,
-                insert.application_user_access_refresh_token_expires_at,
-                insert.application_user_access_refresh_token_updated_at,
+                insert_2.application_user_id,
+                Cow::Borrowed(insert_2.application_user_device_id),
+                Cow::Borrowed(insert_2.application_user_access_token_id),
+                insert_2.application_user_access_refresh_token_obfuscation_value,
+                insert_2.application_user_access_refresh_token_expires_at,
+                insert_2.application_user_access_refresh_token_updated_at,
             ),
         );
     }
@@ -607,13 +606,4 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken1> {
 
         return Ok(());
     }
-}
-
-pub struct Insert<'a> {
-    pub application_user_id: ApplicationUser_Id,
-    pub application_user_device_id: &'a ApplicationUserDevice_Id,
-    pub application_user_access_token_id: &'a ApplicationUserAccessToken_Id,
-    pub application_user_access_refresh_token_obfuscation_value: ApplicationUserAccessRefreshToken_ObfuscationValue,
-    pub application_user_access_refresh_token_expires_at: ApplicationUserAccessRefreshToken_ExpiresAt,
-    pub application_user_access_refresh_token_updated_at: ApplicationUserAccessRefreshToken_UpdatedAt,
 }

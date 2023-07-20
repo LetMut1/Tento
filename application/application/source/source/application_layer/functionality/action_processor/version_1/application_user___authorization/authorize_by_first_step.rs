@@ -30,7 +30,7 @@ use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
-use crate::infrastructure_layer::functionality::repository::application_user_authorization_token___postgresql_repository::Insert;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::insert::Insert3;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By1;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By2;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
@@ -494,18 +494,16 @@ impl ActionProcessor {
                     }
                 };
 
-                let insert = Insert {
-                    application_user_id,
-                    application_user_device_id: &incoming.application_user_device_id,
-                    application_user_authorization_token_value: Generator::<ApplicationUserAuthorizationToken_Value>::generate(),
-                    application_user_authorization_token_wrong_enter_tries_quantity: ApplicationUserAuthorizationToken_WrongEnterTriesQuantity::new(0),
-                    application_user_authorization_token_expires_at,
-                    application_user_authorization_token_can_be_resent_from,
-                };
-
                 let application_user_authorization_token_ = match PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::create(
                     database_2_postgresql_connection,
-                    insert,
+                    Insert3 {
+                        application_user_id,
+                        application_user_device_id: &incoming.application_user_device_id,
+                        application_user_authorization_token_value: Generator::<ApplicationUserAuthorizationToken_Value>::generate(),
+                        application_user_authorization_token_wrong_enter_tries_quantity: ApplicationUserAuthorizationToken_WrongEnterTriesQuantity::new(0),
+                        application_user_authorization_token_expires_at,
+                        application_user_authorization_token_can_be_resent_from,
+                    },
                 )
                 .await
                 {

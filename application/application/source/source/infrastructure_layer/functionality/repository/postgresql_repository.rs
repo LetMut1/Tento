@@ -182,3 +182,134 @@ pub mod update {
         pub application_user_reset_password_token_is_approved: ApplicationUserResetPasswordToken_IsApproved,
     }
 }
+
+pub mod insert {
+    use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ExpiresAt;
+    use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ObfuscationValue;
+    use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_UpdatedAt;
+    use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken_Id;
+    use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_CanBeResentFrom;
+    use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_ExpiresAt;
+    use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_Value;
+    use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_WrongEnterTriesQuantity;
+    use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
+    use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
+    use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
+    use crate::domain_layer::data::entity::application_user::ApplicationUser_Nickname;
+    use crate::domain_layer::data::entity::application_user::ApplicationUser_PasswordHash;
+    use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_CanBeResentFrom;
+    use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_ExpiresAt;
+    use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_IsApproved;
+    use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_Value;
+    use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_WrongEnterTriesQuantity;
+    use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_CanBeResentFrom;
+    use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_ExpiresAt;
+    use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_IsApproved;
+    use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_Value;
+    use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_WrongEnterTriesQuantity;
+    use crate::domain_layer::data::entity::channel::Channel_AccessModifier;
+    use crate::domain_layer::data::entity::channel::Channel_BackgroundImagePath;
+    use crate::domain_layer::data::entity::channel::Channel_CoverImagePath;
+    use crate::domain_layer::data::entity::channel::Channel_Description;
+    use crate::domain_layer::data::entity::channel::Channel_Id;
+    use crate::domain_layer::data::entity::channel::Channel_LinkedName;
+    use crate::domain_layer::data::entity::channel::Channel_MarksQuantity;
+    use crate::domain_layer::data::entity::channel::Channel_Name;
+    use crate::domain_layer::data::entity::channel::Channel_Orientation;
+    use crate::domain_layer::data::entity::channel::Channel_SubscribersQuantity;
+    use crate::domain_layer::data::entity::channel::Channel_ViewingQuantity;
+    use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier;
+    use crate::domain_layer::data::entity::channel_outer_link::ChannelOuterLink_Address;
+    use crate::domain_layer::data::entity::channel_outer_link::ChannelOuterLink_Alias;
+    use crate::domain_layer::data::entity::action_round_register::ActionRoundRegister_Context;
+    use crate::domain_layer::data::entity::action_round_register::ActionRoundRegister_Method;
+    use crate::domain_layer::data::entity::action_round_register::ActionRoundRegister_Route;
+    use crate::domain_layer::data::entity::action_round_register::ActionRoundRegister_StatusCode;
+
+    pub struct Insert1 {
+        pub application_user_email: ApplicationUser_Email,
+        pub application_user_nickname: ApplicationUser_Nickname,
+        pub application_user_password_hash: ApplicationUser_PasswordHash,
+    }
+
+    pub struct Insert2<'a> {
+        pub application_user_id: ApplicationUser_Id,
+        pub application_user_device_id: &'a ApplicationUserDevice_Id,
+        pub application_user_access_token_id: &'a ApplicationUserAccessToken_Id,
+        pub application_user_access_refresh_token_obfuscation_value: ApplicationUserAccessRefreshToken_ObfuscationValue,
+        pub application_user_access_refresh_token_expires_at: ApplicationUserAccessRefreshToken_ExpiresAt,
+        pub application_user_access_refresh_token_updated_at: ApplicationUserAccessRefreshToken_UpdatedAt,
+    }
+
+    pub struct Insert3<'a> {
+        pub application_user_id: ApplicationUser_Id,
+        pub application_user_device_id: &'a ApplicationUserDevice_Id,
+        pub application_user_authorization_token_value: ApplicationUserAuthorizationToken_Value,
+        pub application_user_authorization_token_wrong_enter_tries_quantity: ApplicationUserAuthorizationToken_WrongEnterTriesQuantity,
+        pub application_user_authorization_token_expires_at: ApplicationUserAuthorizationToken_ExpiresAt,
+        pub application_user_authorization_token_can_be_resent_from: ApplicationUserAuthorizationToken_CanBeResentFrom,
+    }
+
+    pub struct Insert4 {
+        pub application_user_device_id: ApplicationUserDevice_Id,
+        pub application_user_id: ApplicationUser_Id,
+    }
+
+    pub struct Insert5<'a> {
+        pub application_user_email: &'a ApplicationUser_Email,
+        pub application_user_device_id: &'a ApplicationUserDevice_Id,
+        pub application_user_registration_token_value: ApplicationUserRegistrationToken_Value,
+        pub application_user_registration_token_wrong_enter_tries_quantity: ApplicationUserRegistrationToken_WrongEnterTriesQuantity,
+        pub application_user_registration_token_is_approved: ApplicationUserRegistrationToken_IsApproved,
+        pub application_user_registration_token_expires_at: ApplicationUserRegistrationToken_ExpiresAt,
+        pub application_user_registration_token_can_be_resent_from: ApplicationUserRegistrationToken_CanBeResentFrom,
+    }
+
+    pub struct Insert6<'a> {
+        pub application_user_id: ApplicationUser_Id,
+        pub application_user_device_id: &'a ApplicationUserDevice_Id,
+        pub application_user_reset_password_token_value: ApplicationUserResetPasswordToken_Value,
+        pub application_user_reset_password_token_wrong_enter_tries_quantity: ApplicationUserResetPasswordToken_WrongEnterTriesQuantity,
+        pub application_user_reset_password_token_is_approved: ApplicationUserResetPasswordToken_IsApproved,
+        pub application_user_reset_password_token_expires_at: ApplicationUserResetPasswordToken_ExpiresAt,
+        pub application_user_reset_password_token_can_be_resent_from: ApplicationUserResetPasswordToken_CanBeResentFrom,
+    }
+
+    pub struct Insert7 {
+        pub channel_owner: ApplicationUser_Id,
+        pub channel_name: Channel_Name,
+        pub channel_linked_name: Channel_LinkedName,
+        pub channel_description: Option<Channel_Description>,
+        pub channel_access_modifier: Channel_AccessModifier,
+        pub channel_visability_modifier: Channel_VisabilityModifier,
+        pub channel_orientation: Channel_Orientation,
+        pub channel_cover_image_path: Option<Channel_CoverImagePath>,
+        pub channel_background_image_path: Option<Channel_BackgroundImagePath>,
+        pub channel_subscribers_quantity: Channel_SubscribersQuantity,
+        pub channel_marks_quantity: Channel_MarksQuantity,
+        pub channel_viewing_quantity: Channel_ViewingQuantity,
+    }
+
+    pub struct Insert8 {
+        pub channel_inner_link_from: Channel_Id,
+        pub channel_inner_link_to: Channel_Id,
+    }
+
+    pub struct Insert9 {
+        pub channel_outer_link_from: Channel_Id,
+        pub channel_outer_link_alias: ChannelOuterLink_Alias,
+        pub channel_outer_link_address: ChannelOuterLink_Address,
+    }
+
+    pub struct Insert10 {
+        pub application_user_id: ApplicationUser_Id,
+        pub channel_id: Channel_Id,
+    }
+
+    pub struct Insert11<'a> {
+        pub action_round_register_route: ActionRoundRegister_Route<'a>,
+        pub action_round_register_method: ActionRoundRegister_Method<'a>,
+        pub action_round_register_status_code: ActionRoundRegister_StatusCode,
+        pub action_round_register_context: Option<ActionRoundRegister_Context>,
+    }
+}

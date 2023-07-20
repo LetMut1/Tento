@@ -7,6 +7,7 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use super::postgresql_repository::by::By8;
+use super::postgresql_repository::insert::Insert8;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 use extern_crate::serde::Serialize;
@@ -19,11 +20,11 @@ use extern_crate::serde::Deserialize;
 impl PostgresqlRepository<ChannelInnerLink> {
     pub async fn create<'a>(
         database_1_connection: &'a Connection,
-        insert: Insert,
+        insert_8: Insert8,
     ) -> Result<ChannelInnerLink, ErrorAuditor> {
-        let channel_inner_link_from = insert.channel_inner_link_from.get();
+        let channel_inner_link_from = insert_8.channel_inner_link_from.get();
 
-        let channel_inner_link_to = insert.channel_inner_link_to.get();
+        let channel_inner_link_to = insert_8.channel_inner_link_to.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -129,8 +130,8 @@ impl PostgresqlRepository<ChannelInnerLink> {
         };
 
         let channel_inner_link = ChannelInnerLink::new(
-            insert.channel_inner_link_from,
-            insert.channel_inner_link_to,
+            insert_8.channel_inner_link_from,
+            insert_8.channel_inner_link_to,
             channel_inner_link_created_at,
         );
 
@@ -257,11 +258,6 @@ impl PostgresqlRepository<ChannelInnerLink> {
 
         return Ok(channel_inner_link_registry);
     }
-}
-
-pub struct Insert {
-    pub channel_inner_link_from: Channel_Id,
-    pub channel_inner_link_to: Channel_Id,
 }
 
 #[cfg_attr(

@@ -1,5 +1,4 @@
 use super::postgresql_repository::PostgresqlRepository;
-use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken1;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken2;
@@ -10,12 +9,12 @@ use crate::domain_layer::data::entity::application_user_authorization_token::App
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_Value;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_WrongEnterTriesQuantity;
-use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use super::postgresql_repository::by::By4;
 use super::postgresql_repository::update::Update3;
 use super::postgresql_repository::update::Update4;
 use super::postgresql_repository::update::Update5;
 use super::postgresql_repository::update::Update6;
+use super::postgresql_repository::insert::Insert3;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -29,19 +28,19 @@ use std::borrow::Cow;
 impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
     pub async fn create<'a>(
         database_2_connection: &'a Connection,
-        insert: Insert<'a>,
+        insert_3: Insert3<'a>,
     ) -> Result<ApplicationUserAuthorizationToken<'a>, ErrorAuditor> {
-        let application_user_id = insert.application_user_id.get();
+        let application_user_id = insert_3.application_user_id.get();
 
-        let application_user_device_id = insert.application_user_device_id.get();
+        let application_user_device_id = insert_3.application_user_device_id.get();
 
-        let application_user_authorization_token_value = insert.application_user_authorization_token_value.get();
+        let application_user_authorization_token_value = insert_3.application_user_authorization_token_value.get();
 
-        let application_user_authorization_token_wrong_enter_tries_quantity = insert.application_user_authorization_token_wrong_enter_tries_quantity.get();
+        let application_user_authorization_token_wrong_enter_tries_quantity = insert_3.application_user_authorization_token_wrong_enter_tries_quantity.get();
 
-        let application_user_authorization_token_expires_at = insert.application_user_authorization_token_expires_at.get();
+        let application_user_authorization_token_expires_at = insert_3.application_user_authorization_token_expires_at.get();
 
-        let application_user_authorization_token_can_be_resent_from = insert.application_user_authorization_token_can_be_resent_from.get();
+        let application_user_authorization_token_can_be_resent_from = insert_3.application_user_authorization_token_can_be_resent_from.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -143,12 +142,12 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
 
         return Ok(
             ApplicationUserAuthorizationToken::new(
-                insert.application_user_id,
-                Cow::Borrowed(insert.application_user_device_id),
-                insert.application_user_authorization_token_value,
-                insert.application_user_authorization_token_wrong_enter_tries_quantity,
-                insert.application_user_authorization_token_expires_at,
-                insert.application_user_authorization_token_can_be_resent_from,
+                insert_3.application_user_id,
+                Cow::Borrowed(insert_3.application_user_device_id),
+                insert_3.application_user_authorization_token_value,
+                insert_3.application_user_authorization_token_wrong_enter_tries_quantity,
+                insert_3.application_user_authorization_token_expires_at,
+                insert_3.application_user_authorization_token_can_be_resent_from,
             ),
         );
     }
@@ -1169,13 +1168,4 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken5> {
             ),
         );
     }
-}
-
-pub struct Insert<'a> {
-    pub application_user_id: ApplicationUser_Id,
-    pub application_user_device_id: &'a ApplicationUserDevice_Id,
-    pub application_user_authorization_token_value: ApplicationUserAuthorizationToken_Value,
-    pub application_user_authorization_token_wrong_enter_tries_quantity: ApplicationUserAuthorizationToken_WrongEnterTriesQuantity,
-    pub application_user_authorization_token_expires_at: ApplicationUserAuthorizationToken_ExpiresAt,
-    pub application_user_authorization_token_can_be_resent_from: ApplicationUserAuthorizationToken_CanBeResentFrom,
 }

@@ -1,6 +1,5 @@
 use super::postgresql_repository::PostgresqlRepository;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
-use crate::domain_layer::data::entity::channel::Channel;
 use crate::domain_layer::data::entity::channel::Channel_AccessModifier;
 use crate::domain_layer::data::entity::channel::Channel_BackgroundImagePath;
 use crate::domain_layer::data::entity::channel::Channel_CoverImagePath;
@@ -13,15 +12,17 @@ use crate::domain_layer::data::entity::channel::Channel_Name;
 use crate::domain_layer::data::entity::channel::Channel_Orientation;
 use crate::domain_layer::data::entity::channel::Channel_SubscribersQuantity;
 use crate::domain_layer::data::entity::channel::Channel_ViewingQuantity;
-use super::postgresql_repository::by::By7;
 use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier;
+use crate::domain_layer::data::entity::channel::Channel;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
-use super::postgresql_repository::by::By6;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
+use super::postgresql_repository::by::By6;
+use super::postgresql_repository::by::By7;
+use super::postgresql_repository::insert::Insert7;
 use extern_crate::serde::Serialize;
 use extern_crate::tokio_postgres::types::Type;
 use extern_crate::tokio_postgres::Client as Connection;
@@ -33,40 +34,40 @@ use extern_crate::serde::Deserialize;
 impl PostgresqlRepository<Channel<'_>> {
     pub async fn create<'a>(
         database_1_connection: &'a Connection,
-        insert: Insert,
+        insert_7: Insert7,
     ) -> Result<Channel<'static>, ErrorAuditor> {
-        let channel_owner = insert.channel_owner.get();
+        let channel_owner = insert_7.channel_owner.get();
 
-        let channel_name = insert.channel_name.get();
+        let channel_name = insert_7.channel_name.get();
 
-        let channel_linked_name = insert.channel_linked_name.get();
+        let channel_linked_name = insert_7.channel_linked_name.get();
 
-        let channel_description = match insert.channel_description {
+        let channel_description = match insert_7.channel_description {
             Some(ref channel_description_) => Some(channel_description_.get()),
             None => None,
         };
 
-        let channel_access_modifier = insert.channel_access_modifier.get();
+        let channel_access_modifier = insert_7.channel_access_modifier.get();
 
-        let channel_visability_modifier = insert.channel_visability_modifier.get();
+        let channel_visability_modifier = insert_7.channel_visability_modifier.get();
 
-        let channel_orientation = insert.channel_orientation.get();
+        let channel_orientation = insert_7.channel_orientation.get();
 
-        let channel_cover_image_path = match insert.channel_cover_image_path {
+        let channel_cover_image_path = match insert_7.channel_cover_image_path {
             Some(ref channel_cover_image_path_) => Some(channel_cover_image_path_.get()),
             None => None,
         };
 
-        let channel_background_image_path = match insert.channel_background_image_path {
+        let channel_background_image_path = match insert_7.channel_background_image_path {
             Some(ref channel_background_image_path_) => Some(channel_background_image_path_.get()),
             None => None,
         };
 
-        let channel_subscribers_quantity = insert.channel_subscribers_quantity.get();
+        let channel_subscribers_quantity = insert_7.channel_subscribers_quantity.get();
 
-        let channel_marks_quantity = insert.channel_marks_quantity.get();
+        let channel_marks_quantity = insert_7.channel_marks_quantity.get();
 
-        let channel_viewing_quantity = insert.channel_viewing_quantity.get();
+        let channel_viewing_quantity = insert_7.channel_viewing_quantity.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -259,18 +260,18 @@ impl PostgresqlRepository<Channel<'_>> {
         return Ok(
             Channel::new(
                 channel_id,
-                insert.channel_owner,
-                Cow::Owned(insert.channel_name),
-                insert.channel_linked_name,
-                insert.channel_description,
+                insert_7.channel_owner,
+                Cow::Owned(insert_7.channel_name),
+                insert_7.channel_linked_name,
+                insert_7.channel_description,
                 Channel_AccessModifier::new(channel_access_modifier),
                 Channel_VisabilityModifier::new(channel_visability_modifier),
-                insert.channel_orientation,
-                insert.channel_cover_image_path,
-                insert.channel_background_image_path,
-                insert.channel_subscribers_quantity,
-                insert.channel_marks_quantity,
-                insert.channel_viewing_quantity,
+                insert_7.channel_orientation,
+                insert_7.channel_cover_image_path,
+                insert_7.channel_background_image_path,
+                insert_7.channel_subscribers_quantity,
+                insert_7.channel_marks_quantity,
+                insert_7.channel_viewing_quantity,
                 channel_created_at,
             ),
         );
@@ -1073,21 +1074,6 @@ impl PostgresqlRepository<Channel<'_>> {
             ),
         );
     }
-}
-
-pub struct Insert {
-    pub channel_owner: ApplicationUser_Id,
-    pub channel_name: Channel_Name,
-    pub channel_linked_name: Channel_LinkedName,
-    pub channel_description: Option<Channel_Description>,
-    pub channel_access_modifier: Channel_AccessModifier,
-    pub channel_visability_modifier: Channel_VisabilityModifier,
-    pub channel_orientation: Channel_Orientation,
-    pub channel_cover_image_path: Option<Channel_CoverImagePath>,
-    pub channel_background_image_path: Option<Channel_BackgroundImagePath>,
-    pub channel_subscribers_quantity: Channel_SubscribersQuantity,
-    pub channel_marks_quantity: Channel_MarksQuantity,
-    pub channel_viewing_quantity: Channel_ViewingQuantity,
 }
 
 #[cfg_attr(

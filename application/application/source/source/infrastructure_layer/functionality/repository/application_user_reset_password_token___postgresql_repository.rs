@@ -1,6 +1,4 @@
 use super::postgresql_repository::PostgresqlRepository;
-use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
-use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken1;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken2;
@@ -20,6 +18,7 @@ use super::postgresql_repository::update::Update12;
 use super::postgresql_repository::update::Update13;
 use super::postgresql_repository::update::Update14;
 use super::postgresql_repository::update::Update15;
+use super::postgresql_repository::insert::Insert6;
 use super::postgresql_repository::update::Update16;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
@@ -32,23 +31,23 @@ use std::borrow::Cow;
 impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
     pub async fn create<'a>(
         database_2_connection: &'a Connection,
-        insert: Insert<'a>,
+        insert_6: Insert6<'a>,
     ) -> Result<ApplicationUserResetPasswordToken<'a>, ErrorAuditor> {
-        let application_user_id = insert.application_user_id.get();
+        let application_user_id = insert_6.application_user_id.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let application_user_device_id = insert.application_user_device_id.get();
+        let application_user_device_id = insert_6.application_user_device_id.get();
 
-        let application_user_reset_password_token_value = insert.application_user_reset_password_token_value.get();
+        let application_user_reset_password_token_value = insert_6.application_user_reset_password_token_value.get();
 
-        let application_user_reset_password_token_wrong_enter_tries_quantity = insert.application_user_reset_password_token_wrong_enter_tries_quantity.get();
+        let application_user_reset_password_token_wrong_enter_tries_quantity = insert_6.application_user_reset_password_token_wrong_enter_tries_quantity.get();
 
-        let application_user_reset_password_token_is_approved = insert.application_user_reset_password_token_is_approved.get();
+        let application_user_reset_password_token_is_approved = insert_6.application_user_reset_password_token_is_approved.get();
 
-        let application_user_reset_password_token_expires_at = insert.application_user_reset_password_token_expires_at.get();
+        let application_user_reset_password_token_expires_at = insert_6.application_user_reset_password_token_expires_at.get();
 
-        let application_user_reset_password_token_can_be_resent_from = insert.application_user_reset_password_token_can_be_resent_from.get();
+        let application_user_reset_password_token_can_be_resent_from = insert_6.application_user_reset_password_token_can_be_resent_from.get();
 
         let query = "\
             INSERT INTO public.application_user_reset_password_token AS aurpt ( \
@@ -154,13 +153,13 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
 
         return Ok(
             ApplicationUserResetPasswordToken::new(
-                insert.application_user_id,
-                Cow::Borrowed(insert.application_user_device_id),
-                insert.application_user_reset_password_token_value,
-                insert.application_user_reset_password_token_wrong_enter_tries_quantity,
-                insert.application_user_reset_password_token_is_approved,
-                insert.application_user_reset_password_token_expires_at,
-                insert.application_user_reset_password_token_can_be_resent_from,
+                insert_6.application_user_id,
+                Cow::Borrowed(insert_6.application_user_device_id),
+                insert_6.application_user_reset_password_token_value,
+                insert_6.application_user_reset_password_token_wrong_enter_tries_quantity,
+                insert_6.application_user_reset_password_token_is_approved,
+                insert_6.application_user_reset_password_token_expires_at,
+                insert_6.application_user_reset_password_token_can_be_resent_from,
             ),
         );
     }
@@ -1363,14 +1362,4 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken6> {
             ),
         );
     }
-}
-
-pub struct Insert<'a> {
-    pub application_user_id: ApplicationUser_Id,
-    pub application_user_device_id: &'a ApplicationUserDevice_Id,
-    pub application_user_reset_password_token_value: ApplicationUserResetPasswordToken_Value,
-    pub application_user_reset_password_token_wrong_enter_tries_quantity: ApplicationUserResetPasswordToken_WrongEnterTriesQuantity,
-    pub application_user_reset_password_token_is_approved: ApplicationUserResetPasswordToken_IsApproved,
-    pub application_user_reset_password_token_expires_at: ApplicationUserResetPasswordToken_ExpiresAt,
-    pub application_user_reset_password_token_can_be_resent_from: ApplicationUserResetPasswordToken_CanBeResentFrom,
 }
