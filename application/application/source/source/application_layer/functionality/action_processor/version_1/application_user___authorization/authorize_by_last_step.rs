@@ -26,6 +26,7 @@ use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::update::Update2;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
@@ -374,7 +375,12 @@ impl ActionProcessor {
 
                 if let Err(mut error) = PostgresqlRepository::<ApplicationUserAccessRefreshToken1>::update(
                     database_2_postgresql_connection,
-                    &application_user_access_refresh_token__,
+                    &Update2 {
+                        application_user_access_token_id: application_user_access_refresh_token__.get_application_user_access_token_id(),
+                        application_user_access_refresh_token_obfuscation_value: application_user_access_refresh_token__.get_obfuscation_value(),
+                        application_user_access_refresh_token_expires_at: application_user_access_refresh_token__.get_expires_at(),
+                        application_user_access_refresh_token_updated_at: application_user_access_refresh_token__.get_updated_at(),
+                    },
                     &by_4,
                 )
                 .await

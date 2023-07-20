@@ -22,6 +22,7 @@ use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By3;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::update::Update1;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By4;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
@@ -343,7 +344,9 @@ impl ActionProcessor {
 
         if let Err(mut error) = PostgresqlRepository::<ApplicationUser4>::update(
             database_1_postgresql_connection,
-            &application_user_,
+            &Update1 {
+                application_user_password_hash: application_user_.get_password_hash(),
+            },
             &by_3,
         )
         .await

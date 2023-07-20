@@ -13,8 +13,8 @@ use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Nickname;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_PasswordHash;
-use crate::domain_layer::functionality::service::getter::Getter;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
+use super::postgresql_repository::update::Update1;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
@@ -1037,17 +1037,14 @@ impl PostgresqlRepository<ApplicationUser3> {
 }
 
 impl PostgresqlRepository<ApplicationUser4> {
-    pub async fn update<'a, T>(
+    pub async fn update<'a>(
         database_1_connection: &'a Connection,
-        subject: &'a T,
+        update_1: &'a Update1<'_>,
         by_3: &'a By3,
-    ) -> Result<(), ErrorAuditor>
-    where
-        T: Getter<'a, &'a ApplicationUser_PasswordHash>,
-    {
+    ) -> Result<(), ErrorAuditor> {
         let application_user_id = by_3.application_user_id.get();
 
-        let application_user_password_hash = <T as Getter<'a, &'a ApplicationUser_PasswordHash>>::get(subject).get();
+        let application_user_password_hash = update_1.application_user_password_hash.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 

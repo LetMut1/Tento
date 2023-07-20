@@ -20,6 +20,7 @@ use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By4;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::update::Update2;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::UnixTime;
@@ -237,7 +238,12 @@ impl ActionProcessor {
 
         if let Err(mut error) = PostgresqlRepository::<ApplicationUserAccessRefreshToken1>::update(
             database_2_postgresql_connection,
-            &application_user_access_refresh_token_,
+            &Update2 {
+                application_user_access_token_id: application_user_access_refresh_token_.get_application_user_access_token_id(),
+                application_user_access_refresh_token_obfuscation_value: application_user_access_refresh_token_.get_obfuscation_value(),
+                application_user_access_refresh_token_expires_at: application_user_access_refresh_token_.get_expires_at(),
+                application_user_access_refresh_token_updated_at: application_user_access_refresh_token_.get_updated_at(),
+            },
             &by_4,
         )
         .await

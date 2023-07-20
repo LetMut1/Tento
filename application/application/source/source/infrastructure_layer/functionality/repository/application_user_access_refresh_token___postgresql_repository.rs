@@ -1,5 +1,6 @@
 use super::postgresql_repository::by::By3;
 use super::postgresql_repository::by::By4;
+use super::postgresql_repository::update::Update2;
 use super::postgresql_repository::PostgresqlRepository;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
@@ -492,28 +493,22 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
 }
 
 impl PostgresqlRepository<ApplicationUserAccessRefreshToken1> {
-    pub async fn update<'a, T>(
+    pub async fn update<'a>(
         database_2_connection: &'a Connection,
-        subject: &'a T,
+        update_2: &'a Update2<'_>,
         by_4: &'a By4<'_>,
-    ) -> Result<(), ErrorAuditor>
-    where
-        T: Getter<'a, &'a ApplicationUserAccessToken_Id>,
-        T: Getter<'a, &'a ApplicationUserAccessRefreshToken_ObfuscationValue>,
-        T: Getter<'a, ApplicationUserAccessRefreshToken_ExpiresAt>,
-        T: Getter<'a, ApplicationUserAccessRefreshToken_UpdatedAt>,
-    {
+    ) -> Result<(), ErrorAuditor> {
         let application_user_id = by_4.application_user_id.get();
 
         let application_user_device_id = by_4.application_user_device_id.get();
 
-        let application_user_access_token_id = <T as Getter<'a, &'a ApplicationUserAccessToken_Id>>::get(subject).get();
+        let application_user_access_token_id = update_2.application_user_access_token_id.get();
 
-        let application_user_access_refresh_token_obfuscation_value = <T as Getter<'a, &'a ApplicationUserAccessRefreshToken_ObfuscationValue>>::get(subject).get();
+        let application_user_access_refresh_token_obfuscation_value = update_2.application_user_access_refresh_token_obfuscation_value.get();
 
-        let application_user_access_refresh_token_expires_at = <T as Getter<'a, ApplicationUserAccessRefreshToken_ExpiresAt>>::get(subject).get();
+        let application_user_access_refresh_token_expires_at = update_2.application_user_access_refresh_token_expires_at.get();
 
-        let application_user_access_refresh_token_updated_at = <T as Getter<'a, ApplicationUserAccessRefreshToken_UpdatedAt>>::get(subject).get();
+        let application_user_access_refresh_token_updated_at = update_2.application_user_access_refresh_token_updated_at.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 

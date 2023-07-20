@@ -75,8 +75,23 @@ pub mod by {
     }
 }
 
+pub mod update {
+    use crate::domain_layer::data::entity::application_user::ApplicationUser_PasswordHash;
+    use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
+    use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken1;
+    use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ExpiresAt;
+    use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ObfuscationValue;
+    use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_UpdatedAt;
+    use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken_Id;
 
+    pub struct Update1<'a> {
+        pub application_user_password_hash: &'a ApplicationUser_PasswordHash,
+    }
 
-
-
-// let application_user_password_hash = <T as Getter<'a, &'a ApplicationUser_PasswordHash>>::get(subject).get();
+    pub struct Update2<'a> {
+        pub application_user_access_token_id: &'a ApplicationUserAccessToken_Id,
+        pub application_user_access_refresh_token_obfuscation_value: &'a ApplicationUserAccessRefreshToken_ObfuscationValue,
+        pub application_user_access_refresh_token_expires_at: ApplicationUserAccessRefreshToken_ExpiresAt,
+        pub application_user_access_refresh_token_updated_at: ApplicationUserAccessRefreshToken_UpdatedAt,
+    }
+}
