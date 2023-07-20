@@ -84,15 +84,17 @@ pub mod update {
     use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_ExpiresAt;
     use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_Value;
     use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_WrongEnterTriesQuantity;
-    use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
     use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_CanBeResentFrom;
     use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_ExpiresAt;
     use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_IsApproved;
     use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_Value;
     use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_WrongEnterTriesQuantity;
-    use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
-    use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
     use crate::domain_layer::data::entity::application_user::ApplicationUser_PasswordHash;
+    use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_CanBeResentFrom;
+    use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_ExpiresAt;
+    use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_IsApproved;
+    use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_Value;
+    use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_WrongEnterTriesQuantity;
 
     pub struct Update1<'a> {
         pub application_user_password_hash: &'a ApplicationUser_PasswordHash,
@@ -151,5 +153,32 @@ pub mod update {
 
     pub struct Update11 {
         pub application_user_registration_token_is_approved: ApplicationUserRegistrationToken_IsApproved,
+    }
+
+    pub struct Update12<'a> {
+        pub application_user_reset_password_token_value: &'a ApplicationUserResetPasswordToken_Value,
+        pub application_user_reset_password_token_wrong_enter_tries_quantity: ApplicationUserResetPasswordToken_WrongEnterTriesQuantity,
+        pub application_user_reset_password_token_is_approved: ApplicationUserResetPasswordToken_IsApproved,
+        pub application_user_reset_password_token_expires_at: ApplicationUserResetPasswordToken_ExpiresAt,
+        pub application_user_reset_password_token_can_be_resent_from: ApplicationUserResetPasswordToken_CanBeResentFrom,
+    }
+
+    pub struct Update13 {
+        pub application_user_reset_password_token_can_be_resent_from: ApplicationUserResetPasswordToken_CanBeResentFrom,
+    }
+
+    pub struct Update14<'a> {
+        pub application_user_reset_password_token_value: &'a ApplicationUserResetPasswordToken_Value,
+        pub application_user_reset_password_token_wrong_enter_tries_quantity: ApplicationUserResetPasswordToken_WrongEnterTriesQuantity,
+        pub application_user_reset_password_token_is_approved: ApplicationUserResetPasswordToken_IsApproved,
+        pub application_user_reset_password_token_expires_at: ApplicationUserResetPasswordToken_ExpiresAt,
+    }
+
+    pub struct Update15 {
+        pub application_user_reset_password_token_wrong_enter_tries_quantity: ApplicationUserResetPasswordToken_WrongEnterTriesQuantity,
+    }
+
+    pub struct Update16 {
+        pub application_user_reset_password_token_is_approved: ApplicationUserResetPasswordToken_IsApproved,
     }
 }

@@ -26,6 +26,9 @@ use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentR
 use crate::infrastructure_layer::functionality::repository::application_user_reset_password_token___postgresql_repository::Insert;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By2;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By4;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::update::Update12;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::update::Update13;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::update::Update14;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::UnixTime;
@@ -251,7 +254,13 @@ impl ActionProcessor {
                 if need_to_update_1 && need_to_update_2 {
                     if let Err(mut error) = PostgresqlRepository::<ApplicationUserResetPasswordToken1>::update(
                         database_2_postgresql_connection,
-                        &application_user_reset_password_token_,
+                        &Update12 {
+                            application_user_reset_password_token_value: application_user_reset_password_token_.get_value(),
+                            application_user_reset_password_token_wrong_enter_tries_quantity: application_user_reset_password_token_.get_wrong_enter_tries_quantity(),
+                            application_user_reset_password_token_is_approved: application_user_reset_password_token_.get_is_approved(),
+                            application_user_reset_password_token_expires_at: application_user_reset_password_token_.get_expires_at(),
+                            application_user_reset_password_token_can_be_resent_from: application_user_reset_password_token_.get_can_be_resent_from(),
+                        },
                         &by_4,
                     )
                     .await
@@ -270,7 +279,9 @@ impl ActionProcessor {
                     if need_to_update_1 {
                         if let Err(mut error) = PostgresqlRepository::<ApplicationUserResetPasswordToken2>::update(
                             database_2_postgresql_connection,
-                            &application_user_reset_password_token_,
+                            &Update13 {
+                                application_user_reset_password_token_can_be_resent_from: application_user_reset_password_token_.get_can_be_resent_from(),
+                            },
                             &by_4,
                         )
                         .await
@@ -290,7 +301,12 @@ impl ActionProcessor {
                     if need_to_update_2 {
                         if let Err(mut error) = PostgresqlRepository::<ApplicationUserResetPasswordToken3>::update(
                             database_2_postgresql_connection,
-                            &application_user_reset_password_token_,
+                            &Update14 {
+                                application_user_reset_password_token_value: application_user_reset_password_token_.get_value(),
+                                application_user_reset_password_token_wrong_enter_tries_quantity: application_user_reset_password_token_.get_wrong_enter_tries_quantity(),
+                                application_user_reset_password_token_is_approved: application_user_reset_password_token_.get_is_approved(),
+                                application_user_reset_password_token_expires_at: application_user_reset_password_token_.get_expires_at(),
+                            },
                             &by_4,
                         )
                         .await

@@ -11,6 +11,8 @@ use crate::domain_layer::data::entity::application_user_reset_password_token::Ap
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_WrongEnterTriesQuantity;
 use crate::domain_layer::functionality::service::incrementor::Incrementor;
 use crate::domain_layer::functionality::service::validator::Validator;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::update::Update15;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::update::Update16;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
@@ -199,7 +201,9 @@ impl ActionProcessor {
             if application_user_reset_password_token_.get_wrong_enter_tries_quantity().get() <= ApplicationUserResetPasswordToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
                 if let Err(mut error) = PostgresqlRepository::<ApplicationUserResetPasswordToken4>::update(
                     database_2_postgresql_connection,
-                    &application_user_reset_password_token_,
+                    &Update15 {
+                        application_user_reset_password_token_wrong_enter_tries_quantity: application_user_reset_password_token_.get_wrong_enter_tries_quantity(),
+                    },
                     &by_4,
                 )
                 .await
@@ -244,7 +248,9 @@ impl ActionProcessor {
 
         if let Err(mut error) = PostgresqlRepository::<ApplicationUserResetPasswordToken5>::update(
             database_2_postgresql_connection,
-            &application_user_reset_password_token_,
+            &Update16 {
+                application_user_reset_password_token_is_approved: application_user_reset_password_token_.get_is_approved(),
+            },
             &by_4,
         )
         .await

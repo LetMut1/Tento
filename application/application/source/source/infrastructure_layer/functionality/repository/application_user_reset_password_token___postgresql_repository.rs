@@ -13,10 +13,14 @@ use crate::domain_layer::data::entity::application_user_reset_password_token::Ap
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_IsApproved;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_Value;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_WrongEnterTriesQuantity;
-use crate::domain_layer::functionality::service::getter::Getter;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use super::postgresql_repository::by::By4;
+use super::postgresql_repository::update::Update12;
+use super::postgresql_repository::update::Update13;
+use super::postgresql_repository::update::Update14;
+use super::postgresql_repository::update::Update15;
+use super::postgresql_repository::update::Update16;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
@@ -243,31 +247,24 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
 }
 
 impl PostgresqlRepository<ApplicationUserResetPasswordToken1> {
-    pub async fn update<'a, T>(
+    pub async fn update<'a>(
         database_2_connection: &'a Connection,
-        subject: &'a T,
+        update_12: &'a Update12<'_>,
         by_4: &'a By4<'_>,
-    ) -> Result<(), ErrorAuditor>
-    where
-        T: Getter<'a, &'a ApplicationUserResetPasswordToken_Value>,
-        T: Getter<'a, ApplicationUserResetPasswordToken_WrongEnterTriesQuantity>,
-        T: Getter<'a, ApplicationUserResetPasswordToken_IsApproved>,
-        T: Getter<'a, ApplicationUserResetPasswordToken_ExpiresAt>,
-        T: Getter<'a, ApplicationUserResetPasswordToken_CanBeResentFrom>,
-    {
+    ) -> Result<(), ErrorAuditor> {
         let application_user_id = by_4.application_user_id.get();
 
         let application_user_device_id = by_4.application_user_device_id.get();
 
-        let application_user_reset_password_token_value = <T as Getter<'a, &'a ApplicationUserResetPasswordToken_Value>>::get(subject).get();
+        let application_user_reset_password_token_value = update_12.application_user_reset_password_token_value.get();
 
-        let application_user_reset_password_token_wrong_enter_tries_quantity = <T as Getter<'a, ApplicationUserResetPasswordToken_WrongEnterTriesQuantity>>::get(subject).get();
+        let application_user_reset_password_token_wrong_enter_tries_quantity = update_12.application_user_reset_password_token_wrong_enter_tries_quantity.get();
 
-        let application_user_reset_password_token_is_approved = <T as Getter<'a, ApplicationUserResetPasswordToken_IsApproved>>::get(subject).get();
+        let application_user_reset_password_token_is_approved = update_12.application_user_reset_password_token_is_approved.get();
 
-        let application_user_reset_password_token_expires_at = <T as Getter<'a, ApplicationUserResetPasswordToken_ExpiresAt>>::get(subject).get();
+        let application_user_reset_password_token_expires_at = update_12.application_user_reset_password_token_expires_at.get();
 
-        let application_user_reset_password_token_can_be_resent_from = <T as Getter<'a, ApplicationUserResetPasswordToken_CanBeResentFrom>>::get(subject).get();
+        let application_user_reset_password_token_can_be_resent_from = update_12.application_user_reset_password_token_can_be_resent_from.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -589,19 +586,16 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken1> {
 }
 
 impl PostgresqlRepository<ApplicationUserResetPasswordToken2> {
-    pub async fn update<'a, T>(
+    pub async fn update<'a>(
         database_2_connection: &'a Connection,
-        subject: &'a T,
+        update_13: &'a Update13,
         by_4: &'a By4<'_>,
-    ) -> Result<(), ErrorAuditor>
-    where
-        T: Getter<'a, ApplicationUserResetPasswordToken_CanBeResentFrom>,
-    {
+    ) -> Result<(), ErrorAuditor> {
         let application_user_id = by_4.application_user_id.get();
 
         let application_user_device_id = by_4.application_user_device_id.get();
 
-        let application_user_reset_password_token_can_be_resent_from = <T as Getter<'a, ApplicationUserResetPasswordToken_CanBeResentFrom>>::get(subject).get();
+        let application_user_reset_password_token_can_be_resent_from = update_13.application_user_reset_password_token_can_be_resent_from.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -686,28 +680,22 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken2> {
 }
 
 impl PostgresqlRepository<ApplicationUserResetPasswordToken3> {
-    pub async fn update<'a, T>(
+    pub async fn update<'a>(
         database_2_connection: &'a Connection,
-        subject: &'a T,
+        update_14: &'a Update14<'_>,
         by_4: &'a By4<'_>,
-    ) -> Result<(), ErrorAuditor>
-    where
-        T: Getter<'a, &'a ApplicationUserResetPasswordToken_Value>,
-        T: Getter<'a, ApplicationUserResetPasswordToken_WrongEnterTriesQuantity>,
-        T: Getter<'a, ApplicationUserResetPasswordToken_IsApproved>,
-        T: Getter<'a, ApplicationUserResetPasswordToken_ExpiresAt>,
-    {
+    ) -> Result<(), ErrorAuditor> {
         let application_user_id = by_4.application_user_id.get();
 
         let application_user_device_id = by_4.application_user_device_id.get();
 
-        let application_user_reset_password_token_value = <T as Getter<'a, &'a ApplicationUserResetPasswordToken_Value>>::get(subject).get();
+        let application_user_reset_password_token_value = update_14.application_user_reset_password_token_value.get();
 
-        let application_user_reset_password_token_wrong_enter_tries_quantity = <T as Getter<'a, ApplicationUserResetPasswordToken_WrongEnterTriesQuantity>>::get(subject).get();
+        let application_user_reset_password_token_wrong_enter_tries_quantity = update_14.application_user_reset_password_token_wrong_enter_tries_quantity.get();
 
-        let application_user_reset_password_token_is_approved = <T as Getter<'a, ApplicationUserResetPasswordToken_IsApproved>>::get(subject).get();
+        let application_user_reset_password_token_is_approved = update_14.application_user_reset_password_token_is_approved.get();
 
-        let application_user_reset_password_token_expires_at = <T as Getter<'a, ApplicationUserResetPasswordToken_ExpiresAt>>::get(subject).get();
+        let application_user_reset_password_token_expires_at = update_14.application_user_reset_password_token_expires_at.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -999,19 +987,16 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken3> {
 }
 
 impl PostgresqlRepository<ApplicationUserResetPasswordToken4> {
-    pub async fn update<'a, T>(
+    pub async fn update<'a>(
         database_2_connection: &'a Connection,
-        subject: &'a T,
+        update_15: &'a Update15,
         by_4: &'a By4<'_>,
-    ) -> Result<(), ErrorAuditor>
-    where
-        T: Getter<'a, ApplicationUserResetPasswordToken_WrongEnterTriesQuantity>,
-    {
+    ) -> Result<(), ErrorAuditor> {
         let application_user_id = by_4.application_user_id.get();
 
         let application_user_device_id = by_4.application_user_device_id.get();
 
-        let application_user_reset_password_token_wrong_enter_tries_quantity = <T as Getter<'a, ApplicationUserResetPasswordToken_WrongEnterTriesQuantity>>::get(subject).get();
+        let application_user_reset_password_token_wrong_enter_tries_quantity = update_15.application_user_reset_password_token_wrong_enter_tries_quantity.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -1096,19 +1081,16 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken4> {
 }
 
 impl PostgresqlRepository<ApplicationUserResetPasswordToken5> {
-    pub async fn update<'a, T>(
+    pub async fn update<'a>(
         database_2_connection: &'a Connection,
-        subject: &'a T,
+        update_16: &'a Update16,
         by_4: &'a By4<'_>,
-    ) -> Result<(), ErrorAuditor>
-    where
-        T: Getter<'a, ApplicationUserResetPasswordToken_IsApproved>,
-    {
+    ) -> Result<(), ErrorAuditor> {
         let application_user_id = by_4.application_user_id.get();
 
         let application_user_device_id = by_4.application_user_device_id.get();
 
-        let application_user_reset_password_token_is_approved = <T as Getter<'a, ApplicationUserResetPasswordToken_IsApproved>>::get(subject).get();
+        let application_user_reset_password_token_is_approved = update_16.application_user_reset_password_token_is_approved.get();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 

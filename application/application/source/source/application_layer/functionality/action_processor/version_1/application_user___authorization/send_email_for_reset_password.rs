@@ -19,6 +19,7 @@ use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By3;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::update::Update13;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::UnixTime;
@@ -241,7 +242,9 @@ impl ActionProcessor {
 
         if let Err(mut error) = PostgresqlRepository::<ApplicationUserResetPasswordToken2>::update(
             database_2_postgresql_connection,
-            &application_user_reset_password_token_,
+            &Update13 {
+                application_user_reset_password_token_can_be_resent_from: application_user_reset_password_token_.get_can_be_resent_from(),
+            },
             &by_4,
         )
         .await
