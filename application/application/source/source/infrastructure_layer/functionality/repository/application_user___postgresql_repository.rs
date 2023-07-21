@@ -31,11 +31,11 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         database_1_connection: &'a Connection,
         insert_1: Insert1,
     ) -> Result<ApplicationUser<'static>, ErrorAuditor> {
-        let application_user_email = insert_1.application_user_email.get();
+        let application_user_email = insert_1.application_user_email.0.as_str();
 
-        let application_user_nickname = insert_1.application_user_nickname.get();
+        let application_user_nickname = insert_1.application_user_nickname.0.as_str();
 
-        let application_user_password_hash = insert_1.application_user_password_hash.get();
+        let application_user_password_hash = insert_1.application_user_password_hash.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -128,7 +128,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         };
 
         let application_user_id = match row_registry[0].try_get::<'_, usize, i64>(0) {
-            Ok(application_user_id_) => ApplicationUser_Id::new(application_user_id_),
+            Ok(application_user_id_) => ApplicationUser_Id(application_user_id_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -150,7 +150,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         };
 
         let application_user_created_at = match row_registry[0].try_get::<'_, usize, String>(1) {
-            Ok(application_user_created_at_) => ApplicationUser_CreatedAt::new(application_user_created_at_),
+            Ok(application_user_created_at_) => ApplicationUser_CreatedAt(application_user_created_at_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -187,7 +187,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         database_1_connection: &'a Connection,
         by_1: &'a By1<'_>,
     ) -> Result<bool, ErrorAuditor> {
-        let application_user_nickname = by_1.application_user_nickname.get();
+        let application_user_nickname = by_1.application_user_nickname.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -269,7 +269,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         database_1_connection: &'a Connection,
         by_2: &'a By2<'_>,
     ) -> Result<bool, ErrorAuditor> {
-        let application_user_email = by_2.application_user_email.get();
+        let application_user_email = by_2.application_user_email.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -351,7 +351,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         database_1_connection: &'a Connection,
         by_3: &'a By3,
     ) -> Result<bool, ErrorAuditor> {
-        let application_user_id = by_3.application_user_id.get();
+        let application_user_id = by_3.application_user_id.0;
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -433,7 +433,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         database_1_connection: &'a Connection,
         by_1: &'a By1<'b>,
     ) -> Result<Option<ApplicationUser<'b>>, ErrorAuditor> {
-        let application_user_nickname = by_1.application_user_nickname.get();
+        let application_user_nickname = by_1.application_user_nickname.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -512,7 +512,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         }
 
         let application_user_id = match row_registry[0].try_get::<'_, usize, i64>(0) {
-            Ok(application_user_id_) => ApplicationUser_Id::new(application_user_id_),
+            Ok(application_user_id_) => ApplicationUser_Id(application_user_id_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -534,7 +534,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         };
 
         let application_user_email = match row_registry[0].try_get::<'_, usize, String>(1) {
-            Ok(application_user_email_) => ApplicationUser_Email::new(application_user_email_),
+            Ok(application_user_email_) => ApplicationUser_Email(application_user_email_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -556,7 +556,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         };
 
         let application_user_password_hash = match row_registry[0].try_get::<'_, usize, String>(2) {
-            Ok(application_user_password_hash_) => ApplicationUser_PasswordHash::new(application_user_password_hash_),
+            Ok(application_user_password_hash_) => ApplicationUser_PasswordHash(application_user_password_hash_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -578,7 +578,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         };
 
         let application_user_created_at = match row_registry[0].try_get::<'_, usize, String>(3) {
-            Ok(application_user_created_at_) => ApplicationUser_CreatedAt::new(application_user_created_at_),
+            Ok(application_user_created_at_) => ApplicationUser_CreatedAt(application_user_created_at_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -619,7 +619,7 @@ impl PostgresqlRepository<ApplicationUser1> {
         database_1_connection: &'a Connection,
         by_1: &'a By1<'_>,
     ) -> Result<Option<ApplicationUser1>, ErrorAuditor> {
-        let application_user_nickname = by_1.application_user_nickname.get();
+        let application_user_nickname = by_1.application_user_nickname.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -697,7 +697,7 @@ impl PostgresqlRepository<ApplicationUser1> {
         }
 
         let application_user_id = match row_registry[0].try_get::<'_, usize, i64>(0) {
-            Ok(application_user_id_) => ApplicationUser_Id::new(application_user_id_),
+            Ok(application_user_id_) => ApplicationUser_Id(application_user_id_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -719,7 +719,7 @@ impl PostgresqlRepository<ApplicationUser1> {
         };
 
         let application_user_email = match row_registry[0].try_get::<'_, usize, String>(1) {
-            Ok(application_user_email_) => ApplicationUser_Email::new(application_user_email_),
+            Ok(application_user_email_) => ApplicationUser_Email(application_user_email_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -741,7 +741,7 @@ impl PostgresqlRepository<ApplicationUser1> {
         };
 
         let application_user_password_hash = match row_registry[0].try_get::<'_, usize, String>(2) {
-            Ok(application_user_password_hash_) => ApplicationUser_PasswordHash::new(application_user_password_hash_),
+            Ok(application_user_password_hash_) => ApplicationUser_PasswordHash(application_user_password_hash_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -779,7 +779,7 @@ impl PostgresqlRepository<ApplicationUser2> {
         database_1_connection: &'a Connection,
         by_2: &'a By2<'_>,
     ) -> Result<Option<ApplicationUser2>, ErrorAuditor> {
-        let application_user_email = by_2.application_user_email.get();
+        let application_user_email = by_2.application_user_email.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -857,7 +857,7 @@ impl PostgresqlRepository<ApplicationUser2> {
         }
 
         let application_user_id = match row_registry[0].try_get::<'_, usize, i64>(0) {
-            Ok(application_user_id_) => ApplicationUser_Id::new(application_user_id_),
+            Ok(application_user_id_) => ApplicationUser_Id(application_user_id_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -879,7 +879,7 @@ impl PostgresqlRepository<ApplicationUser2> {
         };
 
         let application_user_nickname = match row_registry[0].try_get::<'_, usize, String>(1) {
-            Ok(application_user_nickname_) => ApplicationUser_Nickname::new(application_user_nickname_),
+            Ok(application_user_nickname_) => ApplicationUser_Nickname(application_user_nickname_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -901,7 +901,7 @@ impl PostgresqlRepository<ApplicationUser2> {
         };
 
         let application_user_password_hash = match row_registry[0].try_get::<'_, usize, String>(2) {
-            Ok(application_user_password_hash_) => ApplicationUser_PasswordHash::new(application_user_password_hash_),
+            Ok(application_user_password_hash_) => ApplicationUser_PasswordHash(application_user_password_hash_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -939,7 +939,7 @@ impl PostgresqlRepository<ApplicationUser3> {
         database_1_connection: &'a Connection,
         by_2: &'a By2<'_>,
     ) -> Result<Option<ApplicationUser3>, ErrorAuditor> {
-        let application_user_email = by_2.application_user_email.get();
+        let application_user_email = by_2.application_user_email.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -1015,7 +1015,7 @@ impl PostgresqlRepository<ApplicationUser3> {
         }
 
         let application_user_id = match row_registry[0].try_get::<'_, usize, i64>(0) {
-            Ok(application_user_id_) => ApplicationUser_Id::new(application_user_id_),
+            Ok(application_user_id_) => ApplicationUser_Id(application_user_id_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -1052,9 +1052,9 @@ impl PostgresqlRepository<ApplicationUser4> {
         update_1: &'a Update1<'_>,
         by_3: &'a By3,
     ) -> Result<(), ErrorAuditor> {
-        let application_user_id = by_3.application_user_id.get();
+        let application_user_id = by_3.application_user_id.0;
 
-        let application_user_password_hash = update_1.application_user_password_hash.get();
+        let application_user_password_hash = update_1.application_user_password_hash.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -1139,7 +1139,7 @@ impl PostgresqlRepository<ApplicationUser4> {
         database_1_connection: &'a Connection,
         by_3: &'a By3,
     ) -> Result<Option<ApplicationUser4>, ErrorAuditor> {
-        let application_user_id = by_3.application_user_id.get();
+        let application_user_id = by_3.application_user_id.0;
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -1217,7 +1217,7 @@ impl PostgresqlRepository<ApplicationUser4> {
         }
 
         let application_user_email = match row_registry[0].try_get::<'_, usize, String>(0) {
-            Ok(application_user_password_email_) => ApplicationUser_Email::new(application_user_password_email_),
+            Ok(application_user_password_email_) => ApplicationUser_Email(application_user_password_email_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -1239,7 +1239,7 @@ impl PostgresqlRepository<ApplicationUser4> {
         };
 
         let application_user_password_nickname = match row_registry[0].try_get::<'_, usize, String>(1) {
-            Ok(application_user_password_nickanme_) => ApplicationUser_Nickname::new(application_user_password_nickanme_),
+            Ok(application_user_password_nickanme_) => ApplicationUser_Nickname(application_user_password_nickanme_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -1261,7 +1261,7 @@ impl PostgresqlRepository<ApplicationUser4> {
         };
 
         let application_user_password_hash = match row_registry[0].try_get::<'_, usize, String>(2) {
-            Ok(application_user_password_hash_) => ApplicationUser_PasswordHash::new(application_user_password_hash_),
+            Ok(application_user_password_hash_) => ApplicationUser_PasswordHash(application_user_password_hash_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -1299,7 +1299,7 @@ impl PostgresqlRepository<ApplicationUser5> {
         database_1_connection: &'a Connection,
         by_3: &'a By3,
     ) -> Result<Option<ApplicationUser5>, ErrorAuditor> {
-        let application_user_id = by_3.application_user_id.get();
+        let application_user_id = by_3.application_user_id.0;
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -1375,7 +1375,7 @@ impl PostgresqlRepository<ApplicationUser5> {
         }
 
         let application_user_email = match row_registry[0].try_get::<'_, usize, String>(0) {
-            Ok(application_user_email_) => ApplicationUser_Email::new(application_user_email_),
+            Ok(application_user_email_) => ApplicationUser_Email(application_user_email_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(

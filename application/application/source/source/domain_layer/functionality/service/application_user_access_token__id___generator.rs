@@ -4,6 +4,6 @@ use extern_crate::uuid::Uuid;
 
 impl Generator<ApplicationUserAccessToken_Id> {
     pub fn generate() -> ApplicationUserAccessToken_Id {
-        return ApplicationUserAccessToken_Id::new(Uuid::new_v4().to_string());
+        return ApplicationUserAccessToken_Id(Uuid::new_v4().to_string());
     }
 }

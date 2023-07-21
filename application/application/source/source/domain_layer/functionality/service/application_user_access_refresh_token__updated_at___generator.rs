@@ -5,6 +5,6 @@ use crate::infrastructure_layer::functionality::service::resolver::Resolver;
 
 impl Generator<ApplicationUserAccessRefreshToken_UpdatedAt> {
     pub fn generate() -> ApplicationUserAccessRefreshToken_UpdatedAt {
-        return ApplicationUserAccessRefreshToken_UpdatedAt::new(Resolver::<DateTime>::unixtime_get_now());
+        return ApplicationUserAccessRefreshToken_UpdatedAt(Resolver::<DateTime>::unixtime_get_now());
     }
 }

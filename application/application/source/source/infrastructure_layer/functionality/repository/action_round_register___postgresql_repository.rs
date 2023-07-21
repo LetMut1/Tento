@@ -17,14 +17,14 @@ impl PostgresqlRepository<ActionRoundRegister<'_>> {
     ) -> Result<(), ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
-        let action_round_register_route = insert_11.action_round_register_route.get();
+        let action_round_register_route = insert_11.action_round_register_route.0.as_ref();
 
-        let action_round_register_method = insert_11.action_round_register_method.get();
+        let action_round_register_method = insert_11.action_round_register_method.0.as_ref();
 
-        let action_round_register_status_code = insert_11.action_round_register_status_code.get();
+        let action_round_register_status_code = insert_11.action_round_register_status_code.0;
 
         let action_round_register_context = match insert_11.action_round_register_context {
-            Some(ref action_round_register_context_) => Some(action_round_register_context_.get()),
+            Some(ref action_round_register_context_) => Some(action_round_register_context_.0.as_str()),
             None => None,
         };
 

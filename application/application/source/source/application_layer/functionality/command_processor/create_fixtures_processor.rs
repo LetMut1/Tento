@@ -149,7 +149,7 @@ impl CreateFixturesProcessor {
             }
         };
 
-        let application_user_password = ApplicationUser_Password::new(Self::APPLICATION_USER__PASSWORD.to_string());
+        let application_user_password = ApplicationUser_Password(Self::APPLICATION_USER__PASSWORD.to_string());
 
         let application_user_password_hash = match Encoder::<ApplicationUser_Password>::encode(&application_user_password) {
             Ok(application_user_password_hash_) => application_user_password_hash_,
@@ -191,15 +191,15 @@ impl CreateFixturesProcessor {
         let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
 
         '_a: for _ in 1..=Self::QUANTITY_OF_APPLICATION_USERS {
-            let mut application_user_nickname = ApplicationUser_Nickname::new(String::new());
+            let mut application_user_nickname = ApplicationUser_Nickname(String::new());
 
             '_b: for _ in 1..=thread_rng().gen_range::<usize, _>(1..=Validator::<ApplicationUser_Nickname>::MAXIMUM_LENGTH) {
                 let character = Self::ASCII_CHARACTER_REGISTRY[thread_rng().gen_range::<usize, _>(0..Self::ASCII_CHARACTER_REGISTRY.len())];
 
-                application_user_nickname = ApplicationUser_Nickname::new(
+                application_user_nickname = ApplicationUser_Nickname(
                     format!(
                         "{}{}",
-                        application_user_nickname.get(),
+                        application_user_nickname.0.as_str(),
                         character
                     ),
                 );
@@ -220,10 +220,10 @@ impl CreateFixturesProcessor {
                 );
             }
 
-            let application_user_email = ApplicationUser_Email::new(
+            let application_user_email = ApplicationUser_Email(
                 format!(
                     "{}@fixture.com",
-                    application_user_nickname.get()
+                    application_user_nickname.0.as_str()
                 ),
             );
 
@@ -331,10 +331,10 @@ impl CreateFixturesProcessor {
                 }
             };
 
-            let application_user_device_id = ApplicationUserDevice_Id::new(
+            let application_user_device_id = ApplicationUserDevice_Id(
                 format!(
                     "{}_{}",
-                    application_user_.nickname.get(),
+                    application_user_.nickname.0.as_str(),
                     Self::APPLICATION_USER_DEVICE__ID_PART
                 ),
             );
@@ -375,15 +375,15 @@ impl CreateFixturesProcessor {
             };
 
             'b: for _ in 1..=Self::QUANTITY_OF_CHANNELS {
-                let mut channel_name = Channel_Name::new(String::new());
+                let mut channel_name = Channel_Name(String::new());
 
                 '_c: for _ in 1..=thread_rng().gen_range::<usize, _>(1..=Validator::<Channel_Name>::MAXIMUM_LENGTH) {
                     let character = Self::ASCII_CHARACTER_REGISTRY[thread_rng().gen_range::<usize, _>(0..Self::ASCII_CHARACTER_REGISTRY.len())];
 
-                    channel_name = Channel_Name::new(
+                    channel_name = Channel_Name(
                         format!(
                             "{}{}",
-                            channel_name.get(),
+                            channel_name.0.as_str(),
                             character
                         ),
                     );
@@ -404,7 +404,7 @@ impl CreateFixturesProcessor {
                     );
                 }
 
-                let channel_linked_name = Channel_LinkedName::new(channel_name.get().to_string());
+                let channel_linked_name = Channel_LinkedName(channel_name.0.clone());
 
                 if !Validator::<Channel_LinkedName>::is_valid(&channel_linked_name) {
                     return Err(
@@ -422,15 +422,15 @@ impl CreateFixturesProcessor {
                 }
 
                 let channel_description = if thread_rng().gen_range::<i8, _>(0..=1) == 1 {
-                    let mut channel_description_ = Channel_Description::new(String::new());
+                    let mut channel_description_ = Channel_Description(String::new());
 
                     '_c: for _ in 1..=thread_rng().gen_range::<usize, _>(1..=Validator::<Channel_Description>::MAXIMUM_LENGTH) {
                         let character = Self::ASCII_CHARACTER_REGISTRY[thread_rng().gen_range::<usize, _>(0..Self::ASCII_CHARACTER_REGISTRY.len())];
 
-                        channel_description_ = Channel_Description::new(
+                        channel_description_ = Channel_Description(
                             format!(
                                 "{}{}",
-                                channel_description_.get(),
+                                channel_description_.0.as_str(),
                                 character
                             ),
                         );
@@ -456,7 +456,7 @@ impl CreateFixturesProcessor {
                     None
                 };
 
-                let channel_orientation = Channel_Orientation::new(
+                let channel_orientation = Channel_Orientation(
                     vec![
                         0, 1, 2,
                     ],
@@ -514,11 +514,11 @@ impl CreateFixturesProcessor {
                                 channel_access_modifier: FormResolver::<AccessModifier>::from_representation(Channel_AccessModifier_::Open),
                                 channel_visability_modifier: FormResolver::<Channel_VisabilityModifier>::from_representation(Channel_VisabilityModifier_::Public),
                                 channel_orientation,
-                                channel_cover_image_path: Some(Channel_CoverImagePath::new(Self::STUB.to_string())),
-                                channel_background_image_path: Some(Channel_BackgroundImagePath::new(Self::STUB.to_string())),
-                                channel_subscribers_quantity: Channel_SubscribersQuantity::new(0),
-                                channel_marks_quantity: Channel_MarksQuantity::new(0),
-                                channel_viewing_quantity: Channel_ViewingQuantity::new(0),
+                                channel_cover_image_path: Some(Channel_CoverImagePath(Self::STUB.to_string())),
+                                channel_background_image_path: Some(Channel_BackgroundImagePath(Self::STUB.to_string())),
+                                channel_subscribers_quantity: Channel_SubscribersQuantity(0),
+                                channel_marks_quantity: Channel_MarksQuantity(0),
+                                channel_viewing_quantity: Channel_ViewingQuantity(0),
                             },
                         )
                         .await

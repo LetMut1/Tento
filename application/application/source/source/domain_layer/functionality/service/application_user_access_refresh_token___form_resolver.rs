@@ -38,7 +38,7 @@ impl FormResolver<ApplicationUserAccessRefreshToken<'_>> {
 
         let application_user_access_refresh_token_encrypted = Encoder_::<Base64>::encode(hmac_encoded_data.as_slice());
 
-        return Ok(ApplicationUserAccessRefreshTokenEncrypted::new(application_user_access_refresh_token_encrypted));
+        return Ok(ApplicationUserAccessRefreshTokenEncrypted(application_user_access_refresh_token_encrypted));
     }
 
     pub fn is_valid<'a>(
@@ -60,6 +60,6 @@ impl FormResolver<ApplicationUserAccessRefreshToken<'_>> {
             }
         };
 
-        return Ok(application_user_access_refresh_token_encrypted_.get() == application_user_access_refresh_token_encrypted.get());
+        return Ok(application_user_access_refresh_token_encrypted_.0 == application_user_access_refresh_token_encrypted.0);
     }
 }

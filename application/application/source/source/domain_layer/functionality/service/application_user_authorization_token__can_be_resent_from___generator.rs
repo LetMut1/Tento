@@ -23,6 +23,6 @@ impl Generator<ApplicationUserAuthorizationToken_CanBeResentFrom> {
             }
         };
 
-        return Ok(ApplicationUserAuthorizationToken_CanBeResentFrom::new(application_user_authorization_token_can_be_resent_from));
+        return Ok(ApplicationUserAuthorizationToken_CanBeResentFrom(application_user_authorization_token_can_be_resent_from));
     }
 }

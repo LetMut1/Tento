@@ -15,17 +15,7 @@ pub use self::CreatedAt as ChannelOuterLink_CreatedAt;
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
-pub struct Alias(String);
-
-impl Alias {
-    pub fn new(inner: String) -> Self {
-        return Self(inner);
-    }
-
-    pub fn get<'a>(&'a self) -> &'a str {
-        return self.0.as_str();
-    }
-}
+pub struct Alias(pub String);
 
 #[cfg_attr(
     feature = "manual_testing",
@@ -34,29 +24,9 @@ impl Alias {
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
-pub struct Address(String);
+pub struct Address(pub String);
 
-impl Address {
-    pub fn new(inner: String) -> Self {
-        return Self(inner);
-    }
-
-    pub fn get<'a>(&'a self) -> &'a str {
-        return self.0.as_str();
-    }
-}
-
-pub struct CreatedAt(String);
-
-impl CreatedAt {
-    pub fn new(inner: String) -> Self {
-        return Self(inner);
-    }
-
-    pub fn get<'a>(&'a self) -> &'a str {
-        return self.0.as_str();
-    }
-}
+pub struct CreatedAt(pub String);
 
 pub struct ChannelOuterLink {
     pub from: Channel_Id,

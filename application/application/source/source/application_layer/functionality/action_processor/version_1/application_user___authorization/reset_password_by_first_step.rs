@@ -197,7 +197,7 @@ impl ActionProcessor {
 
         let (application_user_reset_password_token_aggregator, can_send) = match application_user_reset_password_token {
             Some(mut application_user_reset_password_token_) => {
-                let (can_send_, need_to_update_1) = if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_reset_password_token_.can_be_resent_from.get()) {
+                let (can_send_, need_to_update_1) = if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_reset_password_token_.can_be_resent_from.0) {
                     application_user_reset_password_token_.can_be_resent_from = match Generator::<ApplicationUserResetPasswordToken_CanBeResentFrom>::generate() {
                         Ok(application_user_reset_password_token_can_be_resent_from_) => application_user_reset_password_token_can_be_resent_from_,
                         Err(mut error) => {
@@ -222,12 +222,12 @@ impl ActionProcessor {
                     )
                 };
 
-                let need_to_update_2 = if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_reset_password_token_.expires_at.get()) || application_user_reset_password_token_.is_approved.get() {
+                let need_to_update_2 = if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_reset_password_token_.expires_at.0) || application_user_reset_password_token_.is_approved.0 {
                     application_user_reset_password_token_.value = Generator::<ApplicationUserResetPasswordToken_Value>::generate();
 
-                    application_user_reset_password_token_.wrong_enter_tries_quantity = ApplicationUserResetPasswordToken_WrongEnterTriesQuantity::new(0);
+                    application_user_reset_password_token_.wrong_enter_tries_quantity = ApplicationUserResetPasswordToken_WrongEnterTriesQuantity(0);
 
-                    application_user_reset_password_token_.is_approved = ApplicationUserResetPasswordToken_IsApproved::new(false);
+                    application_user_reset_password_token_.is_approved = ApplicationUserResetPasswordToken_IsApproved(false);
 
                     application_user_reset_password_token_.expires_at = match Generator::<ApplicationUserResetPasswordToken_ExpiresAt>::generate() {
                         Ok(application_user_reset_password_token_expires_at) => application_user_reset_password_token_expires_at,
@@ -366,8 +366,8 @@ impl ActionProcessor {
                         application_user_id: application_user_.id,
                         application_user_device_id: &incoming.application_user_device_id,
                         application_user_reset_password_token_value: Generator::<ApplicationUserResetPasswordToken_Value>::generate(),
-                        application_user_reset_password_token_wrong_enter_tries_quantity: ApplicationUserResetPasswordToken_WrongEnterTriesQuantity::new(0),
-                        application_user_reset_password_token_is_approved: ApplicationUserResetPasswordToken_IsApproved::new(false),
+                        application_user_reset_password_token_wrong_enter_tries_quantity: ApplicationUserResetPasswordToken_WrongEnterTriesQuantity(0),
+                        application_user_reset_password_token_is_approved: ApplicationUserResetPasswordToken_IsApproved(false),
                         application_user_reset_password_token_expires_at,
                         application_user_reset_password_token_can_be_resent_from,
                     },

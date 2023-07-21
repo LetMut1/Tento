@@ -13,17 +13,7 @@ pub use self::PasswordHash as ApplicationUser_PasswordHash;
 #[derive(Clone, Copy, Serialize, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
-pub struct Id(i64);
-
-impl Id {
-    pub fn new(inner: i64) -> Self {
-        return Self(inner);
-    }
-
-    pub fn get<'a>(&'a self) -> i64 {
-        return self.0;
-    }
-}
+pub struct Id(pub i64);
 
 #[cfg_attr(
     feature = "manual_testing",
@@ -32,21 +22,7 @@ impl Id {
 #[derive(Clone, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
-pub struct Email(String);
-
-impl Email {
-    pub fn new(inner: String) -> Self {
-        return Self(inner);
-    }
-
-    pub fn get<'a>(&'a self) -> &'a str {
-        return self.0.as_str();
-    }
-
-    pub fn into_inner(self) -> String {
-        return self.0;
-    }
-}
+pub struct Email(pub String);
 
 #[cfg_attr(
     feature = "manual_testing",
@@ -55,17 +31,7 @@ impl Email {
 #[derive(Clone, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
-pub struct Nickname(String);
-
-impl Nickname {
-    pub fn new(inner: String) -> Self {
-        return Self(inner);
-    }
-
-    pub fn get<'a>(&'a self) -> &'a str {
-        return self.0.as_str();
-    }
-}
+pub struct Nickname(pub String);
 
 #[cfg_attr(
     feature = "manual_testing",
@@ -74,42 +40,12 @@ impl Nickname {
 #[derive(Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
-pub struct Password(String);
-
-impl Password {
-    pub fn new(inner: String) -> Self {
-        return Self(inner);
-    }
-
-    pub fn get<'a>(&'a self) -> &'a str {
-        return self.0.as_str();
-    }
-}
+pub struct Password(pub String);
 
 #[derive(Clone)]
-pub struct PasswordHash(String);
+pub struct PasswordHash(pub String);
 
-impl PasswordHash {
-    pub fn new(inner: String) -> Self {
-        return Self(inner);
-    }
-
-    pub fn get<'a>(&'a self) -> &'a str {
-        return self.0.as_str();
-    }
-}
-
-pub struct CreatedAt(String);
-
-impl CreatedAt {
-    pub fn new(inner: String) -> Self {
-        return Self(inner);
-    }
-
-    pub fn get<'a>(&'a self) -> &'a str {
-        return self.0.as_str();
-    }
-}
+pub struct CreatedAt(pub String);
 
 pub struct ApplicationUser<'a> {
     pub id: Id,

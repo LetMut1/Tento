@@ -5,6 +5,6 @@ use crate::infrastructure_layer::functionality::service::generator::NumberRow;
 
 impl Generator<ApplicationUserAuthorizationToken_Value> {
     pub fn generate() -> ApplicationUserAuthorizationToken_Value {
-        return ApplicationUserAuthorizationToken_Value::new(Generator_::<NumberRow>::generate_6());
+        return ApplicationUserAuthorizationToken_Value(Generator_::<NumberRow>::generate_6());
     }
 }

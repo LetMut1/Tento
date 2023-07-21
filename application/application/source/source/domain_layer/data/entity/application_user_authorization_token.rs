@@ -16,43 +16,13 @@ pub use self::WrongEnterTriesQuantity as ApplicationUserAuthorizationToken_Wrong
 #[derive(Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
-pub struct Value(String);
-
-impl Value {
-    pub fn new(inner: String) -> Self {
-        return Self(inner);
-    }
-
-    pub fn get<'a>(&'a self) -> &'a str {
-        return self.0.as_str();
-    }
-}
+pub struct Value(pub String);
 
 #[derive(Clone, Copy)]
-pub struct WrongEnterTriesQuantity(i16);
-
-impl WrongEnterTriesQuantity {
-    pub fn new(inner: i16) -> Self {
-        return Self(inner);
-    }
-
-    pub fn get<'a>(&'a self) -> i16 {
-        return self.0;
-    }
-}
+pub struct WrongEnterTriesQuantity(pub i16);
 
 #[derive(Clone, Copy)]
-pub struct ExpiresAt(i64);
-
-impl ExpiresAt {
-    pub fn new(inner: i64) -> Self {
-        return Self(inner);
-    }
-
-    pub fn get<'a>(&'a self) -> i64 {
-        return self.0;
-    }
-}
+pub struct ExpiresAt(pub i64);
 
 #[cfg_attr(
     feature = "manual_testing",
@@ -61,17 +31,7 @@ impl ExpiresAt {
 #[derive(Clone, Copy, Serialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
-pub struct CanBeResentFrom(i64);
-
-impl CanBeResentFrom {
-    pub fn new(inner: i64) -> Self {
-        return Self(inner);
-    }
-
-    pub fn get<'a>(&'a self) -> i64 {
-        return self.0;
-    }
-}
+pub struct CanBeResentFrom(pub i64);
 
 pub struct ApplicationUserAuthorizationToken<'a> {
     pub application_user_id: ApplicationUser_Id,

@@ -22,9 +22,9 @@ impl PostgresqlRepository<ChannelInnerLink> {
         database_1_connection: &'a Connection,
         insert_8: Insert8,
     ) -> Result<ChannelInnerLink, ErrorAuditor> {
-        let channel_inner_link_from = insert_8.channel_inner_link_from.get();
+        let channel_inner_link_from = insert_8.channel_inner_link_from.0;
 
-        let channel_inner_link_to = insert_8.channel_inner_link_to.get();
+        let channel_inner_link_to = insert_8.channel_inner_link_to.0;
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -108,7 +108,7 @@ impl PostgresqlRepository<ChannelInnerLink> {
         };
 
         let channel_inner_link_created_at = match row_registry[0].try_get::<'_, usize, String>(0) {
-            Ok(channel_inner_link_created_at_) => ChannelInnerLink_CreatedAt::new(channel_inner_link_created_at_),
+            Ok(channel_inner_link_created_at_) => ChannelInnerLink_CreatedAt(channel_inner_link_created_at_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -143,7 +143,7 @@ impl PostgresqlRepository<ChannelInnerLink> {
         by_8: &'a By8,
         limit: i16,
     ) -> Result<Vec<ChannelInnerLink1>, ErrorAuditor> {
-        let channel_inner_link_from = by_8.channel_inner_link_from.get();
+        let channel_inner_link_from = by_8.channel_inner_link_from.0;
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -228,7 +228,7 @@ impl PostgresqlRepository<ChannelInnerLink> {
 
         '_a: for row in row_registry.iter() {
             let channel_inner_link_to = match row.try_get::<'_, usize, i64>(0) {
-                Ok(channel_inner_link_to_) => Channel_Id::new(channel_inner_link_to_),
+                Ok(channel_inner_link_to_) => Channel_Id(channel_inner_link_to_),
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(

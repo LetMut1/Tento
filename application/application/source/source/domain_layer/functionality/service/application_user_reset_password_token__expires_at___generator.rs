@@ -23,6 +23,6 @@ impl Generator<ApplicationUserResetPasswordToken_ExpiresAt> {
             }
         };
 
-        return Ok(ApplicationUserResetPasswordToken_ExpiresAt::new(application_user_reset_password_token_expires_at));
+        return Ok(ApplicationUserResetPasswordToken_ExpiresAt(application_user_reset_password_token_expires_at));
     }
 }

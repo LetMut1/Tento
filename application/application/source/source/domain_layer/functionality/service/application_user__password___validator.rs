@@ -19,13 +19,11 @@ impl Validator<ApplicationUser_Password> {
     pub fn is_valid_part_1<'a>(
         application_user_password: &'a ApplicationUser_Password,
     ) -> bool {
-        let application_user_password_ = application_user_password.get();
-
-        let password_chars_count = application_user_password_.chars().count();
+        let password_chars_count = application_user_password.0.chars().count();
 
         return password_chars_count >= Self::MINIMUM_LENGTH
             && password_chars_count <= Self::MAXIMUM_LENGTH
-            && !application_user_password_.contains(' ');
+            && !application_user_password.0.contains(' ');
     }
 
     pub fn is_valid_part_2<'a>(
@@ -33,9 +31,9 @@ impl Validator<ApplicationUser_Password> {
         application_user_email: &'a ApplicationUser_Email,
         application_user_nickname: &'a ApplicationUser_Nickname,
     ) -> bool {
-        let application_user_password_ = application_user_password.get();
+        let application_user_password_ = application_user_password.0.as_str();
 
-        return application_user_password_ != application_user_email.get()
-            && application_user_password_ != application_user_nickname.get();
+        return application_user_password_ != application_user_email.0.as_str()
+            && application_user_password_ != application_user_nickname.0.as_str();
     }
 }

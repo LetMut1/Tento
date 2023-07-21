@@ -10,32 +10,12 @@ pub use self::Id as ApplicationUserAccessToken_Id;
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
-pub struct Id(String);
-
-impl Id {
-    pub fn new(inner: String) -> Self {
-        return Self(inner);
-    }
-
-    pub fn get<'a>(&'a self) -> &'a str {
-        return self.0.as_str();
-    }
-}
+pub struct Id(pub String);
 
 #[derive(Clone, Copy, Serialize, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
-pub struct ExpiresAt(i64);
-
-impl ExpiresAt {
-    pub fn new(inner: i64) -> Self {
-        return Self(inner);
-    }
-
-    pub fn get<'a>(&'a self) -> i64 {
-        return self.0;
-    }
-}
+pub struct ExpiresAt(pub i64);
 
 #[derive(Serialize, Deserialize)]
 #[serde(crate = "extern_crate::serde")]

@@ -17,9 +17,9 @@ impl PostgresqlRepository<ChannelSubscription> {
         database_1_connection: &'a Connection,
         insert_10: Insert10,
     ) -> Result<ChannelSubscription, ErrorAuditor> {
-        let application_user_id = insert_10.application_user_id.get();
+        let application_user_id = insert_10.application_user_id.0;
 
-        let channel_id = insert_10.channel_id.get();
+        let channel_id = insert_10.channel_id.0;
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -103,7 +103,7 @@ impl PostgresqlRepository<ChannelSubscription> {
         };
 
         let channel_subscription_created_at = match row_registry[0].try_get::<'_, usize, String>(0) {
-            Ok(channel_subscription_created_at_) => ChannelSubscription_CreatedAt::new(channel_subscription_created_at_),
+            Ok(channel_subscription_created_at_) => ChannelSubscription_CreatedAt(channel_subscription_created_at_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -137,9 +137,9 @@ impl PostgresqlRepository<ChannelSubscription> {
         database_1_connection: &'a Connection,
         by_10: &'a By10,
     ) -> Result<bool, ErrorAuditor> {
-        let application_user_id = by_10.application_user_id.get();
+        let application_user_id = by_10.application_user_id.0;
 
-        let channel_id = by_10.channel_id.get();
+        let channel_id = by_10.channel_id.0;
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 

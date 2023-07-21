@@ -23,6 +23,6 @@ impl Generator<ApplicationUserResetPasswordToken_CanBeResentFrom> {
             }
         };
 
-        return Ok(ApplicationUserResetPasswordToken_CanBeResentFrom::new(application_user_reset_password_token_can_be_resent_from));
+        return Ok(ApplicationUserResetPasswordToken_CanBeResentFrom(application_user_reset_password_token_can_be_resent_from));
     }
 }

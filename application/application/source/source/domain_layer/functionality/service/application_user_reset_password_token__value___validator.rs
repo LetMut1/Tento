@@ -31,6 +31,6 @@ impl Validator<ApplicationUserResetPasswordToken_Value> {
             }
         };
 
-        return Ok(regex.is_match(application_user_authorization_token_value.get()));
+        return Ok(regex.is_match(application_user_authorization_token_value.0.as_str()));
     }
 }

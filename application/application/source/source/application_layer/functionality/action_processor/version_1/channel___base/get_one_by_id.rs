@@ -207,7 +207,7 @@ impl ActionProcessor {
                 }
             };
 
-            if !is_exist && application_user_access_token.application_user_id.get() != channel_.owner.get() {
+            if !is_exist && application_user_access_token.application_user_id.0 != channel_.owner.0 {
                 return Ok(
                     InvalidArgumentResult::Ok {
                         subject: UnifiedReport::precedent(Precedent::Channel_IsClosed),

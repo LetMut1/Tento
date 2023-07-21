@@ -167,7 +167,7 @@ impl ActionProcessor {
             }
         };
 
-        if channel_.owner.get() == application_user_access_token.application_user_id.get() {
+        if channel_.owner.0 == application_user_access_token.application_user_id.0 {
             return Ok(
                 InvalidArgumentResult::Ok {
                     subject: UnifiedReport::precedent(Precedent::ApplicationUser_IsChannelOwner),

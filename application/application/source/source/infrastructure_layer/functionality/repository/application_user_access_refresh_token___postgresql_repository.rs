@@ -24,19 +24,19 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
         database_2_connection: &'a Connection,
         insert_2: Insert2<'a>,
     ) -> Result<ApplicationUserAccessRefreshToken<'a>, ErrorAuditor> {
-        let application_user_id = insert_2.application_user_id.get();
+        let application_user_id = insert_2.application_user_id.0;
 
-        let application_user_device_id = insert_2.application_user_device_id.get();
+        let application_user_device_id = insert_2.application_user_device_id.0.as_str();
 
-        let application_user_access_token_id = insert_2.application_user_access_token_id.get();
+        let application_user_access_token_id = insert_2.application_user_access_token_id.0.as_str();
 
-        let application_user_access_refresh_token_obfuscation_value = insert_2.application_user_access_refresh_token_obfuscation_value.get();
+        let application_user_access_refresh_token_obfuscation_value = insert_2.application_user_access_refresh_token_obfuscation_value.0.as_str();
 
-        let application_user_access_refresh_token_expires_at = insert_2.application_user_access_refresh_token_expires_at.get();
+        let application_user_access_refresh_token_expires_at = insert_2.application_user_access_refresh_token_expires_at.0;
+
+        let application_user_access_refresh_token_updated_at = insert_2.application_user_access_refresh_token_updated_at.0;
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-
-        let application_user_access_refresh_token_updated_at = insert_2.application_user_access_refresh_token_updated_at.get();
 
         let query = "\
             INSERT INTO public.application_user_access_refresh_token AS auart ( \
@@ -150,9 +150,9 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
         database_2_connection: &'a Connection,
         by_4: &'a By4<'_>,
     ) -> Result<(), ErrorAuditor> {
-        let application_user_id = by_4.application_user_id.get();
+        let application_user_id = by_4.application_user_id.0;
 
-        let application_user_device_id = by_4.application_user_device_id.get();
+        let application_user_device_id = by_4.application_user_device_id.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -229,7 +229,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
         database_2_connection: &'a Connection,
         by_3: &'a By3,
     ) -> Result<(), ErrorAuditor> {
-        let application_user_id = by_3.application_user_id.get();
+        let application_user_id = by_3.application_user_id.0;
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -302,9 +302,9 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
         database_2_connection: &'a Connection,
         by_4: &'a By4<'b>,
     ) -> Result<Option<ApplicationUserAccessRefreshToken<'b>>, ErrorAuditor> {
-        let application_user_id = by_4.application_user_id.get();
+        let application_user_id = by_4.application_user_id.0;
 
-        let application_user_device_id = by_4.application_user_device_id.get();
+        let application_user_device_id = by_4.application_user_device_id.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -388,7 +388,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
         }
 
         let application_user_access_token_id = match row_registry[0].try_get::<'_, usize, String>(0) {
-            Ok(application_user_access_token_id_) => ApplicationUserAccessToken_Id::new(application_user_access_token_id_),
+            Ok(application_user_access_token_id_) => ApplicationUserAccessToken_Id(application_user_access_token_id_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -410,7 +410,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
         };
 
         let application_user_access_refresh_token_obfuscation_value = match row_registry[0].try_get::<'_, usize, String>(1) {
-            Ok(application_user_access_refresh_token_obfuscation_value_) => ApplicationUserAccessRefreshToken_ObfuscationValue::new(application_user_access_refresh_token_obfuscation_value_),
+            Ok(application_user_access_refresh_token_obfuscation_value_) => ApplicationUserAccessRefreshToken_ObfuscationValue(application_user_access_refresh_token_obfuscation_value_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -432,7 +432,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
         };
 
         let application_user_access_refresh_token_expires_at = match row_registry[0].try_get::<'_, usize, i64>(2) {
-            Ok(application_user_access_refresh_token_expires_at_) => ApplicationUserAccessRefreshToken_ExpiresAt::new(application_user_access_refresh_token_expires_at_),
+            Ok(application_user_access_refresh_token_expires_at_) => ApplicationUserAccessRefreshToken_ExpiresAt(application_user_access_refresh_token_expires_at_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -454,7 +454,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
         };
 
         let application_user_access_refresh_token_updated_at = match row_registry[0].try_get::<'_, usize, i64>(3) {
-            Ok(application_user_access_refresh_token_updated_at_) => ApplicationUserAccessRefreshToken_UpdatedAt::new(application_user_access_refresh_token_updated_at_),
+            Ok(application_user_access_refresh_token_updated_at_) => ApplicationUserAccessRefreshToken_UpdatedAt(application_user_access_refresh_token_updated_at_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -496,17 +496,17 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken1> {
         update_2: &'a Update2<'_>,
         by_4: &'a By4<'_>,
     ) -> Result<(), ErrorAuditor> {
-        let application_user_id = by_4.application_user_id.get();
+        let application_user_id = by_4.application_user_id.0;
 
-        let application_user_device_id = by_4.application_user_device_id.get();
+        let application_user_device_id = by_4.application_user_device_id.0.as_str();
 
-        let application_user_access_token_id = update_2.application_user_access_token_id.get();
+        let application_user_access_token_id = update_2.application_user_access_token_id.0.as_str();
 
-        let application_user_access_refresh_token_obfuscation_value = update_2.application_user_access_refresh_token_obfuscation_value.get();
+        let application_user_access_refresh_token_obfuscation_value = update_2.application_user_access_refresh_token_obfuscation_value.0.as_str();
 
-        let application_user_access_refresh_token_expires_at = update_2.application_user_access_refresh_token_expires_at.get();
+        let application_user_access_refresh_token_expires_at = update_2.application_user_access_refresh_token_expires_at.0;
 
-        let application_user_access_refresh_token_updated_at = update_2.application_user_access_refresh_token_updated_at.get();
+        let application_user_access_refresh_token_updated_at = update_2.application_user_access_refresh_token_updated_at.0;
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 

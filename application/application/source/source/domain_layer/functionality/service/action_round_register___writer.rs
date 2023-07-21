@@ -111,7 +111,7 @@ impl Writer<ActionRoundRegister<'_>> {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
         let action_round_register_status_code = match <Converter as Convert<u16, i16>>::convert(response.status().as_u16()) {
-            Ok(action_round_register_status_code_) => ActionRoundRegister_StatusCode::new(action_round_register_status_code_),
+            Ok(action_round_register_status_code_) => ActionRoundRegister_StatusCode(action_round_register_status_code_),
             Err(mut error) => {
                 error.add_backtrace_part(
                     BacktracePart::new(
@@ -125,9 +125,9 @@ impl Writer<ActionRoundRegister<'_>> {
             }
         };
 
-        let action_round_register_route = ActionRoundRegister_Route::new(Cow::Borrowed(request.uri().path()));
+        let action_round_register_route = ActionRoundRegister_Route(Cow::Borrowed(request.uri().path()));
 
-        let action_round_register_method = ActionRoundRegister_Method::new(Cow::Borrowed(request.method().as_str()));
+        let action_round_register_method = ActionRoundRegister_Method(Cow::Borrowed(request.method().as_str()));
 
         let database_2_postgresql_pooled_connection = match database_2_postgresql_connection_pool.get().await {
             Ok(database_2_postgresql_pooled_connection_) => database_2_postgresql_pooled_connection_,

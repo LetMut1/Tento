@@ -22,32 +22,12 @@ pub use self::VisabilityModifier_ as Channel_VisabilityModifier_;
 #[derive(Clone, Copy, Serialize, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
-pub struct Id(i64);
-
-impl Id {
-    pub fn new(inner: i64) -> Self {
-        return Self(inner);
-    }
-
-    pub fn get<'a>(&'a self) -> i64 {
-        return self.0;
-    }
-}
+pub struct Id(pub i64);
 
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
-pub struct Name(String);
-
-impl Name {
-    pub fn new(inner: String) -> Self {
-        return Self(inner);
-    }
-
-    pub fn get<'a>(&'a self) -> &'a str {
-        return self.0.as_str();
-    }
-}
+pub struct Name(pub String);
 
 #[cfg_attr(
     feature = "manual_testing",
@@ -56,17 +36,7 @@ impl Name {
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
-pub struct LinkedName(String);
-
-impl LinkedName {
-    pub fn new(inner: String) -> Self {
-        return Self(inner);
-    }
-
-    pub fn get<'a>(&'a self) -> &'a str {
-        return self.0.as_str();
-    }
-}
+pub struct LinkedName(pub String);
 
 #[cfg_attr(
     feature = "manual_testing",
@@ -75,17 +45,7 @@ impl LinkedName {
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
-pub struct Description(String);
-
-impl Description {
-    pub fn new(inner: String) -> Self {
-        return Self(inner);
-    }
-
-    pub fn get<'a>(&'a self) -> &'a str {
-        return self.0.as_str();
-    }
-}
+pub struct Description(pub String);
 
 #[cfg_attr(
     feature = "manual_testing",
@@ -94,19 +54,11 @@ impl Description {
 #[derive(Clone, Copy, Serialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
-pub struct AccessModifier(i16);
+pub struct AccessModifier(pub i16);
 
 impl AccessModifier {
     pub const OPEN: i16 = 0;
     pub const CLOSE: i16 = 1;
-
-    pub fn new(inner: i16) -> Self {
-        return Self(inner);
-    }
-
-    pub fn get<'a>(&'a self) -> i16 {
-        return self.0;
-    }
 }
 
 pub enum AccessModifier_ {
@@ -121,19 +73,11 @@ pub enum AccessModifier_ {
 #[derive(Clone, Copy, Serialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
-pub struct VisabilityModifier(i16);
+pub struct VisabilityModifier(pub i16);
 
 impl VisabilityModifier {
     pub const PUBLIC: i16 = 0;
     pub const PRIVATE: i16 = 1;
-
-    pub fn new(inner: i16) -> Self {
-        return Self(inner);
-    }
-
-    pub fn get<'a>(&'a self) -> i16 {
-        return self.0;
-    }
 }
 
 pub enum VisabilityModifier_ {
@@ -148,17 +92,7 @@ pub enum VisabilityModifier_ {
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
-pub struct Orientation(Vec<i16>);
-
-impl Orientation {
-    pub fn new(inner: Vec<i16>) -> Self {
-        return Self(inner);
-    }
-
-    pub fn get<'a>(&'a self) -> &'a [i16] {
-        return self.0.as_slice();
-    }
-}
+pub struct Orientation(pub Vec<i16>);
 
 #[cfg_attr(
     feature = "manual_testing",
@@ -167,17 +101,7 @@ impl Orientation {
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
-pub struct CoverImagePath(String);
-
-impl CoverImagePath {
-    pub fn new(inner: String) -> Self {
-        return Self(inner);
-    }
-
-    pub fn get<'a>(&'a self) -> &'a str {
-        return self.0.as_str();
-    }
-}
+pub struct CoverImagePath(pub String);
 
 #[cfg_attr(
     feature = "manual_testing",
@@ -186,17 +110,7 @@ impl CoverImagePath {
 #[derive(Serialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
-pub struct BackgroundImagePath(String);
-
-impl BackgroundImagePath {
-    pub fn new(inner: String) -> Self {
-        return Self(inner);
-    }
-
-    pub fn get<'a>(&'a self) -> &'a str {
-        return self.0.as_str();
-    }
-}
+pub struct BackgroundImagePath(pub String);
 
 #[cfg_attr(
     feature = "manual_testing",
@@ -205,35 +119,7 @@ impl BackgroundImagePath {
 #[derive(Clone, Copy, Serialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
-pub struct SubscribersQuantity(i64);
-
-impl SubscribersQuantity {
-    pub fn new(inner: i64) -> Self {
-        return Self(inner);
-    }
-
-    pub fn get<'a>(&'a self) -> i64 {
-        return self.0;
-    }
-}
-
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Deserialize)
-)]
-#[derive(Clone, Copy, Serialize)]
-#[serde(crate = "extern_crate::serde")]
-pub struct MarksQuantity(i64);
-
-impl MarksQuantity {
-    pub fn new(inner: i64) -> Self {
-        return Self(inner);
-    }
-
-    pub fn get<'a>(&'a self) -> i64 {
-        return self.0;
-    }
-}
+pub struct SubscribersQuantity(pub i64);
 
 #[cfg_attr(
     feature = "manual_testing",
@@ -242,29 +128,18 @@ impl MarksQuantity {
 #[derive(Clone, Copy, Serialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
-pub struct ViewingQuantity(i64);
+pub struct MarksQuantity(pub i64);
 
-impl ViewingQuantity {
-    pub fn new(inner: i64) -> Self {
-        return Self(inner);
-    }
+#[cfg_attr(
+    feature = "manual_testing",
+    derive(Deserialize)
+)]
+#[derive(Clone, Copy, Serialize)]
+#[serde(crate = "extern_crate::serde")]
+#[serde(transparent)]
+pub struct ViewingQuantity(pub i64);
 
-    pub fn get<'a>(&'a self) -> i64 {
-        return self.0;
-    }
-}
-
-pub struct CreatedAt(String);
-
-impl CreatedAt {
-    pub fn new(inner: String) -> Self {
-        return Self(inner);
-    }
-
-    pub fn get<'a>(&'a self) -> &'a str {
-        return self.0.as_str();
-    }
-}
+pub struct CreatedAt(pub String);
 
 pub struct Channel<'a> {
     pub id: Id,

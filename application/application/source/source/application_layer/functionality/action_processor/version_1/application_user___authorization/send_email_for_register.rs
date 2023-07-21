@@ -140,7 +140,7 @@ impl ActionProcessor {
             }
         };
 
-        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token_.expires_at.get()) {
+        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token_.expires_at.0) {
             if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete(
                 database_2_postgresql_connection,
                 &by_5,
@@ -165,7 +165,7 @@ impl ActionProcessor {
             );
         }
 
-        if application_user_registration_token_.is_approved.get() {
+        if application_user_registration_token_.is_approved.0 {
             return Ok(
                 InvalidArgumentResult::Ok {
                     subject: UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_AlreadyApproved),
@@ -173,7 +173,7 @@ impl ActionProcessor {
             );
         }
 
-        if !ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token_.can_be_resent_from.get()) {
+        if !ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token_.can_be_resent_from.0) {
             return Ok(
                 InvalidArgumentResult::Ok {
                     subject: UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_TimeToResendHasNotCome),

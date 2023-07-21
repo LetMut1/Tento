@@ -23,6 +23,6 @@ impl Generator<ApplicationUserAccessToken_ExpiresAt> {
             }
         };
 
-        return Ok(ApplicationUserAccessToken_ExpiresAt::new(application_user_access_token_expires_at));
+        return Ok(ApplicationUserAccessToken_ExpiresAt(application_user_access_token_expires_at));
     }
 }

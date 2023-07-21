@@ -81,7 +81,7 @@ impl ActionProcessor {
             );
         }
 
-        let application_user_email = ApplicationUser_Email::new(incoming.application_user_email_or_application_user_nickname);
+        let application_user_email = ApplicationUser_Email(incoming.application_user_email_or_application_user_nickname);
 
         let is_valid_email = match Validator::<ApplicationUser_Email>::is_valid(&application_user_email) {
             Ok(is_valid_email_) => is_valid_email_,
@@ -161,7 +161,7 @@ impl ActionProcessor {
                 application_user_email,
             }
         } else {
-            let application_user_nickname = ApplicationUser_Nickname::new(application_user_email.into_inner());
+            let application_user_nickname = ApplicationUser_Nickname(application_user_email.0);
 
             if Validator::<ApplicationUser_Nickname>::is_valid(&application_user_nickname) {
                 let application_user_ = match PostgresqlRepository::<ApplicationUser1>::find_1(
@@ -332,7 +332,7 @@ impl ActionProcessor {
 
         let (application_user_authorization_token_aggregator, can_send) = match application_user_authorization_token {
             Some(mut application_user_authorization_token_) => {
-                let (can_send_, need_to_update_1) = if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token_.can_be_resent_from.get()) {
+                let (can_send_, need_to_update_1) = if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token_.can_be_resent_from.0) {
                     application_user_authorization_token_.can_be_resent_from = match Generator::<ApplicationUserAuthorizationToken_CanBeResentFrom>::generate() {
                         Ok(application_user_authorization_token_can_be_resent_from) => application_user_authorization_token_can_be_resent_from,
                         Err(mut error) => {
@@ -357,10 +357,10 @@ impl ActionProcessor {
                     )
                 };
 
-                let need_to_update_2 = if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token_.expires_at.get()) {
+                let need_to_update_2 = if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token_.expires_at.0) {
                     application_user_authorization_token_.value = Generator::<ApplicationUserAuthorizationToken_Value>::generate();
 
-                    application_user_authorization_token_.wrong_enter_tries_quantity = ApplicationUserAuthorizationToken_WrongEnterTriesQuantity::new(0);
+                    application_user_authorization_token_.wrong_enter_tries_quantity = ApplicationUserAuthorizationToken_WrongEnterTriesQuantity(0);
 
                     application_user_authorization_token_.expires_at = match Generator::<ApplicationUserAuthorizationToken_ExpiresAt>::generate() {
                         Ok(application_user_authorization_token_expires_at) => application_user_authorization_token_expires_at,
@@ -497,7 +497,7 @@ impl ActionProcessor {
                         application_user_id,
                         application_user_device_id: &incoming.application_user_device_id,
                         application_user_authorization_token_value: Generator::<ApplicationUserAuthorizationToken_Value>::generate(),
-                        application_user_authorization_token_wrong_enter_tries_quantity: ApplicationUserAuthorizationToken_WrongEnterTriesQuantity::new(0),
+                        application_user_authorization_token_wrong_enter_tries_quantity: ApplicationUserAuthorizationToken_WrongEnterTriesQuantity(0),
                         application_user_authorization_token_expires_at,
                         application_user_authorization_token_can_be_resent_from,
                     },

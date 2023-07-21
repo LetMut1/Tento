@@ -30,9 +30,9 @@ impl PostgresqlRepository<Common1> {
         by_11: &'a By11<'_>,
         limit: i16,
     ) -> Result<Vec<Common1>, ErrorAuditor> {
-        let application_user_id = by_11.application_user_id.get();
+        let application_user_id = by_11.application_user_id.0;
 
-        let channel_name = by_11.channel_name.get();
+        let channel_name = by_11.channel_name.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -87,7 +87,7 @@ impl PostgresqlRepository<Common1> {
             }
         };
 
-        let channel_visability_modifier = by_11.channel_visability_modifier.get();
+        let channel_visability_modifier = by_11.channel_visability_modifier.0;
 
         let mut query = format!(
             "SELECT \
@@ -126,7 +126,7 @@ impl PostgresqlRepository<Common1> {
         let requery_channel_name: &'_ str;
 
         if let Some(requery_channel_name_) = by_11.requery_channel_name {
-            requery_channel_name = requery_channel_name_.get();
+            requery_channel_name = requery_channel_name_.0.as_str();
 
             counter_value = match counter.get_next_value() {
                 Ok(counter_value_) => counter_value_,
@@ -247,7 +247,7 @@ impl PostgresqlRepository<Common1> {
 
         '_a: for row in row_registry.iter() {
             let channel_id = match row.try_get::<'_, usize, i64>(0) {
-                Ok(channel_id_) => Channel_Id::new(channel_id_),
+                Ok(channel_id_) => Channel_Id(channel_id_),
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(
@@ -269,7 +269,7 @@ impl PostgresqlRepository<Common1> {
             };
 
             let channel_name_ = match row.try_get::<'_, usize, String>(1) {
-                Ok(channel_name__) => Channel_Name::new(channel_name__),
+                Ok(channel_name__) => Channel_Name(channel_name__),
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(
@@ -291,7 +291,7 @@ impl PostgresqlRepository<Common1> {
             };
 
             let channel_linked_name = match row.try_get::<'_, usize, String>(2) {
-                Ok(channel_name__) => Channel_LinkedName::new(channel_name__),
+                Ok(channel_name__) => Channel_LinkedName(channel_name__),
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(
@@ -313,7 +313,7 @@ impl PostgresqlRepository<Common1> {
             };
 
             let channel_access_modifier = match row.try_get::<'_, usize, i16>(3) {
-                Ok(channel_access_modifier_) => Channel_AccessModifier::new(channel_access_modifier_),
+                Ok(channel_access_modifier_) => Channel_AccessModifier(channel_access_modifier_),
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(
@@ -335,7 +335,14 @@ impl PostgresqlRepository<Common1> {
             };
 
             let channel_cover_image_path = match row.try_get::<'_, usize, Option<String>>(4) {
-                Ok(channel_cover_image_path_) => channel_cover_image_path_.map(Channel_CoverImagePath::new),
+                Ok(channel_cover_image_path_) => {
+                    let channel_cover_image_path__ = match channel_cover_image_path_ {
+                        Some(channel_cover_image_path___) => Some(Channel_CoverImagePath(channel_cover_image_path___)),
+                        None => None
+                    };
+
+                    channel_cover_image_path__
+                }
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(
@@ -357,7 +364,14 @@ impl PostgresqlRepository<Common1> {
             };
 
             let channel_background_image_path = match row.try_get::<'_, usize, Option<String>>(5) {
-                Ok(channel_background_image_path_) => channel_background_image_path_.map(Channel_BackgroundImagePath::new),
+                Ok(channel_background_image_path_) => {
+                    let channel_background_image_path__ = match channel_background_image_path_ {
+                        Some(channel_background_image_path___) => Some(Channel_BackgroundImagePath(channel_background_image_path___)),
+                        None => None
+                    };
+
+                    channel_background_image_path__
+                }
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(
@@ -431,9 +445,9 @@ impl PostgresqlRepository<Common1> {
         by_12: &'a By12<'_>,
         limit: i16,
     ) -> Result<Vec<Common1>, ErrorAuditor> {
-        let application_user_id = by_12.application_user_id.get();
+        let application_user_id = by_12.application_user_id.0;
 
-        let channel_name = by_12.channel_name.get();
+        let channel_name = by_12.channel_name.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -504,7 +518,7 @@ impl PostgresqlRepository<Common1> {
         let requery_channel_name: &'_ str;
 
         if let Some(requery_channel_name_) = by_12.requery_channel_name {
-            requery_channel_name = requery_channel_name_.get();
+            requery_channel_name = requery_channel_name_.0.as_str();
 
             counter_value = match counter.get_next_value() {
                 Ok(counter_value_) => counter_value_,
@@ -625,7 +639,7 @@ impl PostgresqlRepository<Common1> {
 
         '_a: for row in row_registry.iter() {
             let channel_id = match row.try_get::<'_, usize, i64>(0) {
-                Ok(channel_id_) => Channel_Id::new(channel_id_),
+                Ok(channel_id_) => Channel_Id(channel_id_),
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(
@@ -647,7 +661,7 @@ impl PostgresqlRepository<Common1> {
             };
 
             let channel_name_ = match row.try_get::<'_, usize, String>(1) {
-                Ok(channel_name__) => Channel_Name::new(channel_name__),
+                Ok(channel_name__) => Channel_Name(channel_name__),
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(
@@ -669,7 +683,7 @@ impl PostgresqlRepository<Common1> {
             };
 
             let channel_linked_name = match row.try_get::<'_, usize, String>(2) {
-                Ok(channel_name__) => Channel_LinkedName::new(channel_name__),
+                Ok(channel_name__) => Channel_LinkedName(channel_name__),
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(
@@ -691,7 +705,7 @@ impl PostgresqlRepository<Common1> {
             };
 
             let channel_access_modifier = match row.try_get::<'_, usize, i16>(3) {
-                Ok(channel_access_modifier_) => Channel_AccessModifier::new(channel_access_modifier_),
+                Ok(channel_access_modifier_) => Channel_AccessModifier(channel_access_modifier_),
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(
@@ -713,7 +727,7 @@ impl PostgresqlRepository<Common1> {
             };
 
             let channel_visability_modifier = match row.try_get::<'_, usize, i16>(4) {
-                Ok(channel_visability_modifier_) => Channel_VisabilityModifier::new(channel_visability_modifier_),
+                Ok(channel_visability_modifier_) => Channel_VisabilityModifier(channel_visability_modifier_),
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(
@@ -735,7 +749,14 @@ impl PostgresqlRepository<Common1> {
             };
 
             let channel_cover_image_path = match row.try_get::<'_, usize, Option<String>>(5) {
-                Ok(channel_cover_image_path_) => channel_cover_image_path_.map(Channel_CoverImagePath::new),
+                Ok(channel_cover_image_path_) => {
+                    let channel_cover_image_path__ = match channel_cover_image_path_ {
+                        Some(channel_cover_image_path___) => Some(Channel_CoverImagePath(channel_cover_image_path___)),
+                        None => None
+                    };
+
+                    channel_cover_image_path__
+                }
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(
@@ -757,7 +778,14 @@ impl PostgresqlRepository<Common1> {
             };
 
             let channel_background_image_path = match row.try_get::<'_, usize, Option<String>>(6) {
-                Ok(channel_background_image_path_) => channel_background_image_path_.map(Channel_BackgroundImagePath::new),
+                Ok(channel_background_image_path_) => {
+                    let channel_background_image_path__ = match channel_background_image_path_ {
+                        Some(channel_background_image_path___) => Some(Channel_BackgroundImagePath(channel_background_image_path___)),
+                        None => None
+                    };
+
+                    channel_background_image_path__
+                }
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(
@@ -804,7 +832,7 @@ impl PostgresqlRepository<Common1> {
         by_13: &'a By13,
         limit: i16,
     ) -> Result<Vec<Common1>, ErrorAuditor> {
-        let application_user_id = by_13.application_user_id.get();
+        let application_user_id = by_13.application_user_id.0;
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -847,7 +875,7 @@ impl PostgresqlRepository<Common1> {
         let requery_channel_id: i64;
 
         if let Some(requery_channel_id_) = by_13.requery_channel_id {
-            requery_channel_id = requery_channel_id_.get();
+            requery_channel_id = requery_channel_id_.0;
 
             counter_value = match counter.get_next_value() {
                 Ok(counter_value_) => counter_value_,
@@ -969,7 +997,7 @@ impl PostgresqlRepository<Common1> {
 
         '_a: for row in row_registry.iter() {
             let channel_id = match row.try_get::<'_, usize, i64>(0) {
-                Ok(channel_id_) => Channel_Id::new(channel_id_),
+                Ok(channel_id_) => Channel_Id(channel_id_),
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(
@@ -991,7 +1019,7 @@ impl PostgresqlRepository<Common1> {
             };
 
             let channel_name = match row.try_get::<'_, usize, String>(1) {
-                Ok(channel_name_) => Channel_Name::new(channel_name_),
+                Ok(channel_name_) => Channel_Name(channel_name_),
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(
@@ -1013,7 +1041,7 @@ impl PostgresqlRepository<Common1> {
             };
 
             let channel_linked_name = match row.try_get::<'_, usize, String>(2) {
-                Ok(channel_linked_name_) => Channel_LinkedName::new(channel_linked_name_),
+                Ok(channel_linked_name_) => Channel_LinkedName(channel_linked_name_),
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(
@@ -1035,7 +1063,7 @@ impl PostgresqlRepository<Common1> {
             };
 
             let channel_access_modifier = match row.try_get::<'_, usize, i16>(3) {
-                Ok(channel_access_modifier_) => Channel_AccessModifier::new(channel_access_modifier_),
+                Ok(channel_access_modifier_) => Channel_AccessModifier(channel_access_modifier_),
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(
@@ -1057,7 +1085,7 @@ impl PostgresqlRepository<Common1> {
             };
 
             let channel_visability_modifier = match row.try_get::<'_, usize, i16>(4) {
-                Ok(channel_visability_modifier_) => Channel_VisabilityModifier::new(channel_visability_modifier_),
+                Ok(channel_visability_modifier_) => Channel_VisabilityModifier(channel_visability_modifier_),
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(
@@ -1079,7 +1107,14 @@ impl PostgresqlRepository<Common1> {
             };
 
             let channel_cover_image_path = match row.try_get::<'_, usize, Option<String>>(5) {
-                Ok(channel_cover_image_path_) => channel_cover_image_path_.map(Channel_CoverImagePath::new),
+                Ok(channel_cover_image_path_) => {
+                    let channel_cover_image_path__ = match channel_cover_image_path_ {
+                        Some(channel_cover_image_path___) => Some(Channel_CoverImagePath(channel_cover_image_path___)),
+                        None => None
+                    };
+
+                    channel_cover_image_path__
+                }
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(
@@ -1101,7 +1136,14 @@ impl PostgresqlRepository<Common1> {
             };
 
             let channel_background_image_path = match row.try_get::<'_, usize, Option<String>>(6) {
-                Ok(channel_background_image_path_) => channel_background_image_path_.map(Channel_BackgroundImagePath::new),
+                Ok(channel_background_image_path_) => {
+                    let channel_background_image_path__ = match channel_background_image_path_ {
+                        Some(channel_background_image_path___) => Some(Channel_BackgroundImagePath(channel_background_image_path___)),
+                        None => None
+                    };
+
+                    channel_background_image_path__
+                }
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(

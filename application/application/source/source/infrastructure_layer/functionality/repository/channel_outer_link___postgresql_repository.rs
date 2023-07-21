@@ -23,11 +23,10 @@ impl PostgresqlRepository<ChannelOuterLink> {
         database_1_connection: &'a Connection,
         insert_9: Insert9,
     ) -> Result<ChannelOuterLink, ErrorAuditor> {
-        let channel_outer_link_from = insert_9.channel_outer_link_from.get();
+        let channel_outer_link_from = insert_9.channel_outer_link_from.0;
 
-        let channel_outer_link_alias = insert_9.channel_outer_link_alias.get();
-
-        let channel_outer_link_address = insert_9.channel_outer_link_address.get();
+        let channel_outer_link_alias = insert_9.channel_outer_link_alias.0.as_str();
+        let channel_outer_link_address = insert_9.channel_outer_link_address.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -117,7 +116,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
         };
 
         let channel_outer_link_created_at = match row_registry[0].try_get::<'_, usize, String>(0) {
-            Ok(channel_outer_link_created_at_) => ChannelOuterLink_CreatedAt::new(channel_outer_link_created_at_),
+            Ok(channel_outer_link_created_at_) => ChannelOuterLink_CreatedAt(channel_outer_link_created_at_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -153,7 +152,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
         by_9: &'a By9,
         limit: i16,
     ) -> Result<Vec<ChannelOuterLink1>, ErrorAuditor> {
-        let channel_outer_link_from = by_9.channel_outer_link_from.get();
+        let channel_outer_link_from = by_9.channel_outer_link_from.0;
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -239,7 +238,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
 
         '_a: for row in row_registry.iter() {
             let channel_outer_link_alias = match row.try_get::<'_, usize, String>(0) {
-                Ok(channel_outer_link_alias_) => ChannelOuterLink_Alias::new(channel_outer_link_alias_),
+                Ok(channel_outer_link_alias_) => ChannelOuterLink_Alias(channel_outer_link_alias_),
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(
@@ -261,7 +260,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
             };
 
             let channel_outer_link_address = match row.try_get::<'_, usize, String>(1) {
-                Ok(channel_outer_link_address_) => ChannelOuterLink_Address::new(channel_outer_link_address_),
+                Ok(channel_outer_link_address_) => ChannelOuterLink_Address(channel_outer_link_address_),
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(

@@ -47,11 +47,11 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
             application_user_access_token_signature.as_str()
         );
 
-        return Ok(ApplicationUserAccessTokenEncrypted::new(application_user_access_token_encrypted));
+        return Ok(ApplicationUserAccessTokenEncrypted(application_user_access_token_encrypted));
     }
 
     pub fn from_encrypted<'a>(application_user_access_token_encrypted: &'a ApplicationUserAccessTokenEncrypted) -> Result<InvalidArgumentResult<ApplicationUserAccessToken<'static>>, ErrorAuditor> {
-        let mut token_part_registry = application_user_access_token_encrypted.get().splitn::<'_, &'_ str>(
+        let mut token_part_registry = application_user_access_token_encrypted.0.as_str().splitn::<'_, &'_ str>(
             2,
             Self::TOKEN_PARTS_SEPARATOR,
         );

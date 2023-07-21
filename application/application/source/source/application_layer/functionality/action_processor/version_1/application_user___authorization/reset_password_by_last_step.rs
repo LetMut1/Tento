@@ -165,7 +165,7 @@ impl ActionProcessor {
             }
         };
 
-        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_reset_password_token_.expires_at.get()) {
+        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_reset_password_token_.expires_at.0) {
             if let Err(mut error) = PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete(
                 database_2_postgresql_connection,
                 &by_4,
@@ -190,7 +190,7 @@ impl ActionProcessor {
             );
         }
 
-        if !application_user_reset_password_token_.is_approved.get() {
+        if !application_user_reset_password_token_.is_approved.0 {
             return Ok(
                 InvalidArgumentResult::Ok {
                     subject: UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_IsNotApproved),
@@ -198,7 +198,7 @@ impl ActionProcessor {
             );
         }
 
-        if application_user_reset_password_token_.value.get() != incoming.application_user_reset_password_token_value.get() {
+        if application_user_reset_password_token_.value.0 != incoming.application_user_reset_password_token_value.0 {
             if let Err(mut error) = Incrementor::<ApplicationUserResetPasswordToken_WrongEnterTriesQuantity>::increment(&mut application_user_reset_password_token_.wrong_enter_tries_quantity) {
                 error.add_backtrace_part(
                     BacktracePart::new(
@@ -211,7 +211,7 @@ impl ActionProcessor {
                 return Err(error);
             }
 
-            if application_user_reset_password_token_.wrong_enter_tries_quantity.get() <= ApplicationUserResetPasswordToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
+            if application_user_reset_password_token_.wrong_enter_tries_quantity.0 <= ApplicationUserResetPasswordToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
                 if let Err(mut error) = PostgresqlRepository::<ApplicationUserResetPasswordToken4>::update(
                     database_2_postgresql_connection,
                     &Update15 {

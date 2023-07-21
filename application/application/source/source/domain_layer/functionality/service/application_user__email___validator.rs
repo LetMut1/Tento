@@ -12,7 +12,7 @@ impl Validator<ApplicationUser_Email> {
     const MAXIMUM_LENGTH: usize = 320;
 
     pub fn is_valid<'a>(application_user_email: &'a ApplicationUser_Email) -> Result<bool, ErrorAuditor> {
-        let application_user_email_ = application_user_email.get();
+        let application_user_email_ = application_user_email.0.as_str();
 
         let regex = match Regex::new(Self::REGULAR_EXPRESSION) {
             Ok(regex_) => regex_,
@@ -34,6 +34,9 @@ impl Validator<ApplicationUser_Email> {
             }
         };
 
-        return Ok(regex.is_match(application_user_email_) && application_user_email_.chars().count() <= Self::MAXIMUM_LENGTH);
+        return Ok(
+            regex.is_match(application_user_email_)
+                && application_user_email_.chars().count() <= Self::MAXIMUM_LENGTH
+        );
     }
 }

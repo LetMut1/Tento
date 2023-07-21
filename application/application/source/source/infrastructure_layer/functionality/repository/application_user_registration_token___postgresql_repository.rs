@@ -33,19 +33,19 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
         database_2_connection: &'a Connection,
         insert_5: Insert5<'a>,
     ) -> Result<ApplicationUserRegistrationToken<'a>, ErrorAuditor> {
-        let application_user_email = insert_5.application_user_email.get();
+        let application_user_email = insert_5.application_user_email.0.as_str();
 
-        let application_user_device_id = insert_5.application_user_device_id.get();
+        let application_user_device_id = insert_5.application_user_device_id.0.as_str();
 
-        let application_user_registration_token_value = insert_5.application_user_registration_token_value.get();
+        let application_user_registration_token_value = insert_5.application_user_registration_token_value.0.as_str();
 
-        let application_user_registration_token_wrong_enter_tries_quantity = insert_5.application_user_registration_token_wrong_enter_tries_quantity.get();
+        let application_user_registration_token_wrong_enter_tries_quantity = insert_5.application_user_registration_token_wrong_enter_tries_quantity.0;
 
-        let application_user_registration_token_is_approved = insert_5.application_user_registration_token_is_approved.get();
+        let application_user_registration_token_is_approved = insert_5.application_user_registration_token_is_approved.0;
 
-        let application_user_registration_token_expires_at = insert_5.application_user_registration_token_expires_at.get();
+        let application_user_registration_token_expires_at = insert_5.application_user_registration_token_expires_at.0;
 
-        let application_user_registration_token_can_be_resent_from = insert_5.application_user_registration_token_can_be_resent_from.get();
+        let application_user_registration_token_can_be_resent_from = insert_5.application_user_registration_token_can_be_resent_from.0;
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -168,9 +168,9 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
         database_2_connection: &'a Connection,
         by_5: &'a By5<'_>
     ) -> Result<(), ErrorAuditor> {
-        let application_user_email = by_5.application_user_email.get();
+        let application_user_email = by_5.application_user_email.0.as_str();
 
-        let application_user_device_id = by_5.application_user_device_id.get();
+        let application_user_device_id = by_5.application_user_device_id.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -251,19 +251,19 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
         update_7: &'a Update7<'_>,
         by_5: &'a By5<'_>,
     ) -> Result<(), ErrorAuditor> {
-        let application_user_email = by_5.application_user_email.get();
+        let application_user_email = by_5.application_user_email.0.as_str();
 
-        let application_user_device_id = by_5.application_user_device_id.get();
+        let application_user_device_id = by_5.application_user_device_id.0.as_str();
 
-        let application_user_registration_token_value = update_7.application_user_registration_token_value.get();
+        let application_user_registration_token_value = update_7.application_user_registration_token_value.0.as_str();
 
-        let application_user_registration_token_wrong_enter_tries_quantity = update_7.application_user_registration_token_wrong_enter_tries_quantity.get();
+        let application_user_registration_token_wrong_enter_tries_quantity = update_7.application_user_registration_token_wrong_enter_tries_quantity.0;
 
-        let application_user_registration_token_is_approved = update_7.application_user_registration_token_is_approved.get();
+        let application_user_registration_token_is_approved = update_7.application_user_registration_token_is_approved.0;
 
-        let application_user_registration_token_expires_at = update_7.application_user_registration_token_expires_at.get();
+        let application_user_registration_token_expires_at = update_7.application_user_registration_token_expires_at.0;
 
-        let application_user_registration_token_can_be_resent_from = update_7.application_user_registration_token_can_be_resent_from.get();
+        let application_user_registration_token_can_be_resent_from = update_7.application_user_registration_token_can_be_resent_from.0;
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -374,9 +374,9 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
         database_2_connection: &'a Connection,
         by_5: &'a By5<'_>,
     ) -> Result<Option<ApplicationUserRegistrationToken1>, ErrorAuditor> {
-        let application_user_email = by_5.application_user_email.get();
+        let application_user_email = by_5.application_user_email.0.as_str();
 
-        let application_user_device_id = by_5.application_user_device_id.get();
+        let application_user_device_id = by_5.application_user_device_id.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -461,7 +461,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
         }
 
         let application_user_registration_token_value = match row_registry[0].try_get::<'_, usize, String>(0) {
-            Ok(application_user_registration_token_value_) => ApplicationUserRegistrationToken_Value::new(application_user_registration_token_value_),
+            Ok(application_user_registration_token_value_) => ApplicationUserRegistrationToken_Value(application_user_registration_token_value_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -483,7 +483,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
         };
 
         let application_user_registration_token_wrong_enter_tries_quantity = match row_registry[0].try_get::<'_, usize, i16>(1) {
-            Ok(application_user_registration_token_wrong_enter_tries_quantity_) => ApplicationUserRegistrationToken_WrongEnterTriesQuantity::new(application_user_registration_token_wrong_enter_tries_quantity_),
+            Ok(application_user_registration_token_wrong_enter_tries_quantity_) => ApplicationUserRegistrationToken_WrongEnterTriesQuantity(application_user_registration_token_wrong_enter_tries_quantity_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -505,7 +505,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
         };
 
         let application_user_registration_token_is_approved = match row_registry[0].try_get::<'_, usize, bool>(2) {
-            Ok(application_user_registration_token_is_approved_) => ApplicationUserRegistrationToken_IsApproved::new(application_user_registration_token_is_approved_),
+            Ok(application_user_registration_token_is_approved_) => ApplicationUserRegistrationToken_IsApproved(application_user_registration_token_is_approved_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -527,7 +527,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
         };
 
         let application_user_registration_token_expires_at = match row_registry[0].try_get::<'_, usize, i64>(3) {
-            Ok(application_user_registration_token_expires_at_) => ApplicationUserRegistrationToken_ExpiresAt::new(application_user_registration_token_expires_at_),
+            Ok(application_user_registration_token_expires_at_) => ApplicationUserRegistrationToken_ExpiresAt(application_user_registration_token_expires_at_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -549,7 +549,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
         };
 
         let application_user_registration_token_can_be_resent_from = match row_registry[0].try_get::<'_, usize, i64>(4) {
-            Ok(application_user_registration_token_can_be_resent_from_) => ApplicationUserRegistrationToken_CanBeResentFrom::new(application_user_registration_token_can_be_resent_from_),
+            Ok(application_user_registration_token_can_be_resent_from_) => ApplicationUserRegistrationToken_CanBeResentFrom(application_user_registration_token_can_be_resent_from_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -590,11 +590,11 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken2> {
         update_8: &'a Update8,
         by_5: &'a By5<'_>,
     ) -> Result<(), ErrorAuditor> {
-        let application_user_email = by_5.application_user_email.get();
+        let application_user_email = by_5.application_user_email.0.as_str();
 
-        let application_user_device_id = by_5.application_user_device_id.get();
+        let application_user_device_id = by_5.application_user_device_id.0.as_str();
 
-        let application_user_registration_token_can_be_resent_from = update_8.application_user_registration_token_can_be_resent_from.get();
+        let application_user_registration_token_can_be_resent_from = update_8.application_user_registration_token_can_be_resent_from.0;
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -684,17 +684,17 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
         update_9: &'a Update9<'_>,
         by_5: &'a By5<'_>,
     ) -> Result<(), ErrorAuditor> {
-        let application_user_email = by_5.application_user_email.get();
+        let application_user_email = by_5.application_user_email.0.as_str();
 
-        let application_user_device_id = by_5.application_user_device_id.get();
+        let application_user_device_id = by_5.application_user_device_id.0.as_str();
 
-        let application_user_registration_token_value = update_9.application_user_registration_token_value.get();
+        let application_user_registration_token_value = update_9.application_user_registration_token_value.0.as_str();
 
-        let application_user_registration_token_wrong_enter_tries_quantity = update_9.application_user_registration_token_wrong_enter_tries_quantity.get();
+        let application_user_registration_token_wrong_enter_tries_quantity = update_9.application_user_registration_token_wrong_enter_tries_quantity.0;
 
-        let application_user_registration_token_is_approved = update_9.application_user_registration_token_is_approved.get();
+        let application_user_registration_token_is_approved = update_9.application_user_registration_token_is_approved.0;
 
-        let application_user_registration_token_expires_at = update_9.application_user_registration_token_expires_at.get();
+        let application_user_registration_token_expires_at = update_9.application_user_registration_token_expires_at.0;
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -799,9 +799,9 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
         database_2_connection: &'a Connection,
         by_5: &'a By5<'_>,
     ) -> Result<Option<ApplicationUserRegistrationToken3>, ErrorAuditor> {
-        let application_user_email = by_5.application_user_email.get();
+        let application_user_email = by_5.application_user_email.0.as_str();
 
-        let application_user_device_id = by_5.application_user_device_id.get();
+        let application_user_device_id = by_5.application_user_device_id.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -885,7 +885,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
         }
 
         let application_user_registration_token_value = match row_registry[0].try_get::<'_, usize, String>(0) {
-            Ok(application_user_registration_token_value_) => ApplicationUserRegistrationToken_Value::new(application_user_registration_token_value_),
+            Ok(application_user_registration_token_value_) => ApplicationUserRegistrationToken_Value(application_user_registration_token_value_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -907,7 +907,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
         };
 
         let application_user_registration_token_wrong_enter_tries_quantity = match row_registry[0].try_get::<'_, usize, i16>(1) {
-            Ok(application_user_registration_token_wrong_enter_tries_quantity_) => ApplicationUserRegistrationToken_WrongEnterTriesQuantity::new(application_user_registration_token_wrong_enter_tries_quantity_),
+            Ok(application_user_registration_token_wrong_enter_tries_quantity_) => ApplicationUserRegistrationToken_WrongEnterTriesQuantity(application_user_registration_token_wrong_enter_tries_quantity_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -929,7 +929,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
         };
 
         let application_user_registration_token_is_approved = match row_registry[0].try_get::<'_, usize, bool>(2) {
-            Ok(application_user_registration_token_is_approved_) => ApplicationUserRegistrationToken_IsApproved::new(application_user_registration_token_is_approved_),
+            Ok(application_user_registration_token_is_approved_) => ApplicationUserRegistrationToken_IsApproved(application_user_registration_token_is_approved_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -951,7 +951,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
         };
 
         let application_user_registration_token_expires_at = match row_registry[0].try_get::<'_, usize, i64>(3) {
-            Ok(application_user_registration_token_expires_at_) => ApplicationUserRegistrationToken_ExpiresAt::new(application_user_registration_token_expires_at_),
+            Ok(application_user_registration_token_expires_at_) => ApplicationUserRegistrationToken_ExpiresAt(application_user_registration_token_expires_at_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -991,11 +991,11 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken4> {
         update_10: &'a Update10,
         by_5: &'a By5<'_>,
     ) -> Result<(), ErrorAuditor> {
-        let application_user_email = by_5.application_user_email.get();
+        let application_user_email = by_5.application_user_email.0.as_str();
 
-        let application_user_device_id = by_5.application_user_device_id.get();
+        let application_user_device_id = by_5.application_user_device_id.0.as_str();
 
-        let application_user_registration_token_wrong_enter_tries_quantity = update_10.application_user_registration_token_wrong_enter_tries_quantity.get();
+        let application_user_registration_token_wrong_enter_tries_quantity = update_10.application_user_registration_token_wrong_enter_tries_quantity.0;
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -1085,11 +1085,11 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken5> {
         update_11: &'a Update11,
         by_5: &'a By5<'_>,
     ) -> Result<(), ErrorAuditor> {
-        let application_user_email = by_5.application_user_email.get();
+        let application_user_email = by_5.application_user_email.0.as_str();
 
-        let application_user_device_id = by_5.application_user_device_id.get();
+        let application_user_device_id = by_5.application_user_device_id.0.as_str();
 
-        let application_user_registration_token_is_approved = update_11.application_user_registration_token_is_approved.get();
+        let application_user_registration_token_is_approved = update_11.application_user_registration_token_is_approved.0;
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -1178,9 +1178,9 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken6> {
         database_2_connection: &'a Connection,
         by_5: &'a By5<'_>,
     ) -> Result<Option<ApplicationUserRegistrationToken6>, ErrorAuditor> {
-        let application_user_email = by_5.application_user_email.get();
+        let application_user_email = by_5.application_user_email.0.as_str();
 
-        let application_user_device_id = by_5.application_user_device_id.get();
+        let application_user_device_id = by_5.application_user_device_id.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -1264,7 +1264,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken6> {
         }
 
         let application_user_registration_token_value = match row_registry[0].try_get::<'_, usize, String>(0) {
-            Ok(application_user_registration_token_value_) => ApplicationUserRegistrationToken_Value::new(application_user_registration_token_value_),
+            Ok(application_user_registration_token_value_) => ApplicationUserRegistrationToken_Value(application_user_registration_token_value_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -1286,7 +1286,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken6> {
         };
 
         let application_user_registration_token_is_approved = match row_registry[0].try_get::<'_, usize, bool>(1) {
-            Ok(application_user_registration_token_is_approved_) => ApplicationUserRegistrationToken_IsApproved::new(application_user_registration_token_is_approved_),
+            Ok(application_user_registration_token_is_approved_) => ApplicationUserRegistrationToken_IsApproved(application_user_registration_token_is_approved_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -1308,7 +1308,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken6> {
         };
 
         let application_user_registration_token_expires_at = match row_registry[0].try_get::<'_, usize, i64>(2) {
-            Ok(application_user_registration_token_expires_at_) => ApplicationUserRegistrationToken_ExpiresAt::new(application_user_registration_token_expires_at_),
+            Ok(application_user_registration_token_expires_at_) => ApplicationUserRegistrationToken_ExpiresAt(application_user_registration_token_expires_at_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
@@ -1330,7 +1330,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken6> {
         };
 
         let application_user_registration_token_can_be_resent_from = match row_registry[0].try_get::<'_, usize, i64>(3) {
-            Ok(application_user_registration_token_can_be_resent_from_) => ApplicationUserRegistrationToken_CanBeResentFrom::new(application_user_registration_token_can_be_resent_from_),
+            Ok(application_user_registration_token_can_be_resent_from_) => ApplicationUserRegistrationToken_CanBeResentFrom(application_user_registration_token_can_be_resent_from_),
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(

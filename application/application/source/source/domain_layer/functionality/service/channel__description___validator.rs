@@ -5,6 +5,6 @@ impl Validator<Channel_Description> {
     pub const MAXIMUM_LENGTH: usize = 500;
 
     pub fn is_valid<'a>(channel_description: &'a Channel_Description) -> bool {
-        return channel_description.get().chars().count() <= Self::MAXIMUM_LENGTH;
+        return channel_description.0.chars().count() <= Self::MAXIMUM_LENGTH;
     }
 }

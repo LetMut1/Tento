@@ -5,6 +5,6 @@ use crate::infrastructure_layer::functionality::service::generator::NumberRow;
 
 impl Generator<ApplicationUserResetPasswordToken_Value> {
     pub fn generate() -> ApplicationUserResetPasswordToken_Value {
-        return ApplicationUserResetPasswordToken_Value::new(Generator_::<NumberRow>::generate_6());
+        return ApplicationUserResetPasswordToken_Value(Generator_::<NumberRow>::generate_6());
     }
 }

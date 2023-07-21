@@ -23,6 +23,6 @@ impl Generator<ApplicationUserRegistrationToken_CanBeResentFrom> {
             }
         };
 
-        return Ok(ApplicationUserRegistrationToken_CanBeResentFrom::new(application_user_registration_token_can_be_resent_from));
+        return Ok(ApplicationUserRegistrationToken_CanBeResentFrom(application_user_registration_token_can_be_resent_from));
     }
 }

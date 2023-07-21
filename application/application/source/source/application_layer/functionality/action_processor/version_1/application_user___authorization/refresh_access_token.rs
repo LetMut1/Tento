@@ -161,7 +161,7 @@ impl ActionProcessor {
             }
         };
 
-        if !is_valid || application_user_access_token_.id.get() != application_user_access_refresh_token_.application_user_access_token_id.as_ref().get() {
+        if !is_valid || application_user_access_token_.id.0 != application_user_access_refresh_token_.application_user_access_token_id.as_ref().0 {
             return Ok(
                 InvalidArgumentResult::InvalidArgument {
                     invalid_argument: InvalidArgument::ApplicationUserAccessRefreshTokenEncrypted,
@@ -169,7 +169,7 @@ impl ActionProcessor {
             );
         }
 
-        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_access_refresh_token_.expires_at.get()) {
+        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_access_refresh_token_.expires_at.0) {
             if let Err(mut error) = PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::delete_1(
                 database_2_postgresql_connection,
                 &by_4,

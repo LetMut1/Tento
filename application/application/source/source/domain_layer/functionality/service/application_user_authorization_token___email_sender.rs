@@ -16,14 +16,14 @@ impl EmailSender<ApplicationUserAuthorizationToken<'_>> {
     ) -> Result<(), ErrorAuditor> {
         let message_body = format!(
             "Your code {} for device {}.",
-            application_user_authorization_token_value.get(),
-            application_user_device_id.get()
+            application_user_authorization_token_value.0.as_str(),
+            application_user_device_id.0.as_str()
         );
 
         if let Err(mut error) = Sender::<Email>::send(
             "Authorization confirmation",
             message_body,
-            application_user_email.get(),
+            application_user_email.0.as_str(),
         ) {
             error.add_backtrace_part(
                 BacktracePart::new(

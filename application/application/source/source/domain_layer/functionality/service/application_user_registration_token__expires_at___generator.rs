@@ -23,6 +23,6 @@ impl Generator<ApplicationUserRegistrationToken_ExpiresAt> {
             }
         };
 
-        return Ok(ApplicationUserRegistrationToken_ExpiresAt::new(application_user_registration_token_expires_at));
+        return Ok(ApplicationUserRegistrationToken_ExpiresAt(application_user_registration_token_expires_at));
     }
 }
