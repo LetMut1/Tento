@@ -193,9 +193,9 @@ impl ActionProcessor {
 
         let (application_user_registration_token_aggregator, can_send) = match application_user_registration_token {
             Some(mut application_user_registration_token_) => {
-                let (can_send_, need_to_update_1) = if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token_.get_can_be_resent_from().get()) {
-                    let application_user_registration_token_can_be_resent_from = match Generator::<ApplicationUserRegistrationToken_CanBeResentFrom>::generate() {
-                        Ok(application_user_registration_token_can_be_resent_from_) => application_user_registration_token_can_be_resent_from_,
+                let (can_send_, need_to_update_1) = if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token_.can_be_resent_from.get()) {
+                    application_user_registration_token_.can_be_resent_from = match Generator::<ApplicationUserRegistrationToken_CanBeResentFrom>::generate() {
+                        Ok(application_user_registration_token_can_be_resent_from) => application_user_registration_token_can_be_resent_from,
                         Err(mut error) => {
                             error.add_backtrace_part(
                                 BacktracePart::new(
@@ -208,8 +208,6 @@ impl ActionProcessor {
                             return Err(error);
                         }
                     };
-
-                    application_user_registration_token_.set_can_be_resent_from(application_user_registration_token_can_be_resent_from);
 
                     (
                         true, true,
@@ -220,9 +218,15 @@ impl ActionProcessor {
                     )
                 };
 
-                let need_to_update_2 = if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token_.get_expires_at().get()) || application_user_registration_token_.get_is_approved().get() {
-                    let application_user_registration_token_expires_at = match Generator::<ApplicationUserRegistrationToken_ExpiresAt>::generate() {
-                        Ok(application_user_registration_token_expires_at_) => application_user_registration_token_expires_at_,
+                let need_to_update_2 = if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token_.expires_at.get()) || application_user_registration_token_.is_approved.get() {
+                    application_user_registration_token_.value = Generator::<ApplicationUserRegistrationToken_Value>::generate();
+
+                    application_user_registration_token_.wrong_enter_tries_quantity = ApplicationUserRegistrationToken_WrongEnterTriesQuantity::new(0);
+
+                    application_user_registration_token_.is_approved = ApplicationUserRegistrationToken_IsApproved::new(false);
+
+                    application_user_registration_token_.expires_at = match Generator::<ApplicationUserRegistrationToken_ExpiresAt>::generate() {
+                        Ok(application_user_registration_token_expires_at) => application_user_registration_token_expires_at,
                         Err(mut error) => {
                             error.add_backtrace_part(
                                 BacktracePart::new(
@@ -236,12 +240,6 @@ impl ActionProcessor {
                         }
                     };
 
-                    application_user_registration_token_
-                        .set_value(Generator::<ApplicationUserRegistrationToken_Value>::generate())
-                        .set_wrong_enter_tries_quantity(ApplicationUserRegistrationToken_WrongEnterTriesQuantity::new(0))
-                        .set_is_approved(ApplicationUserRegistrationToken_IsApproved::new(false))
-                        .set_expires_at(application_user_registration_token_expires_at);
-
                     true
                 } else {
                     false
@@ -251,11 +249,11 @@ impl ActionProcessor {
                     if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken1>::update(
                         database_2_postgresql_connection,
                         &Update7 {
-                            application_user_registration_token_value: application_user_registration_token_.get_value(),
-                            application_user_registration_token_wrong_enter_tries_quantity: application_user_registration_token_.get_wrong_enter_tries_quantity(),
-                            application_user_registration_token_is_approved: application_user_registration_token_.get_is_approved(),
-                            application_user_registration_token_expires_at: application_user_registration_token_.get_expires_at(),
-                            application_user_registration_token_can_be_resent_from: application_user_registration_token_.get_can_be_resent_from(),
+                            application_user_registration_token_value: &application_user_registration_token_.value,
+                            application_user_registration_token_wrong_enter_tries_quantity: application_user_registration_token_.wrong_enter_tries_quantity,
+                            application_user_registration_token_is_approved: application_user_registration_token_.is_approved,
+                            application_user_registration_token_expires_at: application_user_registration_token_.expires_at,
+                            application_user_registration_token_can_be_resent_from: application_user_registration_token_.can_be_resent_from,
                         },
                         &by_5,
                     )
@@ -276,7 +274,7 @@ impl ActionProcessor {
                         if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken2>::update(
                             database_2_postgresql_connection,
                             &Update8 {
-                                application_user_registration_token_can_be_resent_from: application_user_registration_token_.get_can_be_resent_from(),
+                                application_user_registration_token_can_be_resent_from: application_user_registration_token_.can_be_resent_from,
                             },
                             &by_5,
                         )
@@ -298,10 +296,10 @@ impl ActionProcessor {
                         if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken3>::update(
                             database_2_postgresql_connection,
                             &Update9 {
-                                application_user_registration_token_value: application_user_registration_token_.get_value(),
-                                application_user_registration_token_wrong_enter_tries_quantity: application_user_registration_token_.get_wrong_enter_tries_quantity(),
-                                application_user_registration_token_is_approved: application_user_registration_token_.get_is_approved(),
-                                application_user_registration_token_expires_at: application_user_registration_token_.get_expires_at(),
+                                application_user_registration_token_value: &application_user_registration_token_.value,
+                                application_user_registration_token_wrong_enter_tries_quantity: application_user_registration_token_.wrong_enter_tries_quantity,
+                                application_user_registration_token_is_approved: application_user_registration_token_.is_approved,
+                                application_user_registration_token_expires_at: application_user_registration_token_.expires_at,
                             },
                             &by_5,
                         )
@@ -399,10 +397,10 @@ impl ActionProcessor {
             let application_user_registration_token_value = match application_user_registration_token_aggregator {
                 ApplicationUserRegistrationToken_Aggregator::First {
                     application_user_registration_token: ref application_user_registration_token_,
-                } => application_user_registration_token_.get_value(),
+                } => &application_user_registration_token_.value,
                 ApplicationUserRegistrationToken_Aggregator::Second {
                     application_user_registration_token: ref application_user_registration_token_,
-                } => application_user_registration_token_.get_value(),
+                } => &application_user_registration_token_.value,
             };
 
             if let Err(mut error) = EmailSender::<ApplicationUserRegistrationToken<'_>>::send(
@@ -425,10 +423,10 @@ impl ActionProcessor {
         let application_user_registration_token_can_be_resent_from = match application_user_registration_token_aggregator {
             ApplicationUserRegistrationToken_Aggregator::First {
                 application_user_registration_token: ref application_user_registration_token_,
-            } => application_user_registration_token_.get_can_be_resent_from(),
+            } => application_user_registration_token_.can_be_resent_from,
             ApplicationUserRegistrationToken_Aggregator::Second {
                 application_user_registration_token: ref application_user_registration_token_,
-            } => application_user_registration_token_.get_can_be_resent_from(),
+            } => application_user_registration_token_.can_be_resent_from,
         };
 
         let outcoming = Outcoming {

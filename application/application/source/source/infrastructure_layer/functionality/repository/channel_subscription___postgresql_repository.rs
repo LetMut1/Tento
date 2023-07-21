@@ -124,11 +124,11 @@ impl PostgresqlRepository<ChannelSubscription> {
             }
         };
 
-        let channel_subscription = ChannelSubscription::new(
-            insert_10.application_user_id,
-            insert_10.channel_id,
-            channel_subscription_created_at,
-        );
+        let channel_subscription = ChannelSubscription {
+            application_user_id: insert_10.application_user_id,
+            channel_id: insert_10.channel_id,
+            created_at: channel_subscription_created_at,
+        };
 
         return Ok(channel_subscription);
     }

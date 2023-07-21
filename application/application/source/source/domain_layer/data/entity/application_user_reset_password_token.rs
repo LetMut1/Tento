@@ -88,340 +88,51 @@ impl CanBeResentFrom {
 }
 
 pub struct ApplicationUserResetPasswordToken<'a> {
-    application_user_id: ApplicationUser_Id,
-    application_user_device_id: Cow<'a, ApplicationUserDevice_Id>,
-    value: Value,
-    wrong_enter_tries_quantity: WrongEnterTriesQuantity,
-    is_approved: IsApproved,
-    expires_at: ExpiresAt,
-    can_be_resent_from: CanBeResentFrom,
+    pub application_user_id: ApplicationUser_Id,
+    pub application_user_device_id: Cow<'a, ApplicationUserDevice_Id>,
+    pub value: Value,
+    pub wrong_enter_tries_quantity: WrongEnterTriesQuantity,
+    pub is_approved: IsApproved,
+    pub expires_at: ExpiresAt,
+    pub can_be_resent_from: CanBeResentFrom,
 }
 
 impl<'a> ApplicationUserResetPasswordToken<'a> {
     pub const QUANTITY_OF_MINUTES_BEFORE_RESENDING: i64 = 1;
     pub const QUANTITY_OF_MINUTES_FOR_EXPIRATION: i64 = 10;
     pub const WRONG_ENTER_TRIES_QUANTITY_LIMIT: i16 = 3;
-
-    pub fn new(
-        application_user_id: ApplicationUser_Id,
-        application_user_device_id: Cow<'a, ApplicationUserDevice_Id>,
-        value: Value,
-        wrong_enter_tries_quantity: WrongEnterTriesQuantity,
-        is_approved: IsApproved,
-        expires_at: ExpiresAt,
-        can_be_resent_from: CanBeResentFrom,
-    ) -> Self {
-        return Self {
-            application_user_id,
-            application_user_device_id,
-            value,
-            wrong_enter_tries_quantity,
-            is_approved,
-            expires_at,
-            can_be_resent_from,
-        };
-    }
-
-    pub fn get_application_user_id<'b>(&'b self) -> ApplicationUser_Id {
-        return self.application_user_id;
-    }
-
-    pub fn get_application_user_device_id<'b>(&'b self) -> &'b ApplicationUserDevice_Id {
-        return self.application_user_device_id.as_ref();
-    }
-
-    pub fn get_value<'b>(&'b self) -> &'b Value {
-        return &self.value;
-    }
-
-    pub fn get_wrong_enter_tries_quantity<'b>(&'b self) -> WrongEnterTriesQuantity {
-        return self.wrong_enter_tries_quantity;
-    }
-
-    pub fn get_is_approved<'b>(&'b self) -> IsApproved {
-        return self.is_approved;
-    }
-
-    pub fn get_expires_at<'b>(&'b self) -> ExpiresAt {
-        return self.expires_at;
-    }
-
-    pub fn get_can_be_resent_from<'b>(&'b self) -> CanBeResentFrom {
-        return self.can_be_resent_from;
-    }
-
-    pub fn set_value<'b>(
-        &'b mut self,
-        value: Value,
-    ) -> &'b mut Self {
-        self.value = value;
-
-        return self;
-    }
-
-    pub fn set_wrong_enter_tries_quantity<'b>(
-        &'b mut self,
-        wrong_enter_tries_quantity: WrongEnterTriesQuantity,
-    ) -> &'b mut Self {
-        self.wrong_enter_tries_quantity = wrong_enter_tries_quantity;
-
-        return self;
-    }
-
-    pub fn set_is_approved<'b>(
-        &'b mut self,
-        is_approved: IsApproved,
-    ) -> &'b mut Self {
-        self.is_approved = is_approved;
-
-        return self;
-    }
-
-    pub fn set_expires_at<'b>(
-        &'b mut self,
-        expires_at: ExpiresAt,
-    ) -> &'b mut Self {
-        self.expires_at = expires_at;
-
-        return self;
-    }
-
-    pub fn set_can_be_resent_from<'b>(
-        &'b mut self,
-        can_be_resent_from: CanBeResentFrom,
-    ) -> &'b mut Self {
-        self.can_be_resent_from = can_be_resent_from;
-
-        return self;
-    }
 }
 
 pub struct ApplicationUserResetPasswordToken1 {
-    value: Value,
-    wrong_enter_tries_quantity: WrongEnterTriesQuantity,
-    is_approved: IsApproved,
-    expires_at: ExpiresAt,
-    can_be_resent_from: CanBeResentFrom,
-}
-
-impl ApplicationUserResetPasswordToken1 {
-    pub fn new(
-        value: Value,
-        wrong_enter_tries_quantity: WrongEnterTriesQuantity,
-        is_approved: IsApproved,
-        expires_at: ExpiresAt,
-        can_be_resent_from: CanBeResentFrom,
-    ) -> Self {
-        return Self {
-            value,
-            wrong_enter_tries_quantity,
-            is_approved,
-            expires_at,
-            can_be_resent_from,
-        };
-    }
-
-    pub fn get_value<'a>(&'a self) -> &'a Value {
-        return &self.value;
-    }
-
-    pub fn get_wrong_enter_tries_quantity<'a>(&'a self) -> WrongEnterTriesQuantity {
-        return self.wrong_enter_tries_quantity;
-    }
-
-    pub fn get_is_approved<'a>(&'a self) -> IsApproved {
-        return self.is_approved;
-    }
-
-    pub fn get_expires_at<'a>(&'a self) -> ExpiresAt {
-        return self.expires_at;
-    }
-
-    pub fn get_can_be_resent_from<'a>(&'a self) -> CanBeResentFrom {
-        return self.can_be_resent_from;
-    }
-
-    pub fn set_value<'a>(
-        &'a mut self,
-        value: Value,
-    ) -> &'a mut Self {
-        self.value = value;
-
-        return self;
-    }
-
-    pub fn set_wrong_enter_tries_quantity<'a>(
-        &'a mut self,
-        wrong_enter_tries_quantity: WrongEnterTriesQuantity,
-    ) -> &'a mut Self {
-        self.wrong_enter_tries_quantity = wrong_enter_tries_quantity;
-
-        return self;
-    }
-
-    pub fn set_is_approved<'a>(
-        &'a mut self,
-        is_approved: IsApproved,
-    ) -> &'a mut Self {
-        self.is_approved = is_approved;
-
-        return self;
-    }
-
-    pub fn set_expires_at<'a>(
-        &'a mut self,
-        expires_at: ExpiresAt,
-    ) -> &'a mut Self {
-        self.expires_at = expires_at;
-
-        return self;
-    }
-
-    pub fn set_can_be_resent_from<'a>(
-        &'a mut self,
-        can_be_resent_from: CanBeResentFrom,
-    ) -> &'a mut Self {
-        self.can_be_resent_from = can_be_resent_from;
-
-        return self;
-    }
+    pub value: Value,
+    pub wrong_enter_tries_quantity: WrongEnterTriesQuantity,
+    pub is_approved: IsApproved,
+    pub expires_at: ExpiresAt,
+    pub can_be_resent_from: CanBeResentFrom,
 }
 
 pub struct ApplicationUserResetPasswordToken2 {
-    can_be_resent_from: CanBeResentFrom,
+    pub can_be_resent_from: CanBeResentFrom,
 }
 
 pub struct ApplicationUserResetPasswordToken3 {
-    value: Value,
-    wrong_enter_tries_quantity: WrongEnterTriesQuantity,
-    is_approved: IsApproved,
-    expires_at: ExpiresAt,
-}
-
-impl ApplicationUserResetPasswordToken3 {
-    pub fn new(
-        value: Value,
-        wrong_enter_tries_quantity: WrongEnterTriesQuantity,
-        is_approved: IsApproved,
-        expires_at: ExpiresAt,
-    ) -> Self {
-        return Self {
-            value,
-            wrong_enter_tries_quantity,
-            is_approved,
-            expires_at,
-        };
-    }
-
-    pub fn get_value<'a>(&'a self) -> &'a Value {
-        return &self.value;
-    }
-
-    pub fn get_wrong_enter_tries_quantity<'a>(&'a self) -> WrongEnterTriesQuantity {
-        return self.wrong_enter_tries_quantity;
-    }
-
-    pub fn get_wrong_enter_tries_quantity_<'a>(&'a mut self) -> &'a mut WrongEnterTriesQuantity {
-        return &mut self.wrong_enter_tries_quantity;
-    }
-
-    pub fn get_is_approved<'a>(&'a self) -> IsApproved {
-        return self.is_approved;
-    }
-
-    pub fn get_expires_at<'a>(&'a self) -> ExpiresAt {
-        return self.expires_at;
-    }
-
-    pub fn set_value<'a>(
-        &'a mut self,
-        value: Value,
-    ) -> &'a mut Self {
-        self.value = value;
-
-        return self;
-    }
-
-    pub fn set_wrong_enter_tries_quantity<'a>(
-        &'a mut self,
-        wrong_enter_tries_quantity: WrongEnterTriesQuantity,
-    ) -> &'a mut Self {
-        self.wrong_enter_tries_quantity = wrong_enter_tries_quantity;
-
-        return self;
-    }
-
-    pub fn set_is_approved<'a>(
-        &'a mut self,
-        is_approved: IsApproved,
-    ) -> &'a mut Self {
-        self.is_approved = is_approved;
-
-        return self;
-    }
-
-    pub fn set_expires_at<'a>(
-        &'a mut self,
-        expires_at: ExpiresAt,
-    ) -> &'a mut Self {
-        self.expires_at = expires_at;
-
-        return self;
-    }
+    pub value: Value,
+    pub wrong_enter_tries_quantity: WrongEnterTriesQuantity,
+    pub is_approved: IsApproved,
+    pub expires_at: ExpiresAt,
 }
 
 pub struct ApplicationUserResetPasswordToken4 {
-    wrong_enter_tries_quantity: WrongEnterTriesQuantity,
+    pub wrong_enter_tries_quantity: WrongEnterTriesQuantity,
 }
 
 pub struct ApplicationUserResetPasswordToken5 {
-    is_approved: IsApproved,
+    pub is_approved: IsApproved,
 }
 
 pub struct ApplicationUserResetPasswordToken6 {
-    value: Value,
-    is_approved: IsApproved,
-    expires_at: ExpiresAt,
-    can_be_resent_from: CanBeResentFrom,
-}
-
-impl ApplicationUserResetPasswordToken6 {
-    pub fn new(
-        value: Value,
-        is_approved: IsApproved,
-        expires_at: ExpiresAt,
-        can_be_resent_from: CanBeResentFrom,
-    ) -> Self {
-        return Self {
-            value,
-            is_approved,
-            expires_at,
-            can_be_resent_from,
-        };
-    }
-
-    pub fn get_value<'a>(&'a self) -> &'a Value {
-        return &self.value;
-    }
-
-    pub fn get_is_approved<'a>(&'a self) -> IsApproved {
-        return self.is_approved;
-    }
-
-    pub fn get_expires_at<'a>(&'a self) -> ExpiresAt {
-        return self.expires_at;
-    }
-
-    pub fn get_can_be_resent_from<'a>(&'a self) -> CanBeResentFrom {
-        return self.can_be_resent_from;
-    }
-
-    pub fn set_can_be_resent_from<'a>(
-        &'a mut self,
-        can_be_resent_from: CanBeResentFrom,
-    ) -> &'a mut Self {
-        self.can_be_resent_from = can_be_resent_from;
-
-        return self;
-    }
+    pub value: Value,
+    pub is_approved: IsApproved,
+    pub expires_at: ExpiresAt,
+    pub can_be_resent_from: CanBeResentFrom,
 }

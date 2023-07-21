@@ -20,22 +20,6 @@ impl Id {
 }
 
 pub struct ApplicationUserDevice {
-    id: Id,
-    application_user_id: ApplicationUser_Id,
-}
-
-impl ApplicationUserDevice {
-    pub fn new(
-        id: Id,
-        application_user_id: ApplicationUser_Id,
-    ) -> Self {
-        return Self {
-            id,
-            application_user_id,
-        };
-    }
-
-    pub fn get_id<'a>(&'a self) -> &'a Id {
-        return &self.id;
-    }
+    pub id: Id,
+    pub application_user_id: ApplicationUser_Id,
 }

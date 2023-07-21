@@ -40,42 +40,12 @@ impl ExpiresAt {
 #[derive(Serialize, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct ApplicationUserAccessToken<'a> {
-    id: Id,
-    application_user_id: ApplicationUser_Id,
-    application_user_device_id: Cow<'a, ApplicationUserDevice_Id>,
-    expires_at: ExpiresAt,
+    pub id: Id,
+    pub application_user_id: ApplicationUser_Id,
+    pub application_user_device_id: Cow<'a, ApplicationUserDevice_Id>,
+    pub expires_at: ExpiresAt,
 }
 
 impl<'a> ApplicationUserAccessToken<'a> {
     pub const QUANTITY_OF_MINUTES_FOR_EXPIRATION: i64 = 30;
-
-    pub fn new(
-        id: Id,
-        application_user_id: ApplicationUser_Id,
-        application_user_device_id: Cow<'a, ApplicationUserDevice_Id>,
-        expires_at: ExpiresAt,
-    ) -> Self {
-        return Self {
-            id,
-            application_user_id,
-            application_user_device_id,
-            expires_at,
-        };
-    }
-
-    pub fn get_id<'b>(&'b self) -> &'b Id {
-        return &self.id;
-    }
-
-    pub fn get_application_user_id<'b>(&'b self) -> ApplicationUser_Id {
-        return self.application_user_id;
-    }
-
-    pub fn get_application_user_device_id<'b>(&'b self) -> &'b ApplicationUserDevice_Id {
-        return self.application_user_device_id.as_ref();
-    }
-
-    pub fn get_expires_at<'b>(&'b self) -> ExpiresAt {
-        return self.expires_at;
-    }
 }

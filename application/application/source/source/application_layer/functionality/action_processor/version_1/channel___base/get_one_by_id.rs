@@ -181,14 +181,14 @@ impl ActionProcessor {
             }
         };
 
-        let channel_access_modifier = FormResolver::<Channel_AccessModifier>::to_representation(channel_.get_access_modifier());
+        let channel_access_modifier = FormResolver::<Channel_AccessModifier>::to_representation(channel_.access_modifier);
 
         if let Channel_AccessModifier_::Close = channel_access_modifier {
             let is_exist = match PostgresqlRepository::<ChannelSubscription>::is_exist_1(
                 &*database_1_postgresql_pooled_connection,
                 &By10 {
-                    application_user_id: application_user_access_token.get_application_user_id(),
-                    channel_id: channel_.get_id(),
+                    application_user_id: application_user_access_token.application_user_id,
+                    channel_id: channel_.id,
                 },
             )
             .await
@@ -207,7 +207,7 @@ impl ActionProcessor {
                 }
             };
 
-            if !is_exist && application_user_access_token.get_application_user_id().get() != channel_.get_owner().get() {
+            if !is_exist && application_user_access_token.application_user_id.get() != channel_.owner.get() {
                 return Ok(
                     InvalidArgumentResult::Ok {
                         subject: UnifiedReport::precedent(Precedent::Channel_IsClosed),
@@ -219,7 +219,7 @@ impl ActionProcessor {
         let channel_inner_link_registry = match PostgresqlRepository::<ChannelInnerLink>::find_1(
             &*database_1_postgresql_pooled_connection,
             &By8 {
-                channel_inner_link_from: channel_.get_id(),
+                channel_inner_link_from: channel_.id,
             },
             ChannelInnerLink::MAXIMUM_QUANTITY,
         )
@@ -242,7 +242,7 @@ impl ActionProcessor {
         let channel_outer_link_registry = match PostgresqlRepository::<ChannelOuterLink>::find_1(
             &*database_1_postgresql_pooled_connection,
             &By9 {
-                channel_outer_link_from: channel_.get_id(),
+                channel_outer_link_from: channel_.id,
             },
             ChannelOuterLink::MAXIMUM_QUANTITY,
         )
@@ -262,22 +262,22 @@ impl ActionProcessor {
             }
         };
 
-        let (
-            _channel_id,
-            channel_owner,
-            channel_name,
-            channel_linked_name,
-            channel_description,
-            channel_access_modifier,
-            channel_visability_modifier,
-            channel_orientation,
-            channel_cover_image_path,
-            channel_background_image_path,
-            channel_subscribers_quantity,
-            channel_marks_quantity,
-            channel_viewing_quantity,
-            _channel_created_at,
-        ) = channel_.into_inner();
+        let EntityChannel {
+            id: _,
+            owner: channel_owner,
+            name: channel_name,
+            linked_name: channel_linked_name,
+            description: channel_description,
+            access_modifier: channel_access_modifier,
+            visability_modifier: channel_visability_modifier,
+            orientation: channel_orientation,
+            cover_image_path: channel_cover_image_path,
+            background_image_path: channel_background_image_path,
+            subscribers_quantity: channel_subscribers_quantity,
+            marks_quantity: channel_marks_quantity,
+            viewing_quantity: channel_viewing_quantity,
+            created_at: _,
+        } = channel_;
 
         let channel = Channel {
             channel_owner,

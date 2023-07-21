@@ -182,7 +182,7 @@ impl ActionProcessor {
             }
         };
 
-        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_reset_password_token_.get_expires_at().get()) {
+        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_reset_password_token_.expires_at.get()) {
             if let Err(mut error) = PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete(
                 database_2_postgresql_connection,
                 &by_4,
@@ -207,7 +207,7 @@ impl ActionProcessor {
             );
         }
 
-        if application_user_reset_password_token_.get_is_approved().get() {
+        if application_user_reset_password_token_.is_approved.get() {
             return Ok(
                 InvalidArgumentResult::Ok {
                     subject: UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_AlreadyApproved),
@@ -215,7 +215,7 @@ impl ActionProcessor {
             );
         }
 
-        if !ExpirationTimeChecker::<UnixTime>::is_expired(application_user_reset_password_token_.get_can_be_resent_from().get()) {
+        if !ExpirationTimeChecker::<UnixTime>::is_expired(application_user_reset_password_token_.can_be_resent_from.get()) {
             return Ok(
                 InvalidArgumentResult::Ok {
                     subject: UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_TimeToResendHasNotCome),
@@ -223,7 +223,7 @@ impl ActionProcessor {
             );
         }
 
-        let application_user_reset_password_token_can_be_resent_from = match Generator::<ApplicationUserResetPasswordToken_CanBeResentFrom>::generate() {
+        application_user_reset_password_token_.can_be_resent_from = match Generator::<ApplicationUserResetPasswordToken_CanBeResentFrom>::generate() {
             Ok(application_user_reset_password_token_can_be_resent_from_) => application_user_reset_password_token_can_be_resent_from_,
             Err(mut error) => {
                 error.add_backtrace_part(
@@ -238,12 +238,10 @@ impl ActionProcessor {
             }
         };
 
-        application_user_reset_password_token_.set_can_be_resent_from(application_user_reset_password_token_can_be_resent_from);
-
         if let Err(mut error) = PostgresqlRepository::<ApplicationUserResetPasswordToken2>::update(
             database_2_postgresql_connection,
             &Update13 {
-                application_user_reset_password_token_can_be_resent_from: application_user_reset_password_token_.get_can_be_resent_from(),
+                application_user_reset_password_token_can_be_resent_from: application_user_reset_password_token_.can_be_resent_from,
             },
             &by_4,
         )
@@ -261,8 +259,8 @@ impl ActionProcessor {
         }
 
         if let Err(mut error) = EmailSender::<ApplicationUserResetPasswordToken<'_>>::send(
-            application_user_reset_password_token_.get_value(),
-            application_user_.get_email(),
+            &application_user_reset_password_token_.value,
+            &application_user_.email,
             &incoming.application_user_device_id,
         ) {
             error.add_backtrace_part(
@@ -277,7 +275,7 @@ impl ActionProcessor {
         }
 
         let outcoming = Outcoming {
-            application_user_registration_token_can_be_resent_from: application_user_reset_password_token_.get_can_be_resent_from(),
+            application_user_registration_token_can_be_resent_from: application_user_reset_password_token_.can_be_resent_from,
         };
 
         return Ok(

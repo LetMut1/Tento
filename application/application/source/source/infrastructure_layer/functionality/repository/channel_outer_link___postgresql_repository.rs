@@ -138,12 +138,12 @@ impl PostgresqlRepository<ChannelOuterLink> {
             }
         };
 
-        let channel_outer_link = ChannelOuterLink::new(
-            insert_9.channel_outer_link_from,
-            insert_9.channel_outer_link_alias,
-            insert_9.channel_outer_link_address,
-            channel_outer_link_created_at,
-        );
+        let channel_outer_link = ChannelOuterLink {
+            from: insert_9.channel_outer_link_from,
+            alias: insert_9.channel_outer_link_alias,
+            address: insert_9.channel_outer_link_address,
+            created_at: channel_outer_link_created_at,
+        };
 
         return Ok(channel_outer_link);
     }

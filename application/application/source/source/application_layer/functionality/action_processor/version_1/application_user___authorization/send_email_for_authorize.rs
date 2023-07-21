@@ -182,7 +182,7 @@ impl ActionProcessor {
             }
         };
 
-        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token_.get_expires_at().get()) {
+        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token_.expires_at.get()) {
             if let Err(mut error) = PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::delete(
                 database_2_postgresql_connection,
                 &by_4
@@ -207,7 +207,7 @@ impl ActionProcessor {
             );
         }
 
-        if !ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token_.get_can_be_resent_from().get()) {
+        if !ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token_.can_be_resent_from.get()) {
             return Ok(
                 InvalidArgumentResult::Ok {
                     subject: UnifiedReport::precedent(Precedent::ApplicationUserAuthorizationToken_TimeToResendHasNotCome),
@@ -215,8 +215,8 @@ impl ActionProcessor {
             );
         }
 
-        let application_user_authorization_token_can_be_resent_from = match Generator::<ApplicationUserAuthorizationToken_CanBeResentFrom>::generate() {
-            Ok(application_user_authorization_token_can_be_resent_from_) => application_user_authorization_token_can_be_resent_from_,
+        application_user_authorization_token_.can_be_resent_from = match Generator::<ApplicationUserAuthorizationToken_CanBeResentFrom>::generate() {
+            Ok(application_user_authorization_token_can_be_resent_from) => application_user_authorization_token_can_be_resent_from,
             Err(mut error) => {
                 error.add_backtrace_part(
                     BacktracePart::new(
@@ -230,12 +230,10 @@ impl ActionProcessor {
             }
         };
 
-        application_user_authorization_token_.set_can_be_resent_from(application_user_authorization_token_can_be_resent_from);
-
         if let Err(mut error) = PostgresqlRepository::<ApplicationUserAuthorizationToken3>::update(
             database_2_postgresql_connection,
             &Update5 {
-                application_user_authorization_token_can_be_resent_from: application_user_authorization_token_.get_can_be_resent_from(),
+                application_user_authorization_token_can_be_resent_from: application_user_authorization_token_.can_be_resent_from,
             },
             &by_4,
         )
@@ -253,8 +251,8 @@ impl ActionProcessor {
         }
 
         if let Err(mut error) = EmailSender::<ApplicationUserAuthorizationToken<'_>>::send(
-            application_user_authorization_token_.get_value(),
-            application_user_.get_email(),
+            &application_user_authorization_token_.value,
+            &application_user_.email,
             &incoming.application_user_device_id,
         ) {
             error.add_backtrace_part(
@@ -269,7 +267,7 @@ impl ActionProcessor {
         }
 
         let outcoming = Outcoming {
-            application_user_authorization_token_can_be_resent_from: application_user_authorization_token_.get_can_be_resent_from(),
+            application_user_authorization_token_can_be_resent_from: application_user_authorization_token_.can_be_resent_from,
         };
 
         return Ok(

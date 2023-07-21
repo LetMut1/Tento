@@ -152,7 +152,7 @@ impl ActionProcessor {
         let common_registry = match PostgresqlRepository::<Common1>::find_1(
             &*database_1_postgresql_pooled_connection,
             &By11 {
-                application_user_id: application_user_access_token.get_application_user_id(),
+                application_user_id: application_user_access_token.application_user_id,
                 channel_name: &incoming.channel_name,
                 requery_channel_name: &incoming.requery_channel_name,
                 channel_visability_modifier: FormResolver::<Channel_VisabilityModifier>::from_representation(Channel_VisabilityModifier_::Public),

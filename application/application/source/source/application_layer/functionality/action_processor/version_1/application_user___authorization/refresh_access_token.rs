@@ -84,8 +84,8 @@ impl ActionProcessor {
         };
 
         let by_4 = By4 {
-            application_user_id: application_user_access_token_.get_application_user_id(),
-            application_user_device_id: application_user_access_token_.get_application_user_device_id(),
+            application_user_id: application_user_access_token_.application_user_id,
+            application_user_device_id: application_user_access_token_.application_user_device_id.as_ref(),
         };
 
         let database_2_postgresql_pooled_connection = match database_2_postgresql_connection_pool.get().await {
@@ -161,7 +161,7 @@ impl ActionProcessor {
             }
         };
 
-        if !is_valid || application_user_access_token_.get_id().get() != application_user_access_refresh_token_.get_application_user_access_token_id().get() {
+        if !is_valid || application_user_access_token_.id.get() != application_user_access_refresh_token_.application_user_access_token_id.as_ref().get() {
             return Ok(
                 InvalidArgumentResult::InvalidArgument {
                     invalid_argument: InvalidArgument::ApplicationUserAccessRefreshTokenEncrypted,
@@ -169,7 +169,7 @@ impl ActionProcessor {
             );
         }
 
-        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_access_refresh_token_.get_expires_at().get()) {
+        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_access_refresh_token_.expires_at.get()) {
             if let Err(mut error) = PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::delete_1(
                 database_2_postgresql_connection,
                 &by_4,
@@ -208,15 +208,20 @@ impl ActionProcessor {
                 return Err(error);
             }
         };
-        let application_user_access_token_new = ApplicationUserAccessToken::new(
-            Generator::<ApplicationUserAccessToken_Id>::generate(),
-            application_user_access_token_.get_application_user_id(),
-            Cow::Borrowed(application_user_access_token_.get_application_user_device_id()),
-            expires_at,
-        );
 
-        let application_user_access_refresh_token_expires_at = match Generator::<ApplicationUserAccessRefreshToken_ExpiresAt>::generate() {
-            Ok(application_user_access_refresh_token_expires_at_) => application_user_access_refresh_token_expires_at_,
+        let application_user_access_token_new = ApplicationUserAccessToken {
+            id: Generator::<ApplicationUserAccessToken_Id>::generate(),
+            application_user_id: application_user_access_token_.application_user_id,
+            application_user_device_id: Cow::Borrowed(application_user_access_token_.application_user_device_id.as_ref()),
+            expires_at,
+        };
+
+        application_user_access_refresh_token_.application_user_access_token_id = Cow::Borrowed(&application_user_access_token_new.id);
+
+        application_user_access_refresh_token_.obfuscation_value = Generator::<ApplicationUserAccessRefreshToken_ObfuscationValue>::generate();
+
+        application_user_access_refresh_token_.expires_at = match Generator::<ApplicationUserAccessRefreshToken_ExpiresAt>::generate() {
+            Ok(application_user_access_refresh_token_expires_at) => application_user_access_refresh_token_expires_at,
             Err(mut error) => {
                 error.add_backtrace_part(
                     BacktracePart::new(
@@ -230,19 +235,15 @@ impl ActionProcessor {
             }
         };
 
-        application_user_access_refresh_token_
-            .set_application_user_access_token_id(Cow::Borrowed(application_user_access_token_new.get_id()))
-            .set_obfuscation_value(Generator::<ApplicationUserAccessRefreshToken_ObfuscationValue>::generate())
-            .set_expires_at(application_user_access_refresh_token_expires_at)
-            .set_updated_at(Generator::<ApplicationUserAccessRefreshToken_UpdatedAt>::generate());
+        application_user_access_refresh_token_.updated_at = Generator::<ApplicationUserAccessRefreshToken_UpdatedAt>::generate();
 
         if let Err(mut error) = PostgresqlRepository::<ApplicationUserAccessRefreshToken1>::update(
             database_2_postgresql_connection,
             &Update2 {
-                application_user_access_token_id: application_user_access_refresh_token_.get_application_user_access_token_id(),
-                application_user_access_refresh_token_obfuscation_value: application_user_access_refresh_token_.get_obfuscation_value(),
-                application_user_access_refresh_token_expires_at: application_user_access_refresh_token_.get_expires_at(),
-                application_user_access_refresh_token_updated_at: application_user_access_refresh_token_.get_updated_at(),
+                application_user_access_token_id: application_user_access_refresh_token_.application_user_access_token_id.as_ref(),
+                application_user_access_refresh_token_obfuscation_value: &application_user_access_refresh_token_.obfuscation_value,
+                application_user_access_refresh_token_expires_at: application_user_access_refresh_token_.expires_at,
+                application_user_access_refresh_token_updated_at: application_user_access_refresh_token_.updated_at,
             },
             &by_4,
         )

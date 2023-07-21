@@ -167,7 +167,7 @@ impl ActionProcessor {
             }
         };
 
-        if channel_.get_owner().get() == application_user_access_token.get_application_user_id().get() {
+        if channel_.owner.get() == application_user_access_token.application_user_id.get() {
             return Ok(
                 InvalidArgumentResult::Ok {
                     subject: UnifiedReport::precedent(Precedent::ApplicationUser_IsChannelOwner),
@@ -175,7 +175,7 @@ impl ActionProcessor {
             );
         }
 
-        let channel_access_modifier = FormResolver::<Channel_AccessModifier>::to_representation(channel_.get_access_modifier());
+        let channel_access_modifier = FormResolver::<Channel_AccessModifier>::to_representation(channel_.access_modifier);
 
         if let Channel_AccessModifier_::Close = channel_access_modifier {
             return Ok(
@@ -188,8 +188,8 @@ impl ActionProcessor {
         if let Err(mut error) = PostgresqlRepository::<ChannelSubscription>::create(
             database_1_postgresql_connection,
             Insert10 {
-                application_user_id: application_user_access_token.get_application_user_id(),
-                channel_id: channel_.get_id(),
+                application_user_id: application_user_access_token.application_user_id,
+                channel_id: channel_.id,
             },
         )
         .await

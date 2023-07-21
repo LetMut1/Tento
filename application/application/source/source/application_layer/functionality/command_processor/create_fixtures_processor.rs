@@ -334,7 +334,7 @@ impl CreateFixturesProcessor {
             let application_user_device_id = ApplicationUserDevice_Id::new(
                 format!(
                     "{}_{}",
-                    application_user_.get_nickname().get(),
+                    application_user_.nickname.get(),
                     Self::APPLICATION_USER_DEVICE__ID_PART
                 ),
             );
@@ -358,7 +358,7 @@ impl CreateFixturesProcessor {
                 database_1_postgresql_connection,
                 Insert4 {
                     application_user_device_id,
-                    application_user_id: application_user_.get_id(),
+                    application_user_id: application_user_.id,
                 },
             )
             .await
@@ -507,7 +507,7 @@ impl CreateFixturesProcessor {
                         if let Err(mut error) = PostgresqlRepository::<Channel<'_>>::create(
                             database_1_postgresql_connection,
                             Insert7 {
-                                channel_owner: application_user_.get_id(),
+                                channel_owner: application_user_.id,
                                 channel_name,
                                 channel_linked_name,
                                 channel_description,

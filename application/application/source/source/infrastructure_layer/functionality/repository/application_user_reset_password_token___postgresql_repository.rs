@@ -152,15 +152,15 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
         };
 
         return Ok(
-            ApplicationUserResetPasswordToken::new(
-                insert_6.application_user_id,
-                Cow::Borrowed(insert_6.application_user_device_id),
-                insert_6.application_user_reset_password_token_value,
-                insert_6.application_user_reset_password_token_wrong_enter_tries_quantity,
-                insert_6.application_user_reset_password_token_is_approved,
-                insert_6.application_user_reset_password_token_expires_at,
-                insert_6.application_user_reset_password_token_can_be_resent_from,
-            ),
+            ApplicationUserResetPasswordToken {
+                application_user_id: insert_6.application_user_id,
+                application_user_device_id: Cow::Borrowed(insert_6.application_user_device_id),
+                value: insert_6.application_user_reset_password_token_value,
+                wrong_enter_tries_quantity: insert_6.application_user_reset_password_token_wrong_enter_tries_quantity,
+                is_approved: insert_6.application_user_reset_password_token_is_approved,
+                expires_at: insert_6.application_user_reset_password_token_expires_at,
+                can_be_resent_from: insert_6.application_user_reset_password_token_can_be_resent_from,
+            },
         );
     }
 
@@ -572,13 +572,13 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken1> {
 
         return Ok(
             Some(
-                ApplicationUserResetPasswordToken1::new(
-                    application_user_reset_password_token_value,
-                    application_user_reset_password_token_wrong_enter_tries_quantity,
-                    application_user_reset_password_token_is_approved,
-                    application_user_reset_password_token_expires_at,
-                    application_user_reset_password_token_can_be_resent_from,
-                ),
+                ApplicationUserResetPasswordToken1 {
+                    value: application_user_reset_password_token_value,
+                    wrong_enter_tries_quantity: application_user_reset_password_token_wrong_enter_tries_quantity,
+                    is_approved:  application_user_reset_password_token_is_approved,
+                    expires_at: application_user_reset_password_token_expires_at,
+                    can_be_resent_from: application_user_reset_password_token_can_be_resent_from,
+                },
             ),
         );
     }
@@ -974,12 +974,12 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken3> {
 
         return Ok(
             Some(
-                ApplicationUserResetPasswordToken3::new(
-                    application_user_reset_password_token_value,
-                    application_user_reset_password_token_wrong_enter_tries_quantity,
-                    application_user_reset_password_token_is_approved,
-                    application_user_reset_password_token_expires_at,
-                ),
+                ApplicationUserResetPasswordToken3 {
+                    value: application_user_reset_password_token_value,
+                    wrong_enter_tries_quantity: application_user_reset_password_token_wrong_enter_tries_quantity,
+                    is_approved: application_user_reset_password_token_is_approved,
+                    expires_at: application_user_reset_password_token_expires_at,
+                },
             ),
         );
     }
@@ -1353,12 +1353,12 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken6> {
 
         return Ok(
             Some(
-                ApplicationUserResetPasswordToken6::new(
-                    application_user_reset_password_token_value,
-                    application_user_reset_password_token_is_approved,
-                    application_user_reset_password_token_expires_at,
-                    application_user_reset_password_token_can_be_resent_from,
-                ),
+                ApplicationUserResetPasswordToken6 {
+                    value: application_user_reset_password_token_value,
+                    is_approved: application_user_reset_password_token_is_approved,
+                    expires_at: application_user_reset_password_token_expires_at,
+                    can_be_resent_from: application_user_reset_password_token_can_be_resent_from,
+                },
             ),
         );
     }

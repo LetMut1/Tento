@@ -123,7 +123,7 @@ impl ActionProcessor {
         if let Err(mut error) = PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::delete_2(
             &*database_2_postgresql_pooled_connection,
             &By3 {
-                application_user_id: application_user_access_token.get_application_user_id(),
+                application_user_id: application_user_access_token.application_user_id,
             },
         )
         .await

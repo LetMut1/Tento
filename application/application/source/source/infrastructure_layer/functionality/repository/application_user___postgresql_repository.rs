@@ -23,6 +23,7 @@ use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 use extern_crate::tokio_postgres::types::Type;
 use extern_crate::tokio_postgres::Client as Connection;
+use std::marker::PhantomData;
 use std::borrow::Cow;
 
 impl PostgresqlRepository<ApplicationUser<'_>> {
@@ -170,15 +171,16 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             }
         };
 
-        let application_user = ApplicationUser::new(
-            application_user_id,
-            insert_1.application_user_email,
-            Cow::Owned(insert_1.application_user_nickname),
-            insert_1.application_user_password_hash,
-            application_user_created_at,
+        return Ok(
+            ApplicationUser {
+                id: application_user_id,
+                email: insert_1.application_user_email,
+                nickname: Cow::Owned(insert_1.application_user_nickname),
+                _password: PhantomData,
+                password_hash: insert_1.application_user_password_hash,
+                created_at: application_user_created_at,
+            }
         );
-
-        return Ok(application_user);
     }
 
     pub async fn is_exist_1<'a>(
@@ -599,13 +601,14 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
 
         return Ok(
             Some(
-                ApplicationUser::new(
-                    application_user_id,
-                    application_user_email,
-                    Cow::Borrowed(by_1.application_user_nickname),
-                    application_user_password_hash,
-                    application_user_created_at,
-                ),
+                ApplicationUser {
+                    id: application_user_id,
+                    email: application_user_email,
+                    nickname: Cow::Borrowed(by_1.application_user_nickname),
+                    _password: PhantomData,
+                    password_hash: application_user_password_hash,
+                    created_at: application_user_created_at,
+                },
             ),
         );
     }
@@ -761,11 +764,11 @@ impl PostgresqlRepository<ApplicationUser1> {
 
         return Ok(
             Some(
-                ApplicationUser1::new(
-                    application_user_id,
-                    application_user_email,
-                    application_user_password_hash,
-                ),
+                ApplicationUser1 {
+                    id: application_user_id,
+                    email: application_user_email,
+                    password_hash: application_user_password_hash,
+                },
             ),
         );
     }
@@ -921,11 +924,11 @@ impl PostgresqlRepository<ApplicationUser2> {
 
         return Ok(
             Some(
-                ApplicationUser2::new(
-                    application_user_id,
-                    application_user_nickname,
-                    application_user_password_hash,
-                ),
+                ApplicationUser2 {
+                    id: application_user_id,
+                    nickname: application_user_nickname,
+                    password_hash: application_user_password_hash,
+                },
             ),
         );
     }
@@ -1033,7 +1036,13 @@ impl PostgresqlRepository<ApplicationUser3> {
             }
         };
 
-        return Ok(Some(ApplicationUser3::new(application_user_id)));
+        return Ok(
+            Some(
+                ApplicationUser3 {
+                    id: application_user_id
+                }
+            )
+        );
     }
 }
 
@@ -1275,11 +1284,11 @@ impl PostgresqlRepository<ApplicationUser4> {
 
         return Ok(
             Some(
-                ApplicationUser4::new(
-                    application_user_email,
-                    application_user_password_nickname,
-                    application_user_password_hash,
-                )
+                ApplicationUser4 {
+                    email: application_user_email,
+                    nickname: application_user_password_nickname,
+                    password_hash: application_user_password_hash,
+                }
             )
         );
     }
@@ -1387,6 +1396,12 @@ impl PostgresqlRepository<ApplicationUser5> {
             }
         };
 
-        return Ok(Some(ApplicationUser5::new(application_user_email)));
+        return Ok(
+            Some(
+                ApplicationUser5 {
+                    email: application_user_email,
+                }
+            )
+        );
     }
 }

@@ -167,7 +167,7 @@ impl ActionProcessor {
             }
         };
 
-        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token_.get_expires_at().get()) {
+        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token_.expires_at.get()) {
             if let Err(mut error) = PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::delete(
                 database_2_postgresql_connection,
                 &by_4
@@ -192,8 +192,8 @@ impl ActionProcessor {
             );
         }
 
-        if application_user_authorization_token_.get_value().get() != incoming.application_user_authorization_token_value.get() {
-            if let Err(mut error) = Incrementor::<ApplicationUserAuthorizationToken_WrongEnterTriesQuantity>::increment(application_user_authorization_token_.get_wrong_enter_tries_quantity_()) {
+        if application_user_authorization_token_.value.get() != incoming.application_user_authorization_token_value.get() {
+            if let Err(mut error) = Incrementor::<ApplicationUserAuthorizationToken_WrongEnterTriesQuantity>::increment(&mut application_user_authorization_token_.wrong_enter_tries_quantity) {
                 error.add_backtrace_part(
                     BacktracePart::new(
                         line!(),
@@ -205,11 +205,11 @@ impl ActionProcessor {
                 return Err(error);
             }
 
-            if application_user_authorization_token_.get_wrong_enter_tries_quantity().get() <= ApplicationUserAuthorizationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
+            if application_user_authorization_token_.wrong_enter_tries_quantity.get() <= ApplicationUserAuthorizationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
                 if let Err(mut error) = PostgresqlRepository::<ApplicationUserAuthorizationToken4>::update(
                     database_2_postgresql_connection,
                     &Update6 {
-                        application_user_authorization_token_wrong_enter_tries_quantity: application_user_authorization_token_.get_wrong_enter_tries_quantity(),
+                        application_user_authorization_token_wrong_enter_tries_quantity: application_user_authorization_token_.wrong_enter_tries_quantity,
                     },
                     &by_4,
                 )
@@ -320,12 +320,12 @@ impl ActionProcessor {
             }
         };
 
-        let application_user_access_token = ApplicationUserAccessToken::new(
-            Generator::<ApplicationUserAccessToken_Id>::generate(),
-            incoming.application_user_id,
-            Cow::Borrowed(&incoming.application_user_device_id),
+        let application_user_access_token = ApplicationUserAccessToken {
+            id: Generator::<ApplicationUserAccessToken_Id>::generate(),
+            application_user_id: incoming.application_user_id,
+            application_user_device_id: Cow::Borrowed(&incoming.application_user_device_id),
             expires_at,
-        );
+        };
 
         let application_user_access_refresh_token = match PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::find_1(
             database_2_postgresql_connection,
@@ -347,7 +347,7 @@ impl ActionProcessor {
             }
         };
 
-        let application_user_access_token_id = application_user_access_token.get_id();
+        let application_user_access_token_id = &application_user_access_token.id;
 
         let application_user_access_refresh_token_obfuscation_value = Generator::<ApplicationUserAccessRefreshToken_ObfuscationValue>::generate();
 
@@ -370,19 +370,21 @@ impl ActionProcessor {
         // TODO  TRANZACTION
         let application_user_access_refresh_token_ = match application_user_access_refresh_token {
             Some(mut application_user_access_refresh_token__) => {
-                application_user_access_refresh_token__
-                    .set_application_user_access_token_id(Cow::Borrowed(application_user_access_token_id))
-                    .set_obfuscation_value(application_user_access_refresh_token_obfuscation_value)
-                    .set_expires_at(application_user_access_refresh_token_expires_at)
-                    .set_updated_at(application_user_access_refresh_token_updated_at);
+                    application_user_access_refresh_token__.application_user_access_token_id = Cow::Borrowed(application_user_access_token_id);
+
+                    application_user_access_refresh_token__.obfuscation_value = application_user_access_refresh_token_obfuscation_value;
+
+                    application_user_access_refresh_token__.expires_at = application_user_access_refresh_token_expires_at;
+
+                    application_user_access_refresh_token__.updated_at = application_user_access_refresh_token_updated_at;
 
                 if let Err(mut error) = PostgresqlRepository::<ApplicationUserAccessRefreshToken1>::update(
                     database_2_postgresql_connection,
                     &Update2 {
-                        application_user_access_token_id: application_user_access_refresh_token__.get_application_user_access_token_id(),
-                        application_user_access_refresh_token_obfuscation_value: application_user_access_refresh_token__.get_obfuscation_value(),
-                        application_user_access_refresh_token_expires_at: application_user_access_refresh_token__.get_expires_at(),
-                        application_user_access_refresh_token_updated_at: application_user_access_refresh_token__.get_updated_at(),
+                        application_user_access_token_id: application_user_access_refresh_token__.application_user_access_token_id.as_ref(),
+                        application_user_access_refresh_token_obfuscation_value: &application_user_access_refresh_token__.obfuscation_value,
+                        application_user_access_refresh_token_expires_at: application_user_access_refresh_token__.expires_at,
+                        application_user_access_refresh_token_updated_at: application_user_access_refresh_token__.updated_at,
                     },
                     &by_4,
                 )

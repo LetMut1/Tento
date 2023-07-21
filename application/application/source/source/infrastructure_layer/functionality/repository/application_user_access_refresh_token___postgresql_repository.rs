@@ -135,14 +135,14 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
         };
 
         return Ok(
-            ApplicationUserAccessRefreshToken::new(
-                insert_2.application_user_id,
-                Cow::Borrowed(insert_2.application_user_device_id),
-                Cow::Borrowed(insert_2.application_user_access_token_id),
-                insert_2.application_user_access_refresh_token_obfuscation_value,
-                insert_2.application_user_access_refresh_token_expires_at,
-                insert_2.application_user_access_refresh_token_updated_at,
-            ),
+            ApplicationUserAccessRefreshToken {
+                application_user_id: insert_2.application_user_id,
+                application_user_device_id: Cow::Borrowed(insert_2.application_user_device_id),
+                application_user_access_token_id: Cow::Borrowed(insert_2.application_user_access_token_id),
+                obfuscation_value: insert_2.application_user_access_refresh_token_obfuscation_value,
+                expires_at: insert_2.application_user_access_refresh_token_expires_at,
+                updated_at: insert_2.application_user_access_refresh_token_updated_at,
+            },
         );
     }
 
@@ -477,14 +477,14 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
 
         return Ok(
             Some(
-                ApplicationUserAccessRefreshToken::new(
-                    by_4.application_user_id,
-                    Cow::Borrowed(by_4.application_user_device_id),
-                    Cow::Owned(application_user_access_token_id),
-                    application_user_access_refresh_token_obfuscation_value,
-                    application_user_access_refresh_token_expires_at,
-                    application_user_access_refresh_token_updated_at,
-                ),
+                ApplicationUserAccessRefreshToken {
+                    application_user_id: by_4.application_user_id,
+                    application_user_device_id: Cow::Borrowed(by_4.application_user_device_id),
+                    application_user_access_token_id: Cow::Owned(application_user_access_token_id),
+                    obfuscation_value: application_user_access_refresh_token_obfuscation_value,
+                    expires_at: application_user_access_refresh_token_expires_at,
+                    updated_at: application_user_access_refresh_token_updated_at,
+                },
             ),
         );
     }

@@ -289,7 +289,7 @@ impl ActionProcessor {
             }
         };
 
-        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token_.get_expires_at().get()) {
+        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token_.expires_at.get()) {
             if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete(
                 database_2_postgresql_connection,
                 &by_5,
@@ -314,7 +314,7 @@ impl ActionProcessor {
             );
         }
 
-        if !application_user_registration_token_.get_is_approved().get() {
+        if !application_user_registration_token_.is_approved.get() {
             return Ok(
                 InvalidArgumentResult::Ok {
                     subject: UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_IsNotApproved),
@@ -322,8 +322,8 @@ impl ActionProcessor {
             );
         }
 
-        if application_user_registration_token_.get_value().get() != incoming.application_user_registration_token_value.get() {
-            if let Err(mut error) = Incrementor::<ApplicationUserRegistrationToken_WrongEnterTriesQuantity>::increment(application_user_registration_token_.get_wrong_enter_tries_quantity_()) {
+        if application_user_registration_token_.value.get() != incoming.application_user_registration_token_value.get() {
+            if let Err(mut error) = Incrementor::<ApplicationUserRegistrationToken_WrongEnterTriesQuantity>::increment(&mut application_user_registration_token_.wrong_enter_tries_quantity) {
                 error.add_backtrace_part(
                     BacktracePart::new(
                         line!(),
@@ -335,11 +335,11 @@ impl ActionProcessor {
                 return Err(error);
             };
 
-            if application_user_registration_token_.get_wrong_enter_tries_quantity().get() <= ApplicationUserRegistrationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
+            if application_user_registration_token_.wrong_enter_tries_quantity.get() <= ApplicationUserRegistrationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
                 if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken4>::update(
                     database_2_postgresql_connection,
                     &Update10 {
-                        application_user_registration_token_wrong_enter_tries_quantity: application_user_registration_token_.get_wrong_enter_tries_quantity(),
+                        application_user_registration_token_wrong_enter_tries_quantity: application_user_registration_token_.wrong_enter_tries_quantity,
                     },
                     &by_5,
                 )
@@ -441,7 +441,7 @@ impl ActionProcessor {
             database_1_postgresql_connection,
             Insert4 {
                 application_user_device_id: incoming.application_user_device_id,
-                application_user_id: application_user.get_id(),
+                application_user_id: application_user.id,
             },
         )
         .await
@@ -475,12 +475,12 @@ impl ActionProcessor {
             }
         };
 
-        let application_user_access_token = ApplicationUserAccessToken::new(
-            Generator::<ApplicationUserAccessToken_Id>::generate(),
-            application_user.get_id(),
-            Cow::Borrowed(application_user_device.get_id()),
-            application_user_acces_token_expires_at,
-        );
+        let application_user_access_token = ApplicationUserAccessToken {
+            id: Generator::<ApplicationUserAccessToken_Id>::generate(),
+            application_user_id:  application_user.id,
+            application_user_device_id: Cow::Borrowed(&application_user_device.id),
+            expires_at: application_user_acces_token_expires_at,
+        };
 
         let application_user_access_refresh_token_expires_at = match Generator::<ApplicationUserAccessRefreshToken_ExpiresAt>::generate() {
             Ok(application_user_access_refresh_token_expires_at_) => application_user_access_refresh_token_expires_at_,
@@ -501,9 +501,9 @@ impl ActionProcessor {
         let application_user_access_refresh_token = match PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::create(
             database_2_postgresql_connection,
             Insert2 {
-                application_user_id: application_user.get_id(),
-                application_user_device_id: application_user_device.get_id(),
-                application_user_access_token_id: application_user_access_token.get_id(),
+                application_user_id: application_user.id,
+                application_user_device_id: &application_user_device.id,
+                application_user_access_token_id: &application_user_access_token.id,
                 application_user_access_refresh_token_obfuscation_value: Generator::<ApplicationUserAccessRefreshToken_ObfuscationValue>::generate(),
                 application_user_access_refresh_token_expires_at,
                 application_user_access_refresh_token_updated_at: Generator::<ApplicationUserAccessRefreshToken_UpdatedAt>::generate(),

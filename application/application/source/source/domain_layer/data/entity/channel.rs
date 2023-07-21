@@ -267,106 +267,18 @@ impl CreatedAt {
 }
 
 pub struct Channel<'a> {
-    id: Id,
-    owner: ApplicationUser_Id,
-    name: Cow<'a, Name>,
-    linked_name: LinkedName,
-    description: Option<Description>,
-    access_modifier: AccessModifier,
-    visability_modifier: VisabilityModifier,
-    orientation: Orientation,
-    cover_image_path: Option<CoverImagePath>,
-    background_image_path: Option<BackgroundImagePath>,
-    subscribers_quantity: SubscribersQuantity,
-    marks_quantity: MarksQuantity,
-    viewing_quantity: ViewingQuantity,
-    created_at: CreatedAt,
-}
-
-impl<'a> Channel<'a> {
-    pub fn new(
-        id: Id,
-        owner: ApplicationUser_Id,
-        name: Cow<'a, Name>,
-        linked_name: LinkedName,
-        description: Option<Description>,
-        access_modifier: AccessModifier,
-        visability_modifier: VisabilityModifier,
-        orientation: Orientation,
-        cover_image_path: Option<CoverImagePath>,
-        background_image_path: Option<BackgroundImagePath>,
-        subscribers_quantity: SubscribersQuantity,
-        marks_quantity: MarksQuantity,
-        viewing_quantity: ViewingQuantity,
-        created_at: CreatedAt,
-    ) -> Self {
-        return Self {
-            id,
-            owner,
-            name,
-            linked_name,
-            description,
-            access_modifier,
-            visability_modifier,
-            orientation,
-            cover_image_path,
-            background_image_path,
-            subscribers_quantity,
-            marks_quantity,
-            viewing_quantity,
-            created_at,
-        };
-    }
-
-    pub fn into_inner(
-        self
-    ) -> (
-        Id,
-        ApplicationUser_Id,
-        Cow<'a, Name>,
-        LinkedName,
-        Option<Description>,
-        AccessModifier,
-        VisabilityModifier,
-        Orientation,
-        Option<CoverImagePath>,
-        Option<BackgroundImagePath>,
-        SubscribersQuantity,
-        MarksQuantity,
-        ViewingQuantity,
-        CreatedAt,
-    ) {
-        return (
-            self.id,
-            self.owner,
-            self.name,
-            self.linked_name,
-            self.description,
-            self.access_modifier,
-            self.visability_modifier,
-            self.orientation,
-            self.cover_image_path,
-            self.background_image_path,
-            self.subscribers_quantity,
-            self.marks_quantity,
-            self.viewing_quantity,
-            self.created_at,
-        );
-    }
-
-    pub fn get_id<'b>(&'b self) -> Id {
-        return self.id;
-    }
-
-    pub fn get_owner<'b>(&'b self) -> ApplicationUser_Id {
-        return self.owner;
-    }
-
-    pub fn get_access_modifier<'b>(&'b self) -> AccessModifier {
-        return self.access_modifier;
-    }
-
-    pub fn get_visability_modifier<'b>(&'b self) -> VisabilityModifier {
-        return self.visability_modifier;
-    }
+    pub id: Id,
+    pub owner: ApplicationUser_Id,
+    pub name: Cow<'a, Name>,
+    pub linked_name: LinkedName,
+    pub description: Option<Description>,
+    pub access_modifier: AccessModifier,
+    pub visability_modifier: VisabilityModifier,
+    pub orientation: Orientation,
+    pub cover_image_path: Option<CoverImagePath>,
+    pub background_image_path: Option<BackgroundImagePath>,
+    pub subscribers_quantity: SubscribersQuantity,
+    pub marks_quantity: MarksQuantity,
+    pub viewing_quantity: ViewingQuantity,
+    pub created_at: CreatedAt,
 }

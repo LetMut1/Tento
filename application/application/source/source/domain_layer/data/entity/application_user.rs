@@ -112,195 +112,36 @@ impl CreatedAt {
 }
 
 pub struct ApplicationUser<'a> {
-    id: Id,
-    email: Email,
-    nickname: Cow<'a, Nickname>,
-    _password: PhantomData<Password>,
-    password_hash: PasswordHash,
-    created_at: CreatedAt,
-}
-
-impl<'a> ApplicationUser<'a> {
-    pub fn new(
-        id: Id,
-        email: Email,
-        nickname: Cow<'a, Nickname>,
-        password_hash: PasswordHash,
-        created_at: CreatedAt,
-    ) -> Self {
-        return Self {
-            id,
-            email,
-            nickname,
-            _password: PhantomData,
-            password_hash,
-            created_at,
-        };
-    }
-
-    pub fn get_id<'b>(&'b self) -> Id {
-        return self.id;
-    }
-
-    pub fn get_email<'b>(&'b self) -> &'b Email {
-        return &self.email;
-    }
-
-    pub fn get_nickname<'b>(&'b self) -> &'b Nickname {
-        return self.nickname.as_ref();
-    }
-
-    pub fn get_password_hash<'b>(&'b self) -> &'b PasswordHash {
-        return &self.password_hash;
-    }
-
-    pub fn get_created_at<'b>(&'b self) -> &'b CreatedAt {
-        return &self.created_at;
-    }
-
-    pub fn set_password_hash<'b>(
-        &'b mut self,
-        password_hash: PasswordHash,
-    ) -> &'b mut Self {
-        self.password_hash = password_hash;
-
-        return self;
-    }
+    pub id: Id,
+    pub email: Email,
+    pub nickname: Cow<'a, Nickname>,
+    pub _password: PhantomData<Password>,
+    pub password_hash: PasswordHash,
+    pub created_at: CreatedAt,
 }
 
 pub struct ApplicationUser1 {
-    id: Id,
-    email: Email,
-    password_hash: PasswordHash,
-}
-
-impl ApplicationUser1 {
-    pub fn new(
-        id: Id,
-        email: Email,
-        password_hash: PasswordHash,
-    ) -> Self {
-        return Self {
-            id,
-            email,
-            password_hash,
-        };
-    }
-
-    pub fn get_id<'a>(&'a self) -> Id {
-        return self.id;
-    }
-
-    pub fn get_email<'a>(&'a self) -> &'a Email {
-        return &self.email;
-    }
-
-    pub fn get_password_hash<'a>(&'a self) -> &'a PasswordHash {
-        return &self.password_hash;
-    }
+    pub id: Id,
+    pub email: Email,
+    pub password_hash: PasswordHash,
 }
 
 pub struct ApplicationUser2 {
-    id: Id,
-    nickname: Nickname,
-    password_hash: PasswordHash,
-}
-
-impl ApplicationUser2 {
-    pub fn new(
-        id: Id,
-        nickname: Nickname,
-        password_hash: PasswordHash,
-    ) -> Self {
-        return Self {
-            id,
-            nickname,
-            password_hash,
-        };
-    }
-
-    pub fn get_id<'a>(&'a self) -> Id {
-        return self.id;
-    }
-
-    pub fn get_nickname<'a>(&'a self) -> &'a Nickname {
-        return &self.nickname;
-    }
-
-    pub fn get_password_hash<'a>(&'a self) -> &'a PasswordHash {
-        return &self.password_hash;
-    }
+    pub id: Id,
+    pub nickname: Nickname,
+    pub password_hash: PasswordHash,
 }
 
 pub struct ApplicationUser3 {
-    id: Id,
-}
-
-impl ApplicationUser3 {
-    pub fn new(id: Id) -> Self {
-        return Self {
-            id,
-        };
-    }
-
-    pub fn get_id<'a>(&'a self) -> Id {
-        return self.id;
-    }
+    pub id: Id,
 }
 
 pub struct ApplicationUser4 {
-    email: Email,
-    nickname: Nickname,
-    password_hash: PasswordHash,
-}
-
-impl ApplicationUser4 {
-    pub fn new(
-        email: Email,
-        nickname: Nickname,
-        password_hash: PasswordHash,
-    ) -> Self {
-        return Self {
-            email,
-            nickname,
-            password_hash,
-        };
-    }
-
-    pub fn get_email<'a>(&'a self) -> &'a Email {
-        return &self.email;
-    }
-
-    pub fn get_nickname<'a>(&'a self) -> &'a Nickname {
-        return &self.nickname;
-    }
-
-    pub fn get_password_hash<'a>(&'a self) -> &'a PasswordHash {
-        return &self.password_hash;
-    }
-
-    pub fn set_password_hash<'a>(
-        &'a mut self,
-        password_hash: PasswordHash,
-    ) -> &'a mut Self {
-        self.password_hash = password_hash;
-
-        return self;
-    }
+    pub email: Email,
+    pub nickname: Nickname,
+    pub password_hash: PasswordHash,
 }
 
 pub struct ApplicationUser5 {
-    email: Email,
-}
-
-impl ApplicationUser5 {
-    pub fn new(email: Email) -> Self {
-        return Self {
-            email,
-        };
-    }
-
-    pub fn get_email<'a>(&'a self) -> &'a Email {
-        return &self.email;
-    }
+    pub email: Email,
 }

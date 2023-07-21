@@ -141,7 +141,7 @@ impl ActionProcessor {
         let common_registry = match PostgresqlRepository::<Common1>::find_3(
             &*database_1_postgresql_pooled_connection,
             &By13 {
-                application_user_id: application_user_access_token.get_application_user_id(),
+                application_user_id: application_user_access_token.application_user_id,
                 requery_channel_id: incoming.requery_channel_id,
             },
             incoming.limit,

@@ -167,7 +167,7 @@ impl ActionProcessor {
             }
         };
 
-        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token_.get_expires_at().get()) {
+        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token_.expires_at.get()) {
             if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete(
                 database_2_postgresql_connection,
                 &by_5,
@@ -192,7 +192,7 @@ impl ActionProcessor {
             );
         }
 
-        if application_user_registration_token_.get_is_approved().get() {
+        if application_user_registration_token_.is_approved.get() {
             return Ok(
                 InvalidArgumentResult::Ok {
                     subject: UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_AlreadyApproved),
@@ -200,8 +200,8 @@ impl ActionProcessor {
             );
         }
 
-        if application_user_registration_token_.get_value().get() != incoming.application_user_registration_token_value.get() {
-            if let Err(mut error) = Incrementor::<ApplicationUserRegistrationToken_WrongEnterTriesQuantity>::increment(application_user_registration_token_.get_wrong_enter_tries_quantity_()) {
+        if application_user_registration_token_.value.get() != incoming.application_user_registration_token_value.get() {
+            if let Err(mut error) = Incrementor::<ApplicationUserRegistrationToken_WrongEnterTriesQuantity>::increment(&mut application_user_registration_token_.wrong_enter_tries_quantity) {
                 error.add_backtrace_part(
                     BacktracePart::new(
                         line!(),
@@ -213,11 +213,11 @@ impl ActionProcessor {
                 return Err(error);
             };
 
-            if application_user_registration_token_.get_wrong_enter_tries_quantity().get() <= ApplicationUserRegistrationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
+            if application_user_registration_token_.wrong_enter_tries_quantity.get() <= ApplicationUserRegistrationToken::WRONG_ENTER_TRIES_QUANTITY_LIMIT {
                 if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken4>::update(
                     database_2_postgresql_connection,
                     &Update10 {
-                        application_user_registration_token_wrong_enter_tries_quantity: application_user_registration_token_.get_wrong_enter_tries_quantity(),
+                        application_user_registration_token_wrong_enter_tries_quantity: application_user_registration_token_.wrong_enter_tries_quantity,
                     },
                     &by_5,
                 )
@@ -259,12 +259,12 @@ impl ActionProcessor {
             );
         }
 
-        application_user_registration_token_.set_is_approved(ApplicationUserRegistrationToken_IsApproved::new(true));
+        application_user_registration_token_.is_approved = ApplicationUserRegistrationToken_IsApproved::new(true);
 
         if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken5>::update(
             database_2_postgresql_connection,
             &Update11 {
-                application_user_registration_token_is_approved: application_user_registration_token_.get_is_approved(),
+                application_user_registration_token_is_approved: application_user_registration_token_.is_approved,
             },
             &by_5,
         )

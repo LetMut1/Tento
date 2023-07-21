@@ -141,14 +141,14 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
         };
 
         return Ok(
-            ApplicationUserAuthorizationToken::new(
-                insert_3.application_user_id,
-                Cow::Borrowed(insert_3.application_user_device_id),
-                insert_3.application_user_authorization_token_value,
-                insert_3.application_user_authorization_token_wrong_enter_tries_quantity,
-                insert_3.application_user_authorization_token_expires_at,
-                insert_3.application_user_authorization_token_can_be_resent_from,
-            ),
+            ApplicationUserAuthorizationToken {
+                application_user_id: insert_3.application_user_id,
+                application_user_device_id: Cow::Borrowed(insert_3.application_user_device_id),
+                value: insert_3.application_user_authorization_token_value,
+                wrong_enter_tries_quantity: insert_3.application_user_authorization_token_wrong_enter_tries_quantity,
+                expires_at: insert_3.application_user_authorization_token_expires_at,
+                can_be_resent_from: insert_3.application_user_authorization_token_can_be_resent_from,
+            },
         );
     }
 
@@ -529,12 +529,12 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken1> {
 
         return Ok(
             Some(
-                ApplicationUserAuthorizationToken1::new(
-                    application_user_authorization_token_value,
-                    application_user_authorization_token_wrong_enter_tries_quantity,
-                    application_user_authorization_token_expires_at,
-                    application_user_authorization_token_can_be_resent_from,
-                ),
+                ApplicationUserAuthorizationToken1 {
+                    value: application_user_authorization_token_value,
+                    wrong_enter_tries_quantity: application_user_authorization_token_wrong_enter_tries_quantity,
+                    expires_at: application_user_authorization_token_expires_at,
+                    can_be_resent_from: application_user_authorization_token_can_be_resent_from,
+                },
             ),
         );
     }
@@ -805,11 +805,11 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken2> {
 
         return Ok(
             Some(
-                ApplicationUserAuthorizationToken2::new(
-                    application_user_authorization_token_value,
-                    application_user_authorization_token_wrong_enter_tries_quantity,
-                    application_user_authorization_token_expires_at,
-                ),
+                ApplicationUserAuthorizationToken2 {
+                    value: application_user_authorization_token_value,
+                    wrong_enter_tries_quantity: application_user_authorization_token_wrong_enter_tries_quantity,
+                    expires_at: application_user_authorization_token_expires_at,
+                },
             ),
         );
     }
@@ -1160,11 +1160,11 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken5> {
 
         return Ok(
             Some(
-                ApplicationUserAuthorizationToken5::new(
-                    application_user_authorization_token_value,
-                    application_user_authorization_token_expires_at,
-                    application_user_authorization_token_can_be_resent_from,
-                ),
+                ApplicationUserAuthorizationToken5 {
+                    value: application_user_authorization_token_value,
+                    expires_at: application_user_authorization_token_expires_at,
+                    can_be_resent_from: application_user_authorization_token_can_be_resent_from,
+                },
             ),
         );
     }

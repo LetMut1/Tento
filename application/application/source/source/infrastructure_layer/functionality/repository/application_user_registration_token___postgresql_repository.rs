@@ -152,15 +152,15 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
         };
 
         return Ok(
-            ApplicationUserRegistrationToken::new(
-                Cow::Borrowed(insert_5.application_user_email),
-                Cow::Borrowed(insert_5.application_user_device_id),
-                insert_5.application_user_registration_token_value,
-                insert_5.application_user_registration_token_wrong_enter_tries_quantity,
-                insert_5.application_user_registration_token_is_approved,
-                insert_5.application_user_registration_token_expires_at,
-                insert_5.application_user_registration_token_can_be_resent_from,
-            ),
+            ApplicationUserRegistrationToken {
+                application_user_email: Cow::Borrowed(insert_5.application_user_email),
+                application_user_device_id: Cow::Borrowed(insert_5.application_user_device_id),
+                value: insert_5.application_user_registration_token_value,
+                wrong_enter_tries_quantity: insert_5.application_user_registration_token_wrong_enter_tries_quantity,
+                is_approved: insert_5.application_user_registration_token_is_approved,
+                expires_at: insert_5.application_user_registration_token_expires_at,
+                can_be_resent_from: insert_5.application_user_registration_token_can_be_resent_from,
+            },
         );
     }
 
@@ -572,13 +572,13 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
 
         return Ok(
             Some(
-                ApplicationUserRegistrationToken1::new(
-                    application_user_registration_token_value,
-                    application_user_registration_token_wrong_enter_tries_quantity,
-                    application_user_registration_token_is_approved,
-                    application_user_registration_token_expires_at,
-                    application_user_registration_token_can_be_resent_from,
-                ),
+                ApplicationUserRegistrationToken1 {
+                    value: application_user_registration_token_value,
+                    wrong_enter_tries_quantity: application_user_registration_token_wrong_enter_tries_quantity,
+                    is_approved: application_user_registration_token_is_approved,
+                    expires_at: application_user_registration_token_expires_at,
+                    can_be_resent_from: application_user_registration_token_can_be_resent_from,
+                },
             ),
         );
     }
@@ -974,12 +974,12 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
 
         return Ok(
             Some(
-                ApplicationUserRegistrationToken3::new(
-                    application_user_registration_token_value,
-                    application_user_registration_token_wrong_enter_tries_quantity,
-                    application_user_registration_token_is_approved,
-                    application_user_registration_token_expires_at,
-                ),
+                ApplicationUserRegistrationToken3 {
+                    value: application_user_registration_token_value,
+                    wrong_enter_tries_quantity: application_user_registration_token_wrong_enter_tries_quantity,
+                    is_approved: application_user_registration_token_is_approved,
+                    expires_at: application_user_registration_token_expires_at,
+                },
             ),
         );
     }
@@ -1353,12 +1353,12 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken6> {
 
         return Ok(
             Some(
-                ApplicationUserRegistrationToken6::new(
-                    application_user_registration_token_value,
-                    application_user_registration_token_is_approved,
-                    application_user_registration_token_expires_at,
-                    application_user_registration_token_can_be_resent_from,
-                ),
+                ApplicationUserRegistrationToken6 {
+                    value: application_user_registration_token_value,
+                    is_approved: application_user_registration_token_is_approved,
+                    expires_at: application_user_registration_token_expires_at,
+                    can_be_resent_from: application_user_registration_token_can_be_resent_from,
+                },
             ),
         );
     }

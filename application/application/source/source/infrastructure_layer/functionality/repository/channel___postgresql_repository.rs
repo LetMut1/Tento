@@ -258,22 +258,22 @@ impl PostgresqlRepository<Channel<'_>> {
         };
 
         return Ok(
-            Channel::new(
-                channel_id,
-                insert_7.channel_owner,
-                Cow::Owned(insert_7.channel_name),
-                insert_7.channel_linked_name,
-                insert_7.channel_description,
-                Channel_AccessModifier::new(channel_access_modifier),
-                Channel_VisabilityModifier::new(channel_visability_modifier),
-                insert_7.channel_orientation,
-                insert_7.channel_cover_image_path,
-                insert_7.channel_background_image_path,
-                insert_7.channel_subscribers_quantity,
-                insert_7.channel_marks_quantity,
-                insert_7.channel_viewing_quantity,
-                channel_created_at,
-            ),
+            Channel {
+                id: channel_id,
+                owner: insert_7.channel_owner,
+                name: Cow::Owned(insert_7.channel_name),
+                linked_name: insert_7.channel_linked_name,
+                description: insert_7.channel_description,
+                access_modifier: Channel_AccessModifier::new(channel_access_modifier),
+                visability_modifier: Channel_VisabilityModifier::new(channel_visability_modifier),
+                orientation: insert_7.channel_orientation,
+                cover_image_path: insert_7.channel_cover_image_path,
+                background_image_path: insert_7.channel_background_image_path,
+                subscribers_quantity: insert_7.channel_subscribers_quantity,
+                marks_quantity: insert_7.channel_marks_quantity,
+                viewing_quantity: insert_7.channel_viewing_quantity,
+                created_at: channel_created_at,
+            },
         );
     }
 
@@ -656,22 +656,22 @@ impl PostgresqlRepository<Channel<'_>> {
 
         return Ok(
             Some(
-                Channel::new(
-                    by_6.channel_id,
-                    channel_owner,
-                    Cow::Owned(channel_name),
-                    channel_linked_name,
-                    channel_description,
-                    channel_access_modifier,
-                    channel_visability_modifier,
-                    channel_orientation,
-                    channel_cover_image_path,
-                    channel_background_image_path,
-                    channel_subscribers_quantity,
-                    channel_marks_quantity,
-                    channel_viewing_quantity,
-                    channel_created_at,
-                ),
+                Channel {
+                    id: by_6.channel_id,
+                    owner: channel_owner,
+                    name: Cow::Owned(channel_name),
+                    linked_name: channel_linked_name,
+                    description: channel_description,
+                    access_modifier: channel_access_modifier,
+                    visability_modifier: channel_visability_modifier,
+                    orientation: channel_orientation,
+                    cover_image_path: channel_cover_image_path,
+                    background_image_path: channel_background_image_path,
+                    subscribers_quantity: channel_subscribers_quantity,
+                    marks_quantity: channel_marks_quantity,
+                    viewing_quantity: channel_viewing_quantity,
+                    created_at: channel_created_at,
+                },
             ),
         );
     }
@@ -1055,22 +1055,22 @@ impl PostgresqlRepository<Channel<'_>> {
 
         return Ok(
             Some(
-                Channel::new(
-                    channel_id,
-                    channel_owner,
-                    Cow::Borrowed(by_7.channel_name),
-                    channel_linked_name,
-                    channel_description,
-                    channel_access_modifier,
-                    channel_visability_modifier,
-                    channel_orientation,
-                    channel_cover_image_path,
-                    channel_background_image_path,
-                    channel_subscribers_quantity,
-                    channel_marks_quantity,
-                    channel_viewing_quantity,
-                    channel_created_at,
-                ),
+                Channel {
+                    id: channel_id,
+                    owner: channel_owner,
+                    name: Cow::Borrowed(by_7.channel_name),
+                    linked_name: channel_linked_name,
+                    description: channel_description,
+                    access_modifier: channel_access_modifier,
+                    visability_modifier: channel_visability_modifier,
+                    orientation: channel_orientation,
+                    cover_image_path: channel_cover_image_path,
+                    background_image_path: channel_background_image_path,
+                    subscribers_quantity: channel_subscribers_quantity,
+                    marks_quantity: channel_marks_quantity,
+                    viewing_quantity: channel_viewing_quantity,
+                    created_at: channel_created_at,
+                },
             ),
         );
     }

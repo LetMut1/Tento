@@ -129,13 +129,13 @@ impl PostgresqlRepository<ChannelInnerLink> {
             }
         };
 
-        let channel_inner_link = ChannelInnerLink::new(
-            insert_8.channel_inner_link_from,
-            insert_8.channel_inner_link_to,
-            channel_inner_link_created_at,
+        return Ok(
+            ChannelInnerLink {
+                from: insert_8.channel_inner_link_from,
+                to: insert_8.channel_inner_link_to,
+                created_at: channel_inner_link_created_at,
+            },
         );
-
-        return Ok(channel_inner_link);
     }
 
     pub async fn find_1<'a>(

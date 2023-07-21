@@ -95,10 +95,10 @@ impl PostgresqlRepository<ApplicationUserDevice> {
         };
 
         return Ok(
-            ApplicationUserDevice::new(
-                insert_4.application_user_device_id,
-                insert_4.application_user_id,
-            ),
+            ApplicationUserDevice {
+                id: insert_4.application_user_device_id,
+                application_user_id: insert_4.application_user_id,
+            },
         );
     }
 }
