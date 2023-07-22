@@ -122,7 +122,12 @@ impl ActionProcessor {
 
         let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
 
-        let application_user_aggregator = if is_valid_email {
+        let (
+            application_user_id,
+            application_user_email,
+            application_user_nickname,
+            application_user_password_hash,
+        ) = if is_valid_email {
             let application_user_ = match PostgresqlRepository::<ApplicationUser2>::find_1(
                 database_1_postgresql_connection,
                 &By2 {
@@ -156,10 +161,12 @@ impl ActionProcessor {
                 }
             };
 
-            ApplicationUser_Aggregator::Second {
-                application_user: application_user__,
+            (
+                application_user__.id,
                 application_user_email,
-            }
+                application_user__.nickname,
+                application_user__.password_hash,
+            )
         } else {
             let application_user_nickname = ApplicationUser_Nickname(application_user_email.0);
 
@@ -197,10 +204,12 @@ impl ActionProcessor {
                     }
                 };
 
-                ApplicationUser_Aggregator::First {
-                    application_user: application_user__,
-                    application_user_nickname
-                }
+                (
+                    application_user__.id,
+                    application_user__.email,
+                    application_user_nickname,
+                    application_user__.password_hash,
+                )
             } else {
                 return Ok(
                     InvalidArgumentResult::InvalidArgument {
@@ -208,17 +217,6 @@ impl ActionProcessor {
                     },
                 );
             }
-        };
-
-        let (application_user_email, application_user_nickname,)  = match application_user_aggregator {
-            ApplicationUser_Aggregator::First {
-                ref application_user,
-                application_user_nickname: ref application_user_nickname_,
-            } => (&application_user.email, application_user_nickname_),
-            ApplicationUser_Aggregator::Second {
-                ref application_user,
-                application_user_email: ref application_user_email_,
-            } => (application_user_email_, &application_user.nickname)
         };
 
         if !Validator::<ApplicationUser_Password>::is_valid_part_2(
@@ -233,20 +231,9 @@ impl ActionProcessor {
             );
         }
 
-        let application_user_password_hash = match application_user_aggregator {
-            ApplicationUser_Aggregator::First {
-                ref application_user,
-                application_user_nickname: _,
-            } => &application_user.password_hash,
-            ApplicationUser_Aggregator::Second {
-                ref application_user,
-                application_user_email: _,
-            } => &application_user.password_hash,
-        };
-
         let is_valid = match Encoder::<ApplicationUser_Password>::is_valid(
             &incoming.application_user_password,
-            application_user_password_hash,
+            &application_user_password_hash,
         ) {
             Ok(is_valid_) => is_valid_,
             Err(mut error) => {
@@ -269,17 +256,6 @@ impl ActionProcessor {
                 },
             );
         }
-
-        let application_user_id = match application_user_aggregator {
-            ApplicationUser_Aggregator::First {
-                ref application_user,
-                application_user_nickname: _,
-            } => application_user.id,
-            ApplicationUser_Aggregator::Second {
-                ref application_user,
-                application_user_email: _,
-            } => application_user.id,
-        };
 
         let by_4 = By4 {
             application_user_id,
@@ -330,7 +306,11 @@ impl ActionProcessor {
             }
         };
 
-        let (application_user_authorization_token_aggregator, can_send) = match application_user_authorization_token {
+        let (
+            application_user_authorization_token_value,
+            application_user_authorization_token_can_be_resent_from,
+            can_send,
+        ) = match application_user_authorization_token {
             Some(mut application_user_authorization_token_) => {
                 let (can_send_, need_to_update_1) = if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token_.can_be_resent_from.0) {
                     application_user_authorization_token_.can_be_resent_from = match Generator::<ApplicationUserAuthorizationToken_CanBeResentFrom>::generate() {
@@ -454,9 +434,8 @@ impl ActionProcessor {
                 }
 
                 (
-                    ApplicationUserAuthorizationToken_Aggregator::Second {
-                        application_user_authorization_token: application_user_authorization_token_,
-                    },
+                    application_user_authorization_token_.value,
+                    application_user_authorization_token_.can_be_resent_from,
                     can_send_,
                 )
             }
@@ -519,27 +498,17 @@ impl ActionProcessor {
                 };
 
                 (
-                    ApplicationUserAuthorizationToken_Aggregator::First {
-                        application_user_authorization_token: application_user_authorization_token_,
-                    },
+                    application_user_authorization_token_.value,
+                    application_user_authorization_token_.can_be_resent_from,
                     true,
                 )
             }
         };
 
         if can_send {
-            let application_user_authorization_token_value = match application_user_authorization_token_aggregator {
-                ApplicationUserAuthorizationToken_Aggregator::First {
-                    application_user_authorization_token: ref application_user_authorization_token_,
-                } => &application_user_authorization_token_.value,
-                ApplicationUserAuthorizationToken_Aggregator::Second {
-                    application_user_authorization_token: ref application_user_authorization_token_,
-                } => &application_user_authorization_token_.value,
-            };
-
             if let Err(mut error) = EmailSender::<ApplicationUserAuthorizationToken<'_>>::send(
-                application_user_authorization_token_value,
-                application_user_email,
+                &application_user_authorization_token_value,
+                &application_user_email,
                 &incoming.application_user_device_id,
             ) {
                 error.add_backtrace_part(
@@ -553,15 +522,6 @@ impl ActionProcessor {
                 return Err(error);
             }
         }
-
-        let application_user_authorization_token_can_be_resent_from = match application_user_authorization_token_aggregator {
-            ApplicationUserAuthorizationToken_Aggregator::First {
-                application_user_authorization_token: ref application_user_authorization_token_,
-            } => application_user_authorization_token_.can_be_resent_from,
-            ApplicationUserAuthorizationToken_Aggregator::Second {
-                application_user_authorization_token: ref application_user_authorization_token_,
-            } => application_user_authorization_token_.can_be_resent_from,
-        };
 
         let outcoming = Outcoming {
             application_user_id,
@@ -606,23 +566,3 @@ r#enum!(
         CommonPrecedent::ApplicationUser_WrongEmailOrNicknameOrPassword,
     }
 );
-
-enum ApplicationUser_Aggregator {
-    First {
-        application_user: ApplicationUser1,
-        application_user_nickname: ApplicationUser_Nickname,
-    },
-    Second {
-        application_user: ApplicationUser2,
-        application_user_email: ApplicationUser_Email,
-    },
-}
-
-enum ApplicationUserAuthorizationToken_Aggregator<'a> {
-    First {
-        application_user_authorization_token: ApplicationUserAuthorizationToken<'a>,
-    },
-    Second {
-        application_user_authorization_token: ApplicationUserAuthorizationToken1,
-    },
-}
