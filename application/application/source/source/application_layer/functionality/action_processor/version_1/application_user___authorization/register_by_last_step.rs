@@ -335,7 +335,7 @@ impl ActionProcessor {
                 return Err(error);
             };
 
-            if application_user_registration_token_.wrong_enter_tries_quantity.0 <= ApplicationUserRegistrationToken_WrongEnterTriesQuantity::LIMIT {
+            if application_user_registration_token_.wrong_enter_tries_quantity.0 < ApplicationUserRegistrationToken_WrongEnterTriesQuantity::LIMIT {
                 if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken4>::update(
                     database_2_postgresql_connection,
                     &Update10 {

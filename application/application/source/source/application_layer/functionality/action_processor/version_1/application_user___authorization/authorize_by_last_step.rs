@@ -205,7 +205,7 @@ impl ActionProcessor {
                 return Err(error);
             }
 
-            if application_user_authorization_token_.wrong_enter_tries_quantity.0 <= ApplicationUserAuthorizationToken_WrongEnterTriesQuantity::LIMIT {
+            if application_user_authorization_token_.wrong_enter_tries_quantity.0 < ApplicationUserAuthorizationToken_WrongEnterTriesQuantity::LIMIT {
                 if let Err(mut error) = PostgresqlRepository::<ApplicationUserAuthorizationToken4>::update(
                     database_2_postgresql_connection,
                     &Update6 {
@@ -246,7 +246,11 @@ impl ActionProcessor {
 
             return Ok(
                 InvalidArgumentResult::Ok {
-                    subject: UnifiedReport::precedent(Precedent::ApplicationUserAuthorizationToken_WrongValue),
+                    subject: UnifiedReport::precedent(
+                        Precedent::ApplicationUserAuthorizationToken_WrongValue {
+                            application_user_authorization_token_wrong_enter_tries_quantity: application_user_authorization_token_.wrong_enter_tries_quantity,
+                        }
+                    ),
                 },
             );
         }
@@ -542,7 +546,9 @@ r#enum!(
     pub enum Precedent {
         CommonPrecedent::ApplicationUserAuthorizationToken_NotFound,
         CommonPrecedent::ApplicationUserAuthorizationToken_AlreadyExpired,
-        CommonPrecedent::ApplicationUserAuthorizationToken_WrongValue,
+        CommonPrecedent::ApplicationUserAuthorizationToken_WrongValue {
+            application_user_authorization_token_wrong_enter_tries_quantity: ApplicationUserAuthorizationToken_WrongEnterTriesQuantity,
+        },
         CommonPrecedent::ApplicationUser_NotFound,
     }
 );
