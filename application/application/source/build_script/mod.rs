@@ -13,7 +13,7 @@ use extern_crate::uuid::Uuid;
 
 fn main() -> () {
     if let Err(error) = Processor::process() {
-        println!(
+        panic!(
             "{}",
             error
         );
