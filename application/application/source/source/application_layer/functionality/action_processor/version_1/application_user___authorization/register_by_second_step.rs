@@ -254,7 +254,11 @@ impl ActionProcessor {
 
             return Ok(
                 InvalidArgumentResult::Ok {
-                    subject: UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_WrongValue),
+                    subject: UnifiedReport::precedent(
+                        Precedent::ApplicationUserRegistrationToken_WrongValue {
+                            application_user_registration_token_wrong_enter_tries_quantity: application_user_registration_token_.wrong_enter_tries_quantity
+                        }
+                    ),
                 },
             );
         }
@@ -306,6 +310,8 @@ r#enum!(
         CommonPrecedent::ApplicationUserRegistrationToken_NotFound,
         CommonPrecedent::ApplicationUserRegistrationToken_AlreadyExpired,
         CommonPrecedent::ApplicationUserRegistrationToken_AlreadyApproved,
-        CommonPrecedent::ApplicationUserRegistrationToken_WrongValue,
+        CommonPrecedent::ApplicationUserRegistrationToken_WrongValue {
+            application_user_registration_token_wrong_enter_tries_quantity: ApplicationUserRegistrationToken_WrongEnterTriesQuantity,
+        },
     }
 );

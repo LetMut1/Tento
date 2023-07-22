@@ -239,7 +239,11 @@ impl ActionProcessor {
 
             return Ok(
                 InvalidArgumentResult::Ok {
-                    subject: UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_WrongValue),
+                    subject: UnifiedReport::precedent(
+                        Precedent::ApplicationUserResetPasswordToken_WrongValue {
+                            application_user_reset_password_token_wrong_enter_tries_quantity: application_user_reset_password_token_.wrong_enter_tries_quantity,
+                        }
+                    ),
                 },
             );
         }
@@ -291,6 +295,8 @@ r#enum!(
         CommonPrecedent::ApplicationUserResetPasswordToken_NotFound,
         CommonPrecedent::ApplicationUserResetPasswordToken_AlreadyExpired,
         CommonPrecedent::ApplicationUserResetPasswordToken_AlreadyApproved,
-        CommonPrecedent::ApplicationUserResetPasswordToken_WrongValue,
+        CommonPrecedent::ApplicationUserResetPasswordToken_WrongValue {
+            application_user_reset_password_token_wrong_enter_tries_quantity: ApplicationUserResetPasswordToken_WrongEnterTriesQuantity,
+        },
     }
 );

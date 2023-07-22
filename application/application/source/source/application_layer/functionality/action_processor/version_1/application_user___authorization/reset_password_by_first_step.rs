@@ -198,6 +198,7 @@ impl ActionProcessor {
         let (
             application_user_reset_password_token_value,
             application_user_reset_password_token_can_be_resent_from,
+            application_user_reset_password_token_wrong_enter_tries_quantity,
             can_send
         ) = match application_user_reset_password_token {
             Some(mut application_user_reset_password_token_) => {
@@ -329,6 +330,7 @@ impl ActionProcessor {
                 (
                     application_user_reset_password_token_.value,
                     application_user_reset_password_token_.can_be_resent_from,
+                    application_user_reset_password_token_.wrong_enter_tries_quantity,
                     can_send_,
                 )
             }
@@ -394,6 +396,7 @@ impl ActionProcessor {
                 (
                     application_user_reset_password_token_.value,
                     application_user_reset_password_token_.can_be_resent_from,
+                    application_user_reset_password_token_.wrong_enter_tries_quantity,
                     true,
                 )
             }
@@ -421,6 +424,8 @@ impl ActionProcessor {
             application_user_id: application_user_.id,
             verification_message_sent: can_send,
             application_user_reset_password_token_can_be_resent_from,
+            application_user_reset_password_token_wrong_enter_tries_quantity,
+            application_user_reset_password_token_wrong_enter_tries_quantity_limit: ApplicationUserResetPasswordToken_WrongEnterTriesQuantity::LIMIT,
         };
 
         return Ok(
@@ -452,6 +457,8 @@ pub struct Outcoming {
     application_user_id: ApplicationUser_Id,
     verification_message_sent: bool,
     application_user_reset_password_token_can_be_resent_from: ApplicationUserResetPasswordToken_CanBeResentFrom,
+    application_user_reset_password_token_wrong_enter_tries_quantity: ApplicationUserResetPasswordToken_WrongEnterTriesQuantity,
+    application_user_reset_password_token_wrong_enter_tries_quantity_limit: i16,
 }
 
 r#enum!(
