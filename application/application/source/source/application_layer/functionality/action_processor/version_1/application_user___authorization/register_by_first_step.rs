@@ -191,7 +191,11 @@ impl ActionProcessor {
             }
         };
 
-        let (application_user_registration_token_aggregator, can_send) = match application_user_registration_token {
+        let (
+            application_user_registration_token_value,
+            application_user_registration_token_can_be_resent_from,
+            can_send,
+        ) = match application_user_registration_token {
             Some(mut application_user_registration_token_) => {
                 let (can_send_, need_to_update_1) = if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token_.can_be_resent_from.0) {
                     application_user_registration_token_.can_be_resent_from = match Generator::<ApplicationUserRegistrationToken_CanBeResentFrom>::generate() {
@@ -319,9 +323,8 @@ impl ActionProcessor {
                 }
 
                 (
-                    ApplicationUserRegistrationToken_Aggregator::Second {
-                        application_user_registration_token: application_user_registration_token_,
-                    },
+                    application_user_registration_token_.value,
+                    application_user_registration_token_.can_be_resent_from,
                     can_send_,
                 )
             }
@@ -385,26 +388,16 @@ impl ActionProcessor {
                 };
 
                 (
-                    ApplicationUserRegistrationToken_Aggregator::First {
-                        application_user_registration_token: application_user_registration_token_,
-                    },
+                    application_user_registration_token_.value,
+                    application_user_registration_token_.can_be_resent_from,
                     true,
                 )
             }
         };
 
         if can_send {
-            let application_user_registration_token_value = match application_user_registration_token_aggregator {
-                ApplicationUserRegistrationToken_Aggregator::First {
-                    application_user_registration_token: ref application_user_registration_token_,
-                } => &application_user_registration_token_.value,
-                ApplicationUserRegistrationToken_Aggregator::Second {
-                    application_user_registration_token: ref application_user_registration_token_,
-                } => &application_user_registration_token_.value,
-            };
-
             if let Err(mut error) = EmailSender::<ApplicationUserRegistrationToken<'_>>::send(
-                application_user_registration_token_value,
+                &application_user_registration_token_value,
                 &incoming.application_user_email,
                 &incoming.application_user_device_id,
             ) {
@@ -419,15 +412,6 @@ impl ActionProcessor {
                 return Err(error);
             }
         }
-
-        let application_user_registration_token_can_be_resent_from = match application_user_registration_token_aggregator {
-            ApplicationUserRegistrationToken_Aggregator::First {
-                application_user_registration_token: ref application_user_registration_token_,
-            } => application_user_registration_token_.can_be_resent_from,
-            ApplicationUserRegistrationToken_Aggregator::Second {
-                application_user_registration_token: ref application_user_registration_token_,
-            } => application_user_registration_token_.can_be_resent_from,
-        };
 
         let outcoming = Outcoming {
             verification_message_sent: can_send,
@@ -469,12 +453,3 @@ r#enum!(
         CommonPrecedent::ApplicationUser_EmailAlreadyExist,
     }
 );
-
-enum ApplicationUserRegistrationToken_Aggregator<'a> {
-    First {
-        application_user_registration_token: ApplicationUserRegistrationToken<'a>,
-    },
-    Second {
-        application_user_registration_token: ApplicationUserRegistrationToken1,
-    },
-}

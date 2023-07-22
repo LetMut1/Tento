@@ -195,7 +195,11 @@ impl ActionProcessor {
             }
         };
 
-        let (application_user_reset_password_token_aggregator, can_send) = match application_user_reset_password_token {
+        let (
+            application_user_reset_password_token_value,
+            application_user_reset_password_token_can_be_resent_from,
+            can_send
+        ) = match application_user_reset_password_token {
             Some(mut application_user_reset_password_token_) => {
                 let (can_send_, need_to_update_1) = if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_reset_password_token_.can_be_resent_from.0) {
                     application_user_reset_password_token_.can_be_resent_from = match Generator::<ApplicationUserResetPasswordToken_CanBeResentFrom>::generate() {
@@ -323,9 +327,8 @@ impl ActionProcessor {
                 }
 
                 (
-                    ApplicationUserResetPasswordToken_Aggregator::Second {
-                        application_user_reset_password_token: application_user_reset_password_token_,
-                    },
+                    application_user_reset_password_token_.value,
+                    application_user_reset_password_token_.can_be_resent_from,
                     can_send_,
                 )
             }
@@ -389,26 +392,16 @@ impl ActionProcessor {
                 };
 
                 (
-                    ApplicationUserResetPasswordToken_Aggregator::First {
-                        application_user_reset_password_token: application_user_reset_password_token_,
-                    },
+                    application_user_reset_password_token_.value,
+                    application_user_reset_password_token_.can_be_resent_from,
                     true,
                 )
             }
         };
 
         if can_send {
-            let application_user_reset_password_token_value = match application_user_reset_password_token_aggregator {
-                ApplicationUserResetPasswordToken_Aggregator::First {
-                    application_user_reset_password_token: ref application_user_reset_password_token_,
-                } => &application_user_reset_password_token_.value,
-                ApplicationUserResetPasswordToken_Aggregator::Second {
-                    application_user_reset_password_token: ref application_user_reset_password_token_,
-                } => &application_user_reset_password_token_.value,
-            };
-
             if let Err(mut error) = EmailSender::<ApplicationUserResetPasswordToken<'_>>::send(
-                application_user_reset_password_token_value,
+                &application_user_reset_password_token_value,
                 &incoming.application_user_email,
                 &incoming.application_user_device_id,
             ) {
@@ -423,15 +416,6 @@ impl ActionProcessor {
                 return Err(error);
             }
         }
-
-        let application_user_reset_password_token_can_be_resent_from = match application_user_reset_password_token_aggregator {
-            ApplicationUserResetPasswordToken_Aggregator::First {
-                application_user_reset_password_token: ref application_user_reset_password_token_,
-            } => application_user_reset_password_token_.can_be_resent_from,
-            ApplicationUserResetPasswordToken_Aggregator::Second {
-                application_user_reset_password_token: ref application_user_reset_password_token_,
-            } => application_user_reset_password_token_.can_be_resent_from,
-        };
 
         let outcoming = Outcoming {
             application_user_id: application_user_.id,
@@ -475,12 +459,3 @@ r#enum!(
         CommonPrecedent::ApplicationUser_NotFound,
     }
 );
-
-enum ApplicationUserResetPasswordToken_Aggregator<'a> {
-    First {
-        application_user_reset_password_token: ApplicationUserResetPasswordToken<'a>,
-    },
-    Second {
-        application_user_reset_password_token: ApplicationUserResetPasswordToken1,
-    },
-}
