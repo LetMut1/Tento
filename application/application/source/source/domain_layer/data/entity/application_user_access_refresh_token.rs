@@ -19,6 +19,10 @@ pub struct ObfuscationValue(pub String);
 #[serde(transparent)]
 pub struct ExpiresAt(pub i64);
 
+impl ExpiresAt {
+    pub const QUANTITY_OF_MINUTES_FOR_EXPIRATION: i64 = 60 * 24 * 30 * 3;
+}
+
 #[derive(Clone, Copy, Serialize, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
@@ -33,10 +37,6 @@ pub struct ApplicationUserAccessRefreshToken<'a> {
     pub obfuscation_value: ObfuscationValue,
     pub expires_at: ExpiresAt,
     pub updated_at: UpdatedAt,
-}
-
-impl<'a> ApplicationUserAccessRefreshToken<'a> {
-    pub const QUANTITY_OF_MINUTES_FOR_EXPIRATION: i64 = 60 * 24 * 30 * 3;
 }
 
 pub struct ApplicationUserAccessRefreshToken1 {

@@ -309,6 +309,7 @@ impl ActionProcessor {
         let (
             application_user_authorization_token_value,
             application_user_authorization_token_can_be_resent_from,
+            application_user_authorization_token_wrong_enter_tries_quantity,
             can_send,
         ) = match application_user_authorization_token {
             Some(mut application_user_authorization_token_) => {
@@ -436,6 +437,7 @@ impl ActionProcessor {
                 (
                     application_user_authorization_token_.value,
                     application_user_authorization_token_.can_be_resent_from,
+                    application_user_authorization_token_.wrong_enter_tries_quantity,
                     can_send_,
                 )
             }
@@ -500,10 +502,42 @@ impl ActionProcessor {
                 (
                     application_user_authorization_token_.value,
                     application_user_authorization_token_.can_be_resent_from,
+                    application_user_authorization_token_.wrong_enter_tries_quantity,
                     true,
                 )
             }
         };
+
+        let application_user_authorization_token_remaining_enter_tries_quantity = match ApplicationUserAuthorizationToken_WrongEnterTriesQuantity::LIMIT.checked_sub(application_user_authorization_token_wrong_enter_tries_quantity.0) {
+            Some(application_user_authorization_token_remaining_enter_tries_quantity_) => application_user_authorization_token_remaining_enter_tries_quantity_,
+            None => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::create_out_of_range(),
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+        };
+
+        if application_user_authorization_token_remaining_enter_tries_quantity < 0 {
+            return Err(
+                ErrorAuditor::new(
+                    BaseError::LogicError {
+                        message: "The value should not be less than 0.",
+                    },
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                ),
+            );
+        }
 
         if can_send {
             if let Err(mut error) = EmailSender::<ApplicationUserAuthorizationToken<'_>>::send(
@@ -527,6 +561,7 @@ impl ActionProcessor {
             application_user_id,
             verification_message_sent: can_send,
             application_user_authorization_token_can_be_resent_from,
+            application_user_authorization_token_remaining_enter_tries_quantity,
         };
 
         return Ok(
@@ -559,6 +594,7 @@ pub struct Outcoming {
     application_user_id: ApplicationUser_Id,
     verification_message_sent: bool,
     application_user_authorization_token_can_be_resent_from: ApplicationUserAuthorizationToken_CanBeResentFrom,
+    application_user_authorization_token_remaining_enter_tries_quantity: i16
 }
 
 r#enum!(

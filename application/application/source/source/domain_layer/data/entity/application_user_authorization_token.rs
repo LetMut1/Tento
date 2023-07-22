@@ -25,8 +25,16 @@ impl Value {
 #[derive(Clone, Copy)]
 pub struct WrongEnterTriesQuantity(pub i16);
 
+impl WrongEnterTriesQuantity {
+    pub const LIMIT: i16 = 5;
+}
+
 #[derive(Clone, Copy)]
 pub struct ExpiresAt(pub i64);
+
+impl ExpiresAt {
+    pub const QUANTITY_OF_MINUTES_FOR_EXPIRATION: i64 = 10;
+}
 
 #[cfg_attr(
     feature = "manual_testing",
@@ -37,6 +45,10 @@ pub struct ExpiresAt(pub i64);
 #[serde(transparent)]
 pub struct CanBeResentFrom(pub i64);
 
+impl CanBeResentFrom {
+    pub const QUANTITY_OF_MINUTES_BEFORE_RESENDING: i64 = 1;
+}
+
 pub struct ApplicationUserAuthorizationToken<'a> {
     pub application_user_id: ApplicationUser_Id,
     pub application_user_device_id: Cow<'a, ApplicationUserDevice_Id>,
@@ -44,12 +56,6 @@ pub struct ApplicationUserAuthorizationToken<'a> {
     pub wrong_enter_tries_quantity: WrongEnterTriesQuantity,
     pub expires_at: ExpiresAt,
     pub can_be_resent_from: CanBeResentFrom,
-}
-
-impl<'a> ApplicationUserAuthorizationToken<'a> {
-    pub const QUANTITY_OF_MINUTES_BEFORE_RESENDING: i64 = 1;
-    pub const QUANTITY_OF_MINUTES_FOR_EXPIRATION: i64 = 10;
-    pub const WRONG_ENTER_TRIES_QUANTITY_LIMIT: i16 = 5;
 }
 
 pub struct ApplicationUserAuthorizationToken1 {

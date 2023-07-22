@@ -17,6 +17,10 @@ pub struct Id(pub String);
 #[serde(transparent)]
 pub struct ExpiresAt(pub i64);
 
+impl ExpiresAt {
+    pub const QUANTITY_OF_MINUTES_FOR_EXPIRATION: i64 = 30;
+}
+
 #[derive(Serialize, Deserialize)]
 #[serde(crate = "extern_crate::serde")]
 pub struct ApplicationUserAccessToken<'a> {
@@ -24,8 +28,4 @@ pub struct ApplicationUserAccessToken<'a> {
     pub application_user_id: ApplicationUser_Id,
     pub application_user_device_id: Cow<'a, ApplicationUserDevice_Id>,
     pub expires_at: ExpiresAt,
-}
-
-impl<'a> ApplicationUserAccessToken<'a> {
-    pub const QUANTITY_OF_MINUTES_FOR_EXPIRATION: i64 = 30;
 }
