@@ -36,8 +36,6 @@ impl PostgresqlRepository<Channel<'_>> {
         database_1_connection: &'a Connection,
         insert_7: Insert7,
     ) -> Result<Channel<'static>, ErrorAuditor> {
-        let channel_owner = insert_7.channel_owner.0;
-
         let channel_name = insert_7.channel_name.0.as_str();
 
         let channel_linked_name = insert_7.channel_linked_name.0.as_str();
@@ -46,10 +44,6 @@ impl PostgresqlRepository<Channel<'_>> {
             Some(ref channel_description_) => Some(channel_description_.0.as_str()),
             None => None,
         };
-
-        let channel_access_modifier = insert_7.channel_access_modifier.0;
-
-        let channel_visability_modifier = insert_7.channel_visability_modifier.0;
 
         let channel_orientation = insert_7.channel_orientation.0.as_slice();
 
@@ -62,12 +56,6 @@ impl PostgresqlRepository<Channel<'_>> {
             Some(ref channel_background_image_path_) => Some(channel_background_image_path_.0.as_str()),
             None => None,
         };
-
-        let channel_subscribers_quantity = insert_7.channel_subscribers_quantity.0;
-
-        let channel_marks_quantity = insert_7.channel_marks_quantity.0;
-
-        let channel_viewing_quantity = insert_7.channel_viewing_quantity.0;
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -109,7 +97,7 @@ impl PostgresqlRepository<Channel<'_>> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &channel_owner,
+                &insert_7.channel_owner.0,
                 Type::INT8,
             )
             .add_parameter(
@@ -125,11 +113,11 @@ impl PostgresqlRepository<Channel<'_>> {
                 Type::TEXT,
             )
             .add_parameter(
-                &channel_access_modifier,
+                &insert_7.channel_access_modifier.0,
                 Type::INT2,
             )
             .add_parameter(
-                &channel_visability_modifier,
+                &insert_7.channel_visability_modifier.0,
                 Type::INT2,
             )
             .add_parameter(
@@ -145,15 +133,15 @@ impl PostgresqlRepository<Channel<'_>> {
                 Type::TEXT,
             )
             .add_parameter(
-                &channel_subscribers_quantity,
+                &insert_7.channel_subscribers_quantity.0,
                 Type::INT8,
             )
             .add_parameter(
-                &channel_marks_quantity,
+                &insert_7.channel_marks_quantity.0,
                 Type::INT8,
             )
             .add_parameter(
-                &channel_viewing_quantity,
+                &insert_7.channel_viewing_quantity.0,
                 Type::INT8,
             );
 
@@ -264,8 +252,8 @@ impl PostgresqlRepository<Channel<'_>> {
                 name: Cow::Owned(insert_7.channel_name),
                 linked_name: insert_7.channel_linked_name,
                 description: insert_7.channel_description,
-                access_modifier: Channel_AccessModifier(channel_access_modifier),
-                visability_modifier: Channel_VisabilityModifier(channel_visability_modifier),
+                access_modifier: insert_7.channel_access_modifier,
+                visability_modifier: insert_7.channel_visability_modifier,
                 orientation: insert_7.channel_orientation,
                 cover_image_path: insert_7.channel_cover_image_path,
                 background_image_path: insert_7.channel_background_image_path,
@@ -281,8 +269,6 @@ impl PostgresqlRepository<Channel<'_>> {
         database_1_connection: &'a Connection,
         by_6: &'a By6,
     ) -> Result<Option<Channel<'static>>, ErrorAuditor> {
-        let channel_id = by_6.channel_id.0;
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
@@ -304,7 +290,7 @@ impl PostgresqlRepository<Channel<'_>> {
             WHERE c.id = $1;";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(
-            &channel_id,
+            &by_6.channel_id.0,
             Type::INT8,
         );
 

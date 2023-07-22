@@ -22,10 +22,6 @@ impl PostgresqlRepository<ChannelInnerLink> {
         database_1_connection: &'a Connection,
         insert_8: Insert8,
     ) -> Result<ChannelInnerLink, ErrorAuditor> {
-        let channel_inner_link_from = insert_8.channel_inner_link_from.0;
-
-        let channel_inner_link_to = insert_8.channel_inner_link_to.0;
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
@@ -43,11 +39,11 @@ impl PostgresqlRepository<ChannelInnerLink> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &channel_inner_link_from,
+                &insert_8.channel_inner_link_from.0,
                 Type::INT8,
             )
             .add_parameter(
-                &channel_inner_link_to,
+                &insert_8.channel_inner_link_to.0,
                 Type::INT8,
             );
 
@@ -143,8 +139,6 @@ impl PostgresqlRepository<ChannelInnerLink> {
         by_8: &'a By8,
         limit: i16,
     ) -> Result<Vec<ChannelInnerLink1>, ErrorAuditor> {
-        let channel_inner_link_from = by_8.channel_inner_link_from.0;
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
@@ -156,7 +150,7 @@ impl PostgresqlRepository<ChannelInnerLink> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &channel_inner_link_from,
+                &by_8.channel_inner_link_from.0,
                 Type::INT8,
             )
             .add_parameter(

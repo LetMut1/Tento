@@ -30,8 +30,6 @@ impl PostgresqlRepository<Common1> {
         by_11: &'a By11<'_>,
         limit: i16,
     ) -> Result<Vec<Common1>, ErrorAuditor> {
-        let application_user_id = by_11.application_user_id.0;
-
         let channel_name = by_11.channel_name.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -87,8 +85,6 @@ impl PostgresqlRepository<Common1> {
             }
         };
 
-        let channel_visability_modifier = by_11.channel_visability_modifier.0;
-
         let mut query = format!(
             "SELECT \
                 c.id AS i, \
@@ -111,11 +107,11 @@ impl PostgresqlRepository<Common1> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &application_user_id,
+                &by_11.application_user_id.0,
                 Type::INT8,
             )
             .add_parameter(
-                &channel_visability_modifier,
+                &by_11.channel_visability_modifier.0,
                 Type::INT2,
             )
             .add_parameter(
@@ -445,8 +441,6 @@ impl PostgresqlRepository<Common1> {
         by_12: &'a By12<'_>,
         limit: i16,
     ) -> Result<Vec<Common1>, ErrorAuditor> {
-        let application_user_id = by_12.application_user_id.0;
-
         let channel_name = by_12.channel_name.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -507,7 +501,7 @@ impl PostgresqlRepository<Common1> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &application_user_id,
+                &by_12.application_user_id.0,
                 Type::INT8,
             )
             .add_parameter(
@@ -832,8 +826,6 @@ impl PostgresqlRepository<Common1> {
         by_13: &'a By13,
         limit: i16,
     ) -> Result<Vec<Common1>, ErrorAuditor> {
-        let application_user_id = by_13.application_user_id.0;
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let mut counter = Counter::<i16>::new_classic();
@@ -868,7 +860,7 @@ impl PostgresqlRepository<Common1> {
         );
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(
-            &application_user_id,
+            &by_13.application_user_id.0,
             Type::INT8,
         );
 

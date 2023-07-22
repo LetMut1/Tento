@@ -23,9 +23,8 @@ impl PostgresqlRepository<ChannelOuterLink> {
         database_1_connection: &'a Connection,
         insert_9: Insert9,
     ) -> Result<ChannelOuterLink, ErrorAuditor> {
-        let channel_outer_link_from = insert_9.channel_outer_link_from.0;
-
         let channel_outer_link_alias = insert_9.channel_outer_link_alias.0.as_str();
+
         let channel_outer_link_address = insert_9.channel_outer_link_address.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -47,7 +46,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &channel_outer_link_from,
+                &insert_9.channel_outer_link_from.0,
                 Type::INT8,
             )
             .add_parameter(
@@ -152,8 +151,6 @@ impl PostgresqlRepository<ChannelOuterLink> {
         by_9: &'a By9,
         limit: i16,
     ) -> Result<Vec<ChannelOuterLink1>, ErrorAuditor> {
-        let channel_outer_link_from = by_9.channel_outer_link_from.0;
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
@@ -166,7 +163,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &channel_outer_link_from,
+                &by_9.channel_outer_link_from.0,
                 Type::INT8,
             )
             .add_parameter(

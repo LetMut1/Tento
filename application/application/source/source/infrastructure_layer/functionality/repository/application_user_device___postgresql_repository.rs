@@ -15,8 +15,6 @@ impl PostgresqlRepository<ApplicationUserDevice> {
         database_1_connection: &'a Connection,
         insert_4: Insert4,
     ) -> Result<ApplicationUserDevice, ErrorAuditor> {
-        let application_user_id = insert_4.application_user_id.0;
-
         let application_user_device_id = insert_4.application_user_device_id.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -37,7 +35,7 @@ impl PostgresqlRepository<ApplicationUserDevice> {
                 Type::TEXT,
             )
             .add_parameter(
-                &application_user_id,
+                &insert_4.application_user_id.0,
                 Type::INT8,
             );
 

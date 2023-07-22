@@ -39,14 +39,6 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
 
         let application_user_registration_token_value = insert_5.application_user_registration_token_value.0.as_str();
 
-        let application_user_registration_token_wrong_enter_tries_quantity = insert_5.application_user_registration_token_wrong_enter_tries_quantity.0;
-
-        let application_user_registration_token_is_approved = insert_5.application_user_registration_token_is_approved.0;
-
-        let application_user_registration_token_expires_at = insert_5.application_user_registration_token_expires_at.0;
-
-        let application_user_registration_token_can_be_resent_from = insert_5.application_user_registration_token_can_be_resent_from.0;
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
@@ -82,19 +74,19 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
                 Type::TEXT,
             )
             .add_parameter(
-                &application_user_registration_token_wrong_enter_tries_quantity,
+                &insert_5.application_user_registration_token_wrong_enter_tries_quantity.0,
                 Type::INT2,
             )
             .add_parameter(
-                &application_user_registration_token_is_approved,
+                &insert_5.application_user_registration_token_is_approved.0,
                 Type::BOOL,
             )
             .add_parameter(
-                &application_user_registration_token_expires_at,
+                &insert_5.application_user_registration_token_expires_at.0,
                 Type::INT8,
             )
             .add_parameter(
-                &application_user_registration_token_can_be_resent_from,
+                &insert_5.application_user_registration_token_can_be_resent_from.0,
                 Type::INT8,
             );
 
@@ -257,14 +249,6 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
 
         let application_user_registration_token_value = update_7.application_user_registration_token_value.0.as_str();
 
-        let application_user_registration_token_wrong_enter_tries_quantity = update_7.application_user_registration_token_wrong_enter_tries_quantity.0;
-
-        let application_user_registration_token_is_approved = update_7.application_user_registration_token_is_approved.0;
-
-        let application_user_registration_token_expires_at = update_7.application_user_registration_token_expires_at.0;
-
-        let application_user_registration_token_can_be_resent_from = update_7.application_user_registration_token_can_be_resent_from.0;
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
@@ -290,19 +274,19 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
                 Type::TEXT,
             )
             .add_parameter(
-                &application_user_registration_token_wrong_enter_tries_quantity,
+                &update_7.application_user_registration_token_wrong_enter_tries_quantity.0,
                 Type::INT2,
             )
             .add_parameter(
-                &application_user_registration_token_is_approved,
+                &update_7.application_user_registration_token_is_approved.0,
                 Type::BOOL,
             )
             .add_parameter(
-                &application_user_registration_token_expires_at,
+                &update_7.application_user_registration_token_expires_at.0,
                 Type::INT8,
             )
             .add_parameter(
-                &application_user_registration_token_can_be_resent_from,
+                &update_7.application_user_registration_token_can_be_resent_from.0,
                 Type::INT8,
             )
             .add_parameter(
@@ -594,8 +578,6 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken2> {
 
         let application_user_device_id = by_5.application_user_device_id.0.as_str();
 
-        let application_user_registration_token_can_be_resent_from = update_8.application_user_registration_token_can_be_resent_from.0;
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
@@ -609,7 +591,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken2> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &application_user_registration_token_can_be_resent_from,
+                &update_8.application_user_registration_token_can_be_resent_from.0,
                 Type::INT8,
             )
             .add_parameter(
@@ -690,12 +672,6 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
 
         let application_user_registration_token_value = update_9.application_user_registration_token_value.0.as_str();
 
-        let application_user_registration_token_wrong_enter_tries_quantity = update_9.application_user_registration_token_wrong_enter_tries_quantity.0;
-
-        let application_user_registration_token_is_approved = update_9.application_user_registration_token_is_approved.0;
-
-        let application_user_registration_token_expires_at = update_9.application_user_registration_token_expires_at.0;
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
@@ -719,15 +695,15 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
                 Type::TEXT,
             )
             .add_parameter(
-                &application_user_registration_token_wrong_enter_tries_quantity,
+                &update_9.application_user_registration_token_wrong_enter_tries_quantity.0,
                 Type::INT2,
             )
             .add_parameter(
-                &application_user_registration_token_is_approved,
+                &update_9.application_user_registration_token_is_approved.0,
                 Type::BOOL,
             )
             .add_parameter(
-                &application_user_registration_token_expires_at,
+                &update_9.application_user_registration_token_expires_at.0,
                 Type::INT8,
             )
             .add_parameter(
@@ -995,8 +971,6 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken4> {
 
         let application_user_device_id = by_5.application_user_device_id.0.as_str();
 
-        let application_user_registration_token_wrong_enter_tries_quantity = update_10.application_user_registration_token_wrong_enter_tries_quantity.0;
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
@@ -1010,7 +984,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken4> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &application_user_registration_token_wrong_enter_tries_quantity,
+                &update_10.application_user_registration_token_wrong_enter_tries_quantity.0,
                 Type::INT2,
             )
             .add_parameter(
@@ -1089,8 +1063,6 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken5> {
 
         let application_user_device_id = by_5.application_user_device_id.0.as_str();
 
-        let application_user_registration_token_is_approved = update_11.application_user_registration_token_is_approved.0;
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
@@ -1104,7 +1076,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken5> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &application_user_registration_token_is_approved,
+                &update_11.application_user_registration_token_is_approved.0,
                 Type::BOOL,
             )
             .add_parameter(

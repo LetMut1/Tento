@@ -21,8 +21,6 @@ impl PostgresqlRepository<ActionRoundRegister<'_>> {
 
         let action_round_register_method = insert_11.action_round_register_method.0.as_ref();
 
-        let action_round_register_status_code = insert_11.action_round_register_status_code.0;
-
         let action_round_register_context = match insert_11.action_round_register_context {
             Some(ref action_round_register_context_) => Some(action_round_register_context_.0.as_str()),
             None => None,
@@ -53,7 +51,7 @@ impl PostgresqlRepository<ActionRoundRegister<'_>> {
                 Type::TEXT,
             )
             .add_parameter(
-                &action_round_register_status_code,
+                &insert_11.action_round_register_status_code.0,
                 Type::INT2,
             )
             .add_parameter(

@@ -17,10 +17,6 @@ impl PostgresqlRepository<ChannelSubscription> {
         database_1_connection: &'a Connection,
         insert_10: Insert10,
     ) -> Result<ChannelSubscription, ErrorAuditor> {
-        let application_user_id = insert_10.application_user_id.0;
-
-        let channel_id = insert_10.channel_id.0;
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
@@ -38,11 +34,11 @@ impl PostgresqlRepository<ChannelSubscription> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &application_user_id,
+                &insert_10.application_user_id.0,
                 Type::INT8,
             )
             .add_parameter(
-                &channel_id,
+                &insert_10.channel_id.0,
                 Type::INT8,
             );
 
@@ -137,10 +133,6 @@ impl PostgresqlRepository<ChannelSubscription> {
         database_1_connection: &'a Connection,
         by_10: &'a By10,
     ) -> Result<bool, ErrorAuditor> {
-        let application_user_id = by_10.application_user_id.0;
-
-        let channel_id = by_10.channel_id.0;
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
@@ -151,11 +143,11 @@ impl PostgresqlRepository<ChannelSubscription> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &application_user_id,
+                &by_10.application_user_id.0,
                 Type::INT8,
             )
             .add_parameter(
-                &channel_id,
+                &by_10.channel_id.0,
                 Type::INT8,
             );
 

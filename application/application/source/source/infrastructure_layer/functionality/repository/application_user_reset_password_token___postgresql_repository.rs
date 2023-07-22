@@ -33,19 +33,9 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
         database_2_connection: &'a Connection,
         insert_6: Insert6<'a>,
     ) -> Result<ApplicationUserResetPasswordToken<'a>, ErrorAuditor> {
-        let application_user_id = insert_6.application_user_id.0;
-
         let application_user_device_id = insert_6.application_user_device_id.0.as_str();
 
         let application_user_reset_password_token_value = insert_6.application_user_reset_password_token_value.0.as_str();
-
-        let application_user_reset_password_token_wrong_enter_tries_quantity = insert_6.application_user_reset_password_token_wrong_enter_tries_quantity.0;
-
-        let application_user_reset_password_token_is_approved = insert_6.application_user_reset_password_token_is_approved.0;
-
-        let application_user_reset_password_token_expires_at = insert_6.application_user_reset_password_token_expires_at.0;
-
-        let application_user_reset_password_token_can_be_resent_from = insert_6.application_user_reset_password_token_can_be_resent_from.0;
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -70,7 +60,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &application_user_id,
+                &insert_6.application_user_id.0,
                 Type::INT8,
             )
             .add_parameter(
@@ -82,19 +72,19 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
                 Type::TEXT,
             )
             .add_parameter(
-                &application_user_reset_password_token_wrong_enter_tries_quantity,
+                &insert_6.application_user_reset_password_token_wrong_enter_tries_quantity.0,
                 Type::INT2,
             )
             .add_parameter(
-                &application_user_reset_password_token_is_approved,
+                &insert_6.application_user_reset_password_token_is_approved.0,
                 Type::BOOL,
             )
             .add_parameter(
-                &application_user_reset_password_token_expires_at,
+                &insert_6.application_user_reset_password_token_expires_at.0,
                 Type::INT8,
             )
             .add_parameter(
-                &application_user_reset_password_token_can_be_resent_from,
+                &insert_6.application_user_reset_password_token_can_be_resent_from.0,
                 Type::INT8,
             );
 
@@ -168,8 +158,6 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
         database_2_connection: &'a Connection,
         by_4: &'a By4<'_>,
     ) -> Result<(), ErrorAuditor> {
-        let application_user_id = by_4.application_user_id.0;
-
         let application_user_device_id = by_4.application_user_device_id.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -180,7 +168,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &application_user_id,
+                &by_4.application_user_id.0,
                 Type::INT8,
             )
             .add_parameter(
@@ -251,19 +239,9 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken1> {
         update_12: &'a Update12<'_>,
         by_4: &'a By4<'_>,
     ) -> Result<(), ErrorAuditor> {
-        let application_user_id = by_4.application_user_id.0;
-
         let application_user_device_id = by_4.application_user_device_id.0.as_str();
 
         let application_user_reset_password_token_value = update_12.application_user_reset_password_token_value.0.as_str();
-
-        let application_user_reset_password_token_wrong_enter_tries_quantity = update_12.application_user_reset_password_token_wrong_enter_tries_quantity.0;
-
-        let application_user_reset_password_token_is_approved = update_12.application_user_reset_password_token_is_approved.0;
-
-        let application_user_reset_password_token_expires_at = update_12.application_user_reset_password_token_expires_at.0;
-
-        let application_user_reset_password_token_can_be_resent_from = update_12.application_user_reset_password_token_can_be_resent_from.0;
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -290,23 +268,23 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken1> {
                 Type::TEXT,
             )
             .add_parameter(
-                &application_user_reset_password_token_wrong_enter_tries_quantity,
+                &update_12.application_user_reset_password_token_wrong_enter_tries_quantity.0,
                 Type::INT2,
             )
             .add_parameter(
-                &application_user_reset_password_token_is_approved,
+                &update_12.application_user_reset_password_token_is_approved.0,
                 Type::BOOL,
             )
             .add_parameter(
-                &application_user_reset_password_token_expires_at,
+                &update_12.application_user_reset_password_token_expires_at.0,
                 Type::INT8,
             )
             .add_parameter(
-                &application_user_reset_password_token_can_be_resent_from,
+                &update_12.application_user_reset_password_token_can_be_resent_from.0,
                 Type::INT8,
             )
             .add_parameter(
-                &application_user_id,
+                &by_4.application_user_id.0,
                 Type::INT8,
             )
             .add_parameter(
@@ -374,8 +352,6 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken1> {
         database_2_connection: &'a Connection,
         by_4: &'a By4<'_>,
     ) -> Result<Option<ApplicationUserResetPasswordToken1>, ErrorAuditor> {
-        let application_user_id = by_4.application_user_id.0;
-
         let application_user_device_id = by_4.application_user_device_id.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -392,7 +368,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken1> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &application_user_id,
+                &by_4.application_user_id.0,
                 Type::INT8,
             )
             .add_parameter(
@@ -590,11 +566,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken2> {
         update_13: &'a Update13,
         by_4: &'a By4<'_>,
     ) -> Result<(), ErrorAuditor> {
-        let application_user_id = by_4.application_user_id.0;
-
         let application_user_device_id = by_4.application_user_device_id.0.as_str();
-
-        let application_user_reset_password_token_can_be_resent_from = update_13.application_user_reset_password_token_can_be_resent_from.0;
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -609,11 +581,11 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken2> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &application_user_reset_password_token_can_be_resent_from,
+                &update_13.application_user_reset_password_token_can_be_resent_from.0,
                 Type::INT8,
             )
             .add_parameter(
-                &application_user_id,
+                &by_4.application_user_id.0,
                 Type::INT8,
             )
             .add_parameter(
@@ -684,17 +656,9 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken3> {
         update_14: &'a Update14<'_>,
         by_4: &'a By4<'_>,
     ) -> Result<(), ErrorAuditor> {
-        let application_user_id = by_4.application_user_id.0;
-
         let application_user_device_id = by_4.application_user_device_id.0.as_str();
 
         let application_user_reset_password_token_value = update_14.application_user_reset_password_token_value.0.as_str();
-
-        let application_user_reset_password_token_wrong_enter_tries_quantity = update_14.application_user_reset_password_token_wrong_enter_tries_quantity.0;
-
-        let application_user_reset_password_token_is_approved = update_14.application_user_reset_password_token_is_approved.0;
-
-        let application_user_reset_password_token_expires_at = update_14.application_user_reset_password_token_expires_at.0;
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -719,19 +683,19 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken3> {
                 Type::TEXT,
             )
             .add_parameter(
-                &application_user_reset_password_token_wrong_enter_tries_quantity,
+                &update_14.application_user_reset_password_token_wrong_enter_tries_quantity.0,
                 Type::INT2,
             )
             .add_parameter(
-                &application_user_reset_password_token_is_approved,
+                &update_14.application_user_reset_password_token_is_approved.0,
                 Type::BOOL,
             )
             .add_parameter(
-                &application_user_reset_password_token_expires_at,
+                &update_14.application_user_reset_password_token_expires_at.0,
                 Type::INT8,
             )
             .add_parameter(
-                &application_user_id,
+                &by_4.application_user_id.0,
                 Type::INT8,
             )
             .add_parameter(
@@ -799,8 +763,6 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken3> {
         database_2_connection: &'a Connection,
         by_4: &'a By4<'_>,
     ) -> Result<Option<ApplicationUserResetPasswordToken3>, ErrorAuditor> {
-        let application_user_id = by_4.application_user_id.0;
-
         let application_user_device_id = by_4.application_user_device_id.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -816,7 +778,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken3> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &application_user_id,
+                &by_4.application_user_id.0,
                 Type::INT8,
             )
             .add_parameter(
@@ -991,11 +953,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken4> {
         update_15: &'a Update15,
         by_4: &'a By4<'_>,
     ) -> Result<(), ErrorAuditor> {
-        let application_user_id = by_4.application_user_id.0;
-
         let application_user_device_id = by_4.application_user_device_id.0.as_str();
-
-        let application_user_reset_password_token_wrong_enter_tries_quantity = update_15.application_user_reset_password_token_wrong_enter_tries_quantity.0;
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -1010,11 +968,11 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken4> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &application_user_reset_password_token_wrong_enter_tries_quantity,
+                &update_15.application_user_reset_password_token_wrong_enter_tries_quantity.0,
                 Type::INT2,
             )
             .add_parameter(
-                &application_user_id,
+                &by_4.application_user_id.0,
                 Type::INT8,
             )
             .add_parameter(
@@ -1085,11 +1043,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken5> {
         update_16: &'a Update16,
         by_4: &'a By4<'_>,
     ) -> Result<(), ErrorAuditor> {
-        let application_user_id = by_4.application_user_id.0;
-
         let application_user_device_id = by_4.application_user_device_id.0.as_str();
-
-        let application_user_reset_password_token_is_approved = update_16.application_user_reset_password_token_is_approved.0;
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -1104,11 +1058,11 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken5> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &application_user_reset_password_token_is_approved,
+                &update_16.application_user_reset_password_token_is_approved.0,
                 Type::BOOL,
             )
             .add_parameter(
-                &application_user_id,
+                &by_4.application_user_id.0,
                 Type::INT8,
             )
             .add_parameter(
@@ -1178,8 +1132,6 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken6> {
         database_2_connection: &'a Connection,
         by_4: &'a By4<'_>,
     ) -> Result<Option<ApplicationUserResetPasswordToken6>, ErrorAuditor> {
-        let application_user_id = by_4.application_user_id.0;
-
         let application_user_device_id = by_4.application_user_device_id.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -1195,7 +1147,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken6> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &application_user_id,
+                &by_4.application_user_id.0,
                 Type::INT8,
             )
             .add_parameter(

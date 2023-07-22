@@ -23,18 +23,23 @@ impl Creator<Response> {
     ) -> Response {
         // TODO Посмотреть, что за дефолтные ответ. НАстроить необходимое
         let mut header_map = HeaderMap::new();
+
         header_map.append(
             header::CONTENT_TYPE,
             HeaderValue::from_static(Self::HEADER_VALUE_CONTENT_TYPE),
         );
+
         header_map.append(
             header::X_CONTENT_TYPE_OPTIONS,
             HeaderValue::from_static(Self::HEADER_VALUE_X_CONTENT_TYPE_OPTIONS),
         );
 
         let mut parts = HyperResponse::new(()).into_parts().0;
+
         parts.status = status_code;
+
         parts.version = Version::HTTP_2;
+
         parts.headers = header_map;
 
         let body = match data {

@@ -351,8 +351,6 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         database_1_connection: &'a Connection,
         by_3: &'a By3,
     ) -> Result<bool, ErrorAuditor> {
-        let application_user_id = by_3.application_user_id.0;
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
@@ -362,7 +360,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             WHERE au.id = $1;";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(
-            &application_user_id,
+            &by_3.application_user_id.0,
             Type::INT8,
         );
 
@@ -1052,8 +1050,6 @@ impl PostgresqlRepository<ApplicationUser4> {
         update_1: &'a Update1<'_>,
         by_3: &'a By3,
     ) -> Result<(), ErrorAuditor> {
-        let application_user_id = by_3.application_user_id.0;
-
         let application_user_password_hash = update_1.application_user_password_hash.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -1075,7 +1071,7 @@ impl PostgresqlRepository<ApplicationUser4> {
                 Type::TEXT,
             )
             .add_parameter(
-                &application_user_id,
+                &by_3.application_user_id.0,
                 Type::INT8,
             );
 
@@ -1139,8 +1135,6 @@ impl PostgresqlRepository<ApplicationUser4> {
         database_1_connection: &'a Connection,
         by_3: &'a By3,
     ) -> Result<Option<ApplicationUser4>, ErrorAuditor> {
-        let application_user_id = by_3.application_user_id.0;
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
@@ -1152,7 +1146,7 @@ impl PostgresqlRepository<ApplicationUser4> {
             WHERE au.id = $1;";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(
-            &application_user_id,
+            &by_3.application_user_id.0,
             Type::INT8,
         );
 
@@ -1299,8 +1293,6 @@ impl PostgresqlRepository<ApplicationUser5> {
         database_1_connection: &'a Connection,
         by_3: &'a By3,
     ) -> Result<Option<ApplicationUser5>, ErrorAuditor> {
-        let application_user_id = by_3.application_user_id.0;
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
@@ -1310,7 +1302,7 @@ impl PostgresqlRepository<ApplicationUser5> {
             WHERE au.id = $1;";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(
-            &application_user_id,
+            &by_3.application_user_id.0,
             Type::INT8,
         );
 
