@@ -15,7 +15,7 @@ pub struct StatusCode(pub i16);
 
 pub struct Context(pub String);
 
-pub struct CreatedAt;
+pub struct CreatedAt(pub String);
 
 pub struct ActionRoundRegister<'a> {
     route: Route<'a>,

@@ -29,6 +29,10 @@ pub struct Id(pub i64);
 #[serde(transparent)]
 pub struct Name(pub String);
 
+impl Name {
+    pub const MAXIMUM_LENGTH: usize = 75;
+}
+
 #[cfg_attr(
     feature = "manual_testing",
     derive(Deserialize)
@@ -46,6 +50,10 @@ pub struct LinkedName(pub String);
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct Description(pub String);
+
+impl Description {
+    pub const MAXIMUM_LENGTH: usize = 500;
+}
 
 #[cfg_attr(
     feature = "manual_testing",

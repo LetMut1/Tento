@@ -24,6 +24,11 @@ pub struct Id(pub i64);
 #[serde(transparent)]
 pub struct Email(pub String);
 
+impl Email {
+    pub const REGULAR_EXPRESSION: &'static str = r#"(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])"#;
+    pub const MAXIMUM_LENGTH: usize = 320;
+}
+
 #[cfg_attr(
     feature = "manual_testing",
     derive(Serialize)
@@ -33,6 +38,10 @@ pub struct Email(pub String);
 #[serde(transparent)]
 pub struct Nickname(pub String);
 
+impl Nickname {
+    pub const MAXIMUM_LENGTH: usize = 55;
+}
+
 #[cfg_attr(
     feature = "manual_testing",
     derive(Serialize)
@@ -41,6 +50,11 @@ pub struct Nickname(pub String);
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct Password(pub String);
+
+impl Password {
+    pub const MINIMUM_LENGTH: usize = 7;
+    pub const MAXIMUM_LENGTH: usize = 65;   // TODO Нужна ли максимальная длина? // TODO TODO TODO TODO TODO усилить пароль (ввести обязательность цифр,  и так далее)
+}
 
 #[derive(Clone)]
 pub struct PasswordHash(pub String);

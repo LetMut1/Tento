@@ -18,6 +18,10 @@ pub use self::WrongEnterTriesQuantity as ApplicationUserAuthorizationToken_Wrong
 #[serde(transparent)]
 pub struct Value(pub String);
 
+impl Value {
+    pub const REGULAR_EXPRESSION: &'static str = r#"^[0-9]{6}$"#;
+}
+
 #[derive(Clone, Copy)]
 pub struct WrongEnterTriesQuantity(pub i16);
 

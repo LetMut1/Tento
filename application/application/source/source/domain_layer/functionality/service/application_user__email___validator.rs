@@ -8,13 +8,10 @@ use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use extern_crate::regex::Regex;
 
 impl Validator<ApplicationUser_Email> {
-    const REGULAR_EXPRESSION: &'static str = r#"(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])"#;
-    const MAXIMUM_LENGTH: usize = 320;
-
     pub fn is_valid<'a>(application_user_email: &'a ApplicationUser_Email) -> Result<bool, ErrorAuditor> {
         let application_user_email_ = application_user_email.0.as_str();
 
-        let regex = match Regex::new(Self::REGULAR_EXPRESSION) {
+        let regex = match Regex::new(ApplicationUser_Email::REGULAR_EXPRESSION) {
             Ok(regex_) => regex_,
             Err(error) => {
                 return Err(
@@ -36,7 +33,7 @@ impl Validator<ApplicationUser_Email> {
 
         return Ok(
             regex.is_match(application_user_email_)
-                && application_user_email_.chars().count() <= Self::MAXIMUM_LENGTH
+                && application_user_email_.chars().count() <= ApplicationUser_Email::MAXIMUM_LENGTH
         );
     }
 }
