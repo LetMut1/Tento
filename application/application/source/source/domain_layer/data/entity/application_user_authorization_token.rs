@@ -22,7 +22,13 @@ impl Value {
     pub const REGULAR_EXPRESSION: &'static str = r#"^[0-9]{6}$"#;
 }
 
-#[derive(Clone, Copy)]
+#[cfg_attr(
+    feature = "manual_testing",
+    derive(Deserialize)
+)]
+#[derive(Clone, Copy, Serialize)]
+#[serde(crate = "extern_crate::serde")]
+#[serde(transparent)]
 pub struct WrongEnterTriesQuantity(pub i16);
 
 impl WrongEnterTriesQuantity {
