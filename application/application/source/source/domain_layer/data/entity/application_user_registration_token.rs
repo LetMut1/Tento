@@ -25,9 +25,9 @@ impl Value {
 
 #[cfg_attr(
     feature = "manual_testing",
-    derive(Serialize)
+    derive(Deserialize)
 )]
-#[derive(Clone, Copy, Deserialize)]
+#[derive(Clone, Copy, Serialize)]
 #[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct WrongEnterTriesQuantity(pub i16);

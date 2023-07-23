@@ -8,6 +8,7 @@ use std::env::var;
 use std::error::Error;
 use std::fs::File;
 use std::io::Write;
+use extern_crate::cbindgen::Builder;
 use std::path::Path;
 use extern_crate::uuid::Uuid;
 
@@ -29,6 +30,8 @@ impl Processor {
         Self::create_rerun_instruction()?;
 
         Self::create_environment_configuration_constant()?;
+
+        Self::create_c_bindings()?;
 
         return Ok(());
     }
@@ -242,6 +245,22 @@ impl Processor {
         let mut file = File::create(Path::new(build_file.as_str()))?;
 
         file.write_all(build_file_content.as_bytes())?;
+
+        return Ok(());
+    }
+
+    fn create_c_bindings() -> Result<(), Box<dyn Error + 'static>> {
+        let crate_path = format!(
+            "{}/../integration_module",
+            var("CARGO_MANIFEST_DIR")?.as_str(),
+        );
+
+        let crate_path_ = Path::new(crate_path.as_str());
+
+        Builder::new()                                      // TODO many options
+            .with_crate(crate_path_)
+            .generate()?
+            .write_to_file("c_bindings.h");
 
         return Ok(());
     }

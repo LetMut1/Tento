@@ -19,6 +19,7 @@ pub use redis;
 pub use regex;
 pub use rmp_serde;
 pub use serde;
+pub use cbindgen;
 pub use tokio;
 pub use tokio_postgres;
 pub use toml;
