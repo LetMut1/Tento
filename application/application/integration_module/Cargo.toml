@@ -14,7 +14,7 @@ doc = true
 proc-macro = false
 harness = true
 edition = "2021"
-crate-type = ["cdylib"]
+crate-type = ["staticlib"]
 required-features = []
 
 [dependencies]
