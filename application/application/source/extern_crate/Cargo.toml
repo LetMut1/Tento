@@ -35,6 +35,7 @@ hyper = { package = "hyper", version = "0.14.27", default-features = true, featu
 lettre = { package = "lettre", version = "^0.9", default-features = true, features = [], optional = false }
 lettre_email = { package = "lettre_email", version = "^0.9", default-features = true, features = [], optional = false }
 macro_rules = { path = "./../macro_rules", package = "macro_rules", version = "0.1.0", default-features = true, features = [], optional = false }
+matchit = { package = "matchit", version = "0.7.0", default-features = true, features = [], optional = false }
 rand = { package = "rand", version = "0.8.5", default-features = true, features = [], optional = false }
 redis = { package = "redis", version = "^0.21", default-features = true, features = ["tokio-comp", "tokio-native-tls-comp"], optional = false }
 regex = { package = "regex", version = "^1.4", default-features = true, features = [], optional = false }

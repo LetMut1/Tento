@@ -1,7 +1,7 @@
-use crate::application_layer::functionality::action_processor::version_1::application_user___authorization::reset_password_by_first_step::ActionProcessor;
-use crate::application_layer::functionality::action_processor::version_1::application_user___authorization::reset_password_by_first_step::Incoming;
-use crate::application_layer::functionality::action_processor::version_1::application_user___authorization::reset_password_by_first_step::Outcoming;
-use crate::application_layer::functionality::action_processor::version_1::application_user___authorization::reset_password_by_first_step::Precedent;
+use crate::application_layer::functionality::action_processor::channel___base::get_many_public_by_name::ActionProcessor;
+use crate::application_layer::functionality::action_processor::channel___base::get_many_public_by_name::Incoming;
+use crate::application_layer::functionality::action_processor::channel___base::get_many_public_by_name::Outcoming;
+use crate::application_layer::functionality::action_processor::channel___base::get_many_public_by_name::Precedent;
 use crate::application_layer::functionality::action_processor::core_action_processor::CoreActionProcessor;
 use crate::infrastructure_layer::data::control_type::Request;
 use crate::infrastructure_layer::data::control_type::Response;
@@ -21,9 +21,9 @@ use crate::application_layer::functionality::action_processor::wrapped_action_pr
 #[cfg(feature = "manual_testing")]
 use crate::infrastructure_layer::functionality::service::serializer::Json;
 
-pub struct ResetPasswordByFirstStep;
+pub struct GetManyPublicByName;
 
-impl ResetPasswordByFirstStep {
+impl GetManyPublicByName {
     pub async fn run<'a, T>(
         request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -48,7 +48,7 @@ impl ResetPasswordByFirstStep {
 }
 
 #[cfg(feature = "manual_testing")]
-impl ResetPasswordByFirstStep {
+impl GetManyPublicByName {
     pub async fn run_<'a, T>(
         request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,

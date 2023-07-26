@@ -1,7 +1,7 @@
-use crate::application_layer::functionality::action_processor::version_1::channel___base::get_one_by_id::ActionProcessor;
-use crate::application_layer::functionality::action_processor::version_1::channel___base::get_one_by_id::Incoming;
-use crate::application_layer::functionality::action_processor::version_1::channel___base::get_one_by_id::Outcoming;
-use crate::application_layer::functionality::action_processor::version_1::channel___base::get_one_by_id::Precedent;
+use crate::application_layer::functionality::action_processor::application_user___authorization::reset_password_by_first_step::ActionProcessor;
+use crate::application_layer::functionality::action_processor::application_user___authorization::reset_password_by_first_step::Incoming;
+use crate::application_layer::functionality::action_processor::application_user___authorization::reset_password_by_first_step::Outcoming;
+use crate::application_layer::functionality::action_processor::application_user___authorization::reset_password_by_first_step::Precedent;
 use crate::application_layer::functionality::action_processor::core_action_processor::CoreActionProcessor;
 use crate::infrastructure_layer::data::control_type::Request;
 use crate::infrastructure_layer::data::control_type::Response;
@@ -21,9 +21,9 @@ use crate::application_layer::functionality::action_processor::wrapped_action_pr
 #[cfg(feature = "manual_testing")]
 use crate::infrastructure_layer::functionality::service::serializer::Json;
 
-pub struct GetOneByID;
+pub struct ResetPasswordByFirstStep;
 
-impl GetOneByID {
+impl ResetPasswordByFirstStep {
     pub async fn run<'a, T>(
         request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -48,7 +48,7 @@ impl GetOneByID {
 }
 
 #[cfg(feature = "manual_testing")]
-impl GetOneByID {
+impl ResetPasswordByFirstStep {
     pub async fn run_<'a, T>(
         request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,

@@ -1,5 +1,8 @@
 pub mod route_not_found;
-pub mod version_1;
+pub mod application_user___authorization;
+pub mod channel___base;
+pub mod channel_subscription___base;
+
 pub mod core_action_processor;
 
 #[cfg(feature = "manual_testing")]

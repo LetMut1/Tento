@@ -1,6 +1,6 @@
-use crate::application_layer::functionality::action_processor::version_1::application_user___authorization::reset_password_by_last_step::ActionProcessor;
-use crate::application_layer::functionality::action_processor::version_1::application_user___authorization::reset_password_by_last_step::Incoming;
-use crate::application_layer::functionality::action_processor::version_1::application_user___authorization::reset_password_by_last_step::Precedent;
+use crate::application_layer::functionality::action_processor::application_user___authorization::deauthorize_from_one_device::ActionProcessor;
+use crate::application_layer::functionality::action_processor::application_user___authorization::deauthorize_from_one_device::Incoming;
+use crate::application_layer::functionality::action_processor::application_user___authorization::deauthorize_from_one_device::Precedent;
 use crate::application_layer::functionality::action_processor::core_action_processor::CoreActionProcessor;
 use crate::infrastructure_layer::data::control_type::Request;
 use crate::infrastructure_layer::data::control_type::Response;
@@ -21,9 +21,9 @@ use crate::application_layer::functionality::action_processor::wrapped_action_pr
 #[cfg(feature = "manual_testing")]
 use crate::infrastructure_layer::functionality::service::serializer::Json;
 
-pub struct ResetPasswordByLastStep;
+pub struct DeauthorizeFromOneDevice;
 
-impl ResetPasswordByLastStep {
+impl DeauthorizeFromOneDevice {
     pub async fn run<'a, T>(
         request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -48,7 +48,7 @@ impl ResetPasswordByLastStep {
 }
 
 #[cfg(feature = "manual_testing")]
-impl ResetPasswordByLastStep {
+impl DeauthorizeFromOneDevice {
     pub async fn run_<'a, T>(
         request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,

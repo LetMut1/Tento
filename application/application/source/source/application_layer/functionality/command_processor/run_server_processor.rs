@@ -14,9 +14,9 @@ use crate::infrastructure_layer::functionality::service::creator::PostgresqlConn
 use crate::infrastructure_layer::functionality::service::creator::RedisConnectonPool;
 use crate::presentation_layer::data::http_route_registry::HttpRouteRegistry;
 use crate::presentation_layer::functionality::action::route_not_found;
-use crate::presentation_layer::functionality::action::version_1::application_user___authorization;
-use crate::presentation_layer::functionality::action::version_1::channel___base;
-use crate::presentation_layer::functionality::action::version_1::channel_subscription___base;
+use crate::presentation_layer::functionality::action::application_user___authorization;
+use crate::presentation_layer::functionality::action::channel___base;
+use crate::presentation_layer::functionality::action::channel_subscription___base;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::bb8::Pool;
@@ -40,7 +40,12 @@ use std::marker::Send;
 use std::marker::Sync;
 use std::net::ToSocketAddrs;
 use std::str::FromStr;
+use extern_crate::matchit::Router;
 use std::time::Duration;
+
+enum RouterVariant {
+    A,
+}
 
 pub struct RunServerProcessor;
 
@@ -82,6 +87,21 @@ impl RunServerProcessor {
     }
 
     async fn run_http_server() -> Result<(), ErrorAuditor> {
+        let router = match Self::create_router() {
+            Ok(router_) => router_,
+            Err(mut error) => {
+                error.add_backtrace_part(
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                );
+
+                return Err(error);
+            }
+        };
+
         let mut application_http_socket_address_registry = match ENVIRONMENT_CONFIGURATION.application_server.tcp.socket_address.0.to_socket_addrs() {
             Ok(application_http_socket_address_registry_) => application_http_socket_address_registry_,
             Err(error) => {
@@ -422,8 +442,12 @@ impl RunServerProcessor {
 
         let graceful_shutdown_signal = async {
             select! {
-                _ = signal_interrupt_future => {},
-                _ = signal_terminate_future => {},
+                _ = signal_interrupt_future => {
+                    ()
+                },
+                _ = signal_terminate_future => {
+                    ()
+                },
             }
         };
 
@@ -445,6 +469,33 @@ impl RunServerProcessor {
         }
 
         return Ok(());
+    }
+
+    fn create_router() -> Result<Router<RouterVariant>, ErrorAuditor> {
+        // let mut router = Router::new();
+
+
+        // if let Err(error) = router.insert(
+        //     HttpRouteRegistry::VERSION_1__APPLICATION_USER__CHECK_NICKNAME_FOR_EXISTING,
+        //     "Welcome!"
+        // ) {
+        //     return Err(
+        //         ErrorAuditor::new(
+        //             BaseError::RuntimeError {
+        //                 runtime_error: RuntimeError::OtherError {
+        //                     other_error: OtherError::new(error),
+        //                 },
+        //             },
+        //             BacktracePart::new(
+        //                 line!(),
+        //                 file!(),
+        //                 None,
+        //             ),
+        //         ),
+        //     );
+        // }
+
+        todo!();
     }
 
     async fn resolve<'a, T>(

@@ -1,7 +1,7 @@
-use crate::application_layer::functionality::action_processor::version_1::application_user___authorization::send_email_for_authorize::ActionProcessor;
-use crate::application_layer::functionality::action_processor::version_1::application_user___authorization::send_email_for_authorize::Incoming;
-use crate::application_layer::functionality::action_processor::version_1::application_user___authorization::send_email_for_authorize::Outcoming;
-use crate::application_layer::functionality::action_processor::version_1::application_user___authorization::send_email_for_authorize::Precedent;
+use crate::application_layer::functionality::action_processor::channel___base::get_many_by_subscription::ActionProcessor;
+use crate::application_layer::functionality::action_processor::channel___base::get_many_by_subscription::Incoming;
+use crate::application_layer::functionality::action_processor::channel___base::get_many_by_subscription::Outcoming;
+use crate::application_layer::functionality::action_processor::channel___base::get_many_by_subscription::Precedent;
 use crate::application_layer::functionality::action_processor::core_action_processor::CoreActionProcessor;
 use crate::infrastructure_layer::data::control_type::Request;
 use crate::infrastructure_layer::data::control_type::Response;
@@ -21,9 +21,9 @@ use crate::application_layer::functionality::action_processor::wrapped_action_pr
 #[cfg(feature = "manual_testing")]
 use crate::infrastructure_layer::functionality::service::serializer::Json;
 
-pub struct SendEmailForAuthorize;
+pub struct GetManyBySubscription;
 
-impl SendEmailForAuthorize {
+impl GetManyBySubscription {
     pub async fn run<'a, T>(
         request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -48,7 +48,7 @@ impl SendEmailForAuthorize {
 }
 
 #[cfg(feature = "manual_testing")]
-impl SendEmailForAuthorize {
+impl GetManyBySubscription {
     pub async fn run_<'a, T>(
         request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,

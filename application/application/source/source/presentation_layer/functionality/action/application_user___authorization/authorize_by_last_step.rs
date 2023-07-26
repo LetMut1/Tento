@@ -1,7 +1,7 @@
-use crate::application_layer::functionality::action_processor::version_1::channel___base::get_many_by_name_in_subscriptions::ActionProcessor;
-use crate::application_layer::functionality::action_processor::version_1::channel___base::get_many_by_name_in_subscriptions::Incoming;
-use crate::application_layer::functionality::action_processor::version_1::channel___base::get_many_by_name_in_subscriptions::Outcoming;
-use crate::application_layer::functionality::action_processor::version_1::channel___base::get_many_by_name_in_subscriptions::Precedent;
+use crate::application_layer::functionality::action_processor::application_user___authorization::authorize_by_last_step::ActionProcessor;
+use crate::application_layer::functionality::action_processor::application_user___authorization::authorize_by_last_step::Incoming;
+use crate::application_layer::functionality::action_processor::application_user___authorization::authorize_by_last_step::Outcoming;
+use crate::application_layer::functionality::action_processor::application_user___authorization::authorize_by_last_step::Precedent;
 use crate::application_layer::functionality::action_processor::core_action_processor::CoreActionProcessor;
 use crate::infrastructure_layer::data::control_type::Request;
 use crate::infrastructure_layer::data::control_type::Response;
@@ -21,9 +21,9 @@ use crate::application_layer::functionality::action_processor::wrapped_action_pr
 #[cfg(feature = "manual_testing")]
 use crate::infrastructure_layer::functionality::service::serializer::Json;
 
-pub struct GetManyByNameInSubscriptions;
+pub struct AuthorizeByLastStep;
 
-impl GetManyByNameInSubscriptions {
+impl AuthorizeByLastStep {
     pub async fn run<'a, T>(
         request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -48,7 +48,7 @@ impl GetManyByNameInSubscriptions {
 }
 
 #[cfg(feature = "manual_testing")]
-impl GetManyByNameInSubscriptions {
+impl AuthorizeByLastStep {
     pub async fn run_<'a, T>(
         request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,

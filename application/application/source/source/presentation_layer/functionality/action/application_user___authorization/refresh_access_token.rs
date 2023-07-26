@@ -1,7 +1,7 @@
-use crate::application_layer::functionality::action_processor::version_1::application_user___authorization::send_email_for_reset_password::ActionProcessor;
-use crate::application_layer::functionality::action_processor::version_1::application_user___authorization::send_email_for_reset_password::Incoming;
-use crate::application_layer::functionality::action_processor::version_1::application_user___authorization::send_email_for_reset_password::Outcoming;
-use crate::application_layer::functionality::action_processor::version_1::application_user___authorization::send_email_for_reset_password::Precedent;
+use crate::application_layer::functionality::action_processor::application_user___authorization::refresh_access_token::ActionProcessor;
+use crate::application_layer::functionality::action_processor::application_user___authorization::refresh_access_token::Incoming;
+use crate::application_layer::functionality::action_processor::application_user___authorization::refresh_access_token::Outcoming;
+use crate::application_layer::functionality::action_processor::application_user___authorization::refresh_access_token::Precedent;
 use crate::application_layer::functionality::action_processor::core_action_processor::CoreActionProcessor;
 use crate::infrastructure_layer::data::control_type::Request;
 use crate::infrastructure_layer::data::control_type::Response;
@@ -21,9 +21,9 @@ use crate::application_layer::functionality::action_processor::wrapped_action_pr
 #[cfg(feature = "manual_testing")]
 use crate::infrastructure_layer::functionality::service::serializer::Json;
 
-pub struct SendEmailForResetPassword;
+pub struct RefreshApplicationUserAccessToken;
 
-impl SendEmailForResetPassword {
+impl RefreshApplicationUserAccessToken {
     pub async fn run<'a, T>(
         request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -48,7 +48,7 @@ impl SendEmailForResetPassword {
 }
 
 #[cfg(feature = "manual_testing")]
-impl SendEmailForResetPassword {
+impl RefreshApplicationUserAccessToken {
     pub async fn run_<'a, T>(
         request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,

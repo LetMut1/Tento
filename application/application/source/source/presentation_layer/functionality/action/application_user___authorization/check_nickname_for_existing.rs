@@ -1,6 +1,6 @@
-use crate::application_layer::functionality::action_processor::version_1::application_user___authorization::check_email_for_existing::ActionProcessor;
-use crate::application_layer::functionality::action_processor::version_1::application_user___authorization::check_email_for_existing::Incoming;
-use crate::application_layer::functionality::action_processor::version_1::application_user___authorization::check_email_for_existing::Outcoming;
+use crate::application_layer::functionality::action_processor::application_user___authorization::check_nickname_for_existing::ActionProcessor;
+use crate::application_layer::functionality::action_processor::application_user___authorization::check_nickname_for_existing::Incoming;
+use crate::application_layer::functionality::action_processor::application_user___authorization::check_nickname_for_existing::Outcoming;
 use crate::application_layer::functionality::action_processor::core_action_processor::CoreActionProcessor;
 use crate::infrastructure_layer::data::control_type::Request;
 use crate::infrastructure_layer::data::control_type::Response;
@@ -21,9 +21,9 @@ use crate::application_layer::functionality::action_processor::wrapped_action_pr
 #[cfg(feature = "manual_testing")]
 use crate::infrastructure_layer::functionality::service::serializer::Json;
 
-pub struct CheckEmailForExisting;
+pub struct CheckNicknameForExisting;
 
-impl CheckEmailForExisting {
+impl CheckNicknameForExisting {
     pub async fn run<'a, T>(
         request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -48,7 +48,7 @@ impl CheckEmailForExisting {
 }
 
 #[cfg(feature = "manual_testing")]
-impl CheckEmailForExisting {
+impl CheckNicknameForExisting {
     pub async fn run_<'a, T>(
         request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
