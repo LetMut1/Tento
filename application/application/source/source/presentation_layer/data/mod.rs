@@ -1,1 +1,1 @@
-pub mod http_route_registry;
+pub mod http_route;

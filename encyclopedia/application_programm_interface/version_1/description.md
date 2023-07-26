@@ -50,7 +50,7 @@ struct Data<S>
 ```
  Every endpoint at this area requires an existing of access token.
 ```
- - ## VERSION_1__APPLICATION_USER__DEAUTHORIZE_FROM_ONE_DEVICE POST
+ - ## APPLICATION_USER__DEAUTHORIZE_FROM_ONE_DEVICE POST
 ```
 Deauthorizes application user from one device.
 ```
@@ -68,7 +68,7 @@ Communication codes:
 - APPLICATION_USER_ACCESS_TOKEN__ALREADY_EXPIRED
 - APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST
 ```
- - ## VERSION_1__APPLICATION_USER__DEAUTHORIZE_FROM_ALL_DEVICE POST
+ - ## APPLICATION_USER__DEAUTHORIZE_FROM_ALL_DEVICE POST
 ```
 Deauthorizes application user from all devices.
 ```
@@ -86,7 +86,7 @@ Communication codes:
 - APPLICATION_USER_ACCESS_TOKEN__ALREADY_EXPIRED
 - APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST
 ```
- - ## VERSION_1__CHANNEL__GET_ONE_BY_ID POST (GET functional)
+ - ## CHANNEL__GET_ONE_BY_ID POST (GET functional)
 ```
 Returns channel data by id.
 ```
@@ -137,7 +137,7 @@ Communication codes:
 - CHANNEL__NOT_FOUND
 - CHANNEL__IS_CLOSED
 ```
- - ## VERSION_1__CHANNEL__GET_MANY_BY_NAME_IN_SUBSCRIPTION POST (GET functional)
+ - ## CHANNEL__GET_MANY_BY_NAME_IN_SUBSCRIPTION POST (GET functional)
 ```
 Returns channels the user is subscribed to by name.
 ```
@@ -185,7 +185,7 @@ Communication codes:
 - APPLICATION_USER_ACCESS_TOKEN__ALREADY_EXPIRED
 - APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST
 ```
- - ## VERSION_1__CHANNEL__GET_MANY_BY_SUBSCRIPTION POST (GET functional)
+ - ## CHANNEL__GET_MANY_BY_SUBSCRIPTION POST (GET functional)
 ```
 Returns channels the user is subscribed to.
 ```
@@ -232,7 +232,7 @@ Communication codes:
 - APPLICATION_USER_ACCESS_TOKEN__ALREADY_EXPIRED
 - APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST
 ```
- - ## VERSION_1__CHANNEL__GET_MANY_PUBLIC_BY_NAME POST (GET functional)
+ - ## CHANNEL__GET_MANY_PUBLIC_BY_NAME POST (GET functional)
 ```
 Returns public channels by name.
 ```
@@ -280,7 +280,7 @@ Communication codes:
 - APPLICATION_USER_ACCESS_TOKEN__ALREADY_EXPIRED
 - APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST
 ```
- - ## VERSION_1__CHANNEL_SUBSCRIPTION__CREATE POST (GET functional)
+ - ## CHANNEL_SUBSCRIPTION__CREATE POST (GET functional)
 ```
 Subscribes application user to channel.
 ```
@@ -305,7 +305,7 @@ Communication codes:
 <br/><br/>
 
 # API for not authorized application user.
- - ## VERSION_1__APPLICATION_USER__CHECK_EMAIL_FOR_EXISTING POST (GET functional)
+ - ## APPLICATION_USER__CHECK_EMAIL_FOR_EXISTING POST (GET functional)
 ```
 Checks application user email for existing.
 ```
@@ -324,7 +324,7 @@ struct Outcoming {
 ```
 Communication codes: absent.
 ```
- - ## VERSION_1__APPLICATION_USER__CHECK_NICKNAME_FOR_EXISTING POST (GET functional)
+ - ## APPLICATION_USER__CHECK_NICKNAME_FOR_EXISTING POST (GET functional)
 ```
 Checks application user nickname for existing.
 ```
@@ -343,7 +343,7 @@ struct Outcoming {
 ```
 Communication codes: absent.
 ```
- - ## VERSION_1__APPLICATION_USER__REGISTER_BY_FIRST_STEP POST
+ - ## APPLICATION_USER__REGISTER_BY_FIRST_STEP POST
 ```
 Registers application user for the first step and sends email to user.
 ```
@@ -371,7 +371,7 @@ application_user_registration_token_can_be_resent_from - unixtime after wich it 
 Communication codes:
 - APPLICATION_USER__EMAIL_ALREADY_EXIST
 ```
-- ## VERSION_1__APPLICATION_USER__REGISTER_BY_SECOND_STEP POST
+- ## APPLICATION_USER__REGISTER_BY_SECOND_STEP POST
 ```
 Registers application user for the second step through token value approving.
 ```
@@ -394,7 +394,7 @@ Communication codes:
 - APPLICATION_USER_REGISTRATION_TOKEN__WRONG_VALUE
 ```
 
- - ## VERSION_1__APPLICATION_USER__REGISTER_BY_LAST_STEP POST
+ - ## APPLICATION_USER__REGISTER_BY_LAST_STEP POST
 ```
 Registers application user for the last step.
 ```
@@ -424,7 +424,7 @@ Communication codes:
 - APPLICATION_USER_REGISTRATION_TOKEN__WRONG_VALUE
 - APPLICATION_USER_REGISTRATION_TOKEN__ALREADY_EXPIRED
 ```
- - ## VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_REGISTER POST
+ - ## APPLICATION_USER__SEND_EMAIL_FOR_REGISTER POST
 ```
 Sends email for register. (Should be used only if the user does not receive an email.)
 ```
@@ -451,7 +451,7 @@ Communication codes:
 - APPLICATION_USER_REGISTRATION_TOKEN__ALREADY_EXPIRED
 - APPLICATION_USER_REGISTRATION_TOKEN__TIME_TO_RESEND_HAS_NOT_COME
 ```
- - ## VERSION_1__APPLICATION_USER__AUTHORIZE_BY_FIRST_STEP POST
+ - ## APPLICATION_USER__AUTHORIZE_BY_FIRST_STEP POST
 ```
 Authorizes application user for the firs step and send email to user.
 ```
@@ -477,7 +477,7 @@ application_user_authorization_token_can_be_resent_from - unixtime after wich it
 Communication codes:
 - APPLICATION_USER__WRONG_EMAIL_OR_NICKNAME_OR_PASSWORD
 ```
- - ## VERSION_1__APPLICATION_USER__AUTHORIZE_BY_LAST_STEP POST
+ - ## APPLICATION_USER__AUTHORIZE_BY_LAST_STEP POST
 ```
 Authorizes application user for the last step.
 ```
@@ -503,7 +503,7 @@ Communication codes:
 - APPLICATION_USER_AUTHORIZATION_TOKEN__WRONG_VALUE
 - APPLICATION_USER__NOT_FOUND
 ```
- - ## VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_AUTHORIZE POST
+ - ## APPLICATION_USER__SEND_EMAIL_FOR_AUTHORIZE POST
 ```
 Sends email for authorization. (Should be used only if the user does not receive an email.)
 ```
@@ -527,7 +527,7 @@ Communication codes:
 - APPLICATION_USER_AUTHORIZATION_TOKEN__ALREADY_EXPIRED
 - APPLICATION_USER_AUTHORIZATION_TOKEN__TIME_TO_RESEND_HAS_NOT_COME
 ```
- - ## VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_FIRST_STEP POST
+ - ## APPLICATION_USER__RESET_PASSWORD_BY_FIRST_STEP POST
 ```
 Resets application user password for the first step and send email to user.
 ```
@@ -550,7 +550,7 @@ struct Outcoming {
 Communication codes:
 - APPLICATION_USER__NOT_FOUND
 ```
- - ## VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_SECOND_STEP POST
+ - ## APPLICATION_USER__RESET_PASSWORD_BY_SECOND_STEP POST
 ```
 Resets application user password for the second step through token value approving.
 ```
@@ -572,7 +572,7 @@ Communication codes:
 - APPLICATION_USER_RESET_PASSWORD_TOKEN__ALREADY_APPROVED
 - APPLICATION_USER_RESET_PASSWORD_TOKEN__WRONG_VALUE
 ```
- - ## VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_LAST_STEP POST
+ - ## APPLICATION_USER__RESET_PASSWORD_BY_LAST_STEP POST
 ```
 Resets application user password for the last step.
 ```
@@ -596,7 +596,7 @@ Communication codes:
 - APPLICATION_USER_RESET_PASSWORD_TOKEN__IS_NOT_APPROVED
 - APPLICATION_USER_RESET_PASSWORD_TOKEN__WRONG_VALUE
 ```
- - ## VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_RESET_PASSWORD POST
+ - ## APPLICATION_USER__SEND_EMAIL_FOR_RESET_PASSWORD POST
 ```
 Sends email for reset password.  (Should be used only if the user does not receive an email.)
 ```
@@ -621,7 +621,7 @@ Communication codes:
 - APPLICATION_USER_RESET_PASSWORD_TOKEN__ALREADY_EXPIRED
 - APPLICATION_USER_RESET_PASSWORD_TOKEN__TIME_TO_RESEND_HAS_NOT_COME
 ```
- - ## VERSION_1__APPLICATION_USER__REFRESH_ACCESS_TOKEN POST
+ - ## APPLICATION_USER__REFRESH_ACCESS_TOKEN POST
 ```
 Refreshs application user access token.
 ```

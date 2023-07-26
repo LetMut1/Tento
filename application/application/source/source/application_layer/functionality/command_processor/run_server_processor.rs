@@ -12,7 +12,7 @@ use crate::infrastructure_layer::data::void::ErrorVoid;
 use crate::infrastructure_layer::functionality::service::creator::Creator;
 use crate::infrastructure_layer::functionality::service::creator::PostgresqlConnectionPoolNoTls;
 use crate::infrastructure_layer::functionality::service::creator::RedisConnectonPool;
-use crate::presentation_layer::data::http_route_registry::HttpRouteRegistry;
+use crate::presentation_layer::data::http_route::HttpRoute;
 use crate::presentation_layer::functionality::action::route_not_found;
 use crate::presentation_layer::functionality::action::application_user___authorization;
 use crate::presentation_layer::functionality::action::channel___base;
@@ -476,7 +476,7 @@ impl RunServerProcessor {
 
 
         // if let Err(error) = router.insert(
-        //     HttpRouteRegistry::VERSION_1__APPLICATION_USER__CHECK_NICKNAME_FOR_EXISTING,
+        //     HttpRouteRegistry::APPLICATION_USER__CHECK_NICKNAME_FOR_EXISTING,
         //     "Welcome!"
         // ) {
         //     return Err(
@@ -519,7 +519,7 @@ impl RunServerProcessor {
         ) {
             // Area for existing routes with not authorized user.
             // GET functional.
-            (HttpRouteRegistry::VERSION_1__APPLICATION_USER__CHECK_NICKNAME_FOR_EXISTING, &Method::POST) => {
+            (HttpRoute::APPLICATION_USER__CHECK_NICKNAME_FOR_EXISTING, &Method::POST) => {
                 return application_user___authorization::check_nickname_for_existing::CheckNicknameForExisting::run(
                     request,
                     database_1_postgresql_connection_pool,
@@ -529,7 +529,7 @@ impl RunServerProcessor {
                 .await;
             }
             // GET functional.
-            (HttpRouteRegistry::VERSION_1__APPLICATION_USER__CHECK_EMAIL_FOR_EXISTING, &Method::POST) => {
+            (HttpRoute::APPLICATION_USER__CHECK_EMAIL_FOR_EXISTING, &Method::POST) => {
                 return application_user___authorization::check_email_for_existing::CheckEmailForExisting::run(
                     request,
                     database_1_postgresql_connection_pool,
@@ -538,7 +538,7 @@ impl RunServerProcessor {
                 )
                 .await;
             }
-            (HttpRouteRegistry::VERSION_1__APPLICATION_USER__REGISTER_BY_FIRST_STEP, &Method::POST) => {
+            (HttpRoute::APPLICATION_USER__REGISTER_BY_FIRST_STEP, &Method::POST) => {
                 return application_user___authorization::register_by_first_step::RegisterByFirstStep::run(
                     request,
                     database_1_postgresql_connection_pool,
@@ -547,7 +547,7 @@ impl RunServerProcessor {
                 )
                 .await;
             }
-            (HttpRouteRegistry::VERSION_1__APPLICATION_USER__REGISTER_BY_SECOND_STEP, &Method::POST) => {
+            (HttpRoute::APPLICATION_USER__REGISTER_BY_SECOND_STEP, &Method::POST) => {
                 return application_user___authorization::register_by_second_step::RegisterBySecondStep::run(
                     request,
                     database_1_postgresql_connection_pool,
@@ -556,7 +556,7 @@ impl RunServerProcessor {
                 )
                 .await;
             }
-            (HttpRouteRegistry::VERSION_1__APPLICATION_USER__REGISTER_BY_LAST_STEP, &Method::POST) => {
+            (HttpRoute::APPLICATION_USER__REGISTER_BY_LAST_STEP, &Method::POST) => {
                 return application_user___authorization::register_by_last_step::RegisterByLastStep::run(
                     request,
                     database_1_postgresql_connection_pool,
@@ -565,7 +565,7 @@ impl RunServerProcessor {
                 )
                 .await;
             }
-            (HttpRouteRegistry::VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_REGISTER, &Method::POST) => {
+            (HttpRoute::APPLICATION_USER__SEND_EMAIL_FOR_REGISTER, &Method::POST) => {
                 return application_user___authorization::send_email_for_register::SendEmailForRegister::run(
                     request,
                     database_1_postgresql_connection_pool,
@@ -574,7 +574,7 @@ impl RunServerProcessor {
                 )
                 .await;
             }
-            (HttpRouteRegistry::VERSION_1__APPLICATION_USER__AUTHORIZE_BY_FIRST_STEP, &Method::POST) => {
+            (HttpRoute::APPLICATION_USER__AUTHORIZE_BY_FIRST_STEP, &Method::POST) => {
                 return application_user___authorization::authorize_by_first_step::AuthorizeByFirstStep::run(
                     request,
                     database_1_postgresql_connection_pool,
@@ -583,7 +583,7 @@ impl RunServerProcessor {
                 )
                 .await;
             }
-            (HttpRouteRegistry::VERSION_1__APPLICATION_USER__AUTHORIZE_BY_LAST_STEP, &Method::POST) => {
+            (HttpRoute::APPLICATION_USER__AUTHORIZE_BY_LAST_STEP, &Method::POST) => {
                 return application_user___authorization::authorize_by_last_step::AuthorizeByLastStep::run(
                     request,
                     database_1_postgresql_connection_pool,
@@ -592,7 +592,7 @@ impl RunServerProcessor {
                 )
                 .await;
             }
-            (HttpRouteRegistry::VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_AUTHORIZE, &Method::POST) => {
+            (HttpRoute::APPLICATION_USER__SEND_EMAIL_FOR_AUTHORIZE, &Method::POST) => {
                 return application_user___authorization::send_email_for_authorize::SendEmailForAuthorize::run(
                     request,
                     database_1_postgresql_connection_pool,
@@ -601,7 +601,7 @@ impl RunServerProcessor {
                 )
                 .await;
             }
-            (HttpRouteRegistry::VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_FIRST_STEP, &Method::POST) => {
+            (HttpRoute::APPLICATION_USER__RESET_PASSWORD_BY_FIRST_STEP, &Method::POST) => {
                 return application_user___authorization::reset_password_by_first_step::ResetPasswordByFirstStep::run(
                     request,
                     database_1_postgresql_connection_pool,
@@ -610,7 +610,7 @@ impl RunServerProcessor {
                 )
                 .await;
             }
-            (HttpRouteRegistry::VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_SECOND_STEP, &Method::POST) => {
+            (HttpRoute::APPLICATION_USER__RESET_PASSWORD_BY_SECOND_STEP, &Method::POST) => {
                 return application_user___authorization::reset_password_by_second_step::ResetPasswordBySecondStep::run(
                     request,
                     database_1_postgresql_connection_pool,
@@ -619,7 +619,7 @@ impl RunServerProcessor {
                 )
                 .await;
             }
-            (HttpRouteRegistry::VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_LAST_STEP, &Method::POST) => {
+            (HttpRoute::APPLICATION_USER__RESET_PASSWORD_BY_LAST_STEP, &Method::POST) => {
                 return application_user___authorization::reset_password_by_last_step::ResetPasswordByLastStep::run(
                     request,
                     database_1_postgresql_connection_pool,
@@ -628,7 +628,7 @@ impl RunServerProcessor {
                 )
                 .await;
             }
-            (HttpRouteRegistry::VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_RESET_PASSWORD, &Method::POST) => {
+            (HttpRoute::APPLICATION_USER__SEND_EMAIL_FOR_RESET_PASSWORD, &Method::POST) => {
                 return application_user___authorization::send_email_for_reset_password::SendEmailForResetPassword::run(
                     request,
                     database_1_postgresql_connection_pool,
@@ -637,7 +637,7 @@ impl RunServerProcessor {
                 )
                 .await;
             }
-            (HttpRouteRegistry::VERSION_1__APPLICATION_USER__REFRESH_ACCESS_TOKEN, &Method::POST) => {
+            (HttpRoute::APPLICATION_USER__REFRESH_ACCESS_TOKEN, &Method::POST) => {
                 return application_user___authorization::refresh_access_token::RefreshApplicationUserAccessToken::run(
                     request,
                     database_1_postgresql_connection_pool,
@@ -647,7 +647,7 @@ impl RunServerProcessor {
                 .await;
             }
             // Area for existing routes with authorized user.
-            (HttpRouteRegistry::VERSION_1__APPLICATION_USER__DEAUTHORIZE_FROM_ONE_DEVICE, &Method::POST) => {
+            (HttpRoute::APPLICATION_USER__DEAUTHORIZE_FROM_ONE_DEVICE, &Method::POST) => {
                 return application_user___authorization::deauthorize_from_one_device::DeauthorizeFromOneDevice::run(
                     request,
                     database_1_postgresql_connection_pool,
@@ -656,7 +656,7 @@ impl RunServerProcessor {
                 )
                 .await;
             }
-            (HttpRouteRegistry::VERSION_1__APPLICATION_USER__DEAUTHORIZE_FROM_ALL_DEVICE, &Method::POST) => {
+            (HttpRoute::APPLICATION_USER__DEAUTHORIZE_FROM_ALL_DEVICE, &Method::POST) => {
                 return application_user___authorization::deauthorize_from_all_devices::DeauthorizeFromAllDevices::run(
                     request,
                     database_1_postgresql_connection_pool,
@@ -666,7 +666,7 @@ impl RunServerProcessor {
                 .await;
             }
             // GET functional.
-            (HttpRouteRegistry::VERSION_1__CHANNEL__GET_ONE_BY_ID, &Method::POST) => {
+            (HttpRoute::CHANNEL__GET_ONE_BY_ID, &Method::POST) => {
                 return channel___base::get_one_by_id::GetOneByID::run(
                     request,
                     database_1_postgresql_connection_pool,
@@ -676,7 +676,7 @@ impl RunServerProcessor {
                 .await;
             }
             // GET functional.
-            (HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_BY_NAME_IN_SUBSCRIPTIONS, &Method::POST) => {
+            (HttpRoute::CHANNEL__GET_MANY_BY_NAME_IN_SUBSCRIPTIONS, &Method::POST) => {
                 return channel___base::get_many_by_name_in_subscriptions::GetManyByNameInSubscriptions::run(
                     request,
                     database_1_postgresql_connection_pool,
@@ -686,7 +686,7 @@ impl RunServerProcessor {
                 .await;
             }
             // GET functional.
-            (HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_BY_SUBSCRIPTION, &Method::POST) => {
+            (HttpRoute::CHANNEL__GET_MANY_BY_SUBSCRIPTION, &Method::POST) => {
                 return channel___base::get_many_by_subscription::GetManyBySubscription::run(
                     request,
                     database_1_postgresql_connection_pool,
@@ -696,7 +696,7 @@ impl RunServerProcessor {
                 .await;
             }
             // GET functional.
-            (HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_PUBLIC_BY_NAME, &Method::POST) => {
+            (HttpRoute::CHANNEL__GET_MANY_PUBLIC_BY_NAME, &Method::POST) => {
                 return channel___base::get_many_public_by_name::GetManyPublicByName::run(
                     request,
                     database_1_postgresql_connection_pool,
@@ -705,7 +705,7 @@ impl RunServerProcessor {
                 )
                 .await;
             }
-            (HttpRouteRegistry::VERSION_1__CHANNEL_SUBSCRIPTION__CREATE, &Method::POST) => {
+            (HttpRoute::CHANNEL_SUBSCRIPTION__CREATE, &Method::POST) => {
                 return channel_subscription___base::create::Create::run(
                     request,
                     database_1_postgresql_connection_pool,
@@ -723,7 +723,7 @@ impl RunServerProcessor {
                     ) {
                         // Area for existing routes with not authorized user.
                         // GET functional.
-                        (HttpRouteRegistry::VERSION_1__APPLICATION_USER__CHECK_NICKNAME_FOR_EXISTING_, &Method::POST) => {
+                        (HttpRoute::APPLICATION_USER__CHECK_NICKNAME_FOR_EXISTING_, &Method::POST) => {
                             return application_user___authorization::check_nickname_for_existing::CheckNicknameForExisting::run_(
                                 request,
                                 database_1_postgresql_connection_pool,
@@ -733,7 +733,7 @@ impl RunServerProcessor {
                             .await;
                         }
                         // GET functional.
-                        (HttpRouteRegistry::VERSION_1__APPLICATION_USER__CHECK_EMAIL_FOR_EXISTING_, &Method::POST) => {
+                        (HttpRoute::APPLICATION_USER__CHECK_EMAIL_FOR_EXISTING_, &Method::POST) => {
                             return application_user___authorization::check_email_for_existing::CheckEmailForExisting::run_(
                                 request,
                                 database_1_postgresql_connection_pool,
@@ -742,7 +742,7 @@ impl RunServerProcessor {
                             )
                             .await;
                         }
-                        (HttpRouteRegistry::VERSION_1__APPLICATION_USER__REGISTER_BY_FIRST_STEP_, &Method::POST) => {
+                        (HttpRoute::APPLICATION_USER__REGISTER_BY_FIRST_STEP_, &Method::POST) => {
                             return application_user___authorization::register_by_first_step::RegisterByFirstStep::run_(
                                 request,
                                 database_1_postgresql_connection_pool,
@@ -751,7 +751,7 @@ impl RunServerProcessor {
                             )
                             .await;
                         }
-                        (HttpRouteRegistry::VERSION_1__APPLICATION_USER__REGISTER_BY_SECOND_STEP_, &Method::POST) => {
+                        (HttpRoute::APPLICATION_USER__REGISTER_BY_SECOND_STEP_, &Method::POST) => {
                             return application_user___authorization::register_by_second_step::RegisterBySecondStep::run_(
                                 request,
                                 database_1_postgresql_connection_pool,
@@ -760,7 +760,7 @@ impl RunServerProcessor {
                             )
                             .await;
                         }
-                        (HttpRouteRegistry::VERSION_1__APPLICATION_USER__REGISTER_BY_LAST_STEP_, &Method::POST) => {
+                        (HttpRoute::APPLICATION_USER__REGISTER_BY_LAST_STEP_, &Method::POST) => {
                             return application_user___authorization::register_by_last_step::RegisterByLastStep::run_(
                                 request,
                                 database_1_postgresql_connection_pool,
@@ -769,7 +769,7 @@ impl RunServerProcessor {
                             )
                             .await;
                         }
-                        (HttpRouteRegistry::VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_REGISTER_, &Method::POST) => {
+                        (HttpRoute::APPLICATION_USER__SEND_EMAIL_FOR_REGISTER_, &Method::POST) => {
                             return application_user___authorization::send_email_for_register::SendEmailForRegister::run_(
                                 request,
                                 database_1_postgresql_connection_pool,
@@ -778,7 +778,7 @@ impl RunServerProcessor {
                             )
                             .await;
                         }
-                        (HttpRouteRegistry::VERSION_1__APPLICATION_USER__AUTHORIZE_BY_FIRST_STEP_, &Method::POST) => {
+                        (HttpRoute::APPLICATION_USER__AUTHORIZE_BY_FIRST_STEP_, &Method::POST) => {
                             return application_user___authorization::authorize_by_first_step::AuthorizeByFirstStep::run_(
                                 request,
                                 database_1_postgresql_connection_pool,
@@ -787,7 +787,7 @@ impl RunServerProcessor {
                             )
                             .await;
                         }
-                        (HttpRouteRegistry::VERSION_1__APPLICATION_USER__AUTHORIZE_BY_LAST_STEP_, &Method::POST) => {
+                        (HttpRoute::APPLICATION_USER__AUTHORIZE_BY_LAST_STEP_, &Method::POST) => {
                             return application_user___authorization::authorize_by_last_step::AuthorizeByLastStep::run_(
                                 request,
                                 database_1_postgresql_connection_pool,
@@ -796,7 +796,7 @@ impl RunServerProcessor {
                             )
                             .await;
                         }
-                        (HttpRouteRegistry::VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_AUTHORIZE_, &Method::POST) => {
+                        (HttpRoute::APPLICATION_USER__SEND_EMAIL_FOR_AUTHORIZE_, &Method::POST) => {
                             return application_user___authorization::send_email_for_authorize::SendEmailForAuthorize::run_(
                                 request,
                                 database_1_postgresql_connection_pool,
@@ -805,7 +805,7 @@ impl RunServerProcessor {
                             )
                             .await;
                         }
-                        (HttpRouteRegistry::VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_FIRST_STEP_, &Method::POST) => {
+                        (HttpRoute::APPLICATION_USER__RESET_PASSWORD_BY_FIRST_STEP_, &Method::POST) => {
                             return application_user___authorization::reset_password_by_first_step::ResetPasswordByFirstStep::run_(
                                 request,
                                 database_1_postgresql_connection_pool,
@@ -814,7 +814,7 @@ impl RunServerProcessor {
                             )
                             .await;
                         }
-                        (HttpRouteRegistry::VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_SECOND_STEP_, &Method::POST) => {
+                        (HttpRoute::APPLICATION_USER__RESET_PASSWORD_BY_SECOND_STEP_, &Method::POST) => {
                             return application_user___authorization::reset_password_by_second_step::ResetPasswordBySecondStep::run_(
                                 request,
                                 database_1_postgresql_connection_pool,
@@ -823,7 +823,7 @@ impl RunServerProcessor {
                             )
                             .await;
                         }
-                        (HttpRouteRegistry::VERSION_1__APPLICATION_USER__RESET_PASSWORD_BY_LAST_STEP_, &Method::POST) => {
+                        (HttpRoute::APPLICATION_USER__RESET_PASSWORD_BY_LAST_STEP_, &Method::POST) => {
                             return application_user___authorization::reset_password_by_last_step::ResetPasswordByLastStep::run_(
                                 request,
                                 database_1_postgresql_connection_pool,
@@ -832,7 +832,7 @@ impl RunServerProcessor {
                             )
                             .await;
                         }
-                        (HttpRouteRegistry::VERSION_1__APPLICATION_USER__SEND_EMAIL_FOR_RESET_PASSWORD_, &Method::POST) => {
+                        (HttpRoute::APPLICATION_USER__SEND_EMAIL_FOR_RESET_PASSWORD_, &Method::POST) => {
                             return application_user___authorization::send_email_for_reset_password::SendEmailForResetPassword::run_(
                                 request,
                                 database_1_postgresql_connection_pool,
@@ -841,7 +841,7 @@ impl RunServerProcessor {
                             )
                             .await;
                         }
-                        (HttpRouteRegistry::VERSION_1__APPLICATION_USER__REFRESH_ACCESS_TOKEN_, &Method::POST) => {
+                        (HttpRoute::APPLICATION_USER__REFRESH_ACCESS_TOKEN_, &Method::POST) => {
                             return application_user___authorization::refresh_access_token::RefreshApplicationUserAccessToken::run_(
                                 request,
                                 database_1_postgresql_connection_pool,
@@ -851,7 +851,7 @@ impl RunServerProcessor {
                             .await;
                         }
                         // Area for existing routes with authorized user.
-                        (HttpRouteRegistry::VERSION_1__APPLICATION_USER__DEAUTHORIZE_FROM_ONE_DEVICE_, &Method::POST) => {
+                        (HttpRoute::APPLICATION_USER__DEAUTHORIZE_FROM_ONE_DEVICE_, &Method::POST) => {
                             return application_user___authorization::deauthorize_from_one_device::DeauthorizeFromOneDevice::run_(
                                 request,
                                 database_1_postgresql_connection_pool,
@@ -860,7 +860,7 @@ impl RunServerProcessor {
                             )
                             .await;
                         }
-                        (HttpRouteRegistry::VERSION_1__APPLICATION_USER__DEAUTHORIZE_FROM_ALL_DEVICE_, &Method::POST) => {
+                        (HttpRoute::APPLICATION_USER__DEAUTHORIZE_FROM_ALL_DEVICE_, &Method::POST) => {
                             return application_user___authorization::deauthorize_from_all_devices::DeauthorizeFromAllDevices::run_(
                                 request,
                                 database_1_postgresql_connection_pool,
@@ -870,7 +870,7 @@ impl RunServerProcessor {
                             .await;
                         }
                         // GET functional.
-                        (HttpRouteRegistry::VERSION_1__CHANNEL__GET_ONE_BY_ID_, &Method::POST) => {
+                        (HttpRoute::CHANNEL__GET_ONE_BY_ID_, &Method::POST) => {
                             return channel___base::get_one_by_id::GetOneByID::run_(
                                 request,
                                 database_1_postgresql_connection_pool,
@@ -880,7 +880,7 @@ impl RunServerProcessor {
                             .await;
                         }
                         // GET functional.
-                        (HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_BY_NAME_IN_SUBSCRIPTIONS_, &Method::POST) => {
+                        (HttpRoute::CHANNEL__GET_MANY_BY_NAME_IN_SUBSCRIPTIONS_, &Method::POST) => {
                             return channel___base::get_many_by_name_in_subscriptions::GetManyByNameInSubscriptions::run_(
                                 request,
                                 database_1_postgresql_connection_pool,
@@ -890,7 +890,7 @@ impl RunServerProcessor {
                             .await;
                         }
                         // GET functional.
-                        (HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_BY_SUBSCRIPTION_, &Method::POST) => {
+                        (HttpRoute::CHANNEL__GET_MANY_BY_SUBSCRIPTION_, &Method::POST) => {
                             return channel___base::get_many_by_subscription::GetManyBySubscription::run_(
                                 request,
                                 database_1_postgresql_connection_pool,
@@ -900,7 +900,7 @@ impl RunServerProcessor {
                             .await;
                         }
                         // GET functional.
-                        (HttpRouteRegistry::VERSION_1__CHANNEL__GET_MANY_PUBLIC_BY_NAME_, &Method::POST) => {
+                        (HttpRoute::CHANNEL__GET_MANY_PUBLIC_BY_NAME_, &Method::POST) => {
                             return channel___base::get_many_public_by_name::GetManyPublicByName::run_(
                                 request,
                                 database_1_postgresql_connection_pool,
@@ -909,7 +909,7 @@ impl RunServerProcessor {
                             )
                             .await;
                         }
-                        (HttpRouteRegistry::VERSION_1__CHANNEL_SUBSCRIPTION__CREATE_, &Method::POST) => {
+                        (HttpRoute::CHANNEL_SUBSCRIPTION__CREATE_, &Method::POST) => {
                             return channel_subscription___base::create::Create::run_(
                                 request,
                                 database_1_postgresql_connection_pool,
