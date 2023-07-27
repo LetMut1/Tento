@@ -21,9 +21,9 @@ use crate::application_layer::functionality::action_processor::wrapped_action_pr
 #[cfg(feature = "manual_testing")]
 use crate::infrastructure_layer::functionality::service::serializer::Json;
 
-pub struct RefreshApplicationUserAccessToken;
+pub struct RefreshAccessToken;
 
-impl RefreshApplicationUserAccessToken {
+impl RefreshAccessToken {
     pub async fn run<'a, T>(
         request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -48,7 +48,7 @@ impl RefreshApplicationUserAccessToken {
 }
 
 #[cfg(feature = "manual_testing")]
-impl RefreshApplicationUserAccessToken {
+impl RefreshAccessToken {
     pub async fn run_<'a, T>(
         request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,

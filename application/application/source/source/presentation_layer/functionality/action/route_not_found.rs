@@ -3,7 +3,6 @@ use crate::infrastructure_layer::data::control_type::Request;
 use crate::infrastructure_layer::data::control_type::Response;
 use extern_crate::bb8::Pool;
 use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
-use extern_crate::bb8_redis::RedisConnectionManager;
 use extern_crate::tokio_postgres::tls::MakeTlsConnect;
 use extern_crate::tokio_postgres::tls::TlsConnect;
 use extern_crate::tokio_postgres::Socket;
@@ -13,9 +12,7 @@ use std::marker::Sync;
 
 pub async fn route_not_found<'a, T>(
     request: Request,
-    _database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
     database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
-    _database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
 ) -> Response
 where
     T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,

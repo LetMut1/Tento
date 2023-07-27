@@ -12,7 +12,11 @@ use crate::infrastructure_layer::data::void::ErrorVoid;
 use crate::infrastructure_layer::functionality::service::creator::Creator;
 use crate::infrastructure_layer::functionality::service::creator::PostgresqlConnectionPoolNoTls;
 use crate::infrastructure_layer::functionality::service::creator::RedisConnectonPool;
-use crate::presentation_layer::data::http_route::HttpRoute;
+use crate::presentation_layer::data::action_route::ACTION_ROUTE;
+use crate::presentation_layer::data::action_route::ActionRoute_;
+use crate::presentation_layer::data::action_route::ApplicationUser__Authorization_;
+use crate::presentation_layer::data::action_route::ChannelSubscription__Base_;
+use crate::presentation_layer::data::action_route::Channel__Base_;
 use crate::presentation_layer::functionality::action::route_not_found;
 use crate::presentation_layer::functionality::action::application_user___authorization;
 use crate::presentation_layer::functionality::action::channel___base;
@@ -24,6 +28,7 @@ use extern_crate::hyper::Method;
 use extern_crate::hyper::Server;
 use extern_crate::hyper::server::conn::AddrStream;
 use std::future::Future;
+use std::sync::Arc;
 use extern_crate::tokio::select;
 use extern_crate::hyper::service::make_service_fn;
 use extern_crate::hyper::service::service_fn;
@@ -42,10 +47,6 @@ use std::net::ToSocketAddrs;
 use std::str::FromStr;
 use extern_crate::matchit::Router;
 use std::time::Duration;
-
-enum RouterVariant {
-    A,
-}
 
 pub struct RunServerProcessor;
 
@@ -364,8 +365,12 @@ impl RunServerProcessor {
             }
         };
 
+        let router_ = Arc::new(router);
+
         let service = make_service_fn(
             move |_: &'_ AddrStream| -> _ {
+                let router__ = router_.clone();
+
                 let postgresql_connection_pool_aggregator_ = postgresql_connection_pool_aggregator.clone();
 
                 let database_1_redis_connection_pool_ = database_1_redis_connection_pool.clone();
@@ -373,6 +378,8 @@ impl RunServerProcessor {
                 let future = async move {
                     let service_fn = service_fn(
                         move |request: Request| -> _ {
+                            let router___ = router__.clone();
+
                             let postgresql_connection_pool_aggregator__ = postgresql_connection_pool_aggregator_.clone();
 
                             let database_1_redis_connection_pool__ = database_1_redis_connection_pool_.clone();
@@ -389,6 +396,7 @@ impl RunServerProcessor {
 
                             let future_ = async move {
                                 let response = Self::resolve(
+                                    router___,
                                     request,
                                     &database_1_postgresql_connection_pool_,
                                     &database_2_postgresql_connection_pool_,
@@ -471,34 +479,941 @@ impl RunServerProcessor {
         return Ok(());
     }
 
-    fn create_router() -> Result<Router<RouterVariant>, ErrorAuditor> {
-        // let mut router = Router::new();
+    fn create_router() -> Result<Router<ActionRoute_>, ErrorAuditor> {
+        let mut router = Router::new();
 
+        if let Err(error) = router.insert(
+            ACTION_ROUTE.application_user___authorization.check_nickname_for_existing,
+            ActionRoute_::ApplicationUser__Authorization {
+                application_user___authorization: ApplicationUser__Authorization_::CheckNicknameForExisting,
+            },
+        ) {
+            return Err(
+                ErrorAuditor::new(
+                    BaseError::RuntimeError {
+                        runtime_error: RuntimeError::OtherError {
+                            other_error: OtherError::new(error),
+                        },
+                    },
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                ),
+            );
+        }
 
-        // if let Err(error) = router.insert(
-        //     HttpRouteRegistry::APPLICATION_USER__CHECK_NICKNAME_FOR_EXISTING,
-        //     "Welcome!"
-        // ) {
-        //     return Err(
-        //         ErrorAuditor::new(
-        //             BaseError::RuntimeError {
-        //                 runtime_error: RuntimeError::OtherError {
-        //                     other_error: OtherError::new(error),
-        //                 },
-        //             },
-        //             BacktracePart::new(
-        //                 line!(),
-        //                 file!(),
-        //                 None,
-        //             ),
-        //         ),
-        //     );
-        // }
+        if let Err(error) = router.insert(
+            ACTION_ROUTE.application_user___authorization.check_email_for_existing,
+            ActionRoute_::ApplicationUser__Authorization {
+                application_user___authorization: ApplicationUser__Authorization_::CheckEmailForExisting,
+            },
+        ) {
+            return Err(
+                ErrorAuditor::new(
+                    BaseError::RuntimeError {
+                        runtime_error: RuntimeError::OtherError {
+                            other_error: OtherError::new(error),
+                        },
+                    },
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                ),
+            );
+        }
 
-        todo!();
+        if let Err(error) = router.insert(
+            ACTION_ROUTE.application_user___authorization.regisgter_by_first_step,
+            ActionRoute_::ApplicationUser__Authorization {
+                application_user___authorization: ApplicationUser__Authorization_::RegisterByFirstStep,
+            },
+        ) {
+            return Err(
+                ErrorAuditor::new(
+                    BaseError::RuntimeError {
+                        runtime_error: RuntimeError::OtherError {
+                            other_error: OtherError::new(error),
+                        },
+                    },
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                ),
+            );
+        }
+
+        if let Err(error) = router.insert(
+            ACTION_ROUTE.application_user___authorization.regisgter_by_second_step,
+            ActionRoute_::ApplicationUser__Authorization {
+                application_user___authorization: ApplicationUser__Authorization_::RegisterBySecondStep,
+            },
+        ) {
+            return Err(
+                ErrorAuditor::new(
+                    BaseError::RuntimeError {
+                        runtime_error: RuntimeError::OtherError {
+                            other_error: OtherError::new(error),
+                        },
+                    },
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                ),
+            );
+        }
+
+        if let Err(error) = router.insert(
+            ACTION_ROUTE.application_user___authorization.regisgter_by_last_step,
+            ActionRoute_::ApplicationUser__Authorization {
+                application_user___authorization: ApplicationUser__Authorization_::RegisterByLastStep,
+            },
+        ) {
+            return Err(
+                ErrorAuditor::new(
+                    BaseError::RuntimeError {
+                        runtime_error: RuntimeError::OtherError {
+                            other_error: OtherError::new(error),
+                        },
+                    },
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                ),
+            );
+        }
+
+        if let Err(error) = router.insert(
+            ACTION_ROUTE.application_user___authorization.send_email_for_register,
+            ActionRoute_::ApplicationUser__Authorization {
+                application_user___authorization: ApplicationUser__Authorization_::SendEmailForRegister,
+            },
+        ) {
+            return Err(
+                ErrorAuditor::new(
+                    BaseError::RuntimeError {
+                        runtime_error: RuntimeError::OtherError {
+                            other_error: OtherError::new(error),
+                        },
+                    },
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                ),
+            );
+        }
+
+        if let Err(error) = router.insert(
+            ACTION_ROUTE.application_user___authorization.authorize_by_first_step,
+            ActionRoute_::ApplicationUser__Authorization {
+                application_user___authorization: ApplicationUser__Authorization_::AuthorizeByFirstStep,
+            },
+        ) {
+            return Err(
+                ErrorAuditor::new(
+                    BaseError::RuntimeError {
+                        runtime_error: RuntimeError::OtherError {
+                            other_error: OtherError::new(error),
+                        },
+                    },
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                ),
+            );
+        }
+
+        if let Err(error) = router.insert(
+            ACTION_ROUTE.application_user___authorization.authorize_by_last_step,
+            ActionRoute_::ApplicationUser__Authorization {
+                application_user___authorization: ApplicationUser__Authorization_::AuthorizeByLastStep,
+            },
+        ) {
+            return Err(
+                ErrorAuditor::new(
+                    BaseError::RuntimeError {
+                        runtime_error: RuntimeError::OtherError {
+                            other_error: OtherError::new(error),
+                        },
+                    },
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                ),
+            );
+        }
+
+        if let Err(error) = router.insert(
+            ACTION_ROUTE.application_user___authorization.send_email_for_authorize,
+            ActionRoute_::ApplicationUser__Authorization {
+                application_user___authorization: ApplicationUser__Authorization_::SendEmailForAuthorize,
+            },
+        ) {
+            return Err(
+                ErrorAuditor::new(
+                    BaseError::RuntimeError {
+                        runtime_error: RuntimeError::OtherError {
+                            other_error: OtherError::new(error),
+                        },
+                    },
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                ),
+            );
+        }
+
+        if let Err(error) = router.insert(
+            ACTION_ROUTE.application_user___authorization.reset_password_by_first_step,
+            ActionRoute_::ApplicationUser__Authorization {
+                application_user___authorization: ApplicationUser__Authorization_::ResetPasswordByFirstStep,
+            },
+        ) {
+            return Err(
+                ErrorAuditor::new(
+                    BaseError::RuntimeError {
+                        runtime_error: RuntimeError::OtherError {
+                            other_error: OtherError::new(error),
+                        },
+                    },
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                ),
+            );
+        }
+
+        if let Err(error) = router.insert(
+            ACTION_ROUTE.application_user___authorization.reset_password_by_second_step,
+            ActionRoute_::ApplicationUser__Authorization {
+                application_user___authorization: ApplicationUser__Authorization_::ResetPasswordBySecondStep,
+            },
+        ) {
+            return Err(
+                ErrorAuditor::new(
+                    BaseError::RuntimeError {
+                        runtime_error: RuntimeError::OtherError {
+                            other_error: OtherError::new(error),
+                        },
+                    },
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                ),
+            );
+        }
+
+        if let Err(error) = router.insert(
+            ACTION_ROUTE.application_user___authorization.reset_password_by_last_step,
+            ActionRoute_::ApplicationUser__Authorization {
+                application_user___authorization: ApplicationUser__Authorization_::ResetPasswordByLastStep,
+            },
+        ) {
+            return Err(
+                ErrorAuditor::new(
+                    BaseError::RuntimeError {
+                        runtime_error: RuntimeError::OtherError {
+                            other_error: OtherError::new(error),
+                        },
+                    },
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                ),
+            );
+        }
+
+        if let Err(error) = router.insert(
+            ACTION_ROUTE.application_user___authorization.send_email_for_reset_password,
+            ActionRoute_::ApplicationUser__Authorization {
+                application_user___authorization: ApplicationUser__Authorization_::SendEmailForResetPassword,
+            },
+        ) {
+            return Err(
+                ErrorAuditor::new(
+                    BaseError::RuntimeError {
+                        runtime_error: RuntimeError::OtherError {
+                            other_error: OtherError::new(error),
+                        },
+                    },
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                ),
+            );
+        }
+
+        if let Err(error) = router.insert(
+            ACTION_ROUTE.application_user___authorization.refresh_access_token,
+            ActionRoute_::ApplicationUser__Authorization {
+                application_user___authorization: ApplicationUser__Authorization_::RefreshAccessToken,
+            },
+        ) {
+            return Err(
+                ErrorAuditor::new(
+                    BaseError::RuntimeError {
+                        runtime_error: RuntimeError::OtherError {
+                            other_error: OtherError::new(error),
+                        },
+                    },
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                ),
+            );
+        }
+
+        if let Err(error) = router.insert(
+            ACTION_ROUTE.application_user___authorization.deauthorize_from_one_device,
+            ActionRoute_::ApplicationUser__Authorization {
+                application_user___authorization: ApplicationUser__Authorization_::DeauthorizeFromOneDevice,
+            },
+        ) {
+            return Err(
+                ErrorAuditor::new(
+                    BaseError::RuntimeError {
+                        runtime_error: RuntimeError::OtherError {
+                            other_error: OtherError::new(error),
+                        },
+                    },
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                ),
+            );
+        }
+
+        if let Err(error) = router.insert(
+            ACTION_ROUTE.application_user___authorization.deauthorize_from_all_device,
+            ActionRoute_::ApplicationUser__Authorization {
+                application_user___authorization: ApplicationUser__Authorization_::DeauthorizeFromAllDevices,
+            },
+        ) {
+            return Err(
+                ErrorAuditor::new(
+                    BaseError::RuntimeError {
+                        runtime_error: RuntimeError::OtherError {
+                            other_error: OtherError::new(error),
+                        },
+                    },
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                ),
+            );
+        }
+
+        if let Err(error) = router.insert(
+            ACTION_ROUTE.channel___base.get_one_by_id,
+            ActionRoute_::Channel__Base {
+                channel___base: Channel__Base_::GetOneByID,
+            },
+        ) {
+            return Err(
+                ErrorAuditor::new(
+                    BaseError::RuntimeError {
+                        runtime_error: RuntimeError::OtherError {
+                            other_error: OtherError::new(error),
+                        },
+                    },
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                ),
+            );
+        }
+
+        if let Err(error) = router.insert(
+            ACTION_ROUTE.channel___base.get_many_by_name_in_subscription,
+            ActionRoute_::Channel__Base {
+                channel___base: Channel__Base_::GetManyByNameInSubscriptions,
+            },
+        ) {
+            return Err(
+                ErrorAuditor::new(
+                    BaseError::RuntimeError {
+                        runtime_error: RuntimeError::OtherError {
+                            other_error: OtherError::new(error),
+                        },
+                    },
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                ),
+            );
+        }
+
+        if let Err(error) = router.insert(
+            ACTION_ROUTE.channel___base.get_many_by_subscription,
+            ActionRoute_::Channel__Base {
+                channel___base: Channel__Base_::GetManyBySubscription,
+            },
+        ) {
+            return Err(
+                ErrorAuditor::new(
+                    BaseError::RuntimeError {
+                        runtime_error: RuntimeError::OtherError {
+                            other_error: OtherError::new(error),
+                        },
+                    },
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                ),
+            );
+        }
+
+        if let Err(error) = router.insert(
+            ACTION_ROUTE.channel___base.get_many_piblic_by_name,
+            ActionRoute_::Channel__Base {
+                channel___base: Channel__Base_::GetManyPublicByName,
+            },
+        ) {
+            return Err(
+                ErrorAuditor::new(
+                    BaseError::RuntimeError {
+                        runtime_error: RuntimeError::OtherError {
+                            other_error: OtherError::new(error),
+                        },
+                    },
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                ),
+            );
+        }
+
+        if let Err(error) = router.insert(
+            ACTION_ROUTE.channel_subscription___base.create,
+            ActionRoute_::ChannelSubscription__Base {
+                channel_subscription___base: ChannelSubscription__Base_::Create,
+            },
+        ) {
+            return Err(
+                ErrorAuditor::new(
+                    BaseError::RuntimeError {
+                        runtime_error: RuntimeError::OtherError {
+                            other_error: OtherError::new(error),
+                        },
+                    },
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                ),
+            );
+        }
+
+        #[cfg(feature = "manual_testing")]
+        {
+            if let Err(error) = router.insert(
+                ACTION_ROUTE.application_user___authorization.check_nickname_for_existing_,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::CheckNicknameForExisting_,
+                },
+            ) {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::OtherError {
+                                other_error: OtherError::new(error),
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+
+            if let Err(error) = router.insert(
+                ACTION_ROUTE.application_user___authorization.check_email_for_existing_,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::CheckEmailForExisting_,
+                },
+            ) {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::OtherError {
+                                other_error: OtherError::new(error),
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+
+            if let Err(error) = router.insert(
+                ACTION_ROUTE.application_user___authorization.regisgter_by_first_step_,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::RegisterByFirstStep_,
+                },
+            ) {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::OtherError {
+                                other_error: OtherError::new(error),
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+
+            if let Err(error) = router.insert(
+                ACTION_ROUTE.application_user___authorization.regisgter_by_second_step_,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::RegisterBySecondStep_,
+                },
+            ) {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::OtherError {
+                                other_error: OtherError::new(error),
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+
+            if let Err(error) = router.insert(
+                ACTION_ROUTE.application_user___authorization.regisgter_by_last_step_,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::RegisterByLastStep_,
+                },
+            ) {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::OtherError {
+                                other_error: OtherError::new(error),
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+
+            if let Err(error) = router.insert(
+                ACTION_ROUTE.application_user___authorization.send_email_for_register_,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::SendEmailForRegister_,
+                },
+            ) {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::OtherError {
+                                other_error: OtherError::new(error),
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+
+            if let Err(error) = router.insert(
+                ACTION_ROUTE.application_user___authorization.authorize_by_first_step_,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::AuthorizeByFirstStep_,
+                },
+            ) {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::OtherError {
+                                other_error: OtherError::new(error),
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+
+            if let Err(error) = router.insert(
+                ACTION_ROUTE.application_user___authorization.authorize_by_last_step_,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::AuthorizeByLastStep_,
+                },
+            ) {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::OtherError {
+                                other_error: OtherError::new(error),
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+
+            if let Err(error) = router.insert(
+                ACTION_ROUTE.application_user___authorization.send_email_for_authorize_,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::SendEmailForAuthorize_,
+                },
+            ) {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::OtherError {
+                                other_error: OtherError::new(error),
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+
+            if let Err(error) = router.insert(
+                ACTION_ROUTE.application_user___authorization.reset_password_by_first_step_,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::ResetPasswordByFirstStep_,
+                },
+            ) {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::OtherError {
+                                other_error: OtherError::new(error),
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+
+            if let Err(error) = router.insert(
+                ACTION_ROUTE.application_user___authorization.reset_password_by_second_step_,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::ResetPasswordBySecondStep_,
+                },
+            ) {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::OtherError {
+                                other_error: OtherError::new(error),
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+
+            if let Err(error) = router.insert(
+                ACTION_ROUTE.application_user___authorization.reset_password_by_last_step_,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::ResetPasswordByLastStep_,
+                },
+            ) {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::OtherError {
+                                other_error: OtherError::new(error),
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+
+            if let Err(error) = router.insert(
+                ACTION_ROUTE.application_user___authorization.send_email_for_reset_password_,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::SendEmailForResetPassword_,
+                },
+            ) {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::OtherError {
+                                other_error: OtherError::new(error),
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+
+            if let Err(error) = router.insert(
+                ACTION_ROUTE.application_user___authorization.refresh_access_token_,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::RefreshAccessToken_,
+                },
+            ) {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::OtherError {
+                                other_error: OtherError::new(error),
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+
+            if let Err(error) = router.insert(
+                ACTION_ROUTE.application_user___authorization.deauthorize_from_one_device_,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::DeauthorizeFromOneDevice_,
+                },
+            ) {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::OtherError {
+                                other_error: OtherError::new(error),
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+
+            if let Err(error) = router.insert(
+                ACTION_ROUTE.application_user___authorization.deauthorize_from_all_device_,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::DeauthorizeFromAllDevices_,
+                },
+            ) {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::OtherError {
+                                other_error: OtherError::new(error),
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+
+            if let Err(error) = router.insert(
+                ACTION_ROUTE.channel___base.get_one_by_id_,
+                ActionRoute_::Channel__Base {
+                    channel___base: Channel__Base_::GetOneByID_,
+                },
+            ) {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::OtherError {
+                                other_error: OtherError::new(error),
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+
+            if let Err(error) = router.insert(
+                ACTION_ROUTE.channel___base.get_many_by_name_in_subscription_,
+                ActionRoute_::Channel__Base {
+                    channel___base: Channel__Base_::GetManyByNameInSubscriptions_,
+                },
+            ) {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::OtherError {
+                                other_error: OtherError::new(error),
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+
+            if let Err(error) = router.insert(
+                ACTION_ROUTE.channel___base.get_many_by_subscription_,
+                ActionRoute_::Channel__Base {
+                    channel___base: Channel__Base_::GetManyBySubscription_,
+                },
+            ) {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::OtherError {
+                                other_error: OtherError::new(error),
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+
+            if let Err(error) = router.insert(
+                ACTION_ROUTE.channel___base.get_many_piblic_by_name_,
+                ActionRoute_::Channel__Base {
+                    channel___base: Channel__Base_::GetManyPublicByName_,
+                },
+            ) {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::OtherError {
+                                other_error: OtherError::new(error),
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+
+            if let Err(error) = router.insert(
+                ACTION_ROUTE.channel_subscription___base.create_,
+                ActionRoute_::ChannelSubscription__Base {
+                    channel_subscription___base: ChannelSubscription__Base_::Create_,
+                },
+            ) {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::OtherError {
+                                other_error: OtherError::new(error),
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+        }
+
+        return Ok(router);
     }
 
     async fn resolve<'a, T>(
+        router: Arc<Router<ActionRoute_>>,
         request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -510,428 +1425,454 @@ impl RunServerProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let route = request.uri().path();
+        let r#match = match router.at(request.uri().path()) {
+            Ok(r#match_) => r#match_,
+            Err(error) => {
+                return route_not_found::route_not_found(
+                    request,
+                    database_2_postgresql_connection_pool,
+                )
+                .await;
+            }
+        };
 
         let method = request.method();
 
-        match (
-            route, method,
-        ) {
-            // Area for existing routes with not authorized user.
-            // GET functional.
-            (HttpRoute::APPLICATION_USER__CHECK_NICKNAME_FOR_EXISTING, &Method::POST) => {
-                return application_user___authorization::check_nickname_for_existing::CheckNicknameForExisting::run(
-                    request,
-                    database_1_postgresql_connection_pool,
-                    database_2_postgresql_connection_pool,
-                    database_1_redis_connection_pool,
-                )
-                .await;
-            }
-            // GET functional.
-            (HttpRoute::APPLICATION_USER__CHECK_EMAIL_FOR_EXISTING, &Method::POST) => {
-                return application_user___authorization::check_email_for_existing::CheckEmailForExisting::run(
-                    request,
-                    database_1_postgresql_connection_pool,
-                    database_2_postgresql_connection_pool,
-                    database_1_redis_connection_pool,
-                )
-                .await;
-            }
-            (HttpRoute::APPLICATION_USER__REGISTER_BY_FIRST_STEP, &Method::POST) => {
-                return application_user___authorization::register_by_first_step::RegisterByFirstStep::run(
-                    request,
-                    database_1_postgresql_connection_pool,
-                    database_2_postgresql_connection_pool,
-                    database_1_redis_connection_pool,
-                )
-                .await;
-            }
-            (HttpRoute::APPLICATION_USER__REGISTER_BY_SECOND_STEP, &Method::POST) => {
-                return application_user___authorization::register_by_second_step::RegisterBySecondStep::run(
-                    request,
-                    database_1_postgresql_connection_pool,
-                    database_2_postgresql_connection_pool,
-                    database_1_redis_connection_pool,
-                )
-                .await;
-            }
-            (HttpRoute::APPLICATION_USER__REGISTER_BY_LAST_STEP, &Method::POST) => {
-                return application_user___authorization::register_by_last_step::RegisterByLastStep::run(
-                    request,
-                    database_1_postgresql_connection_pool,
-                    database_2_postgresql_connection_pool,
-                    database_1_redis_connection_pool,
-                )
-                .await;
-            }
-            (HttpRoute::APPLICATION_USER__SEND_EMAIL_FOR_REGISTER, &Method::POST) => {
-                return application_user___authorization::send_email_for_register::SendEmailForRegister::run(
-                    request,
-                    database_1_postgresql_connection_pool,
-                    database_2_postgresql_connection_pool,
-                    database_1_redis_connection_pool,
-                )
-                .await;
-            }
-            (HttpRoute::APPLICATION_USER__AUTHORIZE_BY_FIRST_STEP, &Method::POST) => {
-                return application_user___authorization::authorize_by_first_step::AuthorizeByFirstStep::run(
-                    request,
-                    database_1_postgresql_connection_pool,
-                    database_2_postgresql_connection_pool,
-                    database_1_redis_connection_pool,
-                )
-                .await;
-            }
-            (HttpRoute::APPLICATION_USER__AUTHORIZE_BY_LAST_STEP, &Method::POST) => {
-                return application_user___authorization::authorize_by_last_step::AuthorizeByLastStep::run(
-                    request,
-                    database_1_postgresql_connection_pool,
-                    database_2_postgresql_connection_pool,
-                    database_1_redis_connection_pool,
-                )
-                .await;
-            }
-            (HttpRoute::APPLICATION_USER__SEND_EMAIL_FOR_AUTHORIZE, &Method::POST) => {
-                return application_user___authorization::send_email_for_authorize::SendEmailForAuthorize::run(
-                    request,
-                    database_1_postgresql_connection_pool,
-                    database_2_postgresql_connection_pool,
-                    database_1_redis_connection_pool,
-                )
-                .await;
-            }
-            (HttpRoute::APPLICATION_USER__RESET_PASSWORD_BY_FIRST_STEP, &Method::POST) => {
-                return application_user___authorization::reset_password_by_first_step::ResetPasswordByFirstStep::run(
-                    request,
-                    database_1_postgresql_connection_pool,
-                    database_2_postgresql_connection_pool,
-                    database_1_redis_connection_pool,
-                )
-                .await;
-            }
-            (HttpRoute::APPLICATION_USER__RESET_PASSWORD_BY_SECOND_STEP, &Method::POST) => {
-                return application_user___authorization::reset_password_by_second_step::ResetPasswordBySecondStep::run(
-                    request,
-                    database_1_postgresql_connection_pool,
-                    database_2_postgresql_connection_pool,
-                    database_1_redis_connection_pool,
-                )
-                .await;
-            }
-            (HttpRoute::APPLICATION_USER__RESET_PASSWORD_BY_LAST_STEP, &Method::POST) => {
-                return application_user___authorization::reset_password_by_last_step::ResetPasswordByLastStep::run(
-                    request,
-                    database_1_postgresql_connection_pool,
-                    database_2_postgresql_connection_pool,
-                    database_1_redis_connection_pool,
-                )
-                .await;
-            }
-            (HttpRoute::APPLICATION_USER__SEND_EMAIL_FOR_RESET_PASSWORD, &Method::POST) => {
-                return application_user___authorization::send_email_for_reset_password::SendEmailForResetPassword::run(
-                    request,
-                    database_1_postgresql_connection_pool,
-                    database_2_postgresql_connection_pool,
-                    database_1_redis_connection_pool,
-                )
-                .await;
-            }
-            (HttpRoute::APPLICATION_USER__REFRESH_ACCESS_TOKEN, &Method::POST) => {
-                return application_user___authorization::refresh_access_token::RefreshApplicationUserAccessToken::run(
-                    request,
-                    database_1_postgresql_connection_pool,
-                    database_2_postgresql_connection_pool,
-                    database_1_redis_connection_pool,
-                )
-                .await;
-            }
-            // Area for existing routes with authorized user.
-            (HttpRoute::APPLICATION_USER__DEAUTHORIZE_FROM_ONE_DEVICE, &Method::POST) => {
-                return application_user___authorization::deauthorize_from_one_device::DeauthorizeFromOneDevice::run(
-                    request,
-                    database_1_postgresql_connection_pool,
-                    database_2_postgresql_connection_pool,
-                    database_1_redis_connection_pool,
-                )
-                .await;
-            }
-            (HttpRoute::APPLICATION_USER__DEAUTHORIZE_FROM_ALL_DEVICE, &Method::POST) => {
-                return application_user___authorization::deauthorize_from_all_devices::DeauthorizeFromAllDevices::run(
-                    request,
-                    database_1_postgresql_connection_pool,
-                    database_2_postgresql_connection_pool,
-                    database_1_redis_connection_pool,
-                )
-                .await;
-            }
-            // GET functional.
-            (HttpRoute::CHANNEL__GET_ONE_BY_ID, &Method::POST) => {
-                return channel___base::get_one_by_id::GetOneByID::run(
-                    request,
-                    database_1_postgresql_connection_pool,
-                    database_2_postgresql_connection_pool,
-                    database_1_redis_connection_pool,
-                )
-                .await;
-            }
-            // GET functional.
-            (HttpRoute::CHANNEL__GET_MANY_BY_NAME_IN_SUBSCRIPTIONS, &Method::POST) => {
-                return channel___base::get_many_by_name_in_subscriptions::GetManyByNameInSubscriptions::run(
-                    request,
-                    database_1_postgresql_connection_pool,
-                    database_2_postgresql_connection_pool,
-                    database_1_redis_connection_pool,
-                )
-                .await;
-            }
-            // GET functional.
-            (HttpRoute::CHANNEL__GET_MANY_BY_SUBSCRIPTION, &Method::POST) => {
-                return channel___base::get_many_by_subscription::GetManyBySubscription::run(
-                    request,
-                    database_1_postgresql_connection_pool,
-                    database_2_postgresql_connection_pool,
-                    database_1_redis_connection_pool,
-                )
-                .await;
-            }
-            // GET functional.
-            (HttpRoute::CHANNEL__GET_MANY_PUBLIC_BY_NAME, &Method::POST) => {
-                return channel___base::get_many_public_by_name::GetManyPublicByName::run(
-                    request,
-                    database_1_postgresql_connection_pool,
-                    database_2_postgresql_connection_pool,
-                    database_1_redis_connection_pool,
-                )
-                .await;
-            }
-            (HttpRoute::CHANNEL_SUBSCRIPTION__CREATE, &Method::POST) => {
-                return channel_subscription___base::create::Create::run(
-                    request,
-                    database_1_postgresql_connection_pool,
-                    database_2_postgresql_connection_pool,
-                    database_1_redis_connection_pool,
-                )
-                .await;
-            }
-            // Area for not existing routes.
-            _ => {
-                #[cfg(feature = "manual_testing")]
-                {
-                    match (
-                        route, method,
-                    ) {
-                        // Area for existing routes with not authorized user.
-                        // GET functional.
-                        (HttpRoute::APPLICATION_USER__CHECK_NICKNAME_FOR_EXISTING_, &Method::POST) => {
-                            return application_user___authorization::check_nickname_for_existing::CheckNicknameForExisting::run_(
-                                request,
-                                database_1_postgresql_connection_pool,
-                                database_2_postgresql_connection_pool,
-                                database_1_redis_connection_pool,
-                            )
-                            .await;
+        match r#match.value {
+            &ActionRoute_::ApplicationUser__Authorization { ref application_user___authorization } => {
+                match (application_user___authorization, method) {
+                    // GET functional.
+                    (&ApplicationUser__Authorization_::CheckNicknameForExisting, &Method::POST) => {
+                        return application_user___authorization::check_nickname_for_existing::CheckNicknameForExisting::run(
+                            request,
+                            database_1_postgresql_connection_pool,
+                            database_2_postgresql_connection_pool,
+                            database_1_redis_connection_pool,
+                        )
+                        .await;
+                    }
+                    // GET functional.
+                    (&ApplicationUser__Authorization_::CheckEmailForExisting, &Method::POST) => {
+                        return application_user___authorization::check_email_for_existing::CheckEmailForExisting::run(
+                            request,
+                            database_1_postgresql_connection_pool,
+                            database_2_postgresql_connection_pool,
+                            database_1_redis_connection_pool,
+                        )
+                        .await;
+                    }
+                    (&ApplicationUser__Authorization_::RegisterByFirstStep, &Method::POST) => {
+                        return application_user___authorization::register_by_first_step::RegisterByFirstStep::run(
+                            request,
+                            database_1_postgresql_connection_pool,
+                            database_2_postgresql_connection_pool,
+                            database_1_redis_connection_pool,
+                        )
+                        .await;
+                    }
+                    (&ApplicationUser__Authorization_::RegisterBySecondStep, &Method::POST) => {
+                        return application_user___authorization::register_by_second_step::RegisterBySecondStep::run(
+                            request,
+                            database_1_postgresql_connection_pool,
+                            database_2_postgresql_connection_pool,
+                            database_1_redis_connection_pool,
+                        )
+                        .await;
+                    }
+                    (&ApplicationUser__Authorization_::RegisterByLastStep, &Method::POST) => {
+                        return application_user___authorization::register_by_last_step::RegisterByLastStep::run(
+                            request,
+                            database_1_postgresql_connection_pool,
+                            database_2_postgresql_connection_pool,
+                            database_1_redis_connection_pool,
+                        )
+                        .await;
+                    }
+                    (&ApplicationUser__Authorization_::SendEmailForRegister, &Method::POST) => {
+                        return application_user___authorization::send_email_for_register::SendEmailForRegister::run(
+                            request,
+                            database_1_postgresql_connection_pool,
+                            database_2_postgresql_connection_pool,
+                            database_1_redis_connection_pool,
+                        )
+                        .await;
+                    }
+                    (&ApplicationUser__Authorization_::AuthorizeByFirstStep, &Method::POST) => {
+                        return application_user___authorization::authorize_by_first_step::AuthorizeByFirstStep::run(
+                            request,
+                            database_1_postgresql_connection_pool,
+                            database_2_postgresql_connection_pool,
+                            database_1_redis_connection_pool,
+                        )
+                        .await;
+                    }
+                    (&ApplicationUser__Authorization_::AuthorizeByLastStep, &Method::POST) => {
+                        return application_user___authorization::authorize_by_last_step::AuthorizeByLastStep::run(
+                            request,
+                            database_1_postgresql_connection_pool,
+                            database_2_postgresql_connection_pool,
+                            database_1_redis_connection_pool,
+                        )
+                        .await;
+                    }
+                    (&ApplicationUser__Authorization_::SendEmailForAuthorize, &Method::POST) => {
+                        return application_user___authorization::send_email_for_authorize::SendEmailForAuthorize::run(
+                            request,
+                            database_1_postgresql_connection_pool,
+                            database_2_postgresql_connection_pool,
+                            database_1_redis_connection_pool,
+                        )
+                        .await;
+                    }
+                    (&ApplicationUser__Authorization_::ResetPasswordByFirstStep, &Method::POST) => {
+                        return application_user___authorization::reset_password_by_first_step::ResetPasswordByFirstStep::run(
+                            request,
+                            database_1_postgresql_connection_pool,
+                            database_2_postgresql_connection_pool,
+                            database_1_redis_connection_pool,
+                        )
+                        .await;
+                    }
+                    (&ApplicationUser__Authorization_::ResetPasswordBySecondStep, &Method::POST) => {
+                        return application_user___authorization::reset_password_by_second_step::ResetPasswordBySecondStep::run(
+                            request,
+                            database_1_postgresql_connection_pool,
+                            database_2_postgresql_connection_pool,
+                            database_1_redis_connection_pool,
+                        )
+                        .await;
+                    }
+                    (&ApplicationUser__Authorization_::ResetPasswordByLastStep, &Method::POST) => {
+                        return application_user___authorization::reset_password_by_last_step::ResetPasswordByLastStep::run(
+                            request,
+                            database_1_postgresql_connection_pool,
+                            database_2_postgresql_connection_pool,
+                            database_1_redis_connection_pool,
+                        )
+                        .await;
+                    }
+                    (&ApplicationUser__Authorization_::SendEmailForResetPassword, &Method::POST) => {
+                        return application_user___authorization::send_email_for_reset_password::SendEmailForResetPassword::run(
+                            request,
+                            database_1_postgresql_connection_pool,
+                            database_2_postgresql_connection_pool,
+                            database_1_redis_connection_pool,
+                        )
+                        .await;
+                    }
+                    (&ApplicationUser__Authorization_::RefreshAccessToken, &Method::POST) => {
+                        return application_user___authorization::refresh_access_token::RefreshAccessToken::run(
+                            request,
+                            database_1_postgresql_connection_pool,
+                            database_2_postgresql_connection_pool,
+                            database_1_redis_connection_pool,
+                        )
+                        .await;
+                    }
+                    (&ApplicationUser__Authorization_::DeauthorizeFromOneDevice, &Method::POST) => {
+                        return application_user___authorization::deauthorize_from_one_device::DeauthorizeFromOneDevice::run(
+                            request,
+                            database_1_postgresql_connection_pool,
+                            database_2_postgresql_connection_pool,
+                            database_1_redis_connection_pool,
+                        )
+                        .await;
+                    }
+                    (&ApplicationUser__Authorization_::DeauthorizeFromAllDevices, &Method::POST) => {
+                        return application_user___authorization::deauthorize_from_all_devices::DeauthorizeFromAllDevices::run(
+                            request,
+                            database_1_postgresql_connection_pool,
+                            database_2_postgresql_connection_pool,
+                            database_1_redis_connection_pool,
+                        )
+                        .await;
+                    }
+                    _ => {
+                        #[cfg(feature = "manual_testing")]
+                        {
+                            match (application_user___authorization, method) {
+                                // GET functional.
+                                (&ApplicationUser__Authorization_::CheckNicknameForExisting_, &Method::POST) => {
+                                    return application_user___authorization::check_nickname_for_existing::CheckNicknameForExisting::run_(
+                                        request,
+                                        database_1_postgresql_connection_pool,
+                                        database_2_postgresql_connection_pool,
+                                        database_1_redis_connection_pool,
+                                    )
+                                    .await;
+                                }
+                                // GET functional.
+                                (&ApplicationUser__Authorization_::CheckEmailForExisting_, &Method::POST) => {
+                                    return application_user___authorization::check_email_for_existing::CheckEmailForExisting::run_(
+                                        request,
+                                        database_1_postgresql_connection_pool,
+                                        database_2_postgresql_connection_pool,
+                                        database_1_redis_connection_pool,
+                                    )
+                                    .await;
+                                }
+                                (&ApplicationUser__Authorization_::RegisterByFirstStep_, &Method::POST) => {
+                                    return application_user___authorization::register_by_first_step::RegisterByFirstStep::run_(
+                                        request,
+                                        database_1_postgresql_connection_pool,
+                                        database_2_postgresql_connection_pool,
+                                        database_1_redis_connection_pool,
+                                    )
+                                    .await;
+                                }
+                                (&ApplicationUser__Authorization_::RegisterBySecondStep_, &Method::POST) => {
+                                    return application_user___authorization::register_by_second_step::RegisterBySecondStep::run_(
+                                        request,
+                                        database_1_postgresql_connection_pool,
+                                        database_2_postgresql_connection_pool,
+                                        database_1_redis_connection_pool,
+                                    )
+                                    .await;
+                                }
+                                (&ApplicationUser__Authorization_::RegisterByLastStep_, &Method::POST) => {
+                                    return application_user___authorization::register_by_last_step::RegisterByLastStep::run_(
+                                        request,
+                                        database_1_postgresql_connection_pool,
+                                        database_2_postgresql_connection_pool,
+                                        database_1_redis_connection_pool,
+                                    )
+                                    .await;
+                                }
+                                (&ApplicationUser__Authorization_::SendEmailForRegister_, &Method::POST) => {
+                                    return application_user___authorization::send_email_for_register::SendEmailForRegister::run_(
+                                        request,
+                                        database_1_postgresql_connection_pool,
+                                        database_2_postgresql_connection_pool,
+                                        database_1_redis_connection_pool,
+                                    )
+                                    .await;
+                                }
+                                (&ApplicationUser__Authorization_::AuthorizeByFirstStep_, &Method::POST) => {
+                                    return application_user___authorization::authorize_by_first_step::AuthorizeByFirstStep::run_(
+                                        request,
+                                        database_1_postgresql_connection_pool,
+                                        database_2_postgresql_connection_pool,
+                                        database_1_redis_connection_pool,
+                                    )
+                                    .await;
+                                }
+                                (&ApplicationUser__Authorization_::AuthorizeByLastStep_, &Method::POST) => {
+                                    return application_user___authorization::authorize_by_last_step::AuthorizeByLastStep::run_(
+                                        request,
+                                        database_1_postgresql_connection_pool,
+                                        database_2_postgresql_connection_pool,
+                                        database_1_redis_connection_pool,
+                                    )
+                                    .await;
+                                }
+                                (&ApplicationUser__Authorization_::SendEmailForAuthorize_, &Method::POST) => {
+                                    return application_user___authorization::send_email_for_authorize::SendEmailForAuthorize::run_(
+                                        request,
+                                        database_1_postgresql_connection_pool,
+                                        database_2_postgresql_connection_pool,
+                                        database_1_redis_connection_pool,
+                                    )
+                                    .await;
+                                }
+                                (&ApplicationUser__Authorization_::ResetPasswordByFirstStep_, &Method::POST) => {
+                                    return application_user___authorization::reset_password_by_first_step::ResetPasswordByFirstStep::run_(
+                                        request,
+                                        database_1_postgresql_connection_pool,
+                                        database_2_postgresql_connection_pool,
+                                        database_1_redis_connection_pool,
+                                    )
+                                    .await;
+                                }
+                                (&ApplicationUser__Authorization_::ResetPasswordBySecondStep_, &Method::POST) => {
+                                    return application_user___authorization::reset_password_by_second_step::ResetPasswordBySecondStep::run_(
+                                        request,
+                                        database_1_postgresql_connection_pool,
+                                        database_2_postgresql_connection_pool,
+                                        database_1_redis_connection_pool,
+                                    )
+                                    .await;
+                                }
+                                (&ApplicationUser__Authorization_::ResetPasswordByLastStep_, &Method::POST) => {
+                                    return application_user___authorization::reset_password_by_last_step::ResetPasswordByLastStep::run_(
+                                        request,
+                                        database_1_postgresql_connection_pool,
+                                        database_2_postgresql_connection_pool,
+                                        database_1_redis_connection_pool,
+                                    )
+                                    .await;
+                                }
+                                (&ApplicationUser__Authorization_::SendEmailForResetPassword_, &Method::POST) => {
+                                    return application_user___authorization::send_email_for_reset_password::SendEmailForResetPassword::run_(
+                                        request,
+                                        database_1_postgresql_connection_pool,
+                                        database_2_postgresql_connection_pool,
+                                        database_1_redis_connection_pool,
+                                    )
+                                    .await;
+                                }
+                                (&ApplicationUser__Authorization_::RefreshAccessToken_, &Method::POST) => {
+                                    return application_user___authorization::refresh_access_token::RefreshAccessToken::run_(
+                                        request,
+                                        database_1_postgresql_connection_pool,
+                                        database_2_postgresql_connection_pool,
+                                        database_1_redis_connection_pool,
+                                    )
+                                    .await;
+                                }
+                                (&ApplicationUser__Authorization_::DeauthorizeFromOneDevice_, &Method::POST) => {
+                                    return application_user___authorization::deauthorize_from_one_device::DeauthorizeFromOneDevice::run_(
+                                        request,
+                                        database_1_postgresql_connection_pool,
+                                        database_2_postgresql_connection_pool,
+                                        database_1_redis_connection_pool,
+                                    )
+                                    .await;
+                                }
+                                (&ApplicationUser__Authorization_::DeauthorizeFromAllDevices_, &Method::POST) => {
+                                    return application_user___authorization::deauthorize_from_all_devices::DeauthorizeFromAllDevices::run_(
+                                        request,
+                                        database_1_postgresql_connection_pool,
+                                        database_2_postgresql_connection_pool,
+                                        database_1_redis_connection_pool,
+                                    )
+                                    .await;
+                                }
+                                _ => {}
+                            }
                         }
-                        // GET functional.
-                        (HttpRoute::APPLICATION_USER__CHECK_EMAIL_FOR_EXISTING_, &Method::POST) => {
-                            return application_user___authorization::check_email_for_existing::CheckEmailForExisting::run_(
-                                request,
-                                database_1_postgresql_connection_pool,
-                                database_2_postgresql_connection_pool,
-                                database_1_redis_connection_pool,
-                            )
-                            .await;
+                    }
+                }
+            },
+            &ActionRoute_::Channel__Base { ref channel___base } => {
+                match (channel___base, method) {
+                    // GET functional.
+                    (&Channel__Base_::GetOneByID, &Method::POST) => {
+                        return channel___base::get_one_by_id::GetOneByID::run(
+                            request,
+                            database_1_postgresql_connection_pool,
+                            database_2_postgresql_connection_pool,
+                            database_1_redis_connection_pool,
+                        )
+                        .await;
+                    }
+                    // GET functional.
+                    (&Channel__Base_::GetManyByNameInSubscriptions, &Method::POST) => {
+                        return channel___base::get_many_by_name_in_subscriptions::GetManyByNameInSubscriptions::run(
+                            request,
+                            database_1_postgresql_connection_pool,
+                            database_2_postgresql_connection_pool,
+                            database_1_redis_connection_pool,
+                        )
+                        .await;
+                    }
+                    // GET functional.
+                    (&Channel__Base_::GetManyBySubscription, &Method::POST) => {
+                        return channel___base::get_many_by_subscription::GetManyBySubscription::run(
+                            request,
+                            database_1_postgresql_connection_pool,
+                            database_2_postgresql_connection_pool,
+                            database_1_redis_connection_pool,
+                        )
+                        .await;
+                    }
+                    // GET functional.
+                    (&Channel__Base_::GetManyPublicByName, &Method::POST) => {
+                        return channel___base::get_many_public_by_name::GetManyPublicByName::run(
+                            request,
+                            database_1_postgresql_connection_pool,
+                            database_2_postgresql_connection_pool,
+                            database_1_redis_connection_pool,
+                        )
+                        .await;
+                    }
+                    _ => {
+                        #[cfg(feature = "manual_testing")]
+                        {
+                            match (channel___base, method) {
+                                // GET functional.
+                                (&Channel__Base_::GetOneByID_, &Method::POST) => {
+                                    return channel___base::get_one_by_id::GetOneByID::run_(
+                                        request,
+                                        database_1_postgresql_connection_pool,
+                                        database_2_postgresql_connection_pool,
+                                        database_1_redis_connection_pool,
+                                    )
+                                    .await;
+                                }
+                                // GET functional.
+                                (&Channel__Base_::GetManyByNameInSubscriptions_, &Method::POST) => {
+                                    return channel___base::get_many_by_name_in_subscriptions::GetManyByNameInSubscriptions::run_(
+                                        request,
+                                        database_1_postgresql_connection_pool,
+                                        database_2_postgresql_connection_pool,
+                                        database_1_redis_connection_pool,
+                                    )
+                                    .await;
+                                }
+                                // GET functional.
+                                (&Channel__Base_::GetManyBySubscription_, &Method::POST) => {
+                                    return channel___base::get_many_by_subscription::GetManyBySubscription::run_(
+                                        request,
+                                        database_1_postgresql_connection_pool,
+                                        database_2_postgresql_connection_pool,
+                                        database_1_redis_connection_pool,
+                                    )
+                                    .await;
+                                }
+                                // GET functional.
+                                (&Channel__Base_::GetManyPublicByName_, &Method::POST) => {
+                                    return channel___base::get_many_public_by_name::GetManyPublicByName::run_(
+                                        request,
+                                        database_1_postgresql_connection_pool,
+                                        database_2_postgresql_connection_pool,
+                                        database_1_redis_connection_pool,
+                                    )
+                                    .await;
+                                }
+                                _ => {}
+                            }
                         }
-                        (HttpRoute::APPLICATION_USER__REGISTER_BY_FIRST_STEP_, &Method::POST) => {
-                            return application_user___authorization::register_by_first_step::RegisterByFirstStep::run_(
-                                request,
-                                database_1_postgresql_connection_pool,
-                                database_2_postgresql_connection_pool,
-                                database_1_redis_connection_pool,
-                            )
-                            .await;
-                        }
-                        (HttpRoute::APPLICATION_USER__REGISTER_BY_SECOND_STEP_, &Method::POST) => {
-                            return application_user___authorization::register_by_second_step::RegisterBySecondStep::run_(
-                                request,
-                                database_1_postgresql_connection_pool,
-                                database_2_postgresql_connection_pool,
-                                database_1_redis_connection_pool,
-                            )
-                            .await;
-                        }
-                        (HttpRoute::APPLICATION_USER__REGISTER_BY_LAST_STEP_, &Method::POST) => {
-                            return application_user___authorization::register_by_last_step::RegisterByLastStep::run_(
-                                request,
-                                database_1_postgresql_connection_pool,
-                                database_2_postgresql_connection_pool,
-                                database_1_redis_connection_pool,
-                            )
-                            .await;
-                        }
-                        (HttpRoute::APPLICATION_USER__SEND_EMAIL_FOR_REGISTER_, &Method::POST) => {
-                            return application_user___authorization::send_email_for_register::SendEmailForRegister::run_(
-                                request,
-                                database_1_postgresql_connection_pool,
-                                database_2_postgresql_connection_pool,
-                                database_1_redis_connection_pool,
-                            )
-                            .await;
-                        }
-                        (HttpRoute::APPLICATION_USER__AUTHORIZE_BY_FIRST_STEP_, &Method::POST) => {
-                            return application_user___authorization::authorize_by_first_step::AuthorizeByFirstStep::run_(
-                                request,
-                                database_1_postgresql_connection_pool,
-                                database_2_postgresql_connection_pool,
-                                database_1_redis_connection_pool,
-                            )
-                            .await;
-                        }
-                        (HttpRoute::APPLICATION_USER__AUTHORIZE_BY_LAST_STEP_, &Method::POST) => {
-                            return application_user___authorization::authorize_by_last_step::AuthorizeByLastStep::run_(
-                                request,
-                                database_1_postgresql_connection_pool,
-                                database_2_postgresql_connection_pool,
-                                database_1_redis_connection_pool,
-                            )
-                            .await;
-                        }
-                        (HttpRoute::APPLICATION_USER__SEND_EMAIL_FOR_AUTHORIZE_, &Method::POST) => {
-                            return application_user___authorization::send_email_for_authorize::SendEmailForAuthorize::run_(
-                                request,
-                                database_1_postgresql_connection_pool,
-                                database_2_postgresql_connection_pool,
-                                database_1_redis_connection_pool,
-                            )
-                            .await;
-                        }
-                        (HttpRoute::APPLICATION_USER__RESET_PASSWORD_BY_FIRST_STEP_, &Method::POST) => {
-                            return application_user___authorization::reset_password_by_first_step::ResetPasswordByFirstStep::run_(
-                                request,
-                                database_1_postgresql_connection_pool,
-                                database_2_postgresql_connection_pool,
-                                database_1_redis_connection_pool,
-                            )
-                            .await;
-                        }
-                        (HttpRoute::APPLICATION_USER__RESET_PASSWORD_BY_SECOND_STEP_, &Method::POST) => {
-                            return application_user___authorization::reset_password_by_second_step::ResetPasswordBySecondStep::run_(
-                                request,
-                                database_1_postgresql_connection_pool,
-                                database_2_postgresql_connection_pool,
-                                database_1_redis_connection_pool,
-                            )
-                            .await;
-                        }
-                        (HttpRoute::APPLICATION_USER__RESET_PASSWORD_BY_LAST_STEP_, &Method::POST) => {
-                            return application_user___authorization::reset_password_by_last_step::ResetPasswordByLastStep::run_(
-                                request,
-                                database_1_postgresql_connection_pool,
-                                database_2_postgresql_connection_pool,
-                                database_1_redis_connection_pool,
-                            )
-                            .await;
-                        }
-                        (HttpRoute::APPLICATION_USER__SEND_EMAIL_FOR_RESET_PASSWORD_, &Method::POST) => {
-                            return application_user___authorization::send_email_for_reset_password::SendEmailForResetPassword::run_(
-                                request,
-                                database_1_postgresql_connection_pool,
-                                database_2_postgresql_connection_pool,
-                                database_1_redis_connection_pool,
-                            )
-                            .await;
-                        }
-                        (HttpRoute::APPLICATION_USER__REFRESH_ACCESS_TOKEN_, &Method::POST) => {
-                            return application_user___authorization::refresh_access_token::RefreshApplicationUserAccessToken::run_(
-                                request,
-                                database_1_postgresql_connection_pool,
-                                database_2_postgresql_connection_pool,
-                                database_1_redis_connection_pool,
-                            )
-                            .await;
-                        }
-                        // Area for existing routes with authorized user.
-                        (HttpRoute::APPLICATION_USER__DEAUTHORIZE_FROM_ONE_DEVICE_, &Method::POST) => {
-                            return application_user___authorization::deauthorize_from_one_device::DeauthorizeFromOneDevice::run_(
-                                request,
-                                database_1_postgresql_connection_pool,
-                                database_2_postgresql_connection_pool,
-                                database_1_redis_connection_pool,
-                            )
-                            .await;
-                        }
-                        (HttpRoute::APPLICATION_USER__DEAUTHORIZE_FROM_ALL_DEVICE_, &Method::POST) => {
-                            return application_user___authorization::deauthorize_from_all_devices::DeauthorizeFromAllDevices::run_(
-                                request,
-                                database_1_postgresql_connection_pool,
-                                database_2_postgresql_connection_pool,
-                                database_1_redis_connection_pool,
-                            )
-                            .await;
-                        }
-                        // GET functional.
-                        (HttpRoute::CHANNEL__GET_ONE_BY_ID_, &Method::POST) => {
-                            return channel___base::get_one_by_id::GetOneByID::run_(
-                                request,
-                                database_1_postgresql_connection_pool,
-                                database_2_postgresql_connection_pool,
-                                database_1_redis_connection_pool,
-                            )
-                            .await;
-                        }
-                        // GET functional.
-                        (HttpRoute::CHANNEL__GET_MANY_BY_NAME_IN_SUBSCRIPTIONS_, &Method::POST) => {
-                            return channel___base::get_many_by_name_in_subscriptions::GetManyByNameInSubscriptions::run_(
-                                request,
-                                database_1_postgresql_connection_pool,
-                                database_2_postgresql_connection_pool,
-                                database_1_redis_connection_pool,
-                            )
-                            .await;
-                        }
-                        // GET functional.
-                        (HttpRoute::CHANNEL__GET_MANY_BY_SUBSCRIPTION_, &Method::POST) => {
-                            return channel___base::get_many_by_subscription::GetManyBySubscription::run_(
-                                request,
-                                database_1_postgresql_connection_pool,
-                                database_2_postgresql_connection_pool,
-                                database_1_redis_connection_pool,
-                            )
-                            .await;
-                        }
-                        // GET functional.
-                        (HttpRoute::CHANNEL__GET_MANY_PUBLIC_BY_NAME_, &Method::POST) => {
-                            return channel___base::get_many_public_by_name::GetManyPublicByName::run_(
-                                request,
-                                database_1_postgresql_connection_pool,
-                                database_2_postgresql_connection_pool,
-                                database_1_redis_connection_pool,
-                            )
-                            .await;
-                        }
-                        (HttpRoute::CHANNEL_SUBSCRIPTION__CREATE_, &Method::POST) => {
-                            return channel_subscription___base::create::Create::run_(
-                                request,
-                                database_1_postgresql_connection_pool,
-                                database_2_postgresql_connection_pool,
-                                database_1_redis_connection_pool,
-                            )
-                            .await;
-                        }
-                        // Area for not existing routes.
-                        _ => {}
                     }
                 }
 
-                return route_not_found::route_not_found(
-                    request,
-                    database_1_postgresql_connection_pool,
-                    database_2_postgresql_connection_pool,
-                    database_1_redis_connection_pool,
-                )
-                .await;
+            },
+            &ActionRoute_::ChannelSubscription__Base { ref channel_subscription___base } => {
+                match (channel_subscription___base, method) {
+                    (&ChannelSubscription__Base_::Create, &Method::POST) => {
+                        return channel_subscription___base::create::Create::run(
+                            request,
+                            database_1_postgresql_connection_pool,
+                            database_2_postgresql_connection_pool,
+                            database_1_redis_connection_pool,
+                        )
+                        .await;
+                    }
+                    _ => {
+                        #[cfg(feature = "manual_testing")]
+                        {
+                            match (channel_subscription___base, method) {
+                                (&ChannelSubscription__Base_::Create_, &Method::POST) => {
+                                    return channel_subscription___base::create::Create::run_(
+                                        request,
+                                        database_1_postgresql_connection_pool,
+                                        database_2_postgresql_connection_pool,
+                                        database_1_redis_connection_pool,
+                                    )
+                                    .await;
+                                }
+                                _ => {}
+                            }
+                        }
+                    }
+                }
             }
         }
+
+        return route_not_found::route_not_found(
+            request,
+            database_2_postgresql_connection_pool,
+        )
+        .await;
     }
 
     fn create_signal(signal_kind: SignalKind) -> Result<impl Future<Output = ()>, ErrorAuditor> {
