@@ -49,9 +49,9 @@ use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
 
-pub struct ActionProcessor;
+pub struct AuthorizeByFirstStep;
 
-impl ActionProcessor {
+impl AuthorizeByFirstStep {
     pub async fn process<'a, T>(
         // TODO Если два логина на разные устройства, и коды подтверждения еще не введены? То есть, приийдет пользоватею два разных кода, а оне не узнает, какой код к какому устройству
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,

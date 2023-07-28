@@ -1,4 +1,4 @@
-use crate::application_layer::functionality::action_processor::application_user___authorization::send_email_for_reset_password::ActionProcessor;
+use crate::application_layer::functionality::action_processor::application_user___authorization::send_email_for_reset_password::SendEmailForResetPassword as SendEmailForResetPassword_;
 use crate::application_layer::functionality::action_processor::application_user___authorization::send_email_for_reset_password::Incoming;
 use crate::application_layer::functionality::action_processor::application_user___authorization::send_email_for_reset_password::Outcoming;
 use crate::application_layer::functionality::action_processor::application_user___authorization::send_email_for_reset_password::Precedent;
@@ -41,7 +41,7 @@ impl SendEmailForResetPassword {
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
             database_1_redis_connection_pool,
-            ActionProcessor::process,
+            SendEmailForResetPassword_::process,
         )
         .await;
     }

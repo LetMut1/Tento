@@ -1,4 +1,4 @@
-use crate::application_layer::functionality::action_processor::application_user___authorization::deauthorize_from_all_devices::ActionProcessor;
+use crate::application_layer::functionality::action_processor::application_user___authorization::deauthorize_from_all_devices::DeauthorizeFromAllDevices as DeauthorizeFromAllDevices_;
 use crate::application_layer::functionality::action_processor::application_user___authorization::deauthorize_from_all_devices::Incoming;
 use crate::application_layer::functionality::action_processor::application_user___authorization::deauthorize_from_all_devices::Precedent;
 use crate::application_layer::functionality::service::common_action_processor::CommonActionProcessor;
@@ -41,7 +41,7 @@ impl DeauthorizeFromAllDevices {
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
             database_1_redis_connection_pool,
-            ActionProcessor::process,
+            DeauthorizeFromAllDevices_::process,
         )
         .await;
     }

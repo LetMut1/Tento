@@ -1,4 +1,4 @@
-use crate::application_layer::functionality::action_processor::application_user___authorization::send_email_for_authorize::ActionProcessor;
+use crate::application_layer::functionality::action_processor::application_user___authorization::send_email_for_authorize::SendEmailForAuthorize as SendEmailForAuthorize_;
 use crate::application_layer::functionality::action_processor::application_user___authorization::send_email_for_authorize::Incoming;
 use crate::application_layer::functionality::action_processor::application_user___authorization::send_email_for_authorize::Outcoming;
 use crate::application_layer::functionality::action_processor::application_user___authorization::send_email_for_authorize::Precedent;
@@ -41,7 +41,7 @@ impl SendEmailForAuthorize {
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
             database_1_redis_connection_pool,
-            ActionProcessor::process,
+            SendEmailForAuthorize_::process,
         )
         .await;
     }

@@ -38,9 +38,9 @@ use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
 
-pub struct ActionProcessor;
+pub struct RegisterBySecondStep;
 
-impl ActionProcessor {
+impl RegisterBySecondStep {
     pub async fn process<'a, T>(
         _database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,

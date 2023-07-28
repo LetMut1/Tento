@@ -1,4 +1,4 @@
-use crate::application_layer::functionality::action_processor::channel___base::get_many_by_name_in_subscriptions::ActionProcessor;
+use crate::application_layer::functionality::action_processor::channel___base::get_many_by_name_in_subscriptions::GetManyByNameInSubscriptions as GetManyByNameInSubscriptions_;
 use crate::application_layer::functionality::action_processor::channel___base::get_many_by_name_in_subscriptions::Incoming;
 use crate::application_layer::functionality::action_processor::channel___base::get_many_by_name_in_subscriptions::Outcoming;
 use crate::application_layer::functionality::action_processor::channel___base::get_many_by_name_in_subscriptions::Precedent;
@@ -41,7 +41,7 @@ impl GetManyByNameInSubscriptions {
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
             database_1_redis_connection_pool,
-            ActionProcessor::process,
+            GetManyByNameInSubscriptions_::process,
         )
         .await;
     }

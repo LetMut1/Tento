@@ -1,4 +1,4 @@
-use crate::application_layer::functionality::action_processor::channel___base::get_many_public_by_name::ActionProcessor;
+use crate::application_layer::functionality::action_processor::channel___base::get_many_public_by_name::GetManyPublicByName as GetManyPublicByName_;
 use crate::application_layer::functionality::action_processor::channel___base::get_many_public_by_name::Incoming;
 use crate::application_layer::functionality::action_processor::channel___base::get_many_public_by_name::Outcoming;
 use crate::application_layer::functionality::action_processor::channel___base::get_many_public_by_name::Precedent;
@@ -41,7 +41,7 @@ impl GetManyPublicByName {
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
             database_1_redis_connection_pool,
-            ActionProcessor::process,
+            GetManyPublicByName_::process,
         )
         .await;
     }

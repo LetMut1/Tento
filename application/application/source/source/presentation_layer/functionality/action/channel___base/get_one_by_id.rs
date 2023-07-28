@@ -1,4 +1,4 @@
-use crate::application_layer::functionality::action_processor::channel___base::get_one_by_id::ActionProcessor;
+use crate::application_layer::functionality::action_processor::channel___base::get_one_by_id::GetOneByID as GetOneByID_;
 use crate::application_layer::functionality::action_processor::channel___base::get_one_by_id::Incoming;
 use crate::application_layer::functionality::action_processor::channel___base::get_one_by_id::Outcoming;
 use crate::application_layer::functionality::action_processor::channel___base::get_one_by_id::Precedent;
@@ -41,7 +41,7 @@ impl GetOneByID {
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
             database_1_redis_connection_pool,
-            ActionProcessor::process,
+            GetOneByID_::process,
         )
         .await;
     }

@@ -1,4 +1,4 @@
-use crate::application_layer::functionality::action_processor::application_user___authorization::register_by_first_step::ActionProcessor;
+use crate::application_layer::functionality::action_processor::application_user___authorization::register_by_first_step::RegisterByFirstStep as RegisterByFirstStep_;
 use crate::application_layer::functionality::action_processor::application_user___authorization::register_by_first_step::Incoming;
 use crate::application_layer::functionality::action_processor::application_user___authorization::register_by_first_step::Outcoming;
 use crate::application_layer::functionality::action_processor::application_user___authorization::register_by_first_step::Precedent;
@@ -41,7 +41,7 @@ impl RegisterByFirstStep {
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
             database_1_redis_connection_pool,
-            ActionProcessor::process,
+            RegisterByFirstStep_::process,
         )
         .await;
     }

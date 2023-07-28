@@ -1,4 +1,4 @@
-use crate::application_layer::functionality::action_processor::application_user___authorization::refresh_access_token::ActionProcessor;
+use crate::application_layer::functionality::action_processor::application_user___authorization::refresh_access_token::RefreshAccessToken as RefreshAccessToken_;
 use crate::application_layer::functionality::action_processor::application_user___authorization::refresh_access_token::Incoming;
 use crate::application_layer::functionality::action_processor::application_user___authorization::refresh_access_token::Outcoming;
 use crate::application_layer::functionality::action_processor::application_user___authorization::refresh_access_token::Precedent;
@@ -41,7 +41,7 @@ impl RefreshAccessToken {
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
             database_1_redis_connection_pool,
-            ActionProcessor::process,
+            RefreshAccessToken_::process,
         )
         .await;
     }

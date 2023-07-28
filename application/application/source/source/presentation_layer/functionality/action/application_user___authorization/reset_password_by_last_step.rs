@@ -1,4 +1,4 @@
-use crate::application_layer::functionality::action_processor::application_user___authorization::reset_password_by_last_step::ActionProcessor;
+use crate::application_layer::functionality::action_processor::application_user___authorization::reset_password_by_last_step::ResetPasswordByLastStep as ResetPasswordByLastStep_;
 use crate::application_layer::functionality::action_processor::application_user___authorization::reset_password_by_last_step::Incoming;
 use crate::application_layer::functionality::action_processor::application_user___authorization::reset_password_by_last_step::Precedent;
 use crate::application_layer::functionality::service::common_action_processor::CommonActionProcessor;
@@ -41,7 +41,7 @@ impl ResetPasswordByLastStep {
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
             database_1_redis_connection_pool,
-            ActionProcessor::process,
+            ResetPasswordByLastStep_::process,
         )
         .await;
     }

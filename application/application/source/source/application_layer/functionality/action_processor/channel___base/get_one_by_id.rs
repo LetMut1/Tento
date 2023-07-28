@@ -51,9 +51,9 @@ use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
 
-pub struct ActionProcessor;
+pub struct GetOneByID;
 
-impl ActionProcessor {
+impl GetOneByID {
     pub async fn process<'a, T>(
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,

@@ -1,4 +1,4 @@
-use crate::application_layer::functionality::action_processor::application_user___authorization::check_nickname_for_existing::ActionProcessor;
+use crate::application_layer::functionality::action_processor::application_user___authorization::check_nickname_for_existing::CheckNicknameForExisting as CheckNicknameForExisting_;
 use crate::application_layer::functionality::action_processor::application_user___authorization::check_nickname_for_existing::Incoming;
 use crate::application_layer::functionality::action_processor::application_user___authorization::check_nickname_for_existing::Outcoming;
 use crate::application_layer::functionality::service::common_action_processor::CommonActionProcessor;
@@ -41,7 +41,7 @@ impl CheckNicknameForExisting {
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
             database_1_redis_connection_pool,
-            ActionProcessor::process,
+            CheckNicknameForExisting_::process,
         )
         .await;
     }

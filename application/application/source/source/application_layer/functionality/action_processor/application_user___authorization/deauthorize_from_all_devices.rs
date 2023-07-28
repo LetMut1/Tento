@@ -30,9 +30,9 @@ use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
 
-pub struct ActionProcessor;
+pub struct DeauthorizeFromAllDevices;
 
-impl ActionProcessor {
+impl DeauthorizeFromAllDevices {
     pub async fn process<'a, T>(
         // TODO TODO TODO УДАляются ли АккессТокены все при массовом разлогине? Если не удаляются, можно просто при Ектракте АккессТокена использовать проверку на наличие рефреша, если нет, значит произошел разлогин.
         _database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,

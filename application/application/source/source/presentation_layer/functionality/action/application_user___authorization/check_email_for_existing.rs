@@ -1,4 +1,4 @@
-use crate::application_layer::functionality::action_processor::application_user___authorization::check_email_for_existing::ActionProcessor;
+use crate::application_layer::functionality::action_processor::application_user___authorization::check_email_for_existing::CheckEmailForExisting as CheckEmailForExisting_;
 use crate::application_layer::functionality::action_processor::application_user___authorization::check_email_for_existing::Incoming;
 use crate::application_layer::functionality::action_processor::application_user___authorization::check_email_for_existing::Outcoming;
 use crate::application_layer::functionality::service::common_action_processor::CommonActionProcessor;
@@ -41,7 +41,7 @@ impl CheckEmailForExisting {
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
             database_1_redis_connection_pool,
-            ActionProcessor::process,
+            CheckEmailForExisting_::process,
         )
         .await;
     }

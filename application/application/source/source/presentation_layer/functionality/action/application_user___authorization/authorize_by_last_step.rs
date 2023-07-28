@@ -1,4 +1,4 @@
-use crate::application_layer::functionality::action_processor::application_user___authorization::authorize_by_last_step::ActionProcessor;
+use crate::application_layer::functionality::action_processor::application_user___authorization::authorize_by_last_step::AuthorizeByLastStep as AuthorizeByLastStep_;
 use crate::application_layer::functionality::action_processor::application_user___authorization::authorize_by_last_step::Incoming;
 use crate::application_layer::functionality::action_processor::application_user___authorization::authorize_by_last_step::Outcoming;
 use crate::application_layer::functionality::action_processor::application_user___authorization::authorize_by_last_step::Precedent;
@@ -41,7 +41,7 @@ impl AuthorizeByLastStep {
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
             database_1_redis_connection_pool,
-            ActionProcessor::process,
+            AuthorizeByLastStep_::process,
         )
         .await;
     }

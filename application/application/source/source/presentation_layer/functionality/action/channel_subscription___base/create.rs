@@ -1,4 +1,4 @@
-use crate::application_layer::functionality::action_processor::channel_subscription___base::create::ActionProcessor;
+use crate::application_layer::functionality::action_processor::channel_subscription___base::create::Create as Create_;
 use crate::application_layer::functionality::action_processor::channel_subscription___base::create::Incoming;
 use crate::application_layer::functionality::action_processor::channel_subscription___base::create::Precedent;
 use crate::application_layer::functionality::service::common_action_processor::CommonActionProcessor;
@@ -41,7 +41,7 @@ impl Create {
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
             database_1_redis_connection_pool,
-            ActionProcessor::process,
+            Create_::process,
         )
         .await;
     }

@@ -32,9 +32,9 @@ use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
 
-pub struct ActionProcessor;
+pub struct GetManyPublicByName;
 
-impl ActionProcessor {
+impl GetManyPublicByName {
     const LIMIT: i16 = 100;
 
     pub async fn process<'a, T>(
