@@ -10,19 +10,23 @@ use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
 
-pub async fn route_not_found<'a, T>(
-    request: Request,
-    database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
-) -> Response
-where
-    T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
-    <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
-    <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
-    <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
-{
-    return ActionProcessor::process(
-        request,
-        database_2_postgresql_connection_pool,
-    )
-    .await;
+pub struct RouteNotFound;
+
+impl RouteNotFound {
+    pub async fn run<'a, T>(
+        request: Request,
+        database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
+    ) -> Response
+    where
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
+    {
+        return ActionProcessor::process(
+            request,
+            database_2_postgresql_connection_pool,
+        )
+        .await;
+    }
 }

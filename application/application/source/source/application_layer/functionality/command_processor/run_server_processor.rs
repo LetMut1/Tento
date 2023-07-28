@@ -17,7 +17,7 @@ use crate::presentation_layer::data::action_route::ActionRoute_;
 use crate::presentation_layer::data::action_route::ApplicationUser__Authorization_;
 use crate::presentation_layer::data::action_route::ChannelSubscription__Base_;
 use crate::presentation_layer::data::action_route::Channel__Base_;
-use crate::presentation_layer::functionality::action::route_not_found;
+use crate::presentation_layer::functionality::action::route_not_found::RouteNotFound;
 use crate::presentation_layer::functionality::action::application_user___authorization;
 use crate::presentation_layer::functionality::action::channel___base;
 use crate::presentation_layer::functionality::action::channel_subscription___base;
@@ -1427,8 +1427,8 @@ impl RunServerProcessor {
     {
         let r#match = match router.at(request.uri().path()) {
             Ok(r#match_) => r#match_,
-            Err(error) => {
-                return route_not_found::route_not_found(
+            Err(_) => {
+                return RouteNotFound::run(
                     request,
                     database_2_postgresql_connection_pool,
                 )
@@ -1868,7 +1868,7 @@ impl RunServerProcessor {
             }
         }
 
-        return route_not_found::route_not_found(
+        return RouteNotFound::run(
             request,
             database_2_postgresql_connection_pool,
         )
