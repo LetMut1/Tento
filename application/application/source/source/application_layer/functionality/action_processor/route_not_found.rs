@@ -14,9 +14,9 @@ use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
 
-pub struct ActionProcessor;
+pub struct RouteNotFound;
 
-impl ActionProcessor {
+impl RouteNotFound {
     pub async fn process<'a, T>(
         request: Request,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,

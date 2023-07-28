@@ -48,9 +48,9 @@ use std::str::FromStr;
 use extern_crate::matchit::Router;
 use std::time::Duration;
 
-pub struct RunServerProcessor;
+pub struct RunServer;
 
-impl RunServerProcessor {
+impl RunServer {
     pub fn process() -> Result<(), ErrorAuditor> {
         let runtime = match Builder::new_multi_thread().enable_all().build() {
             Ok(runtime_) => runtime_,

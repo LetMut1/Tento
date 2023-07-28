@@ -1,4 +1,4 @@
-use crate::application_layer::functionality::action_processor::route_not_found::ActionProcessor;
+use crate::application_layer::functionality::action_processor::route_not_found::RouteNotFound as RouteNotFound_;
 use crate::infrastructure_layer::data::control_type::Request;
 use crate::infrastructure_layer::data::control_type::Response;
 use extern_crate::bb8::Pool;
@@ -23,7 +23,7 @@ impl RouteNotFound {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        return ActionProcessor::process(
+        return RouteNotFound_::process(
             request,
             database_2_postgresql_connection_pool,
         )
