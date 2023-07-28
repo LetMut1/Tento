@@ -29,9 +29,9 @@ use std::future::Future;
 use std::marker::Send;
 use std::marker::Sync;
 
-pub struct CoreActionProcessor;
+pub struct CommonActionProcessor;
 
-impl CoreActionProcessor {
+impl CommonActionProcessor {
     pub async fn process<'a, SF, T, AP, F, API, APO, APP>(
         mut request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,

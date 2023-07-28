@@ -2,7 +2,7 @@ use crate::application_layer::functionality::action_processor::application_user_
 use crate::application_layer::functionality::action_processor::application_user___authorization::authorize_by_last_step::Incoming;
 use crate::application_layer::functionality::action_processor::application_user___authorization::authorize_by_last_step::Outcoming;
 use crate::application_layer::functionality::action_processor::application_user___authorization::authorize_by_last_step::Precedent;
-use crate::application_layer::functionality::action_processor::core_action_processor::CoreActionProcessor;
+use crate::application_layer::functionality::service::common_action_processor::CommonActionProcessor;
 use crate::infrastructure_layer::data::control_type::Request;
 use crate::infrastructure_layer::data::control_type::Response;
 use crate::infrastructure_layer::functionality::service::serializer::MessagePack;
@@ -17,7 +17,7 @@ use std::marker::Send;
 use std::marker::Sync;
 
 #[cfg(feature = "manual_testing")]
-use crate::application_layer::functionality::action_processor::wrapped_action_processor::WrappedActionProcessor;
+use crate::application_layer::functionality::service::wrapped_action_processor::WrappedActionProcessor;
 #[cfg(feature = "manual_testing")]
 use crate::infrastructure_layer::functionality::service::serializer::Json;
 
@@ -36,7 +36,7 @@ impl AuthorizeByLastStep {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        return CoreActionProcessor::process::<'_, MessagePack, _, _, _, Incoming, Outcoming, Precedent>(
+        return CommonActionProcessor::process::<'_, MessagePack, _, _, _, Incoming, Outcoming, Precedent>(
             request,
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
