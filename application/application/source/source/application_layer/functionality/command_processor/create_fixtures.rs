@@ -43,9 +43,9 @@ use extern_crate::tokio::runtime::Builder;
 use extern_crate::tokio_postgres::Config as PostgresqlConfiguration;
 use std::str::FromStr;
 
-pub struct CreateFixturesProcessor;
+pub struct CreateFixtures;
 
-impl CreateFixturesProcessor {
+impl CreateFixtures {
     const STUB: &'static str = "s_t_u_b";
     const QUANTITY_OF_APPLICATION_USERS: u16 = 10_000;
     const QUANTITY_OF_CHANNELS: u8 = 5;

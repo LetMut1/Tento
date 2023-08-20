@@ -1,2 +1,2 @@
-pub mod create_fixtures_processor;
+pub mod create_fixtures;
 pub mod run_server;
