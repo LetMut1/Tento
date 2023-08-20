@@ -8,7 +8,9 @@ rustup component add \
     rustfmt \
     rust-src && \
 rustup target add \
-    aarch64-apple-ios && \
+    aarch64-apple-ios \
+    aarch64-apple-ios-sim \
+    armv7-linux-androideabi && \
 apt-get update && \
 apt-get install -y \
     cron \

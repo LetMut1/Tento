@@ -923,9 +923,6 @@ dependencies = [
 [[package]]
 name = "integration_module"
 version = "0.1.0"
-dependencies = [
- "application",
-]
 
 [[package]]
 name = "itoa"
