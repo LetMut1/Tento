@@ -45,6 +45,7 @@ dependencies = [
 name = "application"
 version = "0.1.0"
 dependencies = [
+ "application_layer",
  "base64 0.13.1",
  "bb8",
  "bb8-postgres",
