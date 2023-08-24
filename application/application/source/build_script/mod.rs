@@ -135,7 +135,7 @@ impl Processor {
 
     fn create_environment_configuration_constant() -> Result<(), Box<dyn Error + 'static>> {
         let environment_configuration_file_path = format!(
-            "{}/../environment_configuration",
+            "{}/environment_configuration",
             var("CARGO_MANIFEST_DIR")?.as_str(),
         );
 
@@ -328,7 +328,7 @@ impl Processor {
 
     fn create_c_bindings() -> Result<(), Box<dyn Error + 'static>> {
         let crate_path = format!(
-            "{}/../integration_module",
+            "{}/integration_module",
             var("CARGO_MANIFEST_DIR")?.as_str(),
         );
 
