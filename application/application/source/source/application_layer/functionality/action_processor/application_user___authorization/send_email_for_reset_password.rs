@@ -1,5 +1,5 @@
-use application_layer::data::common_precedent::CommonPrecedent;
-use application_layer::data::unified_report::UnifiedReport;
+use crate::application_layer::data::common_precedent::CommonPrecedent;
+use crate::application_layer::data::unified_report_::UnifiedReport;
 use crate::domain_layer::data::entity::application_user::ApplicationUser5;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;

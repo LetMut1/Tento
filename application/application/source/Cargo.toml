@@ -19,7 +19,6 @@ crate-type = ["lib"]
 required-features = []
 
 [dependencies]         #  TODO  TODO TODO TODO Разобарться, где нужны default фичи
-application_layer = { path = "./inner_crate/application_layer", package = "application_layer", version = "0.1.0", default-features = true, features = [], optional = false }
 argon2 = { package = "rust-argon2", version = "^0.8", default-features = true, features = [], optional = false }
 base64 = { package = "base64", version = "^0.13", default-features = true, features = [], optional = false }
 bb8 = { package = "bb8", version = "^0.7", default-features = true, features = [], optional = false }
@@ -45,6 +44,7 @@ serde = { package = "serde", version = "^1.0", default-features = true, features
 tokio = { package = "tokio", version = "^1.16", default-features = true, features = ["full"], optional = false }  # // TODO Убрать фичу Full и понять , какие нужны
 tokio_postgres = { package = "tokio-postgres", version = "^0.7", default-features = true, features = [], optional = false }
 toml = { package = "toml", version = "0.7.4", default-features = true, features = [], optional = false }
+unified_report = { path = "./inner_crate/unified_report", package = "unified_report", version = "0.1.0", default-features = true, features = [], optional = false }
 uuid = { package = "uuid", version = "^0.8", default-features = true, features = ["v4"], optional = false }
 
 const_format = { package = "const_format", version = "^0.2", default-features = true, features = [], optional = true }
@@ -59,7 +59,7 @@ uuid = { package = "uuid", version = "^0.8", default-features = true, features =
 [features]
 default = []
 manual_testing = [
-    "application_layer/manual_testing",
+    "unified_report/manual_testing",
     "const_format",
     "serde_json"
 ]

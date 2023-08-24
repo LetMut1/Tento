@@ -45,7 +45,6 @@ dependencies = [
 name = "application"
 version = "0.1.0"
 dependencies = [
- "application_layer",
  "base64 0.13.1",
  "bb8",
  "bb8-postgres",
@@ -74,14 +73,8 @@ dependencies = [
  "tokio",
  "tokio-postgres",
  "toml 0.7.6",
+ "unified_report",
  "uuid 0.8.2",
-]
-
-[[package]]
-name = "application_layer"
-version = "0.1.0"
-dependencies = [
- "serde",
 ]
 
 [[package]]
@@ -2089,6 +2082,13 @@ name = "unicode-xid"
 version = "0.2.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f962df74c8c05a667b5ee8bcf162993134c104e96440b663c8daa176dc772d8c"
+
+[[package]]
+name = "unified_report"
+version = "0.1.0"
+dependencies = [
+ "serde",
+]
 
 [[package]]
 name = "url"

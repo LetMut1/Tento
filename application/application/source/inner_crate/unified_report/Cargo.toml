@@ -1,12 +1,12 @@
 [package]
-name = "application_layer"
+name = "unified_report"
 version = "0.1.0"
 authors.workspace = true
 edition = "2021"
 
 [lib]
-name = "application_layer"
-path = "./mod.rs"
+name = "unified_report"
+path = "./source/mod.rs"
 test = true
 doctest = true
 bench = true
@@ -20,12 +20,6 @@ required-features = []
 [dependencies]
 serde = { package = "serde", version = "^1.0", default-features = true, features = ["derive"], optional = false }
 
-
-
-# TODO
 [features]
 default = []
-manual_testing = [
-    # "const_format",
-    # "serde_json"
-]
+manual_testing = []
