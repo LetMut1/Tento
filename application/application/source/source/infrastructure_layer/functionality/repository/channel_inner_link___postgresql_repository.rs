@@ -1,3 +1,5 @@
+use super::postgresql_repository::by::By8;
+use super::postgresql_repository::insert::Insert8;
 use super::postgresql_repository::PostgresqlRepository;
 use crate::domain_layer::data::entity::channel::Channel_Id;
 use crate::domain_layer::data::entity::channel_inner_link::ChannelInnerLink;
@@ -6,16 +8,14 @@ use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
-use super::postgresql_repository::by::By8;
-use super::postgresql_repository::insert::Insert8;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
-use extern_crate::serde::Serialize;
-use extern_crate::tokio_postgres::types::Type;
-use extern_crate::tokio_postgres::Client as Connection;
+use serde::Serialize;
+use tokio_postgres::types::Type;
+use tokio_postgres::Client as Connection;
 
 #[cfg(feature = "manual_testing")]
-use extern_crate::serde::Deserialize;
+use serde::Deserialize;
 
 impl PostgresqlRepository<ChannelInnerLink> {
     pub async fn create<'a>(
@@ -259,7 +259,6 @@ impl PostgresqlRepository<ChannelInnerLink> {
     derive(Deserialize)
 )]
 #[derive(Serialize)]
-#[serde(crate = "extern_crate::serde")]
 pub struct ChannelInnerLink1 {
     pub channel_inner_link_to: Channel_Id,
 }

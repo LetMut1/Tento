@@ -1,3 +1,10 @@
+use super::postgresql_repository::by::By4;
+use super::postgresql_repository::insert::Insert6;
+use super::postgresql_repository::update::Update12;
+use super::postgresql_repository::update::Update13;
+use super::postgresql_repository::update::Update14;
+use super::postgresql_repository::update::Update15;
+use super::postgresql_repository::update::Update16;
 use super::postgresql_repository::PostgresqlRepository;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken1;
@@ -13,20 +20,13 @@ use crate::domain_layer::data::entity::application_user_reset_password_token::Ap
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_WrongEnterTriesQuantity;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
-use super::postgresql_repository::by::By4;
-use super::postgresql_repository::update::Update12;
-use super::postgresql_repository::update::Update13;
-use super::postgresql_repository::update::Update14;
-use super::postgresql_repository::update::Update15;
-use super::postgresql_repository::insert::Insert6;
-use super::postgresql_repository::update::Update16;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
-use extern_crate::tokio_postgres::types::Type;
-use extern_crate::tokio_postgres::Client as Connection;
 use std::borrow::Cow;
+use tokio_postgres::types::Type;
+use tokio_postgres::Client as Connection;
 
 impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
     pub async fn create<'a>(
@@ -551,7 +551,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken1> {
                 ApplicationUserResetPasswordToken1 {
                     value: application_user_reset_password_token_value,
                     wrong_enter_tries_quantity: application_user_reset_password_token_wrong_enter_tries_quantity,
-                    is_approved:  application_user_reset_password_token_is_approved,
+                    is_approved: application_user_reset_password_token_is_approved,
                     expires_at: application_user_reset_password_token_expires_at,
                     can_be_resent_from: application_user_reset_password_token_can_be_resent_from,
                 },

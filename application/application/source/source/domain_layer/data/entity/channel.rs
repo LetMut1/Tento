@@ -1,6 +1,6 @@
 use super::application_user::ApplicationUser_Id;
-use extern_crate::serde::Deserialize;
-use extern_crate::serde::Serialize;
+use serde::Deserialize;
+use serde::Serialize;
 use std::borrow::Cow;
 
 pub use self::AccessModifier as Channel_AccessModifier;
@@ -20,12 +20,10 @@ pub use self::VisabilityModifier as Channel_VisabilityModifier;
 pub use self::VisabilityModifier_ as Channel_VisabilityModifier_;
 
 #[derive(Clone, Copy, Serialize, Deserialize)]
-#[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct Id(pub i64);
 
 #[derive(Clone, Serialize, Deserialize)]
-#[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct Name(pub String);
 
@@ -38,7 +36,6 @@ impl Name {
     derive(Deserialize)
 )]
 #[derive(Serialize)]
-#[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct LinkedName(pub String);
 
@@ -47,7 +44,6 @@ pub struct LinkedName(pub String);
     derive(Deserialize)
 )]
 #[derive(Serialize)]
-#[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct Description(pub String);
 
@@ -60,7 +56,6 @@ impl Description {
     derive(Deserialize)
 )]
 #[derive(Clone, Copy, Serialize)]
-#[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct AccessModifier(pub i16);
 
@@ -79,7 +74,6 @@ pub enum AccessModifier_ {
     derive(Deserialize)
 )]
 #[derive(Clone, Copy, Serialize)]
-#[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct VisabilityModifier(pub i16);
 
@@ -98,7 +92,6 @@ pub enum VisabilityModifier_ {
     derive(Deserialize)
 )]
 #[derive(Serialize)]
-#[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct Orientation(pub Vec<i16>);
 
@@ -107,7 +100,6 @@ pub struct Orientation(pub Vec<i16>);
     derive(Deserialize)
 )]
 #[derive(Serialize)]
-#[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct CoverImagePath(pub String);
 
@@ -116,7 +108,6 @@ pub struct CoverImagePath(pub String);
     derive(Deserialize)
 )]
 #[derive(Serialize)]
-#[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct BackgroundImagePath(pub String);
 
@@ -125,7 +116,6 @@ pub struct BackgroundImagePath(pub String);
     derive(Deserialize)
 )]
 #[derive(Clone, Copy, Serialize)]
-#[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct SubscribersQuantity(pub i64);
 
@@ -134,7 +124,6 @@ pub struct SubscribersQuantity(pub i64);
     derive(Deserialize)
 )]
 #[derive(Clone, Copy, Serialize)]
-#[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct MarksQuantity(pub i64);
 
@@ -143,7 +132,6 @@ pub struct MarksQuantity(pub i64);
     derive(Deserialize)
 )]
 #[derive(Clone, Copy, Serialize)]
-#[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct ViewingQuantity(pub i64);
 

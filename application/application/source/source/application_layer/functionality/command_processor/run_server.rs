@@ -12,41 +12,41 @@ use crate::infrastructure_layer::data::void::ErrorVoid;
 use crate::infrastructure_layer::functionality::service::creator::Creator;
 use crate::infrastructure_layer::functionality::service::creator::PostgresqlConnectionPoolNoTls;
 use crate::infrastructure_layer::functionality::service::creator::RedisConnectonPool;
-use crate::presentation_layer::data::action_route::ACTION_ROUTE;
 use crate::presentation_layer::data::action_route::ActionRoute_;
 use crate::presentation_layer::data::action_route::ApplicationUser__Authorization_;
 use crate::presentation_layer::data::action_route::ChannelSubscription__Base_;
 use crate::presentation_layer::data::action_route::Channel__Base_;
-use crate::presentation_layer::functionality::action::route_not_found::RouteNotFound;
+use crate::presentation_layer::data::action_route::ACTION_ROUTE;
 use crate::presentation_layer::functionality::action::application_user___authorization;
 use crate::presentation_layer::functionality::action::channel___base;
 use crate::presentation_layer::functionality::action::channel_subscription___base;
-use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
-use extern_crate::bb8_redis::RedisConnectionManager;
-use extern_crate::bb8::Pool;
-use extern_crate::hyper::Method;
-use extern_crate::hyper::Server;
-use extern_crate::hyper::server::conn::AddrStream;
-use std::future::Future;
-use std::sync::Arc;
-use extern_crate::tokio::select;
-use extern_crate::hyper::service::make_service_fn;
-use extern_crate::hyper::service::service_fn;
-use extern_crate::redis::ConnectionInfo;
-use extern_crate::tokio_postgres::Config as PostgresqlConfiguration;
-use extern_crate::tokio_postgres::Socket;
-use extern_crate::tokio_postgres::tls::MakeTlsConnect;
-use extern_crate::tokio_postgres::tls::TlsConnect;
-use extern_crate::tokio::runtime::Builder;
-use extern_crate::tokio::signal::unix::signal;
-use extern_crate::tokio::signal::unix::SignalKind;
+use crate::presentation_layer::functionality::action::route_not_found::RouteNotFound;
+use bb8::Pool;
+use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
+use bb8_redis::RedisConnectionManager;
+use hyper::server::conn::AddrStream;
+use hyper::service::make_service_fn;
+use hyper::service::service_fn;
+use hyper::Method;
+use hyper::Server;
+use matchit::Router;
+use redis::ConnectionInfo;
 use std::clone::Clone;
+use std::future::Future;
 use std::marker::Send;
 use std::marker::Sync;
 use std::net::ToSocketAddrs;
 use std::str::FromStr;
-use extern_crate::matchit::Router;
+use std::sync::Arc;
 use std::time::Duration;
+use tokio::runtime::Builder;
+use tokio::select;
+use tokio::signal::unix::signal;
+use tokio::signal::unix::SignalKind;
+use tokio_postgres::tls::MakeTlsConnect;
+use tokio_postgres::tls::TlsConnect;
+use tokio_postgres::Config as PostgresqlConfiguration;
+use tokio_postgres::Socket;
 
 pub struct RunServer;
 
@@ -167,21 +167,13 @@ impl RunServer {
             .tcp_keepalive_retries(ENVIRONMENT_CONFIGURATION.application_server.tcp.keepalive.retries_quantity);
 
         server_builder = match ENVIRONMENT_CONFIGURATION.application_server.tcp.keepalive.duration {
-            Some(duration) => {
-                server_builder.tcp_keepalive(Some(Duration::from_secs(duration)))
-            }
-            None => {
-                server_builder.tcp_keepalive(None)
-            }
+            Some(duration) => server_builder.tcp_keepalive(Some(Duration::from_secs(duration))),
+            None => server_builder.tcp_keepalive(None),
         };
 
         server_builder = match ENVIRONMENT_CONFIGURATION.application_server.tcp.keepalive.interval_duration {
-            Some(interval_duration) => {
-                server_builder.tcp_keepalive_interval(Some(Duration::from_secs(interval_duration)))
-            }
-            None => {
-                server_builder.tcp_keepalive_interval(None)
-            }
+            Some(interval_duration) => server_builder.tcp_keepalive_interval(Some(Duration::from_secs(interval_duration))),
+            None => server_builder.tcp_keepalive_interval(None),
         };
 
         server_builder = server_builder
@@ -199,23 +191,13 @@ impl RunServer {
         };
 
         server_builder = match ENVIRONMENT_CONFIGURATION.application_server.http.keepalive {
-            Some(ref keepalive_) => {
-                server_builder
-                    .http2_keep_alive_interval(Some(Duration::from_secs(keepalive_.interval_duration)))
-                    .http2_keep_alive_timeout(Duration::from_secs(keepalive_.timeout_duration))
-            }
-            None => {
-                server_builder.http2_keep_alive_interval(None)
-            }
+            Some(ref keepalive_) => server_builder.http2_keep_alive_interval(Some(Duration::from_secs(keepalive_.interval_duration))).http2_keep_alive_timeout(Duration::from_secs(keepalive_.timeout_duration)),
+            None => server_builder.http2_keep_alive_interval(None),
         };
 
         server_builder = match ENVIRONMENT_CONFIGURATION.application_server.http.maximum_pending_accept_reset_streams {
-            Some(maximum_pending_accept_reset_streams_) => {
-                server_builder.http2_max_pending_accept_reset_streams(Some(maximum_pending_accept_reset_streams_))
-            }
-            None => {
-                server_builder.http2_max_pending_accept_reset_streams(None)
-            }
+            Some(maximum_pending_accept_reset_streams_) => server_builder.http2_max_pending_accept_reset_streams(Some(maximum_pending_accept_reset_streams_)),
+            None => server_builder.http2_max_pending_accept_reset_streams(None),
         };
 
         if let Some(ref tls) = ENVIRONMENT_CONFIGURATION.application_server.http.tls {
@@ -1439,8 +1421,13 @@ impl RunServer {
         let method = request.method();
 
         match r#match.value {
-            &ActionRoute_::ApplicationUser__Authorization { ref application_user___authorization } => {
-                match (application_user___authorization, method) {
+            &ActionRoute_::ApplicationUser__Authorization {
+                ref application_user___authorization,
+            } => {
+                match (
+                    application_user___authorization,
+                    method,
+                ) {
                     // GET functional.
                     (&ApplicationUser__Authorization_::CheckNicknameForExisting, &Method::POST) => {
                         return application_user___authorization::check_nickname_for_existing::CheckNicknameForExisting::run(
@@ -1590,7 +1577,10 @@ impl RunServer {
                     _ => {
                         #[cfg(feature = "manual_testing")]
                         {
-                            match (application_user___authorization, method) {
+                            match (
+                                application_user___authorization,
+                                method,
+                            ) {
                                 // GET functional.
                                 (&ApplicationUser__Authorization_::CheckNicknameForExisting_, &Method::POST) => {
                                     return application_user___authorization::check_nickname_for_existing::CheckNicknameForExisting::run_(
@@ -1742,9 +1732,14 @@ impl RunServer {
                         }
                     }
                 }
-            },
-            &ActionRoute_::Channel__Base { ref channel___base } => {
-                match (channel___base, method) {
+            }
+            &ActionRoute_::Channel__Base {
+                ref channel___base,
+            } => {
+                match (
+                    channel___base,
+                    method,
+                ) {
                     // GET functional.
                     (&Channel__Base_::GetOneByID, &Method::POST) => {
                         return channel___base::get_one_by_id::GetOneByID::run(
@@ -1788,7 +1783,10 @@ impl RunServer {
                     _ => {
                         #[cfg(feature = "manual_testing")]
                         {
-                            match (channel___base, method) {
+                            match (
+                                channel___base,
+                                method,
+                            ) {
                                 // GET functional.
                                 (&Channel__Base_::GetOneByID_, &Method::POST) => {
                                     return channel___base::get_one_by_id::GetOneByID::run_(
@@ -1834,10 +1832,14 @@ impl RunServer {
                         }
                     }
                 }
-
-            },
-            &ActionRoute_::ChannelSubscription__Base { ref channel_subscription___base } => {
-                match (channel_subscription___base, method) {
+            }
+            &ActionRoute_::ChannelSubscription__Base {
+                ref channel_subscription___base,
+            } => {
+                match (
+                    channel_subscription___base,
+                    method,
+                ) {
                     (&ChannelSubscription__Base_::Create, &Method::POST) => {
                         return channel_subscription___base::create::Create::run(
                             request,
@@ -1850,7 +1852,10 @@ impl RunServer {
                     _ => {
                         #[cfg(feature = "manual_testing")]
                         {
-                            match (channel_subscription___base, method) {
+                            match (
+                                channel_subscription___base,
+                                method,
+                            ) {
                                 (&ChannelSubscription__Base_::Create_, &Method::POST) => {
                                     return channel_subscription___base::create::Create::run_(
                                         request,

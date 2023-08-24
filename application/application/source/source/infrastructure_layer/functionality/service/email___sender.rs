@@ -8,10 +8,10 @@ use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use extern_crate::lettre::smtp::SmtpClient;
-use extern_crate::lettre::ClientSecurity;
-use extern_crate::lettre::Transport;
-use extern_crate::lettre_email::EmailBuilder;
+use lettre::smtp::SmtpClient;
+use lettre::ClientSecurity;
+use lettre::Transport;
+use lettre_email::EmailBuilder;
 use std::convert::Into;
 use std::net::ToSocketAddrs;
 

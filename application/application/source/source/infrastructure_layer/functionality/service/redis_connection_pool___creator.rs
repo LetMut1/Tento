@@ -5,9 +5,9 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use extern_crate::bb8::Pool;
-use extern_crate::bb8_redis::RedisConnectionManager;
-use extern_crate::redis::ConnectionInfo;
+use bb8::Pool;
+use bb8_redis::RedisConnectionManager;
+use redis::ConnectionInfo;
 use std::clone::Clone;
 
 pub use crate::infrastructure_layer::data::control_type::RedisConnectonPool;

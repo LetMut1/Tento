@@ -1,5 +1,5 @@
-use extern_crate::serde::Deserialize;
-use extern_crate::serde::Serialize;
+use serde::Deserialize;
+use serde::Serialize;
 use std::borrow::Cow;
 use std::marker::PhantomData;
 
@@ -11,7 +11,6 @@ pub use self::Password as ApplicationUser_Password;
 pub use self::PasswordHash as ApplicationUser_PasswordHash;
 
 #[derive(Clone, Copy, Serialize, Deserialize)]
-#[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct Id(pub i64);
 
@@ -20,7 +19,6 @@ pub struct Id(pub i64);
     derive(Serialize)
 )]
 #[derive(Clone, Deserialize)]
-#[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct Email(pub String);
 
@@ -34,7 +32,6 @@ impl Email {
     derive(Serialize)
 )]
 #[derive(Clone, Deserialize)]
-#[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct Nickname(pub String);
 
@@ -47,13 +44,12 @@ impl Nickname {
     derive(Serialize)
 )]
 #[derive(Deserialize)]
-#[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct Password(pub String);
 
 impl Password {
     pub const MINIMUM_LENGTH: usize = 7;
-    pub const MAXIMUM_LENGTH: usize = 65;   // TODO Нужна ли максимальная длина? // TODO TODO TODO TODO TODO усилить пароль (ввести обязательность цифр,  и так далее)
+    pub const MAXIMUM_LENGTH: usize = 65; // TODO Нужна ли максимальная длина? // TODO TODO TODO TODO TODO усилить пароль (ввести обязательность цифр,  и так далее)
 }
 
 #[derive(Clone)]

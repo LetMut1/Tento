@@ -15,10 +15,6 @@ use crate::domain_layer::data::entity::application_user_authorization_token::App
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_Value;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_WrongEnterTriesQuantity;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
-use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By4;
-use crate::infrastructure_layer::functionality::repository::postgresql_repository::update::Update3;
-use crate::infrastructure_layer::functionality::repository::postgresql_repository::update::Update4;
-use crate::infrastructure_layer::functionality::repository::postgresql_repository::update::Update5;
 use crate::domain_layer::functionality::service::email_sender::EmailSender;
 use crate::domain_layer::functionality::service::encoder::Encoder;
 use crate::domain_layer::functionality::service::generator::Generator;
@@ -30,24 +26,28 @@ use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
-use crate::infrastructure_layer::functionality::repository::postgresql_repository::insert::Insert3;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By1;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By2;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By4;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::insert::Insert3;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::update::Update3;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::update::Update4;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::update::Update5;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::UnixTime;
-use extern_crate::bb8::Pool;
-use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
-use extern_crate::bb8_redis::RedisConnectionManager;
-use extern_crate::macro_rules::r#enum;
-use extern_crate::serde::Deserialize;
-use extern_crate::serde::Serialize;
-use extern_crate::tokio_postgres::tls::MakeTlsConnect;
-use extern_crate::tokio_postgres::tls::TlsConnect;
-use extern_crate::tokio_postgres::Socket;
+use bb8::Pool;
+use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
+use bb8_redis::RedisConnectionManager;
+use macro_rules::r#enum;
+use serde::Deserialize;
+use serde::Serialize;
 use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
+use tokio_postgres::tls::MakeTlsConnect;
+use tokio_postgres::tls::TlsConnect;
+use tokio_postgres::Socket;
 
 pub struct AuthorizeByFirstStep;
 
@@ -122,12 +122,7 @@ impl AuthorizeByFirstStep {
 
         let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
 
-        let (
-            application_user_id,
-            application_user_email,
-            application_user_nickname,
-            application_user_password_hash,
-        ) = if is_valid_email {
+        let (application_user_id, application_user_email, application_user_nickname, application_user_password_hash) = if is_valid_email {
             let application_user_ = match PostgresqlRepository::<ApplicationUser2>::find_1(
                 database_1_postgresql_connection,
                 &By2 {
@@ -306,12 +301,7 @@ impl AuthorizeByFirstStep {
             }
         };
 
-        let (
-            application_user_authorization_token_value,
-            application_user_authorization_token_can_be_resent_from,
-            application_user_authorization_token_wrong_enter_tries_quantity,
-            can_send,
-        ) = match application_user_authorization_token {
+        let (application_user_authorization_token_value, application_user_authorization_token_can_be_resent_from, application_user_authorization_token_wrong_enter_tries_quantity, can_send) = match application_user_authorization_token {
             Some(mut application_user_authorization_token_) => {
                 let (can_send_, need_to_update_1) = if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token_.can_be_resent_from.0) {
                     application_user_authorization_token_.can_be_resent_from = match Generator::<ApplicationUserAuthorizationToken_CanBeResentFrom>::generate() {
@@ -547,7 +537,6 @@ impl AuthorizeByFirstStep {
     derive(Serialize)
 )]
 #[derive(Deserialize)]
-#[serde(crate = "extern_crate::serde")]
 pub struct Incoming {
     application_user_device_id: ApplicationUserDevice_Id,
     application_user_email_or_application_user_nickname: String,
@@ -559,7 +548,6 @@ pub struct Incoming {
     derive(Deserialize)
 )]
 #[derive(Serialize)]
-#[serde(crate = "extern_crate::serde")]
 pub struct Outcoming {
     application_user_id: ApplicationUser_Id,
     verification_message_sent: bool,

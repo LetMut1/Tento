@@ -1,6 +1,6 @@
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
-use extern_crate::serde::Deserialize;
-use extern_crate::serde::Serialize as SerdeSerialize;
+use serde::Deserialize;
+use serde::Serialize as SerdeSerialize;
 use std::marker::PhantomData;
 
 pub use super::message_pack___serializer::MessagePack;

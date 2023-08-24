@@ -1,7 +1,7 @@
 use super::encoder::Encoder;
-use extern_crate::crypto::hmac::Hmac as Hmac_;
-use extern_crate::crypto::mac::Mac;
-use extern_crate::crypto::sha2::Sha512;
+use crypto::hmac::Hmac as Hmac_;
+use crypto::mac::Mac;
+use crypto::sha2::Sha512;
 
 pub use crate::infrastructure_layer::data::control_type::Hmac;
 

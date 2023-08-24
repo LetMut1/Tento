@@ -1,3 +1,10 @@
+use super::postgresql_repository::by::By5;
+use super::postgresql_repository::insert::Insert5;
+use super::postgresql_repository::update::Update10;
+use super::postgresql_repository::update::Update11;
+use super::postgresql_repository::update::Update7;
+use super::postgresql_repository::update::Update8;
+use super::postgresql_repository::update::Update9;
 use super::postgresql_repository::PostgresqlRepository;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken1;
@@ -14,19 +21,12 @@ use crate::domain_layer::data::entity::application_user_registration_token::Appl
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
-use super::postgresql_repository::update::Update7;
-use super::postgresql_repository::update::Update8;
-use super::postgresql_repository::update::Update9;
-use super::postgresql_repository::update::Update11;
-use super::postgresql_repository::update::Update10;
-use super::postgresql_repository::by::By5;
-use super::postgresql_repository::insert::Insert5;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
-use extern_crate::tokio_postgres::types::Type;
-use extern_crate::tokio_postgres::Client as Connection;
 use std::borrow::Cow;
+use tokio_postgres::types::Type;
+use tokio_postgres::Client as Connection;
 
 impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
     pub async fn create<'a>(
@@ -158,7 +158,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
 
     pub async fn delete<'a>(
         database_2_connection: &'a Connection,
-        by_5: &'a By5<'_>
+        by_5: &'a By5<'_>,
     ) -> Result<(), ErrorAuditor> {
         let application_user_email = by_5.application_user_email.0.as_str();
 

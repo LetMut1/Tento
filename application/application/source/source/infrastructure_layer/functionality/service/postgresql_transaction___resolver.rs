@@ -4,7 +4,7 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use extern_crate::tokio_postgres::Client as Connection;
+use tokio_postgres::Client as Connection;
 
 pub use crate::infrastructure_layer::data::control_type::PostgresqlTransaction;
 

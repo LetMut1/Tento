@@ -1,4 +1,3 @@
-
 // TODO http://blog.asleson.org/2021/02/23/how-to-writing-a-c-shared-library-in-rust/ что здесь за аллокатор.Для чего он нужен?
 // TODO сделать Makefile на компиляцию на архитектуры эпл.
 // TODO https://nadim.computer/posts/2022-02-11-maccatalyst.html
@@ -20,13 +19,9 @@ pub extern "C" fn is_x_equal_to_x(
     a: *mut A,
     b: *mut B,
 ) -> bool {
-    let a_ = unsafe {
-        *a
-    };
+    let a_ = unsafe { *a };
 
-    let b_ = unsafe {
-        *b
-    };
+    let b_ = unsafe { *b };
 
     if a_.x == b_.x {
         return true;
@@ -34,7 +29,6 @@ pub extern "C" fn is_x_equal_to_x(
 
     return false;
 }
-
 
 #[repr(C)]
 #[derive(Clone, Copy)]

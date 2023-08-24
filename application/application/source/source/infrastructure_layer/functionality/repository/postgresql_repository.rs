@@ -10,8 +10,8 @@ pub mod by {
     use crate::domain_layer::data::entity::application_user::ApplicationUser_Nickname;
     use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
     use crate::domain_layer::data::entity::channel::Channel_Id;
-    use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier;
     use crate::domain_layer::data::entity::channel::Channel_Name;
+    use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier;
 
     pub struct By1<'a> {
         pub application_user_nickname: &'a ApplicationUser_Nickname,
@@ -76,6 +76,7 @@ pub mod by {
 }
 
 pub mod update {
+    use crate::domain_layer::data::entity::application_user::ApplicationUser_PasswordHash;
     use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ExpiresAt;
     use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ObfuscationValue;
     use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_UpdatedAt;
@@ -89,7 +90,6 @@ pub mod update {
     use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_IsApproved;
     use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_Value;
     use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_WrongEnterTriesQuantity;
-    use crate::domain_layer::data::entity::application_user::ApplicationUser_PasswordHash;
     use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_CanBeResentFrom;
     use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_ExpiresAt;
     use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_IsApproved;
@@ -111,7 +111,7 @@ pub mod update {
         pub application_user_authorization_token_value: &'a ApplicationUserAuthorizationToken_Value,
         pub application_user_authorization_token_wrong_enter_tries_quantity: ApplicationUserAuthorizationToken_WrongEnterTriesQuantity,
         pub application_user_authorization_token_expires_at: ApplicationUserAuthorizationToken_ExpiresAt,
-        pub application_user_authorization_token_can_be_resent_from: ApplicationUserAuthorizationToken_CanBeResentFrom
+        pub application_user_authorization_token_can_be_resent_from: ApplicationUserAuthorizationToken_CanBeResentFrom,
     }
 
     pub struct Update4<'a> {
@@ -121,7 +121,7 @@ pub mod update {
     }
 
     pub struct Update5 {
-        pub application_user_authorization_token_can_be_resent_from: ApplicationUserAuthorizationToken_CanBeResentFrom
+        pub application_user_authorization_token_can_be_resent_from: ApplicationUserAuthorizationToken_CanBeResentFrom,
     }
 
     pub struct Update6 {
@@ -184,6 +184,14 @@ pub mod update {
 }
 
 pub mod insert {
+    use crate::domain_layer::data::entity::action_round_register::ActionRoundRegister_Context;
+    use crate::domain_layer::data::entity::action_round_register::ActionRoundRegister_Method;
+    use crate::domain_layer::data::entity::action_round_register::ActionRoundRegister_Route;
+    use crate::domain_layer::data::entity::action_round_register::ActionRoundRegister_StatusCode;
+    use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
+    use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
+    use crate::domain_layer::data::entity::application_user::ApplicationUser_Nickname;
+    use crate::domain_layer::data::entity::application_user::ApplicationUser_PasswordHash;
     use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ExpiresAt;
     use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ObfuscationValue;
     use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_UpdatedAt;
@@ -193,10 +201,6 @@ pub mod insert {
     use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_Value;
     use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_WrongEnterTriesQuantity;
     use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
-    use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
-    use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
-    use crate::domain_layer::data::entity::application_user::ApplicationUser_Nickname;
-    use crate::domain_layer::data::entity::application_user::ApplicationUser_PasswordHash;
     use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_CanBeResentFrom;
     use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_ExpiresAt;
     use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_IsApproved;
@@ -221,10 +225,6 @@ pub mod insert {
     use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier;
     use crate::domain_layer::data::entity::channel_outer_link::ChannelOuterLink_Address;
     use crate::domain_layer::data::entity::channel_outer_link::ChannelOuterLink_Alias;
-    use crate::domain_layer::data::entity::action_round_register::ActionRoundRegister_Context;
-    use crate::domain_layer::data::entity::action_round_register::ActionRoundRegister_Method;
-    use crate::domain_layer::data::entity::action_round_register::ActionRoundRegister_Route;
-    use crate::domain_layer::data::entity::action_round_register::ActionRoundRegister_StatusCode;
 
     pub struct Insert1 {
         pub application_user_email: ApplicationUser_Email,

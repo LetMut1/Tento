@@ -1,4 +1,4 @@
-use extern_crate::build_script_constant::environment_configuration_constant_file_name;
+use build_script_constant::environment_configuration_constant_file_name;
 
 include!(
     concat!(

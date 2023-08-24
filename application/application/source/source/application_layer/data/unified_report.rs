@@ -1,14 +1,13 @@
-use extern_crate::serde::Serialize;
+use serde::Serialize;
 
 #[cfg(feature = "manual_testing")]
-use extern_crate::serde::Deserialize;
+use serde::Deserialize;
 
 #[cfg_attr(
     feature = "manual_testing",
     derive(Deserialize)
 )]
 #[derive(Serialize)]
-#[serde(crate = "extern_crate::serde")]
 pub enum UnifiedReport<T, P> {
     Target {
         data: Data<T>,
@@ -77,7 +76,6 @@ where
     derive(Deserialize)
 )]
 #[derive(Serialize)]
-#[serde(crate = "extern_crate::serde")]
 pub enum Data<D> {
     Empty,
     Filled {

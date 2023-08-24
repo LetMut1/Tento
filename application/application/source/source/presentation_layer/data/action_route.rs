@@ -1,5 +1,5 @@
 #[cfg(feature = "manual_testing")]
-use extern_crate::const_format::concatcp;
+use const_format::concatcp;
 
 pub const ACTION_ROUTE: ActionRoute = ActionRoute {
     application_user___authorization: ApplicationUser__Authorization {
@@ -70,7 +70,7 @@ pub const ACTION_ROUTE: ActionRoute = ActionRoute {
         create: ChannelSubscription__Base::CREATE,
         #[cfg(feature = "manual_testing")]
         create_: ChannelSubscription__Base::CREATE_,
-    }
+    },
 };
 
 pub struct ActionRoute {
@@ -281,7 +281,6 @@ impl ChannelSubscription__Base {
         ActionRoute::CONCATENATING_PART
     );
 }
-
 
 pub enum ActionRoute_ {
     ApplicationUser__Authorization {

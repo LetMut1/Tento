@@ -5,7 +5,7 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use extern_crate::regex::Regex;
+use regex::Regex;
 
 impl Validator<ApplicationUser_Email> {
     pub fn is_valid<'a>(application_user_email: &'a ApplicationUser_Email) -> Result<bool, ErrorAuditor> {
@@ -31,9 +31,6 @@ impl Validator<ApplicationUser_Email> {
             }
         };
 
-        return Ok(
-            regex.is_match(application_user_email_)
-                && application_user_email_.chars().count() <= ApplicationUser_Email::MAXIMUM_LENGTH
-        );
+        return Ok(regex.is_match(application_user_email_) && application_user_email_.chars().count() <= ApplicationUser_Email::MAXIMUM_LENGTH);
     }
 }

@@ -88,7 +88,7 @@ pub mod environment_configuration {
 
     pub struct EnvironmentConfiguration<T>
     where
-        T: Sealed
+        T: Sealed,
     {
         pub environment: Environment,
         pub application_server: ApplicationServer<T>,
@@ -98,7 +98,7 @@ pub mod environment_configuration {
 
     pub struct ApplicationServer<T>
     where
-        T: Sealed
+        T: Sealed,
     {
         pub tcp: Tcp<T>,
         pub http: Http<T>,
@@ -106,7 +106,7 @@ pub mod environment_configuration {
 
     pub struct Tcp<T>
     where
-        T: Sealed
+        T: Sealed,
     {
         pub socket_address: T,
         pub nodelay: bool,
@@ -122,7 +122,7 @@ pub mod environment_configuration {
 
     pub struct Http<T>
     where
-        T: Sealed
+        T: Sealed,
     {
         pub adaptive_window: bool,
         pub connection_window_size: u32,
@@ -133,7 +133,7 @@ pub mod environment_configuration {
         pub maximum_header_list_size: u32,
         pub maximum_pending_accept_reset_streams: Option<usize>,
         pub keepalive: Option<HttpKeepalive>,
-        pub tls: Option<Tls<T>>
+        pub tls: Option<Tls<T>>,
     }
 
     pub struct HttpKeepalive {
@@ -143,7 +143,7 @@ pub mod environment_configuration {
 
     pub struct Tls<T>
     where
-        T: Sealed
+        T: Sealed,
     {
         pub certificate_crt_path: T,
         pub certificate_key_path: T,
@@ -151,7 +151,7 @@ pub mod environment_configuration {
 
     pub struct Resource<T>
     where
-        T: Sealed
+        T: Sealed,
     {
         pub postgresql: Postgresql<T>,
         pub redis: Redis<T>,
@@ -160,7 +160,7 @@ pub mod environment_configuration {
 
     pub struct Postgresql<T>
     where
-        T: Sealed
+        T: Sealed,
     {
         pub database_1_url: T,
         pub database_2_url: T,
@@ -168,28 +168,28 @@ pub mod environment_configuration {
 
     pub struct Redis<T>
     where
-        T: Sealed
+        T: Sealed,
     {
         pub database_1_url: T,
     }
 
     pub struct EmailServer<T>
     where
-        T: Sealed
+        T: Sealed,
     {
         pub socket_address: T,
     }
 
     pub struct Encryption<T>
     where
-        T: Sealed
+        T: Sealed,
     {
         pub private_key: PrivateKey<T>,
     }
 
     pub struct PrivateKey<T>
     where
-        T: Sealed
+        T: Sealed,
     {
         pub application_user_access_token: T,
         pub application_user_access_refresh_token: T,
@@ -252,7 +252,7 @@ pub mod environment_configuration {
             pub maximum_header_list_size: Value<u32>,
             pub maximum_pending_accept_reset_streams: ValueExist<usize>,
             pub keepalive: HttpKeepalive,
-            pub tls: Tls
+            pub tls: Tls,
         }
 
         #[derive(Deserialize)]
@@ -415,22 +415,22 @@ pub mod error {
 }
 
 pub mod loader {
-    use super::environment_configuration::HttpKeepalive;
-    use super::environment_configuration::String_;
-    use super::environment_configuration::Tcp;
-    use super::environment_configuration::Http;
-    use super::environment_configuration::Environment;
-    use super::environment_configuration::EnvironmentConfiguration;
-    use super::environment_configuration::Tls;
+    use super::environment_configuration::environment_configuration_file::EnvironmentConfigurationFile;
+    use super::environment_configuration::ApplicationServer;
     use super::environment_configuration::EmailServer;
     use super::environment_configuration::Encryption;
+    use super::environment_configuration::Environment;
+    use super::environment_configuration::EnvironmentConfiguration;
+    use super::environment_configuration::Http;
+    use super::environment_configuration::HttpKeepalive;
     use super::environment_configuration::Postgresql;
     use super::environment_configuration::PrivateKey;
-    use super::environment_configuration::TcpKeepalive;
     use super::environment_configuration::Redis;
     use super::environment_configuration::Resource;
-    use super::environment_configuration::ApplicationServer;
-    use super::environment_configuration::environment_configuration_file::EnvironmentConfigurationFile;
+    use super::environment_configuration::String_;
+    use super::environment_configuration::Tcp;
+    use super::environment_configuration::TcpKeepalive;
+    use super::environment_configuration::Tls;
     use super::error::Error;
     use std::fs::read_to_string;
     use std::path::Path;
@@ -487,7 +487,7 @@ pub mod loader {
                     if development_environment_file_path_.try_exists()? {
                         (
                             Environment::Development,
-                            read_to_string(development_environment_file_path_)?
+                            read_to_string(development_environment_file_path_)?,
                         )
                     } else {
                         return Err(
@@ -534,7 +534,7 @@ pub mod loader {
                             socket_address: String_(environment_configuration_file.application_server.tcp.socket_address.value),
                             nodelay: environment_configuration_file.application_server.tcp.nodelay.value,
                             sleep_on_accept_errors: environment_configuration_file.application_server.tcp.sleep_on_accept_errors.value,
-                            keepalive
+                            keepalive,
                         }
                     };
 
@@ -544,7 +544,7 @@ pub mod loader {
                                 HttpKeepalive {
                                     interval_duration: environment_configuration_file.application_server.http.keepalive.interval_duration.value,
                                     timeout_duration: environment_configuration_file.application_server.http.keepalive.timeout_duration.value,
-                                }
+                                },
                             )
                         } else {
                             None
@@ -555,7 +555,7 @@ pub mod loader {
                                 Tls {
                                     certificate_crt_path: String_(environment_configuration_file.application_server.http.tls.certificate_crt_path.value),
                                     certificate_key_path: String_(environment_configuration_file.application_server.http.tls.certificate_key_path.value),
-                                }
+                                },
                             )
                         } else {
                             None
@@ -573,17 +573,17 @@ pub mod loader {
                             stream_window_size: environment_configuration_file.application_server.http.stream_window_size.value,
                             maximum_frame_size: environment_configuration_file.application_server.http.maximum_frame_size.value,
                             maximum_sending_buffer_size: environment_configuration_file.application_server.http.maximum_sending_buffer_size.value,
-                            enable_connect_protocol:environment_configuration_file.application_server.http.enable_connect_protocol.value,
-                            maximum_header_list_size:environment_configuration_file.application_server.http.maximum_header_list_size.value,
+                            enable_connect_protocol: environment_configuration_file.application_server.http.enable_connect_protocol.value,
+                            maximum_header_list_size: environment_configuration_file.application_server.http.maximum_header_list_size.value,
                             maximum_pending_accept_reset_streams,
                             keepalive,
-                            tls
+                            tls,
                         }
                     };
 
                     ApplicationServer {
                         tcp,
-                        http
+                        http,
                     }
                 };
 
@@ -611,7 +611,7 @@ pub mod loader {
                     environment,
                     application_server,
                     resource,
-                    encryption
+                    encryption,
                 }
             };
 

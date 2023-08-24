@@ -5,9 +5,9 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use extern_crate::serde::Deserialize;
-use extern_crate::serde::Serialize as SerdeSerialize;
-use extern_crate::serde_json;
+use serde::Deserialize;
+use serde::Serialize as SerdeSerialize;
+use serde_json;
 
 #[cfg(feature = "manual_testing")]
 pub use crate::infrastructure_layer::data::control_type::Json;

@@ -1,15 +1,15 @@
 use super::creator::Creator;
-use extern_crate::http::header;
-use extern_crate::http::HeaderMap;
-use extern_crate::http::HeaderValue;
-use extern_crate::http::Version;
-use extern_crate::hyper::Body;
-use extern_crate::hyper::Response as HyperResponse;
-use extern_crate::hyper::StatusCode;
+use http::header;
+use http::HeaderMap;
+use http::HeaderValue;
+use http::Version;
+use hyper::Body;
+use hyper::Response as HyperResponse;
+use hyper::StatusCode;
 use std::convert::From;
 
 #[cfg(feature = "manual_testing")]
-use extern_crate::http::response::Parts;
+use http::response::Parts;
 
 pub use crate::infrastructure_layer::data::control_type::Response;
 

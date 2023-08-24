@@ -1,8 +1,8 @@
 use super::channel::Channel_Id;
-use extern_crate::serde::Serialize;
+use serde::Serialize;
 
 #[cfg(feature = "manual_testing")]
-use extern_crate::serde::Deserialize;
+use serde::Deserialize;
 
 pub use self::Address as ChannelOuterLink_Address;
 pub use self::Alias as ChannelOuterLink_Alias;
@@ -13,7 +13,6 @@ pub use self::CreatedAt as ChannelOuterLink_CreatedAt;
     derive(Deserialize)
 )]
 #[derive(Serialize)]
-#[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct Alias(pub String);
 
@@ -22,7 +21,6 @@ pub struct Alias(pub String);
     derive(Deserialize)
 )]
 #[derive(Serialize)]
-#[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct Address(pub String);
 

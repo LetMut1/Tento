@@ -5,11 +5,11 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use extern_crate::bb8::Pool;
-use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
-use extern_crate::tokio_postgres::config::Config;
-use extern_crate::tokio_postgres::NoTls;
+use bb8::Pool;
+use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use std::clone::Clone;
+use tokio_postgres::config::Config;
+use tokio_postgres::NoTls;
 
 pub use crate::infrastructure_layer::data::control_type::PostgresqlConnectionPoolNoTls;
 

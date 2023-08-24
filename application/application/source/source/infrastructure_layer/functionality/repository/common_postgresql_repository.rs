@@ -1,3 +1,6 @@
+use super::postgresql_repository::by::By11;
+use super::postgresql_repository::by::By12;
+use super::postgresql_repository::by::By13;
 use super::postgresql_repository::PostgresqlRepository;
 use crate::domain_layer::data::entity::channel::Channel_AccessModifier;
 use crate::domain_layer::data::entity::channel::Channel_BackgroundImagePath;
@@ -10,19 +13,16 @@ use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
-use super::postgresql_repository::by::By11;
-use super::postgresql_repository::by::By12;
-use super::postgresql_repository::by::By13;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::repository::channel___postgresql_repository::Channel1;
 use crate::infrastructure_layer::functionality::service::counter::Counter;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
-use extern_crate::serde::Serialize;
-use extern_crate::tokio_postgres::types::Type;
-use extern_crate::tokio_postgres::Client as Connection;
+use serde::Serialize;
+use tokio_postgres::types::Type;
+use tokio_postgres::Client as Connection;
 
 #[cfg(feature = "manual_testing")]
-use extern_crate::serde::Deserialize;
+use serde::Deserialize;
 
 impl PostgresqlRepository<Common1> {
     pub async fn find_1<'a>(
@@ -334,7 +334,7 @@ impl PostgresqlRepository<Common1> {
                 Ok(channel_cover_image_path_) => {
                     let channel_cover_image_path__ = match channel_cover_image_path_ {
                         Some(channel_cover_image_path___) => Some(Channel_CoverImagePath(channel_cover_image_path___)),
-                        None => None
+                        None => None,
                     };
 
                     channel_cover_image_path__
@@ -363,7 +363,7 @@ impl PostgresqlRepository<Common1> {
                 Ok(channel_background_image_path_) => {
                     let channel_background_image_path__ = match channel_background_image_path_ {
                         Some(channel_background_image_path___) => Some(Channel_BackgroundImagePath(channel_background_image_path___)),
-                        None => None
+                        None => None,
                     };
 
                     channel_background_image_path__
@@ -746,7 +746,7 @@ impl PostgresqlRepository<Common1> {
                 Ok(channel_cover_image_path_) => {
                     let channel_cover_image_path__ = match channel_cover_image_path_ {
                         Some(channel_cover_image_path___) => Some(Channel_CoverImagePath(channel_cover_image_path___)),
-                        None => None
+                        None => None,
                     };
 
                     channel_cover_image_path__
@@ -775,7 +775,7 @@ impl PostgresqlRepository<Common1> {
                 Ok(channel_background_image_path_) => {
                     let channel_background_image_path__ = match channel_background_image_path_ {
                         Some(channel_background_image_path___) => Some(Channel_BackgroundImagePath(channel_background_image_path___)),
-                        None => None
+                        None => None,
                     };
 
                     channel_background_image_path__
@@ -1102,7 +1102,7 @@ impl PostgresqlRepository<Common1> {
                 Ok(channel_cover_image_path_) => {
                     let channel_cover_image_path__ = match channel_cover_image_path_ {
                         Some(channel_cover_image_path___) => Some(Channel_CoverImagePath(channel_cover_image_path___)),
-                        None => None
+                        None => None,
                     };
 
                     channel_cover_image_path__
@@ -1131,7 +1131,7 @@ impl PostgresqlRepository<Common1> {
                 Ok(channel_background_image_path_) => {
                     let channel_background_image_path__ = match channel_background_image_path_ {
                         Some(channel_background_image_path___) => Some(Channel_BackgroundImagePath(channel_background_image_path___)),
-                        None => None
+                        None => None,
                     };
 
                     channel_background_image_path__
@@ -1183,7 +1183,6 @@ impl PostgresqlRepository<Common1> {
     derive(Deserialize)
 )]
 #[derive(Serialize)]
-#[serde(crate = "extern_crate::serde")]
 pub struct Common1 {
     pub channel: Channel1,
     pub is_application_user_subscribed: bool,

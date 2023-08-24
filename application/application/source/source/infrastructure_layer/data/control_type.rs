@@ -1,10 +1,10 @@
-use extern_crate::bb8::Pool;
-use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
-use extern_crate::bb8_redis::RedisConnectionManager;
-use extern_crate::hyper::Body;
-use extern_crate::hyper::Request as HyperRequest;
-use extern_crate::hyper::Response as HyperResponse;
-use extern_crate::tokio_postgres::NoTls;
+use bb8::Pool;
+use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
+use bb8_redis::RedisConnectionManager;
+use hyper::Body;
+use hyper::Request as HyperRequest;
+use hyper::Response as HyperResponse;
+use tokio_postgres::NoTls;
 
 pub struct Argon2Id;
 

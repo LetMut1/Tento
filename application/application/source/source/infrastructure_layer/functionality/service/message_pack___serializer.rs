@@ -5,9 +5,9 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use extern_crate::rmp_serde;
-use extern_crate::serde::Deserialize;
-use extern_crate::serde::Serialize as SerdeSerialize;
+use rmp_serde;
+use serde::Deserialize;
+use serde::Serialize as SerdeSerialize;
 
 pub use crate::infrastructure_layer::data::control_type::MessagePack;
 

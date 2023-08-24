@@ -29,19 +29,19 @@ use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By1;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By7;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::insert::Insert1;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::insert::Insert4;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::insert::Insert7;
-use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By1;
-use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By7;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::creator::Creator;
 use crate::infrastructure_layer::functionality::service::creator::PostgresqlConnectionPoolNoTls;
-use extern_crate::rand::thread_rng;
-use extern_crate::rand::Rng;
-use extern_crate::tokio::runtime::Builder;
-use extern_crate::tokio_postgres::Config as PostgresqlConfiguration;
+use rand::thread_rng;
+use rand::Rng;
 use std::str::FromStr;
+use tokio::runtime::Builder;
+use tokio_postgres::Config as PostgresqlConfiguration;
 
 pub struct CreateFixtures;
 
@@ -479,7 +479,7 @@ impl CreateFixtures {
 
                 let channel = match PostgresqlRepository::<Channel<'_>>::find_2(
                     database_1_postgresql_connection,
-                    & By7 {
+                    &By7 {
                         channel_name: &channel_name,
                     },
                 )

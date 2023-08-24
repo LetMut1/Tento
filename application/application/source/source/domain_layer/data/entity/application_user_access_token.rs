@@ -1,19 +1,17 @@
 use super::application_user::ApplicationUser_Id;
 use super::application_user_device::ApplicationUserDevice_Id;
-use extern_crate::serde::Deserialize;
-use extern_crate::serde::Serialize;
+use serde::Deserialize;
+use serde::Serialize;
 use std::borrow::Cow;
 
 pub use self::ExpiresAt as ApplicationUserAccessToken_ExpiresAt;
 pub use self::Id as ApplicationUserAccessToken_Id;
 
 #[derive(Clone, Serialize, Deserialize)]
-#[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct Id(pub String);
 
 #[derive(Clone, Copy, Serialize, Deserialize)]
-#[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct ExpiresAt(pub i64);
 
@@ -22,7 +20,6 @@ impl ExpiresAt {
 }
 
 #[derive(Serialize, Deserialize)]
-#[serde(crate = "extern_crate::serde")]
 pub struct ApplicationUserAccessToken<'a> {
     pub id: Id,
     pub application_user_id: ApplicationUser_Id,

@@ -1,3 +1,5 @@
+use super::postgresql_repository::by::By9;
+use super::postgresql_repository::insert::Insert9;
 use super::postgresql_repository::PostgresqlRepository;
 use crate::domain_layer::data::entity::channel_outer_link::ChannelOuterLink;
 use crate::domain_layer::data::entity::channel_outer_link::ChannelOuterLink_Address;
@@ -9,14 +11,12 @@ use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
-use extern_crate::serde::Serialize;
-use super::postgresql_repository::by::By9;
-use super::postgresql_repository::insert::Insert9;
-use extern_crate::tokio_postgres::types::Type;
-use extern_crate::tokio_postgres::Client as Connection;
+use serde::Serialize;
+use tokio_postgres::types::Type;
+use tokio_postgres::Client as Connection;
 
 #[cfg(feature = "manual_testing")]
-use extern_crate::serde::Deserialize;
+use serde::Deserialize;
 
 impl PostgresqlRepository<ChannelOuterLink> {
     pub async fn create<'a>(
@@ -295,7 +295,6 @@ impl PostgresqlRepository<ChannelOuterLink> {
     derive(Deserialize)
 )]
 #[derive(Serialize)]
-#[serde(crate = "extern_crate::serde")]
 pub struct ChannelOuterLink1 {
     pub channel_outer_link_alias: ChannelOuterLink_Alias,
     pub channel_outer_link_address: ChannelOuterLink_Address,

@@ -1,5 +1,9 @@
+use super::postgresql_repository::by::By6;
+use super::postgresql_repository::by::By7;
+use super::postgresql_repository::insert::Insert7;
 use super::postgresql_repository::PostgresqlRepository;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
+use crate::domain_layer::data::entity::channel::Channel;
 use crate::domain_layer::data::entity::channel::Channel_AccessModifier;
 use crate::domain_layer::data::entity::channel::Channel_BackgroundImagePath;
 use crate::domain_layer::data::entity::channel::Channel_CoverImagePath;
@@ -13,23 +17,19 @@ use crate::domain_layer::data::entity::channel::Channel_Orientation;
 use crate::domain_layer::data::entity::channel::Channel_SubscribersQuantity;
 use crate::domain_layer::data::entity::channel::Channel_ViewingQuantity;
 use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier;
-use crate::domain_layer::data::entity::channel::Channel;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
-use super::postgresql_repository::by::By6;
-use super::postgresql_repository::by::By7;
-use super::postgresql_repository::insert::Insert7;
-use extern_crate::serde::Serialize;
-use extern_crate::tokio_postgres::types::Type;
-use extern_crate::tokio_postgres::Client as Connection;
+use serde::Serialize;
 use std::borrow::Cow;
+use tokio_postgres::types::Type;
+use tokio_postgres::Client as Connection;
 
 #[cfg(feature = "manual_testing")]
-use extern_crate::serde::Deserialize;
+use serde::Deserialize;
 
 impl PostgresqlRepository<Channel<'_>> {
     pub async fn create<'a>(
@@ -424,7 +424,7 @@ impl PostgresqlRepository<Channel<'_>> {
             Ok(channel_description_) => {
                 let channel_description__ = match channel_description_ {
                     Some(channel_description___) => Some(Channel_Description(channel_description___)),
-                    None => None
+                    None => None,
                 };
 
                 channel_description__
@@ -519,7 +519,7 @@ impl PostgresqlRepository<Channel<'_>> {
             Ok(channel_cover_image_path_) => {
                 let channel_cover_image_path__ = match channel_cover_image_path_ {
                     Some(channel_cover_image_path___) => Some(Channel_CoverImagePath(channel_cover_image_path___)),
-                    None => None
+                    None => None,
                 };
 
                 channel_cover_image_path__
@@ -548,7 +548,7 @@ impl PostgresqlRepository<Channel<'_>> {
             Ok(channel_background_image_path_) => {
                 let channel_background_image_path__ = match channel_background_image_path_ {
                     Some(channel_background_image_path___) => Some(Channel_BackgroundImagePath(channel_background_image_path___)),
-                    None => None
+                    None => None,
                 };
 
                 channel_background_image_path__
@@ -685,7 +685,7 @@ impl PostgresqlRepository<Channel<'_>> {
 
     pub async fn find_2<'a, 'b>(
         database_1_connection: &'a Connection,
-        by_7: &'a By7<'b>
+        by_7: &'a By7<'b>,
     ) -> Result<Option<Channel<'b>>, ErrorAuditor> {
         let channel_name = by_7.channel_name.0.as_str();
 
@@ -844,7 +844,7 @@ impl PostgresqlRepository<Channel<'_>> {
             Ok(channel_description_) => {
                 let channel_description__ = match channel_description_ {
                     Some(channel_description___) => Some(Channel_Description(channel_description___)),
-                    None => None
+                    None => None,
                 };
 
                 channel_description__
@@ -939,7 +939,7 @@ impl PostgresqlRepository<Channel<'_>> {
             Ok(channel_cover_image_path_) => {
                 let channel_cover_image_path__ = match channel_cover_image_path_ {
                     Some(channel_cover_image_path___) => Some(Channel_CoverImagePath(channel_cover_image_path___)),
-                    None => None
+                    None => None,
                 };
 
                 channel_cover_image_path__
@@ -968,7 +968,7 @@ impl PostgresqlRepository<Channel<'_>> {
             Ok(channel_background_image_path_) => {
                 let channel_background_image_path__ = match channel_background_image_path_ {
                     Some(channel_background_image_path___) => Some(Channel_BackgroundImagePath(channel_background_image_path___)),
-                    None => None
+                    None => None,
                 };
 
                 channel_background_image_path__
@@ -1109,7 +1109,6 @@ impl PostgresqlRepository<Channel<'_>> {
     derive(Deserialize)
 )]
 #[derive(Serialize)]
-#[serde(crate = "extern_crate::serde")]
 pub struct Channel1 {
     pub channel_id: Channel_Id,
     pub channel_name: Channel_Name,

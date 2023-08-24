@@ -4,10 +4,10 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use extern_crate::argon2::hash_encoded;
-use extern_crate::argon2::verify_encoded;
-use extern_crate::argon2::Config;
-use extern_crate::uuid::Uuid;
+use argon2::hash_encoded;
+use argon2::verify_encoded;
+use argon2::Config;
+use uuid::Uuid;
 
 pub use crate::infrastructure_layer::data::control_type::Argon2Id;
 

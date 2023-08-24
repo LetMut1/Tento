@@ -5,7 +5,7 @@ use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::OtherError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use extern_crate::regex::Regex;
+use regex::Regex;
 
 impl Validator<ApplicationUserAuthorizationToken_Value> {
     pub fn is_valid<'a>(application_user_authorization_token_value: &'a ApplicationUserAuthorizationToken_Value) -> Result<bool, ErrorAuditor> {

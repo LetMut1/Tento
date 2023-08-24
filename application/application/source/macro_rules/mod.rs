@@ -19,7 +19,6 @@ macro_rules! r#enum {
             derive(Deserialize))
         ]
         #[derive(Serialize)]
-        #[serde(crate = "extern_crate::serde")]
         $visability enum $enum_name {
             $($enum_variant $({ $($enum_variant_field: $enum_variant_field_type,)* })?,)*
         }

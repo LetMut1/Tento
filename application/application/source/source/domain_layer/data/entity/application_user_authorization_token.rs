@@ -1,7 +1,7 @@
 use super::application_user::ApplicationUser_Id;
 use super::application_user_device::ApplicationUserDevice_Id;
-use extern_crate::serde::Deserialize;
-use extern_crate::serde::Serialize;
+use serde::Deserialize;
+use serde::Serialize;
 use std::borrow::Cow;
 
 pub use self::CanBeResentFrom as ApplicationUserAuthorizationToken_CanBeResentFrom;
@@ -14,7 +14,6 @@ pub use self::WrongEnterTriesQuantity as ApplicationUserAuthorizationToken_Wrong
     derive(Serialize)
 )]
 #[derive(Deserialize)]
-#[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct Value(pub String);
 
@@ -27,7 +26,6 @@ impl Value {
     derive(Deserialize)
 )]
 #[derive(Clone, Copy, Serialize)]
-#[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct WrongEnterTriesQuantity(pub i16);
 
@@ -47,7 +45,6 @@ impl ExpiresAt {
     derive(Deserialize)
 )]
 #[derive(Clone, Copy, Serialize)]
-#[serde(crate = "extern_crate::serde")]
 #[serde(transparent)]
 pub struct CanBeResentFrom(pub i64);
 

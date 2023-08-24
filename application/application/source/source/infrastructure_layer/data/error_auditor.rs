@@ -1,12 +1,12 @@
-use extern_crate::bb8::RunError as Bb8Error;
-use extern_crate::lettre::smtp::error::Error as SmtpError;
-use extern_crate::lettre_email::error::Error as EmailError;
-use extern_crate::redis::RedisError;
-use extern_crate::tokio_postgres::Error as PostgresqlError;
+use bb8::RunError as Bb8Error;
+use lettre::smtp::error::Error as SmtpError;
+use lettre_email::error::Error as EmailError;
+use redis::RedisError;
 use std::error::Error;
 use std::fmt::Display;
 use std::fmt::Error as FormatError;
 use std::fmt::Formatter;
+use tokio_postgres::Error as PostgresqlError;
 
 #[derive(Debug)]
 pub struct ErrorAuditor {

@@ -1,6 +1,8 @@
 use super::postgresql_repository::by::By1;
 use super::postgresql_repository::by::By2;
 use super::postgresql_repository::by::By3;
+use super::postgresql_repository::insert::Insert1;
+use super::postgresql_repository::update::Update1;
 use super::postgresql_repository::PostgresqlRepository;
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::data::entity::application_user::ApplicationUser1;
@@ -14,17 +16,15 @@ use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Nickname;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_PasswordHash;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
-use super::postgresql_repository::update::Update1;
-use super::postgresql_repository::insert::Insert1;
 use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
-use extern_crate::tokio_postgres::types::Type;
-use extern_crate::tokio_postgres::Client as Connection;
-use std::marker::PhantomData;
 use std::borrow::Cow;
+use std::marker::PhantomData;
+use tokio_postgres::types::Type;
+use tokio_postgres::Client as Connection;
 
 impl PostgresqlRepository<ApplicationUser<'_>> {
     pub async fn create<'a>(
@@ -179,7 +179,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 _password: PhantomData,
                 password_hash: insert_1.application_user_password_hash,
                 created_at: application_user_created_at,
-            }
+            },
         );
     }
 
@@ -1037,9 +1037,9 @@ impl PostgresqlRepository<ApplicationUser3> {
         return Ok(
             Some(
                 ApplicationUser3 {
-                    id: application_user_id
-                }
-            )
+                    id: application_user_id,
+                },
+            ),
         );
     }
 }
@@ -1282,8 +1282,8 @@ impl PostgresqlRepository<ApplicationUser4> {
                     email: application_user_email,
                     nickname: application_user_password_nickname,
                     password_hash: application_user_password_hash,
-                }
-            )
+                },
+            ),
         );
     }
 }
@@ -1392,8 +1392,8 @@ impl PostgresqlRepository<ApplicationUser5> {
             Some(
                 ApplicationUser5 {
                     email: application_user_email,
-                }
-            )
+                },
+            ),
         );
     }
 }

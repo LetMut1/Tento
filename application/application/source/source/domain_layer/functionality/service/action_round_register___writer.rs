@@ -17,15 +17,15 @@ use crate::infrastructure_layer::functionality::repository::postgresql_repositor
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::converter::Convert;
 use crate::infrastructure_layer::functionality::service::converter::Converter;
-use extern_crate::bb8::Pool;
-use extern_crate::bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
-use extern_crate::tokio_postgres::tls::MakeTlsConnect;
-use extern_crate::tokio_postgres::tls::TlsConnect;
-use extern_crate::tokio_postgres::Socket;
+use bb8::Pool;
+use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use std::borrow::Cow;
 use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
+use tokio_postgres::tls::MakeTlsConnect;
+use tokio_postgres::tls::TlsConnect;
+use tokio_postgres::Socket;
 
 impl Writer<ActionRoundRegister<'_>> {
     pub async fn write<'a, T>(

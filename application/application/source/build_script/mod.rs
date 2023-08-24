@@ -77,17 +77,17 @@
     clippy::zero_sized_map_values
 )]
 
-use extern_crate::build_script_constant::environment_configuration::ENVIRONMENT_CONFIGURATION_CONSTANT_NAME;
-use extern_crate::build_script_constant::environment_configuration_constant_file_name;
-use extern_crate::environment_configuration::environment_configuration::Environment;
-use extern_crate::environment_configuration::loader::Loader;
+use build_script_constant::environment_configuration::ENVIRONMENT_CONFIGURATION_CONSTANT_NAME;
+use build_script_constant::environment_configuration_constant_file_name;
+use cbindgen::Builder;
+use environment_configuration::environment_configuration::Environment;
+use environment_configuration::loader::Loader;
 use std::env::var;
 use std::error::Error;
 use std::fs::File;
 use std::io::Write;
-use extern_crate::cbindgen::Builder;
 use std::path::Path;
-use extern_crate::uuid::Uuid;
+use uuid::Uuid;
 
 fn main() -> () {
     if let Err(error) = Processor::process() {
@@ -144,7 +144,7 @@ impl Processor {
         let environment = match environment_configuration.environment {
             Environment::Production => "Environment::Production",
             Environment::Development => "Environment::Development",
-            Environment::LocalDevelopment => "Environment::LocalDevelopment"
+            Environment::LocalDevelopment => "Environment::LocalDevelopment",
         };
 
         let keepalive_duration = match environment_configuration.application_server.tcp.keepalive.duration {
@@ -154,7 +154,7 @@ impl Processor {
                     keepalive_duration_,
                 )
             }
-            None => "None".to_string()
+            None => "None".to_string(),
         };
 
         let keepalive_interval_duration = match environment_configuration.application_server.tcp.keepalive.interval_duration {
@@ -164,7 +164,7 @@ impl Processor {
                     keepalive_interval_duration_,
                 )
             }
-            None => "None".to_string()
+            None => "None".to_string(),
         };
 
         let keepalive_retries_quantity = match environment_configuration.application_server.tcp.keepalive.retries_quantity {
@@ -174,7 +174,7 @@ impl Processor {
                     keepalive_retries_quantity_,
                 )
             }
-            None => "None".to_string()
+            None => "None".to_string(),
         };
 
         let http_maximum_pending_accept_reset_streams = match environment_configuration.application_server.http.maximum_pending_accept_reset_streams {
@@ -184,7 +184,7 @@ impl Processor {
                     http_maximum_pending_accept_reset_streams_,
                 )
             }
-            None => "None".to_string()
+            None => "None".to_string(),
         };
 
         let keepalive = match environment_configuration.application_server.http.keepalive {
@@ -198,11 +198,10 @@ impl Processor {
                             }} \n\t\t\t\
                         )\
                     ",
-                    keepalive_.interval_duration,
-                    keepalive_.timeout_duration,
+                    keepalive_.interval_duration, keepalive_.timeout_duration,
                 )
             }
-            None => "None".to_string()
+            None => "None".to_string(),
         };
 
         let tls = match environment_configuration.application_server.http.tls {
@@ -220,26 +219,26 @@ impl Processor {
                     tls_.certificate_key_path.0.as_str(),
                 )
             }
-            None => "None".to_string()
+            None => "None".to_string(),
         };
 
         let build_file_content = format!(
             "\
-                pub use extern_crate::environment_configuration::environment_configuration::ApplicationServer; \n\
-                pub use extern_crate::environment_configuration::environment_configuration::EmailServer; \n\
-                pub use extern_crate::environment_configuration::environment_configuration::Encryption; \n\
-                pub use extern_crate::environment_configuration::environment_configuration::Environment; \n\
-                pub use extern_crate::environment_configuration::environment_configuration::EnvironmentConfiguration; \n\
-                pub use extern_crate::environment_configuration::environment_configuration::Http; \n\
-                pub use extern_crate::environment_configuration::environment_configuration::HttpKeepalive; \n\
-                pub use extern_crate::environment_configuration::environment_configuration::Postgresql; \n\
-                pub use extern_crate::environment_configuration::environment_configuration::PrivateKey; \n\
-                pub use extern_crate::environment_configuration::environment_configuration::Redis; \n\
-                pub use extern_crate::environment_configuration::environment_configuration::Resource; \n\
-                pub use extern_crate::environment_configuration::environment_configuration::StringLiteral; \n\
-                pub use extern_crate::environment_configuration::environment_configuration::Tcp; \n\
-                pub use extern_crate::environment_configuration::environment_configuration::TcpKeepalive; \n\
-                pub use extern_crate::environment_configuration::environment_configuration::Tls; \n\
+                pub use environment_configuration::environment_configuration::ApplicationServer; \n\
+                pub use environment_configuration::environment_configuration::EmailServer; \n\
+                pub use environment_configuration::environment_configuration::Encryption; \n\
+                pub use environment_configuration::environment_configuration::Environment; \n\
+                pub use environment_configuration::environment_configuration::EnvironmentConfiguration; \n\
+                pub use environment_configuration::environment_configuration::Http; \n\
+                pub use environment_configuration::environment_configuration::HttpKeepalive; \n\
+                pub use environment_configuration::environment_configuration::Postgresql; \n\
+                pub use environment_configuration::environment_configuration::PrivateKey; \n\
+                pub use environment_configuration::environment_configuration::Redis; \n\
+                pub use environment_configuration::environment_configuration::Resource; \n\
+                pub use environment_configuration::environment_configuration::StringLiteral; \n\
+                pub use environment_configuration::environment_configuration::Tcp; \n\
+                pub use environment_configuration::environment_configuration::TcpKeepalive; \n\
+                pub use environment_configuration::environment_configuration::Tls; \n\
                 \n\
                 pub const {}: EnvironmentConfiguration<StringLiteral> = EnvironmentConfiguration {{ \n\t\
                     environment: {}, \n\t\
@@ -334,7 +333,7 @@ impl Processor {
 
         let crate_path_ = Path::new(crate_path.as_str());
 
-        Builder::new()                                      // TODO many options
+        Builder::new() // TODO many options
             .with_crate(crate_path_)
             .generate()?
             .write_to_file("c_bindings.h");
