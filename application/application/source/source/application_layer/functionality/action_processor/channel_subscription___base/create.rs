@@ -1,5 +1,5 @@
-use crate::application_layer::data::common_precedent::CommonPrecedent;
-use crate::application_layer::data::unified_report::UnifiedReport;
+use application_layer::data::common_precedent::CommonPrecedent;
+use application_layer::data::unified_report::UnifiedReport;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::data::entity::application_user_access_token_encrypted::ApplicationUserAccessTokenEncrypted;
 use crate::domain_layer::data::entity::channel::Channel;
