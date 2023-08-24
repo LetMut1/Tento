@@ -578,41 +578,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "extern_crate"
-version = "0.1.0"
-dependencies = [
- "base64 0.13.1",
- "bb8",
- "bb8-postgres",
- "bb8-redis",
- "build_script_constant",
- "bytes",
- "cbindgen",
- "chrono",
- "const_format",
- "dotenv",
- "environment_configuration",
- "http",
- "hyper",
- "lettre",
- "lettre_email",
- "macro_rules",
- "matchit",
- "rand 0.8.5",
- "redis",
- "regex",
- "rmp-serde",
- "rust-argon2",
- "rust-crypto",
- "serde",
- "serde_json",
- "tokio",
- "tokio-postgres",
- "toml 0.7.6",
- "uuid 0.8.2",
-]
-
-[[package]]
 name = "fallible-iterator"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"

@@ -2,9 +2,8 @@
 resolver = "2"
 members = [
     "./source",
-    "./source/extern_crate",
-    "./source/extern_crate/build_script_constant",
-    "./source/extern_crate/environment_configuration",
+    "./source/inner_crate/build_script_constant",
+    "./source/inner_crate/environment_configuration",
     "./source/integration_module",
     "./source/macro_rules",
     "./source/source/presentation_layer/functionality/command/create_fixtures",
@@ -13,9 +12,8 @@ members = [
 ]
 default-members = [
     "./source",
-    "./source/extern_crate",
-    "./source/extern_crate/build_script_constant",
-    "./source/extern_crate/environment_configuration",
+    "./source/inner_crate/build_script_constant",
+    "./source/inner_crate/environment_configuration",
     "./source/integration_module",
     "./source/macro_rules",
     "./source/source/presentation_layer/functionality/command/create_fixtures",

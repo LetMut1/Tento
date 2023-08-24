@@ -24,12 +24,12 @@ base64 = { package = "base64", version = "^0.13", default-features = true, featu
 bb8 = { package = "bb8", version = "^0.7", default-features = true, features = [], optional = false }
 bb8_postgres = { package = "bb8-postgres", version = "^0.7", default-features = true, features = [], optional = false }
 bb8_redis = { package = "bb8-redis", version = "^0.10", default-features = true, features = [], optional = false }
-build_script_constant = { path = "./extern_crate/build_script_constant", package = "build_script_constant", version = "0.1.0", default-features = true, features = [], optional = false }
+build_script_constant = { path = "./inner_crate/build_script_constant", package = "build_script_constant", version = "0.1.0", default-features = true, features = [], optional = false }
 bytes = { package = "bytes", version = "^1.1", default-features = true, features = [], optional = false }
 chrono = { package = "chrono", version = "^0.4", default-features = true, features = [], optional = false }
 crypto = { package = "rust-crypto", version = "^0.2", default-features = true, features = [], optional = false }
 dotenv = { package = "dotenv", version = "^0.15", default-features = true, features = [], optional = false }
-environment_configuration = { path = "./extern_crate/environment_configuration", package = "environment_configuration", version = "0.1.0", default-features = true, features = [], optional = false }
+environment_configuration = { path = "./inner_crate/environment_configuration", package = "environment_configuration", version = "0.1.0", default-features = true, features = [], optional = false }
 http = { package = "http", version = "^0.2", default-features = true, features = [], optional = false }
 hyper = { package = "hyper", version = "^0.14", default-features = true, features = ["full"], optional = false }  # // TODO Убрать фичу Full и понять , какие нужны
 lettre = { package = "lettre", version = "^0.9", default-features = true, features = [], optional = false }
@@ -50,9 +50,9 @@ const_format = { package = "const_format", version = "^0.2", default-features = 
 serde_json = { package = "serde_json", version = "^1.0", default-features = true, features = [], optional = true }
 
 [build-dependencies]
-build_script_constant = { path = "./extern_crate/build_script_constant", package = "build_script_constant", version = "0.1.0", default-features = true, features = [], optional = false }
+build_script_constant = { path = "./inner_crate/build_script_constant", package = "build_script_constant", version = "0.1.0", default-features = true, features = [], optional = false }
 cbindgen = { package = "cbindgen", version = "^0.24", default-features = true, features = [], optional = false }
-environment_configuration = { path = "./extern_crate/environment_configuration", package = "environment_configuration", version = "0.1.0", default-features = true, features = [], optional = false }
+environment_configuration = { path = "./inner_crate/environment_configuration", package = "environment_configuration", version = "0.1.0", default-features = true, features = [], optional = false }
 uuid = { package = "uuid", version = "^0.8", default-features = true, features = ["v4"], optional = false }
 
 [features]
