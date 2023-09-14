@@ -81,5 +81,24 @@
     clippy::zero_sized_map_values
 )]
 
-pub mod common_precedent;
-pub mod unified_report;
+pub mod action_round_register;
+pub mod application_user;
+pub mod application_user_access_refresh_token;
+pub mod application_user_access_refresh_token_encrypted;
+pub mod application_user_access_token;
+pub mod application_user_access_token_black_list;
+pub mod application_user_access_token_encrypted;
+pub mod application_user_authorization_token;
+pub mod application_user_device;
+pub mod application_user_direct_message;
+pub mod application_user_direct_message_publication;
+pub mod application_user_registration_token;
+pub mod application_user_reset_password_token;
+pub mod application_user_subscription;
+pub mod channel;
+pub mod channel_feed_publication;
+pub mod channel_feed_publication_mark;
+pub mod channel_feed_publication_reaction;
+pub mod channel_inner_link;
+pub mod channel_outer_link;
+pub mod channel_subscription;

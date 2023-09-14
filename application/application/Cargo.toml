@@ -3,6 +3,7 @@ resolver = "2"
 members = [
     "./source",
     "./source/inner_crate/build_script_constant",
+    "./source/inner_crate/entity",
     "./source/inner_crate/environment_configuration",
     "./source/inner_crate/macro_rules",
     "./source/inner_crate/unified_report",
@@ -14,6 +15,7 @@ members = [
 default-members = [
     "./source",
     "./source/inner_crate/build_script_constant",
+    "./source/inner_crate/entity",
     "./source/inner_crate/environment_configuration",
     "./source/inner_crate/macro_rules",
     "./source/inner_crate/unified_report",
