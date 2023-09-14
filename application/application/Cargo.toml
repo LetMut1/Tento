@@ -2,11 +2,11 @@
 resolver = "2"
 members = [
     "./source",
-    "./source/inner_crate/build_script_constant",
-    "./source/inner_crate/entity",
-    "./source/inner_crate/environment_configuration",
-    "./source/inner_crate/macro_rules",
-    "./source/inner_crate/unified_report",
+    "./source/forced_crate/build_script_constant",
+    "./source/forced_crate/entity",
+    "./source/forced_crate/environment_configuration",
+    "./source/forced_crate/macro_rules",
+    "./source/forced_crate/unified_report",
     "./source/integration_module",
     "./source/source/presentation_layer/functionality/command/create_fixtures",
     "./source/source/presentation_layer/functionality/command/remove_incomplite_state",
@@ -14,11 +14,11 @@ members = [
 ]
 default-members = [
     "./source",
-    "./source/inner_crate/build_script_constant",
-    "./source/inner_crate/entity",
-    "./source/inner_crate/environment_configuration",
-    "./source/inner_crate/macro_rules",
-    "./source/inner_crate/unified_report",
+    "./source/forced_crate/build_script_constant",
+    "./source/forced_crate/entity",
+    "./source/forced_crate/environment_configuration",
+    "./source/forced_crate/macro_rules",
+    "./source/forced_crate/unified_report",
     "./source/integration_module",
     "./source/source/presentation_layer/functionality/command/create_fixtures",
     "./source/source/presentation_layer/functionality/command/remove_incomplite_state",
