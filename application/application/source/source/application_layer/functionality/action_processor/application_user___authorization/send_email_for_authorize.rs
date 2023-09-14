@@ -27,14 +27,14 @@ use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use bb8_redis::RedisConnectionManager;
 use macro_rules::r#enum;
-use serde::Deserialize;
-use serde::Serialize;
 use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
+pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::send_email_for_authorize::Incoming;
+pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::send_email_for_authorize::Outcoming;
 
 pub struct SendEmailForAuthorize;
 
@@ -276,25 +276,6 @@ impl SendEmailForAuthorize {
             },
         );
     }
-}
-
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Serialize)
-)]
-#[derive(Deserialize)]
-pub struct Incoming {
-    application_user_device_id: ApplicationUserDevice_Id,
-    application_user_id: ApplicationUser_Id,
-}
-
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Deserialize)
-)]
-#[derive(Serialize)]
-pub struct Outcoming {
-    application_user_authorization_token_can_be_resent_from: ApplicationUserAuthorizationToken_CanBeResentFrom,
 }
 
 r#enum!(

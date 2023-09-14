@@ -9,8 +9,8 @@ use serde::Serialize;
 )]
 #[derive(Deserialize)]
 pub struct Incoming {
-    application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
-    application_user_access_refresh_token_encrypted: ApplicationUserAccessRefreshTokenEncrypted,
+    pub application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
+    pub application_user_access_refresh_token_encrypted: ApplicationUserAccessRefreshTokenEncrypted,
 }
 
 #[cfg_attr(
@@ -19,6 +19,6 @@ pub struct Incoming {
 )]
 #[derive(Serialize)]
 pub struct Outcoming {
-    application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
-    application_user_access_refresh_token_encrypted: ApplicationUserAccessRefreshTokenEncrypted,
+    pub application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
+    pub application_user_access_refresh_token_encrypted: ApplicationUserAccessRefreshTokenEncrypted,
 }

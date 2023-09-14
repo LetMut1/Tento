@@ -2,7 +2,6 @@ use crate::application_layer::data::common_precedent::CommonPrecedent;
 use crate::application_layer::data::unified_report_::UnifiedReport;
 use crate::domain_layer::data::entity::application_user::ApplicationUser3;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
-use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken1;
@@ -36,14 +35,14 @@ use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use bb8_redis::RedisConnectionManager;
 use macro_rules::r#enum;
-use serde::Deserialize;
-use serde::Serialize;
 use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
+pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::reset_password_by_first_step::Incoming;
+pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::reset_password_by_first_step::Outcoming;
 
 pub struct ResetPasswordByFirstStep;
 
@@ -429,29 +428,6 @@ impl ResetPasswordByFirstStep {
             },
         );
     }
-}
-
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Serialize)
-)]
-#[derive(Deserialize)]
-pub struct Incoming {
-    application_user_email: ApplicationUser_Email,
-    application_user_device_id: ApplicationUserDevice_Id,
-}
-
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Deserialize)
-)]
-#[derive(Serialize)]
-pub struct Outcoming {
-    application_user_id: ApplicationUser_Id,
-    verification_message_sent: bool,
-    application_user_reset_password_token_can_be_resent_from: ApplicationUserResetPasswordToken_CanBeResentFrom,
-    application_user_reset_password_token_wrong_enter_tries_quantity: ApplicationUserResetPasswordToken_WrongEnterTriesQuantity,
-    application_user_reset_password_token_wrong_enter_tries_quantity_limit: i16,
 }
 
 r#enum!(

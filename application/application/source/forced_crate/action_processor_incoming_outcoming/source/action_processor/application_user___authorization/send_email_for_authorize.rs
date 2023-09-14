@@ -10,8 +10,8 @@ use serde::Serialize;
 )]
 #[derive(Deserialize)]
 pub struct Incoming {
-    application_user_device_id: ApplicationUserDevice_Id,
-    application_user_id: ApplicationUser_Id,
+    pub application_user_device_id: ApplicationUserDevice_Id,
+    pub application_user_id: ApplicationUser_Id,
 }
 
 #[cfg_attr(
@@ -20,5 +20,5 @@ pub struct Incoming {
 )]
 #[derive(Serialize)]
 pub struct Outcoming {
-    application_user_authorization_token_can_be_resent_from: ApplicationUserAuthorizationToken_CanBeResentFrom,
+    pub application_user_authorization_token_can_be_resent_from: ApplicationUserAuthorizationToken_CanBeResentFrom,
 }

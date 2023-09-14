@@ -15,14 +15,14 @@ use crate::infrastructure_layer::functionality::repository::postgresql_repositor
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use bb8_redis::RedisConnectionManager;
-use serde::Deserialize;
-use serde::Serialize;
 use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
+pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::check_email_for_existing::Incoming;
+pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::check_email_for_existing::Outcoming;
 
 pub struct CheckEmailForExisting;
 
@@ -116,22 +116,4 @@ impl CheckEmailForExisting {
             },
         );
     }
-}
-
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Serialize)
-)]
-#[derive(Deserialize)]
-pub struct Incoming {
-    application_user_email: ApplicationUser_Email,
-}
-
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Deserialize)
-)]
-#[derive(Serialize)]
-pub struct Outcoming {
-    result: bool,
 }

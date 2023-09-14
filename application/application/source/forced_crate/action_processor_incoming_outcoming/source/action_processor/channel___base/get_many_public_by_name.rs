@@ -10,10 +10,10 @@ use serde::Serialize;
 )]
 #[derive(Deserialize)]
 pub struct Incoming {
-    application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
-    channel_name: Channel_Name,
-    requery_channel_name: Option<Channel_Name>,
-    limit: i16,
+    pub application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
+    pub channel_name: Channel_Name,
+    pub requery_channel_name: Option<Channel_Name>,
+    pub limit: i16,
 }
 
 #[cfg_attr(
@@ -22,5 +22,5 @@ pub struct Incoming {
 )]
 #[derive(Serialize)]
 pub struct Outcoming {
-    common_registry: Vec<Common1>,
+    pub common_registry: Vec<Common1>,
 }

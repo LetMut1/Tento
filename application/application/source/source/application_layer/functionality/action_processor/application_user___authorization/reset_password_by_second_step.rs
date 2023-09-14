@@ -29,14 +29,13 @@ use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use bb8_redis::RedisConnectionManager;
 use macro_rules::r#enum;
-use serde::Deserialize;
-use serde::Serialize;
 use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
+pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::reset_password_by_second_step::Incoming;
 
 pub struct ResetPasswordBySecondStep;
 
@@ -276,17 +275,6 @@ impl ResetPasswordBySecondStep {
             },
         );
     }
-}
-
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Serialize)
-)]
-#[derive(Deserialize)]
-pub struct Incoming {
-    application_user_id: ApplicationUser_Id,
-    application_user_device_id: ApplicationUserDevice_Id,
-    application_user_reset_password_token_value: ApplicationUserResetPasswordToken_Value,
 }
 
 r#enum!(

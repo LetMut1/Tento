@@ -1,22 +1,10 @@
 use crate::application_layer::data::common_precedent::CommonPrecedent;
 use crate::application_layer::data::unified_report_::UnifiedReport;
-use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
-use crate::domain_layer::data::entity::application_user_access_token_encrypted::ApplicationUserAccessTokenEncrypted;
 use crate::domain_layer::data::entity::channel::Channel as EntityChannel;
 use crate::domain_layer::data::entity::channel::Channel_AccessModifier;
 use crate::domain_layer::data::entity::channel::Channel_AccessModifier_;
-use crate::domain_layer::data::entity::channel::Channel_BackgroundImagePath;
-use crate::domain_layer::data::entity::channel::Channel_CoverImagePath;
-use crate::domain_layer::data::entity::channel::Channel_Description;
 use crate::domain_layer::data::entity::channel::Channel_Id;
-use crate::domain_layer::data::entity::channel::Channel_LinkedName;
-use crate::domain_layer::data::entity::channel::Channel_MarksQuantity;
-use crate::domain_layer::data::entity::channel::Channel_Name;
-use crate::domain_layer::data::entity::channel::Channel_Orientation;
-use crate::domain_layer::data::entity::channel::Channel_SubscribersQuantity;
-use crate::domain_layer::data::entity::channel::Channel_ViewingQuantity;
-use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier;
 use crate::domain_layer::data::entity::channel_inner_link::ChannelInnerLink;
 use crate::domain_layer::data::entity::channel_outer_link::ChannelOuterLink;
 use crate::domain_layer::data::entity::channel_subscription::ChannelSubscription;
@@ -31,8 +19,6 @@ use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
-use crate::infrastructure_layer::functionality::repository::channel_inner_link___postgresql_repository::ChannelInnerLink1;
-use crate::infrastructure_layer::functionality::repository::channel_outer_link___postgresql_repository::ChannelOuterLink1;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By10;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By6;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By8;
@@ -42,14 +28,15 @@ use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use bb8_redis::RedisConnectionManager;
 use macro_rules::r#enum;
-use serde::Deserialize;
-use serde::Serialize;
 use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
+pub use action_processor_incoming_outcoming::action_processor::channel___base::get_one_by_id::Incoming;
+pub use action_processor_incoming_outcoming::action_processor::channel___base::get_one_by_id::Outcoming;
+pub use action_processor_incoming_outcoming::action_processor::channel___base::get_one_by_id::Channel;
 
 pub struct GetOneByID;
 
@@ -306,47 +293,6 @@ impl GetOneByID {
             },
         );
     }
-}
-
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Serialize)
-)]
-#[derive(Deserialize)]
-pub struct Incoming {
-    application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
-    channel_id: Channel_Id,
-}
-
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Deserialize)
-)]
-#[derive(Serialize)]
-pub struct Outcoming {
-    channel: Channel,
-    channel_inner_link_registry: Vec<ChannelInnerLink1>,
-    channel_outer_link_registry: Vec<ChannelOuterLink1>,
-}
-
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Deserialize)
-)]
-#[derive(Serialize)]
-struct Channel {
-    channel_owner: ApplicationUser_Id,
-    channel_name: Channel_Name,
-    channel_linked_name: Channel_LinkedName,
-    channel_description: Option<Channel_Description>,
-    channel_access_modifier: Channel_AccessModifier,
-    channel_visability_modifier: Channel_VisabilityModifier,
-    channel_orientation: Channel_Orientation,
-    channel_cover_image_path: Option<Channel_CoverImagePath>,
-    channel_background_image_path: Option<Channel_BackgroundImagePath>,
-    channel_subscribers_quantity: Channel_SubscribersQuantity,
-    channel_marks_quantity: Channel_MarksQuantity,
-    channel_viewing_quantity: Channel_ViewingQuantity,
 }
 
 r#enum!(

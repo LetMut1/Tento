@@ -35,14 +35,14 @@ use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use bb8_redis::RedisConnectionManager;
 use macro_rules::r#enum;
-use serde::Deserialize;
-use serde::Serialize;
 use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
+pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::register_by_first_step::Incoming;
+pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::register_by_first_step::Outcoming;
 
 pub struct RegisterByFirstStep;
 
@@ -424,28 +424,6 @@ impl RegisterByFirstStep {
             },
         );
     }
-}
-
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Serialize)
-)]
-#[derive(Deserialize)]
-pub struct Incoming {
-    application_user_email: ApplicationUser_Email,
-    application_user_device_id: ApplicationUserDevice_Id,
-}
-
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Deserialize)
-)]
-#[derive(Serialize)]
-pub struct Outcoming {
-    verification_message_sent: bool,
-    application_user_registration_token_can_be_resent_from: ApplicationUserRegistrationToken_CanBeResentFrom,
-    application_user_registration_token_wrong_enter_tries_quantity: ApplicationUserRegistrationToken_WrongEnterTriesQuantity,
-    application_user_registration_token_wrong_enter_tries_quantity_limit: i16,
 }
 
 r#enum!(

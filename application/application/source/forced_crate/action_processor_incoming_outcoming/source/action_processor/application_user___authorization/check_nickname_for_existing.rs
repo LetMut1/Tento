@@ -8,7 +8,7 @@ use serde::Serialize;
 )]
 #[derive(Deserialize)]
 pub struct Incoming {
-    application_user_nickname: ApplicationUser_Nickname,
+    pub application_user_nickname: ApplicationUser_Nickname,
 }
 
 #[cfg_attr(
@@ -17,5 +17,5 @@ pub struct Incoming {
 )]
 #[derive(Serialize)]
 pub struct Outcoming {
-    result: bool,
+    pub result: bool,
 }

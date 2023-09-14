@@ -9,6 +9,6 @@ use serde::Serialize;
 )]
 #[derive(Deserialize)]
 pub struct Incoming {
-    application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
-    channel_id: Channel_Id,
+    pub application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
+    pub channel_id: Channel_Id,
 }

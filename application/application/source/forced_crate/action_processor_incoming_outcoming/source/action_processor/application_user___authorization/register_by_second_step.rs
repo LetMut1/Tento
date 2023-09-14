@@ -10,7 +10,7 @@ use serde::Serialize;
 )]
 #[derive(Deserialize)]
 pub struct Incoming {
-    application_user_email: ApplicationUser_Email,
-    application_user_device_id: ApplicationUserDevice_Id,
-    application_user_registration_token_value: ApplicationUserRegistrationToken_Value,
+    pub application_user_email: ApplicationUser_Email,
+    pub application_user_device_id: ApplicationUserDevice_Id,
+    pub application_user_registration_token_value: ApplicationUserRegistrationToken_Value,
 }

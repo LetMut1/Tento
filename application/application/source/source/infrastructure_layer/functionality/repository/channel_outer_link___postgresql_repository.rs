@@ -11,12 +11,9 @@ use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
-use serde::Serialize;
 use tokio_postgres::types::Type;
 use tokio_postgres::Client as Connection;
-
-#[cfg(feature = "manual_testing")]
-use serde::Deserialize;
+pub use action_processor_incoming_outcoming::ChannelOuterLink1;
 
 impl PostgresqlRepository<ChannelOuterLink> {
     pub async fn create<'a>(
@@ -288,14 +285,4 @@ impl PostgresqlRepository<ChannelOuterLink> {
 
         return Ok(channel_outer_link_registry);
     }
-}
-
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Deserialize)
-)]
-#[derive(Serialize)]
-pub struct ChannelOuterLink1 {
-    pub channel_outer_link_alias: ChannelOuterLink_Alias,
-    pub channel_outer_link_address: ChannelOuterLink_Address,
 }

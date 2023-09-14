@@ -11,8 +11,8 @@ use serde::Serialize;
 )]
 #[derive(Deserialize)]
 pub struct Incoming {
-    application_user_email: ApplicationUser_Email,
-    application_user_device_id: ApplicationUserDevice_Id,
+    pub application_user_email: ApplicationUser_Email,
+    pub application_user_device_id: ApplicationUserDevice_Id,
 }
 
 #[cfg_attr(
@@ -21,8 +21,8 @@ pub struct Incoming {
 )]
 #[derive(Serialize)]
 pub struct Outcoming {
-    verification_message_sent: bool,
-    application_user_registration_token_can_be_resent_from: ApplicationUserRegistrationToken_CanBeResentFrom,
-    application_user_registration_token_wrong_enter_tries_quantity: ApplicationUserRegistrationToken_WrongEnterTriesQuantity,
-    application_user_registration_token_wrong_enter_tries_quantity_limit: i16,
+    pub verification_message_sent: bool,
+    pub application_user_registration_token_can_be_resent_from: ApplicationUserRegistrationToken_CanBeResentFrom,
+    pub application_user_registration_token_wrong_enter_tries_quantity: ApplicationUserRegistrationToken_WrongEnterTriesQuantity,
+    pub application_user_registration_token_wrong_enter_tries_quantity_limit: i16,
 }

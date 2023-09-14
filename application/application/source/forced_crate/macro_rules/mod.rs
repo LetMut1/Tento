@@ -16,9 +16,9 @@ macro_rules! r#enum {
 
         #[cfg_attr(
             feature = "manual_testing",
-            derive(Deserialize))
+            derive(serde::Deserialize))
         ]
-        #[derive(Serialize)]
+        #[derive(serde::Serialize)]
         $visability enum $enum_name {
             $($enum_variant $({ $($enum_variant_field: $enum_variant_field_type,)* })?,)*
         }

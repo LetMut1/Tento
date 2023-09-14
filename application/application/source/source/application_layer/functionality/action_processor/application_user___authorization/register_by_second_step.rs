@@ -29,14 +29,13 @@ use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use bb8_redis::RedisConnectionManager;
 use macro_rules::r#enum;
-use serde::Deserialize;
-use serde::Serialize;
 use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
+pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::register_by_second_step::Incoming;
 
 pub struct RegisterBySecondStep;
 
@@ -291,17 +290,6 @@ impl RegisterBySecondStep {
             },
         );
     }
-}
-
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Serialize)
-)]
-#[derive(Deserialize)]
-pub struct Incoming {
-    application_user_email: ApplicationUser_Email,
-    application_user_device_id: ApplicationUserDevice_Id,
-    application_user_registration_token_value: ApplicationUserRegistrationToken_Value,
 }
 
 r#enum!(

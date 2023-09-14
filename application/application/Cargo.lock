@@ -53,6 +53,7 @@ dependencies = [
 name = "application"
 version = "0.1.0"
 dependencies = [
+ "action_processor_incoming_outcoming",
  "base64 0.13.1",
  "bb8",
  "bb8-postgres",

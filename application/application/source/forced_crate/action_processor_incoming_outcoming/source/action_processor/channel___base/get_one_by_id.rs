@@ -23,8 +23,8 @@ use serde::Serialize;
 )]
 #[derive(Deserialize)]
 pub struct Incoming {
-    application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
-    channel_id: Channel_Id,
+    pub application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
+    pub channel_id: Channel_Id,
 }
 
 #[cfg_attr(
@@ -33,9 +33,9 @@ pub struct Incoming {
 )]
 #[derive(Serialize)]
 pub struct Outcoming {
-    channel: Channel,
-    channel_inner_link_registry: Vec<ChannelInnerLink1>,
-    channel_outer_link_registry: Vec<ChannelOuterLink1>,
+    pub channel: Channel,
+    pub channel_inner_link_registry: Vec<ChannelInnerLink1>,
+    pub channel_outer_link_registry: Vec<ChannelOuterLink1>,
 }
 
 #[cfg_attr(
@@ -43,17 +43,17 @@ pub struct Outcoming {
     derive(Deserialize)
 )]
 #[derive(Serialize)]
-struct Channel {
-    channel_owner: ApplicationUser_Id,
-    channel_name: Channel_Name,
-    channel_linked_name: Channel_LinkedName,
-    channel_description: Option<Channel_Description>,
-    channel_access_modifier: Channel_AccessModifier,
-    channel_visability_modifier: Channel_VisabilityModifier,
-    channel_orientation: Channel_Orientation,
-    channel_cover_image_path: Option<Channel_CoverImagePath>,
-    channel_background_image_path: Option<Channel_BackgroundImagePath>,
-    channel_subscribers_quantity: Channel_SubscribersQuantity,
-    channel_marks_quantity: Channel_MarksQuantity,
-    channel_viewing_quantity: Channel_ViewingQuantity,
+pub struct Channel {
+    pub channel_owner: ApplicationUser_Id,
+    pub channel_name: Channel_Name,
+    pub channel_linked_name: Channel_LinkedName,
+    pub channel_description: Option<Channel_Description>,
+    pub channel_access_modifier: Channel_AccessModifier,
+    pub channel_visability_modifier: Channel_VisabilityModifier,
+    pub channel_orientation: Channel_Orientation,
+    pub channel_cover_image_path: Option<Channel_CoverImagePath>,
+    pub channel_background_image_path: Option<Channel_BackgroundImagePath>,
+    pub channel_subscribers_quantity: Channel_SubscribersQuantity,
+    pub channel_marks_quantity: Channel_MarksQuantity,
+    pub channel_viewing_quantity: Channel_ViewingQuantity,
 }

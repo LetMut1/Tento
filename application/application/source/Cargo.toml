@@ -19,6 +19,7 @@ crate-type = ["lib"]
 required-features = []
 
 [dependencies]         #  TODO  TODO TODO TODO Разобарться, где нужны default фичи
+action_processor_incoming_outcoming = { path = "./forced_crate/action_processor_incoming_outcoming", package = "action_processor_incoming_outcoming", version = "0.1.0", default-features = true, features = [], optional = false }
 argon2 = { package = "rust-argon2", version = "^0.8", default-features = true, features = [], optional = false }
 base64 = { package = "base64", version = "^0.13", default-features = true, features = [], optional = false }
 bb8 = { package = "bb8", version = "^0.7", default-features = true, features = [], optional = false }

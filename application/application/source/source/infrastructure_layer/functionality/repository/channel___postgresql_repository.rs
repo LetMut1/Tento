@@ -23,13 +23,10 @@ use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
-use serde::Serialize;
+pub use action_processor_incoming_outcoming::Channel1;
 use std::borrow::Cow;
 use tokio_postgres::types::Type;
 use tokio_postgres::Client as Connection;
-
-#[cfg(feature = "manual_testing")]
-use serde::Deserialize;
 
 impl PostgresqlRepository<Channel<'_>> {
     pub async fn create<'a>(
@@ -1102,19 +1099,4 @@ impl PostgresqlRepository<Channel<'_>> {
             ),
         );
     }
-}
-
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Deserialize)
-)]
-#[derive(Serialize)]
-pub struct Channel1 {
-    pub channel_id: Channel_Id,
-    pub channel_name: Channel_Name,
-    pub channel_linked_name: Channel_LinkedName,
-    pub channel_access_modifier: Channel_AccessModifier,
-    pub channel_visability_modifier: Channel_VisabilityModifier,
-    pub channel_cover_image_path: Option<Channel_CoverImagePath>,
-    pub channel_background_image_path: Option<Channel_BackgroundImagePath>,
 }

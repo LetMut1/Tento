@@ -17,12 +17,9 @@ use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::repository::channel___postgresql_repository::Channel1;
 use crate::infrastructure_layer::functionality::service::counter::Counter;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
-use serde::Serialize;
+pub use action_processor_incoming_outcoming::Common1;
 use tokio_postgres::types::Type;
 use tokio_postgres::Client as Connection;
-
-#[cfg(feature = "manual_testing")]
-use serde::Deserialize;
 
 impl PostgresqlRepository<Common1> {
     pub async fn find_1<'a>(
@@ -1176,14 +1173,4 @@ impl PostgresqlRepository<Common1> {
 
         return Ok(common_registry);
     }
-}
-
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Deserialize)
-)]
-#[derive(Serialize)]
-pub struct Common1 {
-    pub channel: Channel1,
-    pub is_application_user_subscribed: bool,
 }

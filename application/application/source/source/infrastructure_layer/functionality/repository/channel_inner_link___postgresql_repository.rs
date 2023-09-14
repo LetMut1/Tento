@@ -10,12 +10,9 @@ use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::RuntimeError;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
-use serde::Serialize;
 use tokio_postgres::types::Type;
 use tokio_postgres::Client as Connection;
-
-#[cfg(feature = "manual_testing")]
-use serde::Deserialize;
+pub use action_processor_incoming_outcoming::ChannelInnerLink1;
 
 impl PostgresqlRepository<ChannelInnerLink> {
     pub async fn create<'a>(
@@ -252,13 +249,4 @@ impl PostgresqlRepository<ChannelInnerLink> {
 
         return Ok(channel_inner_link_registry);
     }
-}
-
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Deserialize)
-)]
-#[derive(Serialize)]
-pub struct ChannelInnerLink1 {
-    pub channel_inner_link_to: Channel_Id,
 }

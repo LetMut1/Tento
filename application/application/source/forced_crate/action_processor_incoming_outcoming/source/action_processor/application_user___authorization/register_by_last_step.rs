@@ -14,11 +14,11 @@ use serde::Serialize;
 )]
 #[derive(Deserialize)]
 pub struct Incoming {
-    application_user_device_id: ApplicationUserDevice_Id,
-    application_user_nickname: ApplicationUser_Nickname,
-    application_user_password: ApplicationUser_Password,
-    application_user_email: ApplicationUser_Email,
-    application_user_registration_token_value: ApplicationUserRegistrationToken_Value,
+    pub application_user_device_id: ApplicationUserDevice_Id,
+    pub application_user_nickname: ApplicationUser_Nickname,
+    pub application_user_password: ApplicationUser_Password,
+    pub application_user_email: ApplicationUser_Email,
+    pub application_user_registration_token_value: ApplicationUserRegistrationToken_Value,
 }
 
 #[cfg_attr(
@@ -27,6 +27,6 @@ pub struct Incoming {
 )]
 #[derive(Serialize)]
 pub struct Outcoming {
-    application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
-    application_user_access_refresh_token_encrypted: ApplicationUserAccessRefreshTokenEncrypted,
+    pub application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
+    pub application_user_access_refresh_token_encrypted: ApplicationUserAccessRefreshTokenEncrypted,
 }
