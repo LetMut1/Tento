@@ -55,6 +55,7 @@ dependencies = [
  "chrono",
  "const_format",
  "dotenv",
+ "entity",
  "environment_configuration",
  "http",
  "hyper",
