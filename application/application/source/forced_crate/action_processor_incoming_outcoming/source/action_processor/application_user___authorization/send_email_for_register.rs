@@ -3,6 +3,8 @@ use entity::application_user_device::ApplicationUserDevice_Id;
 use entity::application_user_registration_token::ApplicationUserRegistrationToken_CanBeResentFrom;
 use serde::Deserialize;
 use serde::Serialize;
+use macro_rules::r#enum;
+use common_precedent::CommonPrecedent;
 
 #[cfg_attr(
     feature = "manual_testing",
@@ -22,3 +24,12 @@ pub struct Incoming {
 pub struct Outcoming {
     pub application_user_registration_token_can_be_resent_from: ApplicationUserRegistrationToken_CanBeResentFrom,
 }
+
+r#enum!(
+    pub enum Precedent {
+        CommonPrecedent::ApplicationUserRegistrationToken_NotFound,
+        CommonPrecedent::ApplicationUserRegistrationToken_AlreadyExpired,
+        CommonPrecedent::ApplicationUserRegistrationToken_AlreadyApproved,
+        CommonPrecedent::ApplicationUserRegistrationToken_TimeToResendHasNotCome,
+    }
+);

@@ -1,5 +1,4 @@
-use crate::application_layer::data::common_precedent::CommonPrecedent;
-use crate::application_layer::data::unified_report_::UnifiedReport;
+use crate::application_layer::data::unified_report::UnifiedReport;
 use crate::domain_layer::data::entity::application_user::ApplicationUser5;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken;
@@ -26,7 +25,6 @@ use crate::infrastructure_layer::functionality::service::expiration_time_checker
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use bb8_redis::RedisConnectionManager;
-use macro_rules::r#enum;
 use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
@@ -35,6 +33,7 @@ use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
 pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::send_email_for_authorize::Incoming;
 pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::send_email_for_authorize::Outcoming;
+pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::send_email_for_authorize::Precedent;
 
 pub struct SendEmailForAuthorize;
 
@@ -277,12 +276,3 @@ impl SendEmailForAuthorize {
         );
     }
 }
-
-r#enum!(
-    pub enum Precedent {
-        CommonPrecedent::ApplicationUser_NotFound,
-        CommonPrecedent::ApplicationUserAuthorizationToken_NotFound,
-        CommonPrecedent::ApplicationUserAuthorizationToken_AlreadyExpired,
-        CommonPrecedent::ApplicationUserAuthorizationToken_TimeToResendHasNotCome,
-    }
-);

@@ -6,7 +6,9 @@ version = 3
 name = "action_processor_incoming_outcoming"
 version = "0.1.0"
 dependencies = [
+ "common_precedent",
  "entity",
+ "macro_rules",
  "serde",
 ]
 
@@ -70,7 +72,6 @@ dependencies = [
  "hyper",
  "lettre",
  "lettre_email",
- "macro_rules",
  "matchit",
  "rand 0.8.5",
  "redis",
@@ -379,6 +380,10 @@ dependencies = [
  "tokio",
  "tokio-util",
 ]
+
+[[package]]
+name = "common_precedent"
+version = "0.1.0"
 
 [[package]]
 name = "const_format"

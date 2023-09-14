@@ -1,5 +1,4 @@
-use crate::application_layer::data::common_precedent::CommonPrecedent;
-use crate::application_layer::data::unified_report_::UnifiedReport;
+use crate::application_layer::data::unified_report::UnifiedReport;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::data::entity::channel::Channel_Name;
 use crate::domain_layer::functionality::service::application_user_access_token___extractor::ExtractorResult;
@@ -18,7 +17,6 @@ use crate::infrastructure_layer::functionality::repository::postgresql_repositor
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use bb8_redis::RedisConnectionManager;
-use macro_rules::r#enum;
 use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
@@ -27,6 +25,7 @@ use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
 pub use action_processor_incoming_outcoming::action_processor::channel___base::get_many_by_name_in_subscriptions::Incoming;
 pub use action_processor_incoming_outcoming::action_processor::channel___base::get_many_by_name_in_subscriptions::Outcoming;
+pub use action_processor_incoming_outcoming::action_processor::channel___base::get_many_by_name_in_subscriptions::Precedent;
 
 pub struct GetManyByNameInSubscriptions;
 
@@ -181,10 +180,3 @@ impl GetManyByNameInSubscriptions {
         );
     }
 }
-
-r#enum!(
-    pub enum Precedent {
-        CommonPrecedent::ApplicationUserAccessToken_AlreadyExpired,
-        CommonPrecedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList,
-    }
-);

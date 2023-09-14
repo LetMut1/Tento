@@ -1,11 +1,11 @@
 [package]
-name = "macro_rules"
+name = "common_precedent"
 version = "0.1.0"
 authors.workspace = true
 edition = "2021"
 
 [lib]
-name = "macro_rules"
+name = "common_precedent"
 path = "./mod.rs"
 test = true
 doctest = true

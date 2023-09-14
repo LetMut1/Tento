@@ -36,7 +36,6 @@ http = { package = "http", version = "^0.2", default-features = true, features =
 hyper = { package = "hyper", version = "^0.14", default-features = true, features = ["full"], optional = false }  # // TODO Убрать фичу Full и понять , какие нужны
 lettre = { package = "lettre", version = "^0.9", default-features = true, features = [], optional = false }
 lettre_email = { package = "lettre_email", version = "^0.9", default-features = true, features = [], optional = false }
-macro_rules = { path = "./forced_crate/macro_rules", package = "macro_rules", version = "0.1.0", default-features = true, features = [], optional = false }
 matchit = { package = "matchit", version = "^0.7", default-features = true, features = [], optional = false }
 rand = { package = "rand", version = "^0.8", default-features = true, features = [], optional = false }
 redis = { package = "redis", version = "^0.21", default-features = true, features = ["tokio-comp", "tokio-native-tls-comp"], optional = false }

@@ -16,6 +16,8 @@ use entity::channel::Channel_ViewingQuantity;
 use entity::channel::Channel_VisabilityModifier;
 use serde::Deserialize;
 use serde::Serialize;
+use macro_rules::r#enum;
+use common_precedent::CommonPrecedent;
 
 #[cfg_attr(
     feature = "manual_testing",
@@ -57,3 +59,12 @@ pub struct Channel {
     pub channel_marks_quantity: Channel_MarksQuantity,
     pub channel_viewing_quantity: Channel_ViewingQuantity,
 }
+
+r#enum!(
+    pub enum Precedent {
+        CommonPrecedent::ApplicationUserAccessToken_AlreadyExpired,
+        CommonPrecedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList,
+        CommonPrecedent::Channel_NotFound,
+        CommonPrecedent::Channel_IsClosed,
+    }
+);

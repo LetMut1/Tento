@@ -1,5 +1,4 @@
-use crate::application_layer::data::common_precedent::CommonPrecedent;
-use crate::application_layer::data::unified_report_::UnifiedReport;
+use crate::application_layer::data::unified_report::UnifiedReport;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
@@ -28,7 +27,6 @@ use crate::infrastructure_layer::functionality::service::expiration_time_checker
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use bb8_redis::RedisConnectionManager;
-use macro_rules::r#enum;
 use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
@@ -36,6 +34,7 @@ use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
 pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::reset_password_by_second_step::Incoming;
+pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::reset_password_by_second_step::Precedent;
 
 pub struct ResetPasswordBySecondStep;
 
@@ -276,14 +275,3 @@ impl ResetPasswordBySecondStep {
         );
     }
 }
-
-r#enum!(
-    pub enum Precedent {
-        CommonPrecedent::ApplicationUserResetPasswordToken_NotFound,
-        CommonPrecedent::ApplicationUserResetPasswordToken_AlreadyExpired,
-        CommonPrecedent::ApplicationUserResetPasswordToken_AlreadyApproved,
-        CommonPrecedent::ApplicationUserResetPasswordToken_WrongValue {
-            application_user_reset_password_token_wrong_enter_tries_quantity: ApplicationUserResetPasswordToken_WrongEnterTriesQuantity,
-        },
-    }
-);

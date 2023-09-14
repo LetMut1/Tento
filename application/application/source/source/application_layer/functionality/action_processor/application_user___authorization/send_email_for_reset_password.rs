@@ -1,5 +1,4 @@
-use crate::application_layer::data::common_precedent::CommonPrecedent;
-use crate::application_layer::data::unified_report_::UnifiedReport;
+use crate::application_layer::data::unified_report::UnifiedReport;
 use crate::domain_layer::data::entity::application_user::ApplicationUser5;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
@@ -26,7 +25,6 @@ use crate::infrastructure_layer::functionality::service::expiration_time_checker
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use bb8_redis::RedisConnectionManager;
-use macro_rules::r#enum;
 use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
@@ -35,6 +33,7 @@ use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
 pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::send_email_for_reset_password::Incoming;
 pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::send_email_for_reset_password::Outcoming;
+pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::send_email_for_reset_password::Precedent;
 
 pub struct SendEmailForResetPassword;
 
@@ -285,13 +284,3 @@ impl SendEmailForResetPassword {
         );
     }
 }
-
-r#enum!(
-    pub enum Precedent {
-        CommonPrecedent::ApplicationUser_NotFound,
-        CommonPrecedent::ApplicationUserResetPasswordToken_NotFound,
-        CommonPrecedent::ApplicationUserResetPasswordToken_AlreadyExpired,
-        CommonPrecedent::ApplicationUserResetPasswordToken_AlreadyApproved,
-        CommonPrecedent::ApplicationUserResetPasswordToken_TimeToResendHasNotCome,
-    }
-);

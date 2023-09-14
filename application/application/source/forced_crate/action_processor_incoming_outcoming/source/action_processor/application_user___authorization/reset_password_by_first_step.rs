@@ -5,6 +5,8 @@ use entity::application_user_reset_password_token::ApplicationUserResetPasswordT
 use entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_WrongEnterTriesQuantity;
 use serde::Deserialize;
 use serde::Serialize;
+use macro_rules::r#enum;
+use common_precedent::CommonPrecedent;
 
 #[cfg_attr(
     feature = "manual_testing",
@@ -28,3 +30,9 @@ pub struct Outcoming {
     pub application_user_reset_password_token_wrong_enter_tries_quantity: ApplicationUserResetPasswordToken_WrongEnterTriesQuantity,
     pub application_user_reset_password_token_wrong_enter_tries_quantity_limit: i16,
 }
+
+r#enum!(
+    pub enum Precedent {
+        CommonPrecedent::ApplicationUser_NotFound,
+    }
+);

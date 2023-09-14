@@ -18,7 +18,7 @@ pub const ACTION_ROUTE: ActionRoute = ActionRoute {
         send_email_for_reset_password: ApplicationUser__Authorization::SEND_EMAIL_FOR_RESET_PASSWORD,
         refresh_access_token: ApplicationUser__Authorization::REFRESH_ACCESS_TOKEN,
         deauthorize_from_one_device: ApplicationUser__Authorization::DEAUTHORIZE_FROM_ONE_DEVICE,
-        deauthorize_from_all_device: ApplicationUser__Authorization::DEAUTHORIZE_FROM_ONE_DEVICE,
+        deauthorize_from_all_devices: ApplicationUser__Authorization::DEAUTHORIZE_FROM_ALL_DEVICES,
         #[cfg(feature = "manual_testing")]
         check_nickname_for_existing_: ApplicationUser__Authorization::CHECK_NICKNAME_FOR_EXISTING_,
         #[cfg(feature = "manual_testing")]
@@ -50,7 +50,7 @@ pub const ACTION_ROUTE: ActionRoute = ActionRoute {
         #[cfg(feature = "manual_testing")]
         deauthorize_from_one_device_: ApplicationUser__Authorization::DEAUTHORIZE_FROM_ONE_DEVICE_,
         #[cfg(feature = "manual_testing")]
-        deauthorize_from_all_device_: ApplicationUser__Authorization::DEAUTHORIZE_FROM_ONE_DEVICE_,
+        deauthorize_from_all_devices_: ApplicationUser__Authorization::DEAUTHORIZE_FROM_ALL_DEVICES_,
     },
     channel___base: Channel__Base {
         get_one_by_id: Channel__Base::GET_ONE_BY_ID,
@@ -100,7 +100,7 @@ pub struct ApplicationUser__Authorization {
     pub send_email_for_reset_password: &'static str,
     pub refresh_access_token: &'static str,
     pub deauthorize_from_one_device: &'static str,
-    pub deauthorize_from_all_device: &'static str,
+    pub deauthorize_from_all_devices: &'static str,
     #[cfg(feature = "manual_testing")]
     pub check_nickname_for_existing_: &'static str,
     #[cfg(feature = "manual_testing")]
@@ -132,7 +132,7 @@ pub struct ApplicationUser__Authorization {
     #[cfg(feature = "manual_testing")]
     pub deauthorize_from_one_device_: &'static str,
     #[cfg(feature = "manual_testing")]
-    pub deauthorize_from_all_device_: &'static str,
+    pub deauthorize_from_all_devices_: &'static str,
 }
 
 impl ApplicationUser__Authorization {
@@ -151,7 +151,7 @@ impl ApplicationUser__Authorization {
     const SEND_EMAIL_FOR_RESET_PASSWORD: &'static str = "/1/13";
     const REFRESH_ACCESS_TOKEN: &'static str = "/1/14";
     const DEAUTHORIZE_FROM_ONE_DEVICE: &'static str = "/1/15";
-    const DEAUTHORIZE_FROM_ALL_DEVICE: &'static str = "/1/16";
+    const DEAUTHORIZE_FROM_ALL_DEVICES: &'static str = "/1/16";
 }
 
 #[cfg(feature = "manual_testing")]
@@ -216,8 +216,8 @@ impl ApplicationUser__Authorization {
         ApplicationUser__Authorization::DEAUTHORIZE_FROM_ONE_DEVICE,
         ActionRoute::CONCATENATING_PART
     );
-    const DEAUTHORIZE_FROM_ALL_DEVICE_: &'static str = concatcp!(
-        ApplicationUser__Authorization::DEAUTHORIZE_FROM_ALL_DEVICE,
+    const DEAUTHORIZE_FROM_ALL_DEVICES_: &'static str = concatcp!(
+        ApplicationUser__Authorization::DEAUTHORIZE_FROM_ALL_DEVICES,
         ActionRoute::CONCATENATING_PART
     );
 }

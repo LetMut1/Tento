@@ -795,7 +795,7 @@ impl RunServer {
         }
 
         if let Err(error) = router.insert(
-            ACTION_ROUTE.application_user___authorization.deauthorize_from_all_device,
+            ACTION_ROUTE.application_user___authorization.deauthorize_from_all_devices,
             ActionRoute_::ApplicationUser__Authorization {
                 application_user___authorization: ApplicationUser__Authorization_::DeauthorizeFromAllDevices,
             },
@@ -1259,7 +1259,7 @@ impl RunServer {
             }
 
             if let Err(error) = router.insert(
-                ACTION_ROUTE.application_user___authorization.deauthorize_from_all_device_,
+                ACTION_ROUTE.application_user___authorization.deauthorize_from_all_devices_,
                 ActionRoute_::ApplicationUser__Authorization {
                     application_user___authorization: ApplicationUser__Authorization_::DeauthorizeFromAllDevices_,
                 },

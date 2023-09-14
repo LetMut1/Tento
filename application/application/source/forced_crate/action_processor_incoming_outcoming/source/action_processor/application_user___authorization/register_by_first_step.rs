@@ -4,6 +4,8 @@ use entity::application_user_registration_token::ApplicationUserRegistrationToke
 use entity::application_user_registration_token::ApplicationUserRegistrationToken_WrongEnterTriesQuantity;
 use serde::Deserialize;
 use serde::Serialize;
+use macro_rules::r#enum;
+use common_precedent::CommonPrecedent;
 
 #[cfg_attr(
     feature = "manual_testing",
@@ -26,3 +28,9 @@ pub struct Outcoming {
     pub application_user_registration_token_wrong_enter_tries_quantity: ApplicationUserRegistrationToken_WrongEnterTriesQuantity,
     pub application_user_registration_token_wrong_enter_tries_quantity_limit: i16,
 }
+
+r#enum!(
+    pub enum Precedent {
+        CommonPrecedent::ApplicationUser_EmailAlreadyExist,
+    }
+);

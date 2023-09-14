@@ -1,5 +1,4 @@
-use crate::application_layer::data::common_precedent::CommonPrecedent;
-use crate::application_layer::data::unified_report_::UnifiedReport;
+use crate::application_layer::data::unified_report::UnifiedReport;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken1;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ExpiresAt;
@@ -25,7 +24,6 @@ use crate::infrastructure_layer::functionality::service::expiration_time_checker
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use bb8_redis::RedisConnectionManager;
-use macro_rules::r#enum;
 use std::borrow::Cow;
 use std::clone::Clone;
 use std::marker::Send;
@@ -35,6 +33,7 @@ use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
 pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::refresh_access_token::Incoming;
 pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::refresh_access_token::Outcoming;
+pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::refresh_access_token::Precedent;
 
 pub struct RefreshAccessToken;
 
@@ -300,10 +299,3 @@ impl RefreshAccessToken {
         );
     }
 }
-
-r#enum!(
-    pub enum Precedent {
-        CommonPrecedent::ApplicationUserAccessRefreshToken_NotFound,
-        CommonPrecedent::ApplicationUserAccessRefreshToken_AlreadyExpired,
-    }
-);

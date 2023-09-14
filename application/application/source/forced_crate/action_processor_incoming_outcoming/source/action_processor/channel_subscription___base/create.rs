@@ -2,6 +2,8 @@ use entity::application_user_access_token_encrypted::ApplicationUserAccessTokenE
 use entity::channel::Channel_Id;
 use serde::Deserialize;
 use serde::Serialize;
+use macro_rules::r#enum;
+use common_precedent::CommonPrecedent;
 
 #[cfg_attr(
     feature = "manual_testing",
@@ -12,3 +14,13 @@ pub struct Incoming {
     pub application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
     pub channel_id: Channel_Id,
 }
+
+r#enum!(
+    pub enum Precedent {
+        CommonPrecedent::ApplicationUserAccessToken_AlreadyExpired,
+        CommonPrecedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList,
+        CommonPrecedent::Channel_NotFound,
+        CommonPrecedent::Channel_IsClosed,
+        CommonPrecedent::ApplicationUser_IsChannelOwner,
+    }
+);
