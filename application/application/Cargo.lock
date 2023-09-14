@@ -3,6 +3,14 @@
 version = 3
 
 [[package]]
+name = "action_processor_incoming_outcoming"
+version = "0.1.0"
+dependencies = [
+ "entity",
+ "serde",
+]
+
+[[package]]
 name = "addr2line"
 version = "0.20.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"

@@ -2,6 +2,7 @@
 resolver = "2"
 members = [
     "./source",
+    "./source/forced_crate/action_processor_incoming_outcoming",
     "./source/forced_crate/build_script_constant",
     "./source/forced_crate/entity",
     "./source/forced_crate/environment_configuration",
@@ -10,10 +11,11 @@ members = [
     "./source/integration_module",
     "./source/source/presentation_layer/functionality/command/create_fixtures",
     "./source/source/presentation_layer/functionality/command/remove_incomplite_state",
-    "./source/source/presentation_layer/functionality/command/run_server"
+    "./source/source/presentation_layer/functionality/command/run_server",
 ]
 default-members = [
     "./source",
+    "./source/forced_crate/action_processor_incoming_outcoming",
     "./source/forced_crate/build_script_constant",
     "./source/forced_crate/entity",
     "./source/forced_crate/environment_configuration",
@@ -22,7 +24,7 @@ default-members = [
     "./source/integration_module",
     "./source/source/presentation_layer/functionality/command/create_fixtures",
     "./source/source/presentation_layer/functionality/command/remove_incomplite_state",
-    "./source/source/presentation_layer/functionality/command/run_server"
+    "./source/source/presentation_layer/functionality/command/run_server",
 ]
 
 [workspace.package]
