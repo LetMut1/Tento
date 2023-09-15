@@ -3,6 +3,10 @@
 // TODO https://nadim.computer/posts/2022-02-11-maccatalyst.html
 // TODO https://doc.rust-lang.org/nightly/rustc/platform-support.html
 
+// TODO cargo build --release --lib --target aarch64-apple-ios
+// TODO cargo build --release --lib --target aarch64-apple-ios-sim
+// TODO cargo build --release --lib --target armv7-linux-androideabi
+
 use std::os::raw::c_int;
 
 #[no_mangle]

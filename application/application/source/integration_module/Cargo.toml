@@ -18,4 +18,8 @@ crate-type = ["staticlib"]
 required-features = []
 
 [dependencies]
-# application = { path = "./..", package = "application", version = "0.1.0", default-features = true, features = [], optional = false }
+unified_report = { path = "./../forced_crate/unified_report", package = "unified_report", version = "0.1.0", default-features = true, features = [], optional = false }
+action_processor_incoming_outcoming = { path = "./../forced_crate/action_processor_incoming_outcoming", package = "action_processor_incoming_outcoming", version = "0.1.0", default-features = true, features = [], optional = false }
+
+[features]
+default = []

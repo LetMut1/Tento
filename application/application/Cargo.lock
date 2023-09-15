@@ -939,6 +939,10 @@ dependencies = [
 [[package]]
 name = "integration_module"
 version = "0.1.0"
+dependencies = [
+ "action_processor_incoming_outcoming",
+ "unified_report",
+]
 
 [[package]]
 name = "itoa"
