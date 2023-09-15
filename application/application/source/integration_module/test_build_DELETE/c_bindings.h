@@ -5,17 +5,44 @@
 #include <new>
 
 struct A {
-  int x;
+  int a;
 };
 
 struct B {
-  int x;
+  int a;
+};
+
+struct C {
+  int a;
+  bool b;
 };
 
 extern "C" {
 
-bool is_equal_to_1(int x);
+int f1(int a);
 
-bool is_x_equal_to_x(A *a, B *b);
+bool f2(bool a);
+
+double f3(double a);
+
+int f4(A a);
+
+B f5(A a);
+
+bool f6(A a, B b);
+
+int f7(const int *a);
+
+int f8(int *a);
+
+int f9(const A *a);
+
+int f10(A *a);
+
+bool f11(A *a, B *b);
+
+C f12(C *a, int b);
+
+void f13(C *a, bool b);
 
 } // extern "C"
