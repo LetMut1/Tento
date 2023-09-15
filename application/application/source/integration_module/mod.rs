@@ -1,5 +1,4 @@
 // TODO http://blog.asleson.org/2021/02/23/how-to-writing-a-c-shared-library-in-rust/ что здесь за аллокатор.Для чего он нужен?
-// TODO сделать Makefile на компиляцию на архитектуры эпл.
 // TODO https://nadim.computer/posts/2022-02-11-maccatalyst.html
 // TODO https://doc.rust-lang.org/nightly/rustc/platform-support.html
 
@@ -7,7 +6,7 @@
 // TODO cargo build --release --lib --target aarch64-apple-ios-sim
 // TODO cargo build --release --lib --target armv7-linux-androideabi
 
-use std::os::raw::c_int;
+use core::ffi::c_int;
 
 #[no_mangle]
 pub extern "C" fn is_equal_to_1(x: c_int) -> bool {
