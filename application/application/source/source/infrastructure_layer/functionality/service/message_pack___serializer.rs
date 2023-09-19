@@ -1,11 +1,8 @@
 use super::serializer::Serialize;
 use super::serializer::Serializer;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
-use crate::infrastructure_layer::data::error_auditor::BaseError;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::data::error_auditor::OtherError;
-use crate::infrastructure_layer::data::error_auditor::RuntimeError;
-use rmp_serde;
+use message_pack_serializer::Serializer as Serializer_;
 use serde::Deserialize;
 use serde::Serialize as SerdeSerialize;
 
@@ -16,23 +13,18 @@ impl Serialize for Serializer<MessagePack> {
     where
         T: SerdeSerialize,
     {
-        let data = match rmp_serde::to_vec(subject) {
+        let data = match Serializer_::serialize(subject) {
             Ok(data_) => data_,
-            Err(error) => {
-                return Err(
-                    ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::OtherError {
-                                other_error: OtherError::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
+            Err(mut error) => {
+                error.add_backtrace_part(
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
                     ),
                 );
+
+                return Err(error);
             }
         };
 
@@ -43,23 +35,18 @@ impl Serialize for Serializer<MessagePack> {
     where
         T: Deserialize<'a>,
     {
-        let subject = match rmp_serde::from_read_ref::<'_, [u8], T>(data) {
+        let subject = match Serializer_::deserialize::<'_, T>(data) {
             Ok(subject_) => subject_,
-            Err(error) => {
-                return Err(
-                    ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::OtherError {
-                                other_error: OtherError::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
+            Err(mut error) => {
+                error.add_backtrace_part(
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
                     ),
                 );
+
+                return Err(error);
             }
         };
 

@@ -41,13 +41,13 @@ matchit = { package = "matchit", version = "^0.7", default-features = true, feat
 rand = { package = "rand", version = "^0.8", default-features = true, features = [], optional = false }
 redis = { package = "redis", version = "^0.21", default-features = true, features = ["tokio-comp", "tokio-native-tls-comp"], optional = false }
 regex = { package = "regex", version = "^1.4", default-features = true, features = [], optional = false }
-rmp_serde = { package = "rmp-serde", version = "^0.15", default-features = true, features = [], optional = false }
 serde = { package = "serde", version = "^1.0", default-features = true, features = ["derive"], optional = false }
 tokio = { package = "tokio", version = "^1.16", default-features = true, features = ["full"], optional = false }  # // TODO Убрать фичу Full и понять , какие нужны
 tokio_postgres = { package = "tokio-postgres", version = "^0.7", default-features = true, features = [], optional = false }
 toml = { package = "toml", version = "0.7.4", default-features = true, features = [], optional = false }
 unified_report = { path = "./forced_crate/unified_report", package = "unified_report", version = "0.1.0", default-features = true, features = [], optional = false }
 uuid = { package = "uuid", version = "^0.8", default-features = true, features = ["v4"], optional = false }
+message_pack_serializer = { path = "./forced_crate/message_pack_serializer", package = "message_pack_serializer", version = "0.1.0", default-features = true, features = [], optional = false }
 
 const_format = { package = "const_format", version = "^0.2", default-features = true, features = [], optional = true }
 serde_json = { package = "serde_json", version = "^1.0", default-features = true, features = [], optional = true }
