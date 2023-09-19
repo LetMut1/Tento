@@ -14,7 +14,11 @@ use super::environment_configuration::String_;
 use super::environment_configuration::Tcp;
 use super::environment_configuration::TcpKeepalive;
 use super::environment_configuration::Tls;
-use super::error::Error;
+use error_auditor::error_auditor::ErrorAuditor;
+use error_auditor::error_auditor::BacktracePart;
+use error_auditor::error_auditor::BaseError;
+use error_auditor::error_auditor::OtherError;
+use error_auditor::error_auditor::RuntimeError;
 use std::fs::read_to_string;
 use std::path::Path;
 use toml::from_str;
@@ -27,7 +31,7 @@ impl Loader {
     const LOCAL_DEVELOPMENT_ENVIRONMENT_DIRECTORY_NAME: &'static str = "local_development";
     const ENVIRONMENT_FILE_NAME: &'static str = "environment.toml";
 
-    pub fn load_from_file<'a>(environment_configuration_directory_path: &'a str) -> Result<EnvironmentConfiguration<String_>, Error> {
+    pub fn load_from_file<'a>(environment_configuration_directory_path: &'a str) -> Result<EnvironmentConfiguration<String_>, ErrorAuditor> {
         let production_environment_file_path = format!(
             "{}/{}/{}",
             environment_configuration_directory_path,
@@ -37,10 +41,50 @@ impl Loader {
 
         let production_environment_file_path_ = Path::new(production_environment_file_path.as_str());
 
-        let (environment, environment_file_data) = if production_environment_file_path_.try_exists()? {
+        let mut is_exist = match production_environment_file_path_.try_exists() {
+            Ok(is_exist_) => is_exist_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::OtherError {
+                                other_error: OtherError::new(error),
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+        };
+
+        let (environment, environment_file_data) = if is_exist {
+            let environment_file_data_ = match read_to_string(production_environment_file_path_) {
+                Ok(environment_file_data__) => environment_file_data__,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RuntimeError {
+                                runtime_error: RuntimeError::OtherError {
+                                    other_error: OtherError::new(error),
+                                },
+                            },
+                            BacktracePart::new(
+                                line!(),
+                                file!(),
+                                None,
+                            ),
+                        ),
+                    );
+                }
+            };
+
             (
                 Environment::Production,
-                read_to_string(production_environment_file_path_)?,
+                environment_file_data_,
             )
         } else {
             let local_development_environment_file_path = format!(
@@ -52,10 +96,50 @@ impl Loader {
 
             let local_development_environment_file_path_ = Path::new(local_development_environment_file_path.as_str());
 
-            if local_development_environment_file_path_.try_exists()? {
+            is_exist = match local_development_environment_file_path_.try_exists() {
+                Ok(is_exist_) => is_exist_,
+                Err(error) => {
+                    return Err(
+                        ErrorAuditor::new(
+                            BaseError::RuntimeError {
+                                runtime_error: RuntimeError::OtherError {
+                                    other_error: OtherError::new(error),
+                                },
+                            },
+                            BacktracePart::new(
+                                line!(),
+                                file!(),
+                                None,
+                            ),
+                        ),
+                    );
+                }
+            };
+
+            if is_exist {
+                let environment_file_data_ = match read_to_string(local_development_environment_file_path_) {
+                    Ok(environment_file_data__) => environment_file_data__,
+                    Err(error) => {
+                        return Err(
+                            ErrorAuditor::new(
+                                BaseError::RuntimeError {
+                                    runtime_error: RuntimeError::OtherError {
+                                        other_error: OtherError::new(error),
+                                    },
+                                },
+                                BacktracePart::new(
+                                    line!(),
+                                    file!(),
+                                    None,
+                                ),
+                            ),
+                        );
+                    }
+                };
+
                 (
                     Environment::LocalDevelopment,
-                    read_to_string(local_development_environment_file_path_)?,
+                    environment_file_data_,
                 )
             } else {
                 let development_environment_file_path = format!(
@@ -67,22 +151,87 @@ impl Loader {
 
                 let development_environment_file_path_ = Path::new(development_environment_file_path.as_str());
 
-                if development_environment_file_path_.try_exists()? {
+                is_exist = match development_environment_file_path_.try_exists() {
+                    Ok(is_exist_) => is_exist_,
+                    Err(error) => {
+                        return Err(
+                            ErrorAuditor::new(
+                                BaseError::RuntimeError {
+                                    runtime_error: RuntimeError::OtherError {
+                                        other_error: OtherError::new(error),
+                                    },
+                                },
+                                BacktracePart::new(
+                                    line!(),
+                                    file!(),
+                                    None,
+                                ),
+                            ),
+                        );
+                    }
+                };
+
+                if is_exist {
+                    let environment_file_data_ = match read_to_string(development_environment_file_path_) {
+                        Ok(environment_file_data__) => environment_file_data__,
+                        Err(error) => {
+                            return Err(
+                                ErrorAuditor::new(
+                                    BaseError::RuntimeError {
+                                        runtime_error: RuntimeError::OtherError {
+                                            other_error: OtherError::new(error),
+                                        },
+                                    },
+                                    BacktracePart::new(
+                                        line!(),
+                                        file!(),
+                                        None,
+                                    ),
+                                ),
+                            );
+                        }
+                    };
+
                     (
                         Environment::Development,
-                        read_to_string(development_environment_file_path_)?,
+                        environment_file_data_,
                     )
                 } else {
                     return Err(
-                        Error::LogicError {
-                            message: "The environment.toml file does not exist.",
-                        },
+                        ErrorAuditor::new(
+                            BaseError::LogicError {
+                                message: "The environment.toml file does not exist.",
+                            },
+                            BacktracePart::new(
+                                line!(),
+                                file!(),
+                                None,
+                            ),
+                        ),
                     );
                 }
             }
         };
 
-        let environment_configuration_file = from_str::<EnvironmentConfigurationFile>(environment_file_data.as_str())?;
+        let environment_configuration_file = match from_str::<EnvironmentConfigurationFile>(environment_file_data.as_str()) {
+            Ok(environment_configuration_file_) => environment_configuration_file_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        BaseError::RuntimeError {
+                            runtime_error: RuntimeError::OtherError {
+                                other_error: OtherError::new(error),
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+        };
 
         let environment_configuration = {
             let application_server = {

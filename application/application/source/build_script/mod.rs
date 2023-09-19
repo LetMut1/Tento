@@ -88,6 +88,7 @@ use std::fs::File;
 use std::io::Write;
 use std::path::Path;
 use uuid::Uuid;
+use error_auditor::formatter::Formatter;
 
 fn main() -> () {
     if let Err(error) = Processor::process() {
@@ -139,7 +140,14 @@ impl Processor {
             var("CARGO_MANIFEST_DIR")?.as_str(),
         );
 
-        let environment_configuration = Loader::load_from_file(environment_configuration_file_path.as_str())?;
+        let environment_configuration = match Loader::load_from_file(environment_configuration_file_path.as_str()) {
+            Ok(environment_configuration_) => environment_configuration_,
+            Err(error) => {
+                return Err(
+                    Formatter::prepare(&error).into()
+                );
+            }
+        };
 
         let environment = match environment_configuration.environment {
             Environment::Production => "Environment::Production",

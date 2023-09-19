@@ -570,6 +570,7 @@ dependencies = [
 name = "environment_configuration"
 version = "0.1.0"
 dependencies = [
+ "error_auditor",
  "serde",
  "toml 0.7.6",
 ]

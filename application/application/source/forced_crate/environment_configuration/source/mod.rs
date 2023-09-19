@@ -82,5 +82,4 @@
 )]
 
 pub mod environment_configuration;
-pub mod error;
 pub mod loader;

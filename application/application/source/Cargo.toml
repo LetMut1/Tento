@@ -56,6 +56,7 @@ serde_json = { package = "serde_json", version = "^1.0", default-features = true
 build_script_constant = { path = "./forced_crate/build_script_constant", package = "build_script_constant", version = "0.1.0", default-features = true, features = [], optional = false }
 cbindgen = { package = "cbindgen", version = "^0.24", default-features = true, features = [], optional = false }
 environment_configuration = { path = "./forced_crate/environment_configuration", package = "environment_configuration", version = "0.1.0", default-features = true, features = [], optional = false }
+error_auditor = { path = "./forced_crate/error_auditor", package = "error_auditor", version = "0.1.0", default-features = true, features = [], optional = false }
 uuid = { package = "uuid", version = "^0.8", default-features = true, features = ["v4"], optional = false }
 
 [features]
