@@ -32,6 +32,7 @@ crypto = { package = "rust-crypto", version = "^0.2", default-features = true, f
 dotenv = { package = "dotenv", version = "^0.15", default-features = true, features = [], optional = false }
 entity = { path = "./forced_crate/entity", package = "entity", version = "0.1.0", default-features = true, features = [], optional = false }
 environment_configuration = { path = "./forced_crate/environment_configuration", package = "environment_configuration", version = "0.1.0", default-features = true, features = [], optional = false }
+error_auditor = { path = "./forced_crate/error_auditor", package = "error_auditor", version = "0.1.0", default-features = true, features = [], optional = false }
 http = { package = "http", version = "^0.2", default-features = true, features = [], optional = false }
 hyper = { package = "hyper", version = "^0.14", default-features = true, features = ["full"], optional = false }  # // TODO Убрать фичу Full и понять , какие нужны
 lettre = { package = "lettre", version = "^0.9", default-features = true, features = [], optional = false }

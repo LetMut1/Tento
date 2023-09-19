@@ -68,6 +68,7 @@ dependencies = [
  "dotenv",
  "entity",
  "environment_configuration",
+ "error_auditor",
  "http",
  "hyper",
  "lettre",
@@ -598,6 +599,17 @@ checksum = "aa68f1b12764fab894d2755d2518754e71b4fd80ecfb822714a1206c2aab39bf"
 dependencies = [
  "cc",
  "libc",
+]
+
+[[package]]
+name = "error_auditor"
+version = "0.1.0"
+dependencies = [
+ "bb8",
+ "lettre",
+ "lettre_email",
+ "redis",
+ "tokio-postgres",
 ]
 
 [[package]]

@@ -1,0 +1,28 @@
+[package]
+name = "error_auditor"
+version = "0.1.0"
+authors.workspace = true
+edition = "2021"
+
+[lib]
+name = "error_auditor"
+path = "./mod.rs"
+test = true
+doctest = true
+bench = true
+doc = true
+proc-macro = false
+harness = true
+edition = "2021"
+crate-type = ["lib"]
+required-features = []
+
+[dependencies]
+bb8 = { package = "bb8", version = "^0.7", default-features = true, features = [], optional = false }
+lettre = { package = "lettre", version = "^0.9", default-features = true, features = [], optional = false }
+lettre_email = { package = "lettre_email", version = "^0.9", default-features = true, features = [], optional = false }
+redis = { package = "redis", version = "^0.21", default-features = true, features = ["tokio-comp", "tokio-native-tls-comp"], optional = false }
+tokio_postgres = { package = "tokio-postgres", version = "^0.7", default-features = true, features = [], optional = false }
+
+[features]
+default = []
