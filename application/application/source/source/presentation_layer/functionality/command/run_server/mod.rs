@@ -119,5 +119,7 @@ fn main() -> () {
 
 // Formatter::prepare(&error) -> Formatter::<ErrorAuditor>::prepare(&error)
 
+// unified_report crate цепляется за ненужные ресурсы в модуле для интеграции. СДелать Ресурс часть на дженерике.
+
 // СДелал оптимизацию запросов для:
 // - application_user_authorization. // ToDo ДОделать остальные. и сделать репозиторий по новым правилам.

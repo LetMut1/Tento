@@ -955,6 +955,7 @@ version = "0.1.0"
 dependencies = [
  "action_processor_incoming_outcoming",
  "libc",
+ "message_pack_serializer",
  "unified_report",
 ]
 
