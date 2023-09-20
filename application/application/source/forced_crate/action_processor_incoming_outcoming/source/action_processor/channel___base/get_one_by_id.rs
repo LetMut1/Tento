@@ -19,32 +19,20 @@ use serde::Serialize;
 use macro_rules::r#enum;
 use common_precedent::CommonPrecedent;
 
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Serialize)
-)]
-#[derive(Deserialize)]
+#[derive(Serialize, Deserialize)]
 pub struct Incoming {
     pub application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
     pub channel_id: Channel_Id,
 }
 
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Deserialize)
-)]
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize)]
 pub struct Outcoming {
     pub channel: Channel,
     pub channel_inner_link_registry: Vec<ChannelInnerLink1>,
     pub channel_outer_link_registry: Vec<ChannelOuterLink1>,
 }
 
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Deserialize)
-)]
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize)]
 pub struct Channel {
     pub channel_owner: ApplicationUser_Id,
     pub channel_name: Channel_Name,

@@ -6,11 +6,7 @@ use serde::Serialize;
 use macro_rules::r#enum;
 use common_precedent::CommonPrecedent;
 
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Serialize)
-)]
-#[derive(Deserialize)]
+#[derive(Serialize, Deserialize)]
 pub struct Incoming {
     pub application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
     pub channel_name: Channel_Name,
@@ -18,11 +14,7 @@ pub struct Incoming {
     pub limit: i16,
 }
 
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Deserialize)
-)]
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize)]
 pub struct Outcoming {
     pub common_registry: Vec<Common1>,
 }

@@ -3,15 +3,9 @@ use std::error::Error;
 use std::fmt::Display;
 use std::fmt::Error as FmtError;
 use std::fmt::Formatter;
-
-#[cfg(feature = "manual_testing")]
 use serde::Deserialize;
 
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Deserialize)
-)]
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub enum Void {}
 
 #[derive(Debug)]

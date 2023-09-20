@@ -5,21 +5,13 @@ use serde::Serialize;
 use macro_rules::r#enum;
 use common_precedent::CommonPrecedent;
 
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Serialize)
-)]
-#[derive(Deserialize)]
+#[derive(Serialize, Deserialize)]
 pub struct Incoming {
     pub application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
     pub application_user_access_refresh_token_encrypted: ApplicationUserAccessRefreshTokenEncrypted,
 }
 
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Deserialize)
-)]
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize)]
 pub struct Outcoming {
     pub application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
     pub application_user_access_refresh_token_encrypted: ApplicationUserAccessRefreshTokenEncrypted,

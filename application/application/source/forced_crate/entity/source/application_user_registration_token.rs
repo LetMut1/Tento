@@ -10,11 +10,7 @@ pub use self::IsApproved as ApplicationUserRegistrationToken_IsApproved;
 pub use self::Value as ApplicationUserRegistrationToken_Value;
 pub use self::WrongEnterTriesQuantity as ApplicationUserRegistrationToken_WrongEnterTriesQuantity;
 
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Serialize)
-)]
-#[derive(Deserialize)]
+#[derive(Serialize, Deserialize)]
 #[serde(transparent)]
 pub struct Value(pub String);
 
@@ -22,11 +18,7 @@ impl Value {
     pub const REGULAR_EXPRESSION: &'static str = r#"^[0-9]{6}$"#;
 }
 
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Deserialize)
-)]
-#[derive(Clone, Copy, Serialize)]
+#[derive(Clone, Copy, Serialize, Deserialize)]
 #[serde(transparent)]
 pub struct WrongEnterTriesQuantity(pub i16);
 
@@ -44,12 +36,7 @@ impl ExpiresAt {
     pub const QUANTITY_OF_MINUTES_FOR_EXPIRATION: i64 = 60 * 3;
 }
 
-#[derive(Clone, Copy)]
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Deserialize)
-)]
-#[derive(Serialize)]
+#[derive(Clone, Copy, Serialize, Deserialize)]
 #[serde(transparent)]
 pub struct CanBeResentFrom(pub i64);
 

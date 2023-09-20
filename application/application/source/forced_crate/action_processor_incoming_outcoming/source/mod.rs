@@ -93,25 +93,15 @@ use entity::channel::Channel_LinkedName;
 use entity::channel::Channel_Name;
 use entity::channel::Channel_VisabilityModifier;
 use serde::Serialize;
-
-#[cfg(feature = "manual_testing")]
 use serde::Deserialize;
 
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Deserialize)
-)]
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize)]
 pub struct Common1 {
     pub channel: Channel1,
     pub is_application_user_subscribed: bool,
 }
 
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Deserialize)
-)]
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize)]
 pub struct Channel1 {
     pub channel_id: Channel_Id,
     pub channel_name: Channel_Name,
@@ -122,20 +112,12 @@ pub struct Channel1 {
     pub channel_background_image_path: Option<Channel_BackgroundImagePath>,
 }
 
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Deserialize)
-)]
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize)]
 pub struct ChannelInnerLink1 {
     pub channel_inner_link_to: Channel_Id,
 }
 
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Deserialize)
-)]
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize)]
 pub struct ChannelOuterLink1 {
     pub channel_outer_link_alias: ChannelOuterLink_Alias,
     pub channel_outer_link_address: ChannelOuterLink_Address,

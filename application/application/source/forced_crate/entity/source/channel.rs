@@ -31,19 +31,11 @@ impl Name {
     pub const MAXIMUM_LENGTH: usize = 75;
 }
 
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Deserialize)
-)]
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize)]
 #[serde(transparent)]
 pub struct LinkedName(pub String);
 
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Deserialize)
-)]
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize)]
 #[serde(transparent)]
 pub struct Description(pub String);
 
@@ -51,11 +43,7 @@ impl Description {
     pub const MAXIMUM_LENGTH: usize = 500;
 }
 
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Deserialize)
-)]
-#[derive(Clone, Copy, Serialize)]
+#[derive(Clone, Copy, Serialize, Deserialize)]
 #[serde(transparent)]
 pub struct AccessModifier(pub i16);
 
@@ -69,11 +57,7 @@ pub enum AccessModifier_ {
     Close = AccessModifier::CLOSE as isize,
 }
 
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Deserialize)
-)]
-#[derive(Clone, Copy, Serialize)]
+#[derive(Clone, Copy, Serialize, Deserialize)]
 #[serde(transparent)]
 pub struct VisabilityModifier(pub i16);
 
@@ -87,51 +71,27 @@ pub enum VisabilityModifier_ {
     Private = VisabilityModifier::PRIVATE as isize,
 }
 
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Deserialize)
-)]
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize)]
 #[serde(transparent)]
 pub struct Orientation(pub Vec<i16>);
 
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Deserialize)
-)]
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize)]
 #[serde(transparent)]
 pub struct CoverImagePath(pub String);
 
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Deserialize)
-)]
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize)]
 #[serde(transparent)]
 pub struct BackgroundImagePath(pub String);
 
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Deserialize)
-)]
-#[derive(Clone, Copy, Serialize)]
+#[derive(Clone, Copy, Serialize, Deserialize)]
 #[serde(transparent)]
 pub struct SubscribersQuantity(pub i64);
 
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Deserialize)
-)]
-#[derive(Clone, Copy, Serialize)]
+#[derive(Clone, Copy, Serialize, Deserialize)]
 #[serde(transparent)]
 pub struct MarksQuantity(pub i64);
 
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Deserialize)
-)]
-#[derive(Clone, Copy, Serialize)]
+#[derive(Clone, Copy, Serialize, Deserialize)]
 #[serde(transparent)]
 pub struct ViewingQuantity(pub i64);
 

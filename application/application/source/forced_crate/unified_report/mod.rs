@@ -82,15 +82,9 @@
 )]
 
 use serde::Serialize;
-
-#[cfg(feature = "manual_testing")]
 use serde::Deserialize;
 
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Deserialize)
-)]
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize)]
 pub enum UnifiedReport<T, P> {
     Target {
         data: Data<T>,
@@ -100,34 +94,6 @@ pub enum UnifiedReport<T, P> {
     },
 }
 
-#[cfg(not(feature = "manual_testing"))]
-impl<T, P> UnifiedReport<T, P>
-where
-    T: Serialize,
-    P: Serialize,
-{
-    pub fn empty() -> Self {
-        return Self::Target {
-            data: Data::Empty,
-        };
-    }
-
-    pub fn filled(data: T) -> Self {
-        return Self::Target {
-            data: Data::Filled {
-                data,
-            },
-        };
-    }
-
-    pub fn precedent(precedent: P) -> Self {
-        return Self::Precedent {
-            precedent,
-        };
-    }
-}
-
-#[cfg(feature = "manual_testing")]
 impl<T, P> UnifiedReport<T, P>
 where
     T: Serialize + for<'de> Deserialize<'de>,
@@ -154,11 +120,7 @@ where
     }
 }
 
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Deserialize)
-)]
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize)]
 pub enum Data<D> {
     Empty,
     Filled {

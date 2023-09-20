@@ -22,4 +22,3 @@ serde = { package = "serde", version = "^1.0", default-features = true, features
 
 [features]
 default = []
-manual_testing = []

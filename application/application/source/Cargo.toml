@@ -63,7 +63,5 @@ uuid = { package = "uuid", version = "^0.8", default-features = true, features =
 default = []
 manual_testing = [
     "const_format",
-    "entity/manual_testing",
     "serde_json",
-    "unified_report/manual_testing",
 ]

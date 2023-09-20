@@ -7,11 +7,7 @@ use macro_rules::r#enum;
 use common_precedent::CommonPrecedent;
 use serde::Serialize;
 
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Serialize)
-)]
-#[derive(Deserialize)]
+#[derive(Serialize, Deserialize)]
 pub struct Incoming {
     pub application_user_email: ApplicationUser_Email,
     pub application_user_device_id: ApplicationUserDevice_Id,

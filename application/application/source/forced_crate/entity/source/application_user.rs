@@ -14,11 +14,7 @@ pub use self::PasswordHash as ApplicationUser_PasswordHash;
 #[serde(transparent)]
 pub struct Id(pub i64);
 
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Serialize)
-)]
-#[derive(Clone, Deserialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(transparent)]
 pub struct Email(pub String);
 
@@ -27,11 +23,7 @@ impl Email {
     pub const MAXIMUM_LENGTH: usize = 320;
 }
 
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Serialize)
-)]
-#[derive(Clone, Deserialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(transparent)]
 pub struct Nickname(pub String);
 
@@ -39,11 +31,7 @@ impl Nickname {
     pub const MAXIMUM_LENGTH: usize = 55;
 }
 
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Serialize)
-)]
-#[derive(Deserialize)]
+#[derive(Deserialize, Serialize)]
 #[serde(transparent)]
 pub struct Password(pub String);
 

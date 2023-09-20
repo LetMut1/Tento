@@ -25,6 +25,3 @@ macro_rules = { path = "./../macro_rules", package = "macro_rules", version = "0
 
 [features]
 default = []
-manual_testing = [
-    "entity/manual_testing",
-]

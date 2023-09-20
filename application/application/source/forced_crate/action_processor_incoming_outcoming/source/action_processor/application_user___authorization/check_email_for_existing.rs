@@ -2,20 +2,12 @@ use entity::application_user::ApplicationUser_Email;
 use serde::Deserialize;
 use serde::Serialize;
 
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Serialize)
-)]
-#[derive(Deserialize)]
+#[derive(Serialize, Deserialize)]
 pub struct Incoming {
     pub application_user_email: ApplicationUser_Email,
 }
 
-#[cfg_attr(
-    feature = "manual_testing",
-    derive(Deserialize)
-)]
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize)]
 pub struct Outcoming {
     pub result: bool,
 }
