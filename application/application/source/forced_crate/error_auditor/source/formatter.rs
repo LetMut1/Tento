@@ -56,7 +56,7 @@ impl Formatter {
             };
         }
 
-        let error_message = match *error_auditor.get_base_error() {
+        let error_message = match *error_auditor.get_error() {
             Error::Logic {
                 message,
             } => {

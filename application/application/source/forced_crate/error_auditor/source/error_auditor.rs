@@ -34,7 +34,7 @@ impl ErrorAuditor {
         return ();
     }
 
-    pub fn get_base_error<'a>(&'a self) -> &'a Error {
+    pub fn get_error<'a>(&'a self) -> &'a Error {
         return &self.error;
     }
 
