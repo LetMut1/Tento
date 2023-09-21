@@ -3,11 +3,11 @@ use crate::infrastructure_layer::data::control_type::Response;
 use crate::infrastructure_layer::data::environment_configuration::Environment;
 use crate::infrastructure_layer::data::environment_configuration::ENVIRONMENT_CONFIGURATION;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
-use crate::infrastructure_layer::data::error_auditor::BaseError;
+use crate::infrastructure_layer::data::error_auditor::Error;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::data::error_auditor::OtherError;
-use crate::infrastructure_layer::data::error_auditor::ResourceError;
-use crate::infrastructure_layer::data::error_auditor::RuntimeError;
+use crate::infrastructure_layer::data::error_auditor::Other;
+use crate::infrastructure_layer::data::error_auditor::Resource;
+use crate::infrastructure_layer::data::error_auditor::Runtime;
 use crate::infrastructure_layer::data::void::ErrorVoid;
 use crate::infrastructure_layer::functionality::service::creator::Creator;
 use crate::infrastructure_layer::functionality::service::creator::PostgresqlConnectionPoolNoTls;
@@ -57,9 +57,9 @@ impl RunServer {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::OtherError {
-                                other_error: OtherError::new(error),
+                        Error::Runtime {
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -108,9 +108,9 @@ impl RunServer {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::OtherError {
-                                other_error: OtherError::new(error),
+                        Error::Runtime {
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -128,7 +128,7 @@ impl RunServer {
             None => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::LogicError {
+                        Error::Logic {
                             message: "Invalid socket address.",
                         },
                         BacktracePart::new(
@@ -146,9 +146,9 @@ impl RunServer {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::OtherError {
-                                other_error: OtherError::new(error),
+                        Error::Runtime {
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -214,9 +214,9 @@ impl RunServer {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::PostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -236,9 +236,9 @@ impl RunServer {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::PostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -258,9 +258,9 @@ impl RunServer {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::RedisError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Redis {
                                     redis_error: error,
                                 },
                             },
@@ -444,9 +444,9 @@ impl RunServer {
         if let Err(error) = server_builder.serve(service).with_graceful_shutdown(graceful_shutdown_signal).await {
             return Err(
                 ErrorAuditor::new(
-                    BaseError::RuntimeError {
-                        runtime_error: RuntimeError::OtherError {
-                            other_error: OtherError::new(error),
+                    Error::Runtime {
+                        runtime: Runtime::Other {
+                            other: Other::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -472,9 +472,9 @@ impl RunServer {
         ) {
             return Err(
                 ErrorAuditor::new(
-                    BaseError::RuntimeError {
-                        runtime_error: RuntimeError::OtherError {
-                            other_error: OtherError::new(error),
+                    Error::Runtime {
+                        runtime: Runtime::Other {
+                            other: Other::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -494,9 +494,9 @@ impl RunServer {
         ) {
             return Err(
                 ErrorAuditor::new(
-                    BaseError::RuntimeError {
-                        runtime_error: RuntimeError::OtherError {
-                            other_error: OtherError::new(error),
+                    Error::Runtime {
+                        runtime: Runtime::Other {
+                            other: Other::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -516,9 +516,9 @@ impl RunServer {
         ) {
             return Err(
                 ErrorAuditor::new(
-                    BaseError::RuntimeError {
-                        runtime_error: RuntimeError::OtherError {
-                            other_error: OtherError::new(error),
+                    Error::Runtime {
+                        runtime: Runtime::Other {
+                            other: Other::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -538,9 +538,9 @@ impl RunServer {
         ) {
             return Err(
                 ErrorAuditor::new(
-                    BaseError::RuntimeError {
-                        runtime_error: RuntimeError::OtherError {
-                            other_error: OtherError::new(error),
+                    Error::Runtime {
+                        runtime: Runtime::Other {
+                            other: Other::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -560,9 +560,9 @@ impl RunServer {
         ) {
             return Err(
                 ErrorAuditor::new(
-                    BaseError::RuntimeError {
-                        runtime_error: RuntimeError::OtherError {
-                            other_error: OtherError::new(error),
+                    Error::Runtime {
+                        runtime: Runtime::Other {
+                            other: Other::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -582,9 +582,9 @@ impl RunServer {
         ) {
             return Err(
                 ErrorAuditor::new(
-                    BaseError::RuntimeError {
-                        runtime_error: RuntimeError::OtherError {
-                            other_error: OtherError::new(error),
+                    Error::Runtime {
+                        runtime: Runtime::Other {
+                            other: Other::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -604,9 +604,9 @@ impl RunServer {
         ) {
             return Err(
                 ErrorAuditor::new(
-                    BaseError::RuntimeError {
-                        runtime_error: RuntimeError::OtherError {
-                            other_error: OtherError::new(error),
+                    Error::Runtime {
+                        runtime: Runtime::Other {
+                            other: Other::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -626,9 +626,9 @@ impl RunServer {
         ) {
             return Err(
                 ErrorAuditor::new(
-                    BaseError::RuntimeError {
-                        runtime_error: RuntimeError::OtherError {
-                            other_error: OtherError::new(error),
+                    Error::Runtime {
+                        runtime: Runtime::Other {
+                            other: Other::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -648,9 +648,9 @@ impl RunServer {
         ) {
             return Err(
                 ErrorAuditor::new(
-                    BaseError::RuntimeError {
-                        runtime_error: RuntimeError::OtherError {
-                            other_error: OtherError::new(error),
+                    Error::Runtime {
+                        runtime: Runtime::Other {
+                            other: Other::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -670,9 +670,9 @@ impl RunServer {
         ) {
             return Err(
                 ErrorAuditor::new(
-                    BaseError::RuntimeError {
-                        runtime_error: RuntimeError::OtherError {
-                            other_error: OtherError::new(error),
+                    Error::Runtime {
+                        runtime: Runtime::Other {
+                            other: Other::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -692,9 +692,9 @@ impl RunServer {
         ) {
             return Err(
                 ErrorAuditor::new(
-                    BaseError::RuntimeError {
-                        runtime_error: RuntimeError::OtherError {
-                            other_error: OtherError::new(error),
+                    Error::Runtime {
+                        runtime: Runtime::Other {
+                            other: Other::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -714,9 +714,9 @@ impl RunServer {
         ) {
             return Err(
                 ErrorAuditor::new(
-                    BaseError::RuntimeError {
-                        runtime_error: RuntimeError::OtherError {
-                            other_error: OtherError::new(error),
+                    Error::Runtime {
+                        runtime: Runtime::Other {
+                            other: Other::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -736,9 +736,9 @@ impl RunServer {
         ) {
             return Err(
                 ErrorAuditor::new(
-                    BaseError::RuntimeError {
-                        runtime_error: RuntimeError::OtherError {
-                            other_error: OtherError::new(error),
+                    Error::Runtime {
+                        runtime: Runtime::Other {
+                            other: Other::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -758,9 +758,9 @@ impl RunServer {
         ) {
             return Err(
                 ErrorAuditor::new(
-                    BaseError::RuntimeError {
-                        runtime_error: RuntimeError::OtherError {
-                            other_error: OtherError::new(error),
+                    Error::Runtime {
+                        runtime: Runtime::Other {
+                            other: Other::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -780,9 +780,9 @@ impl RunServer {
         ) {
             return Err(
                 ErrorAuditor::new(
-                    BaseError::RuntimeError {
-                        runtime_error: RuntimeError::OtherError {
-                            other_error: OtherError::new(error),
+                    Error::Runtime {
+                        runtime: Runtime::Other {
+                            other: Other::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -802,9 +802,9 @@ impl RunServer {
         ) {
             return Err(
                 ErrorAuditor::new(
-                    BaseError::RuntimeError {
-                        runtime_error: RuntimeError::OtherError {
-                            other_error: OtherError::new(error),
+                    Error::Runtime {
+                        runtime: Runtime::Other {
+                            other: Other::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -824,9 +824,9 @@ impl RunServer {
         ) {
             return Err(
                 ErrorAuditor::new(
-                    BaseError::RuntimeError {
-                        runtime_error: RuntimeError::OtherError {
-                            other_error: OtherError::new(error),
+                    Error::Runtime {
+                        runtime: Runtime::Other {
+                            other: Other::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -846,9 +846,9 @@ impl RunServer {
         ) {
             return Err(
                 ErrorAuditor::new(
-                    BaseError::RuntimeError {
-                        runtime_error: RuntimeError::OtherError {
-                            other_error: OtherError::new(error),
+                    Error::Runtime {
+                        runtime: Runtime::Other {
+                            other: Other::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -868,9 +868,9 @@ impl RunServer {
         ) {
             return Err(
                 ErrorAuditor::new(
-                    BaseError::RuntimeError {
-                        runtime_error: RuntimeError::OtherError {
-                            other_error: OtherError::new(error),
+                    Error::Runtime {
+                        runtime: Runtime::Other {
+                            other: Other::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -890,9 +890,9 @@ impl RunServer {
         ) {
             return Err(
                 ErrorAuditor::new(
-                    BaseError::RuntimeError {
-                        runtime_error: RuntimeError::OtherError {
-                            other_error: OtherError::new(error),
+                    Error::Runtime {
+                        runtime: Runtime::Other {
+                            other: Other::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -912,9 +912,9 @@ impl RunServer {
         ) {
             return Err(
                 ErrorAuditor::new(
-                    BaseError::RuntimeError {
-                        runtime_error: RuntimeError::OtherError {
-                            other_error: OtherError::new(error),
+                    Error::Runtime {
+                        runtime: Runtime::Other {
+                            other: Other::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -936,9 +936,9 @@ impl RunServer {
             ) {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::OtherError {
-                                other_error: OtherError::new(error),
+                        Error::Runtime {
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -958,9 +958,9 @@ impl RunServer {
             ) {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::OtherError {
-                                other_error: OtherError::new(error),
+                        Error::Runtime {
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -980,9 +980,9 @@ impl RunServer {
             ) {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::OtherError {
-                                other_error: OtherError::new(error),
+                        Error::Runtime {
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -1002,9 +1002,9 @@ impl RunServer {
             ) {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::OtherError {
-                                other_error: OtherError::new(error),
+                        Error::Runtime {
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -1024,9 +1024,9 @@ impl RunServer {
             ) {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::OtherError {
-                                other_error: OtherError::new(error),
+                        Error::Runtime {
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -1046,9 +1046,9 @@ impl RunServer {
             ) {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::OtherError {
-                                other_error: OtherError::new(error),
+                        Error::Runtime {
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -1068,9 +1068,9 @@ impl RunServer {
             ) {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::OtherError {
-                                other_error: OtherError::new(error),
+                        Error::Runtime {
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -1090,9 +1090,9 @@ impl RunServer {
             ) {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::OtherError {
-                                other_error: OtherError::new(error),
+                        Error::Runtime {
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -1112,9 +1112,9 @@ impl RunServer {
             ) {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::OtherError {
-                                other_error: OtherError::new(error),
+                        Error::Runtime {
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -1134,9 +1134,9 @@ impl RunServer {
             ) {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::OtherError {
-                                other_error: OtherError::new(error),
+                        Error::Runtime {
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -1156,9 +1156,9 @@ impl RunServer {
             ) {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::OtherError {
-                                other_error: OtherError::new(error),
+                        Error::Runtime {
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -1178,9 +1178,9 @@ impl RunServer {
             ) {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::OtherError {
-                                other_error: OtherError::new(error),
+                        Error::Runtime {
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -1200,9 +1200,9 @@ impl RunServer {
             ) {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::OtherError {
-                                other_error: OtherError::new(error),
+                        Error::Runtime {
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -1222,9 +1222,9 @@ impl RunServer {
             ) {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::OtherError {
-                                other_error: OtherError::new(error),
+                        Error::Runtime {
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -1244,9 +1244,9 @@ impl RunServer {
             ) {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::OtherError {
-                                other_error: OtherError::new(error),
+                        Error::Runtime {
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -1266,9 +1266,9 @@ impl RunServer {
             ) {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::OtherError {
-                                other_error: OtherError::new(error),
+                        Error::Runtime {
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -1288,9 +1288,9 @@ impl RunServer {
             ) {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::OtherError {
-                                other_error: OtherError::new(error),
+                        Error::Runtime {
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -1310,9 +1310,9 @@ impl RunServer {
             ) {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::OtherError {
-                                other_error: OtherError::new(error),
+                        Error::Runtime {
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -1332,9 +1332,9 @@ impl RunServer {
             ) {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::OtherError {
-                                other_error: OtherError::new(error),
+                        Error::Runtime {
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -1354,9 +1354,9 @@ impl RunServer {
             ) {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::OtherError {
-                                other_error: OtherError::new(error),
+                        Error::Runtime {
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -1376,9 +1376,9 @@ impl RunServer {
             ) {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::OtherError {
-                                other_error: OtherError::new(error),
+                        Error::Runtime {
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -1892,9 +1892,9 @@ impl RunServer {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::OtherError {
-                                other_error: OtherError::new(error),
+                        Error::Runtime {
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(

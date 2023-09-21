@@ -1,10 +1,10 @@
 use super::creator::Creator;
 use crate::infrastructure_layer::data::environment_configuration::Environment;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
-use crate::infrastructure_layer::data::error_auditor::BaseError;
+use crate::infrastructure_layer::data::error_auditor::Error;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::data::error_auditor::ResourceError;
-use crate::infrastructure_layer::data::error_auditor::RuntimeError;
+use crate::infrastructure_layer::data::error_auditor::Resource;
+use crate::infrastructure_layer::data::error_auditor::Runtime;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use std::clone::Clone;
@@ -22,7 +22,7 @@ impl Creator<PostgresqlConnectionPoolNoTls> {
             Environment::Production => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::LogicError {
+                        Error::Logic {
                             message: "NoTls should be only not in production environment.",
                         },
                         BacktracePart::new(
@@ -47,9 +47,9 @@ impl Creator<PostgresqlConnectionPoolNoTls> {
                     Err(error) => {
                         return Err(
                             ErrorAuditor::new(
-                                BaseError::RuntimeError {
-                                    runtime_error: RuntimeError::ResourceError {
-                                        resource_error: ResourceError::PostgresqlError {
+                                Error::Runtime {
+                                    runtime: Runtime::Resource {
+                                        resource: Resource::Postgresql {
                                             postgresql_error: error,
                                         },
                                     },

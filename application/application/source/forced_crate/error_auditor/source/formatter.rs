@@ -1,8 +1,8 @@
-use super::error_auditor::BaseError;
-use super::error_auditor::EmailServerError;
+use super::error_auditor::Error;
+use super::error_auditor::EmailServer;
 use super::error_auditor::ErrorAuditor;
-use super::error_auditor::ResourceError;
-use super::error_auditor::RuntimeError;
+use super::error_auditor::Resource;
+use super::error_auditor::Runtime;
 
 pub struct Formatter;
 
@@ -57,7 +57,7 @@ impl Formatter {
         }
 
         let error_message = match *error_auditor.get_base_error() {
-            BaseError::LogicError {
+            Error::Logic {
                 message,
             } => {
                 format!(
@@ -65,21 +65,21 @@ impl Formatter {
                     message
                 )
             }
-            BaseError::RuntimeError {
-                runtime_error: ref run_time_error,
+            Error::Runtime {
+                runtime: ref run_time_error,
             } => match *run_time_error {
-                RuntimeError::OtherError {
-                    ref other_error,
+                Runtime::Other {
+                    other: ref other_error,
                 } => {
                     format!(
                         "Error, runtime, other: {}.",
                         other_error.get_message()
                     )
                 }
-                RuntimeError::ResourceError {
-                    ref resource_error,
+                Runtime::Resource {
+                    resource: ref resource_error,
                 } => match *resource_error {
-                    ResourceError::ConnectionPoolRedisError {
+                    Resource::ConnectionPoolRedis {
                         ref bb8_redis_error,
                     } => {
                         format!(
@@ -87,7 +87,7 @@ impl Formatter {
                             bb8_redis_error
                         )
                     }
-                    ResourceError::ConnectionPoolPostgresqlError {
+                    Resource::ConnectionPoolPostgresql {
                         ref bb8_postgresql_error,
                     } => {
                         format!(
@@ -95,10 +95,10 @@ impl Formatter {
                             bb8_postgresql_error
                         )
                     }
-                    ResourceError::EmailServerError {
-                        ref email_server_error,
+                    Resource::EmailServer {
+                        email_server: ref email_server_error,
                     } => match *email_server_error {
-                        EmailServerError::EmailError {
+                        EmailServer::Email {
                             ref email_error,
                         } => {
                             format!(
@@ -106,7 +106,7 @@ impl Formatter {
                                 email_error
                             )
                         }
-                        EmailServerError::SmtpError {
+                        EmailServer::Smtp {
                             ref smtp_error,
                         } => {
                             format!(
@@ -115,7 +115,7 @@ impl Formatter {
                             )
                         }
                     },
-                    ResourceError::PostgresqlError {
+                    Resource::Postgresql {
                         ref postgresql_error,
                     } => {
                         format!(
@@ -123,7 +123,7 @@ impl Formatter {
                             postgresql_error
                         )
                     }
-                    ResourceError::RedisError {
+                    Resource::Redis {
                         ref redis_error,
                     } => {
                         format!(

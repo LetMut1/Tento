@@ -24,11 +24,11 @@ use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::environment_configuration::Environment;
 use crate::infrastructure_layer::data::environment_configuration::ENVIRONMENT_CONFIGURATION;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
-use crate::infrastructure_layer::data::error_auditor::BaseError;
+use crate::infrastructure_layer::data::error_auditor::Error;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::data::error_auditor::OtherError;
-use crate::infrastructure_layer::data::error_auditor::ResourceError;
-use crate::infrastructure_layer::data::error_auditor::RuntimeError;
+use crate::infrastructure_layer::data::error_auditor::Other;
+use crate::infrastructure_layer::data::error_auditor::Resource;
+use crate::infrastructure_layer::data::error_auditor::Runtime;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By1;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By7;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::insert::Insert1;
@@ -59,7 +59,7 @@ impl CreateFixtures {
         if let Environment::Production = ENVIRONMENT_CONFIGURATION.environment {
             return Err(
                 ErrorAuditor::new(
-                    BaseError::LogicError {
+                    Error::Logic {
                         message: "CreateFixturesProcessor should process only not in production environment.",
                     },
                     BacktracePart::new(
@@ -76,9 +76,9 @@ impl CreateFixtures {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::OtherError {
-                                other_error: OtherError::new(error),
+                        Error::Runtime {
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -112,9 +112,9 @@ impl CreateFixtures {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::PostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -171,9 +171,9 @@ impl CreateFixtures {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::ConnectionPoolPostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::ConnectionPoolPostgresql {
                                     bb8_postgresql_error: error,
                                 },
                             },
@@ -208,7 +208,7 @@ impl CreateFixtures {
             if !Validator::<ApplicationUser_Nickname>::is_valid(&application_user_nickname) {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::LogicError {
+                        Error::Logic {
                             message: "Application_user nickname should be valid.",
                         },
                         BacktracePart::new(
@@ -245,7 +245,7 @@ impl CreateFixtures {
             if !is_valid_email {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::LogicError {
+                        Error::Logic {
                             message: "Application_user email should be valid.",
                         },
                         BacktracePart::new(
@@ -264,7 +264,7 @@ impl CreateFixtures {
             ) {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::LogicError {
+                        Error::Logic {
                             message: "Application_user_password should be valid.",
                         },
                         BacktracePart::new(
@@ -342,7 +342,7 @@ impl CreateFixtures {
             if !Validator::<ApplicationUserDevice_Id>::is_valid(&application_user_device_id) {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::LogicError {
+                        Error::Logic {
                             message: "Application_user_device id should be valid.",
                         },
                         BacktracePart::new(
@@ -392,7 +392,7 @@ impl CreateFixtures {
                 if !Validator::<Channel_Name>::is_valid(&channel_name) {
                     return Err(
                         ErrorAuditor::new(
-                            BaseError::LogicError {
+                            Error::Logic {
                                 message: "Channel name should be valid.",
                             },
                             BacktracePart::new(
@@ -409,7 +409,7 @@ impl CreateFixtures {
                 if !Validator::<Channel_LinkedName>::is_valid(&channel_linked_name) {
                     return Err(
                         ErrorAuditor::new(
-                            BaseError::LogicError {
+                            Error::Logic {
                                 message: "Channel linked name should be valid.",
                             },
                             BacktracePart::new(
@@ -439,7 +439,7 @@ impl CreateFixtures {
                     if !Validator::<Channel_Description>::is_valid(&channel_description_) {
                         return Err(
                             ErrorAuditor::new(
-                                BaseError::LogicError {
+                                Error::Logic {
                                     message: "Channel description should be valid.",
                                 },
                                 BacktracePart::new(
@@ -465,7 +465,7 @@ impl CreateFixtures {
                 if !Validator::<Channel_Orientation>::is_valid(&channel_orientation) {
                     return Err(
                         ErrorAuditor::new(
-                            BaseError::LogicError {
+                            Error::Logic {
                                 message: "Channel orientation email should be valid.",
                             },
                             BacktracePart::new(

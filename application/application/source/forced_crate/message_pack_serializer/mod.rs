@@ -82,10 +82,10 @@
 )]
 
 use error_auditor::error_auditor::BacktracePart;
-use error_auditor::error_auditor::BaseError;
+use error_auditor::error_auditor::Error;
 use error_auditor::error_auditor::ErrorAuditor;
-use error_auditor::error_auditor::OtherError;
-use error_auditor::error_auditor::RuntimeError;
+use error_auditor::error_auditor::Other;
+use error_auditor::error_auditor::Runtime;
 use rmp_serde::to_vec;
 use rmp_serde::from_read_ref;
 use serde::Deserialize;
@@ -103,9 +103,9 @@ impl Serializer {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::OtherError {
-                                other_error: OtherError::new(error),
+                        Error::Runtime {
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -130,9 +130,9 @@ impl Serializer {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::OtherError {
-                                other_error: OtherError::new(error),
+                        Error::Runtime {
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(

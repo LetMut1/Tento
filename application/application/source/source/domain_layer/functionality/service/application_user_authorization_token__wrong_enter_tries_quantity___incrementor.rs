@@ -1,7 +1,7 @@
 use super::incrementor::Incrementor;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_WrongEnterTriesQuantity;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
-use crate::infrastructure_layer::data::error_auditor::BaseError;
+use crate::infrastructure_layer::data::error_auditor::Error;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 
 impl Incrementor<ApplicationUserAuthorizationToken_WrongEnterTriesQuantity> {
@@ -11,7 +11,7 @@ impl Incrementor<ApplicationUserAuthorizationToken_WrongEnterTriesQuantity> {
             None => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::create_out_of_range(),
+                        Error::create_out_of_range(),
                         BacktracePart::new(
                             line!(),
                             file!(),

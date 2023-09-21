@@ -2,12 +2,12 @@ use super::sender::Sender;
 use crate::infrastructure_layer::data::environment_configuration::Environment;
 use crate::infrastructure_layer::data::environment_configuration::ENVIRONMENT_CONFIGURATION;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
-use crate::infrastructure_layer::data::error_auditor::BaseError;
-use crate::infrastructure_layer::data::error_auditor::EmailServerError;
+use crate::infrastructure_layer::data::error_auditor::Error;
+use crate::infrastructure_layer::data::error_auditor::EmailServer;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::data::error_auditor::OtherError;
-use crate::infrastructure_layer::data::error_auditor::ResourceError;
-use crate::infrastructure_layer::data::error_auditor::RuntimeError;
+use crate::infrastructure_layer::data::error_auditor::Other;
+use crate::infrastructure_layer::data::error_auditor::Resource;
+use crate::infrastructure_layer::data::error_auditor::Runtime;
 use lettre::smtp::SmtpClient;
 use lettre::ClientSecurity;
 use lettre::Transport;
@@ -35,10 +35,10 @@ impl Sender<Email> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::EmailServerError {
-                                    email_server_error: EmailServerError::EmailError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::EmailServer {
+                                    email_server: EmailServer::Email {
                                         email_error: error,
                                     },
                                 },
@@ -59,9 +59,9 @@ impl Sender<Email> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::OtherError {
-                                other_error: OtherError::new(error),
+                        Error::Runtime {
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -79,7 +79,7 @@ impl Sender<Email> {
             None => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::LogicError {
+                        Error::Logic {
                             message: "Invalid socket address.",
                         },
                         BacktracePart::new(
@@ -105,10 +105,10 @@ impl Sender<Email> {
                     Err(error) => {
                         return Err(
                             ErrorAuditor::new(
-                                BaseError::RuntimeError {
-                                    runtime_error: RuntimeError::ResourceError {
-                                        resource_error: ResourceError::EmailServerError {
-                                            email_server_error: EmailServerError::SmtpError {
+                                Error::Runtime {
+                                    runtime: Runtime::Resource {
+                                        resource: Resource::EmailServer {
+                                            email_server: EmailServer::Smtp {
                                                 smtp_error: error,
                                             },
                                         },
@@ -131,10 +131,10 @@ impl Sender<Email> {
         if let Err(error) = smtp_client.transport().send(email.into()) {
             return Err(
                 ErrorAuditor::new(
-                    BaseError::RuntimeError {
-                        runtime_error: RuntimeError::ResourceError {
-                            resource_error: ResourceError::EmailServerError {
-                                email_server_error: EmailServerError::SmtpError {
+                    Error::Runtime {
+                        runtime: Runtime::Resource {
+                            resource: Resource::EmailServer {
+                                email_server: EmailServer::Smtp {
                                     smtp_error: error,
                                 },
                             },

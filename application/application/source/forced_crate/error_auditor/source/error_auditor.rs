@@ -2,7 +2,7 @@ use bb8::RunError as Bb8Error;
 use lettre::smtp::error::Error as SmtpError;
 use lettre_email::error::Error as EmailError;
 use redis::RedisError;
-use std::error::Error;
+use std::error::Error as StdError;
 use std::fmt::Display;
 use std::fmt::Error as FormatError;
 use std::fmt::Formatter;
@@ -10,17 +10,17 @@ use tokio_postgres::Error as PostgresqlError;
 
 #[derive(Debug)]
 pub struct ErrorAuditor {
-    base_error: BaseError,
+    error: Error,
     backtrace: Backtrace,
 }
 
 impl ErrorAuditor {
     pub fn new(
-        base_error: BaseError,
+        error: Error,
         backtrace_part: BacktracePart,
     ) -> Self {
         return Self {
-            base_error,
+            error,
             backtrace: Backtrace::new(backtrace_part),
         };
     }
@@ -34,8 +34,8 @@ impl ErrorAuditor {
         return ();
     }
 
-    pub fn get_base_error<'a>(&'a self) -> &'a BaseError {
-        return &self.base_error;
+    pub fn get_base_error<'a>(&'a self) -> &'a Error {
+        return &self.error;
     }
 
     pub fn get_backtrace<'a>(&'a self) -> &'a Backtrace {
@@ -52,33 +52,33 @@ impl Display for ErrorAuditor {
     }
 }
 
-impl Error for ErrorAuditor {}
+impl StdError for ErrorAuditor {}
 
 #[derive(Debug)]
-pub enum BaseError {
-    LogicError {
+pub enum Error {
+    Logic {
         message: &'static str,
     },
-    RuntimeError {
-        runtime_error: RuntimeError,
+    Runtime {
+        runtime: Runtime,
     },
 }
 
-impl BaseError {
+impl Error {
     pub fn create_unreachable_state() -> Self {
-        return Self::LogicError {
+        return Self::Logic {
             message: "Unreachable state.",
         };
     }
 
     pub fn create_out_of_range() -> Self {
-        return Self::LogicError {
+        return Self::Logic {
             message: "Out of range.",
         };
     }
 }
 
-impl Display for BaseError {
+impl Display for Error {
     fn fmt<'a, 'b>(
         &'a self,
         _: &'b mut Formatter<'_>,
@@ -88,16 +88,16 @@ impl Display for BaseError {
 }
 
 #[derive(Debug)]
-pub enum RuntimeError {
-    OtherError {
-        other_error: OtherError,
+pub enum Runtime {
+    Other {
+        other: Other,
     },
-    ResourceError {
-        resource_error: ResourceError,
+    Resource {
+        resource: Resource,
     },
 }
 
-impl Display for RuntimeError {
+impl Display for Runtime {
     fn fmt<'a, 'b>(
         &'a self,
         _: &'b mut Formatter<'_>,
@@ -107,14 +107,14 @@ impl Display for RuntimeError {
 }
 
 #[derive(Debug)]
-pub struct OtherError {
+pub struct Other {
     message: String,
 }
 
-impl OtherError {
+impl Other {
     pub fn new<E>(error: E) -> Self
     where
-        E: Error,
+        E: StdError,
     {
         return Self {
             message: format!(
@@ -129,7 +129,7 @@ impl OtherError {
     }
 }
 
-impl Display for OtherError {
+impl Display for Other {
     fn fmt<'a, 'b>(
         &'a self,
         _: &'b mut Formatter<'_>,
@@ -139,25 +139,25 @@ impl Display for OtherError {
 }
 
 #[derive(Debug)]
-pub enum ResourceError {
-    ConnectionPoolRedisError {
+pub enum Resource {
+    ConnectionPoolRedis {
         bb8_redis_error: Bb8Error<RedisError>,
     },
-    ConnectionPoolPostgresqlError {
+    ConnectionPoolPostgresql {
         bb8_postgresql_error: Bb8Error<PostgresqlError>,
     },
-    EmailServerError {
-        email_server_error: EmailServerError,
+    EmailServer {
+        email_server: EmailServer,
     },
-    PostgresqlError {
+    Postgresql {
         postgresql_error: PostgresqlError,
     },
-    RedisError {
+    Redis {
         redis_error: RedisError,
     },
 }
 
-impl Display for ResourceError {
+impl Display for Resource {
     fn fmt<'a, 'b>(
         &'a self,
         _: &'b mut Formatter<'_>,
@@ -167,16 +167,16 @@ impl Display for ResourceError {
 }
 
 #[derive(Debug)]
-pub enum EmailServerError {
-    EmailError {
+pub enum EmailServer {
+    Email {
         email_error: EmailError,
     },
-    SmtpError {
+    Smtp {
         smtp_error: SmtpError,
     },
 }
 
-impl Display for EmailServerError {
+impl Display for EmailServer {
     fn fmt<'a, 'b>(
         &'a self,
         _: &'b mut Formatter<'_>,

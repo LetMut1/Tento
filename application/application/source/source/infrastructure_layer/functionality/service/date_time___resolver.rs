@@ -1,6 +1,6 @@
 use super::resolver::Resolver;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
-use crate::infrastructure_layer::data::error_auditor::BaseError;
+use crate::infrastructure_layer::data::error_auditor::Error;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use chrono::DateTime as ChronoDateTime;
 use chrono::Utc;
@@ -23,7 +23,7 @@ impl Resolver<DateTime> {
             None => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::LogicError {
+                        Error::Logic {
                             message: "Too big quantity of minutes must not be added.",
                         },
                         BacktracePart::new(
@@ -41,7 +41,7 @@ impl Resolver<DateTime> {
             None => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::LogicError {
+                        Error::Logic {
                             message: "Too big quantity of minutes must not be added.",
                         },
                         BacktracePart::new(

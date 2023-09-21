@@ -9,10 +9,10 @@ use crate::domain_layer::functionality::service::action_round_register__context_
 use crate::infrastructure_layer::data::control_type::Request;
 use crate::infrastructure_layer::data::control_type::Response;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
-use crate::infrastructure_layer::data::error_auditor::BaseError;
+use crate::infrastructure_layer::data::error_auditor::Error;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::data::error_auditor::ResourceError;
-use crate::infrastructure_layer::data::error_auditor::RuntimeError;
+use crate::infrastructure_layer::data::error_auditor::Resource;
+use crate::infrastructure_layer::data::error_auditor::Runtime;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::insert::Insert11;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::converter::Convert;
@@ -134,9 +134,9 @@ impl Writer<ActionRoundRegister<'_>> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::ConnectionPoolPostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::ConnectionPoolPostgresql {
                                     bb8_postgresql_error: error,
                                 },
                             },

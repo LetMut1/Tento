@@ -4,10 +4,10 @@ use super::postgresql_repository::PostgresqlRepository;
 use crate::domain_layer::data::entity::channel_subscription::ChannelSubscription;
 use crate::domain_layer::data::entity::channel_subscription::ChannelSubscription_CreatedAt;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
-use crate::infrastructure_layer::data::error_auditor::BaseError;
+use crate::infrastructure_layer::data::error_auditor::Error;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::data::error_auditor::ResourceError;
-use crate::infrastructure_layer::data::error_auditor::RuntimeError;
+use crate::infrastructure_layer::data::error_auditor::Resource;
+use crate::infrastructure_layer::data::error_auditor::Runtime;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 use tokio_postgres::types::Type;
 use tokio_postgres::Client as Connection;
@@ -53,9 +53,9 @@ impl PostgresqlRepository<ChannelSubscription> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::PostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -81,9 +81,9 @@ impl PostgresqlRepository<ChannelSubscription> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::PostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -103,9 +103,9 @@ impl PostgresqlRepository<ChannelSubscription> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::PostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -162,9 +162,9 @@ impl PostgresqlRepository<ChannelSubscription> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::PostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -190,9 +190,9 @@ impl PostgresqlRepository<ChannelSubscription> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::PostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Postgresql {
                                     postgresql_error: error,
                                 },
                             },

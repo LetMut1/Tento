@@ -1,10 +1,10 @@
 use super::creator::Creator;
 use crate::infrastructure_layer::data::environment_configuration::Environment;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
-use crate::infrastructure_layer::data::error_auditor::BaseError;
+use crate::infrastructure_layer::data::error_auditor::Error;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::data::error_auditor::ResourceError;
-use crate::infrastructure_layer::data::error_auditor::RuntimeError;
+use crate::infrastructure_layer::data::error_auditor::Resource;
+use crate::infrastructure_layer::data::error_auditor::Runtime;
 use bb8::Pool;
 use bb8_redis::RedisConnectionManager;
 use redis::ConnectionInfo;
@@ -27,9 +27,9 @@ impl Creator<RedisConnectonPool> {
                     Err(error) => {
                         return Err(
                             ErrorAuditor::new(
-                                BaseError::RuntimeError {
-                                    runtime_error: RuntimeError::ResourceError {
-                                        resource_error: ResourceError::RedisError {
+                                Error::Runtime {
+                                    runtime: Runtime::Resource {
+                                        resource: Resource::Redis {
                                             redis_error: error,
                                         },
                                     },
@@ -52,9 +52,9 @@ impl Creator<RedisConnectonPool> {
                     Err(error) => {
                         return Err(
                             ErrorAuditor::new(
-                                BaseError::RuntimeError {
-                                    runtime_error: RuntimeError::ResourceError {
-                                        resource_error: ResourceError::RedisError {
+                                Error::Runtime {
+                                    runtime: Runtime::Resource {
+                                        resource: Resource::Redis {
                                             redis_error: error,
                                         },
                                     },

@@ -1,9 +1,9 @@
 use super::resolver::Resolver;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
-use crate::infrastructure_layer::data::error_auditor::BaseError;
+use crate::infrastructure_layer::data::error_auditor::Error;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::data::error_auditor::ResourceError;
-use crate::infrastructure_layer::data::error_auditor::RuntimeError;
+use crate::infrastructure_layer::data::error_auditor::Resource;
+use crate::infrastructure_layer::data::error_auditor::Runtime;
 use tokio_postgres::Client as Connection;
 
 pub use crate::infrastructure_layer::data::control_type::PostgresqlTransaction;
@@ -49,9 +49,9 @@ impl Resolver<PostgresqlTransaction> {
         {
             return Err(
                 ErrorAuditor::new(
-                    BaseError::RuntimeError {
-                        runtime_error: RuntimeError::ResourceError {
-                            resource_error: ResourceError::PostgresqlError {
+                    Error::Runtime {
+                        runtime: Runtime::Resource {
+                            resource: Resource::Postgresql {
                                 postgresql_error: error,
                             },
                         },
@@ -83,9 +83,9 @@ impl Resolver<PostgresqlTransaction> {
         {
             return Err(
                 ErrorAuditor::new(
-                    BaseError::RuntimeError {
-                        runtime_error: RuntimeError::ResourceError {
-                            resource_error: ResourceError::PostgresqlError {
+                    Error::Runtime {
+                        runtime: Runtime::Resource {
+                            resource: Resource::Postgresql {
                                 postgresql_error: error,
                             },
                         },
@@ -117,9 +117,9 @@ impl Resolver<PostgresqlTransaction> {
         {
             return Err(
                 ErrorAuditor::new(
-                    BaseError::RuntimeError {
-                        runtime_error: RuntimeError::ResourceError {
-                            resource_error: ResourceError::PostgresqlError {
+                    Error::Runtime {
+                        runtime: Runtime::Resource {
+                            resource: Resource::Postgresql {
                                 postgresql_error: error,
                             },
                         },

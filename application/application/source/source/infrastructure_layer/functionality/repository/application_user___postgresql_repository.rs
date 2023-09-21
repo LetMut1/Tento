@@ -16,10 +16,10 @@ use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Nickname;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_PasswordHash;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
-use crate::infrastructure_layer::data::error_auditor::BaseError;
+use crate::infrastructure_layer::data::error_auditor::Error;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::data::error_auditor::ResourceError;
-use crate::infrastructure_layer::data::error_auditor::RuntimeError;
+use crate::infrastructure_layer::data::error_auditor::Resource;
+use crate::infrastructure_layer::data::error_auditor::Runtime;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 use std::borrow::Cow;
 use std::marker::PhantomData;
@@ -82,9 +82,9 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::PostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -110,9 +110,9 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::PostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -132,9 +132,9 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::PostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -154,9 +154,9 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::PostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -213,9 +213,9 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::PostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -241,9 +241,9 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::PostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -295,9 +295,9 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::PostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -323,9 +323,9 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::PostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -375,9 +375,9 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::PostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -403,9 +403,9 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::PostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -460,9 +460,9 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::PostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -488,9 +488,9 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::PostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -514,9 +514,9 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::PostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -536,9 +536,9 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::PostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -558,9 +558,9 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::PostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -580,9 +580,9 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::PostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -645,9 +645,9 @@ impl PostgresqlRepository<ApplicationUser1> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::PostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -673,9 +673,9 @@ impl PostgresqlRepository<ApplicationUser1> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::PostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -699,9 +699,9 @@ impl PostgresqlRepository<ApplicationUser1> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::PostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -721,9 +721,9 @@ impl PostgresqlRepository<ApplicationUser1> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::PostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -743,9 +743,9 @@ impl PostgresqlRepository<ApplicationUser1> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::PostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -805,9 +805,9 @@ impl PostgresqlRepository<ApplicationUser2> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::PostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -833,9 +833,9 @@ impl PostgresqlRepository<ApplicationUser2> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::PostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -859,9 +859,9 @@ impl PostgresqlRepository<ApplicationUser2> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::PostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -881,9 +881,9 @@ impl PostgresqlRepository<ApplicationUser2> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::PostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -903,9 +903,9 @@ impl PostgresqlRepository<ApplicationUser2> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::PostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -963,9 +963,9 @@ impl PostgresqlRepository<ApplicationUser3> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::PostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -991,9 +991,9 @@ impl PostgresqlRepository<ApplicationUser3> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::PostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -1017,9 +1017,9 @@ impl PostgresqlRepository<ApplicationUser3> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::PostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -1086,9 +1086,9 @@ impl PostgresqlRepository<ApplicationUser4> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::PostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -1112,9 +1112,9 @@ impl PostgresqlRepository<ApplicationUser4> {
         {
             return Err(
                 ErrorAuditor::new(
-                    BaseError::RuntimeError {
-                        runtime_error: RuntimeError::ResourceError {
-                            resource_error: ResourceError::PostgresqlError {
+                    Error::Runtime {
+                        runtime: Runtime::Resource {
+                            resource: Resource::Postgresql {
                                 postgresql_error: error,
                             },
                         },
@@ -1161,9 +1161,9 @@ impl PostgresqlRepository<ApplicationUser4> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::PostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -1189,9 +1189,9 @@ impl PostgresqlRepository<ApplicationUser4> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::PostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -1215,9 +1215,9 @@ impl PostgresqlRepository<ApplicationUser4> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::PostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -1237,9 +1237,9 @@ impl PostgresqlRepository<ApplicationUser4> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::PostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -1259,9 +1259,9 @@ impl PostgresqlRepository<ApplicationUser4> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::PostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -1317,9 +1317,9 @@ impl PostgresqlRepository<ApplicationUser5> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::PostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -1345,9 +1345,9 @@ impl PostgresqlRepository<ApplicationUser5> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::PostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -1371,9 +1371,9 @@ impl PostgresqlRepository<ApplicationUser5> {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::ResourceError {
-                                resource_error: ResourceError::PostgresqlError {
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: Resource::Postgresql {
                                     postgresql_error: error,
                                 },
                             },

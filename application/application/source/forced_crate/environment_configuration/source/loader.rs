@@ -16,9 +16,9 @@ use super::environment_configuration::TcpKeepalive;
 use super::environment_configuration::Tls;
 use error_auditor::error_auditor::ErrorAuditor;
 use error_auditor::error_auditor::BacktracePart;
-use error_auditor::error_auditor::BaseError;
-use error_auditor::error_auditor::OtherError;
-use error_auditor::error_auditor::RuntimeError;
+use error_auditor::error_auditor::Error;
+use error_auditor::error_auditor::Other;
+use error_auditor::error_auditor::Runtime;
 use std::fs::read_to_string;
 use std::path::Path;
 use toml::from_str;
@@ -46,9 +46,9 @@ impl Loader {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::OtherError {
-                                other_error: OtherError::new(error),
+                        Error::Runtime {
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -67,9 +67,9 @@ impl Loader {
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(
-                            BaseError::RuntimeError {
-                                runtime_error: RuntimeError::OtherError {
-                                    other_error: OtherError::new(error),
+                            Error::Runtime {
+                                runtime: Runtime::Other {
+                                    other: Other::new(error),
                                 },
                             },
                             BacktracePart::new(
@@ -101,9 +101,9 @@ impl Loader {
                 Err(error) => {
                     return Err(
                         ErrorAuditor::new(
-                            BaseError::RuntimeError {
-                                runtime_error: RuntimeError::OtherError {
-                                    other_error: OtherError::new(error),
+                            Error::Runtime {
+                                runtime: Runtime::Other {
+                                    other: Other::new(error),
                                 },
                             },
                             BacktracePart::new(
@@ -122,9 +122,9 @@ impl Loader {
                     Err(error) => {
                         return Err(
                             ErrorAuditor::new(
-                                BaseError::RuntimeError {
-                                    runtime_error: RuntimeError::OtherError {
-                                        other_error: OtherError::new(error),
+                                Error::Runtime {
+                                    runtime: Runtime::Other {
+                                        other: Other::new(error),
                                     },
                                 },
                                 BacktracePart::new(
@@ -156,9 +156,9 @@ impl Loader {
                     Err(error) => {
                         return Err(
                             ErrorAuditor::new(
-                                BaseError::RuntimeError {
-                                    runtime_error: RuntimeError::OtherError {
-                                        other_error: OtherError::new(error),
+                                Error::Runtime {
+                                    runtime: Runtime::Other {
+                                        other: Other::new(error),
                                     },
                                 },
                                 BacktracePart::new(
@@ -177,9 +177,9 @@ impl Loader {
                         Err(error) => {
                             return Err(
                                 ErrorAuditor::new(
-                                    BaseError::RuntimeError {
-                                        runtime_error: RuntimeError::OtherError {
-                                            other_error: OtherError::new(error),
+                                    Error::Runtime {
+                                        runtime: Runtime::Other {
+                                            other: Other::new(error),
                                         },
                                     },
                                     BacktracePart::new(
@@ -199,7 +199,7 @@ impl Loader {
                 } else {
                     return Err(
                         ErrorAuditor::new(
-                            BaseError::LogicError {
+                            Error::Logic {
                                 message: "The environment.toml file does not exist.",
                             },
                             BacktracePart::new(
@@ -218,9 +218,9 @@ impl Loader {
             Err(error) => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::RuntimeError {
-                            runtime_error: RuntimeError::OtherError {
-                                other_error: OtherError::new(error),
+                        Error::Runtime {
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(

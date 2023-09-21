@@ -1,5 +1,5 @@
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
-use crate::infrastructure_layer::data::error_auditor::BaseError;
+use crate::infrastructure_layer::data::error_auditor::Error;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 
 pub struct Counter<T> {
@@ -33,7 +33,7 @@ impl Counter<i16> {
             None => {
                 return Err(
                     ErrorAuditor::new(
-                        BaseError::create_out_of_range(),
+                        Error::create_out_of_range(),
                         BacktracePart::new(
                             line!(),
                             file!(),
