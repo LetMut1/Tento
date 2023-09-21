@@ -5,6 +5,7 @@ use redis::RedisError;
 use std::error::Error as StdError;
 use std::fmt::Display;
 use std::fmt::Error as FormatError;
+use std::boxed::Box;
 use std::fmt::Formatter;
 use tokio_postgres::Error as PostgresqlError;
 
@@ -108,24 +109,21 @@ impl Display for Runtime {
 
 #[derive(Debug)]
 pub struct Other {
-    message: String,
+    error: Box<dyn StdError + Send + Sync + 'static>,
 }
 
 impl Other {
     pub fn new<E>(error: E) -> Self
     where
-        E: StdError,
+        E: StdError + Send + Sync + 'static,
     {
         return Self {
-            message: format!(
-                "{}",
-                error
-            ),
+            error: Box::new(error)
         };
     }
 
-    pub fn get_message<'a>(&'a self) -> &'a str {
-        return self.message.as_str();
+    pub fn get_error<'a>(&'a self) -> &'a (dyn StdError + 'static) {
+        return self.error.as_ref();
     }
 }
 

@@ -73,7 +73,7 @@ impl Formatter {
                 } => {
                     format!(
                         "Error, runtime, other: {}.",
-                        other_error.get_message()
+                        other_error.get_error()
                     )
                 }
                 Runtime::Resource {
