@@ -56,9 +56,9 @@ where
     T: Debug,
 {}
 
-impl<T> Format<ErrorAuditor<T>> for Formatter<ErrorAuditor<T>>
+impl<T> Format<ErrorAuditor<T>> for Formatter
 where
-    Formatter<T>: Format<T>,
+    Formatter: Format<T>,
 {
     fn prepare<'a>(subject: &'a ErrorAuditor<T>) -> String {
         let mut backtrace_message = String::new();
@@ -133,7 +133,7 @@ where
                     Runtime::Resource {
                         ref resource,
                     } => {
-                        let message = <Formatter<T> as Format<T>>::prepare(resource);
+                        let message = <Formatter as Format<T>>::prepare(resource);
 
                         let error_message__ = if !message.is_empty() {
                             format!(
@@ -141,7 +141,7 @@ where
                                 message.as_str(),
                             )
                         } else {
-                            "Error-->Runtime-->Resource: ?. It's probably better to tell exactly what happened...".to_string()
+                            "Error-->Runtime-->Resource: ???. It's probably better to tell exactly what happened...".to_string()
                         };
 
                         error_message__

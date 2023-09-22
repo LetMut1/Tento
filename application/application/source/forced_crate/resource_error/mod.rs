@@ -37,7 +37,7 @@ impl Display for ResourceError {
     }
 }
 
-impl Format<ResourceError> for Formatter<ResourceError> {
+impl Format<ResourceError> for Formatter {
     fn prepare<'a>(subject: &'a ResourceError) -> String {
         let message = match *subject {
             ResourceError::ConnectionPoolRedis {

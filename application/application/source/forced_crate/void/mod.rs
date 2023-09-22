@@ -24,7 +24,7 @@ impl Display for ErrorVoid {
     }
 }
 
-impl Format<ErrorVoid> for Formatter<ErrorVoid> {
+impl Format<ErrorVoid> for Formatter {
     fn prepare<'a>(_: &'a ErrorVoid) -> String {
         return String::new();
     }

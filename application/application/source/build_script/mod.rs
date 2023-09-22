@@ -90,8 +90,6 @@ use std::path::Path;
 use uuid::Uuid;
 use formatter::Formatter;
 use formatter::Format;
-use error_auditor::ErrorAuditor;
-use resource_error::ResourceError;
 
 fn main() -> () {
     if let Err(error) = Processor::process() {
@@ -147,7 +145,7 @@ impl Processor {
             Ok(environment_configuration_) => environment_configuration_,
             Err(error) => {
                 return Err(
-                    Formatter::<ErrorAuditor<ResourceError>>::prepare(&error).into()
+                    Formatter::prepare(&error).into()
                 );
             }
         };

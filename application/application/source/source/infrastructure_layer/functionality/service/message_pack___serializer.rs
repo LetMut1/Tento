@@ -9,8 +9,6 @@ use message_pack_serializer::Serializer as Serializer_;
 use serde::Deserialize;
 use super::formatter::Format;
 use super::formatter::Formatter;
-use crate::infrastructure_layer::data::void::ErrorVoid;
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use serde::Serialize as SerdeSerialize;
 
 pub use crate::infrastructure_layer::data::control_type::MessagePack;
@@ -28,7 +26,7 @@ impl Serialize for Serializer<MessagePack> {
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new_(
-                                    Formatter::<ErrorAuditor<ErrorVoid>>::prepare(&error).into()
+                                    Formatter::prepare(&error).into()
                                 ),
                             },
                         },
@@ -57,7 +55,7 @@ impl Serialize for Serializer<MessagePack> {
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new_(
-                                    Formatter::<ErrorAuditor<ErrorVoid>>::prepare(&error).into()
+                                    Formatter::prepare(&error).into()
                                 ),
                             },
                         },

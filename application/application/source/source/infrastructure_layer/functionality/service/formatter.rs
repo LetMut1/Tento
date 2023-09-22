@@ -3,7 +3,7 @@ use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 pub use formatter::Formatter;
 pub use formatter::Format;
 
-impl Format<InvalidArgument> for Formatter<InvalidArgument> {
+impl Format<InvalidArgument> for Formatter {
     fn prepare<'a>(subject: &'a InvalidArgument) -> String {
         let message_part = match *subject {
             InvalidArgument::ApplicationUser_AccessModifier => "AccessModifier",
