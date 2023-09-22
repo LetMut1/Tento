@@ -22,14 +22,52 @@ struct StructWithString1 {
   char *string;
 };
 
-struct Error {
+struct Error2 {
   bool is_exist;
 };
 
 struct StructWithString2 {
   StructWithString1 struct_with_string;
-  Error error;
+  Error2 error;
 };
+
+struct Opaque {
+  bool public_;
+  bool _private;
+};
+
+struct ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming {
+  long application_user_id;
+  bool verification_message_sent;
+  long application_user_authorization_token_can_be_resent_from;
+  short application_user_authorization_token_wrong_enter_tries_quantity;
+  short application_user_authorization_token_wrong_enter_tries_quantity_limit;
+};
+
+struct ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent {
+  bool application_user__wrong_email_or_nickname_or_password;
+};
+
+template<typename T>
+struct Data {
+  T filled;
+  bool is_filled;
+};
+
+template<typename D, typename P>
+struct UnifiedReport {
+  Data<D> target;
+  P precedent;
+  bool is_target;
+};
+
+template<typename T>
+struct Result {
+  T data;
+  bool is_data;
+};
+
+using ApplicationUser__Authorization___AuthorizeByFirstStep___Result = Result<UnifiedReport<ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming, ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent>>;
 
 extern "C" {
 
@@ -73,5 +111,12 @@ void string_deallocate_f3(StructWithString2 *struct_with_string);
 
 unsigned char array_slice_f1(unsigned char *pointer_to_first_element_of_registry,
                              size_t registry_length);
+
+bool opaque_f1(Opaque *opaque);
+
+ApplicationUser__Authorization___AuthorizeByFirstStep___Result *application_user___authorization____authorize_by_first_step____deserialize(unsigned char *pointer_to_first_element_of_registry,
+                                                                                                                                           size_t registry_length);
+
+void application_user___authorization____authorize_by_first_step____deallocate(ApplicationUser__Authorization___AuthorizeByFirstStep___Result *result);
 
 } // extern "C"

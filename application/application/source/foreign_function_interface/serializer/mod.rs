@@ -259,8 +259,7 @@ pub extern "C" fn string_allocate_f2() -> *mut StructWithString1 {
         Box::new(
             StructWithString1 {
                 is_exist: true,
-                string: string.into_raw(),
-                _private: 0
+                string: string.into_raw()
             }
         )
     )
@@ -283,7 +282,6 @@ pub extern "C" fn string_deallocate_f2(struct_with_string: *mut StructWithString
 pub struct StructWithString1 {
     pub is_exist: bool,
     pub string: *mut c_char,
-    _private: c_char,
 }
 
 
@@ -300,12 +298,10 @@ pub extern "C" fn string_allocate_f3() -> *mut StructWithString2 {
                         struct_with_string: StructWithString1 {
                             is_exist: false,
                             string: ptr::null_mut(),
-                            _private: 0
                         },
                         error: Error2 {
                             is_exist: true,
                         },
-                        _private: 0
                     }
                 )
             )
@@ -318,12 +314,10 @@ pub extern "C" fn string_allocate_f3() -> *mut StructWithString2 {
                 struct_with_string: StructWithString1 {
                     is_exist: true,
                     string: string.into_raw(),
-                    _private: 0
                 },
                 error: Error2 {
                     is_exist: false,
                 },
-                _private: 0
             }
         )
     )
@@ -346,7 +340,6 @@ pub extern "C" fn string_deallocate_f3(struct_with_string: *mut StructWithString
 pub struct StructWithString2 {
     pub struct_with_string: StructWithString1,
     pub error: Error2,
-    _private: c_char
 }
 
 #[repr(C)]
