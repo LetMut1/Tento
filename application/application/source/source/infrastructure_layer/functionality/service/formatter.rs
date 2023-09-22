@@ -1,20 +1,9 @@
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
-use super::error_auditor_formatter::Formatter as Formatter_;
 
-pub struct Formatter;
+pub use formatter::Formatter;
+pub use formatter::Format;
 
-pub trait Format<T> {
-    fn prepare<'a>(subject: &'a T) -> String;
-}
-
-impl Format<ErrorAuditor> for Formatter {
-    fn prepare<'a>(subject: &'a ErrorAuditor) -> String {
-        return Formatter_::prepare(subject);
-    }
-}
-
-impl Format<InvalidArgument> for Formatter {
+impl Format<InvalidArgument> for Formatter<InvalidArgument> {
     fn prepare<'a>(subject: &'a InvalidArgument) -> String {
         let message_part = match *subject {
             InvalidArgument::ApplicationUser_AccessModifier => "AccessModifier",

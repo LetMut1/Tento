@@ -11,12 +11,12 @@ pub trait ContextFrom<T> {
 
 impl ContextFrom<InvalidArgument> for Creator<ActionRoundRegister_Context> {
     fn create<'a>(from: &'a InvalidArgument) -> ActionRoundRegister_Context {
-        return ActionRoundRegister_Context(Formatter::prepare(from));
+        return ActionRoundRegister_Context(Formatter::<InvalidArgument>::prepare(from));
     }
 }
 
 impl ContextFrom<ErrorAuditor> for Creator<ActionRoundRegister_Context> {
     fn create<'a>(from: &'a ErrorAuditor) -> ActionRoundRegister_Context {
-        return ActionRoundRegister_Context(Formatter::prepare(from));
+        return ActionRoundRegister_Context(Formatter::<ErrorAuditor>::prepare(from));
     }
 }

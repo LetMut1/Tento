@@ -3,7 +3,7 @@ use crate::infrastructure_layer::data::environment_configuration::Environment;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::data::error_auditor::Resource;
+use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
@@ -49,7 +49,7 @@ impl Creator<PostgresqlConnectionPoolNoTls> {
                             ErrorAuditor::new(
                                 Error::Runtime {
                                     runtime: Runtime::Resource {
-                                        resource: Resource::Postgresql {
+                                        resource: ResourceError::Postgresql {
                                             postgresql_error: error,
                                         },
                                     },

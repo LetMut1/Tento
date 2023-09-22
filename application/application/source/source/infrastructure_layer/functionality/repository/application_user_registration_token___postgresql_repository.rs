@@ -21,7 +21,7 @@ use crate::domain_layer::data::entity::application_user_registration_token::Appl
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::data::error_auditor::Resource;
+use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 use std::borrow::Cow;
@@ -103,7 +103,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
                     ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
-                                resource: Resource::Postgresql {
+                                resource: ResourceError::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -129,7 +129,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
                 ErrorAuditor::new(
                     Error::Runtime {
                         runtime: Runtime::Resource {
-                            resource: Resource::Postgresql {
+                            resource: ResourceError::Postgresql {
                                 postgresql_error: error,
                             },
                         },
@@ -193,7 +193,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
                     ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
-                                resource: Resource::Postgresql {
+                                resource: ResourceError::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -219,7 +219,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
                 ErrorAuditor::new(
                     Error::Runtime {
                         runtime: Runtime::Resource {
-                            resource: Resource::Postgresql {
+                            resource: ResourceError::Postgresql {
                                 postgresql_error: error,
                             },
                         },
@@ -311,7 +311,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
                     ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
-                                resource: Resource::Postgresql {
+                                resource: ResourceError::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -337,7 +337,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
                 ErrorAuditor::new(
                     Error::Runtime {
                         runtime: Runtime::Resource {
-                            resource: Resource::Postgresql {
+                            resource: ResourceError::Postgresql {
                                 postgresql_error: error,
                             },
                         },
@@ -397,7 +397,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
                     ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
-                                resource: Resource::Postgresql {
+                                resource: ResourceError::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -425,7 +425,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
                     ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
-                                resource: Resource::Postgresql {
+                                resource: ResourceError::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -451,7 +451,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
                     ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
-                                resource: Resource::Postgresql {
+                                resource: ResourceError::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -473,7 +473,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
                     ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
-                                resource: Resource::Postgresql {
+                                resource: ResourceError::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -495,7 +495,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
                     ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
-                                resource: Resource::Postgresql {
+                                resource: ResourceError::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -517,7 +517,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
                     ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
-                                resource: Resource::Postgresql {
+                                resource: ResourceError::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -539,7 +539,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
                     ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
-                                resource: Resource::Postgresql {
+                                resource: ResourceError::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -616,7 +616,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken2> {
                     ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
-                                resource: Resource::Postgresql {
+                                resource: ResourceError::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -642,7 +642,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken2> {
                 ErrorAuditor::new(
                     Error::Runtime {
                         runtime: Runtime::Resource {
-                            resource: Resource::Postgresql {
+                            resource: ResourceError::Postgresql {
                                 postgresql_error: error,
                             },
                         },
@@ -728,7 +728,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
                     ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
-                                resource: Resource::Postgresql {
+                                resource: ResourceError::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -754,7 +754,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
                 ErrorAuditor::new(
                     Error::Runtime {
                         runtime: Runtime::Resource {
-                            resource: Resource::Postgresql {
+                            resource: ResourceError::Postgresql {
                                 postgresql_error: error,
                             },
                         },
@@ -813,7 +813,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
                     ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
-                                resource: Resource::Postgresql {
+                                resource: ResourceError::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -841,7 +841,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
                     ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
-                                resource: Resource::Postgresql {
+                                resource: ResourceError::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -867,7 +867,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
                     ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
-                                resource: Resource::Postgresql {
+                                resource: ResourceError::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -889,7 +889,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
                     ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
-                                resource: Resource::Postgresql {
+                                resource: ResourceError::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -911,7 +911,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
                     ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
-                                resource: Resource::Postgresql {
+                                resource: ResourceError::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -933,7 +933,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
                     ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
-                                resource: Resource::Postgresql {
+                                resource: ResourceError::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -1009,7 +1009,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken4> {
                     ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
-                                resource: Resource::Postgresql {
+                                resource: ResourceError::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -1035,7 +1035,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken4> {
                 ErrorAuditor::new(
                     Error::Runtime {
                         runtime: Runtime::Resource {
-                            resource: Resource::Postgresql {
+                            resource: ResourceError::Postgresql {
                                 postgresql_error: error,
                             },
                         },
@@ -1101,7 +1101,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken5> {
                     ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
-                                resource: Resource::Postgresql {
+                                resource: ResourceError::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -1127,7 +1127,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken5> {
                 ErrorAuditor::new(
                     Error::Runtime {
                         runtime: Runtime::Resource {
-                            resource: Resource::Postgresql {
+                            resource: ResourceError::Postgresql {
                                 postgresql_error: error,
                             },
                         },
@@ -1188,7 +1188,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken6> {
                     ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
-                                resource: Resource::Postgresql {
+                                resource: ResourceError::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -1216,7 +1216,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken6> {
                     ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
-                                resource: Resource::Postgresql {
+                                resource: ResourceError::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -1242,7 +1242,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken6> {
                     ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
-                                resource: Resource::Postgresql {
+                                resource: ResourceError::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -1264,7 +1264,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken6> {
                     ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
-                                resource: Resource::Postgresql {
+                                resource: ResourceError::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -1286,7 +1286,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken6> {
                     ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
-                                resource: Resource::Postgresql {
+                                resource: ResourceError::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -1308,7 +1308,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken6> {
                     ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
-                                resource: Resource::Postgresql {
+                                resource: ResourceError::Postgresql {
                                     postgresql_error: error,
                                 },
                             },

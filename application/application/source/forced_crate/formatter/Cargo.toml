@@ -1,11 +1,11 @@
 [package]
-name = "error_auditor"
+name = "formatter"
 version = "0.1.0"
 authors.workspace = true
 edition = "2021"
 
 [lib]
-name = "error_auditor"
+name = "formatter"
 path = "./mod.rs"
 test = true
 doctest = true
@@ -16,9 +16,6 @@ harness = true
 edition = "2021"
 crate-type = ["lib"]
 required-features = []
-
-[dependencies]
-formatter = { path = "./../formatter", package = "formatter", version = "0.1.0", default-features = true, features = [], optional = false }
 
 [features]
 default = []

@@ -88,7 +88,10 @@ use std::fs::File;
 use std::io::Write;
 use std::path::Path;
 use uuid::Uuid;
-use error_auditor::formatter::Formatter;
+use formatter::Formatter;
+use formatter::Format;
+use error_auditor::ErrorAuditor;
+use resource_error::ResourceError;
 
 fn main() -> () {
     if let Err(error) = Processor::process() {
@@ -144,7 +147,7 @@ impl Processor {
             Ok(environment_configuration_) => environment_configuration_,
             Err(error) => {
                 return Err(
-                    Formatter::prepare(&error).into()
+                    Formatter::<ErrorAuditor<ResourceError>>::prepare(&error).into()
                 );
             }
         };
@@ -335,16 +338,16 @@ impl Processor {
 
     fn create_c_bindings() -> Result<(), Box<dyn Error + 'static>> {
         let crate_path = format!(
-            "{}/integration_module",
+            "{}/foreign_function_interface/serializer",
             var("CARGO_MANIFEST_DIR")?.as_str(),
         );
 
         let crate_path_ = Path::new(crate_path.as_str());
 
-        Builder::new() // TODO many options
+        Builder::new()                                      // TODO TODO TODO many options
             .with_crate(crate_path_)
             .generate()?
-            .write_to_file("c_bindings.h");
+            .write_to_file("c_bindings.h");     // TODO полный путь.
 
         return Ok(());
     }

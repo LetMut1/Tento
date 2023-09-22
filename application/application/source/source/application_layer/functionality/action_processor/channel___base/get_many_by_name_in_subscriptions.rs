@@ -7,7 +7,7 @@ use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::data::error_auditor::Resource;
+use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
@@ -129,7 +129,7 @@ impl GetManyByNameInSubscriptions {
                     ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
-                                resource: Resource::ConnectionPoolPostgresql {
+                                resource: ResourceError::ConnectionPoolPostgresql {
                                     bb8_postgresql_error: error,
                                 },
                             },

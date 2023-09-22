@@ -81,20 +81,21 @@
     clippy::zero_sized_map_values
 )]
 
-use error_auditor::error_auditor::BacktracePart;
-use error_auditor::error_auditor::Error;
-use error_auditor::error_auditor::ErrorAuditor;
-use error_auditor::error_auditor::Other;
-use error_auditor::error_auditor::Runtime;
+use error_auditor::BacktracePart;
+use error_auditor::Error;
+use error_auditor::ErrorAuditor;
+use error_auditor::Other;
+use error_auditor::Runtime;
 use rmp_serde::to_vec;
 use rmp_serde::from_read_ref;
 use serde::Deserialize;
 use serde::Serialize as SerdeSerialize;
+use resource_error::ResourceError;
 
 pub struct Serializer;
 
 impl Serializer {
-    pub fn serialize<'a, T>(subject: &'a T) -> Result<Vec<u8>, ErrorAuditor>
+    pub fn serialize<'a, T>(subject: &'a T) -> Result<Vec<u8>, ErrorAuditor<ResourceError>>
     where
         T: SerdeSerialize,
     {
@@ -121,7 +122,7 @@ impl Serializer {
         return Ok(data);
     }
 
-    pub fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, ErrorAuditor>
+    pub fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, ErrorAuditor<ResourceError>>
     where
         T: Deserialize<'a>,
     {

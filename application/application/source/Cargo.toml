@@ -33,21 +33,24 @@ dotenv = { package = "dotenv", version = "^0.15", default-features = true, featu
 entity = { path = "./forced_crate/entity", package = "entity", version = "0.1.0", default-features = true, features = [], optional = false }
 environment_configuration = { path = "./forced_crate/environment_configuration", package = "environment_configuration", version = "0.1.0", default-features = true, features = [], optional = false }
 error_auditor = { path = "./forced_crate/error_auditor", package = "error_auditor", version = "0.1.0", default-features = true, features = [], optional = false }
+formatter = { path = "./forced_crate/formatter", package = "formatter", version = "0.1.0", default-features = true, features = [], optional = false }
 http = { package = "http", version = "^0.2", default-features = true, features = [], optional = false }
 hyper = { package = "hyper", version = "^0.14", default-features = true, features = ["full"], optional = false }  # // TODO Убрать фичу Full и понять , какие нужны
 lettre = { package = "lettre", version = "^0.9", default-features = true, features = [], optional = false }
 lettre_email = { package = "lettre_email", version = "^0.9", default-features = true, features = [], optional = false }
 matchit = { package = "matchit", version = "^0.7", default-features = true, features = [], optional = false }
+message_pack_serializer = { path = "./forced_crate/message_pack_serializer", package = "message_pack_serializer", version = "0.1.0", default-features = true, features = [], optional = false }
 rand = { package = "rand", version = "^0.8", default-features = true, features = [], optional = false }
 redis = { package = "redis", version = "^0.21", default-features = true, features = ["tokio-comp", "tokio-native-tls-comp"], optional = false }
 regex = { package = "regex", version = "^1.4", default-features = true, features = [], optional = false }
+resource_error = { path = "./forced_crate/resource_error", package = "resource_error", version = "0.1.0", default-features = true, features = [], optional = false }
 serde = { package = "serde", version = "^1.0", default-features = true, features = ["derive"], optional = false }
 tokio = { package = "tokio", version = "^1.16", default-features = true, features = ["full"], optional = false }  # // TODO Убрать фичу Full и понять , какие нужны
 tokio_postgres = { package = "tokio-postgres", version = "^0.7", default-features = true, features = [], optional = false }
 toml = { package = "toml", version = "0.7.4", default-features = true, features = [], optional = false }
 unified_report = { path = "./forced_crate/unified_report", package = "unified_report", version = "0.1.0", default-features = true, features = [], optional = false }
 uuid = { package = "uuid", version = "^0.8", default-features = true, features = ["v4"], optional = false }
-message_pack_serializer = { path = "./forced_crate/message_pack_serializer", package = "message_pack_serializer", version = "0.1.0", default-features = true, features = [], optional = false }
+void = { path = "./forced_crate/void", package = "void", version = "0.1.0", default-features = true, features = [], optional = false }
 
 const_format = { package = "const_format", version = "^0.2", default-features = true, features = [], optional = true }
 serde_json = { package = "serde_json", version = "^1.0", default-features = true, features = [], optional = true }
@@ -57,6 +60,8 @@ build_script_constant = { path = "./forced_crate/build_script_constant", package
 cbindgen = { package = "cbindgen", version = "^0.24", default-features = true, features = [], optional = false }
 environment_configuration = { path = "./forced_crate/environment_configuration", package = "environment_configuration", version = "0.1.0", default-features = true, features = [], optional = false }
 error_auditor = { path = "./forced_crate/error_auditor", package = "error_auditor", version = "0.1.0", default-features = true, features = [], optional = false }
+formatter = { path = "./forced_crate/formatter", package = "formatter", version = "0.1.0", default-features = true, features = [], optional = false }
+resource_error = { path = "./forced_crate/resource_error", package = "resource_error", version = "0.1.0", default-features = true, features = [], optional = false }
 uuid = { package = "uuid", version = "^0.8", default-features = true, features = ["v4"], optional = false }
 
 [features]

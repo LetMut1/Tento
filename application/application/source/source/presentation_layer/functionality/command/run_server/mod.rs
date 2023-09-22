@@ -1,9 +1,9 @@
 #![allow(clippy::unused_unit)]
 
-extern crate application;
-
 use application::application_layer::functionality::command_processor::run_server::RunServer;
-use application::infrastructure_layer::functionality::service::error_auditor_formatter::Formatter;
+use application::infrastructure_layer::functionality::service::formatter::Format;
+use application::infrastructure_layer::functionality::service::formatter::Formatter;
+use application::infrastructure_layer::data::error_auditor::ErrorAuditor;
 
 fn main() -> () {
     match RunServer::process() {
@@ -13,7 +13,7 @@ fn main() -> () {
         Err(error) => {
             println!(
                 "{}",
-                Formatter::prepare(&error)
+                Formatter::<ErrorAuditor>::prepare(&error)
             );
         }
     }
@@ -117,9 +117,6 @@ fn main() -> () {
 
 // Так как есть много публичных дто, пройти и посмотреть, где их можно сделать opaque struct.
 
-// Formatter::prepare(&error) -> Formatter::<ErrorAuditor>::prepare(&error)
-
-// unified_report crate цепляется за ненужные ресурсы в модуле для интеграции. СДелать Ресурс часть на дженерике.
 
 // СДелал оптимизацию запросов для:
 // - application_user_authorization. // ToDo ДОделать остальные. и сделать репозиторий по новым правилам.

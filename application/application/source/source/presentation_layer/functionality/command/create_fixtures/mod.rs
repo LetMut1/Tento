@@ -1,15 +1,15 @@
 #![allow(clippy::unused_unit)]
 
-extern crate application;
-
 use application::application_layer::functionality::command_processor::create_fixtures::CreateFixtures;
-use application::infrastructure_layer::functionality::service::error_auditor_formatter::Formatter;
+use application::infrastructure_layer::functionality::service::formatter::Format;
+use application::infrastructure_layer::functionality::service::formatter::Formatter;
+use application::infrastructure_layer::data::error_auditor::ErrorAuditor;
 
 fn main() -> () {
     if let Err(error) = CreateFixtures::process() {
         println!(
             "{}",
-            Formatter::prepare(&error)
+            Formatter::<ErrorAuditor>::prepare(&error)
         );
     }
 

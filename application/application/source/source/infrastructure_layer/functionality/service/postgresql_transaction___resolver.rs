@@ -2,7 +2,7 @@ use super::resolver::Resolver;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::data::error_auditor::Resource;
+use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
 use tokio_postgres::Client as Connection;
 
@@ -51,7 +51,7 @@ impl Resolver<PostgresqlTransaction> {
                 ErrorAuditor::new(
                     Error::Runtime {
                         runtime: Runtime::Resource {
-                            resource: Resource::Postgresql {
+                            resource: ResourceError::Postgresql {
                                 postgresql_error: error,
                             },
                         },
@@ -85,7 +85,7 @@ impl Resolver<PostgresqlTransaction> {
                 ErrorAuditor::new(
                     Error::Runtime {
                         runtime: Runtime::Resource {
-                            resource: Resource::Postgresql {
+                            resource: ResourceError::Postgresql {
                                 postgresql_error: error,
                             },
                         },
@@ -119,7 +119,7 @@ impl Resolver<PostgresqlTransaction> {
                 ErrorAuditor::new(
                     Error::Runtime {
                         runtime: Runtime::Resource {
-                            resource: Resource::Postgresql {
+                            resource: ResourceError::Postgresql {
                                 postgresql_error: error,
                             },
                         },

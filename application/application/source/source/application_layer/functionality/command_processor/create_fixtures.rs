@@ -27,7 +27,7 @@ use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::Other;
-use crate::infrastructure_layer::data::error_auditor::Resource;
+use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By1;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By7;
@@ -114,7 +114,7 @@ impl CreateFixtures {
                     ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
-                                resource: Resource::Postgresql {
+                                resource: ResourceError::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -173,7 +173,7 @@ impl CreateFixtures {
                     ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
-                                resource: Resource::ConnectionPoolPostgresql {
+                                resource: ResourceError::ConnectionPoolPostgresql {
                                     bb8_postgresql_error: error,
                                 },
                             },

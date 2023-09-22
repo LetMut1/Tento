@@ -14,13 +14,14 @@ use super::environment_configuration::String_;
 use super::environment_configuration::Tcp;
 use super::environment_configuration::TcpKeepalive;
 use super::environment_configuration::Tls;
-use error_auditor::error_auditor::ErrorAuditor;
-use error_auditor::error_auditor::BacktracePart;
-use error_auditor::error_auditor::Error;
-use error_auditor::error_auditor::Other;
-use error_auditor::error_auditor::Runtime;
+use error_auditor::ErrorAuditor;
+use error_auditor::BacktracePart;
+use error_auditor::Error;
+use error_auditor::Other;
+use error_auditor::Runtime;
 use std::fs::read_to_string;
 use std::path::Path;
+use resource_error::ResourceError;
 use toml::from_str;
 
 pub struct Loader;
@@ -31,7 +32,7 @@ impl Loader {
     const LOCAL_DEVELOPMENT_ENVIRONMENT_DIRECTORY_NAME: &'static str = "local_development";
     const ENVIRONMENT_FILE_NAME: &'static str = "environment.toml";
 
-    pub fn load_from_file<'a>(environment_configuration_directory_path: &'a str) -> Result<EnvironmentConfiguration<String_>, ErrorAuditor> {
+    pub fn load_from_file<'a>(environment_configuration_directory_path: &'a str) -> Result<EnvironmentConfiguration<String_>, ErrorAuditor<ResourceError>> {
         let production_environment_file_path = format!(
             "{}/{}/{}",
             environment_configuration_directory_path,

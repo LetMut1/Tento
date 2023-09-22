@@ -3,7 +3,7 @@ use crate::infrastructure_layer::data::environment_configuration::Environment;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::data::error_auditor::Resource;
+use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
 use bb8::Pool;
 use bb8_redis::RedisConnectionManager;
@@ -29,7 +29,7 @@ impl Creator<RedisConnectonPool> {
                             ErrorAuditor::new(
                                 Error::Runtime {
                                     runtime: Runtime::Resource {
-                                        resource: Resource::Redis {
+                                        resource: ResourceError::Redis {
                                             redis_error: error,
                                         },
                                     },
@@ -54,7 +54,7 @@ impl Creator<RedisConnectonPool> {
                             ErrorAuditor::new(
                                 Error::Runtime {
                                     runtime: Runtime::Resource {
-                                        resource: Resource::Redis {
+                                        resource: ResourceError::Redis {
                                             redis_error: error,
                                         },
                                     },

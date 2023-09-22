@@ -12,7 +12,7 @@ use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::data::error_auditor::Resource;
+use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
 use crate::infrastructure_layer::functionality::repository::channel___postgresql_repository::Channel1;
 use crate::infrastructure_layer::functionality::service::counter::Counter;
@@ -189,7 +189,7 @@ impl PostgresqlRepository<Common1> {
                     ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
-                                resource: Resource::Postgresql {
+                                resource: ResourceError::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -217,7 +217,7 @@ impl PostgresqlRepository<Common1> {
                     ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
-                                resource: Resource::Postgresql {
+                                resource: ResourceError::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -246,7 +246,7 @@ impl PostgresqlRepository<Common1> {
                         ErrorAuditor::new(
                             Error::Runtime {
                                 runtime: Runtime::Resource {
-                                    resource: Resource::Postgresql {
+                                    resource: ResourceError::Postgresql {
                                         postgresql_error: error,
                                     },
                                 },
@@ -268,7 +268,7 @@ impl PostgresqlRepository<Common1> {
                         ErrorAuditor::new(
                             Error::Runtime {
                                 runtime: Runtime::Resource {
-                                    resource: Resource::Postgresql {
+                                    resource: ResourceError::Postgresql {
                                         postgresql_error: error,
                                     },
                                 },
@@ -290,7 +290,7 @@ impl PostgresqlRepository<Common1> {
                         ErrorAuditor::new(
                             Error::Runtime {
                                 runtime: Runtime::Resource {
-                                    resource: Resource::Postgresql {
+                                    resource: ResourceError::Postgresql {
                                         postgresql_error: error,
                                     },
                                 },
@@ -312,7 +312,7 @@ impl PostgresqlRepository<Common1> {
                         ErrorAuditor::new(
                             Error::Runtime {
                                 runtime: Runtime::Resource {
-                                    resource: Resource::Postgresql {
+                                    resource: ResourceError::Postgresql {
                                         postgresql_error: error,
                                     },
                                 },
@@ -341,7 +341,7 @@ impl PostgresqlRepository<Common1> {
                         ErrorAuditor::new(
                             Error::Runtime {
                                 runtime: Runtime::Resource {
-                                    resource: Resource::Postgresql {
+                                    resource: ResourceError::Postgresql {
                                         postgresql_error: error,
                                     },
                                 },
@@ -370,7 +370,7 @@ impl PostgresqlRepository<Common1> {
                         ErrorAuditor::new(
                             Error::Runtime {
                                 runtime: Runtime::Resource {
-                                    resource: Resource::Postgresql {
+                                    resource: ResourceError::Postgresql {
                                         postgresql_error: error,
                                     },
                                 },
@@ -392,7 +392,7 @@ impl PostgresqlRepository<Common1> {
                         ErrorAuditor::new(
                             Error::Runtime {
                                 runtime: Runtime::Resource {
-                                    resource: Resource::Postgresql {
+                                    resource: ResourceError::Postgresql {
                                         postgresql_error: error,
                                     },
                                 },
@@ -579,7 +579,7 @@ impl PostgresqlRepository<Common1> {
                     ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
-                                resource: Resource::Postgresql {
+                                resource: ResourceError::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -607,7 +607,7 @@ impl PostgresqlRepository<Common1> {
                     ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
-                                resource: Resource::Postgresql {
+                                resource: ResourceError::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -636,7 +636,7 @@ impl PostgresqlRepository<Common1> {
                         ErrorAuditor::new(
                             Error::Runtime {
                                 runtime: Runtime::Resource {
-                                    resource: Resource::Postgresql {
+                                    resource: ResourceError::Postgresql {
                                         postgresql_error: error,
                                     },
                                 },
@@ -658,7 +658,7 @@ impl PostgresqlRepository<Common1> {
                         ErrorAuditor::new(
                             Error::Runtime {
                                 runtime: Runtime::Resource {
-                                    resource: Resource::Postgresql {
+                                    resource: ResourceError::Postgresql {
                                         postgresql_error: error,
                                     },
                                 },
@@ -680,7 +680,7 @@ impl PostgresqlRepository<Common1> {
                         ErrorAuditor::new(
                             Error::Runtime {
                                 runtime: Runtime::Resource {
-                                    resource: Resource::Postgresql {
+                                    resource: ResourceError::Postgresql {
                                         postgresql_error: error,
                                     },
                                 },
@@ -702,7 +702,7 @@ impl PostgresqlRepository<Common1> {
                         ErrorAuditor::new(
                             Error::Runtime {
                                 runtime: Runtime::Resource {
-                                    resource: Resource::Postgresql {
+                                    resource: ResourceError::Postgresql {
                                         postgresql_error: error,
                                     },
                                 },
@@ -724,7 +724,7 @@ impl PostgresqlRepository<Common1> {
                         ErrorAuditor::new(
                             Error::Runtime {
                                 runtime: Runtime::Resource {
-                                    resource: Resource::Postgresql {
+                                    resource: ResourceError::Postgresql {
                                         postgresql_error: error,
                                     },
                                 },
@@ -753,7 +753,7 @@ impl PostgresqlRepository<Common1> {
                         ErrorAuditor::new(
                             Error::Runtime {
                                 runtime: Runtime::Resource {
-                                    resource: Resource::Postgresql {
+                                    resource: ResourceError::Postgresql {
                                         postgresql_error: error,
                                     },
                                 },
@@ -782,7 +782,7 @@ impl PostgresqlRepository<Common1> {
                         ErrorAuditor::new(
                             Error::Runtime {
                                 runtime: Runtime::Resource {
-                                    resource: Resource::Postgresql {
+                                    resource: ResourceError::Postgresql {
                                         postgresql_error: error,
                                     },
                                 },
@@ -935,7 +935,7 @@ impl PostgresqlRepository<Common1> {
                     ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
-                                resource: Resource::Postgresql {
+                                resource: ResourceError::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -963,7 +963,7 @@ impl PostgresqlRepository<Common1> {
                     ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
-                                resource: Resource::Postgresql {
+                                resource: ResourceError::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -992,7 +992,7 @@ impl PostgresqlRepository<Common1> {
                         ErrorAuditor::new(
                             Error::Runtime {
                                 runtime: Runtime::Resource {
-                                    resource: Resource::Postgresql {
+                                    resource: ResourceError::Postgresql {
                                         postgresql_error: error,
                                     },
                                 },
@@ -1014,7 +1014,7 @@ impl PostgresqlRepository<Common1> {
                         ErrorAuditor::new(
                             Error::Runtime {
                                 runtime: Runtime::Resource {
-                                    resource: Resource::Postgresql {
+                                    resource: ResourceError::Postgresql {
                                         postgresql_error: error,
                                     },
                                 },
@@ -1036,7 +1036,7 @@ impl PostgresqlRepository<Common1> {
                         ErrorAuditor::new(
                             Error::Runtime {
                                 runtime: Runtime::Resource {
-                                    resource: Resource::Postgresql {
+                                    resource: ResourceError::Postgresql {
                                         postgresql_error: error,
                                     },
                                 },
@@ -1058,7 +1058,7 @@ impl PostgresqlRepository<Common1> {
                         ErrorAuditor::new(
                             Error::Runtime {
                                 runtime: Runtime::Resource {
-                                    resource: Resource::Postgresql {
+                                    resource: ResourceError::Postgresql {
                                         postgresql_error: error,
                                     },
                                 },
@@ -1080,7 +1080,7 @@ impl PostgresqlRepository<Common1> {
                         ErrorAuditor::new(
                             Error::Runtime {
                                 runtime: Runtime::Resource {
-                                    resource: Resource::Postgresql {
+                                    resource: ResourceError::Postgresql {
                                         postgresql_error: error,
                                     },
                                 },
@@ -1109,7 +1109,7 @@ impl PostgresqlRepository<Common1> {
                         ErrorAuditor::new(
                             Error::Runtime {
                                 runtime: Runtime::Resource {
-                                    resource: Resource::Postgresql {
+                                    resource: ResourceError::Postgresql {
                                         postgresql_error: error,
                                     },
                                 },
@@ -1138,7 +1138,7 @@ impl PostgresqlRepository<Common1> {
                         ErrorAuditor::new(
                             Error::Runtime {
                                 runtime: Runtime::Resource {
-                                    resource: Resource::Postgresql {
+                                    resource: ResourceError::Postgresql {
                                         postgresql_error: error,
                                     },
                                 },

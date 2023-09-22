@@ -6,7 +6,7 @@ use crate::infrastructure_layer::data::error_auditor::Error;
 use crate::infrastructure_layer::data::error_auditor::EmailServer;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::Other;
-use crate::infrastructure_layer::data::error_auditor::Resource;
+use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
 use lettre::smtp::SmtpClient;
 use lettre::ClientSecurity;
@@ -37,7 +37,7 @@ impl Sender<Email> {
                     ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
-                                resource: Resource::EmailServer {
+                                resource: ResourceError::EmailServer {
                                     email_server: EmailServer::Email {
                                         email_error: error,
                                     },
@@ -107,7 +107,7 @@ impl Sender<Email> {
                             ErrorAuditor::new(
                                 Error::Runtime {
                                     runtime: Runtime::Resource {
-                                        resource: Resource::EmailServer {
+                                        resource: ResourceError::EmailServer {
                                             email_server: EmailServer::Smtp {
                                                 smtp_error: error,
                                             },
@@ -133,7 +133,7 @@ impl Sender<Email> {
                 ErrorAuditor::new(
                     Error::Runtime {
                         runtime: Runtime::Resource {
-                            resource: Resource::EmailServer {
+                            resource: ResourceError::EmailServer {
                                 email_server: EmailServer::Smtp {
                                     smtp_error: error,
                                 },

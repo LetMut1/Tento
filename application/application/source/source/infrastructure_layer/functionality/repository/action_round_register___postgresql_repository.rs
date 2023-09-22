@@ -4,7 +4,7 @@ use crate::domain_layer::data::entity::action_round_register::ActionRoundRegiste
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::data::error_auditor::Resource;
+use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 use tokio_postgres::types::Type;
@@ -72,7 +72,7 @@ impl PostgresqlRepository<ActionRoundRegister<'_>> {
                     ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
-                                resource: Resource::Postgresql {
+                                resource: ResourceError::Postgresql {
                                     postgresql_error: error,
                                 },
                             },
@@ -98,7 +98,7 @@ impl PostgresqlRepository<ActionRoundRegister<'_>> {
                 ErrorAuditor::new(
                     Error::Runtime {
                         runtime: Runtime::Resource {
-                            resource: Resource::Postgresql {
+                            resource: ResourceError::Postgresql {
                                 postgresql_error: error,
                             },
                         },
