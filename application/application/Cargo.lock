@@ -574,9 +574,9 @@ name = "environment_configuration"
 version = "0.1.0"
 dependencies = [
  "error_auditor",
- "resource_error",
  "serde",
  "toml 0.7.6",
+ "void",
 ]
 
 [[package]]

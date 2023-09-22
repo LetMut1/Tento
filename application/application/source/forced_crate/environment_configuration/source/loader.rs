@@ -21,7 +21,7 @@ use error_auditor::Other;
 use error_auditor::Runtime;
 use std::fs::read_to_string;
 use std::path::Path;
-use resource_error::ResourceError;
+use void::ErrorVoid;
 use toml::from_str;
 
 pub struct Loader;
@@ -32,7 +32,7 @@ impl Loader {
     const LOCAL_DEVELOPMENT_ENVIRONMENT_DIRECTORY_NAME: &'static str = "local_development";
     const ENVIRONMENT_FILE_NAME: &'static str = "environment.toml";
 
-    pub fn load_from_file<'a>(environment_configuration_directory_path: &'a str) -> Result<EnvironmentConfiguration<String_>, ErrorAuditor<ResourceError>> {
+    pub fn load_from_file<'a>(environment_configuration_directory_path: &'a str) -> Result<EnvironmentConfiguration<String_>, ErrorAuditor<ErrorVoid>> {
         let production_environment_file_path = format!(
             "{}/{}/{}",
             environment_configuration_directory_path,
