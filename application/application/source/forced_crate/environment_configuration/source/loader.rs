@@ -1,4 +1,4 @@
-use super::environment_configuration::environment_configuration_file::EnvironmentConfigurationFile;
+use super::environment_configuration_file::EnvironmentConfigurationFile;
 use super::environment_configuration::ApplicationServer;
 use super::environment_configuration::EmailServer;
 use super::environment_configuration::Encryption;
@@ -10,7 +10,7 @@ use super::environment_configuration::Postgresql;
 use super::environment_configuration::PrivateKey;
 use super::environment_configuration::Redis;
 use super::environment_configuration::Resource;
-use super::environment_configuration::String_;
+use super::sealed::String_;
 use super::environment_configuration::Tcp;
 use super::environment_configuration::TcpKeepalive;
 use super::environment_configuration::Tls;

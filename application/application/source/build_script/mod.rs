@@ -246,10 +246,10 @@ impl Processor {
                 pub use environment_configuration::environment_configuration::PrivateKey; \n\
                 pub use environment_configuration::environment_configuration::Redis; \n\
                 pub use environment_configuration::environment_configuration::Resource; \n\
-                pub use environment_configuration::environment_configuration::StringLiteral; \n\
                 pub use environment_configuration::environment_configuration::Tcp; \n\
                 pub use environment_configuration::environment_configuration::TcpKeepalive; \n\
                 pub use environment_configuration::environment_configuration::Tls; \n\
+                pub use environment_configuration::StringLiteral; \n\
                 \n\
                 pub const {}: EnvironmentConfiguration<StringLiteral> = EnvironmentConfiguration {{ \n\t\
                     environment: {}, \n\t\

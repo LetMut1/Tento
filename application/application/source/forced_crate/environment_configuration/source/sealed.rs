@@ -1,5 +1,6 @@
-use super::StringLiteral;
-use super::String_;
+pub struct String_(pub String);
+
+pub struct StringLiteral(pub &'static str);
 
 pub trait Sealed {}
 

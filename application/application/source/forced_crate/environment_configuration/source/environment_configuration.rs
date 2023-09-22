@@ -1,7 +1,4 @@
-pub(crate) mod environment_configuration_file;
-mod sealed;
-
-use self::sealed::Sealed;
+use super::sealed::Sealed;
 
 pub enum Environment {
     Production,
@@ -117,7 +114,3 @@ where
     pub application_user_access_token: T,
     pub application_user_access_refresh_token: T,
 }
-
-pub struct String_(pub String);
-
-pub struct StringLiteral(pub &'static str);

@@ -83,3 +83,8 @@
 
 pub mod environment_configuration;
 pub mod loader;
+pub(crate) mod environment_configuration_file;
+mod sealed;
+
+pub use sealed::StringLiteral;
+pub use sealed::String_;
