@@ -1,4 +1,4 @@
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::data::error_auditor::ErrorAuditor_;
 use serde::Deserialize;
 use serde::Serialize as SerdeSerialize;
 use std::marker::PhantomData;
@@ -13,11 +13,11 @@ pub struct Serializer<T> {
 }
 
 pub trait Serialize {
-    fn serialize<'a, T>(subject: &'a T) -> Result<Vec<u8>, ErrorAuditor>
+    fn serialize<'a, T>(subject: &'a T) -> Result<Vec<u8>, ErrorAuditor_>
     where
         T: SerdeSerialize;
 
-    fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, ErrorAuditor>
+    fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, ErrorAuditor_>
     where
         T: Deserialize<'a>;
 }

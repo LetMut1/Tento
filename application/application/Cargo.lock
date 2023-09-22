@@ -1064,9 +1064,9 @@ name = "message_pack_serializer"
 version = "0.1.0"
 dependencies = [
  "error_auditor",
- "resource_error",
  "rmp-serde",
  "serde",
+ "void",
 ]
 
 [[package]]
@@ -2198,6 +2198,7 @@ checksum = "49874b5167b65d7193b8aba1567f5c7d93d001cafc34600cee003eda787e483f"
 name = "void"
 version = "0.1.0"
 dependencies = [
+ "formatter",
  "serde",
 ]
 

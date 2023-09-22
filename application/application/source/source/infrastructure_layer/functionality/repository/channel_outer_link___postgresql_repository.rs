@@ -7,7 +7,7 @@ use crate::domain_layer::data::entity::channel_outer_link::ChannelOuterLink_Alia
 use crate::domain_layer::data::entity::channel_outer_link::ChannelOuterLink_CreatedAt;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::data::error_auditor::ErrorAuditor_;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
@@ -19,7 +19,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
     pub async fn create<'a>(
         database_1_connection: &'a Connection,
         insert_9: Insert9,
-    ) -> Result<ChannelOuterLink, ErrorAuditor> {
+    ) -> Result<ChannelOuterLink, ErrorAuditor_> {
         let channel_outer_link_alias = insert_9.channel_outer_link_alias.0.as_str();
 
         let channel_outer_link_address = insert_9.channel_outer_link_address.0.as_str();
@@ -65,7 +65,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    ErrorAuditor_::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -93,7 +93,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
             Ok(row_registry_) => row_registry_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    ErrorAuditor_::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -115,7 +115,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
             Ok(channel_outer_link_created_at_) => ChannelOuterLink_CreatedAt(channel_outer_link_created_at_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    ErrorAuditor_::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -147,7 +147,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
         database_1_connection: &'a Connection,
         by_9: &'a By9,
         limit: i16,
-    ) -> Result<Vec<ChannelOuterLink1>, ErrorAuditor> {
+    ) -> Result<Vec<ChannelOuterLink1>, ErrorAuditor_> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
@@ -178,7 +178,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    ErrorAuditor_::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -206,7 +206,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
             Ok(row_registry_) => row_registry_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    ErrorAuditor_::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -235,7 +235,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
                 Ok(channel_outer_link_alias_) => ChannelOuterLink_Alias(channel_outer_link_alias_),
                 Err(error) => {
                     return Err(
-                        ErrorAuditor::new(
+                        ErrorAuditor_::new(
                             Error::Runtime {
                                 runtime: Runtime::Resource {
                                     resource: ResourceError::Postgresql {
@@ -257,7 +257,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
                 Ok(channel_outer_link_address_) => ChannelOuterLink_Address(channel_outer_link_address_),
                 Err(error) => {
                     return Err(
-                        ErrorAuditor::new(
+                        ErrorAuditor_::new(
                             Error::Runtime {
                                 runtime: Runtime::Resource {
                                     resource: ResourceError::Postgresql {

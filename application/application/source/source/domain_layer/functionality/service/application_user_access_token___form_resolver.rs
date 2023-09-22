@@ -5,7 +5,7 @@ use crate::domain_layer::functionality::service::encoder::Encoder;
 use crate::infrastructure_layer::data::environment_configuration::ENVIRONMENT_CONFIGURATION;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::data::error_auditor::ErrorAuditor_;
 use crate::infrastructure_layer::data::error_auditor::Other;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
@@ -20,7 +20,7 @@ use crate::infrastructure_layer::functionality::service::serializer::Serializer;
 impl FormResolver<ApplicationUserAccessToken<'_>> {
     const TOKEN_PARTS_SEPARATOR: &'static str = ".";
 
-    pub fn to_encrypted<'a>(application_user_access_token: &'a ApplicationUserAccessToken<'_>) -> Result<ApplicationUserAccessTokenEncrypted, ErrorAuditor> {
+    pub fn to_encrypted<'a>(application_user_access_token: &'a ApplicationUserAccessToken<'_>) -> Result<ApplicationUserAccessTokenEncrypted, ErrorAuditor_> {
         let data = match Serializer::<MessagePack>::serialize(application_user_access_token) {
             Ok(data_) => data_,
             Err(mut error) => {
@@ -50,7 +50,7 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
         return Ok(ApplicationUserAccessTokenEncrypted(application_user_access_token_encrypted));
     }
 
-    pub fn from_encrypted<'a>(application_user_access_token_encrypted: &'a ApplicationUserAccessTokenEncrypted) -> Result<InvalidArgumentResult<ApplicationUserAccessToken<'static>>, ErrorAuditor> {
+    pub fn from_encrypted<'a>(application_user_access_token_encrypted: &'a ApplicationUserAccessTokenEncrypted) -> Result<InvalidArgumentResult<ApplicationUserAccessToken<'static>>, ErrorAuditor_> {
         let mut token_part_registry = application_user_access_token_encrypted.0.as_str().splitn::<'_, &'_ str>(
             2,
             Self::TOKEN_PARTS_SEPARATOR,
@@ -87,7 +87,7 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
             Ok(data_) => data_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    ErrorAuditor_::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),

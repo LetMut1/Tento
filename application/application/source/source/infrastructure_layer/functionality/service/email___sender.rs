@@ -4,7 +4,7 @@ use crate::infrastructure_layer::data::environment_configuration::ENVIRONMENT_CO
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
 use crate::infrastructure_layer::data::error_auditor::EmailServer;
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::data::error_auditor::ErrorAuditor_;
 use crate::infrastructure_layer::data::error_auditor::Other;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
@@ -23,7 +23,7 @@ impl Sender<Email> {
         subject: &'a str,
         body: String,
         to: &'a str,
-    ) -> Result<(), ErrorAuditor> {
+    ) -> Result<(), ErrorAuditor_> {
         let email = match EmailBuilder::new() //TODO
             .subject(subject)
             .text(body)
@@ -34,7 +34,7 @@ impl Sender<Email> {
             Ok(email_) => email_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    ErrorAuditor_::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::EmailServer {
@@ -58,7 +58,7 @@ impl Sender<Email> {
             Ok(email_server_socket_address_registry_) => email_server_socket_address_registry_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    ErrorAuditor_::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -78,7 +78,7 @@ impl Sender<Email> {
             Some(email_server_socket_address_) => email_server_socket_address_,
             None => {
                 return Err(
-                    ErrorAuditor::new(
+                    ErrorAuditor_::new(
                         Error::Logic {
                             message: "Invalid socket address.",
                         },
@@ -104,7 +104,7 @@ impl Sender<Email> {
                     Ok(smtp_client__) => smtp_client__,
                     Err(error) => {
                         return Err(
-                            ErrorAuditor::new(
+                            ErrorAuditor_::new(
                                 Error::Runtime {
                                     runtime: Runtime::Resource {
                                         resource: ResourceError::EmailServer {
@@ -130,7 +130,7 @@ impl Sender<Email> {
 
         if let Err(error) = smtp_client.transport().send(email.into()) {
             return Err(
-                ErrorAuditor::new(
+                ErrorAuditor_::new(
                     Error::Runtime {
                         runtime: Runtime::Resource {
                             resource: ResourceError::EmailServer {

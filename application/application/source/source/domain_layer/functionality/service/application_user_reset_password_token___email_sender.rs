@@ -4,7 +4,7 @@ use crate::domain_layer::data::entity::application_user_device::ApplicationUserD
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_Value;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::data::error_auditor::ErrorAuditor_;
 
 use crate::infrastructure_layer::functionality::service::sender::Email;
 use crate::infrastructure_layer::functionality::service::sender::Sender;
@@ -14,7 +14,7 @@ impl EmailSender<ApplicationUserResetPasswordToken<'_>> {
         application_user_reset_password_token_value: &'a ApplicationUserResetPasswordToken_Value,
         application_user_email: &'a ApplicationUser_Email,
         application_user_device_id: &'a ApplicationUserDevice_Id,
-    ) -> Result<(), ErrorAuditor> {
+    ) -> Result<(), ErrorAuditor_> {
         let message_body = format!(
             "Your code: {} for device {}.",
             application_user_reset_password_token_value.0.as_str(),

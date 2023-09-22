@@ -223,7 +223,13 @@ impl Other {
         E: StdError + Send + Sync + 'static,
     {
         return Self {
-            error: Box::new(error)
+            error: error.into()
+        };
+    }
+
+    pub fn new_(error: Box<dyn StdError + Send + Sync + 'static>) -> Self {
+        return Self {
+            error
         };
     }
 

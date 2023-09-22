@@ -3,7 +3,7 @@ use crate::domain_layer::data::entity::application_user_access_refresh_token::Ap
 use crate::domain_layer::data::entity::application_user_access_refresh_token_encrypted::ApplicationUserAccessRefreshTokenEncrypted;
 use crate::infrastructure_layer::data::environment_configuration::ENVIRONMENT_CONFIGURATION;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::data::error_auditor::ErrorAuditor_;
 use crate::infrastructure_layer::functionality::service::encoder::Base64;
 use crate::infrastructure_layer::functionality::service::encoder::Encoder as Encoder_;
 use crate::infrastructure_layer::functionality::service::encoder::Hmac;
@@ -12,7 +12,7 @@ use crate::infrastructure_layer::functionality::service::serializer::Serialize;
 use crate::infrastructure_layer::functionality::service::serializer::Serializer;
 
 impl FormResolver<ApplicationUserAccessRefreshToken<'_>> {
-    pub fn to_encrypted<'a>(application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>) -> Result<ApplicationUserAccessRefreshTokenEncrypted, ErrorAuditor> {
+    pub fn to_encrypted<'a>(application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>) -> Result<ApplicationUserAccessRefreshTokenEncrypted, ErrorAuditor_> {
         let data = match Serializer::<MessagePack>::serialize(application_user_access_refresh_token) {
             Ok(data_) => data_,
             Err(mut error) => {
@@ -44,7 +44,7 @@ impl FormResolver<ApplicationUserAccessRefreshToken<'_>> {
     pub fn is_valid<'a>(
         application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>,
         application_user_access_refresh_token_encrypted: &'a ApplicationUserAccessRefreshTokenEncrypted,
-    ) -> Result<bool, ErrorAuditor> {
+    ) -> Result<bool, ErrorAuditor_> {
         let application_user_access_refresh_token_encrypted_ = match Self::to_encrypted(application_user_access_refresh_token) {
             Ok(application_user_access_refresh_token_encrypted__) => application_user_access_refresh_token_encrypted__,
             Err(mut error) => {

@@ -1,7 +1,7 @@
 pub use super::encoder::Encoder;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::data::error_auditor::ErrorAuditor_;
 use crate::infrastructure_layer::data::error_auditor::Other;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
 use base64::decode_config;
@@ -21,7 +21,7 @@ impl Encoder<Base64> {
         );
     }
 
-    pub fn decode<'a>(encoded_data: &'a [u8]) -> Result<Vec<u8>, ErrorAuditor> {
+    pub fn decode<'a>(encoded_data: &'a [u8]) -> Result<Vec<u8>, ErrorAuditor_> {
         let data = match decode_config(
             encoded_data,
             Self::BASE64_STANDARD_CONFIGURATION,
@@ -29,7 +29,7 @@ impl Encoder<Base64> {
             Ok(data_) => data_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    ErrorAuditor_::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),

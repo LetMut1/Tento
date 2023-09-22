@@ -3,7 +3,7 @@ use crate::infrastructure_layer::data::control_type::Request;
 use crate::infrastructure_layer::data::control_type::Response;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::data::error_auditor::ErrorAuditor_;
 use crate::infrastructure_layer::data::error_auditor::Other;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
 use crate::infrastructure_layer::functionality::service::creator::Creator;
@@ -128,7 +128,7 @@ impl ActionDelegator {
         database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
         convertible_parts: ConvertibleParts<API>,
         action: A,
-    ) -> Result<ActionProcessingDelegatorResult<APO, APP>, ErrorAuditor>
+    ) -> Result<ActionProcessingDelegatorResult<APO, APP>, ErrorAuditor_>
     where
         Serializer<SF>: Serialize,
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -185,7 +185,7 @@ impl ActionDelegator {
                 Ok(bytes_) => bytes_,
                 Err(error) => {
                     return Err(
-                        ErrorAuditor::new(
+                        ErrorAuditor_::new(
                             Error::Runtime {
                                 runtime: Runtime::Other {
                                     other: Other::new(error),

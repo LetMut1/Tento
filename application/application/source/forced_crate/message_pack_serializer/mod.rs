@@ -90,12 +90,12 @@ use rmp_serde::to_vec;
 use rmp_serde::from_read_ref;
 use serde::Deserialize;
 use serde::Serialize as SerdeSerialize;
-use resource_error::ResourceError;
+use void::ErrorVoid;
 
 pub struct Serializer;
 
 impl Serializer {
-    pub fn serialize<'a, T>(subject: &'a T) -> Result<Vec<u8>, ErrorAuditor<ResourceError>>
+    pub fn serialize<'a, T>(subject: &'a T) -> Result<Vec<u8>, ErrorAuditor<ErrorVoid>>
     where
         T: SerdeSerialize,
     {
@@ -122,7 +122,7 @@ impl Serializer {
         return Ok(data);
     }
 
-    pub fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, ErrorAuditor<ResourceError>>
+    pub fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, ErrorAuditor<ErrorVoid>>
     where
         T: Deserialize<'a>,
     {

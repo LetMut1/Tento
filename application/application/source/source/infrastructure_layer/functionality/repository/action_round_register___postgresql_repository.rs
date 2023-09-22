@@ -3,7 +3,7 @@ use super::postgresql_repository::PostgresqlRepository;
 use crate::domain_layer::data::entity::action_round_register::ActionRoundRegister;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::data::error_auditor::ErrorAuditor_;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
@@ -14,7 +14,7 @@ impl PostgresqlRepository<ActionRoundRegister<'_>> {
     pub async fn create<'a>(
         database_2_connection: &'a Connection,
         insert_11: Insert11<'a>,
-    ) -> Result<(), ErrorAuditor> {
+    ) -> Result<(), ErrorAuditor_> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let action_round_register_route = insert_11.action_round_register_route.0.as_ref();
@@ -69,7 +69,7 @@ impl PostgresqlRepository<ActionRoundRegister<'_>> {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    ErrorAuditor_::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -95,7 +95,7 @@ impl PostgresqlRepository<ActionRoundRegister<'_>> {
             .await
         {
             return Err(
-                ErrorAuditor::new(
+                ErrorAuditor_::new(
                     Error::Runtime {
                         runtime: Runtime::Resource {
                             resource: ResourceError::Postgresql {

@@ -2,7 +2,7 @@ use super::creator::Creator;
 use crate::infrastructure_layer::data::environment_configuration::Environment;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::data::error_auditor::ErrorAuditor_;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
 use bb8::Pool;
@@ -16,7 +16,7 @@ impl Creator<RedisConnectonPool> {
     pub async fn create<'a>(
         environment: &'a Environment,
         connection_info: &'a ConnectionInfo,
-    ) -> Result<Pool<RedisConnectionManager>, ErrorAuditor> {
+    ) -> Result<Pool<RedisConnectionManager>, ErrorAuditor_> {
         let redis_connection_pool = match *environment {
             Environment::Production => {
                 todo!();
@@ -26,7 +26,7 @@ impl Creator<RedisConnectonPool> {
                     Ok(redis_connection_manager_) => redis_connection_manager_,
                     Err(error) => {
                         return Err(
-                            ErrorAuditor::new(
+                            ErrorAuditor_::new(
                                 Error::Runtime {
                                     runtime: Runtime::Resource {
                                         resource: ResourceError::Redis {
@@ -51,7 +51,7 @@ impl Creator<RedisConnectonPool> {
                     Ok(redis_connection_pool__) => redis_connection_pool__,
                     Err(error) => {
                         return Err(
-                            ErrorAuditor::new(
+                            ErrorAuditor_::new(
                                 Error::Runtime {
                                     runtime: Runtime::Resource {
                                         resource: ResourceError::Redis {

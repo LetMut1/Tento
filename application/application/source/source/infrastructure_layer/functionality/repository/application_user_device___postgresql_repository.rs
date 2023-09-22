@@ -3,7 +3,7 @@ use super::postgresql_repository::PostgresqlRepository;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::data::error_auditor::ErrorAuditor_;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
@@ -14,7 +14,7 @@ impl PostgresqlRepository<ApplicationUserDevice> {
     pub async fn create<'a>(
         database_1_connection: &'a Connection,
         insert_4: Insert4,
-    ) -> Result<ApplicationUserDevice, ErrorAuditor> {
+    ) -> Result<ApplicationUserDevice, ErrorAuditor_> {
         let application_user_device_id = insert_4.application_user_device_id.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -49,7 +49,7 @@ impl PostgresqlRepository<ApplicationUserDevice> {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    ErrorAuditor_::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -75,7 +75,7 @@ impl PostgresqlRepository<ApplicationUserDevice> {
             .await
         {
             return Err(
-                ErrorAuditor::new(
+                ErrorAuditor_::new(
                     Error::Runtime {
                         runtime: Runtime::Resource {
                             resource: ResourceError::Postgresql {
