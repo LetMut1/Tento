@@ -394,6 +394,68 @@ pub extern "C" fn opaque_f1(opaque: *mut Opaque) -> bool {
 
 
 
+#[no_mangle]
+pub extern "C" fn generic_allocate_f1() -> *mut StructWithGeneric<c_char> {
+    return Box::into_raw(
+        Box::new(
+            StructWithGeneric {
+                a: 0 as c_char,
+                b: true,
+            }
+        )
+    )
+}
+
+#[no_mangle]
+pub extern "C" fn generic_deallocate_f1(struct_with_generic: *mut StructWithGeneric<c_char>) -> () {
+    if struct_with_generic.is_null() {
+        return ();
+    }
+
+    let _ = unsafe {
+        Box::from_raw(struct_with_generic)
+    };
+
+    return ();
+}
+
+
+
+
+#[no_mangle]
+pub extern "C" fn generic_allocate_f2() -> *mut StructWithGeneric<*mut c_char> {
+    return Box::into_raw(
+        Box::new(
+            StructWithGeneric {
+                a: CString::new("qwerty").unwrap().into_raw(),
+                b: true,
+            }
+        )
+    )
+}
+
+#[no_mangle]
+pub extern "C" fn generic_deallocate_f2(struct_with_generic: *mut StructWithGeneric<*mut c_char>) -> () {
+    if struct_with_generic.is_null() {
+        return ();
+    }
+
+    let _ = unsafe {
+        Box::from_raw(struct_with_generic)
+    };
+
+    return ();
+}
+
+#[repr(C)]
+pub struct StructWithGeneric<T> {
+    pub a: T,
+    pub b: bool,
+}
+
+
+
+
 
 
 
