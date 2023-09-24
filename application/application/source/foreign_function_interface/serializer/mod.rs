@@ -482,6 +482,86 @@ pub struct StructWithGeneric<T> {
 
 
 
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct Main1 {
+    pub nested1: Nested1,
+}
+
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct Main2 {
+    pub nested1: Nested1,
+    pub nested2: Nested2,
+}
+
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct Nested1 {
+    pub a: bool,
+    pub b: bool,
+    pub c: bool,
+}
+
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct Nested2 {
+    pub a: bool,
+}
+
+#[no_mangle]
+pub extern "C" fn main_nested_allocate_f1() -> *mut Main1 {
+    return Box::into_raw(
+        Box::new(
+            Main1 { nested1: Nested1 { a: true, b: false, c: true } }
+        )
+    )
+}
+
+#[no_mangle]
+pub extern "C" fn main_nested_deallocate_f1(main: *mut Main1) -> () {
+    if main.is_null() {
+        return ();
+    }
+
+    let _ = unsafe {
+        Box::from_raw(main)
+    };
+
+    return ();
+}
+
+#[no_mangle]
+pub extern "C" fn main_nested_allocate_f2() -> *mut Main2 {
+    return Box::into_raw(
+        Box::new(
+            Main2 {
+                nested1: Nested1 {
+                    a: true,
+                    b: false,
+                    c: true
+                },
+                nested2: Nested2 {
+                    a: true
+                }
+            }
+        )
+    )
+}
+
+#[no_mangle]
+pub extern "C" fn main_nested_deallocate_f2(main: *mut Main2) -> () {
+    if main.is_null() {
+        return ();
+    }
+
+    let _ = unsafe {
+        Box::from_raw(main)
+    };
+
+    return ();
+}
+
 
 
 

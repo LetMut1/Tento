@@ -42,6 +42,25 @@ struct StructWithGeneric {
   bool b;
 };
 
+struct Nested1 {
+  bool a;
+  bool b;
+  bool c;
+};
+
+struct Main1 {
+  Nested1 nested1;
+};
+
+struct Nested2 {
+  bool a;
+};
+
+struct Main2 {
+  Nested1 nested1;
+  Nested2 nested2;
+};
+
 struct ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming {
   long application_user_id;
   bool verification_message_sent;
@@ -127,6 +146,14 @@ void generic_deallocate_f1(StructWithGeneric<char> *struct_with_generic);
 StructWithGeneric<char*> *generic_allocate_f2();
 
 void generic_deallocate_f2(StructWithGeneric<char*> *struct_with_generic);
+
+Main1 *main_nested_allocate_f1();
+
+void main_nested_deallocate_f1(Main1 *main);
+
+Main2 *main_nested_allocate_f2();
+
+void main_nested_deallocate_f2(Main2 *main);
 
 ApplicationUser__Authorization___AuthorizeByFirstStep___Result *application_user___authorization____authorize_by_first_step____deserialize(unsigned char *pointer_to_first_element_of_registry,
                                                                                                                                            size_t registry_length);
