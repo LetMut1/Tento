@@ -271,9 +271,17 @@ pub extern "C" fn string_deallocate_f2(struct_with_string: *mut StructWithString
         return ();
     }
 
-    let _ = unsafe {
+    let struct_with_string = unsafe {
         Box::from_raw(struct_with_string)
     };
+
+    let string = struct_with_string.string;
+
+    if !string.is_null() {
+        let _ = unsafe {
+            CString::from_raw(string)
+        };
+    }
 
     return ();
 }
@@ -329,9 +337,17 @@ pub extern "C" fn string_deallocate_f3(struct_with_string: *mut StructWithString
         return ();
     }
 
-    let _ = unsafe {
+    let struct_with_string = unsafe {
         Box::from_raw(struct_with_string)
     };
+
+    let string = struct_with_string.struct_with_string.string;
+
+    if !string.is_null() {
+        let _ = unsafe {
+            CString::from_raw(string)
+        };
+    }
 
     return ();
 }
@@ -440,9 +456,17 @@ pub extern "C" fn generic_deallocate_f2(struct_with_generic: *mut StructWithGene
         return ();
     }
 
-    let _ = unsafe {
+    let struct_with_generic = unsafe {
         Box::from_raw(struct_with_generic)
     };
+
+    let string = struct_with_generic.a;
+
+    if !string.is_null() {
+        let _ = unsafe {
+            CString::from_raw(string)
+        };
+    }
 
     return ();
 }
