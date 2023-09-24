@@ -46,6 +46,7 @@ struct Nested1 {
   bool a;
   bool b;
   bool c;
+  char *string;
 };
 
 struct Main1 {

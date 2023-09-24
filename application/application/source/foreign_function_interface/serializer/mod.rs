@@ -501,6 +501,7 @@ pub struct Nested1 {
     pub a: bool,
     pub b: bool,
     pub c: bool,
+    pub string: *mut c_char,
 }
 
 #[repr(C)]
@@ -513,7 +514,7 @@ pub struct Nested2 {
 pub extern "C" fn main_nested_allocate_f1() -> *mut Main1 {
     return Box::into_raw(
         Box::new(
-            Main1 { nested1: Nested1 { a: true, b: false, c: true } }
+            Main1 { nested1: Nested1 { a: true, b: false, c: true, string: CString::new("qwerty").unwrap().into_raw() } }
         )
     )
 }
@@ -524,9 +525,15 @@ pub extern "C" fn main_nested_deallocate_f1(main: *mut Main1) -> () {
         return ();
     }
 
-    let _ = unsafe {
+    let main = unsafe {
         Box::from_raw(main)
     };
+
+    if !main.nested1.string.is_null() {
+        let _ = unsafe {
+            CString::from_raw(main.nested1.string)
+        };
+    }
 
     return ();
 }
@@ -539,7 +546,8 @@ pub extern "C" fn main_nested_allocate_f2() -> *mut Main2 {
                 nested1: Nested1 {
                     a: true,
                     b: false,
-                    c: true
+                    c: true,
+                    string: CString::new("qwerty_12334_qwertyu").unwrap().into_raw()
                 },
                 nested2: Nested2 {
                     a: true
@@ -555,9 +563,15 @@ pub extern "C" fn main_nested_deallocate_f2(main: *mut Main2) -> () {
         return ();
     }
 
-    let _ = unsafe {
+    let main = unsafe {
         Box::from_raw(main)
     };
+
+    if !main.nested1.string.is_null() {
+        let _ = unsafe {
+            CString::from_raw(main.nested1.string)
+        };
+    }
 
     return ();
 }
