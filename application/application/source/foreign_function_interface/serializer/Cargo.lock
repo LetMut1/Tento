@@ -148,7 +148,9 @@ dependencies = [
  "action_processor_incoming_outcoming",
  "libc",
  "message_pack_serializer",
+ "serde",
  "unified_report",
+ "void",
 ]
 
 [[package]]

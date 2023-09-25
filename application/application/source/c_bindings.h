@@ -95,6 +95,44 @@ struct Result {
 
 using ApplicationUser__Authorization___AuthorizeByFirstStep___Result = Result<UnifiedReport<ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming, ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent>>;
 
+struct Vector {
+  unsigned char *pointer_to_first_element;
+  size_t length;
+};
+
+struct String_ {
+  char *pointer;
+};
+
+struct ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming {
+  String_ application_user_access_token_encrypted;
+  String_ application_user_access_refresh_token_encrypted;
+};
+
+struct ApplicationUserAuthorizationToken_WrongValue {
+  bool is_exist;
+  short application_user_authorization_token_wrong_enter_tries_quantity;
+};
+
+struct ApplicationUser__Authorization___AuthorizeByLastStep___Precedent {
+  bool application_user_authorization_token__not_found;
+  bool application_user_authorization_token__already_expired;
+  ApplicationUserAuthorizationToken_WrongValue application_user_authorization_token__wrong_value;
+  bool application_user__not_found;
+};
+
+using ApplicationUser__Authorization___AuthorizeByLastStep___Result = Result<UnifiedReport<ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming, ApplicationUser__Authorization___AuthorizeByLastStep___Precedent>>;
+
+struct ApplicationUser__Authorization___CheckEmailForExisting___Outcoming {
+  bool result;
+};
+
+struct Void {
+  bool _inner;
+};
+
+using ApplicationUser__Authorization___CheckEmailForExisting___Result = Result<UnifiedReport<ApplicationUser__Authorization___CheckEmailForExisting___Outcoming, Void>>;
+
 extern "C" {
 
 int f1(int a);
@@ -156,9 +194,16 @@ Main2 *main_nested_allocate_f2();
 
 void main_nested_deallocate_f2(Main2 *main);
 
-ApplicationUser__Authorization___AuthorizeByFirstStep___Result *application_user___authorization____authorize_by_first_step____deserialize(unsigned char *pointer_to_first_element_of_registry,
-                                                                                                                                           size_t registry_length);
+ApplicationUser__Authorization___AuthorizeByFirstStep___Result *application_user___authorization____authorize_by_first_step____deserialize(Vector *vector);
 
 void application_user___authorization____authorize_by_first_step____deallocate(ApplicationUser__Authorization___AuthorizeByFirstStep___Result *result);
+
+ApplicationUser__Authorization___AuthorizeByLastStep___Result *application_user___authorization____authorize_by_last_step____deserialize(Vector *vector);
+
+void application_user___authorization____authorize_by_last_step____deallocate(ApplicationUser__Authorization___AuthorizeByLastStep___Result *result);
+
+ApplicationUser__Authorization___CheckEmailForExisting___Result *application_user___authorization____check_email_for_existing____deserialize(Vector *vector);
+
+void application_user___authorization____authorize_by_last_step____deallocate(ApplicationUser__Authorization___AuthorizeByLastStep___Result *result);
 
 } // extern "C"
