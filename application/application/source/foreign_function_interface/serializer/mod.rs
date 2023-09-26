@@ -703,11 +703,11 @@ where
 }
 
 #[repr(C)]
-pub struct String_ {
+pub struct CString_ {
     pub pointer: *mut c_char,
 }
 
-impl Default for String_ {
+impl Default for CString_ {
     fn default() -> Self {
         return Self {
             pointer: ptr::null_mut()
@@ -805,22 +805,35 @@ where
     );
 }
 
-fn deallocate<APO, APP>(
-    result: *mut Result<UnifiedReport<APO, APP>>
-) -> ()
-where
-    APO: Default,
-    APP: Default,
-{
-    if result.is_null() {
-        return ();
+struct CStringAllocator;
+
+impl CStringAllocator {
+    fn allocate<'a>(value: &'a str) -> StdResult<CString_, Box<dyn Error + 'static>> {
+        let pointer = match CString::new(value) {
+            Ok(pointer_) => pointer_.into_raw(),
+            Err(error) => {
+                return Err(error.into());
+            }
+        };
+
+        return Ok(
+            CString_ {
+                pointer
+            }
+        );
     }
 
-    let _ = unsafe {
-        Box::from_raw(result)
-    };
+    fn deallocate(c_string: CString_) -> () {
+        if c_string.pointer.is_null() {
+            return ();
+        }
 
-    return ();
+        let _ = unsafe {
+            CString::from_raw(c_string.pointer)
+        };
+
+        return ();
+    }
 }
 
 type ApplicationUser__Authorization___AuthorizeByFirstStep___Result = Result<UnifiedReport<ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming, ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent>>;
@@ -894,7 +907,13 @@ pub extern "C" fn application_user___authorization____authorize_by_first_step___
 pub extern "C" fn application_user___authorization____authorize_by_first_step____deallocate(
     result: *mut ApplicationUser__Authorization___AuthorizeByFirstStep___Result
 ) -> () {
-    deallocate(result);
+    if result.is_null() {
+        return ();
+    }
+
+    let _ = unsafe {
+        Box::from_raw(result)
+    };
 
     return ();
 }
@@ -904,8 +923,8 @@ type ApplicationUser__Authorization___AuthorizeByLastStep___Result = Result<Unif
 #[repr(C)]
 #[derive(Default)]
 pub struct ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming {
-    pub application_user_access_token_encrypted: String_,
-    pub application_user_access_refresh_token_encrypted: String_,
+    pub application_user_access_token_encrypted: CString_,
+    pub application_user_access_refresh_token_encrypted: CString_,
 }
 
 #[repr(C)]
@@ -940,27 +959,9 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
                         Data::<ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming>::empty()
                     }
                     Data_::Filled { data: data__ } => {
-                        let application_user_access_token_encrypted = match CString::new(data__.application_user_access_token_encrypted.0.as_str()) {
-                            Ok(application_user_access_token_encrypted_) => application_user_access_token_encrypted_.into_raw(),
-                            Err(error) => {
-                                return Err(error.into());
-                            }
-                        };
-
-                        let application_user_access_refresh_token_encrypted = match CString::new(data__.application_user_access_refresh_token_encrypted.0.as_str()) {
-                            Ok(application_user_access_refresh_token_encrypted_) => application_user_access_refresh_token_encrypted_.into_raw(),
-                            Err(error) => {
-                                return Err(error.into());
-                            }
-                        };
-
                         let outcoming = ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming {
-                            application_user_access_token_encrypted: String_ {
-                                pointer: application_user_access_token_encrypted,
-                            },
-                            application_user_access_refresh_token_encrypted: String_ {
-                                pointer: application_user_access_refresh_token_encrypted
-                            }
+                            application_user_access_token_encrypted: CStringAllocator::allocate(data__.application_user_access_token_encrypted.0.as_str())?,
+                            application_user_access_refresh_token_encrypted: CStringAllocator::allocate(data__.application_user_access_refresh_token_encrypted.0.as_str())?,
                         };
 
                         Data::filled(outcoming)
@@ -1014,7 +1015,23 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
 pub extern "C" fn application_user___authorization____authorize_by_last_step____deallocate(
     result: *mut ApplicationUser__Authorization___AuthorizeByLastStep___Result
 ) -> () {
-    deallocate(result);
+    if result.is_null() {
+        return ();
+    }
+
+    let result_ = unsafe {
+        Box::from_raw(result)
+    };
+
+    if result_.is_data {
+        if result_.data.is_target {
+            if result_.data.target.is_filled {
+                CStringAllocator::deallocate(result_.data.target.filled.application_user_access_token_encrypted);
+
+                CStringAllocator::deallocate(result_.data.target.filled.application_user_access_refresh_token_encrypted);
+            }
+        }
+    }
 
     return ();
 }
@@ -1070,7 +1087,13 @@ pub extern "C" fn application_user___authorization____check_email_for_existing__
 pub extern "C" fn application_user___authorization____check_email_for_existing____deallocate(
     result: *mut ApplicationUser__Authorization___CheckEmailForExisting___Result
 ) -> () {
-    deallocate(result);
+    if result.is_null() {
+        return ();
+    }
+
+    let _ = unsafe {
+        Box::from_raw(result)
+    };
 
     return ();
 }
@@ -1126,7 +1149,13 @@ pub extern "C" fn application_user___authorization____check_nickname_for_existin
 pub extern "C" fn application_user___authorization____check_nickname_for_existing____deallocate(
     result: *mut ApplicationUser__Authorization___CheckNicknameForExisting___Result
 ) -> () {
-    deallocate(result);
+    if result.is_null() {
+        return ();
+    }
+
+    let _ = unsafe {
+        Box::from_raw(result)
+    };
 
     return ();
 }
@@ -1194,7 +1223,13 @@ pub extern "C" fn application_user___authorization____deauthorize_from_all_devic
 pub extern "C" fn application_user___authorization____deauthorize_from_all_devices____deallocate(
     result: *mut ApplicationUser__Authorization___DeauthorizeFromAllDevices___Result
 ) -> () {
-    deallocate(result);
+    if result.is_null() {
+        return ();
+    }
+
+    let _ = unsafe {
+        Box::from_raw(result)
+    };
 
     return ();
 }
@@ -1262,7 +1297,13 @@ pub extern "C" fn application_user___authorization____deauthorize_from_one_devic
 pub extern "C" fn application_user___authorization____deauthorize_from_one_device____deallocate(
     result: *mut ApplicationUser__Authorization___DeauthorizeFromOneDevice___Result
 ) -> () {
-    deallocate(result);
+    if result.is_null() {
+        return ();
+    }
+
+    let _ = unsafe {
+        Box::from_raw(result)
+    };
 
     return ();
 }
@@ -1272,8 +1313,8 @@ type ApplicationUser__Authorization___RefreshAccessToken___Result = Result<Unifi
 #[repr(C)]
 #[derive(Default)]
 pub struct ApplicationUser__Authorization___RefreshAccessToken___Outcoming {
-    pub application_user_access_token_encrypted: String_,
-    pub application_user_access_refresh_token_encrypted: String_,
+    pub application_user_access_token_encrypted: CString_,
+    pub application_user_access_refresh_token_encrypted: CString_,
 }
 
 #[repr(C)]
@@ -1299,27 +1340,9 @@ pub extern "C" fn application_user___authorization____refresh_access_token____de
                         Data::<ApplicationUser__Authorization___RefreshAccessToken___Outcoming>::empty()
                     }
                     Data_::Filled { data: data__ } => {
-                        let application_user_access_token_encrypted = match CString::new(data__.application_user_access_token_encrypted.0.as_str()) {
-                            Ok(application_user_access_token_encrypted_) => application_user_access_token_encrypted_.into_raw(),
-                            Err(error) => {
-                                return Err(error.into());
-                            }
-                        };
-
-                        let application_user_access_refresh_token_encrypted = match CString::new(data__.application_user_access_refresh_token_encrypted.0.as_str()) {
-                            Ok(application_user_access_refresh_token_encrypted_) => application_user_access_refresh_token_encrypted_.into_raw(),
-                            Err(error) => {
-                                return Err(error.into());
-                            }
-                        };
-
                         let outcoming = ApplicationUser__Authorization___RefreshAccessToken___Outcoming {
-                            application_user_access_token_encrypted: String_ {
-                                pointer: application_user_access_token_encrypted,
-                            },
-                            application_user_access_refresh_token_encrypted: String_ {
-                                pointer: application_user_access_refresh_token_encrypted
-                            }
+                            application_user_access_token_encrypted: CStringAllocator::allocate(data__.application_user_access_token_encrypted.0.as_str())?,
+                            application_user_access_refresh_token_encrypted: CStringAllocator::allocate(data__.application_user_access_refresh_token_encrypted.0.as_str())?,
                         };
 
                         Data::filled(outcoming)
@@ -1358,7 +1381,23 @@ pub extern "C" fn application_user___authorization____refresh_access_token____de
 pub extern "C" fn application_user___authorization____refresh_access_token____deallocate(
     result: *mut ApplicationUser__Authorization___RefreshAccessToken___Result
 ) -> () {
-    deallocate(result);
+    if result.is_null() {
+        return ();
+    }
+
+    let result_ = unsafe {
+        Box::from_raw(result)
+    };
+
+    if result_.is_data {
+        if result_.data.is_target {
+            if result_.data.target.is_filled {
+                CStringAllocator::deallocate(result_.data.target.filled.application_user_access_token_encrypted);
+
+                CStringAllocator::deallocate(result_.data.target.filled.application_user_access_refresh_token_encrypted);
+            }
+        }
+    }
 
     return ();
 }
@@ -1432,7 +1471,13 @@ pub extern "C" fn application_user___authorization____register_by_first_step____
 pub extern "C" fn application_user___authorization____register_by_first_step____deallocate(
     result: *mut ApplicationUser__Authorization___RegisterByFirstStep___Result
 ) -> () {
-    deallocate(result);
+    if result.is_null() {
+        return ();
+    }
+
+    let _ = unsafe {
+        Box::from_raw(result)
+    };
 
     return ();
 }
@@ -1524,7 +1569,13 @@ pub extern "C" fn application_user___authorization____register_by_second_step___
 pub extern "C" fn application_user___authorization____register_by_second_step____deallocate(
     result: *mut ApplicationUser__Authorization___RegisterBySecondStep___Result
 ) -> () {
-    deallocate(result);
+    if result.is_null() {
+        return ();
+    }
+
+    let _ = unsafe {
+        Box::from_raw(result)
+    };
 
     return ();
 }
@@ -1534,8 +1585,8 @@ type ApplicationUser__Authorization___RegisterByLastStep___Result = Result<Unifi
 #[repr(C)]
 #[derive(Default)]
 pub struct ApplicationUser__Authorization___RegisterByLastStep___Outcoming {
-    pub application_user_access_token_encrypted: String_,
-    pub application_user_access_refresh_token_encrypted: String_,
+    pub application_user_access_token_encrypted: CString_,
+    pub application_user_access_refresh_token_encrypted: CString_,
 }
 
 #[repr(C)]
@@ -1565,27 +1616,9 @@ pub extern "C" fn application_user___authorization____register_by_last_step____d
                         Data::<ApplicationUser__Authorization___RegisterByLastStep___Outcoming>::empty()
                     }
                     Data_::Filled { data: data__ } => {
-                        let application_user_access_token_encrypted = match CString::new(data__.application_user_access_token_encrypted.0.as_str()) {
-                            Ok(application_user_access_token_encrypted_) => application_user_access_token_encrypted_.into_raw(),
-                            Err(error) => {
-                                return Err(error.into());
-                            }
-                        };
-
-                        let application_user_access_refresh_token_encrypted = match CString::new(data__.application_user_access_refresh_token_encrypted.0.as_str()) {
-                            Ok(application_user_access_refresh_token_encrypted_) => application_user_access_refresh_token_encrypted_.into_raw(),
-                            Err(error) => {
-                                return Err(error.into());
-                            }
-                        };
-
                         let outcoming = ApplicationUser__Authorization___RegisterByLastStep___Outcoming {
-                            application_user_access_token_encrypted: String_ {
-                                pointer: application_user_access_token_encrypted,
-                            },
-                            application_user_access_refresh_token_encrypted: String_ {
-                                pointer: application_user_access_refresh_token_encrypted
-                            }
+                            application_user_access_token_encrypted: CStringAllocator::allocate(data__.application_user_access_token_encrypted.0.as_str())?,
+                            application_user_access_refresh_token_encrypted: CStringAllocator::allocate(data__.application_user_access_refresh_token_encrypted.0.as_str())?,
                         };
 
                         Data::filled(outcoming)
@@ -1648,7 +1681,23 @@ pub extern "C" fn application_user___authorization____register_by_last_step____d
 pub extern "C" fn application_user___authorization____register_by_last_step____deallocate(
     result: *mut ApplicationUser__Authorization___RegisterByLastStep___Result
 ) -> () {
-    deallocate(result);
+    if result.is_null() {
+        return ();
+    }
+
+    let result_ = unsafe {
+        Box::from_raw(result)
+    };
+
+    if result_.is_data {
+        if result_.data.is_target {
+            if result_.data.target.is_filled {
+                CStringAllocator::deallocate(result_.data.target.filled.application_user_access_token_encrypted);
+
+                CStringAllocator::deallocate(result_.data.target.filled.application_user_access_refresh_token_encrypted);
+            }
+        }
+    }
 
     return ();
 }
@@ -1724,7 +1773,13 @@ pub extern "C" fn application_user___authorization____reset_password_by_first_st
 pub extern "C" fn application_user___authorization____reset_password_by_first_step____deallocate(
     result: *mut ApplicationUser__Authorization___ResetPasswordByFirstStep___Result
 ) -> () {
-    deallocate(result);
+    if result.is_null() {
+        return ();
+    }
+
+    let _ = unsafe {
+        Box::from_raw(result)
+    };
 
     return ();
 }
@@ -1816,7 +1871,13 @@ pub extern "C" fn application_user___authorization____reset_password_by_second_s
 pub extern "C" fn application_user___authorization____reset_password_by_second_step____deallocate(
     result: *mut ApplicationUser__Authorization___ResetPasswordBySecondStep___Result
 ) -> () {
-    deallocate(result);
+    if result.is_null() {
+        return ();
+    }
+
+    let _ = unsafe {
+        Box::from_raw(result)
+    };
 
     return ();
 }
@@ -1905,7 +1966,13 @@ pub extern "C" fn application_user___authorization____reset_password_by_last_ste
 pub extern "C" fn application_user___authorization____reset_password_by_last_step____deallocate(
     result: *mut ApplicationUser__Authorization___ResetPasswordByLastStep___Result
 ) -> () {
-    deallocate(result);
+    if result.is_null() {
+        return ();
+    }
+
+    let _ = unsafe {
+        Box::from_raw(result)
+    };
 
     return ();
 }
@@ -1995,7 +2062,13 @@ pub extern "C" fn application_user___authorization____send_email_for_register___
 pub extern "C" fn application_user___authorization____send_email_for_register____deallocate(
     result: *mut ApplicationUser__Authorization___SendEmailForRegister___Result
 ) -> () {
-    deallocate(result);
+    if result.is_null() {
+        return ();
+    }
+
+    let _ = unsafe {
+        Box::from_raw(result)
+    };
 
     return ();
 }
@@ -2085,7 +2158,13 @@ pub extern "C" fn application_user___authorization____send_email_for_authorize__
 pub extern "C" fn application_user___authorization____send_email_for_authorize____deallocate(
     result: *mut ApplicationUser__Authorization___SendEmailForAuthorize___Result
 ) -> () {
-    deallocate(result);
+    if result.is_null() {
+        return ();
+    }
+
+    let _ = unsafe {
+        Box::from_raw(result)
+    };
 
     return ();
 }
@@ -2182,7 +2261,13 @@ pub extern "C" fn application_user___authorization____send_email_for_reset_passw
 pub extern "C" fn application_user___authorization____send_email_for_reset_password____deallocate(
     result: *mut ApplicationUser__Authorization___SendEmailForResetPassword___Result
 ) -> () {
-    deallocate(result);
+    if result.is_null() {
+        return ();
+    }
+
+    let _ = unsafe {
+        Box::from_raw(result)
+    };
 
     return ();
 }
