@@ -717,12 +717,14 @@ impl Default for String_ {
 
 #[repr(C)]
 #[derive(Clone, Copy)]
-pub struct Vector {
-    pointer_to_first_element: *mut c_uchar,
+pub struct Vector<T> {
+    pointer_to_first_element: *mut T,
     length: size_t,
 }
 
-impl Default for Vector {
+type VectorOfBytes = Vector<c_uchar>;
+
+impl Default for VectorOfBytes {
     fn default() -> Self {
         return Self {
             pointer_to_first_element: ptr::null_mut(),
@@ -740,7 +742,7 @@ pub struct Void {
 }
 
 fn deserialize<APO1, APP1, F, APO2, APP2>(
-    vector: *mut Vector,
+    vector_of_bytes: *mut VectorOfBytes,
     converter: F
 ) -> *mut Result<UnifiedReport<APO2, APP2>>
 where
@@ -750,7 +752,7 @@ where
     APP2: Default,
     F: FnOnce(UnifiedReport_<APO1, APP1>) -> StdResult<UnifiedReport<APO2, APP2>, Box<dyn Error + 'static>>
 {
-    if vector.is_null() {
+    if vector_of_bytes.is_null() {
         return Box::into_raw(
             Box::new(
                 Result::error()
@@ -759,7 +761,7 @@ where
     }
 
     let vector_ = unsafe {
-        *vector
+        *vector_of_bytes
     };
 
     if vector_.pointer_to_first_element.is_null() || vector_.length == 0 {
@@ -841,7 +843,7 @@ pub struct ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent {
 
 #[no_mangle]
 pub extern "C" fn application_user___authorization____authorize_by_first_step____deserialize(
-    vector: *mut Vector,
+    vector_of_bytes: *mut VectorOfBytes,
 ) -> *mut ApplicationUser__Authorization___AuthorizeByFirstStep___Result {
     type Outcoming_ = application_user___authorization::authorize_by_first_step::Outcoming;
 
@@ -885,7 +887,7 @@ pub extern "C" fn application_user___authorization____authorize_by_first_step___
         return Ok(unified_report_);
     };
 
-    return deserialize(vector, converter);
+    return deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -924,7 +926,7 @@ pub struct ApplicationUserAuthorizationToken_WrongValue {
 
 #[no_mangle]
 pub extern "C" fn application_user___authorization____authorize_by_last_step____deserialize(
-    vector: *mut Vector,
+    vector_of_bytes: *mut VectorOfBytes,
 ) -> *mut ApplicationUser__Authorization___AuthorizeByLastStep___Result {
     type Outcoming_ = application_user___authorization::authorize_by_last_step::Outcoming;
 
@@ -1005,7 +1007,7 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
         return Ok(unified_report_);
     };
 
-    return deserialize(vector, converter);
+    return deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -1027,7 +1029,7 @@ pub struct ApplicationUser__Authorization___CheckEmailForExisting___Outcoming {
 
 #[no_mangle]
 pub extern "C" fn application_user___authorization____check_email_for_existing____deserialize(
-    vector: *mut Vector,
+    vector_of_bytes: *mut VectorOfBytes,
 ) -> *mut ApplicationUser__Authorization___CheckEmailForExisting___Result {
     type Outcoming_ = application_user___authorization::check_email_for_existing::Outcoming;
 
@@ -1061,7 +1063,7 @@ pub extern "C" fn application_user___authorization____check_email_for_existing__
         return Ok(unified_report_);
     };
 
-    return deserialize(vector, converter);
+    return deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -1083,7 +1085,7 @@ pub struct ApplicationUser__Authorization___CheckNicknameForExisting___Outcoming
 
 #[no_mangle]
 pub extern "C" fn application_user___authorization____check_nickname_for_existing____deserialize(
-    vector: *mut Vector,
+    vector_of_bytes: *mut VectorOfBytes,
 ) -> *mut ApplicationUser__Authorization___CheckNicknameForExisting___Result {
     type Outcoming_ = application_user___authorization::check_nickname_for_existing::Outcoming;
 
@@ -1117,7 +1119,7 @@ pub extern "C" fn application_user___authorization____check_nickname_for_existin
         return Ok(unified_report_);
     };
 
-    return deserialize(vector, converter);
+    return deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -1140,7 +1142,7 @@ pub struct ApplicationUser__Authorization___DeauthorizeFromAllDevices___Preceden
 
 #[no_mangle]
 pub extern "C" fn application_user___authorization____deauthorize_from_all_devices____deserialize(
-    vector: *mut Vector,
+    vector_of_bytes: *mut VectorOfBytes,
 ) -> *mut ApplicationUser__Authorization___DeauthorizeFromAllDevices___Result {
     type Precedent_ = application_user___authorization::deauthorize_from_all_devices::Precedent;
 
@@ -1185,7 +1187,7 @@ pub extern "C" fn application_user___authorization____deauthorize_from_all_devic
         return Ok(unified_report_);
     };
 
-    return deserialize(vector, converter);
+    return deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -1208,7 +1210,7 @@ pub struct ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent
 
 #[no_mangle]
 pub extern "C" fn application_user___authorization____deauthorize_from_one_device____deserialize(
-    vector: *mut Vector,
+    vector_of_bytes: *mut VectorOfBytes,
 ) -> *mut ApplicationUser__Authorization___DeauthorizeFromOneDevice___Result {
     type Precedent_ = application_user___authorization::deauthorize_from_one_device::Precedent;
 
@@ -1253,7 +1255,7 @@ pub extern "C" fn application_user___authorization____deauthorize_from_one_devic
         return Ok(unified_report_);
     };
 
-    return deserialize(vector, converter);
+    return deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -1283,7 +1285,7 @@ pub struct ApplicationUser__Authorization___RefreshAccessToken___Precedent {
 
 #[no_mangle]
 pub extern "C" fn application_user___authorization____refresh_access_token____deserialize(
-    vector: *mut Vector,
+    vector_of_bytes: *mut VectorOfBytes,
 ) -> *mut ApplicationUser__Authorization___RefreshAccessToken___Result {
     type Outcoming_ = application_user___authorization::refresh_access_token::Outcoming;
 
@@ -1349,7 +1351,7 @@ pub extern "C" fn application_user___authorization____refresh_access_token____de
         return Ok(unified_report_);
     };
 
-    return deserialize(vector, converter);
+    return deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -1380,7 +1382,7 @@ pub struct ApplicationUser__Authorization___RegisterByFirstStep___Precedent {
 
 #[no_mangle]
 pub extern "C" fn application_user___authorization____register_by_first_step____deserialize(
-    vector: *mut Vector,
+    vector_of_bytes: *mut VectorOfBytes,
 ) -> *mut ApplicationUser__Authorization___RegisterByFirstStep___Result {
     type Outcoming_ = application_user___authorization::register_by_first_step::Outcoming;
 
@@ -1423,7 +1425,7 @@ pub extern "C" fn application_user___authorization____register_by_first_step____
         return Ok(unified_report_);
     };
 
-    return deserialize(vector, converter);
+    return deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -1455,7 +1457,7 @@ pub struct ApplicationUserRegistrationToken_WrongValue {
 
 #[no_mangle]
 pub extern "C" fn application_user___authorization____register_by_second_step____deserialize(
-    vector: *mut Vector,
+    vector_of_bytes: *mut VectorOfBytes,
 ) -> *mut ApplicationUser__Authorization___RegisterBySecondStep___Result {
     type Precedent_ = application_user___authorization::register_by_second_step::Precedent;
 
@@ -1515,7 +1517,7 @@ pub extern "C" fn application_user___authorization____register_by_second_step___
         return Ok(unified_report_);
     };
 
-    return deserialize(vector, converter);
+    return deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -1549,7 +1551,7 @@ pub struct ApplicationUser__Authorization___RegisterByLastStep___Precedent {
 
 #[no_mangle]
 pub extern "C" fn application_user___authorization____register_by_last_step____deserialize(
-    vector: *mut Vector,
+    vector_of_bytes: *mut VectorOfBytes,
 ) -> *mut ApplicationUser__Authorization___RegisterByLastStep___Result {
     type Outcoming_ = application_user___authorization::register_by_last_step::Outcoming;
 
@@ -1639,7 +1641,7 @@ pub extern "C" fn application_user___authorization____register_by_last_step____d
         return Ok(unified_report_);
     };
 
-    return deserialize(vector, converter);
+    return deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -1671,7 +1673,7 @@ pub struct ApplicationUser__Authorization___ResetPasswordByFirstStep___Precedent
 
 #[no_mangle]
 pub extern "C" fn application_user___authorization____reset_password_by_first_step____deserialize(
-    vector: *mut Vector,
+    vector_of_bytes: *mut VectorOfBytes,
 ) -> *mut ApplicationUser__Authorization___ResetPasswordByFirstStep___Result {
     type Outcoming_ = application_user___authorization::reset_password_by_first_step::Outcoming;
 
@@ -1715,7 +1717,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_first_st
         return Ok(unified_report_);
     };
 
-    return deserialize(vector, converter);
+    return deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -1747,7 +1749,7 @@ pub struct ApplicationUserResetPasswordToken_WrongValue {
 
 #[no_mangle]
 pub extern "C" fn application_user___authorization____reset_password_by_second_step____deserialize(
-    vector: *mut Vector,
+    vector_of_bytes: *mut VectorOfBytes,
 ) -> *mut ApplicationUser__Authorization___ResetPasswordBySecondStep___Result {
     type Precedent_ = application_user___authorization::reset_password_by_second_step::Precedent;
 
@@ -1807,7 +1809,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_second_s
         return Ok(unified_report_);
     };
 
-    return deserialize(vector, converter);
+    return deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -1833,7 +1835,7 @@ pub struct ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent 
 
 #[no_mangle]
 pub extern "C" fn application_user___authorization____reset_password_by_last_step____deserialize(
-    vector: *mut Vector,
+    vector_of_bytes: *mut VectorOfBytes,
 ) -> *mut ApplicationUser__Authorization___ResetPasswordByLastStep___Result {
     type Precedent_ = application_user___authorization::reset_password_by_last_step::Precedent;
 
@@ -1896,7 +1898,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_last_ste
         return Ok(unified_report_);
     };
 
-    return deserialize(vector, converter);
+    return deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -1927,7 +1929,7 @@ pub struct ApplicationUser__Authorization___SendEmailForRegister___Precedent {
 
 #[no_mangle]
 pub extern "C" fn application_user___authorization____send_email_for_register____deserialize(
-    vector: *mut Vector,
+    vector_of_bytes: *mut VectorOfBytes,
 ) -> *mut ApplicationUser__Authorization___SendEmailForRegister___Result {
     type Outcoming_ = application_user___authorization::send_email_for_register::Outcoming;
 
@@ -1986,7 +1988,7 @@ pub extern "C" fn application_user___authorization____send_email_for_register___
         return Ok(unified_report_);
     };
 
-    return deserialize(vector, converter);
+    return deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -2017,7 +2019,7 @@ pub struct ApplicationUser__Authorization___SendEmailForAuthorize___Precedent {
 
 #[no_mangle]
 pub extern "C" fn application_user___authorization____send_email_for_authorize____deserialize(
-    vector: *mut Vector,
+    vector_of_bytes: *mut VectorOfBytes,
 ) -> *mut ApplicationUser__Authorization___SendEmailForAuthorize___Result {
     type Outcoming_ = application_user___authorization::send_email_for_authorize::Outcoming;
 
@@ -2076,7 +2078,7 @@ pub extern "C" fn application_user___authorization____send_email_for_authorize__
         return Ok(unified_report_);
     };
 
-    return deserialize(vector, converter);
+    return deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -2108,7 +2110,7 @@ pub struct ApplicationUser__Authorization___SendEmailForResetPassword___Preceden
 
 #[no_mangle]
 pub extern "C" fn application_user___authorization____send_email_for_reset_password____deserialize(
-    vector: *mut Vector,
+    vector_of_bytes: *mut VectorOfBytes,
 ) -> *mut ApplicationUser__Authorization___SendEmailForResetPassword___Result {
     type Outcoming_ = application_user___authorization::send_email_for_reset_password::Outcoming;
 
@@ -2173,7 +2175,7 @@ pub extern "C" fn application_user___authorization____send_email_for_reset_passw
         return Ok(unified_report_);
     };
 
-    return deserialize(vector, converter);
+    return deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
