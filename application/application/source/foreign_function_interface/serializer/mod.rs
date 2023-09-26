@@ -107,7 +107,7 @@ use libc::c_uchar;
 use libc::c_char;
 use void::Void as Void_;
 use std::error::Error;
-use std::ffi::CString;
+use std::ffi::CString as CString_;
 use std::slice;
 use libc::size_t;
 use std::default::Default;
@@ -235,7 +235,7 @@ pub struct C {
 
 #[no_mangle]
 pub extern "C" fn string_allocate_f1() -> *mut c_char {
-    let string = CString::new("qwerty").unwrap();
+    let string = CString_::new("qwerty").unwrap();
 
     return string.into_raw();
 }
@@ -247,7 +247,7 @@ pub extern "C" fn string_deallocate_f1(string: *mut c_char) -> () {
     }
 
     let _ = unsafe {
-        CString::from_raw(string)
+        CString_::from_raw(string)
     };
 
     return ();
@@ -258,7 +258,7 @@ pub extern "C" fn string_deallocate_f1(string: *mut c_char) -> () {
 
 #[no_mangle]
 pub extern "C" fn string_allocate_f2() -> *mut StructWithString1 {
-    let string = CString::new("qwerty").unwrap();
+    let string = CString_::new("qwerty").unwrap();
 
     return Box::into_raw(
         Box::new(
@@ -284,7 +284,7 @@ pub extern "C" fn string_deallocate_f2(struct_with_string: *mut StructWithString
 
     if !string.is_null() {
         let _ = unsafe {
-            CString::from_raw(string)
+            CString_::from_raw(string)
         };
     }
 
@@ -302,7 +302,7 @@ pub struct StructWithString1 {
 
 #[no_mangle]
 pub extern "C" fn string_allocate_f3() -> *mut StructWithString2 {
-    let string = match CString::new("qwerty") {
+    let string = match CString_::new("qwerty") {
         Ok(string_) => string_,
         Err(_) => {
             return Box::into_raw(
@@ -350,7 +350,7 @@ pub extern "C" fn string_deallocate_f3(struct_with_string: *mut StructWithString
 
     if !string.is_null() {
         let _ = unsafe {
-            CString::from_raw(string)
+            CString_::from_raw(string)
         };
     }
 
@@ -448,7 +448,7 @@ pub extern "C" fn generic_allocate_f2() -> *mut StructWithGeneric<*mut c_char> {
     return Box::into_raw(
         Box::new(
             StructWithGeneric {
-                a: CString::new("qwerty").unwrap().into_raw(),
+                a: CString_::new("qwerty").unwrap().into_raw(),
                 b: true,
             }
         )
@@ -469,7 +469,7 @@ pub extern "C" fn generic_deallocate_f2(struct_with_generic: *mut StructWithGene
 
     if !string.is_null() {
         let _ = unsafe {
-            CString::from_raw(string)
+            CString_::from_raw(string)
         };
     }
 
@@ -519,7 +519,7 @@ pub struct Nested2 {
 pub extern "C" fn main_nested_allocate_f1() -> *mut Main1 {
     return Box::into_raw(
         Box::new(
-            Main1 { nested1: Nested1 { a: true, b: false, c: true, string: CString::new("qwerty").unwrap().into_raw() } }
+            Main1 { nested1: Nested1 { a: true, b: false, c: true, string: CString_::new("qwerty").unwrap().into_raw() } }
         )
     )
 }
@@ -536,7 +536,7 @@ pub extern "C" fn main_nested_deallocate_f1(main: *mut Main1) -> () {
 
     if !main.nested1.string.is_null() {
         let _ = unsafe {
-            CString::from_raw(main.nested1.string)
+            CString_::from_raw(main.nested1.string)
         };
     }
 
@@ -552,7 +552,7 @@ pub extern "C" fn main_nested_allocate_f2() -> *mut Main2 {
                     a: true,
                     b: false,
                     c: true,
-                    string: CString::new("qwerty_12334_qwertyu").unwrap().into_raw()
+                    string: CString_::new("qwerty_12334_qwertyu").unwrap().into_raw()
                 },
                 nested2: Nested2 {
                     a: true
@@ -574,7 +574,7 @@ pub extern "C" fn main_nested_deallocate_f2(main: *mut Main2) -> () {
 
     if !main.nested1.string.is_null() {
         let _ = unsafe {
-            CString::from_raw(main.nested1.string)
+            CString_::from_raw(main.nested1.string)
         };
     }
 
@@ -612,8 +612,7 @@ pub extern "C" fn main_nested_deallocate_f2(main: *mut Main2) -> () {
 #[repr(C)]
 pub struct Result<T> {
     pub data: T,
-    // If false, then it means an error occurred. In general,
-    // if everything is integrated correctly, there can be no error.
+    // If false, then it means an error occurred.
     pub is_data: bool,
 }
 
@@ -635,6 +634,43 @@ where
             data: T::default(),
             is_data: false,
         };
+    }
+}
+
+#[repr(C)]
+pub struct Option<T> {
+    pub data: T,
+    // If false, then it means it it None.
+    pub is_data: bool,
+}
+
+impl<T> Option<T> {
+    fn data(data: T) -> Self {
+        return Self {
+            data,
+            is_data: true,
+        };
+    }
+}
+
+impl<T> Option<T>
+where
+    T: Default
+{
+    fn none() -> Self {
+        return Self {
+            data: T::default(),
+            is_data: false,
+        };
+    }
+}
+
+impl<T> Default for Option<T>
+where
+    T: Default
+{
+    fn default() -> Self {
+        return Self::none();
     }
 }
 
@@ -703,11 +739,11 @@ where
 }
 
 #[repr(C)]
-pub struct CString_ {
+pub struct CString {
     pub pointer: *mut c_char,
 }
 
-impl Default for CString_ {
+impl Default for CString {
     fn default() -> Self {
         return Self {
             pointer: ptr::null_mut()
@@ -808,8 +844,8 @@ where
 struct CStringAllocator;
 
 impl CStringAllocator {
-    fn allocate<'a>(value: &'a str) -> StdResult<CString_, Box<dyn Error + 'static>> {
-        let pointer = match CString::new(value) {
+    fn allocate<'a>(value: &'a str) -> StdResult<CString, Box<dyn Error + 'static>> {
+        let pointer = match CString_::new(value) {
             Ok(pointer_) => pointer_.into_raw(),
             Err(error) => {
                 return Err(error.into());
@@ -817,19 +853,19 @@ impl CStringAllocator {
         };
 
         return Ok(
-            CString_ {
+            CString {
                 pointer
             }
         );
     }
 
-    fn deallocate(c_string: CString_) -> () {
+    fn deallocate(c_string: CString) -> () {
         if c_string.pointer.is_null() {
             return ();
         }
 
         let _ = unsafe {
-            CString::from_raw(c_string.pointer)
+            CString_::from_raw(c_string.pointer)
         };
 
         return ();
@@ -923,8 +959,8 @@ type ApplicationUser__Authorization___AuthorizeByLastStep___Result = Result<Unif
 #[repr(C)]
 #[derive(Default)]
 pub struct ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming {
-    pub application_user_access_token_encrypted: CString_,
-    pub application_user_access_refresh_token_encrypted: CString_,
+    pub application_user_access_token_encrypted: CString,
+    pub application_user_access_refresh_token_encrypted: CString,
 }
 
 #[repr(C)]
@@ -1313,8 +1349,8 @@ type ApplicationUser__Authorization___RefreshAccessToken___Result = Result<Unifi
 #[repr(C)]
 #[derive(Default)]
 pub struct ApplicationUser__Authorization___RefreshAccessToken___Outcoming {
-    pub application_user_access_token_encrypted: CString_,
-    pub application_user_access_refresh_token_encrypted: CString_,
+    pub application_user_access_token_encrypted: CString,
+    pub application_user_access_refresh_token_encrypted: CString,
 }
 
 #[repr(C)]
@@ -1585,8 +1621,8 @@ type ApplicationUser__Authorization___RegisterByLastStep___Result = Result<Unifi
 #[repr(C)]
 #[derive(Default)]
 pub struct ApplicationUser__Authorization___RegisterByLastStep___Outcoming {
-    pub application_user_access_token_encrypted: CString_,
-    pub application_user_access_refresh_token_encrypted: CString_,
+    pub application_user_access_token_encrypted: CString,
+    pub application_user_access_refresh_token_encrypted: CString,
 }
 
 #[repr(C)]
@@ -2271,3 +2307,136 @@ pub extern "C" fn application_user___authorization____send_email_for_reset_passw
 
     return ();
 }
+
+
+
+
+
+
+
+
+
+
+
+// #[repr(C)]
+// #[derive(Default)]
+// pub struct Common1 {
+//     pub channel: Channel1,
+//     pub is_application_user_subscribed: bool,
+// }
+
+// #[repr(C)]
+// #[derive(Default)]
+// pub struct Channel1 {
+//     pub channel_id: c_long,
+//     pub channel_name: Channel_Name,
+//     pub channel_linked_name: Channel_LinkedName,
+//     pub channel_access_modifier: Channel_AccessModifier,
+//     pub channel_visability_modifier: Channel_VisabilityModifier,
+//     pub channel_cover_image_path: Option<Channel_CoverImagePath>,
+//     pub channel_background_image_path: Option<Channel_BackgroundImagePath>,
+// }
+
+
+// type ApplicationUser__Authorization___SendEmailForResetPassword___Result = Result<UnifiedReport<ApplicationUser__Authorization___SendEmailForResetPassword___Outcoming, ApplicationUser__Authorization___SendEmailForResetPassword___Precedent>>;
+
+// #[repr(C)]
+// #[derive(Default)]
+// pub struct ApplicationUser__Authorization___SendEmailForResetPassword___Outcoming {
+//     pub application_user_resep_password_token_can_be_resent_from: c_long,
+// }
+
+// #[repr(C)]
+// #[derive(Default)]
+// pub struct ApplicationUser__Authorization___SendEmailForResetPassword___Precedent {
+//     pub application_user__not_found: bool,
+//     pub application_user_reset_password_token__not_found: bool,
+//     pub application_user_reset_password_token__already_expired: bool,
+//     pub application_user_reset_password_token__already_approved: bool,
+//     pub application_user_reset_password_token__time_to_resend_has_not_come: bool,
+// }
+
+// #[no_mangle]
+// pub extern "C" fn application_user___authorization____send_email_for_reset_password____deserialize(
+//     vector_of_bytes: *mut VectorOfBytes,
+// ) -> *mut ApplicationUser__Authorization___SendEmailForResetPassword___Result {
+//     type Outcoming_ = application_user___authorization::send_email_for_reset_password::Outcoming;
+
+//     type Precedent_ = application_user___authorization::send_email_for_reset_password::Precedent;
+
+//     let converter = move |unified_report: UnifiedReport_<Outcoming_, Precedent_>| -> StdResult<UnifiedReport<ApplicationUser__Authorization___SendEmailForResetPassword___Outcoming, ApplicationUser__Authorization___SendEmailForResetPassword___Precedent>, Box<dyn Error + 'static>> {
+//         let unified_report_ = match unified_report {
+//             UnifiedReport_::Target { data } => {
+//                 let data_ = match data {
+//                     Data_::Empty => {
+//                         Data::<ApplicationUser__Authorization___SendEmailForResetPassword___Outcoming>::empty()
+//                     }
+//                     Data_::Filled { data: data__ } => {
+//                         let outcoming = ApplicationUser__Authorization___SendEmailForResetPassword___Outcoming {
+//                             application_user_resep_password_token_can_be_resent_from: data__.application_user_reset_password_token_can_be_resent_from.0 as c_long,
+//                         };
+
+//                         Data::filled(outcoming)
+//                     }
+//                 };
+
+//                 UnifiedReport::target(data_)
+//             }
+//             UnifiedReport_::Precedent { precedent } => {
+//                 let precedent_ = match precedent {
+//                     Precedent_::ApplicationUser_NotFound => {
+//                         ApplicationUser__Authorization___SendEmailForResetPassword___Precedent {
+//                             application_user__not_found: true,
+//                             ..Default::default()
+//                         }
+//                     }
+//                     Precedent_::ApplicationUserResetPasswordToken_NotFound => {
+//                         ApplicationUser__Authorization___SendEmailForResetPassword___Precedent {
+//                             application_user_reset_password_token__not_found: true,
+//                             ..Default::default()
+//                         }
+//                     }
+//                     Precedent_::ApplicationUserResetPasswordToken_AlreadyExpired => {
+//                         ApplicationUser__Authorization___SendEmailForResetPassword___Precedent {
+//                             application_user_reset_password_token__already_expired: true,
+//                             ..Default::default()
+//                         }
+//                     }
+//                     Precedent_::ApplicationUserResetPasswordToken_AlreadyApproved => {
+//                         ApplicationUser__Authorization___SendEmailForResetPassword___Precedent {
+//                             application_user_reset_password_token__already_approved: true,
+//                             ..Default::default()
+//                         }
+//                     }
+//                     Precedent_::ApplicationUserResetPasswordToken_TimeToResendHasNotCome => {
+//                         ApplicationUser__Authorization___SendEmailForResetPassword___Precedent {
+//                             application_user_reset_password_token__time_to_resend_has_not_come: true,
+//                             ..Default::default()
+//                         }
+//                     }
+//                 };
+
+//                 UnifiedReport::precedent(precedent_)
+//             }
+//         };
+
+//         return Ok(unified_report_);
+//     };
+
+//     return deserialize(vector_of_bytes, converter);
+// }
+
+// #[no_mangle]
+// pub extern "C" fn application_user___authorization____send_email_for_reset_password____deallocate(
+//     result: *mut ApplicationUser__Authorization___SendEmailForResetPassword___Result
+// ) -> () {
+//     if result.is_null() {
+//         return ();
+//     }
+
+//     let _ = unsafe {
+//         Box::from_raw(result)
+//     };
+
+//     return ();
+// }
