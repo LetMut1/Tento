@@ -14,7 +14,7 @@ pub struct Incoming {
 
 #[derive(Serialize, Deserialize)]
 pub struct Outcoming {
-    pub application_user_registration_token_can_be_resent_from: ApplicationUserResetPasswordToken_CanBeResentFrom,
+    pub application_user_reset_password_token_can_be_resent_from: ApplicationUserResetPasswordToken_CanBeResentFrom,
 }
 
 r#enum!(

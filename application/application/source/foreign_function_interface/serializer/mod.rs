@@ -1650,3 +1650,537 @@ pub extern "C" fn application_user___authorization____register_by_last_step____d
 
     return ();
 }
+
+type ApplicationUser__Authorization___ResetPasswordByFirstStep___Result = Result<UnifiedReport<ApplicationUser__Authorization___ResetPasswordByFirstStep___Outcoming, ApplicationUser__Authorization___ResetPasswordByFirstStep___Precedent>>;
+
+#[repr(C)]
+#[derive(Default)]
+pub struct ApplicationUser__Authorization___ResetPasswordByFirstStep___Outcoming {
+    pub application_user_id: c_long,
+    pub verification_message_sent: bool,
+    pub application_user_reset_password_token_can_be_resent_from: c_long,
+    pub application_user_reset_password_token_wrong_enter_tries_quantity: c_short,
+    pub application_user_reset_password_token_wrong_enter_tries_quantity_limit: c_short,
+}
+
+#[repr(C)]
+#[derive(Default)]
+pub struct ApplicationUser__Authorization___ResetPasswordByFirstStep___Precedent {
+    pub application_user__not_found: bool,
+}
+
+#[no_mangle]
+pub extern "C" fn application_user___authorization____reset_password_by_first_step____deserialize(
+    vector: *mut Vector,
+) -> *mut ApplicationUser__Authorization___ResetPasswordByFirstStep___Result {
+    type Outcoming_ = application_user___authorization::reset_password_by_first_step::Outcoming;
+
+    type Precedent_ = application_user___authorization::reset_password_by_first_step::Precedent;
+
+    let converter = move |unified_report: UnifiedReport_<Outcoming_, Precedent_>| -> StdResult<UnifiedReport<ApplicationUser__Authorization___ResetPasswordByFirstStep___Outcoming, ApplicationUser__Authorization___ResetPasswordByFirstStep___Precedent>, Box<dyn Error + 'static>> {
+        let unified_report_ = match unified_report {
+            UnifiedReport_::Target { data } => {
+                let data_ = match data {
+                    Data_::Empty => {
+                        Data::<ApplicationUser__Authorization___ResetPasswordByFirstStep___Outcoming>::empty()
+                    }
+                    Data_::Filled { data: data__ } => {
+                        let outcoming = ApplicationUser__Authorization___ResetPasswordByFirstStep___Outcoming {
+                            application_user_id: data__.application_user_id.0 as c_long,
+                            verification_message_sent: data__.verification_message_sent,
+                            application_user_reset_password_token_can_be_resent_from: data__.application_user_reset_password_token_can_be_resent_from.0 as c_long,
+                            application_user_reset_password_token_wrong_enter_tries_quantity: data__.application_user_reset_password_token_wrong_enter_tries_quantity.0 as c_short,
+                            application_user_reset_password_token_wrong_enter_tries_quantity_limit: data__.application_user_reset_password_token_wrong_enter_tries_quantity_limit as c_short,
+                        };
+
+                        Data::filled(outcoming)
+                    }
+                };
+
+                UnifiedReport::target(data_)
+            }
+            UnifiedReport_::Precedent { precedent } => {
+                match precedent {
+                    Precedent_::ApplicationUser_NotFound => {}
+                };
+
+                let precedent_ = ApplicationUser__Authorization___ResetPasswordByFirstStep___Precedent {
+                    application_user__not_found: true
+                };
+
+                UnifiedReport::precedent(precedent_)
+            }
+        };
+
+        return Ok(unified_report_);
+    };
+
+    return deserialize(vector, converter);
+}
+
+#[no_mangle]
+pub extern "C" fn application_user___authorization____reset_password_by_first_step____deallocate(
+    result: *mut ApplicationUser__Authorization___ResetPasswordByFirstStep___Result
+) -> () {
+    deallocate(result);
+
+    return ();
+}
+
+type ApplicationUser__Authorization___ResetPasswordBySecondStep___Result = Result<UnifiedReport<Void, ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent>>;
+
+#[repr(C)]
+#[derive(Default)]
+pub struct ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent {
+    pub application_user_reset_password_token__not_found: bool,
+    pub application_user_reset_password_token__already_expired: bool,
+    pub application_user_reset_password_token__already_approved: bool,
+    pub application_user_reset_password_token__wrong_value: ApplicationUserResetPasswordToken_WrongValue,
+}
+
+#[repr(C)]
+#[derive(Default)]
+pub struct ApplicationUserResetPasswordToken_WrongValue {
+    pub is_exist: bool,
+    pub application_user_reset_password_token_wrong_enter_tries_quantity: c_short,
+}
+
+#[no_mangle]
+pub extern "C" fn application_user___authorization____reset_password_by_second_step____deserialize(
+    vector: *mut Vector,
+) -> *mut ApplicationUser__Authorization___ResetPasswordBySecondStep___Result {
+    type Precedent_ = application_user___authorization::reset_password_by_second_step::Precedent;
+
+    let converter = move |unified_report: UnifiedReport_<Void_, Precedent_>| -> StdResult<UnifiedReport<Void, ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent>, Box<dyn Error + 'static>> {
+        let unified_report_ = match unified_report {
+            UnifiedReport_::Target { data } => {
+                let data_ = match data {
+                    Data_::Empty => {
+                        Data::<Void>::empty()
+                    }
+                    Data_::Filled { data: _ } => {
+                        let outcoming = Void {
+                            ..Default::default()
+                        };
+
+                        Data::filled(outcoming)
+                    }
+                };
+
+                UnifiedReport::target(data_)
+            }
+            UnifiedReport_::Precedent { precedent } => {
+                let precedent_ = match precedent {
+                    Precedent_::ApplicationUserResetPasswordToken_NotFound => {
+                        ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent {
+                            application_user_reset_password_token__not_found: true,
+                            ..Default::default()
+                        }
+                    }
+                    Precedent_::ApplicationUserResetPasswordToken_AlreadyExpired => {
+                        ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent {
+                            application_user_reset_password_token__already_expired: true,
+                            ..Default::default()
+                        }
+                    }
+                    Precedent_::ApplicationUserResetPasswordToken_AlreadyApproved => {
+                        ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent {
+                            application_user_reset_password_token__already_approved: true,
+                            ..Default::default()
+                        }
+                    }
+                    Precedent_::ApplicationUserResetPasswordToken_WrongValue { application_user_reset_password_token_wrong_enter_tries_quantity } => {
+                        ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent {
+                            application_user_reset_password_token__wrong_value: ApplicationUserResetPasswordToken_WrongValue {
+                                is_exist: true,
+                                application_user_reset_password_token_wrong_enter_tries_quantity: application_user_reset_password_token_wrong_enter_tries_quantity.0 as c_short,
+                            },
+                            ..Default::default()
+                        }
+                    }
+                };
+
+                UnifiedReport::precedent(precedent_)
+            }
+        };
+
+        return Ok(unified_report_);
+    };
+
+    return deserialize(vector, converter);
+}
+
+#[no_mangle]
+pub extern "C" fn application_user___authorization____reset_password_by_second_step____deallocate(
+    result: *mut ApplicationUser__Authorization___ResetPasswordBySecondStep___Result
+) -> () {
+    deallocate(result);
+
+    return ();
+}
+
+type ApplicationUser__Authorization___ResetPasswordByLastStep___Result = Result<UnifiedReport<Void, ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent>>;
+
+#[repr(C)]
+#[derive(Default)]
+pub struct ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent {
+    pub application_user__not_found: bool,
+    pub application_user_reset_password_token__not_found: bool,
+    pub application_user_reset_password_token__already_expired: bool,
+    pub application_user_reset_password_token__is_not_approved: bool,
+    pub application_user_reset_password_token__wrong_value: bool
+}
+
+#[no_mangle]
+pub extern "C" fn application_user___authorization____reset_password_by_last_step____deserialize(
+    vector: *mut Vector,
+) -> *mut ApplicationUser__Authorization___ResetPasswordByLastStep___Result {
+    type Precedent_ = application_user___authorization::reset_password_by_last_step::Precedent;
+
+    let converter = move |unified_report: UnifiedReport_<Void_, Precedent_>| -> StdResult<UnifiedReport<Void, ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent>, Box<dyn Error + 'static>> {
+        let unified_report_ = match unified_report {
+            UnifiedReport_::Target { data } => {
+                let data_ = match data {
+                    Data_::Empty => {
+                        Data::<Void>::empty()
+                    }
+                    Data_::Filled { data: data__ } => {
+                        let outcoming = Void {
+                            ..Default::default()
+                        };
+
+                        Data::filled(outcoming)
+                    }
+                };
+
+                UnifiedReport::target(data_)
+            }
+            UnifiedReport_::Precedent { precedent } => {
+                let precedent_ = match precedent {
+                    Precedent_::ApplicationUser_NotFound => {
+                        ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent {
+                            application_user__not_found: true,
+                            ..Default::default()
+                        }
+                    }
+                    Precedent_::ApplicationUserResetPasswordToken_NotFound => {
+                        ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent {
+                            application_user_reset_password_token__not_found: true,
+                            ..Default::default()
+                        }
+                    }
+                    Precedent_::ApplicationUserResetPasswordToken_AlreadyExpired => {
+                        ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent {
+                            application_user_reset_password_token__already_expired: true,
+                            ..Default::default()
+                        }
+                    }
+                    Precedent_::ApplicationUserResetPasswordToken_IsNotApproved => {
+                        ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent {
+                            application_user_reset_password_token__is_not_approved: true,
+                            ..Default::default()
+                        }
+                    }
+                    Precedent_::ApplicationUserResetPasswordToken_WrongValue => {
+                        ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent {
+                            application_user_reset_password_token__wrong_value: true,
+                            ..Default::default()
+                        }
+                    }
+                };
+
+                UnifiedReport::precedent(precedent_)
+            }
+        };
+
+        return Ok(unified_report_);
+    };
+
+    return deserialize(vector, converter);
+}
+
+#[no_mangle]
+pub extern "C" fn application_user___authorization____reset_password_by_last_step____deallocate(
+    result: *mut ApplicationUser__Authorization___ResetPasswordByLastStep___Result
+) -> () {
+    deallocate(result);
+
+    return ();
+}
+
+type ApplicationUser__Authorization___SendEmailForRegister___Result = Result<UnifiedReport<ApplicationUser__Authorization___SendEmailForRegister___Outcoming, ApplicationUser__Authorization___SendEmailForRegister___Precedent>>;
+
+#[repr(C)]
+#[derive(Default)]
+pub struct ApplicationUser__Authorization___SendEmailForRegister___Outcoming {
+    pub application_user_registration_token_can_be_resent_from: c_long,
+}
+
+#[repr(C)]
+#[derive(Default)]
+pub struct ApplicationUser__Authorization___SendEmailForRegister___Precedent {
+    pub application_user_registration_token__not_found: bool,
+    pub application_user_registration_token__already_expired: bool,
+    pub application_user_registration_token__already_approved: bool,
+    pub application_user_registration_token__time_to_resend_has_not_come: bool,
+}
+
+#[no_mangle]
+pub extern "C" fn application_user___authorization____send_email_for_register____deserialize(
+    vector: *mut Vector,
+) -> *mut ApplicationUser__Authorization___SendEmailForRegister___Result {
+    type Outcoming_ = application_user___authorization::send_email_for_register::Outcoming;
+
+    type Precedent_ = application_user___authorization::send_email_for_register::Precedent;
+
+    let converter = move |unified_report: UnifiedReport_<Outcoming_, Precedent_>| -> StdResult<UnifiedReport<ApplicationUser__Authorization___SendEmailForRegister___Outcoming, ApplicationUser__Authorization___SendEmailForRegister___Precedent>, Box<dyn Error + 'static>> {
+        let unified_report_ = match unified_report {
+            UnifiedReport_::Target { data } => {
+                let data_ = match data {
+                    Data_::Empty => {
+                        Data::<ApplicationUser__Authorization___SendEmailForRegister___Outcoming>::empty()
+                    }
+                    Data_::Filled { data: data__ } => {
+                        let outcoming = ApplicationUser__Authorization___SendEmailForRegister___Outcoming {
+                            application_user_registration_token_can_be_resent_from: data__.application_user_registration_token_can_be_resent_from.0 as c_long,
+                        };
+
+                        Data::filled(outcoming)
+                    }
+                };
+
+                UnifiedReport::target(data_)
+            }
+            UnifiedReport_::Precedent { precedent } => {
+                let precedent_ = match precedent {
+                    Precedent_::ApplicationUserRegistrationToken_NotFound => {
+                        ApplicationUser__Authorization___SendEmailForRegister___Precedent {
+                            application_user_registration_token__not_found: true,
+                            ..Default::default()
+                        }
+                    }
+                    Precedent_::ApplicationUserRegistrationToken_AlreadyExpired => {
+                        ApplicationUser__Authorization___SendEmailForRegister___Precedent {
+                            application_user_registration_token__already_expired: true,
+                            ..Default::default()
+                        }
+                    }
+                    Precedent_::ApplicationUserRegistrationToken_AlreadyApproved => {
+                        ApplicationUser__Authorization___SendEmailForRegister___Precedent {
+                            application_user_registration_token__already_approved: true,
+                            ..Default::default()
+                        }
+                    }
+                    Precedent_::ApplicationUserRegistrationToken_TimeToResendHasNotCome => {
+                        ApplicationUser__Authorization___SendEmailForRegister___Precedent {
+                            application_user_registration_token__time_to_resend_has_not_come: true,
+                            ..Default::default()
+                        }
+                    }
+                };
+
+                UnifiedReport::precedent(precedent_)
+            }
+        };
+
+        return Ok(unified_report_);
+    };
+
+    return deserialize(vector, converter);
+}
+
+#[no_mangle]
+pub extern "C" fn application_user___authorization____send_email_for_register____deallocate(
+    result: *mut ApplicationUser__Authorization___SendEmailForRegister___Result
+) -> () {
+    deallocate(result);
+
+    return ();
+}
+
+type ApplicationUser__Authorization___SendEmailForAuthorize___Result = Result<UnifiedReport<ApplicationUser__Authorization___SendEmailForAuthorize___Outcoming, ApplicationUser__Authorization___SendEmailForAuthorize___Precedent>>;
+
+#[repr(C)]
+#[derive(Default)]
+pub struct ApplicationUser__Authorization___SendEmailForAuthorize___Outcoming {
+    pub application_user_authorization_token_can_be_resent_from: c_long,
+}
+
+#[repr(C)]
+#[derive(Default)]
+pub struct ApplicationUser__Authorization___SendEmailForAuthorize___Precedent {
+    pub application_user__not_found: bool,
+    pub application_user_authorization_token__not_found: bool,
+    pub application_user_authorization_token__already_expired: bool,
+    pub application_user_authorization_token__time_to_resend_has_not_come: bool,
+}
+
+#[no_mangle]
+pub extern "C" fn application_user___authorization____send_email_for_authorize____deserialize(
+    vector: *mut Vector,
+) -> *mut ApplicationUser__Authorization___SendEmailForAuthorize___Result {
+    type Outcoming_ = application_user___authorization::send_email_for_authorize::Outcoming;
+
+    type Precedent_ = application_user___authorization::send_email_for_authorize::Precedent;
+
+    let converter = move |unified_report: UnifiedReport_<Outcoming_, Precedent_>| -> StdResult<UnifiedReport<ApplicationUser__Authorization___SendEmailForAuthorize___Outcoming, ApplicationUser__Authorization___SendEmailForAuthorize___Precedent>, Box<dyn Error + 'static>> {
+        let unified_report_ = match unified_report {
+            UnifiedReport_::Target { data } => {
+                let data_ = match data {
+                    Data_::Empty => {
+                        Data::<ApplicationUser__Authorization___SendEmailForAuthorize___Outcoming>::empty()
+                    }
+                    Data_::Filled { data: data__ } => {
+                        let outcoming = ApplicationUser__Authorization___SendEmailForAuthorize___Outcoming {
+                            application_user_authorization_token_can_be_resent_from: data__.application_user_authorization_token_can_be_resent_from.0 as c_long,
+                        };
+
+                        Data::filled(outcoming)
+                    }
+                };
+
+                UnifiedReport::target(data_)
+            }
+            UnifiedReport_::Precedent { precedent } => {
+                let precedent_ = match precedent {
+                    Precedent_::ApplicationUser_NotFound => {
+                        ApplicationUser__Authorization___SendEmailForAuthorize___Precedent {
+                            application_user__not_found: true,
+                            ..Default::default()
+                        }
+                    }
+                    Precedent_::ApplicationUserAuthorizationToken_NotFound => {
+                        ApplicationUser__Authorization___SendEmailForAuthorize___Precedent {
+                            application_user_authorization_token__not_found: true,
+                            ..Default::default()
+                        }
+                    }
+                    Precedent_::ApplicationUserAuthorizationToken_AlreadyExpired => {
+                        ApplicationUser__Authorization___SendEmailForAuthorize___Precedent {
+                            application_user_authorization_token__already_expired: true,
+                            ..Default::default()
+                        }
+                    }
+                    Precedent_::ApplicationUserAuthorizationToken_TimeToResendHasNotCome => {
+                        ApplicationUser__Authorization___SendEmailForAuthorize___Precedent {
+                            application_user_authorization_token__time_to_resend_has_not_come: true,
+                            ..Default::default()
+                        }
+                    }
+                };
+
+                UnifiedReport::precedent(precedent_)
+            }
+        };
+
+        return Ok(unified_report_);
+    };
+
+    return deserialize(vector, converter);
+}
+
+#[no_mangle]
+pub extern "C" fn application_user___authorization____send_email_for_authorize____deallocate(
+    result: *mut ApplicationUser__Authorization___SendEmailForAuthorize___Result
+) -> () {
+    deallocate(result);
+
+    return ();
+}
+
+type ApplicationUser__Authorization___SendEmailForResetPassword___Result = Result<UnifiedReport<ApplicationUser__Authorization___SendEmailForResetPassword___Outcoming, ApplicationUser__Authorization___SendEmailForResetPassword___Precedent>>;
+
+#[repr(C)]
+#[derive(Default)]
+pub struct ApplicationUser__Authorization___SendEmailForResetPassword___Outcoming {
+    pub application_user_resep_password_token_can_be_resent_from: c_long,
+}
+
+#[repr(C)]
+#[derive(Default)]
+pub struct ApplicationUser__Authorization___SendEmailForResetPassword___Precedent {
+    pub application_user__not_found: bool,
+    pub application_user_reset_password_token__not_found: bool,
+    pub application_user_reset_password_token__already_expired: bool,
+    pub application_user_reset_password_token__already_approved: bool,
+    pub application_user_reset_password_token__time_to_resend_has_not_come: bool,
+}
+
+#[no_mangle]
+pub extern "C" fn application_user___authorization____send_email_for_reset_password____deserialize(
+    vector: *mut Vector,
+) -> *mut ApplicationUser__Authorization___SendEmailForResetPassword___Result {
+    type Outcoming_ = application_user___authorization::send_email_for_reset_password::Outcoming;
+
+    type Precedent_ = application_user___authorization::send_email_for_reset_password::Precedent;
+
+    let converter = move |unified_report: UnifiedReport_<Outcoming_, Precedent_>| -> StdResult<UnifiedReport<ApplicationUser__Authorization___SendEmailForResetPassword___Outcoming, ApplicationUser__Authorization___SendEmailForResetPassword___Precedent>, Box<dyn Error + 'static>> {
+        let unified_report_ = match unified_report {
+            UnifiedReport_::Target { data } => {
+                let data_ = match data {
+                    Data_::Empty => {
+                        Data::<ApplicationUser__Authorization___SendEmailForResetPassword___Outcoming>::empty()
+                    }
+                    Data_::Filled { data: data__ } => {
+                        let outcoming = ApplicationUser__Authorization___SendEmailForResetPassword___Outcoming {
+                            application_user_resep_password_token_can_be_resent_from: data__.application_user_reset_password_token_can_be_resent_from.0 as c_long,
+                        };
+
+                        Data::filled(outcoming)
+                    }
+                };
+
+                UnifiedReport::target(data_)
+            }
+            UnifiedReport_::Precedent { precedent } => {
+                let precedent_ = match precedent {
+                    Precedent_::ApplicationUser_NotFound => {
+                        ApplicationUser__Authorization___SendEmailForResetPassword___Precedent {
+                            application_user__not_found: true,
+                            ..Default::default()
+                        }
+                    }
+                    Precedent_::ApplicationUserResetPasswordToken_NotFound => {
+                        ApplicationUser__Authorization___SendEmailForResetPassword___Precedent {
+                            application_user_reset_password_token__not_found: true,
+                            ..Default::default()
+                        }
+                    }
+                    Precedent_::ApplicationUserResetPasswordToken_AlreadyExpired => {
+                        ApplicationUser__Authorization___SendEmailForResetPassword___Precedent {
+                            application_user_reset_password_token__already_expired: true,
+                            ..Default::default()
+                        }
+                    }
+                    Precedent_::ApplicationUserResetPasswordToken_AlreadyApproved => {
+                        ApplicationUser__Authorization___SendEmailForResetPassword___Precedent {
+                            application_user_reset_password_token__already_approved: true,
+                            ..Default::default()
+                        }
+                    }
+                    Precedent_::ApplicationUserResetPasswordToken_TimeToResendHasNotCome => {
+                        ApplicationUser__Authorization___SendEmailForResetPassword___Precedent {
+                            application_user_reset_password_token__time_to_resend_has_not_come: true,
+                            ..Default::default()
+                        }
+                    }
+                };
+
+                UnifiedReport::precedent(precedent_)
+            }
+        };
+
+        return Ok(unified_report_);
+    };
+
+    return deserialize(vector, converter);
+}
+
+#[no_mangle]
+pub extern "C" fn application_user___authorization____send_email_for_reset_password____deallocate(
+    result: *mut ApplicationUser__Authorization___SendEmailForResetPassword___Result
+) -> () {
+    deallocate(result);
+
+    return ();
+}

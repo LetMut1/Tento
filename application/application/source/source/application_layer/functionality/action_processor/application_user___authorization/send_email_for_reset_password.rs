@@ -274,7 +274,7 @@ impl SendEmailForResetPassword {
         }
 
         let outcoming = Outcoming {
-            application_user_registration_token_can_be_resent_from: application_user_reset_password_token_.can_be_resent_from,
+            application_user_reset_password_token_can_be_resent_from: application_user_reset_password_token_.can_be_resent_from,
         };
 
         return Ok(
