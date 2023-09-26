@@ -1846,7 +1846,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_last_ste
                     Data_::Empty => {
                         Data::<Void>::empty()
                     }
-                    Data_::Filled { data: data__ } => {
+                    Data_::Filled { data: _ } => {
                         let outcoming = Void {
                             ..Default::default()
                         };
