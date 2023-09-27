@@ -94,8 +94,8 @@
 
 // TODO Везде в unsafe функциях (slice::from_raw_parts, ...) ядра посмотреть требования к параметрам и попробовать сделать проверку.
 // TODO access_modifier/visability_modifier посмотреть, как на бэкенде лежат в бд и отдаются. Здесь сделать структуру
-// TODO что будет, если половина саллоцируется, а затем вылетит с ошиькой?
-// TODO Может быть, везде нужно immutable raw pointer (*const T)?
+
+// TODO TODO TODO TODO что будет, если половина саллоцируется, а затем вылетит с ошиькой?
 
 
 use libc::c_int;
@@ -106,6 +106,7 @@ use libc::c_uchar;
 use libc::c_char;
 use void::Void;
 use std::error::Error;
+use std::slice::from_raw_parts;
 use std::ffi::CString;
 use std::slice;
 use std::mem::forget;
@@ -116,12 +117,13 @@ use std::boxed::Box;
 use std::ptr;
 use serde::Deserialize;
 use unified_report::UnifiedReport;
-use ptr::slice_from_raw_parts_mut;
+use std::marker::PhantomData;
+use std::ptr::slice_from_raw_parts_mut;
 use unified_report::Data;
 use action_processor_incoming_outcoming::action_processor::application_user___authorization;
 use action_processor_incoming_outcoming::action_processor::channel___base;
 use action_processor_incoming_outcoming::action_processor::channel_subscription___base;
-use message_pack_serializer::Serializer;
+use message_pack_serializer::Serializer as Serializer_;
 
 #[no_mangle]
 pub extern "C" fn f1(a: c_int) -> c_int {
@@ -740,6 +742,7 @@ where
 }
 
 #[repr(C)]
+#[derive(Clone, Copy)]
 pub struct C_String {
     pub pointer: *mut c_char,
 }
@@ -752,69 +755,11 @@ impl Default for C_String {
     }
 }
 
-impl C_String {
-    fn allocate<'a>(value: &'a str) -> Result<Self, Box<dyn Error + 'static>> {
-        let pointer = match CString::new(value) {
-            Ok(pointer_) => pointer_.into_raw(),
-            Err(error) => {
-                return Err(error.into());
-            }
-        };
-
-        return Ok(
-            Self {
-                pointer
-            }
-        );
-    }
-
-    fn deallocate(self) -> () {
-        if self.pointer.is_null() {
-            return ();
-        }
-
-        let _ = unsafe {
-            CString::from_raw(self.pointer)
-        };
-
-        return ();
-    }
-}
-
 #[repr(C)]
 #[derive(Clone, Copy)]
 pub struct C_Vector<T> {
     pointer: *mut T,
     length: size_t,
-}
-
-impl<T> C_Vector<T> {
-    fn allocate(registry: Vec<T>) -> Self {                                 // TODO Discord Ping.
-        let mut boxed_slice = registry.into_boxed_slice();
-
-        let self_ = Self {
-            pointer: boxed_slice.as_mut_ptr(),
-            length: boxed_slice.len()
-        };
-
-        forget(boxed_slice);
-
-        return self_;
-    }
-
-    fn deallocate(self) -> () {
-        if self.pointer.is_null() {
-            return ();
-        }
-
-        let pointer = slice_from_raw_parts_mut(self.pointer, self.length as usize);
-
-        let _ = unsafe {
-            Box::from_raw(pointer)
-        };
-
-        return ();
-    }
 }
 
 impl<T> Default for C_Vector<T> {
@@ -834,68 +779,129 @@ pub struct C_Void {
     _inner: bool,
 }
 
-fn deserialize<APO1, APP1, F, APO2, APP2>(
-    vector_of_bytes: *mut C_Vector<c_uchar>,
-    converter: F
-) -> *mut C_Result<C_UnifiedReport<APO2, APP2>>
-where
-    APO1: for<'de> Deserialize<'de>,
-    APP1: for<'de> Deserialize<'de>,
-    APO2: Default,
-    APP2: Default,
-    F: FnOnce(UnifiedReport<APO1, APP1>) -> Result<C_UnifiedReport<APO2, APP2>, Box<dyn Error + 'static>>
-{
-    if vector_of_bytes.is_null() {
-        return Box::into_raw(
-            Box::new(
-                C_Result::error()
-            )
-        );
+struct Allocator<S> {
+    _subject: PhantomData<S>,
+}
+
+impl Allocator<C_String> {
+    fn allocate(string: String) -> C_String {
+        let c_string = unsafe {
+            CString::from_vec_unchecked(string.into_bytes())
+        };
+
+        C_String {
+            pointer: c_string.into_raw()
+        }
     }
 
-    let vector_ = unsafe {
-        *vector_of_bytes
-    };
+    fn deallocate(c_string: C_String) -> () {
+        if c_string.pointer.is_null() {
+            return ();
+        }
 
-    if vector_.pointer.is_null() || vector_.length == 0 {
-        return Box::into_raw(
-            Box::new(
-                C_Result::error()
-            )
-        );
+        let _ = unsafe {
+            CString::from_raw(c_string.pointer)
+        };
+
+        return ();
+    }
+}
+
+impl<T> Allocator<C_Vector<T>> {
+    fn allocate(vector: Vec<T>) -> C_Vector<T> {                                 // TODO Discord Ping.
+        let mut boxed_slice = vector.into_boxed_slice();
+
+        let self_ = C_Vector {
+            pointer: boxed_slice.as_mut_ptr(),
+            length: boxed_slice.len()
+        };
+
+        forget(boxed_slice);
+
+        return self_;
     }
 
-    let data = unsafe {
-        slice::from_raw_parts::<u8>(vector_.pointer as *mut u8, vector_.length as usize)
-    };
+    fn deallocate(c_vector: C_Vector<T>) -> () {
+        if c_vector.pointer.is_null() {
+            return ();
+        }
 
-    let unified_report = match Serializer::deserialize::<'_, UnifiedReport<APO1, APP1>>(data) {
-        Ok(unified_report_) => unified_report_,
-        Err(_) => {
+        let pointer = slice_from_raw_parts_mut(c_vector.pointer, c_vector.length as usize);
+
+        let _ = unsafe {
+            Box::from_raw(pointer)
+        };
+
+        return ();
+    }
+}
+
+struct Serilizer;
+
+impl Serilizer {
+    fn deserialize<APO1, APP1, F, APO2, APP2>(
+        vector_of_bytes: *mut C_Vector<c_uchar>,
+        converter: F
+    ) -> *mut C_Result<C_UnifiedReport<APO2, APP2>>
+    where
+        APO1: for<'de> Deserialize<'de>,
+        APP1: for<'de> Deserialize<'de>,
+        APO2: Default,
+        APP2: Default,
+        F: FnOnce(UnifiedReport<APO1, APP1>) -> Result<C_UnifiedReport<APO2, APP2>, Box<dyn Error + 'static>>
+    {
+        if vector_of_bytes.is_null() {
             return Box::into_raw(
                 Box::new(
                     C_Result::error()
                 )
             );
         }
-    };
 
-    let unified_report_ = match converter(unified_report) {
-        Ok(unified_report__) => unified_report__,
-        Err(_) => {
+        let vector_ = unsafe {
+            *vector_of_bytes
+        };
+
+        if vector_.pointer.is_null() || vector_.length == 0 {
             return Box::into_raw(
                 Box::new(
                     C_Result::error()
                 )
             );
         }
-    };
 
-    return Box::into_raw(
-        Box::new(
-            C_Result::data(unified_report_)
-        )
-    );
+        let data = unsafe {
+            slice::from_raw_parts::<u8>(vector_.pointer as *mut u8, vector_.length as usize)
+        };
+
+        let unified_report = match Serializer_::deserialize::<'_, UnifiedReport<APO1, APP1>>(data) {
+            Ok(unified_report_) => unified_report_,
+            Err(_) => {
+                return Box::into_raw(
+                    Box::new(
+                        C_Result::error()
+                    )
+                );
+            }
+        };
+
+        let unified_report_ = match converter(unified_report) {
+            Ok(unified_report__) => unified_report__,
+            Err(_) => {
+                return Box::into_raw(
+                    Box::new(
+                        C_Result::error()
+                    )
+                );
+            }
+        };
+
+        return Box::into_raw(
+            Box::new(
+                C_Result::data(unified_report_)
+            )
+        );
+    }
 }
 
 type ApplicationUser__Authorization___AuthorizeByFirstStep___Result = C_Result<C_UnifiedReport<ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming, ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent>>;
@@ -962,7 +968,7 @@ pub extern "C" fn application_user___authorization____authorize_by_first_step___
         return Ok(unified_report_);
     };
 
-    return deserialize(vector_of_bytes, converter);
+    return Serilizer::deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -1022,8 +1028,8 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
                     }
                     Data::Filled { data: Data_ } => {
                         let outcoming = ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming {
-                            application_user_access_token_encrypted: C_String::allocate(Data_.application_user_access_token_encrypted.0.as_str())?,
-                            application_user_access_refresh_token_encrypted: C_String::allocate(Data_.application_user_access_refresh_token_encrypted.0.as_str())?,
+                            application_user_access_token_encrypted: Allocator::<C_String>::allocate(Data_.application_user_access_token_encrypted.0),
+                            application_user_access_refresh_token_encrypted: Allocator::<C_String>::allocate(Data_.application_user_access_refresh_token_encrypted.0),
                         };
 
                         C_Data::filled(outcoming)
@@ -1070,7 +1076,7 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
         return Ok(unified_report_);
     };
 
-    return deserialize(vector_of_bytes, converter);
+    return Serilizer::deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -1088,9 +1094,9 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
     if result_.is_data {
         if result_.data.is_target {
             if result_.data.target.is_filled {
-                C_String::deallocate(result_.data.target.filled.application_user_access_token_encrypted);
+                Allocator::<C_String>::deallocate(result_.data.target.filled.application_user_access_token_encrypted);
 
-                C_String::deallocate(result_.data.target.filled.application_user_access_refresh_token_encrypted);
+                Allocator::<C_String>::deallocate(result_.data.target.filled.application_user_access_refresh_token_encrypted);
             }
         }
     }
@@ -1142,7 +1148,7 @@ pub extern "C" fn application_user___authorization____check_email_for_existing__
         return Ok(unified_report_);
     };
 
-    return deserialize(vector_of_bytes, converter);
+    return Serilizer::deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -1204,7 +1210,7 @@ pub extern "C" fn application_user___authorization____check_nickname_for_existin
         return Ok(unified_report_);
     };
 
-    return deserialize(vector_of_bytes, converter);
+    return Serilizer::deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -1278,7 +1284,7 @@ pub extern "C" fn application_user___authorization____deauthorize_from_all_devic
         return Ok(unified_report_);
     };
 
-    return deserialize(vector_of_bytes, converter);
+    return Serilizer::deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -1352,7 +1358,7 @@ pub extern "C" fn application_user___authorization____deauthorize_from_one_devic
         return Ok(unified_report_);
     };
 
-    return deserialize(vector_of_bytes, converter);
+    return Serilizer::deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -1403,8 +1409,8 @@ pub extern "C" fn application_user___authorization____refresh_access_token____de
                     }
                     Data::Filled { data: Data_ } => {
                         let outcoming = ApplicationUser__Authorization___RefreshAccessToken___Outcoming {
-                            application_user_access_token_encrypted: C_String::allocate(Data_.application_user_access_token_encrypted.0.as_str())?,
-                            application_user_access_refresh_token_encrypted: C_String::allocate(Data_.application_user_access_refresh_token_encrypted.0.as_str())?,
+                            application_user_access_token_encrypted: Allocator::<C_String>::allocate(Data_.application_user_access_token_encrypted.0),
+                            application_user_access_refresh_token_encrypted: Allocator::<C_String>::allocate(Data_.application_user_access_refresh_token_encrypted.0),
                         };
 
                         C_Data::filled(outcoming)
@@ -1436,7 +1442,7 @@ pub extern "C" fn application_user___authorization____refresh_access_token____de
         return Ok(unified_report_);
     };
 
-    return deserialize(vector_of_bytes, converter);
+    return Serilizer::deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -1454,9 +1460,9 @@ pub extern "C" fn application_user___authorization____refresh_access_token____de
     if result_.is_data {
         if result_.data.is_target {
             if result_.data.target.is_filled {
-                C_String::deallocate(result_.data.target.filled.application_user_access_token_encrypted);
+                Allocator::<C_String>::deallocate(result_.data.target.filled.application_user_access_token_encrypted);
 
-                C_String::deallocate(result_.data.target.filled.application_user_access_refresh_token_encrypted);
+                Allocator::<C_String>::deallocate(result_.data.target.filled.application_user_access_refresh_token_encrypted);
             }
         }
     }
@@ -1526,7 +1532,7 @@ pub extern "C" fn application_user___authorization____register_by_first_step____
         return Ok(unified_report_);
     };
 
-    return deserialize(vector_of_bytes, converter);
+    return Serilizer::deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -1624,7 +1630,7 @@ pub extern "C" fn application_user___authorization____register_by_second_step___
         return Ok(unified_report_);
     };
 
-    return deserialize(vector_of_bytes, converter);
+    return Serilizer::deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -1679,8 +1685,8 @@ pub extern "C" fn application_user___authorization____register_by_last_step____d
                     }
                     Data::Filled { data: Data_ } => {
                         let outcoming = ApplicationUser__Authorization___RegisterByLastStep___Outcoming {
-                            application_user_access_token_encrypted: C_String::allocate(Data_.application_user_access_token_encrypted.0.as_str())?,
-                            application_user_access_refresh_token_encrypted: C_String::allocate(Data_.application_user_access_refresh_token_encrypted.0.as_str())?,
+                            application_user_access_token_encrypted: Allocator::<C_String>::allocate(Data_.application_user_access_token_encrypted.0),
+                            application_user_access_refresh_token_encrypted: Allocator::<C_String>::allocate(Data_.application_user_access_refresh_token_encrypted.0),
                         };
 
                         C_Data::filled(outcoming)
@@ -1736,7 +1742,7 @@ pub extern "C" fn application_user___authorization____register_by_last_step____d
         return Ok(unified_report_);
     };
 
-    return deserialize(vector_of_bytes, converter);
+    return Serilizer::deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -1754,9 +1760,9 @@ pub extern "C" fn application_user___authorization____register_by_last_step____d
     if result_.is_data {
         if result_.data.is_target {
             if result_.data.target.is_filled {
-                C_String::deallocate(result_.data.target.filled.application_user_access_token_encrypted);
+                Allocator::<C_String>::deallocate(result_.data.target.filled.application_user_access_token_encrypted);
 
-                C_String::deallocate(result_.data.target.filled.application_user_access_refresh_token_encrypted);
+                Allocator::<C_String>::deallocate(result_.data.target.filled.application_user_access_refresh_token_encrypted);
             }
         }
     }
@@ -1828,7 +1834,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_first_st
         return Ok(unified_report_);
     };
 
-    return deserialize(vector_of_bytes, converter);
+    return Serilizer::deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -1926,7 +1932,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_second_s
         return Ok(unified_report_);
     };
 
-    return deserialize(vector_of_bytes, converter);
+    return Serilizer::deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -2021,7 +2027,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_last_ste
         return Ok(unified_report_);
     };
 
-    return deserialize(vector_of_bytes, converter);
+    return Serilizer::deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -2117,7 +2123,7 @@ pub extern "C" fn application_user___authorization____send_email_for_register___
         return Ok(unified_report_);
     };
 
-    return deserialize(vector_of_bytes, converter);
+    return Serilizer::deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -2213,7 +2219,7 @@ pub extern "C" fn application_user___authorization____send_email_for_authorize__
         return Ok(unified_report_);
     };
 
-    return deserialize(vector_of_bytes, converter);
+    return Serilizer::deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -2316,7 +2322,7 @@ pub extern "C" fn application_user___authorization____send_email_for_reset_passw
         return Ok(unified_report_);
     };
 
-    return deserialize(vector_of_bytes, converter);
+    return Serilizer::deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -2398,20 +2404,20 @@ pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____deseria
 
                         '_a: for common_1 in Data_.common_registry {
                             let channel_cover_image_path = match common_1.channel.channel_cover_image_path {
-                                Some(channel_cover_image_path_) => C_Option::data(C_String::allocate(channel_cover_image_path_.0.as_str())?),
+                                Some(channel_cover_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel_cover_image_path_.0)),
                                 None => C_Option::none()
                             };
 
                             let channel_background_image_path = match common_1.channel.channel_background_image_path {
-                                Some(channel_background_image_path_) => C_Option::data(C_String::allocate(channel_background_image_path_.0.as_str())?),
+                                Some(channel_background_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel_background_image_path_.0)),
                                 None => C_Option::none()
                             };
 
                             let common_1_ = Common1 {
                                 channel: Channel1 {
                                     channel_id: common_1.channel.channel_id.0 as c_long,
-                                    channel_name: C_String::allocate(common_1.channel.channel_name.0.as_str())?,
-                                    channel_linked_name: C_String::allocate(common_1.channel.channel_linked_name.0.as_str())?,
+                                    channel_name: Allocator::<C_String>::allocate(common_1.channel.channel_name.0),
+                                    channel_linked_name: Allocator::<C_String>::allocate(common_1.channel.channel_linked_name.0),
                                     channel_access_modifier: common_1.channel.channel_access_modifier.0 as c_short,
                                     channel_visability_modifier: common_1.channel.channel_visability_modifier.0 as c_short,
                                     channel_cover_image_path,
@@ -2423,7 +2429,7 @@ pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____deseria
                             common_registry.push(common_1_);
                         }
 
-                        let common_registry_ = C_Vector::allocate(common_registry);
+                        let common_registry_ = Allocator::<C_Vector<_>>::allocate(common_registry);
 
                         let outcoming = Channel__Base___GetManyByNameInSubscriptions___Outcoming {
                             common_registry: common_registry_,
@@ -2458,20 +2464,46 @@ pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____deseria
         return Ok(unified_report_);
     };
 
-    return deserialize(vector_of_bytes, converter);
+    return Serilizer::deserialize(vector_of_bytes, converter);
 }
 
-// #[no_mangle]
-// pub extern "C" fn channel___base____send_email_for_reset_password____deallocate(
-//     result: *mut Channel__Base___SendEmailForResetPassword___Result
-// ) -> () {
-//     if result.is_null() {
-//         return ();
-//     }
+#[no_mangle]
+pub extern "C" fn channel___base____send_email_for_reset_password____deallocate(
+    result: *mut Channel__Base___GetManyByNameInSubscriptions___Result
+) -> () {
+    if result.is_null() {
+        return ();
+    }
 
-//     let _ = unsafe {
-//         Box::from_raw(result)
-//     };
+    let result_ = unsafe {
+        Box::from_raw(result)
+    };
 
-//     return ();
-// }
+    if result_.is_data {
+        if result_.data.is_target {
+            if result_.data.target.is_filled {
+                let common_registry = unsafe {
+                    from_raw_parts(result_.data.target.filled.common_registry.pointer, result_.data.target.filled.common_registry.length as usize)
+                };
+
+                for common in common_registry {
+                    Allocator::<C_String>::deallocate(common.channel.channel_name);
+
+                    Allocator::<C_String>::deallocate(common.channel.channel_linked_name);
+
+                    if common.channel. channel_background_image_path.is_data {
+                        Allocator::<C_String>::deallocate(common.channel. channel_background_image_path.data);
+                    }
+
+                    if common.channel. channel_cover_image_path.is_data {
+                        Allocator::<C_String>::deallocate(common.channel. channel_cover_image_path.data);
+                    }
+                }
+
+                Allocator::<C_Vector<_>>::deallocate(result_.data.target.filled.common_registry);
+            }
+        }
+    }
+
+    return ();
+}
