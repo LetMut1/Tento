@@ -1,3 +1,15 @@
+// TODO cargo build --release --lib --target aarch64-apple-ios
+// TODO cargo build --release --lib --target aarch64-apple-ios-sim
+// TODO cargo build --release --lib --target armv7-linux-androideabi
+
+// TODO access_modifier/visability_modifier посмотреть, как на бэкенде лежат в бд и отдаются. Здесь сделать структуру
+// TODO unit.tests
+
+
+
+
+
+
 #![allow(
     dead_code,
     non_camel_case_types,
@@ -80,23 +92,6 @@
     clippy::verbose_file_reads,
     clippy::zero_sized_map_values
 )]
-
-
-
-
-
-
-
-// TODO cargo build --release --lib --target aarch64-apple-ios
-// TODO cargo build --release --lib --target aarch64-apple-ios-sim
-// TODO cargo build --release --lib --target armv7-linux-androideabi
-
-
-// TODO Везде в unsafe функциях (slice::from_raw_parts, ...) ядра посмотреть требования к параметрам и попробовать сделать проверку.
-// TODO access_modifier/visability_modifier посмотреть, как на бэкенде лежат в бд и отдаются. Здесь сделать структуру
-
-// TODO TODO TODO TODO что будет, если половина саллоцируется, а затем вылетит с ошиькой?
-
 
 use libc::c_int;
 use libc::c_short;
@@ -2966,23 +2961,6 @@ pub extern "C" fn channel___base____get_one_by_id____deallocate(
 
     return ();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 type ChannelSubscription__Base___Create___Result = C_Result<C_UnifiedReport<C_Void, ChannelSubscription__Base___Create___Precedent>>;
 
