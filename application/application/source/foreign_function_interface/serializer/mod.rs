@@ -383,7 +383,7 @@ pub extern "C" fn array_slice_f1(pointer_to_first_element_of_registry: *mut c_uc
     }
 
     let registry = unsafe {
-        slice::from_raw_parts::<u8>(pointer_to_first_element_of_registry, registry_length as usize)
+        slice::from_raw_parts::<u8>(pointer_to_first_element_of_registry, registry_length )
     };
 
     if registry.len() == 0 {
@@ -779,6 +779,14 @@ pub struct C_Void {
     _inner: bool,
 }
 
+impl C_Void {
+    fn new() -> Self {
+        return Self {
+            ..Default::default()
+        };
+    }
+}
+
 struct Allocator<S> {
     _subject: PhantomData<S>,
 }
@@ -826,7 +834,7 @@ impl<T> Allocator<C_Vector<T>> {
             return ();
         }
 
-        let pointer = slice_from_raw_parts_mut(c_vector.pointer, c_vector.length as usize);
+        let pointer = slice_from_raw_parts_mut(c_vector.pointer, c_vector.length );
 
         let _ = unsafe {
             Box::from_raw(pointer)
@@ -871,7 +879,7 @@ impl Serilizer {
         }
 
         let data = unsafe {
-            slice::from_raw_parts::<u8>(vector_.pointer as *mut u8, vector_.length as usize)
+            slice::from_raw_parts::<u8>(vector_.pointer as *mut u8, vector_.length )
         };
 
         let unified_report = match Serializer_::deserialize::<'_, UnifiedReport<APO1, APP1>>(data) {
@@ -904,6 +912,53 @@ impl Serilizer {
     }
 }
 
+#[repr(C)]
+#[derive(Default)]
+pub struct Common1 {
+    pub channel: Channel1,
+    pub is_application_user_subscribed: bool,
+}
+
+#[repr(C)]
+#[derive(Default)]
+pub struct Channel1 {
+    pub channel_id: c_long,
+    pub channel_name: C_String,
+    pub channel_linked_name: C_String,
+    pub channel_access_modifier: c_short,
+    pub channel_visability_modifier: c_short,
+    pub channel_cover_image_path: C_Option<C_String>,
+    pub channel_background_image_path: C_Option<C_String>,
+}
+
+#[repr(C)]
+#[derive(Default)]
+pub struct Channel2 {
+    pub channel_owner: c_long,
+    pub channel_name: C_String,
+    pub channel_linked_name: C_String,
+    pub channel_description: C_Option<C_String>,
+    pub channel_access_modifier: c_short,
+    pub channel_visability_modifier: c_short,
+    pub channel_orientation: C_Vector<c_short>,
+    pub channel_cover_image_path: C_Option<C_String>,
+    pub channel_background_image_path: C_Option<C_String>,
+    pub channel_subscribers_quantity: c_long,
+    pub channel_marks_quantity: c_long,
+    pub channel_viewing_quantity: c_long,
+}
+
+#[repr(C)]
+#[derive(Default)]
+pub struct ChannelInnerLink1 {
+    pub channel_inner_link_to: c_long,
+}
+
+pub struct ChannelOuterLink1 {
+    pub channel_outer_link_alias: C_String,
+    pub channel_outer_link_address: C_String,
+}
+
 type ApplicationUser__Authorization___AuthorizeByFirstStep___Result = C_Result<C_UnifiedReport<ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming, ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent>>;
 
 #[repr(C)]
@@ -933,24 +988,24 @@ pub extern "C" fn application_user___authorization____authorize_by_first_step___
     let converter = move |unified_report: UnifiedReport<Outcoming_, Precedent_>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming, ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
-                let data = match data {
+                let data_ = match data {
                     Data::Empty => {
                         C_Data::empty()
                     }
-                    Data::Filled { data: Data_ } => {
+                    Data::Filled { data: data__ } => {
                         let outcoming = ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming {
-                            application_user_id: Data_.application_user_id.0 as c_long,
-                            verification_message_sent: Data_.verification_message_sent,
-                            application_user_authorization_token_can_be_resent_from: Data_.application_user_authorization_token_can_be_resent_from.0 as c_long,
-                            application_user_authorization_token_wrong_enter_tries_quantity: Data_.application_user_authorization_token_wrong_enter_tries_quantity.0 as c_short,
-                            application_user_authorization_token_wrong_enter_tries_quantity_limit: Data_.application_user_authorization_token_wrong_enter_tries_quantity_limit as c_short,
+                            application_user_id: data__.application_user_id.0,
+                            verification_message_sent: data__.verification_message_sent,
+                            application_user_authorization_token_can_be_resent_from: data__.application_user_authorization_token_can_be_resent_from.0,
+                            application_user_authorization_token_wrong_enter_tries_quantity: data__.application_user_authorization_token_wrong_enter_tries_quantity.0,
+                            application_user_authorization_token_wrong_enter_tries_quantity_limit: data__.application_user_authorization_token_wrong_enter_tries_quantity_limit,
                         };
 
                         C_Data::filled(outcoming)
                     }
                 };
 
-                C_UnifiedReport::target(data)
+                C_UnifiedReport::target(data_)
             }
             UnifiedReport::Precedent { precedent } => {
                 match precedent {
@@ -1022,21 +1077,21 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
     let converter = move |unified_report: UnifiedReport<Outcoming_, Precedent_>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming, ApplicationUser__Authorization___AuthorizeByLastStep___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
-                let data = match data {
+                let data_ = match data {
                     Data::Empty => {
                         C_Data::empty()
                     }
-                    Data::Filled { data: Data_ } => {
+                    Data::Filled { data: data__ } => {
                         let outcoming = ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming {
-                            application_user_access_token_encrypted: Allocator::<C_String>::allocate(Data_.application_user_access_token_encrypted.0),
-                            application_user_access_refresh_token_encrypted: Allocator::<C_String>::allocate(Data_.application_user_access_refresh_token_encrypted.0),
+                            application_user_access_token_encrypted: Allocator::<C_String>::allocate(data__.application_user_access_token_encrypted.0),
+                            application_user_access_refresh_token_encrypted: Allocator::<C_String>::allocate(data__.application_user_access_refresh_token_encrypted.0),
                         };
 
                         C_Data::filled(outcoming)
                     }
                 };
 
-                C_UnifiedReport::target(data)
+                C_UnifiedReport::target(data_)
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
@@ -1056,7 +1111,7 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
                         ApplicationUser__Authorization___AuthorizeByLastStep___Precedent {
                             application_user_authorization_token__wrong_value: ApplicationUserAuthorizationToken_WrongValue {
                                 is_exist: true,
-                                application_user_authorization_token_wrong_enter_tries_quantity: application_user_authorization_token_wrong_enter_tries_quantity.0 as c_short,
+                                application_user_authorization_token_wrong_enter_tries_quantity: application_user_authorization_token_wrong_enter_tries_quantity.0,
                             },
                             ..Default::default()
                         }
@@ -1121,27 +1176,23 @@ pub extern "C" fn application_user___authorization____check_email_for_existing__
     let converter = move |unified_report: UnifiedReport<Outcoming_, Void>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___CheckEmailForExisting___Outcoming, C_Void>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
-                let data = match data {
+                let data_ = match data {
                     Data::Empty => {
                         C_Data::empty()
                     }
-                    Data::Filled { data: Data_ } => {
+                    Data::Filled { data: data__ } => {
                         let outcoming = ApplicationUser__Authorization___CheckEmailForExisting___Outcoming {
-                            result: Data_.result,
+                            result: data__.result,
                         };
 
                         C_Data::filled(outcoming)
                     }
                 };
 
-                C_UnifiedReport::target(data)
+                C_UnifiedReport::target(data_)
             }
             UnifiedReport::Precedent { precedent: _ } => {
-                let precedent_ = C_Void {
-                    ..Default::default()
-                };
-
-                C_UnifiedReport::precedent(precedent_)
+                C_UnifiedReport::precedent(C_Void::new())
             }
         };
 
@@ -1183,27 +1234,23 @@ pub extern "C" fn application_user___authorization____check_nickname_for_existin
     let converter = move |unified_report: UnifiedReport<Outcoming_, Void>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___CheckNicknameForExisting___Outcoming, C_Void>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
-                let data = match data {
+                let data_ = match data {
                     Data::Empty => {
                         C_Data::empty()
                     }
-                    Data::Filled { data: Data_ } => {
+                    Data::Filled { data: data__ } => {
                         let outcoming = ApplicationUser__Authorization___CheckNicknameForExisting___Outcoming {
-                            result: Data_.result,
+                            result: data__.result,
                         };
 
                         C_Data::filled(outcoming)
                     }
                 };
 
-                C_UnifiedReport::target(data)
+                C_UnifiedReport::target(data_)
             }
             UnifiedReport::Precedent { precedent: _ } => {
-                let precedent_ = C_Void {
-                    ..Default::default()
-                };
-
-                C_UnifiedReport::precedent(precedent_)
+                C_UnifiedReport::precedent(C_Void::new())
             }
         };
 
@@ -1251,11 +1298,7 @@ pub extern "C" fn application_user___authorization____deauthorize_from_all_devic
                         C_Data::empty()
                     }
                     Data::Filled { data: _ } => {
-                        let outcoming = C_Void {
-                            ..Default::default()
-                        };
-
-                        C_Data::filled(outcoming)
+                        C_Data::filled(C_Void::new())
                     }
                 };
 
@@ -1325,11 +1368,7 @@ pub extern "C" fn application_user___authorization____deauthorize_from_one_devic
                         C_Data::empty()
                     }
                     Data::Filled { data: _ } => {
-                        let outcoming = C_Void {
-                            ..Default::default()
-                        };
-
-                        C_Data::filled(outcoming)
+                        C_Data::filled(C_Void::new())
                     }
                 };
 
@@ -1403,21 +1442,21 @@ pub extern "C" fn application_user___authorization____refresh_access_token____de
     let converter = move |unified_report: UnifiedReport<Outcoming_, Precedent_>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___RefreshAccessToken___Outcoming, ApplicationUser__Authorization___RefreshAccessToken___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
-                let data = match data {
+                let data_ = match data {
                     Data::Empty => {
                         C_Data::empty()
                     }
-                    Data::Filled { data: Data_ } => {
+                    Data::Filled { data: data__ } => {
                         let outcoming = ApplicationUser__Authorization___RefreshAccessToken___Outcoming {
-                            application_user_access_token_encrypted: Allocator::<C_String>::allocate(Data_.application_user_access_token_encrypted.0),
-                            application_user_access_refresh_token_encrypted: Allocator::<C_String>::allocate(Data_.application_user_access_refresh_token_encrypted.0),
+                            application_user_access_token_encrypted: Allocator::<C_String>::allocate(data__.application_user_access_token_encrypted.0),
+                            application_user_access_refresh_token_encrypted: Allocator::<C_String>::allocate(data__.application_user_access_refresh_token_encrypted.0),
                         };
 
                         C_Data::filled(outcoming)
                     }
                 };
 
-                C_UnifiedReport::target(data)
+                C_UnifiedReport::target(data_)
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
@@ -1498,23 +1537,23 @@ pub extern "C" fn application_user___authorization____register_by_first_step____
     let converter = move |unified_report: UnifiedReport<Outcoming_, Precedent_>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___RegisterByFirstStep___Outcoming, ApplicationUser__Authorization___RegisterByFirstStep___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
-                let data = match data {
+                let data_ = match data {
                     Data::Empty => {
                         C_Data::empty()
                     }
-                    Data::Filled { data: Data_ } => {
+                    Data::Filled { data: data__ } => {
                         let outcoming = ApplicationUser__Authorization___RegisterByFirstStep___Outcoming {
-                            verification_message_sent: Data_.verification_message_sent,
-                            application_user_registration_token_can_be_resent_from: Data_.application_user_registration_token_can_be_resent_from.0 as c_long,
-                            application_user_registration_token_wrong_enter_tries_quantity: Data_.application_user_registration_token_wrong_enter_tries_quantity.0 as c_short,
-                            application_user_registration_token_wrong_enter_tries_quantity_limit: Data_.application_user_registration_token_wrong_enter_tries_quantity_limit as c_short,
+                            verification_message_sent: data__.verification_message_sent,
+                            application_user_registration_token_can_be_resent_from: data__.application_user_registration_token_can_be_resent_from.0,
+                            application_user_registration_token_wrong_enter_tries_quantity: data__.application_user_registration_token_wrong_enter_tries_quantity.0,
+                            application_user_registration_token_wrong_enter_tries_quantity_limit: data__.application_user_registration_token_wrong_enter_tries_quantity_limit,
                         };
 
                         C_Data::filled(outcoming)
                     }
                 };
 
-                C_UnifiedReport::target(data)
+                C_UnifiedReport::target(data_)
             }
             UnifiedReport::Precedent { precedent } => {
                 match precedent {
@@ -1582,11 +1621,7 @@ pub extern "C" fn application_user___authorization____register_by_second_step___
                         C_Data::empty()
                     }
                     Data::Filled { data: _ } => {
-                        let outcoming = C_Void {
-                            ..Default::default()
-                        };
-
-                        C_Data::filled(outcoming)
+                        C_Data::filled(C_Void::new())
                     }
                 };
 
@@ -1616,7 +1651,7 @@ pub extern "C" fn application_user___authorization____register_by_second_step___
                         ApplicationUser__Authorization___RegisterBySecondStep___Precedent {
                             application_user_registration_token__wrong_value: ApplicationUserRegistrationToken_WrongValue {
                                 is_exist: true,
-                                application_user_registration_token_wrong_enter_tries_quantity: application_user_registration_token_wrong_enter_tries_quantity.0 as c_short,
+                                application_user_registration_token_wrong_enter_tries_quantity: application_user_registration_token_wrong_enter_tries_quantity.0,
                             },
                             ..Default::default()
                         }
@@ -1679,21 +1714,21 @@ pub extern "C" fn application_user___authorization____register_by_last_step____d
     let converter = move |unified_report: UnifiedReport<Outcoming_, Precedent_>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___RegisterByLastStep___Outcoming, ApplicationUser__Authorization___RegisterByLastStep___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
-                let data = match data {
+                let data_ = match data {
                     Data::Empty => {
                         C_Data::empty()
                     }
-                    Data::Filled { data: Data_ } => {
+                    Data::Filled { data: data__ } => {
                         let outcoming = ApplicationUser__Authorization___RegisterByLastStep___Outcoming {
-                            application_user_access_token_encrypted: Allocator::<C_String>::allocate(Data_.application_user_access_token_encrypted.0),
-                            application_user_access_refresh_token_encrypted: Allocator::<C_String>::allocate(Data_.application_user_access_refresh_token_encrypted.0),
+                            application_user_access_token_encrypted: Allocator::<C_String>::allocate(data__.application_user_access_token_encrypted.0),
+                            application_user_access_refresh_token_encrypted: Allocator::<C_String>::allocate(data__.application_user_access_refresh_token_encrypted.0),
                         };
 
                         C_Data::filled(outcoming)
                     }
                 };
 
-                C_UnifiedReport::target(data)
+                C_UnifiedReport::target(data_)
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
@@ -1799,24 +1834,24 @@ pub extern "C" fn application_user___authorization____reset_password_by_first_st
     let converter = move |unified_report: UnifiedReport<Outcoming_, Precedent_>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___ResetPasswordByFirstStep___Outcoming, ApplicationUser__Authorization___ResetPasswordByFirstStep___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
-                let data = match data {
+                let data_ = match data {
                     Data::Empty => {
                         C_Data::empty()
                     }
-                    Data::Filled { data: Data_ } => {
+                    Data::Filled { data: data__ } => {
                         let outcoming = ApplicationUser__Authorization___ResetPasswordByFirstStep___Outcoming {
-                            application_user_id: Data_.application_user_id.0 as c_long,
-                            verification_message_sent: Data_.verification_message_sent,
-                            application_user_reset_password_token_can_be_resent_from: Data_.application_user_reset_password_token_can_be_resent_from.0 as c_long,
-                            application_user_reset_password_token_wrong_enter_tries_quantity: Data_.application_user_reset_password_token_wrong_enter_tries_quantity.0 as c_short,
-                            application_user_reset_password_token_wrong_enter_tries_quantity_limit: Data_.application_user_reset_password_token_wrong_enter_tries_quantity_limit as c_short,
+                            application_user_id: data__.application_user_id.0,
+                            verification_message_sent: data__.verification_message_sent,
+                            application_user_reset_password_token_can_be_resent_from: data__.application_user_reset_password_token_can_be_resent_from.0,
+                            application_user_reset_password_token_wrong_enter_tries_quantity: data__.application_user_reset_password_token_wrong_enter_tries_quantity.0,
+                            application_user_reset_password_token_wrong_enter_tries_quantity_limit: data__.application_user_reset_password_token_wrong_enter_tries_quantity_limit,
                         };
 
                         C_Data::filled(outcoming)
                     }
                 };
 
-                C_UnifiedReport::target(data)
+                C_UnifiedReport::target(data_)
             }
             UnifiedReport::Precedent { precedent } => {
                 match precedent {
@@ -1884,11 +1919,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_second_s
                         C_Data::empty()
                     }
                     Data::Filled { data: _ } => {
-                        let outcoming = C_Void {
-                            ..Default::default()
-                        };
-
-                        C_Data::filled(outcoming)
+                        C_Data::filled(C_Void::new())
                     }
                 };
 
@@ -1918,7 +1949,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_second_s
                         ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent {
                             application_user_reset_password_token__wrong_value: ApplicationUserResetPasswordToken_WrongValue {
                                 is_exist: true,
-                                application_user_reset_password_token_wrong_enter_tries_quantity: application_user_reset_password_token_wrong_enter_tries_quantity.0 as c_short,
+                                application_user_reset_password_token_wrong_enter_tries_quantity: application_user_reset_password_token_wrong_enter_tries_quantity.0,
                             },
                             ..Default::default()
                         }
@@ -1976,11 +2007,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_last_ste
                         C_Data::empty()
                     }
                     Data::Filled { data: _ } => {
-                        let outcoming = C_Void {
-                            ..Default::default()
-                        };
-
-                        C_Data::filled(outcoming)
+                        C_Data::filled(C_Void::new())
                     }
                 };
 
@@ -2073,20 +2100,20 @@ pub extern "C" fn application_user___authorization____send_email_for_register___
     let converter = move |unified_report: UnifiedReport<Outcoming_, Precedent_>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___SendEmailForRegister___Outcoming, ApplicationUser__Authorization___SendEmailForRegister___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
-                let data = match data {
+                let data_ = match data {
                     Data::Empty => {
                         C_Data::empty()
                     }
-                    Data::Filled { data: Data_ } => {
+                    Data::Filled { data: data__ } => {
                         let outcoming = ApplicationUser__Authorization___SendEmailForRegister___Outcoming {
-                            application_user_registration_token_can_be_resent_from: Data_.application_user_registration_token_can_be_resent_from.0 as c_long,
+                            application_user_registration_token_can_be_resent_from: data__.application_user_registration_token_can_be_resent_from.0,
                         };
 
                         C_Data::filled(outcoming)
                     }
                 };
 
-                C_UnifiedReport::target(data)
+                C_UnifiedReport::target(data_)
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
@@ -2169,20 +2196,20 @@ pub extern "C" fn application_user___authorization____send_email_for_authorize__
     let converter = move |unified_report: UnifiedReport<Outcoming_, Precedent_>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___SendEmailForAuthorize___Outcoming, ApplicationUser__Authorization___SendEmailForAuthorize___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
-                let data = match data {
+                let data_ = match data {
                     Data::Empty => {
                         C_Data::empty()
                     }
-                    Data::Filled { data: Data_ } => {
+                    Data::Filled { data: data__ } => {
                         let outcoming = ApplicationUser__Authorization___SendEmailForAuthorize___Outcoming {
-                            application_user_authorization_token_can_be_resent_from: Data_.application_user_authorization_token_can_be_resent_from.0 as c_long,
+                            application_user_authorization_token_can_be_resent_from: data__.application_user_authorization_token_can_be_resent_from.0,
                         };
 
                         C_Data::filled(outcoming)
                     }
                 };
 
-                C_UnifiedReport::target(data)
+                C_UnifiedReport::target(data_)
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
@@ -2266,20 +2293,20 @@ pub extern "C" fn application_user___authorization____send_email_for_reset_passw
     let converter = move |unified_report: UnifiedReport<Outcoming_, Precedent_>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___SendEmailForResetPassword___Outcoming, ApplicationUser__Authorization___SendEmailForResetPassword___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
-                let data = match data {
+                let data_ = match data {
                     Data::Empty => {
                         C_Data::empty()
                     }
-                    Data::Filled { data: Data_ } => {
+                    Data::Filled { data: data__ } => {
                         let outcoming = ApplicationUser__Authorization___SendEmailForResetPassword___Outcoming {
-                            application_user_resep_password_token_can_be_resent_from: Data_.application_user_reset_password_token_can_be_resent_from.0 as c_long,
+                            application_user_resep_password_token_can_be_resent_from: data__.application_user_reset_password_token_can_be_resent_from.0,
                         };
 
                         C_Data::filled(outcoming)
                     }
                 };
 
-                C_UnifiedReport::target(data)
+                C_UnifiedReport::target(data_)
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
@@ -2340,35 +2367,6 @@ pub extern "C" fn application_user___authorization____send_email_for_reset_passw
     return ();
 }
 
-
-
-
-
-
-
-
-
-
-
-#[repr(C)]
-#[derive(Default)]
-pub struct Common1 {
-    pub channel: Channel1,
-    pub is_application_user_subscribed: bool,
-}
-
-#[repr(C)]
-#[derive(Default)]
-pub struct Channel1 {
-    pub channel_id: c_long,
-    pub channel_name: C_String,
-    pub channel_linked_name: C_String,
-    pub channel_access_modifier: c_short,
-    pub channel_visability_modifier: c_short,
-    pub channel_cover_image_path: C_Option<C_String>,
-    pub channel_background_image_path: C_Option<C_String>,
-}
-
 type Channel__Base___GetManyByNameInSubscriptions___Result = C_Result<C_UnifiedReport<Channel__Base___GetManyByNameInSubscriptions___Outcoming, Channel__Base___GetManyByNameInSubscriptions___Precedent>>;
 
 #[repr(C)]
@@ -2395,14 +2393,14 @@ pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____deseria
     let converter = move |unified_report: UnifiedReport<Outcoming_, Precedent_>| -> Result<C_UnifiedReport<Channel__Base___GetManyByNameInSubscriptions___Outcoming, Channel__Base___GetManyByNameInSubscriptions___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
-                let data = match data {
+                let data_ = match data {
                     Data::Empty => {
                         C_Data::empty()
                     }
-                    Data::Filled { data: Data_ } => {
+                    Data::Filled { data: data__ } => {
                         let mut common_registry: Vec<Common1> = vec![];
 
-                        '_a: for common_1 in Data_.common_registry {
+                        '_a: for common_1 in data__.common_registry {
                             let channel_cover_image_path = match common_1.channel.channel_cover_image_path {
                                 Some(channel_cover_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel_cover_image_path_.0)),
                                 None => C_Option::none()
@@ -2415,11 +2413,11 @@ pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____deseria
 
                             let common_1_ = Common1 {
                                 channel: Channel1 {
-                                    channel_id: common_1.channel.channel_id.0 as c_long,
+                                    channel_id: common_1.channel.channel_id.0,
                                     channel_name: Allocator::<C_String>::allocate(common_1.channel.channel_name.0),
                                     channel_linked_name: Allocator::<C_String>::allocate(common_1.channel.channel_linked_name.0),
-                                    channel_access_modifier: common_1.channel.channel_access_modifier.0 as c_short,
-                                    channel_visability_modifier: common_1.channel.channel_visability_modifier.0 as c_short,
+                                    channel_access_modifier: common_1.channel.channel_access_modifier.0,
+                                    channel_visability_modifier: common_1.channel.channel_visability_modifier.0,
                                     channel_cover_image_path,
                                     channel_background_image_path,
                                 },
@@ -2429,17 +2427,15 @@ pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____deseria
                             common_registry.push(common_1_);
                         }
 
-                        let common_registry_ = Allocator::<C_Vector<_>>::allocate(common_registry);
-
                         let outcoming = Channel__Base___GetManyByNameInSubscriptions___Outcoming {
-                            common_registry: common_registry_,
+                            common_registry: Allocator::<C_Vector<_>>::allocate(common_registry),
                         };
 
                         C_Data::filled(outcoming)
                     }
                 };
 
-                C_UnifiedReport::target(data)
+                C_UnifiedReport::target(data_)
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
@@ -2468,7 +2464,7 @@ pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____deseria
 }
 
 #[no_mangle]
-pub extern "C" fn channel___base____send_email_for_reset_password____deallocate(
+pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____deallocate(
     result: *mut Channel__Base___GetManyByNameInSubscriptions___Result
 ) -> () {
     if result.is_null() {
@@ -2483,7 +2479,7 @@ pub extern "C" fn channel___base____send_email_for_reset_password____deallocate(
         if result_.data.is_target {
             if result_.data.target.is_filled {
                 let common_registry = unsafe {
-                    from_raw_parts(result_.data.target.filled.common_registry.pointer, result_.data.target.filled.common_registry.length as usize)
+                    from_raw_parts(result_.data.target.filled.common_registry.pointer, result_.data.target.filled.common_registry.length )
                 };
 
                 for common in common_registry {
@@ -2504,6 +2500,577 @@ pub extern "C" fn channel___base____send_email_for_reset_password____deallocate(
             }
         }
     }
+
+    return ();
+}
+
+type Channel__Base___GetManyBySubscription___Result = C_Result<C_UnifiedReport<Channel__Base___GetManyBySubscription___Outcoming, Channel__Base___GetManyBySubscription___Precedent>>;
+
+#[repr(C)]
+#[derive(Default)]
+pub struct Channel__Base___GetManyBySubscription___Outcoming {
+    pub common_registry: C_Vector<Common1>,
+}
+
+#[repr(C)]
+#[derive(Default)]
+pub struct Channel__Base___GetManyBySubscription___Precedent {
+    pub application_user_access_token__already_expired: bool,
+    pub application_user_access_token__in_application_user_access_token_black_list: bool,
+}
+
+#[no_mangle]
+pub extern "C" fn channel___base____get_many_by_subscription____deserialize(
+    vector_of_bytes: *mut C_Vector<c_uchar>,
+) -> *mut Channel__Base___GetManyBySubscription___Result {
+    type Outcoming_ = channel___base::get_many_by_subscription::Outcoming;
+
+    type Precedent_ = channel___base::get_many_by_subscription::Precedent;
+
+    let converter = move |unified_report: UnifiedReport<Outcoming_, Precedent_>| -> Result<C_UnifiedReport<Channel__Base___GetManyBySubscription___Outcoming, Channel__Base___GetManyBySubscription___Precedent>, Box<dyn Error + 'static>> {
+        let unified_report_ = match unified_report {
+            UnifiedReport::Target { data } => {
+                let data_ = match data {
+                    Data::Empty => {
+                        C_Data::empty()
+                    }
+                    Data::Filled { data: data__ } => {
+                        let mut common_registry: Vec<Common1> = vec![];
+
+                        '_a: for common_1 in data__.common_registry {
+                            let channel_cover_image_path = match common_1.channel.channel_cover_image_path {
+                                Some(channel_cover_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel_cover_image_path_.0)),
+                                None => C_Option::none()
+                            };
+
+                            let channel_background_image_path = match common_1.channel.channel_background_image_path {
+                                Some(channel_background_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel_background_image_path_.0)),
+                                None => C_Option::none()
+                            };
+
+                            let common_1_ = Common1 {
+                                channel: Channel1 {
+                                    channel_id: common_1.channel.channel_id.0,
+                                    channel_name: Allocator::<C_String>::allocate(common_1.channel.channel_name.0),
+                                    channel_linked_name: Allocator::<C_String>::allocate(common_1.channel.channel_linked_name.0),
+                                    channel_access_modifier: common_1.channel.channel_access_modifier.0,
+                                    channel_visability_modifier: common_1.channel.channel_visability_modifier.0,
+                                    channel_cover_image_path,
+                                    channel_background_image_path,
+                                },
+                                is_application_user_subscribed: common_1.is_application_user_subscribed,
+                            };
+
+                            common_registry.push(common_1_);
+                        }
+
+                        let outcoming = Channel__Base___GetManyBySubscription___Outcoming {
+                            common_registry: Allocator::<C_Vector<_>>::allocate(common_registry),
+                        };
+
+                        C_Data::filled(outcoming)
+                    }
+                };
+
+                C_UnifiedReport::target(data_)
+            }
+            UnifiedReport::Precedent { precedent } => {
+                let precedent_ = match precedent {
+                    Precedent_::ApplicationUserAccessToken_AlreadyExpired => {
+                        Channel__Base___GetManyBySubscription___Precedent {
+                            application_user_access_token__already_expired: true,
+                            ..Default::default()
+                        }
+                    }
+                    Precedent_::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList => {
+                        Channel__Base___GetManyBySubscription___Precedent {
+                            application_user_access_token__in_application_user_access_token_black_list: true,
+                            ..Default::default()
+                        }
+                    }
+                };
+
+                C_UnifiedReport::precedent(precedent_)
+            }
+        };
+
+        return Ok(unified_report_);
+    };
+
+    return Serilizer::deserialize(vector_of_bytes, converter);
+}
+
+#[no_mangle]
+pub extern "C" fn channel___base____get_many_by_subscription____deallocate(
+    result: *mut Channel__Base___GetManyBySubscription___Result
+) -> () {
+    if result.is_null() {
+        return ();
+    }
+
+    let result_ = unsafe {
+        Box::from_raw(result)
+    };
+
+    if result_.is_data {
+        if result_.data.is_target {
+            if result_.data.target.is_filled {
+                let common_registry = unsafe {
+                    from_raw_parts(result_.data.target.filled.common_registry.pointer, result_.data.target.filled.common_registry.length )
+                };
+
+                for common in common_registry {
+                    Allocator::<C_String>::deallocate(common.channel.channel_name);
+
+                    Allocator::<C_String>::deallocate(common.channel.channel_linked_name);
+
+                    if common.channel. channel_background_image_path.is_data {
+                        Allocator::<C_String>::deallocate(common.channel. channel_background_image_path.data);
+                    }
+
+                    if common.channel. channel_cover_image_path.is_data {
+                        Allocator::<C_String>::deallocate(common.channel. channel_cover_image_path.data);
+                    }
+                }
+
+                Allocator::<C_Vector<_>>::deallocate(result_.data.target.filled.common_registry);
+            }
+        }
+    }
+
+    return ();
+}
+
+type Channel__Base___GetManyPublicByName___Result = C_Result<C_UnifiedReport<Channel__Base___GetManyPublicByName___Outcoming, Channel__Base___GetManyPublicByName___Precedent>>;
+
+#[repr(C)]
+#[derive(Default)]
+pub struct Channel__Base___GetManyPublicByName___Outcoming {
+    pub common_registry: C_Vector<Common1>,
+}
+
+#[repr(C)]
+#[derive(Default)]
+pub struct Channel__Base___GetManyPublicByName___Precedent {
+    pub application_user_access_token__already_expired: bool,
+    pub application_user_access_token__in_application_user_access_token_black_list: bool,
+}
+
+#[no_mangle]
+pub extern "C" fn channel___base____get_many_public_by_name____deserialize(
+    vector_of_bytes: *mut C_Vector<c_uchar>,
+) -> *mut Channel__Base___GetManyPublicByName___Result {
+    type Outcoming_ = channel___base::get_many_public_by_name::Outcoming;
+
+    type Precedent_ = channel___base::get_many_public_by_name::Precedent;
+
+    let converter = move |unified_report: UnifiedReport<Outcoming_, Precedent_>| -> Result<C_UnifiedReport<Channel__Base___GetManyPublicByName___Outcoming, Channel__Base___GetManyPublicByName___Precedent>, Box<dyn Error + 'static>> {
+        let unified_report_ = match unified_report {
+            UnifiedReport::Target { data } => {
+                let data_ = match data {
+                    Data::Empty => {
+                        C_Data::empty()
+                    }
+                    Data::Filled { data: data__ } => {
+                        let mut common_registry: Vec<Common1> = vec![];
+
+                        '_a: for common_1 in data__.common_registry {
+                            let channel_cover_image_path = match common_1.channel.channel_cover_image_path {
+                                Some(channel_cover_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel_cover_image_path_.0)),
+                                None => C_Option::none()
+                            };
+
+                            let channel_background_image_path = match common_1.channel.channel_background_image_path {
+                                Some(channel_background_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel_background_image_path_.0)),
+                                None => C_Option::none()
+                            };
+
+                            let common_1_ = Common1 {
+                                channel: Channel1 {
+                                    channel_id: common_1.channel.channel_id.0,
+                                    channel_name: Allocator::<C_String>::allocate(common_1.channel.channel_name.0),
+                                    channel_linked_name: Allocator::<C_String>::allocate(common_1.channel.channel_linked_name.0),
+                                    channel_access_modifier: common_1.channel.channel_access_modifier.0,
+                                    channel_visability_modifier: common_1.channel.channel_visability_modifier.0,
+                                    channel_cover_image_path,
+                                    channel_background_image_path,
+                                },
+                                is_application_user_subscribed: common_1.is_application_user_subscribed,
+                            };
+
+                            common_registry.push(common_1_);
+                        }
+
+                        let outcoming = Channel__Base___GetManyPublicByName___Outcoming {
+                            common_registry: Allocator::<C_Vector<_>>::allocate(common_registry),
+                        };
+
+                        C_Data::filled(outcoming)
+                    }
+                };
+
+                C_UnifiedReport::target(data_)
+            }
+            UnifiedReport::Precedent { precedent } => {
+                let precedent_ = match precedent {
+                    Precedent_::ApplicationUserAccessToken_AlreadyExpired => {
+                        Channel__Base___GetManyPublicByName___Precedent {
+                            application_user_access_token__already_expired: true,
+                            ..Default::default()
+                        }
+                    }
+                    Precedent_::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList => {
+                        Channel__Base___GetManyPublicByName___Precedent {
+                            application_user_access_token__in_application_user_access_token_black_list: true,
+                            ..Default::default()
+                        }
+                    }
+                };
+
+                C_UnifiedReport::precedent(precedent_)
+            }
+        };
+
+        return Ok(unified_report_);
+    };
+
+    return Serilizer::deserialize(vector_of_bytes, converter);
+}
+
+#[no_mangle]
+pub extern "C" fn channel___base____get_many_public_by_name____deallocate(
+    result: *mut Channel__Base___GetManyPublicByName___Result
+) -> () {
+    if result.is_null() {
+        return ();
+    }
+
+    let result_ = unsafe {
+        Box::from_raw(result)
+    };
+
+    if result_.is_data {
+        if result_.data.is_target {
+            if result_.data.target.is_filled {
+                let common_registry = unsafe {
+                    from_raw_parts(result_.data.target.filled.common_registry.pointer, result_.data.target.filled.common_registry.length )
+                };
+
+                for common_1 in common_registry {
+                    Allocator::<C_String>::deallocate(common_1.channel.channel_name);
+
+                    Allocator::<C_String>::deallocate(common_1.channel.channel_linked_name);
+
+                    if common_1.channel. channel_background_image_path.is_data {
+                        Allocator::<C_String>::deallocate(common_1.channel. channel_background_image_path.data);
+                    }
+
+                    if common_1.channel. channel_cover_image_path.is_data {
+                        Allocator::<C_String>::deallocate(common_1.channel. channel_cover_image_path.data);
+                    }
+                }
+
+                Allocator::<C_Vector<_>>::deallocate(result_.data.target.filled.common_registry);
+            }
+        }
+    }
+
+    return ();
+}
+
+type Channel__Base___GetOneById___Result = C_Result<C_UnifiedReport<Channel__Base___GetOneById___Outcoming, Channel__Base___GetOneById___Precedent>>;
+
+#[repr(C)]
+#[derive(Default)]
+pub struct Channel__Base___GetOneById___Outcoming {
+    pub channel: Channel2,
+    pub channel_inner_link_registry: C_Vector<ChannelInnerLink1>,
+    pub channel_outer_link_registry: C_Vector<ChannelOuterLink1>,
+}
+
+#[repr(C)]
+#[derive(Default)]
+pub struct Channel__Base___GetOneById___Precedent {
+    pub application_user_access_token__already_expired: bool,
+    pub application_user_access_token__in_application_user_access_token_black_list: bool,
+    pub channel__not_found: bool,
+    pub channel__is_close: bool,
+}
+
+#[no_mangle]
+pub extern "C" fn channel___base____get_one_by_id____deserialize(
+    vector_of_bytes: *mut C_Vector<c_uchar>,
+) -> *mut Channel__Base___GetOneById___Result {
+    type Outcoming_ = channel___base::get_one_by_id::Outcoming;
+
+    type Precedent_ = channel___base::get_one_by_id::Precedent;
+
+    let converter = move |unified_report: UnifiedReport<Outcoming_, Precedent_>| -> Result<C_UnifiedReport<Channel__Base___GetOneById___Outcoming, Channel__Base___GetOneById___Precedent>, Box<dyn Error + 'static>> {
+        let unified_report_ = match unified_report {
+            UnifiedReport::Target { data } => {
+                let data_ = match data {
+                    Data::Empty => {
+                        C_Data::empty()
+                    }
+                    Data::Filled { data: data__ } => {
+                        let channel_description = match data__.channel.channel_description {
+                            Some(channel_description_) => C_Option::data(Allocator::<C_String>::allocate(channel_description_.0)),
+                            None => C_Option::none()
+                        };
+
+                        let channel_cover_image_path = match data__.channel.channel_cover_image_path {
+                            Some(channel_cover_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel_cover_image_path_.0)),
+                            None => C_Option::none()
+                        };
+
+                        let channel_background_image_path = match data__.channel.channel_background_image_path {
+                            Some(channel_background_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel_background_image_path_.0)),
+                            None => C_Option::none()
+                        };
+
+                        let channel_2 = Channel2 {
+                            channel_owner: data__.channel.channel_owner.0,
+                            channel_name: Allocator::<C_String>::allocate(data__.channel.channel_name.0),
+                            channel_linked_name: Allocator::<C_String>::allocate(data__.channel.channel_linked_name.0),
+                            channel_description,
+                            channel_access_modifier: data__.channel.channel_access_modifier.0,
+                            channel_visability_modifier: data__.channel.channel_visability_modifier.0,
+                            channel_orientation: Allocator::<C_Vector<_>>::allocate(data__.channel.channel_orientation.0),
+                            channel_cover_image_path,
+                            channel_background_image_path,
+                            channel_subscribers_quantity: data__.channel.channel_subscribers_quantity.0,
+                            channel_marks_quantity: data__.channel.channel_marks_quantity.0,
+                            channel_viewing_quantity: data__.channel. channel_viewing_quantity.0,
+                        };
+
+                        let mut channel_inner_link_registry: Vec<ChannelInnerLink1> = vec![];
+
+                        '_a: for channel_inner_link_1 in data__.channel_inner_link_registry {
+                            let channel_inner_link_1_ = ChannelInnerLink1 {
+                                channel_inner_link_to: channel_inner_link_1.channel_inner_link_to.0
+                            };
+
+                            channel_inner_link_registry.push(channel_inner_link_1_);
+                        }
+
+                        let mut channel_outer_link_registry: Vec<ChannelOuterLink1> = vec![];
+
+                        '_a: for channel_outer_link_1 in data__.channel_outer_link_registry {
+                            let channel_outer_link_1_ = ChannelOuterLink1 {
+                                channel_outer_link_alias: Allocator::<C_String>::allocate(channel_outer_link_1.channel_outer_link_alias.0),
+                                channel_outer_link_address: Allocator::<C_String>::allocate(channel_outer_link_1.channel_outer_link_address.0)
+                            };
+
+                            channel_outer_link_registry.push(channel_outer_link_1_);
+                        }
+
+                        let outcoming = Channel__Base___GetOneById___Outcoming {
+                            channel: channel_2,
+                            channel_inner_link_registry: Allocator::<C_Vector<_>>::allocate(channel_inner_link_registry),
+                            channel_outer_link_registry: Allocator::<C_Vector<_>>::allocate(channel_outer_link_registry),
+                        };
+
+                        C_Data::filled(outcoming)
+                    }
+                };
+
+                C_UnifiedReport::target(data_)
+            }
+            UnifiedReport::Precedent { precedent } => {
+                let precedent_ = match precedent {
+                    Precedent_::ApplicationUserAccessToken_AlreadyExpired => {
+                        Channel__Base___GetOneById___Precedent {
+                            application_user_access_token__already_expired: true,
+                            ..Default::default()
+                        }
+                    }
+                    Precedent_::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList => {
+                        Channel__Base___GetOneById___Precedent {
+                            application_user_access_token__in_application_user_access_token_black_list: true,
+                            ..Default::default()
+                        }
+                    }
+                    Precedent_::Channel_NotFound => {
+                        Channel__Base___GetOneById___Precedent {
+                            channel__not_found: true,
+                            ..Default::default()
+                        }
+                    }
+                    Precedent_::Channel_IsClose => {
+                        Channel__Base___GetOneById___Precedent {
+                            channel__is_close: true,
+                            ..Default::default()
+                        }
+                    }
+                };
+
+                C_UnifiedReport::precedent(precedent_)
+            }
+        };
+
+        return Ok(unified_report_);
+    };
+
+    return Serilizer::deserialize(vector_of_bytes, converter);
+}
+
+#[no_mangle]
+pub extern "C" fn channel___base____get_one_by_id____deallocate(
+    result: *mut Channel__Base___GetOneById___Result
+) -> () {
+    if result.is_null() {
+        return ();
+    }
+
+    let result_ = unsafe {
+        Box::from_raw(result)
+    };
+
+    if result_.is_data {
+        if result_.data.is_target {
+            if result_.data.target.is_filled {
+                Allocator::<C_String>::deallocate(result_.data.target.filled.channel.channel_name);
+
+                Allocator::<C_String>::deallocate(result_.data.target.filled.channel.channel_linked_name);
+
+                if result_.data.target.filled.channel.channel_description.is_data {
+                    Allocator::<C_String>::deallocate(result_.data.target.filled.channel.channel_description.data);
+                }
+
+                if result_.data.target.filled.channel.channel_background_image_path.is_data {
+                    Allocator::<C_String>::deallocate(result_.data.target.filled.channel.channel_background_image_path.data);
+                }
+
+                if result_.data.target.filled.channel.channel_cover_image_path.is_data {
+                    Allocator::<C_String>::deallocate(result_.data.target.filled.channel.channel_cover_image_path.data);
+                }
+
+                Allocator::<C_Vector<_>>::deallocate(result_.data.target.filled.channel.channel_orientation);
+
+                Allocator::<C_Vector<_>>::deallocate(result_.data.target.filled.channel_inner_link_registry);
+
+                let channel_outer_link_registry = unsafe {
+                    from_raw_parts(result_.data.target.filled.channel_outer_link_registry.pointer, result_.data.target.filled.channel_outer_link_registry.length)
+                };
+
+                for channel_outer_link_1 in channel_outer_link_registry {
+                    Allocator::<C_String>::deallocate(channel_outer_link_1.channel_outer_link_alias);
+
+                    Allocator::<C_String>::deallocate(channel_outer_link_1.channel_outer_link_address);
+                }
+
+                Allocator::<C_Vector<_>>::deallocate(result_.data.target.filled.channel_outer_link_registry);
+            }
+        }
+    }
+
+    return ();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+type ChannelSubscription__Base___Create___Result = C_Result<C_UnifiedReport<C_Void, ChannelSubscription__Base___Create___Precedent>>;
+
+#[repr(C)]
+#[derive(Default)]
+pub struct ChannelSubscription__Base___Create___Precedent {
+    pub application_user_access_token__already_expired: bool,
+    pub application_user_access_token__in_application_user_access_token_black_list: bool,
+    pub channel__not_found: bool,
+    pub channel__is_close: bool,
+    pub application_user__is_channel_owner: bool,
+}
+
+#[no_mangle]
+pub extern "C" fn channel_subscription___base____create____deserialize(
+    vector_of_bytes: *mut C_Vector<c_uchar>,
+) -> *mut ChannelSubscription__Base___Create___Result {
+    type Precedent_ = channel_subscription___base::create::Precedent;
+
+    let converter = move |unified_report: UnifiedReport<Void, Precedent_>| -> Result<C_UnifiedReport<C_Void, ChannelSubscription__Base___Create___Precedent>, Box<dyn Error + 'static>> {
+        let unified_report_ = match unified_report {
+            UnifiedReport::Target { data } => {
+                let data_ = match data {
+                    Data::Empty => {
+                        C_Data::empty()
+                    }
+                    Data::Filled { data: _ } => {
+                        C_Data::filled(C_Void::new())
+                    }
+                };
+
+                C_UnifiedReport::target(data_)
+            }
+            UnifiedReport::Precedent { precedent } => {
+                let precedent_ = match precedent {
+                    Precedent_::ApplicationUserAccessToken_AlreadyExpired => {
+                        ChannelSubscription__Base___Create___Precedent {
+                            application_user_access_token__already_expired: true,
+                            ..Default::default()
+                        }
+                    }
+                    Precedent_::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList => {
+                        ChannelSubscription__Base___Create___Precedent {
+                            application_user_access_token__in_application_user_access_token_black_list: true,
+                            ..Default::default()
+                        }
+                    }
+                    Precedent_::Channel_NotFound => {
+                        ChannelSubscription__Base___Create___Precedent {
+                            channel__not_found: true,
+                            ..Default::default()
+                        }
+                    }
+                    Precedent_::Channel_IsClose => {
+                        ChannelSubscription__Base___Create___Precedent {
+                            channel__is_close: true,
+                            ..Default::default()
+                        }
+                    }
+                    Precedent_::ApplicationUser_IsChannelOwner => {
+                        ChannelSubscription__Base___Create___Precedent {
+                            application_user__is_channel_owner: true,
+                            ..Default::default()
+                        }
+                    }
+                };
+
+                C_UnifiedReport::precedent(precedent_)
+            }
+        };
+
+        return Ok(unified_report_);
+    };
+
+    return Serilizer::deserialize(vector_of_bytes, converter);
+}
+
+#[no_mangle]
+pub extern "C" fn channel_subscription___base____create____deallocate(
+    result: *mut ChannelSubscription__Base___Create___Result
+) -> () {
+    if result.is_null() {
+        return ();
+    }
+
+    let _ = unsafe {
+        Box::from_raw(result)
+    };
 
     return ();
 }

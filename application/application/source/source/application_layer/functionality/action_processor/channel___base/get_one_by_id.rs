@@ -35,7 +35,7 @@ use tokio_postgres::Socket;
 pub use action_processor_incoming_outcoming::action_processor::channel___base::get_one_by_id::Incoming;
 pub use action_processor_incoming_outcoming::action_processor::channel___base::get_one_by_id::Outcoming;
 pub use action_processor_incoming_outcoming::action_processor::channel___base::get_one_by_id::Precedent;
-pub use action_processor_incoming_outcoming::action_processor::channel___base::get_one_by_id::Channel;
+pub use action_processor_incoming_outcoming::action_processor::channel___base::get_one_by_id::Channel2;
 
 pub struct GetOneByID;
 
@@ -196,7 +196,7 @@ impl GetOneByID {
             if !is_exist && application_user_access_token.application_user_id.0 != channel_.owner.0 {
                 return Ok(
                     InvalidArgumentResult::Ok {
-                        subject: UnifiedReport::precedent(Precedent::Channel_IsClosed),
+                        subject: UnifiedReport::precedent(Precedent::Channel_IsClose),
                     },
                 );
             }
@@ -265,7 +265,7 @@ impl GetOneByID {
             created_at: _,
         } = channel_;
 
-        let channel = Channel {
+        let channel_2 = Channel2 {
             channel_owner,
             channel_name: channel_name.into_owned(),
             channel_linked_name,
@@ -281,7 +281,7 @@ impl GetOneByID {
         };
 
         let outcoming = Outcoming {
-            channel,
+            channel: channel_2,
             channel_inner_link_registry,
             channel_outer_link_registry,
         };

@@ -108,6 +108,6 @@ pub enum CommonPrecedent {
     ApplicationUserResetPasswordToken_NotFound,
     ApplicationUserResetPasswordToken_TimeToResendHasNotCome,
     ApplicationUserResetPasswordToken_WrongValue,
-    Channel_IsClosed,
+    Channel_IsClose,
     Channel_NotFound,
 }

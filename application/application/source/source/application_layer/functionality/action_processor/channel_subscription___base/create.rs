@@ -177,7 +177,7 @@ impl Create {
         if let Channel_AccessModifier_::Close = channel_access_modifier {
             return Ok(
                 InvalidArgumentResult::Ok {
-                    subject: UnifiedReport::precedent(Precedent::Channel_IsClosed),
+                    subject: UnifiedReport::precedent(Precedent::Channel_IsClose),
                 },
             );
         }
