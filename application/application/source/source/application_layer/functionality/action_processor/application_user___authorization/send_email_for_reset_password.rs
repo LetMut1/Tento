@@ -279,7 +279,7 @@ impl SendEmailForResetPassword {
 
         return Ok(
             InvalidArgumentResult::Ok {
-                subject: UnifiedReport::filled(outcoming),
+                subject: UnifiedReport::target_filled(outcoming),
             },
         );
     }

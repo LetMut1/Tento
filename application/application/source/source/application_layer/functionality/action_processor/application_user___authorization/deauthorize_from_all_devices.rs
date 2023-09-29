@@ -139,7 +139,7 @@ impl DeauthorizeFromAllDevices {
 
         return Ok(
             InvalidArgumentResult::Ok {
-                subject: UnifiedReport::empty(),
+                subject: UnifiedReport::target_empty(),
             },
         );
     }

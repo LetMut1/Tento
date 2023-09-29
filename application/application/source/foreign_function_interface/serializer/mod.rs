@@ -121,6 +121,7 @@ use action_processor_incoming_outcoming::action_processor::application_user___au
 use action_processor_incoming_outcoming::action_processor::application_user___authorization::check_nickname_for_existing::Outcoming as ApplicationUser__Authorization___CheckNicknameForExisting___Outcoming_;
 use std::ptr::slice_from_raw_parts_mut;
 use unified_report::Data;
+use serde::Serialize;
 use message_pack_serializer::Serializer as Serializer_;
 use action_processor_incoming_outcoming::action_processor::application_user___authorization::authorize_by_last_step::Outcoming as ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming_;
 use action_processor_incoming_outcoming::action_processor::application_user___authorization::authorize_by_last_step::Precedent as ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_;
@@ -646,6 +647,7 @@ pub extern "C" fn main_nested_deallocate_f2(main: *mut Main2) -> () {
 
 
 #[repr(C)]
+#[derive(Clone, Copy)]
 pub struct C_Result<T> {
     pub data: T,
     // If false, then it means an error occurred.
@@ -674,6 +676,7 @@ where
 }
 
 #[repr(C)]
+#[derive(Clone, Copy)]
 pub struct C_Option<T> {
     pub data: T,
     // If false, then it means it it None.
@@ -711,7 +714,7 @@ where
 }
 
 #[repr(C)]
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct C_UnifiedReport<D, P> {
     pub target: C_Data<D>,
     pub precedent: P,
@@ -746,7 +749,7 @@ where
 }
 
 #[repr(C)]
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct C_Data<T> {
     pub filled: T,
     // If false, then it means data is empty.
@@ -807,7 +810,7 @@ impl<T> Default for C_Vector<T> {
 // Struct for simulating Void type. That is, we will use this structure
 // in those moments when we would like to use the classic Void type.
 #[repr(C)]
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct C_Void {
     _inner: bool,
 }
@@ -849,7 +852,7 @@ impl Allocator<C_String> {
 }
 
 impl<T> Allocator<C_Vector<T>> {
-    fn allocate(vector: Vec<T>) -> C_Vector<T> {            // TODO TODO TODO TODO TODO  ПРОверить
+    fn allocate(vector: Vec<T>) -> C_Vector<T> {
         let mut boxed_slice = vector.into_boxed_slice();
 
         let self_ = C_Vector {
@@ -926,8 +929,8 @@ impl Serilizer {
             }
         };
 
-        let unified_report_ = match converter(unified_report) {
-            Ok(unified_report__) => unified_report__,
+        let c_unified_report = match converter(unified_report) {
+            Ok(c_unified_report_) => c_unified_report_,
             Err(_) => {
                 return Box::into_raw(
                     Box::new(
@@ -937,23 +940,23 @@ impl Serilizer {
             }
         };
 
+        let c_result = C_Result::data(c_unified_report);
+
         return Box::into_raw(
-            Box::new(
-                C_Result::data(unified_report_)
-            )
+            Box::new(c_result)
         );
     }
 }
 
 #[repr(C)]
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct Common1 {
     pub channel: Channel1,
     pub is_application_user_subscribed: bool,
 }
 
 #[repr(C)]
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct Channel1 {
     pub channel_id: c_long,
     pub channel_name: C_String,
@@ -965,7 +968,7 @@ pub struct Channel1 {
 }
 
 #[repr(C)]
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct Channel2 {
     pub channel_owner: c_long,
     pub channel_name: C_String,
@@ -982,20 +985,22 @@ pub struct Channel2 {
 }
 
 #[repr(C)]
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct ChannelInnerLink1 {
     pub channel_inner_link_to: c_long,
 }
 
+#[repr(C)]
+#[derive(Default, Clone, Copy)]
 pub struct ChannelOuterLink1 {
     pub channel_outer_link_alias: C_String,
     pub channel_outer_link_address: C_String,
 }
 
-type ApplicationUser__Authorization___AuthorizeByFirstStep___Result = C_Result<C_UnifiedReport<ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming, ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent>>;
+type ApplicationUser__Authorization___AuthorizeByFirstStep___C_Result = C_Result<C_UnifiedReport<ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming, ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent>>;
 
 #[repr(C)]
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming {
     pub application_user_id: c_long,
     pub verification_message_sent: bool,
@@ -1005,7 +1010,7 @@ pub struct ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming {
 }
 
 #[repr(C)]
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent {
     pub application_user__wrong_email_or_nickname_or_password: bool,
 }
@@ -1013,7 +1018,7 @@ pub struct ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent {
 #[no_mangle]
 pub extern "C" fn application_user___authorization____authorize_by_first_step____deserialize(
     vector_of_bytes: *mut C_Vector<c_uchar>,
-) -> *mut ApplicationUser__Authorization___AuthorizeByFirstStep___Result {
+) -> *mut ApplicationUser__Authorization___AuthorizeByFirstStep___C_Result {
     let converter = move |unified_report: UnifiedReport<ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming_, ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent_>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming, ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
@@ -1057,30 +1062,30 @@ pub extern "C" fn application_user___authorization____authorize_by_first_step___
 
 #[no_mangle]
 pub extern "C" fn application_user___authorization____authorize_by_first_step____deallocate(
-    result: *mut ApplicationUser__Authorization___AuthorizeByFirstStep___Result
+    c_result: *mut ApplicationUser__Authorization___AuthorizeByFirstStep___C_Result
 ) -> () {
-    if result.is_null() {
+    if c_result.is_null() {
         return ();
     }
 
     let _ = unsafe {
-        Box::from_raw(result)
+        Box::from_raw(c_result)
     };
 
     return ();
 }
 
-type ApplicationUser__Authorization___AuthorizeByLastStep___Result = C_Result<C_UnifiedReport<ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming, ApplicationUser__Authorization___AuthorizeByLastStep___Precedent>>;
+type ApplicationUser__Authorization___AuthorizeByLastStep___C_Result = C_Result<C_UnifiedReport<ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming, ApplicationUser__Authorization___AuthorizeByLastStep___Precedent>>;
 
 #[repr(C)]
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming {
     pub application_user_access_token_encrypted: C_String,
     pub application_user_access_refresh_token_encrypted: C_String,
 }
 
 #[repr(C)]
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct ApplicationUser__Authorization___AuthorizeByLastStep___Precedent {
     pub application_user_authorization_token__not_found: bool,
     pub application_user_authorization_token__already_expired: bool,
@@ -1089,7 +1094,7 @@ pub struct ApplicationUser__Authorization___AuthorizeByLastStep___Precedent {
 }
 
 #[repr(C)]
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct ApplicationUserAuthorizationToken_WrongValue {
     pub is_exist: bool,
     pub application_user_authorization_token_wrong_enter_tries_quantity: c_short,
@@ -1098,7 +1103,7 @@ pub struct ApplicationUserAuthorizationToken_WrongValue {
 #[no_mangle]
 pub extern "C" fn application_user___authorization____authorize_by_last_step____deserialize(
     vector_of_bytes: *mut C_Vector<c_uchar>,
-) -> *mut ApplicationUser__Authorization___AuthorizeByLastStep___Result {
+) -> *mut ApplicationUser__Authorization___AuthorizeByLastStep___C_Result {
     let converter = move |unified_report: UnifiedReport<ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming_, ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming, ApplicationUser__Authorization___AuthorizeByLastStep___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
@@ -1161,14 +1166,14 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
 
 #[no_mangle]
 pub extern "C" fn application_user___authorization____authorize_by_last_step____deallocate(
-    result: *mut ApplicationUser__Authorization___AuthorizeByLastStep___Result
+    c_result: *mut ApplicationUser__Authorization___AuthorizeByLastStep___C_Result
 ) -> () {
-    if result.is_null() {
+    if c_result.is_null() {
         return ();
     }
 
     let result_ = unsafe {
-        Box::from_raw(result)
+        Box::from_raw(c_result)
     };
 
     if result_.is_data {
@@ -1184,10 +1189,10 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
     return ();
 }
 
-type ApplicationUser__Authorization___CheckEmailForExisting___Result = C_Result<C_UnifiedReport<ApplicationUser__Authorization___CheckEmailForExisting___Outcoming, C_Void>>;
+type ApplicationUser__Authorization___CheckEmailForExisting___C_Result = C_Result<C_UnifiedReport<ApplicationUser__Authorization___CheckEmailForExisting___Outcoming, C_Void>>;
 
 #[repr(C)]
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct ApplicationUser__Authorization___CheckEmailForExisting___Outcoming {
     pub result: bool,
 }
@@ -1195,7 +1200,7 @@ pub struct ApplicationUser__Authorization___CheckEmailForExisting___Outcoming {
 #[no_mangle]
 pub extern "C" fn application_user___authorization____check_email_for_existing____deserialize(
     vector_of_bytes: *mut C_Vector<c_uchar>,
-) -> *mut ApplicationUser__Authorization___CheckEmailForExisting___Result {
+) -> *mut ApplicationUser__Authorization___CheckEmailForExisting___C_Result {
     let converter = move |unified_report: UnifiedReport<ApplicationUser__Authorization___CheckEmailForExisting___Outcoming_, Void>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___CheckEmailForExisting___Outcoming, C_Void>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
@@ -1227,23 +1232,23 @@ pub extern "C" fn application_user___authorization____check_email_for_existing__
 
 #[no_mangle]
 pub extern "C" fn application_user___authorization____check_email_for_existing____deallocate(
-    result: *mut ApplicationUser__Authorization___CheckEmailForExisting___Result
+    c_result: *mut ApplicationUser__Authorization___CheckEmailForExisting___C_Result
 ) -> () {
-    if result.is_null() {
+    if c_result.is_null() {
         return ();
     }
 
     let _ = unsafe {
-        Box::from_raw(result)
+        Box::from_raw(c_result)
     };
 
     return ();
 }
 
-type ApplicationUser__Authorization___CheckNicknameForExisting___Result = C_Result<C_UnifiedReport<ApplicationUser__Authorization___CheckNicknameForExisting___Outcoming, C_Void>>;
+type ApplicationUser__Authorization___CheckNicknameForExisting___C_Result = C_Result<C_UnifiedReport<ApplicationUser__Authorization___CheckNicknameForExisting___Outcoming, C_Void>>;
 
 #[repr(C)]
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct ApplicationUser__Authorization___CheckNicknameForExisting___Outcoming {
     pub result: bool,
 }
@@ -1251,7 +1256,7 @@ pub struct ApplicationUser__Authorization___CheckNicknameForExisting___Outcoming
 #[no_mangle]
 pub extern "C" fn application_user___authorization____check_nickname_for_existing____deserialize(
     vector_of_bytes: *mut C_Vector<c_uchar>,
-) -> *mut ApplicationUser__Authorization___CheckNicknameForExisting___Result {
+) -> *mut ApplicationUser__Authorization___CheckNicknameForExisting___C_Result {
     let converter = move |unified_report: UnifiedReport<ApplicationUser__Authorization___CheckNicknameForExisting___Outcoming_, Void>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___CheckNicknameForExisting___Outcoming, C_Void>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
@@ -1283,23 +1288,23 @@ pub extern "C" fn application_user___authorization____check_nickname_for_existin
 
 #[no_mangle]
 pub extern "C" fn application_user___authorization____check_nickname_for_existing____deallocate(
-    result: *mut ApplicationUser__Authorization___CheckNicknameForExisting___Result
+    c_result: *mut ApplicationUser__Authorization___CheckNicknameForExisting___C_Result
 ) -> () {
-    if result.is_null() {
+    if c_result.is_null() {
         return ();
     }
 
     let _ = unsafe {
-        Box::from_raw(result)
+        Box::from_raw(c_result)
     };
 
     return ();
 }
 
-type ApplicationUser__Authorization___DeauthorizeFromAllDevices___Result = C_Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent>>;
+type ApplicationUser__Authorization___DeauthorizeFromAllDevices___C_Result = C_Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent>>;
 
 #[repr(C)]
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent {
     pub application_user_access_token__already_expired: bool,
     pub application_user_access_token__in_application_user_access_token_black_list: bool,
@@ -1308,7 +1313,7 @@ pub struct ApplicationUser__Authorization___DeauthorizeFromAllDevices___Preceden
 #[no_mangle]
 pub extern "C" fn application_user___authorization____deauthorize_from_all_devices____deserialize(
     vector_of_bytes: *mut C_Vector<c_uchar>,
-) -> *mut ApplicationUser__Authorization___DeauthorizeFromAllDevices___Result {
+) -> *mut ApplicationUser__Authorization___DeauthorizeFromAllDevices___C_Result {
     let converter = move |unified_report: UnifiedReport<Void, ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent_>| -> Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
@@ -1351,23 +1356,23 @@ pub extern "C" fn application_user___authorization____deauthorize_from_all_devic
 
 #[no_mangle]
 pub extern "C" fn application_user___authorization____deauthorize_from_all_devices____deallocate(
-    result: *mut ApplicationUser__Authorization___DeauthorizeFromAllDevices___Result
+    c_result: *mut ApplicationUser__Authorization___DeauthorizeFromAllDevices___C_Result
 ) -> () {
-    if result.is_null() {
+    if c_result.is_null() {
         return ();
     }
 
     let _ = unsafe {
-        Box::from_raw(result)
+        Box::from_raw(c_result)
     };
 
     return ();
 }
 
-type ApplicationUser__Authorization___DeauthorizeFromOneDevice___Result = C_Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent>>;
+type ApplicationUser__Authorization___DeauthorizeFromOneDevice___C_Result = C_Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent>>;
 
 #[repr(C)]
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent {
     pub application_user_access_token__already_expired: bool,
     pub application_user_access_token__in_application_user_access_token_black_list: bool,
@@ -1376,7 +1381,7 @@ pub struct ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent
 #[no_mangle]
 pub extern "C" fn application_user___authorization____deauthorize_from_one_device____deserialize(
     vector_of_bytes: *mut C_Vector<c_uchar>,
-) -> *mut ApplicationUser__Authorization___DeauthorizeFromOneDevice___Result {
+) -> *mut ApplicationUser__Authorization___DeauthorizeFromOneDevice___C_Result {
     let converter = move |unified_report: UnifiedReport<Void, ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent_>| -> Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
@@ -1419,30 +1424,30 @@ pub extern "C" fn application_user___authorization____deauthorize_from_one_devic
 
 #[no_mangle]
 pub extern "C" fn application_user___authorization____deauthorize_from_one_device____deallocate(
-    result: *mut ApplicationUser__Authorization___DeauthorizeFromOneDevice___Result
+    c_result: *mut ApplicationUser__Authorization___DeauthorizeFromOneDevice___C_Result
 ) -> () {
-    if result.is_null() {
+    if c_result.is_null() {
         return ();
     }
 
     let _ = unsafe {
-        Box::from_raw(result)
+        Box::from_raw(c_result)
     };
 
     return ();
 }
 
-type ApplicationUser__Authorization___RefreshAccessToken___Result = C_Result<C_UnifiedReport<ApplicationUser__Authorization___RefreshAccessToken___Outcoming, ApplicationUser__Authorization___RefreshAccessToken___Precedent>>;
+type ApplicationUser__Authorization___RefreshAccessToken___C_Result = C_Result<C_UnifiedReport<ApplicationUser__Authorization___RefreshAccessToken___Outcoming, ApplicationUser__Authorization___RefreshAccessToken___Precedent>>;
 
 #[repr(C)]
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct ApplicationUser__Authorization___RefreshAccessToken___Outcoming {
     pub application_user_access_token_encrypted: C_String,
     pub application_user_access_refresh_token_encrypted: C_String,
 }
 
 #[repr(C)]
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct ApplicationUser__Authorization___RefreshAccessToken___Precedent {
     pub application_user_access_refresh_token__not_found: bool,
     pub application_user_access_refresh_token__already_expired: bool,
@@ -1451,7 +1456,7 @@ pub struct ApplicationUser__Authorization___RefreshAccessToken___Precedent {
 #[no_mangle]
 pub extern "C" fn application_user___authorization____refresh_access_token____deserialize(
     vector_of_bytes: *mut C_Vector<c_uchar>,
-) -> *mut ApplicationUser__Authorization___RefreshAccessToken___Result {
+) -> *mut ApplicationUser__Authorization___RefreshAccessToken___C_Result {
     let converter = move |unified_report: UnifiedReport<ApplicationUser__Authorization___RefreshAccessToken___Outcoming_, ApplicationUser__Authorization___RefreshAccessToken___Precedent_>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___RefreshAccessToken___Outcoming, ApplicationUser__Authorization___RefreshAccessToken___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
@@ -1499,14 +1504,14 @@ pub extern "C" fn application_user___authorization____refresh_access_token____de
 
 #[no_mangle]
 pub extern "C" fn application_user___authorization____refresh_access_token____deallocate(
-    result: *mut ApplicationUser__Authorization___RefreshAccessToken___Result
+    c_result: *mut ApplicationUser__Authorization___RefreshAccessToken___C_Result
 ) -> () {
-    if result.is_null() {
+    if c_result.is_null() {
         return ();
     }
 
     let result_ = unsafe {
-        Box::from_raw(result)
+        Box::from_raw(c_result)
     };
 
     if result_.is_data {
@@ -1522,10 +1527,10 @@ pub extern "C" fn application_user___authorization____refresh_access_token____de
     return ();
 }
 
-type ApplicationUser__Authorization___RegisterByFirstStep___Result = C_Result<C_UnifiedReport<ApplicationUser__Authorization___RegisterByFirstStep___Outcoming, ApplicationUser__Authorization___RegisterByFirstStep___Precedent>>;
+type ApplicationUser__Authorization___RegisterByFirstStep___C_Result = C_Result<C_UnifiedReport<ApplicationUser__Authorization___RegisterByFirstStep___Outcoming, ApplicationUser__Authorization___RegisterByFirstStep___Precedent>>;
 
 #[repr(C)]
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct ApplicationUser__Authorization___RegisterByFirstStep___Outcoming {
     pub verification_message_sent: bool,
     pub application_user_registration_token_can_be_resent_from: c_long,
@@ -1534,7 +1539,7 @@ pub struct ApplicationUser__Authorization___RegisterByFirstStep___Outcoming {
 }
 
 #[repr(C)]
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct ApplicationUser__Authorization___RegisterByFirstStep___Precedent {
     pub application_user__email_already_exist: bool,
 }
@@ -1542,7 +1547,7 @@ pub struct ApplicationUser__Authorization___RegisterByFirstStep___Precedent {
 #[no_mangle]
 pub extern "C" fn application_user___authorization____register_by_first_step____deserialize(
     vector_of_bytes: *mut C_Vector<c_uchar>,
-) -> *mut ApplicationUser__Authorization___RegisterByFirstStep___Result {
+) -> *mut ApplicationUser__Authorization___RegisterByFirstStep___C_Result {
     let converter = move |unified_report: UnifiedReport<ApplicationUser__Authorization___RegisterByFirstStep___Outcoming_, ApplicationUser__Authorization___RegisterByFirstStep___Precedent_>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___RegisterByFirstStep___Outcoming, ApplicationUser__Authorization___RegisterByFirstStep___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
@@ -1585,23 +1590,23 @@ pub extern "C" fn application_user___authorization____register_by_first_step____
 
 #[no_mangle]
 pub extern "C" fn application_user___authorization____register_by_first_step____deallocate(
-    result: *mut ApplicationUser__Authorization___RegisterByFirstStep___Result
+    c_result: *mut ApplicationUser__Authorization___RegisterByFirstStep___C_Result
 ) -> () {
-    if result.is_null() {
+    if c_result.is_null() {
         return ();
     }
 
     let _ = unsafe {
-        Box::from_raw(result)
+        Box::from_raw(c_result)
     };
 
     return ();
 }
 
-type ApplicationUser__Authorization___RegisterBySecondStep___Result = C_Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___RegisterBySecondStep___Precedent>>;
+type ApplicationUser__Authorization___RegisterBySecondStep___C_Result = C_Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___RegisterBySecondStep___Precedent>>;
 
 #[repr(C)]
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct ApplicationUser__Authorization___RegisterBySecondStep___Precedent {
     pub application_user_registration_token__not_found: bool,
     pub application_user_registration_token__already_expired: bool,
@@ -1610,7 +1615,7 @@ pub struct ApplicationUser__Authorization___RegisterBySecondStep___Precedent {
 }
 
 #[repr(C)]
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct ApplicationUserRegistrationToken_WrongValue {
     pub is_exist: bool,
     pub application_user_registration_token_wrong_enter_tries_quantity: c_short,
@@ -1619,7 +1624,7 @@ pub struct ApplicationUserRegistrationToken_WrongValue {
 #[no_mangle]
 pub extern "C" fn application_user___authorization____register_by_second_step____deserialize(
     vector_of_bytes: *mut C_Vector<c_uchar>,
-) -> *mut ApplicationUser__Authorization___RegisterBySecondStep___Result {
+) -> *mut ApplicationUser__Authorization___RegisterBySecondStep___C_Result {
     let converter = move |unified_report: UnifiedReport<Void, ApplicationUser__Authorization___RegisterBySecondStep___Precedent_>| -> Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___RegisterBySecondStep___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
@@ -1677,30 +1682,30 @@ pub extern "C" fn application_user___authorization____register_by_second_step___
 
 #[no_mangle]
 pub extern "C" fn application_user___authorization____register_by_second_step____deallocate(
-    result: *mut ApplicationUser__Authorization___RegisterBySecondStep___Result
+    c_result: *mut ApplicationUser__Authorization___RegisterBySecondStep___C_Result
 ) -> () {
-    if result.is_null() {
+    if c_result.is_null() {
         return ();
     }
 
     let _ = unsafe {
-        Box::from_raw(result)
+        Box::from_raw(c_result)
     };
 
     return ();
 }
 
-type ApplicationUser__Authorization___RegisterByLastStep___Result = C_Result<C_UnifiedReport<ApplicationUser__Authorization___RegisterByLastStep___Outcoming, ApplicationUser__Authorization___RegisterByLastStep___Precedent>>;
+type ApplicationUser__Authorization___RegisterByLastStep___C_Result = C_Result<C_UnifiedReport<ApplicationUser__Authorization___RegisterByLastStep___Outcoming, ApplicationUser__Authorization___RegisterByLastStep___Precedent>>;
 
 #[repr(C)]
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct ApplicationUser__Authorization___RegisterByLastStep___Outcoming {
     pub application_user_access_token_encrypted: C_String,
     pub application_user_access_refresh_token_encrypted: C_String,
 }
 
 #[repr(C)]
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct ApplicationUser__Authorization___RegisterByLastStep___Precedent {
     pub application_user__nickname_already_exist: bool,
     pub application_user__email_already_exist: bool,
@@ -1713,7 +1718,7 @@ pub struct ApplicationUser__Authorization___RegisterByLastStep___Precedent {
 #[no_mangle]
 pub extern "C" fn application_user___authorization____register_by_last_step____deserialize(
     vector_of_bytes: *mut C_Vector<c_uchar>,
-) -> *mut ApplicationUser__Authorization___RegisterByLastStep___Result {
+) -> *mut ApplicationUser__Authorization___RegisterByLastStep___C_Result {
     let converter = move |unified_report: UnifiedReport<ApplicationUser__Authorization___RegisterByLastStep___Outcoming_, ApplicationUser__Authorization___RegisterByLastStep___Precedent_>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___RegisterByLastStep___Outcoming, ApplicationUser__Authorization___RegisterByLastStep___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
@@ -1785,14 +1790,14 @@ pub extern "C" fn application_user___authorization____register_by_last_step____d
 
 #[no_mangle]
 pub extern "C" fn application_user___authorization____register_by_last_step____deallocate(
-    result: *mut ApplicationUser__Authorization___RegisterByLastStep___Result
+    c_result: *mut ApplicationUser__Authorization___RegisterByLastStep___C_Result
 ) -> () {
-    if result.is_null() {
+    if c_result.is_null() {
         return ();
     }
 
     let result_ = unsafe {
-        Box::from_raw(result)
+        Box::from_raw(c_result)
     };
 
     if result_.is_data {
@@ -1808,10 +1813,10 @@ pub extern "C" fn application_user___authorization____register_by_last_step____d
     return ();
 }
 
-type ApplicationUser__Authorization___ResetPasswordByFirstStep___Result = C_Result<C_UnifiedReport<ApplicationUser__Authorization___ResetPasswordByFirstStep___Outcoming, ApplicationUser__Authorization___ResetPasswordByFirstStep___Precedent>>;
+type ApplicationUser__Authorization___ResetPasswordByFirstStep___C_Result = C_Result<C_UnifiedReport<ApplicationUser__Authorization___ResetPasswordByFirstStep___Outcoming, ApplicationUser__Authorization___ResetPasswordByFirstStep___Precedent>>;
 
 #[repr(C)]
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct ApplicationUser__Authorization___ResetPasswordByFirstStep___Outcoming {
     pub application_user_id: c_long,
     pub verification_message_sent: bool,
@@ -1821,7 +1826,7 @@ pub struct ApplicationUser__Authorization___ResetPasswordByFirstStep___Outcoming
 }
 
 #[repr(C)]
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct ApplicationUser__Authorization___ResetPasswordByFirstStep___Precedent {
     pub application_user__not_found: bool,
 }
@@ -1829,7 +1834,7 @@ pub struct ApplicationUser__Authorization___ResetPasswordByFirstStep___Precedent
 #[no_mangle]
 pub extern "C" fn application_user___authorization____reset_password_by_first_step____deserialize(
     vector_of_bytes: *mut C_Vector<c_uchar>,
-) -> *mut ApplicationUser__Authorization___ResetPasswordByFirstStep___Result {
+) -> *mut ApplicationUser__Authorization___ResetPasswordByFirstStep___C_Result {
     let converter = move |unified_report: UnifiedReport<ApplicationUser__Authorization___ResetPasswordByFirstStep___Outcoming_, ApplicationUser__Authorization___ResetPasswordByFirstStep___Precedent_>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___ResetPasswordByFirstStep___Outcoming, ApplicationUser__Authorization___ResetPasswordByFirstStep___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
@@ -1873,23 +1878,23 @@ pub extern "C" fn application_user___authorization____reset_password_by_first_st
 
 #[no_mangle]
 pub extern "C" fn application_user___authorization____reset_password_by_first_step____deallocate(
-    result: *mut ApplicationUser__Authorization___ResetPasswordByFirstStep___Result
+    c_result: *mut ApplicationUser__Authorization___ResetPasswordByFirstStep___C_Result
 ) -> () {
-    if result.is_null() {
+    if c_result.is_null() {
         return ();
     }
 
     let _ = unsafe {
-        Box::from_raw(result)
+        Box::from_raw(c_result)
     };
 
     return ();
 }
 
-type ApplicationUser__Authorization___ResetPasswordBySecondStep___Result = C_Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent>>;
+type ApplicationUser__Authorization___ResetPasswordBySecondStep___C_Result = C_Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent>>;
 
 #[repr(C)]
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent {
     pub application_user_reset_password_token__not_found: bool,
     pub application_user_reset_password_token__already_expired: bool,
@@ -1898,7 +1903,7 @@ pub struct ApplicationUser__Authorization___ResetPasswordBySecondStep___Preceden
 }
 
 #[repr(C)]
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct ApplicationUserResetPasswordToken_WrongValue {
     pub is_exist: bool,
     pub application_user_reset_password_token_wrong_enter_tries_quantity: c_short,
@@ -1907,7 +1912,7 @@ pub struct ApplicationUserResetPasswordToken_WrongValue {
 #[no_mangle]
 pub extern "C" fn application_user___authorization____reset_password_by_second_step____deserialize(
     vector_of_bytes: *mut C_Vector<c_uchar>,
-) -> *mut ApplicationUser__Authorization___ResetPasswordBySecondStep___Result {
+) -> *mut ApplicationUser__Authorization___ResetPasswordBySecondStep___C_Result {
     let converter = move |unified_report: UnifiedReport<Void, ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_>| -> Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
@@ -1965,23 +1970,23 @@ pub extern "C" fn application_user___authorization____reset_password_by_second_s
 
 #[no_mangle]
 pub extern "C" fn application_user___authorization____reset_password_by_second_step____deallocate(
-    result: *mut ApplicationUser__Authorization___ResetPasswordBySecondStep___Result
+    c_result: *mut ApplicationUser__Authorization___ResetPasswordBySecondStep___C_Result
 ) -> () {
-    if result.is_null() {
+    if c_result.is_null() {
         return ();
     }
 
     let _ = unsafe {
-        Box::from_raw(result)
+        Box::from_raw(c_result)
     };
 
     return ();
 }
 
-type ApplicationUser__Authorization___ResetPasswordByLastStep___Result = C_Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent>>;
+type ApplicationUser__Authorization___ResetPasswordByLastStep___C_Result = C_Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent>>;
 
 #[repr(C)]
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent {
     pub application_user__not_found: bool,
     pub application_user_reset_password_token__not_found: bool,
@@ -1993,7 +1998,7 @@ pub struct ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent 
 #[no_mangle]
 pub extern "C" fn application_user___authorization____reset_password_by_last_step____deserialize(
     vector_of_bytes: *mut C_Vector<c_uchar>,
-) -> *mut ApplicationUser__Authorization___ResetPasswordByLastStep___Result {
+) -> *mut ApplicationUser__Authorization___ResetPasswordByLastStep___C_Result {
     let converter = move |unified_report: UnifiedReport<Void, ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_>| -> Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
@@ -2054,29 +2059,29 @@ pub extern "C" fn application_user___authorization____reset_password_by_last_ste
 
 #[no_mangle]
 pub extern "C" fn application_user___authorization____reset_password_by_last_step____deallocate(
-    result: *mut ApplicationUser__Authorization___ResetPasswordByLastStep___Result
+    c_result: *mut ApplicationUser__Authorization___ResetPasswordByLastStep___C_Result
 ) -> () {
-    if result.is_null() {
+    if c_result.is_null() {
         return ();
     }
 
     let _ = unsafe {
-        Box::from_raw(result)
+        Box::from_raw(c_result)
     };
 
     return ();
 }
 
-type ApplicationUser__Authorization___SendEmailForRegister___Result = C_Result<C_UnifiedReport<ApplicationUser__Authorization___SendEmailForRegister___Outcoming, ApplicationUser__Authorization___SendEmailForRegister___Precedent>>;
+type ApplicationUser__Authorization___SendEmailForRegister___C_Result = C_Result<C_UnifiedReport<ApplicationUser__Authorization___SendEmailForRegister___Outcoming, ApplicationUser__Authorization___SendEmailForRegister___Precedent>>;
 
 #[repr(C)]
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct ApplicationUser__Authorization___SendEmailForRegister___Outcoming {
     pub application_user_registration_token_can_be_resent_from: c_long,
 }
 
 #[repr(C)]
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct ApplicationUser__Authorization___SendEmailForRegister___Precedent {
     pub application_user_registration_token__not_found: bool,
     pub application_user_registration_token__already_expired: bool,
@@ -2087,7 +2092,7 @@ pub struct ApplicationUser__Authorization___SendEmailForRegister___Precedent {
 #[no_mangle]
 pub extern "C" fn application_user___authorization____send_email_for_register____deserialize(
     vector_of_bytes: *mut C_Vector<c_uchar>,
-) -> *mut ApplicationUser__Authorization___SendEmailForRegister___Result {
+) -> *mut ApplicationUser__Authorization___SendEmailForRegister___C_Result {
     let converter = move |unified_report: UnifiedReport<ApplicationUser__Authorization___SendEmailForRegister___Outcoming_, ApplicationUser__Authorization___SendEmailForRegister___Precedent_>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___SendEmailForRegister___Outcoming, ApplicationUser__Authorization___SendEmailForRegister___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
@@ -2146,29 +2151,29 @@ pub extern "C" fn application_user___authorization____send_email_for_register___
 
 #[no_mangle]
 pub extern "C" fn application_user___authorization____send_email_for_register____deallocate(
-    result: *mut ApplicationUser__Authorization___SendEmailForRegister___Result
+    c_result: *mut ApplicationUser__Authorization___SendEmailForRegister___C_Result
 ) -> () {
-    if result.is_null() {
+    if c_result.is_null() {
         return ();
     }
 
     let _ = unsafe {
-        Box::from_raw(result)
+        Box::from_raw(c_result)
     };
 
     return ();
 }
 
-type ApplicationUser__Authorization___SendEmailForAuthorize___Result = C_Result<C_UnifiedReport<ApplicationUser__Authorization___SendEmailForAuthorize___Outcoming, ApplicationUser__Authorization___SendEmailForAuthorize___Precedent>>;
+type ApplicationUser__Authorization___SendEmailForAuthorize___C_Result = C_Result<C_UnifiedReport<ApplicationUser__Authorization___SendEmailForAuthorize___Outcoming, ApplicationUser__Authorization___SendEmailForAuthorize___Precedent>>;
 
 #[repr(C)]
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct ApplicationUser__Authorization___SendEmailForAuthorize___Outcoming {
     pub application_user_authorization_token_can_be_resent_from: c_long,
 }
 
 #[repr(C)]
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct ApplicationUser__Authorization___SendEmailForAuthorize___Precedent {
     pub application_user__not_found: bool,
     pub application_user_authorization_token__not_found: bool,
@@ -2179,7 +2184,7 @@ pub struct ApplicationUser__Authorization___SendEmailForAuthorize___Precedent {
 #[no_mangle]
 pub extern "C" fn application_user___authorization____send_email_for_authorize____deserialize(
     vector_of_bytes: *mut C_Vector<c_uchar>,
-) -> *mut ApplicationUser__Authorization___SendEmailForAuthorize___Result {
+) -> *mut ApplicationUser__Authorization___SendEmailForAuthorize___C_Result {
     let converter = move |unified_report: UnifiedReport<ApplicationUser__Authorization___SendEmailForAuthorize___Outcoming_, ApplicationUser__Authorization___SendEmailForAuthorize___Precedent_>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___SendEmailForAuthorize___Outcoming, ApplicationUser__Authorization___SendEmailForAuthorize___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
@@ -2238,29 +2243,29 @@ pub extern "C" fn application_user___authorization____send_email_for_authorize__
 
 #[no_mangle]
 pub extern "C" fn application_user___authorization____send_email_for_authorize____deallocate(
-    result: *mut ApplicationUser__Authorization___SendEmailForAuthorize___Result
+    c_result: *mut ApplicationUser__Authorization___SendEmailForAuthorize___C_Result
 ) -> () {
-    if result.is_null() {
+    if c_result.is_null() {
         return ();
     }
 
     let _ = unsafe {
-        Box::from_raw(result)
+        Box::from_raw(c_result)
     };
 
     return ();
 }
 
-type ApplicationUser__Authorization___SendEmailForResetPassword___Result = C_Result<C_UnifiedReport<ApplicationUser__Authorization___SendEmailForResetPassword___Outcoming, ApplicationUser__Authorization___SendEmailForResetPassword___Precedent>>;
+type ApplicationUser__Authorization___SendEmailForResetPassword___C_Result = C_Result<C_UnifiedReport<ApplicationUser__Authorization___SendEmailForResetPassword___Outcoming, ApplicationUser__Authorization___SendEmailForResetPassword___Precedent>>;
 
 #[repr(C)]
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct ApplicationUser__Authorization___SendEmailForResetPassword___Outcoming {
     pub application_user_resep_password_token_can_be_resent_from: c_long,
 }
 
 #[repr(C)]
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct ApplicationUser__Authorization___SendEmailForResetPassword___Precedent {
     pub application_user__not_found: bool,
     pub application_user_reset_password_token__not_found: bool,
@@ -2272,7 +2277,7 @@ pub struct ApplicationUser__Authorization___SendEmailForResetPassword___Preceden
 #[no_mangle]
 pub extern "C" fn application_user___authorization____send_email_for_reset_password____deserialize(
     vector_of_bytes: *mut C_Vector<c_uchar>,
-) -> *mut ApplicationUser__Authorization___SendEmailForResetPassword___Result {
+) -> *mut ApplicationUser__Authorization___SendEmailForResetPassword___C_Result {
     let converter = move |unified_report: UnifiedReport<ApplicationUser__Authorization___SendEmailForResetPassword___Outcoming_, ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___SendEmailForResetPassword___Outcoming, ApplicationUser__Authorization___SendEmailForResetPassword___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
@@ -2337,29 +2342,29 @@ pub extern "C" fn application_user___authorization____send_email_for_reset_passw
 
 #[no_mangle]
 pub extern "C" fn application_user___authorization____send_email_for_reset_password____deallocate(
-    result: *mut ApplicationUser__Authorization___SendEmailForResetPassword___Result
+    c_result: *mut ApplicationUser__Authorization___SendEmailForResetPassword___C_Result
 ) -> () {
-    if result.is_null() {
+    if c_result.is_null() {
         return ();
     }
 
     let _ = unsafe {
-        Box::from_raw(result)
+        Box::from_raw(c_result)
     };
 
     return ();
 }
 
-type Channel__Base___GetManyByNameInSubscriptions___Result = C_Result<C_UnifiedReport<Channel__Base___GetManyByNameInSubscriptions___Outcoming, Channel__Base___GetManyByNameInSubscriptions___Precedent>>;
+type Channel__Base___GetManyByNameInSubscriptions___C_Result = C_Result<C_UnifiedReport<Channel__Base___GetManyByNameInSubscriptions___Outcoming, Channel__Base___GetManyByNameInSubscriptions___Precedent>>;
 
 #[repr(C)]
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct Channel__Base___GetManyByNameInSubscriptions___Outcoming {
     pub common_registry: C_Vector<Common1>,
 }
 
 #[repr(C)]
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct Channel__Base___GetManyByNameInSubscriptions___Precedent {
     pub application_user_access_token__already_expired: bool,
     pub application_user_access_token__in_application_user_access_token_black_list: bool,
@@ -2368,7 +2373,7 @@ pub struct Channel__Base___GetManyByNameInSubscriptions___Precedent {
 #[no_mangle]
 pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____deserialize(
     vector_of_bytes: *mut C_Vector<c_uchar>,
-) -> *mut Channel__Base___GetManyByNameInSubscriptions___Result {
+) -> *mut Channel__Base___GetManyByNameInSubscriptions___C_Result {
     let converter = move |unified_report: UnifiedReport<Channel__Base___GetManyByNameInSubscriptions___Outcoming_, Channel__Base___GetManyByNameInSubscriptions___Precedent_>| -> Result<C_UnifiedReport<Channel__Base___GetManyByNameInSubscriptions___Outcoming, Channel__Base___GetManyByNameInSubscriptions___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
@@ -2444,14 +2449,14 @@ pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____deseria
 
 #[no_mangle]
 pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____deallocate(
-    result: *mut Channel__Base___GetManyByNameInSubscriptions___Result
+    c_result: *mut Channel__Base___GetManyByNameInSubscriptions___C_Result
 ) -> () {
-    if result.is_null() {
+    if c_result.is_null() {
         return ();
     }
 
     let result_ = unsafe {
-        Box::from_raw(result)
+        Box::from_raw(c_result)
     };
 
     if result_.is_data {
@@ -2483,16 +2488,16 @@ pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____dealloc
     return ();
 }
 
-type Channel__Base___GetManyBySubscription___Result = C_Result<C_UnifiedReport<Channel__Base___GetManyBySubscription___Outcoming, Channel__Base___GetManyBySubscription___Precedent>>;
+type Channel__Base___GetManyBySubscription___C_Result = C_Result<C_UnifiedReport<Channel__Base___GetManyBySubscription___Outcoming, Channel__Base___GetManyBySubscription___Precedent>>;
 
 #[repr(C)]
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct Channel__Base___GetManyBySubscription___Outcoming {
     pub common_registry: C_Vector<Common1>,
 }
 
 #[repr(C)]
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct Channel__Base___GetManyBySubscription___Precedent {
     pub application_user_access_token__already_expired: bool,
     pub application_user_access_token__in_application_user_access_token_black_list: bool,
@@ -2501,7 +2506,7 @@ pub struct Channel__Base___GetManyBySubscription___Precedent {
 #[no_mangle]
 pub extern "C" fn channel___base____get_many_by_subscription____deserialize(
     vector_of_bytes: *mut C_Vector<c_uchar>,
-) -> *mut Channel__Base___GetManyBySubscription___Result {
+) -> *mut Channel__Base___GetManyBySubscription___C_Result {
     let converter = move |unified_report: UnifiedReport<Channel__Base___GetManyBySubscription___Outcoming_, Channel__Base___GetManyBySubscription___Precedent_>| -> Result<C_UnifiedReport<Channel__Base___GetManyBySubscription___Outcoming, Channel__Base___GetManyBySubscription___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
@@ -2577,14 +2582,14 @@ pub extern "C" fn channel___base____get_many_by_subscription____deserialize(
 
 #[no_mangle]
 pub extern "C" fn channel___base____get_many_by_subscription____deallocate(
-    result: *mut Channel__Base___GetManyBySubscription___Result
+    c_result: *mut Channel__Base___GetManyBySubscription___C_Result
 ) -> () {
-    if result.is_null() {
+    if c_result.is_null() {
         return ();
     }
 
     let result_ = unsafe {
-        Box::from_raw(result)
+        Box::from_raw(c_result)
     };
 
     if result_.is_data {
@@ -2616,16 +2621,16 @@ pub extern "C" fn channel___base____get_many_by_subscription____deallocate(
     return ();
 }
 
-type Channel__Base___GetManyPublicByName___Result = C_Result<C_UnifiedReport<Channel__Base___GetManyPublicByName___Outcoming, Channel__Base___GetManyPublicByName___Precedent>>;
+type Channel__Base___GetManyPublicByName___C_Result = C_Result<C_UnifiedReport<Channel__Base___GetManyPublicByName___Outcoming, Channel__Base___GetManyPublicByName___Precedent>>;
 
 #[repr(C)]
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct Channel__Base___GetManyPublicByName___Outcoming {
     pub common_registry: C_Vector<Common1>,
 }
 
 #[repr(C)]
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct Channel__Base___GetManyPublicByName___Precedent {
     pub application_user_access_token__already_expired: bool,
     pub application_user_access_token__in_application_user_access_token_black_list: bool,
@@ -2634,7 +2639,7 @@ pub struct Channel__Base___GetManyPublicByName___Precedent {
 #[no_mangle]
 pub extern "C" fn channel___base____get_many_public_by_name____deserialize(
     vector_of_bytes: *mut C_Vector<c_uchar>,
-) -> *mut Channel__Base___GetManyPublicByName___Result {
+) -> *mut Channel__Base___GetManyPublicByName___C_Result {
     let converter = move |unified_report: UnifiedReport<Channel__Base___GetManyPublicByName___Outcoming_, Channel__Base___GetManyPublicByName___Precedent_>| -> Result<C_UnifiedReport<Channel__Base___GetManyPublicByName___Outcoming, Channel__Base___GetManyPublicByName___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
@@ -2710,14 +2715,14 @@ pub extern "C" fn channel___base____get_many_public_by_name____deserialize(
 
 #[no_mangle]
 pub extern "C" fn channel___base____get_many_public_by_name____deallocate(
-    result: *mut Channel__Base___GetManyPublicByName___Result
+    c_result: *mut Channel__Base___GetManyPublicByName___C_Result
 ) -> () {
-    if result.is_null() {
+    if c_result.is_null() {
         return ();
     }
 
     let result_ = unsafe {
-        Box::from_raw(result)
+        Box::from_raw(c_result)
     };
 
     if result_.is_data {
@@ -2749,10 +2754,10 @@ pub extern "C" fn channel___base____get_many_public_by_name____deallocate(
     return ();
 }
 
-type Channel__Base___GetOneById___Result = C_Result<C_UnifiedReport<Channel__Base___GetOneById___Outcoming, Channel__Base___GetOneById___Precedent>>;
+type Channel__Base___GetOneById___C_Result = C_Result<C_UnifiedReport<Channel__Base___GetOneById___Outcoming, Channel__Base___GetOneById___Precedent>>;
 
 #[repr(C)]
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct Channel__Base___GetOneById___Outcoming {
     pub channel: Channel2,
     pub channel_inner_link_registry: C_Vector<ChannelInnerLink1>,
@@ -2760,7 +2765,7 @@ pub struct Channel__Base___GetOneById___Outcoming {
 }
 
 #[repr(C)]
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct Channel__Base___GetOneById___Precedent {
     pub application_user_access_token__already_expired: bool,
     pub application_user_access_token__in_application_user_access_token_black_list: bool,
@@ -2771,7 +2776,7 @@ pub struct Channel__Base___GetOneById___Precedent {
 #[no_mangle]
 pub extern "C" fn channel___base____get_one_by_id____deserialize(
     vector_of_bytes: *mut C_Vector<c_uchar>,
-) -> *mut Channel__Base___GetOneById___Result {
+) -> *mut Channel__Base___GetOneById___C_Result {
     let converter = move |unified_report: UnifiedReport<Channel__Base___GetOneById___Outcoming_, Channel__Base___GetOneById___Precedent_>| -> Result<C_UnifiedReport<Channel__Base___GetOneById___Outcoming, Channel__Base___GetOneById___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
@@ -2883,14 +2888,14 @@ pub extern "C" fn channel___base____get_one_by_id____deserialize(
 
 #[no_mangle]
 pub extern "C" fn channel___base____get_one_by_id____deallocate(
-    result: *mut Channel__Base___GetOneById___Result
+    c_result: *mut Channel__Base___GetOneById___C_Result
 ) -> () {
-    if result.is_null() {
+    if c_result.is_null() {
         return ();
     }
 
     let result_ = unsafe {
-        Box::from_raw(result)
+        Box::from_raw(c_result)
     };
 
     if result_.is_data {
@@ -2934,10 +2939,10 @@ pub extern "C" fn channel___base____get_one_by_id____deallocate(
     return ();
 }
 
-type ChannelSubscription__Base___Create___Result = C_Result<C_UnifiedReport<C_Void, ChannelSubscription__Base___Create___Precedent>>;
+type ChannelSubscription__Base___Create___C_Result = C_Result<C_UnifiedReport<C_Void, ChannelSubscription__Base___Create___Precedent>>;
 
 #[repr(C)]
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct ChannelSubscription__Base___Create___Precedent {
     pub application_user_access_token__already_expired: bool,
     pub application_user_access_token__in_application_user_access_token_black_list: bool,
@@ -2949,7 +2954,7 @@ pub struct ChannelSubscription__Base___Create___Precedent {
 #[no_mangle]
 pub extern "C" fn channel_subscription___base____create____deserialize(
     vector_of_bytes: *mut C_Vector<c_uchar>,
-) -> *mut ChannelSubscription__Base___Create___Result {
+) -> *mut ChannelSubscription__Base___Create___C_Result {
     let converter = move |unified_report: UnifiedReport<Void, ChannelSubscription__Base___Create___Precedent_>| -> Result<C_UnifiedReport<C_Void, ChannelSubscription__Base___Create___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
@@ -3010,14 +3015,14 @@ pub extern "C" fn channel_subscription___base____create____deserialize(
 
 #[no_mangle]
 pub extern "C" fn channel_subscription___base____create____deallocate(
-    result: *mut ChannelSubscription__Base___Create___Result
+    c_result: *mut ChannelSubscription__Base___Create___C_Result
 ) -> () {
-    if result.is_null() {
+    if c_result.is_null() {
         return ();
     }
 
     let _ = unsafe {
-        Box::from_raw(result)
+        Box::from_raw(c_result)
     };
 
     return ();
@@ -3028,8 +3033,93 @@ pub extern "C" fn channel_subscription___base____create____deallocate(
 mod deallocation {
     use super::*;
 
-    #[test]
-    fn application_user___authorization____authorize_by_first_step() -> () {
+    fn execute<'a, T, E, A, D>(
+        data: &'a T,
+        allocator: A,
+        deallocator: D,
+    ) -> Result<(), Box<dyn Error + 'static>>
+    where
+        T: Serialize,
+        A: FnOnce(*mut C_Vector<c_uchar>) -> *mut C_Result<E>,
+        E: Copy,
+        D: FnOnce(*mut C_Result<E>) -> (),
+    {
+        let registry = Serializer_::serialize(data)?;
 
+        let c_vector = Allocator::<C_Vector<_>>::allocate(registry);
+
+        let c_vector_ = Box::into_raw(
+            Box::new(c_vector)
+        );
+
+        let c_result = allocator(c_vector_);
+
+        let c_result_ = unsafe {
+            *c_result
+        };
+
+        if !c_result_.is_data {
+            return Err("Function inner error.".into());
+        }
+
+        deallocator(c_result);
+
+        if c_vector_.is_null() {
+            return Err("The pointer must continue to point to the data.".into());
+        }
+
+        let c_vector__ = unsafe {
+            Box::from_raw(c_vector_)
+        };
+
+        Allocator::<C_Vector<_>>::deallocate(*c_vector__);
+
+        return Ok(());
     }
+
+    #[test]
+    fn test_1____application_user___authorization____authorize_by_first_step() -> Result<(), Box<dyn Error + 'static>> {
+        let unified_report = UnifiedReport::<ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming_, ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent_>::target_empty();
+
+        let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___AuthorizeByFirstStep___C_Result {
+            return application_user___authorization____authorize_by_first_step____deserialize(vector_of_bytes);
+        };
+
+        let deallocator = move |c_result: *mut ApplicationUser__Authorization___AuthorizeByFirstStep___C_Result| -> () {
+            application_user___authorization____authorize_by_first_step____deallocate(c_result);
+
+            return ();
+        };
+
+        return execute(
+            &unified_report,
+            allocator,
+            deallocator,
+        );
+    }
+
+    // #[test]
+    // fn test_1____application_user___authorization____authorize_by_first_step() -> Result<(), Box<dyn Error + 'static>> {
+        // let unified_report = UnifiedReport::<ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming_, ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent_>::target_empty();
+
+    //     let registry = Serializer_::serialize(&unified_report)?;
+
+    //     let c_vector = Allocator::<C_Vector<_>>::allocate(registry);
+
+    //     let c_vector_ = Box::into_raw(
+    //         Box::new(c_vector)
+    //     );
+
+    //     application_user___authorization____authorize_by_first_step____deallocate(
+    //         application_user___authorization____authorize_by_first_step____deserialize(c_vector_)
+    //     );
+
+    //     let c_vector__ = unsafe {
+    //         Box::from_raw(c_vector_)
+    //     };
+
+    //     Allocator::<C_Vector<_>>::deallocate(*c_vector__);
+
+    //     return Ok(());
+    // }
 }

@@ -99,13 +99,13 @@ where
     T: Serialize + for<'de> Deserialize<'de>,
     P: Serialize + for<'de> Deserialize<'de>,
 {
-    pub fn empty() -> Self {
+    pub fn target_empty() -> Self {
         return Self::Target {
             data: Data::Empty,
         };
     }
 
-    pub fn filled(data: T) -> Self {
+    pub fn target_filled(data: T) -> Self {
         return Self::Target {
             data: Data::Filled {
                 data,
