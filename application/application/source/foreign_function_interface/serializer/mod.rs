@@ -113,12 +113,50 @@ use std::ptr;
 use serde::Deserialize;
 use unified_report::UnifiedReport;
 use std::marker::PhantomData;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::check_email_for_existing::Outcoming as ApplicationUser__Authorization___CheckEmailForExisting___Outcoming_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::refresh_access_token::Outcoming as ApplicationUser__Authorization___RefreshAccessToken___Outcoming_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::refresh_access_token::Precedent as ApplicationUser__Authorization___RefreshAccessToken___Precedent_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::register_by_first_step::Outcoming as ApplicationUser__Authorization___RegisterByFirstStep___Outcoming_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::register_by_first_step::Precedent as ApplicationUser__Authorization___RegisterByFirstStep___Precedent_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::check_nickname_for_existing::Outcoming as ApplicationUser__Authorization___CheckNicknameForExisting___Outcoming_;
 use std::ptr::slice_from_raw_parts_mut;
 use unified_report::Data;
-use action_processor_incoming_outcoming::action_processor::application_user___authorization;
-use action_processor_incoming_outcoming::action_processor::channel___base;
-use action_processor_incoming_outcoming::action_processor::channel_subscription___base;
 use message_pack_serializer::Serializer as Serializer_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::authorize_by_last_step::Outcoming as ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::authorize_by_last_step::Precedent as ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::authorize_by_first_step::Outcoming as ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::authorize_by_first_step::Precedent as ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::deauthorize_from_all_devices::Precedent as ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::deauthorize_from_one_device::Precedent as ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::register_by_second_step::Precedent as ApplicationUser__Authorization___RegisterBySecondStep___Precedent_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::register_by_last_step::Outcoming as ApplicationUser__Authorization___RegisterByLastStep___Outcoming_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::register_by_last_step::Precedent as ApplicationUser__Authorization___RegisterByLastStep___Precedent_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::reset_password_by_first_step::Outcoming as ApplicationUser__Authorization___ResetPasswordByFirstStep___Outcoming_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::reset_password_by_first_step::Precedent as ApplicationUser__Authorization___ResetPasswordByFirstStep___Precedent_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::reset_password_by_second_step::Precedent as ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::reset_password_by_last_step::Precedent as ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::send_email_for_register::Outcoming as ApplicationUser__Authorization___SendEmailForRegister___Outcoming_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::send_email_for_register::Precedent as ApplicationUser__Authorization___SendEmailForRegister___Precedent_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::send_email_for_authorize::Outcoming as ApplicationUser__Authorization___SendEmailForAuthorize___Outcoming_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::send_email_for_authorize::Precedent as ApplicationUser__Authorization___SendEmailForAuthorize___Precedent_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::send_email_for_reset_password::Outcoming as ApplicationUser__Authorization___SendEmailForResetPassword___Outcoming_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::send_email_for_reset_password::Precedent as ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_;
+use action_processor_incoming_outcoming::action_processor::channel___base::get_many_by_name_in_subscriptions::Outcoming as Channel__Base___GetManyByNameInSubscriptions___Outcoming_;
+use action_processor_incoming_outcoming::action_processor::channel___base::get_many_by_name_in_subscriptions::Precedent as Channel__Base___GetManyByNameInSubscriptions___Precedent_;
+use action_processor_incoming_outcoming::action_processor::channel___base::get_many_by_subscription::Outcoming as Channel__Base___GetManyBySubscription___Outcoming_;
+use action_processor_incoming_outcoming::action_processor::channel___base::get_many_by_subscription::Precedent as Channel__Base___GetManyBySubscription___Precedent_;
+use action_processor_incoming_outcoming::action_processor::channel___base::get_many_public_by_name::Outcoming as Channel__Base___GetManyPublicByName___Outcoming_;
+use action_processor_incoming_outcoming::action_processor::channel___base::get_many_public_by_name::Precedent as Channel__Base___GetManyPublicByName___Precedent_;
+use action_processor_incoming_outcoming::action_processor::channel___base::get_one_by_id::Outcoming as Channel__Base___GetOneById___Outcoming_;
+use action_processor_incoming_outcoming::action_processor::channel___base::get_one_by_id::Precedent as Channel__Base___GetOneById___Precedent_;
+use action_processor_incoming_outcoming::action_processor::channel_subscription___base::create::Precedent as ChannelSubscription__Base___Create___Precedent_;
+
+
+
+
+
+
+
 
 #[no_mangle]
 pub extern "C" fn f1(a: c_int) -> c_int {
@@ -811,7 +849,7 @@ impl Allocator<C_String> {
 }
 
 impl<T> Allocator<C_Vector<T>> {
-    fn allocate(vector: Vec<T>) -> C_Vector<T> {                                 // TODO Discord Ping.
+    fn allocate(vector: Vec<T>) -> C_Vector<T> {            // TODO TODO TODO TODO TODO  ПРОверить
         let mut boxed_slice = vector.into_boxed_slice();
 
         let self_ = C_Vector {
@@ -976,11 +1014,7 @@ pub struct ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent {
 pub extern "C" fn application_user___authorization____authorize_by_first_step____deserialize(
     vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___AuthorizeByFirstStep___Result {
-    type Outcoming_ = application_user___authorization::authorize_by_first_step::Outcoming;
-
-    type Precedent_ = application_user___authorization::authorize_by_first_step::Precedent;
-
-    let converter = move |unified_report: UnifiedReport<Outcoming_, Precedent_>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming, ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent>, Box<dyn Error + 'static>> {
+    let converter = move |unified_report: UnifiedReport<ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming_, ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent_>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming, ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
                 let data_ = match data {
@@ -1004,7 +1038,7 @@ pub extern "C" fn application_user___authorization____authorize_by_first_step___
             }
             UnifiedReport::Precedent { precedent } => {
                 match precedent {
-                    Precedent_::ApplicationUser_WrongEmailOrNicknameOrPassword => {}
+                    ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent_::ApplicationUser_WrongEmailOrNicknameOrPassword => {}
                 };
 
                 let precedent_ = ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent {
@@ -1065,11 +1099,7 @@ pub struct ApplicationUserAuthorizationToken_WrongValue {
 pub extern "C" fn application_user___authorization____authorize_by_last_step____deserialize(
     vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___AuthorizeByLastStep___Result {
-    type Outcoming_ = application_user___authorization::authorize_by_last_step::Outcoming;
-
-    type Precedent_ = application_user___authorization::authorize_by_last_step::Precedent;
-
-    let converter = move |unified_report: UnifiedReport<Outcoming_, Precedent_>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming, ApplicationUser__Authorization___AuthorizeByLastStep___Precedent>, Box<dyn Error + 'static>> {
+    let converter = move |unified_report: UnifiedReport<ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming_, ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming, ApplicationUser__Authorization___AuthorizeByLastStep___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
                 let data_ = match data {
@@ -1090,19 +1120,19 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    Precedent_::ApplicationUserAuthorizationToken_AlreadyExpired => {
+                    ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_::ApplicationUserAuthorizationToken_AlreadyExpired => {
                         ApplicationUser__Authorization___AuthorizeByLastStep___Precedent {
                             application_user_authorization_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    Precedent_::ApplicationUserAuthorizationToken_NotFound => {
+                    ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_::ApplicationUserAuthorizationToken_NotFound => {
                         ApplicationUser__Authorization___AuthorizeByLastStep___Precedent {
                             application_user_authorization_token__not_found: true,
                             ..Default::default()
                         }
                     }
-                    Precedent_::ApplicationUserAuthorizationToken_WrongValue { application_user_authorization_token_wrong_enter_tries_quantity } => {
+                    ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_::ApplicationUserAuthorizationToken_WrongValue { application_user_authorization_token_wrong_enter_tries_quantity } => {
                         ApplicationUser__Authorization___AuthorizeByLastStep___Precedent {
                             application_user_authorization_token__wrong_value: ApplicationUserAuthorizationToken_WrongValue {
                                 is_exist: true,
@@ -1111,7 +1141,7 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
                             ..Default::default()
                         }
                     }
-                    Precedent_::ApplicationUser_NotFound => {
+                    ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_::ApplicationUser_NotFound => {
                         ApplicationUser__Authorization___AuthorizeByLastStep___Precedent {
                             application_user__not_found: true,
                             ..Default::default()
@@ -1166,9 +1196,7 @@ pub struct ApplicationUser__Authorization___CheckEmailForExisting___Outcoming {
 pub extern "C" fn application_user___authorization____check_email_for_existing____deserialize(
     vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___CheckEmailForExisting___Result {
-    type Outcoming_ = application_user___authorization::check_email_for_existing::Outcoming;
-
-    let converter = move |unified_report: UnifiedReport<Outcoming_, Void>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___CheckEmailForExisting___Outcoming, C_Void>, Box<dyn Error + 'static>> {
+    let converter = move |unified_report: UnifiedReport<ApplicationUser__Authorization___CheckEmailForExisting___Outcoming_, Void>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___CheckEmailForExisting___Outcoming, C_Void>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
                 let data_ = match data {
@@ -1224,9 +1252,7 @@ pub struct ApplicationUser__Authorization___CheckNicknameForExisting___Outcoming
 pub extern "C" fn application_user___authorization____check_nickname_for_existing____deserialize(
     vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___CheckNicknameForExisting___Result {
-    type Outcoming_ = application_user___authorization::check_nickname_for_existing::Outcoming;
-
-    let converter = move |unified_report: UnifiedReport<Outcoming_, Void>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___CheckNicknameForExisting___Outcoming, C_Void>, Box<dyn Error + 'static>> {
+    let converter = move |unified_report: UnifiedReport<ApplicationUser__Authorization___CheckNicknameForExisting___Outcoming_, Void>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___CheckNicknameForExisting___Outcoming, C_Void>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
                 let data_ = match data {
@@ -1283,9 +1309,7 @@ pub struct ApplicationUser__Authorization___DeauthorizeFromAllDevices___Preceden
 pub extern "C" fn application_user___authorization____deauthorize_from_all_devices____deserialize(
     vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___DeauthorizeFromAllDevices___Result {
-    type Precedent_ = application_user___authorization::deauthorize_from_all_devices::Precedent;
-
-    let converter = move |unified_report: UnifiedReport<Void, Precedent_>| -> Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent>, Box<dyn Error + 'static>> {
+    let converter = move |unified_report: UnifiedReport<Void, ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent_>| -> Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
                 let data = match data {
@@ -1301,13 +1325,13 @@ pub extern "C" fn application_user___authorization____deauthorize_from_all_devic
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    Precedent_::ApplicationUserAccessToken_AlreadyExpired => {
+                    ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent_::ApplicationUserAccessToken_AlreadyExpired => {
                         ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent {
                             application_user_access_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    Precedent_::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList => {
+                    ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent_::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList => {
                         ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent {
                             application_user_access_token__in_application_user_access_token_black_list: true,
                             ..Default::default()
@@ -1353,9 +1377,7 @@ pub struct ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent
 pub extern "C" fn application_user___authorization____deauthorize_from_one_device____deserialize(
     vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___DeauthorizeFromOneDevice___Result {
-    type Precedent_ = application_user___authorization::deauthorize_from_one_device::Precedent;
-
-    let converter = move |unified_report: UnifiedReport<Void, Precedent_>| -> Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent>, Box<dyn Error + 'static>> {
+    let converter = move |unified_report: UnifiedReport<Void, ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent_>| -> Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
                 let data = match data {
@@ -1371,13 +1393,13 @@ pub extern "C" fn application_user___authorization____deauthorize_from_one_devic
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    Precedent_::ApplicationUserAccessToken_AlreadyExpired => {
+                    ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent_::ApplicationUserAccessToken_AlreadyExpired => {
                         ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent {
                             application_user_access_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    Precedent_::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList => {
+                    ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent_::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList => {
                         ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent {
                             application_user_access_token__in_application_user_access_token_black_list: true,
                             ..Default::default()
@@ -1430,11 +1452,7 @@ pub struct ApplicationUser__Authorization___RefreshAccessToken___Precedent {
 pub extern "C" fn application_user___authorization____refresh_access_token____deserialize(
     vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___RefreshAccessToken___Result {
-    type Outcoming_ = application_user___authorization::refresh_access_token::Outcoming;
-
-    type Precedent_ = application_user___authorization::refresh_access_token::Precedent;
-
-    let converter = move |unified_report: UnifiedReport<Outcoming_, Precedent_>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___RefreshAccessToken___Outcoming, ApplicationUser__Authorization___RefreshAccessToken___Precedent>, Box<dyn Error + 'static>> {
+    let converter = move |unified_report: UnifiedReport<ApplicationUser__Authorization___RefreshAccessToken___Outcoming_, ApplicationUser__Authorization___RefreshAccessToken___Precedent_>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___RefreshAccessToken___Outcoming, ApplicationUser__Authorization___RefreshAccessToken___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
                 let data_ = match data {
@@ -1455,13 +1473,13 @@ pub extern "C" fn application_user___authorization____refresh_access_token____de
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    Precedent_::ApplicationUserAccessRefreshToken_AlreadyExpired => {
+                    ApplicationUser__Authorization___RefreshAccessToken___Precedent_::ApplicationUserAccessRefreshToken_AlreadyExpired => {
                         ApplicationUser__Authorization___RefreshAccessToken___Precedent {
                             application_user_access_refresh_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    Precedent_::ApplicationUserAccessRefreshToken_NotFound => {
+                    ApplicationUser__Authorization___RefreshAccessToken___Precedent_::ApplicationUserAccessRefreshToken_NotFound => {
                         ApplicationUser__Authorization___RefreshAccessToken___Precedent {
                             application_user_access_refresh_token__not_found: true,
                             ..Default::default()
@@ -1525,11 +1543,7 @@ pub struct ApplicationUser__Authorization___RegisterByFirstStep___Precedent {
 pub extern "C" fn application_user___authorization____register_by_first_step____deserialize(
     vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___RegisterByFirstStep___Result {
-    type Outcoming_ = application_user___authorization::register_by_first_step::Outcoming;
-
-    type Precedent_ = application_user___authorization::register_by_first_step::Precedent;
-
-    let converter = move |unified_report: UnifiedReport<Outcoming_, Precedent_>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___RegisterByFirstStep___Outcoming, ApplicationUser__Authorization___RegisterByFirstStep___Precedent>, Box<dyn Error + 'static>> {
+    let converter = move |unified_report: UnifiedReport<ApplicationUser__Authorization___RegisterByFirstStep___Outcoming_, ApplicationUser__Authorization___RegisterByFirstStep___Precedent_>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___RegisterByFirstStep___Outcoming, ApplicationUser__Authorization___RegisterByFirstStep___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
                 let data_ = match data {
@@ -1552,7 +1566,7 @@ pub extern "C" fn application_user___authorization____register_by_first_step____
             }
             UnifiedReport::Precedent { precedent } => {
                 match precedent {
-                    Precedent_::ApplicationUser_EmailAlreadyExist => {}
+                    ApplicationUser__Authorization___RegisterByFirstStep___Precedent_::ApplicationUser_EmailAlreadyExist => {}
                 };
 
                 let precedent_ = ApplicationUser__Authorization___RegisterByFirstStep___Precedent {
@@ -1606,9 +1620,7 @@ pub struct ApplicationUserRegistrationToken_WrongValue {
 pub extern "C" fn application_user___authorization____register_by_second_step____deserialize(
     vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___RegisterBySecondStep___Result {
-    type Precedent_ = application_user___authorization::register_by_second_step::Precedent;
-
-    let converter = move |unified_report: UnifiedReport<Void, Precedent_>| -> Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___RegisterBySecondStep___Precedent>, Box<dyn Error + 'static>> {
+    let converter = move |unified_report: UnifiedReport<Void, ApplicationUser__Authorization___RegisterBySecondStep___Precedent_>| -> Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___RegisterBySecondStep___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
                 let data = match data {
@@ -1624,25 +1636,25 @@ pub extern "C" fn application_user___authorization____register_by_second_step___
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    Precedent_::ApplicationUserRegistrationToken_NotFound => {
+                    ApplicationUser__Authorization___RegisterBySecondStep___Precedent_::ApplicationUserRegistrationToken_NotFound => {
                         ApplicationUser__Authorization___RegisterBySecondStep___Precedent {
                             application_user_registration_token__not_found: true,
                             ..Default::default()
                         }
                     }
-                    Precedent_::ApplicationUserRegistrationToken_AlreadyExpired => {
+                    ApplicationUser__Authorization___RegisterBySecondStep___Precedent_::ApplicationUserRegistrationToken_AlreadyExpired => {
                         ApplicationUser__Authorization___RegisterBySecondStep___Precedent {
                             application_user_registration_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    Precedent_::ApplicationUserRegistrationToken_AlreadyApproved => {
+                    ApplicationUser__Authorization___RegisterBySecondStep___Precedent_::ApplicationUserRegistrationToken_AlreadyApproved => {
                         ApplicationUser__Authorization___RegisterBySecondStep___Precedent {
                             application_user_registration_token__already_approved: true,
                             ..Default::default()
                         }
                     }
-                    Precedent_::ApplicationUserRegistrationToken_WrongValue { application_user_registration_token_wrong_enter_tries_quantity } => {
+                    ApplicationUser__Authorization___RegisterBySecondStep___Precedent_::ApplicationUserRegistrationToken_WrongValue { application_user_registration_token_wrong_enter_tries_quantity } => {
                         ApplicationUser__Authorization___RegisterBySecondStep___Precedent {
                             application_user_registration_token__wrong_value: ApplicationUserRegistrationToken_WrongValue {
                                 is_exist: true,
@@ -1702,11 +1714,7 @@ pub struct ApplicationUser__Authorization___RegisterByLastStep___Precedent {
 pub extern "C" fn application_user___authorization____register_by_last_step____deserialize(
     vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___RegisterByLastStep___Result {
-    type Outcoming_ = application_user___authorization::register_by_last_step::Outcoming;
-
-    type Precedent_ = application_user___authorization::register_by_last_step::Precedent;
-
-    let converter = move |unified_report: UnifiedReport<Outcoming_, Precedent_>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___RegisterByLastStep___Outcoming, ApplicationUser__Authorization___RegisterByLastStep___Precedent>, Box<dyn Error + 'static>> {
+    let converter = move |unified_report: UnifiedReport<ApplicationUser__Authorization___RegisterByLastStep___Outcoming_, ApplicationUser__Authorization___RegisterByLastStep___Precedent_>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___RegisterByLastStep___Outcoming, ApplicationUser__Authorization___RegisterByLastStep___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
                 let data_ = match data {
@@ -1727,37 +1735,37 @@ pub extern "C" fn application_user___authorization____register_by_last_step____d
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    Precedent_::ApplicationUser_NicknameAlreadyExist => {
+                    ApplicationUser__Authorization___RegisterByLastStep___Precedent_::ApplicationUser_NicknameAlreadyExist => {
                         ApplicationUser__Authorization___RegisterByLastStep___Precedent {
                             application_user__nickname_already_exist: true,
                             ..Default::default()
                         }
                     }
-                    Precedent_::ApplicationUser_EmailAlreadyExist => {
+                    ApplicationUser__Authorization___RegisterByLastStep___Precedent_::ApplicationUser_EmailAlreadyExist => {
                         ApplicationUser__Authorization___RegisterByLastStep___Precedent {
                             application_user__email_already_exist: true,
                             ..Default::default()
                         }
                     }
-                    Precedent_::ApplicationUserRegistrationToken_NotFound => {
+                    ApplicationUser__Authorization___RegisterByLastStep___Precedent_::ApplicationUserRegistrationToken_NotFound => {
                         ApplicationUser__Authorization___RegisterByLastStep___Precedent {
                             application_user_registration_token__not_found: true,
                             ..Default::default()
                         }
                     }
-                    Precedent_::ApplicationUserRegistrationToken_AlreadyExpired => {
+                    ApplicationUser__Authorization___RegisterByLastStep___Precedent_::ApplicationUserRegistrationToken_AlreadyExpired => {
                         ApplicationUser__Authorization___RegisterByLastStep___Precedent {
                             application_user_registration_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    Precedent_::ApplicationUserRegistrationToken_IsNotApproved => {
+                    ApplicationUser__Authorization___RegisterByLastStep___Precedent_::ApplicationUserRegistrationToken_IsNotApproved => {
                         ApplicationUser__Authorization___RegisterByLastStep___Precedent {
                             application_user_registration_token__is_not_approved: true,
                             ..Default::default()
                         }
                     }
-                    Precedent_::ApplicationUserRegistrationToken_WrongValue => {
+                    ApplicationUser__Authorization___RegisterByLastStep___Precedent_::ApplicationUserRegistrationToken_WrongValue => {
                         ApplicationUser__Authorization___RegisterByLastStep___Precedent {
                             application_user_registration_token__wrong_value: true,
                             ..Default::default()
@@ -1822,11 +1830,7 @@ pub struct ApplicationUser__Authorization___ResetPasswordByFirstStep___Precedent
 pub extern "C" fn application_user___authorization____reset_password_by_first_step____deserialize(
     vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___ResetPasswordByFirstStep___Result {
-    type Outcoming_ = application_user___authorization::reset_password_by_first_step::Outcoming;
-
-    type Precedent_ = application_user___authorization::reset_password_by_first_step::Precedent;
-
-    let converter = move |unified_report: UnifiedReport<Outcoming_, Precedent_>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___ResetPasswordByFirstStep___Outcoming, ApplicationUser__Authorization___ResetPasswordByFirstStep___Precedent>, Box<dyn Error + 'static>> {
+    let converter = move |unified_report: UnifiedReport<ApplicationUser__Authorization___ResetPasswordByFirstStep___Outcoming_, ApplicationUser__Authorization___ResetPasswordByFirstStep___Precedent_>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___ResetPasswordByFirstStep___Outcoming, ApplicationUser__Authorization___ResetPasswordByFirstStep___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
                 let data_ = match data {
@@ -1850,7 +1854,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_first_st
             }
             UnifiedReport::Precedent { precedent } => {
                 match precedent {
-                    Precedent_::ApplicationUser_NotFound => {}
+                    ApplicationUser__Authorization___ResetPasswordByFirstStep___Precedent_::ApplicationUser_NotFound => {}
                 };
 
                 let precedent_ = ApplicationUser__Authorization___ResetPasswordByFirstStep___Precedent {
@@ -1904,9 +1908,7 @@ pub struct ApplicationUserResetPasswordToken_WrongValue {
 pub extern "C" fn application_user___authorization____reset_password_by_second_step____deserialize(
     vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___ResetPasswordBySecondStep___Result {
-    type Precedent_ = application_user___authorization::reset_password_by_second_step::Precedent;
-
-    let converter = move |unified_report: UnifiedReport<Void, Precedent_>| -> Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent>, Box<dyn Error + 'static>> {
+    let converter = move |unified_report: UnifiedReport<Void, ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_>| -> Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
                 let data = match data {
@@ -1922,25 +1924,25 @@ pub extern "C" fn application_user___authorization____reset_password_by_second_s
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    Precedent_::ApplicationUserResetPasswordToken_NotFound => {
+                    ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_::ApplicationUserResetPasswordToken_NotFound => {
                         ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent {
                             application_user_reset_password_token__not_found: true,
                             ..Default::default()
                         }
                     }
-                    Precedent_::ApplicationUserResetPasswordToken_AlreadyExpired => {
+                    ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_::ApplicationUserResetPasswordToken_AlreadyExpired => {
                         ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent {
                             application_user_reset_password_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    Precedent_::ApplicationUserResetPasswordToken_AlreadyApproved => {
+                    ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_::ApplicationUserResetPasswordToken_AlreadyApproved => {
                         ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent {
                             application_user_reset_password_token__already_approved: true,
                             ..Default::default()
                         }
                     }
-                    Precedent_::ApplicationUserResetPasswordToken_WrongValue { application_user_reset_password_token_wrong_enter_tries_quantity } => {
+                    ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_::ApplicationUserResetPasswordToken_WrongValue { application_user_reset_password_token_wrong_enter_tries_quantity } => {
                         ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent {
                             application_user_reset_password_token__wrong_value: ApplicationUserResetPasswordToken_WrongValue {
                                 is_exist: true,
@@ -1992,9 +1994,7 @@ pub struct ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent 
 pub extern "C" fn application_user___authorization____reset_password_by_last_step____deserialize(
     vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___ResetPasswordByLastStep___Result {
-    type Precedent_ = application_user___authorization::reset_password_by_last_step::Precedent;
-
-    let converter = move |unified_report: UnifiedReport<Void, Precedent_>| -> Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent>, Box<dyn Error + 'static>> {
+    let converter = move |unified_report: UnifiedReport<Void, ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_>| -> Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
                 let data = match data {
@@ -2010,31 +2010,31 @@ pub extern "C" fn application_user___authorization____reset_password_by_last_ste
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    Precedent_::ApplicationUser_NotFound => {
+                    ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_::ApplicationUser_NotFound => {
                         ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent {
                             application_user__not_found: true,
                             ..Default::default()
                         }
                     }
-                    Precedent_::ApplicationUserResetPasswordToken_NotFound => {
+                    ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_::ApplicationUserResetPasswordToken_NotFound => {
                         ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent {
                             application_user_reset_password_token__not_found: true,
                             ..Default::default()
                         }
                     }
-                    Precedent_::ApplicationUserResetPasswordToken_AlreadyExpired => {
+                    ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_::ApplicationUserResetPasswordToken_AlreadyExpired => {
                         ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent {
                             application_user_reset_password_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    Precedent_::ApplicationUserResetPasswordToken_IsNotApproved => {
+                    ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_::ApplicationUserResetPasswordToken_IsNotApproved => {
                         ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent {
                             application_user_reset_password_token__is_not_approved: true,
                             ..Default::default()
                         }
                     }
-                    Precedent_::ApplicationUserResetPasswordToken_WrongValue => {
+                    ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_::ApplicationUserResetPasswordToken_WrongValue => {
                         ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent {
                             application_user_reset_password_token__wrong_value: true,
                             ..Default::default()
@@ -2088,11 +2088,7 @@ pub struct ApplicationUser__Authorization___SendEmailForRegister___Precedent {
 pub extern "C" fn application_user___authorization____send_email_for_register____deserialize(
     vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___SendEmailForRegister___Result {
-    type Outcoming_ = application_user___authorization::send_email_for_register::Outcoming;
-
-    type Precedent_ = application_user___authorization::send_email_for_register::Precedent;
-
-    let converter = move |unified_report: UnifiedReport<Outcoming_, Precedent_>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___SendEmailForRegister___Outcoming, ApplicationUser__Authorization___SendEmailForRegister___Precedent>, Box<dyn Error + 'static>> {
+    let converter = move |unified_report: UnifiedReport<ApplicationUser__Authorization___SendEmailForRegister___Outcoming_, ApplicationUser__Authorization___SendEmailForRegister___Precedent_>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___SendEmailForRegister___Outcoming, ApplicationUser__Authorization___SendEmailForRegister___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
                 let data_ = match data {
@@ -2112,25 +2108,25 @@ pub extern "C" fn application_user___authorization____send_email_for_register___
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    Precedent_::ApplicationUserRegistrationToken_NotFound => {
+                    ApplicationUser__Authorization___SendEmailForRegister___Precedent_::ApplicationUserRegistrationToken_NotFound => {
                         ApplicationUser__Authorization___SendEmailForRegister___Precedent {
                             application_user_registration_token__not_found: true,
                             ..Default::default()
                         }
                     }
-                    Precedent_::ApplicationUserRegistrationToken_AlreadyExpired => {
+                    ApplicationUser__Authorization___SendEmailForRegister___Precedent_::ApplicationUserRegistrationToken_AlreadyExpired => {
                         ApplicationUser__Authorization___SendEmailForRegister___Precedent {
                             application_user_registration_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    Precedent_::ApplicationUserRegistrationToken_AlreadyApproved => {
+                    ApplicationUser__Authorization___SendEmailForRegister___Precedent_::ApplicationUserRegistrationToken_AlreadyApproved => {
                         ApplicationUser__Authorization___SendEmailForRegister___Precedent {
                             application_user_registration_token__already_approved: true,
                             ..Default::default()
                         }
                     }
-                    Precedent_::ApplicationUserRegistrationToken_TimeToResendHasNotCome => {
+                    ApplicationUser__Authorization___SendEmailForRegister___Precedent_::ApplicationUserRegistrationToken_TimeToResendHasNotCome => {
                         ApplicationUser__Authorization___SendEmailForRegister___Precedent {
                             application_user_registration_token__time_to_resend_has_not_come: true,
                             ..Default::default()
@@ -2184,11 +2180,7 @@ pub struct ApplicationUser__Authorization___SendEmailForAuthorize___Precedent {
 pub extern "C" fn application_user___authorization____send_email_for_authorize____deserialize(
     vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___SendEmailForAuthorize___Result {
-    type Outcoming_ = application_user___authorization::send_email_for_authorize::Outcoming;
-
-    type Precedent_ = application_user___authorization::send_email_for_authorize::Precedent;
-
-    let converter = move |unified_report: UnifiedReport<Outcoming_, Precedent_>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___SendEmailForAuthorize___Outcoming, ApplicationUser__Authorization___SendEmailForAuthorize___Precedent>, Box<dyn Error + 'static>> {
+    let converter = move |unified_report: UnifiedReport<ApplicationUser__Authorization___SendEmailForAuthorize___Outcoming_, ApplicationUser__Authorization___SendEmailForAuthorize___Precedent_>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___SendEmailForAuthorize___Outcoming, ApplicationUser__Authorization___SendEmailForAuthorize___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
                 let data_ = match data {
@@ -2208,25 +2200,25 @@ pub extern "C" fn application_user___authorization____send_email_for_authorize__
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    Precedent_::ApplicationUser_NotFound => {
+                    ApplicationUser__Authorization___SendEmailForAuthorize___Precedent_::ApplicationUser_NotFound => {
                         ApplicationUser__Authorization___SendEmailForAuthorize___Precedent {
                             application_user__not_found: true,
                             ..Default::default()
                         }
                     }
-                    Precedent_::ApplicationUserAuthorizationToken_NotFound => {
+                    ApplicationUser__Authorization___SendEmailForAuthorize___Precedent_::ApplicationUserAuthorizationToken_NotFound => {
                         ApplicationUser__Authorization___SendEmailForAuthorize___Precedent {
                             application_user_authorization_token__not_found: true,
                             ..Default::default()
                         }
                     }
-                    Precedent_::ApplicationUserAuthorizationToken_AlreadyExpired => {
+                    ApplicationUser__Authorization___SendEmailForAuthorize___Precedent_::ApplicationUserAuthorizationToken_AlreadyExpired => {
                         ApplicationUser__Authorization___SendEmailForAuthorize___Precedent {
                             application_user_authorization_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    Precedent_::ApplicationUserAuthorizationToken_TimeToResendHasNotCome => {
+                    ApplicationUser__Authorization___SendEmailForAuthorize___Precedent_::ApplicationUserAuthorizationToken_TimeToResendHasNotCome => {
                         ApplicationUser__Authorization___SendEmailForAuthorize___Precedent {
                             application_user_authorization_token__time_to_resend_has_not_come: true,
                             ..Default::default()
@@ -2281,11 +2273,7 @@ pub struct ApplicationUser__Authorization___SendEmailForResetPassword___Preceden
 pub extern "C" fn application_user___authorization____send_email_for_reset_password____deserialize(
     vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___SendEmailForResetPassword___Result {
-    type Outcoming_ = application_user___authorization::send_email_for_reset_password::Outcoming;
-
-    type Precedent_ = application_user___authorization::send_email_for_reset_password::Precedent;
-
-    let converter = move |unified_report: UnifiedReport<Outcoming_, Precedent_>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___SendEmailForResetPassword___Outcoming, ApplicationUser__Authorization___SendEmailForResetPassword___Precedent>, Box<dyn Error + 'static>> {
+    let converter = move |unified_report: UnifiedReport<ApplicationUser__Authorization___SendEmailForResetPassword___Outcoming_, ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___SendEmailForResetPassword___Outcoming, ApplicationUser__Authorization___SendEmailForResetPassword___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
                 let data_ = match data {
@@ -2305,31 +2293,31 @@ pub extern "C" fn application_user___authorization____send_email_for_reset_passw
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    Precedent_::ApplicationUser_NotFound => {
+                    ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_::ApplicationUser_NotFound => {
                         ApplicationUser__Authorization___SendEmailForResetPassword___Precedent {
                             application_user__not_found: true,
                             ..Default::default()
                         }
                     }
-                    Precedent_::ApplicationUserResetPasswordToken_NotFound => {
+                    ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_::ApplicationUserResetPasswordToken_NotFound => {
                         ApplicationUser__Authorization___SendEmailForResetPassword___Precedent {
                             application_user_reset_password_token__not_found: true,
                             ..Default::default()
                         }
                     }
-                    Precedent_::ApplicationUserResetPasswordToken_AlreadyExpired => {
+                    ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_::ApplicationUserResetPasswordToken_AlreadyExpired => {
                         ApplicationUser__Authorization___SendEmailForResetPassword___Precedent {
                             application_user_reset_password_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    Precedent_::ApplicationUserResetPasswordToken_AlreadyApproved => {
+                    ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_::ApplicationUserResetPasswordToken_AlreadyApproved => {
                         ApplicationUser__Authorization___SendEmailForResetPassword___Precedent {
                             application_user_reset_password_token__already_approved: true,
                             ..Default::default()
                         }
                     }
-                    Precedent_::ApplicationUserResetPasswordToken_TimeToResendHasNotCome => {
+                    ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_::ApplicationUserResetPasswordToken_TimeToResendHasNotCome => {
                         ApplicationUser__Authorization___SendEmailForResetPassword___Precedent {
                             application_user_reset_password_token__time_to_resend_has_not_come: true,
                             ..Default::default()
@@ -2381,11 +2369,7 @@ pub struct Channel__Base___GetManyByNameInSubscriptions___Precedent {
 pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____deserialize(
     vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut Channel__Base___GetManyByNameInSubscriptions___Result {
-    type Outcoming_ = channel___base::get_many_by_name_in_subscriptions::Outcoming;
-
-    type Precedent_ = channel___base::get_many_by_name_in_subscriptions::Precedent;
-
-    let converter = move |unified_report: UnifiedReport<Outcoming_, Precedent_>| -> Result<C_UnifiedReport<Channel__Base___GetManyByNameInSubscriptions___Outcoming, Channel__Base___GetManyByNameInSubscriptions___Precedent>, Box<dyn Error + 'static>> {
+    let converter = move |unified_report: UnifiedReport<Channel__Base___GetManyByNameInSubscriptions___Outcoming_, Channel__Base___GetManyByNameInSubscriptions___Precedent_>| -> Result<C_UnifiedReport<Channel__Base___GetManyByNameInSubscriptions___Outcoming, Channel__Base___GetManyByNameInSubscriptions___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
                 let data_ = match data {
@@ -2434,13 +2418,13 @@ pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____deseria
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    Precedent_::ApplicationUserAccessToken_AlreadyExpired => {
+                    Channel__Base___GetManyByNameInSubscriptions___Precedent_::ApplicationUserAccessToken_AlreadyExpired => {
                         Channel__Base___GetManyByNameInSubscriptions___Precedent {
                             application_user_access_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    Precedent_::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList => {
+                    Channel__Base___GetManyByNameInSubscriptions___Precedent_::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList => {
                         Channel__Base___GetManyByNameInSubscriptions___Precedent {
                             application_user_access_token__in_application_user_access_token_black_list: true,
                             ..Default::default()
@@ -2518,11 +2502,7 @@ pub struct Channel__Base___GetManyBySubscription___Precedent {
 pub extern "C" fn channel___base____get_many_by_subscription____deserialize(
     vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut Channel__Base___GetManyBySubscription___Result {
-    type Outcoming_ = channel___base::get_many_by_subscription::Outcoming;
-
-    type Precedent_ = channel___base::get_many_by_subscription::Precedent;
-
-    let converter = move |unified_report: UnifiedReport<Outcoming_, Precedent_>| -> Result<C_UnifiedReport<Channel__Base___GetManyBySubscription___Outcoming, Channel__Base___GetManyBySubscription___Precedent>, Box<dyn Error + 'static>> {
+    let converter = move |unified_report: UnifiedReport<Channel__Base___GetManyBySubscription___Outcoming_, Channel__Base___GetManyBySubscription___Precedent_>| -> Result<C_UnifiedReport<Channel__Base___GetManyBySubscription___Outcoming, Channel__Base___GetManyBySubscription___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
                 let data_ = match data {
@@ -2571,13 +2551,13 @@ pub extern "C" fn channel___base____get_many_by_subscription____deserialize(
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    Precedent_::ApplicationUserAccessToken_AlreadyExpired => {
+                    Channel__Base___GetManyBySubscription___Precedent_::ApplicationUserAccessToken_AlreadyExpired => {
                         Channel__Base___GetManyBySubscription___Precedent {
                             application_user_access_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    Precedent_::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList => {
+                    Channel__Base___GetManyBySubscription___Precedent_::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList => {
                         Channel__Base___GetManyBySubscription___Precedent {
                             application_user_access_token__in_application_user_access_token_black_list: true,
                             ..Default::default()
@@ -2655,11 +2635,7 @@ pub struct Channel__Base___GetManyPublicByName___Precedent {
 pub extern "C" fn channel___base____get_many_public_by_name____deserialize(
     vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut Channel__Base___GetManyPublicByName___Result {
-    type Outcoming_ = channel___base::get_many_public_by_name::Outcoming;
-
-    type Precedent_ = channel___base::get_many_public_by_name::Precedent;
-
-    let converter = move |unified_report: UnifiedReport<Outcoming_, Precedent_>| -> Result<C_UnifiedReport<Channel__Base___GetManyPublicByName___Outcoming, Channel__Base___GetManyPublicByName___Precedent>, Box<dyn Error + 'static>> {
+    let converter = move |unified_report: UnifiedReport<Channel__Base___GetManyPublicByName___Outcoming_, Channel__Base___GetManyPublicByName___Precedent_>| -> Result<C_UnifiedReport<Channel__Base___GetManyPublicByName___Outcoming, Channel__Base___GetManyPublicByName___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
                 let data_ = match data {
@@ -2708,13 +2684,13 @@ pub extern "C" fn channel___base____get_many_public_by_name____deserialize(
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    Precedent_::ApplicationUserAccessToken_AlreadyExpired => {
+                    Channel__Base___GetManyPublicByName___Precedent_::ApplicationUserAccessToken_AlreadyExpired => {
                         Channel__Base___GetManyPublicByName___Precedent {
                             application_user_access_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    Precedent_::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList => {
+                    Channel__Base___GetManyPublicByName___Precedent_::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList => {
                         Channel__Base___GetManyPublicByName___Precedent {
                             application_user_access_token__in_application_user_access_token_black_list: true,
                             ..Default::default()
@@ -2796,11 +2772,7 @@ pub struct Channel__Base___GetOneById___Precedent {
 pub extern "C" fn channel___base____get_one_by_id____deserialize(
     vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut Channel__Base___GetOneById___Result {
-    type Outcoming_ = channel___base::get_one_by_id::Outcoming;
-
-    type Precedent_ = channel___base::get_one_by_id::Precedent;
-
-    let converter = move |unified_report: UnifiedReport<Outcoming_, Precedent_>| -> Result<C_UnifiedReport<Channel__Base___GetOneById___Outcoming, Channel__Base___GetOneById___Precedent>, Box<dyn Error + 'static>> {
+    let converter = move |unified_report: UnifiedReport<Channel__Base___GetOneById___Outcoming_, Channel__Base___GetOneById___Precedent_>| -> Result<C_UnifiedReport<Channel__Base___GetOneById___Outcoming, Channel__Base___GetOneById___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
                 let data_ = match data {
@@ -2873,25 +2845,25 @@ pub extern "C" fn channel___base____get_one_by_id____deserialize(
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    Precedent_::ApplicationUserAccessToken_AlreadyExpired => {
+                    Channel__Base___GetOneById___Precedent_::ApplicationUserAccessToken_AlreadyExpired => {
                         Channel__Base___GetOneById___Precedent {
                             application_user_access_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    Precedent_::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList => {
+                    Channel__Base___GetOneById___Precedent_::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList => {
                         Channel__Base___GetOneById___Precedent {
                             application_user_access_token__in_application_user_access_token_black_list: true,
                             ..Default::default()
                         }
                     }
-                    Precedent_::Channel_NotFound => {
+                    Channel__Base___GetOneById___Precedent_::Channel_NotFound => {
                         Channel__Base___GetOneById___Precedent {
                             channel__not_found: true,
                             ..Default::default()
                         }
                     }
-                    Precedent_::Channel_IsClose => {
+                    Channel__Base___GetOneById___Precedent_::Channel_IsClose => {
                         Channel__Base___GetOneById___Precedent {
                             channel__is_close: true,
                             ..Default::default()
@@ -2978,9 +2950,7 @@ pub struct ChannelSubscription__Base___Create___Precedent {
 pub extern "C" fn channel_subscription___base____create____deserialize(
     vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ChannelSubscription__Base___Create___Result {
-    type Precedent_ = channel_subscription___base::create::Precedent;
-
-    let converter = move |unified_report: UnifiedReport<Void, Precedent_>| -> Result<C_UnifiedReport<C_Void, ChannelSubscription__Base___Create___Precedent>, Box<dyn Error + 'static>> {
+    let converter = move |unified_report: UnifiedReport<Void, ChannelSubscription__Base___Create___Precedent_>| -> Result<C_UnifiedReport<C_Void, ChannelSubscription__Base___Create___Precedent>, Box<dyn Error + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
                 let data_ = match data {
@@ -2996,31 +2966,31 @@ pub extern "C" fn channel_subscription___base____create____deserialize(
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    Precedent_::ApplicationUserAccessToken_AlreadyExpired => {
+                    ChannelSubscription__Base___Create___Precedent_::ApplicationUserAccessToken_AlreadyExpired => {
                         ChannelSubscription__Base___Create___Precedent {
                             application_user_access_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    Precedent_::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList => {
+                    ChannelSubscription__Base___Create___Precedent_::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList => {
                         ChannelSubscription__Base___Create___Precedent {
                             application_user_access_token__in_application_user_access_token_black_list: true,
                             ..Default::default()
                         }
                     }
-                    Precedent_::Channel_NotFound => {
+                    ChannelSubscription__Base___Create___Precedent_::Channel_NotFound => {
                         ChannelSubscription__Base___Create___Precedent {
                             channel__not_found: true,
                             ..Default::default()
                         }
                     }
-                    Precedent_::Channel_IsClose => {
+                    ChannelSubscription__Base___Create___Precedent_::Channel_IsClose => {
                         ChannelSubscription__Base___Create___Precedent {
                             channel__is_close: true,
                             ..Default::default()
                         }
                     }
-                    Precedent_::ApplicationUser_IsChannelOwner => {
+                    ChannelSubscription__Base___Create___Precedent_::ApplicationUser_IsChannelOwner => {
                         ChannelSubscription__Base___Create___Precedent {
                             application_user__is_channel_owner: true,
                             ..Default::default()
@@ -3051,4 +3021,15 @@ pub extern "C" fn channel_subscription___base____create____deallocate(
     };
 
     return ();
+}
+
+// All tests should be performed using the Valgrind utility as `cargo valgrind test ...' command.
+#[cfg(test)]
+mod deallocation {
+    use super::*;
+
+    #[test]
+    fn application_user___authorization____authorize_by_first_step() -> () {
+
+    }
 }

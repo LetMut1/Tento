@@ -15,7 +15,9 @@ apt-get update && \
 apt-get install -y \
     cron \
     pkg-config \
-    libssl-dev && \
+    libssl-dev \
+    valgrind && \
+cargo install cargo-valgrind && \
 cargo install diesel_cli --no-default-features --features postgres
 
 # TODO TODO TODO для чего pkg-config, libssl-dev? МОжно ли без них?

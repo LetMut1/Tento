@@ -4,6 +4,8 @@
 #include <ostream>
 #include <new>
 
+struct ChannelOuterLink1;
+
 struct A {
   int a;
 };
@@ -341,6 +343,50 @@ struct Channel__Base___GetManyPublicByName___Precedent {
 
 using Channel__Base___GetManyPublicByName___Result = C_Result<C_UnifiedReport<Channel__Base___GetManyPublicByName___Outcoming, Channel__Base___GetManyPublicByName___Precedent>>;
 
+struct Channel2 {
+  long channel_owner;
+  C_String channel_name;
+  C_String channel_linked_name;
+  C_Option<C_String> channel_description;
+  short channel_access_modifier;
+  short channel_visability_modifier;
+  C_Vector<short> channel_orientation;
+  C_Option<C_String> channel_cover_image_path;
+  C_Option<C_String> channel_background_image_path;
+  long channel_subscribers_quantity;
+  long channel_marks_quantity;
+  long channel_viewing_quantity;
+};
+
+struct ChannelInnerLink1 {
+  long channel_inner_link_to;
+};
+
+struct Channel__Base___GetOneById___Outcoming {
+  Channel2 channel;
+  C_Vector<ChannelInnerLink1> channel_inner_link_registry;
+  C_Vector<ChannelOuterLink1> channel_outer_link_registry;
+};
+
+struct Channel__Base___GetOneById___Precedent {
+  bool application_user_access_token__already_expired;
+  bool application_user_access_token__in_application_user_access_token_black_list;
+  bool channel__not_found;
+  bool channel__is_close;
+};
+
+using Channel__Base___GetOneById___Result = C_Result<C_UnifiedReport<Channel__Base___GetOneById___Outcoming, Channel__Base___GetOneById___Precedent>>;
+
+struct ChannelSubscription__Base___Create___Precedent {
+  bool application_user_access_token__already_expired;
+  bool application_user_access_token__in_application_user_access_token_black_list;
+  bool channel__not_found;
+  bool channel__is_close;
+  bool application_user__is_channel_owner;
+};
+
+using ChannelSubscription__Base___Create___Result = C_Result<C_UnifiedReport<C_Void, ChannelSubscription__Base___Create___Precedent>>;
+
 extern "C" {
 
 int f1(int a);
@@ -478,8 +524,12 @@ Channel__Base___GetManyPublicByName___Result *channel___base____get_many_public_
 
 void channel___base____get_many_public_by_name____deallocate(Channel__Base___GetManyPublicByName___Result *result);
 
-Channel__Base___GetManyBySubscription___Result *channel___base____get_many_by_subscription____deserialize(C_Vector<unsigned char> *vector_of_bytes);
+Channel__Base___GetOneById___Result *channel___base____get_one_by_id____deserialize(C_Vector<unsigned char> *vector_of_bytes);
 
-void channel___base____get_many_by_subscription____deallocate(Channel__Base___GetManyBySubscription___Result *result);
+void channel___base____get_one_by_id____deallocate(Channel__Base___GetOneById___Result *result);
+
+ChannelSubscription__Base___Create___Result *channel_subscription___base____create____deserialize(C_Vector<unsigned char> *vector_of_bytes);
+
+void channel_subscription___base____create____deallocate(ChannelSubscription__Base___Create___Result *result);
 
 } // extern "C"
