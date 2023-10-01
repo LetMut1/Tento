@@ -668,6 +668,14 @@ impl<T> C_Result<T> {
             is_data: true,
         };
     }
+
+    fn into_row(self) -> *mut Self {
+        return Box::into_raw(
+            Box::new(
+                self
+            )
+        );
+    }
 }
 
 impl<T> C_Result<T>
@@ -918,11 +926,7 @@ impl Serilizer {
         F: FnOnce(UnifiedReport<APO1, APP1>) -> Result<C_UnifiedReport<APO2, APP2>, Box<dyn Error + 'static>>
     {
         if vector_of_bytes.is_null() {
-            return Box::into_raw(
-                Box::new(
-                    C_Result::error()
-                )
-            );
+            return C_Result::error().into_row();
         }
 
         let vector_ = unsafe {
@@ -930,11 +934,7 @@ impl Serilizer {
         };
 
         if vector_.pointer.is_null() || vector_.length == 0 {
-            return Box::into_raw(
-                Box::new(
-                    C_Result::error()
-                )
-            );
+            return C_Result::error().into_row();
         }
 
         let data = unsafe {
@@ -944,30 +944,20 @@ impl Serilizer {
         let unified_report = match Serializer_::deserialize::<'_, UnifiedReport<APO1, APP1>>(data) {
             Ok(unified_report_) => unified_report_,
             Err(_) => {
-                return Box::into_raw(
-                    Box::new(
-                        C_Result::error()
-                    )
-                );
+                return C_Result::error().into_row();
             }
         };
 
         let c_unified_report = match converter(unified_report) {
             Ok(c_unified_report_) => c_unified_report_,
             Err(_) => {
-                return Box::into_raw(
-                    Box::new(
-                        C_Result::error()
-                    )
-                );
+                return C_Result::error().into_row();
             }
         };
 
         let c_result = C_Result::data(c_unified_report);
 
-        return Box::into_raw(
-            Box::new(c_result)
-        );
+        return c_result.into_row();
     }
 }
 
@@ -1029,15 +1019,11 @@ pub struct ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming {
 }
 
 #[no_mangle]
-pub extern "C" fn application_user___authorization____authorize_by_first_step____serialize(     // TODO DEallocate + названия, C_Result.into_row,
+pub extern "C" fn application_user___authorization____authorize_by_first_step____serialize(     // TODO DEallocate + названия,
     incoming: *mut ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     if incoming.is_null() {
-        return Box::into_raw(
-            Box::new(
-                C_Result::error()
-            )
-        );
+        return C_Result::error().into_row();
     }
 
     let incoming_ = unsafe {
@@ -1047,33 +1033,21 @@ pub extern "C" fn application_user___authorization____authorize_by_first_step___
     let application_user_device_id = match incoming_.application_user_device_id.to_string() {
         Ok(application_user_device_id_) => application_user_device_id_,
         Err(_) => {
-            return Box::into_raw(
-                Box::new(
-                    C_Result::error()
-                )
-            );
+            return C_Result::error().into_row();
         }
     };
 
     let application_user_email_or_application_user_nickname = match incoming_.application_user_email_or_application_user_nickname.to_string() {
         Ok(application_user_email_or_application_user_nickname_) => application_user_email_or_application_user_nickname_,
         Err(_) => {
-            return Box::into_raw(
-                Box::new(
-                    C_Result::error()
-                )
-            );
+            return C_Result::error().into_row();
         }
     };
 
     let application_user_password = match incoming_.application_user_password.to_string() {
         Ok(application_user_password_) => application_user_password_,
         Err(_) => {
-            return Box::into_raw(
-                Box::new(
-                    C_Result::error()
-                )
-            );
+            return C_Result::error().into_row();
         }
     };
 
@@ -1086,11 +1060,7 @@ pub extern "C" fn application_user___authorization____authorize_by_first_step___
     let data = match Serializer_::serialize(&incoming__) {
         Ok(data_) => data_,
         Err(_) => {
-            return Box::into_raw(
-                Box::new(
-                    C_Result::error()
-                )
-            );
+            return C_Result::error().into_row();
         }
     };
 
@@ -1098,11 +1068,7 @@ pub extern "C" fn application_user___authorization____authorize_by_first_step___
 
     let c_result = C_Result::data(c_vector);
 
-    return Box::into_raw(
-        Box::new(
-            c_result
-        )
-    );
+    return c_result.into_row();
 }
 
 type ApplicationUser__Authorization___AuthorizeByFirstStep___C_Result = C_Result<C_UnifiedReport<ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming, ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent>>;
