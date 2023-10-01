@@ -146,6 +146,7 @@ name = "serializer"
 version = "0.1.0"
 dependencies = [
  "action_processor_incoming_outcoming",
+ "entity",
  "libc",
  "message_pack_serializer",
  "serde",

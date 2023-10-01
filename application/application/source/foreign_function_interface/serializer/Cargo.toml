@@ -26,6 +26,9 @@ serde = { package = "serde", version = "^1.0", default-features = true, features
 unified_report = { path = "./../../forced_crate/unified_report", package = "unified_report", version = "0.1.0", default-features = true, features = [], optional = false }
 void = { path = "./../../forced_crate/void", package = "void", version = "0.1.0", default-features = true, features = [], optional = false }
 
+[dev-dependencies]
+entity = { path = "./../../forced_crate/entity", package = "entity", version = "0.1.0", default-features = true, features = [], optional = false }
+
 [features]
 default = []
 
