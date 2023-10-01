@@ -929,9 +929,15 @@ impl<T> Allocator<C_Result<C_Vector<T>>> {
     }
 }
 
-struct Serilizer;
+struct Transformer<S> {
+    _subject: PhantomData<S>,
+}
 
-impl Serilizer {
+struct ServerRequestData;
+
+struct ServerResponseData;
+
+impl Transformer<ServerResponseData> {
     fn deserialize<F, APO1, APP1, APO2, APP2>(
         vector_of_bytes: *mut C_Vector<c_uchar>,
         converter: F
@@ -977,7 +983,9 @@ impl Serilizer {
 
         return c_result.into_row();
     }
+}
 
+impl Transformer<ServerRequestData> {
     fn serialize<API1, F, API2>(
         incoming: *mut API1,
         converter: F,
@@ -1094,7 +1102,7 @@ pub extern "C" fn application_user___authorization____authorize_by_first_step___
         return Ok(incoming__);
     };
 
-    return Serilizer::serialize(incoming, converter);
+    return Transformer::<ServerRequestData>::serialize(incoming, converter);
 }
 
 #[no_mangle]
@@ -1167,7 +1175,7 @@ pub extern "C" fn application_user___authorization____authorize_by_first_step___
         return Ok(unified_report_);
     };
 
-    return Serilizer::deserialize(vector_of_bytes, converter);
+    return Transformer::<ServerResponseData>::deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -1271,7 +1279,7 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
         return Ok(unified_report_);
     };
 
-    return Serilizer::deserialize(vector_of_bytes, converter);
+    return Transformer::<ServerResponseData>::deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -1337,7 +1345,7 @@ pub extern "C" fn application_user___authorization____check_email_for_existing__
         return Ok(unified_report_);
     };
 
-    return Serilizer::deserialize(vector_of_bytes, converter);
+    return Transformer::<ServerResponseData>::deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -1393,7 +1401,7 @@ pub extern "C" fn application_user___authorization____check_nickname_for_existin
         return Ok(unified_report_);
     };
 
-    return Serilizer::deserialize(vector_of_bytes, converter);
+    return Transformer::<ServerResponseData>::deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -1461,7 +1469,7 @@ pub extern "C" fn application_user___authorization____deauthorize_from_all_devic
         return Ok(unified_report_);
     };
 
-    return Serilizer::deserialize(vector_of_bytes, converter);
+    return Transformer::<ServerResponseData>::deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -1529,7 +1537,7 @@ pub extern "C" fn application_user___authorization____deauthorize_from_one_devic
         return Ok(unified_report_);
     };
 
-    return Serilizer::deserialize(vector_of_bytes, converter);
+    return Transformer::<ServerResponseData>::deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -1609,7 +1617,7 @@ pub extern "C" fn application_user___authorization____refresh_access_token____de
         return Ok(unified_report_);
     };
 
-    return Serilizer::deserialize(vector_of_bytes, converter);
+    return Transformer::<ServerResponseData>::deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -1695,7 +1703,7 @@ pub extern "C" fn application_user___authorization____register_by_first_step____
         return Ok(unified_report_);
     };
 
-    return Serilizer::deserialize(vector_of_bytes, converter);
+    return Transformer::<ServerResponseData>::deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -1787,7 +1795,7 @@ pub extern "C" fn application_user___authorization____register_by_second_step___
         return Ok(unified_report_);
     };
 
-    return Serilizer::deserialize(vector_of_bytes, converter);
+    return Transformer::<ServerResponseData>::deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -1895,7 +1903,7 @@ pub extern "C" fn application_user___authorization____register_by_last_step____d
         return Ok(unified_report_);
     };
 
-    return Serilizer::deserialize(vector_of_bytes, converter);
+    return Transformer::<ServerResponseData>::deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -1983,7 +1991,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_first_st
         return Ok(unified_report_);
     };
 
-    return Serilizer::deserialize(vector_of_bytes, converter);
+    return Transformer::<ServerResponseData>::deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -2075,7 +2083,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_second_s
         return Ok(unified_report_);
     };
 
-    return Serilizer::deserialize(vector_of_bytes, converter);
+    return Transformer::<ServerResponseData>::deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -2164,7 +2172,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_last_ste
         return Ok(unified_report_);
     };
 
-    return Serilizer::deserialize(vector_of_bytes, converter);
+    return Transformer::<ServerResponseData>::deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -2256,7 +2264,7 @@ pub extern "C" fn application_user___authorization____send_email_for_register___
         return Ok(unified_report_);
     };
 
-    return Serilizer::deserialize(vector_of_bytes, converter);
+    return Transformer::<ServerResponseData>::deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -2348,7 +2356,7 @@ pub extern "C" fn application_user___authorization____send_email_for_authorize__
         return Ok(unified_report_);
     };
 
-    return Serilizer::deserialize(vector_of_bytes, converter);
+    return Transformer::<ServerResponseData>::deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -2447,7 +2455,7 @@ pub extern "C" fn application_user___authorization____send_email_for_reset_passw
         return Ok(unified_report_);
     };
 
-    return Serilizer::deserialize(vector_of_bytes, converter);
+    return Transformer::<ServerResponseData>::deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -2554,7 +2562,7 @@ pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____deseria
         return Ok(unified_report_);
     };
 
-    return Serilizer::deserialize(vector_of_bytes, converter);
+    return Transformer::<ServerResponseData>::deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -2687,7 +2695,7 @@ pub extern "C" fn channel___base____get_many_by_subscription____deserialize(
         return Ok(unified_report_);
     };
 
-    return Serilizer::deserialize(vector_of_bytes, converter);
+    return Transformer::<ServerResponseData>::deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -2820,7 +2828,7 @@ pub extern "C" fn channel___base____get_many_public_by_name____deserialize(
         return Ok(unified_report_);
     };
 
-    return Serilizer::deserialize(vector_of_bytes, converter);
+    return Transformer::<ServerResponseData>::deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -2993,7 +3001,7 @@ pub extern "C" fn channel___base____get_one_by_id____deserialize(
         return Ok(unified_report_);
     };
 
-    return Serilizer::deserialize(vector_of_bytes, converter);
+    return Transformer::<ServerResponseData>::deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
@@ -3120,7 +3128,7 @@ pub extern "C" fn channel_subscription___base____create____deserialize(
         return Ok(unified_report_);
     };
 
-    return Serilizer::deserialize(vector_of_bytes, converter);
+    return Transformer::<ServerResponseData>::deserialize(vector_of_bytes, converter);
 }
 
 #[no_mangle]
