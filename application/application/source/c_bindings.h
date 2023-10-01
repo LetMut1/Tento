@@ -62,6 +62,28 @@ struct Main2 {
   Nested2 nested2;
 };
 
+template<typename T>
+struct C_Vector {
+  T *pointer;
+  size_t length;
+};
+
+template<typename T>
+struct C_Result {
+  T data;
+  bool is_data;
+};
+
+struct C_String {
+  char *pointer;
+};
+
+struct ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming {
+  C_String application_user_device_id;
+  C_String application_user_email_or_application_user_nickname;
+  C_String application_user_password;
+};
+
 struct ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming {
   long application_user_id;
   bool verification_message_sent;
@@ -87,23 +109,7 @@ struct C_UnifiedReport {
   bool is_target;
 };
 
-template<typename T>
-struct C_Result {
-  T data;
-  bool is_data;
-};
-
 using ApplicationUser__Authorization___AuthorizeByFirstStep___C_Result = C_Result<C_UnifiedReport<ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming, ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent>>;
-
-template<typename T>
-struct C_Vector {
-  T *pointer;
-  size_t length;
-};
-
-struct C_String {
-  char *pointer;
-};
 
 struct ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming {
   C_String application_user_access_token_encrypted;
@@ -450,6 +456,8 @@ void main_nested_deallocate_f1(Main1 *main);
 Main2 *main_nested_allocate_f2();
 
 void main_nested_deallocate_f2(Main2 *main);
+
+C_Result<C_Vector<unsigned char>> *application_user___authorization____authorize_by_first_step____serialize(ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming *incoming);
 
 ApplicationUser__Authorization___AuthorizeByFirstStep___C_Result *application_user___authorization____authorize_by_first_step____deserialize(C_Vector<unsigned char> *vector_of_bytes);
 

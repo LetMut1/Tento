@@ -1,15 +1,3 @@
-// TODO cargo build --release --lib --target aarch64-apple-ios
-// TODO cargo build --release --lib --target aarch64-apple-ios-sim
-// TODO cargo build --release --lib --target armv7-linux-androideabi
-
-// TODO access_modifier/visability_modifier посмотреть, как на бэкенде лежат в бд и отдаются. Здесь сделать структуру
-// TODO unit.tests
-
-
-
-
-
-
 #![allow(
     dead_code,
     non_camel_case_types,
@@ -93,6 +81,22 @@
     clippy::zero_sized_map_values
 )]
 
+
+
+
+// TODO cargo build --release --lib --target aarch64-apple-ios
+// TODO cargo build --release --lib --target aarch64-apple-ios-sim
+// TODO cargo build --release --lib --target armv7-linux-androideabi
+
+// TODO access_modifier/visability_modifier посмотреть, как на бэкенде лежат в бд и отдаются. Здесь сделать структуру
+// TODO unit.tests
+
+
+
+
+
+
+
 use libc::c_int;
 use libc::c_short;
 use libc::c_long;
@@ -103,6 +107,7 @@ use void::Void;
 use std::error::Error;
 use std::slice::from_raw_parts;
 use std::ffi::CString;
+use std::ffi::CStr;
 use std::slice;
 use std::mem::forget;
 use libc::size_t;
@@ -151,8 +156,10 @@ use action_processor_incoming_outcoming::action_processor::channel___base::get_m
 use action_processor_incoming_outcoming::action_processor::channel___base::get_one_by_id::Outcoming as Channel__Base___GetOneById___Outcoming_;
 use action_processor_incoming_outcoming::action_processor::channel___base::get_one_by_id::Precedent as Channel__Base___GetOneById___Precedent_;
 use action_processor_incoming_outcoming::action_processor::channel_subscription___base::create::Precedent as ChannelSubscription__Base___Create___Precedent_;
-
-
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::authorize_by_first_step::Incoming as ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming_;
+use entity::application_user::ApplicationUser_Id;
+use entity::application_user::ApplicationUser_Password;
+use entity::application_user_device::ApplicationUserDevice_Id;
 
 
 
@@ -783,6 +790,22 @@ pub struct C_String {
     pub pointer: *mut c_char,
 }
 
+impl C_String {
+    fn to_string(self) -> Result<String, Box<dyn Error + 'static>> {
+        if self.pointer.is_null() {
+            return Err("There should not be a null-pointer.".into());
+        }
+
+        let c_str = unsafe {
+            CStr::from_ptr(self.pointer as *const _)
+        };
+
+        let c_string = c_str.to_str()?.to_string();
+
+        return Ok(c_string);
+    }
+}
+
 impl Default for C_String {
     fn default() -> Self {
         return Self {
@@ -997,6 +1020,91 @@ pub struct ChannelOuterLink1 {
     pub channel_outer_link_address: C_String,
 }
 
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming {
+    pub application_user_device_id: C_String,
+    pub application_user_email_or_application_user_nickname: C_String,
+    pub application_user_password: C_String,
+}
+
+#[no_mangle]
+pub extern "C" fn application_user___authorization____authorize_by_first_step____serialize(     // TODO DEallocate + названия, C_Result.into_row,
+    incoming: *mut ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming
+) -> *mut C_Result<C_Vector<c_uchar>> {
+    if incoming.is_null() {
+        return Box::into_raw(
+            Box::new(
+                C_Result::error()
+            )
+        );
+    }
+
+    let incoming_ = unsafe {
+        *incoming
+    };
+
+    let application_user_device_id = match incoming_.application_user_device_id.to_string() {
+        Ok(application_user_device_id_) => application_user_device_id_,
+        Err(_) => {
+            return Box::into_raw(
+                Box::new(
+                    C_Result::error()
+                )
+            );
+        }
+    };
+
+    let application_user_email_or_application_user_nickname = match incoming_.application_user_email_or_application_user_nickname.to_string() {
+        Ok(application_user_email_or_application_user_nickname_) => application_user_email_or_application_user_nickname_,
+        Err(_) => {
+            return Box::into_raw(
+                Box::new(
+                    C_Result::error()
+                )
+            );
+        }
+    };
+
+    let application_user_password = match incoming_.application_user_password.to_string() {
+        Ok(application_user_password_) => application_user_password_,
+        Err(_) => {
+            return Box::into_raw(
+                Box::new(
+                    C_Result::error()
+                )
+            );
+        }
+    };
+
+    let incoming__ = ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming_ {
+        application_user_device_id: ApplicationUserDevice_Id(application_user_device_id),
+        application_user_email_or_application_user_nickname,
+        application_user_password: ApplicationUser_Password(application_user_password),
+    };
+
+    let data = match Serializer_::serialize(&incoming__) {
+        Ok(data_) => data_,
+        Err(_) => {
+            return Box::into_raw(
+                Box::new(
+                    C_Result::error()
+                )
+            );
+        }
+    };
+
+    let c_vector = Allocator::<C_Vector<_>>::allocate(data);
+
+    let c_result = C_Result::data(c_vector);
+
+    return Box::into_raw(
+        Box::new(
+            c_result
+        )
+    );
+}
+
 type ApplicationUser__Authorization___AuthorizeByFirstStep___C_Result = C_Result<C_UnifiedReport<ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming, ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent>>;
 
 #[repr(C)]
@@ -1014,6 +1122,7 @@ pub struct ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming {
 pub struct ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent {
     pub application_user__wrong_email_or_nickname_or_password: bool,
 }
+
 
 #[no_mangle]
 pub extern "C" fn application_user___authorization____authorize_by_first_step____deserialize(
