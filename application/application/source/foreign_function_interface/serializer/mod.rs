@@ -911,19 +911,37 @@ impl<T> Allocator<C_Vector<T>> {
     }
 }
 
+impl Allocator<C_Result<C_Vector<c_uchar>>> {
+    fn deallocate(c_result: *mut C_Result<C_Vector<c_uchar>>) -> () {
+        if c_result.is_null() {
+            return ();
+        }
+
+        let c_result_ = unsafe {
+            Box::from_raw(c_result)
+        };
+
+        if c_result_.is_data {
+            Allocator::<C_Vector<_>>::deallocate(c_result_.data);
+        }
+
+        return ();
+    }
+}
+
 struct Serilizer;
 
 impl Serilizer {
-    fn deserialize<APO1, APP1, F, APO2, APP2>(
+    fn deserialize<F, APO1, APP1, APO2, APP2>(
         vector_of_bytes: *mut C_Vector<c_uchar>,
         converter: F
     ) -> *mut C_Result<C_UnifiedReport<APO2, APP2>>
     where
+        F: FnOnce(UnifiedReport<APO1, APP1>) -> Result<C_UnifiedReport<APO2, APP2>, Box<dyn Error + 'static>>,
         APO1: for<'de> Deserialize<'de>,
         APP1: for<'de> Deserialize<'de>,
         APO2: Default,
         APP2: Default,
-        F: FnOnce(UnifiedReport<APO1, APP1>) -> Result<C_UnifiedReport<APO2, APP2>, Box<dyn Error + 'static>>
     {
         if vector_of_bytes.is_null() {
             return C_Result::error().into_row();
@@ -956,6 +974,44 @@ impl Serilizer {
         };
 
         let c_result = C_Result::data(c_unified_report);
+
+        return c_result.into_row();
+    }
+
+    fn serialize<API1, F, API2>(                                    // TODO Allocator
+        incoming: *mut API1,
+        converter: F,
+    ) -> *mut C_Result<C_Vector<c_uchar>>
+    where
+        API1: Copy,
+        F: FnOnce(API1) -> Result<API2, Box<dyn Error + 'static>>,
+        API2: Serialize,
+    {
+        if incoming.is_null() {
+            return C_Result::error().into_row();
+        }
+
+        let incoming_ = unsafe {
+            *incoming
+        };
+
+        let incoming__ = match converter(incoming_) {
+            Ok(incoming___) => incoming___,
+            Err(_) => {
+                return C_Result::error().into_row();
+            }
+        };
+
+        let data = match Serializer_::serialize(&incoming__) {
+            Ok(data_) => data_,
+            Err(_) => {
+                return C_Result::error().into_row();
+            }
+        };
+
+        let c_vector = Allocator::<C_Vector<_>>::allocate(data);
+
+        let c_result = C_Result::data(c_vector);
 
         return c_result.into_row();
     }
@@ -1019,56 +1075,35 @@ pub struct ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming {
 }
 
 #[no_mangle]
-pub extern "C" fn application_user___authorization____authorize_by_first_step____serialize(     // TODO DEallocate + названия,
+pub extern "C" fn application_user___authorization____authorize_by_first_step____serialize(
     incoming: *mut ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming
 ) -> *mut C_Result<C_Vector<c_uchar>> {
-    if incoming.is_null() {
-        return C_Result::error().into_row();
-    }
+    let converter = move |incoming: ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming| -> Result<ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming_, Box<dyn Error + 'static>> {
+        let application_user_device_id = incoming.application_user_device_id.to_string()?;
 
-    let incoming_ = unsafe {
-        *incoming
+        let application_user_email_or_application_user_nickname = incoming.application_user_email_or_application_user_nickname.to_string()?;
+
+        let application_user_password = incoming.application_user_password.to_string()?;
+
+        let incoming__ = ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming_ {
+            application_user_device_id: ApplicationUserDevice_Id(application_user_device_id),
+            application_user_email_or_application_user_nickname,
+            application_user_password: ApplicationUser_Password(application_user_password),
+        };
+
+        return Ok(incoming__);
     };
 
-    let application_user_device_id = match incoming_.application_user_device_id.to_string() {
-        Ok(application_user_device_id_) => application_user_device_id_,
-        Err(_) => {
-            return C_Result::error().into_row();
-        }
-    };
+    return Serilizer::serialize(incoming, converter);
+}
 
-    let application_user_email_or_application_user_nickname = match incoming_.application_user_email_or_application_user_nickname.to_string() {
-        Ok(application_user_email_or_application_user_nickname_) => application_user_email_or_application_user_nickname_,
-        Err(_) => {
-            return C_Result::error().into_row();
-        }
-    };
+#[no_mangle]
+pub extern "C" fn application_user___authorization____authorize_by_first_step____serialize____deallocate(
+    c_result: *mut C_Result<C_Vector<c_uchar>>
+) -> () {
+    Allocator::<C_Result<_>>::deallocate(c_result);
 
-    let application_user_password = match incoming_.application_user_password.to_string() {
-        Ok(application_user_password_) => application_user_password_,
-        Err(_) => {
-            return C_Result::error().into_row();
-        }
-    };
-
-    let incoming__ = ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming_ {
-        application_user_device_id: ApplicationUserDevice_Id(application_user_device_id),
-        application_user_email_or_application_user_nickname,
-        application_user_password: ApplicationUser_Password(application_user_password),
-    };
-
-    let data = match Serializer_::serialize(&incoming__) {
-        Ok(data_) => data_,
-        Err(_) => {
-            return C_Result::error().into_row();
-        }
-    };
-
-    let c_vector = Allocator::<C_Vector<_>>::allocate(data);
-
-    let c_result = C_Result::data(c_vector);
-
-    return c_result.into_row();
+    return ();
 }
 
 type ApplicationUser__Authorization___AuthorizeByFirstStep___C_Result = C_Result<C_UnifiedReport<ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming, ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent>>;
@@ -1136,7 +1171,7 @@ pub extern "C" fn application_user___authorization____authorize_by_first_step___
 }
 
 #[no_mangle]
-pub extern "C" fn application_user___authorization____authorize_by_first_step____deallocate(
+pub extern "C" fn application_user___authorization____authorize_by_first_step____deserialize____deallocate(
     c_result: *mut ApplicationUser__Authorization___AuthorizeByFirstStep___C_Result
 ) -> () {
     if c_result.is_null() {
@@ -1240,7 +1275,7 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
 }
 
 #[no_mangle]
-pub extern "C" fn application_user___authorization____authorize_by_last_step____deallocate(
+pub extern "C" fn application_user___authorization____authorize_by_last_step____deserialize____deallocate(
     c_result: *mut ApplicationUser__Authorization___AuthorizeByLastStep___C_Result
 ) -> () {
     if c_result.is_null() {
@@ -1306,7 +1341,7 @@ pub extern "C" fn application_user___authorization____check_email_for_existing__
 }
 
 #[no_mangle]
-pub extern "C" fn application_user___authorization____check_email_for_existing____deallocate(
+pub extern "C" fn application_user___authorization____check_email_for_existing____deserialize____deallocate(
     c_result: *mut ApplicationUser__Authorization___CheckEmailForExisting___C_Result
 ) -> () {
     if c_result.is_null() {
@@ -1362,7 +1397,7 @@ pub extern "C" fn application_user___authorization____check_nickname_for_existin
 }
 
 #[no_mangle]
-pub extern "C" fn application_user___authorization____check_nickname_for_existing____deallocate(
+pub extern "C" fn application_user___authorization____check_nickname_for_existing____deserialize____deallocate(
     c_result: *mut ApplicationUser__Authorization___CheckNicknameForExisting___C_Result
 ) -> () {
     if c_result.is_null() {
@@ -1430,7 +1465,7 @@ pub extern "C" fn application_user___authorization____deauthorize_from_all_devic
 }
 
 #[no_mangle]
-pub extern "C" fn application_user___authorization____deauthorize_from_all_devices____deallocate(
+pub extern "C" fn application_user___authorization____deauthorize_from_all_devices____deserialize____deallocate(
     c_result: *mut ApplicationUser__Authorization___DeauthorizeFromAllDevices___C_Result
 ) -> () {
     if c_result.is_null() {
@@ -1498,7 +1533,7 @@ pub extern "C" fn application_user___authorization____deauthorize_from_one_devic
 }
 
 #[no_mangle]
-pub extern "C" fn application_user___authorization____deauthorize_from_one_device____deallocate(
+pub extern "C" fn application_user___authorization____deauthorize_from_one_device____deserialize____deallocate(
     c_result: *mut ApplicationUser__Authorization___DeauthorizeFromOneDevice___C_Result
 ) -> () {
     if c_result.is_null() {
@@ -1578,7 +1613,7 @@ pub extern "C" fn application_user___authorization____refresh_access_token____de
 }
 
 #[no_mangle]
-pub extern "C" fn application_user___authorization____refresh_access_token____deallocate(
+pub extern "C" fn application_user___authorization____refresh_access_token____deserialize____deallocate(
     c_result: *mut ApplicationUser__Authorization___RefreshAccessToken___C_Result
 ) -> () {
     if c_result.is_null() {
@@ -1664,7 +1699,7 @@ pub extern "C" fn application_user___authorization____register_by_first_step____
 }
 
 #[no_mangle]
-pub extern "C" fn application_user___authorization____register_by_first_step____deallocate(
+pub extern "C" fn application_user___authorization____register_by_first_step____deserialize____deallocate(
     c_result: *mut ApplicationUser__Authorization___RegisterByFirstStep___C_Result
 ) -> () {
     if c_result.is_null() {
@@ -1756,7 +1791,7 @@ pub extern "C" fn application_user___authorization____register_by_second_step___
 }
 
 #[no_mangle]
-pub extern "C" fn application_user___authorization____register_by_second_step____deallocate(
+pub extern "C" fn application_user___authorization____register_by_second_step____deserialize____deallocate(
     c_result: *mut ApplicationUser__Authorization___RegisterBySecondStep___C_Result
 ) -> () {
     if c_result.is_null() {
@@ -1864,7 +1899,7 @@ pub extern "C" fn application_user___authorization____register_by_last_step____d
 }
 
 #[no_mangle]
-pub extern "C" fn application_user___authorization____register_by_last_step____deallocate(
+pub extern "C" fn application_user___authorization____register_by_last_step____deserialize____deallocate(
     c_result: *mut ApplicationUser__Authorization___RegisterByLastStep___C_Result
 ) -> () {
     if c_result.is_null() {
@@ -1952,7 +1987,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_first_st
 }
 
 #[no_mangle]
-pub extern "C" fn application_user___authorization____reset_password_by_first_step____deallocate(
+pub extern "C" fn application_user___authorization____reset_password_by_first_step____deserialize____deallocate(
     c_result: *mut ApplicationUser__Authorization___ResetPasswordByFirstStep___C_Result
 ) -> () {
     if c_result.is_null() {
@@ -2044,7 +2079,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_second_s
 }
 
 #[no_mangle]
-pub extern "C" fn application_user___authorization____reset_password_by_second_step____deallocate(
+pub extern "C" fn application_user___authorization____reset_password_by_second_step____deserialize____deallocate(
     c_result: *mut ApplicationUser__Authorization___ResetPasswordBySecondStep___C_Result
 ) -> () {
     if c_result.is_null() {
@@ -2133,7 +2168,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_last_ste
 }
 
 #[no_mangle]
-pub extern "C" fn application_user___authorization____reset_password_by_last_step____deallocate(
+pub extern "C" fn application_user___authorization____reset_password_by_last_step____deserialize____deallocate(
     c_result: *mut ApplicationUser__Authorization___ResetPasswordByLastStep___C_Result
 ) -> () {
     if c_result.is_null() {
@@ -2225,7 +2260,7 @@ pub extern "C" fn application_user___authorization____send_email_for_register___
 }
 
 #[no_mangle]
-pub extern "C" fn application_user___authorization____send_email_for_register____deallocate(
+pub extern "C" fn application_user___authorization____send_email_for_register____deserialize____deallocate(
     c_result: *mut ApplicationUser__Authorization___SendEmailForRegister___C_Result
 ) -> () {
     if c_result.is_null() {
@@ -2317,7 +2352,7 @@ pub extern "C" fn application_user___authorization____send_email_for_authorize__
 }
 
 #[no_mangle]
-pub extern "C" fn application_user___authorization____send_email_for_authorize____deallocate(
+pub extern "C" fn application_user___authorization____send_email_for_authorize____deserialize____deallocate(
     c_result: *mut ApplicationUser__Authorization___SendEmailForAuthorize___C_Result
 ) -> () {
     if c_result.is_null() {
@@ -2416,7 +2451,7 @@ pub extern "C" fn application_user___authorization____send_email_for_reset_passw
 }
 
 #[no_mangle]
-pub extern "C" fn application_user___authorization____send_email_for_reset_password____deallocate(
+pub extern "C" fn application_user___authorization____send_email_for_reset_password____deserialize____deallocate(
     c_result: *mut ApplicationUser__Authorization___SendEmailForResetPassword___C_Result
 ) -> () {
     if c_result.is_null() {
@@ -2523,7 +2558,7 @@ pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____deseria
 }
 
 #[no_mangle]
-pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____deallocate(
+pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____deserialize____deallocate(
     c_result: *mut Channel__Base___GetManyByNameInSubscriptions___C_Result
 ) -> () {
     if c_result.is_null() {
@@ -2656,7 +2691,7 @@ pub extern "C" fn channel___base____get_many_by_subscription____deserialize(
 }
 
 #[no_mangle]
-pub extern "C" fn channel___base____get_many_by_subscription____deallocate(
+pub extern "C" fn channel___base____get_many_by_subscription____deserialize____deallocate(
     c_result: *mut Channel__Base___GetManyBySubscription___C_Result
 ) -> () {
     if c_result.is_null() {
@@ -2789,7 +2824,7 @@ pub extern "C" fn channel___base____get_many_public_by_name____deserialize(
 }
 
 #[no_mangle]
-pub extern "C" fn channel___base____get_many_public_by_name____deallocate(
+pub extern "C" fn channel___base____get_many_public_by_name____deserialize____deallocate(
     c_result: *mut Channel__Base___GetManyPublicByName___C_Result
 ) -> () {
     if c_result.is_null() {
@@ -2962,7 +2997,7 @@ pub extern "C" fn channel___base____get_one_by_id____deserialize(
 }
 
 #[no_mangle]
-pub extern "C" fn channel___base____get_one_by_id____deallocate(
+pub extern "C" fn channel___base____get_one_by_id____deserialize____deallocate(
     c_result: *mut Channel__Base___GetOneById___C_Result
 ) -> () {
     if c_result.is_null() {
@@ -3089,7 +3124,7 @@ pub extern "C" fn channel_subscription___base____create____deserialize(
 }
 
 #[no_mangle]
-pub extern "C" fn channel_subscription___base____create____deallocate(
+pub extern "C" fn channel_subscription___base____create____deserialize____deallocate(
     c_result: *mut ChannelSubscription__Base___Create___C_Result
 ) -> () {
     if c_result.is_null() {
@@ -3195,7 +3230,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut ApplicationUser__Authorization___AuthorizeByFirstStep___C_Result| -> () {
-                application_user___authorization____authorize_by_first_step____deallocate(c_result);
+                application_user___authorization____authorize_by_first_step____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -3224,7 +3259,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut ApplicationUser__Authorization___AuthorizeByFirstStep___C_Result| -> () {
-                application_user___authorization____authorize_by_first_step____deallocate(c_result);
+                application_user___authorization____authorize_by_first_step____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -3247,7 +3282,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut ApplicationUser__Authorization___AuthorizeByFirstStep___C_Result| -> () {
-                application_user___authorization____authorize_by_first_step____deallocate(c_result);
+                application_user___authorization____authorize_by_first_step____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -3268,7 +3303,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut ApplicationUser__Authorization___AuthorizeByLastStep___C_Result| -> () {
-                application_user___authorization____authorize_by_last_step____deallocate(c_result);
+                application_user___authorization____authorize_by_last_step____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -3294,7 +3329,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut ApplicationUser__Authorization___AuthorizeByLastStep___C_Result| -> () {
-                application_user___authorization____authorize_by_last_step____deallocate(c_result);
+                application_user___authorization____authorize_by_last_step____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -3314,7 +3349,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut ApplicationUser__Authorization___AuthorizeByLastStep___C_Result| -> () {
-                application_user___authorization____authorize_by_last_step____deallocate(c_result);
+                application_user___authorization____authorize_by_last_step____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -3358,7 +3393,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut ApplicationUser__Authorization___CheckEmailForExisting___C_Result| -> () {
-                application_user___authorization____check_email_for_existing____deallocate(c_result);
+                application_user___authorization____check_email_for_existing____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -3383,7 +3418,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut ApplicationUser__Authorization___CheckEmailForExisting___C_Result| -> () {
-                application_user___authorization____check_email_for_existing____deallocate(c_result);
+                application_user___authorization____check_email_for_existing____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -3409,7 +3444,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut ApplicationUser__Authorization___CheckNicknameForExisting___C_Result| -> () {
-                application_user___authorization____check_nickname_for_existing____deallocate(c_result);
+                application_user___authorization____check_nickname_for_existing____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -3434,7 +3469,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut ApplicationUser__Authorization___CheckNicknameForExisting___C_Result| -> () {
-                application_user___authorization____check_nickname_for_existing____deallocate(c_result);
+                application_user___authorization____check_nickname_for_existing____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -3460,7 +3495,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut ApplicationUser__Authorization___DeauthorizeFromAllDevices___C_Result| -> () {
-                application_user___authorization____deauthorize_from_all_devices____deallocate(c_result);
+                application_user___authorization____deauthorize_from_all_devices____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -3485,7 +3520,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut ApplicationUser__Authorization___DeauthorizeFromAllDevices___C_Result| -> () {
-                application_user___authorization____deauthorize_from_all_devices____deallocate(c_result);
+                application_user___authorization____deauthorize_from_all_devices____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -3521,7 +3556,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut ApplicationUser__Authorization___DeauthorizeFromOneDevice___C_Result| -> () {
-                application_user___authorization____deauthorize_from_one_device____deallocate(c_result);
+                application_user___authorization____deauthorize_from_one_device____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -3546,7 +3581,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut ApplicationUser__Authorization___DeauthorizeFromOneDevice___C_Result| -> () {
-                application_user___authorization____deauthorize_from_one_device____deallocate(c_result);
+                application_user___authorization____deauthorize_from_one_device____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -3582,7 +3617,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut ApplicationUser__Authorization___RefreshAccessToken___C_Result| -> () {
-                application_user___authorization____refresh_access_token____deallocate(c_result);
+                application_user___authorization____refresh_access_token____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -3608,7 +3643,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut ApplicationUser__Authorization___RefreshAccessToken___C_Result| -> () {
-                application_user___authorization____refresh_access_token____deallocate(c_result);
+                application_user___authorization____refresh_access_token____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -3628,7 +3663,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut ApplicationUser__Authorization___RefreshAccessToken___C_Result| -> () {
-                application_user___authorization____refresh_access_token____deallocate(c_result);
+                application_user___authorization____refresh_access_token____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -3664,7 +3699,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut ApplicationUser__Authorization___RegisterByFirstStep___C_Result| -> () {
-                application_user___authorization____register_by_first_step____deallocate(c_result);
+                application_user___authorization____register_by_first_step____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -3692,7 +3727,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut ApplicationUser__Authorization___RegisterByFirstStep___C_Result| -> () {
-                application_user___authorization____register_by_first_step____deallocate(c_result);
+                application_user___authorization____register_by_first_step____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -3715,7 +3750,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut ApplicationUser__Authorization___RegisterByFirstStep___C_Result| -> () {
-                application_user___authorization____register_by_first_step____deallocate(c_result);
+                application_user___authorization____register_by_first_step____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -3736,7 +3771,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut ApplicationUser__Authorization___RegisterBySecondStep___C_Result| -> () {
-                application_user___authorization____register_by_second_step____deallocate(c_result);
+                application_user___authorization____register_by_second_step____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -3761,7 +3796,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut ApplicationUser__Authorization___RegisterBySecondStep___C_Result| -> () {
-                application_user___authorization____register_by_second_step____deallocate(c_result);
+                application_user___authorization____register_by_second_step____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -3805,7 +3840,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut ApplicationUser__Authorization___RegisterByLastStep___C_Result| -> () {
-                application_user___authorization____register_by_last_step____deallocate(c_result);
+                application_user___authorization____register_by_last_step____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -3831,7 +3866,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut ApplicationUser__Authorization___RegisterByLastStep___C_Result| -> () {
-                application_user___authorization____register_by_last_step____deallocate(c_result);
+                application_user___authorization____register_by_last_step____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -3851,7 +3886,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut ApplicationUser__Authorization___RegisterByLastStep___C_Result| -> () {
-                application_user___authorization____register_by_last_step____deallocate(c_result);
+                application_user___authorization____register_by_last_step____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -3895,7 +3930,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut ApplicationUser__Authorization___ResetPasswordByFirstStep___C_Result| -> () {
-                application_user___authorization____reset_password_by_first_step____deallocate(c_result);
+                application_user___authorization____reset_password_by_first_step____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -3924,7 +3959,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut ApplicationUser__Authorization___ResetPasswordByFirstStep___C_Result| -> () {
-                application_user___authorization____reset_password_by_first_step____deallocate(c_result);
+                application_user___authorization____reset_password_by_first_step____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -3947,7 +3982,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut ApplicationUser__Authorization___ResetPasswordByFirstStep___C_Result| -> () {
-                application_user___authorization____reset_password_by_first_step____deallocate(c_result);
+                application_user___authorization____reset_password_by_first_step____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -3968,7 +4003,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut ApplicationUser__Authorization___ResetPasswordBySecondStep___C_Result| -> () {
-                application_user___authorization____reset_password_by_second_step____deallocate(c_result);
+                application_user___authorization____reset_password_by_second_step____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -3993,7 +4028,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut ApplicationUser__Authorization___ResetPasswordBySecondStep___C_Result| -> () {
-                application_user___authorization____reset_password_by_second_step____deallocate(c_result);
+                application_user___authorization____reset_password_by_second_step____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -4037,7 +4072,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut ApplicationUser__Authorization___ResetPasswordByLastStep___C_Result| -> () {
-                application_user___authorization____reset_password_by_last_step____deallocate(c_result);
+                application_user___authorization____reset_password_by_last_step____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -4062,7 +4097,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut ApplicationUser__Authorization___ResetPasswordByLastStep___C_Result| -> () {
-                application_user___authorization____reset_password_by_last_step____deallocate(c_result);
+                application_user___authorization____reset_password_by_last_step____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -4104,7 +4139,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut ApplicationUser__Authorization___SendEmailForRegister___C_Result| -> () {
-                application_user___authorization____send_email_for_register____deallocate(c_result);
+                application_user___authorization____send_email_for_register____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -4129,7 +4164,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut ApplicationUser__Authorization___SendEmailForRegister___C_Result| -> () {
-                application_user___authorization____send_email_for_register____deallocate(c_result);
+                application_user___authorization____send_email_for_register____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -4149,7 +4184,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut ApplicationUser__Authorization___SendEmailForRegister___C_Result| -> () {
-                application_user___authorization____send_email_for_register____deallocate(c_result);
+                application_user___authorization____send_email_for_register____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -4189,7 +4224,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut ApplicationUser__Authorization___SendEmailForAuthorize___C_Result| -> () {
-                application_user___authorization____send_email_for_authorize____deallocate(c_result);
+                application_user___authorization____send_email_for_authorize____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -4214,7 +4249,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut ApplicationUser__Authorization___SendEmailForAuthorize___C_Result| -> () {
-                application_user___authorization____send_email_for_authorize____deallocate(c_result);
+                application_user___authorization____send_email_for_authorize____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -4234,7 +4269,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut ApplicationUser__Authorization___SendEmailForAuthorize___C_Result| -> () {
-                application_user___authorization____send_email_for_authorize____deallocate(c_result);
+                application_user___authorization____send_email_for_authorize____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -4274,7 +4309,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut ApplicationUser__Authorization___SendEmailForResetPassword___C_Result| -> () {
-                application_user___authorization____send_email_for_reset_password____deallocate(c_result);
+                application_user___authorization____send_email_for_reset_password____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -4299,7 +4334,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut ApplicationUser__Authorization___SendEmailForResetPassword___C_Result| -> () {
-                application_user___authorization____send_email_for_reset_password____deallocate(c_result);
+                application_user___authorization____send_email_for_reset_password____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -4319,7 +4354,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut ApplicationUser__Authorization___SendEmailForResetPassword___C_Result| -> () {
-                application_user___authorization____send_email_for_reset_password____deallocate(c_result);
+                application_user___authorization____send_email_for_reset_password____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -4361,7 +4396,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut Channel__Base___GetManyByNameInSubscriptions___C_Result| -> () {
-                channel___base____get_many_by_name_in_subscriptions____deallocate(c_result);
+                channel___base____get_many_by_name_in_subscriptions____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -4405,7 +4440,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut Channel__Base___GetManyByNameInSubscriptions___C_Result| -> () {
-                channel___base____get_many_by_name_in_subscriptions____deallocate(c_result);
+                channel___base____get_many_by_name_in_subscriptions____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -4425,7 +4460,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut Channel__Base___GetManyByNameInSubscriptions___C_Result| -> () {
-                channel___base____get_many_by_name_in_subscriptions____deallocate(c_result);
+                channel___base____get_many_by_name_in_subscriptions____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -4461,7 +4496,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut Channel__Base___GetManyBySubscription___C_Result| -> () {
-                channel___base____get_many_by_subscription____deallocate(c_result);
+                channel___base____get_many_by_subscription____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -4505,7 +4540,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut Channel__Base___GetManyBySubscription___C_Result| -> () {
-                channel___base____get_many_by_subscription____deallocate(c_result);
+                channel___base____get_many_by_subscription____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -4525,7 +4560,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut Channel__Base___GetManyBySubscription___C_Result| -> () {
-                channel___base____get_many_by_subscription____deallocate(c_result);
+                channel___base____get_many_by_subscription____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -4561,7 +4596,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut Channel__Base___GetManyPublicByName___C_Result| -> () {
-                channel___base____get_many_public_by_name____deallocate(c_result);
+                channel___base____get_many_public_by_name____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -4605,7 +4640,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut Channel__Base___GetManyPublicByName___C_Result| -> () {
-                channel___base____get_many_public_by_name____deallocate(c_result);
+                channel___base____get_many_public_by_name____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -4625,7 +4660,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut Channel__Base___GetManyPublicByName___C_Result| -> () {
-                channel___base____get_many_public_by_name____deallocate(c_result);
+                channel___base____get_many_public_by_name____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -4661,7 +4696,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut Channel__Base___GetOneById___C_Result| -> () {
-                channel___base____get_one_by_id____deallocate(c_result);
+                channel___base____get_one_by_id____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -4724,7 +4759,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut Channel__Base___GetOneById___C_Result| -> () {
-                channel___base____get_one_by_id____deallocate(c_result);
+                channel___base____get_one_by_id____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -4744,7 +4779,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut Channel__Base___GetOneById___C_Result| -> () {
-                channel___base____get_one_by_id____deallocate(c_result);
+                channel___base____get_one_by_id____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -4784,7 +4819,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut ChannelSubscription__Base___Create___C_Result| -> () {
-                channel_subscription___base____create____deallocate(c_result);
+                channel_subscription___base____create____deserialize____deallocate(c_result);
 
                 return ();
             };
@@ -4809,7 +4844,7 @@ mod deallocation {
             };
 
             let deallocator = move |c_result: *mut ChannelSubscription__Base___Create___C_Result| -> () {
-                channel_subscription___base____create____deallocate(c_result);
+                channel_subscription___base____create____deserialize____deallocate(c_result);
 
                 return ();
             };
