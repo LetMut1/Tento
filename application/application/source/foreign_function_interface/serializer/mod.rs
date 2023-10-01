@@ -3864,36 +3864,36 @@ mod test {
 
     mod deallocation {
         use super::*;
-        use entity::application_user::ApplicationUser_Id;
-        use entity::application_user_authorization_token::ApplicationUserAuthorizationToken_CanBeResentFrom;
-        use entity::application_user_authorization_token::ApplicationUserAuthorizationToken_WrongEnterTriesQuantity;
-        use entity::application_user_access_refresh_token_encrypted::ApplicationUserAccessRefreshTokenEncrypted;
-        use entity::application_user_access_token_encrypted::ApplicationUserAccessTokenEncrypted;
-        use entity::application_user_registration_token::ApplicationUserRegistrationToken_CanBeResentFrom;
-        use entity::application_user_registration_token::ApplicationUserRegistrationToken_WrongEnterTriesQuantity;
-        use entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_CanBeResentFrom;
-        use entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_WrongEnterTriesQuantity;
-        use entity::channel_outer_link::ChannelOuterLink_Address;
-        use entity::channel_outer_link::ChannelOuterLink_Alias;
-        use entity::channel::Channel_AccessModifier;
-        use entity::channel::Channel_BackgroundImagePath;
-        use entity::channel::Channel_CoverImagePath;
-        use entity::channel::Channel_Description;
-        use entity::channel::Channel_Id;
-        use entity::channel::Channel_LinkedName;
-        use entity::channel::Channel_MarksQuantity;
-        use entity::channel::Channel_Name;
-        use entity::channel::Channel_Orientation;
-        use entity::channel::Channel_SubscribersQuantity;
-        use entity::channel::Channel_ViewingQuantity;
-        use entity::channel::Channel_VisabilityModifier;
 
         const STRING_LITERAL: &'static str = "qwerty";
 
         mod server_response_data_deserialization {
             use super::*;
+            use entity::application_user::ApplicationUser_Id;
+            use entity::application_user_authorization_token::ApplicationUserAuthorizationToken_CanBeResentFrom;
+            use entity::application_user_authorization_token::ApplicationUserAuthorizationToken_WrongEnterTriesQuantity;
+            use entity::application_user_access_refresh_token_encrypted::ApplicationUserAccessRefreshTokenEncrypted;
+            use entity::application_user_access_token_encrypted::ApplicationUserAccessTokenEncrypted;
+            use entity::application_user_registration_token::ApplicationUserRegistrationToken_CanBeResentFrom;
+            use entity::application_user_registration_token::ApplicationUserRegistrationToken_WrongEnterTriesQuantity;
+            use entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_CanBeResentFrom;
+            use entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_WrongEnterTriesQuantity;
+            use entity::channel_outer_link::ChannelOuterLink_Address;
+            use entity::channel_outer_link::ChannelOuterLink_Alias;
+            use entity::channel::Channel_AccessModifier;
+            use entity::channel::Channel_BackgroundImagePath;
+            use entity::channel::Channel_CoverImagePath;
+            use entity::channel::Channel_Description;
+            use entity::channel::Channel_Id;
+            use entity::channel::Channel_LinkedName;
+            use entity::channel::Channel_MarksQuantity;
+            use entity::channel::Channel_Name;
+            use entity::channel::Channel_Orientation;
+            use entity::channel::Channel_SubscribersQuantity;
+            use entity::channel::Channel_ViewingQuantity;
+            use entity::channel::Channel_VisabilityModifier;
 
-            fn execute_by_templait<'a, T, E, A, D>(
+            fn run_by_template<'a, T, E, A, D>(
                 data: &'a T,
                 allocator: A,
                 deallocator: D,
@@ -3960,7 +3960,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -3989,7 +3989,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -4012,7 +4012,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -4033,7 +4033,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -4059,7 +4059,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -4079,7 +4079,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -4123,7 +4123,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -4148,7 +4148,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -4174,7 +4174,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -4199,7 +4199,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -4225,7 +4225,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -4250,7 +4250,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -4286,7 +4286,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -4311,7 +4311,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -4347,7 +4347,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -4373,7 +4373,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -4393,7 +4393,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -4429,7 +4429,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -4457,7 +4457,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -4480,7 +4480,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -4501,7 +4501,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -4526,7 +4526,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -4570,7 +4570,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -4596,7 +4596,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -4616,7 +4616,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -4660,7 +4660,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -4689,7 +4689,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -4712,7 +4712,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -4733,7 +4733,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -4758,7 +4758,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -4802,7 +4802,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -4827,7 +4827,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -4869,7 +4869,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -4894,7 +4894,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -4914,7 +4914,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -4954,7 +4954,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -4979,7 +4979,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -4999,7 +4999,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -5039,7 +5039,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -5064,7 +5064,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -5084,7 +5084,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -5126,7 +5126,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -5170,7 +5170,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -5190,7 +5190,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -5226,7 +5226,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -5270,7 +5270,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -5290,7 +5290,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -5326,7 +5326,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -5370,7 +5370,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -5390,7 +5390,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -5426,7 +5426,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -5489,7 +5489,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -5509,7 +5509,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -5549,7 +5549,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -5574,7 +5574,7 @@ mod test {
                         return ();
                     };
 
-                    return execute_by_templait(
+                    return run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
@@ -5605,6 +5605,79 @@ mod test {
         }
 
         mod server_request_data_serialization {
+            use super::*;
+
+            fn run_by_template<API, A, D>(
+                incoming: *mut API,
+                allocator: A,
+                deallocator: D,
+            ) -> Result<(), Box<dyn Error + 'static>>
+            where
+                API: Copy,
+                A: FnOnce(*mut API) -> *mut C_Result<C_Vector<c_uchar>>,
+                D: FnOnce(*mut C_Result<C_Vector<c_uchar>>) -> (),
+            {
+                let c_result = allocator(incoming);
+
+                let c_result_ = unsafe {
+                    *c_result
+                };
+
+                if !c_result_.is_data {
+                    return Err("Function inner error.".into());
+                }
+
+                deallocator(c_result);
+
+                if incoming.is_null() {
+                    return Err("The pointer must continue to point to the data.".into());
+                }
+
+                return Ok(());
+            }
+
+            #[test]
+            fn application_user___authorization____authorize_by_first_step() -> Result<(), Box<dyn Error + 'static>> {
+                let incoming = ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming {
+                    application_user_device_id: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    application_user_email_or_application_user_nickname: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    application_user_password: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                };
+
+                let incoming_ = Box::into_raw(
+                    Box::new(
+                        incoming
+                    )
+                );
+
+                let allocator = move |incoming: *mut ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
+                    return application_user___authorization____authorize_by_first_step____serialize(incoming);
+                };
+
+                let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
+                    application_user___authorization____authorize_by_first_step____serialize____deallocate(c_result);
+
+                    return ();
+                };
+
+                run_by_template(
+                    incoming_,
+                    allocator,
+                    deallocator
+                )?;
+
+                let incoming__  = unsafe {
+                    Box::from_raw(incoming_)
+                };
+
+                Allocator::<C_String>::deallocate(incoming__.application_user_device_id);
+
+                Allocator::<C_String>::deallocate(incoming__.application_user_email_or_application_user_nickname);
+
+                Allocator::<C_String>::deallocate(incoming__.application_user_password);
+
+                return Ok(());
+            }
         }
     }
 }
