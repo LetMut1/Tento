@@ -5601,8 +5601,8 @@ mod test {
         mod server_request_data_serialization {
             use super::*;
 
-            fn run_by_template<API, A, D>(
-                incoming: *mut API,
+            fn run_by_template<'a, API, A, D>(
+                incoming: &'a API,
                 allocator: A,
                 deallocator: D,
             ) -> Result<(), Box<dyn Error + 'static>>
@@ -5611,7 +5611,9 @@ mod test {
                 A: FnOnce(*mut API) -> *mut C_Result<C_Vector<c_uchar>>,
                 D: FnOnce(*mut C_Result<C_Vector<c_uchar>>) -> (),
             {
-                let c_result = allocator(incoming);
+                let incoming_ = (incoming as *const _) as *mut _;
+
+                let c_result = allocator(incoming_);
 
                 let c_result_ = unsafe {
                     *c_result
@@ -5623,7 +5625,7 @@ mod test {
 
                 deallocator(c_result);
 
-                if incoming.is_null() {
+                if incoming_.is_null() {
                     return Err("The pointer must continue to point to the data.".into());
                 }
 
@@ -5638,8 +5640,6 @@ mod test {
                     application_user_password: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
                 };
 
-                let incoming_ = ((&incoming) as *const _) as *mut _;
-
                 let allocator = move |incoming: *mut ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
                     return application_user___authorization____authorize_by_first_step____serialize(incoming);
                 };
@@ -5651,7 +5651,7 @@ mod test {
                 };
 
                 run_by_template(
-                    incoming_,
+                    &incoming,
                     allocator,
                     deallocator
                 )?;
@@ -5673,8 +5673,6 @@ mod test {
                     application_user_authorization_token_value: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
                 };
 
-                let incoming_ = ((&incoming) as *const _) as *mut _;
-
                 let allocator = move |incoming: *mut ApplicationUser__Authorization___AuthorizeByLastStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
                     return application_user___authorization____authorize_by_last_step____serialize(incoming);
                 };
@@ -5686,7 +5684,7 @@ mod test {
                 };
 
                 run_by_template(
-                    incoming_,
+                    &incoming,
                     allocator,
                     deallocator
                 )?;
