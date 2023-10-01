@@ -698,7 +698,7 @@ impl<T> C_Result<T> {
         };
     }
 
-    fn into_row(self) -> *mut Self {
+    fn into_raw(self) -> *mut Self {
         return Box::into_raw(
             Box::new(
                 self
@@ -979,7 +979,7 @@ impl Transformer<ServerResponseData> {
         APP2: Default,
     {
         if vector_of_bytes.is_null() {
-            return C_Result::error().into_row();
+            return C_Result::error().into_raw();
         }
 
         let vector_ = unsafe {
@@ -987,7 +987,7 @@ impl Transformer<ServerResponseData> {
         };
 
         if vector_.pointer.is_null() || vector_.length == 0 {
-            return C_Result::error().into_row();
+            return C_Result::error().into_raw();
         }
 
         let data = unsafe {
@@ -997,20 +997,20 @@ impl Transformer<ServerResponseData> {
         let unified_report = match Serializer_::deserialize::<'_, UnifiedReport<APO1, APP1>>(data) {
             Ok(unified_report_) => unified_report_,
             Err(_) => {
-                return C_Result::error().into_row();
+                return C_Result::error().into_raw();
             }
         };
 
         let c_unified_report = match converter(unified_report) {
             Ok(c_unified_report_) => c_unified_report_,
             Err(_) => {
-                return C_Result::error().into_row();
+                return C_Result::error().into_raw();
             }
         };
 
         let c_result = C_Result::data(c_unified_report);
 
-        return c_result.into_row();
+        return c_result.into_raw();
     }
 }
 
@@ -1025,7 +1025,7 @@ impl Transformer<ServerRequestData> {
         API2: Serialize,
     {
         if incoming.is_null() {
-            return C_Result::error().into_row();
+            return C_Result::error().into_raw();
         }
 
         let incoming_ = unsafe {
@@ -1035,14 +1035,14 @@ impl Transformer<ServerRequestData> {
         let incoming__ = match converter(incoming_) {
             Ok(incoming___) => incoming___,
             Err(_) => {
-                return C_Result::error().into_row();
+                return C_Result::error().into_raw();
             }
         };
 
         let data = match Serializer_::serialize(&incoming__) {
             Ok(data_) => data_,
             Err(_) => {
-                return C_Result::error().into_row();
+                return C_Result::error().into_raw();
             }
         };
 
@@ -1050,7 +1050,7 @@ impl Transformer<ServerRequestData> {
 
         let c_result = C_Result::data(c_vector);
 
-        return c_result.into_row();
+        return c_result.into_raw();
     }
 }
 
