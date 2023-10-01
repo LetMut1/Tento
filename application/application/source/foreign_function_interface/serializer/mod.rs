@@ -5678,6 +5678,47 @@ mod test {
 
                 return Ok(());
             }
+
+            #[test]
+            fn application_user___authorization____authorize_by_last_step() -> Result<(), Box<dyn Error + 'static>> {
+                let incoming = ApplicationUser__Authorization___AuthorizeByLastStep___Incoming {
+                    application_user_id: 0,
+                    application_user_device_id: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    application_user_authorization_token_value: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                };
+
+                let incoming_ = Box::into_raw(
+                    Box::new(
+                        incoming
+                    )
+                );
+
+                let allocator = move |incoming: *mut ApplicationUser__Authorization___AuthorizeByLastStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
+                    return application_user___authorization____authorize_by_last_step____serialize(incoming);
+                };
+
+                let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
+                    application_user___authorization____authorize_by_last_step____serialize____deallocate(c_result);
+
+                    return ();
+                };
+
+                run_by_template(
+                    incoming_,
+                    allocator,
+                    deallocator
+                )?;
+
+                let incoming__  = unsafe {
+                    Box::from_raw(incoming_)
+                };
+
+                Allocator::<C_String>::deallocate(incoming__.application_user_device_id);
+
+                Allocator::<C_String>::deallocate(incoming__.application_user_authorization_token_value);
+
+                return Ok(());
+            }
         }
     }
 }
