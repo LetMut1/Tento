@@ -912,6 +912,44 @@ impl<T> Allocator<C_Vector<T>> {
 }
 
 impl Allocator<C_Result<C_Vector<c_uchar>>> {
+    fn allocate<API1, F, API2>(
+        incoming: *mut API1,
+        converter: F,
+    ) -> *mut C_Result<C_Vector<c_uchar>>
+    where
+        API1: Copy,
+        F: FnOnce(API1) -> Result<API2, Box<dyn Error + 'static>>,
+        API2: Serialize,
+    {
+        if incoming.is_null() {
+            return C_Result::error().into_row();
+        }
+
+        let incoming_ = unsafe {
+            *incoming
+        };
+
+        let incoming__ = match converter(incoming_) {
+            Ok(incoming___) => incoming___,
+            Err(_) => {
+                return C_Result::error().into_row();
+            }
+        };
+
+        let data = match Serializer_::serialize(&incoming__) {
+            Ok(data_) => data_,
+            Err(_) => {
+                return C_Result::error().into_row();
+            }
+        };
+
+        let c_vector = Allocator::<C_Vector<_>>::allocate(data);
+
+        let c_result = C_Result::data(c_vector);
+
+        return c_result.into_row();
+    }
+
     fn deallocate(c_result: *mut C_Result<C_Vector<c_uchar>>) -> () {
         if c_result.is_null() {
             return ();
@@ -974,44 +1012,6 @@ impl Serilizer {
         };
 
         let c_result = C_Result::data(c_unified_report);
-
-        return c_result.into_row();
-    }
-
-    fn serialize<API1, F, API2>(                                    // TODO Allocator
-        incoming: *mut API1,
-        converter: F,
-    ) -> *mut C_Result<C_Vector<c_uchar>>
-    where
-        API1: Copy,
-        F: FnOnce(API1) -> Result<API2, Box<dyn Error + 'static>>,
-        API2: Serialize,
-    {
-        if incoming.is_null() {
-            return C_Result::error().into_row();
-        }
-
-        let incoming_ = unsafe {
-            *incoming
-        };
-
-        let incoming__ = match converter(incoming_) {
-            Ok(incoming___) => incoming___,
-            Err(_) => {
-                return C_Result::error().into_row();
-            }
-        };
-
-        let data = match Serializer_::serialize(&incoming__) {
-            Ok(data_) => data_,
-            Err(_) => {
-                return C_Result::error().into_row();
-            }
-        };
-
-        let c_vector = Allocator::<C_Vector<_>>::allocate(data);
-
-        let c_result = C_Result::data(c_vector);
 
         return c_result.into_row();
     }
@@ -1094,7 +1094,7 @@ pub extern "C" fn application_user___authorization____authorize_by_first_step___
         return Ok(incoming__);
     };
 
-    return Serilizer::serialize(incoming, converter);
+    return Allocator::<C_Result<C_Vector<c_uchar>>>::allocate(incoming, converter);
 }
 
 #[no_mangle]
