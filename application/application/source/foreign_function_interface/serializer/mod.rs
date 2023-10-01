@@ -3908,9 +3908,7 @@ mod test {
 
                 let c_vector = Allocator::<C_Vector<_>>::allocate(registry);
 
-                let c_vector_ = Box::into_raw(
-                    Box::new(c_vector)
-                );
+                let c_vector_ = ((&c_vector) as *const _) as *mut _;
 
                 let c_result = allocator(c_vector_);
 
@@ -3928,11 +3926,7 @@ mod test {
                     return Err("The pointer must continue to point to the data.".into());
                 }
 
-                let c_vector__ = unsafe {
-                    Box::from_raw(c_vector_)
-                };
-
-                Allocator::<C_Vector<_>>::deallocate(*c_vector__);
+                Allocator::<C_Vector<_>>::deallocate(c_vector);
 
                 return Ok(());
             }
@@ -5644,11 +5638,7 @@ mod test {
                     application_user_password: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
                 };
 
-                let incoming_ = Box::into_raw(
-                    Box::new(
-                        incoming
-                    )
-                );
+                let incoming_ = ((&incoming) as *const _) as *mut _;
 
                 let allocator = move |incoming: *mut ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
                     return application_user___authorization____authorize_by_first_step____serialize(incoming);
@@ -5666,15 +5656,11 @@ mod test {
                     deallocator
                 )?;
 
-                let incoming__  = unsafe {
-                    Box::from_raw(incoming_)
-                };
+                Allocator::<C_String>::deallocate(incoming.application_user_device_id);
 
-                Allocator::<C_String>::deallocate(incoming__.application_user_device_id);
+                Allocator::<C_String>::deallocate(incoming.application_user_email_or_application_user_nickname);
 
-                Allocator::<C_String>::deallocate(incoming__.application_user_email_or_application_user_nickname);
-
-                Allocator::<C_String>::deallocate(incoming__.application_user_password);
+                Allocator::<C_String>::deallocate(incoming.application_user_password);
 
                 return Ok(());
             }
@@ -5687,11 +5673,7 @@ mod test {
                     application_user_authorization_token_value: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
                 };
 
-                let incoming_ = Box::into_raw(
-                    Box::new(
-                        incoming
-                    )
-                );
+                let incoming_ = ((&incoming) as *const _) as *mut _;
 
                 let allocator = move |incoming: *mut ApplicationUser__Authorization___AuthorizeByLastStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
                     return application_user___authorization____authorize_by_last_step____serialize(incoming);
@@ -5709,13 +5691,9 @@ mod test {
                     deallocator
                 )?;
 
-                let incoming__  = unsafe {
-                    Box::from_raw(incoming_)
-                };
+                Allocator::<C_String>::deallocate(incoming.application_user_device_id);
 
-                Allocator::<C_String>::deallocate(incoming__.application_user_device_id);
-
-                Allocator::<C_String>::deallocate(incoming__.application_user_authorization_token_value);
+                Allocator::<C_String>::deallocate(incoming.application_user_authorization_token_value);
 
                 return Ok(());
             }
