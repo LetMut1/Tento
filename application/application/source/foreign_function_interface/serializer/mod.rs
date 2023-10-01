@@ -89,7 +89,7 @@
 // TODO cargo build --release --lib --target armv7-linux-androideabi
 
 // TODO access_modifier/visability_modifier посмотреть, как на бэкенде лежат в бд и отдаются. Здесь сделать структуру
-// TODO unit.tests
+// TODO можно ли сериализовать Incoming не со String, а со &str для подготовки converter, чтобы избежать аллокации в стринг. На большой стренге это будет сильно замедлять.
 
 
 
@@ -97,69 +97,98 @@
 
 
 
-use libc::c_int;
-use libc::c_short;
-use libc::c_long;
-use libc::c_double;
-use libc::c_uchar;
-use libc::c_char;
-use void::Void;
-use std::error::Error;
-use std::slice::from_raw_parts;
-use std::ffi::CString;
-use std::ffi::CStr;
-use std::slice;
-use std::mem::forget;
-use libc::size_t;
-use std::default::Default;
-use std::result::Result;
-use std::boxed::Box;
-use std::ptr;
-use serde::Deserialize;
-use unified_report::UnifiedReport;
-use std::marker::PhantomData;
-use action_processor_incoming_outcoming::action_processor::application_user___authorization::check_email_for_existing::Outcoming as ApplicationUser__Authorization___CheckEmailForExisting___Outcoming_;
-use action_processor_incoming_outcoming::action_processor::application_user___authorization::refresh_access_token::Outcoming as ApplicationUser__Authorization___RefreshAccessToken___Outcoming_;
-use action_processor_incoming_outcoming::action_processor::application_user___authorization::refresh_access_token::Precedent as ApplicationUser__Authorization___RefreshAccessToken___Precedent_;
-use action_processor_incoming_outcoming::action_processor::application_user___authorization::register_by_first_step::Outcoming as ApplicationUser__Authorization___RegisterByFirstStep___Outcoming_;
-use action_processor_incoming_outcoming::action_processor::application_user___authorization::register_by_first_step::Precedent as ApplicationUser__Authorization___RegisterByFirstStep___Precedent_;
-use action_processor_incoming_outcoming::action_processor::application_user___authorization::check_nickname_for_existing::Outcoming as ApplicationUser__Authorization___CheckNicknameForExisting___Outcoming_;
-use std::ptr::slice_from_raw_parts_mut;
-use unified_report::Data;
-use serde::Serialize;
-use message_pack_serializer::Serializer as Serializer_;
-use action_processor_incoming_outcoming::action_processor::application_user___authorization::authorize_by_last_step::Outcoming as ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming_;
-use action_processor_incoming_outcoming::action_processor::application_user___authorization::authorize_by_last_step::Precedent as ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::authorize_by_first_step::Incoming as ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming_;
 use action_processor_incoming_outcoming::action_processor::application_user___authorization::authorize_by_first_step::Outcoming as ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming_;
 use action_processor_incoming_outcoming::action_processor::application_user___authorization::authorize_by_first_step::Precedent as ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::authorize_by_last_step::Incoming as ApplicationUser__Authorization___AuthorizeByLastStep___Incoming_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::authorize_by_last_step::Outcoming as ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::authorize_by_last_step::Precedent as ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::check_email_for_existing::Incoming as ApplicationUser__Authorization___CheckEmailForExisting___Incoming_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::check_email_for_existing::Outcoming as ApplicationUser__Authorization___CheckEmailForExisting___Outcoming_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::check_nickname_for_existing::Incoming as ApplicationUser__Authorization___CheckNicknameForExisting___Incoming_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::check_nickname_for_existing::Outcoming as ApplicationUser__Authorization___CheckNicknameForExisting___Outcoming_;
 use action_processor_incoming_outcoming::action_processor::application_user___authorization::deauthorize_from_all_devices::Precedent as ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::deauthorize_from_all_devices::Incoming as ApplicationUser__Authorization___DeauthorizeFromAllDevices___Incoming_;
 use action_processor_incoming_outcoming::action_processor::application_user___authorization::deauthorize_from_one_device::Precedent as ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent_;
-use action_processor_incoming_outcoming::action_processor::application_user___authorization::register_by_second_step::Precedent as ApplicationUser__Authorization___RegisterBySecondStep___Precedent_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::deauthorize_from_one_device::Incoming as ApplicationUser__Authorization___DeauthorizeFromOneDevice___Incoming_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::refresh_access_token::Outcoming as ApplicationUser__Authorization___RefreshAccessToken___Outcoming_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::refresh_access_token::Precedent as ApplicationUser__Authorization___RefreshAccessToken___Precedent_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::refresh_access_token::Incoming as ApplicationUser__Authorization___RefreshAccessToken___Incoming_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::register_by_first_step::Outcoming as ApplicationUser__Authorization___RegisterByFirstStep___Outcoming_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::register_by_first_step::Precedent as ApplicationUser__Authorization___RegisterByFirstStep___Precedent_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::register_by_first_step::Incoming as ApplicationUser__Authorization___RegisterByFirstStep___Incoming_;
 use action_processor_incoming_outcoming::action_processor::application_user___authorization::register_by_last_step::Outcoming as ApplicationUser__Authorization___RegisterByLastStep___Outcoming_;
 use action_processor_incoming_outcoming::action_processor::application_user___authorization::register_by_last_step::Precedent as ApplicationUser__Authorization___RegisterByLastStep___Precedent_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::register_by_last_step::Incoming as ApplicationUser__Authorization___RegisterByLastStep___Incoming_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::register_by_second_step::Precedent as ApplicationUser__Authorization___RegisterBySecondStep___Precedent_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::register_by_second_step::Incoming as ApplicationUser__Authorization___RegisterBySecondStep___Incoming_;
 use action_processor_incoming_outcoming::action_processor::application_user___authorization::reset_password_by_first_step::Outcoming as ApplicationUser__Authorization___ResetPasswordByFirstStep___Outcoming_;
 use action_processor_incoming_outcoming::action_processor::application_user___authorization::reset_password_by_first_step::Precedent as ApplicationUser__Authorization___ResetPasswordByFirstStep___Precedent_;
-use action_processor_incoming_outcoming::action_processor::application_user___authorization::reset_password_by_second_step::Precedent as ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::reset_password_by_first_step::Incoming as ApplicationUser__Authorization___ResetPasswordByFirstStep___Incoming_;
 use action_processor_incoming_outcoming::action_processor::application_user___authorization::reset_password_by_last_step::Precedent as ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_;
-use action_processor_incoming_outcoming::action_processor::application_user___authorization::send_email_for_register::Outcoming as ApplicationUser__Authorization___SendEmailForRegister___Outcoming_;
-use action_processor_incoming_outcoming::action_processor::application_user___authorization::send_email_for_register::Precedent as ApplicationUser__Authorization___SendEmailForRegister___Precedent_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::reset_password_by_last_step::Incoming as ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::reset_password_by_second_step::Precedent as ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::reset_password_by_second_step::Incoming as ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming_;
 use action_processor_incoming_outcoming::action_processor::application_user___authorization::send_email_for_authorize::Outcoming as ApplicationUser__Authorization___SendEmailForAuthorize___Outcoming_;
 use action_processor_incoming_outcoming::action_processor::application_user___authorization::send_email_for_authorize::Precedent as ApplicationUser__Authorization___SendEmailForAuthorize___Precedent_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::send_email_for_authorize::Incoming as ApplicationUser__Authorization___SendEmailForAuthorize___Incoming_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::send_email_for_register::Outcoming as ApplicationUser__Authorization___SendEmailForRegister___Outcoming_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::send_email_for_register::Precedent as ApplicationUser__Authorization___SendEmailForRegister___Precedent_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::send_email_for_register::Incoming as ApplicationUser__Authorization___SendEmailForRegister___Incoming_;
 use action_processor_incoming_outcoming::action_processor::application_user___authorization::send_email_for_reset_password::Outcoming as ApplicationUser__Authorization___SendEmailForResetPassword___Outcoming_;
 use action_processor_incoming_outcoming::action_processor::application_user___authorization::send_email_for_reset_password::Precedent as ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_;
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::send_email_for_reset_password::Incoming as ApplicationUser__Authorization___SendEmailForResetPassword___Incoming_;
 use action_processor_incoming_outcoming::action_processor::channel___base::get_many_by_name_in_subscriptions::Outcoming as Channel__Base___GetManyByNameInSubscriptions___Outcoming_;
 use action_processor_incoming_outcoming::action_processor::channel___base::get_many_by_name_in_subscriptions::Precedent as Channel__Base___GetManyByNameInSubscriptions___Precedent_;
+use action_processor_incoming_outcoming::action_processor::channel___base::get_many_by_name_in_subscriptions::Incoming as Channel__Base___GetManyByNameInSubscriptions___Incoming_;
 use action_processor_incoming_outcoming::action_processor::channel___base::get_many_by_subscription::Outcoming as Channel__Base___GetManyBySubscription___Outcoming_;
 use action_processor_incoming_outcoming::action_processor::channel___base::get_many_by_subscription::Precedent as Channel__Base___GetManyBySubscription___Precedent_;
+use action_processor_incoming_outcoming::action_processor::channel___base::get_many_by_subscription::Incoming as Channel__Base___GetManyBySubscription___Incoming_;
 use action_processor_incoming_outcoming::action_processor::channel___base::get_many_public_by_name::Outcoming as Channel__Base___GetManyPublicByName___Outcoming_;
 use action_processor_incoming_outcoming::action_processor::channel___base::get_many_public_by_name::Precedent as Channel__Base___GetManyPublicByName___Precedent_;
+use action_processor_incoming_outcoming::action_processor::channel___base::get_many_public_by_name::Incoming as Channel__Base___GetManyPublicByName___Incoming_;
 use action_processor_incoming_outcoming::action_processor::channel___base::get_one_by_id::Outcoming as Channel__Base___GetOneById___Outcoming_;
 use action_processor_incoming_outcoming::action_processor::channel___base::get_one_by_id::Precedent as Channel__Base___GetOneById___Precedent_;
+use action_processor_incoming_outcoming::action_processor::channel___base::get_one_by_id::Incoming as Channel__Base___GetOneById___Incoming_;
 use action_processor_incoming_outcoming::action_processor::channel_subscription___base::create::Precedent as ChannelSubscription__Base___Create___Precedent_;
-use action_processor_incoming_outcoming::action_processor::application_user___authorization::authorize_by_first_step::Incoming as ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming_;
-use entity::application_user::ApplicationUser_Id;
-use entity::application_user::ApplicationUser_Password;
+use action_processor_incoming_outcoming::action_processor::channel_subscription___base::create::Incoming as ChannelSubscription__Base___Create___Incoming_;
+use entity::application_user_authorization_token::ApplicationUserAuthorizationToken_Value;
 use entity::application_user_device::ApplicationUserDevice_Id;
+use entity::application_user_access_token_encrypted::ApplicationUserAccessTokenEncrypted;
+use entity::application_user::ApplicationUser_Email;
+use entity::application_user::ApplicationUser_Id;
+use entity::application_user::ApplicationUser_Nickname;
+use entity::application_user::ApplicationUser_Password;
+use entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_Value;
+use libc::c_char;
+use entity::application_user_registration_token::ApplicationUserRegistrationToken_Value;
+use libc::c_double;
+use libc::c_int;
+use entity::channel::Channel_Name;
+use libc::c_long;
+use libc::c_short;
+use libc::c_uchar;
+use entity::application_user_access_refresh_token_encrypted::ApplicationUserAccessRefreshTokenEncrypted;
+use libc::size_t;
+use message_pack_serializer::Serializer as Serializer_;
+use serde::Deserialize;
+use serde::Serialize;
+use entity::channel::Channel_Id;
+use std::boxed::Box;
+use std::default::Default;
+use std::error::Error;
+use std::ffi::CStr;
+use std::ffi::CString;
+use std::marker::PhantomData;
+use std::mem::forget;
+use std::ptr;
+use std::ptr::slice_from_raw_parts_mut;
+use std::result::Result;
+use std::slice;
+use std::slice::from_raw_parts;
+use unified_report::Data;
+use unified_report::UnifiedReport;
+use void::Void;
 
 
 
@@ -901,7 +930,7 @@ impl<T> Allocator<C_Vector<T>> {
             return ();
         }
 
-        let pointer = slice_from_raw_parts_mut(c_vector.pointer, c_vector.length );
+        let pointer = slice_from_raw_parts_mut(c_vector.pointer, c_vector.length);
 
         let _ = unsafe {
             Box::from_raw(pointer)
@@ -1087,19 +1116,13 @@ pub extern "C" fn application_user___authorization____authorize_by_first_step___
     incoming: *mut ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming| -> Result<ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming_, Box<dyn Error + 'static>> {
-        let application_user_device_id = incoming.application_user_device_id.to_string()?;
-
-        let application_user_email_or_application_user_nickname = incoming.application_user_email_or_application_user_nickname.to_string()?;
-
-        let application_user_password = incoming.application_user_password.to_string()?;
-
-        let incoming__ = ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming_ {
-            application_user_device_id: ApplicationUserDevice_Id(application_user_device_id),
-            application_user_email_or_application_user_nickname,
-            application_user_password: ApplicationUser_Password(application_user_password),
+        let incoming_ = ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming_ {
+            application_user_device_id: ApplicationUserDevice_Id(incoming.application_user_device_id.to_string()?),
+            application_user_email_or_application_user_nickname: incoming.application_user_email_or_application_user_nickname.to_string()?,
+            application_user_password: ApplicationUser_Password(incoming.application_user_password.to_string()?),
         };
 
-        return Ok(incoming__);
+        return Ok(incoming_);
     };
 
     return Transformer::<ServerRequestData>::transform(incoming, converter);
@@ -1189,6 +1212,40 @@ pub extern "C" fn application_user___authorization____authorize_by_first_step___
     let _ = unsafe {
         Box::from_raw(c_result)
     };
+
+    return ();
+}
+
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct ApplicationUser__Authorization___AuthorizeByLastStep___Incoming {
+    pub application_user_id: c_long,
+    pub application_user_device_id: C_String,
+    pub application_user_authorization_token_value: C_String,
+}
+
+#[no_mangle]
+pub extern "C" fn application_user___authorization____authorize_by_last_step____serialize(
+    incoming: *mut ApplicationUser__Authorization___AuthorizeByLastStep___Incoming
+) -> *mut C_Result<C_Vector<c_uchar>> {
+    let converter = move |incoming: ApplicationUser__Authorization___AuthorizeByLastStep___Incoming| -> Result<ApplicationUser__Authorization___AuthorizeByLastStep___Incoming_, Box<dyn Error + 'static>> {
+        let incoming_ = ApplicationUser__Authorization___AuthorizeByLastStep___Incoming_ {
+            application_user_id: ApplicationUser_Id(incoming.application_user_id),
+            application_user_device_id: ApplicationUserDevice_Id(incoming.application_user_device_id.to_string()?),
+            application_user_authorization_token_value: ApplicationUserAuthorizationToken_Value(incoming.application_user_authorization_token_value.to_string()?),
+        };
+
+        return Ok(incoming_);
+    };
+
+    return Transformer::<ServerRequestData>::transform(incoming, converter);
+}
+
+#[no_mangle]
+pub extern "C" fn application_user___authorization____authorize_by_last_step____serialize____deallocate(
+    c_result: *mut C_Result<C_Vector<c_uchar>>
+) -> () {
+    Allocator::<C_Result<C_Vector<c_uchar>>>::deallocate(c_result);
 
     return ();
 }
@@ -1307,6 +1364,36 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
     return ();
 }
 
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct ApplicationUser__Authorization___CheckEmailForExisting___Incoming {
+    pub application_user_email: C_String,
+}
+
+#[no_mangle]
+pub extern "C" fn application_user___authorization____check_email_for_existing____serialize(
+    incoming: *mut ApplicationUser__Authorization___CheckEmailForExisting___Incoming
+) -> *mut C_Result<C_Vector<c_uchar>> {
+    let converter = move |incoming: ApplicationUser__Authorization___CheckEmailForExisting___Incoming| -> Result<ApplicationUser__Authorization___CheckEmailForExisting___Incoming_, Box<dyn Error + 'static>> {
+        let incoming_ = ApplicationUser__Authorization___CheckEmailForExisting___Incoming_ {
+            application_user_email: ApplicationUser_Email(incoming.application_user_email.to_string()?),
+        };
+
+        return Ok(incoming_);
+    };
+
+    return Transformer::<ServerRequestData>::transform(incoming, converter);
+}
+
+#[no_mangle]
+pub extern "C" fn application_user___authorization____check_email_for_existing____serialize____deallocate(
+    c_result: *mut C_Result<C_Vector<c_uchar>>
+) -> () {
+    Allocator::<C_Result<C_Vector<c_uchar>>>::deallocate(c_result);
+
+    return ();
+}
+
 type ApplicationUser__Authorization___CheckEmailForExisting___C_Result = C_Result<C_UnifiedReport<ApplicationUser__Authorization___CheckEmailForExisting___Outcoming, C_Void>>;
 
 #[repr(C)]
@@ -1363,6 +1450,36 @@ pub extern "C" fn application_user___authorization____check_email_for_existing__
     return ();
 }
 
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct ApplicationUser__Authorization___CheckNicknameForExisting___Incoming {
+    pub application_user_nickname: C_String,
+}
+
+#[no_mangle]
+pub extern "C" fn application_user___authorization____check_nickname_for_existing____serialize(
+    incoming: *mut ApplicationUser__Authorization___CheckNicknameForExisting___Incoming
+) -> *mut C_Result<C_Vector<c_uchar>> {
+    let converter = move |incoming: ApplicationUser__Authorization___CheckNicknameForExisting___Incoming| -> Result<ApplicationUser__Authorization___CheckNicknameForExisting___Incoming_, Box<dyn Error + 'static>> {
+        let incoming_ = ApplicationUser__Authorization___CheckNicknameForExisting___Incoming_ {
+            application_user_nickname: ApplicationUser_Nickname(incoming.application_user_nickname.to_string()?),
+        };
+
+        return Ok(incoming_);
+    };
+
+    return Transformer::<ServerRequestData>::transform(incoming, converter);
+}
+
+#[no_mangle]
+pub extern "C" fn application_user___authorization____check_nickname_for_existing____serialize____deallocate(
+    c_result: *mut C_Result<C_Vector<c_uchar>>
+) -> () {
+    Allocator::<C_Result<C_Vector<c_uchar>>>::deallocate(c_result);
+
+    return ();
+}
+
 type ApplicationUser__Authorization___CheckNicknameForExisting___C_Result = C_Result<C_UnifiedReport<ApplicationUser__Authorization___CheckNicknameForExisting___Outcoming, C_Void>>;
 
 #[repr(C)]
@@ -1415,6 +1532,36 @@ pub extern "C" fn application_user___authorization____check_nickname_for_existin
     let _ = unsafe {
         Box::from_raw(c_result)
     };
+
+    return ();
+}
+
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct ApplicationUser__Authorization___DeauthorizeFromAllDevices___Incoming {
+    pub application_user_access_token_encrypted: C_String,
+}
+
+#[no_mangle]
+pub extern "C" fn application_user___authorization____deauthorize_from_all_devices____serialize(
+    incoming: *mut ApplicationUser__Authorization___DeauthorizeFromAllDevices___Incoming
+) -> *mut C_Result<C_Vector<c_uchar>> {
+    let converter = move |incoming: ApplicationUser__Authorization___DeauthorizeFromAllDevices___Incoming| -> Result<ApplicationUser__Authorization___DeauthorizeFromAllDevices___Incoming_, Box<dyn Error + 'static>> {
+        let incoming_ = ApplicationUser__Authorization___DeauthorizeFromAllDevices___Incoming_ {
+            application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted(incoming.application_user_access_token_encrypted.to_string()?),
+        };
+
+        return Ok(incoming_);
+    };
+
+    return Transformer::<ServerRequestData>::transform(incoming, converter);
+}
+
+#[no_mangle]
+pub extern "C" fn application_user___authorization____deauthorize_from_all_devices____serialize____deallocate(
+    c_result: *mut C_Result<C_Vector<c_uchar>>
+) -> () {
+    Allocator::<C_Result<C_Vector<c_uchar>>>::deallocate(c_result);
 
     return ();
 }
@@ -1496,6 +1643,36 @@ pub struct ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent
     pub application_user_access_token__in_application_user_access_token_black_list: bool,
 }
 
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct ApplicationUser__Authorization___DeauthorizeFromOneDevice___Incoming {
+    pub application_user_access_token_encrypted: C_String,
+}
+
+#[no_mangle]
+pub extern "C" fn application_user___authorization____deauthorize_from_one_device____serialize(
+    incoming: *mut ApplicationUser__Authorization___DeauthorizeFromOneDevice___Incoming
+) -> *mut C_Result<C_Vector<c_uchar>> {
+    let converter = move |incoming: ApplicationUser__Authorization___DeauthorizeFromOneDevice___Incoming| -> Result<ApplicationUser__Authorization___DeauthorizeFromOneDevice___Incoming_, Box<dyn Error + 'static>> {
+        let incoming_ = ApplicationUser__Authorization___DeauthorizeFromOneDevice___Incoming_ {
+            application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted(incoming.application_user_access_token_encrypted.to_string()?),
+        };
+
+        return Ok(incoming_);
+    };
+
+    return Transformer::<ServerRequestData>::transform(incoming, converter);
+}
+
+#[no_mangle]
+pub extern "C" fn application_user___authorization____deauthorize_from_one_device____serialize____deallocate(
+    c_result: *mut C_Result<C_Vector<c_uchar>>
+) -> () {
+    Allocator::<C_Result<C_Vector<c_uchar>>>::deallocate(c_result);
+
+    return ();
+}
+
 #[no_mangle]
 pub extern "C" fn application_user___authorization____deauthorize_from_one_device____deserialize(
     vector_of_bytes: *mut C_Vector<c_uchar>,
@@ -1551,6 +1728,38 @@ pub extern "C" fn application_user___authorization____deauthorize_from_one_devic
     let _ = unsafe {
         Box::from_raw(c_result)
     };
+
+    return ();
+}
+
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct ApplicationUser__Authorization___RefreshAccessToken___Incoming {
+    pub application_user_access_token_encrypted: C_String,
+    pub application_user_access_refresh_token_encrypted: C_String,
+}
+
+#[no_mangle]
+pub extern "C" fn application_user___authorization____refresh_access_token____serialize(
+    incoming: *mut ApplicationUser__Authorization___RefreshAccessToken___Incoming
+) -> *mut C_Result<C_Vector<c_uchar>> {
+    let converter = move |incoming: ApplicationUser__Authorization___RefreshAccessToken___Incoming| -> Result<ApplicationUser__Authorization___RefreshAccessToken___Incoming_, Box<dyn Error + 'static>> {
+        let incoming_ = ApplicationUser__Authorization___RefreshAccessToken___Incoming_ {
+            application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted(incoming.application_user_access_token_encrypted.to_string()?),
+            application_user_access_refresh_token_encrypted: ApplicationUserAccessRefreshTokenEncrypted(incoming.application_user_access_refresh_token_encrypted.to_string()?),
+        };
+
+        return Ok(incoming_);
+    };
+
+    return Transformer::<ServerRequestData>::transform(incoming, converter);
+}
+
+#[no_mangle]
+pub extern "C" fn application_user___authorization____refresh_access_token____serialize____deallocate(
+    c_result: *mut C_Result<C_Vector<c_uchar>>
+) -> () {
+    Allocator::<C_Result<C_Vector<c_uchar>>>::deallocate(c_result);
 
     return ();
 }
@@ -1645,6 +1854,38 @@ pub extern "C" fn application_user___authorization____refresh_access_token____de
     return ();
 }
 
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct ApplicationUser__Authorization___RegisterByFirstStep___Incoming {
+    pub application_user_email: C_String,
+    pub application_user_device_id: C_String,
+}
+
+#[no_mangle]
+pub extern "C" fn application_user___authorization____register_by_first_step____serialize(
+    incoming: *mut ApplicationUser__Authorization___RegisterByFirstStep___Incoming
+) -> *mut C_Result<C_Vector<c_uchar>> {
+    let converter = move |incoming: ApplicationUser__Authorization___RegisterByFirstStep___Incoming| -> Result<ApplicationUser__Authorization___RegisterByFirstStep___Incoming_, Box<dyn Error + 'static>> {
+        let incoming_ = ApplicationUser__Authorization___RegisterByFirstStep___Incoming_ {
+            application_user_email: ApplicationUser_Email(incoming.application_user_email.to_string()?),
+            application_user_device_id: ApplicationUserDevice_Id(incoming.application_user_device_id.to_string()?),
+        };
+
+        return Ok(incoming_);
+    };
+
+    return Transformer::<ServerRequestData>::transform(incoming, converter);
+}
+
+#[no_mangle]
+pub extern "C" fn application_user___authorization____register_by_first_step____serialize____deallocate(
+    c_result: *mut C_Result<C_Vector<c_uchar>>
+) -> () {
+    Allocator::<C_Result<C_Vector<c_uchar>>>::deallocate(c_result);
+
+    return ();
+}
+
 type ApplicationUser__Authorization___RegisterByFirstStep___C_Result = C_Result<C_UnifiedReport<ApplicationUser__Authorization___RegisterByFirstStep___Outcoming, ApplicationUser__Authorization___RegisterByFirstStep___Precedent>>;
 
 #[repr(C)]
@@ -1717,6 +1958,40 @@ pub extern "C" fn application_user___authorization____register_by_first_step____
     let _ = unsafe {
         Box::from_raw(c_result)
     };
+
+    return ();
+}
+
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct ApplicationUser__Authorization___RegisterBySecondStep___Incoming {
+    pub application_user_email: C_String,
+    pub application_user_device_id: C_String,
+    pub application_user_registration_token_value: C_String,
+}
+
+#[no_mangle]
+pub extern "C" fn application_user___authorization____register_by_second_step____serialize(
+    incoming: *mut ApplicationUser__Authorization___RegisterBySecondStep___Incoming
+) -> *mut C_Result<C_Vector<c_uchar>> {
+    let converter = move |incoming: ApplicationUser__Authorization___RegisterBySecondStep___Incoming| -> Result<ApplicationUser__Authorization___RegisterBySecondStep___Incoming_, Box<dyn Error + 'static>> {
+        let incoming_ = ApplicationUser__Authorization___RegisterBySecondStep___Incoming_ {
+            application_user_email: ApplicationUser_Email(incoming.application_user_email.to_string()?),
+            application_user_device_id: ApplicationUserDevice_Id(incoming.application_user_device_id.to_string()?),
+            application_user_registration_token_value: ApplicationUserRegistrationToken_Value(incoming.application_user_registration_token_value.to_string()?),
+        };
+
+        return Ok(incoming_);
+    };
+
+    return Transformer::<ServerRequestData>::transform(incoming, converter);
+}
+
+#[no_mangle]
+pub extern "C" fn application_user___authorization____register_by_second_step____serialize____deallocate(
+    c_result: *mut C_Result<C_Vector<c_uchar>>
+) -> () {
+    Allocator::<C_Result<C_Vector<c_uchar>>>::deallocate(c_result);
 
     return ();
 }
@@ -1809,6 +2084,44 @@ pub extern "C" fn application_user___authorization____register_by_second_step___
     let _ = unsafe {
         Box::from_raw(c_result)
     };
+
+    return ();
+}
+
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct ApplicationUser__Authorization___RegisterByLastStep___Incoming {
+    pub application_user_device_id: C_String,
+    pub application_user_nickname: C_String,
+    pub application_user_password: C_String,
+    pub application_user_email: C_String,
+    pub application_user_registration_token_value: C_String,
+}
+
+#[no_mangle]
+pub extern "C" fn application_user___authorization____register_by_last_step____serialize(
+    incoming: *mut ApplicationUser__Authorization___RegisterByLastStep___Incoming
+) -> *mut C_Result<C_Vector<c_uchar>> {
+    let converter = move |incoming: ApplicationUser__Authorization___RegisterByLastStep___Incoming| -> Result<ApplicationUser__Authorization___RegisterByLastStep___Incoming_, Box<dyn Error + 'static>> {
+        let incoming_ = ApplicationUser__Authorization___RegisterByLastStep___Incoming_ {
+            application_user_device_id: ApplicationUserDevice_Id(incoming.application_user_device_id.to_string()?),
+            application_user_email: ApplicationUser_Email(incoming.application_user_email.to_string()?),
+            application_user_nickname: ApplicationUser_Nickname(incoming.application_user_nickname.to_string()?),
+            application_user_password: ApplicationUser_Password(incoming.application_user_password.to_string()?),
+            application_user_registration_token_value: ApplicationUserRegistrationToken_Value(incoming.application_user_registration_token_value.to_string()?),
+        };
+
+        return Ok(incoming_);
+    };
+
+    return Transformer::<ServerRequestData>::transform(incoming, converter);
+}
+
+#[no_mangle]
+pub extern "C" fn application_user___authorization____register_by_last_step____serialize____deallocate(
+    c_result: *mut C_Result<C_Vector<c_uchar>>
+) -> () {
+    Allocator::<C_Result<C_Vector<c_uchar>>>::deallocate(c_result);
 
     return ();
 }
@@ -1931,6 +2244,38 @@ pub extern "C" fn application_user___authorization____register_by_last_step____d
     return ();
 }
 
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct ApplicationUser__Authorization___ResetPasswordByFirstStep___Incoming {
+    pub application_user_email: C_String,
+    pub application_user_device_id: C_String,
+}
+
+#[no_mangle]
+pub extern "C" fn application_user___authorization____reset_password_by_first_step____serialize(
+    incoming: *mut ApplicationUser__Authorization___ResetPasswordByFirstStep___Incoming
+) -> *mut C_Result<C_Vector<c_uchar>> {
+    let converter = move |incoming: ApplicationUser__Authorization___ResetPasswordByFirstStep___Incoming| -> Result<ApplicationUser__Authorization___ResetPasswordByFirstStep___Incoming_, Box<dyn Error + 'static>> {
+        let incoming_ = ApplicationUser__Authorization___ResetPasswordByFirstStep___Incoming_ {
+            application_user_email: ApplicationUser_Email(incoming.application_user_email.to_string()?),
+            application_user_device_id: ApplicationUserDevice_Id(incoming.application_user_device_id.to_string()?),
+        };
+
+        return Ok(incoming_);
+    };
+
+    return Transformer::<ServerRequestData>::transform(incoming, converter);
+}
+
+#[no_mangle]
+pub extern "C" fn application_user___authorization____reset_password_by_first_step____serialize____deallocate(
+    c_result: *mut C_Result<C_Vector<c_uchar>>
+) -> () {
+    Allocator::<C_Result<C_Vector<c_uchar>>>::deallocate(c_result);
+
+    return ();
+}
+
 type ApplicationUser__Authorization___ResetPasswordByFirstStep___C_Result = C_Result<C_UnifiedReport<ApplicationUser__Authorization___ResetPasswordByFirstStep___Outcoming, ApplicationUser__Authorization___ResetPasswordByFirstStep___Precedent>>;
 
 #[repr(C)]
@@ -2005,6 +2350,40 @@ pub extern "C" fn application_user___authorization____reset_password_by_first_st
     let _ = unsafe {
         Box::from_raw(c_result)
     };
+
+    return ();
+}
+
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming {
+    pub application_user_id: c_long,
+    pub application_user_device_id: C_String,
+    pub application_user_reset_password_token_value: C_String,
+}
+
+#[no_mangle]
+pub extern "C" fn application_user___authorization____reset_password_by_second_step____serialize(
+    incoming: *mut ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming
+) -> *mut C_Result<C_Vector<c_uchar>> {
+    let converter = move |incoming: ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming| -> Result<ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming_, Box<dyn Error + 'static>> {
+        let incoming_ = ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming_ {
+            application_user_id: ApplicationUser_Id(incoming.application_user_id),
+            application_user_device_id: ApplicationUserDevice_Id(incoming.application_user_device_id.to_string()?),
+            application_user_reset_password_token_value: ApplicationUserResetPasswordToken_Value(incoming.application_user_reset_password_token_value.to_string()?),
+        };
+
+        return Ok(incoming_);
+    };
+
+    return Transformer::<ServerRequestData>::transform(incoming, converter);
+}
+
+#[no_mangle]
+pub extern "C" fn application_user___authorization____reset_password_by_second_step____serialize____deallocate(
+    c_result: *mut C_Result<C_Vector<c_uchar>>
+) -> () {
+    Allocator::<C_Result<C_Vector<c_uchar>>>::deallocate(c_result);
 
     return ();
 }
@@ -2101,6 +2480,42 @@ pub extern "C" fn application_user___authorization____reset_password_by_second_s
     return ();
 }
 
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming {
+    pub application_user_id: c_long,
+    pub application_user_device_id: C_String,
+    pub application_user_password: C_String,
+    pub application_user_reset_password_token_value: C_String,
+}
+
+#[no_mangle]
+pub extern "C" fn application_user___authorization____reset_password_by_last_step____serialize(
+    incoming: *mut ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming
+) -> *mut C_Result<C_Vector<c_uchar>> {
+    let converter = move |incoming: ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming| -> Result<ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming_, Box<dyn Error + 'static>> {
+        let incoming_ = ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming_ {
+            application_user_id: ApplicationUser_Id(incoming.application_user_id),
+            application_user_device_id: ApplicationUserDevice_Id(incoming.application_user_device_id.to_string()?),
+            application_user_password: ApplicationUser_Password(incoming.application_user_password.to_string()?),
+            application_user_reset_password_token_value: ApplicationUserResetPasswordToken_Value(incoming.application_user_reset_password_token_value.to_string()?),
+        };
+
+        return Ok(incoming_);
+    };
+
+    return Transformer::<ServerRequestData>::transform(incoming, converter);
+}
+
+#[no_mangle]
+pub extern "C" fn application_user___authorization____reset_password_by_last_step____serialize____deallocate(
+    c_result: *mut C_Result<C_Vector<c_uchar>>
+) -> () {
+    Allocator::<C_Result<C_Vector<c_uchar>>>::deallocate(c_result);
+
+    return ();
+}
+
 type ApplicationUser__Authorization___ResetPasswordByLastStep___C_Result = C_Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent>>;
 
 #[repr(C)]
@@ -2186,6 +2601,38 @@ pub extern "C" fn application_user___authorization____reset_password_by_last_ste
     let _ = unsafe {
         Box::from_raw(c_result)
     };
+
+    return ();
+}
+
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct ApplicationUser__Authorization___SendEmailForRegister___Incoming {
+    pub application_user_email: C_String,
+    pub application_user_device_id: C_String,
+}
+
+#[no_mangle]
+pub extern "C" fn application_user___authorization____send_email_for_register____serialize(
+    incoming: *mut ApplicationUser__Authorization___SendEmailForRegister___Incoming
+) -> *mut C_Result<C_Vector<c_uchar>> {
+    let converter = move |incoming: ApplicationUser__Authorization___SendEmailForRegister___Incoming| -> Result<ApplicationUser__Authorization___SendEmailForRegister___Incoming_, Box<dyn Error + 'static>> {
+        let incoming_ = ApplicationUser__Authorization___SendEmailForRegister___Incoming_ {
+            application_user_email: ApplicationUser_Email(incoming.application_user_email.to_string()?),
+            application_user_device_id: ApplicationUserDevice_Id(incoming.application_user_device_id.to_string()?),
+        };
+
+        return Ok(incoming_);
+    };
+
+    return Transformer::<ServerRequestData>::transform(incoming, converter);
+}
+
+#[no_mangle]
+pub extern "C" fn application_user___authorization____send_email_for_register____serialize____deallocate(
+    c_result: *mut C_Result<C_Vector<c_uchar>>
+) -> () {
+    Allocator::<C_Result<C_Vector<c_uchar>>>::deallocate(c_result);
 
     return ();
 }
@@ -2282,6 +2729,38 @@ pub extern "C" fn application_user___authorization____send_email_for_register___
     return ();
 }
 
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct ApplicationUser__Authorization___SendEmailForAuthorize___Incoming {
+    pub application_user_device_id: C_String,
+    pub application_user_id: c_long,
+}
+
+#[no_mangle]
+pub extern "C" fn application_user___authorization____send_email_for_authorize____serialize(
+    incoming: *mut ApplicationUser__Authorization___SendEmailForAuthorize___Incoming
+) -> *mut C_Result<C_Vector<c_uchar>> {
+    let converter = move |incoming: ApplicationUser__Authorization___SendEmailForAuthorize___Incoming| -> Result<ApplicationUser__Authorization___SendEmailForAuthorize___Incoming_, Box<dyn Error + 'static>> {
+        let incoming_ = ApplicationUser__Authorization___SendEmailForAuthorize___Incoming_ {
+            application_user_device_id: ApplicationUserDevice_Id(incoming.application_user_device_id.to_string()?),
+            application_user_id: ApplicationUser_Id(incoming.application_user_id),
+        };
+
+        return Ok(incoming_);
+    };
+
+    return Transformer::<ServerRequestData>::transform(incoming, converter);
+}
+
+#[no_mangle]
+pub extern "C" fn application_user___authorization____send_email_for_authorize____serialize____deallocate(
+    c_result: *mut C_Result<C_Vector<c_uchar>>
+) -> () {
+    Allocator::<C_Result<C_Vector<c_uchar>>>::deallocate(c_result);
+
+    return ();
+}
+
 type ApplicationUser__Authorization___SendEmailForAuthorize___C_Result = C_Result<C_UnifiedReport<ApplicationUser__Authorization___SendEmailForAuthorize___Outcoming, ApplicationUser__Authorization___SendEmailForAuthorize___Precedent>>;
 
 #[repr(C)]
@@ -2370,6 +2849,38 @@ pub extern "C" fn application_user___authorization____send_email_for_authorize__
     let _ = unsafe {
         Box::from_raw(c_result)
     };
+
+    return ();
+}
+
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct ApplicationUser__Authorization___SendEmailForResetPassword___Incoming {
+    pub application_user_id: c_long,
+    pub application_user_device_id: C_String,
+}
+
+#[no_mangle]
+pub extern "C" fn application_user___authorization____send_email_for_reset_password____serialize(
+    incoming: *mut ApplicationUser__Authorization___SendEmailForResetPassword___Incoming
+) -> *mut C_Result<C_Vector<c_uchar>> {
+    let converter = move |incoming: ApplicationUser__Authorization___SendEmailForResetPassword___Incoming| -> Result<ApplicationUser__Authorization___SendEmailForResetPassword___Incoming_, Box<dyn Error + 'static>> {
+        let incoming_ = ApplicationUser__Authorization___SendEmailForResetPassword___Incoming_ {
+            application_user_id: ApplicationUser_Id(incoming.application_user_id),
+            application_user_device_id: ApplicationUserDevice_Id(incoming.application_user_device_id.to_string()?),
+        };
+
+        return Ok(incoming_);
+    };
+
+    return Transformer::<ServerRequestData>::transform(incoming, converter);
+}
+
+#[no_mangle]
+pub extern "C" fn application_user___authorization____send_email_for_reset_password____serialize____deallocate(
+    c_result: *mut C_Result<C_Vector<c_uchar>>
+) -> () {
+    Allocator::<C_Result<C_Vector<c_uchar>>>::deallocate(c_result);
 
     return ();
 }
@@ -2469,6 +2980,52 @@ pub extern "C" fn application_user___authorization____send_email_for_reset_passw
     let _ = unsafe {
         Box::from_raw(c_result)
     };
+
+    return ();
+}
+
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct Channel__Base___GetManyByNameInSubscriptions___Incoming {
+    pub application_user_access_token_encrypted: C_String,
+    pub channel_name: C_String,
+    pub requery_channel_name: C_Option<C_String>,
+    pub limit: c_short,
+}
+
+#[no_mangle]
+pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____serialize(
+    incoming: *mut Channel__Base___GetManyByNameInSubscriptions___Incoming
+) -> *mut C_Result<C_Vector<c_uchar>> {
+    let converter = move |incoming: Channel__Base___GetManyByNameInSubscriptions___Incoming| -> Result<Channel__Base___GetManyByNameInSubscriptions___Incoming_, Box<dyn Error + 'static>> {
+        let requery_channel_name = if incoming.requery_channel_name.is_data {
+            Some(
+                Channel_Name(
+                    incoming.requery_channel_name.data.to_string()?
+                )
+            )
+        } else {
+            None
+        };
+
+        let incoming_ = Channel__Base___GetManyByNameInSubscriptions___Incoming_ {
+            application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted(incoming.application_user_access_token_encrypted.to_string()?),
+            channel_name: Channel_Name(incoming.channel_name.to_string()?),
+            requery_channel_name,
+            limit: incoming.limit,
+        };
+
+        return Ok(incoming_);
+    };
+
+    return Transformer::<ServerRequestData>::transform(incoming, converter);
+}
+
+#[no_mangle]
+pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____deallocate(
+    c_result: *mut C_Result<C_Vector<c_uchar>>
+) -> () {
+    Allocator::<C_Result<C_Vector<c_uchar>>>::deallocate(c_result);
 
     return ();
 }
@@ -2606,6 +3163,50 @@ pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____deseria
     return ();
 }
 
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct Channel__Base___GetManyBySubscription___Incoming {
+    pub application_user_access_token_encrypted: C_String,
+    pub requery_channel_id: C_Option<c_long>,
+    pub limit: c_short,
+}
+
+#[no_mangle]
+pub extern "C" fn channel___base____get_many_by_subscription____serialize(
+    incoming: *mut Channel__Base___GetManyBySubscription___Incoming
+) -> *mut C_Result<C_Vector<c_uchar>> {
+    let converter = move |incoming: Channel__Base___GetManyBySubscription___Incoming| -> Result<Channel__Base___GetManyBySubscription___Incoming_, Box<dyn Error + 'static>> {
+        let requery_channel_id = if incoming.requery_channel_id.is_data {
+            Some(
+                Channel_Id(
+                    incoming.requery_channel_id.data
+                )
+            )
+        } else {
+            None
+        };
+
+        let incoming_ = Channel__Base___GetManyBySubscription___Incoming_ {
+            application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted(incoming.application_user_access_token_encrypted.to_string()?),
+            requery_channel_id,
+            limit: incoming.limit,
+        };
+
+        return Ok(incoming_);
+    };
+
+    return Transformer::<ServerRequestData>::transform(incoming, converter);
+}
+
+#[no_mangle]
+pub extern "C" fn channel___base____get_many_by_subscription____deallocate(
+    c_result: *mut C_Result<C_Vector<c_uchar>>
+) -> () {
+    Allocator::<C_Result<C_Vector<c_uchar>>>::deallocate(c_result);
+
+    return ();
+}
+
 type Channel__Base___GetManyBySubscription___C_Result = C_Result<C_UnifiedReport<Channel__Base___GetManyBySubscription___Outcoming, Channel__Base___GetManyBySubscription___Precedent>>;
 
 #[repr(C)]
@@ -2739,6 +3340,52 @@ pub extern "C" fn channel___base____get_many_by_subscription____deserialize____d
     return ();
 }
 
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct Channel__Base___GetManyPublicByName___Incoming {
+    pub application_user_access_token_encrypted: C_String,
+    pub channel_name: C_String,
+    pub requery_channel_name: C_Option<C_String>,
+    pub limit: c_short,
+}
+
+#[no_mangle]
+pub extern "C" fn channel___base____get_many_public_by_name____serialize(
+    incoming: *mut Channel__Base___GetManyPublicByName___Incoming
+) -> *mut C_Result<C_Vector<c_uchar>> {
+    let converter = move |incoming: Channel__Base___GetManyPublicByName___Incoming| -> Result<Channel__Base___GetManyPublicByName___Incoming_, Box<dyn Error + 'static>> {
+        let requery_channel_name = if incoming.requery_channel_name.is_data {
+            Some(
+                Channel_Name(
+                    incoming.requery_channel_name.data.to_string()?
+                )
+            )
+        } else {
+            None
+        };
+
+        let incoming_ = Channel__Base___GetManyPublicByName___Incoming_ {
+            application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted(incoming.application_user_access_token_encrypted.to_string()?),
+            channel_name: Channel_Name(incoming.channel_name.to_string()?),
+            requery_channel_name,
+            limit: incoming.limit,
+        };
+
+        return Ok(incoming_);
+    };
+
+    return Transformer::<ServerRequestData>::transform(incoming, converter);
+}
+
+#[no_mangle]
+pub extern "C" fn channel___base____get_many_public_by_name____deallocate(
+    c_result: *mut C_Result<C_Vector<c_uchar>>
+) -> () {
+    Allocator::<C_Result<C_Vector<c_uchar>>>::deallocate(c_result);
+
+    return ();
+}
+
 type Channel__Base___GetManyPublicByName___C_Result = C_Result<C_UnifiedReport<Channel__Base___GetManyPublicByName___Outcoming, Channel__Base___GetManyPublicByName___Precedent>>;
 
 #[repr(C)]
@@ -2868,6 +3515,38 @@ pub extern "C" fn channel___base____get_many_public_by_name____deserialize____de
             }
         }
     }
+
+    return ();
+}
+
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct Channel__Base___GetOneById___Incoming {
+    pub application_user_access_token_encrypted: C_String,
+    pub channel_id: c_long,
+}
+
+#[no_mangle]
+pub extern "C" fn channel___base____get_one_by_id____serialize(
+    incoming: *mut Channel__Base___GetOneById___Incoming
+) -> *mut C_Result<C_Vector<c_uchar>> {
+    let converter = move |incoming: Channel__Base___GetOneById___Incoming| -> Result<Channel__Base___GetOneById___Incoming_, Box<dyn Error + 'static>> {
+        let incoming_ = Channel__Base___GetOneById___Incoming_ {
+            application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted(incoming.application_user_access_token_encrypted.to_string()?),
+            channel_id: Channel_Id(incoming.channel_id),
+        };
+
+        return Ok(incoming_);
+    };
+
+    return Transformer::<ServerRequestData>::transform(incoming, converter);
+}
+
+#[no_mangle]
+pub extern "C" fn channel___base____get_one_by_id____deallocate(
+    c_result: *mut C_Result<C_Vector<c_uchar>>
+) -> () {
+    Allocator::<C_Result<C_Vector<c_uchar>>>::deallocate(c_result);
 
     return ();
 }
@@ -3053,6 +3732,38 @@ pub extern "C" fn channel___base____get_one_by_id____deserialize____deallocate(
             }
         }
     }
+
+    return ();
+}
+
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct ChannelSubscription__Base___Create___Incoming {
+    pub application_user_access_token_encrypted: C_String,
+    pub channel_id: c_long,
+}
+
+#[no_mangle]
+pub extern "C" fn channel_subscription___base____create____serialize(
+    incoming: *mut ChannelSubscription__Base___Create___Incoming
+) -> *mut C_Result<C_Vector<c_uchar>> {
+    let converter = move |incoming: ChannelSubscription__Base___Create___Incoming| -> Result<ChannelSubscription__Base___Create___Incoming_, Box<dyn Error + 'static>> {
+        let incoming_ = ChannelSubscription__Base___Create___Incoming_ {
+            application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted(incoming.application_user_access_token_encrypted.to_string()?),
+            channel_id: Channel_Id(incoming.channel_id),
+        };
+
+        return Ok(incoming_);
+    };
+
+    return Transformer::<ServerRequestData>::transform(incoming, converter);
+}
+
+#[no_mangle]
+pub extern "C" fn channel_subscription___base____create____deallocate(
+    c_result: *mut C_Result<C_Vector<c_uchar>>
+) -> () {
+    Allocator::<C_Result<C_Vector<c_uchar>>>::deallocate(c_result);
 
     return ();
 }
