@@ -1101,7 +1101,7 @@ pub extern "C" fn application_user___authorization____authorize_by_first_step___
 pub extern "C" fn application_user___authorization____authorize_by_first_step____serialize____deallocate(
     c_result: *mut C_Result<C_Vector<c_uchar>>
 ) -> () {
-    Allocator::<C_Result<_>>::deallocate(c_result);
+    Allocator::<C_Result<C_Vector<c_uchar>>>::deallocate(c_result);
 
     return ();
 }
