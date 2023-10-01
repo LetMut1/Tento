@@ -3022,7 +3022,7 @@ pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____seriali
 }
 
 #[no_mangle]
-pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____deallocate(
+pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____serialize____deallocate(
     c_result: *mut C_Result<C_Vector<c_uchar>>
 ) -> () {
     Allocator::<C_Result<C_Vector<c_uchar>>>::deallocate(c_result);
@@ -3199,7 +3199,7 @@ pub extern "C" fn channel___base____get_many_by_subscription____serialize(
 }
 
 #[no_mangle]
-pub extern "C" fn channel___base____get_many_by_subscription____deallocate(
+pub extern "C" fn channel___base____get_many_by_subscription____serialize____deallocate(
     c_result: *mut C_Result<C_Vector<c_uchar>>
 ) -> () {
     Allocator::<C_Result<C_Vector<c_uchar>>>::deallocate(c_result);
@@ -3378,7 +3378,7 @@ pub extern "C" fn channel___base____get_many_public_by_name____serialize(
 }
 
 #[no_mangle]
-pub extern "C" fn channel___base____get_many_public_by_name____deallocate(
+pub extern "C" fn channel___base____get_many_public_by_name____serialize____deallocate(
     c_result: *mut C_Result<C_Vector<c_uchar>>
 ) -> () {
     Allocator::<C_Result<C_Vector<c_uchar>>>::deallocate(c_result);
@@ -3543,7 +3543,7 @@ pub extern "C" fn channel___base____get_one_by_id____serialize(
 }
 
 #[no_mangle]
-pub extern "C" fn channel___base____get_one_by_id____deallocate(
+pub extern "C" fn channel___base____get_one_by_id____serialize____deallocate(
     c_result: *mut C_Result<C_Vector<c_uchar>>
 ) -> () {
     Allocator::<C_Result<C_Vector<c_uchar>>>::deallocate(c_result);
@@ -3760,7 +3760,7 @@ pub extern "C" fn channel_subscription___base____create____serialize(
 }
 
 #[no_mangle]
-pub extern "C" fn channel_subscription___base____create____deallocate(
+pub extern "C" fn channel_subscription___base____create____serialize____deallocate(
     c_result: *mut C_Result<C_Vector<c_uchar>>
 ) -> () {
     Allocator::<C_Result<C_Vector<c_uchar>>>::deallocate(c_result);
