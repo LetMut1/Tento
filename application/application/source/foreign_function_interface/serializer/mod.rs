@@ -90,7 +90,7 @@
 
 // TODO access_modifier/visability_modifier посмотреть, как на бэкенде лежат в бд и отдаются. Здесь сделать структуру
 // TODO можно ли сериализовать Incoming не со String, а со &str для подготовки converter, чтобы избежать аллокации в стринг. На большой стренге это будет сильно замедлять.
-
+// TODO поменять ли *mut на *const в FFI ? Так как мы не меняем данные по поинтеру, логичнее указать его как иммутбл.
 
 
 
@@ -5692,6 +5692,582 @@ mod test {
                 Allocator::<C_String>::deallocate(incoming.application_user_device_id);
 
                 Allocator::<C_String>::deallocate(incoming.application_user_authorization_token_value);
+
+                return Ok(());
+            }
+
+            #[test]
+            fn application_user___authorization____check_email_for_existing() -> Result<(), Box<dyn Error + 'static>> {
+                let incoming = ApplicationUser__Authorization___CheckEmailForExisting___Incoming {
+                    application_user_email: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                };
+
+                let allocator = move |incoming: *mut ApplicationUser__Authorization___CheckEmailForExisting___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
+                    return application_user___authorization____check_email_for_existing____serialize(incoming);
+                };
+
+                let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
+                    application_user___authorization____check_email_for_existing____serialize____deallocate(c_result);
+
+                    return ();
+                };
+
+                run_by_template(
+                    &incoming,
+                    allocator,
+                    deallocator
+                )?;
+
+                Allocator::<C_String>::deallocate(incoming.application_user_email);
+
+                return Ok(());
+            }
+
+            #[test]
+            fn application_user___authorization____check_nickname_for_existing() -> Result<(), Box<dyn Error + 'static>> {
+                let incoming = ApplicationUser__Authorization___CheckNicknameForExisting___Incoming {
+                    application_user_nickname: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                };
+
+                let allocator = move |incoming: *mut ApplicationUser__Authorization___CheckNicknameForExisting___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
+                    return application_user___authorization____check_nickname_for_existing____serialize(incoming);
+                };
+
+                let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
+                    application_user___authorization____check_nickname_for_existing____serialize____deallocate(c_result);
+
+                    return ();
+                };
+
+                run_by_template(
+                    &incoming,
+                    allocator,
+                    deallocator
+                )?;
+
+                Allocator::<C_String>::deallocate(incoming.application_user_nickname);
+
+                return Ok(());
+            }
+
+            #[test]
+            fn application_user___authorization____deauthorize_from_all_devices() -> Result<(), Box<dyn Error + 'static>> {
+                let incoming = ApplicationUser__Authorization___DeauthorizeFromAllDevices___Incoming {
+                    application_user_access_token_encrypted: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                };
+
+                let allocator = move |incoming: *mut ApplicationUser__Authorization___DeauthorizeFromAllDevices___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
+                    return application_user___authorization____deauthorize_from_all_devices____serialize(incoming);
+                };
+
+                let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
+                    application_user___authorization____deauthorize_from_all_devices____serialize____deallocate(c_result);
+
+                    return ();
+                };
+
+                run_by_template(
+                    &incoming,
+                    allocator,
+                    deallocator
+                )?;
+
+                Allocator::<C_String>::deallocate(incoming.application_user_access_token_encrypted);
+
+                return Ok(());
+            }
+
+            #[test]
+            fn application_user___authorization____deauthorize_from_one_device() -> Result<(), Box<dyn Error + 'static>> {
+                let incoming = ApplicationUser__Authorization___DeauthorizeFromOneDevice___Incoming {
+                    application_user_access_token_encrypted: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                };
+
+                let allocator = move |incoming: *mut ApplicationUser__Authorization___DeauthorizeFromOneDevice___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
+                    return application_user___authorization____deauthorize_from_one_device____serialize(incoming);
+                };
+
+                let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
+                    application_user___authorization____deauthorize_from_one_device____serialize____deallocate(c_result);
+
+                    return ();
+                };
+
+                run_by_template(
+                    &incoming,
+                    allocator,
+                    deallocator
+                )?;
+
+                Allocator::<C_String>::deallocate(incoming.application_user_access_token_encrypted);
+
+                return Ok(());
+            }
+
+            #[test]
+            fn application_user___authorization____refresh_access_token() -> Result<(), Box<dyn Error + 'static>> {
+                let incoming = ApplicationUser__Authorization___RefreshAccessToken___Incoming {
+                    application_user_access_token_encrypted: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    application_user_access_refresh_token_encrypted: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                };
+
+                let allocator = move |incoming: *mut ApplicationUser__Authorization___RefreshAccessToken___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
+                    return application_user___authorization____refresh_access_token____serialize(incoming);
+                };
+
+                let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
+                    application_user___authorization____refresh_access_token____serialize____deallocate(c_result);
+
+                    return ();
+                };
+
+                run_by_template(
+                    &incoming,
+                    allocator,
+                    deallocator
+                )?;
+
+                Allocator::<C_String>::deallocate(incoming.application_user_access_token_encrypted);
+
+                Allocator::<C_String>::deallocate(incoming.application_user_access_refresh_token_encrypted);
+
+                return Ok(());
+            }
+
+            #[test]
+            fn application_user___authorization____register_by_first_step() -> Result<(), Box<dyn Error + 'static>> {
+                let incoming = ApplicationUser__Authorization___RegisterByFirstStep___Incoming {
+                    application_user_email: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    application_user_device_id: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                };
+
+                let allocator = move |incoming: *mut ApplicationUser__Authorization___RegisterByFirstStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
+                    return application_user___authorization____register_by_first_step____serialize(incoming);
+                };
+
+                let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
+                    application_user___authorization____register_by_first_step____serialize____deallocate(c_result);
+
+                    return ();
+                };
+
+                run_by_template(
+                    &incoming,
+                    allocator,
+                    deallocator
+                )?;
+
+                Allocator::<C_String>::deallocate(incoming.application_user_email);
+
+                Allocator::<C_String>::deallocate(incoming.application_user_device_id);
+
+                return Ok(());
+            }
+
+            #[test]
+            fn application_user___authorization____register_by_second_step() -> Result<(), Box<dyn Error + 'static>> {
+                let incoming = ApplicationUser__Authorization___RegisterBySecondStep___Incoming {
+                    application_user_email: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    application_user_device_id: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    application_user_registration_token_value: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                };
+
+                let allocator = move |incoming: *mut ApplicationUser__Authorization___RegisterBySecondStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
+                    return application_user___authorization____register_by_second_step____serialize(incoming);
+                };
+
+                let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
+                    application_user___authorization____register_by_second_step____serialize____deallocate(c_result);
+
+                    return ();
+                };
+
+                run_by_template(
+                    &incoming,
+                    allocator,
+                    deallocator
+                )?;
+
+                Allocator::<C_String>::deallocate(incoming.application_user_email);
+
+                Allocator::<C_String>::deallocate(incoming.application_user_device_id);
+
+                Allocator::<C_String>::deallocate(incoming.application_user_registration_token_value);
+
+                return Ok(());
+            }
+
+            #[test]
+            fn application_user___authorization____register_by_last_step() -> Result<(), Box<dyn Error + 'static>> {
+                let incoming = ApplicationUser__Authorization___RegisterByLastStep___Incoming {
+                    application_user_device_id: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    application_user_nickname: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    application_user_password: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    application_user_email: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    application_user_registration_token_value: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                };
+
+                let allocator = move |incoming: *mut ApplicationUser__Authorization___RegisterByLastStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
+                    return application_user___authorization____register_by_last_step____serialize(incoming);
+                };
+
+                let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
+                    application_user___authorization____register_by_last_step____serialize____deallocate(c_result);
+
+                    return ();
+                };
+
+                run_by_template(
+                    &incoming,
+                    allocator,
+                    deallocator
+                )?;
+
+                Allocator::<C_String>::deallocate(incoming.application_user_device_id);
+
+                Allocator::<C_String>::deallocate(incoming.application_user_nickname);
+
+                Allocator::<C_String>::deallocate(incoming.application_user_password);
+
+                Allocator::<C_String>::deallocate(incoming.application_user_email);
+
+                Allocator::<C_String>::deallocate(incoming.application_user_registration_token_value);
+
+                return Ok(());
+            }
+
+            #[test]
+            fn application_user___authorization____reset_password_by_first_step() -> Result<(), Box<dyn Error + 'static>> {
+                let incoming = ApplicationUser__Authorization___ResetPasswordByFirstStep___Incoming {
+                    application_user_email: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    application_user_device_id: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                };
+
+                let allocator = move |incoming: *mut ApplicationUser__Authorization___ResetPasswordByFirstStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
+                    return application_user___authorization____reset_password_by_first_step____serialize(incoming);
+                };
+
+                let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
+                    application_user___authorization____reset_password_by_first_step____serialize____deallocate(c_result);
+
+                    return ();
+                };
+
+                run_by_template(
+                    &incoming,
+                    allocator,
+                    deallocator
+                )?;
+
+                Allocator::<C_String>::deallocate(incoming.application_user_email);
+
+                Allocator::<C_String>::deallocate(incoming.application_user_device_id);
+
+                return Ok(());
+            }
+
+            #[test]
+            fn application_user___authorization____reset_password_by_second_step() -> Result<(), Box<dyn Error + 'static>> {
+                let incoming = ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming {
+                    application_user_id: 0,
+                    application_user_device_id: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    application_user_reset_password_token_value: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                };
+
+                let allocator = move |incoming: *mut ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
+                    return application_user___authorization____reset_password_by_second_step____serialize(incoming);
+                };
+
+                let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
+                    application_user___authorization____reset_password_by_second_step____serialize____deallocate(c_result);
+
+                    return ();
+                };
+
+                run_by_template(
+                    &incoming,
+                    allocator,
+                    deallocator
+                )?;
+
+                Allocator::<C_String>::deallocate(incoming.application_user_device_id);
+
+                Allocator::<C_String>::deallocate(incoming.application_user_reset_password_token_value);
+
+                return Ok(());
+            }
+
+            #[test]
+            fn application_user___authorization____reset_password_by_last_step() -> Result<(), Box<dyn Error + 'static>> {
+                let incoming = ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming {
+                    application_user_id: 0,
+                    application_user_device_id: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    application_user_password: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    application_user_reset_password_token_value: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                };
+
+                let allocator = move |incoming: *mut ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
+                    return application_user___authorization____reset_password_by_last_step____serialize(incoming);
+                };
+
+                let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
+                    application_user___authorization____reset_password_by_last_step____serialize____deallocate(c_result);
+
+                    return ();
+                };
+
+                run_by_template(
+                    &incoming,
+                    allocator,
+                    deallocator
+                )?;
+
+                Allocator::<C_String>::deallocate(incoming.application_user_device_id);
+
+                Allocator::<C_String>::deallocate(incoming.application_user_password);
+
+                Allocator::<C_String>::deallocate(incoming.application_user_reset_password_token_value);
+
+                return Ok(());
+            }
+
+            #[test]
+            fn application_user___authorization____send_email_for_register() -> Result<(), Box<dyn Error + 'static>> {
+                let incoming = ApplicationUser__Authorization___SendEmailForRegister___Incoming {
+                    application_user_email: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    application_user_device_id: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                };
+
+                let allocator = move |incoming: *mut ApplicationUser__Authorization___SendEmailForRegister___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
+                    return application_user___authorization____send_email_for_register____serialize(incoming);
+                };
+
+                let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
+                    application_user___authorization____send_email_for_register____serialize____deallocate(c_result);
+
+                    return ();
+                };
+
+                run_by_template(
+                    &incoming,
+                    allocator,
+                    deallocator
+                )?;
+
+                Allocator::<C_String>::deallocate(incoming.application_user_email);
+
+                Allocator::<C_String>::deallocate(incoming.application_user_device_id);
+
+                return Ok(());
+            }
+
+            #[test]
+            fn application_user___authorization____send_email_for_authorize() -> Result<(), Box<dyn Error + 'static>> {
+                let incoming = ApplicationUser__Authorization___SendEmailForAuthorize___Incoming {
+                    application_user_device_id: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    application_user_id: 0,
+                };
+
+                let allocator = move |incoming: *mut ApplicationUser__Authorization___SendEmailForAuthorize___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
+                    return application_user___authorization____send_email_for_authorize____serialize(incoming);
+                };
+
+                let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
+                    application_user___authorization____send_email_for_authorize____serialize____deallocate(c_result);
+
+                    return ();
+                };
+
+                run_by_template(
+                    &incoming,
+                    allocator,
+                    deallocator
+                )?;
+
+                Allocator::<C_String>::deallocate(incoming.application_user_device_id);
+
+                return Ok(());
+            }
+
+            #[test]
+            fn application_user___authorization____send_email_for_reset_password() -> Result<(), Box<dyn Error + 'static>> {
+                let incoming = ApplicationUser__Authorization___SendEmailForResetPassword___Incoming {
+                    application_user_id: 0,
+                    application_user_device_id: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                };
+
+                let allocator = move |incoming: *mut ApplicationUser__Authorization___SendEmailForResetPassword___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
+                    return application_user___authorization____send_email_for_reset_password____serialize(incoming);
+                };
+
+                let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
+                    application_user___authorization____send_email_for_reset_password____serialize____deallocate(c_result);
+
+                    return ();
+                };
+
+                run_by_template(
+                    &incoming,
+                    allocator,
+                    deallocator
+                )?;
+
+                Allocator::<C_String>::deallocate(incoming.application_user_device_id);
+
+                return Ok(());
+            }
+
+            #[test]
+            fn channel___base____get_many_by_name_in_subscriptions() -> Result<(), Box<dyn Error + 'static>> {
+                let incoming = Channel__Base___GetManyByNameInSubscriptions___Incoming {
+                    application_user_access_token_encrypted: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    channel_name: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    requery_channel_name: C_Option::data(
+                        Allocator::<C_String>::allocate(STRING_LITERAL.to_string())
+                    ),
+                    limit: 0,
+                };
+
+                let allocator = move |incoming: *mut Channel__Base___GetManyByNameInSubscriptions___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
+                    return channel___base____get_many_by_name_in_subscriptions____serialize(incoming);
+                };
+
+                let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
+                    channel___base____get_many_by_name_in_subscriptions____serialize____deallocate(c_result);
+
+                    return ();
+                };
+
+                run_by_template(
+                    &incoming,
+                    allocator,
+                    deallocator
+                )?;
+
+                Allocator::<C_String>::deallocate(incoming.application_user_access_token_encrypted);
+
+                Allocator::<C_String>::deallocate(incoming.channel_name);
+
+                Allocator::<C_String>::deallocate(incoming.requery_channel_name.data);
+
+                return Ok(());
+            }
+
+            #[test]
+            fn channel___base____get_many_by_subscription() -> Result<(), Box<dyn Error + 'static>> {
+                let incoming = Channel__Base___GetManyBySubscription___Incoming {
+                    application_user_access_token_encrypted: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    requery_channel_id: C_Option::data(0),
+                    limit: 0,
+                };
+
+                let allocator = move |incoming: *mut Channel__Base___GetManyBySubscription___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
+                    return channel___base____get_many_by_subscription____serialize(incoming);
+                };
+
+                let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
+                    channel___base____get_many_by_subscription____serialize____deallocate(c_result);
+
+                    return ();
+                };
+
+                run_by_template(
+                    &incoming,
+                    allocator,
+                    deallocator
+                )?;
+
+                Allocator::<C_String>::deallocate(incoming.application_user_access_token_encrypted);
+
+                return Ok(());
+            }
+
+            #[test]
+            fn channel___base____get_many_public_by_name() -> Result<(), Box<dyn Error + 'static>> {
+                let incoming = Channel__Base___GetManyPublicByName___Incoming {
+                    application_user_access_token_encrypted: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    channel_name: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    requery_channel_name: C_Option::data(Allocator::<C_String>::allocate(STRING_LITERAL.to_string())),
+                    limit: 0,
+                };
+
+                let allocator = move |incoming: *mut Channel__Base___GetManyPublicByName___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
+                    return channel___base____get_many_public_by_name____serialize(incoming);
+                };
+
+                let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
+                    channel___base____get_many_public_by_name____serialize____deallocate(c_result);
+
+                    return ();
+                };
+
+                run_by_template(
+                    &incoming,
+                    allocator,
+                    deallocator
+                )?;
+
+                Allocator::<C_String>::deallocate(incoming.application_user_access_token_encrypted);
+
+                Allocator::<C_String>::deallocate(incoming.channel_name);
+
+                Allocator::<C_String>::deallocate(incoming.requery_channel_name.data);
+
+                return Ok(());
+            }
+
+            #[test]
+            fn channel___base____get_one_by_id() -> Result<(), Box<dyn Error + 'static>> {
+                let incoming = Channel__Base___GetOneById___Incoming {
+                    application_user_access_token_encrypted: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    channel_id: 0,
+                };
+
+                let allocator = move |incoming: *mut Channel__Base___GetOneById___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
+                    return channel___base____get_one_by_id____serialize(incoming);
+                };
+
+                let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
+                    channel___base____get_one_by_id____serialize____deallocate(c_result);
+
+                    return ();
+                };
+
+                run_by_template(
+                    &incoming,
+                    allocator,
+                    deallocator
+                )?;
+
+                Allocator::<C_String>::deallocate(incoming.application_user_access_token_encrypted);
+
+                return Ok(());
+            }
+
+            #[test]
+            fn channel_subscription___base____create() -> Result<(), Box<dyn Error + 'static>> {
+                let incoming = ChannelSubscription__Base___Create___Incoming {
+                    application_user_access_token_encrypted: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    channel_id: 0,
+                };
+
+                let allocator = move |incoming: *mut ChannelSubscription__Base___Create___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
+                    return channel_subscription___base____create____serialize(incoming);
+                };
+
+                let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
+                    channel_subscription___base____create____serialize____deallocate(c_result);
+
+                    return ();
+                };
+
+                run_by_template(
+                    &incoming,
+                    allocator,
+                    deallocator
+                )?;
+
+                Allocator::<C_String>::deallocate(incoming.application_user_access_token_encrypted);
 
                 return Ok(());
             }
