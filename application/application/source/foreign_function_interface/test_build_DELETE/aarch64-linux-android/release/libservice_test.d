@@ -1,0 +1,1 @@
+/_tento/application/application/source/foreign_function_interface/test_build_DELETE/target/aarch64-linux-android/release/libservice_test.a: /_tento/application/application/source/foreign_function_interface/test_build_DELETE/mod.rs

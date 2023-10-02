@@ -180,7 +180,8 @@ use void::Void;
 
 // TODO cargo build --release --lib --target aarch64-apple-ios
 // TODO cargo build --release --lib --target aarch64-apple-ios-sim
-// TODO cargo build --release --lib --target armv7-linux-androideabi
+// TODO cargo build --release --lib --target aarch64-linux-android
+// TODO cargo build --release --lib --target x86_64-linux-android
 
 // TODO access_modifier/visability_modifier посмотреть, как на бэкенде лежат в бд и отдаются. Здесь сделать структуру
 // TODO можно ли сериализовать Incoming не со String, а со &str для подготовки converter, чтобы избежать аллокации в стринг. На большой стренге это будет сильно замедлять.
