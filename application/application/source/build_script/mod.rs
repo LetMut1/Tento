@@ -336,7 +336,7 @@ impl Processor {
 
     fn create_c_bindings() -> Result<(), Box<dyn Error + 'static>> {
         let crate_path = format!(
-            "{}/foreign_function_interface/serializer",
+            "{}/foreign_function_interface/client_server_data_serializer",
             var("CARGO_MANIFEST_DIR")?.as_str(),
         );
 
