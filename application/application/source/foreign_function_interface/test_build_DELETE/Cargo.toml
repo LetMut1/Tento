@@ -1,0 +1,28 @@
+[package]
+name = "service_test"
+version = "0.1.0"
+authors = ["Zimin Dmitriy <dimazimin96@yandex.ru>"]
+edition = "2021"
+# resolver = "2" // TODO TODO TODO TODO TODO TODO TODO
+
+[lib]
+name = "service_test"
+path = "./mod.rs"
+test = true
+doctest = true
+bench = true
+doc = true
+proc-macro = false
+harness = true
+edition = "2021"
+crate-type = ["staticlib"]
+required-features = []
+
+[dependencies]
+libc = { package = "libc", version = "0.2.148", default-features = true, features = [], optional = false }
+[features]
+default = []
+
+# TODO https://github.com/rust-lang/cargo/issues/6745#issuecomment-472667516
+# Remove after solving the problem and configure in normal way.
+[workspace]
