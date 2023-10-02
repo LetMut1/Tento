@@ -10,7 +10,8 @@ rustup component add \
 rustup target add \
     aarch64-apple-ios \
     aarch64-apple-ios-sim \
-    armv7-linux-androideabi && \
+    aarch64-linux-android \
+    x86_64-linux-android && \
 apt-get update && \
 apt-get install -y \
     cron \
