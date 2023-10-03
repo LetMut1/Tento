@@ -10,8 +10,6 @@ pub struct Argon2Id;
 
 pub struct Base64;
 
-pub struct Hmac;
-
 pub struct CloudMessage;
 
 pub struct DateTime;

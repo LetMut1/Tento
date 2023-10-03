@@ -12,7 +12,7 @@ use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::functionality::service::encoder::Base64;
 use crate::infrastructure_layer::functionality::service::encoder::Encoder as Encoder_;
-use crate::infrastructure_layer::functionality::service::encoder::Hmac;
+use crate::infrastructure_layer::functionality::service::encoder::Hmac_Sha2_512;
 use crate::infrastructure_layer::functionality::service::serializer::MessagePack;
 use crate::infrastructure_layer::functionality::service::serializer::Serialize;
 use crate::infrastructure_layer::functionality::service::serializer::Serializer;
@@ -38,16 +38,31 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
 
         let application_user_access_token_serialized = Encoder_::<Base64>::encode(data.as_slice());
 
-        let application_user_access_token_signature = Encoder::<Signature>::encode(application_user_access_token_serialized.as_str());
+        let application_user_access_token_serialized_signature = match Encoder::<Signature>::encode(application_user_access_token_serialized.as_bytes()) {
+            Ok(application_user_access_token_serialized_signature_) => application_user_access_token_serialized_signature_,
+            Err(mut error) => {
+                error.add_backtrace_part(
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                );
+
+                return Err(error);
+            }
+        };
 
         let application_user_access_token_encrypted = format!(
             "{}{}{}",
             application_user_access_token_serialized.as_str(),
             Self::TOKEN_PARTS_SEPARATOR,
-            application_user_access_token_signature.as_str()
+            application_user_access_token_serialized_signature.as_str()
         );
 
-        return Ok(ApplicationUserAccessTokenEncrypted(application_user_access_token_encrypted));
+        return Ok(
+            ApplicationUserAccessTokenEncrypted(application_user_access_token_encrypted)
+        );
     }
 
     pub fn from_encrypted<'a>(application_user_access_token_encrypted: &'a ApplicationUserAccessTokenEncrypted) -> Result<InvalidArgumentResult<ApplicationUserAccessToken<'static>>, ErrorAuditor_> {
@@ -56,31 +71,53 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
             Self::TOKEN_PARTS_SEPARATOR,
         );
 
-        let invalid_argument_result = InvalidArgumentResult::InvalidArgument {
-            invalid_argument: InvalidArgument::ApplicationUserAccessTokenEncrypted,
-        };
-
         let application_user_access_token_serialized = match token_part_registry.next() {
             Some(application_user_access_token_serialized_) => application_user_access_token_serialized_,
             None => {
-                return Ok(invalid_argument_result);
+                return Ok(
+                    InvalidArgumentResult::InvalidArgument {
+                        invalid_argument: InvalidArgument::ApplicationUserAccessTokenEncrypted,
+                    }
+                );
             }
         };
 
-        let application_user_access_token_signature = match token_part_registry.next() {
-            Some(application_user_access_token_signature_) => application_user_access_token_signature_,
+        let application_user_access_token_serialized_signature = match token_part_registry.next() {
+            Some(application_user_access_token_serialized_signature_) => application_user_access_token_serialized_signature_,
             None => {
-                return Ok(invalid_argument_result);
+                return Ok(
+                    InvalidArgumentResult::InvalidArgument {
+                        invalid_argument: InvalidArgument::ApplicationUserAccessTokenEncrypted,
+                    }
+                );
             }
         };
 
-        let is_valid = Encoder::<Signature>::is_valid(
-            application_user_access_token_serialized,
-            application_user_access_token_signature,
-        );
+        let is_valid = match Encoder::<Signature>::is_valid(
+            application_user_access_token_serialized.as_bytes(),
+            application_user_access_token_serialized_signature.as_bytes(),
+        )
+        {
+            Ok(is_valid_) => is_valid_,
+            Err(mut error) => {
+                error.add_backtrace_part(
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                );
+
+                return Err(error);
+            }
+        };
 
         if !is_valid {
-            return Ok(invalid_argument_result);
+            return Ok(
+                InvalidArgumentResult::InvalidArgument {
+                    invalid_argument: InvalidArgument::ApplicationUserAccessTokenEncrypted,
+                }
+            );
         }
 
         let data = match Encoder_::<Base64>::decode(application_user_access_token_serialized.as_bytes()) {
@@ -129,24 +166,70 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
 struct Signature;
 
 impl Encoder<Signature> {
-    fn encode<'a>(application_user_access_token_serialized: &'a str) -> String {
-        let mut hmac_encoded_data: Vec<u8> = vec![];
-
-        Encoder_::<Hmac>::encode(
+    fn encode<'a>(application_user_access_token_serialized: &'a [u8]) -> Result<String, ErrorAuditor_> {
+        let application_user_access_token_serialized_encoded = match Encoder_::<Hmac_Sha2_512>::encode(
             ENVIRONMENT_CONFIGURATION.encryption.private_key.application_user_access_token.0.as_bytes(),
-            application_user_access_token_serialized.as_bytes(),
-            hmac_encoded_data.as_mut_slice(),
-        );
+            application_user_access_token_serialized,
+        )
+        {
+            Ok(application_user_access_token_serialized_encoded_) => application_user_access_token_serialized_encoded_,
+            Err(mut error) => {
+                error.add_backtrace_part(
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                );
 
-        return Encoder_::<Base64>::encode(hmac_encoded_data.as_slice());
+                return Err(error);
+            }
+        };
+
+        let application_user_access_token_serialized_signature = Encoder_::<Base64>::encode(application_user_access_token_serialized_encoded.into_bytes().as_slice());
+
+        return Ok(application_user_access_token_serialized_signature);
     }
 
     fn is_valid<'a>(
-        application_user_access_token_serialized: &'a str,
-        application_user_access_token_signature: &'a str,
-    ) -> bool {
-        let application_user_access_token_signature_ = Self::encode(application_user_access_token_serialized);
+        application_user_access_token_serialized: &'a [u8],
+        application_user_access_token_serialized_signature: &'a [u8],
+    ) -> Result<bool, ErrorAuditor_> {
+        let application_user_access_token_serialized_encoded = match Encoder_::<Base64>::decode(application_user_access_token_serialized_signature) {
+            Ok(application_user_access_token_serialized_encoded_) => application_user_access_token_serialized_encoded_,
+            Err(mut error) => {
+                error.add_backtrace_part(
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                );
 
-        return application_user_access_token_signature_.as_str() == application_user_access_token_signature;
+                return Err(error);
+            }
+        };
+
+        let is_valid = match Encoder_::<Hmac_Sha2_512>::is_valid(
+            ENVIRONMENT_CONFIGURATION.encryption.private_key.application_user_access_token.0.as_bytes(),
+            application_user_access_token_serialized,
+            application_user_access_token_serialized_encoded.as_slice(),
+        )
+        {
+            Ok(is_valid_) => is_valid_,
+            Err(mut error) => {
+                error.add_backtrace_part(
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                );
+
+                return Err(error);
+            }
+        };
+
+        return Ok(is_valid);
     }
 }
