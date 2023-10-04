@@ -58,7 +58,7 @@ serde_json = { package = "serde_json", version = "^1.0", default-features = true
 
 [build-dependencies]
 build_script_constant = { path = "./forced_crate/build_script_constant", package = "build_script_constant", version = "0.1.0", default-features = true, features = [], optional = false }
-cbindgen = { package = "cbindgen", version = "^0.24", default-features = true, features = [], optional = false }
+cargo-emit = { package = "cargo-emit", version = "0.2.1", default-features = true, features = [], optional = false }
 environment_configuration = { path = "./forced_crate/environment_configuration", package = "environment_configuration", version = "0.1.0", default-features = true, features = [], optional = false }
 error_auditor = { path = "./forced_crate/error_auditor", package = "error_auditor", version = "0.1.0", default-features = true, features = [], optional = false }
 formatter = { path = "./forced_crate/formatter", package = "formatter", version = "0.1.0", default-features = true, features = [], optional = false }

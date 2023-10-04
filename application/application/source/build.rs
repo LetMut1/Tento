@@ -79,7 +79,6 @@
 
 use build_script_constant::environment_configuration::ENVIRONMENT_CONFIGURATION_CONSTANT_NAME;
 use build_script_constant::environment_configuration_constant_file_name;
-use cbindgen::Builder;
 use environment_configuration::environment_configuration::Environment;
 use environment_configuration::loader::Loader;
 use std::env::var;
@@ -87,6 +86,7 @@ use std::error::Error;
 use std::fs::File;
 use std::io::Write;
 use std::path::Path;
+use cargo_emit::rerun_if_changed;
 use uuid::Uuid;
 use formatter::Formatter;
 use formatter::Format;
@@ -110,8 +110,6 @@ impl Processor {
 
         Self::create_environment_configuration_constant()?;
 
-        Self::create_c_bindings()?;
-
         return Ok(());
     }
 
@@ -127,10 +125,7 @@ impl Processor {
             file_name.as_str(),
         );
 
-        println!(
-            "cargo:rerun-if-changed={}",
-            file_path.as_str(),
-        );
+        rerun_if_changed!(file_path.as_str());
 
         return Ok(());
     }
@@ -330,22 +325,6 @@ impl Processor {
         let mut file = File::create(Path::new(build_file.as_str()))?;
 
         file.write_all(build_file_content.as_bytes())?;
-
-        return Ok(());
-    }
-
-    fn create_c_bindings() -> Result<(), Box<dyn Error + 'static>> {
-        let crate_path = format!(
-            "{}/foreign_function_interface/client_server_data_serializer",
-            var("CARGO_MANIFEST_DIR")?.as_str(),
-        );
-
-        let crate_path_ = Path::new(crate_path.as_str());
-
-        Builder::new()                                      // TODO TODO TODO many options
-            .with_crate(crate_path_)
-            .generate()?
-            .write_to_file("c_bindings.h");     // TODO полный путь.
 
         return Ok(());
     }

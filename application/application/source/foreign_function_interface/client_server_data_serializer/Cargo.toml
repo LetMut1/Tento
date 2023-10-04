@@ -4,6 +4,7 @@ version = "0.1.0"
 authors = ["Zimin Dmitriy <dimazimin96@yandex.ru>"]
 edition = "2021"
 resolver = "2"
+build = "./build.rs"
 
 [lib]
 name = "client_server_data_serializer"
@@ -26,6 +27,11 @@ message_pack_serializer = { path = "./../../forced_crate/message_pack_serializer
 serde = { package = "serde", version = "^1.0", default-features = true, features = ["derive"], optional = false }
 unified_report = { path = "./../../forced_crate/unified_report", package = "unified_report", version = "0.1.0", default-features = true, features = [], optional = false }
 void = { path = "./../../forced_crate/void", package = "void", version = "0.1.0", default-features = true, features = [], optional = false }
+
+[build-dependencies]
+cargo-emit = { package = "cargo-emit", version = "0.2.1", default-features = true, features = [], optional = false }
+cbindgen = { package = "cbindgen", version = "^0.24", default-features = true, features = [], optional = false }
+uuid = { package = "uuid", version = "^0.8", default-features = true, features = ["v4"], optional = false }
 
 [features]
 default = []
