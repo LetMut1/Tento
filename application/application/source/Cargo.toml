@@ -3,7 +3,7 @@ name = "application"
 version = "0.1.0"
 authors.workspace = true
 edition = "2021"
-build = "./build_script/mod.rs"
+build = "./build.rs"
 
 [lib]
 name = "application"
