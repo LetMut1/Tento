@@ -7,12 +7,10 @@ use crate::infrastructure_layer::data::error_auditor::Error;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor_;
 use crate::infrastructure_layer::data::error_auditor::Other;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
-use sha2::Sha512;
+use sha3::Sha512;
 
 pub type Hmac_Sha2_512 = Hmac<Sha512>;
 
-                                // TODO hex для Стринг.
-                                // TODO Sha2-512 or sha3-512 ?
 impl Encoder<Hmac_Sha2_512> {
     pub fn encode<'a>(
         salt: &'a [u8],

@@ -45,7 +45,7 @@ redis = { package = "redis", version = "^0.21", default-features = true, feature
 regex = { package = "regex", version = "^1.4", default-features = true, features = [], optional = false }
 resource_error = { path = "./forced_crate/resource_error", package = "resource_error", version = "0.1.0", default-features = true, features = [], optional = false }
 serde = { package = "serde", version = "^1.0", default-features = true, features = ["derive"], optional = false }
-sha2 = { package = "sha2", version = "0.10.8", default-features = true, features = [], optional = false }
+sha3 = { package = "sha2", version = "0.10.8", default-features = true, features = [], optional = false }
 tokio = { package = "tokio", version = "^1.16", default-features = true, features = ["full"], optional = false }  # // TODO Убрать фичу Full и понять , какие нужны
 tokio_postgres = { package = "tokio-postgres", version = "^0.7", default-features = true, features = [], optional = false }
 toml = { package = "toml", version = "0.7.4", default-features = true, features = [], optional = false }
