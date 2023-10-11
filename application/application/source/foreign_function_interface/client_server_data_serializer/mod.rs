@@ -183,13 +183,10 @@ use void::Void;
 // TODO cargo build --release --lib --target aarch64-linux-android
 // TODO cargo build --release --lib --target x86_64-linux-android
 
+// TODO rust binary ffi optimize for size.  !!!!!!!!!!!!
+
 // TODO access_modifier/visability_modifier посмотреть, как на бэкенде лежат в бд и отдаются. Здесь сделать структуру
 // TODO можно ли сериализовать Incoming не со String, а со &str для подготовки converter, чтобы избежать аллокации в стринг. На большой стренге это будет сильно замедлять.
-// TODO поменять ли *mut на *const в FFI ? Так как мы не меняем данные по поинтеру, логичнее указать его как иммутбл.
-
-
-
-
 
 
 
