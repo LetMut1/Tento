@@ -184,6 +184,8 @@ use void::Void;
 // TODO cargo build --release --lib --target x86_64-linux-android
 
 // TODO rust binary ffi optimize for size.  !!!!!!!!!!!!
+// https://arusahni.net/blog/2020/03/optimizing-rust-binary-size.html
+// https://github.com/johnthagen/min-sized-rust !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 // TODO access_modifier/visability_modifier посмотреть, как на бэкенде лежат в бд и отдаются. Здесь сделать структуру
 // TODO можно ли сериализовать Incoming не со String, а со &str для подготовки converter, чтобы избежать аллокации в стринг. На большой стренге это будет сильно замедлять.

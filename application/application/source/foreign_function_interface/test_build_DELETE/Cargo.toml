@@ -33,3 +33,16 @@ default = []
 # TODO https://github.com/rust-lang/cargo/issues/6745#issuecomment-472667516
 # Remove after solving the problem and configure in normal way.
 [workspace]
+
+
+[profile.release]
+opt-level = "z"
+# debug = false
+# debug-assertions = false
+# overflow-checks = true
+lto = true
+panic = "abort"
+# incremental = false
+codegen-units = 1
+# rpath = false
+strip = true  # Automatically strip symbols from the binary.
