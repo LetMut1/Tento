@@ -3,7 +3,8 @@ name = "service_test"
 version = "0.1.0"
 authors = ["Zimin Dmitriy <dimazimin96@yandex.ru>"]
 edition = "2021"
-# resolver = "2" // TODO TODO TODO TODO TODO TODO TODO
+build = "./build.rs"
+resolver = "2"
 
 [lib]
 name = "service_test"
@@ -20,6 +21,12 @@ required-features = []
 
 [dependencies]
 libc = { package = "libc", version = "0.2.148", default-features = true, features = [], optional = false }
+
+[build-dependencies]
+cargo-emit = { package = "cargo-emit", version = "0.2.1", default-features = true, features = [], optional = false }
+cbindgen = { package = "cbindgen", version = "^0.24", default-features = true, features = [], optional = false }
+uuid = { package = "uuid", version = "^0.8", default-features = true, features = ["v4"], optional = false }
+
 [features]
 default = []
 
