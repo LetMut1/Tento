@@ -127,7 +127,7 @@ impl Processor {
         let crate_path_ = Path::new(crate_path.as_str());
 
         let file_path = format!(
-            "{}/target_/c_bindings.h",
+            "{}/../target_/c_bindings.h",
             crate_path.as_str(),
         );
 
