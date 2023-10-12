@@ -14,6 +14,8 @@ use crate::infrastructure_layer::functionality::service::creator::Response;
 use crate::infrastructure_layer::functionality::service::serializer::Serialize;
 use crate::infrastructure_layer::functionality::service::serializer::Serializer;
 use crate::infrastructure_layer::functionality::service::validator::Validator;
+use crate::infrastructure_layer::functionality::service::formatter::Format;
+use crate::infrastructure_layer::functionality::service::formatter::Formatter;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use bb8_redis::RedisConnectionManager;
@@ -70,6 +72,14 @@ impl CommonActionProcessor {
                     ),
                 );
 
+                #[cfg(feature = "manual_testing")]
+                {
+                    println!(
+                        "{}",
+                        Formatter::prepare(&error)
+                    );
+                }
+
                 unreachable!(
                     "{}. TODO: Write in concurrent way. It is also necessary that the write                     // TODO CHANGE all occurences.
                     process does not wait for another write process, and writes immediately.",
@@ -96,6 +106,14 @@ impl CommonActionProcessor {
                     ),
                 );
 
+                #[cfg(feature = "manual_testing")]
+                {
+                    println!(
+                        "{}",
+                        Formatter::prepare(&error_)
+                    );
+                }
+
                 let response = Creator::<Response>::create_internal_server_error();
 
                 if let Err(mut error__) = Writer::<ActionRoundRegister>::write_with_context(
@@ -114,6 +132,14 @@ impl CommonActionProcessor {
                         ),
                     );
 
+                    #[cfg(feature = "manual_testing")]
+                    {
+                        println!(
+                            "{}",
+                            Formatter::prepare(&error__)
+                        );
+                    }
+
                     unreachable!(
                         "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
                         process does not wait for another write process, and writes immediately.",
@@ -128,6 +154,14 @@ impl CommonActionProcessor {
         let action_processor_incoming = match Serializer::<SF>::deserialize::<'_, API>(bytes.chunk()) {
             Ok(action_processor_incoming_) => action_processor_incoming_,
             Err(error) => {
+                #[cfg(feature = "manual_testing")]
+                {
+                    println!(
+                        "{}",
+                        Formatter::prepare(&error)
+                    );
+                }
+
                 let response = Creator::<Response>::create_internal_server_error();
 
                 if let Err(mut error_) = Writer::<ActionRoundRegister>::write_with_context(
@@ -145,6 +179,14 @@ impl CommonActionProcessor {
                             None,
                         ),
                     );
+
+                    #[cfg(feature = "manual_testing")]
+                    {
+                        println!(
+                            "{}",
+                            Formatter::prepare(&error_)
+                        );
+                    }
 
                     unreachable!(
                         "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
@@ -167,6 +209,14 @@ impl CommonActionProcessor {
         {
             Ok(unified_report_) => unified_report_,
             Err(error) => {
+                #[cfg(feature = "manual_testing")]
+                {
+                    println!(
+                        "{}",
+                        Formatter::prepare(&error)
+                    );
+                }
+
                 let response = Creator::<Response>::create_internal_server_error();
 
                 if let Err(mut error_) = Writer::<ActionRoundRegister>::write_with_context(
@@ -184,6 +234,14 @@ impl CommonActionProcessor {
                             None,
                         ),
                     );
+
+                    #[cfg(feature = "manual_testing")]
+                    {
+                        println!(
+                            "{}",
+                            Formatter::prepare(&error_)
+                        );
+                    }
 
                     unreachable!(
                         "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
@@ -221,6 +279,14 @@ impl CommonActionProcessor {
                         ),
                     );
 
+                    #[cfg(feature = "manual_testing")]
+                    {
+                        println!(
+                            "{}",
+                            Formatter::prepare(&error)
+                        );
+                    }
+
                     unreachable!(
                         "{}. TODO: Write in concurrent way. It is also necessary that the write
                         process does not wait for another write process, and writes immediately.",
@@ -235,6 +301,14 @@ impl CommonActionProcessor {
         let data = match Serializer::<SF>::serialize(&unified_report_) {
             Ok(data_) => data_,
             Err(error) => {
+                #[cfg(feature = "manual_testing")]
+                {
+                    println!(
+                        "{}",
+                        Formatter::prepare(&error)
+                    );
+                }
+
                 let response = Creator::<Response>::create_internal_server_error();
 
                 if let Err(mut error_) = Writer::<ActionRoundRegister>::write_with_context(
@@ -252,6 +326,14 @@ impl CommonActionProcessor {
                             None,
                         ),
                     );
+
+                    #[cfg(feature = "manual_testing")]
+                    {
+                        println!(
+                            "{}",
+                            Formatter::prepare(&error_)
+                        );
+                    }
 
                     unreachable!(
                         "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
@@ -280,6 +362,14 @@ impl CommonActionProcessor {
                     None,
                 ),
             );
+
+            #[cfg(feature = "manual_testing")]
+            {
+                println!(
+                    "{}",
+                    Formatter::prepare(&error)
+                );
+            }
 
             unreachable!(
                 "{}. TODO: Write in concurrent way. It is also necessary that the write
