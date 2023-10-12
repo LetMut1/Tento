@@ -88,6 +88,14 @@ impl RunServer {
     }
 
     async fn run_http_server() -> Result<(), ErrorAuditor_> {
+        #[derive(Clone)]
+        enum PostgresqlConnectionPoolAggregator {
+            LocalDevelopment {
+                database_1_postgresql_connection_pool: PostgresqlConnectionPoolNoTls,
+                database_2_postgresql_connection_pool: PostgresqlConnectionPoolNoTls,
+            },
+        }
+
         let router = match Self::create_router() {
             Ok(router_) => router_,
             Err(mut error) => {
@@ -1909,12 +1917,4 @@ impl RunServer {
 
         return Ok(signal);
     }
-}
-
-#[derive(Clone)]
-enum PostgresqlConnectionPoolAggregator {
-    LocalDevelopment {
-        database_1_postgresql_connection_pool: PostgresqlConnectionPoolNoTls,
-        database_2_postgresql_connection_pool: PostgresqlConnectionPoolNoTls,
-    },
 }
