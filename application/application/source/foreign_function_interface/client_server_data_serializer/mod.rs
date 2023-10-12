@@ -178,11 +178,6 @@ use void::Void;
 
 
 
-// TODO cargo build --release --lib --target aarch64-apple-ios
-// TODO cargo build --release --lib --target aarch64-apple-ios-sim
-// TODO cargo build --release --lib --target aarch64-linux-android
-// TODO cargo build --release --lib --target x86_64-linux-android
-
 // TODO rust binary ffi optimize for size.  !!!!!!!!!!!!
 // https://arusahni.net/blog/2020/03/optimizing-rust-binary-size.html
 // https://github.com/johnthagen/min-sized-rust !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
