@@ -5,11 +5,22 @@ use application::infrastructure_layer::functionality::service::formatter::Format
 use application::infrastructure_layer::functionality::service::formatter::Formatter;
 
 fn main() -> () {
-    if let Err(error) = CreateFixtures::process() {
-        println!(
-            "{}",
-            Formatter::prepare(&error)
-        );
+    'a: loop {
+        match CreateFixtures::process() {
+            Ok(_) => {
+                println!("\n Graceful shutdown.");
+
+                break 'a;
+            }
+            Err(error) => {
+                println!(
+                    "{}",
+                    Formatter::prepare(&error)
+                );
+
+                continue 'a;
+            }
+        }
     }
 
     return ();

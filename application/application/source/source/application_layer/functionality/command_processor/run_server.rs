@@ -72,7 +72,7 @@ impl RunServer {
             }
         };
 
-        if let Err(mut error) = runtime.block_on(Self::run_http_server()) {
+        if let Err(mut error) = runtime.block_on(Self::run_server()) {
             error.add_backtrace_part(
                 BacktracePart::new(
                     line!(),
@@ -87,7 +87,7 @@ impl RunServer {
         return Ok(());
     }
 
-    async fn run_http_server() -> Result<(), ErrorAuditor_> {
+    async fn run_server() -> Result<(), ErrorAuditor_> {
         #[derive(Clone)]
         enum PostgresqlConnectionPoolAggregator {
             LocalDevelopment {

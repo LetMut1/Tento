@@ -5,15 +5,21 @@ use application::infrastructure_layer::functionality::service::formatter::Format
 use application::infrastructure_layer::functionality::service::formatter::Formatter;
 
 fn main() -> () {
-    match RunServer::process() {
-        Ok(_) => {
-            println!("\n Graceful shutdown.");
-        }
-        Err(error) => {
-            println!(
-                "{}",
-                Formatter::prepare(&error)
-            );
+    'a: loop {
+        match RunServer::process() {
+            Ok(_) => {
+                println!("\n Graceful shutdown.");
+
+                break 'a;
+            }
+            Err(error) => {
+                println!(
+                    "{}",
+                    Formatter::prepare(&error)
+                );
+
+                continue 'a;
+            }
         }
     }
 
@@ -120,6 +126,9 @@ fn main() -> () {
 // Так как есть много публичных дто, пройти и посмотреть, где их можно сделать opaque struct.
 
 // !!!!!!!!!!!!!!! Проверять валидность байт в типе Стринг с клиента. Возможно, встроить в модуль.
+
+// через один бин с флагами, а не через много бинов.
+
 
 
 // СДелал оптимизацию запросов для:
