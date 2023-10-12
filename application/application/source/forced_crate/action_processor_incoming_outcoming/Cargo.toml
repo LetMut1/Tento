@@ -18,7 +18,7 @@ crate-type = ["lib"]
 required-features = []
 
 [dependencies]
-serde = { package = "serde", version = "^1.0", default-features = true, features = ["derive"], optional = false }
+serde = { package = "serde", version = "1.0.188", default-features = true, features = ["derive"], optional = false }
 entity = { path = "./../entity", package = "entity", version = "0.1.0", default-features = true, features = [], optional = false }
 common_precedent = { path = "./../common_precedent", package = "common_precedent", version = "0.1.0", default-features = true, features = [], optional = false }
 macro_rules = { path = "./../macro_rules", package = "macro_rules", version = "0.1.0", default-features = true, features = [], optional = false }
