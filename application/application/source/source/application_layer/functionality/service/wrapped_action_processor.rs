@@ -31,6 +31,7 @@ use std::ops::FnOnce;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
+use matchit::Params;
 use http::request::Parts as RequestParts;
 
 #[cfg(feature = "manual_testing")]
@@ -38,13 +39,14 @@ pub struct WrappedActionProcessor;
 
 #[cfg(feature = "manual_testing")]
 impl WrappedActionProcessor {
-    pub async fn process<'a, SF, WSF, T, WA, F, API, APO, APP>(
+    pub async fn process<'a, 'b, 'c, SF, WSF, T, A, F, API, APO, APP>(
         mut body: Body,
-        request_parts: RequestParts,
+        request_parts: &'a mut RequestParts,
+        route_parameters: &'a Params<'b, 'c>,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
-        action: WA,
+        action: A,
     ) -> Response
     where
         Serializer<SF>: Serialize,
@@ -53,13 +55,13 @@ impl WrappedActionProcessor {
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
-        WA: FnOnce(Request, &'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<RedisConnectionManager>) -> F,
+        A: FnOnce(Body, &'a RequestParts, &'a Params<'b, 'c>, &'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<RedisConnectionManager>) -> F,
         F: Future<Output = Response>,
         API: SerdeSerialize + for<'de> Deserialize<'de>,
         APO: SerdeSerialize + for<'de> Deserialize<'de>,
         APP: SerdeSerialize + for<'de> Deserialize<'de>,
     {
-        if !Validator::<RequestParts>::is_valid(&request_parts) {
+        if !Validator::<RequestParts>::is_valid(request_parts) {
             return Creator::<Response>::create_bad_request();
         }
 
@@ -70,21 +72,20 @@ impl WrappedActionProcessor {
             }
         };
 
-        let incoming = match Serializer::<SF>::deserialize::<API>(bytes.chunk()) {
-            Ok(wrapped_incoming_) => wrapped_incoming_,
+        let action_processor_incoming = match Serializer::<SF>::deserialize::<API>(bytes.chunk()) {
+            Ok(action_processor_incoming_) => action_processor_incoming_,
             Err(_) => {
                 return Creator::<Response>::create_internal_server_error();
             }
         };
 
-        let action_processing_delegator_result = match ActionDelegator::delegate::<'_, WSF, _, _, _, API, APO, APP>(
+        let action_processing_delegator_result = match ActionDelegator::delegate::<'_, '_, '_, WSF, _, _, _, API, APO, APP>(
+            request_parts,
+            route_parameters,
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
             database_1_redis_connection_pool,
-            Convertible {
-                request_parts,
-                action_processor_incoming: incoming,
-            },
+            action_processor_incoming,
             action,
         )
         .await
@@ -124,26 +125,28 @@ struct ActionDelegator;
 
 #[cfg(feature = "manual_testing")]
 impl ActionDelegator {
-    async fn delegate<'a, SF, T, A, F, API, APO, APP>(
+    async fn delegate<'a, 'b, 'c, SF, T, A, F, API, APO, APP>(
+        request_parts: &'a mut RequestParts,
+        route_parameters: &'a Params<'b, 'c>,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
-        convertible: Convertible<API>,
+        action_processor_incoming: API,
         action: A,
-    ) -> Result<ActionProcessingDelegatorResult<APO, APP>, ErrorAuditor_>
+    ) -> Result<Result_<APO, APP>, ErrorAuditor_>
     where
         Serializer<SF>: Serialize,
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
-        A: FnOnce(Request, &'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<RedisConnectionManager>) -> F,
+        A: FnOnce(Body, &'a RequestParts, &'a Params<'b, 'c>, &'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<RedisConnectionManager>) -> F,
         F: Future<Output = Response>,
         API: SerdeSerialize + for<'de> Deserialize<'de>,
         APO: SerdeSerialize + for<'de> Deserialize<'de>,
         APP: SerdeSerialize + for<'de> Deserialize<'de>,
     {
-        let data = match Serializer::<SF>::serialize(&convertible.action_processor_incoming) {
+        let data = match Serializer::<SF>::serialize(&action_processor_incoming) {
             Ok(data_) => data_,
             Err(mut error) => {
                 error.add_backtrace_part(
@@ -158,8 +161,6 @@ impl ActionDelegator {
             }
         };
 
-        let mut request_parts = convertible.request_parts;
-
         request_parts.headers.remove(header::CONTENT_LENGTH);
 
         request_parts.headers.append(
@@ -167,13 +168,12 @@ impl ActionDelegator {
             HeaderValue::from(data.len() as u64),
         );
 
-        let request = Request::from_parts(
-            request_parts,
-            Body::from(data),
-        );
+        let body = Body::from(data);
 
         let response = action(
-            request,
+            body,
+            request_parts,
+            route_parameters,
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
             database_1_redis_connection_pool,
@@ -182,7 +182,7 @@ impl ActionDelegator {
 
         let (response_parts, body) = response.into_parts();
 
-        let action_processing_delegator_result = if response_parts.status == StatusCode::OK {
+        let result_ = if response_parts.status == StatusCode::OK {
             let bytes = match to_bytes(body).await {
                 Ok(bytes_) => bytes_,
                 Err(error) => {
@@ -218,32 +218,23 @@ impl ActionDelegator {
                 }
             };
 
-            ActionProcessingDelegatorResult {
+            Result_ {
                 response_parts,
                 unified_report: Some(unified_report),
             }
         } else {
-            ActionProcessingDelegatorResult {
+            Result_ {
                 response_parts,
                 unified_report: None,
             }
         };
 
-        return Ok(action_processing_delegator_result);
+        return Ok(result_);
     }
 }
 
 #[cfg(feature = "manual_testing")]
-struct Convertible<T>
-where
-    T: SerdeSerialize + for<'de> Deserialize<'de>,
-{
-    request_parts: RequestParts,
-    action_processor_incoming: T,
-}
-
-#[cfg(feature = "manual_testing")]
-struct ActionProcessingDelegatorResult<T, P>
+struct Result_<T, P>
 where
     T: SerdeSerialize + for<'de> Deserialize<'de>,
     P: SerdeSerialize + for<'de> Deserialize<'de>,
