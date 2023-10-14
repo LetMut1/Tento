@@ -1415,13 +1415,13 @@ impl RunServer {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let (parts, body) = request.into_parts();
+        let (parts, mut body) = request.into_parts();
 
         let r#match = match router.at(parts.uri.path()) {
             Ok(r#match_) => r#match_,
             Err(_) => {
                 return RouteNotFound::run(
-                    body,
+                    &mut body,
                     &parts,
                     database_2_postgresql_connection_pool,
                 )
@@ -1440,7 +1440,7 @@ impl RunServer {
                     // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                     (&ApplicationUser__Authorization_::CheckNicknameForExisting, &Method::POST) => {
                         return application_user___authorization::check_nickname_for_existing::CheckNicknameForExisting::run(
-                            body,
+                            &mut body,
                             &parts,
                             &r#match.params,
                             database_1_postgresql_connection_pool,
@@ -1452,7 +1452,7 @@ impl RunServer {
                     // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                     (&ApplicationUser__Authorization_::CheckEmailForExisting, &Method::POST) => {
                         return application_user___authorization::check_email_for_existing::CheckEmailForExisting::run(
-                            body,
+                            &mut body,
                             &parts,
                             &r#match.params,
                             database_1_postgresql_connection_pool,
@@ -1463,7 +1463,7 @@ impl RunServer {
                     }
                     (&ApplicationUser__Authorization_::RegisterByFirstStep, &Method::POST) => {
                         return application_user___authorization::register_by_first_step::RegisterByFirstStep::run(
-                            body,
+                            &mut body,
                             &parts,
                             &r#match.params,
                             database_1_postgresql_connection_pool,
@@ -1474,7 +1474,7 @@ impl RunServer {
                     }
                     (&ApplicationUser__Authorization_::RegisterBySecondStep, &Method::POST) => {
                         return application_user___authorization::register_by_second_step::RegisterBySecondStep::run(
-                            body,
+                            &mut body,
                             &parts,
                             &r#match.params,
                             database_1_postgresql_connection_pool,
@@ -1485,7 +1485,7 @@ impl RunServer {
                     }
                     (&ApplicationUser__Authorization_::RegisterByLastStep, &Method::POST) => {
                         return application_user___authorization::register_by_last_step::RegisterByLastStep::run(
-                            body,
+                            &mut body,
                             &parts,
                             &r#match.params,
                             database_1_postgresql_connection_pool,
@@ -1496,7 +1496,7 @@ impl RunServer {
                     }
                     (&ApplicationUser__Authorization_::SendEmailForRegister, &Method::POST) => {
                         return application_user___authorization::send_email_for_register::SendEmailForRegister::run(
-                            body,
+                            &mut body,
                             &parts,
                             &r#match.params,
                             database_1_postgresql_connection_pool,
@@ -1507,7 +1507,7 @@ impl RunServer {
                     }
                     (&ApplicationUser__Authorization_::AuthorizeByFirstStep, &Method::POST) => {
                         return application_user___authorization::authorize_by_first_step::AuthorizeByFirstStep::run(
-                            body,
+                            &mut body,
                             &parts,
                             &r#match.params,
                             database_1_postgresql_connection_pool,
@@ -1518,7 +1518,7 @@ impl RunServer {
                     }
                     (&ApplicationUser__Authorization_::AuthorizeByLastStep, &Method::POST) => {
                         return application_user___authorization::authorize_by_last_step::AuthorizeByLastStep::run(
-                            body,
+                            &mut body,
                             &parts,
                             &r#match.params,
                             database_1_postgresql_connection_pool,
@@ -1529,7 +1529,7 @@ impl RunServer {
                     }
                     (&ApplicationUser__Authorization_::SendEmailForAuthorize, &Method::POST) => {
                         return application_user___authorization::send_email_for_authorize::SendEmailForAuthorize::run(
-                            body,
+                            &mut body,
                             &parts,
                             &r#match.params,
                             database_1_postgresql_connection_pool,
@@ -1540,7 +1540,7 @@ impl RunServer {
                     }
                     (&ApplicationUser__Authorization_::ResetPasswordByFirstStep, &Method::POST) => {
                         return application_user___authorization::reset_password_by_first_step::ResetPasswordByFirstStep::run(
-                            body,
+                            &mut body,
                             &parts,
                             &r#match.params,
                             database_1_postgresql_connection_pool,
@@ -1551,7 +1551,7 @@ impl RunServer {
                     }
                     (&ApplicationUser__Authorization_::ResetPasswordBySecondStep, &Method::POST) => {
                         return application_user___authorization::reset_password_by_second_step::ResetPasswordBySecondStep::run(
-                            body,
+                            &mut body,
                             &parts,
                             &r#match.params,
                             database_1_postgresql_connection_pool,
@@ -1562,7 +1562,7 @@ impl RunServer {
                     }
                     (&ApplicationUser__Authorization_::ResetPasswordByLastStep, &Method::POST) => {
                         return application_user___authorization::reset_password_by_last_step::ResetPasswordByLastStep::run(
-                            body,
+                            &mut body,
                             &parts,
                             &r#match.params,
                             database_1_postgresql_connection_pool,
@@ -1573,7 +1573,7 @@ impl RunServer {
                     }
                     (&ApplicationUser__Authorization_::SendEmailForResetPassword, &Method::POST) => {
                         return application_user___authorization::send_email_for_reset_password::SendEmailForResetPassword::run(
-                            body,
+                            &mut body,
                             &parts,
                             &r#match.params,
                             database_1_postgresql_connection_pool,
@@ -1584,7 +1584,7 @@ impl RunServer {
                     }
                     (&ApplicationUser__Authorization_::RefreshAccessToken, &Method::POST) => {
                         return application_user___authorization::refresh_access_token::RefreshAccessToken::run(
-                            body,
+                            &mut body,
                             &parts,
                             &r#match.params,
                             database_1_postgresql_connection_pool,
@@ -1595,7 +1595,7 @@ impl RunServer {
                     }
                     (&ApplicationUser__Authorization_::DeauthorizeFromOneDevice, &Method::POST) => {
                         return application_user___authorization::deauthorize_from_one_device::DeauthorizeFromOneDevice::run(
-                            body,
+                            &mut body,
                             &parts,
                             &r#match.params,
                             database_1_postgresql_connection_pool,
@@ -1606,7 +1606,7 @@ impl RunServer {
                     }
                     (&ApplicationUser__Authorization_::DeauthorizeFromAllDevices, &Method::POST) => {
                         return application_user___authorization::deauthorize_from_all_devices::DeauthorizeFromAllDevices::run(
-                            body,
+                            &mut body,
                             &parts,
                             &r#match.params,
                             database_1_postgresql_connection_pool,
@@ -1625,7 +1625,7 @@ impl RunServer {
                                 // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                                 (&ApplicationUser__Authorization_::CheckNicknameForExisting_, &Method::POST) => {
                                     return application_user___authorization::check_nickname_for_existing::CheckNicknameForExisting::run_(
-                                        body,
+                                        &mut body,
                                         &parts,
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
@@ -1637,7 +1637,7 @@ impl RunServer {
                                 // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                                 (&ApplicationUser__Authorization_::CheckEmailForExisting_, &Method::POST) => {
                                     return application_user___authorization::check_email_for_existing::CheckEmailForExisting::run_(
-                                        body,
+                                        &mut body,
                                         &parts,
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
@@ -1648,7 +1648,7 @@ impl RunServer {
                                 }
                                 (&ApplicationUser__Authorization_::RegisterByFirstStep_, &Method::POST) => {
                                     return application_user___authorization::register_by_first_step::RegisterByFirstStep::run_(
-                                        body,
+                                        &mut body,
                                         &parts,
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
@@ -1659,7 +1659,7 @@ impl RunServer {
                                 }
                                 (&ApplicationUser__Authorization_::RegisterBySecondStep_, &Method::POST) => {
                                     return application_user___authorization::register_by_second_step::RegisterBySecondStep::run_(
-                                        body,
+                                        &mut body,
                                         &parts,
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
@@ -1670,7 +1670,7 @@ impl RunServer {
                                 }
                                 (&ApplicationUser__Authorization_::RegisterByLastStep_, &Method::POST) => {
                                     return application_user___authorization::register_by_last_step::RegisterByLastStep::run_(
-                                        body,
+                                        &mut body,
                                         &parts,
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
@@ -1681,7 +1681,7 @@ impl RunServer {
                                 }
                                 (&ApplicationUser__Authorization_::SendEmailForRegister_, &Method::POST) => {
                                     return application_user___authorization::send_email_for_register::SendEmailForRegister::run_(
-                                        body,
+                                        &mut body,
                                         &parts,
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
@@ -1692,7 +1692,7 @@ impl RunServer {
                                 }
                                 (&ApplicationUser__Authorization_::AuthorizeByFirstStep_, &Method::POST) => {
                                     return application_user___authorization::authorize_by_first_step::AuthorizeByFirstStep::run_(
-                                        body,
+                                        &mut body,
                                         &parts,
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
@@ -1703,7 +1703,7 @@ impl RunServer {
                                 }
                                 (&ApplicationUser__Authorization_::AuthorizeByLastStep_, &Method::POST) => {
                                     return application_user___authorization::authorize_by_last_step::AuthorizeByLastStep::run_(
-                                        body,
+                                        &mut body,
                                         &parts,
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
@@ -1714,7 +1714,7 @@ impl RunServer {
                                 }
                                 (&ApplicationUser__Authorization_::SendEmailForAuthorize_, &Method::POST) => {
                                     return application_user___authorization::send_email_for_authorize::SendEmailForAuthorize::run_(
-                                        body,
+                                        &mut body,
                                         &parts,
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
@@ -1725,7 +1725,7 @@ impl RunServer {
                                 }
                                 (&ApplicationUser__Authorization_::ResetPasswordByFirstStep_, &Method::POST) => {
                                     return application_user___authorization::reset_password_by_first_step::ResetPasswordByFirstStep::run_(
-                                        body,
+                                        &mut body,
                                         &parts,
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
@@ -1736,7 +1736,7 @@ impl RunServer {
                                 }
                                 (&ApplicationUser__Authorization_::ResetPasswordBySecondStep_, &Method::POST) => {
                                     return application_user___authorization::reset_password_by_second_step::ResetPasswordBySecondStep::run_(
-                                        body,
+                                        &mut body,
                                         &parts,
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
@@ -1747,7 +1747,7 @@ impl RunServer {
                                 }
                                 (&ApplicationUser__Authorization_::ResetPasswordByLastStep_, &Method::POST) => {
                                     return application_user___authorization::reset_password_by_last_step::ResetPasswordByLastStep::run_(
-                                        body,
+                                        &mut body,
                                         &parts,
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
@@ -1758,7 +1758,7 @@ impl RunServer {
                                 }
                                 (&ApplicationUser__Authorization_::SendEmailForResetPassword_, &Method::POST) => {
                                     return application_user___authorization::send_email_for_reset_password::SendEmailForResetPassword::run_(
-                                        body,
+                                        &mut body,
                                         &parts,
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
@@ -1769,7 +1769,7 @@ impl RunServer {
                                 }
                                 (&ApplicationUser__Authorization_::RefreshAccessToken_, &Method::POST) => {
                                     return application_user___authorization::refresh_access_token::RefreshAccessToken::run_(
-                                        body,
+                                        &mut body,
                                         &parts,
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
@@ -1780,7 +1780,7 @@ impl RunServer {
                                 }
                                 (&ApplicationUser__Authorization_::DeauthorizeFromOneDevice_, &Method::POST) => {
                                     return application_user___authorization::deauthorize_from_one_device::DeauthorizeFromOneDevice::run_(
-                                        body,
+                                        &mut body,
                                         &parts,
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
@@ -1791,7 +1791,7 @@ impl RunServer {
                                 }
                                 (&ApplicationUser__Authorization_::DeauthorizeFromAllDevices_, &Method::POST) => {
                                     return application_user___authorization::deauthorize_from_all_devices::DeauthorizeFromAllDevices::run_(
-                                        body,
+                                        &mut body,
                                         &parts,
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
@@ -1816,7 +1816,7 @@ impl RunServer {
                     // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                     (&Channel__Base_::GetOneByID, &Method::POST) => {
                         return channel___base::get_one_by_id::GetOneByID::run(
-                            body,
+                            &mut body,
                             &parts,
                             &r#match.params,
                             database_1_postgresql_connection_pool,
@@ -1828,7 +1828,7 @@ impl RunServer {
                     // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                     (&Channel__Base_::GetManyByNameInSubscriptions, &Method::POST) => {
                         return channel___base::get_many_by_name_in_subscriptions::GetManyByNameInSubscriptions::run(
-                            body,
+                            &mut body,
                             &parts,
                             &r#match.params,
                             database_1_postgresql_connection_pool,
@@ -1840,7 +1840,7 @@ impl RunServer {
                     // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                     (&Channel__Base_::GetManyBySubscription, &Method::POST) => {
                         return channel___base::get_many_by_subscription::GetManyBySubscription::run(
-                            body,
+                            &mut body,
                             &parts,
                             &r#match.params,
                             database_1_postgresql_connection_pool,
@@ -1852,7 +1852,7 @@ impl RunServer {
                     // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                     (&Channel__Base_::GetManyPublicByName, &Method::POST) => {
                         return channel___base::get_many_public_by_name::GetManyPublicByName::run(
-                            body,
+                            &mut body,
                             &parts,
                             &r#match.params,
                             database_1_postgresql_connection_pool,
@@ -1871,7 +1871,7 @@ impl RunServer {
                                 // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                                 (&Channel__Base_::GetOneByID_, &Method::POST) => {
                                     return channel___base::get_one_by_id::GetOneByID::run_(
-                                        body,
+                                        &mut body,
                                         &parts,
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
@@ -1883,7 +1883,7 @@ impl RunServer {
                                 // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                                 (&Channel__Base_::GetManyByNameInSubscriptions_, &Method::POST) => {
                                     return channel___base::get_many_by_name_in_subscriptions::GetManyByNameInSubscriptions::run_(
-                                        body,
+                                        &mut body,
                                         &parts,
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
@@ -1895,7 +1895,7 @@ impl RunServer {
                                 // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                                 (&Channel__Base_::GetManyBySubscription_, &Method::POST) => {
                                     return channel___base::get_many_by_subscription::GetManyBySubscription::run_(
-                                        body,
+                                        &mut body,
                                         &parts,
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
@@ -1907,7 +1907,7 @@ impl RunServer {
                                 // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                                 (&Channel__Base_::GetManyPublicByName_, &Method::POST) => {
                                     return channel___base::get_many_public_by_name::GetManyPublicByName::run_(
-                                        body,
+                                        &mut body,
                                         &parts,
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
@@ -1931,7 +1931,7 @@ impl RunServer {
                 ) {
                     (&ChannelSubscription__Base_::Create, &Method::POST) => {
                         return channel_subscription___base::create::Create::run(
-                            body,
+                            &mut body,
                             &parts,
                             &r#match.params,
                             database_1_postgresql_connection_pool,
@@ -1949,7 +1949,7 @@ impl RunServer {
                             ) {
                                 (&ChannelSubscription__Base_::Create_, &Method::POST) => {
                                     return channel_subscription___base::create::Create::run_(
-                                        body,
+                                        &mut body,
                                         &parts,
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
@@ -1967,7 +1967,7 @@ impl RunServer {
         }
 
         return RouteNotFound::run(
-            body,
+            &mut body,
             &parts,
             database_2_postgresql_connection_pool,
         )

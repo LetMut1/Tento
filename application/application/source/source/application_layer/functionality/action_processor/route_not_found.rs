@@ -21,7 +21,7 @@ pub struct RouteNotFound;
 
 impl RouteNotFound {
     pub async fn process<'a, T>(
-        body: Body,
+        body: &'a mut Body,
         parts: &'a Parts,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
     ) -> Response

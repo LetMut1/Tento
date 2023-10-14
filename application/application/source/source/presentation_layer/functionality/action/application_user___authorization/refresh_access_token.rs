@@ -38,7 +38,7 @@ pub struct RefreshAccessToken;
 
 impl RefreshAccessToken {
     pub async fn run<'a, T>(
-        body: Body,
+        body: &'a mut Body,
         parts: &'a Parts,
         route_parameters: &'a Params<'_, '_>,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -65,7 +65,7 @@ impl RefreshAccessToken {
     }
 
     pub async fn extract<'a>(
-        body: Body,
+        body: &'a mut Body,
         _parts: &'a Parts,
         _route_parameters: &'a Params<'_, '_>,
     ) -> Result<InvalidArgumentResult<Incoming>, ErrorAuditor_> {
@@ -115,7 +115,7 @@ impl RefreshAccessToken {
 #[cfg(feature = "manual_testing")]
 impl RefreshAccessToken {
     pub async fn run_<'a, T>(
-        body: Body,
+        body: &'a mut Body,
         parts: &'a Parts,
         route_parameters: &'a Params<'_, '_>,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,

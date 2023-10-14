@@ -40,7 +40,7 @@ pub struct WrappedActionProcessor;
 #[cfg(feature = "manual_testing")]
 impl WrappedActionProcessor {
     pub async fn process<'a, 'b, 'c, SF, WSF, T, A, F, API, APO, APP>(
-        mut body: Body,
+        mut body: &'a mut Body,
         request_parts: &'a mut RequestParts,
         route_parameters: &'a Params<'b, 'c>,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,

@@ -38,7 +38,7 @@ pub struct CommonActionProcessor;
 
 impl CommonActionProcessor {
     pub async fn process<'a, 'b, 'c, T, DE, F1, AP, F2, API, APO, APP, SF>(
-        body: Body,
+        body: &'a mut Body,
         parts: &'a Parts,
         route_parameters: &'a Params<'b, 'c>,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -52,7 +52,7 @@ impl CommonActionProcessor {
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
-        DE: FnOnce(Body, &'a Parts, &'a Params<'b, 'c>) -> F1,
+        DE: FnOnce(&'a mut Body, &'a Parts, &'a Params<'b, 'c>) -> F1,
         F1: Future<Output = Result<InvalidArgumentResult<API>, ErrorAuditor_>>,
         AP: FnOnce(&'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<RedisConnectionManager>, API) -> F2,
         F2: Future<Output = Result<InvalidArgumentResult<UnifiedReport<APO, APP>>, ErrorAuditor_>>,
@@ -186,12 +186,6 @@ impl CommonActionProcessor {
                 return response;
             }
         };
-
-
-
-
-
-
 
         let unified_report = match action_processor(
             database_1_postgresql_connection_pool,
