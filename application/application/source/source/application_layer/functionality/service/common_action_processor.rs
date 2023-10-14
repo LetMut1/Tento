@@ -30,180 +30,174 @@ use std::marker::Sync;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
+use http::request::Parts;
+use hyper::Body;
+use matchit::Params;
 
 pub struct CommonActionProcessor;
 
 impl CommonActionProcessor {
-    pub async fn process<'a, SF, T, AP, F, API, APO, APP>(
-        mut request: Request,
+    pub async fn process<'a, 'b, 'c, T, DE, F1, AP, F2, API, APO, APP, SF>(
+        body: Body,
+        parts: &'a Parts,
+        route_parameters: &'a Params<'b, 'c>,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
+        data_extractor: DE,
         action_processor: AP,
     ) -> Response
     where
-        Serializer<SF>: Serialize,
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
-        AP: FnOnce(&'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<RedisConnectionManager>, API) -> F,
-        F: Future<Output = Result<InvalidArgumentResult<UnifiedReport<APO, APP>>, ErrorAuditor_>>,
-        API: for<'de> Deserialize<'de>,
+        DE: FnOnce(Body, &'a Parts, &'a Params<'b, 'c>) -> F1,
+        F1: Future<Output = Result<InvalidArgumentResult<API>, ErrorAuditor_>>,
+        AP: FnOnce(&'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<RedisConnectionManager>, API) -> F2,
+        F2: Future<Output = Result<InvalidArgumentResult<UnifiedReport<APO, APP>>, ErrorAuditor_>>,
         APO: SerdeSerialize,
         APP: SerdeSerialize,
+        Serializer<SF>: Serialize,
     {
-        if !Validator::<Request>::is_valid(&request) {
+        if !Validator::<Parts>::is_valid(parts) {
             let response = Creator::<Response>::create_bad_request();
 
-            if let Err(mut error) = Writer::<ActionRoundRegister>::write_with_context(
-                database_2_postgresql_connection_pool,
-                &request,
-                &response,
-                &InvalidArgument::HttpHeader,
-            )
-            .await
-            {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                        None,
-                    ),
-                );
+            // if let Err(mut error) = Writer::<ActionRoundRegister>::write_with_context(
+            //     database_2_postgresql_connection_pool,
+            //     &request,
+            //     &response,
+            //     &InvalidArgument::HttpHeader,
+            // )
+            // .await
+            // {
+            //     error.add_backtrace_part(
+            //         BacktracePart::new(
+            //             line!(),
+            //             file!(),
+            //             None,
+            //         ),
+            //     );
 
-                #[cfg(feature = "manual_testing")]
-                {
-                    println!(
-                        "{}",
-                        Formatter::prepare(&error)
-                    );
-                }
+            //     #[cfg(feature = "manual_testing")]
+            //     {
+            //         println!(
+            //             "{}",
+            //             Formatter::prepare(&error)
+            //         );
+            //     }
 
-                unreachable!(
-                    "{}. TODO: Write in concurrent way. It is also necessary that the write                     // TODO CHANGE all occurences.
-                    process does not wait for another write process, and writes immediately.",
-                    &error,
-                );
-            }
+            //     unreachable!(
+            //         "{}. TODO: Write in concurrent way. It is also necessary that the write                     // TODO CHANGE all occurences.
+            //         process does not wait for another write process, and writes immediately.",
+            //         &error,
+            //     );
+            // }
 
             return response;
         }
 
-        let bytes = match to_bytes(request.body_mut()).await {
-            Ok(bytes_) => bytes_,
-            Err(error) => {
-                let error_ = ErrorAuditor_::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Other::new(error),
-                        },
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                        None,
-                    ),
-                );
-
-                #[cfg(feature = "manual_testing")]
-                {
-                    println!(
-                        "{}",
-                        Formatter::prepare(&error_)
-                    );
-                }
-
-                let response = Creator::<Response>::create_internal_server_error();
-
-                if let Err(mut error__) = Writer::<ActionRoundRegister>::write_with_context(
-                    database_2_postgresql_connection_pool,
-                    &request,
-                    &response,
-                    &error_,
-                )
-                .await
-                {
-                    error__.add_backtrace_part(
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    );
-
-                    #[cfg(feature = "manual_testing")]
-                    {
-                        println!(
-                            "{}",
-                            Formatter::prepare(&error__)
-                        );
-                    }
-
-                    unreachable!(
-                        "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
-                        process does not wait for another write process, and writes immediately.",
-                        &error_, &error__
-                    );
-                }
-
-                return response;
-            }
-        };
-
-        let action_processor_incoming = match Serializer::<SF>::deserialize::<'_, API>(bytes.chunk()) {
+        let action_processor_incoming = match data_extractor(
+            body,
+            parts,
+            route_parameters,
+        )
+        .await
+        {
             Ok(action_processor_incoming_) => action_processor_incoming_,
             Err(error) => {
-                #[cfg(feature = "manual_testing")]
-                {
-                    println!(
-                        "{}",
-                        Formatter::prepare(&error)
-                    );
-                }
-
                 let response = Creator::<Response>::create_internal_server_error();
 
-                if let Err(mut error_) = Writer::<ActionRoundRegister>::write_with_context(
-                    database_2_postgresql_connection_pool,
-                    &request,
-                    &response,
-                    &error,
-                )
-                .await
-                {
-                    error_.add_backtrace_part(
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    );
+                // if let Err(mut error) = Writer::<ActionRoundRegister>::write_with_context(
+                //     database_2_postgresql_connection_pool,
+                //     &request,
+                //     &response,
+                //     &InvalidArgument::HttpHeader,
+                // )
+                // .await
+                // {
+                //     error.add_backtrace_part(
+                //         BacktracePart::new(
+                //             line!(),
+                //             file!(),
+                //             None,
+                //         ),
+                //     );
 
-                    #[cfg(feature = "manual_testing")]
-                    {
-                        println!(
-                            "{}",
-                            Formatter::prepare(&error_)
-                        );
-                    }
+                //     #[cfg(feature = "manual_testing")]
+                //     {
+                //         println!(
+                //             "{}",
+                //             Formatter::prepare(&error)
+                //         );
+                //     }
 
-                    unreachable!(
-                        "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
-                        process does not wait for another write process, and writes immediately.",
-                        &error, &error_
-                    );
-                }
+                //     unreachable!(
+                //         "{}. TODO: Write in concurrent way. It is also necessary that the write                     // TODO CHANGE all occurences.
+                //         process does not wait for another write process, and writes immediately.",
+                //         &error,
+                //     );
+                // }
 
                 return response;
             }
         };
+
+        let action_processor_incoming_ = match action_processor_incoming {
+            InvalidArgumentResult::Ok {
+                subject: action_processor_incoming__,
+            } => action_processor_incoming__,
+            InvalidArgumentResult::InvalidArgument {
+                invalid_argument,
+            } => {
+                let response = Creator::<Response>::create_bad_request();
+
+                // if let Err(mut error) = Writer::<ActionRoundRegister>::write_with_context(
+                //     database_2_postgresql_connection_pool,
+                //     &request,
+                //     &response,
+                //     &InvalidArgument::HttpHeader,
+                // )
+                // .await
+                // {
+                //     error.add_backtrace_part(
+                //         BacktracePart::new(
+                //             line!(),
+                //             file!(),
+                //             None,
+                //         ),
+                //     );
+
+                //     #[cfg(feature = "manual_testing")]
+                //     {
+                //         println!(
+                //             "{}",
+                //             Formatter::prepare(&error)
+                //         );
+                //     }
+
+                //     unreachable!(
+                //         "{}. TODO: Write in concurrent way. It is also necessary that the write                     // TODO CHANGE all occurences.
+                //         process does not wait for another write process, and writes immediately.",
+                //         &error,
+                //     );
+                // }
+
+                return response;
+            }
+        };
+
+
+
+
+
+
 
         let unified_report = match action_processor(
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
             database_1_redis_connection_pool,
-            action_processor_incoming,
+            action_processor_incoming_,
         )
         .await
         {
@@ -219,36 +213,36 @@ impl CommonActionProcessor {
 
                 let response = Creator::<Response>::create_internal_server_error();
 
-                if let Err(mut error_) = Writer::<ActionRoundRegister>::write_with_context(
-                    database_2_postgresql_connection_pool,
-                    &request,
-                    &response,
-                    &error,
-                )
-                .await
-                {
-                    error_.add_backtrace_part(
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    );
+                // if let Err(mut error_) = Writer::<ActionRoundRegister>::write_with_context(
+                //     database_2_postgresql_connection_pool,
+                //     &request,
+                //     &response,
+                //     &error,
+                // )
+                // .await
+                // {
+                //     error_.add_backtrace_part(
+                //         BacktracePart::new(
+                //             line!(),
+                //             file!(),
+                //             None,
+                //         ),
+                //     );
 
-                    #[cfg(feature = "manual_testing")]
-                    {
-                        println!(
-                            "{}",
-                            Formatter::prepare(&error_)
-                        );
-                    }
+                //     #[cfg(feature = "manual_testing")]
+                //     {
+                //         println!(
+                //             "{}",
+                //             Formatter::prepare(&error_)
+                //         );
+                //     }
 
-                    unreachable!(
-                        "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
-                        process does not wait for another write process, and writes immediately.",
-                        &error, &error_
-                    );
-                }
+                //     unreachable!(
+                //         "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
+                //         process does not wait for another write process, and writes immediately.",
+                //         &error, &error_
+                //     );
+                // }
 
                 return response;
             }
@@ -263,36 +257,36 @@ impl CommonActionProcessor {
             } => {
                 let response = Creator::<Response>::create_bad_request();
 
-                if let Err(mut error) = Writer::<ActionRoundRegister>::write_with_context(
-                    database_2_postgresql_connection_pool,
-                    &request,
-                    &response,
-                    &invalid_argument,
-                )
-                .await
-                {
-                    error.add_backtrace_part(
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    );
+                // if let Err(mut error) = Writer::<ActionRoundRegister>::write_with_context(
+                //     database_2_postgresql_connection_pool,
+                //     &request,
+                //     &response,
+                //     &invalid_argument,
+                // )
+                // .await
+                // {
+                //     error.add_backtrace_part(
+                //         BacktracePart::new(
+                //             line!(),
+                //             file!(),
+                //             None,
+                //         ),
+                //     );
 
-                    #[cfg(feature = "manual_testing")]
-                    {
-                        println!(
-                            "{}",
-                            Formatter::prepare(&error)
-                        );
-                    }
+                //     #[cfg(feature = "manual_testing")]
+                //     {
+                //         println!(
+                //             "{}",
+                //             Formatter::prepare(&error)
+                //         );
+                //     }
 
-                    unreachable!(
-                        "{}. TODO: Write in concurrent way. It is also necessary that the write
-                        process does not wait for another write process, and writes immediately.",
-                        &error
-                    );
-                }
+                //     unreachable!(
+                //         "{}. TODO: Write in concurrent way. It is also necessary that the write
+                //         process does not wait for another write process, and writes immediately.",
+                //         &error
+                //     );
+                // }
 
                 return response;
             }
@@ -311,36 +305,36 @@ impl CommonActionProcessor {
 
                 let response = Creator::<Response>::create_internal_server_error();
 
-                if let Err(mut error_) = Writer::<ActionRoundRegister>::write_with_context(
-                    database_2_postgresql_connection_pool,
-                    &request,
-                    &response,
-                    &error,
-                )
-                .await
-                {
-                    error_.add_backtrace_part(
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    );
+                // if let Err(mut error_) = Writer::<ActionRoundRegister>::write_with_context(
+                //     database_2_postgresql_connection_pool,
+                //     &request,
+                //     &response,
+                //     &error,
+                // )
+                // .await
+                // {
+                //     error_.add_backtrace_part(
+                //         BacktracePart::new(
+                //             line!(),
+                //             file!(),
+                //             None,
+                //         ),
+                //     );
 
-                    #[cfg(feature = "manual_testing")]
-                    {
-                        println!(
-                            "{}",
-                            Formatter::prepare(&error_)
-                        );
-                    }
+                //     #[cfg(feature = "manual_testing")]
+                //     {
+                //         println!(
+                //             "{}",
+                //             Formatter::prepare(&error_)
+                //         );
+                //     }
 
-                    unreachable!(
-                        "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
-                        process does not wait for another write process, and writes immediately.",
-                        &error, &error_
-                    );
-                }
+                //     unreachable!(
+                //         "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
+                //         process does not wait for another write process, and writes immediately.",
+                //         &error, &error_
+                //     );
+                // }
 
                 return response;
             }
@@ -348,35 +342,35 @@ impl CommonActionProcessor {
 
         let response = Creator::<Response>::create_ok(data);
 
-        if let Err(mut error) = Writer::<ActionRoundRegister>::write(
-            database_2_postgresql_connection_pool,
-            &request,
-            &response,
-        )
-        .await
-        {
-            error.add_backtrace_part(
-                BacktracePart::new(
-                    line!(),
-                    file!(),
-                    None,
-                ),
-            );
+        // if let Err(mut error) = Writer::<ActionRoundRegister>::write(
+        //     database_2_postgresql_connection_pool,
+        //     &request,
+        //     &response,
+        // )
+        // .await
+        // {
+        //     error.add_backtrace_part(
+        //         BacktracePart::new(
+        //             line!(),
+        //             file!(),
+        //             None,
+        //         ),
+        //     );
 
-            #[cfg(feature = "manual_testing")]
-            {
-                println!(
-                    "{}",
-                    Formatter::prepare(&error)
-                );
-            }
+        //     #[cfg(feature = "manual_testing")]
+        //     {
+        //         println!(
+        //             "{}",
+        //             Formatter::prepare(&error)
+        //         );
+        //     }
 
-            unreachable!(
-                "{}. TODO: Write in concurrent way. It is also necessary that the write
-                process does not wait for another write process, and writes immediately.",
-                &error
-            );
-        }
+        //     unreachable!(
+        //         "{}. TODO: Write in concurrent way. It is also necessary that the write
+        //         process does not wait for another write process, and writes immediately.",
+        //         &error
+        //     );
+        // }
 
         return response;
     }

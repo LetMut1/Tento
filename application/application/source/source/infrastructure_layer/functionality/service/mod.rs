@@ -17,7 +17,7 @@ pub mod postgresql_connection_pool___creator;
 pub mod postgresql_transaction___resolver;
 pub mod prepared_statemant_parameter_convertation_resolver;
 pub mod redis_connection_pool___creator;
-pub mod request___validator;
+pub mod request_parts___validator;
 pub mod resolver;
 pub mod response___creator;
 pub mod sender;

@@ -3,11 +3,11 @@ use crate::infrastructure_layer::functionality::service::creator::Creator;
 use crate::infrastructure_layer::functionality::service::creator::Response;
 use http::header;
 
-pub use crate::infrastructure_layer::data::control_type::Request;
+pub use http::request::Parts;
 
-impl Validator<Request> {
-    pub fn is_valid<'a>(request: &'a Request) -> bool {
-        let header_map = request.headers();
+impl Validator<Parts> {
+    pub fn is_valid<'a>(parts: &'a Parts) -> bool {
+        let header_map = &parts.headers;
 
         let header_value_content_type = match header_map.get(header::CONTENT_TYPE) {
             Some(header_value_content_type_) => header_value_content_type_,

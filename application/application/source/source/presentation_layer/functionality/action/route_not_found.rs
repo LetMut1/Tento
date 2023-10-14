@@ -9,12 +9,16 @@ use std::marker::Sync;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
+use http::request::Parts;
+use hyper::Body;
+use matchit::Params;
 
 pub struct RouteNotFound;
 
 impl RouteNotFound {
     pub async fn run<'a, T>(
-        request: Request,
+        body: Body,
+        parts: &'a Parts,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
     ) -> Response
     where
@@ -24,7 +28,8 @@ impl RouteNotFound {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
         return RouteNotFound_::process(
-            request,
+            body,
+            parts,
             database_2_postgresql_connection_pool,
         )
         .await;

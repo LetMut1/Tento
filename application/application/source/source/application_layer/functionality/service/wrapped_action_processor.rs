@@ -57,63 +57,64 @@ impl WrappedActionProcessor {
         APO: SerdeSerialize + for<'de> Deserialize<'de>,
         APP: SerdeSerialize + for<'de> Deserialize<'de>,
     {
-        if !Validator::<Request>::is_valid(&request) {
-            return Creator::<Response>::create_bad_request();
-        }
+        todo!();
+        // if !Validator::<Request>::is_valid(&request) {
+        //     return Creator::<Response>::create_bad_request();
+        // }
 
-        let bytes = match to_bytes(request.body_mut()).await {
-            Ok(bytes_) => bytes_,
-            Err(_) => {
-                return Creator::<Response>::create_internal_server_error();
-            }
-        };
+        // let bytes = match to_bytes(request.body_mut()).await {
+        //     Ok(bytes_) => bytes_,
+        //     Err(_) => {
+        //         return Creator::<Response>::create_internal_server_error();
+        //     }
+        // };
 
-        let incoming = match Serializer::<SF>::deserialize::<API>(bytes.chunk()) {
-            Ok(wrapped_incoming_) => wrapped_incoming_,
-            Err(_) => {
-                return Creator::<Response>::create_internal_server_error();
-            }
-        };
+        // let incoming = match Serializer::<SF>::deserialize::<API>(bytes.chunk()) {
+        //     Ok(wrapped_incoming_) => wrapped_incoming_,
+        //     Err(_) => {
+        //         return Creator::<Response>::create_internal_server_error();
+        //     }
+        // };
 
-        let action_processing_delegator_result = match ActionDelegator::delegate::<'_, WSF, _, _, _, API, APO, APP>(
-            database_1_postgresql_connection_pool,
-            database_2_postgresql_connection_pool,
-            database_1_redis_connection_pool,
-            ConvertibleParts {
-                request,
-                action_processor_incoming: incoming,
-            },
-            action,
-        )
-        .await
-        {
-            Ok(action_processor_result_) => action_processor_result_,
-            Err(_) => {
-                return Creator::<Response>::create_internal_server_error();
-            }
-        };
+        // let action_processing_delegator_result = match ActionDelegator::delegate::<'_, WSF, _, _, _, API, APO, APP>(
+        //     database_1_postgresql_connection_pool,
+        //     database_2_postgresql_connection_pool,
+        //     database_1_redis_connection_pool,
+        //     ConvertibleParts {
+        //         request,
+        //         action_processor_incoming: incoming,
+        //     },
+        //     action,
+        // )
+        // .await
+        // {
+        //     Ok(action_processor_result_) => action_processor_result_,
+        //     Err(_) => {
+        //         return Creator::<Response>::create_internal_server_error();
+        //     }
+        // };
 
-        let unified_report = match action_processing_delegator_result.unified_report {
-            Some(unified_report_) => unified_report_,
-            None => {
-                return Creator::<Response>::create_from_response_parts(
-                    action_processing_delegator_result.response_parts,
-                    None,
-                );
-            }
-        };
+        // let unified_report = match action_processing_delegator_result.unified_report {
+        //     Some(unified_report_) => unified_report_,
+        //     None => {
+        //         return Creator::<Response>::create_from_response_parts(
+        //             action_processing_delegator_result.response_parts,
+        //             None,
+        //         );
+        //     }
+        // };
 
-        let data = match Serializer::<SF>::serialize(&unified_report) {
-            Ok(data_) => data_,
-            Err(_) => {
-                return Creator::<Response>::create_internal_server_error();
-            }
-        };
+        // let data = match Serializer::<SF>::serialize(&unified_report) {
+        //     Ok(data_) => data_,
+        //     Err(_) => {
+        //         return Creator::<Response>::create_internal_server_error();
+        //     }
+        // };
 
-        return Creator::<Response>::create_from_response_parts(
-            action_processing_delegator_result.response_parts,
-            Some(data),
-        );
+        // return Creator::<Response>::create_from_response_parts(
+        //     action_processing_delegator_result.response_parts,
+        //     Some(data),
+        // );
     }
 }
 

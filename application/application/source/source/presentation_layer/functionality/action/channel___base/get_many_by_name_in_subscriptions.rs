@@ -15,6 +15,19 @@ use std::marker::Sync;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
+use http::request::Parts;
+use hyper::Body;
+use matchit::Params;
+use hyper::body::to_bytes;
+use crate::infrastructure_layer::data::error_auditor::BacktracePart;
+use crate::infrastructure_layer::data::error_auditor::Error;
+use crate::infrastructure_layer::data::error_auditor::ErrorAuditor_;
+use crate::infrastructure_layer::data::error_auditor::Other;
+use crate::infrastructure_layer::data::error_auditor::Runtime;
+use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
+use crate::infrastructure_layer::functionality::service::serializer::Serialize;
+use crate::infrastructure_layer::functionality::service::serializer::Serializer;
+use bytes::Buf;
 
 #[cfg(feature = "manual_testing")]
 use crate::application_layer::functionality::service::wrapped_action_processor::WrappedActionProcessor;
@@ -25,7 +38,9 @@ pub struct GetManyByNameInSubscriptions;
 
 impl GetManyByNameInSubscriptions {
     pub async fn run<'a, T>(
-        request: Request,
+        body: Body,
+        parts: &'a Parts,
+        route_parameters: &'a Params<'_, '_>,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
@@ -36,21 +51,73 @@ impl GetManyByNameInSubscriptions {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        return CommonActionProcessor::process::<'_, MessagePack, _, _, _, Incoming, Outcoming, Precedent>(
-            request,
+        return CommonActionProcessor::process::<'_, '_, '_, _, _, _, _, _, _, _, _, MessagePack>(
+            body,
+            parts,
+            route_parameters,
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
             database_1_redis_connection_pool,
+            Self::extract,
             GetManyByNameInSubscriptions_::process,
         )
         .await;
+    }
+
+    pub async fn extract<'a>(
+        body: Body,
+        _parts: &'a Parts,
+        _route_parameters: &'a Params<'_, '_>,
+    ) -> Result<InvalidArgumentResult<Incoming>, ErrorAuditor_> {
+        let bytes = match to_bytes(body).await {
+            Ok(bytes_) => bytes_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor_::new(
+                        Error::Runtime {
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    )
+                );
+            }
+        };
+
+        let incoming = match Serializer::<MessagePack>::deserialize::<'_, Incoming>(bytes.chunk()) {
+            Ok(incoming_) => incoming_,
+            Err(mut error) => {
+                error.add_backtrace_part(
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                );
+
+                return Err(error);
+            }
+        };
+
+        return Ok(
+            InvalidArgumentResult::Ok {
+                subject: incoming,
+            },
+        );
     }
 }
 
 #[cfg(feature = "manual_testing")]
 impl GetManyByNameInSubscriptions {
     pub async fn run_<'a, T>(
-        request: Request,
+        body: Body,
+        parts: &'a Parts,
+        route_parameters: &'a Params<'_, '_>,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
@@ -61,13 +128,14 @@ impl GetManyByNameInSubscriptions {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        return WrappedActionProcessor::process::<'_, Json, MessagePack, _, _, _, Incoming, Outcoming, Precedent>(
-            request,
-            database_1_postgresql_connection_pool,
-            database_2_postgresql_connection_pool,
-            database_1_redis_connection_pool,
-            Self::run,
-        )
-        .await;
+        todo!();
+        // return WrappedActionProcessor::process::<'_, Json, MessagePack, _, _, _, Incoming, Outcoming, Precedent>(
+        //     request,
+        //     database_1_postgresql_connection_pool,
+        //     database_2_postgresql_connection_pool,
+        //     database_1_redis_connection_pool,
+        //     Self::run,
+        // )
+        // .await;
     }
 }

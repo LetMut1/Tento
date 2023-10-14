@@ -13,12 +13,16 @@ use std::marker::Sync;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
+use http::request::Parts;
+use hyper::Body;
+use matchit::Params;
 
 pub struct RouteNotFound;
 
 impl RouteNotFound {
     pub async fn process<'a, T>(
-        request: Request,
+        body: Body,
+        parts: &'a Parts,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
     ) -> Response
     where
@@ -29,28 +33,28 @@ impl RouteNotFound {
     {
         let response = Creator::<Response>::create_not_found();
 
-        if let Err(mut error) = Writer::<ActionRoundRegister>::write_with_context(
-            database_2_postgresql_connection_pool,
-            &request,
-            &response,
-            &InvalidArgument::HttpRoute,
-        )
-        .await
-        {
-            error.add_backtrace_part(
-                BacktracePart::new(
-                    line!(),
-                    file!(),
-                    None,
-                ),
-            );
+        // if let Err(mut error) = Writer::<ActionRoundRegister>::write_with_context(
+        //     database_2_postgresql_connection_pool,
+        //     &request,
+        //     &response,
+        //     &InvalidArgument::HttpRoute,
+        // )
+        // .await
+        // {
+        //     error.add_backtrace_part(
+        //         BacktracePart::new(
+        //             line!(),
+        //             file!(),
+        //             None,
+        //         ),
+        //     );
 
-            unreachable!(
-                "{}. TODO: Write in concurrent way. It is also necessary that the write
-                process does not wait for another write process, and writes immediately.",
-                &error
-            );
-        }
+        //     unreachable!(
+        //         "{}. TODO: Write in concurrent way. It is also necessary that the write
+        //         process does not wait for another write process, and writes immediately.",
+        //         &error
+        //     );
+        // }
 
         return response;
     }
