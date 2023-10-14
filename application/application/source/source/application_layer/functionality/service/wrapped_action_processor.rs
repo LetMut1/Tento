@@ -59,11 +59,6 @@ impl WrappedActionProcessor {
         APO: SerdeSerialize + for<'de> Deserialize<'de>,
         APP: SerdeSerialize + for<'de> Deserialize<'de>,
     {
-// TODO Зачем проверять? если дальше все проверяется.
-// TODO Зачем проверять? если дальше все проверяется.
-// TODO Зачем проверять? если дальше все проверяется.
-// TODO Зачем проверять? если дальше все проверяется.
-// TODO Зачем проверять? если дальше все проверяется.
         if !Validator::<RequestParts>::is_valid(&request_parts) {
             return Creator::<Response>::create_bad_request();
         }
