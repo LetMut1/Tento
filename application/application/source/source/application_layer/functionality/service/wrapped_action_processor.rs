@@ -41,6 +41,8 @@ pub struct WrappedActionProcessor;
 impl WrappedActionProcessor {
     pub async fn process<'a, 'b, 'c, SF, WSF, T, A, F, API, APO, APP>(
         body: &'a mut Body,
+        // TODO https://github.com/rust-lang/rust/issues/102211#issuecomment-1513931928
+        body_: &'a mut Body,
         request_parts: &'a mut RequestParts,
         route_parameters: &'a Params<'b, 'c>,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -55,7 +57,7 @@ impl WrappedActionProcessor {
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
-        A: for<'d, 'e, 'f> FnOnce(&'d mut Body, &'d RequestParts, &'d Params<'e, 'f>, &'d Pool<PostgresqlConnectionManager<T>>, &'d Pool<PostgresqlConnectionManager<T>>, &'d Pool<RedisConnectionManager>) -> F,
+        A: FnOnce(&'a mut Body, &'a RequestParts, &'a Params<'b, 'c>, &'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<RedisConnectionManager>) -> F,
         F: Future<Output = Response>,
         API: SerdeSerialize + for<'de> Deserialize<'de>,
         APO: SerdeSerialize + for<'de> Deserialize<'de>,
@@ -79,7 +81,8 @@ impl WrappedActionProcessor {
             }
         };
 
-        let action_processing_delegator_result = match ActionDelegator::delegate::<WSF, _, _, _, API, APO, APP>(
+        let result_ = match ActionDelegator::delegate::<'_, '_, '_, _, _, _, _, APO, APP, WSF>(
+            body_,
             request_parts,
             route_parameters,
             database_1_postgresql_connection_pool,
@@ -90,17 +93,17 @@ impl WrappedActionProcessor {
         )
         .await
         {
-            Ok(action_processor_result_) => action_processor_result_,
+            Ok(result__) => result__,
             Err(_) => {
                 return Creator::<Response>::create_internal_server_error();
             }
         };
 
-        let unified_report = match action_processing_delegator_result.unified_report {
+        let unified_report = match result_.unified_report {
             Some(unified_report_) => unified_report_,
             None => {
                 return Creator::<Response>::create_from_response_parts(
-                    action_processing_delegator_result.response_parts,
+                    result_.response_parts,
                     None,
                 );
             }
@@ -114,7 +117,7 @@ impl WrappedActionProcessor {
         };
 
         return Creator::<Response>::create_from_response_parts(
-            action_processing_delegator_result.response_parts,
+            result_.response_parts,
             Some(data),
         );
     }
@@ -125,7 +128,9 @@ struct ActionDelegator;
 
 #[cfg(feature = "manual_testing")]
 impl ActionDelegator {
-    async fn delegate<'a, 'b, 'c, SF, T, A, F, API, APO, APP>(
+    async fn delegate<'a, 'b, 'c, T, A, F, API, APO, APP, SF,>(
+        // TODO https://github.com/rust-lang/rust/issues/102211#issuecomment-1513931928
+        request_body: &'a mut Body,
         request_parts: &'a mut RequestParts,
         route_parameters: &'a Params<'b, 'c>,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -140,7 +145,7 @@ impl ActionDelegator {
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
-        A: for<'d, 'e, 'f> FnOnce(&'d mut Body, &'d RequestParts, &'d Params<'e, 'f>, &'d Pool<PostgresqlConnectionManager<T>>, &'d Pool<PostgresqlConnectionManager<T>>, &'d Pool<RedisConnectionManager>) -> F,
+        A: FnOnce(&'a mut Body, &'a RequestParts, &'a Params<'b, 'c>, &'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<RedisConnectionManager>) -> F,
         F: Future<Output = Response>,
         API: SerdeSerialize + for<'de> Deserialize<'de>,
         APO: SerdeSerialize + for<'de> Deserialize<'de>,
@@ -168,17 +173,40 @@ impl ActionDelegator {
             HeaderValue::from(data.len() as u64),
         );
 
-        let mut request_body = Body::from(data);
+        let request_body_ = Body::from(data);
 
-        let response = action(
-            &mut request_body,
-            request_parts,
-            route_parameters,
-            database_1_postgresql_connection_pool,
-            database_2_postgresql_connection_pool,
-            database_1_redis_connection_pool,
-        )
-        .await;
+        // TODO https://github.com/rust-lang/rust/issues/102211#issuecomment-1513931928
+        // Right way.
+        // let response = {
+            // request_body: &'a mut Body - нужно убрать из сигнатуры
+            // При наличии HRTB -  A: for<'d, 'e, 'f> FnOnce(&'d mut Body, &'d RequestParts, &'d Params<'e, 'f>, &'d Pool<PostgresqlConnectionManager<T>>, &'d Pool<PostgresqlConnectionManager<T>>, &'d Pool<RedisConnectionManager>) -> F,
+
+            // let response = action(
+            //     &mut request_body_,
+            //     request_parts,
+            //     route_parameters,
+            //     database_1_postgresql_connection_pool,
+            //     database_2_postgresql_connection_pool,
+            //     database_1_redis_connection_pool,
+            // )
+            // .await;
+        // };
+
+        // TODO https://github.com/rust-lang/rust/issues/102211#issuecomment-1513931928
+        //  Bad way. Vary bad but worked way. It is neede to write Right way after bug fixing.
+        let response = {
+            *request_body = request_body_;
+
+            action(
+                request_body,
+                request_parts,
+                route_parameters,
+                database_1_postgresql_connection_pool,
+                database_2_postgresql_connection_pool,
+                database_1_redis_connection_pool,
+            )
+            .await
+        };
 
         let (response_parts, response_body) = response.into_parts();
 
