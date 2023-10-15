@@ -34,7 +34,7 @@ impl DeauthorizeFromAllDevices {
         _database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
-        incoming: Incoming,
+        incoming: Option<Incoming>,
     ) -> Result<InvalidArgumentResult<UnifiedReport<Void, Precedent>>, ErrorAuditor_>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -42,7 +42,23 @@ impl DeauthorizeFromAllDevices {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let extractor_result = match Extractor::<ApplicationUserAccessToken<'_>>::extract(&incoming.application_user_access_token_encrypted).await {
+        let incoming_ = match incoming {
+            Some(incoming__) => incoming__,
+            None => {
+                return Err(
+                    ErrorAuditor_::new(
+                        Error::create_incoming_invalid_state(),
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+        };
+
+        let extractor_result = match Extractor::<ApplicationUserAccessToken<'_>>::extract(&incoming_.application_user_access_token_encrypted).await {
             Ok(extractor_result_) => extractor_result_,
             Err(mut error) => {
                 error.add_backtrace_part(

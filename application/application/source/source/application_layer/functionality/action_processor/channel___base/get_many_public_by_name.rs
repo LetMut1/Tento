@@ -39,7 +39,7 @@ impl GetManyPublicByName {
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
-        incoming: Incoming,
+        incoming: Option<Incoming>,
     ) -> Result<InvalidArgumentResult<UnifiedReport<Outcoming, Precedent>>, ErrorAuditor_>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -47,7 +47,23 @@ impl GetManyPublicByName {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let extractor_result = match Extractor::<ApplicationUserAccessToken<'_>>::extract(&incoming.application_user_access_token_encrypted).await {
+        let incoming_ = match incoming {
+            Some(incoming__) => incoming__,
+            None => {
+                return Err(
+                    ErrorAuditor_::new(
+                        Error::create_incoming_invalid_state(),
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+        };
+
+        let extractor_result = match Extractor::<ApplicationUserAccessToken<'_>>::extract(&incoming_.application_user_access_token_encrypted).await {
             Ok(extractor_result_) => extractor_result_,
             Err(mut error) => {
                 error.add_backtrace_part(
@@ -99,7 +115,7 @@ impl GetManyPublicByName {
             }
         };
 
-        if incoming.limit <= 0 || incoming.limit > Self::LIMIT {
+        if incoming_.limit <= 0 || incoming_.limit > Self::LIMIT {
             return Ok(
                 InvalidArgumentResult::InvalidArgument {
                     invalid_argument: InvalidArgument::Limit,
@@ -107,7 +123,7 @@ impl GetManyPublicByName {
             );
         }
 
-        if !Validator::<Channel_Name>::is_valid(&incoming.channel_name) {
+        if !Validator::<Channel_Name>::is_valid(&incoming_.channel_name) {
             return Ok(
                 InvalidArgumentResult::InvalidArgument {
                     invalid_argument: InvalidArgument::Channel_Name,
@@ -115,7 +131,7 @@ impl GetManyPublicByName {
             );
         }
 
-        if let Some(ref requery_channel_name_) = incoming.requery_channel_name {
+        if let Some(ref requery_channel_name_) = incoming_.requery_channel_name {
             if !Validator::<Channel_Name>::is_valid(requery_channel_name_) {
                 return Ok(
                     InvalidArgumentResult::InvalidArgument {
@@ -151,11 +167,11 @@ impl GetManyPublicByName {
             &*database_1_postgresql_pooled_connection,
             &By11 {
                 application_user_id: application_user_access_token.application_user_id,
-                channel_name: &incoming.channel_name,
-                requery_channel_name: &incoming.requery_channel_name,
+                channel_name: &incoming_.channel_name,
+                requery_channel_name: &incoming_.requery_channel_name,
                 channel_visability_modifier: FormResolver::<Channel_VisabilityModifier>::from_representation(Channel_VisabilityModifier_::Public),
             },
-            incoming.limit,
+            incoming_.limit,
         )
         .await
         {

@@ -31,7 +31,7 @@ impl CheckEmailForExisting {
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
-        incoming: Incoming,
+        incoming: Option<Incoming>,
     ) -> Result<InvalidArgumentResult<UnifiedReport<Outcoming, Void>>, ErrorAuditor_>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -39,7 +39,23 @@ impl CheckEmailForExisting {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let is_valid_email = match Validator::<ApplicationUser_Email>::is_valid(&incoming.application_user_email) {
+        let incoming_ = match incoming {
+            Some(incoming__) => incoming__,
+            None => {
+                return Err(
+                    ErrorAuditor_::new(
+                        Error::create_incoming_invalid_state(),
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+        };
+
+        let is_valid_email = match Validator::<ApplicationUser_Email>::is_valid(&incoming_.application_user_email) {
             Ok(is_valid_email_) => is_valid_email_,
             Err(mut error) => {
                 error.add_backtrace_part(
@@ -87,7 +103,7 @@ impl CheckEmailForExisting {
         let is_exist = match PostgresqlRepository::<ApplicationUser<'_>>::is_exist_2(
             &*database_1_postgresql_pooled_connection,
             &By2 {
-                application_user_email: &incoming.application_user_email,
+                application_user_email: &incoming_.application_user_email,
             },
         )
         .await

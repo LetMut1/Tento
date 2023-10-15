@@ -42,7 +42,7 @@ impl RefreshAccessToken {
         _database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
-        incoming: Incoming,
+        incoming: Option<Incoming>,
     ) -> Result<InvalidArgumentResult<UnifiedReport<Outcoming, Precedent>>, ErrorAuditor_>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -50,7 +50,23 @@ impl RefreshAccessToken {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let application_user_access_token = match FormResolver::<ApplicationUserAccessToken<'_>>::from_encrypted(&incoming.application_user_access_token_encrypted) {
+        let incoming_ = match incoming {
+            Some(incoming__) => incoming__,
+            None => {
+                return Err(
+                    ErrorAuditor_::new(
+                        Error::create_incoming_invalid_state(),
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+        };
+
+        let application_user_access_token = match FormResolver::<ApplicationUserAccessToken<'_>>::from_encrypted(&incoming_.application_user_access_token_encrypted) {
             Ok(application_user_access_token_) => application_user_access_token_,
             Err(mut error) => {
                 error.add_backtrace_part(
@@ -142,7 +158,7 @@ impl RefreshAccessToken {
 
         let is_valid = match FormResolver::<ApplicationUserAccessRefreshToken<'_>>::is_valid(
             &application_user_access_refresh_token_,
-            &incoming.application_user_access_refresh_token_encrypted,
+            &incoming_.application_user_access_refresh_token_encrypted,
         ) {
             Ok(is_valid_) => is_valid_,
             Err(mut error) => {

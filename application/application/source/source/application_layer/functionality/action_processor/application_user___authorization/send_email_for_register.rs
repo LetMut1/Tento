@@ -40,7 +40,7 @@ impl SendEmailForRegister {
         _database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
-        incoming: Incoming,
+        incoming: Option<Incoming>,
     ) -> Result<InvalidArgumentResult<UnifiedReport<Outcoming, Precedent>>, ErrorAuditor_>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -48,7 +48,23 @@ impl SendEmailForRegister {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let is_valid_email = match Validator::<ApplicationUser_Email>::is_valid(&incoming.application_user_email) {
+        let incoming_ = match incoming {
+            Some(incoming__) => incoming__,
+            None => {
+                return Err(
+                    ErrorAuditor_::new(
+                        Error::create_incoming_invalid_state(),
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+        };
+
+        let is_valid_email = match Validator::<ApplicationUser_Email>::is_valid(&incoming_.application_user_email) {
             Ok(is_valid_email_) => is_valid_email_,
             Err(mut error) => {
                 error.add_backtrace_part(
@@ -71,7 +87,7 @@ impl SendEmailForRegister {
             );
         }
 
-        if !Validator::<ApplicationUserDevice_Id>::is_valid(&incoming.application_user_device_id) {
+        if !Validator::<ApplicationUserDevice_Id>::is_valid(&incoming_.application_user_device_id) {
             return Ok(
                 InvalidArgumentResult::InvalidArgument {
                     invalid_argument: InvalidArgument::ApplicationUserDevice_Id,
@@ -80,8 +96,8 @@ impl SendEmailForRegister {
         }
 
         let by_5 = By5 {
-            application_user_email: &incoming.application_user_email,
-            application_user_device_id: &incoming.application_user_device_id,
+            application_user_email: &incoming_.application_user_email,
+            application_user_device_id: &incoming_.application_user_device_id,
         };
 
         let database_2_postgresql_pooled_connection = match database_2_postgresql_connection_pool.get().await {
@@ -217,8 +233,8 @@ impl SendEmailForRegister {
 
         if let Err(mut error) = EmailSender::<ApplicationUserRegistrationToken<'_>>::send(
             &application_user_registration_token_.value,
-            &incoming.application_user_email,
-            &incoming.application_user_device_id,
+            &incoming_.application_user_email,
+            &incoming_.application_user_device_id,
         ) {
             error.add_backtrace_part(
                 BacktracePart::new(

@@ -171,6 +171,12 @@ pub enum Error<T> {
 }
 
 impl<T> Error<T> {
+    pub fn create_incoming_invalid_state() -> Self {
+        return Self::Logic {
+            message: "The action processor Incoming in invalid state.",
+        };
+    }
+
     pub fn create_unreachable_state() -> Self {
         return Self::Logic {
             message: "Unreachable state.",

@@ -43,7 +43,7 @@ impl ResetPasswordBySecondStep {
         _database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
-        incoming: Incoming,
+        incoming: Option<Incoming>,
     ) -> Result<InvalidArgumentResult<UnifiedReport<Void, Precedent>>, ErrorAuditor_>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -51,7 +51,23 @@ impl ResetPasswordBySecondStep {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let is_valid_value = match Validator::<ApplicationUserResetPasswordToken_Value>::is_valid(&incoming.application_user_reset_password_token_value) {
+        let incoming_ = match incoming {
+            Some(incoming__) => incoming__,
+            None => {
+                return Err(
+                    ErrorAuditor_::new(
+                        Error::create_incoming_invalid_state(),
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+        };
+
+        let is_valid_value = match Validator::<ApplicationUserResetPasswordToken_Value>::is_valid(&incoming_.application_user_reset_password_token_value) {
             Ok(is_valid_value_) => is_valid_value_,
             Err(mut error) => {
                 error.add_backtrace_part(
@@ -74,7 +90,7 @@ impl ResetPasswordBySecondStep {
             );
         }
 
-        if !Validator::<ApplicationUser_Id>::is_valid(incoming.application_user_id) {
+        if !Validator::<ApplicationUser_Id>::is_valid(incoming_.application_user_id) {
             return Ok(
                 InvalidArgumentResult::InvalidArgument {
                     invalid_argument: InvalidArgument::ApplicationUser_Id,
@@ -82,7 +98,7 @@ impl ResetPasswordBySecondStep {
             );
         }
 
-        if !Validator::<ApplicationUserDevice_Id>::is_valid(&incoming.application_user_device_id) {
+        if !Validator::<ApplicationUserDevice_Id>::is_valid(&incoming_.application_user_device_id) {
             return Ok(
                 InvalidArgumentResult::InvalidArgument {
                     invalid_argument: InvalidArgument::ApplicationUserDevice_Id,
@@ -91,8 +107,8 @@ impl ResetPasswordBySecondStep {
         }
 
         let by_4 = By4 {
-            application_user_id: incoming.application_user_id,
-            application_user_device_id: &incoming.application_user_device_id,
+            application_user_id: incoming_.application_user_id,
+            application_user_device_id: &incoming_.application_user_device_id,
         };
 
         let database_2_postgresql_pooled_connection = match database_2_postgresql_connection_pool.get().await {
@@ -183,7 +199,7 @@ impl ResetPasswordBySecondStep {
             );
         }
 
-        if application_user_reset_password_token_.value.0 != incoming.application_user_reset_password_token_value.0 {
+        if application_user_reset_password_token_.value.0 != incoming_.application_user_reset_password_token_value.0 {
             if let Err(mut error) = Incrementor::<ApplicationUserResetPasswordToken_WrongEnterTriesQuantity>::increment(&mut application_user_reset_password_token_.wrong_enter_tries_quantity) {
                 error.add_backtrace_part(
                     BacktracePart::new(

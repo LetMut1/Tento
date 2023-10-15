@@ -1,5 +1,4 @@
 use crate::application_layer::data::unified_report::UnifiedReport;
-use crate::infrastructure_layer::data::control_type::Request;
 use crate::infrastructure_layer::data::control_type::Response;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
@@ -262,11 +261,7 @@ impl ActionDelegator {
 }
 
 #[cfg(feature = "manual_testing")]
-struct Result_<T, P>
-where
-    T: SerdeSerialize + for<'de> Deserialize<'de>,
-    P: SerdeSerialize + for<'de> Deserialize<'de>,
-{
+struct Result_<T, P> {
     response_parts: ResponseParts,
     unified_report: Option<UnifiedReport<T, P>>,
 }

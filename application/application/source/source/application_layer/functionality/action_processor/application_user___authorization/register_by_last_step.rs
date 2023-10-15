@@ -60,7 +60,7 @@ impl RegisterByLastStep {
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
-        incoming: Incoming,
+        incoming: Option<Incoming>,
     ) -> Result<InvalidArgumentResult<UnifiedReport<Outcoming, Precedent>>, ErrorAuditor_>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -68,10 +68,26 @@ impl RegisterByLastStep {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
+        let incoming_ = match incoming {
+            Some(incoming__) => incoming__,
+            None => {
+                return Err(
+                    ErrorAuditor_::new(
+                        Error::create_incoming_invalid_state(),
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+        };
+
         if !Validator::<ApplicationUser_Password>::is_valid(
-            &incoming.application_user_password,
-            &incoming.application_user_email,
-            &incoming.application_user_nickname,
+            &incoming_.application_user_password,
+            &incoming_.application_user_email,
+            &incoming_.application_user_nickname,
         ) {
             return Ok(
                 InvalidArgumentResult::InvalidArgument {
@@ -80,7 +96,7 @@ impl RegisterByLastStep {
             );
         }
 
-        if !Validator::<ApplicationUser_Nickname>::is_valid(&incoming.application_user_nickname) {
+        if !Validator::<ApplicationUser_Nickname>::is_valid(&incoming_.application_user_nickname) {
             return Ok(
                 InvalidArgumentResult::InvalidArgument {
                     invalid_argument: InvalidArgument::ApplicationUser_Nickname,
@@ -88,7 +104,7 @@ impl RegisterByLastStep {
             );
         }
 
-        let is_valid_email = match Validator::<ApplicationUser_Email>::is_valid(&incoming.application_user_email) {
+        let is_valid_email = match Validator::<ApplicationUser_Email>::is_valid(&incoming_.application_user_email) {
             Ok(is_valid_email_) => is_valid_email_,
             Err(mut error) => {
                 error.add_backtrace_part(
@@ -111,7 +127,7 @@ impl RegisterByLastStep {
             );
         }
 
-        let is_valid_value = match Validator::<ApplicationUserRegistrationToken_Value>::is_valid(&incoming.application_user_registration_token_value) {
+        let is_valid_value = match Validator::<ApplicationUserRegistrationToken_Value>::is_valid(&incoming_.application_user_registration_token_value) {
             Ok(is_valid_value_) => is_valid_value_,
             Err(mut error) => {
                 error.add_backtrace_part(
@@ -134,7 +150,7 @@ impl RegisterByLastStep {
             );
         }
 
-        if !Validator::<ApplicationUserDevice_Id>::is_valid(&incoming.application_user_device_id) {
+        if !Validator::<ApplicationUserDevice_Id>::is_valid(&incoming_.application_user_device_id) {
             return Ok(
                 InvalidArgumentResult::InvalidArgument {
                     invalid_argument: InvalidArgument::ApplicationUserDevice_Id,
@@ -169,7 +185,7 @@ impl RegisterByLastStep {
         let is_exist_1 = match PostgresqlRepository::<ApplicationUser<'_>>::is_exist_1(
             database_1_postgresql_connection,
             &By1 {
-                application_user_nickname: &incoming.application_user_nickname,
+                application_user_nickname: &incoming_.application_user_nickname,
             },
         )
         .await
@@ -199,7 +215,7 @@ impl RegisterByLastStep {
         let is_exist_2 = match PostgresqlRepository::<ApplicationUser<'_>>::is_exist_2(
             database_1_postgresql_connection,
             &By2 {
-                application_user_email: &incoming.application_user_email,
+                application_user_email: &incoming_.application_user_email,
             },
         )
         .await
@@ -227,8 +243,8 @@ impl RegisterByLastStep {
         }
 
         let by_5 = By5 {
-            application_user_email: &incoming.application_user_email,
-            application_user_device_id: &incoming.application_user_device_id,
+            application_user_email: &incoming_.application_user_email,
+            application_user_device_id: &incoming_.application_user_device_id,
         };
 
         let database_2_postgresql_pooled_connection = match database_2_postgresql_connection_pool.get().await {
@@ -319,7 +335,7 @@ impl RegisterByLastStep {
             );
         }
 
-        if application_user_registration_token_.value.0 != incoming.application_user_registration_token_value.0 {
+        if application_user_registration_token_.value.0 != incoming_.application_user_registration_token_value.0 {
             if let Err(mut error) = Incrementor::<ApplicationUserRegistrationToken_WrongEnterTriesQuantity>::increment(&mut application_user_registration_token_.wrong_enter_tries_quantity) {
                 error.add_backtrace_part(
                     BacktracePart::new(
@@ -378,7 +394,7 @@ impl RegisterByLastStep {
             );
         }
 
-        let application_user_password_hash = match Encoder::<ApplicationUser_Password>::encode(&incoming.application_user_password) {
+        let application_user_password_hash = match Encoder::<ApplicationUser_Password>::encode(&incoming_.application_user_password) {
             Ok(application_user_password_hash_) => application_user_password_hash_,
             Err(mut error) => {
                 error.add_backtrace_part(
@@ -413,8 +429,8 @@ impl RegisterByLastStep {
         let application_user = match PostgresqlRepository::<ApplicationUser<'_>>::create(
             database_1_postgresql_connection,
             Insert1 {
-                application_user_email: incoming.application_user_email,
-                application_user_nickname: incoming.application_user_nickname,
+                application_user_email: incoming_.application_user_email,
+                application_user_nickname: incoming_.application_user_nickname,
                 application_user_password_hash,
             },
         )
@@ -437,7 +453,7 @@ impl RegisterByLastStep {
         let application_user_device = match PostgresqlRepository::<ApplicationUserDevice>::create(
             database_1_postgresql_connection,
             Insert4 {
-                application_user_device_id: incoming.application_user_device_id,
+                application_user_device_id: incoming_.application_user_device_id,
                 application_user_id: application_user.id,
             },
         )

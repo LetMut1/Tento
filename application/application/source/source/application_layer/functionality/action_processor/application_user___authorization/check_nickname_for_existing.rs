@@ -31,7 +31,7 @@ impl CheckNicknameForExisting {
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
-        incoming: Incoming,
+        incoming: Option<Incoming>,
     ) -> Result<InvalidArgumentResult<UnifiedReport<Outcoming, Void>>, ErrorAuditor_>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -39,7 +39,23 @@ impl CheckNicknameForExisting {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        if !Validator::<ApplicationUser_Nickname>::is_valid(&incoming.application_user_nickname) {
+        let incoming_ = match incoming {
+            Some(incoming__) => incoming__,
+            None => {
+                return Err(
+                    ErrorAuditor_::new(
+                        Error::create_incoming_invalid_state(),
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+        };
+
+        if !Validator::<ApplicationUser_Nickname>::is_valid(&incoming_.application_user_nickname) {
             return Ok(
                 InvalidArgumentResult::InvalidArgument {
                     invalid_argument: InvalidArgument::ApplicationUser_Nickname,
@@ -72,7 +88,7 @@ impl CheckNicknameForExisting {
         let is_exist = match PostgresqlRepository::<ApplicationUser<'_>>::is_exist_1(
             &*database_1_postgresql_pooled_connection,
             &By1 {
-                application_user_nickname: &incoming.application_user_nickname,
+                application_user_nickname: &incoming_.application_user_nickname,
             },
         )
         .await

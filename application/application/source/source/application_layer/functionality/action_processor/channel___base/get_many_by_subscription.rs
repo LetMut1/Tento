@@ -36,7 +36,7 @@ impl GetManyBySubscription {
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
-        incoming: Incoming,
+        incoming: Option<Incoming>,
     ) -> Result<InvalidArgumentResult<UnifiedReport<Outcoming, Precedent>>, ErrorAuditor_>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -44,7 +44,23 @@ impl GetManyBySubscription {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let extractor_result = match Extractor::<ApplicationUserAccessToken<'_>>::extract(&incoming.application_user_access_token_encrypted).await {
+        let incoming_ = match incoming {
+            Some(incoming__) => incoming__,
+            None => {
+                return Err(
+                    ErrorAuditor_::new(
+                        Error::create_incoming_invalid_state(),
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+        };
+
+        let extractor_result = match Extractor::<ApplicationUserAccessToken<'_>>::extract(&incoming_.application_user_access_token_encrypted).await {
             Ok(extractor_result_) => extractor_result_,
             Err(mut error) => {
                 error.add_backtrace_part(
@@ -96,7 +112,7 @@ impl GetManyBySubscription {
             }
         };
 
-        if let Some(requery_channel_id_) = incoming.requery_channel_id {
+        if let Some(requery_channel_id_) = incoming_.requery_channel_id {
             if !Validator::<Channel_Id>::is_valid(requery_channel_id_) {
                 return Ok(
                     InvalidArgumentResult::InvalidArgument {
@@ -106,7 +122,7 @@ impl GetManyBySubscription {
             }
         }
 
-        if incoming.limit <= 0 || incoming.limit > Self::LIMIT {
+        if incoming_.limit <= 0 || incoming_.limit > Self::LIMIT {
             return Ok(
                 InvalidArgumentResult::InvalidArgument {
                     invalid_argument: InvalidArgument::Limit,
@@ -140,9 +156,9 @@ impl GetManyBySubscription {
             &*database_1_postgresql_pooled_connection,
             &By13 {
                 application_user_id: application_user_access_token.application_user_id,
-                requery_channel_id: incoming.requery_channel_id,
+                requery_channel_id: incoming_.requery_channel_id,
             },
-            incoming.limit,
+            incoming_.limit,
         )
         .await
         {

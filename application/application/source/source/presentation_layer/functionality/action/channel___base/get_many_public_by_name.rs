@@ -68,7 +68,7 @@ impl GetManyPublicByName {
         body: &'a mut Body,
         _parts: &'a Parts,
         _route_parameters: &'a Params<'_, '_>,
-    ) -> Result<InvalidArgumentResult<Incoming>, ErrorAuditor_> {
+    ) -> Result<InvalidArgumentResult<Option<Incoming>>, ErrorAuditor_> {
         let bytes = match to_bytes(body).await {
             Ok(bytes_) => bytes_,
             Err(error) => {
@@ -106,7 +106,7 @@ impl GetManyPublicByName {
 
         return Ok(
             InvalidArgumentResult::Ok {
-                subject: incoming,
+                subject: Some(incoming),
             },
         );
     }

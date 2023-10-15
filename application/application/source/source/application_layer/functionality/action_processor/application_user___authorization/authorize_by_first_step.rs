@@ -55,7 +55,7 @@ impl AuthorizeByFirstStep {
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
-        incoming: Incoming,
+        incoming: Option<Incoming>,
     ) -> Result<InvalidArgumentResult<UnifiedReport<Outcoming, Precedent>>, ErrorAuditor_>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -63,7 +63,23 @@ impl AuthorizeByFirstStep {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        if !Validator::<ApplicationUser_Password>::is_valid_part_1(&incoming.application_user_password) {
+        let incoming_ = match incoming {
+            Some(incoming__) => incoming__,
+            None => {
+                return Err(
+                    ErrorAuditor_::new(
+                        Error::create_incoming_invalid_state(),
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+        };
+
+        if !Validator::<ApplicationUser_Password>::is_valid_part_1(&incoming_.application_user_password) {
             return Ok(
                 InvalidArgumentResult::InvalidArgument {
                     invalid_argument: InvalidArgument::ApplicationUser_Password,
@@ -71,7 +87,7 @@ impl AuthorizeByFirstStep {
             );
         }
 
-        if !Validator::<ApplicationUserDevice_Id>::is_valid(&incoming.application_user_device_id) {
+        if !Validator::<ApplicationUserDevice_Id>::is_valid(&incoming_.application_user_device_id) {
             return Ok(
                 InvalidArgumentResult::InvalidArgument {
                     invalid_argument: InvalidArgument::ApplicationUserDevice_Id,
@@ -79,7 +95,7 @@ impl AuthorizeByFirstStep {
             );
         }
 
-        let application_user_email = ApplicationUser_Email(incoming.application_user_email_or_application_user_nickname);
+        let application_user_email = ApplicationUser_Email(incoming_.application_user_email_or_application_user_nickname);
 
         let is_valid_email = match Validator::<ApplicationUser_Email>::is_valid(&application_user_email) {
             Ok(is_valid_email_) => is_valid_email_,
@@ -213,7 +229,7 @@ impl AuthorizeByFirstStep {
         };
 
         if !Validator::<ApplicationUser_Password>::is_valid_part_2(
-            &incoming.application_user_password,
+            &incoming_.application_user_password,
             &application_user_email,
             &application_user_nickname,
         ) {
@@ -225,7 +241,7 @@ impl AuthorizeByFirstStep {
         }
 
         let is_valid = match Encoder::<ApplicationUser_Password>::is_valid(
-            &incoming.application_user_password,
+            &incoming_.application_user_password,
             &application_user_password_hash,
         ) {
             Ok(is_valid_) => is_valid_,
@@ -252,7 +268,7 @@ impl AuthorizeByFirstStep {
 
         let by_4 = By4 {
             application_user_id,
-            application_user_device_id: &incoming.application_user_device_id,
+            application_user_device_id: &incoming_.application_user_device_id,
         };
 
         let database_2_postgresql_pooled_connection = match database_2_postgresql_connection_pool.get().await {
@@ -464,7 +480,7 @@ impl AuthorizeByFirstStep {
                     database_2_postgresql_connection,
                     Insert3 {
                         application_user_id,
-                        application_user_device_id: &incoming.application_user_device_id,
+                        application_user_device_id: &incoming_.application_user_device_id,
                         application_user_authorization_token_value: Generator::<ApplicationUserAuthorizationToken_Value>::generate(),
                         application_user_authorization_token_wrong_enter_tries_quantity: ApplicationUserAuthorizationToken_WrongEnterTriesQuantity(0),
                         application_user_authorization_token_expires_at,
@@ -500,7 +516,7 @@ impl AuthorizeByFirstStep {
             if let Err(mut error) = EmailSender::<ApplicationUserAuthorizationToken<'_>>::send(
                 &application_user_authorization_token_value,
                 &application_user_email,
-                &incoming.application_user_device_id,
+                &incoming_.application_user_device_id,
             ) {
                 error.add_backtrace_part(
                     BacktracePart::new(
