@@ -1417,6 +1417,32 @@ impl RunServer {
     {
         let (parts, mut body) = request.into_parts();
 
+        // TODO https://github.com/rust-lang/rust/issues/102211#issuecomment-1513931928
+        // Very bad way. Fix it.
+        #[cfg(feature = "manual_testing")]
+        let (mut parts_, mut body_) = {
+            let mut parts_ = Request::default().into_parts().0;
+
+            parts_.method = parts.method.clone();
+
+            parts_.headers = parts.headers.clone();
+
+            parts_.uri = parts.uri.clone();
+
+            parts_.version = parts.version.clone();
+
+            let bytes = match hyper::body::to_bytes(body).await {
+                Ok(bytes_) => bytes_,
+                Err(_) => {
+                    return Creator::<Response>::create_internal_server_error();
+                }
+            };
+
+            body = hyper::Body::from(bytes.clone());
+
+            (parts_, hyper::Body::from(bytes))
+        };
+
         let r#match = match router.at(parts.uri.path()) {
             Ok(r#match_) => r#match_,
             Err(_) => {
@@ -1626,7 +1652,8 @@ impl RunServer {
                                 (&ApplicationUser__Authorization_::CheckNicknameForExisting_, &Method::POST) => {
                                     return application_user___authorization::check_nickname_for_existing::CheckNicknameForExisting::run_(
                                         &mut body,
-                                        &parts,
+                                        &mut body_,
+                                        &mut parts_,
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
                                         database_2_postgresql_connection_pool,
@@ -1638,7 +1665,8 @@ impl RunServer {
                                 (&ApplicationUser__Authorization_::CheckEmailForExisting_, &Method::POST) => {
                                     return application_user___authorization::check_email_for_existing::CheckEmailForExisting::run_(
                                         &mut body,
-                                        &parts,
+                                        &mut body_,
+                                        &mut parts_,
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
                                         database_2_postgresql_connection_pool,
@@ -1649,7 +1677,8 @@ impl RunServer {
                                 (&ApplicationUser__Authorization_::RegisterByFirstStep_, &Method::POST) => {
                                     return application_user___authorization::register_by_first_step::RegisterByFirstStep::run_(
                                         &mut body,
-                                        &parts,
+                                        &mut body_,
+                                        &mut parts_,
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
                                         database_2_postgresql_connection_pool,
@@ -1660,7 +1689,8 @@ impl RunServer {
                                 (&ApplicationUser__Authorization_::RegisterBySecondStep_, &Method::POST) => {
                                     return application_user___authorization::register_by_second_step::RegisterBySecondStep::run_(
                                         &mut body,
-                                        &parts,
+                                        &mut body_,
+                                        &mut parts_,
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
                                         database_2_postgresql_connection_pool,
@@ -1671,7 +1701,8 @@ impl RunServer {
                                 (&ApplicationUser__Authorization_::RegisterByLastStep_, &Method::POST) => {
                                     return application_user___authorization::register_by_last_step::RegisterByLastStep::run_(
                                         &mut body,
-                                        &parts,
+                                        &mut body_,
+                                        &mut parts_,
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
                                         database_2_postgresql_connection_pool,
@@ -1682,7 +1713,8 @@ impl RunServer {
                                 (&ApplicationUser__Authorization_::SendEmailForRegister_, &Method::POST) => {
                                     return application_user___authorization::send_email_for_register::SendEmailForRegister::run_(
                                         &mut body,
-                                        &parts,
+                                        &mut body_,
+                                        &mut parts_,
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
                                         database_2_postgresql_connection_pool,
@@ -1693,7 +1725,8 @@ impl RunServer {
                                 (&ApplicationUser__Authorization_::AuthorizeByFirstStep_, &Method::POST) => {
                                     return application_user___authorization::authorize_by_first_step::AuthorizeByFirstStep::run_(
                                         &mut body,
-                                        &parts,
+                                        &mut body_,
+                                        &mut parts_,
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
                                         database_2_postgresql_connection_pool,
@@ -1704,7 +1737,8 @@ impl RunServer {
                                 (&ApplicationUser__Authorization_::AuthorizeByLastStep_, &Method::POST) => {
                                     return application_user___authorization::authorize_by_last_step::AuthorizeByLastStep::run_(
                                         &mut body,
-                                        &parts,
+                                        &mut body_,
+                                        &mut parts_,
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
                                         database_2_postgresql_connection_pool,
@@ -1715,7 +1749,8 @@ impl RunServer {
                                 (&ApplicationUser__Authorization_::SendEmailForAuthorize_, &Method::POST) => {
                                     return application_user___authorization::send_email_for_authorize::SendEmailForAuthorize::run_(
                                         &mut body,
-                                        &parts,
+                                        &mut body_,
+                                        &mut parts_,
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
                                         database_2_postgresql_connection_pool,
@@ -1726,7 +1761,8 @@ impl RunServer {
                                 (&ApplicationUser__Authorization_::ResetPasswordByFirstStep_, &Method::POST) => {
                                     return application_user___authorization::reset_password_by_first_step::ResetPasswordByFirstStep::run_(
                                         &mut body,
-                                        &parts,
+                                        &mut body_,
+                                        &mut parts_,
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
                                         database_2_postgresql_connection_pool,
@@ -1737,7 +1773,8 @@ impl RunServer {
                                 (&ApplicationUser__Authorization_::ResetPasswordBySecondStep_, &Method::POST) => {
                                     return application_user___authorization::reset_password_by_second_step::ResetPasswordBySecondStep::run_(
                                         &mut body,
-                                        &parts,
+                                        &mut body_,
+                                        &mut parts_,
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
                                         database_2_postgresql_connection_pool,
@@ -1748,7 +1785,8 @@ impl RunServer {
                                 (&ApplicationUser__Authorization_::ResetPasswordByLastStep_, &Method::POST) => {
                                     return application_user___authorization::reset_password_by_last_step::ResetPasswordByLastStep::run_(
                                         &mut body,
-                                        &parts,
+                                        &mut body_,
+                                        &mut parts_,
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
                                         database_2_postgresql_connection_pool,
@@ -1759,7 +1797,8 @@ impl RunServer {
                                 (&ApplicationUser__Authorization_::SendEmailForResetPassword_, &Method::POST) => {
                                     return application_user___authorization::send_email_for_reset_password::SendEmailForResetPassword::run_(
                                         &mut body,
-                                        &parts,
+                                        &mut body_,
+                                        &mut parts_,
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
                                         database_2_postgresql_connection_pool,
@@ -1770,7 +1809,8 @@ impl RunServer {
                                 (&ApplicationUser__Authorization_::RefreshAccessToken_, &Method::POST) => {
                                     return application_user___authorization::refresh_access_token::RefreshAccessToken::run_(
                                         &mut body,
-                                        &parts,
+                                        &mut body_,
+                                        &mut parts_,
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
                                         database_2_postgresql_connection_pool,
@@ -1781,7 +1821,8 @@ impl RunServer {
                                 (&ApplicationUser__Authorization_::DeauthorizeFromOneDevice_, &Method::POST) => {
                                     return application_user___authorization::deauthorize_from_one_device::DeauthorizeFromOneDevice::run_(
                                         &mut body,
-                                        &parts,
+                                        &mut body_,
+                                        &mut parts_,
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
                                         database_2_postgresql_connection_pool,
@@ -1792,7 +1833,8 @@ impl RunServer {
                                 (&ApplicationUser__Authorization_::DeauthorizeFromAllDevices_, &Method::POST) => {
                                     return application_user___authorization::deauthorize_from_all_devices::DeauthorizeFromAllDevices::run_(
                                         &mut body,
-                                        &parts,
+                                        &mut body_,
+                                        &mut parts_,
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
                                         database_2_postgresql_connection_pool,
@@ -1872,7 +1914,8 @@ impl RunServer {
                                 (&Channel__Base_::GetOneByID_, &Method::POST) => {
                                     return channel___base::get_one_by_id::GetOneByID::run_(
                                         &mut body,
-                                        &parts,
+                                        &mut body_,
+                                        &mut parts_,
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
                                         database_2_postgresql_connection_pool,
@@ -1884,7 +1927,8 @@ impl RunServer {
                                 (&Channel__Base_::GetManyByNameInSubscriptions_, &Method::POST) => {
                                     return channel___base::get_many_by_name_in_subscriptions::GetManyByNameInSubscriptions::run_(
                                         &mut body,
-                                        &parts,
+                                        &mut body_,
+                                        &mut parts_,
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
                                         database_2_postgresql_connection_pool,
@@ -1896,7 +1940,8 @@ impl RunServer {
                                 (&Channel__Base_::GetManyBySubscription_, &Method::POST) => {
                                     return channel___base::get_many_by_subscription::GetManyBySubscription::run_(
                                         &mut body,
-                                        &parts,
+                                        &mut body_,
+                                        &mut parts_,
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
                                         database_2_postgresql_connection_pool,
@@ -1908,7 +1953,8 @@ impl RunServer {
                                 (&Channel__Base_::GetManyPublicByName_, &Method::POST) => {
                                     return channel___base::get_many_public_by_name::GetManyPublicByName::run_(
                                         &mut body,
-                                        &parts,
+                                        &mut body_,
+                                        &mut parts_,
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
                                         database_2_postgresql_connection_pool,
@@ -1950,7 +1996,8 @@ impl RunServer {
                                 (&ChannelSubscription__Base_::Create_, &Method::POST) => {
                                     return channel_subscription___base::create::Create::run_(
                                         &mut body,
-                                        &parts,
+                                        &mut body_,
+                                        &mut parts_,
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
                                         database_2_postgresql_connection_pool,

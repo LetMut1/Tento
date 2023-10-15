@@ -39,7 +39,7 @@ pub struct WrappedActionProcessor;
 
 #[cfg(feature = "manual_testing")]
 impl WrappedActionProcessor {
-    pub async fn process<'a, 'b, 'c, SF, WSF, T, A, F, API, APO, APP>(
+    pub async fn process<'a, 'b, 'c, T, A, F, API, APO, APP, SF, WSF>(
         body: &'a mut Body,
         // TODO https://github.com/rust-lang/rust/issues/102211#issuecomment-1513931928
         body_: &'a mut Body,
@@ -51,8 +51,6 @@ impl WrappedActionProcessor {
         action: A,
     ) -> Response
     where
-        Serializer<SF>: Serialize,
-        Serializer<WSF>: Serialize,
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
@@ -62,6 +60,8 @@ impl WrappedActionProcessor {
         API: SerdeSerialize + for<'de> Deserialize<'de>,
         APO: SerdeSerialize + for<'de> Deserialize<'de>,
         APP: SerdeSerialize + for<'de> Deserialize<'de>,
+        Serializer<SF>: Serialize,
+        Serializer<WSF>: Serialize,
     {
         if !Validator::<RequestParts>::is_valid(request_parts) {
             return Creator::<Response>::create_bad_request();
@@ -140,7 +140,6 @@ impl ActionDelegator {
         action: A,
     ) -> Result<Result_<APO, APP>, ErrorAuditor_>
     where
-        Serializer<SF>: Serialize,
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
@@ -150,6 +149,7 @@ impl ActionDelegator {
         API: SerdeSerialize + for<'de> Deserialize<'de>,
         APO: SerdeSerialize + for<'de> Deserialize<'de>,
         APP: SerdeSerialize + for<'de> Deserialize<'de>,
+        Serializer<SF>: Serialize,
     {
         let data = match Serializer::<SF>::serialize(&action_processor_incoming) {
             Ok(data_) => data_,
@@ -193,7 +193,7 @@ impl ActionDelegator {
         // };
 
         // TODO https://github.com/rust-lang/rust/issues/102211#issuecomment-1513931928
-        //  Bad way. Vary bad but worked way. It is neede to write Right way after bug fixing.
+        //  Bad way. Very bad but worked way. It is neede to write Right way after bug fixing.
         let response = {
             *request_body = request_body_;
 

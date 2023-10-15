@@ -116,7 +116,8 @@ impl GetManyPublicByName {
 impl GetManyPublicByName {
     pub async fn run_<'a, T>(
         body: &'a mut Body,
-        parts: &'a Parts,
+        body_: &'a mut Body,
+        parts: &'a mut Parts,
         route_parameters: &'a Params<'_, '_>,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -128,14 +129,16 @@ impl GetManyPublicByName {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        todo!();
-        // return WrappedActionProcessor::process::<'_, Json, MessagePack, _, _, _, Incoming, Outcoming, Precedent>(
-        //     request,
-        //     database_1_postgresql_connection_pool,
-        //     database_2_postgresql_connection_pool,
-        //     database_1_redis_connection_pool,
-        //     Self::run,
-        // )
-        // .await;
+        return WrappedActionProcessor::process::<'_, '_, '_, _, _, _, Incoming, Outcoming, Precedent, Json, MessagePack>(
+            body,
+            body_,
+            parts,
+            route_parameters,
+            database_1_postgresql_connection_pool,
+            database_2_postgresql_connection_pool,
+            database_1_redis_connection_pool,
+            Self::run,
+        )
+        .await;
     }
 }
