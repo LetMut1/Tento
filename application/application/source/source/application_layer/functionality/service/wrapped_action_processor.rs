@@ -40,7 +40,7 @@ pub struct WrappedActionProcessor;
 #[cfg(feature = "manual_testing")]
 impl WrappedActionProcessor {
     pub async fn process<'a, 'b, 'c, SF, WSF, T, A, F, API, APO, APP>(
-        mut body: &'a mut Body,
+        body: &'a mut Body,
         request_parts: &'a mut RequestParts,
         route_parameters: &'a Params<'b, 'c>,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -55,7 +55,7 @@ impl WrappedActionProcessor {
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
-        A: FnOnce(Body, &'a RequestParts, &'a Params<'b, 'c>, &'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<RedisConnectionManager>) -> F,
+        A: for<'d, 'e, 'f> FnOnce(&'d mut Body, &'d RequestParts, &'d Params<'e, 'f>, &'d Pool<PostgresqlConnectionManager<T>>, &'d Pool<PostgresqlConnectionManager<T>>, &'d Pool<RedisConnectionManager>) -> F,
         F: Future<Output = Response>,
         API: SerdeSerialize + for<'de> Deserialize<'de>,
         APO: SerdeSerialize + for<'de> Deserialize<'de>,
@@ -65,7 +65,7 @@ impl WrappedActionProcessor {
             return Creator::<Response>::create_bad_request();
         }
 
-        let bytes = match to_bytes(&mut body).await {
+        let bytes = match to_bytes(body).await {
             Ok(bytes_) => bytes_,
             Err(_) => {
                 return Creator::<Response>::create_internal_server_error();
@@ -79,7 +79,7 @@ impl WrappedActionProcessor {
             }
         };
 
-        let action_processing_delegator_result = match ActionDelegator::delegate::<'_, '_, '_, WSF, _, _, _, API, APO, APP>(
+        let action_processing_delegator_result = match ActionDelegator::delegate::<WSF, _, _, _, API, APO, APP>(
             request_parts,
             route_parameters,
             database_1_postgresql_connection_pool,
@@ -140,7 +140,7 @@ impl ActionDelegator {
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
-        A: FnOnce(Body, &'a RequestParts, &'a Params<'b, 'c>, &'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<RedisConnectionManager>) -> F,
+        A: for<'d, 'e, 'f> FnOnce(&'d mut Body, &'d RequestParts, &'d Params<'e, 'f>, &'d Pool<PostgresqlConnectionManager<T>>, &'d Pool<PostgresqlConnectionManager<T>>, &'d Pool<RedisConnectionManager>) -> F,
         F: Future<Output = Response>,
         API: SerdeSerialize + for<'de> Deserialize<'de>,
         APO: SerdeSerialize + for<'de> Deserialize<'de>,
@@ -168,10 +168,10 @@ impl ActionDelegator {
             HeaderValue::from(data.len() as u64),
         );
 
-        let body = Body::from(data);
+        let mut request_body = Body::from(data);
 
         let response = action(
-            body,
+            &mut request_body,
             request_parts,
             route_parameters,
             database_1_postgresql_connection_pool,
@@ -180,10 +180,10 @@ impl ActionDelegator {
         )
         .await;
 
-        let (response_parts, body) = response.into_parts();
+        let (response_parts, response_body) = response.into_parts();
 
         let result_ = if response_parts.status == StatusCode::OK {
-            let bytes = match to_bytes(body).await {
+            let bytes = match to_bytes(response_body).await {
                 Ok(bytes_) => bytes_,
                 Err(error) => {
                     return Err(
