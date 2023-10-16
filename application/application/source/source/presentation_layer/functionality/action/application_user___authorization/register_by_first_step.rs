@@ -14,7 +14,8 @@ use tokio_postgres::Socket;
 use http::request::Parts;
 use hyper::Body;
 use matchit::Params;
-use crate::presentation_layer::functionality::service::common_body_extractor::CommonBodyExtractor;
+use crate::presentation_layer::functionality::service::extractor::Extractor;
+use crate::presentation_layer::functionality::service::extractor::HttpBodyData;
 
 #[cfg(feature = "manual_testing")]
 use crate::infrastructure_layer::functionality::service::serializer::Json;
@@ -43,7 +44,7 @@ impl RegisterByFirstStep {
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
             database_1_redis_connection_pool,
-            CommonBodyExtractor::extract::<_, MessagePack>,
+            Extractor::<HttpBodyData>::extract::<_, MessagePack>,
             RegisterByFirstStep_::process,
         )
         .await;
@@ -73,7 +74,7 @@ impl RegisterByFirstStep {
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
             database_1_redis_connection_pool,
-            CommonBodyExtractor::extract::<_, Json>,
+            Extractor::<HttpBodyData>::extract::<_, Json>,
             RegisterByFirstStep_::process,
         )
         .await;

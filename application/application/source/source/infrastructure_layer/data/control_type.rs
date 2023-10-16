@@ -18,6 +18,8 @@ pub struct UnixTime;
 
 pub struct Email;
 
+pub struct HttpBodyData;
+
 pub struct MessagePack;
 
 pub struct NumberRow;

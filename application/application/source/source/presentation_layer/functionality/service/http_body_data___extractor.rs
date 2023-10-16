@@ -8,20 +8,21 @@ use crate::infrastructure_layer::functionality::service::serializer::Serialize;
 use crate::infrastructure_layer::functionality::service::serializer::Serializer;
 use serde::Deserialize;
 use crate::infrastructure_layer::functionality::service::transformer::Transformer;
+use super::extractor::Extractor;
 
-pub struct CommonBodyExtractor;
+pub use crate::infrastructure_layer::data::control_type::HttpBodyData;
 
-impl CommonBodyExtractor {
-    pub async fn extract<'a, I, SF>(
+impl Extractor<HttpBodyData> {
+    pub async fn extract<'a, D, SF>(
         body: &'a mut Body,
         _parts: &'a Parts,
         _route_parameters: &'a Params<'_, '_>,
-    ) -> Result<InvalidArgumentResult<Option<I>>, ErrorAuditor_>
+    ) -> Result<InvalidArgumentResult<Option<D>>, ErrorAuditor_>
     where
-        I: for<'de> Deserialize<'de>,
+        D: for<'de> Deserialize<'de>,
         Serializer<SF>: Serialize,
     {
-        let incoming = match Transformer::<Body>::transform::<I, SF>(body).await {
+        let incoming = match Transformer::<Body>::transform::<D, SF>(body).await {
             Ok(incoming_) => incoming_,
             Err(mut error) => {
                 error.add_backtrace_part(
