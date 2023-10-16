@@ -7,8 +7,12 @@ use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentR
 use crate::infrastructure_layer::functionality::service::serializer::Serialize;
 use crate::infrastructure_layer::functionality::service::serializer::Serializer;
 use serde::Deserialize;
-use crate::infrastructure_layer::functionality::service::transformer::Transformer;
 use super::extractor::Extractor;
+use hyper::body::to_bytes;
+use crate::infrastructure_layer::data::error_auditor::Error;
+use crate::infrastructure_layer::data::error_auditor::Other;
+use crate::infrastructure_layer::data::error_auditor::Runtime;
+use bytes::Buf;
 
 pub use crate::infrastructure_layer::data::control_type::HttpBodyData;
 
@@ -22,8 +26,28 @@ impl Extractor<HttpBodyData> {
         D: for<'de> Deserialize<'de>,
         Serializer<SF>: Serialize,
     {
-        let incoming = match Transformer::<Body>::transform::<D, SF>(body).await {
-            Ok(incoming_) => incoming_,
+        let bytes = match to_bytes(body).await {
+            Ok(bytes_) => bytes_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor_::new(
+                        Error::Runtime {
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    )
+                );
+            }
+        };
+
+        let data = match Serializer::<SF>::deserialize::<'_, D>(bytes.chunk()) {
+            Ok(data_) => data_,
             Err(mut error) => {
                 error.add_backtrace_part(
                     BacktracePart::new(
@@ -39,7 +63,7 @@ impl Extractor<HttpBodyData> {
 
         return Ok(
             InvalidArgumentResult::Ok {
-                subject: Some(incoming),
+                subject: Some(data),
             },
         );
     }

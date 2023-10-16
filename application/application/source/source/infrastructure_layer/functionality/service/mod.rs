@@ -24,8 +24,6 @@ pub mod sender;
 pub mod serializer;
 pub mod unix_time___expiration_time_checker;
 pub mod validator;
-pub mod transformer;
-pub mod http_request_body___transformer;
 
 #[cfg(feature = "manual_testing")]
 pub mod json___serializer;
