@@ -1,9 +1,6 @@
 use crate::application_layer::functionality::action_processor::channel___base::get_many_public_by_name::GetManyPublicByName as GetManyPublicByName_;
 use crate::application_layer::functionality::action_processor::channel___base::get_many_public_by_name::Incoming;
-use crate::application_layer::functionality::action_processor::channel___base::get_many_public_by_name::Outcoming;
-use crate::application_layer::functionality::action_processor::channel___base::get_many_public_by_name::Precedent;
 use crate::application_layer::functionality::service::common_action_processor::CommonActionProcessor;
-use crate::infrastructure_layer::data::control_type::Request;
 use crate::infrastructure_layer::data::control_type::Response;
 use crate::infrastructure_layer::functionality::service::serializer::MessagePack;
 use bb8::Pool;

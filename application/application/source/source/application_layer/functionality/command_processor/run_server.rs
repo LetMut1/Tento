@@ -1421,7 +1421,6 @@ impl RunServer {
             Ok(r#match_) => r#match_,
             Err(_) => {
                 return RouteNotFound::run(
-                    &mut body,
                     &parts,
                     database_2_postgresql_connection_pool,
                 )
@@ -1967,7 +1966,6 @@ impl RunServer {
         }
 
         return RouteNotFound::run(
-            &mut body,
             &parts,
             database_2_postgresql_connection_pool,
         )

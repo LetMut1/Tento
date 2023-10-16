@@ -1,9 +1,6 @@
 use crate::application_layer::functionality::action_processor::application_user___authorization::authorize_by_first_step::AuthorizeByFirstStep as AuthorizeByFirstStep_;
 use crate::application_layer::functionality::action_processor::application_user___authorization::authorize_by_first_step::Incoming;
-use crate::application_layer::functionality::action_processor::application_user___authorization::authorize_by_first_step::Outcoming;
-use crate::application_layer::functionality::action_processor::application_user___authorization::authorize_by_first_step::Precedent;
 use crate::application_layer::functionality::service::common_action_processor::CommonActionProcessor;
-use crate::infrastructure_layer::data::control_type::Request;
 use crate::infrastructure_layer::data::control_type::Response;
 use crate::infrastructure_layer::functionality::service::serializer::MessagePack;
 use bb8::Pool;

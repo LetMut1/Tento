@@ -1,9 +1,6 @@
 use crate::application_layer::functionality::action_processor::channel___base::get_one_by_id::GetOneByID as GetOneByID_;
 use crate::application_layer::functionality::action_processor::channel___base::get_one_by_id::Incoming;
-use crate::application_layer::functionality::action_processor::channel___base::get_one_by_id::Outcoming;
-use crate::application_layer::functionality::action_processor::channel___base::get_one_by_id::Precedent;
 use crate::application_layer::functionality::service::common_action_processor::CommonActionProcessor;
-use crate::infrastructure_layer::data::control_type::Request;
 use crate::infrastructure_layer::data::control_type::Response;
 use crate::infrastructure_layer::functionality::service::serializer::MessagePack;
 use bb8::Pool;
