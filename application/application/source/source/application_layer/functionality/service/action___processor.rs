@@ -32,11 +32,12 @@ use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
 use http::request::Parts;
 use hyper::Body;
+use super::processor::Processor;
 use matchit::Params;
 
-pub struct CommonActionProcessor;
+pub use crate::infrastructure_layer::data::control_type::Action;
 
-impl CommonActionProcessor {
+impl Processor<Action> {
     pub async fn process<'a, 'b, 'c, T, DE, F1, AP, F2, I, O, P, SF>(
         body: &'a mut Body,
         parts: &'a Parts,

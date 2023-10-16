@@ -1,5 +1,6 @@
 use crate::application_layer::functionality::action_processor::application_user___authorization::register_by_last_step::RegisterByLastStep as RegisterByLastStep_;
-use crate::application_layer::functionality::service::common_action_processor::CommonActionProcessor;
+use crate::application_layer::functionality::service::processor::Processor;
+use crate::application_layer::functionality::service::processor::Action;
 use crate::infrastructure_layer::data::control_type::Response;
 use crate::infrastructure_layer::functionality::service::serializer::MessagePack;
 use bb8::Pool;
@@ -37,7 +38,7 @@ impl RegisterByLastStep {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        return CommonActionProcessor::process::<'_, '_, '_, _, _, _, _, _, _, _, _, MessagePack>(
+        return Processor::<Action>::process::<'_, '_, '_, _, _, _, _, _, _, _, _, MessagePack>(
             body,
             parts,
             route_parameters,
@@ -67,7 +68,7 @@ impl RegisterByLastStep {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        return CommonActionProcessor::process::<'_, '_, '_, _, _, _, _, _, _, _, _, Json>(
+        return Processor::<Action>::process::<'_, '_, '_, _, _, _, _, _, _, _, _, Json>(
             body,
             parts,
             route_parameters,

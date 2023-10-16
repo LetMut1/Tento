@@ -16,6 +16,8 @@ pub struct DateTime;
 
 pub struct UnixTime;
 
+pub struct Action;
+
 pub struct Email;
 
 pub struct HttpBodyData;
