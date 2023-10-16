@@ -30,8 +30,6 @@ use crate::infrastructure_layer::functionality::service::serializer::Serializer;
 use bytes::Buf;
 
 #[cfg(feature = "manual_testing")]
-use crate::application_layer::functionality::service::wrapped_action_processor::WrappedActionProcessor;
-#[cfg(feature = "manual_testing")]
 use crate::infrastructure_layer::functionality::service::serializer::Json;
 
 pub struct GetOneByID;
@@ -116,8 +114,7 @@ impl GetOneByID {
 impl GetOneByID {
     pub async fn run_<'a, T>(
         body: &'a mut Body,
-        body_: &'a mut Body,
-        parts: &'a mut Parts,
+        parts: &'a Parts,
         route_parameters: &'a Params<'_, '_>,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -129,15 +126,15 @@ impl GetOneByID {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        return WrappedActionProcessor::process::<'_, '_, '_, _, _, _, Incoming, Outcoming, Precedent, Json, MessagePack>(
+        return CommonActionProcessor::process::<'_, '_, '_, _, _, _, _, _, _, _, _, Json>(
             body,
-            body_,
             parts,
             route_parameters,
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
             database_1_redis_connection_pool,
-            Self::run,
+            Self::extract,
+            GetOneByID_::process,
         )
         .await;
     }
