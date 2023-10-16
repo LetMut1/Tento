@@ -22,6 +22,8 @@ pub struct Email;
 
 pub struct HttpBodyData;
 
+pub struct AuthorizeByFirstStep;
+
 pub struct MessagePack;
 
 pub struct NumberRow;

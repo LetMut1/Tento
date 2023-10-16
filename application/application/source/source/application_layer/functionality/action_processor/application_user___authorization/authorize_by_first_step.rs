@@ -42,14 +42,15 @@ use std::marker::Send;
 use std::marker::Sync;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
+use crate::application_layer::functionality::action_processor::action_processor::ActionProcessor;
 use tokio_postgres::Socket;
+
 pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::authorize_by_first_step::Incoming;
 pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::authorize_by_first_step::Outcoming;
 pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::authorize_by_first_step::Precedent;
+pub use crate::infrastructure_layer::data::control_type::AuthorizeByFirstStep;
 
-pub struct AuthorizeByFirstStep;
-
-impl AuthorizeByFirstStep {
+impl ActionProcessor<AuthorizeByFirstStep> {
     pub async fn process<'a, T>(
         // TODO Если два логина на разные устройства, и коды подтверждения еще не введены? То есть, приийдет пользоватею два разных кода, а оне не узнает, какой код к какому устройству
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
