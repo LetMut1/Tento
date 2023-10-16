@@ -524,14 +524,14 @@ impl Transformer<ServerResponseData> {
 }
 
 impl Transformer<ServerRequestData> {
-    fn transform<API1, F, API2>(
-        incoming: *mut API1,
+    fn transform<I1, F, I2>(
+        incoming: *mut I1,
         converter: F,
     ) -> *mut C_Result<C_Vector<c_uchar>>
     where
-        API1: Copy,
-        F: FnOnce(API1) -> Result<API2, Box<dyn Error + 'static>>,
-        API2: Serialize,
+        I1: Copy,
+        F: FnOnce(I1) -> Result<I2, Box<dyn Error + 'static>>,
+        I2: Serialize,
     {
         if incoming.is_null() {
             return C_Result::error().into_raw();
@@ -5110,14 +5110,14 @@ mod test {
         mod server_request_data_serialization {
             use super::*;
 
-            fn run_by_template<'a, API, A, D>(
-                incoming: &'a API,
+            fn run_by_template<'a, I, A, D>(
+                incoming: &'a I,
                 allocator: A,
                 deallocator: D,
             ) -> Result<(), Box<dyn Error + 'static>>
             where
-                API: Copy,
-                A: FnOnce(*mut API) -> *mut C_Result<C_Vector<c_uchar>>,
+                I: Copy,
+                A: FnOnce(*mut I) -> *mut C_Result<C_Vector<c_uchar>>,
                 D: FnOnce(*mut C_Result<C_Vector<c_uchar>>) -> (),
             {
                 let incoming_ = (incoming as *const _) as *mut _;

@@ -37,7 +37,7 @@ use matchit::Params;
 pub struct CommonActionProcessor;
 
 impl CommonActionProcessor {
-    pub async fn process<'a, 'b, 'c, T, DE, F1, AP, F2, API, APO, APP, SF>(
+    pub async fn process<'a, 'b, 'c, T, DE, F1, AP, F2, I, O, P, SF>(
         body: &'a mut Body,
         parts: &'a Parts,
         route_parameters: &'a Params<'b, 'c>,
@@ -53,11 +53,11 @@ impl CommonActionProcessor {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
         DE: FnOnce(&'a mut Body, &'a Parts, &'a Params<'b, 'c>) -> F1,
-        F1: Future<Output = Result<InvalidArgumentResult<Option<API>>, ErrorAuditor_>>,
-        AP: FnOnce(&'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<RedisConnectionManager>, Option<API>) -> F2,
-        F2: Future<Output = Result<InvalidArgumentResult<UnifiedReport<APO, APP>>, ErrorAuditor_>>,
-        APO: SerdeSerialize,
-        APP: SerdeSerialize,
+        F1: Future<Output = Result<InvalidArgumentResult<Option<I>>, ErrorAuditor_>>,
+        AP: FnOnce(&'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<RedisConnectionManager>, Option<I>) -> F2,
+        F2: Future<Output = Result<InvalidArgumentResult<UnifiedReport<O, P>>, ErrorAuditor_>>,
+        O: SerdeSerialize,
+        P: SerdeSerialize,
         Serializer<SF>: Serialize,
     {
         if !Validator::<Parts>::is_valid(parts) {
@@ -97,14 +97,14 @@ impl CommonActionProcessor {
             return response;
         }
 
-        let action_processor_incoming = match data_extractor(
+        let incoming = match data_extractor(
             body,
             parts,
             route_parameters,
         )
         .await
         {
-            Ok(action_processor_incoming_) => action_processor_incoming_,
+            Ok(incoming_) => incoming_,
             Err(error) => {
                 let response = Creator::<Response>::create_internal_server_error();
 
@@ -143,7 +143,7 @@ impl CommonActionProcessor {
             }
         };
 
-        let action_processor_incoming_ = match action_processor_incoming {
+        let action_processor_incoming_ = match incoming {
             InvalidArgumentResult::Ok {
                 subject: action_processor_incoming__,
             } => action_processor_incoming__,

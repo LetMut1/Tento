@@ -17,13 +17,15 @@ pub mod postgresql_connection_pool___creator;
 pub mod postgresql_transaction___resolver;
 pub mod prepared_statemant_parameter_convertation_resolver;
 pub mod redis_connection_pool___creator;
-pub mod request_parts___validator;
+pub mod http_request_parts___validator;
 pub mod resolver;
 pub mod response___creator;
 pub mod sender;
 pub mod serializer;
 pub mod unix_time___expiration_time_checker;
 pub mod validator;
+pub mod transformer;
+pub mod http_request_body___transformer;
 
 #[cfg(feature = "manual_testing")]
 pub mod json___serializer;

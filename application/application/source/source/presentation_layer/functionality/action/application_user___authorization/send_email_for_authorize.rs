@@ -1,4 +1,3 @@
-use crate::application_layer::functionality::action_processor::application_user___authorization::send_email_for_authorize::Incoming;
 use crate::application_layer::functionality::action_processor::application_user___authorization::send_email_for_authorize::SendEmailForAuthorize as SendEmailForAuthorize_;
 use crate::application_layer::functionality::service::common_action_processor::CommonActionProcessor;
 use crate::infrastructure_layer::data::control_type::Response;
@@ -15,16 +14,7 @@ use tokio_postgres::Socket;
 use http::request::Parts;
 use hyper::Body;
 use matchit::Params;
-use hyper::body::to_bytes;
-use crate::infrastructure_layer::data::error_auditor::BacktracePart;
-use crate::infrastructure_layer::data::error_auditor::Error;
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor_;
-use crate::infrastructure_layer::data::error_auditor::Other;
-use crate::infrastructure_layer::data::error_auditor::Runtime;
-use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
-use crate::infrastructure_layer::functionality::service::serializer::Serialize;
-use crate::infrastructure_layer::functionality::service::serializer::Serializer;
-use bytes::Buf;
+use crate::presentation_layer::functionality::service::common_body_extractor::CommonBodyExtractor;
 
 #[cfg(feature = "manual_testing")]
 use crate::infrastructure_layer::functionality::service::serializer::Json;
@@ -53,57 +43,10 @@ impl SendEmailForAuthorize {
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
             database_1_redis_connection_pool,
-            Self::extract,
+            CommonBodyExtractor::extract::<_, MessagePack>,
             SendEmailForAuthorize_::process,
         )
         .await;
-    }
-
-    pub async fn extract<'a>(
-        body: &'a mut Body,
-        _parts: &'a Parts,
-        _route_parameters: &'a Params<'_, '_>,
-    ) -> Result<InvalidArgumentResult<Option<Incoming>>, ErrorAuditor_> {
-        let bytes = match to_bytes(body).await {
-            Ok(bytes_) => bytes_,
-            Err(error) => {
-                return Err(
-                    ErrorAuditor_::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    )
-                );
-            }
-        };
-
-        let incoming = match Serializer::<MessagePack>::deserialize::<'_, Incoming>(bytes.chunk()) {
-            Ok(incoming_) => incoming_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                        None,
-                    ),
-                );
-
-                return Err(error);
-            }
-        };
-
-        return Ok(
-            InvalidArgumentResult::Ok {
-                subject: Some(incoming),
-            },
-        );
     }
 }
 
@@ -130,7 +73,7 @@ impl SendEmailForAuthorize {
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
             database_1_redis_connection_pool,
-            Self::extract,
+            CommonBodyExtractor::extract::<_, Json>,
             SendEmailForAuthorize_::process,
         )
         .await;
