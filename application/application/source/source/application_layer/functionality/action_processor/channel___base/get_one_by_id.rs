@@ -7,7 +7,7 @@ use crate::domain_layer::data::entity::channel::Channel_Id;
 use crate::domain_layer::data::entity::channel_inner_link::ChannelInnerLink;
 use crate::domain_layer::data::entity::channel_outer_link::ChannelOuterLink;
 use crate::domain_layer::data::entity::channel_subscription::ChannelSubscription;
-use crate::domain_layer::functionality::service::application_user_access_token___extractor::ExtractorResult;
+use crate::domain_layer::functionality::service::extractor::application_user_access_token::ExtractorResult;
 use crate::domain_layer::functionality::service::extractor::Extractor;
 use crate::domain_layer::functionality::service::form_resolver::FormResolver;
 use crate::domain_layer::functionality::service::validator::Validator;

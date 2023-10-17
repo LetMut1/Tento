@@ -1,9 +1,3 @@
-pub mod application_user_authorization_token___email_sender;
-pub mod application_user_authorization_token__wrong_enter_tries_quantity___incrementor;
-pub mod application_user_registration_token___email_sender;
-pub mod application_user_registration_token__wrong_enter_tries_quantity___incrementor;
-pub mod application_user_reset_password_token___email_sender;
-pub mod application_user_reset_password_token__wrong_enter_tries_quantity___incrementor;
 pub mod creator;
 pub mod email_sender;
 pub mod encoder;
