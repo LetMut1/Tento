@@ -1,8 +1,6 @@
-pub mod cloud_message___resolver;
 pub mod converter;
 pub mod counter;
 pub mod creator;
-pub mod date_time___resolver;
 pub mod email___sender;
 pub mod encoder;
 pub mod expiration_time_checker;
@@ -11,7 +9,6 @@ pub mod generator;
 pub mod message_pack___serializer;
 pub mod number_row___generator;
 pub mod postgresql_connection_pool___creator;
-pub mod postgresql_transaction___resolver;
 pub mod prepared_statemant_parameter_convertation_resolver;
 pub mod redis_connection_pool___creator;
 pub mod http_request_parts___validator;

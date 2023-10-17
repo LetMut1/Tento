@@ -1,5 +1,5 @@
 use super::expiration_time_checker::ExpirationTimeChecker;
-use crate::infrastructure_layer::functionality::service::resolver::DateTime;
+use crate::infrastructure_layer::functionality::service::resolver::date_time::DateTime;
 use crate::infrastructure_layer::functionality::service::resolver::Resolver;
 
 pub use crate::infrastructure_layer::data::control_type::UnixTime;

@@ -1,4 +1,4 @@
-use super::resolver::Resolver;
+use super::Resolver;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor_;

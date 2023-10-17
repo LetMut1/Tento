@@ -1,4 +1,4 @@
-use super::resolver::Resolver;
+use super::Resolver;
 
 pub use crate::infrastructure_layer::data::control_type::CloudMessage;
 
