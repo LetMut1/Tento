@@ -1,4 +1,4 @@
-use super::validator::Validator;
+use super::Validator;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Nickname;
 
 impl Validator<ApplicationUser_Nickname> {

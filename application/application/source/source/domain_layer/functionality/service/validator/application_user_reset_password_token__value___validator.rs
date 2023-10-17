@@ -1,5 +1,5 @@
-use super::validator::Validator;
-use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_Value;
+use super::Validator;
+use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_Value;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor_;
@@ -7,9 +7,9 @@ use crate::infrastructure_layer::data::error_auditor::Other;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
 use regex::Regex;
 
-impl Validator<ApplicationUserRegistrationToken_Value> {
-    pub fn is_valid<'a>(application_user_authorization_token_value: &'a ApplicationUserRegistrationToken_Value) -> Result<bool, ErrorAuditor_> {
-        let regex = match Regex::new(ApplicationUserRegistrationToken_Value::REGULAR_EXPRESSION) {
+impl Validator<ApplicationUserResetPasswordToken_Value> {
+    pub fn is_valid<'a>(application_user_authorization_token_value: &'a ApplicationUserResetPasswordToken_Value) -> Result<bool, ErrorAuditor_> {
+        let regex = match Regex::new(ApplicationUserResetPasswordToken_Value::REGULAR_EXPRESSION) {
             Ok(regex_) => regex_,
             Err(error) => {
                 return Err(

@@ -1,4 +1,4 @@
-use super::validator::Validator;
+use super::Validator;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 
 impl Validator<ApplicationUserDevice_Id> {

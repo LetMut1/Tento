@@ -1,4 +1,4 @@
-use super::validator::Validator;
+use super::Validator;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;

@@ -1,4 +1,4 @@
-use super::validator::Validator;
+use super::Validator;
 use crate::domain_layer::data::entity::channel::Channel_Name;
 
 impl Validator<Channel_Name> {
