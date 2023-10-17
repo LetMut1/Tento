@@ -847,7 +847,7 @@ impl CommandProcessor<RunServer> {
         if let Err(error) = router.insert(
             ACTION_ROUTE.channel___base.get_one_by_id,
             ActionRoute_::Channel__Base {
-                channel___base: Channel__Base_::GetOneByID,
+                channel___base: Channel__Base_::GetOneById,
             },
         ) {
             return Err(
@@ -1311,7 +1311,7 @@ impl CommandProcessor<RunServer> {
             if let Err(error) = router.insert(
                 ACTION_ROUTE.channel___base.get_one_by_id_,
                 ActionRoute_::Channel__Base {
-                    channel___base: Channel__Base_::GetOneByID_,
+                    channel___base: Channel__Base_::GetOneById_,
                 },
             ) {
                 return Err(
@@ -1833,7 +1833,7 @@ impl CommandProcessor<RunServer> {
                     &parts.method,
                 ) {
                     // Should be GET. But due to restrictions of third-party services, the method is put in Post.
-                    (&Channel__Base_::GetOneByID, &Method::POST) => {
+                    (&Channel__Base_::GetOneById, &Method::POST) => {
                         return Action::<Channel__Base___GetOneById>::run(
                             &mut body,
                             &parts,
@@ -1888,7 +1888,7 @@ impl CommandProcessor<RunServer> {
                                 &parts.method,
                             ) {
                                 // Should be GET. But due to restrictions of third-party services, the method is put in Post.
-                                (&Channel__Base_::GetOneByID_, &Method::POST) => {
+                                (&Channel__Base_::GetOneById_, &Method::POST) => {
                                     return Action::<Channel__Base___GetOneById>::run_(
                                         &mut body,
                                         &parts,

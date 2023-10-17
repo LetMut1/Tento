@@ -346,12 +346,12 @@ pub enum ApplicationUser__Authorization_ {
 }
 
 pub enum Channel__Base_ {
-    GetOneByID,
+    GetOneById,
     GetManyByNameInSubscriptions,
     GetManyBySubscription,
     GetManyPublicByName,
     #[cfg(feature = "manual_testing")]
-    GetOneByID_,
+    GetOneById_,
     #[cfg(feature = "manual_testing")]
     GetManyByNameInSubscriptions_,
     #[cfg(feature = "manual_testing")]
