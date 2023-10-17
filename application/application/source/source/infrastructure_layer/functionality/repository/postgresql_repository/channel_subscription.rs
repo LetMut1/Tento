@@ -1,9 +1,8 @@
-use super::postgresql_repository::by::By8;
-use super::postgresql_repository::insert::Insert8;
-use super::postgresql_repository::PostgresqlRepository;
-use crate::domain_layer::data::entity::channel::Channel_Id;
-use crate::domain_layer::data::entity::channel_inner_link::ChannelInnerLink;
-use crate::domain_layer::data::entity::channel_inner_link::ChannelInnerLink_CreatedAt;
+use super::by::By10;
+use super::insert::Insert10;
+use super::PostgresqlRepository;
+use crate::domain_layer::data::entity::channel_subscription::ChannelSubscription;
+use crate::domain_layer::data::entity::channel_subscription::ChannelSubscription_CreatedAt;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor_;
@@ -12,19 +11,18 @@ use crate::infrastructure_layer::data::error_auditor::Runtime;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 use tokio_postgres::types::Type;
 use tokio_postgres::Client as Connection;
-pub use action_processor_incoming_outcoming::ChannelInnerLink1;
 
-impl PostgresqlRepository<ChannelInnerLink> {
+impl PostgresqlRepository<ChannelSubscription> {
     pub async fn create<'a>(
         database_1_connection: &'a Connection,
-        insert_8: Insert8,
-    ) -> Result<ChannelInnerLink, ErrorAuditor_> {
+        insert_10: Insert10,
+    ) -> Result<ChannelSubscription, ErrorAuditor_> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
-            INSERT INTO public.channel_inner_link AS cil ( \
-                from_, \
-                to_, \
+            INSERT INTO public.channel_subscription AS cs ( \
+                application_user_id, \
+                channel_id, \
                 created_at \
             ) VALUES ( \
                 $1, \
@@ -36,11 +34,11 @@ impl PostgresqlRepository<ChannelInnerLink> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &insert_8.channel_inner_link_from.0,
+                &insert_10.application_user_id.0,
                 Type::INT8,
             )
             .add_parameter(
-                &insert_8.channel_inner_link_to.0,
+                &insert_10.channel_id.0,
                 Type::INT8,
             );
 
@@ -100,8 +98,8 @@ impl PostgresqlRepository<ChannelInnerLink> {
             }
         };
 
-        let channel_inner_link_created_at = match row_registry[0].try_get::<'_, usize, String>(0) {
-            Ok(channel_inner_link_created_at_) => ChannelInnerLink_CreatedAt(channel_inner_link_created_at_),
+        let channel_subscription_created_at = match row_registry[0].try_get::<'_, usize, String>(0) {
+            Ok(channel_subscription_created_at_) => ChannelSubscription_CreatedAt(channel_subscription_created_at_),
             Err(error) => {
                 return Err(
                     ErrorAuditor_::new(
@@ -122,37 +120,35 @@ impl PostgresqlRepository<ChannelInnerLink> {
             }
         };
 
-        return Ok(
-            ChannelInnerLink {
-                from: insert_8.channel_inner_link_from,
-                to: insert_8.channel_inner_link_to,
-                created_at: channel_inner_link_created_at,
-            },
-        );
+        let channel_subscription = ChannelSubscription {
+            application_user_id: insert_10.application_user_id,
+            channel_id: insert_10.channel_id,
+            created_at: channel_subscription_created_at,
+        };
+
+        return Ok(channel_subscription);
     }
 
-    pub async fn find_1<'a>(
+    pub async fn is_exist_1<'a>(
         database_1_connection: &'a Connection,
-        by_8: &'a By8,
-        limit: i16,
-    ) -> Result<Vec<ChannelInnerLink1>, ErrorAuditor_> {
+        by_10: &'a By10,
+    ) -> Result<bool, ErrorAuditor_> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
             SELECT \
-                cil.to_ AS t \
-            FROM public.channel_inner_link cil \
-            WHERE cil.from_ = $1 \
-            LIMIT $2";
+                cs.application_user_id AS aui \
+            FROM public.channel_subscription cs \
+            WHERE cs.application_user_id = $1 AND cs.channel_id = $2;";
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &by_8.channel_inner_link_from.0,
+                &by_10.application_user_id.0,
                 Type::INT8,
             )
             .add_parameter(
-                &limit,
-                Type::INT2,
+                &by_10.channel_id.0,
+                Type::INT8,
             );
 
         let statement = match database_1_connection
@@ -211,42 +207,10 @@ impl PostgresqlRepository<ChannelInnerLink> {
             }
         };
 
-        let mut channel_inner_link_registry: Vec<ChannelInnerLink1> = vec![];
-
         if row_registry.is_empty() {
-            return Ok(channel_inner_link_registry);
+            return Ok(false);
         }
 
-        '_a: for row in row_registry.iter() {
-            let channel_inner_link_to = match row.try_get::<'_, usize, i64>(0) {
-                Ok(channel_inner_link_to_) => Channel_Id(channel_inner_link_to_),
-                Err(error) => {
-                    return Err(
-                        ErrorAuditor_::new(
-                            Error::Runtime {
-                                runtime: Runtime::Resource {
-                                    resource: ResourceError::Postgresql {
-                                        postgresql_error: error,
-                                    },
-                                },
-                            },
-                            BacktracePart::new(
-                                line!(),
-                                file!(),
-                                None,
-                            ),
-                        ),
-                    );
-                }
-            };
-
-            let channel_inner_link = ChannelInnerLink1 {
-                channel_inner_link_to,
-            };
-
-            channel_inner_link_registry.push(channel_inner_link);
-        }
-
-        return Ok(channel_inner_link_registry);
+        return Ok(true);
     }
 }

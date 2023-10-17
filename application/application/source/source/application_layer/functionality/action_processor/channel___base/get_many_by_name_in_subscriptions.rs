@@ -11,7 +11,7 @@ use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
-use crate::infrastructure_layer::functionality::repository::common_postgresql_repository::Common1;
+use crate::infrastructure_layer::functionality::repository::postgresql_repository::common::Common1;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By12;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use bb8::Pool;

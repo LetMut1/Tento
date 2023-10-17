@@ -1,6 +1,6 @@
-use super::postgresql_repository::insert::Insert4;
-use super::postgresql_repository::PostgresqlRepository;
-use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice;
+use super::insert::Insert11;
+use super::PostgresqlRepository;
+use crate::domain_layer::data::entity::action_round_register::ActionRoundRegister;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor_;
@@ -10,36 +10,56 @@ use crate::infrastructure_layer::functionality::service::prepared_statemant_para
 use tokio_postgres::types::Type;
 use tokio_postgres::Client as Connection;
 
-impl PostgresqlRepository<ApplicationUserDevice> {
+impl PostgresqlRepository<ActionRoundRegister<'_>> {
     pub async fn create<'a>(
-        database_1_connection: &'a Connection,
-        insert_4: Insert4,
-    ) -> Result<ApplicationUserDevice, ErrorAuditor_> {
-        let application_user_device_id = insert_4.application_user_device_id.0.as_str();
-
+        database_2_connection: &'a Connection,
+        insert_11: Insert11<'a>,
+    ) -> Result<(), ErrorAuditor_> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
+        let action_round_register_route = insert_11.action_round_register_route.0.as_ref();
+
+        let action_round_register_method = insert_11.action_round_register_method.0.as_ref();
+
+        let action_round_register_context = match insert_11.action_round_register_context {
+            Some(ref action_round_register_context_) => Some(action_round_register_context_.0.as_str()),
+            None => None,
+        };
+
         let query = "\
-            INSERT INTO public.application_user_device AS aud ( \
-                id, \
-                application_user_id \
+            INSERT INTO public.action_round_register AS arr ( \
+                route, \
+                method, \
+                status_code, \
+                context, \
+                created_at \
             ) VALUES ( \
                 $1, \
-                $2 \
-            ) \
-            ON CONFLICT ON CONSTRAINT application_user_device2 DO NOTHING;";
+                $2, \
+                $3, \
+                $4, \
+                current_timestamp(6) \
+            );";
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &application_user_device_id,
+                &action_round_register_route,
                 Type::TEXT,
             )
             .add_parameter(
-                &insert_4.application_user_id.0,
-                Type::INT8,
+                &action_round_register_method,
+                Type::TEXT,
+            )
+            .add_parameter(
+                &insert_11.action_round_register_status_code.0,
+                Type::INT2,
+            )
+            .add_parameter(
+                &action_round_register_context,
+                Type::TEXT,
             );
 
-        let statement = match database_1_connection
+        let statement = match database_2_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
@@ -67,7 +87,7 @@ impl PostgresqlRepository<ApplicationUserDevice> {
             }
         };
 
-        if let Err(error) = database_1_connection
+        if let Err(error) = database_2_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
@@ -92,11 +112,6 @@ impl PostgresqlRepository<ApplicationUserDevice> {
             );
         };
 
-        return Ok(
-            ApplicationUserDevice {
-                id: insert_4.application_user_device_id,
-                application_user_id: insert_4.application_user_id,
-            },
-        );
+        return Ok(());
     }
 }

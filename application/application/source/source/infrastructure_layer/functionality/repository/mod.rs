@@ -1,13 +1,1 @@
-pub mod action_round_register___postgresql_repository;
-pub mod application_user___postgresql_repository;
-pub mod application_user_access_refresh_token___postgresql_repository;
-pub mod application_user_authorization_token___postgresql_repository;
-pub mod application_user_device___postgresql_repository;
-pub mod application_user_registration_token___postgresql_repository;
-pub mod application_user_reset_password_token___postgresql_repository;
-pub mod channel___postgresql_repository;
-pub mod channel_inner_link___postgresql_repository;
-pub mod channel_outer_link___postgresql_repository;
-pub mod channel_subscription___postgresql_repository;
-pub mod common_postgresql_repository;
 pub mod postgresql_repository;

@@ -1,20 +1,23 @@
-use super::postgresql_repository::by::By1;
-use super::postgresql_repository::by::By2;
-use super::postgresql_repository::by::By3;
-use super::postgresql_repository::insert::Insert1;
-use super::postgresql_repository::update::Update1;
-use super::postgresql_repository::PostgresqlRepository;
-use crate::domain_layer::data::entity::application_user::ApplicationUser;
-use crate::domain_layer::data::entity::application_user::ApplicationUser1;
-use crate::domain_layer::data::entity::application_user::ApplicationUser2;
-use crate::domain_layer::data::entity::application_user::ApplicationUser3;
-use crate::domain_layer::data::entity::application_user::ApplicationUser4;
-use crate::domain_layer::data::entity::application_user::ApplicationUser5;
-use crate::domain_layer::data::entity::application_user::ApplicationUser_CreatedAt;
-use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
-use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
-use crate::domain_layer::data::entity::application_user::ApplicationUser_Nickname;
-use crate::domain_layer::data::entity::application_user::ApplicationUser_PasswordHash;
+use super::by::By5;
+use super::insert::Insert5;
+use super::update::Update10;
+use super::update::Update11;
+use super::update::Update7;
+use super::update::Update8;
+use super::update::Update9;
+use super::PostgresqlRepository;
+use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken;
+use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken1;
+use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken2;
+use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken3;
+use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken4;
+use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken5;
+use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken6;
+use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_CanBeResentFrom;
+use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_ExpiresAt;
+use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_IsApproved;
+use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_Value;
+use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_WrongEnterTriesQuantity;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor_;
@@ -22,40 +25,40 @@ use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 use std::borrow::Cow;
-use std::marker::PhantomData;
 use tokio_postgres::types::Type;
 use tokio_postgres::Client as Connection;
 
-impl PostgresqlRepository<ApplicationUser<'_>> {
+impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
     pub async fn create<'a>(
-        database_1_connection: &'a Connection,
-        insert_1: Insert1,
-    ) -> Result<ApplicationUser<'static>, ErrorAuditor_> {
-        let application_user_email = insert_1.application_user_email.0.as_str();
+        database_2_connection: &'a Connection,
+        insert_5: Insert5<'a>,
+    ) -> Result<ApplicationUserRegistrationToken<'a>, ErrorAuditor_> {
+        let application_user_email = insert_5.application_user_email.0.as_str();
 
-        let application_user_nickname = insert_1.application_user_nickname.0.as_str();
+        let application_user_device_id = insert_5.application_user_device_id.0.as_str();
 
-        let application_user_password_hash = insert_1.application_user_password_hash.0.as_str();
+        let application_user_registration_token_value = insert_5.application_user_registration_token_value.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
-            INSERT INTO public.application_user AS au ( \
-                id, \
-                email, \
-                nickname, \
-                password_hash, \
-                created_at \
+            INSERT INTO public.application_user_registration_token AS aurt ( \
+                application_user_email, \
+                application_user_device_id, \
+                value, \
+                wrong_enter_tries_quantity, \
+                is_approved, \
+                expires_at, \
+                can_be_resent_from \
             ) VALUES ( \
-                nextval('public.application_user1'), \
                 $1, \
                 $2, \
                 $3, \
-                current_timestamp(6) \
-            ) \
-            RETURNING \
-                au.id AS i,
-                au.created_at::TEXT AS ca;";
+                $4, \
+                $5, \
+                $6, \
+                $7 \
+            );";
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
@@ -63,1019 +66,31 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 Type::TEXT,
             )
             .add_parameter(
-                &application_user_nickname,
+                &application_user_device_id,
                 Type::TEXT,
             )
             .add_parameter(
-                &application_user_password_hash,
-                Type::TEXT,
-            );
-
-        let statement = match database_1_connection
-            .prepare_typed(
-                query,
-                prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
-            )
-            .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    ErrorAuditor_::new(
-                        Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let row_registry = match database_1_connection
-            .query(
-                &statement,
-                prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
-            )
-            .await
-        {
-            Ok(row_registry_) => row_registry_,
-            Err(error) => {
-                return Err(
-                    ErrorAuditor_::new(
-                        Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let application_user_id = match row_registry[0].try_get::<'_, usize, i64>(0) {
-            Ok(application_user_id_) => ApplicationUser_Id(application_user_id_),
-            Err(error) => {
-                return Err(
-                    ErrorAuditor_::new(
-                        Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let application_user_created_at = match row_registry[0].try_get::<'_, usize, String>(1) {
-            Ok(application_user_created_at_) => ApplicationUser_CreatedAt(application_user_created_at_),
-            Err(error) => {
-                return Err(
-                    ErrorAuditor_::new(
-                        Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    ),
-                );
-            }
-        };
-
-        return Ok(
-            ApplicationUser {
-                id: application_user_id,
-                email: insert_1.application_user_email,
-                nickname: Cow::Owned(insert_1.application_user_nickname),
-                _password: PhantomData,
-                password_hash: insert_1.application_user_password_hash,
-                created_at: application_user_created_at,
-            },
-        );
-    }
-
-    pub async fn is_exist_1<'a>(
-        database_1_connection: &'a Connection,
-        by_1: &'a By1<'_>,
-    ) -> Result<bool, ErrorAuditor_> {
-        let application_user_nickname = by_1.application_user_nickname.0.as_str();
-
-        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-
-        let query = "\
-            SELECT \
-                au.id AS i \
-            FROM public.application_user au \
-            WHERE au.nickname = $1;";
-
-        prepared_statemant_parameter_convertation_resolver.add_parameter(
-            &application_user_nickname,
-            Type::TEXT,
-        );
-
-        let statement = match database_1_connection
-            .prepare_typed(
-                query,
-                prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
-            )
-            .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    ErrorAuditor_::new(
-                        Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let row_registry = match database_1_connection
-            .query(
-                &statement,
-                prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
-            )
-            .await
-        {
-            Ok(row_registry_) => row_registry_,
-            Err(error) => {
-                return Err(
-                    ErrorAuditor_::new(
-                        Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    ),
-                );
-            }
-        };
-
-        if row_registry.is_empty() {
-            return Ok(false);
-        }
-
-        return Ok(true);
-    }
-
-    pub async fn is_exist_2<'a>(
-        database_1_connection: &'a Connection,
-        by_2: &'a By2<'_>,
-    ) -> Result<bool, ErrorAuditor_> {
-        let application_user_email = by_2.application_user_email.0.as_str();
-
-        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-
-        let query = "\
-            SELECT \
-                au.id AS i \
-            FROM public.application_user au \
-            WHERE au.email = $1;";
-
-        prepared_statemant_parameter_convertation_resolver.add_parameter(
-            &application_user_email,
-            Type::TEXT,
-        );
-
-        let statement = match database_1_connection
-            .prepare_typed(
-                query,
-                prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
-            )
-            .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    ErrorAuditor_::new(
-                        Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let row_registry = match database_1_connection
-            .query(
-                &statement,
-                prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
-            )
-            .await
-        {
-            Ok(row_registry_) => row_registry_,
-            Err(error) => {
-                return Err(
-                    ErrorAuditor_::new(
-                        Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    ),
-                );
-            }
-        };
-
-        if row_registry.is_empty() {
-            return Ok(false);
-        }
-
-        return Ok(true);
-    }
-
-    pub async fn is_exist_3<'a>(
-        database_1_connection: &'a Connection,
-        by_3: &'a By3,
-    ) -> Result<bool, ErrorAuditor_> {
-        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-
-        let query = "\
-            SELECT \
-                au.id AS i \
-            FROM public.application_user au \
-            WHERE au.id = $1;";
-
-        prepared_statemant_parameter_convertation_resolver.add_parameter(
-            &by_3.application_user_id.0,
-            Type::INT8,
-        );
-
-        let statement = match database_1_connection
-            .prepare_typed(
-                query,
-                prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
-            )
-            .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    ErrorAuditor_::new(
-                        Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let row_registry = match database_1_connection
-            .query(
-                &statement,
-                prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
-            )
-            .await
-        {
-            Ok(row_registry_) => row_registry_,
-            Err(error) => {
-                return Err(
-                    ErrorAuditor_::new(
-                        Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    ),
-                );
-            }
-        };
-
-        if row_registry.is_empty() {
-            return Ok(false);
-        }
-
-        return Ok(true);
-    }
-
-    pub async fn find_1<'a, 'b>(
-        database_1_connection: &'a Connection,
-        by_1: &'a By1<'b>,
-    ) -> Result<Option<ApplicationUser<'b>>, ErrorAuditor_> {
-        let application_user_nickname = by_1.application_user_nickname.0.as_str();
-
-        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-
-        let query = "\
-            SELECT \
-                au.id AS i, \
-                au.email AS e, \
-                au.password_hash AS ph, \
-                au.created_at::TEXT AS ca \
-            FROM public.application_user au \
-            WHERE au.nickname = $1;";
-
-        prepared_statemant_parameter_convertation_resolver.add_parameter(
-            &application_user_nickname,
-            Type::TEXT,
-        );
-
-        let statement = match database_1_connection
-            .prepare_typed(
-                query,
-                prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
-            )
-            .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    ErrorAuditor_::new(
-                        Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let row_registry = match database_1_connection
-            .query(
-                &statement,
-                prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
-            )
-            .await
-        {
-            Ok(row_registry_) => row_registry_,
-            Err(error) => {
-                return Err(
-                    ErrorAuditor_::new(
-                        Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    ),
-                );
-            }
-        };
-
-        if row_registry.is_empty() {
-            return Ok(None);
-        }
-
-        let application_user_id = match row_registry[0].try_get::<'_, usize, i64>(0) {
-            Ok(application_user_id_) => ApplicationUser_Id(application_user_id_),
-            Err(error) => {
-                return Err(
-                    ErrorAuditor_::new(
-                        Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let application_user_email = match row_registry[0].try_get::<'_, usize, String>(1) {
-            Ok(application_user_email_) => ApplicationUser_Email(application_user_email_),
-            Err(error) => {
-                return Err(
-                    ErrorAuditor_::new(
-                        Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let application_user_password_hash = match row_registry[0].try_get::<'_, usize, String>(2) {
-            Ok(application_user_password_hash_) => ApplicationUser_PasswordHash(application_user_password_hash_),
-            Err(error) => {
-                return Err(
-                    ErrorAuditor_::new(
-                        Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let application_user_created_at = match row_registry[0].try_get::<'_, usize, String>(3) {
-            Ok(application_user_created_at_) => ApplicationUser_CreatedAt(application_user_created_at_),
-            Err(error) => {
-                return Err(
-                    ErrorAuditor_::new(
-                        Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    ),
-                );
-            }
-        };
-
-        return Ok(
-            Some(
-                ApplicationUser {
-                    id: application_user_id,
-                    email: application_user_email,
-                    nickname: Cow::Borrowed(by_1.application_user_nickname),
-                    _password: PhantomData,
-                    password_hash: application_user_password_hash,
-                    created_at: application_user_created_at,
-                },
-            ),
-        );
-    }
-}
-
-impl PostgresqlRepository<ApplicationUser1> {
-    pub async fn find_1<'a>(
-        database_1_connection: &'a Connection,
-        by_1: &'a By1<'_>,
-    ) -> Result<Option<ApplicationUser1>, ErrorAuditor_> {
-        let application_user_nickname = by_1.application_user_nickname.0.as_str();
-
-        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-
-        let query = "\
-            SELECT \
-                au.id AS i, \
-                au.email AS e, \
-                au.password_hash AS ph \
-            FROM public.application_user au \
-            WHERE au.nickname = $1;";
-
-        prepared_statemant_parameter_convertation_resolver.add_parameter(
-            &application_user_nickname,
-            Type::TEXT,
-        );
-
-        let statement = match database_1_connection
-            .prepare_typed(
-                query,
-                prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
-            )
-            .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    ErrorAuditor_::new(
-                        Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let row_registry = match database_1_connection
-            .query(
-                &statement,
-                prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
-            )
-            .await
-        {
-            Ok(row_registry_) => row_registry_,
-            Err(error) => {
-                return Err(
-                    ErrorAuditor_::new(
-                        Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    ),
-                );
-            }
-        };
-
-        if row_registry.is_empty() {
-            return Ok(None);
-        }
-
-        let application_user_id = match row_registry[0].try_get::<'_, usize, i64>(0) {
-            Ok(application_user_id_) => ApplicationUser_Id(application_user_id_),
-            Err(error) => {
-                return Err(
-                    ErrorAuditor_::new(
-                        Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let application_user_email = match row_registry[0].try_get::<'_, usize, String>(1) {
-            Ok(application_user_email_) => ApplicationUser_Email(application_user_email_),
-            Err(error) => {
-                return Err(
-                    ErrorAuditor_::new(
-                        Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let application_user_password_hash = match row_registry[0].try_get::<'_, usize, String>(2) {
-            Ok(application_user_password_hash_) => ApplicationUser_PasswordHash(application_user_password_hash_),
-            Err(error) => {
-                return Err(
-                    ErrorAuditor_::new(
-                        Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    ),
-                );
-            }
-        };
-
-        return Ok(
-            Some(
-                ApplicationUser1 {
-                    id: application_user_id,
-                    email: application_user_email,
-                    password_hash: application_user_password_hash,
-                },
-            ),
-        );
-    }
-}
-
-impl PostgresqlRepository<ApplicationUser2> {
-    pub async fn find_1<'a>(
-        database_1_connection: &'a Connection,
-        by_2: &'a By2<'_>,
-    ) -> Result<Option<ApplicationUser2>, ErrorAuditor_> {
-        let application_user_email = by_2.application_user_email.0.as_str();
-
-        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-
-        let query = "\
-            SELECT \
-                au.id AS i, \
-                au.nickname AS n, \
-                au.password_hash AS ph \
-            FROM public.application_user au \
-            WHERE au.email = $1;";
-
-        prepared_statemant_parameter_convertation_resolver.add_parameter(
-            &application_user_email,
-            Type::TEXT,
-        );
-
-        let statement = match database_1_connection
-            .prepare_typed(
-                query,
-                prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
-            )
-            .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    ErrorAuditor_::new(
-                        Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let row_registry = match database_1_connection
-            .query(
-                &statement,
-                prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
-            )
-            .await
-        {
-            Ok(row_registry_) => row_registry_,
-            Err(error) => {
-                return Err(
-                    ErrorAuditor_::new(
-                        Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    ),
-                );
-            }
-        };
-
-        if row_registry.is_empty() {
-            return Ok(None);
-        }
-
-        let application_user_id = match row_registry[0].try_get::<'_, usize, i64>(0) {
-            Ok(application_user_id_) => ApplicationUser_Id(application_user_id_),
-            Err(error) => {
-                return Err(
-                    ErrorAuditor_::new(
-                        Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let application_user_nickname = match row_registry[0].try_get::<'_, usize, String>(1) {
-            Ok(application_user_nickname_) => ApplicationUser_Nickname(application_user_nickname_),
-            Err(error) => {
-                return Err(
-                    ErrorAuditor_::new(
-                        Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let application_user_password_hash = match row_registry[0].try_get::<'_, usize, String>(2) {
-            Ok(application_user_password_hash_) => ApplicationUser_PasswordHash(application_user_password_hash_),
-            Err(error) => {
-                return Err(
-                    ErrorAuditor_::new(
-                        Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    ),
-                );
-            }
-        };
-
-        return Ok(
-            Some(
-                ApplicationUser2 {
-                    id: application_user_id,
-                    nickname: application_user_nickname,
-                    password_hash: application_user_password_hash,
-                },
-            ),
-        );
-    }
-}
-
-impl PostgresqlRepository<ApplicationUser3> {
-    pub async fn find_1<'a>(
-        database_1_connection: &'a Connection,
-        by_2: &'a By2<'_>,
-    ) -> Result<Option<ApplicationUser3>, ErrorAuditor_> {
-        let application_user_email = by_2.application_user_email.0.as_str();
-
-        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-
-        let query = "\
-            SELECT \
-                au.id AS i \
-            FROM public.application_user au \
-            WHERE au.email = $1;";
-
-        prepared_statemant_parameter_convertation_resolver.add_parameter(
-            &application_user_email,
-            Type::TEXT,
-        );
-
-        let statement = match database_1_connection
-            .prepare_typed(
-                query,
-                prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
-            )
-            .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    ErrorAuditor_::new(
-                        Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let row_registry = match database_1_connection
-            .query(
-                &statement,
-                prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
-            )
-            .await
-        {
-            Ok(row_registry_) => row_registry_,
-            Err(error) => {
-                return Err(
-                    ErrorAuditor_::new(
-                        Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    ),
-                );
-            }
-        };
-
-        if row_registry.is_empty() {
-            return Ok(None);
-        }
-
-        let application_user_id = match row_registry[0].try_get::<'_, usize, i64>(0) {
-            Ok(application_user_id_) => ApplicationUser_Id(application_user_id_),
-            Err(error) => {
-                return Err(
-                    ErrorAuditor_::new(
-                        Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    ),
-                );
-            }
-        };
-
-        return Ok(
-            Some(
-                ApplicationUser3 {
-                    id: application_user_id,
-                },
-            ),
-        );
-    }
-}
-
-impl PostgresqlRepository<ApplicationUser4> {
-    pub async fn update<'a>(
-        database_1_connection: &'a Connection,
-        update_1: &'a Update1<'_>,
-        by_3: &'a By3,
-    ) -> Result<(), ErrorAuditor_> {
-        let application_user_password_hash = update_1.application_user_password_hash.0.as_str();
-
-        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-
-        let query = "\
-            UPDATE ONLY public.application_user AS au \
-            SET ( \
-                password_hash \
-            ) = ROW( \
-                $1 \
-            ) \
-            WHERE au.id = $2 \
-            RETURNING \
-                au.id AS i;";
-
-        prepared_statemant_parameter_convertation_resolver
-            .add_parameter(
-                &application_user_password_hash,
+                &application_user_registration_token_value,
                 Type::TEXT,
             )
             .add_parameter(
-                &by_3.application_user_id.0,
+                &insert_5.application_user_registration_token_wrong_enter_tries_quantity.0,
+                Type::INT2,
+            )
+            .add_parameter(
+                &insert_5.application_user_registration_token_is_approved.0,
+                Type::BOOL,
+            )
+            .add_parameter(
+                &insert_5.application_user_registration_token_expires_at.0,
+                Type::INT8,
+            )
+            .add_parameter(
+                &insert_5.application_user_registration_token_can_be_resent_from.0,
                 Type::INT8,
             );
 
-        let statement = match database_1_connection
+        let statement = match database_2_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
@@ -1103,7 +118,7 @@ impl PostgresqlRepository<ApplicationUser4> {
             }
         };
 
-        if let Err(error) = database_1_connection
+        if let Err(error) = database_2_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
@@ -1126,31 +141,46 @@ impl PostgresqlRepository<ApplicationUser4> {
                     ),
                 ),
             );
-        }
+        };
 
-        return Ok(());
+        return Ok(
+            ApplicationUserRegistrationToken {
+                application_user_email: Cow::Borrowed(insert_5.application_user_email),
+                application_user_device_id: Cow::Borrowed(insert_5.application_user_device_id),
+                value: insert_5.application_user_registration_token_value,
+                wrong_enter_tries_quantity: insert_5.application_user_registration_token_wrong_enter_tries_quantity,
+                is_approved: insert_5.application_user_registration_token_is_approved,
+                expires_at: insert_5.application_user_registration_token_expires_at,
+                can_be_resent_from: insert_5.application_user_registration_token_can_be_resent_from,
+            },
+        );
     }
 
-    pub async fn find_1<'a>(
-        database_1_connection: &'a Connection,
-        by_3: &'a By3,
-    ) -> Result<Option<ApplicationUser4>, ErrorAuditor_> {
+    pub async fn delete<'a>(
+        database_2_connection: &'a Connection,
+        by_5: &'a By5<'_>,
+    ) -> Result<(), ErrorAuditor_> {
+        let application_user_email = by_5.application_user_email.0.as_str();
+
+        let application_user_device_id = by_5.application_user_device_id.0.as_str();
+
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
-            SELECT \
-                au.email AS e, \
-                au.nickname AS n, \
-                au.password_hash AS ph \
-            FROM public.application_user au \
-            WHERE au.id = $1;";
+            DELETE FROM ONLY public.application_user_registration_token AS aurt \
+            WHERE aurt.application_user_email = $1 AND aurt.application_user_device_id = $2;";
 
-        prepared_statemant_parameter_convertation_resolver.add_parameter(
-            &by_3.application_user_id.0,
-            Type::INT8,
-        );
+        prepared_statemant_parameter_convertation_resolver
+            .add_parameter(
+                &application_user_email,
+                Type::TEXT,
+            )
+            .add_parameter(
+                &application_user_device_id,
+                Type::TEXT,
+            );
 
-        let statement = match database_1_connection
+        let statement = match database_2_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
@@ -1178,7 +208,211 @@ impl PostgresqlRepository<ApplicationUser4> {
             }
         };
 
-        let row_registry = match database_1_connection
+        if let Err(error) = database_2_connection
+            .query(
+                &statement,
+                prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
+            )
+            .await
+        {
+            return Err(
+                ErrorAuditor_::new(
+                    Error::Runtime {
+                        runtime: Runtime::Resource {
+                            resource: ResourceError::Postgresql {
+                                postgresql_error: error,
+                            },
+                        },
+                    },
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                ),
+            );
+        };
+
+        return Ok(());
+    }
+}
+
+impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
+    pub async fn update<'a>(
+        database_2_connection: &'a Connection,
+        update_7: &'a Update7<'_>,
+        by_5: &'a By5<'_>,
+    ) -> Result<(), ErrorAuditor_> {
+        let application_user_email = by_5.application_user_email.0.as_str();
+
+        let application_user_device_id = by_5.application_user_device_id.0.as_str();
+
+        let application_user_registration_token_value = update_7.application_user_registration_token_value.0.as_str();
+
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
+
+        let query = "\
+            UPDATE ONLY public.application_user_registration_token AS aurt
+            SET ( \
+                value, \
+                wrong_enter_tries_quantity, \
+                is_approved, \
+                can_be_resent_from, \
+                expires_at \
+            ) = ROW( \
+                $1, \
+                $2, \
+                $3, \
+                $4, \
+                $5 \
+            ) \
+            WHERE aurt.application_user_email = $6 AND aurt.application_user_device_id = $7;";
+
+        prepared_statemant_parameter_convertation_resolver
+            .add_parameter(
+                &application_user_registration_token_value,
+                Type::TEXT,
+            )
+            .add_parameter(
+                &update_7.application_user_registration_token_wrong_enter_tries_quantity.0,
+                Type::INT2,
+            )
+            .add_parameter(
+                &update_7.application_user_registration_token_is_approved.0,
+                Type::BOOL,
+            )
+            .add_parameter(
+                &update_7.application_user_registration_token_expires_at.0,
+                Type::INT8,
+            )
+            .add_parameter(
+                &update_7.application_user_registration_token_can_be_resent_from.0,
+                Type::INT8,
+            )
+            .add_parameter(
+                &application_user_email,
+                Type::TEXT,
+            )
+            .add_parameter(
+                &application_user_device_id,
+                Type::TEXT,
+            );
+
+        let statement = match database_2_connection
+            .prepare_typed(
+                query,
+                prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
+            )
+            .await
+        {
+            Ok(statement_) => statement_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor_::new(
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: ResourceError::Postgresql {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+        };
+
+        if let Err(error) = database_2_connection
+            .query(
+                &statement,
+                prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
+            )
+            .await
+        {
+            return Err(
+                ErrorAuditor_::new(
+                    Error::Runtime {
+                        runtime: Runtime::Resource {
+                            resource: ResourceError::Postgresql {
+                                postgresql_error: error,
+                            },
+                        },
+                    },
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                ),
+            );
+        };
+
+        return Ok(());
+    }
+
+    pub async fn find_1<'a>(
+        database_2_connection: &'a Connection,
+        by_5: &'a By5<'_>,
+    ) -> Result<Option<ApplicationUserRegistrationToken1>, ErrorAuditor_> {
+        let application_user_email = by_5.application_user_email.0.as_str();
+
+        let application_user_device_id = by_5.application_user_device_id.0.as_str();
+
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
+
+        let query = "\
+            SELECT \
+                aurt.value AS v, \
+                aurt.wrong_enter_tries_quantity AS wetq, \
+                aurt.is_approved AS ia, \
+                aurt.expires_at AS ea, \
+                aurt.can_be_resent_from as cbrf \
+            FROM public.application_user_registration_token aurt \
+            WHERE aurt.application_user_email = $1 AND aurt.application_user_device_id = $2;";
+
+        prepared_statemant_parameter_convertation_resolver
+            .add_parameter(
+                &application_user_email,
+                Type::TEXT,
+            )
+            .add_parameter(
+                &application_user_device_id,
+                Type::TEXT,
+            );
+
+        let statement = match database_2_connection
+            .prepare_typed(
+                query,
+                prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
+            )
+            .await
+        {
+            Ok(statement_) => statement_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor_::new(
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: ResourceError::Postgresql {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+        };
+
+        let row_registry = match database_2_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
@@ -1210,8 +444,8 @@ impl PostgresqlRepository<ApplicationUser4> {
             return Ok(None);
         }
 
-        let application_user_email = match row_registry[0].try_get::<'_, usize, String>(0) {
-            Ok(application_user_password_email_) => ApplicationUser_Email(application_user_password_email_),
+        let application_user_registration_token_value = match row_registry[0].try_get::<'_, usize, String>(0) {
+            Ok(application_user_registration_token_value_) => ApplicationUserRegistrationToken_Value(application_user_registration_token_value_),
             Err(error) => {
                 return Err(
                     ErrorAuditor_::new(
@@ -1232,8 +466,8 @@ impl PostgresqlRepository<ApplicationUser4> {
             }
         };
 
-        let application_user_password_nickname = match row_registry[0].try_get::<'_, usize, String>(1) {
-            Ok(application_user_password_nickanme_) => ApplicationUser_Nickname(application_user_password_nickanme_),
+        let application_user_registration_token_wrong_enter_tries_quantity = match row_registry[0].try_get::<'_, usize, i16>(1) {
+            Ok(application_user_registration_token_wrong_enter_tries_quantity_) => ApplicationUserRegistrationToken_WrongEnterTriesQuantity(application_user_registration_token_wrong_enter_tries_quantity_),
             Err(error) => {
                 return Err(
                     ErrorAuditor_::new(
@@ -1254,8 +488,52 @@ impl PostgresqlRepository<ApplicationUser4> {
             }
         };
 
-        let application_user_password_hash = match row_registry[0].try_get::<'_, usize, String>(2) {
-            Ok(application_user_password_hash_) => ApplicationUser_PasswordHash(application_user_password_hash_),
+        let application_user_registration_token_is_approved = match row_registry[0].try_get::<'_, usize, bool>(2) {
+            Ok(application_user_registration_token_is_approved_) => ApplicationUserRegistrationToken_IsApproved(application_user_registration_token_is_approved_),
+            Err(error) => {
+                return Err(
+                    ErrorAuditor_::new(
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: ResourceError::Postgresql {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+        };
+
+        let application_user_registration_token_expires_at = match row_registry[0].try_get::<'_, usize, i64>(3) {
+            Ok(application_user_registration_token_expires_at_) => ApplicationUserRegistrationToken_ExpiresAt(application_user_registration_token_expires_at_),
+            Err(error) => {
+                return Err(
+                    ErrorAuditor_::new(
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: ResourceError::Postgresql {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+        };
+
+        let application_user_registration_token_can_be_resent_from = match row_registry[0].try_get::<'_, usize, i64>(4) {
+            Ok(application_user_registration_token_can_be_resent_from_) => ApplicationUserRegistrationToken_CanBeResentFrom(application_user_registration_token_can_be_resent_from_),
             Err(error) => {
                 return Err(
                     ErrorAuditor_::new(
@@ -1278,35 +556,54 @@ impl PostgresqlRepository<ApplicationUser4> {
 
         return Ok(
             Some(
-                ApplicationUser4 {
-                    email: application_user_email,
-                    nickname: application_user_password_nickname,
-                    password_hash: application_user_password_hash,
+                ApplicationUserRegistrationToken1 {
+                    value: application_user_registration_token_value,
+                    wrong_enter_tries_quantity: application_user_registration_token_wrong_enter_tries_quantity,
+                    is_approved: application_user_registration_token_is_approved,
+                    expires_at: application_user_registration_token_expires_at,
+                    can_be_resent_from: application_user_registration_token_can_be_resent_from,
                 },
             ),
         );
     }
 }
 
-impl PostgresqlRepository<ApplicationUser5> {
-    pub async fn find_1<'a>(
-        database_1_connection: &'a Connection,
-        by_3: &'a By3,
-    ) -> Result<Option<ApplicationUser5>, ErrorAuditor_> {
+impl PostgresqlRepository<ApplicationUserRegistrationToken2> {
+    pub async fn update<'a>(
+        database_2_connection: &'a Connection,
+        update_8: &'a Update8,
+        by_5: &'a By5<'_>,
+    ) -> Result<(), ErrorAuditor_> {
+        let application_user_email = by_5.application_user_email.0.as_str();
+
+        let application_user_device_id = by_5.application_user_device_id.0.as_str();
+
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
-            SELECT \
-                au.email AS e \
-            FROM public.application_user au \
-            WHERE au.id = $1;";
+            UPDATE ONLY public.application_user_registration_token AS aurt
+            SET ( \
+                can_be_resent_from \
+            ) = ROW( \
+                $1 \
+            ) \
+            WHERE aurt.application_user_email = $2 AND aurt.application_user_device_id = $3;";
 
-        prepared_statemant_parameter_convertation_resolver.add_parameter(
-            &by_3.application_user_id.0,
-            Type::INT8,
-        );
+        prepared_statemant_parameter_convertation_resolver
+            .add_parameter(
+                &update_8.application_user_registration_token_can_be_resent_from.0,
+                Type::INT8,
+            )
+            .add_parameter(
+                &application_user_email,
+                Type::TEXT,
+            )
+            .add_parameter(
+                &application_user_device_id,
+                Type::TEXT,
+            );
 
-        let statement = match database_1_connection
+        let statement = match database_2_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
@@ -1334,7 +631,204 @@ impl PostgresqlRepository<ApplicationUser5> {
             }
         };
 
-        let row_registry = match database_1_connection
+        if let Err(error) = database_2_connection
+            .query(
+                &statement,
+                prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
+            )
+            .await
+        {
+            return Err(
+                ErrorAuditor_::new(
+                    Error::Runtime {
+                        runtime: Runtime::Resource {
+                            resource: ResourceError::Postgresql {
+                                postgresql_error: error,
+                            },
+                        },
+                    },
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                ),
+            );
+        };
+
+        return Ok(());
+    }
+}
+
+impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
+    pub async fn update<'a>(
+        database_2_connection: &'a Connection,
+        update_9: &'a Update9<'_>,
+        by_5: &'a By5<'_>,
+    ) -> Result<(), ErrorAuditor_> {
+        let application_user_email = by_5.application_user_email.0.as_str();
+
+        let application_user_device_id = by_5.application_user_device_id.0.as_str();
+
+        let application_user_registration_token_value = update_9.application_user_registration_token_value.0.as_str();
+
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
+
+        let query = "\
+            UPDATE ONLY public.application_user_registration_token AS aurt
+            SET ( \
+                value, \
+                wrong_enter_tries_quantity, \
+                is_approved, \
+                expires_at \
+            ) = ROW( \
+                $1, \
+                $2, \
+                $3, \
+                $4 \
+            ) \
+            WHERE aurt.application_user_email = $5 AND aurt.application_user_device_id = $6;";
+
+        prepared_statemant_parameter_convertation_resolver
+            .add_parameter(
+                &application_user_registration_token_value,
+                Type::TEXT,
+            )
+            .add_parameter(
+                &update_9.application_user_registration_token_wrong_enter_tries_quantity.0,
+                Type::INT2,
+            )
+            .add_parameter(
+                &update_9.application_user_registration_token_is_approved.0,
+                Type::BOOL,
+            )
+            .add_parameter(
+                &update_9.application_user_registration_token_expires_at.0,
+                Type::INT8,
+            )
+            .add_parameter(
+                &application_user_email,
+                Type::TEXT,
+            )
+            .add_parameter(
+                &application_user_device_id,
+                Type::TEXT,
+            );
+
+        let statement = match database_2_connection
+            .prepare_typed(
+                query,
+                prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
+            )
+            .await
+        {
+            Ok(statement_) => statement_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor_::new(
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: ResourceError::Postgresql {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+        };
+
+        if let Err(error) = database_2_connection
+            .query(
+                &statement,
+                prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
+            )
+            .await
+        {
+            return Err(
+                ErrorAuditor_::new(
+                    Error::Runtime {
+                        runtime: Runtime::Resource {
+                            resource: ResourceError::Postgresql {
+                                postgresql_error: error,
+                            },
+                        },
+                    },
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                ),
+            );
+        };
+
+        return Ok(());
+    }
+
+    pub async fn find_1<'a>(
+        database_2_connection: &'a Connection,
+        by_5: &'a By5<'_>,
+    ) -> Result<Option<ApplicationUserRegistrationToken3>, ErrorAuditor_> {
+        let application_user_email = by_5.application_user_email.0.as_str();
+
+        let application_user_device_id = by_5.application_user_device_id.0.as_str();
+
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
+
+        let query = "\
+            SELECT \
+                aurt.value AS v, \
+                aurt.wrong_enter_tries_quantity AS wetq, \
+                aurt.is_approved AS ia, \
+                aurt.expires_at AS ea \
+            FROM public.application_user_registration_token aurt \
+            WHERE aurt.application_user_email = $1 AND aurt.application_user_device_id = $2;";
+
+        prepared_statemant_parameter_convertation_resolver
+            .add_parameter(
+                &application_user_email,
+                Type::TEXT,
+            )
+            .add_parameter(
+                &application_user_device_id,
+                Type::TEXT,
+            );
+
+        let statement = match database_2_connection
+            .prepare_typed(
+                query,
+                prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
+            )
+            .await
+        {
+            Ok(statement_) => statement_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor_::new(
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: ResourceError::Postgresql {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+        };
+
+        let row_registry = match database_2_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
@@ -1366,8 +860,74 @@ impl PostgresqlRepository<ApplicationUser5> {
             return Ok(None);
         }
 
-        let application_user_email = match row_registry[0].try_get::<'_, usize, String>(0) {
-            Ok(application_user_email_) => ApplicationUser_Email(application_user_email_),
+        let application_user_registration_token_value = match row_registry[0].try_get::<'_, usize, String>(0) {
+            Ok(application_user_registration_token_value_) => ApplicationUserRegistrationToken_Value(application_user_registration_token_value_),
+            Err(error) => {
+                return Err(
+                    ErrorAuditor_::new(
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: ResourceError::Postgresql {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+        };
+
+        let application_user_registration_token_wrong_enter_tries_quantity = match row_registry[0].try_get::<'_, usize, i16>(1) {
+            Ok(application_user_registration_token_wrong_enter_tries_quantity_) => ApplicationUserRegistrationToken_WrongEnterTriesQuantity(application_user_registration_token_wrong_enter_tries_quantity_),
+            Err(error) => {
+                return Err(
+                    ErrorAuditor_::new(
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: ResourceError::Postgresql {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+        };
+
+        let application_user_registration_token_is_approved = match row_registry[0].try_get::<'_, usize, bool>(2) {
+            Ok(application_user_registration_token_is_approved_) => ApplicationUserRegistrationToken_IsApproved(application_user_registration_token_is_approved_),
+            Err(error) => {
+                return Err(
+                    ErrorAuditor_::new(
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: ResourceError::Postgresql {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+        };
+
+        let application_user_registration_token_expires_at = match row_registry[0].try_get::<'_, usize, i64>(3) {
+            Ok(application_user_registration_token_expires_at_) => ApplicationUserRegistrationToken_ExpiresAt(application_user_registration_token_expires_at_),
             Err(error) => {
                 return Err(
                     ErrorAuditor_::new(
@@ -1390,8 +950,386 @@ impl PostgresqlRepository<ApplicationUser5> {
 
         return Ok(
             Some(
-                ApplicationUser5 {
-                    email: application_user_email,
+                ApplicationUserRegistrationToken3 {
+                    value: application_user_registration_token_value,
+                    wrong_enter_tries_quantity: application_user_registration_token_wrong_enter_tries_quantity,
+                    is_approved: application_user_registration_token_is_approved,
+                    expires_at: application_user_registration_token_expires_at,
+                },
+            ),
+        );
+    }
+}
+
+impl PostgresqlRepository<ApplicationUserRegistrationToken4> {
+    pub async fn update<'a>(
+        database_2_connection: &'a Connection,
+        update_10: &'a Update10,
+        by_5: &'a By5<'_>,
+    ) -> Result<(), ErrorAuditor_> {
+        let application_user_email = by_5.application_user_email.0.as_str();
+
+        let application_user_device_id = by_5.application_user_device_id.0.as_str();
+
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
+
+        let query = "\
+            UPDATE ONLY public.application_user_registration_token AS aurt
+            SET ( \
+                wrong_enter_tries_quantity \
+            ) = ROW( \
+                $1 \
+            ) \
+            WHERE aurt.application_user_email = $2 AND aurt.application_user_device_id = $3;";
+
+        prepared_statemant_parameter_convertation_resolver
+            .add_parameter(
+                &update_10.application_user_registration_token_wrong_enter_tries_quantity.0,
+                Type::INT2,
+            )
+            .add_parameter(
+                &application_user_email,
+                Type::TEXT,
+            )
+            .add_parameter(
+                &application_user_device_id,
+                Type::TEXT,
+            );
+
+        let statement = match database_2_connection
+            .prepare_typed(
+                query,
+                prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
+            )
+            .await
+        {
+            Ok(statement_) => statement_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor_::new(
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: ResourceError::Postgresql {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+        };
+
+        if let Err(error) = database_2_connection
+            .query(
+                &statement,
+                prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
+            )
+            .await
+        {
+            return Err(
+                ErrorAuditor_::new(
+                    Error::Runtime {
+                        runtime: Runtime::Resource {
+                            resource: ResourceError::Postgresql {
+                                postgresql_error: error,
+                            },
+                        },
+                    },
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                ),
+            );
+        };
+
+        return Ok(());
+    }
+}
+
+impl PostgresqlRepository<ApplicationUserRegistrationToken5> {
+    pub async fn update<'a>(
+        database_2_connection: &'a Connection,
+        update_11: &'a Update11,
+        by_5: &'a By5<'_>,
+    ) -> Result<(), ErrorAuditor_> {
+        let application_user_email = by_5.application_user_email.0.as_str();
+
+        let application_user_device_id = by_5.application_user_device_id.0.as_str();
+
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
+
+        let query = "\
+            UPDATE ONLY public.application_user_registration_token AS aurt
+            SET ( \
+                is_approved \
+            ) = ROW( \
+                $1 \
+            ) \
+            WHERE aurt.application_user_email = $2 AND aurt.application_user_device_id = $3;";
+
+        prepared_statemant_parameter_convertation_resolver
+            .add_parameter(
+                &update_11.application_user_registration_token_is_approved.0,
+                Type::BOOL,
+            )
+            .add_parameter(
+                &application_user_email,
+                Type::TEXT,
+            )
+            .add_parameter(
+                &application_user_device_id,
+                Type::TEXT,
+            );
+
+        let statement = match database_2_connection
+            .prepare_typed(
+                query,
+                prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
+            )
+            .await
+        {
+            Ok(statement_) => statement_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor_::new(
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: ResourceError::Postgresql {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+        };
+
+        if let Err(error) = database_2_connection
+            .query(
+                &statement,
+                prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
+            )
+            .await
+        {
+            return Err(
+                ErrorAuditor_::new(
+                    Error::Runtime {
+                        runtime: Runtime::Resource {
+                            resource: ResourceError::Postgresql {
+                                postgresql_error: error,
+                            },
+                        },
+                    },
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                ),
+            );
+        };
+
+        return Ok(());
+    }
+}
+
+impl PostgresqlRepository<ApplicationUserRegistrationToken6> {
+    pub async fn find_1<'a>(
+        database_2_connection: &'a Connection,
+        by_5: &'a By5<'_>,
+    ) -> Result<Option<ApplicationUserRegistrationToken6>, ErrorAuditor_> {
+        let application_user_email = by_5.application_user_email.0.as_str();
+
+        let application_user_device_id = by_5.application_user_device_id.0.as_str();
+
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
+
+        let query = "\
+            SELECT \
+                aurt.value AS v, \
+                aurt.is_approved AS ia, \
+                aurt.expires_at AS ea, \
+                aurt.can_be_resent_from as cbrf \
+            FROM public.application_user_registration_token aurt \
+            WHERE aurt.application_user_email = $1 AND aurt.application_user_device_id = $2;";
+
+        prepared_statemant_parameter_convertation_resolver
+            .add_parameter(
+                &application_user_email,
+                Type::TEXT,
+            )
+            .add_parameter(
+                &application_user_device_id,
+                Type::TEXT,
+            );
+
+        let statement = match database_2_connection
+            .prepare_typed(
+                query,
+                prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
+            )
+            .await
+        {
+            Ok(statement_) => statement_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor_::new(
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: ResourceError::Postgresql {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+        };
+
+        let row_registry = match database_2_connection
+            .query(
+                &statement,
+                prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
+            )
+            .await
+        {
+            Ok(row_registry_) => row_registry_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor_::new(
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: ResourceError::Postgresql {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+        };
+
+        if row_registry.is_empty() {
+            return Ok(None);
+        }
+
+        let application_user_registration_token_value = match row_registry[0].try_get::<'_, usize, String>(0) {
+            Ok(application_user_registration_token_value_) => ApplicationUserRegistrationToken_Value(application_user_registration_token_value_),
+            Err(error) => {
+                return Err(
+                    ErrorAuditor_::new(
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: ResourceError::Postgresql {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+        };
+
+        let application_user_registration_token_is_approved = match row_registry[0].try_get::<'_, usize, bool>(1) {
+            Ok(application_user_registration_token_is_approved_) => ApplicationUserRegistrationToken_IsApproved(application_user_registration_token_is_approved_),
+            Err(error) => {
+                return Err(
+                    ErrorAuditor_::new(
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: ResourceError::Postgresql {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+        };
+
+        let application_user_registration_token_expires_at = match row_registry[0].try_get::<'_, usize, i64>(2) {
+            Ok(application_user_registration_token_expires_at_) => ApplicationUserRegistrationToken_ExpiresAt(application_user_registration_token_expires_at_),
+            Err(error) => {
+                return Err(
+                    ErrorAuditor_::new(
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: ResourceError::Postgresql {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+        };
+
+        let application_user_registration_token_can_be_resent_from = match row_registry[0].try_get::<'_, usize, i64>(3) {
+            Ok(application_user_registration_token_can_be_resent_from_) => ApplicationUserRegistrationToken_CanBeResentFrom(application_user_registration_token_can_be_resent_from_),
+            Err(error) => {
+                return Err(
+                    ErrorAuditor_::new(
+                        Error::Runtime {
+                            runtime: Runtime::Resource {
+                                resource: ResourceError::Postgresql {
+                                    postgresql_error: error,
+                                },
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+        };
+
+        return Ok(
+            Some(
+                ApplicationUserRegistrationToken6 {
+                    value: application_user_registration_token_value,
+                    is_approved: application_user_registration_token_is_approved,
+                    expires_at: application_user_registration_token_expires_at,
+                    can_be_resent_from: application_user_registration_token_can_be_resent_from,
                 },
             ),
         );
