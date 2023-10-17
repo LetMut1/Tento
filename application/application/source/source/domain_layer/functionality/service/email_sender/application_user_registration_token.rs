@@ -6,7 +6,7 @@ use crate::domain_layer::data::entity::application_user_registration_token::Appl
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor_;
 
-use crate::infrastructure_layer::functionality::service::sender::Email;
+use crate::infrastructure_layer::functionality::service::sender::email::Email;
 use crate::infrastructure_layer::functionality::service::sender::Sender;
 
 impl EmailSender<ApplicationUserRegistrationToken<'_>> {

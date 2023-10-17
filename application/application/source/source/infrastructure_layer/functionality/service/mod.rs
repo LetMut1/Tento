@@ -1,7 +1,6 @@
 pub mod converter;
 pub mod counter;
 pub mod creator;
-pub mod email___sender;
 pub mod encoder;
 pub mod expiration_time_checker;
 pub mod formatter;

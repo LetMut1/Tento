@@ -1,4 +1,4 @@
-use super::sender::Sender;
+use super::Sender;
 use crate::infrastructure_layer::data::environment_configuration::Environment;
 use crate::infrastructure_layer::data::environment_configuration::ENVIRONMENT_CONFIGURATION;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
