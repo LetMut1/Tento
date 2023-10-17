@@ -32,7 +32,7 @@ use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
 use http::request::Parts;
 use hyper::Body;
-use super::processor::Processor;
+use super::Processor;
 use matchit::Params;
 
 pub use crate::infrastructure_layer::data::control_type::GeneralizedAction;
