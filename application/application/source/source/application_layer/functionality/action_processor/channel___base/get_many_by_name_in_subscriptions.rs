@@ -23,13 +23,14 @@ use std::marker::Sync;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
+use crate::application_layer::functionality::action_processor::action_processor::ActionProcessor;
+
 pub use action_processor_incoming_outcoming::action_processor::channel___base::get_many_by_name_in_subscriptions::Incoming;
 pub use action_processor_incoming_outcoming::action_processor::channel___base::get_many_by_name_in_subscriptions::Outcoming;
 pub use action_processor_incoming_outcoming::action_processor::channel___base::get_many_by_name_in_subscriptions::Precedent;
+pub use crate::infrastructure_layer::data::control_type::GetManyByNameInSubscriptions;
 
-pub struct GetManyByNameInSubscriptions;
-
-impl GetManyByNameInSubscriptions {
+impl ActionProcessor<GetManyByNameInSubscriptions> {
     const LIMIT: i16 = 100;
 
     pub async fn process<'a, T>(

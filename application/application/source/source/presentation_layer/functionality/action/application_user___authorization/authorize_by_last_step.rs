@@ -17,6 +17,7 @@ use hyper::Body;
 use matchit::Params;
 use crate::presentation_layer::functionality::service::extractor::Extractor;
 use crate::presentation_layer::functionality::service::extractor::HttpBodyData;
+use crate::application_layer::functionality::action_processor::action_processor::ActionProcessor;
 
 #[cfg(feature = "manual_testing")]
 use crate::infrastructure_layer::functionality::service::serializer::Json;
@@ -46,7 +47,7 @@ impl AuthorizeByLastStep {
             database_2_postgresql_connection_pool,
             database_1_redis_connection_pool,
             Extractor::<HttpBodyData>::extract::<_, MessagePack>,
-            AuthorizeByLastStep_::process,
+            ActionProcessor::<AuthorizeByLastStep_>::process,
         )
         .await;
     }
@@ -76,7 +77,7 @@ impl AuthorizeByLastStep {
             database_2_postgresql_connection_pool,
             database_1_redis_connection_pool,
             Extractor::<HttpBodyData>::extract::<_, Json>,
-            AuthorizeByLastStep_::process,
+            ActionProcessor::<AuthorizeByLastStep_>::process,
         )
         .await;
     }

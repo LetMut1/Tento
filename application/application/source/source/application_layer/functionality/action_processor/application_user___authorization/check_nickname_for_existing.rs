@@ -21,12 +21,13 @@ use std::marker::Sync;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
+use crate::application_layer::functionality::action_processor::action_processor::ActionProcessor;
+
 pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::check_nickname_for_existing::Incoming;
 pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::check_nickname_for_existing::Outcoming;
+pub use crate::infrastructure_layer::data::control_type::CheckNicknameForExisting;
 
-pub struct CheckNicknameForExisting;
-
-impl CheckNicknameForExisting {
+impl ActionProcessor<CheckNicknameForExisting> {
     pub async fn process<'a, T>(
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,

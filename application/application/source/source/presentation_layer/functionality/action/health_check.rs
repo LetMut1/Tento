@@ -16,6 +16,7 @@ use tokio_postgres::Socket;
 use http::request::Parts;
 use hyper::Body;
 use matchit::Params;
+use crate::application_layer::functionality::action_processor::action_processor::ActionProcessor;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor_;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 
@@ -45,7 +46,7 @@ impl HealthCheck {
             database_2_postgresql_connection_pool,
             database_1_redis_connection_pool,
             Self::extract,
-            HealthCheck_::process,
+            ActionProcessor::<HealthCheck_>::process,
         )
         .await;
     }

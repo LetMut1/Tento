@@ -15,6 +15,7 @@ use tokio_postgres::Socket;
 use http::request::Parts;
 use hyper::Body;
 use matchit::Params;
+use crate::application_layer::functionality::action_processor::action_processor::ActionProcessor;
 use crate::presentation_layer::functionality::service::extractor::Extractor;
 use crate::presentation_layer::functionality::service::extractor::HttpBodyData;
 
@@ -46,7 +47,7 @@ impl ResetPasswordByLastStep {
             database_2_postgresql_connection_pool,
             database_1_redis_connection_pool,
             Extractor::<HttpBodyData>::extract::<_, MessagePack>,
-            ResetPasswordByLastStep_::process,
+            ActionProcessor::<ResetPasswordByLastStep_>::process,
         )
         .await;
     }
@@ -76,7 +77,7 @@ impl ResetPasswordByLastStep {
             database_2_postgresql_connection_pool,
             database_1_redis_connection_pool,
             Extractor::<HttpBodyData>::extract::<_, Json>,
-            ResetPasswordByLastStep_::process,
+            ActionProcessor::<ResetPasswordByLastStep_>::process,
         )
         .await;
     }
