@@ -19,7 +19,7 @@ use crate::infrastructure_layer::functionality::repository::postgresql_repositor
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::update::Update8;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
-use crate::infrastructure_layer::functionality::service::expiration_time_checker::UnixTime;
+use crate::infrastructure_layer::functionality::service::expiration_time_checker::unix_time::UnixTime;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use bb8_redis::RedisConnectionManager;

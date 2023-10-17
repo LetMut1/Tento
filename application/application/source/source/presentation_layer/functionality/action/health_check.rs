@@ -2,7 +2,7 @@ use crate::application_layer::functionality::service::processor::Processor;
 use crate::application_layer::functionality::service::processor::generalized_action::GeneralizedAction;
 use crate::infrastructure_layer::data::control_type::Response;
 use crate::infrastructure_layer::data::void::Void;
-use crate::infrastructure_layer::functionality::service::serializer::MessagePack;
+use crate::infrastructure_layer::functionality::service::serializer::message_pack::MessagePack;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use bb8_redis::RedisConnectionManager;

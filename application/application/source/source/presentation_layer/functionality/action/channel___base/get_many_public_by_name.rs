@@ -1,7 +1,7 @@
 use crate::application_layer::functionality::service::processor::Processor;
 use crate::application_layer::functionality::service::processor::generalized_action::GeneralizedAction;
 use crate::infrastructure_layer::data::control_type::Response;
-use crate::infrastructure_layer::functionality::service::serializer::MessagePack;
+use crate::infrastructure_layer::functionality::service::serializer::message_pack::MessagePack;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use bb8_redis::RedisConnectionManager;
@@ -22,7 +22,7 @@ use crate::presentation_layer::functionality::service::extractor::HttpBodyData;
 pub use crate::application_layer::functionality::action_processor::channel___base::get_many_public_by_name::Channel__Base___GetManyPublicByName;
 
 #[cfg(feature = "manual_testing")]
-use crate::infrastructure_layer::functionality::service::serializer::Json;
+use crate::infrastructure_layer::functionality::service::serializer::json::Json;
 
 impl Action<Channel__Base___GetManyPublicByName> {
     pub async fn run<'a, T>(

@@ -13,7 +13,7 @@ use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentR
 use crate::infrastructure_layer::functionality::service::encoder::base64::Base64;
 use crate::infrastructure_layer::functionality::service::encoder::Encoder as Encoder_;
 use crate::infrastructure_layer::functionality::service::encoder::hmac::Hmac_Sha3_512;
-use crate::infrastructure_layer::functionality::service::serializer::MessagePack;
+use crate::infrastructure_layer::functionality::service::serializer::message_pack::MessagePack;
 use crate::infrastructure_layer::functionality::service::serializer::Serialize;
 use crate::infrastructure_layer::functionality::service::serializer::Serializer;
 

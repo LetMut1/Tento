@@ -1,12 +1,12 @@
+pub mod message_pack;
+
+#[cfg(feature = "manual_testing")]
+pub mod json;
+
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor_;
 use serde::Deserialize;
 use serde::Serialize as SerdeSerialize;
 use std::marker::PhantomData;
-
-pub use super::message_pack___serializer::MessagePack;
-
-#[cfg(feature = "manual_testing")]
-pub use super::json___serializer::Json;
 
 pub struct Serializer<T> {
     _format: PhantomData<T>,

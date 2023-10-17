@@ -1,7 +1,7 @@
 use crate::application_layer::functionality::service::processor::Processor;
 use crate::application_layer::functionality::service::processor::generalized_action::GeneralizedAction;
 use crate::infrastructure_layer::data::control_type::Response;
-use crate::infrastructure_layer::functionality::service::serializer::MessagePack;
+use crate::infrastructure_layer::functionality::service::serializer::message_pack::MessagePack;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use bb8_redis::RedisConnectionManager;
@@ -22,7 +22,7 @@ use crate::application_layer::functionality::action_processor::ActionProcessor;
 pub use crate::application_layer::functionality::action_processor::application_user___authorization::authorize_by_last_step::ApplicationUser__Authorization___AuthorizeByLastStep;
 
 #[cfg(feature = "manual_testing")]
-use crate::infrastructure_layer::functionality::service::serializer::Json;
+use crate::infrastructure_layer::functionality::service::serializer::json::Json;
 
 impl Action<ApplicationUser__Authorization___AuthorizeByLastStep> {
     pub async fn run<'a, T>(

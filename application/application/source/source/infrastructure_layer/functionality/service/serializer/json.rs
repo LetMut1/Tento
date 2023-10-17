@@ -1,5 +1,5 @@
-use super::serializer::Serialize;
-use super::serializer::Serializer;
+use super::Serialize;
+use super::Serializer;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor_;

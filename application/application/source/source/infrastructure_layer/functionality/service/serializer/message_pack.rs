@@ -1,5 +1,5 @@
-use super::serializer::Serialize;
-use super::serializer::Serializer;
+use super::Serialize;
+use super::Serializer;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor_;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
@@ -7,8 +7,8 @@ use crate::infrastructure_layer::data::error_auditor::Error;
 use crate::infrastructure_layer::data::error_auditor::Other;
 use message_pack_serializer::Serializer as Serializer_;
 use serde::Deserialize;
-use super::formatter::Format;
-use super::formatter::Formatter;
+use crate::infrastructure_layer::functionality::service::formatter::Format;
+use crate::infrastructure_layer::functionality::service::formatter::Formatter;
 use serde::Serialize as SerdeSerialize;
 
 pub use crate::infrastructure_layer::data::control_type::MessagePack;

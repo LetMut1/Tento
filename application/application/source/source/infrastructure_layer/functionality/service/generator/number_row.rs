@@ -1,4 +1,4 @@
-use super::generator::Generator;
+use super::Generator;
 
 pub use crate::infrastructure_layer::data::control_type::NumberRow;
 

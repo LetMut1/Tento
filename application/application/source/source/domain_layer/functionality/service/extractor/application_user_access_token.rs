@@ -6,7 +6,7 @@ use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor_;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
-use crate::infrastructure_layer::functionality::service::expiration_time_checker::UnixTime;
+use crate::infrastructure_layer::functionality::service::expiration_time_checker::unix_time::UnixTime;
 
 impl Extractor<ApplicationUserAccessToken<'_>> {
     pub async fn extract<'a>(application_user_access_token_encrypted: &'a ApplicationUserAccessTokenEncrypted) -> Result<InvalidArgumentResult<ExtractorResult>, ErrorAuditor_> {
