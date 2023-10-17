@@ -1,5 +1,4 @@
 pub mod action_round_register___writer;
-pub mod application_user__password___encoder;
 pub mod application_user_access_refresh_token___form_resolver;
 pub mod application_user_access_refresh_token__expires_at___generator;
 pub mod application_user_access_refresh_token__obfuscation_value___generator;

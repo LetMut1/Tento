@@ -1,4 +1,4 @@
-use super::encoder::Encoder;
+use super::Encoder;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Password;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_PasswordHash;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
