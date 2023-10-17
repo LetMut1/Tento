@@ -1,4 +1,4 @@
-use crate::application_layer::functionality::action_processor::channel___base::get_many_by_name_in_subscriptions::GetManyByNameInSubscriptions as GetManyByNameInSubscriptions_;
+use crate::application_layer::functionality::action_processor::channel___base::get_many_by_name_in_subscriptions::Channel__Base___GetManyByNameInSubscriptions as GetManyByNameInSubscriptions_;
 use crate::application_layer::functionality::service::processor::Processor;
 use crate::application_layer::functionality::service::processor::Action;
 use crate::infrastructure_layer::data::control_type::Response;

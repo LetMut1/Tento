@@ -1,4 +1,4 @@
-use crate::application_layer::functionality::action_processor::application_user___authorization::check_email_for_existing::CheckEmailForExisting as CheckEmailForExisting_;
+use crate::application_layer::functionality::action_processor::application_user___authorization::check_email_for_existing::ApplicationUser__Authorization___CheckEmailForExisting as CheckEmailForExisting_;
 use crate::application_layer::functionality::service::processor::Processor;
 use crate::application_layer::functionality::service::processor::Action;
 use crate::infrastructure_layer::data::control_type::Response;

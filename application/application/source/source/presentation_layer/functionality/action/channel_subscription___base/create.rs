@@ -1,4 +1,4 @@
-use crate::application_layer::functionality::action_processor::channel_subscription___base::create::Create as Create_;
+use crate::application_layer::functionality::action_processor::channel_subscription___base::create::ChannelSubscription__Base___Create as Create_;
 use crate::application_layer::functionality::service::processor::Processor;
 use crate::application_layer::functionality::service::processor::Action;
 use crate::infrastructure_layer::data::control_type::Response;

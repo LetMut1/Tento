@@ -33,9 +33,9 @@ use crate::application_layer::functionality::action_processor::action_processor:
 
 pub use action_processor_incoming_outcoming::action_processor::channel_subscription___base::create::Incoming;
 pub use action_processor_incoming_outcoming::action_processor::channel_subscription___base::create::Precedent;
-pub use crate::infrastructure_layer::data::control_type::Create;
+pub use crate::infrastructure_layer::data::control_type::ChannelSubscription__Base___Create;
 
-impl ActionProcessor<Create> {
+impl ActionProcessor<ChannelSubscription__Base___Create> {
     pub async fn process<'a, T>(
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,

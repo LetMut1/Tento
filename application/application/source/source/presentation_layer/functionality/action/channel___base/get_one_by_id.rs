@@ -1,4 +1,4 @@
-use crate::application_layer::functionality::action_processor::channel___base::get_one_by_id::GetOneByID as GetOneByID_;
+use crate::application_layer::functionality::action_processor::channel___base::get_one_by_id::Channel__Base___GetOneByID as GetOneByID_;
 use crate::application_layer::functionality::service::processor::Processor;
 use crate::application_layer::functionality::service::processor::Action;
 use crate::infrastructure_layer::data::control_type::Response;

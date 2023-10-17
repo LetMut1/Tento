@@ -25,10 +25,10 @@ use crate::application_layer::functionality::action_processor::action_processor:
 
 pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::deauthorize_from_one_device::Incoming;
 pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::deauthorize_from_one_device::Precedent;
-pub use crate::infrastructure_layer::data::control_type::DeauthorizeFromOneDevice;
+pub use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___DeauthorizeFromOneDevice;
 
 
-impl ActionProcessor<DeauthorizeFromOneDevice> {
+impl ActionProcessor<ApplicationUser__Authorization___DeauthorizeFromOneDevice> {
     pub async fn process<'a, T>(
         _database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,

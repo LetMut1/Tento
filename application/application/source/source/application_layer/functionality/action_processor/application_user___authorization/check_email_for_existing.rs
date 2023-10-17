@@ -25,9 +25,9 @@ use crate::application_layer::functionality::action_processor::action_processor:
 
 pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::check_email_for_existing::Incoming;
 pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::check_email_for_existing::Outcoming;
-pub use crate::infrastructure_layer::data::control_type::CheckEmailForExisting;
+pub use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___CheckEmailForExisting;
 
-impl ActionProcessor<CheckEmailForExisting> {
+impl ActionProcessor<ApplicationUser__Authorization___CheckEmailForExisting> {
     pub async fn process<'a, T>(
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,

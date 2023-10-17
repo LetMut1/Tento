@@ -6,80 +6,43 @@ use hyper::Request as HyperRequest;
 use hyper::Response as HyperResponse;
 use tokio_postgres::NoTls;
 
-pub struct Argon2Id;
-
-pub struct Base64;
-
-pub struct CloudMessage;
-
-pub struct RegisterByLastStep;
-
-pub struct ResetPasswordByLastStep;
-
-pub struct SendEmailForResetPassword;
-
-pub struct RouteNotFound;
-
-pub struct GetManyPublicByName;
-
-pub struct ResetPasswordByFirstStep;
-
-pub struct Create;
-
-pub struct GetManyBySubscription;
-
-pub struct DateTime;
-
-pub struct GetOneByID;
-
-pub struct AuthorizeByLastStep;
-
-pub struct RegisterByFirstStep;
-
-pub struct RefreshAccessToken;
-
-pub struct ResetPasswordBySecondStep;
-
-pub struct UnixTime;
-
-pub struct DeauthorizeFromOneDevice;
-
-pub struct CheckNicknameForExisting;
-
-pub struct DeauthorizeFromAllDevices;
-
-pub struct CheckEmailForExisting;
-
-pub struct SendEmailForAuthorize;
-
 pub struct Action;
-
-pub struct SendEmailForRegister;
-
+pub struct ApplicationUser__Authorization___AuthorizeByFirstStep;
+pub struct ApplicationUser__Authorization___AuthorizeByLastStep;
+pub struct ApplicationUser__Authorization___CheckEmailForExisting;
+pub struct ApplicationUser__Authorization___CheckNicknameForExisting;
+pub struct ApplicationUser__Authorization___DeauthorizeFromAllDevices;
+pub struct ApplicationUser__Authorization___DeauthorizeFromOneDevice;
+pub struct ApplicationUser__Authorization___RefreshAccessToken;
+pub struct ApplicationUser__Authorization___RegisterByFirstStep;
+pub struct ApplicationUser__Authorization___RegisterByLastStep;
+pub struct ApplicationUser__Authorization___RegisterBySecondStep;
+pub struct ApplicationUser__Authorization___ResetPasswordByFirstStep;
+pub struct ApplicationUser__Authorization___ResetPasswordByLastStep;
+pub struct ApplicationUser__Authorization___ResetPasswordBySecondStep;
+pub struct ApplicationUser__Authorization___SendEmailForAuthorize;
+pub struct ApplicationUser__Authorization___SendEmailForRegister;
+pub struct ApplicationUser__Authorization___SendEmailForResetPassword;
+pub struct Argon2Id;
+pub struct Base64;
+pub struct Channel__Base___GetManyByNameInSubscriptions;
+pub struct Channel__Base___GetManyBySubscription;
+pub struct Channel__Base___GetManyPublicByName;
+pub struct Channel__Base___GetOneByID;
+pub struct ChannelSubscription__Base___Create;
+pub struct CloudMessage;
+pub struct DateTime;
 pub struct Email;
-
-pub struct HttpBodyData;
-
-pub struct AuthorizeByFirstStep;
-
 pub struct HealthCheck;
-
-pub struct RegisterBySecondStep;
-
+pub struct HttpBodyData;
 pub struct MessagePack;
-
-pub struct GetManyByNameInSubscriptions;
-
 pub struct NumberRow;
-
 pub struct PostgresqlTransaction;
-
+pub struct RouteNotFound;
+pub struct UnixTime;
 pub type PostgresqlConnectionPoolNoTls = Pool<PostgresqlConnectionManager<NoTls>>;
-
 pub type RedisConnectonPool = Pool<RedisConnectionManager>;
-
 pub type Request = HyperRequest<Body>;
-
 pub type Response = HyperResponse<Body>;
 
 #[cfg(feature = "manual_testing")]

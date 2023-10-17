@@ -1,4 +1,4 @@
-use crate::application_layer::functionality::action_processor::application_user___authorization::deauthorize_from_one_device::DeauthorizeFromOneDevice as DeauthorizeFromOneDevice_;
+use crate::application_layer::functionality::action_processor::application_user___authorization::deauthorize_from_one_device::ApplicationUser__Authorization___DeauthorizeFromOneDevice as DeauthorizeFromOneDevice_;
 use crate::application_layer::functionality::service::processor::Processor;
 use crate::application_layer::functionality::service::processor::Action;
 use crate::infrastructure_layer::data::control_type::Response;

@@ -28,9 +28,9 @@ use crate::application_layer::functionality::action_processor::action_processor:
 pub use action_processor_incoming_outcoming::action_processor::channel___base::get_many_by_subscription::Incoming;
 pub use action_processor_incoming_outcoming::action_processor::channel___base::get_many_by_subscription::Outcoming;
 pub use action_processor_incoming_outcoming::action_processor::channel___base::get_many_by_subscription::Precedent;
-pub use crate::infrastructure_layer::data::control_type::GetManyBySubscription;
+pub use crate::infrastructure_layer::data::control_type::Channel__Base___GetManyBySubscription;
 
-impl ActionProcessor<GetManyBySubscription> {
+impl ActionProcessor<Channel__Base___GetManyBySubscription> {
     const LIMIT: i16 = 100;
 
     pub async fn process<'a, T>(

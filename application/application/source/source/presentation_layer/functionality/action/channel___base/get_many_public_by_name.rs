@@ -1,4 +1,4 @@
-use crate::application_layer::functionality::action_processor::channel___base::get_many_public_by_name::GetManyPublicByName as GetManyPublicByName_;
+use crate::application_layer::functionality::action_processor::channel___base::get_many_public_by_name::Channel__Base___GetManyPublicByName as GetManyPublicByName_;
 use crate::application_layer::functionality::service::processor::Processor;
 use crate::application_layer::functionality::service::processor::Action;
 use crate::infrastructure_layer::data::control_type::Response;

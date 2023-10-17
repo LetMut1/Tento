@@ -27,9 +27,9 @@ use crate::application_layer::functionality::action_processor::action_processor:
 
 pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::deauthorize_from_all_devices::Incoming;
 pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::deauthorize_from_all_devices::Precedent;
-pub use crate::infrastructure_layer::data::control_type::DeauthorizeFromAllDevices;
+pub use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___DeauthorizeFromAllDevices;
 
-impl ActionProcessor<DeauthorizeFromAllDevices> {
+impl ActionProcessor<ApplicationUser__Authorization___DeauthorizeFromAllDevices> {
     pub async fn process<'a, T>(
         // TODO TODO TODO УДАляются ли АккессТокены все при массовом разлогине? Если не удаляются, можно просто при Ектракте АккессТокена использовать проверку на наличие рефреша, если нет, значит произошел разлогин.
         _database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,

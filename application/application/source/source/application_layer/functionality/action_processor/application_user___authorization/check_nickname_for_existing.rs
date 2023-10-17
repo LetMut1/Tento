@@ -25,9 +25,9 @@ use crate::application_layer::functionality::action_processor::action_processor:
 
 pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::check_nickname_for_existing::Incoming;
 pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::check_nickname_for_existing::Outcoming;
-pub use crate::infrastructure_layer::data::control_type::CheckNicknameForExisting;
+pub use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___CheckNicknameForExisting;
 
-impl ActionProcessor<CheckNicknameForExisting> {
+impl ActionProcessor<ApplicationUser__Authorization___CheckNicknameForExisting> {
     pub async fn process<'a, T>(
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,

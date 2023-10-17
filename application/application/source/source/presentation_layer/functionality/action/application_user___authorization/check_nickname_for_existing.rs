@@ -1,4 +1,4 @@
-use crate::application_layer::functionality::action_processor::application_user___authorization::check_nickname_for_existing::CheckNicknameForExisting as CheckNicknameForExisting_;
+use crate::application_layer::functionality::action_processor::application_user___authorization::check_nickname_for_existing::ApplicationUser__Authorization___CheckNicknameForExisting as CheckNicknameForExisting_;
 use crate::application_layer::functionality::service::processor::Processor;
 use crate::application_layer::functionality::service::processor::Action;
 use crate::infrastructure_layer::data::control_type::Response;

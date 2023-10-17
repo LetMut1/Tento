@@ -42,9 +42,9 @@ use crate::application_layer::functionality::action_processor::action_processor:
 
 pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::reset_password_by_last_step::Incoming;
 pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::reset_password_by_last_step::Precedent;
-pub use crate::infrastructure_layer::data::control_type::ResetPasswordByLastStep;
+pub use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___ResetPasswordByLastStep;
 
-impl ActionProcessor<ResetPasswordByLastStep> {
+impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
     pub async fn process<'a, T>(
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,

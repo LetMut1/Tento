@@ -48,9 +48,9 @@ use tokio_postgres::Socket;
 pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::authorize_by_first_step::Incoming;
 pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::authorize_by_first_step::Outcoming;
 pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::authorize_by_first_step::Precedent;
-pub use crate::infrastructure_layer::data::control_type::AuthorizeByFirstStep;
+pub use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___AuthorizeByFirstStep;
 
-impl ActionProcessor<AuthorizeByFirstStep> {
+impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
     pub async fn process<'a, T>(
         // TODO Если два логина на разные устройства, и коды подтверждения еще не введены? То есть, приийдет пользоватею два разных кода, а оне не узнает, какой код к какому устройству
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,

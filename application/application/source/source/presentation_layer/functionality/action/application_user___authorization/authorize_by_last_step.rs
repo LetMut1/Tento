@@ -1,4 +1,4 @@
-use crate::application_layer::functionality::action_processor::application_user___authorization::authorize_by_last_step::AuthorizeByLastStep as AuthorizeByLastStep_;
+use crate::application_layer::functionality::action_processor::application_user___authorization::authorize_by_last_step::ApplicationUser__Authorization___AuthorizeByLastStep as AuthorizeByLastStep_;
 use crate::application_layer::functionality::service::processor::Processor;
 use crate::application_layer::functionality::service::processor::Action;
 use crate::infrastructure_layer::data::control_type::Response;

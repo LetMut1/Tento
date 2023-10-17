@@ -31,9 +31,9 @@ use crate::application_layer::functionality::action_processor::action_processor:
 pub use action_processor_incoming_outcoming::action_processor::channel___base::get_many_public_by_name::Incoming;
 pub use action_processor_incoming_outcoming::action_processor::channel___base::get_many_public_by_name::Outcoming;
 pub use action_processor_incoming_outcoming::action_processor::channel___base::get_many_public_by_name::Precedent;
-pub use crate::infrastructure_layer::data::control_type::GetManyPublicByName;
+pub use crate::infrastructure_layer::data::control_type::Channel__Base___GetManyPublicByName;
 
-impl ActionProcessor<GetManyPublicByName> {
+impl ActionProcessor<Channel__Base___GetManyPublicByName> {
     const LIMIT: i16 = 100;
 
     pub async fn process<'a, T>(

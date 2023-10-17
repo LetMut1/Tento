@@ -1,4 +1,4 @@
-use crate::application_layer::functionality::action_processor::application_user___authorization::send_email_for_reset_password::SendEmailForResetPassword as SendEmailForResetPassword_;
+use crate::application_layer::functionality::action_processor::application_user___authorization::send_email_for_reset_password::ApplicationUser__Authorization___SendEmailForResetPassword as SendEmailForResetPassword_;
 use crate::application_layer::functionality::service::processor::Processor;
 use crate::application_layer::functionality::service::processor::Action;
 use crate::infrastructure_layer::data::control_type::Response;

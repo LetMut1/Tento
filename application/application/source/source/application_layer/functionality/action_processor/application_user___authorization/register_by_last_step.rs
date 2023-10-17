@@ -54,9 +54,9 @@ use crate::application_layer::functionality::action_processor::action_processor:
 pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::register_by_last_step::Incoming;
 pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::register_by_last_step::Outcoming;
 pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::register_by_last_step::Precedent;
-pub use crate::infrastructure_layer::data::control_type::RegisterByLastStep;
+pub use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___RegisterByLastStep;
 
-impl ActionProcessor<RegisterByLastStep> {
+impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
     pub async fn process<'a, T>(
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,

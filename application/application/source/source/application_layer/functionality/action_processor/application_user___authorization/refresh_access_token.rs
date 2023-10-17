@@ -36,9 +36,9 @@ use crate::application_layer::functionality::action_processor::action_processor:
 pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::refresh_access_token::Incoming;
 pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::refresh_access_token::Outcoming;
 pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::refresh_access_token::Precedent;
-pub use crate::infrastructure_layer::data::control_type::RefreshAccessToken;
+pub use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___RefreshAccessToken;
 
-impl ActionProcessor<RefreshAccessToken> {
+impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
     pub async fn process<'a, T>(
         _database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,

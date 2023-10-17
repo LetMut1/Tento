@@ -51,9 +51,9 @@ use tokio_postgres::Socket;
 pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::authorize_by_last_step::Incoming;
 pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::authorize_by_last_step::Outcoming;
 pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::authorize_by_last_step::Precedent;
-pub use crate::infrastructure_layer::data::control_type::AuthorizeByLastStep;
+pub use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___AuthorizeByLastStep;
 
-impl ActionProcessor<AuthorizeByLastStep> {
+impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
     pub async fn process<'a, T>(
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>, // TODO  TODO  TODO  TODO  TODO МОжет ли хакер войти на этом шаге, если пользователь сделал первый шаг.
