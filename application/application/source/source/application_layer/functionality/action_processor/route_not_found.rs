@@ -4,7 +4,7 @@ use crate::infrastructure_layer::data::control_type::Request;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::functionality::service::creator::Creator;
-use crate::infrastructure_layer::functionality::service::creator::Response;
+use crate::infrastructure_layer::functionality::service::creator::response::Response;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use std::clone::Clone;

@@ -1,4 +1,4 @@
-use super::creator::Creator;
+use super::Creator;
 use http::header;
 use http::HeaderMap;
 use http::HeaderValue;

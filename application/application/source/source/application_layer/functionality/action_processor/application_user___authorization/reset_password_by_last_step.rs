@@ -27,7 +27,7 @@ use crate::infrastructure_layer::functionality::repository::postgresql_repositor
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::UnixTime;
-use crate::infrastructure_layer::functionality::service::resolver::CloudMessage;
+use crate::infrastructure_layer::functionality::service::resolver::cloud_message::CloudMessage;
 use crate::infrastructure_layer::functionality::service::resolver::Resolver;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;

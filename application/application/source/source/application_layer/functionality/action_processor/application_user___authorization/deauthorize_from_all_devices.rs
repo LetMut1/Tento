@@ -12,7 +12,7 @@ use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentR
 use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By3;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::PostgresqlRepository;
-use crate::infrastructure_layer::functionality::service::resolver::CloudMessage;
+use crate::infrastructure_layer::functionality::service::resolver::cloud_message::CloudMessage;
 use crate::infrastructure_layer::functionality::service::resolver::Resolver;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
