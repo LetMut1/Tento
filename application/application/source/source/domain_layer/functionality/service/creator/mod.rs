@@ -1,4 +1,4 @@
-pub mod action_round_register__context___creator;
+pub mod action_round_register__context;
 
 use std::marker::PhantomData;
 
