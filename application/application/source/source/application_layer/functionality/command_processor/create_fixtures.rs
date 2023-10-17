@@ -42,10 +42,11 @@ use rand::Rng;
 use std::str::FromStr;
 use tokio::runtime::Builder;
 use tokio_postgres::Config as PostgresqlConfiguration;
+use super::command_processor::CommandProcessor;
 
-pub struct CreateFixtures;
+pub use crate::infrastructure_layer::data::control_type::CreateFixtures;
 
-impl CreateFixtures {
+impl CommandProcessor<CreateFixtures> {
     const STUB: &'static str = "s_t_u_b";
     const QUANTITY_OF_APPLICATION_USERS: u16 = 10_000;
     const QUANTITY_OF_CHANNELS: u8 = 5;

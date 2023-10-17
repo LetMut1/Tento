@@ -47,10 +47,11 @@ use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Config as PostgresqlConfiguration;
 use tokio_postgres::Socket;
+use super::command_processor::CommandProcessor;
 
-pub struct RunServer;
+pub use crate::infrastructure_layer::data::control_type::RunServer;
 
-impl RunServer {
+impl CommandProcessor<RunServer> {
     pub fn process() -> Result<(), ErrorAuditor_> {
         let runtime = match Builder::new_multi_thread().enable_all().build() {
             Ok(runtime_) => runtime_,

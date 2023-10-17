@@ -1,12 +1,13 @@
 #![allow(clippy::unused_unit)]
 
-use application::application_layer::functionality::command_processor::run_server::RunServer;
+use application::application_layer::functionality::command_processor::command_processor::CommandProcessor;
+use application::application_layer::functionality::command_processor::command_processor::RunServer;
 use application::infrastructure_layer::functionality::service::formatter::Format;
 use application::infrastructure_layer::functionality::service::formatter::Formatter;
 
 fn main() -> () {
     'a: loop {
-        match RunServer::process() {
+        match CommandProcessor::<RunServer>::process() {
             Ok(_) => {
                 println!("\n Graceful shutdown.");
 
