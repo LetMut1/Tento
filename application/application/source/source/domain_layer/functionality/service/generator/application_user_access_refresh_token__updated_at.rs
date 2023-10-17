@@ -1,4 +1,4 @@
-use super::generator::Generator;
+use super::Generator;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_UpdatedAt;
 use crate::infrastructure_layer::functionality::service::resolver::DateTime;
 use crate::infrastructure_layer::functionality::service::resolver::Resolver;

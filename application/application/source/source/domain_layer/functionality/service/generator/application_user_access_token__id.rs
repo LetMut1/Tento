@@ -1,4 +1,4 @@
-use super::generator::Generator;
+use super::Generator;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken_Id;
 use uuid::Uuid;
 
