@@ -17,7 +17,7 @@ use crate::presentation_layer::functionality::action::Action;
 use crate::application_layer::functionality::action_processor::ActionProcessor;
 use matchit::Params;
 use crate::presentation_layer::functionality::service::extractor::Extractor;
-use crate::presentation_layer::functionality::service::extractor::HttpBodyData;
+use crate::presentation_layer::functionality::service::extractor::http_body_data::HttpBodyData;
 
 pub use crate::application_layer::functionality::action_processor::application_user___authorization::reset_password_by_first_step::ApplicationUser__Authorization___ResetPasswordByFirstStep;
 

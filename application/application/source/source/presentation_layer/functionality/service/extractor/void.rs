@@ -3,7 +3,7 @@ use hyper::Body;
 use matchit::Params;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor_;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
-use super::extractor::Extractor;
+use super::Extractor;
 use crate::infrastructure_layer::data::void::Void;
 
 pub use crate::infrastructure_layer::data::control_type::HttpBodyData;

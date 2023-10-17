@@ -17,7 +17,7 @@ use hyper::Body;
 use matchit::Params;
 use crate::application_layer::functionality::action_processor::ActionProcessor;
 use crate::presentation_layer::functionality::service::extractor::Extractor;
-use crate::presentation_layer::functionality::service::extractor::HttpBodyData;
+use crate::presentation_layer::functionality::service::extractor::http_body_data::HttpBodyData;
 
 pub use crate::application_layer::functionality::action_processor::channel_subscription___base::create::ChannelSubscription__Base___Create;
 

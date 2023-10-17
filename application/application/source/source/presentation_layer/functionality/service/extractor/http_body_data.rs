@@ -7,7 +7,7 @@ use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentR
 use crate::infrastructure_layer::functionality::service::serializer::Serialize;
 use crate::infrastructure_layer::functionality::service::serializer::Serializer;
 use serde::Deserialize;
-use super::extractor::Extractor;
+use super::Extractor;
 use hyper::body::to_bytes;
 use crate::infrastructure_layer::data::error_auditor::Error;
 use crate::infrastructure_layer::data::error_auditor::Other;
