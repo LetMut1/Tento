@@ -1,4 +1,4 @@
-use super::extractor::Extractor;
+use super::Extractor;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::data::entity::application_user_access_token_encrypted::ApplicationUserAccessTokenEncrypted;
 use crate::domain_layer::functionality::service::form_resolver::FormResolver;
