@@ -38,7 +38,7 @@ use std::marker::Sync;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
-use crate::application_layer::functionality::action_processor::action_processor::ActionProcessor;
+use crate::application_layer::functionality::action_processor::ActionProcessor;
 
 pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::reset_password_by_last_step::Incoming;
 pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::reset_password_by_last_step::Precedent;

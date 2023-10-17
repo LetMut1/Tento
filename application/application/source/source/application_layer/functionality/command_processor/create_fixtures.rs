@@ -42,7 +42,7 @@ use rand::Rng;
 use std::str::FromStr;
 use tokio::runtime::Builder;
 use tokio_postgres::Config as PostgresqlConfiguration;
-use super::command_processor::CommandProcessor;
+use super::CommandProcessor;
 
 pub use crate::infrastructure_layer::data::control_type::CreateFixtures;
 

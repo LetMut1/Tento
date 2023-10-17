@@ -47,7 +47,7 @@ use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Config as PostgresqlConfiguration;
 use tokio_postgres::Socket;
-use super::command_processor::CommandProcessor;
+use super::CommandProcessor;
 
 pub use crate::infrastructure_layer::data::control_type::RunServer;
 

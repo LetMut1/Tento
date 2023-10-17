@@ -14,7 +14,7 @@ use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
 use http::request::Parts;
-use crate::application_layer::functionality::action_processor::action_processor::ActionProcessor;
+use crate::application_layer::functionality::action_processor::ActionProcessor;
 
 pub use crate::infrastructure_layer::data::control_type::RouteNotFound;
 
