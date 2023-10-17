@@ -1,4 +1,3 @@
-pub mod action_round_register___writer;
 pub mod application_user_access_refresh_token__expires_at___generator;
 pub mod application_user_access_refresh_token__obfuscation_value___generator;
 pub mod application_user_access_refresh_token__updated_at___generator;
