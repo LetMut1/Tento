@@ -1,6 +1,5 @@
-use crate::application_layer::functionality::action_processor::application_user___authorization::reset_password_by_second_step::ApplicationUser__Authorization___ResetPasswordBySecondStep as ResetPasswordBySecondStep_;
 use crate::application_layer::functionality::service::processor::Processor;
-use crate::application_layer::functionality::service::action___processor::Action;
+use crate::application_layer::functionality::service::action___processor::GeneralizedAction;
 use crate::infrastructure_layer::data::control_type::Response;
 use crate::infrastructure_layer::functionality::service::serializer::MessagePack;
 use bb8::Pool;
@@ -14,17 +13,18 @@ use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
 use http::request::Parts;
 use hyper::Body;
+use crate::presentation_layer::functionality::action::Action;
 use matchit::Params;
 use crate::application_layer::functionality::action_processor::ActionProcessor;
 use crate::presentation_layer::functionality::service::extractor::Extractor;
 use crate::presentation_layer::functionality::service::extractor::HttpBodyData;
 
+pub use crate::application_layer::functionality::action_processor::application_user___authorization::reset_password_by_second_step::ApplicationUser__Authorization___ResetPasswordBySecondStep;
+
 #[cfg(feature = "manual_testing")]
 use crate::infrastructure_layer::functionality::service::serializer::Json;
 
-pub struct ResetPasswordBySecondStep;
-
-impl ResetPasswordBySecondStep {
+impl Action<ApplicationUser__Authorization___ResetPasswordBySecondStep> {
     pub async fn run<'a, T>(
         body: &'a mut Body,
         parts: &'a Parts,
@@ -39,7 +39,7 @@ impl ResetPasswordBySecondStep {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        return Processor::<Action>::process::<'_, '_, '_, _, _, _, _, _, _, _, _, MessagePack>(
+        return Processor::<GeneralizedAction>::process::<'_, '_, '_, _, _, _, _, _, _, _, _, MessagePack>(
             body,
             parts,
             route_parameters,
@@ -47,14 +47,14 @@ impl ResetPasswordBySecondStep {
             database_2_postgresql_connection_pool,
             database_1_redis_connection_pool,
             Extractor::<HttpBodyData>::extract::<_, MessagePack>,
-            ActionProcessor::<ResetPasswordBySecondStep_>::process,
+            ActionProcessor::<ApplicationUser__Authorization___ResetPasswordBySecondStep>::process,
         )
         .await;
     }
 }
 
 #[cfg(feature = "manual_testing")]
-impl ResetPasswordBySecondStep {
+impl Action<ApplicationUser__Authorization___ResetPasswordBySecondStep> {
     pub async fn run_<'a, T>(
         body: &'a mut Body,
         parts: &'a Parts,
@@ -69,7 +69,7 @@ impl ResetPasswordBySecondStep {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        return Processor::<Action>::process::<'_, '_, '_, _, _, _, _, _, _, _, _, Json>(
+        return Processor::<GeneralizedAction>::process::<'_, '_, '_, _, _, _, _, _, _, _, _, Json>(
             body,
             parts,
             route_parameters,
@@ -77,7 +77,7 @@ impl ResetPasswordBySecondStep {
             database_2_postgresql_connection_pool,
             database_1_redis_connection_pool,
             Extractor::<HttpBodyData>::extract::<_, Json>,
-            ActionProcessor::<ResetPasswordBySecondStep_>::process,
+            ActionProcessor::<ApplicationUser__Authorization___ResetPasswordBySecondStep>::process,
         )
         .await;
     }

@@ -6,7 +6,7 @@ use hyper::Request as HyperRequest;
 use hyper::Response as HyperResponse;
 use tokio_postgres::NoTls;
 
-pub struct Action;
+pub struct GeneralizedAction;
 pub struct ApplicationUser__Authorization___AuthorizeByFirstStep;
 pub struct ApplicationUser__Authorization___AuthorizeByLastStep;
 pub struct ApplicationUser__Authorization___CheckEmailForExisting;
@@ -28,7 +28,7 @@ pub struct Base64;
 pub struct Channel__Base___GetManyByNameInSubscriptions;
 pub struct Channel__Base___GetManyBySubscription;
 pub struct Channel__Base___GetManyPublicByName;
-pub struct Channel__Base___GetOneByID;
+pub struct Channel__Base___GetOneById;
 pub struct ChannelSubscription__Base___Create;
 pub struct CloudMessage;
 pub struct CreateFixtures;

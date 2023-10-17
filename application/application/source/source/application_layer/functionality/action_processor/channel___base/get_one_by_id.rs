@@ -38,9 +38,9 @@ pub use action_processor_incoming_outcoming::action_processor::channel___base::g
 pub use action_processor_incoming_outcoming::action_processor::channel___base::get_one_by_id::Outcoming;
 pub use action_processor_incoming_outcoming::action_processor::channel___base::get_one_by_id::Precedent;
 pub use action_processor_incoming_outcoming::action_processor::channel___base::get_one_by_id::Channel2;
-pub use crate::infrastructure_layer::data::control_type::Channel__Base___GetOneByID;
+pub use crate::infrastructure_layer::data::control_type::Channel__Base___GetOneById;
 
-impl ActionProcessor<Channel__Base___GetOneByID> {
+impl ActionProcessor<Channel__Base___GetOneById> {
     pub async fn process<'a, T>(
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,

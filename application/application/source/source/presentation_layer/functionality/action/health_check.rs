@@ -1,6 +1,5 @@
-use crate::application_layer::functionality::action_processor::health_check::HealthCheck as HealthCheck_;
 use crate::application_layer::functionality::service::processor::Processor;
-use crate::application_layer::functionality::service::action___processor::Action;
+use crate::application_layer::functionality::service::action___processor::GeneralizedAction;
 use crate::infrastructure_layer::data::control_type::Response;
 use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::service::serializer::MessagePack;
@@ -11,6 +10,7 @@ use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
 use tokio_postgres::tls::MakeTlsConnect;
+use crate::presentation_layer::functionality::action::Action;
 use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
 use http::request::Parts;
@@ -20,10 +20,9 @@ use crate::application_layer::functionality::action_processor::ActionProcessor;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor_;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 
+pub use crate::application_layer::functionality::action_processor::health_check::HealthCheck;
 
-pub struct HealthCheck;
-
-impl HealthCheck {
+impl Action<HealthCheck> {
     pub async fn run<'a, T>(
         body: &'a mut Body,
         parts: &'a Parts,
@@ -38,7 +37,7 @@ impl HealthCheck {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        return Processor::<Action>::process::<'_, '_, '_, _, _, _, _, _, _, _, _, MessagePack>(
+        return Processor::<GeneralizedAction>::process::<'_, '_, '_, _, _, _, _, _, _, _, _, MessagePack>(
             body,
             parts,
             route_parameters,
@@ -46,7 +45,7 @@ impl HealthCheck {
             database_2_postgresql_connection_pool,
             database_1_redis_connection_pool,
             Self::extract,
-            ActionProcessor::<HealthCheck_>::process,
+            ActionProcessor::<HealthCheck>::process,
         )
         .await;
     }

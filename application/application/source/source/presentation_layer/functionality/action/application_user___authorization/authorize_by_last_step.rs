@@ -1,6 +1,5 @@
-use crate::application_layer::functionality::action_processor::application_user___authorization::authorize_by_last_step::ApplicationUser__Authorization___AuthorizeByLastStep as AuthorizeByLastStep_;
 use crate::application_layer::functionality::service::processor::Processor;
-use crate::application_layer::functionality::service::action___processor::Action;
+use crate::application_layer::functionality::service::action___processor::GeneralizedAction;
 use crate::infrastructure_layer::data::control_type::Response;
 use crate::infrastructure_layer::functionality::service::serializer::MessagePack;
 use bb8::Pool;
@@ -15,16 +14,17 @@ use tokio_postgres::Socket;
 use http::request::Parts;
 use hyper::Body;
 use matchit::Params;
+use crate::presentation_layer::functionality::action::Action;
 use crate::presentation_layer::functionality::service::extractor::Extractor;
 use crate::presentation_layer::functionality::service::extractor::HttpBodyData;
 use crate::application_layer::functionality::action_processor::ActionProcessor;
 
+pub use crate::application_layer::functionality::action_processor::application_user___authorization::authorize_by_last_step::ApplicationUser__Authorization___AuthorizeByLastStep;
+
 #[cfg(feature = "manual_testing")]
 use crate::infrastructure_layer::functionality::service::serializer::Json;
 
-pub struct AuthorizeByLastStep;
-
-impl AuthorizeByLastStep {
+impl Action<ApplicationUser__Authorization___AuthorizeByLastStep> {
     pub async fn run<'a, T>(
         body: &'a mut Body,
         parts: &'a Parts,
@@ -39,7 +39,7 @@ impl AuthorizeByLastStep {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        return Processor::<Action>::process::<'_, '_, '_, _, _, _, _, _, _, _, _, MessagePack>(
+        return Processor::<GeneralizedAction>::process::<'_, '_, '_, _, _, _, _, _, _, _, _, MessagePack>(
             body,
             parts,
             route_parameters,
@@ -47,14 +47,14 @@ impl AuthorizeByLastStep {
             database_2_postgresql_connection_pool,
             database_1_redis_connection_pool,
             Extractor::<HttpBodyData>::extract::<_, MessagePack>,
-            ActionProcessor::<AuthorizeByLastStep_>::process,
+            ActionProcessor::<ApplicationUser__Authorization___AuthorizeByLastStep>::process,
         )
         .await;
     }
 }
 
 #[cfg(feature = "manual_testing")]
-impl AuthorizeByLastStep {
+impl Action<ApplicationUser__Authorization___AuthorizeByLastStep> {
     pub async fn run_<'a, T>(
         body: &'a mut Body,
         parts: &'a Parts,
@@ -69,7 +69,7 @@ impl AuthorizeByLastStep {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        return Processor::<Action>::process::<'_, '_, '_, _, _, _, _, _, _, _, _, Json>(
+        return Processor::<GeneralizedAction>::process::<'_, '_, '_, _, _, _, _, _, _, _, _, Json>(
             body,
             parts,
             route_parameters,
@@ -77,7 +77,7 @@ impl AuthorizeByLastStep {
             database_2_postgresql_connection_pool,
             database_1_redis_connection_pool,
             Extractor::<HttpBodyData>::extract::<_, Json>,
-            ActionProcessor::<AuthorizeByLastStep_>::process,
+            ActionProcessor::<ApplicationUser__Authorization___AuthorizeByLastStep>::process,
         )
         .await;
     }

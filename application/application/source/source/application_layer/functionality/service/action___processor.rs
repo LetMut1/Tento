@@ -35,9 +35,9 @@ use hyper::Body;
 use super::processor::Processor;
 use matchit::Params;
 
-pub use crate::infrastructure_layer::data::control_type::Action;
+pub use crate::infrastructure_layer::data::control_type::GeneralizedAction;
 
-impl Processor<Action> {
+impl Processor<GeneralizedAction> {
     pub async fn process<'a, 'b, 'c, T, DE, F1, AP, F2, I, O, P, SF>(
         body: &'a mut Body,
         parts: &'a Parts,
