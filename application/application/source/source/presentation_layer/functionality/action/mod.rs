@@ -3,3 +3,11 @@ pub mod channel___base;
 pub mod channel_subscription___base;
 pub mod route_not_found;
 pub mod health_check;
+
+// use std::marker::PhantomData;
+
+// pub use super::action___processor::Action;
+
+// pub struct Processor<S> {
+//     _subject: PhantomData<S>,
+// }

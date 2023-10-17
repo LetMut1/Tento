@@ -1,6 +1,6 @@
 use crate::application_layer::functionality::action_processor::application_user___authorization::reset_password_by_first_step::ApplicationUser__Authorization___ResetPasswordByFirstStep as ResetPasswordByFirstStep_;
 use crate::application_layer::functionality::service::processor::Processor;
-use crate::application_layer::functionality::service::processor::Action;
+use crate::application_layer::functionality::service::action___processor::Action;
 use crate::infrastructure_layer::data::control_type::Response;
 use crate::infrastructure_layer::functionality::service::serializer::MessagePack;
 use bb8::Pool;

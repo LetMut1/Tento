@@ -1,6 +1,6 @@
 use crate::application_layer::functionality::action_processor::channel___base::get_many_by_subscription::Channel__Base___GetManyBySubscription as GetManyBySubscription_;
 use crate::application_layer::functionality::service::processor::Processor;
-use crate::application_layer::functionality::service::processor::Action;
+use crate::application_layer::functionality::service::action___processor::Action;
 use crate::infrastructure_layer::data::control_type::Response;
 use crate::infrastructure_layer::functionality::service::serializer::MessagePack;
 use bb8::Pool;
