@@ -4,9 +4,9 @@ use crate::domain_layer::data::entity::application_user_access_refresh_token_enc
 use crate::infrastructure_layer::data::environment_configuration::ENVIRONMENT_CONFIGURATION;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor_;
-use crate::infrastructure_layer::functionality::service::encoder::Base64;
+use crate::infrastructure_layer::functionality::service::encoder::base64::Base64;
 use crate::infrastructure_layer::functionality::service::encoder::Encoder;
-use crate::infrastructure_layer::functionality::service::encoder::Hmac_Sha2_512;
+use crate::infrastructure_layer::functionality::service::encoder::hmac::Hmac_Sha3_512;
 use crate::infrastructure_layer::functionality::service::serializer::MessagePack;
 use crate::infrastructure_layer::functionality::service::serializer::Serialize;
 use crate::infrastructure_layer::functionality::service::serializer::Serializer;
@@ -28,7 +28,7 @@ impl FormResolver<ApplicationUserAccessRefreshToken<'_>> {
             }
         };
 
-        let encoded_data = match Encoder::<Hmac_Sha2_512>::encode(
+        let encoded_data = match Encoder::<Hmac_Sha3_512>::encode(
             ENVIRONMENT_CONFIGURATION.encryption.private_key.application_user_access_refresh_token.0.as_bytes(),
             data.as_slice(),
         )
@@ -88,7 +88,7 @@ impl FormResolver<ApplicationUserAccessRefreshToken<'_>> {
             }
         };
 
-        let is_valid = match Encoder::<Hmac_Sha2_512>::is_valid(
+        let is_valid = match Encoder::<Hmac_Sha3_512>::is_valid(
             ENVIRONMENT_CONFIGURATION.encryption.private_key.application_user_access_refresh_token.0.as_bytes(),
             data.as_slice(),
             encoded_data.as_slice(),

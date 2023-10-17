@@ -6,7 +6,7 @@ use crate::infrastructure_layer::data::error_auditor::Error;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor_;
 use crate::infrastructure_layer::data::error_auditor::Other;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
-use crate::infrastructure_layer::functionality::service::encoder::Argon2Id;
+use crate::infrastructure_layer::functionality::service::encoder::argon2id::Argon2Id;
 use crate::infrastructure_layer::functionality::service::encoder::Encoder as Encoder_;
 
 impl Encoder<ApplicationUser_Password> {
