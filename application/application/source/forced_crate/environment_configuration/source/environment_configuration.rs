@@ -12,6 +12,7 @@ where
 {
     pub environment: Environment,
     pub application_server: ApplicationServer<T>,
+    pub logging: Logging<T>,
     pub resource: Resource<T>,
     pub encryption: Encryption<T>,  // TODO Заменить на Security слово.
 }
@@ -67,6 +68,14 @@ where
 {
     pub certificate_crt_path: T,
     pub certificate_key_path: T,
+}
+
+pub struct Logging<T>
+where
+    T: Sealed,
+{
+    pub directory_path: T,
+    pub file_name_prefix: T,
 }
 
 pub struct Resource<T>

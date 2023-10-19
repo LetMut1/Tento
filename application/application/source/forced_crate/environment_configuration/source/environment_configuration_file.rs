@@ -3,6 +3,7 @@ use serde::Deserialize;
 #[derive(Deserialize)]
 pub struct EnvironmentConfigurationFile {
     pub application_server: ApplicationServer,
+    pub logging: Logging,
     pub resource: Resource,
     pub encryption: Encryption,
 }
@@ -54,6 +55,12 @@ pub struct Tls {
     pub is_exist: bool,
     pub certificate_crt_path: Value<String>,
     pub certificate_key_path: Value<String>,
+}
+
+#[derive(Deserialize)]
+pub struct Logging {
+    pub directory_path: Value<String>,
+    pub file_name_prefix: Value<String>,
 }
 
 #[derive(Deserialize)]

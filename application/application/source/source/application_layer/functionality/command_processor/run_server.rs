@@ -110,7 +110,11 @@ impl CommandProcessor<RunServer> {
     }
 
     fn configure_logger() -> Result<WorkerGuard, ErrorAuditor_> {
-        let rolling_file_appender = RollingFileAppender::new(Rotation::DAILY, "/__log", "tento.log");       // TODO  toml
+        let rolling_file_appender = RollingFileAppender::new(
+            Rotation::DAILY,
+            ENVIRONMENT_CONFIGURATION.logging.directory_path.0,
+            ENVIRONMENT_CONFIGURATION.logging.file_name_prefix.0,
+        );
 
         let (non_blocking, worker_guard) = NonBlockingBuilder::default().finish(rolling_file_appender);
 
@@ -128,6 +132,7 @@ impl CommandProcessor<RunServer> {
             .with_target(false)
             .with_thread_ids(false)
             .with_thread_names(false)
+            .with_ansi(false)
             .finish();
 
         if let Err(error) = set_global_default(fmt_subscriber) {

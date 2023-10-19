@@ -10,6 +10,7 @@ use super::environment_configuration::Postgresql;
 use super::environment_configuration::PrivateKey;
 use super::environment_configuration::Redis;
 use super::environment_configuration::Resource;
+use super::environment_configuration::Logging;
 use super::sealed::String_;
 use super::environment_configuration::Tcp;
 use super::environment_configuration::TcpKeepalive;
@@ -320,6 +321,11 @@ impl Loader {
                 }
             };
 
+            let logging = Logging {
+                directory_path: String_(environment_configuration_file.logging.directory_path.value),
+                file_name_prefix: String_(environment_configuration_file.logging.file_name_prefix.value),
+            };
+
             let resource = Resource {
                 postgresql: Postgresql {
                     database_1_url: String_(environment_configuration_file.resource.postgresql.database_1_url.value),
@@ -343,6 +349,7 @@ impl Loader {
             EnvironmentConfiguration {
                 environment,
                 application_server,
+                logging,
                 resource,
                 encryption,
             }

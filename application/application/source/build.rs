@@ -235,6 +235,7 @@ impl Processor {
                 pub use environment_configuration::environment_configuration::EnvironmentConfiguration; \n\
                 pub use environment_configuration::environment_configuration::Http; \n\
                 pub use environment_configuration::environment_configuration::HttpKeepalive; \n\
+                pub use environment_configuration::environment_configuration::Logging; \n\
                 pub use environment_configuration::environment_configuration::Postgresql; \n\
                 pub use environment_configuration::environment_configuration::PrivateKey; \n\
                 pub use environment_configuration::environment_configuration::Redis; \n\
@@ -269,6 +270,10 @@ impl Processor {
                             keepalive: {}, \n\t\t\t\
                             tls: {}, \n\t\t\
                         }}, \n\t\
+                    }}, \n\t\
+                    logging: Logging {{ \n\t\t\
+                        directory_path: StringLiteral(\"{}\"), \n\t\t\
+                        file_name_prefix: StringLiteral(\"{}\"), \n\t\
                     }}, \n\t\
                     resource: Resource {{ \n\t\t\
                         postgresql: Postgresql {{ \n\t\t\t\
@@ -308,6 +313,8 @@ impl Processor {
             http_maximum_pending_accept_reset_streams.as_str(),
             keepalive.as_str(),
             tls.as_str(),
+            environment_configuration.logging.directory_path.0.as_str(),
+            environment_configuration.logging.file_name_prefix.0.as_str(),
             environment_configuration.resource.postgresql.database_1_url.0.as_str(),
             environment_configuration.resource.postgresql.database_2_url.0.as_str(),
             environment_configuration.resource.redis.database_1_url.0.as_str(),

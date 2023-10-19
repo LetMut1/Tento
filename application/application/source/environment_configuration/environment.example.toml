@@ -70,6 +70,14 @@ value = ""
 [application_server.http.tls.certificate_key_path]
 value = ""
 
+[logging]
+
+[logging.directory_path]
+value = "/_log"
+
+[logging.file_name_prefix]
+value = "log"
+
 [resource]
 
 [resource.postgresql]
