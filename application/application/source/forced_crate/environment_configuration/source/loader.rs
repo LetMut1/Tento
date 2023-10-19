@@ -287,8 +287,8 @@ impl Loader {
                     let tls = if environment_configuration_file.application_server.http.tls.is_exist {
                         Some(
                             Tls {
-                                certificate_crt_path: String_(environment_configuration_file.application_server.http.tls.certificate_crt_path.value),
-                                certificate_key_path: String_(environment_configuration_file.application_server.http.tls.certificate_key_path.value),
+                                certificate_crt_file_path: String_(environment_configuration_file.application_server.http.tls.certificate_crt_file_path.value),
+                                certificate_key_file_path: String_(environment_configuration_file.application_server.http.tls.certificate_key_file_path.value),
                             },
                         )
                     } else {

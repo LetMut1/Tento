@@ -64,10 +64,10 @@ value = 20
 [application_server.http.tls]
 is_exist = false
 
-[application_server.http.tls.certificate_crt_path]
+[application_server.http.tls.certificate_crt_file_path]
 value = ""
 
-[application_server.http.tls.certificate_key_path]
+[application_server.http.tls.certificate_key_file_path]
 value = ""
 
 [logging]

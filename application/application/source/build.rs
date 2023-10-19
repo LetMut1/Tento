@@ -214,13 +214,13 @@ impl Processor {
                     "\
                         Some( \n\t\t\t\t\
                             Tls {{ \n\t\t\t\t\t\
-                                certificate_crt_path: StringLiteral(\"{}\"), \n\t\t\t\t\t\
-                                certificate_key_path: StringLiteral(\"{}\"), \n\t\t\t\t\
+                                certificate_crt_file_path: StringLiteral(\"{}\"), \n\t\t\t\t\t\
+                                certificate_key_file_path: StringLiteral(\"{}\"), \n\t\t\t\t\
                             }} \n\t\t\t\
                         )\
                     ",
-                    tls_.certificate_crt_path.0.as_str(),
-                    tls_.certificate_key_path.0.as_str(),
+                    tls_.certificate_crt_file_path.0.as_str(),
+                    tls_.certificate_key_file_path.0.as_str(),
                 )
             }
             None => "None".to_string(),

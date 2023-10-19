@@ -66,8 +66,8 @@ pub struct Tls<T>
 where
     T: Sealed,
 {
-    pub certificate_crt_path: T,
-    pub certificate_key_path: T,
+    pub certificate_crt_file_path: T,
+    pub certificate_key_file_path: T,
 }
 
 pub struct Logging<T>

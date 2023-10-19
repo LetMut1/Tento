@@ -53,8 +53,8 @@ pub struct HttpKeepalive {
 #[derive(Deserialize)]
 pub struct Tls {
     pub is_exist: bool,
-    pub certificate_crt_path: Value<String>,
-    pub certificate_key_path: Value<String>,
+    pub certificate_crt_file_path: Value<String>,
+    pub certificate_key_file_path: Value<String>,
 }
 
 #[derive(Deserialize)]
