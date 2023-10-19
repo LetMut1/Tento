@@ -67,11 +67,90 @@ use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Config as PostgresqlConfiguration;
 use tokio_postgres::Socket;
 use super::CommandProcessor;
+use tracing_appender::rolling::Rotation;
+use tracing_appender::rolling::RollingFileAppender;
+use tracing_appender::non_blocking::NonBlockingBuilder;
+use tracing_subscriber::FmtSubscriber;
+use tracing::Level;
+use tracing::subscriber::set_global_default;
+use tracing_appender::non_blocking::WorkerGuard;
 
 pub use crate::infrastructure_layer::data::control_type::RunServer;
 
 impl CommandProcessor<RunServer> {
     pub fn process() -> Result<(), ErrorAuditor_> {
+        let _worker_guard = match Self::configure_logger() {
+            Ok(worker_guard_) => worker_guard_,
+            Err(mut error) => {
+                error.add_backtrace_part(
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                );
+
+                return Err(error);
+            }
+        };
+
+        if let Err(mut error) = Self::run_runtime() {
+            error.add_backtrace_part(
+                BacktracePart::new(
+                    line!(),
+                    file!(),
+                    None,
+                ),
+            );
+
+            return Err(error);
+        }
+
+        return Ok(());
+    }
+
+    fn configure_logger() -> Result<WorkerGuard, ErrorAuditor_> {
+        let rolling_file_appender = RollingFileAppender::new(Rotation::DAILY, "/__log", "tento.log");       // TODO  toml
+
+        let (non_blocking, worker_guard) = NonBlockingBuilder::default().finish(rolling_file_appender);
+
+        let mut logger_level = Level::INFO;
+
+        #[cfg(feature = "logger_level_trace")]
+        {
+            logger_level = Level::TRACE;
+        }
+
+        let fmt_subscriber = FmtSubscriber::builder()
+            .with_max_level(logger_level)
+            .with_writer(non_blocking)
+            .with_file(false)
+            .with_target(false)
+            .with_thread_ids(false)
+            .with_thread_names(false)
+            .finish();
+
+        if let Err(error) = set_global_default(fmt_subscriber) {
+            return Err(
+                ErrorAuditor_::new(
+                    Error::Runtime {
+                        runtime: Runtime::Other {
+                            other: Other::new(error),
+                        },
+                    },
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                ),
+            );
+        }
+
+        return Ok(worker_guard);
+    }
+
+    fn run_runtime() -> Result<(), ErrorAuditor_> {
         let runtime = match Builder::new_multi_thread().enable_all().build() {
             Ok(runtime_) => runtime_,
             Err(error) => {

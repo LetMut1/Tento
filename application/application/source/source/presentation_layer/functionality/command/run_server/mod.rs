@@ -6,21 +6,15 @@ use application::infrastructure_layer::functionality::service::formatter::Format
 use application::infrastructure_layer::functionality::service::formatter::Formatter;
 
 fn main() -> () {
-    'a: loop {
-        match CommandProcessor::<RunServer>::process() {
-            Ok(_) => {
-                println!("\n Graceful shutdown.");
-
-                break 'a;
-            }
-            Err(error) => {
-                println!(
-                    "{}",
-                    Formatter::prepare(&error)
-                );
-
-                continue 'a;
-            }
+    match CommandProcessor::<RunServer>::process() {
+        Ok(_) => {
+            println!("\n Graceful shutdown.");
+        }
+        Err(error) => {
+            println!(
+                "{}",
+                Formatter::prepare(&error)
+            );
         }
     }
 
