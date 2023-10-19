@@ -14,7 +14,7 @@ where
     pub application_server: ApplicationServer<T>,
     pub logging: Logging<T>,
     pub resource: Resource<T>,
-    pub encryption: Encryption<T>,  // TODO Заменить на Security слово.
+    pub encryption: Encryption<T>,
 }
 
 pub struct ApplicationServer<T>

@@ -156,7 +156,9 @@ impl CommandProcessor<RunServer> {
     }
 
     fn run_runtime() -> Result<(), ErrorAuditor_> {
-        let runtime = match Builder::new_multi_thread().enable_all().build() {
+        let runtime = match Builder::new_multi_thread()
+        .max_blocking_threads(1024)
+        .enable_all().build() {
             Ok(runtime_) => runtime_,
             Err(error) => {
                 return Err(
