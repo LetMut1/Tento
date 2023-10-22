@@ -1,6 +1,6 @@
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor_;
+use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 
 pub struct Counter<T> {
     value: T,
@@ -27,12 +27,12 @@ impl Counter<i16> {
         };
     }
 
-    pub fn get_next_value<'a>(&'a mut self) -> Result<i16, ErrorAuditor_> {
+    pub fn get_next_value<'a>(&'a mut self) -> Result<i16, ErrorAuditor> {
         self.value = match self.value.checked_add(self.step_size) {
             Some(value_) => value_,
             None => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::create_out_of_range(),
                         BacktracePart::new(
                             line!(),

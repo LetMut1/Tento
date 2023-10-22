@@ -1,7 +1,7 @@
 use super::Resolver;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor_;
+use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use chrono::DateTime as ChronoDateTime;
 use chrono::Utc;
 
@@ -17,12 +17,12 @@ impl Resolver<DateTime> {
         return Utc::now().timestamp();
     }
 
-    pub fn unixtime_add_minutes_interval_from_now(quantity_of_minutes: i64) -> Result<i64, ErrorAuditor_> {
+    pub fn unixtime_add_minutes_interval_from_now(quantity_of_minutes: i64) -> Result<i64, ErrorAuditor> {
         let mut quantity_of_seconds = match quantity_of_minutes.checked_mul(60) {
             Some(quantity_of_seconds_) => quantity_of_seconds_,
             None => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Logic {
                             message: "Too big quantity of minutes must not be added.",
                         },
@@ -40,7 +40,7 @@ impl Resolver<DateTime> {
             Some(quantity_of_seconds_) => quantity_of_seconds_,
             None => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Logic {
                             message: "Too big quantity of minutes must not be added.",
                         },

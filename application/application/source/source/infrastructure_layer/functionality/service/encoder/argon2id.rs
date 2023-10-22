@@ -1,7 +1,7 @@
 use super::Encoder;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor_;
+use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::Other;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
 use argon2::hash_encoded;
@@ -12,7 +12,7 @@ use uuid::Uuid;
 pub use crate::infrastructure_layer::data::control_type::Argon2Id;
 
 impl Encoder<Argon2Id> {
-    pub fn encode<'a>(data: &'a [u8]) -> Result<String, ErrorAuditor_> { // // TODO TODO TODO ARGON2id . ПРОВЕрИТЬЬ, он или нет, понять, почему не он.  // TODO отрабатывает за 320 млсекунд, как увеличить скорость, https://users.rust-lang.org/t/which-crate-should-i-use-for-argon2/26090
+    pub fn encode<'a>(data: &'a [u8]) -> Result<String, ErrorAuditor> { // // TODO TODO TODO ARGON2id . ПРОВЕрИТЬЬ, он или нет, понять, почему не он.  // TODO отрабатывает за 320 млсекунд, как увеличить скорость, https://users.rust-lang.org/t/which-crate-should-i-use-for-argon2/26090
         let config = Config::default(); // TODO настроить конфиг, возможно, вынестки в константу
 
         let salt = Uuid::new_v4();
@@ -25,7 +25,7 @@ impl Encoder<Argon2Id> {
             Ok(value_) => value_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -47,7 +47,7 @@ impl Encoder<Argon2Id> {
     pub fn is_valid<'a>(
         data: &'a [u8],
         encoded_data: &'a str,
-    ) -> Result<bool, ErrorAuditor_> {
+    ) -> Result<bool, ErrorAuditor> {
         let value = match verify_encoded(
             encoded_data,
             data,
@@ -55,7 +55,7 @@ impl Encoder<Argon2Id> {
             Ok(value_) => value_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),

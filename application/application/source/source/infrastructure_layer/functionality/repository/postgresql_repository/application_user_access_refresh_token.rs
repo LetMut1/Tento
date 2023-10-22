@@ -11,7 +11,7 @@ use crate::domain_layer::data::entity::application_user_access_refresh_token::Ap
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken_Id;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor_;
+use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
@@ -23,7 +23,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
     pub async fn create<'a>(
         database_2_connection: &'a Connection,
         insert_2: Insert2<'a>,
-    ) -> Result<ApplicationUserAccessRefreshToken<'a>, ErrorAuditor_> {
+    ) -> Result<ApplicationUserAccessRefreshToken<'a>, ErrorAuditor> {
         let application_user_device_id = insert_2.application_user_device_id.0.as_str();
 
         let application_user_access_token_id = insert_2.application_user_access_token_id.0.as_str();
@@ -85,7 +85,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -111,7 +111,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
             .await
         {
             return Err(
-                ErrorAuditor_::new(
+                ErrorAuditor::new(
                     Error::Runtime {
                         runtime: Runtime::Resource {
                             resource: ResourceError::Postgresql {
@@ -143,7 +143,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
     pub async fn delete_1<'a>(
         database_2_connection: &'a Connection,
         by_4: &'a By4<'_>,
-    ) -> Result<(), ErrorAuditor_> {
+    ) -> Result<(), ErrorAuditor> {
         let application_user_device_id = by_4.application_user_device_id.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -171,7 +171,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -197,7 +197,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
             .await
         {
             return Err(
-                ErrorAuditor_::new(
+                ErrorAuditor::new(
                     Error::Runtime {
                         runtime: Runtime::Resource {
                             resource: ResourceError::Postgresql {
@@ -220,7 +220,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
     pub async fn delete_2<'a>(
         database_2_connection: &'a Connection,
         by_3: &'a By3,
-    ) -> Result<(), ErrorAuditor_> {
+    ) -> Result<(), ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
@@ -242,7 +242,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -268,7 +268,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
             .await
         {
             return Err(
-                ErrorAuditor_::new(
+                ErrorAuditor::new(
                     Error::Runtime {
                         runtime: Runtime::Resource {
                             resource: ResourceError::Postgresql {
@@ -291,7 +291,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
     pub async fn find_1<'a, 'b>(
         database_2_connection: &'a Connection,
         by_4: &'a By4<'b>,
-    ) -> Result<Option<ApplicationUserAccessRefreshToken<'b>>, ErrorAuditor_> {
+    ) -> Result<Option<ApplicationUserAccessRefreshToken<'b>>, ErrorAuditor> {
         let application_user_device_id = by_4.application_user_device_id.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -325,7 +325,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -353,7 +353,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
             Ok(row_registry_) => row_registry_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -379,7 +379,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
             Ok(application_user_access_token_id_) => ApplicationUserAccessToken_Id(application_user_access_token_id_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -401,7 +401,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
             Ok(application_user_access_refresh_token_obfuscation_value_) => ApplicationUserAccessRefreshToken_ObfuscationValue(application_user_access_refresh_token_obfuscation_value_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -423,7 +423,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
             Ok(application_user_access_refresh_token_expires_at_) => ApplicationUserAccessRefreshToken_ExpiresAt(application_user_access_refresh_token_expires_at_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -445,7 +445,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
             Ok(application_user_access_refresh_token_updated_at_) => ApplicationUserAccessRefreshToken_UpdatedAt(application_user_access_refresh_token_updated_at_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -483,7 +483,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken1> {
         database_2_connection: &'a Connection,
         update_2: &'a Update2<'_>,
         by_4: &'a By4<'_>,
-    ) -> Result<(), ErrorAuditor_> {
+    ) -> Result<(), ErrorAuditor> {
         let application_user_device_id = by_4.application_user_device_id.0.as_str();
 
         let application_user_access_token_id = update_2.application_user_access_token_id.0.as_str();
@@ -543,7 +543,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken1> {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -569,7 +569,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken1> {
             .await
         {
             return Err(
-                ErrorAuditor_::new(
+                ErrorAuditor::new(
                     Error::Runtime {
                         runtime: Runtime::Resource {
                             resource: ResourceError::Postgresql {

@@ -5,7 +5,7 @@ use crate::domain_layer::functionality::service::encoder::Encoder;
 use crate::infrastructure_layer::data::environment_configuration::ENVIRONMENT_CONFIGURATION;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor_;
+use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::Other;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
@@ -20,7 +20,7 @@ use crate::infrastructure_layer::functionality::service::serializer::Serializer;
 impl FormResolver<ApplicationUserAccessToken<'_>> {
     const TOKEN_PARTS_SEPARATOR: &'static str = ".";
 
-    pub fn to_encrypted<'a>(application_user_access_token: &'a ApplicationUserAccessToken<'_>) -> Result<ApplicationUserAccessTokenEncrypted, ErrorAuditor_> {
+    pub fn to_encrypted<'a>(application_user_access_token: &'a ApplicationUserAccessToken<'_>) -> Result<ApplicationUserAccessTokenEncrypted, ErrorAuditor> {
         let data = match Serializer::<MessagePack>::serialize(application_user_access_token) {
             Ok(data_) => data_,
             Err(mut error) => {
@@ -65,7 +65,7 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
         );
     }
 
-    pub fn from_encrypted<'a>(application_user_access_token_encrypted: &'a ApplicationUserAccessTokenEncrypted) -> Result<InvalidArgumentResult<ApplicationUserAccessToken<'static>>, ErrorAuditor_> {
+    pub fn from_encrypted<'a>(application_user_access_token_encrypted: &'a ApplicationUserAccessTokenEncrypted) -> Result<InvalidArgumentResult<ApplicationUserAccessToken<'static>>, ErrorAuditor> {
         let mut token_part_registry = application_user_access_token_encrypted.0.as_str().splitn::<'_, &'_ str>(
             2,
             Self::TOKEN_PARTS_SEPARATOR,
@@ -124,7 +124,7 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
             Ok(data_) => data_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -166,7 +166,7 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
 struct Signature;
 
 impl Encoder<Signature> {
-    fn encode<'a>(application_user_access_token_serialized: &'a [u8]) -> Result<String, ErrorAuditor_> {
+    fn encode<'a>(application_user_access_token_serialized: &'a [u8]) -> Result<String, ErrorAuditor> {
         let application_user_access_token_serialized_encoded = match Encoder_::<Hmac_Sha3_512>::encode(
             ENVIRONMENT_CONFIGURATION.encryption.private_key.application_user_access_token.0.as_bytes(),
             application_user_access_token_serialized,
@@ -194,7 +194,7 @@ impl Encoder<Signature> {
     fn is_valid<'a>(
         application_user_access_token_serialized: &'a [u8],
         application_user_access_token_serialized_signature: &'a [u8],
-    ) -> Result<bool, ErrorAuditor_> {
+    ) -> Result<bool, ErrorAuditor> {
         let application_user_access_token_serialized_encoded = match Encoder_::<Base64>::decode(application_user_access_token_serialized_signature) {
             Ok(application_user_access_token_serialized_encoded_) => application_user_access_token_serialized_encoded_,
             Err(mut error) => {

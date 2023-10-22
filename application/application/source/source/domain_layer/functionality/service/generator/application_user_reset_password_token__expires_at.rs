@@ -1,12 +1,12 @@
 use super::Generator;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_ExpiresAt;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor_;
+use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::functionality::service::resolver::date_time::DateTime;
 use crate::infrastructure_layer::functionality::service::resolver::Resolver;
 
 impl Generator<ApplicationUserResetPasswordToken_ExpiresAt> {
-    pub fn generate() -> Result<ApplicationUserResetPasswordToken_ExpiresAt, ErrorAuditor_> {
+    pub fn generate() -> Result<ApplicationUserResetPasswordToken_ExpiresAt, ErrorAuditor> {
         let application_user_reset_password_token_expires_at = match Resolver::<DateTime>::unixtime_add_minutes_interval_from_now(ApplicationUserResetPasswordToken_ExpiresAt::QUANTITY_OF_MINUTES_FOR_EXPIRATION) {
             Ok(application_user_reset_password_token_expires_at_) => application_user_reset_password_token_expires_at_,
             Err(mut error) => {

@@ -1,6 +1,6 @@
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor_;
+use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::Other;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
 use core::marker::Sized;
@@ -13,16 +13,16 @@ where
     F: Sized,
     T: Sized,
 {
-    fn convert(subject: F) -> Result<T, ErrorAuditor_>;
+    fn convert(subject: F) -> Result<T, ErrorAuditor>;
 }
 
 impl Convert<u16, i16> for Converter {
-    fn convert(subject: u16) -> Result<i16, ErrorAuditor_> {
+    fn convert(subject: u16) -> Result<i16, ErrorAuditor> {
         let converted_subject = match i16::try_from(subject) {
             Ok(converted_subject_) => converted_subject_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),

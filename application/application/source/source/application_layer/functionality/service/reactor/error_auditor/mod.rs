@@ -5,13 +5,13 @@ use tracing::error;
 use http::request::Parts;
 use super::Reactor;
 
-pub use crate::infrastructure_layer::data::error_auditor::ErrorAuditor_;
+pub use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 
-impl Reactor<ErrorAuditor_> {
+impl Reactor<ErrorAuditor> {
     pub fn react<'a>(
         parts: &'a Parts,
         response: &'a Response,
-        errro_auditor: ErrorAuditor_
+        errro_auditor: ErrorAuditor
     ) -> () {
         let future = Self::react_(
             parts.uri.path().to_string(),
@@ -29,7 +29,7 @@ impl Reactor<ErrorAuditor_> {
         request_uri: String,
         request_method: String,
         response_status_code: u16,
-        error_auditor: ErrorAuditor_
+        error_auditor: ErrorAuditor
     ) -> () {
         let error_auditor_message = Formatter_::prepare(&error_auditor);
 

@@ -2,7 +2,7 @@ use super::Creator;
 use crate::infrastructure_layer::data::environment_configuration::Environment;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor_;
+use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
 use bb8::Pool;
@@ -17,11 +17,11 @@ impl Creator<PostgresqlConnectionPoolNoTls> {
     pub async fn create<'a>(
         environment: &'a Environment,
         configuration: &'a Config,
-    ) -> Result<Pool<PostgresqlConnectionManager<NoTls>>, ErrorAuditor_> {
+    ) -> Result<Pool<PostgresqlConnectionManager<NoTls>>, ErrorAuditor> {
         let postgresql_connection_pool = match *environment {
             Environment::Production => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Logic {
                             message: "NoTls should be only not in production environment.",
                         },
@@ -46,7 +46,7 @@ impl Creator<PostgresqlConnectionPoolNoTls> {
                     Ok(postgresql_connection_pool__) => postgresql_connection_pool__,
                     Err(error) => {
                         return Err(
-                            ErrorAuditor_::new(
+                            ErrorAuditor::new(
                                 Error::Runtime {
                                     runtime: Runtime::Resource {
                                         resource: ResourceError::Postgresql {

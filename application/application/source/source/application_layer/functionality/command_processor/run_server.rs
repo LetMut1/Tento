@@ -4,7 +4,7 @@ use crate::infrastructure_layer::data::environment_configuration::Environment;
 use crate::infrastructure_layer::data::environment_configuration::ENVIRONMENT_CONFIGURATION;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor_;
+use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::Other;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
@@ -78,7 +78,7 @@ use tracing_appender::non_blocking::WorkerGuard;
 pub use crate::infrastructure_layer::data::control_type::RunServer;
 
 impl CommandProcessor<RunServer> {
-    pub fn process() -> Result<(), ErrorAuditor_> {
+    pub fn process() -> Result<(), ErrorAuditor> {
         let _worker_guard = match Self::configure_logger() {
             Ok(worker_guard_) => worker_guard_,
             Err(mut error) => {
@@ -109,7 +109,7 @@ impl CommandProcessor<RunServer> {
         return Ok(());
     }
 
-    fn configure_logger() -> Result<WorkerGuard, ErrorAuditor_> {
+    fn configure_logger() -> Result<WorkerGuard, ErrorAuditor> {
         let rolling_file_appender = RollingFileAppender::new(
             Rotation::DAILY,
             ENVIRONMENT_CONFIGURATION.logging.directory_path.0,
@@ -137,7 +137,7 @@ impl CommandProcessor<RunServer> {
 
         if let Err(error) = set_global_default(fmt_subscriber) {
             return Err(
-                ErrorAuditor_::new(
+                ErrorAuditor::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
                             other: Other::new(error),
@@ -155,7 +155,7 @@ impl CommandProcessor<RunServer> {
         return Ok(worker_guard);
     }
 
-    fn run_runtime() -> Result<(), ErrorAuditor_> {
+    fn run_runtime() -> Result<(), ErrorAuditor> {
         let runtime = match Builder::new_multi_thread()
         .max_blocking_threads(1024)
         .enable_all()
@@ -164,7 +164,7 @@ impl CommandProcessor<RunServer> {
             Ok(runtime_) => runtime_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -195,7 +195,7 @@ impl CommandProcessor<RunServer> {
         return Ok(());
     }
 
-    async fn run_server() -> Result<(), ErrorAuditor_> {
+    async fn run_server() -> Result<(), ErrorAuditor> {
         #[derive(Clone)]
         enum PostgresqlConnectionPoolAggregator {
             LocalDevelopment {
@@ -223,7 +223,7 @@ impl CommandProcessor<RunServer> {
             Ok(application_http_socket_address_registry_) => application_http_socket_address_registry_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -243,7 +243,7 @@ impl CommandProcessor<RunServer> {
             Some(application_http_socket_address_) => application_http_socket_address_,
             None => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Logic {
                             message: "Invalid socket address.",
                         },
@@ -261,7 +261,7 @@ impl CommandProcessor<RunServer> {
             Ok(builder_) => builder_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -329,7 +329,7 @@ impl CommandProcessor<RunServer> {
             Ok(database_1_postgresql_configuration_) => database_1_postgresql_configuration_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -351,7 +351,7 @@ impl CommandProcessor<RunServer> {
             Ok(database_2_postgresql_configuration_) => database_2_postgresql_configuration_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -373,7 +373,7 @@ impl CommandProcessor<RunServer> {
             Ok(database_1_redis_connection_info_) => database_1_redis_connection_info_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Redis {
@@ -559,7 +559,7 @@ impl CommandProcessor<RunServer> {
 
         if let Err(error) = server_builder.serve(service).with_graceful_shutdown(graceful_shutdown_signal).await {
             return Err(
-                ErrorAuditor_::new(
+                ErrorAuditor::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
                             other: Other::new(error),
@@ -577,7 +577,7 @@ impl CommandProcessor<RunServer> {
         return Ok(());
     }
 
-    fn create_router() -> Result<Router<ActionRoute_>, ErrorAuditor_> {
+    fn create_router() -> Result<Router<ActionRoute_>, ErrorAuditor> {
         let mut router = Router::new();
 
         if let Err(error) = router.insert(
@@ -587,7 +587,7 @@ impl CommandProcessor<RunServer> {
             },
         ) {
             return Err(
-                ErrorAuditor_::new(
+                ErrorAuditor::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
                             other: Other::new(error),
@@ -609,7 +609,7 @@ impl CommandProcessor<RunServer> {
             },
         ) {
             return Err(
-                ErrorAuditor_::new(
+                ErrorAuditor::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
                             other: Other::new(error),
@@ -631,7 +631,7 @@ impl CommandProcessor<RunServer> {
             },
         ) {
             return Err(
-                ErrorAuditor_::new(
+                ErrorAuditor::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
                             other: Other::new(error),
@@ -653,7 +653,7 @@ impl CommandProcessor<RunServer> {
             },
         ) {
             return Err(
-                ErrorAuditor_::new(
+                ErrorAuditor::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
                             other: Other::new(error),
@@ -675,7 +675,7 @@ impl CommandProcessor<RunServer> {
             },
         ) {
             return Err(
-                ErrorAuditor_::new(
+                ErrorAuditor::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
                             other: Other::new(error),
@@ -697,7 +697,7 @@ impl CommandProcessor<RunServer> {
             },
         ) {
             return Err(
-                ErrorAuditor_::new(
+                ErrorAuditor::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
                             other: Other::new(error),
@@ -719,7 +719,7 @@ impl CommandProcessor<RunServer> {
             },
         ) {
             return Err(
-                ErrorAuditor_::new(
+                ErrorAuditor::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
                             other: Other::new(error),
@@ -741,7 +741,7 @@ impl CommandProcessor<RunServer> {
             },
         ) {
             return Err(
-                ErrorAuditor_::new(
+                ErrorAuditor::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
                             other: Other::new(error),
@@ -763,7 +763,7 @@ impl CommandProcessor<RunServer> {
             },
         ) {
             return Err(
-                ErrorAuditor_::new(
+                ErrorAuditor::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
                             other: Other::new(error),
@@ -785,7 +785,7 @@ impl CommandProcessor<RunServer> {
             },
         ) {
             return Err(
-                ErrorAuditor_::new(
+                ErrorAuditor::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
                             other: Other::new(error),
@@ -807,7 +807,7 @@ impl CommandProcessor<RunServer> {
             },
         ) {
             return Err(
-                ErrorAuditor_::new(
+                ErrorAuditor::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
                             other: Other::new(error),
@@ -829,7 +829,7 @@ impl CommandProcessor<RunServer> {
             },
         ) {
             return Err(
-                ErrorAuditor_::new(
+                ErrorAuditor::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
                             other: Other::new(error),
@@ -851,7 +851,7 @@ impl CommandProcessor<RunServer> {
             },
         ) {
             return Err(
-                ErrorAuditor_::new(
+                ErrorAuditor::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
                             other: Other::new(error),
@@ -873,7 +873,7 @@ impl CommandProcessor<RunServer> {
             },
         ) {
             return Err(
-                ErrorAuditor_::new(
+                ErrorAuditor::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
                             other: Other::new(error),
@@ -895,7 +895,7 @@ impl CommandProcessor<RunServer> {
             },
         ) {
             return Err(
-                ErrorAuditor_::new(
+                ErrorAuditor::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
                             other: Other::new(error),
@@ -917,7 +917,7 @@ impl CommandProcessor<RunServer> {
             },
         ) {
             return Err(
-                ErrorAuditor_::new(
+                ErrorAuditor::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
                             other: Other::new(error),
@@ -939,7 +939,7 @@ impl CommandProcessor<RunServer> {
             },
         ) {
             return Err(
-                ErrorAuditor_::new(
+                ErrorAuditor::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
                             other: Other::new(error),
@@ -961,7 +961,7 @@ impl CommandProcessor<RunServer> {
             },
         ) {
             return Err(
-                ErrorAuditor_::new(
+                ErrorAuditor::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
                             other: Other::new(error),
@@ -983,7 +983,7 @@ impl CommandProcessor<RunServer> {
             },
         ) {
             return Err(
-                ErrorAuditor_::new(
+                ErrorAuditor::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
                             other: Other::new(error),
@@ -1005,7 +1005,7 @@ impl CommandProcessor<RunServer> {
             },
         ) {
             return Err(
-                ErrorAuditor_::new(
+                ErrorAuditor::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
                             other: Other::new(error),
@@ -1027,7 +1027,7 @@ impl CommandProcessor<RunServer> {
             },
         ) {
             return Err(
-                ErrorAuditor_::new(
+                ErrorAuditor::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
                             other: Other::new(error),
@@ -1051,7 +1051,7 @@ impl CommandProcessor<RunServer> {
                 },
             ) {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -1073,7 +1073,7 @@ impl CommandProcessor<RunServer> {
                 },
             ) {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -1095,7 +1095,7 @@ impl CommandProcessor<RunServer> {
                 },
             ) {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -1117,7 +1117,7 @@ impl CommandProcessor<RunServer> {
                 },
             ) {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -1139,7 +1139,7 @@ impl CommandProcessor<RunServer> {
                 },
             ) {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -1161,7 +1161,7 @@ impl CommandProcessor<RunServer> {
                 },
             ) {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -1183,7 +1183,7 @@ impl CommandProcessor<RunServer> {
                 },
             ) {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -1205,7 +1205,7 @@ impl CommandProcessor<RunServer> {
                 },
             ) {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -1227,7 +1227,7 @@ impl CommandProcessor<RunServer> {
                 },
             ) {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -1249,7 +1249,7 @@ impl CommandProcessor<RunServer> {
                 },
             ) {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -1271,7 +1271,7 @@ impl CommandProcessor<RunServer> {
                 },
             ) {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -1293,7 +1293,7 @@ impl CommandProcessor<RunServer> {
                 },
             ) {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -1315,7 +1315,7 @@ impl CommandProcessor<RunServer> {
                 },
             ) {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -1337,7 +1337,7 @@ impl CommandProcessor<RunServer> {
                 },
             ) {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -1359,7 +1359,7 @@ impl CommandProcessor<RunServer> {
                 },
             ) {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -1381,7 +1381,7 @@ impl CommandProcessor<RunServer> {
                 },
             ) {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -1403,7 +1403,7 @@ impl CommandProcessor<RunServer> {
                 },
             ) {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -1425,7 +1425,7 @@ impl CommandProcessor<RunServer> {
                 },
             ) {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -1447,7 +1447,7 @@ impl CommandProcessor<RunServer> {
                 },
             ) {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -1469,7 +1469,7 @@ impl CommandProcessor<RunServer> {
                 },
             ) {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -1491,7 +1491,7 @@ impl CommandProcessor<RunServer> {
                 },
             ) {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -2080,7 +2080,7 @@ impl CommandProcessor<RunServer> {
         .await;
     }
 
-    fn create_signal(signal_kind: SignalKind) -> Result<impl Future<Output = ()>, ErrorAuditor_> {
+    fn create_signal(signal_kind: SignalKind) -> Result<impl Future<Output = ()>, ErrorAuditor> {
         let signal = match signal(signal_kind) {
             Ok(mut signal) => {
                 async move {
@@ -2091,7 +2091,7 @@ impl CommandProcessor<RunServer> {
             }
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),

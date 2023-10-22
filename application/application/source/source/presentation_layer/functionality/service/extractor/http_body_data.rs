@@ -2,7 +2,7 @@ use http::request::Parts;
 use hyper::Body;
 use matchit::Params;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor_;
+use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::functionality::service::serializer::Serialize;
 use crate::infrastructure_layer::functionality::service::serializer::Serializer;
@@ -21,7 +21,7 @@ impl Extractor<HttpBodyData> {
         body: &'a mut Body,
         _parts: &'a Parts,
         _route_parameters: &'a Params<'_, '_>,
-    ) -> Result<InvalidArgumentResult<Option<D>>, ErrorAuditor_>
+    ) -> Result<InvalidArgumentResult<Option<D>>, ErrorAuditor>
     where
         D: for<'de> Deserialize<'de>,
         Serializer<SF>: Serialize,
@@ -30,7 +30,7 @@ impl Extractor<HttpBodyData> {
             Ok(bytes_) => bytes_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),

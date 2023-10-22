@@ -11,7 +11,7 @@ use crate::domain_layer::functionality::service::form_resolver::FormResolver;
 use crate::domain_layer::functionality::service::generator::Generator;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor_;
+use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
@@ -44,7 +44,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
         incoming: Option<Incoming>,
-    ) -> Result<InvalidArgumentResult<UnifiedReport<Outcoming, Precedent>>, ErrorAuditor_>
+    ) -> Result<InvalidArgumentResult<UnifiedReport<Outcoming, Precedent>>, ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -55,7 +55,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
             Some(incoming__) => incoming__,
             None => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::create_incoming_invalid_state(),
                         BacktracePart::new(
                             line!(),
@@ -106,7 +106,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
             Ok(database_2_postgresql_pooled_connection_) => database_2_postgresql_pooled_connection_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::ConnectionPoolPostgresql {

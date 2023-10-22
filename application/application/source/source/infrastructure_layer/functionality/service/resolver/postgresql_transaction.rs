@@ -1,7 +1,7 @@
 use super::Resolver;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor_;
+use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
 use tokio_postgres::Client as Connection;
@@ -12,7 +12,7 @@ impl Resolver<PostgresqlTransaction> {
     pub async fn start<'a>(
         connection: &'a Connection,
         transaction_isolation_level: TransactionIsolationLevel,
-    ) -> Result<Self, ErrorAuditor_> {
+    ) -> Result<Self, ErrorAuditor> {
         let mut query = "START TRANSACTION ISOLATION LEVEL".to_string();
 
         match transaction_isolation_level {
@@ -48,7 +48,7 @@ impl Resolver<PostgresqlTransaction> {
             .await
         {
             return Err(
-                ErrorAuditor_::new(
+                ErrorAuditor::new(
                     Error::Runtime {
                         runtime: Runtime::Resource {
                             resource: ResourceError::Postgresql {
@@ -71,7 +71,7 @@ impl Resolver<PostgresqlTransaction> {
     pub async fn commit<'a>(
         self,
         connection: &'a Connection,
-    ) -> Result<(), ErrorAuditor_> {
+    ) -> Result<(), ErrorAuditor> {
         let query = "COMMIT;";
 
         if let Err(error) = connection
@@ -82,7 +82,7 @@ impl Resolver<PostgresqlTransaction> {
             .await
         {
             return Err(
-                ErrorAuditor_::new(
+                ErrorAuditor::new(
                     Error::Runtime {
                         runtime: Runtime::Resource {
                             resource: ResourceError::Postgresql {
@@ -105,7 +105,7 @@ impl Resolver<PostgresqlTransaction> {
     pub async fn rollback<'a>(
         self,
         connection: &'a Connection,
-    ) -> Result<(), ErrorAuditor_> {
+    ) -> Result<(), ErrorAuditor> {
         let query = "ROLLBACK;";
 
         if let Err(error) = connection
@@ -116,7 +116,7 @@ impl Resolver<PostgresqlTransaction> {
             .await
         {
             return Err(
-                ErrorAuditor_::new(
+                ErrorAuditor::new(
                     Error::Runtime {
                         runtime: Runtime::Resource {
                             resource: ResourceError::Postgresql {

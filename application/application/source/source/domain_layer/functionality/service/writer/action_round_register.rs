@@ -10,7 +10,7 @@ use crate::infrastructure_layer::data::control_type::Request;
 use crate::infrastructure_layer::data::control_type::Response;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor_;
+use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::insert::Insert11;
@@ -32,7 +32,7 @@ impl Writer<ActionRoundRegister<'_>> {
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         request: &'a Request,
         response: &'a Response,
-    ) -> Result<(), ErrorAuditor_>
+    ) -> Result<(), ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -66,7 +66,7 @@ impl Writer<ActionRoundRegister<'_>> {
         request: &'a Request,
         response: &'a Response,
         subject: &'a E,
-    ) -> Result<(), ErrorAuditor_>
+    ) -> Result<(), ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -103,7 +103,7 @@ impl Writer<ActionRoundRegister<'_>> {
         request: &'a Request,
         response: &'a Response,
         action_round_register_context: Option<ActionRoundRegister_Context>,
-    ) -> Result<(), ErrorAuditor_>
+    ) -> Result<(), ErrorAuditor>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -133,7 +133,7 @@ impl Writer<ActionRoundRegister<'_>> {
             Ok(database_2_postgresql_pooled_connection_) => database_2_postgresql_pooled_connection_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::ConnectionPoolPostgresql {

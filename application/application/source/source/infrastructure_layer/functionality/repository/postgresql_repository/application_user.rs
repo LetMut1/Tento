@@ -17,7 +17,7 @@ use crate::domain_layer::data::entity::application_user::ApplicationUser_Nicknam
 use crate::domain_layer::data::entity::application_user::ApplicationUser_PasswordHash;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor_;
+use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
@@ -30,7 +30,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
     pub async fn create<'a>(
         database_1_connection: &'a Connection,
         insert_1: Insert1,
-    ) -> Result<ApplicationUser<'static>, ErrorAuditor_> {
+    ) -> Result<ApplicationUser<'static>, ErrorAuditor> {
         let application_user_email = insert_1.application_user_email.0.as_str();
 
         let application_user_nickname = insert_1.application_user_nickname.0.as_str();
@@ -81,7 +81,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -109,7 +109,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             Ok(row_registry_) => row_registry_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -131,7 +131,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             Ok(application_user_id_) => ApplicationUser_Id(application_user_id_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -153,7 +153,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             Ok(application_user_created_at_) => ApplicationUser_CreatedAt(application_user_created_at_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -186,7 +186,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
     pub async fn is_exist_1<'a>(
         database_1_connection: &'a Connection,
         by_1: &'a By1<'_>,
-    ) -> Result<bool, ErrorAuditor_> {
+    ) -> Result<bool, ErrorAuditor> {
         let application_user_nickname = by_1.application_user_nickname.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -212,7 +212,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -240,7 +240,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             Ok(row_registry_) => row_registry_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -268,7 +268,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
     pub async fn is_exist_2<'a>(
         database_1_connection: &'a Connection,
         by_2: &'a By2<'_>,
-    ) -> Result<bool, ErrorAuditor_> {
+    ) -> Result<bool, ErrorAuditor> {
         let application_user_email = by_2.application_user_email.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -294,7 +294,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -322,7 +322,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             Ok(row_registry_) => row_registry_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -350,7 +350,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
     pub async fn is_exist_3<'a>(
         database_1_connection: &'a Connection,
         by_3: &'a By3,
-    ) -> Result<bool, ErrorAuditor_> {
+    ) -> Result<bool, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
@@ -374,7 +374,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -402,7 +402,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             Ok(row_registry_) => row_registry_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -430,7 +430,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
     pub async fn find_1<'a, 'b>(
         database_1_connection: &'a Connection,
         by_1: &'a By1<'b>,
-    ) -> Result<Option<ApplicationUser<'b>>, ErrorAuditor_> {
+    ) -> Result<Option<ApplicationUser<'b>>, ErrorAuditor> {
         let application_user_nickname = by_1.application_user_nickname.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -459,7 +459,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -487,7 +487,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             Ok(row_registry_) => row_registry_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -513,7 +513,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             Ok(application_user_id_) => ApplicationUser_Id(application_user_id_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -535,7 +535,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             Ok(application_user_email_) => ApplicationUser_Email(application_user_email_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -557,7 +557,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             Ok(application_user_password_hash_) => ApplicationUser_PasswordHash(application_user_password_hash_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -579,7 +579,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             Ok(application_user_created_at_) => ApplicationUser_CreatedAt(application_user_created_at_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -616,7 +616,7 @@ impl PostgresqlRepository<ApplicationUser1> {
     pub async fn find_1<'a>(
         database_1_connection: &'a Connection,
         by_1: &'a By1<'_>,
-    ) -> Result<Option<ApplicationUser1>, ErrorAuditor_> {
+    ) -> Result<Option<ApplicationUser1>, ErrorAuditor> {
         let application_user_nickname = by_1.application_user_nickname.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -644,7 +644,7 @@ impl PostgresqlRepository<ApplicationUser1> {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -672,7 +672,7 @@ impl PostgresqlRepository<ApplicationUser1> {
             Ok(row_registry_) => row_registry_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -698,7 +698,7 @@ impl PostgresqlRepository<ApplicationUser1> {
             Ok(application_user_id_) => ApplicationUser_Id(application_user_id_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -720,7 +720,7 @@ impl PostgresqlRepository<ApplicationUser1> {
             Ok(application_user_email_) => ApplicationUser_Email(application_user_email_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -742,7 +742,7 @@ impl PostgresqlRepository<ApplicationUser1> {
             Ok(application_user_password_hash_) => ApplicationUser_PasswordHash(application_user_password_hash_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -776,7 +776,7 @@ impl PostgresqlRepository<ApplicationUser2> {
     pub async fn find_1<'a>(
         database_1_connection: &'a Connection,
         by_2: &'a By2<'_>,
-    ) -> Result<Option<ApplicationUser2>, ErrorAuditor_> {
+    ) -> Result<Option<ApplicationUser2>, ErrorAuditor> {
         let application_user_email = by_2.application_user_email.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -804,7 +804,7 @@ impl PostgresqlRepository<ApplicationUser2> {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -832,7 +832,7 @@ impl PostgresqlRepository<ApplicationUser2> {
             Ok(row_registry_) => row_registry_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -858,7 +858,7 @@ impl PostgresqlRepository<ApplicationUser2> {
             Ok(application_user_id_) => ApplicationUser_Id(application_user_id_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -880,7 +880,7 @@ impl PostgresqlRepository<ApplicationUser2> {
             Ok(application_user_nickname_) => ApplicationUser_Nickname(application_user_nickname_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -902,7 +902,7 @@ impl PostgresqlRepository<ApplicationUser2> {
             Ok(application_user_password_hash_) => ApplicationUser_PasswordHash(application_user_password_hash_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -936,7 +936,7 @@ impl PostgresqlRepository<ApplicationUser3> {
     pub async fn find_1<'a>(
         database_1_connection: &'a Connection,
         by_2: &'a By2<'_>,
-    ) -> Result<Option<ApplicationUser3>, ErrorAuditor_> {
+    ) -> Result<Option<ApplicationUser3>, ErrorAuditor> {
         let application_user_email = by_2.application_user_email.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -962,7 +962,7 @@ impl PostgresqlRepository<ApplicationUser3> {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -990,7 +990,7 @@ impl PostgresqlRepository<ApplicationUser3> {
             Ok(row_registry_) => row_registry_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -1016,7 +1016,7 @@ impl PostgresqlRepository<ApplicationUser3> {
             Ok(application_user_id_) => ApplicationUser_Id(application_user_id_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -1049,7 +1049,7 @@ impl PostgresqlRepository<ApplicationUser4> {
         database_1_connection: &'a Connection,
         update_1: &'a Update1<'_>,
         by_3: &'a By3,
-    ) -> Result<(), ErrorAuditor_> {
+    ) -> Result<(), ErrorAuditor> {
         let application_user_password_hash = update_1.application_user_password_hash.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -1085,7 +1085,7 @@ impl PostgresqlRepository<ApplicationUser4> {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -1111,7 +1111,7 @@ impl PostgresqlRepository<ApplicationUser4> {
             .await
         {
             return Err(
-                ErrorAuditor_::new(
+                ErrorAuditor::new(
                     Error::Runtime {
                         runtime: Runtime::Resource {
                             resource: ResourceError::Postgresql {
@@ -1134,7 +1134,7 @@ impl PostgresqlRepository<ApplicationUser4> {
     pub async fn find_1<'a>(
         database_1_connection: &'a Connection,
         by_3: &'a By3,
-    ) -> Result<Option<ApplicationUser4>, ErrorAuditor_> {
+    ) -> Result<Option<ApplicationUser4>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
@@ -1160,7 +1160,7 @@ impl PostgresqlRepository<ApplicationUser4> {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -1188,7 +1188,7 @@ impl PostgresqlRepository<ApplicationUser4> {
             Ok(row_registry_) => row_registry_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -1214,7 +1214,7 @@ impl PostgresqlRepository<ApplicationUser4> {
             Ok(application_user_password_email_) => ApplicationUser_Email(application_user_password_email_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -1236,7 +1236,7 @@ impl PostgresqlRepository<ApplicationUser4> {
             Ok(application_user_password_nickanme_) => ApplicationUser_Nickname(application_user_password_nickanme_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -1258,7 +1258,7 @@ impl PostgresqlRepository<ApplicationUser4> {
             Ok(application_user_password_hash_) => ApplicationUser_PasswordHash(application_user_password_hash_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -1292,7 +1292,7 @@ impl PostgresqlRepository<ApplicationUser5> {
     pub async fn find_1<'a>(
         database_1_connection: &'a Connection,
         by_3: &'a By3,
-    ) -> Result<Option<ApplicationUser5>, ErrorAuditor_> {
+    ) -> Result<Option<ApplicationUser5>, ErrorAuditor> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
@@ -1316,7 +1316,7 @@ impl PostgresqlRepository<ApplicationUser5> {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -1344,7 +1344,7 @@ impl PostgresqlRepository<ApplicationUser5> {
             Ok(row_registry_) => row_registry_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {
@@ -1370,7 +1370,7 @@ impl PostgresqlRepository<ApplicationUser5> {
             Ok(application_user_email_) => ApplicationUser_Email(application_user_email_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Resource {
                                 resource: ResourceError::Postgresql {

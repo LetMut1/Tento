@@ -1,7 +1,7 @@
 use super::Serialize;
 use super::Serializer;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor_;
+use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
 use crate::infrastructure_layer::data::error_auditor::Error;
 use crate::infrastructure_layer::data::error_auditor::Other;
@@ -14,7 +14,7 @@ use serde::Serialize as SerdeSerialize;
 pub use crate::infrastructure_layer::data::control_type::MessagePack;
 
 impl Serialize for Serializer<MessagePack> {
-    fn serialize<'a, T>(subject: &'a T) -> Result<Vec<u8>, ErrorAuditor_>
+    fn serialize<'a, T>(subject: &'a T) -> Result<Vec<u8>, ErrorAuditor>
     where
         T: SerdeSerialize,
     {
@@ -22,7 +22,7 @@ impl Serialize for Serializer<MessagePack> {
             Ok(data_) => data_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new_(
@@ -43,7 +43,7 @@ impl Serialize for Serializer<MessagePack> {
         return Ok(data);
     }
 
-    fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, ErrorAuditor_>
+    fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, ErrorAuditor>
     where
         T: Deserialize<'a>,
     {
@@ -51,7 +51,7 @@ impl Serialize for Serializer<MessagePack> {
             Ok(subject_) => subject_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor_::new(
+                    ErrorAuditor::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new_(
