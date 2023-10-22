@@ -1528,11 +1528,7 @@ impl CommandProcessor<RunServer> {
         let r#match = match router.at(parts.uri.path()) {
             Ok(r#match_) => r#match_,
             Err(_) => {
-                return Action::<RouteNotFound>::run(
-                    &parts,
-                    database_2_postgresql_connection_pool,
-                )
-                .await;
+                return Action::<RouteNotFound>::run(&parts).await;
             }
         };
 
@@ -2073,11 +2069,7 @@ impl CommandProcessor<RunServer> {
             }
         }
 
-        return Action::<RouteNotFound>::run(
-            &parts,
-            database_2_postgresql_connection_pool,
-        )
-        .await;
+        return Action::<RouteNotFound>::run(&parts).await;
     }
 
     fn create_signal(signal_kind: SignalKind) -> Result<impl Future<Output = ()>, ErrorAuditor> {
