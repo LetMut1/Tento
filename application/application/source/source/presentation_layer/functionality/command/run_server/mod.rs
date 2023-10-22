@@ -8,7 +8,7 @@ use application::infrastructure_layer::data::error_auditor::ErrorAuditor;
 fn main() -> () {
     match CommandProcessor::<RunServer>::process() {
         Ok(_) => {
-            println!("\n Graceful shutdown.");
+            println!("\nGraceful shutdown.");
         }
         Err(error) => {
             println!(
