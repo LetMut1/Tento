@@ -9,13 +9,13 @@ pub use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 
 impl Reactor<ErrorAuditor> {
     pub fn react<'a>(
-        parts: &'a Parts,
+        request_parts: &'a Parts,
         response: &'a Response,
         errro_auditor: ErrorAuditor
     ) -> () {
         let future = Self::react_(
-            parts.uri.path().to_string(),
-            parts.method.to_string(),
+            request_parts.uri.path().to_string(),
+            request_parts.method.to_string(),
             response.status().as_u16(),
             errro_auditor
         );

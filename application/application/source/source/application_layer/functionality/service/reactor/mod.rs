@@ -1,5 +1,6 @@
 pub mod invalid_argument;
 pub mod error_auditor;
+pub mod response;
 
 use std::marker::PhantomData;
 

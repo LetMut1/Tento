@@ -1,12 +1,5 @@
 use crate::application_layer::data::unified_report::UnifiedReport;
-use crate::domain_layer::data::entity::action_round_register::ActionRoundRegister;
-use crate::domain_layer::functionality::service::writer::Writer;
-use crate::infrastructure_layer::data::control_type::Request;
-use crate::infrastructure_layer::data::error_auditor::BacktracePart;
-use crate::infrastructure_layer::data::error_auditor::Error;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::data::error_auditor::Other;
-use crate::infrastructure_layer::data::error_auditor::Runtime;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::functionality::service::creator::Creator;
@@ -14,21 +7,14 @@ use crate::infrastructure_layer::functionality::service::creator::response::Resp
 use crate::infrastructure_layer::functionality::service::serializer::Serialize;
 use crate::infrastructure_layer::functionality::service::serializer::Serializer;
 use crate::infrastructure_layer::functionality::service::validator::Validator;
-use crate::infrastructure_layer::functionality::service::formatter::Format_;
-use crate::infrastructure_layer::functionality::service::formatter::Formatter_;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use bb8_redis::RedisConnectionManager;
-use bytes::Buf;
-use hyper::body::to_bytes;
-use serde::Deserialize;
 use serde::Serialize as SerdeSerialize;
-use tracing_subscriber::fmt::format;
 use std::clone::Clone;
 use std::future::Future;
 use crate::application_layer::functionality::service::reactor::Reactor;
 use std::marker::Send;
-use tracing::info;
 use std::marker::Sync;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
@@ -150,35 +136,7 @@ impl Processor<GeneralizedAction> {
 
         let response = Creator::<Response>::create_ok(data);
 
-        // if let Err(mut error) = Writer::<ActionRoundRegister>::write(
-        //     database_2_postgresql_connection_pool,
-        //     &request,
-        //     &response,
-        // )
-        // .await
-        // {
-        //     error.add_backtrace_part(
-        //         BacktracePart::new(
-        //             line!(),
-        //             file!(),
-        //             None,
-        //         ),
-        //     );
-
-        //     #[cfg(feature = "manual_testing")]
-        //     {
-        //         println!(
-        //             "{}",
-        //             Formatter::prepare(&error)
-        //         );
-        //     }
-
-        //     unreachable!(
-        //         "{}. TODO: Write in concurrent way. It is also necessary that the write
-        //         process does not wait for another write process, and writes immediately.",
-        //         &error
-        //     );
-        // }
+        Reactor::<Response>::react(parts, &response);
 
         return response;
     }

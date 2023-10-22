@@ -1,23 +1,20 @@
-use crate::infrastructure_layer::functionality::service::creator::response::Response;
 use crate::infrastructure_layer::functionality::service::formatter::Formatter;
 use tracing::info;
 use http::request::Parts;
 use super::Reactor;
 use crate::infrastructure_layer::data::control_type::ActionRoundLog;
 
-pub use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
+pub use crate::infrastructure_layer::data::control_type::Response;
 
-impl Reactor<InvalidArgument> {
+impl Reactor<Response> {
     pub fn react<'a>(
         request_parts: &'a Parts,
         response: &'a Response,
-        invalid_argument: InvalidArgument
     ) -> () {
         let future = Self::react_(
             request_parts.uri.path().to_string(),
             request_parts.method.to_string(),
             response.status().as_u16(),
-            invalid_argument
         );
 
         tokio::spawn(future);
@@ -29,15 +26,12 @@ impl Reactor<InvalidArgument> {
         request_uri: String,
         request_method: String,
         response_status_code: u16,
-        invalid_argument: InvalidArgument
     ) -> () {
-        let invalid_argument_message = Formatter::<InvalidArgument>::format(&invalid_argument);
-
         let message = Formatter::<ActionRoundLog>::format(
             request_uri.as_str(),
             request_method.as_str(),
             response_status_code,
-            Some(invalid_argument_message.as_str()),
+            None
         );
 
         info!("{}", message.as_str());
