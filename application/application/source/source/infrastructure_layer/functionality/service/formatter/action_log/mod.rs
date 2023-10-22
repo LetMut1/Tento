@@ -11,14 +11,14 @@ impl Formatter<ActionRoundLog> {
     ) -> String {
         let message = match context {
             Some(context_) => format!(
-                "{{ {} {} {} {{ Context: {} }} }}",
+                "|{} {} {} |Context: {}||",
                 request_uri,
                 request_method,
                 response_status_code,
                 context_,
             ),
             None => format!(
-                "{{ {} {} {} }}",
+                "|{} {} {}|",
                 request_uri,
                 request_method,
                 response_status_code,
