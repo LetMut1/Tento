@@ -1,4 +1,3 @@
-pub use entity::action_round_register;
 pub use entity::application_user;
 pub use entity::application_user_access_refresh_token;
 pub use entity::application_user_access_refresh_token_encrypted;

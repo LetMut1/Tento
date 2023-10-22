@@ -81,7 +81,6 @@
     clippy::zero_sized_map_values
 )]
 
-pub mod action_round_register;
 pub mod application_user;
 pub mod application_user_access_refresh_token;
 pub mod application_user_access_refresh_token_encrypted;

@@ -1,4 +1,3 @@
-pub mod action_round_register;
 pub mod application_user;
 pub mod application_user_access_refresh_token;
 pub mod application_user_authorization_token;
@@ -197,10 +196,6 @@ pub mod update {
 }
 
 pub mod insert {
-    use crate::domain_layer::data::entity::action_round_register::ActionRoundRegister_Context;
-    use crate::domain_layer::data::entity::action_round_register::ActionRoundRegister_Method;
-    use crate::domain_layer::data::entity::action_round_register::ActionRoundRegister_Route;
-    use crate::domain_layer::data::entity::action_round_register::ActionRoundRegister_StatusCode;
     use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
     use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
     use crate::domain_layer::data::entity::application_user::ApplicationUser_Nickname;
@@ -317,12 +312,5 @@ pub mod insert {
     pub struct Insert10 {
         pub application_user_id: ApplicationUser_Id,
         pub channel_id: Channel_Id,
-    }
-
-    pub struct Insert11<'a> {
-        pub action_round_register_route: ActionRoundRegister_Route<'a>,
-        pub action_round_register_method: ActionRoundRegister_Method<'a>,
-        pub action_round_register_status_code: ActionRoundRegister_StatusCode,
-        pub action_round_register_context: Option<ActionRoundRegister_Context>,
     }
 }
