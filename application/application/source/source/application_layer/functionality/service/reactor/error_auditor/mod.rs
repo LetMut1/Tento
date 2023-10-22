@@ -1,5 +1,6 @@
 use crate::infrastructure_layer::functionality::service::creator::response::Response;
 use crate::infrastructure_layer::functionality::service::formatter::Formatter;
+use crate::infrastructure_layer::data::control_type::ActionRoundLog;
 use tracing::error;
 use http::request::Parts;
 use super::Reactor;
@@ -32,7 +33,7 @@ impl Reactor<ErrorAuditor> {
     ) -> () {
         let error_auditor_message = Formatter::<ErrorAuditor>::format(&error_auditor);
 
-        let message = Self::format(
+        let message = Formatter::<ActionRoundLog>::format(
             request_uri.as_str(),
             request_method.as_str(),
             response_status_code,

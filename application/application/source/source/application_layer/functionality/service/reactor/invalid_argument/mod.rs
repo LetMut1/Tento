@@ -3,6 +3,7 @@ use crate::infrastructure_layer::functionality::service::formatter::Formatter;
 use tracing::info;
 use http::request::Parts;
 use super::Reactor;
+use crate::infrastructure_layer::data::control_type::ActionRoundLog;
 
 pub use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 
@@ -32,7 +33,7 @@ impl Reactor<InvalidArgument> {
     ) -> () {
         let invalid_argument_message = Formatter::<InvalidArgument>::format(&invalid_argument);
 
-        let message = Self::format(
+        let message = Formatter::<ActionRoundLog>::format(
             request_uri.as_str(),
             request_method.as_str(),
             response_status_code,
