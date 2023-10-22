@@ -1,6 +1,5 @@
 use crate::infrastructure_layer::functionality::service::creator::response::Response;
-use crate::infrastructure_layer::functionality::service::formatter::Format;
-use crate::infrastructure_layer::functionality::service::formatter::Formatter_;
+use crate::infrastructure_layer::functionality::service::formatter::Formatter;
 use tracing::info;
 use http::request::Parts;
 use super::Reactor;
@@ -31,7 +30,7 @@ impl Reactor<InvalidArgument> {
         response_status_code: u16,
         invalid_argument: InvalidArgument
     ) -> () {
-        let invalid_argument_message = Formatter_::prepare(&invalid_argument);
+        let invalid_argument_message = Formatter::<InvalidArgument>::format(&invalid_argument);
 
         let message = Self::format(
             request_uri.as_str(),

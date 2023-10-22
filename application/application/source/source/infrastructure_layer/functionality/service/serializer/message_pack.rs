@@ -7,7 +7,7 @@ use crate::infrastructure_layer::data::error_auditor::Error;
 use crate::infrastructure_layer::data::error_auditor::Other;
 use message_pack_serializer::Serializer as Serializer_;
 use serde::Deserialize;
-use crate::infrastructure_layer::functionality::service::formatter::Format;
+use crate::infrastructure_layer::functionality::service::formatter::Format_;
 use crate::infrastructure_layer::functionality::service::formatter::Formatter_;
 use serde::Serialize as SerdeSerialize;
 
