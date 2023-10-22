@@ -1,18 +1,10 @@
-use crate::infrastructure_layer::functionality::service::formatter::Format_;
-use crate::infrastructure_layer::functionality::service::formatter::Formatter_;
 use super::Formatter;
 
 pub use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 
 impl Formatter<InvalidArgument> {
     pub fn format<'a>(invalid_argument: &'a InvalidArgument) -> String {
-        return Formatter_::prepare(invalid_argument);
-    }
-}
-
-impl Format_<InvalidArgument> for Formatter_ {
-    fn prepare<'a>(subject: &'a InvalidArgument) -> String {
-        let message_part = match *subject {
+        let message_part = match *invalid_argument {
             InvalidArgument::ApplicationUser_AccessModifier => "AccessModifier",
             InvalidArgument::ApplicationUser_Email => "ApplicationUser_Email",
             InvalidArgument::ApplicationUser_Id => "ApplicationUser_Id",
@@ -37,7 +29,7 @@ impl Format_<InvalidArgument> for Formatter_ {
 
         return format!(
             "Invalid argument: {}.",
-            message_part
+            message_part,
         );
     }
 }
