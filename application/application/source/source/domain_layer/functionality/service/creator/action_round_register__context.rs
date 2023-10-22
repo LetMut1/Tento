@@ -3,7 +3,7 @@ use crate::domain_layer::data::entity::action_round_register::ActionRoundRegiste
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor_;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::functionality::service::formatter::Format;
-use crate::infrastructure_layer::functionality::service::formatter::Formatter;
+use crate::infrastructure_layer::functionality::service::formatter::Formatter_;
 
 pub trait ContextFrom<T> {
     fn create<'a>(from: &'a T) -> ActionRoundRegister_Context;
@@ -11,12 +11,12 @@ pub trait ContextFrom<T> {
 
 impl ContextFrom<InvalidArgument> for Creator<ActionRoundRegister_Context> {
     fn create<'a>(from: &'a InvalidArgument) -> ActionRoundRegister_Context {
-        return ActionRoundRegister_Context(Formatter::prepare(from));
+        return ActionRoundRegister_Context(Formatter_::prepare(from));
     }
 }
 
 impl ContextFrom<ErrorAuditor_> for Creator<ActionRoundRegister_Context> {
     fn create<'a>(from: &'a ErrorAuditor_) -> ActionRoundRegister_Context {
-        return ActionRoundRegister_Context(Formatter::prepare(from));
+        return ActionRoundRegister_Context(Formatter_::prepare(from));
     }
 }

@@ -1,6 +1,6 @@
 use crate::infrastructure_layer::functionality::service::creator::response::Response;
 use crate::infrastructure_layer::functionality::service::formatter::Format;
-use crate::infrastructure_layer::functionality::service::formatter::Formatter;
+use crate::infrastructure_layer::functionality::service::formatter::Formatter_;
 use tracing::error;
 use http::request::Parts;
 use super::Reactor;
@@ -31,7 +31,7 @@ impl Reactor<ErrorAuditor_> {
         response_status_code: u16,
         error_auditor: ErrorAuditor_
     ) -> () {
-        let error_auditor_message = Formatter::prepare(&error_auditor);
+        let error_auditor_message = Formatter_::prepare(&error_auditor);
 
         let message = Self::format(
             request_uri.as_str(),

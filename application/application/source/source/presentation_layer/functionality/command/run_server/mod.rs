@@ -3,7 +3,7 @@
 use application::application_layer::functionality::command_processor::CommandProcessor;
 use application::application_layer::functionality::command_processor::run_server::RunServer;
 use application::infrastructure_layer::functionality::service::formatter::Format;
-use application::infrastructure_layer::functionality::service::formatter::Formatter;
+use application::infrastructure_layer::functionality::service::formatter::Formatter_;
 
 fn main() -> () {
     match CommandProcessor::<RunServer>::process() {
@@ -13,7 +13,7 @@ fn main() -> () {
         Err(error) => {
             println!(
                 "{}",
-                Formatter::prepare(&error)
+                Formatter_::prepare(&error)
             );
         }
     }

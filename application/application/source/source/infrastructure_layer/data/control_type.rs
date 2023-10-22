@@ -6,7 +6,7 @@ use hyper::Request as HyperRequest;
 use hyper::Response as HyperResponse;
 use tokio_postgres::NoTls;
 
-pub struct GeneralizedAction;
+pub struct ActionLog;
 pub struct ApplicationUser__Authorization___AuthorizeByFirstStep;
 pub struct ApplicationUser__Authorization___AuthorizeByLastStep;
 pub struct ApplicationUser__Authorization___CheckEmailForExisting;
@@ -34,6 +34,7 @@ pub struct CloudMessage;
 pub struct CreateFixtures;
 pub struct DateTime;
 pub struct Email;
+pub struct GeneralizedAction;
 pub struct HealthCheck;
 pub struct HttpBodyData;
 pub struct MessagePack;
