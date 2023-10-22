@@ -23,9 +23,12 @@ use bytes::Buf;
 use hyper::body::to_bytes;
 use serde::Deserialize;
 use serde::Serialize as SerdeSerialize;
+use tracing_subscriber::fmt::format;
 use std::clone::Clone;
 use std::future::Future;
+use crate::application_layer::functionality::service::reactor::Reactor;
 use std::marker::Send;
+use tracing::info;
 use std::marker::Sync;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
@@ -64,36 +67,7 @@ impl Processor<GeneralizedAction> {
         if !Validator::<Parts>::is_valid(parts) {
             let response = Creator::<Response>::create_bad_request();
 
-            // if let Err(mut error) = Writer::<ActionRoundRegister>::write_with_context(
-            //     database_2_postgresql_connection_pool,
-            //     &request,
-            //     &response,
-            //     &InvalidArgument::HttpHeader,
-            // )
-            // .await
-            // {
-            //     error.add_backtrace_part(
-            //         BacktracePart::new(
-            //             line!(),
-            //             file!(),
-            //             None,
-            //         ),
-            //     );
-
-            //     #[cfg(feature = "manual_testing")]
-            //     {
-            //         println!(
-            //             "{}",
-            //             Formatter::prepare(&error)
-            //         );
-            //     }
-
-            //     unreachable!(
-            //         "{}. TODO: Write in concurrent way. It is also necessary that the write                     // TODO CHANGE all occurences.
-            //         process does not wait for another write process, and writes immediately.",
-            //         &error,
-            //     );
-            // }
+            Reactor::<InvalidArgument>::react(parts, &response, InvalidArgument::HttpHeader);
 
             return response;
         }
@@ -109,36 +83,7 @@ impl Processor<GeneralizedAction> {
             Err(error) => {
                 let response = Creator::<Response>::create_internal_server_error();
 
-                // if let Err(mut error) = Writer::<ActionRoundRegister>::write_with_context(
-                //     database_2_postgresql_connection_pool,
-                //     &request,
-                //     &response,
-                //     &InvalidArgument::HttpHeader,
-                // )
-                // .await
-                // {
-                //     error.add_backtrace_part(
-                //         BacktracePart::new(
-                //             line!(),
-                //             file!(),
-                //             None,
-                //         ),
-                //     );
-
-                //     #[cfg(feature = "manual_testing")]
-                //     {
-                //         println!(
-                //             "{}",
-                //             Formatter::prepare(&error)
-                //         );
-                //     }
-
-                //     unreachable!(
-                //         "{}. TODO: Write in concurrent way. It is also necessary that the write                     // TODO CHANGE all occurences.
-                //         process does not wait for another write process, and writes immediately.",
-                //         &error,
-                //     );
-                // }
+                Reactor::<ErrorAuditor_>::react(parts, &response, error);
 
                 return response;
             }
@@ -153,36 +98,7 @@ impl Processor<GeneralizedAction> {
             } => {
                 let response = Creator::<Response>::create_bad_request();
 
-                // if let Err(mut error) = Writer::<ActionRoundRegister>::write_with_context(
-                //     database_2_postgresql_connection_pool,
-                //     &request,
-                //     &response,
-                //     &InvalidArgument::HttpHeader,
-                // )
-                // .await
-                // {
-                //     error.add_backtrace_part(
-                //         BacktracePart::new(
-                //             line!(),
-                //             file!(),
-                //             None,
-                //         ),
-                //     );
-
-                //     #[cfg(feature = "manual_testing")]
-                //     {
-                //         println!(
-                //             "{}",
-                //             Formatter::prepare(&error)
-                //         );
-                //     }
-
-                //     unreachable!(
-                //         "{}. TODO: Write in concurrent way. It is also necessary that the write                     // TODO CHANGE all occurences.
-                //         process does not wait for another write process, and writes immediately.",
-                //         &error,
-                //     );
-                // }
+                Reactor::<InvalidArgument>::react(parts, &response, invalid_argument);
 
                 return response;
             }
@@ -198,46 +114,9 @@ impl Processor<GeneralizedAction> {
         {
             Ok(unified_report_) => unified_report_,
             Err(error) => {
-                #[cfg(feature = "manual_testing")]
-                {
-                    println!(
-                        "{}",
-                        Formatter::prepare(&error)
-                    );
-                }
-
                 let response = Creator::<Response>::create_internal_server_error();
 
-                // if let Err(mut error_) = Writer::<ActionRoundRegister>::write_with_context(
-                //     database_2_postgresql_connection_pool,
-                //     &request,
-                //     &response,
-                //     &error,
-                // )
-                // .await
-                // {
-                //     error_.add_backtrace_part(
-                //         BacktracePart::new(
-                //             line!(),
-                //             file!(),
-                //             None,
-                //         ),
-                //     );
-
-                //     #[cfg(feature = "manual_testing")]
-                //     {
-                //         println!(
-                //             "{}",
-                //             Formatter::prepare(&error_)
-                //         );
-                //     }
-
-                //     unreachable!(
-                //         "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
-                //         process does not wait for another write process, and writes immediately.",
-                //         &error, &error_
-                //     );
-                // }
+                Reactor::<ErrorAuditor_>::react(parts, &response, error);
 
                 return response;
             }
@@ -252,36 +131,7 @@ impl Processor<GeneralizedAction> {
             } => {
                 let response = Creator::<Response>::create_bad_request();
 
-                // if let Err(mut error) = Writer::<ActionRoundRegister>::write_with_context(
-                //     database_2_postgresql_connection_pool,
-                //     &request,
-                //     &response,
-                //     &invalid_argument,
-                // )
-                // .await
-                // {
-                //     error.add_backtrace_part(
-                //         BacktracePart::new(
-                //             line!(),
-                //             file!(),
-                //             None,
-                //         ),
-                //     );
-
-                //     #[cfg(feature = "manual_testing")]
-                //     {
-                //         println!(
-                //             "{}",
-                //             Formatter::prepare(&error)
-                //         );
-                //     }
-
-                //     unreachable!(
-                //         "{}. TODO: Write in concurrent way. It is also necessary that the write
-                //         process does not wait for another write process, and writes immediately.",
-                //         &error
-                //     );
-                // }
+                Reactor::<InvalidArgument>::react(parts, &response, invalid_argument);
 
                 return response;
             }
@@ -290,46 +140,9 @@ impl Processor<GeneralizedAction> {
         let data = match Serializer::<SF>::serialize(&unified_report_) {
             Ok(data_) => data_,
             Err(error) => {
-                #[cfg(feature = "manual_testing")]
-                {
-                    println!(
-                        "{}",
-                        Formatter::prepare(&error)
-                    );
-                }
-
                 let response = Creator::<Response>::create_internal_server_error();
 
-                // if let Err(mut error_) = Writer::<ActionRoundRegister>::write_with_context(
-                //     database_2_postgresql_connection_pool,
-                //     &request,
-                //     &response,
-                //     &error,
-                // )
-                // .await
-                // {
-                //     error_.add_backtrace_part(
-                //         BacktracePart::new(
-                //             line!(),
-                //             file!(),
-                //             None,
-                //         ),
-                //     );
-
-                //     #[cfg(feature = "manual_testing")]
-                //     {
-                //         println!(
-                //             "{}",
-                //             Formatter::prepare(&error_)
-                //         );
-                //     }
-
-                //     unreachable!(
-                //         "{} ({}). TODO: Write in concurrent way. It is also necessary that the write
-                //         process does not wait for another write process, and writes immediately.",
-                //         &error, &error_
-                //     );
-                // }
+                Reactor::<ErrorAuditor_>::react(parts, &response, error);
 
                 return response;
             }
