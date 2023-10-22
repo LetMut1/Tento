@@ -1,11 +1,11 @@
 [package]
-name = "run_server"
+name = "core"
 version = "0.1.0"
 authors.workspace = true
 edition = "2021"
 
 [[bin]]
-name = "run_server"
+name = "core"
 path = "./mod.rs"
 test = true
 doctest = true

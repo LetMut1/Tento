@@ -14,9 +14,7 @@ members = [
     "./source/forced_crate/resource_error",
     "./source/forced_crate/unified_report",
     "./source/forced_crate/void",
-    "./source/source/presentation_layer/functionality/command/create_fixtures",
-    "./source/source/presentation_layer/functionality/command/remove_incomplite_state",
-    "./source/source/presentation_layer/functionality/command/run_server",
+    "./source/source/presentation_layer/functionality/command/core",
 ]
 default-members = [
     "./source",
@@ -32,9 +30,7 @@ default-members = [
     "./source/forced_crate/resource_error",
     "./source/forced_crate/unified_report",
     "./source/forced_crate/void",
-    "./source/source/presentation_layer/functionality/command/create_fixtures",
-    "./source/source/presentation_layer/functionality/command/remove_incomplite_state",
-    "./source/source/presentation_layer/functionality/command/run_server",
+    "./source/source/presentation_layer/functionality/command/core",
 ]
 
 [workspace.package]

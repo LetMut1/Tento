@@ -451,6 +451,14 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "245097e9a4535ee1e3e3931fcfcd55a796a44c643e8596ff6566d68f09b87bbc"
 
 [[package]]
+name = "core"
+version = "0.1.0"
+dependencies = [
+ "application",
+ "clap",
+]
+
+[[package]]
 name = "core-foundation"
 version = "0.9.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -473,13 +481,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a17b76ff3a4162b0b27f354a0c87015ddad39d35f9c0c36607a3bdd175dde1f1"
 dependencies = [
  "libc",
-]
-
-[[package]]
-name = "create_fixtures"
-version = "0.1.0"
-dependencies = [
- "application",
 ]
 
 [[package]]
@@ -1627,10 +1628,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e5ea92a5b6195c6ef2a0295ea818b312502c6fc94dde986c5553242e18fd4ce2"
 
 [[package]]
-name = "remove_incomplite_state"
-version = "0.1.0"
-
-[[package]]
 name = "resource_error"
 version = "0.1.0"
 dependencies = [
@@ -1662,14 +1659,6 @@ dependencies = [
  "byteorder",
  "rmp",
  "serde",
-]
-
-[[package]]
-name = "run_server"
-version = "0.1.0"
-dependencies = [
- "application",
- "clap",
 ]
 
 [[package]]
