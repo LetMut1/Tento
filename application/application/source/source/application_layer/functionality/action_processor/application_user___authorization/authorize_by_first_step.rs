@@ -18,7 +18,9 @@ use crate::domain_layer::functionality::service::encoder::Encoder;
 use crate::domain_layer::functionality::service::generator::Generator;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
+use crate::infrastructure_layer::data::error_auditor::Other;
 use crate::infrastructure_layer::data::error_auditor::Error;
+use tokio::task::spawn_blocking;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
@@ -241,11 +243,37 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
             );
         }
 
-        let is_valid = match Encoder::<ApplicationUser_Password>::is_valid(
-            &incoming_.application_user_password,
-            &application_user_password_hash,
-        ) {
+        let join_handle = spawn_blocking(
+            move || -> Result<bool, ErrorAuditor> {
+                return Encoder::<ApplicationUser_Password>::is_valid(
+                    &incoming_.application_user_password,
+                    &application_user_password_hash,
+                );
+            }
+        );
+
+        let is_valid = match join_handle.await {
             Ok(is_valid_) => is_valid_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        Error::Runtime {
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+        };
+
+        let is_valid_ = match is_valid {
+            Ok(is_valid__) => is_valid__,
             Err(mut error) => {
                 error.add_backtrace_part(
                     BacktracePart::new(
@@ -259,7 +287,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
             }
         };
 
-        if !is_valid {
+        if !is_valid_ {
             return Ok(
                 InvalidArgumentResult::Ok {
                     subject: UnifiedReport::precedent(Precedent::ApplicationUser_WrongEmailOrNicknameOrPassword),
