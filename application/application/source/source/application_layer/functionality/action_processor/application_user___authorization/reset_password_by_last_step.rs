@@ -20,7 +20,6 @@ use crate::infrastructure_layer::data::error_auditor::Runtime;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::error_auditor::Other;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
-use crate::domain_layer::data::entity::application_user::ApplicationUser_PasswordHash;
 use tokio::task::spawn_blocking;
 use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By3;
@@ -347,7 +346,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
         }
 
         let join_handle = spawn_blocking(
-            move || -> Result<ApplicationUser_PasswordHash, ErrorAuditor> {
+            move || -> _ {
                 return Encoder::<ApplicationUser_Password>::encode(&incoming_.application_user_password);
             }
         );

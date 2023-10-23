@@ -244,7 +244,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
         }
 
         let join_handle = spawn_blocking(
-            move || -> Result<bool, ErrorAuditor> {
+            move || -> _ {
                 return Encoder::<ApplicationUser_Password>::is_valid(
                     &incoming_.application_user_password,
                     &application_user_password_hash,

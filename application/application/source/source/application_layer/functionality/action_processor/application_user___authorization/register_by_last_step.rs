@@ -26,7 +26,6 @@ use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
-use crate::domain_layer::data::entity::application_user::ApplicationUser_PasswordHash;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
@@ -399,7 +398,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
         }
 
         let join_handle = spawn_blocking(
-            move || -> Result<ApplicationUser_PasswordHash, ErrorAuditor> {
+            move || -> _ {
                 return Encoder::<ApplicationUser_Password>::encode(&incoming_.application_user_password);
             }
         );
