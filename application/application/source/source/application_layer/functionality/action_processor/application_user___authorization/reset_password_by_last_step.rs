@@ -18,7 +18,10 @@ use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
+use crate::infrastructure_layer::data::error_auditor::Other;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
+use crate::domain_layer::data::entity::application_user::ApplicationUser_PasswordHash;
+use tokio::task::spawn_blocking;
 use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By3;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By4;
@@ -343,8 +346,34 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
             );
         }
 
-        application_user_.password_hash = match Encoder::<ApplicationUser_Password>::encode(&incoming_.application_user_password) {
-            Ok(password_hash_) => password_hash_,
+        let join_handle = spawn_blocking(
+            move || -> Result<ApplicationUser_PasswordHash, ErrorAuditor> {
+                return Encoder::<ApplicationUser_Password>::encode(&incoming_.application_user_password);
+            }
+        );
+
+        let application_user_password_hash = match join_handle.await {
+            Ok(application_user_password_hash_) => application_user_password_hash_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        Error::Runtime {
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+        };
+
+        application_user_.password_hash = match application_user_password_hash {
+            Ok(application_user_password_hash_) => application_user_password_hash_,
             Err(mut error) => {
                 error.add_backtrace_part(
                     BacktracePart::new(
