@@ -1,6 +1,7 @@
 use crate::infrastructure_layer::functionality::service::creator::response::Response;
 use crate::infrastructure_layer::functionality::service::formatter::Formatter;
 use tracing::info;
+use tokio::spawn;
 use http::request::Parts;
 use super::Reactor;
 use crate::infrastructure_layer::data::control_type::ActionRoundLog;
@@ -20,7 +21,7 @@ impl Reactor<InvalidArgument> {
             invalid_argument
         );
 
-        tokio::spawn(future);
+        spawn(future);
 
         return ();
     }

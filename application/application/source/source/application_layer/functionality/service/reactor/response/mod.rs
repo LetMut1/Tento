@@ -1,6 +1,7 @@
 use crate::infrastructure_layer::functionality::service::formatter::Formatter;
 use tracing::info;
 use http::request::Parts;
+use tokio::spawn;
 use super::Reactor;
 use crate::infrastructure_layer::data::control_type::ActionRoundLog;
 
@@ -17,7 +18,7 @@ impl Reactor<Response> {
             response.status().as_u16(),
         );
 
-        tokio::spawn(future);
+        spawn(future);
 
         return ();
     }

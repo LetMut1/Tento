@@ -2,6 +2,7 @@ use crate::infrastructure_layer::functionality::service::creator::response::Resp
 use crate::infrastructure_layer::functionality::service::formatter::Formatter;
 use crate::infrastructure_layer::data::control_type::ActionRoundLog;
 use tracing::error;
+use tokio::spawn;
 use http::request::Parts;
 use super::Reactor;
 
@@ -20,7 +21,7 @@ impl Reactor<ErrorAuditor> {
             errro_auditor
         );
 
-        tokio::spawn(future);
+        spawn(future);
 
         return ();
     }

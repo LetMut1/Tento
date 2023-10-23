@@ -26,6 +26,7 @@ use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
+use crate::domain_layer::data::entity::application_user::ApplicationUser_PasswordHash;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
@@ -45,7 +46,9 @@ use bb8_redis::RedisConnectionManager;
 use std::borrow::Cow;
 use std::clone::Clone;
 use std::marker::Send;
+use crate::infrastructure_layer::data::error_auditor::Other;
 use std::marker::Sync;
+use tokio::task::spawn_blocking;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
@@ -395,8 +398,34 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
             );
         }
 
-        let application_user_password_hash = match Encoder::<ApplicationUser_Password>::encode(&incoming_.application_user_password) {
+        let join_handle = spawn_blocking(
+            move || -> Result<ApplicationUser_PasswordHash, ErrorAuditor> {
+                return Encoder::<ApplicationUser_Password>::encode(&incoming_.application_user_password);
+            }
+        );
+
+        let application_user_password_hash = match join_handle.await {
             Ok(application_user_password_hash_) => application_user_password_hash_,
+            Err(error) => {
+                return Err(
+                    ErrorAuditor::new(
+                        Error::Runtime {
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
+                            },
+                        },
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    ),
+                );
+            }
+        };
+
+        let application_user_password_hash_ = match application_user_password_hash {
+            Ok(application_user_password_hash__) => application_user_password_hash__,
             Err(mut error) => {
                 error.add_backtrace_part(
                     BacktracePart::new(
@@ -432,7 +461,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
             Insert1 {
                 application_user_email: incoming_.application_user_email,
                 application_user_nickname: incoming_.application_user_nickname,
-                application_user_password_hash,
+                application_user_password_hash: application_user_password_hash_,
             },
         )
         .await
