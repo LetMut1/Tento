@@ -2,10 +2,18 @@ use serde::Deserialize;
 
 #[derive(Deserialize)]
 pub struct EnvironmentConfigurationFile {
+    pub tokio_runtime: TokioRuntime,
     pub application_server: ApplicationServer,
     pub logging: Logging,
     pub resource: Resource,
     pub encryption: Encryption,
+}
+
+#[derive(Deserialize)]
+pub struct TokioRuntime {
+    pub maximum_blocking_threads_quantity: Value<usize>,
+    pub worker_threads_quantity: Value<usize>,
+    pub worker_thread_stack_size: Value<usize>,
 }
 
 #[derive(Deserialize)]

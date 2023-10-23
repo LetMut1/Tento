@@ -156,10 +156,30 @@ impl CommandProcessor<RunServer> {
     }
 
     fn run_runtime() -> Result<(), ErrorAuditor> {
+        if ENVIRONMENT_CONFIGURATION.tokio_runtime.maximum_blocking_threads_quantity == 0
+            || ENVIRONMENT_CONFIGURATION.tokio_runtime.worker_threads_quantity == 0
+            || ENVIRONMENT_CONFIGURATION.tokio_runtime.worker_thread_stack_size < (1024 * 1024)
+        {
+            return Err(
+                ErrorAuditor::new(
+                    Error::Logic {
+                        message: "Invalid Tokio runtime configuration.",
+                    },
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
+                        None,
+                    ),
+                ),
+            );
+        }
+
         let runtime = match Builder::new_multi_thread()
-        .max_blocking_threads(1024)
-        .enable_all()
-        .build()
+            .max_blocking_threads(ENVIRONMENT_CONFIGURATION.tokio_runtime.maximum_blocking_threads_quantity)
+            .worker_threads(ENVIRONMENT_CONFIGURATION.tokio_runtime.worker_threads_quantity)
+            .thread_stack_size(ENVIRONMENT_CONFIGURATION.tokio_runtime.worker_thread_stack_size)
+            .enable_all()
+            .build()
         {
             Ok(runtime_) => runtime_,
             Err(error) => {

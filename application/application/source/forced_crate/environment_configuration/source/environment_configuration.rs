@@ -11,10 +11,17 @@ where
     T: Sealed,
 {
     pub environment: Environment,
+    pub tokio_runtime: TokioRuntime,
     pub application_server: ApplicationServer<T>,
     pub logging: Logging<T>,
     pub resource: Resource<T>,
     pub encryption: Encryption<T>,
+}
+
+pub struct TokioRuntime {
+    pub maximum_blocking_threads_quantity: usize,
+    pub worker_threads_quantity: usize,
+    pub worker_thread_stack_size: usize,
 }
 
 pub struct ApplicationServer<T>

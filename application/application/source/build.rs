@@ -243,10 +243,16 @@ impl Processor {
                 pub use environment_configuration::environment_configuration::Tcp; \n\
                 pub use environment_configuration::environment_configuration::TcpKeepalive; \n\
                 pub use environment_configuration::environment_configuration::Tls; \n\
+                pub use environment_configuration::environment_configuration::TokioRuntime; \n\
                 pub use environment_configuration::StringLiteral; \n\
                 \n\
                 pub const {}: EnvironmentConfiguration<StringLiteral> = EnvironmentConfiguration {{ \n\t\
                     environment: {}, \n\t\
+                    tokio_runtime: TokioRuntime {{ \n\t\t\
+                        maximum_blocking_threads_quantity: {}, \n\t\t\
+                        worker_threads_quantity: {}, \n\t\t\
+                        worker_thread_stack_size: {}, \n\t\
+                    }}, \n\t\
                     application_server: ApplicationServer {{ \n\t\t\
                         tcp: Tcp {{ \n\t\t\t\
                             socket_address: StringLiteral(\"{}\"), \n\t\t\t\
@@ -297,6 +303,9 @@ impl Processor {
             ",
             ENVIRONMENT_CONFIGURATION_CONSTANT_NAME,
             environment,
+            environment_configuration.tokio_runtime.maximum_blocking_threads_quantity,
+            environment_configuration.tokio_runtime.worker_threads_quantity,
+            environment_configuration.tokio_runtime.worker_thread_stack_size,
             environment_configuration.application_server.tcp.socket_address.0.as_str(),
             environment_configuration.application_server.tcp.nodelay,
             environment_configuration.application_server.tcp.sleep_on_accept_errors,
