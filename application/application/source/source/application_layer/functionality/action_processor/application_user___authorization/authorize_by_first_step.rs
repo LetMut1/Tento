@@ -20,7 +20,8 @@ use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Other;
 use crate::infrastructure_layer::data::error_auditor::Error;
-use tokio::task::spawn_blocking;
+use crate::infrastructure_layer::data::control_type::TokioBlockingTask;
+use crate::infrastructure_layer::functionality::service::spawner::Spawner;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
@@ -243,7 +244,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
             );
         }
 
-        let join_handle = spawn_blocking(
+        let join_handle = Spawner::<TokioBlockingTask>::spawn_processed(
             move || -> _ {
                 return Encoder::<ApplicationUser_Password>::is_valid(
                     &incoming_.application_user_password,

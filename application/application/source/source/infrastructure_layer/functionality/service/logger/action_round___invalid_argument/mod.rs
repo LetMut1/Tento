@@ -1,9 +1,9 @@
 use crate::infrastructure_layer::functionality::service::formatter::Formatter;
 use tracing::info;
 use super::Logger;
-use crate::infrastructure_layer::data::control_type::ActionRound;
 
 pub use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
+pub use crate::infrastructure_layer::data::control_type::ActionRound;
 
 impl Logger<(ActionRound, InvalidArgument)> {
     pub fn log<'a>(

@@ -9,5 +9,6 @@ pub mod prepared_statemant_parameter_convertation_resolver;
 pub mod resolver;
 pub mod sender;
 pub mod serializer;
+pub mod spawner;
 pub mod validator;
 pub mod logger;

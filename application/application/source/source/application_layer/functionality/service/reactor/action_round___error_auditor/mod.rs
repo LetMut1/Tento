@@ -1,17 +1,18 @@
 use crate::infrastructure_layer::functionality::service::creator::response::Response;
-use tokio::spawn;
 use http::request::Parts;
 use crate::infrastructure_layer::functionality::service::logger::Logger;
 use super::Reactor;
-use crate::infrastructure_layer::data::control_type::ActionRound;
+use crate::infrastructure_layer::data::control_type::TokioNonBlockingTask;
+use crate::infrastructure_layer::functionality::service::spawner::Spawner;
 
-pub use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
+pub use crate::infrastructure_layer::data::control_type::ActionRound;
+pub use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 
-impl Reactor<(ActionRound, InvalidArgument)> {
+impl Reactor<(ActionRound, ErrorAuditor)> {
     pub fn react<'a>(
         request_parts: &'a Parts,
         response: &'a Response,
-        invalid_argument: InvalidArgument
+        error_auditor: ErrorAuditor
     ) -> () {
         let request_uri = request_parts.uri.path().to_string();
 
@@ -19,16 +20,16 @@ impl Reactor<(ActionRound, InvalidArgument)> {
 
         let response_status_code = response.status().as_u16();
 
-        spawn(
+        Spawner::<TokioNonBlockingTask>::spawn_into_background(
             async move {
-                Logger::<(ActionRound, InvalidArgument)>::log(
+                Logger::<(ActionRound, ErrorAuditor)>::log(
                     request_uri.as_str(),
                     request_method.as_str(),
                     response_status_code,
-                    &invalid_argument,
+                    &error_auditor,
                 );
 
-                return ();
+                return Ok(());
             }
         );
 

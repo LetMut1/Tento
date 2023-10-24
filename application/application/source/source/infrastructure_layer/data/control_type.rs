@@ -42,6 +42,8 @@ pub struct NumberRow;
 pub struct PostgresqlTransaction;
 pub struct RouteNotFound;
 pub struct RunServer;
+pub struct TokioBlockingTask;
+pub struct TokioNonBlockingTask;
 pub struct UnixTime;
 pub type PostgresqlConnectionPoolNoTls = Pool<PostgresqlConnectionManager<NoTls>>;
 pub type RedisConnectonPool = Pool<RedisConnectionManager>;

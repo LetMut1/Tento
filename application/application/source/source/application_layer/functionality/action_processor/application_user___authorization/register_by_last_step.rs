@@ -24,14 +24,15 @@ use crate::domain_layer::functionality::service::incrementor::Incrementor;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
+use crate::infrastructure_layer::data::control_type::TokioNonBlockingTask;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
+use crate::infrastructure_layer::functionality::service::spawner::Spawner;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
-use crate::infrastructure_layer::functionality::service::logger::Logger;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By1;
-use tokio::spawn;
+use crate::infrastructure_layer::data::control_type::TokioBlockingTask;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By2;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By5;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::insert::Insert1;
@@ -49,7 +50,6 @@ use std::clone::Clone;
 use std::marker::Send;
 use crate::infrastructure_layer::data::error_auditor::Other;
 use std::marker::Sync;
-use tokio::task::spawn_blocking;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
@@ -399,7 +399,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
             );
         }
 
-        let join_handle = spawn_blocking(
+        let join_handle = Spawner::<TokioBlockingTask>::spawn_processed(
             move || -> _ {
                 return Encoder::<ApplicationUser_Password>::encode(&incoming_.application_user_password);
             }
@@ -584,63 +584,53 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
 
         let database_2_postgresql_connection_pool_ = database_2_postgresql_connection_pool.clone();
 
-        spawn(
+        Spawner::<TokioNonBlockingTask>::spawn_into_background(
             async move {
-                let closure = move || -> _ {
-                    async move {
-                        let database_2_postgresql_pooled_connection_ = match database_2_postgresql_connection_pool_.get().await {
-                            Ok(database_2_postgresql_pooled_connection__) => database_2_postgresql_pooled_connection__,
-                            Err(error) => {
-                                return Err(
-                                    ErrorAuditor::new(
-                                        Error::Runtime {
-                                            runtime: Runtime::Resource {
-                                                resource: ResourceError::ConnectionPoolPostgresql {
-                                                    bb8_postgresql_error: error,
-                                                },
-                                            },
+                let database_2_postgresql_pooled_connection_ = match database_2_postgresql_connection_pool_.get().await {
+                    Ok(database_2_postgresql_pooled_connection__) => database_2_postgresql_pooled_connection__,
+                    Err(error) => {
+                        return Err(
+                            ErrorAuditor::new(
+                                Error::Runtime {
+                                    runtime: Runtime::Resource {
+                                        resource: ResourceError::ConnectionPoolPostgresql {
+                                            bb8_postgresql_error: error,
                                         },
-                                        BacktracePart::new(
-                                            line!(),
-                                            file!(),
-                                            None,
-                                        ),
-                                    )
-                                )
-                            }
-                        };
-
-                        let database_2_postgresql_connection_ = &*database_2_postgresql_pooled_connection_;
-
-                        if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete(
-                            database_2_postgresql_connection_,
-                            &By5 {
-                                application_user_email: &application_user.email,
-                                application_user_device_id: &application_user_device.id,
-                            },
-                        )
-                        .await
-                        {
-                            error.add_backtrace_part(
+                                    },
+                                },
                                 BacktracePart::new(
                                     line!(),
                                     file!(),
                                     None,
                                 ),
-                            );
-
-                            return Err(error);
-                        }
-
-                        return Ok(());
+                            )
+                        )
                     }
                 };
 
-                if let Err(error) = closure().await {
-                    Logger::<ErrorAuditor>::log(&error);
+                let database_2_postgresql_connection_ = &*database_2_postgresql_pooled_connection_;
+
+                if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete(
+                    database_2_postgresql_connection_,
+                    &By5 {
+                        application_user_email: &application_user.email,
+                        application_user_device_id: &application_user_device.id,
+                    },
+                )
+                .await
+                {
+                    error.add_backtrace_part(
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    );
+
+                    return Err(error);
                 }
 
-                return ();
+                return Ok(());
             }
         );
 
