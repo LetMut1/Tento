@@ -608,10 +608,8 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
                     }
                 };
 
-                let database_2_postgresql_connection_ = &*database_2_postgresql_pooled_connection_;
-
                 if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete(
-                    database_2_postgresql_connection_,
+                    &*database_2_postgresql_pooled_connection_,
                     &By5 {
                         application_user_email: &application_user.email,
                         application_user_device_id: &application_user_device.id,

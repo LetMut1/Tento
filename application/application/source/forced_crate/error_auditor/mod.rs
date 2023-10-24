@@ -88,7 +88,7 @@ where
                 backtrace_message = match backtrace_part.get_context() {
                     Some(context) => {
                         format!(
-                            "{}({}) {}:{} ({})\n.",
+                            "{}({}) {}:{} ({}).\n.",
                             backtrace_message.as_str(),
                             index,
                             backtrace_part.get_file_path(),

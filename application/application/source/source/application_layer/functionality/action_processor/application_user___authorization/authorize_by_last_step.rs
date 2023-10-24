@@ -24,6 +24,8 @@ use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
+use crate::infrastructure_layer::data::control_type::TokioNonBlockingTask;
+use crate::infrastructure_layer::functionality::service::spawner::Spawner;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
@@ -453,22 +455,6 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
             }
         };
 
-        if let Err(mut error) = PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::delete(
-            database_2_postgresql_connection,
-            &by_4,
-        )
-        .await
-        {
-            error.add_backtrace_part(
-                BacktracePart::new(
-                    line!(),
-                    file!(),
-                    None,
-                ),
-            );
-
-            return Err(error);
-        }
 // TODO  TRANZACTION
         let application_user_access_token_encrypted = match FormResolver::<ApplicationUserAccessToken<'_>>::to_encrypted(&application_user_access_token) {
             Ok(application_user_access_token_encrypted_) => application_user_access_token_encrypted_,
@@ -500,25 +486,102 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
             }
         };
 
-        if let Err(mut error) = PostgresqlRepository::<ApplicationUserDevice>::create(
-            database_1_postgresql_connection,
-            Insert4 {
-                application_user_device_id: incoming_.application_user_device_id,
-                application_user_id: incoming_.application_user_id,
-            },
-        )
-        .await
-        {
-            error.add_backtrace_part(
-                BacktracePart::new(
-                    line!(),
-                    file!(),
-                    None,
-                ),
-            );
+        let database_1_postgresql_connection_pool_ = database_1_postgresql_connection_pool.clone();
 
-            return Err(error);
-        };
+        let database_2_postgresql_connection_pool_ = database_2_postgresql_connection_pool.clone();
+
+        Spawner::<TokioNonBlockingTask>::spawn_into_background(
+            async move {
+                let database_1_postgresql_pooled_connection_ = match database_1_postgresql_connection_pool_.get().await {
+                    Ok(database_1_postgresql_pooled_connection__) => database_1_postgresql_pooled_connection__,
+                    Err(error) => {
+                        return Err(
+                            ErrorAuditor::new(
+                                Error::Runtime {
+                                    runtime: Runtime::Resource {
+                                        resource: ResourceError::ConnectionPoolPostgresql {
+                                            bb8_postgresql_error: error,
+                                        },
+                                    },
+                                },
+                                BacktracePart::new(
+                                    line!(),
+                                    file!(),
+                                    None,
+                                ),
+                            )
+                        )
+                    }
+                };
+
+                let application_user_device = match PostgresqlRepository::<ApplicationUserDevice>::create(
+                    &*database_1_postgresql_pooled_connection_,
+                    Insert4 {
+                        application_user_device_id: incoming_.application_user_device_id,
+                        application_user_id: incoming_.application_user_id,
+                    },
+                )
+                .await
+                {
+                    Ok(application_user_device_) => application_user_device_,
+                    Err(mut error) => {
+                        error.add_backtrace_part(
+                            BacktracePart::new(
+                                line!(),
+                                file!(),
+                                None,
+                            ),
+                        );
+
+                        return Err(error);
+                    }
+                };
+
+                let database_2_postgresql_pooled_connection_ = match database_2_postgresql_connection_pool_.get().await {
+                    Ok(database_2_postgresql_pooled_connection__) => database_2_postgresql_pooled_connection__,
+                    Err(error) => {
+                        return Err(
+                            ErrorAuditor::new(
+                                Error::Runtime {
+                                    runtime: Runtime::Resource {
+                                        resource: ResourceError::ConnectionPoolPostgresql {
+                                            bb8_postgresql_error: error,
+                                        },
+                                    },
+                                },
+                                BacktracePart::new(
+                                    line!(),
+                                    file!(),
+                                    None,
+                                ),
+                            )
+                        )
+                    }
+                };
+
+                if let Err(mut error) = PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::delete(
+                    &*database_2_postgresql_pooled_connection_,
+                    &By4 {
+                        application_user_id: application_user_device.application_user_id,
+                        application_user_device_id: &application_user_device.id,
+                    },
+                )
+                .await
+                {
+                    error.add_backtrace_part(
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    );
+
+                    return Err(error);
+                }
+
+                return Ok(());
+            }
+        );
 
         let outcoming = Outcoming {
             application_user_access_token_encrypted,
