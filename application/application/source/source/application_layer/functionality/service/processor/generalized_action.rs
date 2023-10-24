@@ -7,6 +7,7 @@ use crate::infrastructure_layer::functionality::service::creator::response::Resp
 use crate::infrastructure_layer::functionality::service::serializer::Serialize;
 use crate::infrastructure_layer::functionality::service::serializer::Serializer;
 use crate::infrastructure_layer::functionality::service::validator::Validator;
+use crate::infrastructure_layer::data::control_type::ActionRound;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use bb8_redis::RedisConnectionManager;
@@ -53,7 +54,7 @@ impl Processor<GeneralizedAction> {
         if !Validator::<Parts>::is_valid(parts) {
             let response = Creator::<Response>::create_bad_request();
 
-            Reactor::<InvalidArgument>::react(parts, &response, InvalidArgument::HttpHeader);
+            Reactor::<(ActionRound, InvalidArgument)>::react(parts, &response, InvalidArgument::HttpHeader);
 
             return response;
         }
@@ -69,7 +70,7 @@ impl Processor<GeneralizedAction> {
             Err(error) => {
                 let response = Creator::<Response>::create_internal_server_error();
 
-                Reactor::<ErrorAuditor>::react(parts, &response, error);
+                Reactor::<(ActionRound, ErrorAuditor)>::react(parts, &response, error);
 
                 return response;
             }
@@ -84,7 +85,7 @@ impl Processor<GeneralizedAction> {
             } => {
                 let response = Creator::<Response>::create_bad_request();
 
-                Reactor::<InvalidArgument>::react(parts, &response, invalid_argument);
+                Reactor::<(ActionRound, InvalidArgument)>::react(parts, &response, invalid_argument);
 
                 return response;
             }
@@ -102,7 +103,7 @@ impl Processor<GeneralizedAction> {
             Err(error) => {
                 let response = Creator::<Response>::create_internal_server_error();
 
-                Reactor::<ErrorAuditor>::react(parts, &response, error);
+                Reactor::<(ActionRound, ErrorAuditor)>::react(parts, &response, error);
 
                 return response;
             }
@@ -117,7 +118,7 @@ impl Processor<GeneralizedAction> {
             } => {
                 let response = Creator::<Response>::create_bad_request();
 
-                Reactor::<InvalidArgument>::react(parts, &response, invalid_argument);
+                Reactor::<(ActionRound, InvalidArgument)>::react(parts, &response, invalid_argument);
 
                 return response;
             }
@@ -128,7 +129,7 @@ impl Processor<GeneralizedAction> {
             Err(error) => {
                 let response = Creator::<Response>::create_internal_server_error();
 
-                Reactor::<ErrorAuditor>::react(parts, &response, error);
+                Reactor::<(ActionRound, ErrorAuditor)>::react(parts, &response, error);
 
                 return response;
             }
@@ -136,7 +137,7 @@ impl Processor<GeneralizedAction> {
 
         let response = Creator::<Response>::create_ok(data);
 
-        Reactor::<Response>::react(parts, &response);
+        Reactor::<(ActionRound, Response)>::react(parts, &response);
 
         return response;
     }

@@ -27,9 +27,11 @@ use crate::infrastructure_layer::data::error_auditor::Error;
 use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
 use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
+use crate::infrastructure_layer::functionality::service::logger::Logger;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By1;
+use tokio::spawn;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By2;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::by::By5;
 use crate::infrastructure_layer::functionality::repository::postgresql_repository::insert::Insert1;
@@ -438,23 +440,6 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
             }
         };
 
-        if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete(
-            database_2_postgresql_connection,
-            &by_5,
-        )
-        .await
-        {
-            error.add_backtrace_part(
-                BacktracePart::new(
-                    line!(),
-                    file!(),
-                    None,
-                ),
-            );
-
-            return Err(error);
-        }
-
         let application_user = match PostgresqlRepository::<ApplicationUser<'_>>::create(
             database_1_postgresql_connection,
             Insert1 {
@@ -539,7 +524,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
             }
         };
 
-        // TODO  TRANZACTION посмотреть, необходимо ли здесь сделать транзакцию
+// TODO  TRANZACTION посмотреть, необходимо ли здесь сделать транзакцию
         let application_user_access_refresh_token = match PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::create(
             database_2_postgresql_connection,
             Insert2 {
@@ -596,6 +581,68 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
                 return Err(error);
             }
         };
+
+        let database_2_postgresql_connection_pool_ = database_2_postgresql_connection_pool.clone();
+
+        spawn(
+            async move {
+                let closure = move || -> _ {
+                    async move {
+                        let database_2_postgresql_pooled_connection_ = match database_2_postgresql_connection_pool_.get().await {
+                            Ok(database_2_postgresql_pooled_connection__) => database_2_postgresql_pooled_connection__,
+                            Err(error) => {
+                                return Err(
+                                    ErrorAuditor::new(
+                                        Error::Runtime {
+                                            runtime: Runtime::Resource {
+                                                resource: ResourceError::ConnectionPoolPostgresql {
+                                                    bb8_postgresql_error: error,
+                                                },
+                                            },
+                                        },
+                                        BacktracePart::new(
+                                            line!(),
+                                            file!(),
+                                            None,
+                                        ),
+                                    )
+                                )
+                            }
+                        };
+
+                        let database_2_postgresql_connection_ = &*database_2_postgresql_pooled_connection_;
+
+                        if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete(
+                            database_2_postgresql_connection_,
+                            &By5 {
+                                application_user_email: &application_user.email,
+                                application_user_device_id: &application_user_device.id,
+                            },
+                        )
+                        .await
+                        {
+                            error.add_backtrace_part(
+                                BacktracePart::new(
+                                    line!(),
+                                    file!(),
+                                    None,
+                                ),
+                            );
+
+                            return Err(error);
+                        }
+
+                        return Ok(());
+                    }
+                };
+
+                if let Err(error) = closure().await {
+                    Logger::<ErrorAuditor>::log(&error);
+                }
+
+                return ();
+            }
+        );
 
         let outcoming = Outcoming {
             application_user_access_token_encrypted,

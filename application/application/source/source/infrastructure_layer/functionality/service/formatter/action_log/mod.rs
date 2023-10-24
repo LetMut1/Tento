@@ -1,8 +1,8 @@
 use super::Formatter;
 
-pub use crate::infrastructure_layer::data::control_type::ActionRoundLog;
+pub use crate::infrastructure_layer::data::control_type::ActionRound;
 
-impl Formatter<ActionRoundLog> {
+impl Formatter<ActionRound> {
     pub fn format<'a>(
         request_uri: &'a str,
         request_method: &'a str,

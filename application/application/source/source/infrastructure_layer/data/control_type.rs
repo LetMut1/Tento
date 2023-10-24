@@ -6,7 +6,7 @@ use hyper::Request as HyperRequest;
 use hyper::Response as HyperResponse;
 use tokio_postgres::NoTls;
 
-pub struct ActionRoundLog;
+pub struct ActionRound;
 pub struct ApplicationUser__Authorization___AuthorizeByFirstStep;
 pub struct ApplicationUser__Authorization___AuthorizeByLastStep;
 pub struct ApplicationUser__Authorization___CheckEmailForExisting;

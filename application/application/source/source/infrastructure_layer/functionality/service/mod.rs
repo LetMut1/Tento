@@ -10,3 +10,4 @@ pub mod resolver;
 pub mod sender;
 pub mod serializer;
 pub mod validator;
+pub mod logger;

@@ -1,47 +1,36 @@
 use crate::infrastructure_layer::functionality::service::creator::response::Response;
-use crate::infrastructure_layer::functionality::service::formatter::Formatter;
-use tracing::info;
 use tokio::spawn;
 use http::request::Parts;
+use crate::infrastructure_layer::functionality::service::logger::Logger;
 use super::Reactor;
-use crate::infrastructure_layer::data::control_type::ActionRoundLog;
+use crate::infrastructure_layer::data::control_type::ActionRound;
 
 pub use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 
-impl Reactor<InvalidArgument> {
+impl Reactor<(ActionRound, InvalidArgument)> {
     pub fn react<'a>(
         request_parts: &'a Parts,
         response: &'a Response,
         invalid_argument: InvalidArgument
     ) -> () {
-        let future = Self::react_(
-            request_parts.uri.path().to_string(),
-            request_parts.method.to_string(),
-            response.status().as_u16(),
-            invalid_argument
+        let request_uri = request_parts.uri.path().to_string();
+
+        let request_method = request_parts.method.to_string();
+
+        let response_status_code = response.status().as_u16();
+
+        spawn(
+            async move {
+                Logger::<(ActionRound, InvalidArgument)>::log(
+                    request_uri.as_str(),
+                    request_method.as_str(),
+                    response_status_code,
+                    &invalid_argument,
+                );
+
+                return ();
+            }
         );
-
-        spawn(future);
-
-        return ();
-    }
-
-    async fn react_(
-        request_uri: String,
-        request_method: String,
-        response_status_code: u16,
-        invalid_argument: InvalidArgument
-    ) -> () {
-        let invalid_argument_message = Formatter::<InvalidArgument>::format(&invalid_argument);
-
-        let message = Formatter::<ActionRoundLog>::format(
-            request_uri.as_str(),
-            request_method.as_str(),
-            response_status_code,
-            Some(invalid_argument_message.as_str()),
-        );
-
-        info!("{}", message.as_str());
 
         return ();
     }
