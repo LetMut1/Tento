@@ -34,6 +34,7 @@ use crate::infrastructure_layer::functionality::service::resolver::cloud_message
 use crate::infrastructure_layer::functionality::service::resolver::Resolver;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
+use crate::infrastructure_layer::data::control_type::TokioNonBlockingTask;
 use bb8_redis::RedisConnectionManager;
 use std::clone::Clone;
 use std::marker::Send;
@@ -407,23 +408,6 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
             return Err(error);
         }
 
-        if let Err(mut error) = PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete(
-            database_2_postgresql_connection,
-            &by_4,
-        )
-        .await
-        {
-            error.add_backtrace_part(
-                BacktracePart::new(
-                    line!(),
-                    file!(),
-                    None,
-                ),
-            );
-
-            return Err(error);
-        }
-
         if let Err(mut error) = PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::delete_2(
             &*database_2_postgresql_pooled_connection,
             &by_3,
@@ -442,6 +426,56 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
         }
 
         Resolver::<CloudMessage>::deauthorize_application_user_from_all_devices();
+
+        let database_2_postgresql_connection_pool_ = database_2_postgresql_connection_pool.clone();
+
+        Spawner::<TokioNonBlockingTask>::spawn_into_background(
+            async move {
+                let database_2_postgresql_pooled_connection_ = match database_2_postgresql_connection_pool_.get().await {
+                    Ok(database_2_postgresql_pooled_connection__) => database_2_postgresql_pooled_connection__,
+                    Err(error) => {
+                        return Err(
+                            ErrorAuditor::new(
+                                Error::Runtime {
+                                    runtime: Runtime::Resource {
+                                        resource: ResourceError::ConnectionPoolPostgresql {
+                                            bb8_postgresql_error: error,
+                                        },
+                                    },
+                                },
+                                BacktracePart::new(
+                                    line!(),
+                                    file!(),
+                                    None,
+                                ),
+                            )
+                        )
+                    }
+                };
+
+                if let Err(mut error) = PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete(
+                    &*database_2_postgresql_pooled_connection_,
+                    &By4 {
+                        application_user_id: incoming_.application_user_id,
+                        application_user_device_id: &incoming_.application_user_device_id,
+                    },
+                )
+                .await
+                {
+                    error.add_backtrace_part(
+                        BacktracePart::new(
+                            line!(),
+                            file!(),
+                            None,
+                        ),
+                    );
+
+                    return Err(error);
+                }
+
+                return Ok(());
+            }
+        );
 
         return Ok(
             InvalidArgumentResult::Ok {

@@ -464,29 +464,6 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
             }
         };
 
-        let application_user_device = match PostgresqlRepository::<ApplicationUserDevice>::create(
-            database_1_postgresql_connection,
-            Insert4 {
-                application_user_device_id: incoming_.application_user_device_id,
-                application_user_id: application_user.id,
-            },
-        )
-        .await
-        {
-            Ok(application_user_device_) => application_user_device_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                        None,
-                    ),
-                );
-
-                return Err(error);
-            }
-        };
-
         let application_user_acces_token_expires_at = match Generator::<ApplicationUserAccessToken_ExpiresAt>::generate() {
             Ok(expires_at_) => expires_at_,
             Err(mut error) => {
@@ -505,7 +482,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
         let application_user_access_token = ApplicationUserAccessToken {
             id: Generator::<ApplicationUserAccessToken_Id>::generate(),
             application_user_id: application_user.id,
-            application_user_device_id: Cow::Borrowed(&application_user_device.id),
+            application_user_device_id: Cow::Borrowed(&incoming_.application_user_device_id),
             expires_at: application_user_acces_token_expires_at,
         };
 
@@ -529,7 +506,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
             database_2_postgresql_connection,
             Insert2 {
                 application_user_id: application_user.id,
-                application_user_device_id: &application_user_device.id,
+                application_user_device_id: &incoming_.application_user_device_id,
                 application_user_access_token_id: &application_user_access_token.id,
                 application_user_access_refresh_token_obfuscation_value: Generator::<ApplicationUserAccessRefreshToken_ObfuscationValue>::generate(),
                 application_user_access_refresh_token_expires_at,
@@ -582,10 +559,57 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
             }
         };
 
+        let database_1_postgresql_connection_pool_ = database_1_postgresql_connection_pool.clone();
+
         let database_2_postgresql_connection_pool_ = database_2_postgresql_connection_pool.clone();
 
         Spawner::<TokioNonBlockingTask>::spawn_into_background(
             async move {
+                let database_1_postgresql_pooled_connection_ = match database_1_postgresql_connection_pool_.get().await {
+                    Ok(database_1_postgresql_pooled_connection__) => database_1_postgresql_pooled_connection__,
+                    Err(error) => {
+                        return Err(
+                            ErrorAuditor::new(
+                                Error::Runtime {
+                                    runtime: Runtime::Resource {
+                                        resource: ResourceError::ConnectionPoolPostgresql {
+                                            bb8_postgresql_error: error,
+                                        },
+                                    },
+                                },
+                                BacktracePart::new(
+                                    line!(),
+                                    file!(),
+                                    None,
+                                ),
+                            )
+                        )
+                    }
+                };
+
+                let application_user_device = match PostgresqlRepository::<ApplicationUserDevice>::create(
+                    &*database_1_postgresql_pooled_connection_,
+                    Insert4 {
+                        application_user_device_id: incoming_.application_user_device_id,
+                        application_user_id: application_user.id,
+                    },
+                )
+                .await
+                {
+                    Ok(application_user_device_) => application_user_device_,
+                    Err(mut error) => {
+                        error.add_backtrace_part(
+                            BacktracePart::new(
+                                line!(),
+                                file!(),
+                                None,
+                            ),
+                        );
+
+                        return Err(error);
+                    }
+                };
+
                 let database_2_postgresql_pooled_connection_ = match database_2_postgresql_connection_pool_.get().await {
                     Ok(database_2_postgresql_pooled_connection__) => database_2_postgresql_pooled_connection__,
                     Err(error) => {
