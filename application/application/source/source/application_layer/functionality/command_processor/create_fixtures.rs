@@ -61,7 +61,7 @@ impl CommandProcessor<CreateFixtures> {
             return Err(
                 ErrorAuditor::new(
                     Error::Logic {
-                        message: "CreateFixturesProcessor should process only not in production environment.",
+                        message: "Should process only not in production environment.",
                     },
                     BacktracePart::new(
                         line!(),
