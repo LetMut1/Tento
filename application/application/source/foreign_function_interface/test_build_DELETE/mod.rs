@@ -29,6 +29,11 @@ pub extern "C" fn f1(a: c_int) -> c_int {
 }
 
 #[no_mangle]
+pub extern "C" fn application_user___authorization____authorize_by_first_step____serialize(a: c_int) -> c_int {
+    return a;
+}
+
+#[no_mangle]
 pub extern "C" fn f2(a: bool) -> bool {
     return a;
 }
@@ -199,6 +204,48 @@ pub struct StructWithString1 {
 }
 
 
+#[no_mangle]
+pub extern "C" fn string_allocate_f22() -> *mut ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming {
+    let string = CString::new("qwerty").unwrap();
+
+    return Box::into_raw(
+        Box::new(
+            ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming {
+                is_exist: true,
+                string: string.into_raw()
+            }
+        )
+    )
+}
+
+#[no_mangle]
+pub extern "C" fn string_deallocate_f22(struct_with_string: *mut ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming) -> () {
+    if struct_with_string.is_null() {
+        return ();
+    }
+
+    let struct_with_string = unsafe {
+        Box::from_raw(struct_with_string)
+    };
+
+    let string = struct_with_string.string;
+
+    if !string.is_null() {
+        let _ = unsafe {
+            CString::from_raw(string)
+        };
+    }
+
+    return ();
+}
+
+#[repr(C)]
+pub struct ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming {
+    pub is_exist: bool,
+    pub string: *mut c_char,
+}
+
+
 
 
 #[no_mangle]
@@ -257,6 +304,7 @@ pub extern "C" fn string_deallocate_f3(struct_with_string: *mut StructWithString
 
     return ();
 }
+
 
 #[repr(C)]
 pub struct StructWithString2 {

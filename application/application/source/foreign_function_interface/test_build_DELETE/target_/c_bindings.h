@@ -21,6 +21,11 @@ typedef struct StructWithString1 {
   char *string;
 } StructWithString1;
 
+typedef struct ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming {
+  bool is_exist;
+  char *string;
+} ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming;
+
 typedef struct Error2 {
   bool is_exist;
 } Error2;
@@ -67,6 +72,8 @@ typedef struct Main2 {
 
 int f1(int a);
 
+int application_user___authorization____authorize_by_first_step____serialize(int a);
+
 bool f2(bool a);
 
 double f3(double a);
@@ -98,6 +105,10 @@ void string_deallocate_f1(char *string);
 struct StructWithString1 *string_allocate_f2(void);
 
 void string_deallocate_f2(struct StructWithString1 *struct_with_string);
+
+struct ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming *string_allocate_f22(void);
+
+void string_deallocate_f22(struct ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming *struct_with_string);
 
 struct StructWithString2 *string_allocate_f3(void);
 
