@@ -114,7 +114,7 @@ where
                 message,
             } => {
                 format!(
-                    "Error-->Logic: {}.",
+                    "LogicError: {}.",
                     message,
                 )
             }
@@ -126,7 +126,7 @@ where
                         ref other,
                     } => {
                         format!(
-                            "Error-->Runtime-->Other: {}.",
+                            "OtherRuntimeError: {}.",
                             other.get_error(),
                         )
                     }
@@ -137,11 +137,11 @@ where
 
                         let error_message__ = if !message.is_empty() {
                             format!(
-                                "Error-->Runtime-->Resource: {}.",
+                                "ResourceRuntimeError: {}.",
                                 message.as_str(),
                             )
                         } else {
-                            "Error-->Runtime-->Resource: ???. It's probably better to tell exactly what happened...".to_string()
+                            "ResourceRuntimeError: ???. It's probably better to tell exactly what happened...".to_string()
                         };
 
                         error_message__

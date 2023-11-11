@@ -566,7 +566,7 @@ impl CommandProcessor<RunServer> {
             }
         };
 
-        let graceful_shutdown_signal = async {
+        let graceful_shutdown_signal_future = async {
             select! {
                 _ = signal_interrupt_future => {
                     ()
@@ -577,7 +577,7 @@ impl CommandProcessor<RunServer> {
             }
         };
 
-        if let Err(error) = server_builder.serve(service).with_graceful_shutdown(graceful_shutdown_signal).await {
+        if let Err(error) = server_builder.serve(service).with_graceful_shutdown(graceful_shutdown_signal_future).await {
             return Err(
                 ErrorAuditor::new(
                     Error::Runtime {
