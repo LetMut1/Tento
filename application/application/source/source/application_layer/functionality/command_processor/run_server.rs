@@ -1548,7 +1548,7 @@ impl CommandProcessor<RunServer> {
         let r#match = match router.at(parts.uri.path()) {
             Ok(r#match_) => r#match_,
             Err(_) => {
-                return Action::<RouteNotFound>::run(&parts).await;
+                return Action::<RouteNotFound>::run(&parts);
             }
         };
 
@@ -2089,7 +2089,7 @@ impl CommandProcessor<RunServer> {
             }
         }
 
-        return Action::<RouteNotFound>::run(&parts).await;
+        return Action::<RouteNotFound>::run(&parts);
     }
 
     fn create_signal(signal_kind: SignalKind) -> Result<impl Future<Output = ()>, ErrorAuditor> {

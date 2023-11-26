@@ -5,7 +5,7 @@ use crate::application_layer::functionality::action_processor::ActionProcessor;
 pub use crate::infrastructure_layer::data::control_type::RouteNotFound;
 
 impl ActionProcessor<RouteNotFound> {
-    pub async fn process() -> Response {
+    pub fn process() -> Response {
         return Creator::<Response>::create_not_found();
     }
 }

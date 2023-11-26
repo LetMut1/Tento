@@ -8,10 +8,10 @@ use crate::application_layer::functionality::service::reactor::Reactor;
 pub use crate::application_layer::functionality::action_processor::route_not_found::RouteNotFound;
 
 impl Action<RouteNotFound> {
-    pub async fn run<'a>(
+    pub fn run<'a>(
         parts: &'a Parts
     ) -> Response {
-        let response = ActionProcessor::<RouteNotFound>::process().await;
+        let response = ActionProcessor::<RouteNotFound>::process();
 
         Reactor::<(ActionRound, Response)>::react(parts, &response);
 
