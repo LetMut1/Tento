@@ -3,6 +3,7 @@ resolver = "2"
 members = [
     "./source",
     "./source/forced_crate/action_processor_incoming_outcoming",
+    "./source/forced_crate/auditor",
     "./source/forced_crate/build_script_constant",
     "./source/forced_crate/common_precedent",
     "./source/forced_crate/entity",
@@ -18,6 +19,7 @@ members = [
 default-members = [
     "./source",
     "./source/forced_crate/action_processor_incoming_outcoming",
+    "./source/forced_crate/auditor",
     "./source/forced_crate/build_script_constant",
     "./source/forced_crate/common_precedent",
     "./source/forced_crate/entity",

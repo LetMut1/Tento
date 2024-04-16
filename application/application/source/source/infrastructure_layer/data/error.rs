@@ -1,6 +1,6 @@
-pub use error::auditor::BacktracePart;
-pub use error::auditor::Backtrace;
-pub use error::error::Error;
-pub use error::error::Other;
-pub use error::error::Runtime;
-pub use error::auditor::Auditor;
+pub use auditor::BacktracePart;
+pub use auditor::Backtrace;
+pub use error::Error;
+pub use error::Other;
+pub use error::Runtime;
+pub use auditor::Auditor;

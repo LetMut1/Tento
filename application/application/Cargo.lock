@@ -104,6 +104,7 @@ name = "application"
 version = "0.1.0"
 dependencies = [
  "action_processor_incoming_outcoming",
+ "auditor",
  "base64 0.13.1",
  "bb8",
  "bb8-postgres",
@@ -169,6 +170,13 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn",
+]
+
+[[package]]
+name = "auditor"
+version = "0.1.0"
+dependencies = [
+ "error",
 ]
 
 [[package]]
@@ -621,6 +629,7 @@ dependencies = [
 name = "environment_configuration"
 version = "0.1.0"
 dependencies = [
+ "auditor",
  "error",
  "serde",
  "toml",
@@ -1087,6 +1096,7 @@ checksum = "2dffe52ecf27772e601905b7522cb4ef790d2cc203488bbd0e2fe85fcb74566d"
 name = "message_pack_serializer"
 version = "0.1.0"
 dependencies = [
+ "auditor",
  "error",
  "rmp-serde",
  "serde",

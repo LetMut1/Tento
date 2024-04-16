@@ -1,4 +1,4 @@
-use super::error::Error;
+use error::Error;
 use std::error::Error as StdError;
 use std::fmt::Debug;
 use std::fmt::Display;

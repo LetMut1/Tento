@@ -18,10 +18,11 @@ crate-type = ["lib"]
 required-features = []
 
 [dependencies]
+auditor = { path = "./../auditor", package = "auditor", version = "0.1.0", default-features = true, features = [], optional = false }
 error = { path = "./../error", package = "error", version = "0.1.0", default-features = true, features = [], optional = false }
-void = { path = "./../void", package = "void", version = "0.1.0", default-features = true, features = [], optional = false }
 serde = { package = "serde", version = "1.0.188", default-features = true, features = ["derive"], optional = false }
 toml = { package = "toml", version = "0.7.4", default-features = true, features = [], optional = false }
+void = { path = "./../void", package = "void", version = "0.1.0", default-features = true, features = [], optional = false }
 
 [features]
 default = []

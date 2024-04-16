@@ -24,6 +24,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "auditor"
+version = "0.1.0"
+dependencies = [
+ "error",
+]
+
+[[package]]
 name = "autocfg"
 version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -247,6 +254,7 @@ version = "0.1.0"
 name = "message_pack_serializer"
 version = "0.1.0"
 dependencies = [
+ "auditor",
  "error",
  "rmp-serde",
  "serde",

@@ -16,12 +16,12 @@ use super::environment_configuration::TcpKeepalive;
 use super::environment_configuration::Tls;
 use super::environment_configuration::TokioRuntime;
 use super::sealed::String_;
-use error::auditor::BacktracePart;
-use error::error::Error;
-use error::error::Other;
-use error::error::Runtime;
+use auditor::BacktracePart;
+use error::Error;
+use error::Other;
+use error::Runtime;
 use std::fs::read_to_string;
-use error::auditor::Auditor;
+use auditor::Auditor;
 use std::path::Path;
 use toml::from_str;
 

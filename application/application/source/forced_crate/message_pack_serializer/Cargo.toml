@@ -18,6 +18,7 @@ crate-type = ["lib"]
 required-features = []
 
 [dependencies]
+auditor = { path = "./../auditor", package = "auditor", version = "0.1.0", default-features = true, features = [], optional = false }
 error = { path = "./../error", package = "error", version = "0.1.0", default-features = true, features = [], optional = false }
 rmp_serde = { package = "rmp-serde", version = "0.15.5", default-features = true, features = [], optional = false }
 serde = { package = "serde", version = "1.0.188", default-features = true, features = ["derive"], optional = false }
