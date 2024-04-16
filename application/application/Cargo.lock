@@ -115,7 +115,7 @@ dependencies = [
  "const_format",
  "entity",
  "environment_configuration",
- "error_auditor",
+ "error",
  "formatter",
  "hmac",
  "http",
@@ -621,7 +621,7 @@ dependencies = [
 name = "environment_configuration"
 version = "0.1.0"
 dependencies = [
- "error_auditor",
+ "error",
  "serde",
  "toml",
  "void",
@@ -655,11 +655,8 @@ dependencies = [
 ]
 
 [[package]]
-name = "error_auditor"
+name = "error"
 version = "0.1.0"
-dependencies = [
- "formatter",
-]
 
 [[package]]
 name = "fallible-iterator"
@@ -1090,7 +1087,7 @@ checksum = "2dffe52ecf27772e601905b7522cb4ef790d2cc203488bbd0e2fe85fcb74566d"
 name = "message_pack_serializer"
 version = "0.1.0"
 dependencies = [
- "error_auditor",
+ "error",
  "rmp-serde",
  "serde",
  "void",

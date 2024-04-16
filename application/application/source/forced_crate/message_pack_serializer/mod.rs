@@ -81,11 +81,11 @@
     clippy::zero_sized_map_values
 )]
 
-use error_auditor::auditor::Auditor;
-use error_auditor::backtrace::BacktracePart;
-use error_auditor::error::Error;
-use error_auditor::error::Other;
-use error_auditor::error::Runtime;
+use error::auditor::Auditor;
+use error::backtrace::BacktracePart;
+use error::error::Error;
+use error::error::Other;
+use error::error::Runtime;
 use rmp_serde::to_vec;
 use rmp_serde::from_read_ref;
 use serde::Deserialize;

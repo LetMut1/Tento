@@ -160,11 +160,8 @@ dependencies = [
 ]
 
 [[package]]
-name = "error_auditor"
+name = "error"
 version = "0.1.0"
-dependencies = [
- "formatter",
-]
 
 [[package]]
 name = "fastrand"
@@ -250,7 +247,7 @@ version = "0.1.0"
 name = "message_pack_serializer"
 version = "0.1.0"
 dependencies = [
- "error_auditor",
+ "error",
  "rmp-serde",
  "serde",
  "void",
