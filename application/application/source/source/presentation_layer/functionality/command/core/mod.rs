@@ -71,19 +71,20 @@
     clippy::zero_sized_map_values
 )]
 
-use std::error::Error;
+use std::error::Error as StdError;
 use application::application_layer::functionality::command_processor::CommandProcessor;
 use application::application_layer::functionality::command_processor::run_server::RunServer;
 use application::infrastructure_layer::functionality::service::formatter::Formatter;
 use application::application_layer::functionality::command_processor::create_fixtures::CreateFixtures;
-use application::infrastructure_layer::data::error_auditor::ErrorAuditor;
+use application::infrastructure_layer::data::error_auditor::Error;
+use application::infrastructure_layer::data::error_auditor::Auditor;
 use clap::command;
 use clap::Command;
 
 const RUN_SERVER: &'static str = "run_server";
 const CREATE_FIXTURES: &'static str = "create_fixtures";
 
-fn main() -> Result<(), Box<dyn Error + 'static>> {
+fn main() -> Result<(), Box<dyn StdError + 'static>> {
     if let Err(error) = process() {
         println!("{}", &error);
 
@@ -93,7 +94,7 @@ fn main() -> Result<(), Box<dyn Error + 'static>> {
     return Ok(());
 }
 
-fn process() -> Result<(), Box<dyn Error + 'static>> {
+fn process() -> Result<(), Box<dyn StdError + 'static>> {
     let arg_matches = command!()
         .arg_required_else_help(true)
         .subcommand_required(true)
