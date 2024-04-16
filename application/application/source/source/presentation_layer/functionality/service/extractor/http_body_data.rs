@@ -1,17 +1,17 @@
 use http::request::Parts;
 use hyper::Body;
 use matchit::Params;
-use crate::infrastructure_layer::data::error_auditor::BacktracePart;
-use crate::infrastructure_layer::data::error_auditor::Auditor;
+use crate::infrastructure_layer::data::error::BacktracePart;
+use crate::infrastructure_layer::data::error::Auditor;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::functionality::service::serializer::Serialize;
 use crate::infrastructure_layer::functionality::service::serializer::Serializer;
 use serde::Deserialize;
 use super::Extractor;
 use hyper::body::to_bytes;
-use crate::infrastructure_layer::data::error_auditor::Error;
-use crate::infrastructure_layer::data::error_auditor::Other;
-use crate::infrastructure_layer::data::error_auditor::Runtime;
+use crate::infrastructure_layer::data::error::Error;
+use crate::infrastructure_layer::data::error::Other;
+use crate::infrastructure_layer::data::error::Runtime;
 use bytes::Buf;
 
 pub use crate::infrastructure_layer::data::control_type::HttpBodyData;

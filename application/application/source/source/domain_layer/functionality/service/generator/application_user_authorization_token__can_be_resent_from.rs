@@ -1,10 +1,10 @@
 use super::Generator;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_CanBeResentFrom;
-use crate::infrastructure_layer::data::error_auditor::BacktracePart;
-use crate::infrastructure_layer::data::error_auditor::Auditor;
+use crate::infrastructure_layer::data::error::BacktracePart;
+use crate::infrastructure_layer::data::error::Auditor;
 use crate::infrastructure_layer::functionality::service::resolver::date_time::DateTime;
 use crate::infrastructure_layer::functionality::service::resolver::Resolver;
-use crate::infrastructure_layer::data::error_auditor::Error;
+use crate::infrastructure_layer::data::error::Error;
 
 impl Generator<ApplicationUserAuthorizationToken_CanBeResentFrom> {
     pub fn generate() -> Result<ApplicationUserAuthorizationToken_CanBeResentFrom, Auditor<Error>> {

@@ -2,15 +2,15 @@ use super::FormResolver;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
 use crate::domain_layer::data::entity::application_user_access_refresh_token_encrypted::ApplicationUserAccessRefreshTokenEncrypted;
 use crate::infrastructure_layer::data::environment_configuration::ENVIRONMENT_CONFIGURATION;
-use crate::infrastructure_layer::data::error_auditor::BacktracePart;
-use crate::infrastructure_layer::data::error_auditor::Auditor;
+use crate::infrastructure_layer::data::error::BacktracePart;
+use crate::infrastructure_layer::data::error::Auditor;
 use crate::infrastructure_layer::functionality::service::encoder::base64::Base64;
 use crate::infrastructure_layer::functionality::service::encoder::Encoder;
 use crate::infrastructure_layer::functionality::service::encoder::hmac::Hmac_Sha3_512;
 use crate::infrastructure_layer::functionality::service::serializer::message_pack::MessagePack;
 use crate::infrastructure_layer::functionality::service::serializer::Serialize;
 use crate::infrastructure_layer::functionality::service::serializer::Serializer;
-use crate::infrastructure_layer::data::error_auditor::Error;
+use crate::infrastructure_layer::data::error::Error;
 
 impl FormResolver<ApplicationUserAccessRefreshToken<'_>> {
     pub fn to_encrypted<'a>(application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>) -> Result<ApplicationUserAccessRefreshTokenEncrypted, Auditor<Error>> {

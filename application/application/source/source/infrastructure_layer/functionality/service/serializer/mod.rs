@@ -3,11 +3,11 @@ pub mod message_pack;
 #[cfg(feature = "manual_testing")]
 pub mod json;
 
-use crate::infrastructure_layer::data::error_auditor::Auditor;
+use crate::infrastructure_layer::data::error::Auditor;
 use serde::Deserialize;
 use serde::Serialize as SerdeSerialize;
 use std::marker::PhantomData;
-use crate::infrastructure_layer::data::error_auditor::Error;
+use crate::infrastructure_layer::data::error::Error;
 
 pub struct Serializer<T> {
     _format: PhantomData<T>,

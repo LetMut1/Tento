@@ -76,8 +76,8 @@ use application::application_layer::functionality::command_processor::CommandPro
 use application::application_layer::functionality::command_processor::run_server::RunServer;
 use application::infrastructure_layer::functionality::service::formatter::Formatter;
 use application::application_layer::functionality::command_processor::create_fixtures::CreateFixtures;
-use application::infrastructure_layer::data::error_auditor::Error;
-use application::infrastructure_layer::data::error_auditor::Auditor;
+use application::infrastructure_layer::data::error::Error;
+use application::infrastructure_layer::data::error::Auditor;
 use clap::command;
 use clap::Command;
 

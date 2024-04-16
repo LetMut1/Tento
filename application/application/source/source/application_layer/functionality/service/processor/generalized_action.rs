@@ -1,5 +1,5 @@
 use crate::application_layer::data::unified_report::UnifiedReport;
-use crate::infrastructure_layer::data::error_auditor::Auditor;
+use crate::infrastructure_layer::data::error::Auditor;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::functionality::service::creator::Creator;
@@ -21,7 +21,7 @@ use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
 use http::request::Parts;
-use crate::infrastructure_layer::data::error_auditor::Error;
+use crate::infrastructure_layer::data::error::Error;
 use hyper::Body;
 use super::Processor;
 use matchit::Params;

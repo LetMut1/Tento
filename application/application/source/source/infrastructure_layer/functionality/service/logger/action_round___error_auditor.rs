@@ -2,8 +2,8 @@ use crate::infrastructure_layer::functionality::service::formatter::Formatter;
 use tracing::error;
 use super::Logger;
 
-pub use crate::infrastructure_layer::data::error_auditor::Auditor;
-pub use crate::infrastructure_layer::data::error_auditor::Error;
+pub use crate::infrastructure_layer::data::error::Auditor;
+pub use crate::infrastructure_layer::data::error::Error;
 pub use crate::infrastructure_layer::data::control_type::ActionRound;
 
 impl Logger<(ActionRound, Auditor<Error>)> {

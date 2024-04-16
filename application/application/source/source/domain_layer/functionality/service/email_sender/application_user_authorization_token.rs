@@ -3,11 +3,11 @@ use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_Value;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
-use crate::infrastructure_layer::data::error_auditor::BacktracePart;
-use crate::infrastructure_layer::data::error_auditor::Auditor;
+use crate::infrastructure_layer::data::error::BacktracePart;
+use crate::infrastructure_layer::data::error::Auditor;
 use crate::infrastructure_layer::functionality::service::sender::email::Email;
 use crate::infrastructure_layer::functionality::service::sender::Sender;
-use crate::infrastructure_layer::data::error_auditor::Error;
+use crate::infrastructure_layer::data::error::Error;
 
 impl EmailSender<ApplicationUserAuthorizationToken<'_>> {
     pub fn send<'a>(

@@ -9,16 +9,16 @@ use crate::domain_layer::data::entity::channel::Channel_Id;
 use crate::domain_layer::data::entity::channel::Channel_LinkedName;
 use crate::domain_layer::data::entity::channel::Channel_Name;
 use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier;
-use crate::infrastructure_layer::data::error_auditor::BacktracePart;
-use crate::infrastructure_layer::data::error_auditor::Error;
-use crate::infrastructure_layer::data::error_auditor::Auditor;
-use crate::infrastructure_layer::data::error_auditor::Runtime;
+use crate::infrastructure_layer::data::error::BacktracePart;
+use crate::infrastructure_layer::data::error::Error;
+use crate::infrastructure_layer::data::error::Auditor;
+use crate::infrastructure_layer::data::error::Runtime;
 use super::channel::Channel1;
 use crate::infrastructure_layer::functionality::service::counter::Counter;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 pub use action_processor_incoming_outcoming::Common1;
 use tokio_postgres::types::Type;
-use crate::infrastructure_layer::data::error_auditor::Other;
+use crate::infrastructure_layer::data::error::Other;
 use tokio_postgres::Client as Connection;
 
 impl PostgresqlRepository<Common1> {

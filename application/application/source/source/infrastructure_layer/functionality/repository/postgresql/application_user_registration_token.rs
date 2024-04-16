@@ -18,13 +18,13 @@ use crate::domain_layer::data::entity::application_user_registration_token::Appl
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_IsApproved;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_Value;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_WrongEnterTriesQuantity;
-use crate::infrastructure_layer::data::error_auditor::BacktracePart;
-use crate::infrastructure_layer::data::error_auditor::Error;
-use crate::infrastructure_layer::data::error_auditor::Auditor;
-use crate::infrastructure_layer::data::error_auditor::Runtime;
+use crate::infrastructure_layer::data::error::BacktracePart;
+use crate::infrastructure_layer::data::error::Error;
+use crate::infrastructure_layer::data::error::Auditor;
+use crate::infrastructure_layer::data::error::Runtime;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 use std::borrow::Cow;
-use crate::infrastructure_layer::data::error_auditor::Other;
+use crate::infrastructure_layer::data::error::Other;
 use tokio_postgres::types::Type;
 use tokio_postgres::Client as Connection;
 

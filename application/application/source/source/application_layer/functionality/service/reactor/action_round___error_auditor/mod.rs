@@ -2,12 +2,12 @@ use crate::infrastructure_layer::functionality::service::creator::response::Resp
 use http::request::Parts;
 use crate::infrastructure_layer::functionality::service::logger::Logger;
 use super::Reactor;
-use crate::infrastructure_layer::data::error_auditor::Error;
+use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::control_type::TokioNonBlockingTask;
 use crate::infrastructure_layer::functionality::service::spawner::Spawner;
 
 pub use crate::infrastructure_layer::data::control_type::ActionRound;
-pub use crate::infrastructure_layer::data::error_auditor::Auditor;
+pub use crate::infrastructure_layer::data::error::Auditor;
 
 impl Reactor<(ActionRound, Auditor<Error>)> {
     pub fn react<'a>(

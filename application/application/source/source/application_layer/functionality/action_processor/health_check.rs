@@ -1,6 +1,6 @@
 use crate::application_layer::data::unified_report::UnifiedReport;
-use crate::infrastructure_layer::data::error_auditor::Auditor;
-use crate::infrastructure_layer::data::error_auditor::Error;
+use crate::infrastructure_layer::data::error::Auditor;
+use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::data::void::Void;
 use bb8::Pool;

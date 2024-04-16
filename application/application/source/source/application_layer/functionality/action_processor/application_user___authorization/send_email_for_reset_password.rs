@@ -9,11 +9,11 @@ use crate::domain_layer::data::entity::application_user_reset_password_token::Ap
 use crate::domain_layer::functionality::service::email_sender::EmailSender;
 use crate::domain_layer::functionality::service::generator::Generator;
 use crate::domain_layer::functionality::service::validator::Validator;
-use crate::infrastructure_layer::data::error_auditor::BacktracePart;
-use crate::infrastructure_layer::data::error_auditor::Error;
-use crate::infrastructure_layer::data::error_auditor::Auditor;
-use crate::infrastructure_layer::data::error_auditor::Other;
-use crate::infrastructure_layer::data::error_auditor::Runtime;
+use crate::infrastructure_layer::data::error::BacktracePart;
+use crate::infrastructure_layer::data::error::Error;
+use crate::infrastructure_layer::data::error::Auditor;
+use crate::infrastructure_layer::data::error::Other;
+use crate::infrastructure_layer::data::error::Runtime;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By3;

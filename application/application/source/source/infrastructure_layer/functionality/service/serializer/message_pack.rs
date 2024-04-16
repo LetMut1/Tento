@@ -1,10 +1,10 @@
 use super::Serialize;
 use super::Serializer;
-use crate::infrastructure_layer::data::error_auditor::BacktracePart;
-use crate::infrastructure_layer::data::error_auditor::Auditor;
-use crate::infrastructure_layer::data::error_auditor::Runtime;
-use crate::infrastructure_layer::data::error_auditor::Error;
-use crate::infrastructure_layer::data::error_auditor::Other;
+use crate::infrastructure_layer::data::error::BacktracePart;
+use crate::infrastructure_layer::data::error::Auditor;
+use crate::infrastructure_layer::data::error::Runtime;
+use crate::infrastructure_layer::data::error::Error;
+use crate::infrastructure_layer::data::error::Other;
 use message_pack_serializer::Serializer as Serializer_;
 use serde::Deserialize;
 use crate::infrastructure_layer::functionality::service::formatter::Format_;

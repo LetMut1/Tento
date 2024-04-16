@@ -1,11 +1,11 @@
-use crate::infrastructure_layer::data::error_auditor::Auditor;
+use crate::infrastructure_layer::data::error::Auditor;
 use std::future::Future;
 use std::marker::Send;
 use tokio::task::JoinHandle;
 use tokio::spawn;
 use crate::infrastructure_layer::functionality::service::logger::Logger;
 use super::Spawner;
-use crate::infrastructure_layer::data::error_auditor::Error;
+use crate::infrastructure_layer::data::error::Error;
 
 pub use crate::infrastructure_layer::data::control_type::TokioNonBlockingTask;
 

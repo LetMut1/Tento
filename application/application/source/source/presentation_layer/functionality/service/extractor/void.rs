@@ -1,10 +1,10 @@
 use http::request::Parts;
 use hyper::Body;
 use matchit::Params;
-use crate::infrastructure_layer::data::error_auditor::Auditor;
+use crate::infrastructure_layer::data::error::Auditor;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use super::Extractor;
-use crate::infrastructure_layer::data::error_auditor::Error;
+use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::void::Void;
 
 pub use crate::infrastructure_layer::data::control_type::HttpBodyData;
