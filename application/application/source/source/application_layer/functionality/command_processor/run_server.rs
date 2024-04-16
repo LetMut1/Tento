@@ -4,11 +4,10 @@ use crate::infrastructure_layer::data::environment_configuration::Environment;
 use crate::infrastructure_layer::data::environment_configuration::ENVIRONMENT_CONFIGURATION;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::data::error_auditor::Auditor;
 use crate::infrastructure_layer::data::error_auditor::Other;
-use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
-use crate::infrastructure_layer::data::void::ErrorVoid;
+use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::service::creator::Creator;
 use crate::infrastructure_layer::functionality::service::creator::postgresql_connection_pool::PostgresqlConnectionPoolNoTls;
 use crate::infrastructure_layer::functionality::service::creator::redis_connection_pool::RedisConnectonPool;
@@ -78,7 +77,7 @@ use tracing_appender::non_blocking::WorkerGuard;
 pub use crate::infrastructure_layer::data::control_type::RunServer;
 
 impl CommandProcessor<RunServer> {
-    pub fn process() -> Result<(), ErrorAuditor> {
+    pub fn process() -> Result<(), Auditor<Error>> {
         let _worker_guard = match Self::configure_logger() {
             Ok(worker_guard_) => worker_guard_,
             Err(mut error) => {
@@ -86,7 +85,6 @@ impl CommandProcessor<RunServer> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 );
 
@@ -99,7 +97,6 @@ impl CommandProcessor<RunServer> {
                 BacktracePart::new(
                     line!(),
                     file!(),
-                    None,
                 ),
             );
 
@@ -109,7 +106,7 @@ impl CommandProcessor<RunServer> {
         return Ok(());
     }
 
-    fn configure_logger() -> Result<WorkerGuard, ErrorAuditor> {
+    fn configure_logger() -> Result<WorkerGuard, Auditor<Error>> {
         let rolling_file_appender = RollingFileAppender::new(
             Rotation::DAILY,
             ENVIRONMENT_CONFIGURATION.logging.directory_path.0,
@@ -137,7 +134,7 @@ impl CommandProcessor<RunServer> {
 
         if let Err(error) = set_global_default(fmt_subscriber) {
             return Err(
-                ErrorAuditor::new(
+                Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
                             other: Other::new(error),
@@ -146,7 +143,6 @@ impl CommandProcessor<RunServer> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 ),
             );
@@ -155,20 +151,19 @@ impl CommandProcessor<RunServer> {
         return Ok(worker_guard);
     }
 
-    fn run_runtime() -> Result<(), ErrorAuditor> {
+    fn run_runtime() -> Result<(), Auditor<Error>> {
         if ENVIRONMENT_CONFIGURATION.tokio_runtime.maximum_blocking_threads_quantity == 0
             || ENVIRONMENT_CONFIGURATION.tokio_runtime.worker_threads_quantity == 0
             || ENVIRONMENT_CONFIGURATION.tokio_runtime.worker_thread_stack_size < (1024 * 1024)
         {
             return Err(
-                ErrorAuditor::new(
+                Auditor::<Error>::new(
                     Error::Logic {
                         message: "Invalid Tokio runtime configuration.",
                     },
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 ),
             );
@@ -184,7 +179,7 @@ impl CommandProcessor<RunServer> {
             Ok(runtime_) => runtime_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -193,7 +188,6 @@ impl CommandProcessor<RunServer> {
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -205,7 +199,6 @@ impl CommandProcessor<RunServer> {
                 BacktracePart::new(
                     line!(),
                     file!(),
-                    None,
                 ),
             );
 
@@ -215,7 +208,7 @@ impl CommandProcessor<RunServer> {
         return Ok(());
     }
 
-    async fn run_server() -> Result<(), ErrorAuditor> {
+    async fn run_server() -> Result<(), Auditor<Error>> {
         #[derive(Clone)]
         enum PostgresqlConnectionPoolAggregator {
             LocalDevelopment {
@@ -231,7 +224,6 @@ impl CommandProcessor<RunServer> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 );
 
@@ -243,7 +235,7 @@ impl CommandProcessor<RunServer> {
             Ok(application_http_socket_address_registry_) => application_http_socket_address_registry_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -252,7 +244,6 @@ impl CommandProcessor<RunServer> {
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -263,14 +254,13 @@ impl CommandProcessor<RunServer> {
             Some(application_http_socket_address_) => application_http_socket_address_,
             None => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Logic {
                             message: "Invalid socket address.",
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -281,7 +271,7 @@ impl CommandProcessor<RunServer> {
             Ok(builder_) => builder_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -290,7 +280,6 @@ impl CommandProcessor<RunServer> {
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -349,18 +338,15 @@ impl CommandProcessor<RunServer> {
             Ok(database_1_postgresql_configuration_) => database_1_postgresql_configuration_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -371,18 +357,15 @@ impl CommandProcessor<RunServer> {
             Ok(database_2_postgresql_configuration_) => database_2_postgresql_configuration_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -393,18 +376,15 @@ impl CommandProcessor<RunServer> {
             Ok(database_1_redis_connection_info_) => database_1_redis_connection_info_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Redis {
-                                    redis_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -428,7 +408,6 @@ impl CommandProcessor<RunServer> {
                             BacktracePart::new(
                                 line!(),
                                 file!(),
-                                None,
                             ),
                         );
 
@@ -448,7 +427,6 @@ impl CommandProcessor<RunServer> {
                             BacktracePart::new(
                                 line!(),
                                 file!(),
-                                None,
                             ),
                         );
 
@@ -475,7 +453,6 @@ impl CommandProcessor<RunServer> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 );
 
@@ -522,14 +499,14 @@ impl CommandProcessor<RunServer> {
                                 )
                                 .await;
 
-                                Ok::<_, ErrorVoid>(response)
+                                Ok::<_, Void>(response)
                             };
 
                             return future_;
                         },
                     );
 
-                    Ok::<_, ErrorVoid>(service_fn)
+                    Ok::<_, Void>(service_fn)
                 };
 
                 return future;
@@ -543,7 +520,6 @@ impl CommandProcessor<RunServer> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 );
 
@@ -558,7 +534,6 @@ impl CommandProcessor<RunServer> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 );
 
@@ -579,7 +554,7 @@ impl CommandProcessor<RunServer> {
 
         if let Err(error) = server_builder.serve(service).with_graceful_shutdown(graceful_shutdown_signal_future).await {
             return Err(
-                ErrorAuditor::new(
+                Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
                             other: Other::new(error),
@@ -588,7 +563,6 @@ impl CommandProcessor<RunServer> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 ),
             );
@@ -597,7 +571,7 @@ impl CommandProcessor<RunServer> {
         return Ok(());
     }
 
-    fn create_router() -> Result<Router<ActionRoute_>, ErrorAuditor> {
+    fn create_router() -> Result<Router<ActionRoute_>, Auditor<Error>> {
         let mut router = Router::new();
 
         if let Err(error) = router.insert(
@@ -607,7 +581,7 @@ impl CommandProcessor<RunServer> {
             },
         ) {
             return Err(
-                ErrorAuditor::new(
+                Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
                             other: Other::new(error),
@@ -616,7 +590,6 @@ impl CommandProcessor<RunServer> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 ),
             );
@@ -629,7 +602,7 @@ impl CommandProcessor<RunServer> {
             },
         ) {
             return Err(
-                ErrorAuditor::new(
+                Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
                             other: Other::new(error),
@@ -638,7 +611,6 @@ impl CommandProcessor<RunServer> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 ),
             );
@@ -651,7 +623,7 @@ impl CommandProcessor<RunServer> {
             },
         ) {
             return Err(
-                ErrorAuditor::new(
+                Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
                             other: Other::new(error),
@@ -660,7 +632,6 @@ impl CommandProcessor<RunServer> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 ),
             );
@@ -673,7 +644,7 @@ impl CommandProcessor<RunServer> {
             },
         ) {
             return Err(
-                ErrorAuditor::new(
+                Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
                             other: Other::new(error),
@@ -682,7 +653,6 @@ impl CommandProcessor<RunServer> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 ),
             );
@@ -695,7 +665,7 @@ impl CommandProcessor<RunServer> {
             },
         ) {
             return Err(
-                ErrorAuditor::new(
+                Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
                             other: Other::new(error),
@@ -704,7 +674,6 @@ impl CommandProcessor<RunServer> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 ),
             );
@@ -717,7 +686,7 @@ impl CommandProcessor<RunServer> {
             },
         ) {
             return Err(
-                ErrorAuditor::new(
+                Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
                             other: Other::new(error),
@@ -726,7 +695,6 @@ impl CommandProcessor<RunServer> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 ),
             );
@@ -739,7 +707,7 @@ impl CommandProcessor<RunServer> {
             },
         ) {
             return Err(
-                ErrorAuditor::new(
+                Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
                             other: Other::new(error),
@@ -748,7 +716,6 @@ impl CommandProcessor<RunServer> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 ),
             );
@@ -761,7 +728,7 @@ impl CommandProcessor<RunServer> {
             },
         ) {
             return Err(
-                ErrorAuditor::new(
+                Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
                             other: Other::new(error),
@@ -770,7 +737,6 @@ impl CommandProcessor<RunServer> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 ),
             );
@@ -783,7 +749,7 @@ impl CommandProcessor<RunServer> {
             },
         ) {
             return Err(
-                ErrorAuditor::new(
+                Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
                             other: Other::new(error),
@@ -792,7 +758,6 @@ impl CommandProcessor<RunServer> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 ),
             );
@@ -805,7 +770,7 @@ impl CommandProcessor<RunServer> {
             },
         ) {
             return Err(
-                ErrorAuditor::new(
+                Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
                             other: Other::new(error),
@@ -814,7 +779,6 @@ impl CommandProcessor<RunServer> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 ),
             );
@@ -827,7 +791,7 @@ impl CommandProcessor<RunServer> {
             },
         ) {
             return Err(
-                ErrorAuditor::new(
+                Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
                             other: Other::new(error),
@@ -836,7 +800,6 @@ impl CommandProcessor<RunServer> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 ),
             );
@@ -849,7 +812,7 @@ impl CommandProcessor<RunServer> {
             },
         ) {
             return Err(
-                ErrorAuditor::new(
+                Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
                             other: Other::new(error),
@@ -858,7 +821,6 @@ impl CommandProcessor<RunServer> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 ),
             );
@@ -871,7 +833,7 @@ impl CommandProcessor<RunServer> {
             },
         ) {
             return Err(
-                ErrorAuditor::new(
+                Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
                             other: Other::new(error),
@@ -880,7 +842,6 @@ impl CommandProcessor<RunServer> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 ),
             );
@@ -893,7 +854,7 @@ impl CommandProcessor<RunServer> {
             },
         ) {
             return Err(
-                ErrorAuditor::new(
+                Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
                             other: Other::new(error),
@@ -902,7 +863,6 @@ impl CommandProcessor<RunServer> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 ),
             );
@@ -915,7 +875,7 @@ impl CommandProcessor<RunServer> {
             },
         ) {
             return Err(
-                ErrorAuditor::new(
+                Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
                             other: Other::new(error),
@@ -924,7 +884,6 @@ impl CommandProcessor<RunServer> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 ),
             );
@@ -937,7 +896,7 @@ impl CommandProcessor<RunServer> {
             },
         ) {
             return Err(
-                ErrorAuditor::new(
+                Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
                             other: Other::new(error),
@@ -946,7 +905,6 @@ impl CommandProcessor<RunServer> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 ),
             );
@@ -959,7 +917,7 @@ impl CommandProcessor<RunServer> {
             },
         ) {
             return Err(
-                ErrorAuditor::new(
+                Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
                             other: Other::new(error),
@@ -968,7 +926,6 @@ impl CommandProcessor<RunServer> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 ),
             );
@@ -981,7 +938,7 @@ impl CommandProcessor<RunServer> {
             },
         ) {
             return Err(
-                ErrorAuditor::new(
+                Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
                             other: Other::new(error),
@@ -990,7 +947,6 @@ impl CommandProcessor<RunServer> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 ),
             );
@@ -1003,7 +959,7 @@ impl CommandProcessor<RunServer> {
             },
         ) {
             return Err(
-                ErrorAuditor::new(
+                Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
                             other: Other::new(error),
@@ -1012,7 +968,6 @@ impl CommandProcessor<RunServer> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 ),
             );
@@ -1025,7 +980,7 @@ impl CommandProcessor<RunServer> {
             },
         ) {
             return Err(
-                ErrorAuditor::new(
+                Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
                             other: Other::new(error),
@@ -1034,7 +989,6 @@ impl CommandProcessor<RunServer> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 ),
             );
@@ -1047,7 +1001,7 @@ impl CommandProcessor<RunServer> {
             },
         ) {
             return Err(
-                ErrorAuditor::new(
+                Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
                             other: Other::new(error),
@@ -1056,7 +1010,6 @@ impl CommandProcessor<RunServer> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 ),
             );
@@ -1071,7 +1024,7 @@ impl CommandProcessor<RunServer> {
                 },
             ) {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -1080,7 +1033,6 @@ impl CommandProcessor<RunServer> {
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -1093,7 +1045,7 @@ impl CommandProcessor<RunServer> {
                 },
             ) {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -1102,7 +1054,6 @@ impl CommandProcessor<RunServer> {
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -1115,7 +1066,7 @@ impl CommandProcessor<RunServer> {
                 },
             ) {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -1124,7 +1075,6 @@ impl CommandProcessor<RunServer> {
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -1137,7 +1087,7 @@ impl CommandProcessor<RunServer> {
                 },
             ) {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -1146,7 +1096,6 @@ impl CommandProcessor<RunServer> {
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -1159,7 +1108,7 @@ impl CommandProcessor<RunServer> {
                 },
             ) {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -1168,7 +1117,6 @@ impl CommandProcessor<RunServer> {
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -1181,7 +1129,7 @@ impl CommandProcessor<RunServer> {
                 },
             ) {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -1190,7 +1138,6 @@ impl CommandProcessor<RunServer> {
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -1203,7 +1150,7 @@ impl CommandProcessor<RunServer> {
                 },
             ) {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -1212,7 +1159,6 @@ impl CommandProcessor<RunServer> {
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -1225,7 +1171,7 @@ impl CommandProcessor<RunServer> {
                 },
             ) {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -1234,7 +1180,6 @@ impl CommandProcessor<RunServer> {
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -1247,7 +1192,7 @@ impl CommandProcessor<RunServer> {
                 },
             ) {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -1256,7 +1201,6 @@ impl CommandProcessor<RunServer> {
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -1269,7 +1213,7 @@ impl CommandProcessor<RunServer> {
                 },
             ) {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -1278,7 +1222,6 @@ impl CommandProcessor<RunServer> {
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -1291,7 +1234,7 @@ impl CommandProcessor<RunServer> {
                 },
             ) {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -1300,7 +1243,6 @@ impl CommandProcessor<RunServer> {
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -1313,7 +1255,7 @@ impl CommandProcessor<RunServer> {
                 },
             ) {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -1322,7 +1264,6 @@ impl CommandProcessor<RunServer> {
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -1335,7 +1276,7 @@ impl CommandProcessor<RunServer> {
                 },
             ) {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -1344,7 +1285,6 @@ impl CommandProcessor<RunServer> {
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -1357,7 +1297,7 @@ impl CommandProcessor<RunServer> {
                 },
             ) {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -1366,7 +1306,6 @@ impl CommandProcessor<RunServer> {
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -1379,7 +1318,7 @@ impl CommandProcessor<RunServer> {
                 },
             ) {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -1388,7 +1327,6 @@ impl CommandProcessor<RunServer> {
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -1401,7 +1339,7 @@ impl CommandProcessor<RunServer> {
                 },
             ) {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -1410,7 +1348,6 @@ impl CommandProcessor<RunServer> {
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -1423,7 +1360,7 @@ impl CommandProcessor<RunServer> {
                 },
             ) {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -1432,7 +1369,6 @@ impl CommandProcessor<RunServer> {
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -1445,7 +1381,7 @@ impl CommandProcessor<RunServer> {
                 },
             ) {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -1454,7 +1390,6 @@ impl CommandProcessor<RunServer> {
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -1467,7 +1402,7 @@ impl CommandProcessor<RunServer> {
                 },
             ) {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -1476,7 +1411,6 @@ impl CommandProcessor<RunServer> {
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -1489,7 +1423,7 @@ impl CommandProcessor<RunServer> {
                 },
             ) {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -1498,7 +1432,6 @@ impl CommandProcessor<RunServer> {
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -1511,7 +1444,7 @@ impl CommandProcessor<RunServer> {
                 },
             ) {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -1520,7 +1453,6 @@ impl CommandProcessor<RunServer> {
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -2092,7 +2024,7 @@ impl CommandProcessor<RunServer> {
         return Action::<RouteNotFound>::run(&parts);
     }
 
-    fn create_signal(signal_kind: SignalKind) -> Result<impl Future<Output = ()>, ErrorAuditor> {
+    fn create_signal(signal_kind: SignalKind) -> Result<impl Future<Output = ()>, Auditor<Error>> {
         let signal = match signal(signal_kind) {
             Ok(mut signal) => {
                 async move {
@@ -2103,7 +2035,7 @@ impl CommandProcessor<RunServer> {
             }
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -2112,7 +2044,6 @@ impl CommandProcessor<RunServer> {
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );

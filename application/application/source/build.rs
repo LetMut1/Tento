@@ -140,7 +140,7 @@ impl Processor {
             Ok(environment_configuration_) => environment_configuration_,
             Err(error) => {
                 return Err(
-                    Formatter::prepare(&error).into()
+                    "Formatter::prepare(&error)".into()
                 );
             }
         };

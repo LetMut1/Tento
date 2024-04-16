@@ -4,7 +4,7 @@ use hmac::Mac;
 use hmac::digest::CtOutput;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::data::error_auditor::Auditor;
 use crate::infrastructure_layer::data::error_auditor::Other;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
 use sha3::Sha512;
@@ -15,7 +15,7 @@ impl Encoder<Hmac_Sha3_512> {
     pub fn encode<'a>(
         salt: &'a [u8],
         data: &'a [u8],
-    ) -> Result<CtOutput<Hmac_Sha3_512>, ErrorAuditor> {
+    ) -> Result<CtOutput<Hmac_Sha3_512>, Auditor<Error>> {
         let hmac = match Self::prepare_hmac(salt, data) {
             Ok(hmac_) => hmac_,
             Err(mut error) => {
@@ -23,7 +23,6 @@ impl Encoder<Hmac_Sha3_512> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 );
 
@@ -40,7 +39,7 @@ impl Encoder<Hmac_Sha3_512> {
         salt: &'a [u8],
         data: &'a [u8],
         encoded_data: &'a [u8],
-    ) -> Result<bool, ErrorAuditor> {
+    ) -> Result<bool, Auditor<Error>> {
         let hmac = match Self::prepare_hmac(salt, data) {
             Ok(hmac_) => hmac_,
             Err(mut error) => {
@@ -48,7 +47,6 @@ impl Encoder<Hmac_Sha3_512> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 );
 
@@ -66,12 +64,12 @@ impl Encoder<Hmac_Sha3_512> {
     fn prepare_hmac<'a>(
         salt: &'a [u8],
         data: &'a [u8],
-    ) -> Result<Hmac_Sha3_512, ErrorAuditor> {
+    ) -> Result<Hmac_Sha3_512, Auditor<Error>> {
         let mut hmac = match Hmac_Sha3_512::new_from_slice(salt) {
             Ok(hmac_) => hmac_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -80,7 +78,6 @@ impl Encoder<Hmac_Sha3_512> {
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );

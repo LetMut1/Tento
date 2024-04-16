@@ -6,11 +6,11 @@ use crate::domain_layer::data::entity::channel_inner_link::ChannelInnerLink;
 use crate::domain_layer::data::entity::channel_inner_link::ChannelInnerLink_CreatedAt;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::data::error_auditor::ResourceError;
+use crate::infrastructure_layer::data::error_auditor::Auditor;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 use tokio_postgres::types::Type;
+use crate::infrastructure_layer::data::error_auditor::Other;
 use tokio_postgres::Client as Connection;
 pub use action_processor_incoming_outcoming::ChannelInnerLink1;
 
@@ -18,7 +18,7 @@ impl PostgresqlRepository<ChannelInnerLink> {
     pub async fn create<'a>(
         database_1_connection: &'a Connection,
         insert_8: Insert8,
-    ) -> Result<ChannelInnerLink, ErrorAuditor> {
+    ) -> Result<ChannelInnerLink, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
@@ -54,18 +54,15 @@ impl PostgresqlRepository<ChannelInnerLink> {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -82,18 +79,15 @@ impl PostgresqlRepository<ChannelInnerLink> {
             Ok(row_registry_) => row_registry_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -104,18 +98,15 @@ impl PostgresqlRepository<ChannelInnerLink> {
             Ok(channel_inner_link_created_at_) => ChannelInnerLink_CreatedAt(channel_inner_link_created_at_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -135,7 +126,7 @@ impl PostgresqlRepository<ChannelInnerLink> {
         database_1_connection: &'a Connection,
         by_8: &'a By8,
         limit: i16,
-    ) -> Result<Vec<ChannelInnerLink1>, ErrorAuditor> {
+    ) -> Result<Vec<ChannelInnerLink1>, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
@@ -165,18 +156,15 @@ impl PostgresqlRepository<ChannelInnerLink> {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -193,18 +181,15 @@ impl PostgresqlRepository<ChannelInnerLink> {
             Ok(row_registry_) => row_registry_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -222,18 +207,15 @@ impl PostgresqlRepository<ChannelInnerLink> {
                 Ok(channel_inner_link_to_) => Channel_Id(channel_inner_link_to_),
                 Err(error) => {
                     return Err(
-                        ErrorAuditor::new(
+                        Auditor::<Error>::new(
                             Error::Runtime {
-                                runtime: Runtime::Resource {
-                                    resource: ResourceError::Postgresql {
-                                        postgresql_error: error,
-                                    },
+                                runtime: Runtime::Other {
+                                    other: Other::new(error),
                                 },
                             },
                             BacktracePart::new(
                                 line!(),
                                 file!(),
-                                None,
                             ),
                         ),
                     );

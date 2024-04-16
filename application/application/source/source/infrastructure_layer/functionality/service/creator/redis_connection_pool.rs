@@ -2,13 +2,13 @@ use super::Creator;
 use crate::infrastructure_layer::data::environment_configuration::Environment;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::data::error_auditor::ResourceError;
+use crate::infrastructure_layer::data::error_auditor::Auditor;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
 use bb8::Pool;
 use bb8_redis::RedisConnectionManager;
 use redis::ConnectionInfo;
 use std::clone::Clone;
+use crate::infrastructure_layer::data::error_auditor::Other;
 
 pub use crate::infrastructure_layer::data::control_type::RedisConnectonPool;
 
@@ -16,7 +16,7 @@ impl Creator<RedisConnectonPool> {
     pub async fn create<'a>(
         environment: &'a Environment,
         connection_info: &'a ConnectionInfo,
-    ) -> Result<Pool<RedisConnectionManager>, ErrorAuditor> {
+    ) -> Result<Pool<RedisConnectionManager>, Auditor<Error>> {
         let redis_connection_pool = match *environment {
             Environment::Production => {
                 todo!();
@@ -26,18 +26,15 @@ impl Creator<RedisConnectonPool> {
                     Ok(redis_connection_manager_) => redis_connection_manager_,
                     Err(error) => {
                         return Err(
-                            ErrorAuditor::new(
+                            Auditor::<Error>::new(
                                 Error::Runtime {
-                                    runtime: Runtime::Resource {
-                                        resource: ResourceError::Redis {
-                                            redis_error: error,
-                                        },
+                                    runtime: Runtime::Other {
+                                        other: Other::new(error),
                                     },
                                 },
                                 BacktracePart::new(
                                     line!(),
                                     file!(),
-                                    None,
                                 ),
                             ),
                         );
@@ -51,18 +48,15 @@ impl Creator<RedisConnectonPool> {
                     Ok(redis_connection_pool__) => redis_connection_pool__,
                     Err(error) => {
                         return Err(
-                            ErrorAuditor::new(
+                            Auditor::<Error>::new(
                                 Error::Runtime {
-                                    runtime: Runtime::Resource {
-                                        resource: ResourceError::Redis {
-                                            redis_error: error,
-                                        },
+                                    runtime: Runtime::Other {
+                                        other: Other::new(error),
                                     },
                                 },
                                 BacktracePart::new(
                                     line!(),
                                     file!(),
-                                    None,
                                 ),
                             ),
                         );

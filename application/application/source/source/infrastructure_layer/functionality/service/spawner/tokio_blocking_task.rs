@@ -1,22 +1,23 @@
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::data::error_auditor::Auditor;
 use std::marker::Send;
 use tokio::task::JoinHandle;
 use tokio::task::spawn_blocking;
 use crate::infrastructure_layer::functionality::service::logger::Logger;
 use super::Spawner;
+use crate::infrastructure_layer::data::error_auditor::Error;
 
 pub use crate::infrastructure_layer::data::control_type::TokioBlockingTask;
 
 impl Spawner<TokioBlockingTask> {
     pub fn spawn_into_background<F, T>(closure: F) -> ()
     where
-        F: FnOnce() -> Result<T, ErrorAuditor> + Send + 'static,
+        F: FnOnce() -> Result<T, Auditor<Error>> + Send + 'static,
         T: Send + 'static,
     {
         spawn_blocking(
             || -> _ {
                 if let Err(error) = closure() {
-                    Logger::<ErrorAuditor>::log(&error);
+                    Logger::<Auditor<Error>>::log(&error);
                 }
 
                 return ();

@@ -2,18 +2,18 @@ use super::Validator;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_Value;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::data::error_auditor::Auditor;
 use crate::infrastructure_layer::data::error_auditor::Other;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
 use regex::Regex;
 
 impl Validator<ApplicationUserAuthorizationToken_Value> {
-    pub fn is_valid<'a>(application_user_authorization_token_value: &'a ApplicationUserAuthorizationToken_Value) -> Result<bool, ErrorAuditor> {
+    pub fn is_valid<'a>(application_user_authorization_token_value: &'a ApplicationUserAuthorizationToken_Value) -> Result<bool, Auditor<Error>> {
         let regex = match Regex::new(ApplicationUserAuthorizationToken_Value::REGULAR_EXPRESSION) {
             Ok(regex_) => regex_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -22,7 +22,6 @@ impl Validator<ApplicationUserAuthorizationToken_Value> {
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );

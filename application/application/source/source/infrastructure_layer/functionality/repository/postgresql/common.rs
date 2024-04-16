@@ -11,14 +11,14 @@ use crate::domain_layer::data::entity::channel::Channel_Name;
 use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::data::error_auditor::ResourceError;
+use crate::infrastructure_layer::data::error_auditor::Auditor;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
 use super::channel::Channel1;
 use crate::infrastructure_layer::functionality::service::counter::Counter;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 pub use action_processor_incoming_outcoming::Common1;
 use tokio_postgres::types::Type;
+use crate::infrastructure_layer::data::error_auditor::Other;
 use tokio_postgres::Client as Connection;
 
 impl PostgresqlRepository<Common1> {
@@ -26,7 +26,7 @@ impl PostgresqlRepository<Common1> {
         database_1_connection: &'a Connection,
         by_11: &'a By11<'_>,
         limit: i16,
-    ) -> Result<Vec<Common1>, ErrorAuditor> {
+    ) -> Result<Vec<Common1>, Auditor<Error>> {
         let channel_name = by_11.channel_name.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -40,7 +40,6 @@ impl PostgresqlRepository<Common1> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 );
 
@@ -57,7 +56,6 @@ impl PostgresqlRepository<Common1> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 );
 
@@ -74,7 +72,6 @@ impl PostgresqlRepository<Common1> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 );
 
@@ -128,7 +125,6 @@ impl PostgresqlRepository<Common1> {
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     );
 
@@ -155,7 +151,6 @@ impl PostgresqlRepository<Common1> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 );
 
@@ -186,18 +181,15 @@ impl PostgresqlRepository<Common1> {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -214,18 +206,15 @@ impl PostgresqlRepository<Common1> {
             Ok(row_registry_) => row_registry_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -243,18 +232,15 @@ impl PostgresqlRepository<Common1> {
                 Ok(channel_id_) => Channel_Id(channel_id_),
                 Err(error) => {
                     return Err(
-                        ErrorAuditor::new(
+                        Auditor::<Error>::new(
                             Error::Runtime {
-                                runtime: Runtime::Resource {
-                                    resource: ResourceError::Postgresql {
-                                        postgresql_error: error,
-                                    },
+                                runtime: Runtime::Other {
+                                    other: Other::new(error),
                                 },
                             },
                             BacktracePart::new(
                                 line!(),
                                 file!(),
-                                None,
                             ),
                         ),
                     );
@@ -265,18 +251,15 @@ impl PostgresqlRepository<Common1> {
                 Ok(channel_name__) => Channel_Name(channel_name__),
                 Err(error) => {
                     return Err(
-                        ErrorAuditor::new(
+                        Auditor::<Error>::new(
                             Error::Runtime {
-                                runtime: Runtime::Resource {
-                                    resource: ResourceError::Postgresql {
-                                        postgresql_error: error,
-                                    },
+                                runtime: Runtime::Other {
+                                    other: Other::new(error),
                                 },
                             },
                             BacktracePart::new(
                                 line!(),
                                 file!(),
-                                None,
                             ),
                         ),
                     );
@@ -287,18 +270,15 @@ impl PostgresqlRepository<Common1> {
                 Ok(channel_name__) => Channel_LinkedName(channel_name__),
                 Err(error) => {
                     return Err(
-                        ErrorAuditor::new(
+                        Auditor::<Error>::new(
                             Error::Runtime {
-                                runtime: Runtime::Resource {
-                                    resource: ResourceError::Postgresql {
-                                        postgresql_error: error,
-                                    },
+                                runtime: Runtime::Other {
+                                    other: Other::new(error),
                                 },
                             },
                             BacktracePart::new(
                                 line!(),
                                 file!(),
-                                None,
                             ),
                         ),
                     );
@@ -309,18 +289,15 @@ impl PostgresqlRepository<Common1> {
                 Ok(channel_access_modifier_) => Channel_AccessModifier(channel_access_modifier_),
                 Err(error) => {
                     return Err(
-                        ErrorAuditor::new(
+                        Auditor::<Error>::new(
                             Error::Runtime {
-                                runtime: Runtime::Resource {
-                                    resource: ResourceError::Postgresql {
-                                        postgresql_error: error,
-                                    },
+                                runtime: Runtime::Other {
+                                    other: Other::new(error),
                                 },
                             },
                             BacktracePart::new(
                                 line!(),
                                 file!(),
-                                None,
                             ),
                         ),
                     );
@@ -338,18 +315,15 @@ impl PostgresqlRepository<Common1> {
                 }
                 Err(error) => {
                     return Err(
-                        ErrorAuditor::new(
+                        Auditor::<Error>::new(
                             Error::Runtime {
-                                runtime: Runtime::Resource {
-                                    resource: ResourceError::Postgresql {
-                                        postgresql_error: error,
-                                    },
+                                runtime: Runtime::Other {
+                                    other: Other::new(error),
                                 },
                             },
                             BacktracePart::new(
                                 line!(),
                                 file!(),
-                                None,
                             ),
                         ),
                     );
@@ -367,18 +341,15 @@ impl PostgresqlRepository<Common1> {
                 }
                 Err(error) => {
                     return Err(
-                        ErrorAuditor::new(
+                        Auditor::<Error>::new(
                             Error::Runtime {
-                                runtime: Runtime::Resource {
-                                    resource: ResourceError::Postgresql {
-                                        postgresql_error: error,
-                                    },
+                                runtime: Runtime::Other {
+                                    other: Other::new(error),
                                 },
                             },
                             BacktracePart::new(
                                 line!(),
                                 file!(),
-                                None,
                             ),
                         ),
                     );
@@ -389,18 +360,15 @@ impl PostgresqlRepository<Common1> {
                 Ok(channel_id_) => channel_id_,
                 Err(error) => {
                     return Err(
-                        ErrorAuditor::new(
+                        Auditor::<Error>::new(
                             Error::Runtime {
-                                runtime: Runtime::Resource {
-                                    resource: ResourceError::Postgresql {
-                                        postgresql_error: error,
-                                    },
+                                runtime: Runtime::Other {
+                                    other: Other::new(error),
                                 },
                             },
                             BacktracePart::new(
                                 line!(),
                                 file!(),
-                                None,
                             ),
                         ),
                     );
@@ -437,7 +405,7 @@ impl PostgresqlRepository<Common1> {
         database_1_connection: &'a Connection,
         by_12: &'a By12<'_>,
         limit: i16,
-    ) -> Result<Vec<Common1>, ErrorAuditor> {
+    ) -> Result<Vec<Common1>, Auditor<Error>> {
         let channel_name = by_12.channel_name.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -451,7 +419,6 @@ impl PostgresqlRepository<Common1> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 );
 
@@ -468,7 +435,6 @@ impl PostgresqlRepository<Common1> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 );
 
@@ -518,7 +484,6 @@ impl PostgresqlRepository<Common1> {
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     );
 
@@ -545,7 +510,6 @@ impl PostgresqlRepository<Common1> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 );
 
@@ -576,18 +540,15 @@ impl PostgresqlRepository<Common1> {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -604,18 +565,15 @@ impl PostgresqlRepository<Common1> {
             Ok(row_registry_) => row_registry_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -633,18 +591,15 @@ impl PostgresqlRepository<Common1> {
                 Ok(channel_id_) => Channel_Id(channel_id_),
                 Err(error) => {
                     return Err(
-                        ErrorAuditor::new(
+                        Auditor::<Error>::new(
                             Error::Runtime {
-                                runtime: Runtime::Resource {
-                                    resource: ResourceError::Postgresql {
-                                        postgresql_error: error,
-                                    },
+                                runtime: Runtime::Other {
+                                    other: Other::new(error),
                                 },
                             },
                             BacktracePart::new(
                                 line!(),
                                 file!(),
-                                None,
                             ),
                         ),
                     );
@@ -655,18 +610,15 @@ impl PostgresqlRepository<Common1> {
                 Ok(channel_name__) => Channel_Name(channel_name__),
                 Err(error) => {
                     return Err(
-                        ErrorAuditor::new(
+                        Auditor::<Error>::new(
                             Error::Runtime {
-                                runtime: Runtime::Resource {
-                                    resource: ResourceError::Postgresql {
-                                        postgresql_error: error,
-                                    },
+                                runtime: Runtime::Other {
+                                    other: Other::new(error),
                                 },
                             },
                             BacktracePart::new(
                                 line!(),
                                 file!(),
-                                None,
                             ),
                         ),
                     );
@@ -677,18 +629,15 @@ impl PostgresqlRepository<Common1> {
                 Ok(channel_name__) => Channel_LinkedName(channel_name__),
                 Err(error) => {
                     return Err(
-                        ErrorAuditor::new(
+                        Auditor::<Error>::new(
                             Error::Runtime {
-                                runtime: Runtime::Resource {
-                                    resource: ResourceError::Postgresql {
-                                        postgresql_error: error,
-                                    },
+                                runtime: Runtime::Other {
+                                    other: Other::new(error),
                                 },
                             },
                             BacktracePart::new(
                                 line!(),
                                 file!(),
-                                None,
                             ),
                         ),
                     );
@@ -699,18 +648,15 @@ impl PostgresqlRepository<Common1> {
                 Ok(channel_access_modifier_) => Channel_AccessModifier(channel_access_modifier_),
                 Err(error) => {
                     return Err(
-                        ErrorAuditor::new(
+                        Auditor::<Error>::new(
                             Error::Runtime {
-                                runtime: Runtime::Resource {
-                                    resource: ResourceError::Postgresql {
-                                        postgresql_error: error,
-                                    },
+                                runtime: Runtime::Other {
+                                    other: Other::new(error),
                                 },
                             },
                             BacktracePart::new(
                                 line!(),
                                 file!(),
-                                None,
                             ),
                         ),
                     );
@@ -721,18 +667,15 @@ impl PostgresqlRepository<Common1> {
                 Ok(channel_visability_modifier_) => Channel_VisabilityModifier(channel_visability_modifier_),
                 Err(error) => {
                     return Err(
-                        ErrorAuditor::new(
+                        Auditor::<Error>::new(
                             Error::Runtime {
-                                runtime: Runtime::Resource {
-                                    resource: ResourceError::Postgresql {
-                                        postgresql_error: error,
-                                    },
+                                runtime: Runtime::Other {
+                                    other: Other::new(error),
                                 },
                             },
                             BacktracePart::new(
                                 line!(),
                                 file!(),
-                                None,
                             ),
                         ),
                     );
@@ -750,18 +693,15 @@ impl PostgresqlRepository<Common1> {
                 }
                 Err(error) => {
                     return Err(
-                        ErrorAuditor::new(
+                        Auditor::<Error>::new(
                             Error::Runtime {
-                                runtime: Runtime::Resource {
-                                    resource: ResourceError::Postgresql {
-                                        postgresql_error: error,
-                                    },
+                                runtime: Runtime::Other {
+                                    other: Other::new(error),
                                 },
                             },
                             BacktracePart::new(
                                 line!(),
                                 file!(),
-                                None,
                             ),
                         ),
                     );
@@ -779,18 +719,15 @@ impl PostgresqlRepository<Common1> {
                 }
                 Err(error) => {
                     return Err(
-                        ErrorAuditor::new(
+                        Auditor::<Error>::new(
                             Error::Runtime {
-                                runtime: Runtime::Resource {
-                                    resource: ResourceError::Postgresql {
-                                        postgresql_error: error,
-                                    },
+                                runtime: Runtime::Other {
+                                    other: Other::new(error),
                                 },
                             },
                             BacktracePart::new(
                                 line!(),
                                 file!(),
-                                None,
                             ),
                         ),
                     );
@@ -822,7 +759,7 @@ impl PostgresqlRepository<Common1> {
         database_1_connection: &'a Connection,
         by_13: &'a By13,
         limit: i16,
-    ) -> Result<Vec<Common1>, ErrorAuditor> {
+    ) -> Result<Vec<Common1>, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let mut counter = Counter::<i16>::new_classic();
@@ -834,7 +771,6 @@ impl PostgresqlRepository<Common1> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 );
 
@@ -873,7 +809,6 @@ impl PostgresqlRepository<Common1> {
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     );
 
@@ -901,7 +836,6 @@ impl PostgresqlRepository<Common1> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 );
 
@@ -932,18 +866,15 @@ impl PostgresqlRepository<Common1> {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -960,18 +891,15 @@ impl PostgresqlRepository<Common1> {
             Ok(row_registry_) => row_registry_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -989,18 +917,15 @@ impl PostgresqlRepository<Common1> {
                 Ok(channel_id_) => Channel_Id(channel_id_),
                 Err(error) => {
                     return Err(
-                        ErrorAuditor::new(
+                        Auditor::<Error>::new(
                             Error::Runtime {
-                                runtime: Runtime::Resource {
-                                    resource: ResourceError::Postgresql {
-                                        postgresql_error: error,
-                                    },
+                                runtime: Runtime::Other {
+                                    other: Other::new(error),
                                 },
                             },
                             BacktracePart::new(
                                 line!(),
                                 file!(),
-                                None,
                             ),
                         ),
                     );
@@ -1011,18 +936,15 @@ impl PostgresqlRepository<Common1> {
                 Ok(channel_name_) => Channel_Name(channel_name_),
                 Err(error) => {
                     return Err(
-                        ErrorAuditor::new(
+                        Auditor::<Error>::new(
                             Error::Runtime {
-                                runtime: Runtime::Resource {
-                                    resource: ResourceError::Postgresql {
-                                        postgresql_error: error,
-                                    },
+                                runtime: Runtime::Other {
+                                    other: Other::new(error),
                                 },
                             },
                             BacktracePart::new(
                                 line!(),
                                 file!(),
-                                None,
                             ),
                         ),
                     );
@@ -1033,18 +955,15 @@ impl PostgresqlRepository<Common1> {
                 Ok(channel_linked_name_) => Channel_LinkedName(channel_linked_name_),
                 Err(error) => {
                     return Err(
-                        ErrorAuditor::new(
+                        Auditor::<Error>::new(
                             Error::Runtime {
-                                runtime: Runtime::Resource {
-                                    resource: ResourceError::Postgresql {
-                                        postgresql_error: error,
-                                    },
+                                runtime: Runtime::Other {
+                                    other: Other::new(error),
                                 },
                             },
                             BacktracePart::new(
                                 line!(),
                                 file!(),
-                                None,
                             ),
                         ),
                     );
@@ -1055,18 +974,15 @@ impl PostgresqlRepository<Common1> {
                 Ok(channel_access_modifier_) => Channel_AccessModifier(channel_access_modifier_),
                 Err(error) => {
                     return Err(
-                        ErrorAuditor::new(
+                        Auditor::<Error>::new(
                             Error::Runtime {
-                                runtime: Runtime::Resource {
-                                    resource: ResourceError::Postgresql {
-                                        postgresql_error: error,
-                                    },
+                                runtime: Runtime::Other {
+                                    other: Other::new(error),
                                 },
                             },
                             BacktracePart::new(
                                 line!(),
                                 file!(),
-                                None,
                             ),
                         ),
                     );
@@ -1077,18 +993,15 @@ impl PostgresqlRepository<Common1> {
                 Ok(channel_visability_modifier_) => Channel_VisabilityModifier(channel_visability_modifier_),
                 Err(error) => {
                     return Err(
-                        ErrorAuditor::new(
+                        Auditor::<Error>::new(
                             Error::Runtime {
-                                runtime: Runtime::Resource {
-                                    resource: ResourceError::Postgresql {
-                                        postgresql_error: error,
-                                    },
+                                runtime: Runtime::Other {
+                                    other: Other::new(error),
                                 },
                             },
                             BacktracePart::new(
                                 line!(),
                                 file!(),
-                                None,
                             ),
                         ),
                     );
@@ -1106,18 +1019,15 @@ impl PostgresqlRepository<Common1> {
                 }
                 Err(error) => {
                     return Err(
-                        ErrorAuditor::new(
+                        Auditor::<Error>::new(
                             Error::Runtime {
-                                runtime: Runtime::Resource {
-                                    resource: ResourceError::Postgresql {
-                                        postgresql_error: error,
-                                    },
+                                runtime: Runtime::Other {
+                                    other: Other::new(error),
                                 },
                             },
                             BacktracePart::new(
                                 line!(),
                                 file!(),
-                                None,
                             ),
                         ),
                     );
@@ -1135,18 +1045,15 @@ impl PostgresqlRepository<Common1> {
                 }
                 Err(error) => {
                     return Err(
-                        ErrorAuditor::new(
+                        Auditor::<Error>::new(
                             Error::Runtime {
-                                runtime: Runtime::Resource {
-                                    resource: ResourceError::Postgresql {
-                                        postgresql_error: error,
-                                    },
+                                runtime: Runtime::Other {
+                                    other: Other::new(error),
                                 },
                             },
                             BacktracePart::new(
                                 line!(),
                                 file!(),
-                                None,
                             ),
                         ),
                     );

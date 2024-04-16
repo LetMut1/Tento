@@ -20,11 +20,11 @@ use crate::domain_layer::data::entity::application_user_registration_token::Appl
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_WrongEnterTriesQuantity;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::data::error_auditor::ResourceError;
+use crate::infrastructure_layer::data::error_auditor::Auditor;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 use std::borrow::Cow;
+use crate::infrastructure_layer::data::error_auditor::Other;
 use tokio_postgres::types::Type;
 use tokio_postgres::Client as Connection;
 
@@ -32,7 +32,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
     pub async fn create<'a>(
         database_2_connection: &'a Connection,
         insert_5: Insert5<'a>,
-    ) -> Result<ApplicationUserRegistrationToken<'a>, ErrorAuditor> {
+    ) -> Result<ApplicationUserRegistrationToken<'a>, Auditor<Error>> {
         let application_user_email = insert_5.application_user_email.0.as_str();
 
         let application_user_device_id = insert_5.application_user_device_id.0.as_str();
@@ -100,18 +100,15 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -126,18 +123,15 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
             .await
         {
             return Err(
-                ErrorAuditor::new(
+                Auditor::<Error>::new(
                     Error::Runtime {
-                        runtime: Runtime::Resource {
-                            resource: ResourceError::Postgresql {
-                                postgresql_error: error,
-                            },
+                        runtime: Runtime::Other {
+                            other: Other::new(error),
                         },
                     },
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 ),
             );
@@ -159,7 +153,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
     pub async fn delete<'a>(
         database_2_connection: &'a Connection,
         by_5: &'a By5<'_>,
-    ) -> Result<(), ErrorAuditor> {
+    ) -> Result<(), Auditor<Error>> {
         let application_user_email = by_5.application_user_email.0.as_str();
 
         let application_user_device_id = by_5.application_user_device_id.0.as_str();
@@ -190,18 +184,15 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -216,18 +207,15 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
             .await
         {
             return Err(
-                ErrorAuditor::new(
+                Auditor::<Error>::new(
                     Error::Runtime {
-                        runtime: Runtime::Resource {
-                            resource: ResourceError::Postgresql {
-                                postgresql_error: error,
-                            },
+                        runtime: Runtime::Other {
+                            other: Other::new(error),
                         },
                     },
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 ),
             );
@@ -242,7 +230,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
         database_2_connection: &'a Connection,
         update_7: &'a Update7<'_>,
         by_5: &'a By5<'_>,
-    ) -> Result<(), ErrorAuditor> {
+    ) -> Result<(), Auditor<Error>> {
         let application_user_email = by_5.application_user_email.0.as_str();
 
         let application_user_device_id = by_5.application_user_device_id.0.as_str();
@@ -308,18 +296,15 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -334,18 +319,15 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
             .await
         {
             return Err(
-                ErrorAuditor::new(
+                Auditor::<Error>::new(
                     Error::Runtime {
-                        runtime: Runtime::Resource {
-                            resource: ResourceError::Postgresql {
-                                postgresql_error: error,
-                            },
+                        runtime: Runtime::Other {
+                            other: Other::new(error),
                         },
                     },
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 ),
             );
@@ -357,7 +339,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
     pub async fn find_1<'a>(
         database_2_connection: &'a Connection,
         by_5: &'a By5<'_>,
-    ) -> Result<Option<ApplicationUserRegistrationToken1>, ErrorAuditor> {
+    ) -> Result<Option<ApplicationUserRegistrationToken1>, Auditor<Error>> {
         let application_user_email = by_5.application_user_email.0.as_str();
 
         let application_user_device_id = by_5.application_user_device_id.0.as_str();
@@ -394,18 +376,15 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -422,18 +401,15 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
             Ok(row_registry_) => row_registry_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -448,18 +424,15 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
             Ok(application_user_registration_token_value_) => ApplicationUserRegistrationToken_Value(application_user_registration_token_value_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -470,18 +443,15 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
             Ok(application_user_registration_token_wrong_enter_tries_quantity_) => ApplicationUserRegistrationToken_WrongEnterTriesQuantity(application_user_registration_token_wrong_enter_tries_quantity_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -492,18 +462,15 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
             Ok(application_user_registration_token_is_approved_) => ApplicationUserRegistrationToken_IsApproved(application_user_registration_token_is_approved_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -514,18 +481,15 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
             Ok(application_user_registration_token_expires_at_) => ApplicationUserRegistrationToken_ExpiresAt(application_user_registration_token_expires_at_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -536,18 +500,15 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
             Ok(application_user_registration_token_can_be_resent_from_) => ApplicationUserRegistrationToken_CanBeResentFrom(application_user_registration_token_can_be_resent_from_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -573,7 +534,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken2> {
         database_2_connection: &'a Connection,
         update_8: &'a Update8,
         by_5: &'a By5<'_>,
-    ) -> Result<(), ErrorAuditor> {
+    ) -> Result<(), Auditor<Error>> {
         let application_user_email = by_5.application_user_email.0.as_str();
 
         let application_user_device_id = by_5.application_user_device_id.0.as_str();
@@ -613,18 +574,15 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken2> {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -639,18 +597,15 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken2> {
             .await
         {
             return Err(
-                ErrorAuditor::new(
+                Auditor::<Error>::new(
                     Error::Runtime {
-                        runtime: Runtime::Resource {
-                            resource: ResourceError::Postgresql {
-                                postgresql_error: error,
-                            },
+                        runtime: Runtime::Other {
+                            other: Other::new(error),
                         },
                     },
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 ),
             );
@@ -665,7 +620,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
         database_2_connection: &'a Connection,
         update_9: &'a Update9<'_>,
         by_5: &'a By5<'_>,
-    ) -> Result<(), ErrorAuditor> {
+    ) -> Result<(), Auditor<Error>> {
         let application_user_email = by_5.application_user_email.0.as_str();
 
         let application_user_device_id = by_5.application_user_device_id.0.as_str();
@@ -725,18 +680,15 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -751,18 +703,15 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
             .await
         {
             return Err(
-                ErrorAuditor::new(
+                Auditor::<Error>::new(
                     Error::Runtime {
-                        runtime: Runtime::Resource {
-                            resource: ResourceError::Postgresql {
-                                postgresql_error: error,
-                            },
+                        runtime: Runtime::Other {
+                            other: Other::new(error),
                         },
                     },
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 ),
             );
@@ -774,7 +723,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
     pub async fn find_1<'a>(
         database_2_connection: &'a Connection,
         by_5: &'a By5<'_>,
-    ) -> Result<Option<ApplicationUserRegistrationToken3>, ErrorAuditor> {
+    ) -> Result<Option<ApplicationUserRegistrationToken3>, Auditor<Error>> {
         let application_user_email = by_5.application_user_email.0.as_str();
 
         let application_user_device_id = by_5.application_user_device_id.0.as_str();
@@ -810,18 +759,15 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -838,18 +784,15 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
             Ok(row_registry_) => row_registry_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -864,18 +807,15 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
             Ok(application_user_registration_token_value_) => ApplicationUserRegistrationToken_Value(application_user_registration_token_value_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -886,18 +826,15 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
             Ok(application_user_registration_token_wrong_enter_tries_quantity_) => ApplicationUserRegistrationToken_WrongEnterTriesQuantity(application_user_registration_token_wrong_enter_tries_quantity_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -908,18 +845,15 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
             Ok(application_user_registration_token_is_approved_) => ApplicationUserRegistrationToken_IsApproved(application_user_registration_token_is_approved_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -930,18 +864,15 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
             Ok(application_user_registration_token_expires_at_) => ApplicationUserRegistrationToken_ExpiresAt(application_user_registration_token_expires_at_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -966,7 +897,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken4> {
         database_2_connection: &'a Connection,
         update_10: &'a Update10,
         by_5: &'a By5<'_>,
-    ) -> Result<(), ErrorAuditor> {
+    ) -> Result<(), Auditor<Error>> {
         let application_user_email = by_5.application_user_email.0.as_str();
 
         let application_user_device_id = by_5.application_user_device_id.0.as_str();
@@ -1006,18 +937,15 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken4> {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -1032,18 +960,15 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken4> {
             .await
         {
             return Err(
-                ErrorAuditor::new(
+                Auditor::<Error>::new(
                     Error::Runtime {
-                        runtime: Runtime::Resource {
-                            resource: ResourceError::Postgresql {
-                                postgresql_error: error,
-                            },
+                        runtime: Runtime::Other {
+                            other: Other::new(error),
                         },
                     },
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 ),
             );
@@ -1058,7 +983,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken5> {
         database_2_connection: &'a Connection,
         update_11: &'a Update11,
         by_5: &'a By5<'_>,
-    ) -> Result<(), ErrorAuditor> {
+    ) -> Result<(), Auditor<Error>> {
         let application_user_email = by_5.application_user_email.0.as_str();
 
         let application_user_device_id = by_5.application_user_device_id.0.as_str();
@@ -1098,18 +1023,15 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken5> {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -1124,18 +1046,15 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken5> {
             .await
         {
             return Err(
-                ErrorAuditor::new(
+                Auditor::<Error>::new(
                     Error::Runtime {
-                        runtime: Runtime::Resource {
-                            resource: ResourceError::Postgresql {
-                                postgresql_error: error,
-                            },
+                        runtime: Runtime::Other {
+                            other: Other::new(error),
                         },
                     },
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 ),
             );
@@ -1149,7 +1068,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken6> {
     pub async fn find_1<'a>(
         database_2_connection: &'a Connection,
         by_5: &'a By5<'_>,
-    ) -> Result<Option<ApplicationUserRegistrationToken6>, ErrorAuditor> {
+    ) -> Result<Option<ApplicationUserRegistrationToken6>, Auditor<Error>> {
         let application_user_email = by_5.application_user_email.0.as_str();
 
         let application_user_device_id = by_5.application_user_device_id.0.as_str();
@@ -1185,18 +1104,15 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken6> {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -1213,18 +1129,15 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken6> {
             Ok(row_registry_) => row_registry_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -1239,18 +1152,15 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken6> {
             Ok(application_user_registration_token_value_) => ApplicationUserRegistrationToken_Value(application_user_registration_token_value_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -1261,18 +1171,15 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken6> {
             Ok(application_user_registration_token_is_approved_) => ApplicationUserRegistrationToken_IsApproved(application_user_registration_token_is_approved_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -1283,18 +1190,15 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken6> {
             Ok(application_user_registration_token_expires_at_) => ApplicationUserRegistrationToken_ExpiresAt(application_user_registration_token_expires_at_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -1305,18 +1209,15 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken6> {
             Ok(application_user_registration_token_can_be_resent_from_) => ApplicationUserRegistrationToken_CanBeResentFrom(application_user_registration_token_can_be_resent_from_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );

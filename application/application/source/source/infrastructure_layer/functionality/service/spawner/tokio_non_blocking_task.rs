@@ -1,22 +1,23 @@
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::data::error_auditor::Auditor;
 use std::future::Future;
 use std::marker::Send;
 use tokio::task::JoinHandle;
 use tokio::spawn;
 use crate::infrastructure_layer::functionality::service::logger::Logger;
 use super::Spawner;
+use crate::infrastructure_layer::data::error_auditor::Error;
 
 pub use crate::infrastructure_layer::data::control_type::TokioNonBlockingTask;
 
 impl Spawner<TokioNonBlockingTask> {
     pub fn spawn_into_background<F, T>(future: F) -> ()
     where
-        F: Future<Output = Result<T, ErrorAuditor>> + Send + 'static,
+        F: Future<Output = Result<T, Auditor<Error>>> + Send + 'static,
     {
         spawn(
             async move {
                 if let Err(error) = future.await {
-                    Logger::<ErrorAuditor>::log(&error);
+                    Logger::<Auditor<Error>>::log(&error);
                 }
 
                 return ();

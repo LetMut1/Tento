@@ -20,9 +20,9 @@ use crate::domain_layer::data::entity::application_user_reset_password_token::Ap
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_WrongEnterTriesQuantity;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::data::error_auditor::ResourceError;
+use crate::infrastructure_layer::data::error_auditor::Auditor;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
+use crate::infrastructure_layer::data::error_auditor::Other;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 use std::borrow::Cow;
 use tokio_postgres::types::Type;
@@ -32,7 +32,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
     pub async fn create<'a>(
         database_2_connection: &'a Connection,
         insert_6: Insert6<'a>,
-    ) -> Result<ApplicationUserResetPasswordToken<'a>, ErrorAuditor> {
+    ) -> Result<ApplicationUserResetPasswordToken<'a>, Auditor<Error>> {
         let application_user_device_id = insert_6.application_user_device_id.0.as_str();
 
         let application_user_reset_password_token_value = insert_6.application_user_reset_password_token_value.0.as_str();
@@ -98,18 +98,15 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -124,18 +121,15 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
             .await
         {
             return Err(
-                ErrorAuditor::new(
+                Auditor::<Error>::new(
                     Error::Runtime {
-                        runtime: Runtime::Resource {
-                            resource: ResourceError::Postgresql {
-                                postgresql_error: error,
-                            },
+                        runtime: Runtime::Other {
+                            other: Other::new(error),
                         },
                     },
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 ),
             );
@@ -157,7 +151,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
     pub async fn delete<'a>(
         database_2_connection: &'a Connection,
         by_4: &'a By4<'_>,
-    ) -> Result<(), ErrorAuditor> {
+    ) -> Result<(), Auditor<Error>> {
         let application_user_device_id = by_4.application_user_device_id.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -186,18 +180,15 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -212,18 +203,15 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
             .await
         {
             return Err(
-                ErrorAuditor::new(
+                Auditor::<Error>::new(
                     Error::Runtime {
-                        runtime: Runtime::Resource {
-                            resource: ResourceError::Postgresql {
-                                postgresql_error: error,
-                            },
+                        runtime: Runtime::Other {
+                            other: Other::new(error),
                         },
                     },
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 ),
             );
@@ -238,7 +226,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken1> {
         database_2_connection: &'a Connection,
         update_12: &'a Update12<'_>,
         by_4: &'a By4<'_>,
-    ) -> Result<(), ErrorAuditor> {
+    ) -> Result<(), Auditor<Error>> {
         let application_user_device_id = by_4.application_user_device_id.0.as_str();
 
         let application_user_reset_password_token_value = update_12.application_user_reset_password_token_value.0.as_str();
@@ -302,18 +290,15 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken1> {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -328,18 +313,15 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken1> {
             .await
         {
             return Err(
-                ErrorAuditor::new(
+                Auditor::<Error>::new(
                     Error::Runtime {
-                        runtime: Runtime::Resource {
-                            resource: ResourceError::Postgresql {
-                                postgresql_error: error,
-                            },
+                        runtime: Runtime::Other {
+                            other: Other::new(error),
                         },
                     },
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 ),
             );
@@ -351,7 +333,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken1> {
     pub async fn find_1<'a>(
         database_2_connection: &'a Connection,
         by_4: &'a By4<'_>,
-    ) -> Result<Option<ApplicationUserResetPasswordToken1>, ErrorAuditor> {
+    ) -> Result<Option<ApplicationUserResetPasswordToken1>, Auditor<Error>> {
         let application_user_device_id = by_4.application_user_device_id.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -386,18 +368,15 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken1> {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -414,18 +393,15 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken1> {
             Ok(row_registry_) => row_registry_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -440,18 +416,15 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken1> {
             Ok(application_user_reset_password_token_value_) => ApplicationUserResetPasswordToken_Value(application_user_reset_password_token_value_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -462,18 +435,15 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken1> {
             Ok(application_user_reset_password_token_wrong_enter_tries_quantity_) => ApplicationUserResetPasswordToken_WrongEnterTriesQuantity(application_user_reset_password_token_wrong_enter_tries_quantity_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -484,18 +454,15 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken1> {
             Ok(application_user_reset_password_token_is_approved_) => ApplicationUserResetPasswordToken_IsApproved(application_user_reset_password_token_is_approved_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -506,18 +473,15 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken1> {
             Ok(application_user_reset_password_token_expires_at_) => ApplicationUserResetPasswordToken_ExpiresAt(application_user_reset_password_token_expires_at_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -528,18 +492,15 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken1> {
             Ok(application_user_reset_password_token_can_be_resent_from_) => ApplicationUserResetPasswordToken_CanBeResentFrom(application_user_reset_password_token_can_be_resent_from_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -565,7 +526,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken2> {
         database_2_connection: &'a Connection,
         update_13: &'a Update13,
         by_4: &'a By4<'_>,
-    ) -> Result<(), ErrorAuditor> {
+    ) -> Result<(), Auditor<Error>> {
         let application_user_device_id = by_4.application_user_device_id.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -603,18 +564,15 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken2> {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -629,18 +587,15 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken2> {
             .await
         {
             return Err(
-                ErrorAuditor::new(
+                Auditor::<Error>::new(
                     Error::Runtime {
-                        runtime: Runtime::Resource {
-                            resource: ResourceError::Postgresql {
-                                postgresql_error: error,
-                            },
+                        runtime: Runtime::Other {
+                            other: Other::new(error),
                         },
                     },
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 ),
             );
@@ -655,7 +610,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken3> {
         database_2_connection: &'a Connection,
         update_14: &'a Update14<'_>,
         by_4: &'a By4<'_>,
-    ) -> Result<(), ErrorAuditor> {
+    ) -> Result<(), Auditor<Error>> {
         let application_user_device_id = by_4.application_user_device_id.0.as_str();
 
         let application_user_reset_password_token_value = update_14.application_user_reset_password_token_value.0.as_str();
@@ -713,18 +668,15 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken3> {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -739,18 +691,15 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken3> {
             .await
         {
             return Err(
-                ErrorAuditor::new(
+                Auditor::<Error>::new(
                     Error::Runtime {
-                        runtime: Runtime::Resource {
-                            resource: ResourceError::Postgresql {
-                                postgresql_error: error,
-                            },
+                        runtime: Runtime::Other {
+                            other: Other::new(error),
                         },
                     },
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 ),
             );
@@ -762,7 +711,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken3> {
     pub async fn find_1<'a>(
         database_2_connection: &'a Connection,
         by_4: &'a By4<'_>,
-    ) -> Result<Option<ApplicationUserResetPasswordToken3>, ErrorAuditor> {
+    ) -> Result<Option<ApplicationUserResetPasswordToken3>, Auditor<Error>> {
         let application_user_device_id = by_4.application_user_device_id.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -796,18 +745,15 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken3> {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -824,18 +770,15 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken3> {
             Ok(row_registry_) => row_registry_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -850,18 +793,15 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken3> {
             Ok(application_user_reset_password_token_value_) => ApplicationUserResetPasswordToken_Value(application_user_reset_password_token_value_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -872,18 +812,15 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken3> {
             Ok(application_user_reset_password_token_wrong_enter_tries_quantity_) => ApplicationUserResetPasswordToken_WrongEnterTriesQuantity(application_user_reset_password_token_wrong_enter_tries_quantity_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -894,18 +831,15 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken3> {
             Ok(application_user_reset_password_token_is_approved_) => ApplicationUserResetPasswordToken_IsApproved(application_user_reset_password_token_is_approved_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -916,18 +850,15 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken3> {
             Ok(application_user_reset_password_token_expires_at_) => ApplicationUserResetPasswordToken_ExpiresAt(application_user_reset_password_token_expires_at_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -952,7 +883,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken4> {
         database_2_connection: &'a Connection,
         update_15: &'a Update15,
         by_4: &'a By4<'_>,
-    ) -> Result<(), ErrorAuditor> {
+    ) -> Result<(), Auditor<Error>> {
         let application_user_device_id = by_4.application_user_device_id.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -990,18 +921,15 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken4> {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -1016,18 +944,15 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken4> {
             .await
         {
             return Err(
-                ErrorAuditor::new(
+                Auditor::<Error>::new(
                     Error::Runtime {
-                        runtime: Runtime::Resource {
-                            resource: ResourceError::Postgresql {
-                                postgresql_error: error,
-                            },
+                        runtime: Runtime::Other {
+                            other: Other::new(error),
                         },
                     },
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 ),
             );
@@ -1042,7 +967,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken5> {
         database_2_connection: &'a Connection,
         update_16: &'a Update16,
         by_4: &'a By4<'_>,
-    ) -> Result<(), ErrorAuditor> {
+    ) -> Result<(), Auditor<Error>> {
         let application_user_device_id = by_4.application_user_device_id.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -1080,18 +1005,15 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken5> {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -1106,18 +1028,15 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken5> {
             .await
         {
             return Err(
-                ErrorAuditor::new(
+                Auditor::<Error>::new(
                     Error::Runtime {
-                        runtime: Runtime::Resource {
-                            resource: ResourceError::Postgresql {
-                                postgresql_error: error,
-                            },
+                        runtime: Runtime::Other {
+                            other: Other::new(error),
                         },
                     },
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 ),
             );
@@ -1131,7 +1050,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken6> {
     pub async fn find_1<'a>(
         database_2_connection: &'a Connection,
         by_4: &'a By4<'_>,
-    ) -> Result<Option<ApplicationUserResetPasswordToken6>, ErrorAuditor> {
+    ) -> Result<Option<ApplicationUserResetPasswordToken6>, Auditor<Error>> {
         let application_user_device_id = by_4.application_user_device_id.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -1165,18 +1084,15 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken6> {
             Ok(statement_) => statement_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -1193,18 +1109,15 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken6> {
             Ok(row_registry_) => row_registry_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -1219,18 +1132,15 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken6> {
             Ok(application_user_reset_password_token_value_) => ApplicationUserResetPasswordToken_Value(application_user_reset_password_token_value_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -1241,18 +1151,15 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken6> {
             Ok(application_user_reset_password_token_is_approved_) => ApplicationUserResetPasswordToken_IsApproved(application_user_reset_password_token_is_approved_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -1263,18 +1170,15 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken6> {
             Ok(application_user_reset_password_token_expires_at_) => ApplicationUserResetPasswordToken_ExpiresAt(application_user_reset_password_token_expires_at_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -1285,18 +1189,15 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken6> {
             Ok(application_user_reset_password_token_can_be_resent_from_) => ApplicationUserResetPasswordToken_CanBeResentFrom(application_user_reset_password_token_can_be_resent_from_),
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );

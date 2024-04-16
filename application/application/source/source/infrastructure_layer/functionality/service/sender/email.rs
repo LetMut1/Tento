@@ -3,10 +3,8 @@ use crate::infrastructure_layer::data::environment_configuration::Environment;
 use crate::infrastructure_layer::data::environment_configuration::ENVIRONMENT_CONFIGURATION;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
-use crate::infrastructure_layer::data::error_auditor::EmailServer;
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::data::error_auditor::Auditor;
 use crate::infrastructure_layer::data::error_auditor::Other;
-use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
 use lettre::smtp::SmtpClient;
 use lettre::ClientSecurity;
@@ -23,7 +21,7 @@ impl Sender<Email> {
         subject: &'a str,
         body: String,
         to: &'a str,
-    ) -> Result<(), ErrorAuditor> {
+    ) -> Result<(), Auditor<Error>> {
         let email = match EmailBuilder::new() //TODO
             .subject(subject)
             .text(body)
@@ -34,20 +32,15 @@ impl Sender<Email> {
             Ok(email_) => email_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::EmailServer {
-                                    email_server: EmailServer::Email {
-                                        email_error: error,
-                                    },
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -58,7 +51,7 @@ impl Sender<Email> {
             Ok(email_server_socket_address_registry_) => email_server_socket_address_registry_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -67,7 +60,6 @@ impl Sender<Email> {
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -78,14 +70,13 @@ impl Sender<Email> {
             Some(email_server_socket_address_) => email_server_socket_address_,
             None => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Logic {
                             message: "Invalid socket address.",
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -104,20 +95,15 @@ impl Sender<Email> {
                     Ok(smtp_client__) => smtp_client__,
                     Err(error) => {
                         return Err(
-                            ErrorAuditor::new(
+                            Auditor::<Error>::new(
                                 Error::Runtime {
-                                    runtime: Runtime::Resource {
-                                        resource: ResourceError::EmailServer {
-                                            email_server: EmailServer::Smtp {
-                                                smtp_error: error,
-                                            },
-                                        },
+                                    runtime: Runtime::Other {
+                                        other: Other::new(error),
                                     },
                                 },
                                 BacktracePart::new(
                                     line!(),
                                     file!(),
-                                    None,
                                 ),
                             ),
                         );
@@ -130,20 +116,15 @@ impl Sender<Email> {
 
         if let Err(error) = smtp_client.transport().send(email.into()) {
             return Err(
-                ErrorAuditor::new(
+                Auditor::<Error>::new(
                     Error::Runtime {
-                        runtime: Runtime::Resource {
-                            resource: ResourceError::EmailServer {
-                                email_server: EmailServer::Smtp {
-                                    smtp_error: error,
-                                },
-                            },
+                        runtime: Runtime::Other {
+                            other: Other::new(error),
                         },
                     },
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 ),
             );

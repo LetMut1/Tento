@@ -2,17 +2,18 @@ use crate::infrastructure_layer::functionality::service::creator::response::Resp
 use http::request::Parts;
 use crate::infrastructure_layer::functionality::service::logger::Logger;
 use super::Reactor;
+use crate::infrastructure_layer::data::error_auditor::Error;
 use crate::infrastructure_layer::data::control_type::TokioNonBlockingTask;
 use crate::infrastructure_layer::functionality::service::spawner::Spawner;
 
 pub use crate::infrastructure_layer::data::control_type::ActionRound;
-pub use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
+pub use crate::infrastructure_layer::data::error_auditor::Auditor;
 
-impl Reactor<(ActionRound, ErrorAuditor)> {
+impl Reactor<(ActionRound, Auditor<Error>)> {
     pub fn react<'a>(
         request_parts: &'a Parts,
         response: &'a Response,
-        error_auditor: ErrorAuditor
+        error_auditor: Auditor<Error>
     ) -> () {
         let request_uri = request_parts.uri.path().to_string();
 
@@ -22,7 +23,7 @@ impl Reactor<(ActionRound, ErrorAuditor)> {
 
         Spawner::<TokioNonBlockingTask>::spawn_into_background(
             async move {
-                Logger::<(ActionRound, ErrorAuditor)>::log(
+                Logger::<(ActionRound, Auditor<Error>)>::log(
                     request_uri.as_str(),
                     request_method.as_str(),
                     response_status_code,

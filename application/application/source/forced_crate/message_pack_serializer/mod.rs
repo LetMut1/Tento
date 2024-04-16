@@ -81,21 +81,20 @@
     clippy::zero_sized_map_values
 )]
 
-use error_auditor::BacktracePart;
-use error_auditor::Error;
-use error_auditor::ErrorAuditor;
-use error_auditor::Other;
-use error_auditor::Runtime;
+use error_auditor::auditor::Auditor;
+use error_auditor::backtrace::BacktracePart;
+use error_auditor::error::Error;
+use error_auditor::error::Other;
+use error_auditor::error::Runtime;
 use rmp_serde::to_vec;
 use rmp_serde::from_read_ref;
 use serde::Deserialize;
 use serde::Serialize as SerdeSerialize;
-use void::ErrorVoid;
 
 pub struct Serializer;
 
 impl Serializer {
-    pub fn serialize<'a, T>(subject: &'a T) -> Result<Vec<u8>, ErrorAuditor<ErrorVoid>>
+    pub fn serialize<'a, T>(subject: &'a T) -> Result<Vec<u8>, Auditor<Error>>
     where
         T: SerdeSerialize,
     {
@@ -103,7 +102,7 @@ impl Serializer {
             Ok(data_) => data_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -112,7 +111,6 @@ impl Serializer {
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -122,7 +120,7 @@ impl Serializer {
         return Ok(data);
     }
 
-    pub fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, ErrorAuditor<ErrorVoid>>
+    pub fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, Auditor<Error>>
     where
         T: Deserialize<'a>,
     {
@@ -130,7 +128,7 @@ impl Serializer {
             Ok(subject_) => subject_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -139,7 +137,6 @@ impl Serializer {
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );

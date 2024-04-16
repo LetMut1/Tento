@@ -111,12 +111,12 @@ fn process() -> Result<(), Box<dyn Error + 'static>> {
     match subcommand_arg_matches {
         (RUN_SERVER, _) => {
             if let Err(error) = CommandProcessor::<RunServer>::process() {
-                return Err(Formatter::<ErrorAuditor>::format(&error).into());
+                return Err(Formatter::<Auditor<Error>>::format(&error).into());
             }
         }
         (CREATE_FIXTURES, _) => {
             if let Err(error) = CommandProcessor::<CreateFixtures>::process() {
-                return Err(Formatter::<ErrorAuditor>::format(&error).into());
+                return Err(Formatter::<Auditor<Error>>::format(&error).into());
             }
         }
         _ => {

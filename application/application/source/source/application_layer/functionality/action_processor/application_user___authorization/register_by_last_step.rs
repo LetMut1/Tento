@@ -25,8 +25,8 @@ use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
 use crate::infrastructure_layer::data::control_type::TokioNonBlockingTask;
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::data::error_auditor::ResourceError;
+use crate::infrastructure_layer::data::error_auditor::Auditor;
+use crate::infrastructure_layer::data::error_auditor::Other;
 use crate::infrastructure_layer::functionality::service::spawner::Spawner;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
@@ -48,7 +48,6 @@ use bb8_redis::RedisConnectionManager;
 use std::borrow::Cow;
 use std::clone::Clone;
 use std::marker::Send;
-use crate::infrastructure_layer::data::error_auditor::Other;
 use std::marker::Sync;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
@@ -66,7 +65,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
         incoming: Option<Incoming>,
-    ) -> Result<InvalidArgumentResult<UnifiedReport<Outcoming, Precedent>>, ErrorAuditor>
+    ) -> Result<InvalidArgumentResult<UnifiedReport<Outcoming, Precedent>>, Auditor<Error>>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -77,12 +76,11 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
             Some(incoming__) => incoming__,
             None => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::create_incoming_invalid_state(),
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -116,7 +114,6 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 );
 
@@ -139,7 +136,6 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 );
 
@@ -167,18 +163,15 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
             Ok(database_1_postgresql_pooled_connection_) => database_1_postgresql_pooled_connection_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::ConnectionPoolPostgresql {
-                                    bb8_postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -201,7 +194,6 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 );
 
@@ -231,7 +223,6 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 );
 
@@ -256,18 +247,15 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
             Ok(database_2_postgresql_pooled_connection_) => database_2_postgresql_pooled_connection_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::ConnectionPoolPostgresql {
-                                    bb8_postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -288,7 +276,6 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 );
 
@@ -318,7 +305,6 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 );
 
@@ -346,7 +332,6 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 );
 
@@ -367,7 +352,6 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     );
 
@@ -384,7 +368,6 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     );
 
@@ -409,7 +392,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
             Ok(application_user_password_hash_) => application_user_password_hash_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -418,7 +401,6 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -432,7 +414,6 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 );
 
@@ -456,7 +437,6 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 );
 
@@ -471,7 +451,6 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 );
 
@@ -493,7 +472,6 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 );
 
@@ -521,7 +499,6 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 );
 
@@ -536,7 +513,6 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 );
 
@@ -551,7 +527,6 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 );
 
@@ -569,21 +544,18 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
                     Ok(database_1_postgresql_pooled_connection__) => database_1_postgresql_pooled_connection__,
                     Err(error) => {
                         return Err(
-                            ErrorAuditor::new(
+                            Auditor::<Error>::new(
                                 Error::Runtime {
-                                    runtime: Runtime::Resource {
-                                        resource: ResourceError::ConnectionPoolPostgresql {
-                                            bb8_postgresql_error: error,
-                                        },
+                                    runtime: Runtime::Other {
+                                        other: Other::new(error),
                                     },
                                 },
                                 BacktracePart::new(
                                     line!(),
                                     file!(),
-                                    None,
                                 ),
-                            )
-                        )
+                            ),
+                        );
                     }
                 };
 
@@ -602,7 +574,6 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
                             BacktracePart::new(
                                 line!(),
                                 file!(),
-                                None,
                             ),
                         );
 
@@ -614,21 +585,18 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
                     Ok(database_2_postgresql_pooled_connection__) => database_2_postgresql_pooled_connection__,
                     Err(error) => {
                         return Err(
-                            ErrorAuditor::new(
+                            Auditor::<Error>::new(
                                 Error::Runtime {
-                                    runtime: Runtime::Resource {
-                                        resource: ResourceError::ConnectionPoolPostgresql {
-                                            bb8_postgresql_error: error,
-                                        },
+                                    runtime: Runtime::Other {
+                                        other: Other::new(error),
                                     },
                                 },
                                 BacktracePart::new(
                                     line!(),
                                     file!(),
-                                    None,
                                 ),
-                            )
-                        )
+                            ),
+                        );
                     }
                 };
 
@@ -645,7 +613,6 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     );
 

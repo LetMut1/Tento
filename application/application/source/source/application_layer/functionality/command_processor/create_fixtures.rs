@@ -25,9 +25,8 @@ use crate::infrastructure_layer::data::environment_configuration::Environment;
 use crate::infrastructure_layer::data::environment_configuration::ENVIRONMENT_CONFIGURATION;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::data::error_auditor::Auditor;
 use crate::infrastructure_layer::data::error_auditor::Other;
-use crate::infrastructure_layer::data::error_auditor::ResourceError;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By1;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By7;
@@ -56,17 +55,16 @@ impl CommandProcessor<CreateFixtures> {
         'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
     ];
 
-    pub fn process() -> Result<(), ErrorAuditor> {
+    pub fn process() -> Result<(), Auditor<Error>> {
         if let Environment::Production = ENVIRONMENT_CONFIGURATION.environment {
             return Err(
-                ErrorAuditor::new(
+                Auditor::<Error>::new(
                     Error::Logic {
                         message: "Should process only not in production environment.",
                     },
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 ),
             );
@@ -76,7 +74,7 @@ impl CommandProcessor<CreateFixtures> {
             Ok(runtime_) => runtime_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
                                 other: Other::new(error),
@@ -85,7 +83,6 @@ impl CommandProcessor<CreateFixtures> {
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -97,7 +94,6 @@ impl CommandProcessor<CreateFixtures> {
                 BacktracePart::new(
                     line!(),
                     file!(),
-                    None,
                 ),
             );
 
@@ -107,23 +103,20 @@ impl CommandProcessor<CreateFixtures> {
         return Ok(());
     }
 
-    async fn create_fixtures<'a>() -> Result<(), ErrorAuditor> {
+    async fn create_fixtures<'a>() -> Result<(), Auditor<Error>> {
         let database_1_postgresql_configuration = match PostgresqlConfiguration::from_str(ENVIRONMENT_CONFIGURATION.resource.postgresql.database_1_url.0) {
             Ok(database_1_postgresql_configuration_) => database_1_postgresql_configuration_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::Postgresql {
-                                    postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -142,7 +135,6 @@ impl CommandProcessor<CreateFixtures> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 );
 
@@ -159,7 +151,6 @@ impl CommandProcessor<CreateFixtures> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 );
 
@@ -171,18 +162,15 @@ impl CommandProcessor<CreateFixtures> {
             Ok(database_1_postgresql_pooled_connection_) => database_1_postgresql_pooled_connection_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::ConnectionPoolPostgresql {
-                                    bb8_postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -208,14 +196,13 @@ impl CommandProcessor<CreateFixtures> {
 
             if !Validator::<ApplicationUser_Nickname>::is_valid(&application_user_nickname) {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Logic {
                             message: "Application_user nickname should be valid.",
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -235,7 +222,6 @@ impl CommandProcessor<CreateFixtures> {
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     );
 
@@ -245,14 +231,13 @@ impl CommandProcessor<CreateFixtures> {
 
             if !is_valid_email {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Logic {
                             message: "Application_user email should be valid.",
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -264,14 +249,13 @@ impl CommandProcessor<CreateFixtures> {
                 &application_user_nickname,
             ) {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Logic {
                             message: "Application_user_password should be valid.",
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -293,7 +277,6 @@ impl CommandProcessor<CreateFixtures> {
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     );
 
@@ -320,7 +303,6 @@ impl CommandProcessor<CreateFixtures> {
                                 BacktracePart::new(
                                     line!(),
                                     file!(),
-                                    None,
                                 ),
                             );
 
@@ -342,14 +324,13 @@ impl CommandProcessor<CreateFixtures> {
 
             if !Validator::<ApplicationUserDevice_Id>::is_valid(&application_user_device_id) {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Logic {
                             message: "Application_user_device id should be valid.",
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -368,7 +349,6 @@ impl CommandProcessor<CreateFixtures> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 );
 
@@ -392,14 +372,13 @@ impl CommandProcessor<CreateFixtures> {
 
                 if !Validator::<Channel_Name>::is_valid(&channel_name) {
                     return Err(
-                        ErrorAuditor::new(
+                        Auditor::<Error>::new(
                             Error::Logic {
                                 message: "Channel name should be valid.",
                             },
                             BacktracePart::new(
                                 line!(),
                                 file!(),
-                                None,
                             ),
                         ),
                     );
@@ -409,14 +388,13 @@ impl CommandProcessor<CreateFixtures> {
 
                 if !Validator::<Channel_LinkedName>::is_valid(&channel_linked_name) {
                     return Err(
-                        ErrorAuditor::new(
+                        Auditor::<Error>::new(
                             Error::Logic {
                                 message: "Channel linked name should be valid.",
                             },
                             BacktracePart::new(
                                 line!(),
                                 file!(),
-                                None,
                             ),
                         ),
                     );
@@ -439,14 +417,13 @@ impl CommandProcessor<CreateFixtures> {
 
                     if !Validator::<Channel_Description>::is_valid(&channel_description_) {
                         return Err(
-                            ErrorAuditor::new(
+                            Auditor::<Error>::new(
                                 Error::Logic {
                                     message: "Channel description should be valid.",
                                 },
                                 BacktracePart::new(
                                     line!(),
                                     file!(),
-                                    None,
                                 ),
                             ),
                         );
@@ -465,14 +442,13 @@ impl CommandProcessor<CreateFixtures> {
 
                 if !Validator::<Channel_Orientation>::is_valid(&channel_orientation) {
                     return Err(
-                        ErrorAuditor::new(
+                        Auditor::<Error>::new(
                             Error::Logic {
                                 message: "Channel orientation email should be valid.",
                             },
                             BacktracePart::new(
                                 line!(),
                                 file!(),
-                                None,
                             ),
                         ),
                     );
@@ -492,7 +468,6 @@ impl CommandProcessor<CreateFixtures> {
                             BacktracePart::new(
                                 line!(),
                                 file!(),
-                                None,
                             ),
                         );
 
@@ -528,7 +503,6 @@ impl CommandProcessor<CreateFixtures> {
                                 BacktracePart::new(
                                     line!(),
                                     file!(),
-                                    None,
                                 ),
                             );
 

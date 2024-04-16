@@ -1,5 +1,5 @@
 use crate::application_layer::data::unified_report::UnifiedReport;
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::data::error_auditor::Auditor;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::functionality::service::creator::Creator;
@@ -21,6 +21,7 @@ use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
 use http::request::Parts;
+use crate::infrastructure_layer::data::error_auditor::Error;
 use hyper::Body;
 use super::Processor;
 use matchit::Params;
@@ -44,9 +45,9 @@ impl Processor<GeneralizedAction> {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
         DE: FnOnce(&'a mut Body, &'a Parts, &'a Params<'b, 'c>) -> F1,
-        F1: Future<Output = Result<InvalidArgumentResult<Option<I>>, ErrorAuditor>>,
+        F1: Future<Output = Result<InvalidArgumentResult<Option<I>>, Auditor<Error>>>,
         AP: FnOnce(&'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<RedisConnectionManager>, Option<I>) -> F2,
-        F2: Future<Output = Result<InvalidArgumentResult<UnifiedReport<O, P>>, ErrorAuditor>>,
+        F2: Future<Output = Result<InvalidArgumentResult<UnifiedReport<O, P>>, Auditor<Error>>>,
         O: SerdeSerialize,
         P: SerdeSerialize,
         Serializer<SF>: Serialize,
@@ -70,7 +71,7 @@ impl Processor<GeneralizedAction> {
             Err(error) => {
                 let response = Creator::<Response>::create_internal_server_error();
 
-                Reactor::<(ActionRound, ErrorAuditor)>::react(parts, &response, error);
+                Reactor::<(ActionRound, Auditor<Error>)>::react(parts, &response, error);
 
                 return response;
             }
@@ -103,7 +104,7 @@ impl Processor<GeneralizedAction> {
             Err(error) => {
                 let response = Creator::<Response>::create_internal_server_error();
 
-                Reactor::<(ActionRound, ErrorAuditor)>::react(parts, &response, error);
+                Reactor::<(ActionRound, Auditor<Error>)>::react(parts, &response, error);
 
                 return response;
             }
@@ -129,7 +130,7 @@ impl Processor<GeneralizedAction> {
             Err(error) => {
                 let response = Creator::<Response>::create_internal_server_error();
 
-                Reactor::<(ActionRound, ErrorAuditor)>::react(parts, &response, error);
+                Reactor::<(ActionRound, Auditor<Error>)>::react(parts, &response, error);
 
                 return response;
             }

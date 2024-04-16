@@ -1,7 +1,7 @@
 use super::Serialize;
 use super::Serializer;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::data::error_auditor::Auditor;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
 use crate::infrastructure_layer::data::error_auditor::Error;
 use crate::infrastructure_layer::data::error_auditor::Other;
@@ -14,58 +14,58 @@ use serde::Serialize as SerdeSerialize;
 pub use crate::infrastructure_layer::data::control_type::MessagePack;
 
 impl Serialize for Serializer<MessagePack> {
-    fn serialize<'a, T>(subject: &'a T) -> Result<Vec<u8>, ErrorAuditor>
+    fn serialize<'a, T>(subject: &'a T) -> Result<Vec<u8>, Auditor<Error>>
     where
         T: SerdeSerialize,
     {
         let data = match Serializer_::serialize(subject) {
             Ok(data_) => data_,
             Err(error) => {
-                return Err(
-                    ErrorAuditor::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new_(
-                                    Formatter_::prepare(&error).into()
-                                ),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    ),
-                );
+                todo!();
+                // return Err(
+                //     Auditor::<Error>::new(
+                //         Error::Runtime {
+                //             runtime: Runtime::Other {
+                //                 other: Other::new_(
+                //                     Formatter_::prepare(&error).into()
+                //                 ),
+                //             },
+                //         },
+                //         BacktracePart::new(
+                //             line!(),
+                //             file!(),
+                //         ),
+                //     ),
+                // );
             }
         };
 
         return Ok(data);
     }
 
-    fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, ErrorAuditor>
+    fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, Auditor<Error>>
     where
         T: Deserialize<'a>,
     {
         let subject = match Serializer_::deserialize::<'_, T>(data) {
             Ok(subject_) => subject_,
             Err(error) => {
-                return Err(
-                    ErrorAuditor::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new_(
-                                    Formatter_::prepare(&error).into()
-                                ),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                            None,
-                        ),
-                    ),
-                );
+                todo!();
+                // return Err(
+                //     Auditor::<Error>::new(
+                //         Error::Runtime {
+                //             runtime: Runtime::Other {
+                //                 other: Other::new_(
+                //                     Formatter_::prepare(&error).into()
+                //                 ),
+                //             },
+                //         },
+                //         BacktracePart::new(
+                //             line!(),
+                //             file!(),
+                //         ),
+                //     ),
+                // );
             }
         };
 

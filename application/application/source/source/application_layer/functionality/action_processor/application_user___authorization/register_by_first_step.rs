@@ -16,8 +16,8 @@ use crate::domain_layer::functionality::service::generator::Generator;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
 use crate::infrastructure_layer::data::error_auditor::Error;
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
-use crate::infrastructure_layer::data::error_auditor::ResourceError;
+use crate::infrastructure_layer::data::error_auditor::Auditor;
+use crate::infrastructure_layer::data::error_auditor::Other;
 use crate::infrastructure_layer::data::error_auditor::Runtime;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
@@ -52,7 +52,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
         incoming: Option<Incoming>,
-    ) -> Result<InvalidArgumentResult<UnifiedReport<Outcoming, Precedent>>, ErrorAuditor>
+    ) -> Result<InvalidArgumentResult<UnifiedReport<Outcoming, Precedent>>, Auditor<Error>>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -63,12 +63,11 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
             Some(incoming__) => incoming__,
             None => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::create_incoming_invalid_state(),
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -82,7 +81,6 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 );
 
@@ -110,18 +108,15 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
             Ok(database_1_postgresql_pooled_connection_) => database_1_postgresql_pooled_connection_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::ConnectionPoolPostgresql {
-                                    bb8_postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -142,7 +137,6 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 );
 
@@ -167,18 +161,15 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
             Ok(database_2_postgresql_pooled_connection_) => database_2_postgresql_pooled_connection_,
             Err(error) => {
                 return Err(
-                    ErrorAuditor::new(
+                    Auditor::<Error>::new(
                         Error::Runtime {
-                            runtime: Runtime::Resource {
-                                resource: ResourceError::ConnectionPoolPostgresql {
-                                    bb8_postgresql_error: error,
-                                },
+                            runtime: Runtime::Other {
+                                other: Other::new(error),
                             },
                         },
                         BacktracePart::new(
                             line!(),
                             file!(),
-                            None,
                         ),
                     ),
                 );
@@ -199,7 +190,6 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 );
 
@@ -217,7 +207,6 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
                                 BacktracePart::new(
                                     line!(),
                                     file!(),
-                                    None,
                                 ),
                             );
 
@@ -248,7 +237,6 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
                                 BacktracePart::new(
                                     line!(),
                                     file!(),
-                                    None,
                                 ),
                             );
 
@@ -279,7 +267,6 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
                             BacktracePart::new(
                                 line!(),
                                 file!(),
-                                None,
                             ),
                         );
 
@@ -300,7 +287,6 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
                                 BacktracePart::new(
                                     line!(),
                                     file!(),
-                                    None,
                                 ),
                             );
 
@@ -325,7 +311,6 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
                                 BacktracePart::new(
                                     line!(),
                                     file!(),
-                                    None,
                                 ),
                             );
 
@@ -349,7 +334,6 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
                             BacktracePart::new(
                                 line!(),
                                 file!(),
-                                None,
                             ),
                         );
 
@@ -364,7 +348,6 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
                             BacktracePart::new(
                                 line!(),
                                 file!(),
-                                None,
                             ),
                         );
 
@@ -392,7 +375,6 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
                             BacktracePart::new(
                                 line!(),
                                 file!(),
-                                None,
                             ),
                         );
 
@@ -419,7 +401,6 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 );
 

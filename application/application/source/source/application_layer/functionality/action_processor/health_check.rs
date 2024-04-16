@@ -1,5 +1,6 @@
 use crate::application_layer::data::unified_report::UnifiedReport;
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::data::error_auditor::Auditor;
+use crate::infrastructure_layer::data::error_auditor::Error;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::data::void::Void;
 use bb8::Pool;
@@ -21,7 +22,7 @@ impl ActionProcessor<HealthCheck> {
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
         incoming: Option<Void>,
-    ) -> Result<InvalidArgumentResult<UnifiedReport<Void, Void>>, ErrorAuditor>
+    ) -> Result<InvalidArgumentResult<UnifiedReport<Void, Void>>, Auditor<Error>>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,

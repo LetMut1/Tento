@@ -3,13 +3,14 @@ use crate::domain_layer::data::entity::application_user_access_token::Applicatio
 use crate::domain_layer::data::entity::application_user_access_token_encrypted::ApplicationUserAccessTokenEncrypted;
 use crate::domain_layer::functionality::service::form_resolver::FormResolver;
 use crate::infrastructure_layer::data::error_auditor::BacktracePart;
-use crate::infrastructure_layer::data::error_auditor::ErrorAuditor;
+use crate::infrastructure_layer::data::error_auditor::Auditor;
+use crate::infrastructure_layer::data::error_auditor::Error;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::unix_time::UnixTime;
 
 impl Extractor<ApplicationUserAccessToken<'_>> {
-    pub async fn extract<'a>(application_user_access_token_encrypted: &'a ApplicationUserAccessTokenEncrypted) -> Result<InvalidArgumentResult<ExtractorResult>, ErrorAuditor> {
+    pub async fn extract<'a>(application_user_access_token_encrypted: &'a ApplicationUserAccessTokenEncrypted) -> Result<InvalidArgumentResult<ExtractorResult>, Auditor<Error>> {
         let application_user_access_token = match FormResolver::<ApplicationUserAccessToken<'_>>::from_encrypted(application_user_access_token_encrypted) {
             Ok(application_user_access_token_) => application_user_access_token_,
             Err(mut error) => {
@@ -17,7 +18,6 @@ impl Extractor<ApplicationUserAccessToken<'_>> {
                     BacktracePart::new(
                         line!(),
                         file!(),
-                        None,
                     ),
                 );
 
