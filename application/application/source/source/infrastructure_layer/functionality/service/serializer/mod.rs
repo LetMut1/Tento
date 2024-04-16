@@ -3,7 +3,7 @@ pub mod message_pack;
 #[cfg(feature = "manual_testing")]
 pub mod json;
 
-use crate::infrastructure_layer::data::error::Auditor;
+use crate::infrastructure_layer::data::auditor::Auditor;
 use serde::Deserialize;
 use serde::Serialize as SerdeSerialize;
 use std::marker::PhantomData;

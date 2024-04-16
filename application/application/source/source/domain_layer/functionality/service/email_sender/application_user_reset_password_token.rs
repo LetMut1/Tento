@@ -3,8 +3,8 @@ use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_Value;
-use crate::infrastructure_layer::data::error::BacktracePart;
-use crate::infrastructure_layer::data::error::Auditor;
+use crate::infrastructure_layer::data::auditor::BacktracePart;
+use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::error::Error;
 
 use crate::infrastructure_layer::functionality::service::sender::email::Email;

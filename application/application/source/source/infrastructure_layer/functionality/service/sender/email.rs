@@ -1,9 +1,9 @@
 use super::Sender;
 use crate::infrastructure_layer::data::environment_configuration::Environment;
 use crate::infrastructure_layer::data::environment_configuration::ENVIRONMENT_CONFIGURATION;
-use crate::infrastructure_layer::data::error::BacktracePart;
+use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::error::Error;
-use crate::infrastructure_layer::data::error::Auditor;
+use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::error::Other;
 use crate::infrastructure_layer::data::error::Runtime;
 use lettre::smtp::SmtpClient;

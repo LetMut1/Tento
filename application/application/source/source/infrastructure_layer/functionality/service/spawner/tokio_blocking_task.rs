@@ -1,4 +1,4 @@
-use crate::infrastructure_layer::data::error::Auditor;
+use crate::infrastructure_layer::data::auditor::Auditor;
 use std::marker::Send;
 use tokio::task::JoinHandle;
 use tokio::task::spawn_blocking;

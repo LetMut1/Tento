@@ -2,7 +2,7 @@ use crate::infrastructure_layer::functionality::service::formatter::Formatter;
 use tracing::error;
 use super::Logger;
 
-pub use crate::infrastructure_layer::data::error::Auditor;
+pub use crate::infrastructure_layer::data::auditor::Auditor;
 pub use crate::infrastructure_layer::data::error::Error;
 
 impl Logger<Auditor<Error>> {

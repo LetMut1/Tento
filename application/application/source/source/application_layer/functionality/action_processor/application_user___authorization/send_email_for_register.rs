@@ -8,9 +8,9 @@ use crate::domain_layer::data::entity::application_user_registration_token::Appl
 use crate::domain_layer::functionality::service::email_sender::EmailSender;
 use crate::domain_layer::functionality::service::generator::Generator;
 use crate::domain_layer::functionality::service::validator::Validator;
-use crate::infrastructure_layer::data::error::BacktracePart;
+use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::error::Error;
-use crate::infrastructure_layer::data::error::Auditor;
+use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::error::Other;
 use crate::infrastructure_layer::data::error::Runtime;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;

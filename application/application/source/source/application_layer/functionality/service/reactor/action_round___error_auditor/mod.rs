@@ -7,7 +7,7 @@ use crate::infrastructure_layer::data::control_type::TokioNonBlockingTask;
 use crate::infrastructure_layer::functionality::service::spawner::Spawner;
 
 pub use crate::infrastructure_layer::data::control_type::ActionRound;
-pub use crate::infrastructure_layer::data::error::Auditor;
+pub use crate::infrastructure_layer::data::auditor::Auditor;
 
 impl Reactor<(ActionRound, Auditor<Error>)> {
     pub fn react<'a>(

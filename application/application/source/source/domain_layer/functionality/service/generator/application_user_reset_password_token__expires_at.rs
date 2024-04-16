@@ -1,7 +1,7 @@
 use super::Generator;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_ExpiresAt;
-use crate::infrastructure_layer::data::error::BacktracePart;
-use crate::infrastructure_layer::data::error::Auditor;
+use crate::infrastructure_layer::data::auditor::BacktracePart;
+use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::functionality::service::resolver::date_time::DateTime;
 use crate::infrastructure_layer::functionality::service::resolver::Resolver;
 use crate::infrastructure_layer::data::error::Error;

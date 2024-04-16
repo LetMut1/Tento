@@ -1,9 +1,9 @@
 use super::Encoder;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Password;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_PasswordHash;
-use crate::infrastructure_layer::data::error::BacktracePart;
+use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::error::Error;
-use crate::infrastructure_layer::data::error::Auditor;
+use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::error::Other;
 use crate::infrastructure_layer::data::error::Runtime;
 use crate::infrastructure_layer::functionality::service::encoder::argon2id::Argon2Id;

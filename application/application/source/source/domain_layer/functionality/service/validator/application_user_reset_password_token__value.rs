@@ -1,8 +1,8 @@
 use super::Validator;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_Value;
-use crate::infrastructure_layer::data::error::BacktracePart;
+use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::error::Error;
-use crate::infrastructure_layer::data::error::Auditor;
+use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::error::Other;
 use crate::infrastructure_layer::data::error::Runtime;
 use regex::Regex;

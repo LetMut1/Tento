@@ -1,7 +1,7 @@
 use http::request::Parts;
 use hyper::Body;
 use matchit::Params;
-use crate::infrastructure_layer::data::error::Auditor;
+use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use super::Extractor;
 use crate::infrastructure_layer::data::error::Error;

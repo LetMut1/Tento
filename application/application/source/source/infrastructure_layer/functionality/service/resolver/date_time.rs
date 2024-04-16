@@ -1,7 +1,7 @@
 use super::Resolver;
-use crate::infrastructure_layer::data::error::BacktracePart;
+use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::error::Error;
-use crate::infrastructure_layer::data::error::Auditor;
+use crate::infrastructure_layer::data::auditor::Auditor;
 use chrono::DateTime as ChronoDateTime;
 use chrono::Utc;
 
