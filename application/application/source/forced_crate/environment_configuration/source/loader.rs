@@ -16,7 +16,7 @@ use super::environment_configuration::TcpKeepalive;
 use super::environment_configuration::Tls;
 use super::environment_configuration::TokioRuntime;
 use super::sealed::String_;
-use error::backtrace::BacktracePart;
+use error::auditor::BacktracePart;
 use error::error::Error;
 use error::error::Other;
 use error::error::Runtime;

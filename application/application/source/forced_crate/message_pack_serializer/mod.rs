@@ -82,7 +82,7 @@
 )]
 
 use error::auditor::Auditor;
-use error::backtrace::BacktracePart;
+use error::auditor::BacktracePart;
 use error::error::Error;
 use error::error::Other;
 use error::error::Runtime;
