@@ -6,7 +6,7 @@ edition = "2021"
 
 [lib]
 name = "build_script_constant"
-path = "./mod.rs"
+path = "./source/mod.rs"
 test = true
 doctest = true
 bench = true

@@ -1,9 +1,5 @@
 use error::Error;
 use std::error::Error as StdError;
-use std::fmt::Debug;
-use std::fmt::Display;
-use std::fmt::Error as FmtError;
-use std::fmt::Formatter;
 use error::Runtime;
 use error::Other;
 use std::boxed::Box;
@@ -91,26 +87,6 @@ impl BacktracePart {
         return self.file_path;
     }
 }
-
-impl Debug for Auditor<Error> {
-    fn fmt<'a, 'b>(
-        &'a self,
-        _: &'b mut Formatter<'_>,
-    ) -> Result<(), FmtError> {
-        return Ok(());
-    }
-}
-
-impl Display for Auditor<Error> {
-    fn fmt<'a, 'b>(
-        &'a self,
-        _: &'b mut Formatter<'_>,
-    ) -> Result<(), FmtError> {
-        return Ok(());
-    }
-}
-
-impl StdError for Auditor<Error> {}
 
 pub trait Converter<T> {
     fn convert(self, backtrace_part: BacktracePart) -> Result<T, Auditor<Error>>;

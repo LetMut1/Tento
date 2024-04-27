@@ -123,9 +123,12 @@ name = "client_server_data_serializer"
 version = "0.1.0"
 dependencies = [
  "action_processor_incoming_outcoming",
+ "auditor",
  "cargo-emit",
  "cbindgen",
  "entity",
+ "error",
+ "formatter",
  "libc",
  "message_pack_serializer",
  "serde",
@@ -179,6 +182,10 @@ checksum = "25cbce373ec4653f1a01a31e8a5e5ec0c622dc27ff9c4e6606eefef5cbbed4a5"
 [[package]]
 name = "formatter"
 version = "0.1.0"
+dependencies = [
+ "auditor",
+ "error",
+]
 
 [[package]]
 name = "getrandom"

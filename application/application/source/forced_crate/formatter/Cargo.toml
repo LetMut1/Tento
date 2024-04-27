@@ -6,7 +6,7 @@ edition = "2021"
 
 [lib]
 name = "formatter"
-path = "./mod.rs"
+path = "./source/mod.rs"
 test = true
 doctest = true
 bench = true
@@ -16,6 +16,10 @@ harness = true
 edition = "2021"
 crate-type = ["lib"]
 required-features = []
+
+[dependencies]
+auditor = { path = "./../auditor", package = "auditor", version = "0.1.0", default-features = true, features = [], optional = false }
+error = { path = "./../error", package = "error", version = "0.1.0", default-features = true, features = [], optional = false }
 
 [features]
 default = []

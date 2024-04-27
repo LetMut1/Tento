@@ -721,6 +721,10 @@ dependencies = [
 [[package]]
 name = "formatter"
 version = "0.1.0"
+dependencies = [
+ "auditor",
+ "error",
+]
 
 [[package]]
 name = "fuchsia-cprng"

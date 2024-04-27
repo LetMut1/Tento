@@ -88,8 +88,6 @@ use std::io::Write;
 use std::path::Path;
 use cargo_emit::rerun_if_changed;
 use uuid::Uuid;
-use formatter::Formatter;
-use formatter::Format;
 
 fn main() -> () {
     if let Err(error) = Processor::process() {

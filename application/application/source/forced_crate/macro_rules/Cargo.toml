@@ -6,7 +6,7 @@ edition = "2021"
 
 [lib]
 name = "macro_rules"
-path = "./mod.rs"
+path = "./source/mod.rs"
 test = true
 doctest = true
 bench = true
