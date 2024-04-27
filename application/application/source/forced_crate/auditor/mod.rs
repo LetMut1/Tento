@@ -116,13 +116,9 @@ pub trait Converter<T> {
     fn convert(self, backtrace_part: BacktracePart) -> Result<T, Auditor<Error>>;
 }
 
-// pub trait Converter_<T> {
-//     fn convert(self, backtrace_part: BacktracePart) -> Result<T, Auditor<Error>>;
-// }
-
 impl<E, T> Converter<T> for Result<T, E>
 where
-    E: StdError + Sync + Send + 'static,
+    E: StdError + Send + Sync + 'static,
 {
     fn convert(self, backtrace_part: BacktracePart) -> Result<T, Auditor<Error>> {
         let result = match self {
@@ -143,41 +139,26 @@ where
     }
 }
 
-// impl<T> Converter_<T> for Result<T, Box<dyn StdError + Sync + Send + 'static>> {
-//     fn convert(self, backtrace_part: BacktracePart) -> Result<T, Auditor<Error>> {
-//         let result = match self {
-//             Ok(value) => Ok(value),
-//             Err(error) => Err(
-//                 Auditor::<Error>::new(
-//                     Error::Runtime {
-//                         runtime: Runtime::Other {
-//                             other: Other::new_(error),
-//                         },
-//                     },
-//                     backtrace_part,
-//                 )
-//             )
-//         };
+pub trait Converter_<T> {
+    fn convert(self, backtrace_part: BacktracePart) -> Result<T, Auditor<Error>>;
+}
 
-//         return result;
-//     }
-// }
+impl<T> Converter_<T> for Result<T, Box<dyn StdError + Sync + Send + 'static>> {
+    fn convert(self, backtrace_part: BacktracePart) -> Result<T, Auditor<Error>> {
+        let result = match self {
+            Ok(value) => Ok(value),
+            Err(error) => Err(
+                Auditor::<Error>::new(
+                    Error::Runtime {
+                        runtime: Runtime::Other {
+                            other: Other::new_(error),
+                        },
+                    },
+                    backtrace_part,
+                )
+            )
+        };
 
-
-// fn a() -> Result<(), Auditor<Error>> {
-
-//     let a = "aa".parse::<u8>().convert(BacktracePart::new(
-//         line!(),
-//         file!(),
-//     ))?;
-
-//     let b: Result<bool, Box<dyn StdError + Sync + Send + 'static>> = Err("sdc".into());
-//     let bb = <Result<bool, Box<dyn StdError + Sync + Send + 'static>> as Converter<bool>>::convert(b, BacktracePart::new(
-//         line!(),
-//         file!(),
-//     ))?;
-
-
-
-//     return Ok(());
-// }
+        return result;
+    }
+}

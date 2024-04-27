@@ -1,4 +1,8 @@
 use std::error::Error as StdError;
+use std::fmt::Debug;
+use std::fmt::Display;
+use std::fmt::Error as FmtError;
+use std::fmt::Formatter;
 
 pub enum Error {
     Logic {
@@ -28,6 +32,26 @@ impl Error {
         };
     }
 }
+
+impl Debug for Error {
+    fn fmt<'a, 'b>(
+        &'a self,
+        _: &'b mut Formatter<'_>,
+    ) -> Result<(), FmtError> {
+        return Ok(());
+    }
+}
+
+impl Display for Error {
+    fn fmt<'a, 'b>(
+        &'a self,
+        _: &'b mut Formatter<'_>,
+    ) -> Result<(), FmtError> {
+        return Ok(());
+    }
+}
+
+impl StdError for Error {}
 
 pub enum Runtime {
     Other {

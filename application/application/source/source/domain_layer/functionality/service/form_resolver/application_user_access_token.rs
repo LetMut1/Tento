@@ -119,20 +119,15 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
 
         let data = match Encoder_::<Base64>::decode(application_user_access_token_serialized.as_bytes()) {
             Ok(data_) => data_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
+            Err(mut error) => {
+                error.add_backtrace_part(
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
                     ),
                 );
+
+                return Err(error);
             }
         };
 

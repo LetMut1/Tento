@@ -13,20 +13,15 @@ impl Encoder<ApplicationUser_Password> {
     pub fn encode<'a>(application_user_password: &'a ApplicationUser_Password) -> Result<ApplicationUser_PasswordHash, Auditor<Error>> {
         let application_user_password_hash = match Encoder_::<Argon2Id>::encode(application_user_password.0.as_bytes()) {
             Ok(application_user_password_hash_) => application_user_password_hash_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
+            Err(mut error) => {
+                error.add_backtrace_part(
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
                     ),
                 );
+
+                return Err(error);
             }
         };
 
@@ -42,20 +37,15 @@ impl Encoder<ApplicationUser_Password> {
             application_user_password_hash.0.as_str(),
         ) {
             Ok(value_) => value_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
+            Err(mut error) => {
+                error.add_backtrace_part(
+                    BacktracePart::new(
+                        line!(),
+                        file!(),
                     ),
                 );
+
+                return Err(error);
             }
         };
 
