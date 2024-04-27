@@ -1,3 +1,4 @@
+mod backtrace;
 mod error_auditor;
 
 use std::marker::PhantomData;

@@ -1,6 +1,6 @@
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::error::Error;
-use formatter::Formatter as Formatter_;
+use super::Formatter_;
 use super::Formatter;
 
 impl Formatter<Auditor<Error>> {
