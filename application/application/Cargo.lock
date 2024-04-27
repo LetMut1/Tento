@@ -4,7 +4,7 @@ version = 3
 
 [[package]]
 name = "action_processor_incoming_outcoming"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "common_precedent",
  "entity",
@@ -101,7 +101,7 @@ dependencies = [
 
 [[package]]
 name = "application"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "action_processor_incoming_outcoming",
  "auditor",
@@ -174,7 +174,7 @@ dependencies = [
 
 [[package]]
 name = "auditor"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "error",
 ]
@@ -316,7 +316,7 @@ checksum = "40e38929add23cdf8a366df9b0e088953150724bcbe5fc330b0d8eb3b328eec8"
 
 [[package]]
 name = "build_script_constant"
-version = "0.1.0"
+version = "1.0.0"
 
 [[package]]
 name = "bumpalo"
@@ -429,7 +429,7 @@ dependencies = [
 
 [[package]]
 name = "common_precedent"
-version = "0.1.0"
+version = "1.0.0"
 
 [[package]]
 name = "const_format"
@@ -459,7 +459,7 @@ checksum = "245097e9a4535ee1e3e3931fcfcd55a796a44c643e8596ff6566d68f09b87bbc"
 
 [[package]]
 name = "core"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "application",
  "clap",
@@ -620,14 +620,14 @@ checksum = "a246d82be1c9d791c5dfde9a2bd045fc3cbba3fa2b11ad558f27d01712f00569"
 
 [[package]]
 name = "entity"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "serde",
 ]
 
 [[package]]
 name = "environment_configuration"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "auditor",
  "error",
@@ -665,7 +665,7 @@ dependencies = [
 
 [[package]]
 name = "error"
-version = "0.1.0"
+version = "1.0.0"
 
 [[package]]
 name = "fallible-iterator"
@@ -720,7 +720,7 @@ dependencies = [
 
 [[package]]
 name = "formatter"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "auditor",
  "error",
@@ -1073,7 +1073,7 @@ checksum = "b5e6163cb8c49088c2c36f57875e58ccd8c87c7427f7fbd50ea6710b2f3f2e8f"
 
 [[package]]
 name = "macro_rules"
-version = "0.1.0"
+version = "1.0.0"
 
 [[package]]
 name = "matchit"
@@ -1098,7 +1098,7 @@ checksum = "2dffe52ecf27772e601905b7522cb4ef790d2cc203488bbd0e2fe85fcb74566d"
 
 [[package]]
 name = "message_pack_serializer"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "auditor",
  "error",
@@ -2205,7 +2205,7 @@ checksum = "f962df74c8c05a667b5ee8bcf162993134c104e96440b663c8daa176dc772d8c"
 
 [[package]]
 name = "unified_report"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "serde",
 ]
@@ -2271,7 +2271,7 @@ checksum = "49874b5167b65d7193b8aba1567f5c7d93d001cafc34600cee003eda787e483f"
 
 [[package]]
 name = "void"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "formatter",
  "serde",

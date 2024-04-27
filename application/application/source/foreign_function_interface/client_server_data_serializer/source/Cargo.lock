@@ -4,7 +4,7 @@ version = 3
 
 [[package]]
 name = "action_processor_incoming_outcoming"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "common_precedent",
  "entity",
@@ -25,7 +25,7 @@ dependencies = [
 
 [[package]]
 name = "auditor"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "error",
 ]
@@ -120,7 +120,7 @@ dependencies = [
 
 [[package]]
 name = "client_server_data_serializer"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "action_processor_incoming_outcoming",
  "auditor",
@@ -139,11 +139,11 @@ dependencies = [
 
 [[package]]
 name = "common_precedent"
-version = "0.1.0"
+version = "1.0.0"
 
 [[package]]
 name = "entity"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "serde",
 ]
@@ -171,7 +171,7 @@ dependencies = [
 
 [[package]]
 name = "error"
-version = "0.1.0"
+version = "1.0.0"
 
 [[package]]
 name = "fastrand"
@@ -181,7 +181,7 @@ checksum = "25cbce373ec4653f1a01a31e8a5e5ec0c622dc27ff9c4e6606eefef5cbbed4a5"
 
 [[package]]
 name = "formatter"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "auditor",
  "error",
@@ -255,11 +255,11 @@ checksum = "b5e6163cb8c49088c2c36f57875e58ccd8c87c7427f7fbd50ea6710b2f3f2e8f"
 
 [[package]]
 name = "macro_rules"
-version = "0.1.0"
+version = "1.0.0"
 
 [[package]]
 name = "message_pack_serializer"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "auditor",
  "error",
@@ -461,7 +461,7 @@ checksum = "3354b9ac3fae1ff6755cb6db53683adb661634f67557942dea4facebec0fee4b"
 
 [[package]]
 name = "unified_report"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "serde",
 ]
@@ -477,7 +477,7 @@ dependencies = [
 
 [[package]]
 name = "void"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "formatter",
  "serde",
