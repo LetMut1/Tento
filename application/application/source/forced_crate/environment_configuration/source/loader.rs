@@ -1,3 +1,8 @@
+use auditor::Auditor;
+use auditor::BacktracePart;
+use auditor::Converter;
+use error::Error;
+use std::path::Path;
 use super::environment_configuration_file::EnvironmentConfigurationFile;
 use super::environment_configuration::ApplicationServer;
 use super::environment_configuration::EmailServer;
@@ -16,14 +21,6 @@ use super::environment_configuration::TcpKeepalive;
 use super::environment_configuration::Tls;
 use super::environment_configuration::TokioRuntime;
 use super::sealed::String_;
-use auditor::BacktracePart;
-use error::Error;
-use error::Other;
-use error::Runtime;
-use std::fs::read_to_string;
-use auditor::Auditor;
-use std::path::Path;
-use toml::from_str;
 
 pub struct Loader;
 
@@ -43,48 +40,10 @@ impl Loader {
 
         let production_environment_file_path_ = Path::new(production_environment_file_path.as_str());
 
-        let mut is_exist = match production_environment_file_path_.try_exists() {
-            Ok(is_exist_) => is_exist_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let (environment, environment_file_data) = if is_exist {
-            let environment_file_data_ = match read_to_string(production_environment_file_path_) {
-                Ok(environment_file_data__) => environment_file_data__,
-                Err(error) => {
-                    return Err(
-                        Auditor::<Error>::new(
-                            Error::Runtime {
-                                runtime: Runtime::Other {
-                                    other: Other::new(error),
-                                },
-                            },
-                            BacktracePart::new(
-                                line!(),
-                                file!(),
-                            ),
-                        ),
-                    );
-                }
-            };
-
+        let (environment, environment_file_data) = if production_environment_file_path_.try_exists().convert(BacktracePart::new(line!(), file!()))? {
             (
                 Environment::Production,
-                environment_file_data_,
+                std::fs::read_to_string(production_environment_file_path_).convert(BacktracePart::new(line!(), file!()))?,
             )
         } else {
             let local_development_environment_file_path = format!(
@@ -96,48 +55,10 @@ impl Loader {
 
             let local_development_environment_file_path_ = Path::new(local_development_environment_file_path.as_str());
 
-            is_exist = match local_development_environment_file_path_.try_exists() {
-                Ok(is_exist_) => is_exist_,
-                Err(error) => {
-                    return Err(
-                        Auditor::<Error>::new(
-                            Error::Runtime {
-                                runtime: Runtime::Other {
-                                    other: Other::new(error),
-                                },
-                            },
-                            BacktracePart::new(
-                                line!(),
-                                file!(),
-                            ),
-                        ),
-                    );
-                }
-            };
-
-            if is_exist {
-                let environment_file_data_ = match read_to_string(local_development_environment_file_path_) {
-                    Ok(environment_file_data__) => environment_file_data__,
-                    Err(error) => {
-                        return Err(
-                            Auditor::<Error>::new(
-                                Error::Runtime {
-                                    runtime: Runtime::Other {
-                                        other: Other::new(error),
-                                    },
-                                },
-                                BacktracePart::new(
-                                    line!(),
-                                    file!(),
-                                ),
-                            ),
-                        );
-                    }
-                };
-
+            if local_development_environment_file_path_.try_exists().convert(BacktracePart::new(line!(), file!()))? {
                 (
                     Environment::LocalDevelopment,
-                    environment_file_data_,
+                    std::fs::read_to_string(local_development_environment_file_path_).convert(BacktracePart::new(line!(), file!()))?,
                 )
             } else {
                 let development_environment_file_path = format!(
@@ -149,55 +70,15 @@ impl Loader {
 
                 let development_environment_file_path_ = Path::new(development_environment_file_path.as_str());
 
-                is_exist = match development_environment_file_path_.try_exists() {
-                    Ok(is_exist_) => is_exist_,
-                    Err(error) => {
-                        return Err(
-                            Auditor::<Error>::new(
-                                Error::Runtime {
-                                    runtime: Runtime::Other {
-                                        other: Other::new(error),
-                                    },
-                                },
-                                BacktracePart::new(
-                                    line!(),
-                                    file!(),
-                                ),
-                            ),
-                        );
-                    }
-                };
-
-                if is_exist {
-                    let environment_file_data_ = match read_to_string(development_environment_file_path_) {
-                        Ok(environment_file_data__) => environment_file_data__,
-                        Err(error) => {
-                            return Err(
-                                Auditor::<Error>::new(
-                                    Error::Runtime {
-                                        runtime: Runtime::Other {
-                                            other: Other::new(error),
-                                        },
-                                    },
-                                    BacktracePart::new(
-                                        line!(),
-                                        file!(),
-                                    ),
-                                ),
-                            );
-                        }
-                    };
-
+                if development_environment_file_path_.try_exists().convert(BacktracePart::new(line!(), file!()))? {
                     (
                         Environment::Development,
-                        environment_file_data_,
+                        std::fs::read_to_string(development_environment_file_path_).convert(BacktracePart::new(line!(), file!()))?,
                     )
                 } else {
                     return Err(
                         Auditor::<Error>::new(
-                            Error::Logic {
-                                message: "The environment.toml file does not exist.",
-                            },
+                            Error::new_logic("The environment.toml file does not exist."),
                             BacktracePart::new(
                                 line!(),
                                 file!(),
@@ -208,24 +89,7 @@ impl Loader {
             }
         };
 
-        let environment_configuration_file = match from_str::<EnvironmentConfigurationFile>(environment_file_data.as_str()) {
-            Ok(environment_configuration_file_) => environment_configuration_file_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        let environment_configuration_file = toml::from_str::<EnvironmentConfigurationFile>(environment_file_data.as_str()).convert(BacktracePart::new(line!(), file!()))?;
 
         let application_server = {
             let tcp = {

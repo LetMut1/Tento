@@ -1,7 +1,6 @@
 use error::Error;
 use auditor::Auditor;
 use auditor::Backtrace;
-use error::Other;
 use error::Runtime;
 use super::Formatter;
 

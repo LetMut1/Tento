@@ -10,7 +10,7 @@ use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::error::Runtime;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 use tokio_postgres::types::Type;
-use crate::infrastructure_layer::data::error::Other;
+use crate::infrastructure_layer::data::auditor::Converter;
 use tokio_postgres::Client as Connection;
 pub use action_processor_incoming_outcoming::ChannelInnerLink1;
 
@@ -44,80 +44,27 @@ impl PostgresqlRepository<ChannelInnerLink> {
                 Type::INT8,
             );
 
-        let statement = match database_1_connection
+        let statement = database_1_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        let row_registry = match database_1_connection
+        let row_registry = database_1_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        {
-            Ok(row_registry_) => row_registry_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let channel_inner_link_created_at = match row_registry[0].try_get::<'_, usize, String>(0) {
-            Ok(channel_inner_link_created_at_) => ChannelInnerLink_CreatedAt(channel_inner_link_created_at_),
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+.convert(BacktracePart::new(line!(), file!()))?;
 
         return Ok(
             ChannelInnerLink {
                 from: insert_8.channel_inner_link_from,
                 to: insert_8.channel_inner_link_to,
-                created_at: channel_inner_link_created_at,
+                created_at: ChannelInnerLink_CreatedAt(row_registry[0].try_get::<'_, usize, String>(0).convert(BacktracePart::new(line!(), file!()))?),
             },
         );
     }
@@ -146,55 +93,21 @@ impl PostgresqlRepository<ChannelInnerLink> {
                 Type::INT2,
             );
 
-        let statement = match database_1_connection
+        let statement = database_1_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        let row_registry = match database_1_connection
+        let row_registry = database_1_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        {
-            Ok(row_registry_) => row_registry_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+.convert(BacktracePart::new(line!(), file!()))?;
 
         let mut channel_inner_link_registry: Vec<ChannelInnerLink1> = vec![];
 
@@ -203,27 +116,8 @@ impl PostgresqlRepository<ChannelInnerLink> {
         }
 
         '_a: for row in row_registry.iter() {
-            let channel_inner_link_to = match row.try_get::<'_, usize, i64>(0) {
-                Ok(channel_inner_link_to_) => Channel_Id(channel_inner_link_to_),
-                Err(error) => {
-                    return Err(
-                        Auditor::<Error>::new(
-                            Error::Runtime {
-                                runtime: Runtime::Other {
-                                    other: Other::new(error),
-                                },
-                            },
-                            BacktracePart::new(
-                                line!(),
-                                file!(),
-                            ),
-                        ),
-                    );
-                }
-            };
-
             let channel_inner_link = ChannelInnerLink1 {
-                channel_inner_link_to,
+                channel_inner_link_to: Channel_Id(row.try_get::<'_, usize, i64>(0).convert(BacktracePart::new(line!(), file!()))?),
             };
 
             channel_inner_link_registry.push(channel_inner_link);

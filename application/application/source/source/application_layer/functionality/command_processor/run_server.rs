@@ -5,7 +5,7 @@ use crate::infrastructure_layer::data::environment_configuration::ENVIRONMENT_CO
 use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::error::Other;
+use crate::infrastructure_layer::data::error::Runtime;
 use crate::infrastructure_layer::data::error::Runtime;
 use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::service::creator::Creator;
@@ -137,7 +137,7 @@ impl CommandProcessor<RunServer> {
                 Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
-                            other: Other::new(error),
+                            other: Runtime::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -182,7 +182,7 @@ impl CommandProcessor<RunServer> {
                     Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
-                                other: Other::new(error),
+                                other: Runtime::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -238,7 +238,7 @@ impl CommandProcessor<RunServer> {
                     Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
-                                other: Other::new(error),
+                                other: Runtime::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -274,7 +274,7 @@ impl CommandProcessor<RunServer> {
                     Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
-                                other: Other::new(error),
+                                other: Runtime::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -341,7 +341,7 @@ impl CommandProcessor<RunServer> {
                     Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
-                                other: Other::new(error),
+                                other: Runtime::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -360,7 +360,7 @@ impl CommandProcessor<RunServer> {
                     Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
-                                other: Other::new(error),
+                                other: Runtime::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -379,7 +379,7 @@ impl CommandProcessor<RunServer> {
                     Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
-                                other: Other::new(error),
+                                other: Runtime::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -557,7 +557,7 @@ impl CommandProcessor<RunServer> {
                 Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
-                            other: Other::new(error),
+                            other: Runtime::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -584,7 +584,7 @@ impl CommandProcessor<RunServer> {
                 Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
-                            other: Other::new(error),
+                            other: Runtime::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -605,7 +605,7 @@ impl CommandProcessor<RunServer> {
                 Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
-                            other: Other::new(error),
+                            other: Runtime::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -626,7 +626,7 @@ impl CommandProcessor<RunServer> {
                 Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
-                            other: Other::new(error),
+                            other: Runtime::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -647,7 +647,7 @@ impl CommandProcessor<RunServer> {
                 Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
-                            other: Other::new(error),
+                            other: Runtime::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -668,7 +668,7 @@ impl CommandProcessor<RunServer> {
                 Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
-                            other: Other::new(error),
+                            other: Runtime::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -689,7 +689,7 @@ impl CommandProcessor<RunServer> {
                 Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
-                            other: Other::new(error),
+                            other: Runtime::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -710,7 +710,7 @@ impl CommandProcessor<RunServer> {
                 Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
-                            other: Other::new(error),
+                            other: Runtime::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -731,7 +731,7 @@ impl CommandProcessor<RunServer> {
                 Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
-                            other: Other::new(error),
+                            other: Runtime::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -752,7 +752,7 @@ impl CommandProcessor<RunServer> {
                 Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
-                            other: Other::new(error),
+                            other: Runtime::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -773,7 +773,7 @@ impl CommandProcessor<RunServer> {
                 Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
-                            other: Other::new(error),
+                            other: Runtime::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -794,7 +794,7 @@ impl CommandProcessor<RunServer> {
                 Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
-                            other: Other::new(error),
+                            other: Runtime::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -815,7 +815,7 @@ impl CommandProcessor<RunServer> {
                 Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
-                            other: Other::new(error),
+                            other: Runtime::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -836,7 +836,7 @@ impl CommandProcessor<RunServer> {
                 Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
-                            other: Other::new(error),
+                            other: Runtime::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -857,7 +857,7 @@ impl CommandProcessor<RunServer> {
                 Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
-                            other: Other::new(error),
+                            other: Runtime::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -878,7 +878,7 @@ impl CommandProcessor<RunServer> {
                 Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
-                            other: Other::new(error),
+                            other: Runtime::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -899,7 +899,7 @@ impl CommandProcessor<RunServer> {
                 Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
-                            other: Other::new(error),
+                            other: Runtime::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -920,7 +920,7 @@ impl CommandProcessor<RunServer> {
                 Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
-                            other: Other::new(error),
+                            other: Runtime::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -941,7 +941,7 @@ impl CommandProcessor<RunServer> {
                 Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
-                            other: Other::new(error),
+                            other: Runtime::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -962,7 +962,7 @@ impl CommandProcessor<RunServer> {
                 Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
-                            other: Other::new(error),
+                            other: Runtime::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -983,7 +983,7 @@ impl CommandProcessor<RunServer> {
                 Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
-                            other: Other::new(error),
+                            other: Runtime::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -1004,7 +1004,7 @@ impl CommandProcessor<RunServer> {
                 Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
-                            other: Other::new(error),
+                            other: Runtime::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -1027,7 +1027,7 @@ impl CommandProcessor<RunServer> {
                     Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
-                                other: Other::new(error),
+                                other: Runtime::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -1048,7 +1048,7 @@ impl CommandProcessor<RunServer> {
                     Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
-                                other: Other::new(error),
+                                other: Runtime::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -1069,7 +1069,7 @@ impl CommandProcessor<RunServer> {
                     Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
-                                other: Other::new(error),
+                                other: Runtime::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -1090,7 +1090,7 @@ impl CommandProcessor<RunServer> {
                     Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
-                                other: Other::new(error),
+                                other: Runtime::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -1111,7 +1111,7 @@ impl CommandProcessor<RunServer> {
                     Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
-                                other: Other::new(error),
+                                other: Runtime::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -1132,7 +1132,7 @@ impl CommandProcessor<RunServer> {
                     Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
-                                other: Other::new(error),
+                                other: Runtime::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -1153,7 +1153,7 @@ impl CommandProcessor<RunServer> {
                     Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
-                                other: Other::new(error),
+                                other: Runtime::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -1174,7 +1174,7 @@ impl CommandProcessor<RunServer> {
                     Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
-                                other: Other::new(error),
+                                other: Runtime::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -1195,7 +1195,7 @@ impl CommandProcessor<RunServer> {
                     Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
-                                other: Other::new(error),
+                                other: Runtime::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -1216,7 +1216,7 @@ impl CommandProcessor<RunServer> {
                     Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
-                                other: Other::new(error),
+                                other: Runtime::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -1237,7 +1237,7 @@ impl CommandProcessor<RunServer> {
                     Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
-                                other: Other::new(error),
+                                other: Runtime::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -1258,7 +1258,7 @@ impl CommandProcessor<RunServer> {
                     Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
-                                other: Other::new(error),
+                                other: Runtime::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -1279,7 +1279,7 @@ impl CommandProcessor<RunServer> {
                     Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
-                                other: Other::new(error),
+                                other: Runtime::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -1300,7 +1300,7 @@ impl CommandProcessor<RunServer> {
                     Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
-                                other: Other::new(error),
+                                other: Runtime::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -1321,7 +1321,7 @@ impl CommandProcessor<RunServer> {
                     Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
-                                other: Other::new(error),
+                                other: Runtime::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -1342,7 +1342,7 @@ impl CommandProcessor<RunServer> {
                     Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
-                                other: Other::new(error),
+                                other: Runtime::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -1363,7 +1363,7 @@ impl CommandProcessor<RunServer> {
                     Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
-                                other: Other::new(error),
+                                other: Runtime::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -1384,7 +1384,7 @@ impl CommandProcessor<RunServer> {
                     Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
-                                other: Other::new(error),
+                                other: Runtime::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -1405,7 +1405,7 @@ impl CommandProcessor<RunServer> {
                     Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
-                                other: Other::new(error),
+                                other: Runtime::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -1426,7 +1426,7 @@ impl CommandProcessor<RunServer> {
                     Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
-                                other: Other::new(error),
+                                other: Runtime::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -1447,7 +1447,7 @@ impl CommandProcessor<RunServer> {
                     Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
-                                other: Other::new(error),
+                                other: Runtime::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -2038,7 +2038,7 @@ impl CommandProcessor<RunServer> {
                     Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
-                                other: Other::new(error),
+                                other: Runtime::new(error),
                             },
                         },
                         BacktracePart::new(

@@ -23,7 +23,7 @@ use crate::infrastructure_layer::functionality::service::prepared_statemant_para
 use std::borrow::Cow;
 use std::marker::PhantomData;
 use tokio_postgres::types::Type;
-use crate::infrastructure_layer::data::error::Other;
+use crate::infrastructure_layer::data::auditor::Converter;
 use tokio_postgres::Client as Connection;
 
 impl PostgresqlRepository<ApplicationUser<'_>> {
@@ -71,102 +71,30 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 Type::TEXT,
             );
 
-        let statement = match database_1_connection
+        let statement = database_1_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        let row_registry = match database_1_connection
+        let row_registry = database_1_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        {
-            Ok(row_registry_) => row_registry_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let application_user_id = match row_registry[0].try_get::<'_, usize, i64>(0) {
-            Ok(application_user_id_) => ApplicationUser_Id(application_user_id_),
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let application_user_created_at = match row_registry[0].try_get::<'_, usize, String>(1) {
-            Ok(application_user_created_at_) => ApplicationUser_CreatedAt(application_user_created_at_),
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+.convert(BacktracePart::new(line!(), file!()))?;
 
         return Ok(
             ApplicationUser {
-                id: application_user_id,
+                id: ApplicationUser_Id(row_registry[0].try_get::<'_, usize, i64>(0).convert(BacktracePart::new(line!(), file!()))?),
                 email: insert_1.application_user_email,
                 nickname: Cow::Owned(insert_1.application_user_nickname),
                 _password: PhantomData,
                 password_hash: insert_1.application_user_password_hash,
-                created_at: application_user_created_at,
+                created_at: ApplicationUser_CreatedAt(row_registry[0].try_get::<'_, usize, String>(1).convert(BacktracePart::new(line!(), file!()))?),
             },
         );
     }
@@ -190,55 +118,21 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             Type::TEXT,
         );
 
-        let statement = match database_1_connection
+        let statement = database_1_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        let row_registry = match database_1_connection
+        let row_registry = database_1_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        {
-            Ok(row_registry_) => row_registry_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+.convert(BacktracePart::new(line!(), file!()))?;
 
         if row_registry.is_empty() {
             return Ok(false);
@@ -266,55 +160,21 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             Type::TEXT,
         );
 
-        let statement = match database_1_connection
+        let statement = database_1_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        let row_registry = match database_1_connection
+        let row_registry = database_1_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        {
-            Ok(row_registry_) => row_registry_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+.convert(BacktracePart::new(line!(), file!()))?;
 
         if row_registry.is_empty() {
             return Ok(false);
@@ -340,55 +200,21 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             Type::INT8,
         );
 
-        let statement = match database_1_connection
+        let statement = database_1_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        let row_registry = match database_1_connection
+        let row_registry = database_1_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        {
-            Ok(row_registry_) => row_registry_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+.convert(BacktracePart::new(line!(), file!()))?;
 
         if row_registry.is_empty() {
             return Ok(false);
@@ -419,145 +245,35 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             Type::TEXT,
         );
 
-        let statement = match database_1_connection
+        let statement = database_1_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        let row_registry = match database_1_connection
+        let row_registry = database_1_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        {
-            Ok(row_registry_) => row_registry_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+.convert(BacktracePart::new(line!(), file!()))?;
 
         if row_registry.is_empty() {
             return Ok(None);
         }
 
-        let application_user_id = match row_registry[0].try_get::<'_, usize, i64>(0) {
-            Ok(application_user_id_) => ApplicationUser_Id(application_user_id_),
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let application_user_email = match row_registry[0].try_get::<'_, usize, String>(1) {
-            Ok(application_user_email_) => ApplicationUser_Email(application_user_email_),
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let application_user_password_hash = match row_registry[0].try_get::<'_, usize, String>(2) {
-            Ok(application_user_password_hash_) => ApplicationUser_PasswordHash(application_user_password_hash_),
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let application_user_created_at = match row_registry[0].try_get::<'_, usize, String>(3) {
-            Ok(application_user_created_at_) => ApplicationUser_CreatedAt(application_user_created_at_),
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
         return Ok(
             Some(
                 ApplicationUser {
-                    id: application_user_id,
-                    email: application_user_email,
+                    id: ApplicationUser_Id(row_registry[0].try_get::<'_, usize, i64>(0).convert(BacktracePart::new(line!(), file!()))?),
+                    email: ApplicationUser_Email(row_registry[0].try_get::<'_, usize, String>(1).convert(BacktracePart::new(line!(), file!()))?),
                     nickname: Cow::Borrowed(by_1.application_user_nickname),
                     _password: PhantomData,
-                    password_hash: application_user_password_hash,
-                    created_at: application_user_created_at,
+                    password_hash: ApplicationUser_PasswordHash(row_registry[0].try_get::<'_, usize, String>(2).convert(BacktracePart::new(line!(), file!()))?),
+                    created_at: ApplicationUser_CreatedAt(row_registry[0].try_get::<'_, usize, String>(3).convert(BacktracePart::new(line!(), file!()))?),
                 },
             ),
         );
@@ -586,123 +302,32 @@ impl PostgresqlRepository<ApplicationUser1> {
             Type::TEXT,
         );
 
-        let statement = match database_1_connection
+        let statement = database_1_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        let row_registry = match database_1_connection
+        let row_registry = database_1_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        {
-            Ok(row_registry_) => row_registry_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+.convert(BacktracePart::new(line!(), file!()))?;
 
         if row_registry.is_empty() {
             return Ok(None);
         }
 
-        let application_user_id = match row_registry[0].try_get::<'_, usize, i64>(0) {
-            Ok(application_user_id_) => ApplicationUser_Id(application_user_id_),
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let application_user_email = match row_registry[0].try_get::<'_, usize, String>(1) {
-            Ok(application_user_email_) => ApplicationUser_Email(application_user_email_),
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let application_user_password_hash = match row_registry[0].try_get::<'_, usize, String>(2) {
-            Ok(application_user_password_hash_) => ApplicationUser_PasswordHash(application_user_password_hash_),
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
         return Ok(
             Some(
                 ApplicationUser1 {
-                    id: application_user_id,
-                    email: application_user_email,
-                    password_hash: application_user_password_hash,
+                    id: ApplicationUser_Id(row_registry[0].try_get::<'_, usize, i64>(0).convert(BacktracePart::new(line!(), file!()))?),
+                    email: ApplicationUser_Email(row_registry[0].try_get::<'_, usize, String>(1).convert(BacktracePart::new(line!(), file!()))?),
+                    password_hash: ApplicationUser_PasswordHash(row_registry[0].try_get::<'_, usize, String>(2).convert(BacktracePart::new(line!(), file!()))?),
                 },
             ),
         );
@@ -731,123 +356,32 @@ impl PostgresqlRepository<ApplicationUser2> {
             Type::TEXT,
         );
 
-        let statement = match database_1_connection
+        let statement = database_1_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        let row_registry = match database_1_connection
+        let row_registry = database_1_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        {
-            Ok(row_registry_) => row_registry_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+.convert(BacktracePart::new(line!(), file!()))?;
 
         if row_registry.is_empty() {
             return Ok(None);
         }
 
-        let application_user_id = match row_registry[0].try_get::<'_, usize, i64>(0) {
-            Ok(application_user_id_) => ApplicationUser_Id(application_user_id_),
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let application_user_nickname = match row_registry[0].try_get::<'_, usize, String>(1) {
-            Ok(application_user_nickname_) => ApplicationUser_Nickname(application_user_nickname_),
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let application_user_password_hash = match row_registry[0].try_get::<'_, usize, String>(2) {
-            Ok(application_user_password_hash_) => ApplicationUser_PasswordHash(application_user_password_hash_),
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
         return Ok(
             Some(
                 ApplicationUser2 {
-                    id: application_user_id,
-                    nickname: application_user_nickname,
-                    password_hash: application_user_password_hash,
+                    id: ApplicationUser_Id(row_registry[0].try_get::<'_, usize, i64>(0).convert(BacktracePart::new(line!(), file!()))?),
+                    nickname: ApplicationUser_Nickname(row_registry[0].try_get::<'_, usize, String>(1).convert(BacktracePart::new(line!(), file!()))?),
+                    password_hash: ApplicationUser_PasswordHash(row_registry[0].try_get::<'_, usize, String>(2).convert(BacktracePart::new(line!(), file!()))?),
                 },
             ),
         );
@@ -874,83 +408,30 @@ impl PostgresqlRepository<ApplicationUser3> {
             Type::TEXT,
         );
 
-        let statement = match database_1_connection
+        let statement = database_1_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        let row_registry = match database_1_connection
+        let row_registry = database_1_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        {
-            Ok(row_registry_) => row_registry_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+.convert(BacktracePart::new(line!(), file!()))?;
 
         if row_registry.is_empty() {
             return Ok(None);
         }
 
-        let application_user_id = match row_registry[0].try_get::<'_, usize, i64>(0) {
-            Ok(application_user_id_) => ApplicationUser_Id(application_user_id_),
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
         return Ok(
             Some(
                 ApplicationUser3 {
-                    id: application_user_id,
+                    id: ApplicationUser_Id(row_registry[0].try_get::<'_, usize, i64>(0).convert(BacktracePart::new(line!(), file!()))?),
                 },
             ),
         );
@@ -988,52 +469,21 @@ impl PostgresqlRepository<ApplicationUser4> {
                 Type::INT8,
             );
 
-        let statement = match database_1_connection
+        let statement = database_1_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        if let Err(error) = database_1_connection
+        database_1_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Other::new(error),
-                        },
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        }
+            .convert(BacktracePart::new(line!(), file!()))?;
 
         return Ok(());
     }
@@ -1057,123 +507,32 @@ impl PostgresqlRepository<ApplicationUser4> {
             Type::INT8,
         );
 
-        let statement = match database_1_connection
+        let statement = database_1_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        let row_registry = match database_1_connection
+        let row_registry = database_1_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        {
-            Ok(row_registry_) => row_registry_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+.convert(BacktracePart::new(line!(), file!()))?;
 
         if row_registry.is_empty() {
             return Ok(None);
         }
 
-        let application_user_email = match row_registry[0].try_get::<'_, usize, String>(0) {
-            Ok(application_user_password_email_) => ApplicationUser_Email(application_user_password_email_),
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let application_user_password_nickname = match row_registry[0].try_get::<'_, usize, String>(1) {
-            Ok(application_user_password_nickanme_) => ApplicationUser_Nickname(application_user_password_nickanme_),
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let application_user_password_hash = match row_registry[0].try_get::<'_, usize, String>(2) {
-            Ok(application_user_password_hash_) => ApplicationUser_PasswordHash(application_user_password_hash_),
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
         return Ok(
             Some(
                 ApplicationUser4 {
-                    email: application_user_email,
-                    nickname: application_user_password_nickname,
-                    password_hash: application_user_password_hash,
+                    email: ApplicationUser_Email(row_registry[0].try_get::<'_, usize, String>(0).convert(BacktracePart::new(line!(), file!()))?),
+                    nickname: ApplicationUser_Nickname(row_registry[0].try_get::<'_, usize, String>(1).convert(BacktracePart::new(line!(), file!()))?),
+                    password_hash: ApplicationUser_PasswordHash(row_registry[0].try_get::<'_, usize, String>(2).convert(BacktracePart::new(line!(), file!()))?),
                 },
             ),
         );
@@ -1198,83 +557,30 @@ impl PostgresqlRepository<ApplicationUser5> {
             Type::INT8,
         );
 
-        let statement = match database_1_connection
+        let statement = database_1_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        let row_registry = match database_1_connection
+        let row_registry = database_1_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        {
-            Ok(row_registry_) => row_registry_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+.convert(BacktracePart::new(line!(), file!()))?;
 
         if row_registry.is_empty() {
             return Ok(None);
         }
 
-        let application_user_email = match row_registry[0].try_get::<'_, usize, String>(0) {
-            Ok(application_user_email_) => ApplicationUser_Email(application_user_email_),
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
         return Ok(
             Some(
                 ApplicationUser5 {
-                    email: application_user_email,
+                    email: ApplicationUser_Email(row_registry[0].try_get::<'_, usize, String>(0).convert(BacktracePart::new(line!(), file!()))?),
                 },
             ),
         );

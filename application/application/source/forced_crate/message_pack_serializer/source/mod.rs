@@ -84,12 +84,9 @@
 use auditor::Auditor;
 use auditor::BacktracePart;
 use error::Error;
-use error::Other;
-use error::Runtime;
-use rmp_serde::to_vec;
-use rmp_serde::from_read_ref;
 use serde::Deserialize;
 use serde::Serialize as SerdeSerialize;
+use auditor::Converter;
 
 pub struct Serializer;
 
@@ -98,51 +95,13 @@ impl Serializer {
     where
         T: SerdeSerialize,
     {
-        let data = match to_vec(subject) {
-            Ok(data_) => data_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
-        return Ok(data);
+        return rmp_serde::to_vec(subject).convert(BacktracePart::new(line!(), file!()));
     }
 
     pub fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, Auditor<Error>>
     where
         T: Deserialize<'a>,
     {
-        let subject = match from_read_ref::<'_, [u8], T>(data) {
-            Ok(subject_) => subject_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
-        return Ok(subject);
+        return rmp_serde::from_read_ref::<'_, [u8], T>(data).convert(BacktracePart::new(line!(), file!()));
     }
 }

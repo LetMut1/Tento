@@ -4,7 +4,7 @@ use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::error::Runtime;
-use crate::infrastructure_layer::data::error::Other;
+use crate::infrastructure_layer::data::error::Runtime;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use std::clone::Clone;
@@ -48,7 +48,7 @@ impl Creator<PostgresqlConnectionPoolNoTls> {
                             Auditor::<Error>::new(
                                 Error::Runtime {
                                     runtime: Runtime::Other {
-                                        other: Other::new(error),
+                                        other: Runtime::new(error),
                                     },
                                 },
                                 BacktracePart::new(

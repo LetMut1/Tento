@@ -10,7 +10,7 @@ use serde::Deserialize;
 use super::Extractor;
 use hyper::body::to_bytes;
 use crate::infrastructure_layer::data::error::Error;
-use crate::infrastructure_layer::data::error::Other;
+use crate::infrastructure_layer::data::error::Runtime;
 use crate::infrastructure_layer::data::error::Runtime;
 use bytes::Buf;
 
@@ -33,7 +33,7 @@ impl Extractor<HttpBodyData> {
                     Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
-                                other: Other::new(error),
+                                other: Runtime::new(error),
                             },
                         },
                         BacktracePart::new(

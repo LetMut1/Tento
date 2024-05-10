@@ -7,7 +7,7 @@ use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::error::Runtime;
-use crate::infrastructure_layer::data::error::Other;
+use crate::infrastructure_layer::data::auditor::Converter;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 use tokio_postgres::types::Type;
 use tokio_postgres::Client as Connection;
@@ -42,79 +42,26 @@ impl PostgresqlRepository<ChannelSubscription> {
                 Type::INT8,
             );
 
-        let statement = match database_1_connection
+        let statement = database_1_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        let row_registry = match database_1_connection
+        let row_registry = database_1_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        {
-            Ok(row_registry_) => row_registry_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let channel_subscription_created_at = match row_registry[0].try_get::<'_, usize, String>(0) {
-            Ok(channel_subscription_created_at_) => ChannelSubscription_CreatedAt(channel_subscription_created_at_),
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+.convert(BacktracePart::new(line!(), file!()))?;
 
         let channel_subscription = ChannelSubscription {
             application_user_id: insert_10.application_user_id,
             channel_id: insert_10.channel_id,
-            created_at: channel_subscription_created_at,
+            created_at: ChannelSubscription_CreatedAt(row_registry[0].try_get::<'_, usize, String>(0).convert(BacktracePart::new(line!(), file!()))?),
         };
 
         return Ok(channel_subscription);
@@ -142,55 +89,21 @@ impl PostgresqlRepository<ChannelSubscription> {
                 Type::INT8,
             );
 
-        let statement = match database_1_connection
+        let statement = database_1_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        let row_registry = match database_1_connection
+        let row_registry = database_1_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        {
-            Ok(row_registry_) => row_registry_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+.convert(BacktracePart::new(line!(), file!()))?;
 
         if row_registry.is_empty() {
             return Ok(false);

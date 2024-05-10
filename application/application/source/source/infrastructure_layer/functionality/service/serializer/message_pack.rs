@@ -4,7 +4,7 @@ use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::error::Runtime;
 use crate::infrastructure_layer::data::error::Error;
-use crate::infrastructure_layer::data::error::Other;
+use crate::infrastructure_layer::data::error::Runtime;
 use message_pack_serializer::Serializer as Serializer_;
 use serde::Deserialize;
 use serde::Serialize as SerdeSerialize;

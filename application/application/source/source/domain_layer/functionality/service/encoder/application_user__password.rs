@@ -4,7 +4,7 @@ use crate::domain_layer::data::entity::application_user::ApplicationUser_Passwor
 use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::error::Other;
+use crate::infrastructure_layer::data::error::Runtime;
 use crate::infrastructure_layer::data::error::Runtime;
 use crate::infrastructure_layer::functionality::service::encoder::argon2id::Argon2Id;
 use crate::infrastructure_layer::functionality::service::encoder::Encoder as Encoder_;

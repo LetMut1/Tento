@@ -1,7 +1,6 @@
 use error::Error;
 use std::error::Error as StdError;
 use error::Runtime;
-use error::Other;
 use std::boxed::Box;
 
 pub struct Auditor<T> {
@@ -101,11 +100,7 @@ where
             Ok(value) => Ok(value),
             Err(error) => Err(
                 Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Other::new(error),
-                        },
-                    },
+                    Error::new_runtime(error),
                     backtrace_part,
                 )
             )
@@ -125,11 +120,7 @@ impl<T> Converter_<T> for Result<T, Box<dyn StdError + Sync + Send + 'static>> {
             Ok(value) => Ok(value),
             Err(error) => Err(
                 Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Other::new_(error),
-                        },
-                    },
+                    Error::new_runtime_(error),
                     backtrace_part,
                 )
             )

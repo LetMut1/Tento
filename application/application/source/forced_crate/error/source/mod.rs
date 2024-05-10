@@ -14,21 +14,46 @@ pub enum Error {
 }
 
 impl Error {
-    pub fn create_incoming_invalid_state() -> Self {
+    pub fn new_logic(message: &'static str) -> Self {
+        return Self::Logic {
+            message,
+        };
+    }
+
+    pub fn new_logic_incoming_invalid_state() -> Self {
         return Self::Logic {
             message: "The action processor Incoming in invalid state.",
         };
     }
 
-    pub fn create_unreachable_state() -> Self {
+    pub fn new_logic_unreachable_state() -> Self {
         return Self::Logic {
             message: "Unreachable state.",
         };
     }
 
-    pub fn create_out_of_range() -> Self {
+    pub fn new_logic_out_of_range() -> Self {
         return Self::Logic {
             message: "Out of range.",
+        };
+    }
+
+    pub fn new_runtime<E>(error: E) -> Self
+    where
+        E: StdError + Send + Sync + 'static,
+    {
+        return Self::Runtime {
+            runtime: Runtime {
+                error: error.into(),
+            },
+        };
+    }
+
+    pub fn new_runtime_(error: Box<dyn StdError + Send + Sync + 'static>) -> Self {
+        return Self::Runtime {
+            runtime: Runtime {
+                error: error,
+            },
         };
     }
 }
@@ -53,33 +78,12 @@ impl Display for Error {
 
 impl StdError for Error {}
 
-pub enum Runtime {
-    Other {
-        other: Other,
-    },
-}
-
-pub struct Other {
+pub struct Runtime {
     error: Box<dyn StdError + Send + Sync + 'static>,
 }
 
-impl Other {
-    pub fn new<E>(error: E) -> Self
-    where
-        E: StdError + Send + Sync + 'static,
-    {
-        return Self {
-            error: error.into(),
-        };
-    }
-
-    pub fn new_(error: Box<dyn StdError + Send + Sync + 'static>) -> Self {
-        return Self {
-            error,
-        };
-    }
-
-    pub fn get_error<'a>(&'a self) -> &'a (dyn StdError + 'static) {
+impl Runtime {
+    pub fn get<'a>(&'a self) -> &'a (dyn StdError + 'static) {
         return self.error.as_ref();
     }
 }

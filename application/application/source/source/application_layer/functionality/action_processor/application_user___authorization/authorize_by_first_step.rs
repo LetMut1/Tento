@@ -18,7 +18,7 @@ use crate::domain_layer::functionality::service::encoder::Encoder;
 use crate::domain_layer::functionality::service::generator::Generator;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::auditor::BacktracePart;
-use crate::infrastructure_layer::data::error::Other;
+use crate::infrastructure_layer::data::error::Runtime;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::control_type::TokioBlockingTask;
 use crate::infrastructure_layer::functionality::service::spawner::Spawner;
@@ -71,7 +71,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
             None => {
                 return Err(
                     Auditor::<Error>::new(
-                        Error::create_incoming_invalid_state(),
+                        Error::new_logic_incoming_invalid_state(),
                         BacktracePart::new(
                             line!(),
                             file!(),
@@ -120,7 +120,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                     Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
-                                other: Other::new(error),
+                                other: Runtime::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -252,7 +252,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                     Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
-                                other: Other::new(error),
+                                other: Runtime::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -298,7 +298,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                     Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
-                                other: Other::new(error),
+                                other: Runtime::new(error),
                             },
                         },
                         BacktracePart::new(

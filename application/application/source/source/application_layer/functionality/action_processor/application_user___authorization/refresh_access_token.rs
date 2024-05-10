@@ -12,7 +12,7 @@ use crate::domain_layer::functionality::service::generator::Generator;
 use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::error::Other;
+use crate::infrastructure_layer::data::error::Runtime;
 use crate::infrastructure_layer::data::error::Runtime;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
@@ -56,7 +56,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
             None => {
                 return Err(
                     Auditor::<Error>::new(
-                        Error::create_incoming_invalid_state(),
+                        Error::new_logic_incoming_invalid_state(),
                         BacktracePart::new(
                             line!(),
                             file!(),
@@ -107,7 +107,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
                     Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
-                                other: Other::new(error),
+                                other: Runtime::new(error),
                             },
                         },
                         BacktracePart::new(

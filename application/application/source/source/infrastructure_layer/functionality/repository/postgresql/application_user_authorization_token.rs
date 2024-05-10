@@ -17,9 +17,8 @@ use crate::domain_layer::data::entity::application_user_authorization_token::App
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_WrongEnterTriesQuantity;
 use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::error::Error;
-use crate::infrastructure_layer::data::error::Other;
 use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::error::Runtime;
+use crate::infrastructure_layer::data::auditor::Converter;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 use std::borrow::Cow;
 use tokio_postgres::types::Type;
@@ -79,52 +78,21 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                 Type::INT8,
             );
 
-        let statement = match database_2_connection
+        let statement = database_2_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+            .convert(BacktracePart::new(line!(), file!()))?;
 
-        if let Err(error) = database_2_connection
+        database_2_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Other::new(error),
-                        },
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        };
+            .convert(BacktracePart::new(line!(), file!()))?;
 
         return Ok(
             ApplicationUserAuthorizationToken {
@@ -160,52 +128,21 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                 Type::TEXT,
             );
 
-        let statement = match database_2_connection
+        let statement = database_2_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+            .convert(BacktracePart::new(line!(), file!()))?;
 
-        if let Err(error) = database_2_connection
+        database_2_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Other::new(error),
-                        },
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        };
+            .convert(BacktracePart::new(line!(), file!()))?;
 
         return Ok(());
     }
@@ -264,52 +201,21 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken1> {
                 Type::TEXT,
             );
 
-        let statement = match database_2_connection
+        let statement = database_2_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+            .convert(BacktracePart::new(line!(), file!()))?;
 
-        if let Err(error) = database_2_connection
+        database_2_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Other::new(error),
-                        },
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        };
+            .convert(BacktracePart::new(line!(), file!()))?;
 
         return Ok(());
     }
@@ -341,143 +247,33 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken1> {
                 Type::TEXT,
             );
 
-        let statement = match database_2_connection
+        let statement = database_2_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+            .convert(BacktracePart::new(line!(), file!()))?;
 
-        let row_registry = match database_2_connection
+        let row_registry = database_2_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        {
-            Ok(row_registry_) => row_registry_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+            .convert(BacktracePart::new(line!(), file!()))?;
 
         if row_registry.is_empty() {
             return Ok(None);
         }
 
-        let application_user_authorization_token_value = match row_registry[0].try_get::<'_, usize, String>(0) {
-            Ok(application_user_authorization_token_value_) => ApplicationUserAuthorizationToken_Value(application_user_authorization_token_value_),
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let application_user_authorization_token_wrong_enter_tries_quantity = match row_registry[0].try_get::<'_, usize, i16>(1) {
-            Ok(application_user_authorization_token_wrong_enter_tries_quantity_) => ApplicationUserAuthorizationToken_WrongEnterTriesQuantity(application_user_authorization_token_wrong_enter_tries_quantity_),
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let application_user_authorization_token_expires_at = match row_registry[0].try_get::<'_, usize, i64>(2) {
-            Ok(application_user_authorization_token_expires_at_) => ApplicationUserAuthorizationToken_ExpiresAt(application_user_authorization_token_expires_at_),
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let application_user_authorization_token_can_be_resent_from = match row_registry[0].try_get::<'_, usize, i64>(3) {
-            Ok(application_user_authorization_token_can_be_resent_from_) => ApplicationUserAuthorizationToken_CanBeResentFrom(application_user_authorization_token_can_be_resent_from_),
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
         return Ok(
             Some(
                 ApplicationUserAuthorizationToken1 {
-                    value: application_user_authorization_token_value,
-                    wrong_enter_tries_quantity: application_user_authorization_token_wrong_enter_tries_quantity,
-                    expires_at: application_user_authorization_token_expires_at,
-                    can_be_resent_from: application_user_authorization_token_can_be_resent_from,
+                    value: ApplicationUserAuthorizationToken_Value(row_registry[0].try_get::<'_, usize, String>(0).convert(BacktracePart::new(line!(), file!()))?),
+                    wrong_enter_tries_quantity: ApplicationUserAuthorizationToken_WrongEnterTriesQuantity(row_registry[0].try_get::<'_, usize, i16>(1).convert(BacktracePart::new(line!(), file!()))?),
+                    expires_at: ApplicationUserAuthorizationToken_ExpiresAt(row_registry[0].try_get::<'_, usize, i64>(2).convert(BacktracePart::new(line!(), file!()))?),
+                    can_be_resent_from: ApplicationUserAuthorizationToken_CanBeResentFrom(row_registry[0].try_get::<'_, usize, i64>(3).convert(BacktracePart::new(line!(), file!()))?),
                 },
             ),
         );
@@ -531,52 +327,21 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken2> {
                 Type::TEXT,
             );
 
-        let statement = match database_2_connection
+        let statement = database_2_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+            .convert(BacktracePart::new(line!(), file!()))?;
 
-        if let Err(error) = database_2_connection
+        database_2_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Other::new(error),
-                        },
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        };
+            .convert(BacktracePart::new(line!(), file!()))?;
 
         return Ok(());
     }
@@ -607,123 +372,32 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken2> {
                 Type::TEXT,
             );
 
-        let statement = match database_2_connection
+        let statement = database_2_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+            .convert(BacktracePart::new(line!(), file!()))?;
 
-        let row_registry = match database_2_connection
+        let row_registry = database_2_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        {
-            Ok(row_registry_) => row_registry_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+            .convert(BacktracePart::new(line!(), file!()))?;
 
         if row_registry.is_empty() {
             return Ok(None);
         }
 
-        let application_user_authorization_token_value = match row_registry[0].try_get::<'_, usize, String>(0) {
-            Ok(application_user_authorization_token_value_) => ApplicationUserAuthorizationToken_Value(application_user_authorization_token_value_),
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let application_user_authorization_token_wrong_enter_tries_quantity = match row_registry[0].try_get::<'_, usize, i16>(1) {
-            Ok(application_user_authorization_token_wrong_enter_tries_quantity_) => ApplicationUserAuthorizationToken_WrongEnterTriesQuantity(application_user_authorization_token_wrong_enter_tries_quantity_),
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let application_user_authorization_token_expires_at = match row_registry[0].try_get::<'_, usize, i64>(2) {
-            Ok(application_user_authorization_token_expires_at_) => ApplicationUserAuthorizationToken_ExpiresAt(application_user_authorization_token_expires_at_),
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
         return Ok(
             Some(
                 ApplicationUserAuthorizationToken2 {
-                    value: application_user_authorization_token_value,
-                    wrong_enter_tries_quantity: application_user_authorization_token_wrong_enter_tries_quantity,
-                    expires_at: application_user_authorization_token_expires_at,
+                    value: ApplicationUserAuthorizationToken_Value(row_registry[0].try_get::<'_, usize, String>(0).convert(BacktracePart::new(line!(), file!()))?),
+                    wrong_enter_tries_quantity: ApplicationUserAuthorizationToken_WrongEnterTriesQuantity(row_registry[0].try_get::<'_, usize, i16>(1).convert(BacktracePart::new(line!(), file!()))?),
+                    expires_at: ApplicationUserAuthorizationToken_ExpiresAt(row_registry[0].try_get::<'_, usize, i64>(2).convert(BacktracePart::new(line!(), file!()))?),
                 },
             ),
         );
@@ -763,52 +437,21 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken3> {
                 Type::TEXT,
             );
 
-        let statement = match database_2_connection
+        let statement = database_2_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+            .convert(BacktracePart::new(line!(), file!()))?;
 
-        if let Err(error) = database_2_connection
+        database_2_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Other::new(error),
-                        },
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        };
+            .convert(BacktracePart::new(line!(), file!()))?;
 
         return Ok(());
     }
@@ -847,52 +490,21 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken4> {
                 Type::TEXT,
             );
 
-        let statement = match database_2_connection
+        let statement = database_2_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+            .convert(BacktracePart::new(line!(), file!()))?;
 
-        if let Err(error) = database_2_connection
+        database_2_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Other::new(error),
-                        },
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        };
+            .convert(BacktracePart::new(line!(), file!()))?;
 
         return Ok(());
     }
@@ -925,123 +537,32 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken5> {
                 Type::TEXT,
             );
 
-        let statement = match database_2_connection
+        let statement = database_2_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+            .convert(BacktracePart::new(line!(), file!()))?;
 
-        let row_registry = match database_2_connection
+        let row_registry = database_2_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        {
-            Ok(row_registry_) => row_registry_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+            .convert(BacktracePart::new(line!(), file!()))?;
 
         if row_registry.is_empty() {
             return Ok(None);
         }
 
-        let application_user_authorization_token_value = match row_registry[0].try_get::<'_, usize, String>(0) {
-            Ok(application_user_authorization_token_value_) => ApplicationUserAuthorizationToken_Value(application_user_authorization_token_value_),
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let application_user_authorization_token_expires_at = match row_registry[0].try_get::<'_, usize, i64>(1) {
-            Ok(application_user_authorization_token_expires_at_) => ApplicationUserAuthorizationToken_ExpiresAt(application_user_authorization_token_expires_at_),
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let application_user_authorization_token_can_be_resent_from = match row_registry[0].try_get::<'_, usize, i64>(2) {
-            Ok(application_user_authorization_token_can_be_resent_from_) => ApplicationUserAuthorizationToken_CanBeResentFrom(application_user_authorization_token_can_be_resent_from_),
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
         return Ok(
             Some(
                 ApplicationUserAuthorizationToken5 {
-                    value: application_user_authorization_token_value,
-                    expires_at: application_user_authorization_token_expires_at,
-                    can_be_resent_from: application_user_authorization_token_can_be_resent_from,
+                    value: ApplicationUserAuthorizationToken_Value(row_registry[0].try_get::<'_, usize, String>(0).convert(BacktracePart::new(line!(), file!()))?),
+                    expires_at: ApplicationUserAuthorizationToken_ExpiresAt(row_registry[0].try_get::<'_, usize, i64>(1).convert(BacktracePart::new(line!(), file!()))?),
+                    can_be_resent_from: ApplicationUserAuthorizationToken_CanBeResentFrom(row_registry[0].try_get::<'_, usize, i64>(2).convert(BacktracePart::new(line!(), file!()))?),
                 },
             ),
         );

@@ -4,7 +4,7 @@ use crate::infrastructure_layer::data::environment_configuration::ENVIRONMENT_CO
 use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::error::Other;
+use crate::infrastructure_layer::data::error::Runtime;
 use crate::infrastructure_layer::data::error::Runtime;
 use lettre::smtp::SmtpClient;
 use lettre::ClientSecurity;
@@ -35,7 +35,7 @@ impl Sender<Email> {
                     Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
-                                other: Other::new(error),
+                                other: Runtime::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -54,7 +54,7 @@ impl Sender<Email> {
                     Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
-                                other: Other::new(error),
+                                other: Runtime::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -98,7 +98,7 @@ impl Sender<Email> {
                             Auditor::<Error>::new(
                                 Error::Runtime {
                                     runtime: Runtime::Other {
-                                        other: Other::new(error),
+                                        other: Runtime::new(error),
                                     },
                                 },
                                 BacktracePart::new(
@@ -119,7 +119,7 @@ impl Sender<Email> {
                 Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
-                            other: Other::new(error),
+                            other: Runtime::new(error),
                         },
                     },
                     BacktracePart::new(

@@ -1,3 +1,3 @@
 pub use error::Error;
-pub use error::Other;
+pub use error::Runtime;
 pub use error::Runtime;

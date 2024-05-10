@@ -11,7 +11,7 @@ impl Incrementor<ApplicationUserResetPasswordToken_WrongEnterTriesQuantity> {
             None => {
                 return Err(
                     Auditor::<Error>::new(
-                        Error::create_out_of_range(),
+                        Error::new_logic_out_of_range(),
                         BacktracePart::new(
                             line!(),
                             file!(),

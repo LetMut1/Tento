@@ -8,7 +8,7 @@ use bb8::Pool;
 use bb8_redis::RedisConnectionManager;
 use redis::ConnectionInfo;
 use std::clone::Clone;
-use crate::infrastructure_layer::data::error::Other;
+use crate::infrastructure_layer::data::error::Runtime;
 
 pub use crate::infrastructure_layer::data::control_type::RedisConnectonPool;
 
@@ -29,7 +29,7 @@ impl Creator<RedisConnectonPool> {
                             Auditor::<Error>::new(
                                 Error::Runtime {
                                     runtime: Runtime::Other {
-                                        other: Other::new(error),
+                                        other: Runtime::new(error),
                                     },
                                 },
                                 BacktracePart::new(
@@ -51,7 +51,7 @@ impl Creator<RedisConnectonPool> {
                             Auditor::<Error>::new(
                                 Error::Runtime {
                                     runtime: Runtime::Other {
-                                        other: Other::new(error),
+                                        other: Runtime::new(error),
                                     },
                                 },
                                 BacktracePart::new(

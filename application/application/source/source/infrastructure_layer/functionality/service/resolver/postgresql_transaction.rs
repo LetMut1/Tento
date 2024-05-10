@@ -4,7 +4,7 @@ use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::error::Runtime;
 use tokio_postgres::Client as Connection;
-use crate::infrastructure_layer::data::error::Other;
+use crate::infrastructure_layer::data::error::Runtime;
 
 pub use crate::infrastructure_layer::data::control_type::PostgresqlTransaction;
 
@@ -51,7 +51,7 @@ impl Resolver<PostgresqlTransaction> {
                 Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
-                            other: Other::new(error),
+                            other: Runtime::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -82,7 +82,7 @@ impl Resolver<PostgresqlTransaction> {
                 Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
-                            other: Other::new(error),
+                            other: Runtime::new(error),
                         },
                     },
                     BacktracePart::new(
@@ -113,7 +113,7 @@ impl Resolver<PostgresqlTransaction> {
                 Auditor::<Error>::new(
                     Error::Runtime {
                         runtime: Runtime::Other {
-                            other: Other::new(error),
+                            other: Runtime::new(error),
                         },
                     },
                     BacktracePart::new(

@@ -19,7 +19,7 @@ use crate::infrastructure_layer::data::error::Runtime;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::control_type::TokioBlockingTask;
 use crate::infrastructure_layer::functionality::service::spawner::Spawner;
-use crate::infrastructure_layer::data::error::Other;
+use crate::infrastructure_layer::data::error::Runtime;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By3;
@@ -65,7 +65,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
             None => {
                 return Err(
                     Auditor::<Error>::new(
-                        Error::create_incoming_invalid_state(),
+                        Error::new_logic_incoming_invalid_state(),
                         BacktracePart::new(
                             line!(),
                             file!(),
@@ -133,7 +133,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
                     Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
-                                other: Other::new(error),
+                                other: Runtime::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -276,7 +276,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
                     Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
-                                other: Other::new(error),
+                                other: Runtime::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -345,7 +345,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
                     Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
-                                other: Other::new(error),
+                                other: Runtime::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -419,7 +419,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
                             Auditor::<Error>::new(
                                 Error::Runtime {
                                     runtime: Runtime::Other {
-                                        other: Other::new(error),
+                                        other: Runtime::new(error),
                                     },
                                 },
                                 BacktracePart::new(

@@ -24,7 +24,7 @@ use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::control_type::TokioNonBlockingTask;
-use crate::infrastructure_layer::data::error::Other;
+use crate::infrastructure_layer::data::error::Runtime;
 use crate::infrastructure_layer::functionality::service::spawner::Spawner;
 use crate::infrastructure_layer::data::error::Runtime;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
@@ -73,7 +73,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
             None => {
                 return Err(
                     Auditor::<Error>::new(
-                        Error::create_incoming_invalid_state(),
+                        Error::new_logic_incoming_invalid_state(),
                         BacktracePart::new(
                             line!(),
                             file!(),
@@ -133,7 +133,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
                     Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
-                                other: Other::new(error),
+                                other: Runtime::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -268,7 +268,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
                     Auditor::<Error>::new(
                         Error::Runtime {
                             runtime: Runtime::Other {
-                                other: Other::new(error),
+                                other: Runtime::new(error),
                             },
                         },
                         BacktracePart::new(
@@ -478,7 +478,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
                             Auditor::<Error>::new(
                                 Error::Runtime {
                                     runtime: Runtime::Other {
-                                        other: Other::new(error),
+                                        other: Runtime::new(error),
                                     },
                                 },
                                 BacktracePart::new(
@@ -519,7 +519,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
                             Auditor::<Error>::new(
                                 Error::Runtime {
                                     runtime: Runtime::Other {
-                                        other: Other::new(error),
+                                        other: Runtime::new(error),
                                     },
                                 },
                                 BacktracePart::new(

@@ -12,10 +12,9 @@ use crate::domain_layer::data::entity::application_user_access_token::Applicatio
 use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::error::Runtime;
+use crate::infrastructure_layer::data::auditor::Converter;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 use std::borrow::Cow;
-use crate::infrastructure_layer::data::error::Other;
 use tokio_postgres::types::Type;
 use tokio_postgres::Client as Connection;
 
@@ -75,52 +74,21 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 Type::INT8,
             );
 
-        let statement = match database_2_connection
+        let statement = database_2_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+            .convert(BacktracePart::new(line!(), file!()))?;
 
-        if let Err(error) = database_2_connection
+        database_2_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Other::new(error),
-                        },
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        };
+            .convert(BacktracePart::new(line!(), file!()))?;
 
         return Ok(
             ApplicationUserAccessRefreshToken {
@@ -155,52 +123,21 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 Type::TEXT,
             );
 
-        let statement = match database_2_connection
+        let statement = database_2_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+            .convert(BacktracePart::new(line!(), file!()))?;
 
-        if let Err(error) = database_2_connection
+        database_2_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Other::new(error),
-                        },
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        };
+            .convert(BacktracePart::new(line!(), file!()))?;
 
         return Ok(());
     }
@@ -220,52 +157,21 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
             Type::INT8,
         );
 
-        let statement = match database_2_connection
+        let statement = database_2_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+            .convert(BacktracePart::new(line!(), file!()))?;
 
-        if let Err(error) = database_2_connection
+        database_2_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Other::new(error),
-                        },
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        };
+            .convert(BacktracePart::new(line!(), file!()))?;
 
         return Ok(());
     }
@@ -297,145 +203,35 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 Type::TEXT,
             );
 
-        let statement = match database_2_connection
+        let statement = database_2_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+            .convert(BacktracePart::new(line!(), file!()))?;
 
-        let row_registry = match database_2_connection
+        let row_registry = database_2_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        {
-            Ok(row_registry_) => row_registry_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+            .convert(BacktracePart::new(line!(), file!()))?;
 
         if row_registry.is_empty() {
             return Ok(None);
         }
-
-        let application_user_access_token_id = match row_registry[0].try_get::<'_, usize, String>(0) {
-            Ok(application_user_access_token_id_) => ApplicationUserAccessToken_Id(application_user_access_token_id_),
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let application_user_access_refresh_token_obfuscation_value = match row_registry[0].try_get::<'_, usize, String>(1) {
-            Ok(application_user_access_refresh_token_obfuscation_value_) => ApplicationUserAccessRefreshToken_ObfuscationValue(application_user_access_refresh_token_obfuscation_value_),
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let application_user_access_refresh_token_expires_at = match row_registry[0].try_get::<'_, usize, i64>(2) {
-            Ok(application_user_access_refresh_token_expires_at_) => ApplicationUserAccessRefreshToken_ExpiresAt(application_user_access_refresh_token_expires_at_),
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let application_user_access_refresh_token_updated_at = match row_registry[0].try_get::<'_, usize, i64>(3) {
-            Ok(application_user_access_refresh_token_updated_at_) => ApplicationUserAccessRefreshToken_UpdatedAt(application_user_access_refresh_token_updated_at_),
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
 
         return Ok(
             Some(
                 ApplicationUserAccessRefreshToken {
                     application_user_id: by_4.application_user_id,
                     application_user_device_id: Cow::Borrowed(by_4.application_user_device_id),
-                    application_user_access_token_id: Cow::Owned(application_user_access_token_id),
-                    obfuscation_value: application_user_access_refresh_token_obfuscation_value,
-                    expires_at: application_user_access_refresh_token_expires_at,
-                    updated_at: application_user_access_refresh_token_updated_at,
+                    application_user_access_token_id: Cow::Owned(ApplicationUserAccessToken_Id(row_registry[0].try_get::<'_, usize, String>(0).convert(BacktracePart::new(line!(), file!()))?)),
+                    obfuscation_value: ApplicationUserAccessRefreshToken_ObfuscationValue(row_registry[0].try_get::<'_, usize, String>(1).convert(BacktracePart::new(line!(), file!()))?),
+                    expires_at: ApplicationUserAccessRefreshToken_ExpiresAt(row_registry[0].try_get::<'_, usize, i64>(2).convert(BacktracePart::new(line!(), file!()))?),
+                    updated_at: ApplicationUserAccessRefreshToken_UpdatedAt(row_registry[0].try_get::<'_, usize, i64>(3).convert(BacktracePart::new(line!(), file!()))?),
                 },
             ),
         );
@@ -497,52 +293,21 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken1> {
                 Type::TEXT,
             );
 
-        let statement = match database_2_connection
+        let statement = database_2_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+            .convert(BacktracePart::new(line!(), file!()))?;
 
-        if let Err(error) = database_2_connection
+        database_2_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Other::new(error),
-                        },
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        };
+            .convert(BacktracePart::new(line!(), file!()))?;
 
         return Ok(());
     }

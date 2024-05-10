@@ -18,7 +18,7 @@ use crate::infrastructure_layer::functionality::service::counter::Counter;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 pub use action_processor_incoming_outcoming::Common1;
 use tokio_postgres::types::Type;
-use crate::infrastructure_layer::data::error::Other;
+use crate::infrastructure_layer::data::auditor::Converter;
 use tokio_postgres::Client as Connection;
 
 impl PostgresqlRepository<Common1> {
@@ -171,55 +171,21 @@ impl PostgresqlRepository<Common1> {
             Type::INT2,
         );
 
-        let statement = match database_1_connection
+        let statement = database_1_connection
             .prepare_typed(
                 query.as_str(),
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        let row_registry = match database_1_connection
+        let row_registry = database_1_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        {
-            Ok(row_registry_) => row_registry_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+.convert(BacktracePart::new(line!(), file!()))?;
 
         let mut common_registry: Vec<Common1> = vec![];
 
@@ -228,164 +194,27 @@ impl PostgresqlRepository<Common1> {
         }
 
         '_a: for row in row_registry.iter() {
-            let channel_id = match row.try_get::<'_, usize, i64>(0) {
-                Ok(channel_id_) => Channel_Id(channel_id_),
-                Err(error) => {
-                    return Err(
-                        Auditor::<Error>::new(
-                            Error::Runtime {
-                                runtime: Runtime::Other {
-                                    other: Other::new(error),
-                                },
-                            },
-                            BacktracePart::new(
-                                line!(),
-                                file!(),
-                            ),
-                        ),
-                    );
-                }
+            let channel_cover_image_path = match row.try_get::<'_, usize, Option<String>>(4).convert(BacktracePart::new(line!(), file!()))? {
+                Some(channel_cover_image_path_) => Some(Channel_CoverImagePath(channel_cover_image_path_)),
+                None => None,
             };
 
-            let channel_name_ = match row.try_get::<'_, usize, String>(1) {
-                Ok(channel_name__) => Channel_Name(channel_name__),
-                Err(error) => {
-                    return Err(
-                        Auditor::<Error>::new(
-                            Error::Runtime {
-                                runtime: Runtime::Other {
-                                    other: Other::new(error),
-                                },
-                            },
-                            BacktracePart::new(
-                                line!(),
-                                file!(),
-                            ),
-                        ),
-                    );
-                }
-            };
-
-            let channel_linked_name = match row.try_get::<'_, usize, String>(2) {
-                Ok(channel_name__) => Channel_LinkedName(channel_name__),
-                Err(error) => {
-                    return Err(
-                        Auditor::<Error>::new(
-                            Error::Runtime {
-                                runtime: Runtime::Other {
-                                    other: Other::new(error),
-                                },
-                            },
-                            BacktracePart::new(
-                                line!(),
-                                file!(),
-                            ),
-                        ),
-                    );
-                }
-            };
-
-            let channel_access_modifier = match row.try_get::<'_, usize, i16>(3) {
-                Ok(channel_access_modifier_) => Channel_AccessModifier(channel_access_modifier_),
-                Err(error) => {
-                    return Err(
-                        Auditor::<Error>::new(
-                            Error::Runtime {
-                                runtime: Runtime::Other {
-                                    other: Other::new(error),
-                                },
-                            },
-                            BacktracePart::new(
-                                line!(),
-                                file!(),
-                            ),
-                        ),
-                    );
-                }
-            };
-
-            let channel_cover_image_path = match row.try_get::<'_, usize, Option<String>>(4) {
-                Ok(channel_cover_image_path_) => {
-                    let channel_cover_image_path__ = match channel_cover_image_path_ {
-                        Some(channel_cover_image_path___) => Some(Channel_CoverImagePath(channel_cover_image_path___)),
-                        None => None,
-                    };
-
-                    channel_cover_image_path__
-                }
-                Err(error) => {
-                    return Err(
-                        Auditor::<Error>::new(
-                            Error::Runtime {
-                                runtime: Runtime::Other {
-                                    other: Other::new(error),
-                                },
-                            },
-                            BacktracePart::new(
-                                line!(),
-                                file!(),
-                            ),
-                        ),
-                    );
-                }
-            };
-
-            let channel_background_image_path = match row.try_get::<'_, usize, Option<String>>(5) {
-                Ok(channel_background_image_path_) => {
-                    let channel_background_image_path__ = match channel_background_image_path_ {
-                        Some(channel_background_image_path___) => Some(Channel_BackgroundImagePath(channel_background_image_path___)),
-                        None => None,
-                    };
-
-                    channel_background_image_path__
-                }
-                Err(error) => {
-                    return Err(
-                        Auditor::<Error>::new(
-                            Error::Runtime {
-                                runtime: Runtime::Other {
-                                    other: Other::new(error),
-                                },
-                            },
-                            BacktracePart::new(
-                                line!(),
-                                file!(),
-                            ),
-                        ),
-                    );
-                }
-            };
-
-            let channel_id_ = match row.try_get::<'_, usize, Option<i64>>(6) {
-                Ok(channel_id_) => channel_id_,
-                Err(error) => {
-                    return Err(
-                        Auditor::<Error>::new(
-                            Error::Runtime {
-                                runtime: Runtime::Other {
-                                    other: Other::new(error),
-                                },
-                            },
-                            BacktracePart::new(
-                                line!(),
-                                file!(),
-                            ),
-                        ),
-                    );
-                }
+            let channel_background_image_path = match row.try_get::<'_, usize, Option<String>>(5).convert(BacktracePart::new(line!(), file!()))? {
+                Some(channel_background_image_path_) => Some(Channel_BackgroundImagePath(channel_background_image_path_)),
+                None => None,
             };
 
             let channel = Channel1 {
-                channel_id,
-                channel_name: channel_name_,
-                channel_linked_name,
-                channel_access_modifier,
+                channel_id: Channel_Id(row.try_get::<'_, usize, i64>(0).convert(BacktracePart::new(line!(), file!()))?),
+                channel_name: Channel_Name(row.try_get::<'_, usize, String>(1).convert(BacktracePart::new(line!(), file!()))?),
+                channel_linked_name: Channel_LinkedName(row.try_get::<'_, usize, String>(2).convert(BacktracePart::new(line!(), file!()))?),
+                channel_access_modifier: Channel_AccessModifier(row.try_get::<'_, usize, i16>(3).convert(BacktracePart::new(line!(), file!()))?),
                 channel_visability_modifier: by_11.channel_visability_modifier,
                 channel_cover_image_path,
                 channel_background_image_path,
             };
 
-            let is_application_user_subscribed = match channel_id_ {
+            let is_application_user_subscribed = match row.try_get::<'_, usize, Option<i64>>(6).convert(BacktracePart::new(line!(), file!()))? {
                 Some(_) => true,
                 None => false,
             };
@@ -530,55 +359,21 @@ impl PostgresqlRepository<Common1> {
             Type::INT2,
         );
 
-        let statement = match database_1_connection
+        let statement = database_1_connection
             .prepare_typed(
                 query.as_str(),
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        let row_registry = match database_1_connection
+        let row_registry = database_1_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        {
-            Ok(row_registry_) => row_registry_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+.convert(BacktracePart::new(line!(), file!()))?;
 
         let mut common_registry: Vec<Common1> = vec![];
 
@@ -587,159 +382,22 @@ impl PostgresqlRepository<Common1> {
         }
 
         '_a: for row in row_registry.iter() {
-            let channel_id = match row.try_get::<'_, usize, i64>(0) {
-                Ok(channel_id_) => Channel_Id(channel_id_),
-                Err(error) => {
-                    return Err(
-                        Auditor::<Error>::new(
-                            Error::Runtime {
-                                runtime: Runtime::Other {
-                                    other: Other::new(error),
-                                },
-                            },
-                            BacktracePart::new(
-                                line!(),
-                                file!(),
-                            ),
-                        ),
-                    );
-                }
+            let channel_cover_image_path = match row.try_get::<'_, usize, Option<String>>(5).convert(BacktracePart::new(line!(), file!()))? {
+                Some(channel_cover_image_path_) => Some(Channel_CoverImagePath(channel_cover_image_path_)),
+                None => None,
             };
 
-            let channel_name_ = match row.try_get::<'_, usize, String>(1) {
-                Ok(channel_name__) => Channel_Name(channel_name__),
-                Err(error) => {
-                    return Err(
-                        Auditor::<Error>::new(
-                            Error::Runtime {
-                                runtime: Runtime::Other {
-                                    other: Other::new(error),
-                                },
-                            },
-                            BacktracePart::new(
-                                line!(),
-                                file!(),
-                            ),
-                        ),
-                    );
-                }
-            };
-
-            let channel_linked_name = match row.try_get::<'_, usize, String>(2) {
-                Ok(channel_name__) => Channel_LinkedName(channel_name__),
-                Err(error) => {
-                    return Err(
-                        Auditor::<Error>::new(
-                            Error::Runtime {
-                                runtime: Runtime::Other {
-                                    other: Other::new(error),
-                                },
-                            },
-                            BacktracePart::new(
-                                line!(),
-                                file!(),
-                            ),
-                        ),
-                    );
-                }
-            };
-
-            let channel_access_modifier = match row.try_get::<'_, usize, i16>(3) {
-                Ok(channel_access_modifier_) => Channel_AccessModifier(channel_access_modifier_),
-                Err(error) => {
-                    return Err(
-                        Auditor::<Error>::new(
-                            Error::Runtime {
-                                runtime: Runtime::Other {
-                                    other: Other::new(error),
-                                },
-                            },
-                            BacktracePart::new(
-                                line!(),
-                                file!(),
-                            ),
-                        ),
-                    );
-                }
-            };
-
-            let channel_visability_modifier = match row.try_get::<'_, usize, i16>(4) {
-                Ok(channel_visability_modifier_) => Channel_VisabilityModifier(channel_visability_modifier_),
-                Err(error) => {
-                    return Err(
-                        Auditor::<Error>::new(
-                            Error::Runtime {
-                                runtime: Runtime::Other {
-                                    other: Other::new(error),
-                                },
-                            },
-                            BacktracePart::new(
-                                line!(),
-                                file!(),
-                            ),
-                        ),
-                    );
-                }
-            };
-
-            let channel_cover_image_path = match row.try_get::<'_, usize, Option<String>>(5) {
-                Ok(channel_cover_image_path_) => {
-                    let channel_cover_image_path__ = match channel_cover_image_path_ {
-                        Some(channel_cover_image_path___) => Some(Channel_CoverImagePath(channel_cover_image_path___)),
-                        None => None,
-                    };
-
-                    channel_cover_image_path__
-                }
-                Err(error) => {
-                    return Err(
-                        Auditor::<Error>::new(
-                            Error::Runtime {
-                                runtime: Runtime::Other {
-                                    other: Other::new(error),
-                                },
-                            },
-                            BacktracePart::new(
-                                line!(),
-                                file!(),
-                            ),
-                        ),
-                    );
-                }
-            };
-
-            let channel_background_image_path = match row.try_get::<'_, usize, Option<String>>(6) {
-                Ok(channel_background_image_path_) => {
-                    let channel_background_image_path__ = match channel_background_image_path_ {
-                        Some(channel_background_image_path___) => Some(Channel_BackgroundImagePath(channel_background_image_path___)),
-                        None => None,
-                    };
-
-                    channel_background_image_path__
-                }
-                Err(error) => {
-                    return Err(
-                        Auditor::<Error>::new(
-                            Error::Runtime {
-                                runtime: Runtime::Other {
-                                    other: Other::new(error),
-                                },
-                            },
-                            BacktracePart::new(
-                                line!(),
-                                file!(),
-                            ),
-                        ),
-                    );
-                }
+            let channel_background_image_path = match row.try_get::<'_, usize, Option<String>>(6).convert(BacktracePart::new(line!(), file!()))? {
+                Some(channel_background_image_path_) => Some(Channel_BackgroundImagePath(channel_background_image_path_)),
+                None => None,
             };
 
             let channel = Channel1 {
-                channel_id,
-                channel_name: channel_name_,
-                channel_linked_name,
-                channel_access_modifier,
-                channel_visability_modifier,
+                channel_id: Channel_Id(row.try_get::<'_, usize, i64>(0).convert(BacktracePart::new(line!(), file!()))?),
+                channel_name: Channel_Name(row.try_get::<'_, usize, String>(1).convert(BacktracePart::new(line!(), file!()))?),
+                channel_linked_name: Channel_LinkedName(row.try_get::<'_, usize, String>(2).convert(BacktracePart::new(line!(), file!()))?),
+                channel_access_modifier: Channel_AccessModifier(row.try_get::<'_, usize, i16>(3).convert(BacktracePart::new(line!(), file!()))?),
+                channel_visability_modifier: Channel_VisabilityModifier(row.try_get::<'_, usize, i16>(4).convert(BacktracePart::new(line!(), file!()))?),
                 channel_cover_image_path,
                 channel_background_image_path,
             };
@@ -856,55 +514,21 @@ impl PostgresqlRepository<Common1> {
             Type::INT2,
         );
 
-        let statement = match database_1_connection
+        let statement = database_1_connection
             .prepare_typed(
                 query.as_str(),
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        let row_registry = match database_1_connection
+        let row_registry = database_1_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        {
-            Ok(row_registry_) => row_registry_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+.convert(BacktracePart::new(line!(), file!()))?;
 
         let mut common_registry: Vec<Common1> = vec![];
 
@@ -913,159 +537,22 @@ impl PostgresqlRepository<Common1> {
         }
 
         '_a: for row in row_registry.iter() {
-            let channel_id = match row.try_get::<'_, usize, i64>(0) {
-                Ok(channel_id_) => Channel_Id(channel_id_),
-                Err(error) => {
-                    return Err(
-                        Auditor::<Error>::new(
-                            Error::Runtime {
-                                runtime: Runtime::Other {
-                                    other: Other::new(error),
-                                },
-                            },
-                            BacktracePart::new(
-                                line!(),
-                                file!(),
-                            ),
-                        ),
-                    );
-                }
+            let channel_cover_image_path = match row.try_get::<'_, usize, Option<String>>(5).convert(BacktracePart::new(line!(), file!()))? {
+                Some(channel_cover_image_path_) => Some(Channel_CoverImagePath(channel_cover_image_path_)),
+                None => None,
             };
 
-            let channel_name = match row.try_get::<'_, usize, String>(1) {
-                Ok(channel_name_) => Channel_Name(channel_name_),
-                Err(error) => {
-                    return Err(
-                        Auditor::<Error>::new(
-                            Error::Runtime {
-                                runtime: Runtime::Other {
-                                    other: Other::new(error),
-                                },
-                            },
-                            BacktracePart::new(
-                                line!(),
-                                file!(),
-                            ),
-                        ),
-                    );
-                }
-            };
-
-            let channel_linked_name = match row.try_get::<'_, usize, String>(2) {
-                Ok(channel_linked_name_) => Channel_LinkedName(channel_linked_name_),
-                Err(error) => {
-                    return Err(
-                        Auditor::<Error>::new(
-                            Error::Runtime {
-                                runtime: Runtime::Other {
-                                    other: Other::new(error),
-                                },
-                            },
-                            BacktracePart::new(
-                                line!(),
-                                file!(),
-                            ),
-                        ),
-                    );
-                }
-            };
-
-            let channel_access_modifier = match row.try_get::<'_, usize, i16>(3) {
-                Ok(channel_access_modifier_) => Channel_AccessModifier(channel_access_modifier_),
-                Err(error) => {
-                    return Err(
-                        Auditor::<Error>::new(
-                            Error::Runtime {
-                                runtime: Runtime::Other {
-                                    other: Other::new(error),
-                                },
-                            },
-                            BacktracePart::new(
-                                line!(),
-                                file!(),
-                            ),
-                        ),
-                    );
-                }
-            };
-
-            let channel_visability_modifier = match row.try_get::<'_, usize, i16>(4) {
-                Ok(channel_visability_modifier_) => Channel_VisabilityModifier(channel_visability_modifier_),
-                Err(error) => {
-                    return Err(
-                        Auditor::<Error>::new(
-                            Error::Runtime {
-                                runtime: Runtime::Other {
-                                    other: Other::new(error),
-                                },
-                            },
-                            BacktracePart::new(
-                                line!(),
-                                file!(),
-                            ),
-                        ),
-                    );
-                }
-            };
-
-            let channel_cover_image_path = match row.try_get::<'_, usize, Option<String>>(5) {
-                Ok(channel_cover_image_path_) => {
-                    let channel_cover_image_path__ = match channel_cover_image_path_ {
-                        Some(channel_cover_image_path___) => Some(Channel_CoverImagePath(channel_cover_image_path___)),
-                        None => None,
-                    };
-
-                    channel_cover_image_path__
-                }
-                Err(error) => {
-                    return Err(
-                        Auditor::<Error>::new(
-                            Error::Runtime {
-                                runtime: Runtime::Other {
-                                    other: Other::new(error),
-                                },
-                            },
-                            BacktracePart::new(
-                                line!(),
-                                file!(),
-                            ),
-                        ),
-                    );
-                }
-            };
-
-            let channel_background_image_path = match row.try_get::<'_, usize, Option<String>>(6) {
-                Ok(channel_background_image_path_) => {
-                    let channel_background_image_path__ = match channel_background_image_path_ {
-                        Some(channel_background_image_path___) => Some(Channel_BackgroundImagePath(channel_background_image_path___)),
-                        None => None,
-                    };
-
-                    channel_background_image_path__
-                }
-                Err(error) => {
-                    return Err(
-                        Auditor::<Error>::new(
-                            Error::Runtime {
-                                runtime: Runtime::Other {
-                                    other: Other::new(error),
-                                },
-                            },
-                            BacktracePart::new(
-                                line!(),
-                                file!(),
-                            ),
-                        ),
-                    );
-                }
+            let channel_background_image_path = match row.try_get::<'_, usize, Option<String>>(6).convert(BacktracePart::new(line!(), file!()))? {
+                Some(channel_background_image_path_) => Some(Channel_BackgroundImagePath(channel_background_image_path_)),
+                None => None,
             };
 
             let channel = Channel1 {
-                channel_id,
-                channel_name,
-                channel_linked_name,
-                channel_access_modifier,
-                channel_visability_modifier,
+                channel_id: Channel_Id(row.try_get::<'_, usize, i64>(0).convert(BacktracePart::new(line!(), file!()))?),
+                channel_name: Channel_Name(row.try_get::<'_, usize, String>(1).convert(BacktracePart::new(line!(), file!()))?),
+                channel_linked_name: Channel_LinkedName(row.try_get::<'_, usize, String>(2).convert(BacktracePart::new(line!(), file!()))?),
+                channel_access_modifier: Channel_AccessModifier(row.try_get::<'_, usize, i16>(3).convert(BacktracePart::new(line!(), file!()))?),
+                channel_visability_modifier: Channel_VisabilityModifier(row.try_get::<'_, usize, i16>(4).convert(BacktracePart::new(line!(), file!()))?),
                 channel_cover_image_path,
                 channel_background_image_path,
             };

@@ -22,7 +22,7 @@ use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::error::Runtime;
-use crate::infrastructure_layer::data::error::Other;
+use crate::infrastructure_layer::data::auditor::Converter;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 use std::borrow::Cow;
 use tokio_postgres::types::Type;
@@ -88,52 +88,21 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
                 Type::INT8,
             );
 
-        let statement = match database_2_connection
+        let statement = database_2_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        if let Err(error) = database_2_connection
+        database_2_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Other::new(error),
-                        },
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        };
+        .convert(BacktracePart::new(line!(), file!()))?;
 
         return Ok(
             ApplicationUserResetPasswordToken {
@@ -170,52 +139,21 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
                 Type::TEXT,
             );
 
-        let statement = match database_2_connection
+        let statement = database_2_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        if let Err(error) = database_2_connection
+        database_2_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Other::new(error),
-                        },
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        };
+        .convert(BacktracePart::new(line!(), file!()))?;
 
         return Ok(());
     }
@@ -280,52 +218,21 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken1> {
                 Type::TEXT,
             );
 
-        let statement = match database_2_connection
+        let statement = database_2_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        if let Err(error) = database_2_connection
+        database_2_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Other::new(error),
-                        },
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        };
+        .convert(BacktracePart::new(line!(), file!()))?;
 
         return Ok(());
     }
@@ -358,163 +265,34 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken1> {
                 Type::TEXT,
             );
 
-        let statement = match database_2_connection
+        let statement = database_2_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        let row_registry = match database_2_connection
+        let row_registry = database_2_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        {
-            Ok(row_registry_) => row_registry_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+.convert(BacktracePart::new(line!(), file!()))?;
 
         if row_registry.is_empty() {
             return Ok(None);
         }
 
-        let application_user_reset_password_token_value = match row_registry[0].try_get::<'_, usize, String>(0) {
-            Ok(application_user_reset_password_token_value_) => ApplicationUserResetPasswordToken_Value(application_user_reset_password_token_value_),
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let application_user_reset_password_token_wrong_enter_tries_quantity = match row_registry[0].try_get::<'_, usize, i16>(1) {
-            Ok(application_user_reset_password_token_wrong_enter_tries_quantity_) => ApplicationUserResetPasswordToken_WrongEnterTriesQuantity(application_user_reset_password_token_wrong_enter_tries_quantity_),
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let application_user_reset_password_token_is_approved = match row_registry[0].try_get::<'_, usize, bool>(2) {
-            Ok(application_user_reset_password_token_is_approved_) => ApplicationUserResetPasswordToken_IsApproved(application_user_reset_password_token_is_approved_),
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let application_user_reset_password_token_expires_at = match row_registry[0].try_get::<'_, usize, i64>(3) {
-            Ok(application_user_reset_password_token_expires_at_) => ApplicationUserResetPasswordToken_ExpiresAt(application_user_reset_password_token_expires_at_),
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let application_user_reset_password_token_can_be_resent_from = match row_registry[0].try_get::<'_, usize, i64>(4) {
-            Ok(application_user_reset_password_token_can_be_resent_from_) => ApplicationUserResetPasswordToken_CanBeResentFrom(application_user_reset_password_token_can_be_resent_from_),
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
         return Ok(
             Some(
                 ApplicationUserResetPasswordToken1 {
-                    value: application_user_reset_password_token_value,
-                    wrong_enter_tries_quantity: application_user_reset_password_token_wrong_enter_tries_quantity,
-                    is_approved: application_user_reset_password_token_is_approved,
-                    expires_at: application_user_reset_password_token_expires_at,
-                    can_be_resent_from: application_user_reset_password_token_can_be_resent_from,
+                    value: ApplicationUserResetPasswordToken_Value(row_registry[0].try_get::<'_, usize, String>(0).convert(BacktracePart::new(line!(), file!()))?),
+                    wrong_enter_tries_quantity: ApplicationUserResetPasswordToken_WrongEnterTriesQuantity(row_registry[0].try_get::<'_, usize, i16>(1).convert(BacktracePart::new(line!(), file!()))?),
+                    is_approved: ApplicationUserResetPasswordToken_IsApproved(row_registry[0].try_get::<'_, usize, bool>(2).convert(BacktracePart::new(line!(), file!()))?),
+                    expires_at: ApplicationUserResetPasswordToken_ExpiresAt(row_registry[0].try_get::<'_, usize, i64>(3).convert(BacktracePart::new(line!(), file!()))?),
+                    can_be_resent_from: ApplicationUserResetPasswordToken_CanBeResentFrom(row_registry[0].try_get::<'_, usize, i64>(4).convert(BacktracePart::new(line!(), file!()))?),
                 },
             ),
         );
@@ -554,52 +332,21 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken2> {
                 Type::TEXT,
             );
 
-        let statement = match database_2_connection
+        let statement = database_2_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        if let Err(error) = database_2_connection
+        database_2_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Other::new(error),
-                        },
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        };
+        .convert(BacktracePart::new(line!(), file!()))?;
 
         return Ok(());
     }
@@ -658,52 +405,21 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken3> {
                 Type::TEXT,
             );
 
-        let statement = match database_2_connection
+        let statement = database_2_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        if let Err(error) = database_2_connection
+        database_2_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Other::new(error),
-                        },
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        };
+        .convert(BacktracePart::new(line!(), file!()))?;
 
         return Ok(());
     }
@@ -735,143 +451,33 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken3> {
                 Type::TEXT,
             );
 
-        let statement = match database_2_connection
+        let statement = database_2_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        let row_registry = match database_2_connection
+        let row_registry = database_2_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        {
-            Ok(row_registry_) => row_registry_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+.convert(BacktracePart::new(line!(), file!()))?;
 
         if row_registry.is_empty() {
             return Ok(None);
         }
 
-        let application_user_reset_password_token_value = match row_registry[0].try_get::<'_, usize, String>(0) {
-            Ok(application_user_reset_password_token_value_) => ApplicationUserResetPasswordToken_Value(application_user_reset_password_token_value_),
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let application_user_reset_password_token_wrong_enter_tries_quantity = match row_registry[0].try_get::<'_, usize, i16>(1) {
-            Ok(application_user_reset_password_token_wrong_enter_tries_quantity_) => ApplicationUserResetPasswordToken_WrongEnterTriesQuantity(application_user_reset_password_token_wrong_enter_tries_quantity_),
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let application_user_reset_password_token_is_approved = match row_registry[0].try_get::<'_, usize, bool>(2) {
-            Ok(application_user_reset_password_token_is_approved_) => ApplicationUserResetPasswordToken_IsApproved(application_user_reset_password_token_is_approved_),
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let application_user_reset_password_token_expires_at = match row_registry[0].try_get::<'_, usize, i64>(3) {
-            Ok(application_user_reset_password_token_expires_at_) => ApplicationUserResetPasswordToken_ExpiresAt(application_user_reset_password_token_expires_at_),
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
         return Ok(
             Some(
                 ApplicationUserResetPasswordToken3 {
-                    value: application_user_reset_password_token_value,
-                    wrong_enter_tries_quantity: application_user_reset_password_token_wrong_enter_tries_quantity,
-                    is_approved: application_user_reset_password_token_is_approved,
-                    expires_at: application_user_reset_password_token_expires_at,
+                    value: ApplicationUserResetPasswordToken_Value(row_registry[0].try_get::<'_, usize, String>(0).convert(BacktracePart::new(line!(), file!()))?),
+                    wrong_enter_tries_quantity: ApplicationUserResetPasswordToken_WrongEnterTriesQuantity(row_registry[0].try_get::<'_, usize, i16>(1).convert(BacktracePart::new(line!(), file!()))?),
+                    is_approved: ApplicationUserResetPasswordToken_IsApproved(row_registry[0].try_get::<'_, usize, bool>(2).convert(BacktracePart::new(line!(), file!()))?),
+                    expires_at: ApplicationUserResetPasswordToken_ExpiresAt(row_registry[0].try_get::<'_, usize, i64>(3).convert(BacktracePart::new(line!(), file!()))?),
                 },
             ),
         );
@@ -911,52 +517,21 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken4> {
                 Type::TEXT,
             );
 
-        let statement = match database_2_connection
+        let statement = database_2_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        if let Err(error) = database_2_connection
+        database_2_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Other::new(error),
-                        },
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        };
+        .convert(BacktracePart::new(line!(), file!()))?;
 
         return Ok(());
     }
@@ -995,52 +570,21 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken5> {
                 Type::TEXT,
             );
 
-        let statement = match database_2_connection
+        let statement = database_2_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        if let Err(error) = database_2_connection
+        database_2_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Other::new(error),
-                        },
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        };
+        .convert(BacktracePart::new(line!(), file!()))?;
 
         return Ok(());
     }
@@ -1074,143 +618,33 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken6> {
                 Type::TEXT,
             );
 
-        let statement = match database_2_connection
+        let statement = database_2_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        {
-            Ok(statement_) => statement_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        let row_registry = match database_2_connection
+        let row_registry = database_2_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        {
-            Ok(row_registry_) => row_registry_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+.convert(BacktracePart::new(line!(), file!()))?;
 
         if row_registry.is_empty() {
             return Ok(None);
         }
 
-        let application_user_reset_password_token_value = match row_registry[0].try_get::<'_, usize, String>(0) {
-            Ok(application_user_reset_password_token_value_) => ApplicationUserResetPasswordToken_Value(application_user_reset_password_token_value_),
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let application_user_reset_password_token_is_approved = match row_registry[0].try_get::<'_, usize, bool>(1) {
-            Ok(application_user_reset_password_token_is_approved_) => ApplicationUserResetPasswordToken_IsApproved(application_user_reset_password_token_is_approved_),
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let application_user_reset_password_token_expires_at = match row_registry[0].try_get::<'_, usize, i64>(2) {
-            Ok(application_user_reset_password_token_expires_at_) => ApplicationUserResetPasswordToken_ExpiresAt(application_user_reset_password_token_expires_at_),
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let application_user_reset_password_token_can_be_resent_from = match row_registry[0].try_get::<'_, usize, i64>(3) {
-            Ok(application_user_reset_password_token_can_be_resent_from_) => ApplicationUserResetPasswordToken_CanBeResentFrom(application_user_reset_password_token_can_be_resent_from_),
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Other::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
         return Ok(
             Some(
                 ApplicationUserResetPasswordToken6 {
-                    value: application_user_reset_password_token_value,
-                    is_approved: application_user_reset_password_token_is_approved,
-                    expires_at: application_user_reset_password_token_expires_at,
-                    can_be_resent_from: application_user_reset_password_token_can_be_resent_from,
+                    value: ApplicationUserResetPasswordToken_Value(row_registry[0].try_get::<'_, usize, String>(0).convert(BacktracePart::new(line!(), file!()))?),
+                    is_approved: ApplicationUserResetPasswordToken_IsApproved(row_registry[0].try_get::<'_, usize, bool>(1).convert(BacktracePart::new(line!(), file!()))?),
+                    expires_at: ApplicationUserResetPasswordToken_ExpiresAt( row_registry[0].try_get::<'_, usize, i64>(2).convert(BacktracePart::new(line!(), file!()))?),
+                    can_be_resent_from: ApplicationUserResetPasswordToken_CanBeResentFrom(row_registry[0].try_get::<'_, usize, i64>(3).convert(BacktracePart::new(line!(), file!()))?),
                 },
             ),
         );
