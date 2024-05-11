@@ -26,8 +26,7 @@ use crate::infrastructure_layer::data::environment_configuration::ENVIRONMENT_CO
 use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::error::Runtime;
-use crate::infrastructure_layer::data::error::Runtime;
+use crate::infrastructure_layer::data::auditor::Converter;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By1;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By7;
 use crate::infrastructure_layer::functionality::repository::postgresql::insert::Insert1;
@@ -70,112 +69,25 @@ impl CommandProcessor<CreateFixtures> {
             );
         }
 
-        let runtime = match Builder::new_current_thread().enable_all().build() {
-            Ok(runtime_) => runtime_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
-        if let Err(mut error) = runtime.block_on(Self::create_fixtures()) {
-            error.add_backtrace_part(
-                BacktracePart::new(
-                    line!(),
-                    file!(),
-                ),
-            );
-
-            return Err(error);
-        }
+        Builder::new_current_thread().enable_all().build().convert(BacktracePart::new(line!(), file!()))?.block_on(Self::create_fixtures())?;
 
         return Ok(());
     }
 
     async fn create_fixtures<'a>() -> Result<(), Auditor<Error>> {
-        let database_1_postgresql_configuration = match PostgresqlConfiguration::from_str(ENVIRONMENT_CONFIGURATION.resource.postgresql.database_1_url.0) {
-            Ok(database_1_postgresql_configuration_) => database_1_postgresql_configuration_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        let database_1_postgresql_configuration = PostgresqlConfiguration::from_str(ENVIRONMENT_CONFIGURATION.resource.postgresql.database_1_url.0).convert(BacktracePart::new(line!(), file!()))?;
 
-        let database_1_postgresql_connection_pool = match Creator::<PostgresqlConnectionPoolNoTls>::create(
+        let database_1_postgresql_connection_pool = Creator::<PostgresqlConnectionPoolNoTls>::create(
             &ENVIRONMENT_CONFIGURATION.environment,
             &database_1_postgresql_configuration,
         )
-        .await
-        {
-            Ok(database_1_postgresql_connection_pool_) => database_1_postgresql_connection_pool_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-
-                return Err(error);
-            }
-        };
+        .await?;
 
         let application_user_password = ApplicationUser_Password(Self::APPLICATION_USER__PASSWORD.to_string());
 
-        let application_user_password_hash = match Encoder::<ApplicationUser_Password>::encode(&application_user_password) {
-            Ok(application_user_password_hash_) => application_user_password_hash_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
+        let application_user_password_hash = Encoder::<ApplicationUser_Password>::encode(&application_user_password)?;
 
-                return Err(error);
-            }
-        };
-
-        let database_1_postgresql_pooled_connection = match database_1_postgresql_connection_pool.get().await {
-            Ok(database_1_postgresql_pooled_connection_) => database_1_postgresql_pooled_connection_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert(BacktracePart::new(line!(), file!()))?;
 
         let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
 
@@ -215,21 +127,7 @@ impl CommandProcessor<CreateFixtures> {
                 ),
             );
 
-            let is_valid_email = match Validator::<ApplicationUser_Email>::is_valid(&application_user_email) {
-                Ok(is_valid_email_) => is_valid_email_,
-                Err(mut error) => {
-                    error.add_backtrace_part(
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    );
-
-                    return Err(error);
-                }
-            };
-
-            if !is_valid_email {
+            if !Validator::<ApplicationUser_Email>::is_valid(&application_user_email)? {
                 return Err(
                     Auditor::<Error>::new(
                         Error::Logic {
@@ -269,25 +167,11 @@ impl CommandProcessor<CreateFixtures> {
                 database_1_postgresql_connection,
                 &by_1,
             )
-            .await
+            .await?
             {
-                Ok(application_user_) => application_user_,
-                Err(mut error) => {
-                    error.add_backtrace_part(
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    );
-
-                    return Err(error);
-                }
-            };
-
-            let application_user_ = match application_user {
-                Some(application_user__) => application_user__,
+                Some(application_user_) => application_user_,
                 None => {
-                    let application_user__ = match PostgresqlRepository::<ApplicationUser<'_>>::create(
+                    PostgresqlRepository::<ApplicationUser<'_>>::create(
                         database_1_postgresql_connection,
                         Insert1 {
                             application_user_email,
@@ -295,29 +179,14 @@ impl CommandProcessor<CreateFixtures> {
                             application_user_password_hash: application_user_password_hash.clone(),
                         },
                     )
-                    .await
-                    {
-                        Ok(application_user_) => application_user_,
-                        Err(mut error) => {
-                            error.add_backtrace_part(
-                                BacktracePart::new(
-                                    line!(),
-                                    file!(),
-                                ),
-                            );
-
-                            return Err(error);
-                        }
-                    };
-
-                    application_user__
+                    .await?
                 }
             };
 
             let application_user_device_id = ApplicationUserDevice_Id(
                 format!(
                     "{}_{}",
-                    application_user_.nickname.0.as_str(),
+                    application_user.nickname.0.as_str(),
                     Self::APPLICATION_USER_DEVICE__ID_PART
                 ),
             );
@@ -336,24 +205,14 @@ impl CommandProcessor<CreateFixtures> {
                 );
             }
 
-            if let Err(mut error) = PostgresqlRepository::<ApplicationUserDevice>::create(
+            PostgresqlRepository::<ApplicationUserDevice>::create(
                 database_1_postgresql_connection,
                 Insert4 {
                     application_user_device_id,
-                    application_user_id: application_user_.id,
+                    application_user_id: application_user.id,
                 },
             )
-            .await
-            {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-
-                return Err(error);
-            };
+            .await?;
 
             'b: for _ in 1..=Self::QUANTITY_OF_CHANNELS {
                 let mut channel_name = Channel_Name(String::new());
@@ -480,10 +339,10 @@ impl CommandProcessor<CreateFixtures> {
                         continue 'b;
                     }
                     None => {
-                        if let Err(mut error) = PostgresqlRepository::<Channel<'_>>::create(
+                        PostgresqlRepository::<Channel<'_>>::create(
                             database_1_postgresql_connection,
                             Insert7 {
-                                channel_owner: application_user_.id,
+                                channel_owner: application_user.id,
                                 channel_name,
                                 channel_linked_name,
                                 channel_description,
@@ -497,17 +356,7 @@ impl CommandProcessor<CreateFixtures> {
                                 channel_viewing_quantity: Channel_ViewingQuantity(0),
                             },
                         )
-                        .await
-                        {
-                            error.add_backtrace_part(
-                                BacktracePart::new(
-                                    line!(),
-                                    file!(),
-                                ),
-                            );
-
-                            return Err(error);
-                        }
+                        .await?;
                     }
                 }
             }

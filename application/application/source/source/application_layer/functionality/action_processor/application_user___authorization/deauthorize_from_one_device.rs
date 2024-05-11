@@ -6,8 +6,7 @@ use crate::domain_layer::functionality::service::extractor::Extractor;
 use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::error::Runtime;
-use crate::infrastructure_layer::data::error::Runtime;
+use crate::infrastructure_layer::data::auditor::Converter;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By4;
@@ -56,25 +55,11 @@ impl ActionProcessor<ApplicationUser__Authorization___DeauthorizeFromOneDevice> 
             }
         };
 
-        let extractor_result = match Extractor::<ApplicationUserAccessToken<'_>>::extract(&incoming_.application_user_access_token_encrypted).await {
-            Ok(extractor_result_) => extractor_result_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-
-                return Err(error);
-            }
-        };
-
-        let application_user_access_token = match extractor_result {
+        let application_user_access_token = match Extractor::<ApplicationUserAccessToken<'_>>::extract(&incoming_.application_user_access_token_encrypted).await? {
             InvalidArgumentResult::Ok {
-                subject: extractor_result_,
+                subject: extractor_result,
             } => {
-                let application_user_access_token_ = match extractor_result_ {
+                let application_user_access_token_ = match extractor_result {
                     ExtractorResult::ApplicationUserAccessToken {
                         application_user_access_token: application_user_access_token__,
                     } => application_user_access_token__,
@@ -107,43 +92,16 @@ impl ActionProcessor<ApplicationUser__Authorization___DeauthorizeFromOneDevice> 
             }
         };
 
-        let database_2_postgresql_pooled_connection = match database_2_postgresql_connection_pool.get().await {
-            Ok(database_2_postgresql_pooled_connection_) => database_2_postgresql_pooled_connection_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert(BacktracePart::new(line!(), file!()))?;
 
-        if let Err(mut error) = PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::delete_1(
+        PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::delete_1(
             &*database_2_postgresql_pooled_connection,
             &By4 {
                 application_user_id: application_user_access_token.application_user_id,
                 application_user_device_id: application_user_access_token.application_user_device_id.as_ref(),
             },
         )
-        .await
-        {
-            error.add_backtrace_part(
-                BacktracePart::new(
-                    line!(),
-                    file!(),
-                ),
-            );
-
-            return Err(error);
-        }
+        .await?;
 
         return Ok(
             InvalidArgumentResult::Ok {

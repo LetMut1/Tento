@@ -11,8 +11,7 @@ use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::error::Runtime;
-use crate::infrastructure_layer::data::error::Runtime;
+use crate::infrastructure_layer::data::auditor::Converter;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By5;
@@ -64,21 +63,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForRegister> {
             }
         };
 
-        let is_valid_email = match Validator::<ApplicationUser_Email>::is_valid(&incoming_.application_user_email) {
-            Ok(is_valid_email_) => is_valid_email_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-
-                return Err(error);
-            }
-        };
-
-        if !is_valid_email {
+        if !Validator::<ApplicationUser_Email>::is_valid(&incoming_.application_user_email)? {
             return Ok(
                 InvalidArgumentResult::InvalidArgument {
                     invalid_argument: InvalidArgument::ApplicationUser_Email,
@@ -99,48 +84,17 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForRegister> {
             application_user_device_id: &incoming_.application_user_device_id,
         };
 
-        let database_2_postgresql_pooled_connection = match database_2_postgresql_connection_pool.get().await {
-            Ok(database_2_postgresql_pooled_connection_) => database_2_postgresql_pooled_connection_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert(BacktracePart::new(line!(), file!()))?;
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
-        let application_user_registration_token = match PostgresqlRepository::<ApplicationUserRegistrationToken6>::find_1(
+        let mut application_user_registration_token = match PostgresqlRepository::<ApplicationUserRegistrationToken6>::find_1(
             database_2_postgresql_connection,
             &by_5,
         )
-        .await
+        .await?
         {
-            Ok(application_user_registration_token_) => application_user_registration_token_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-
-                return Err(error);
-            }
-        };
-
-        let mut application_user_registration_token_ = match application_user_registration_token {
-            Some(application_user_registration_token__) => application_user_registration_token__,
+            Some(application_user_registration_token_) => application_user_registration_token_,
             None => {
                 return Ok(
                     InvalidArgumentResult::Ok {
@@ -150,22 +104,12 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForRegister> {
             }
         };
 
-        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token_.expires_at.0) {
-            if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete(
+        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token.expires_at.0) {
+            PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete(
                 database_2_postgresql_connection,
                 &by_5,
             )
-            .await
-            {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-
-                return Err(error);
-            }
+            .await?;
 
             return Ok(
                 InvalidArgumentResult::Ok {
@@ -174,7 +118,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForRegister> {
             );
         }
 
-        if application_user_registration_token_.is_approved.0 {
+        if application_user_registration_token.is_approved.0 {
             return Ok(
                 InvalidArgumentResult::Ok {
                     subject: UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_AlreadyApproved),
@@ -182,7 +126,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForRegister> {
             );
         }
 
-        if !ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token_.can_be_resent_from.0) {
+        if !ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token.can_be_resent_from.0) {
             return Ok(
                 InvalidArgumentResult::Ok {
                     subject: UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_TimeToResendHasNotCome),
@@ -190,56 +134,25 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForRegister> {
             );
         }
 
-        application_user_registration_token_.can_be_resent_from = match Generator::<ApplicationUserRegistrationToken_CanBeResentFrom>::generate() {
-            Ok(application_user_registration_token_can_be_resent_from_) => application_user_registration_token_can_be_resent_from_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
+        application_user_registration_token.can_be_resent_from = Generator::<ApplicationUserRegistrationToken_CanBeResentFrom>::generate()?;
 
-                return Err(error);
-            }
-        };
-
-        if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken2>::update(
+        PostgresqlRepository::<ApplicationUserRegistrationToken2>::update(
             database_2_postgresql_connection,
             &Update8 {
-                application_user_registration_token_can_be_resent_from: application_user_registration_token_.can_be_resent_from,
+                application_user_registration_token_can_be_resent_from: application_user_registration_token.can_be_resent_from,
             },
             &by_5,
         )
-        .await
-        {
-            error.add_backtrace_part(
-                BacktracePart::new(
-                    line!(),
-                    file!(),
-                ),
-            );
+        .await?;
 
-            return Err(error);
-        }
-
-        if let Err(mut error) = EmailSender::<ApplicationUserRegistrationToken<'_>>::send(
-            &application_user_registration_token_.value,
+        EmailSender::<ApplicationUserRegistrationToken<'_>>::send(
+            &application_user_registration_token.value,
             &incoming_.application_user_email,
             &incoming_.application_user_device_id,
-        ) {
-            error.add_backtrace_part(
-                BacktracePart::new(
-                    line!(),
-                    file!(),
-                ),
-            );
-
-            return Err(error);
-        }
+        )?;
 
         let outcoming = Outcoming {
-            application_user_registration_token_can_be_resent_from: application_user_registration_token_.can_be_resent_from,
+            application_user_registration_token_can_be_resent_from: application_user_registration_token.can_be_resent_from,
         };
 
         return Ok(

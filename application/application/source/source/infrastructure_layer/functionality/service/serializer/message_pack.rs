@@ -1,10 +1,7 @@
 use super::Serialize;
 use super::Serializer;
-use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::error::Runtime;
 use crate::infrastructure_layer::data::error::Error;
-use crate::infrastructure_layer::data::error::Runtime;
 use message_pack_serializer::Serializer as Serializer_;
 use serde::Deserialize;
 use serde::Serialize as SerdeSerialize;
@@ -16,57 +13,13 @@ impl Serialize for Serializer<MessagePack> {
     where
         T: SerdeSerialize,
     {
-        let data = match Serializer_::serialize(subject) {
-            Ok(data_) => data_,
-            Err(error) => {
-                todo!();
-                // return Err(
-                //     Auditor::<Error>::new(
-                //         Error::Runtime {
-                //             runtime: Runtime::Other {
-                //                 other: Other::new_(
-                //                     Formatter_::prepare(&error).into()
-                //                 ),
-                //             },
-                //         },
-                //         BacktracePart::new(
-                //             line!(),
-                //             file!(),
-                //         ),
-                //     ),
-                // );
-            }
-        };
-
-        return Ok(data);
+        return Ok(Serializer_::serialize(subject)?);
     }
 
     fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, Auditor<Error>>
     where
         T: Deserialize<'a>,
     {
-        let subject = match Serializer_::deserialize::<'_, T>(data) {
-            Ok(subject_) => subject_,
-            Err(error) => {
-                todo!();
-                // return Err(
-                //     Auditor::<Error>::new(
-                //         Error::Runtime {
-                //             runtime: Runtime::Other {
-                //                 other: Other::new_(
-                //                     Formatter_::prepare(&error).into()
-                //                 ),
-                //             },
-                //         },
-                //         BacktracePart::new(
-                //             line!(),
-                //             file!(),
-                //         ),
-                //     ),
-                // );
-            }
-        };
-
-        return Ok(subject);
+        return Ok(Serializer_::deserialize::<'_, T>(data)?);
     }
 }

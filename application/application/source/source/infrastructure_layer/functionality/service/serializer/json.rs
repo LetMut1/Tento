@@ -3,8 +3,7 @@ use super::Serializer;
 use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::error::Runtime;
-use crate::infrastructure_layer::data::error::Runtime;
+use crate::infrastructure_layer::data::auditor::Converter;
 use serde::Deserialize;
 use serde::Serialize as SerdeSerialize;
 use serde_json;
@@ -18,51 +17,13 @@ impl Serialize for Serializer<Json> {
     where
         T: SerdeSerialize,
     {
-        let data = match serde_json::to_vec(subject) {
-            Ok(data_) => data_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
-        return Ok(data);
+        return Ok(serde_json::to_vec(subject).convert(BacktracePart::new(line!(), file!()))?);
     }
 
     fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, Auditor<Error>>
     where
         T: Deserialize<'a>,
     {
-        let subject = match serde_json::from_slice::<'_, T>(data) {
-            Ok(subject_) => subject_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
-        return Ok(subject);
+        return Ok(serde_json::from_slice::<'_, T>(data).convert(BacktracePart::new(line!(), file!()))?);
     }
 }

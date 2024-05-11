@@ -5,8 +5,7 @@ use crate::infrastructure_layer::data::environment_configuration::ENVIRONMENT_CO
 use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::error::Runtime;
-use crate::infrastructure_layer::data::error::Runtime;
+use crate::infrastructure_layer::data::auditor::Converter;
 use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::service::creator::Creator;
 use crate::infrastructure_layer::functionality::service::creator::postgresql_connection_pool::PostgresqlConnectionPoolNoTls;
@@ -42,8 +41,6 @@ use crate::presentation_layer::data::action_route::ApplicationUser__Authorizatio
 use crate::presentation_layer::data::action_route::Channel__Base_;
 use crate::presentation_layer::data::action_route::ChannelSubscription__Base_;
 use hyper::server::conn::AddrStream;
-use hyper::service::make_service_fn;
-use hyper::service::service_fn;
 use hyper::Method;
 use hyper::Server;
 use matchit::Router;
@@ -58,8 +55,6 @@ use std::str::FromStr;
 use std::sync::Arc;
 use std::time::Duration;
 use tokio::runtime::Builder;
-use tokio::select;
-use tokio::signal::unix::signal;
 use tokio::signal::unix::SignalKind;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
@@ -71,37 +66,15 @@ use tracing_appender::rolling::RollingFileAppender;
 use tracing_appender::non_blocking::NonBlockingBuilder;
 use tracing_subscriber::FmtSubscriber;
 use tracing::Level;
-use tracing::subscriber::set_global_default;
 use tracing_appender::non_blocking::WorkerGuard;
 
 pub use crate::infrastructure_layer::data::control_type::RunServer;
 
 impl CommandProcessor<RunServer> {
     pub fn process() -> Result<(), Auditor<Error>> {
-        let _worker_guard = match Self::configure_logger() {
-            Ok(worker_guard_) => worker_guard_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
+        let _worker_guard = Self::configure_logger()?;
 
-                return Err(error);
-            }
-        };
-
-        if let Err(mut error) = Self::run_runtime() {
-            error.add_backtrace_part(
-                BacktracePart::new(
-                    line!(),
-                    file!(),
-                ),
-            );
-
-            return Err(error);
-        }
+        Self::run_runtime()?;
 
         return Ok(());
     }
@@ -132,21 +105,7 @@ impl CommandProcessor<RunServer> {
             .with_ansi(false)
             .finish();
 
-        if let Err(error) = set_global_default(fmt_subscriber) {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Runtime::new(error),
-                        },
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        }
+        tracing::subscriber::set_global_default(fmt_subscriber).convert(BacktracePart::new(line!(), file!()))?;
 
         return Ok(worker_guard);
     }
@@ -169,41 +128,14 @@ impl CommandProcessor<RunServer> {
             );
         }
 
-        let runtime = match Builder::new_multi_thread()
+        Builder::new_multi_thread()
             .max_blocking_threads(ENVIRONMENT_CONFIGURATION.tokio_runtime.maximum_blocking_threads_quantity)
             .worker_threads(ENVIRONMENT_CONFIGURATION.tokio_runtime.worker_threads_quantity)
             .thread_stack_size(ENVIRONMENT_CONFIGURATION.tokio_runtime.worker_thread_stack_size)
             .enable_all()
             .build()
-        {
-            Ok(runtime_) => runtime_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
-        if let Err(mut error) = runtime.block_on(Self::run_server()) {
-            error.add_backtrace_part(
-                BacktracePart::new(
-                    line!(),
-                    file!(),
-                ),
-            );
-
-            return Err(error);
-        }
+            .convert(BacktracePart::new(line!(), file!()))?
+            .block_on(Self::run_server())?;
 
         return Ok(());
     }
@@ -217,38 +149,9 @@ impl CommandProcessor<RunServer> {
             },
         }
 
-        let router = match Self::create_router() {
-            Ok(router_) => router_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
+        let router = Self::create_router()?;
 
-                return Err(error);
-            }
-        };
-
-        let mut application_http_socket_address_registry = match ENVIRONMENT_CONFIGURATION.application_server.tcp.socket_address.0.to_socket_addrs() {
-            Ok(application_http_socket_address_registry_) => application_http_socket_address_registry_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        let mut application_http_socket_address_registry = ENVIRONMENT_CONFIGURATION.application_server.tcp.socket_address.0.to_socket_addrs().convert(BacktracePart::new(line!(), file!()))?;
 
         let application_http_socket_address = match application_http_socket_address_registry.next() {
             Some(application_http_socket_address_) => application_http_socket_address_,
@@ -267,24 +170,7 @@ impl CommandProcessor<RunServer> {
             }
         };
 
-        let mut server_builder = match Server::try_bind(&application_http_socket_address) {
-            Ok(builder_) => builder_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        let mut server_builder = Server::try_bind(&application_http_socket_address).convert(BacktracePart::new(line!(), file!()))?;
 
         server_builder = server_builder
             .tcp_nodelay(ENVIRONMENT_CONFIGURATION.application_server.tcp.nodelay)
@@ -334,105 +220,28 @@ impl CommandProcessor<RunServer> {
             server_builder = server_builder.http2_only(false);
         }
 
-        let database_1_postgresql_configuration = match PostgresqlConfiguration::from_str(ENVIRONMENT_CONFIGURATION.resource.postgresql.database_1_url.0) {
-            Ok(database_1_postgresql_configuration_) => database_1_postgresql_configuration_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        let database_1_postgresql_configuration = PostgresqlConfiguration::from_str(ENVIRONMENT_CONFIGURATION.resource.postgresql.database_1_url.0).convert(BacktracePart::new(line!(), file!()))?;
 
-        let database_2_postgresql_configuration = match PostgresqlConfiguration::from_str(ENVIRONMENT_CONFIGURATION.resource.postgresql.database_2_url.0) {
-            Ok(database_2_postgresql_configuration_) => database_2_postgresql_configuration_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        let database_2_postgresql_configuration = PostgresqlConfiguration::from_str(ENVIRONMENT_CONFIGURATION.resource.postgresql.database_2_url.0).convert(BacktracePart::new(line!(), file!()))?;
 
-        let database_1_redis_connection_info = match ConnectionInfo::from_str(ENVIRONMENT_CONFIGURATION.resource.redis.database_1_url.0) {
-            Ok(database_1_redis_connection_info_) => database_1_redis_connection_info_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        let database_1_redis_connection_info = ConnectionInfo::from_str(ENVIRONMENT_CONFIGURATION.resource.redis.database_1_url.0).convert(BacktracePart::new(line!(), file!()))?;
 
         let postgresql_connection_pool_aggregator = match ENVIRONMENT_CONFIGURATION.environment {
             Environment::Production => {
                 todo!("TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ");
             }
             Environment::Development | Environment::LocalDevelopment => {
-                let database_1_postgresql_connection_pool = match Creator::<PostgresqlConnectionPoolNoTls>::create(
+                let database_1_postgresql_connection_pool = Creator::<PostgresqlConnectionPoolNoTls>::create(
                     &ENVIRONMENT_CONFIGURATION.environment,
                     &database_1_postgresql_configuration,
                 )
-                .await
-                {
-                    Ok(database_1_postgresql_connection_pool_) => database_1_postgresql_connection_pool_,
-                    Err(mut error) => {
-                        error.add_backtrace_part(
-                            BacktracePart::new(
-                                line!(),
-                                file!(),
-                            ),
-                        );
+                .await?;
 
-                        return Err(error);
-                    }
-                };
-
-                let database_2_postgresql_connection_pool = match Creator::<PostgresqlConnectionPoolNoTls>::create(
+                let database_2_postgresql_connection_pool = Creator::<PostgresqlConnectionPoolNoTls>::create(
                     &ENVIRONMENT_CONFIGURATION.environment,
                     &database_2_postgresql_configuration,
                 )
-                .await
-                {
-                    Ok(database_2_postgresql_connection_pool_) => database_2_postgresql_connection_pool_,
-                    Err(mut error) => {
-                        error.add_backtrace_part(
-                            BacktracePart::new(
-                                line!(),
-                                file!(),
-                            ),
-                        );
-
-                        return Err(error);
-                    }
-                };
+                .await?;
 
                 PostgresqlConnectionPoolAggregator::LocalDevelopment {
                     database_1_postgresql_connection_pool,
@@ -441,28 +250,15 @@ impl CommandProcessor<RunServer> {
             }
         };
 
-        let database_1_redis_connection_pool = match Creator::<RedisConnectonPool>::create(
+        let database_1_redis_connection_pool = Creator::<RedisConnectonPool>::create(
             &ENVIRONMENT_CONFIGURATION.environment,
             &database_1_redis_connection_info,
         )
-        .await
-        {
-            Ok(database_1_redis_connection_pool_) => database_1_redis_connection_pool_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-
-                return Err(error);
-            }
-        };
+        .await?;
 
         let router_ = Arc::new(router);
 
-        let service = make_service_fn(
+        let service = hyper::service::make_service_fn(
             move |_: &'_ AddrStream| -> _ {
                 let router__ = router_.clone();
 
@@ -471,7 +267,7 @@ impl CommandProcessor<RunServer> {
                 let database_1_redis_connection_pool_ = database_1_redis_connection_pool.clone();
 
                 let future = async move {
-                    let service_fn = service_fn(
+                    let service_fn = hyper::service::service_fn(
                         move |request: Request| -> _ {
                             let router___ = router__.clone();
 
@@ -513,36 +309,12 @@ impl CommandProcessor<RunServer> {
             },
         );
 
-        let signal_interrupt_future = match Self::create_signal(SignalKind::interrupt()) {
-            Ok(signal_interrupt_future_) => signal_interrupt_future_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
+        let signal_interrupt_future = Self::create_signal(SignalKind::interrupt())?;
 
-                return Err(error);
-            }
-        };
-
-        let signal_terminate_future = match Self::create_signal(SignalKind::terminate()) {
-            Ok(signal_terminate_future_) => signal_terminate_future_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-
-                return Err(error);
-            }
-        };
+        let signal_terminate_future = Self::create_signal(SignalKind::terminate())?;
 
         let graceful_shutdown_signal_future = async {
-            select! {
+            tokio::select! {
                 _ = signal_interrupt_future => {
                     ()
                 },
@@ -552,21 +324,7 @@ impl CommandProcessor<RunServer> {
             }
         };
 
-        if let Err(error) = server_builder.serve(service).with_graceful_shutdown(graceful_shutdown_signal_future).await {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Runtime::new(error),
-                        },
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        }
+        server_builder.serve(service).with_graceful_shutdown(graceful_shutdown_signal_future).await.convert(BacktracePart::new(line!(), file!()))?;
 
         return Ok(());
     }
@@ -574,889 +332,343 @@ impl CommandProcessor<RunServer> {
     fn create_router() -> Result<Router<ActionRoute_>, Auditor<Error>> {
         let mut router = Router::new();
 
-        if let Err(error) = router.insert(
+        router.insert(
             ACTION_ROUTE.application_user___authorization.check_nickname_for_existing,
             ActionRoute_::ApplicationUser__Authorization {
                 application_user___authorization: ApplicationUser__Authorization_::CheckNicknameForExisting,
             },
-        ) {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Runtime::new(error),
-                        },
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        }
+        )
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        if let Err(error) = router.insert(
+        router.insert(
             ACTION_ROUTE.application_user___authorization.check_email_for_existing,
             ActionRoute_::ApplicationUser__Authorization {
                 application_user___authorization: ApplicationUser__Authorization_::CheckEmailForExisting,
             },
-        ) {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Runtime::new(error),
-                        },
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        }
+        )
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        if let Err(error) = router.insert(
+        router.insert(
             ACTION_ROUTE.application_user___authorization.regisgter_by_first_step,
             ActionRoute_::ApplicationUser__Authorization {
                 application_user___authorization: ApplicationUser__Authorization_::RegisterByFirstStep,
             },
-        ) {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Runtime::new(error),
-                        },
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        }
+        )
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        if let Err(error) = router.insert(
+        router.insert(
             ACTION_ROUTE.application_user___authorization.regisgter_by_second_step,
             ActionRoute_::ApplicationUser__Authorization {
                 application_user___authorization: ApplicationUser__Authorization_::RegisterBySecondStep,
             },
-        ) {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Runtime::new(error),
-                        },
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        }
+        )
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        if let Err(error) = router.insert(
+        router.insert(
             ACTION_ROUTE.application_user___authorization.regisgter_by_last_step,
             ActionRoute_::ApplicationUser__Authorization {
                 application_user___authorization: ApplicationUser__Authorization_::RegisterByLastStep,
             },
-        ) {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Runtime::new(error),
-                        },
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        }
+        )
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        if let Err(error) = router.insert(
+        router.insert(
             ACTION_ROUTE.application_user___authorization.send_email_for_register,
             ActionRoute_::ApplicationUser__Authorization {
                 application_user___authorization: ApplicationUser__Authorization_::SendEmailForRegister,
             },
-        ) {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Runtime::new(error),
-                        },
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        }
+        )
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        if let Err(error) = router.insert(
+        router.insert(
             ACTION_ROUTE.application_user___authorization.authorize_by_first_step,
             ActionRoute_::ApplicationUser__Authorization {
                 application_user___authorization: ApplicationUser__Authorization_::AuthorizeByFirstStep,
             },
-        ) {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Runtime::new(error),
-                        },
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        }
+        )
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        if let Err(error) = router.insert(
+        router.insert(
             ACTION_ROUTE.application_user___authorization.authorize_by_last_step,
             ActionRoute_::ApplicationUser__Authorization {
                 application_user___authorization: ApplicationUser__Authorization_::AuthorizeByLastStep,
             },
-        ) {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Runtime::new(error),
-                        },
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        }
+        )
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        if let Err(error) = router.insert(
+        router.insert(
             ACTION_ROUTE.application_user___authorization.send_email_for_authorize,
             ActionRoute_::ApplicationUser__Authorization {
                 application_user___authorization: ApplicationUser__Authorization_::SendEmailForAuthorize,
             },
-        ) {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Runtime::new(error),
-                        },
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        }
+        )
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        if let Err(error) = router.insert(
+        router.insert(
             ACTION_ROUTE.application_user___authorization.reset_password_by_first_step,
             ActionRoute_::ApplicationUser__Authorization {
                 application_user___authorization: ApplicationUser__Authorization_::ResetPasswordByFirstStep,
             },
-        ) {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Runtime::new(error),
-                        },
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        }
+        )
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        if let Err(error) = router.insert(
+        router.insert(
             ACTION_ROUTE.application_user___authorization.reset_password_by_second_step,
             ActionRoute_::ApplicationUser__Authorization {
                 application_user___authorization: ApplicationUser__Authorization_::ResetPasswordBySecondStep,
             },
-        ) {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Runtime::new(error),
-                        },
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        }
+        )
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        if let Err(error) = router.insert(
+        router.insert(
             ACTION_ROUTE.application_user___authorization.reset_password_by_last_step,
             ActionRoute_::ApplicationUser__Authorization {
                 application_user___authorization: ApplicationUser__Authorization_::ResetPasswordByLastStep,
             },
-        ) {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Runtime::new(error),
-                        },
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        }
+        )
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        if let Err(error) = router.insert(
+        router.insert(
             ACTION_ROUTE.application_user___authorization.send_email_for_reset_password,
             ActionRoute_::ApplicationUser__Authorization {
                 application_user___authorization: ApplicationUser__Authorization_::SendEmailForResetPassword,
             },
-        ) {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Runtime::new(error),
-                        },
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        }
+        )
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        if let Err(error) = router.insert(
+        router.insert(
             ACTION_ROUTE.application_user___authorization.refresh_access_token,
             ActionRoute_::ApplicationUser__Authorization {
                 application_user___authorization: ApplicationUser__Authorization_::RefreshAccessToken,
             },
-        ) {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Runtime::new(error),
-                        },
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        }
+        )
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        if let Err(error) = router.insert(
+        router.insert(
             ACTION_ROUTE.application_user___authorization.deauthorize_from_one_device,
             ActionRoute_::ApplicationUser__Authorization {
                 application_user___authorization: ApplicationUser__Authorization_::DeauthorizeFromOneDevice,
             },
-        ) {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Runtime::new(error),
-                        },
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        }
+        )
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        if let Err(error) = router.insert(
+        router.insert(
             ACTION_ROUTE.application_user___authorization.deauthorize_from_all_devices,
             ActionRoute_::ApplicationUser__Authorization {
                 application_user___authorization: ApplicationUser__Authorization_::DeauthorizeFromAllDevices,
             },
-        ) {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Runtime::new(error),
-                        },
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        }
+        )
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        if let Err(error) = router.insert(
+        router.insert(
             ACTION_ROUTE.channel___base.get_one_by_id,
             ActionRoute_::Channel__Base {
                 channel___base: Channel__Base_::GetOneById,
             },
-        ) {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Runtime::new(error),
-                        },
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        }
+        )
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        if let Err(error) = router.insert(
+        router.insert(
             ACTION_ROUTE.channel___base.get_many_by_name_in_subscription,
             ActionRoute_::Channel__Base {
                 channel___base: Channel__Base_::GetManyByNameInSubscriptions,
             },
-        ) {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Runtime::new(error),
-                        },
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        }
+        )
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        if let Err(error) = router.insert(
+        router.insert(
             ACTION_ROUTE.channel___base.get_many_by_subscription,
             ActionRoute_::Channel__Base {
                 channel___base: Channel__Base_::GetManyBySubscription,
             },
-        ) {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Runtime::new(error),
-                        },
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        }
+        )
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        if let Err(error) = router.insert(
+        router.insert(
             ACTION_ROUTE.channel___base.get_many_piblic_by_name,
             ActionRoute_::Channel__Base {
                 channel___base: Channel__Base_::GetManyPublicByName,
             },
-        ) {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Runtime::new(error),
-                        },
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        }
+        )
+        .convert(BacktracePart::new(line!(), file!()))?;
 
-        if let Err(error) = router.insert(
+        router.insert(
             ACTION_ROUTE.channel_subscription___base.create,
             ActionRoute_::ChannelSubscription__Base {
                 channel_subscription___base: ChannelSubscription__Base_::Create,
             },
-        ) {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Runtime::new(error),
-                        },
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        }
+        )
+        .convert(BacktracePart::new(line!(), file!()))?;
 
         #[cfg(feature = "manual_testing")]
         {
-            if let Err(error) = router.insert(
+             router.insert(
                 ACTION_ROUTE.application_user___authorization.check_nickname_for_existing_,
                 ActionRoute_::ApplicationUser__Authorization {
                     application_user___authorization: ApplicationUser__Authorization_::CheckNicknameForExisting_,
                 },
-            ) {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
+            )
+.convert(BacktracePart::new(line!(), file!()))?;
 
-            if let Err(error) = router.insert(
+             router.insert(
                 ACTION_ROUTE.application_user___authorization.check_email_for_existing_,
                 ActionRoute_::ApplicationUser__Authorization {
                     application_user___authorization: ApplicationUser__Authorization_::CheckEmailForExisting_,
                 },
-            ) {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
+            )
+.convert(BacktracePart::new(line!(), file!()))?;
 
-            if let Err(error) = router.insert(
+             router.insert(
                 ACTION_ROUTE.application_user___authorization.regisgter_by_first_step_,
                 ActionRoute_::ApplicationUser__Authorization {
                     application_user___authorization: ApplicationUser__Authorization_::RegisterByFirstStep_,
                 },
-            ) {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
+            )
+.convert(BacktracePart::new(line!(), file!()))?;
 
-            if let Err(error) = router.insert(
+             router.insert(
                 ACTION_ROUTE.application_user___authorization.regisgter_by_second_step_,
                 ActionRoute_::ApplicationUser__Authorization {
                     application_user___authorization: ApplicationUser__Authorization_::RegisterBySecondStep_,
                 },
-            ) {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
+            )
+.convert(BacktracePart::new(line!(), file!()))?;
 
-            if let Err(error) = router.insert(
+             router.insert(
                 ACTION_ROUTE.application_user___authorization.regisgter_by_last_step_,
                 ActionRoute_::ApplicationUser__Authorization {
                     application_user___authorization: ApplicationUser__Authorization_::RegisterByLastStep_,
                 },
-            ) {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
+            )
+.convert(BacktracePart::new(line!(), file!()))?;
 
-            if let Err(error) = router.insert(
+             router.insert(
                 ACTION_ROUTE.application_user___authorization.send_email_for_register_,
                 ActionRoute_::ApplicationUser__Authorization {
                     application_user___authorization: ApplicationUser__Authorization_::SendEmailForRegister_,
                 },
-            ) {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
+            )
+.convert(BacktracePart::new(line!(), file!()))?;
 
-            if let Err(error) = router.insert(
+             router.insert(
                 ACTION_ROUTE.application_user___authorization.authorize_by_first_step_,
                 ActionRoute_::ApplicationUser__Authorization {
                     application_user___authorization: ApplicationUser__Authorization_::AuthorizeByFirstStep_,
                 },
-            ) {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
+            )
+.convert(BacktracePart::new(line!(), file!()))?;
 
-            if let Err(error) = router.insert(
+             router.insert(
                 ACTION_ROUTE.application_user___authorization.authorize_by_last_step_,
                 ActionRoute_::ApplicationUser__Authorization {
                     application_user___authorization: ApplicationUser__Authorization_::AuthorizeByLastStep_,
                 },
-            ) {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
+            )
+.convert(BacktracePart::new(line!(), file!()))?;
 
-            if let Err(error) = router.insert(
+             router.insert(
                 ACTION_ROUTE.application_user___authorization.send_email_for_authorize_,
                 ActionRoute_::ApplicationUser__Authorization {
                     application_user___authorization: ApplicationUser__Authorization_::SendEmailForAuthorize_,
                 },
-            ) {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
+            )
+.convert(BacktracePart::new(line!(), file!()))?;
 
-            if let Err(error) = router.insert(
+             router.insert(
                 ACTION_ROUTE.application_user___authorization.reset_password_by_first_step_,
                 ActionRoute_::ApplicationUser__Authorization {
                     application_user___authorization: ApplicationUser__Authorization_::ResetPasswordByFirstStep_,
                 },
-            ) {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
+            )
+.convert(BacktracePart::new(line!(), file!()))?;
 
-            if let Err(error) = router.insert(
+             router.insert(
                 ACTION_ROUTE.application_user___authorization.reset_password_by_second_step_,
                 ActionRoute_::ApplicationUser__Authorization {
                     application_user___authorization: ApplicationUser__Authorization_::ResetPasswordBySecondStep_,
                 },
-            ) {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
+            )
+.convert(BacktracePart::new(line!(), file!()))?;
 
-            if let Err(error) = router.insert(
+             router.insert(
                 ACTION_ROUTE.application_user___authorization.reset_password_by_last_step_,
                 ActionRoute_::ApplicationUser__Authorization {
                     application_user___authorization: ApplicationUser__Authorization_::ResetPasswordByLastStep_,
                 },
-            ) {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
+            )
+.convert(BacktracePart::new(line!(), file!()))?;
 
-            if let Err(error) = router.insert(
+             router.insert(
                 ACTION_ROUTE.application_user___authorization.send_email_for_reset_password_,
                 ActionRoute_::ApplicationUser__Authorization {
                     application_user___authorization: ApplicationUser__Authorization_::SendEmailForResetPassword_,
                 },
-            ) {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
+            )
+.convert(BacktracePart::new(line!(), file!()))?;
 
-            if let Err(error) = router.insert(
+             router.insert(
                 ACTION_ROUTE.application_user___authorization.refresh_access_token_,
                 ActionRoute_::ApplicationUser__Authorization {
                     application_user___authorization: ApplicationUser__Authorization_::RefreshAccessToken_,
                 },
-            ) {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
+            )
+.convert(BacktracePart::new(line!(), file!()))?;
 
-            if let Err(error) = router.insert(
+             router.insert(
                 ACTION_ROUTE.application_user___authorization.deauthorize_from_one_device_,
                 ActionRoute_::ApplicationUser__Authorization {
                     application_user___authorization: ApplicationUser__Authorization_::DeauthorizeFromOneDevice_,
                 },
-            ) {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
+            )
+.convert(BacktracePart::new(line!(), file!()))?;
 
-            if let Err(error) = router.insert(
+             router.insert(
                 ACTION_ROUTE.application_user___authorization.deauthorize_from_all_devices_,
                 ActionRoute_::ApplicationUser__Authorization {
                     application_user___authorization: ApplicationUser__Authorization_::DeauthorizeFromAllDevices_,
                 },
-            ) {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
+            )
+.convert(BacktracePart::new(line!(), file!()))?;
 
-            if let Err(error) = router.insert(
+             router.insert(
                 ACTION_ROUTE.channel___base.get_one_by_id_,
                 ActionRoute_::Channel__Base {
                     channel___base: Channel__Base_::GetOneById_,
                 },
-            ) {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
+            )
+.convert(BacktracePart::new(line!(), file!()))?;
 
-            if let Err(error) = router.insert(
+             router.insert(
                 ACTION_ROUTE.channel___base.get_many_by_name_in_subscription_,
                 ActionRoute_::Channel__Base {
                     channel___base: Channel__Base_::GetManyByNameInSubscriptions_,
                 },
-            ) {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
+            )
+.convert(BacktracePart::new(line!(), file!()))?;
 
-            if let Err(error) = router.insert(
+             router.insert(
                 ACTION_ROUTE.channel___base.get_many_by_subscription_,
                 ActionRoute_::Channel__Base {
                     channel___base: Channel__Base_::GetManyBySubscription_,
                 },
-            ) {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
+            )
+.convert(BacktracePart::new(line!(), file!()))?;
 
-            if let Err(error) = router.insert(
+             router.insert(
                 ACTION_ROUTE.channel___base.get_many_piblic_by_name_,
                 ActionRoute_::Channel__Base {
                     channel___base: Channel__Base_::GetManyPublicByName_,
                 },
-            ) {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
+            )
+.convert(BacktracePart::new(line!(), file!()))?;
 
-            if let Err(error) = router.insert(
+             router.insert(
                 ACTION_ROUTE.channel_subscription___base.create_,
                 ActionRoute_::ChannelSubscription__Base {
                     channel_subscription___base: ChannelSubscription__Base_::Create_,
                 },
-            ) {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
+            )
+.convert(BacktracePart::new(line!(), file!()))?;
         }
 
         return Ok(router);
@@ -2025,31 +1237,14 @@ impl CommandProcessor<RunServer> {
     }
 
     fn create_signal(signal_kind: SignalKind) -> Result<impl Future<Output = ()>, Auditor<Error>> {
-        let signal = match signal(signal_kind) {
-            Ok(mut signal) => {
-                async move {
-                    signal.recv().await;
+        let mut signal = tokio::signal::unix::signal(signal_kind).convert(BacktracePart::new(line!(), file!()))?;
 
-                    ()
-                }
-            }
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
+        let signal_ = async move {
+            signal.recv().await;
+
+            ()
         };
 
-        return Ok(signal);
+        return Ok(signal_);
     }
 }

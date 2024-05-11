@@ -4,8 +4,7 @@ use crate::infrastructure_layer::data::environment_configuration::ENVIRONMENT_CO
 use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::error::Runtime;
-use crate::infrastructure_layer::data::error::Runtime;
+use crate::infrastructure_layer::data::auditor::Converter;
 use lettre::smtp::SmtpClient;
 use lettre::ClientSecurity;
 use lettre::Transport;
@@ -22,49 +21,16 @@ impl Sender<Email> {
         body: String,
         to: &'a str,
     ) -> Result<(), Auditor<Error>> {
-        let email = match EmailBuilder::new() //TODO
+        let email = EmailBuilder::new() //TODO
             .subject(subject)
             .text(body)
             .from("from_changethis@yandex.ru".to_string())
             .to(to)
             .build()
-        {
-            Ok(email_) => email_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+            .convert(BacktracePart::new(line!(), file!()))?;
 
-        let mut email_server_socket_address_registry = match ENVIRONMENT_CONFIGURATION.resource.email_server.socket_address.0.to_socket_addrs() {
-            Ok(email_server_socket_address_registry_) => email_server_socket_address_registry_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        // TODO В static OnceLock
+        let mut email_server_socket_address_registry = ENVIRONMENT_CONFIGURATION.resource.email_server.socket_address.0.to_socket_addrs().convert(BacktracePart::new(line!(), file!()))?;
 
         let email_server_socket_address = match email_server_socket_address_registry.next() {
             Some(email_server_socket_address_) => email_server_socket_address_,
@@ -88,47 +54,15 @@ impl Sender<Email> {
                 todo!();
             }
             Environment::Development | Environment::LocalDevelopment => {
-                let smtp_client_ = match SmtpClient::new(
+                SmtpClient::new(
                     &email_server_socket_address,
                     ClientSecurity::None,
-                ) {
-                    Ok(smtp_client__) => smtp_client__,
-                    Err(error) => {
-                        return Err(
-                            Auditor::<Error>::new(
-                                Error::Runtime {
-                                    runtime: Runtime::Other {
-                                        other: Runtime::new(error),
-                                    },
-                                },
-                                BacktracePart::new(
-                                    line!(),
-                                    file!(),
-                                ),
-                            ),
-                        );
-                    }
-                };
-
-                smtp_client_
+                )
+                .convert(BacktracePart::new(line!(), file!()))?
             }
         };
 
-        if let Err(error) = smtp_client.transport().send(email.into()) {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Runtime::new(error),
-                        },
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        }
+        smtp_client.transport().send(email.into()).convert(BacktracePart::new(line!(), file!()))?;
 
         return Ok(());
     }

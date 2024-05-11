@@ -10,8 +10,7 @@ use serde::Deserialize;
 use super::Extractor;
 use hyper::body::to_bytes;
 use crate::infrastructure_layer::data::error::Error;
-use crate::infrastructure_layer::data::error::Runtime;
-use crate::infrastructure_layer::data::error::Runtime;
+use crate::infrastructure_layer::data::auditor::Converter;
 use bytes::Buf;
 
 pub use crate::infrastructure_layer::data::control_type::HttpBodyData;
@@ -26,38 +25,9 @@ impl Extractor<HttpBodyData> {
         D: for<'de> Deserialize<'de>,
         Serializer<SF>: Serialize,
     {
-        let bytes = match to_bytes(body).await {
-            Ok(bytes_) => bytes_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    )
-                );
-            }
-        };
+        let bytes = to_bytes(body).await.convert(BacktracePart::new(line!(), file!()))?;
 
-        let data = match Serializer::<SF>::deserialize::<'_, D>(bytes.chunk()) {
-            Ok(data_) => data_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-
-                return Err(error);
-            }
-        };
+        let data = Serializer::<SF>::deserialize::<'_, D>(bytes.chunk())?;
 
         return Ok(
             InvalidArgumentResult::Ok {

@@ -7,8 +7,7 @@ use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::error::Runtime;
-use crate::infrastructure_layer::data::error::Runtime;
+use crate::infrastructure_layer::data::auditor::Converter;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::functionality::repository::postgresql::common::Common1;
@@ -60,25 +59,11 @@ impl ActionProcessor<Channel__Base___GetManyByNameInSubscriptions> {
             }
         };
 
-        let extractor_result = match Extractor::<ApplicationUserAccessToken<'_>>::extract(&incoming_.application_user_access_token_encrypted).await {
-            Ok(extractor_result_) => extractor_result_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-
-                return Err(error);
-            }
-        };
-
-        let application_user_access_token = match extractor_result {
+        let application_user_access_token = match Extractor::<ApplicationUserAccessToken<'_>>::extract(&incoming_.application_user_access_token_encrypted).await? {
             InvalidArgumentResult::Ok {
-                subject: extractor_result_,
+                subject: extractor_result,
             } => {
-                let application_user_access_token_ = match extractor_result_ {
+                let application_user_access_token_ = match extractor_result {
                     ExtractorResult::ApplicationUserAccessToken {
                         application_user_access_token: application_user_access_token__,
                     } => application_user_access_token__,
@@ -137,26 +122,9 @@ impl ActionProcessor<Channel__Base___GetManyByNameInSubscriptions> {
             }
         }
 
-        let database_1_postgresql_pooled_connection = match database_1_postgresql_connection_pool.get().await {
-            Ok(database_1_postgresql_pooled_connection_) => database_1_postgresql_pooled_connection_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert(BacktracePart::new(line!(), file!()))?;
 
-        let common_registry = match PostgresqlRepository::<Common1>::find_2(
+        let common_registry = PostgresqlRepository::<Common1>::find_2(
             &*database_1_postgresql_pooled_connection,
             &By12 {
                 application_user_id: application_user_access_token.application_user_id,
@@ -165,20 +133,7 @@ impl ActionProcessor<Channel__Base___GetManyByNameInSubscriptions> {
             },
             incoming_.limit,
         )
-        .await
-        {
-            Ok(channel_registry_) => channel_registry_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-
-                return Err(error);
-            }
-        };
+        .await?;
 
         let outcoming = Outcoming {
             common_registry,

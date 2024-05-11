@@ -12,8 +12,7 @@ use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::error::Runtime;
-use crate::infrastructure_layer::data::error::Runtime;
+use crate::infrastructure_layer::data::auditor::Converter;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::data::void::Void;
@@ -63,25 +62,11 @@ impl ActionProcessor<ChannelSubscription__Base___Create> {
             }
         };
 
-        let extractor_result = match Extractor::<ApplicationUserAccessToken<'_>>::extract(&incoming_.application_user_access_token_encrypted).await {
-            Ok(extractor_result_) => extractor_result_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-
-                return Err(error);
-            }
-        };
-
-        let application_user_access_token = match extractor_result {
+        let application_user_access_token = match Extractor::<ApplicationUserAccessToken<'_>>::extract(&incoming_.application_user_access_token_encrypted).await? {
             InvalidArgumentResult::Ok {
-                subject: extractor_result_,
+                subject: extractor_result,
             } => {
-                let application_user_access_token_ = match extractor_result_ {
+                let application_user_access_token_ = match extractor_result {
                     ExtractorResult::ApplicationUserAccessToken {
                         application_user_access_token: application_user_access_token__,
                     } => application_user_access_token__,
@@ -122,24 +107,7 @@ impl ActionProcessor<ChannelSubscription__Base___Create> {
             );
         }
 
-        let database_1_postgresql_pooled_connection = match database_1_postgresql_connection_pool.get().await {
-            Ok(database_1_postgresql_pooled_connection_) => database_1_postgresql_pooled_connection_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert(BacktracePart::new(line!(), file!()))?;
 
         let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
 
@@ -149,22 +117,8 @@ impl ActionProcessor<ChannelSubscription__Base___Create> {
                 channel_id: incoming_.channel_id,
             },
         )
-        .await
+        .await?
         {
-            Ok(channel_) => channel_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-
-                return Err(error);
-            }
-        };
-
-        let channel_ = match channel {
             Some(channel_) => channel_,
             None => {
                 return Ok(
@@ -175,7 +129,7 @@ impl ActionProcessor<ChannelSubscription__Base___Create> {
             }
         };
 
-        if channel_.owner.0 == application_user_access_token.application_user_id.0 {
+        if channel.owner.0 == application_user_access_token.application_user_id.0 {
             return Ok(
                 InvalidArgumentResult::Ok {
                     subject: UnifiedReport::precedent(Precedent::ApplicationUser_IsChannelOwner),
@@ -183,7 +137,7 @@ impl ActionProcessor<ChannelSubscription__Base___Create> {
             );
         }
 
-        let channel_access_modifier = FormResolver::<Channel_AccessModifier>::to_representation(channel_.access_modifier);
+        let channel_access_modifier = FormResolver::<Channel_AccessModifier>::to_representation(channel.access_modifier);
 
         if let Channel_AccessModifier_::Close = channel_access_modifier {
             return Ok(
@@ -193,24 +147,14 @@ impl ActionProcessor<ChannelSubscription__Base___Create> {
             );
         }
 
-        if let Err(mut error) = PostgresqlRepository::<ChannelSubscription>::create(
+        PostgresqlRepository::<ChannelSubscription>::create(
             database_1_postgresql_connection,
             Insert10 {
                 application_user_id: application_user_access_token.application_user_id,
-                channel_id: channel_.id,
+                channel_id: channel.id,
             },
         )
-        .await
-        {
-            error.add_backtrace_part(
-                BacktracePart::new(
-                    line!(),
-                    file!(),
-                ),
-            );
-
-            return Err(error);
-        }
+        .await?;
 
         return Ok(
             InvalidArgumentResult::Ok {

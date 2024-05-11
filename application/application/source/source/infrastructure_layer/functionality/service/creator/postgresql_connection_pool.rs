@@ -3,8 +3,7 @@ use crate::infrastructure_layer::data::environment_configuration::Environment;
 use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::error::Runtime;
-use crate::infrastructure_layer::data::error::Runtime;
+use crate::infrastructure_layer::data::auditor::Converter;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use std::clone::Clone;
@@ -33,7 +32,7 @@ impl Creator<PostgresqlConnectionPoolNoTls> {
                 );
             }
             Environment::Development | Environment::LocalDevelopment => {
-                let postgresql_connection_pool_ = match Pool::builder()
+                Pool::builder()
                     .build(
                         PostgresqlConnectionManager::new(
                             configuration.clone(),
@@ -41,26 +40,7 @@ impl Creator<PostgresqlConnectionPoolNoTls> {
                         ),
                     )
                     .await
-                {
-                    Ok(postgresql_connection_pool__) => postgresql_connection_pool__,
-                    Err(error) => {
-                        return Err(
-                            Auditor::<Error>::new(
-                                Error::Runtime {
-                                    runtime: Runtime::Other {
-                                        other: Runtime::new(error),
-                                    },
-                                },
-                                BacktracePart::new(
-                                    line!(),
-                                    file!(),
-                                ),
-                            ),
-                        );
-                    }
-                };
-
-                postgresql_connection_pool_
+                    .convert(BacktracePart::new(line!(), file!()))?
             }
         };
 

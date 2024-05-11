@@ -12,7 +12,6 @@ use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier;
 use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::error::Runtime;
 use super::channel::Channel1;
 use crate::infrastructure_layer::functionality::service::counter::Counter;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
@@ -33,52 +32,6 @@ impl PostgresqlRepository<Common1> {
 
         let mut counter = Counter::<i16>::new_classic();
 
-        let mut counter_value = match counter.get_next_value() {
-            Ok(counter_value_) => counter_value_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-
-                return Err(error);
-            }
-        };
-
-        let counter_value_1 = counter_value;
-
-        counter_value = match counter.get_next_value() {
-            Ok(counter_value_) => counter_value_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-
-                return Err(error);
-            }
-        };
-
-        let counter_value_2 = counter_value;
-
-        counter_value = match counter.get_next_value() {
-            Ok(counter_value_) => counter_value_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-
-                return Err(error);
-            }
-        };
-
         let mut query = format!(
             "SELECT \
                 c.id AS i, \
@@ -91,7 +44,9 @@ impl PostgresqlRepository<Common1> {
             FROM public.channel c LEFT OUTER JOIN public.channel_subscription cs \
             ON cs.application_user_id = ${} AND c.id = cs.channel_id \
             WHERE c.visability_modifier = ${} AND c.name LIKE ${}",
-            counter_value_1, counter_value_2, counter_value
+            counter.get_next_value()?,
+            counter.get_next_value()?,
+            counter.get_next_value()?,
         );
 
         let wildcard = format!(
@@ -118,24 +73,10 @@ impl PostgresqlRepository<Common1> {
         if let Some(requery_channel_name_) = by_11.requery_channel_name {
             requery_channel_name = requery_channel_name_.0.as_str();
 
-            counter_value = match counter.get_next_value() {
-                Ok(counter_value_) => counter_value_,
-                Err(mut error) => {
-                    error.add_backtrace_part(
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    );
-
-                    return Err(error);
-                }
-            };
-
             query = format!(
                 "{} AND c.name > ${}",
                 query.as_str(),
-                counter_value
+                counter.get_next_value()?,
             );
 
             prepared_statemant_parameter_convertation_resolver.add_parameter(
@@ -144,26 +85,12 @@ impl PostgresqlRepository<Common1> {
             );
         }
 
-        counter_value = match counter.get_next_value() {
-            Ok(counter_value_) => counter_value_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-
-                return Err(error);
-            }
-        };
-
         query = format!(
             "{} \
             ORDER BY c.name ASC \
             LIMIT ${};",
             query.as_str(),
-            counter_value
+            counter.get_next_value()?
         );
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(
@@ -241,36 +168,6 @@ impl PostgresqlRepository<Common1> {
 
         let mut counter = Counter::<i16>::new_classic();
 
-        let mut counter_value = match counter.get_next_value() {
-            Ok(counter_value_) => counter_value_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-
-                return Err(error);
-            }
-        };
-
-        let counter_value_1 = counter_value;
-
-        counter_value = match counter.get_next_value() {
-            Ok(counter_value_) => counter_value_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-
-                return Err(error);
-            }
-        };
-
         let mut query = format!(
             "SELECT \
                 c.id AS i, \
@@ -283,7 +180,8 @@ impl PostgresqlRepository<Common1> {
             FROM public.channel c INNER JOIN public.channel_subscription cs \
             ON cs.application_user_id = ${} AND c.id = cs.channel_id \
             WHERE c.name LIKE ${}",
-            counter_value_1, counter_value
+            counter.get_next_value()?,
+            counter.get_next_value()?,
         );
 
         let wildcard = format!(
@@ -306,24 +204,10 @@ impl PostgresqlRepository<Common1> {
         if let Some(requery_channel_name_) = by_12.requery_channel_name {
             requery_channel_name = requery_channel_name_.0.as_str();
 
-            counter_value = match counter.get_next_value() {
-                Ok(counter_value_) => counter_value_,
-                Err(mut error) => {
-                    error.add_backtrace_part(
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    );
-
-                    return Err(error);
-                }
-            };
-
             query = format!(
                 "{} AND c.name > ${}",
                 query.as_str(),
-                counter_value
+                counter.get_next_value()?,
             );
 
             prepared_statemant_parameter_convertation_resolver.add_parameter(
@@ -332,26 +216,12 @@ impl PostgresqlRepository<Common1> {
             );
         }
 
-        counter_value = match counter.get_next_value() {
-            Ok(counter_value_) => counter_value_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-
-                return Err(error);
-            }
-        };
-
         query = format!(
             "{} \
             ORDER BY c.name ASC \
             LIMIT ${};",
             query.as_str(),
-            counter_value
+            counter.get_next_value()?,
         );
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(
@@ -422,20 +292,6 @@ impl PostgresqlRepository<Common1> {
 
         let mut counter = Counter::<i16>::new_classic();
 
-        let mut counter_value = match counter.get_next_value() {
-            Ok(counter_value_) => counter_value_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-
-                return Err(error);
-            }
-        };
-
         let mut query = format!(
             "SELECT \
                 c.id AS i, \
@@ -447,7 +303,7 @@ impl PostgresqlRepository<Common1> {
                 c.background_image_path AS bip \
             FROM public.channel c INNER JOIN public.channel_subscription cs \
             ON cs.application_user_id = ${} AND c.id = cs.channel_id",
-            counter_value
+            counter.get_next_value()?,
         );
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(
@@ -460,25 +316,11 @@ impl PostgresqlRepository<Common1> {
         if let Some(requery_channel_id_) = by_13.requery_channel_id {
             requery_channel_id = requery_channel_id_.0;
 
-            counter_value = match counter.get_next_value() {
-                Ok(counter_value_) => counter_value_,
-                Err(mut error) => {
-                    error.add_backtrace_part(
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    );
-
-                    return Err(error);
-                }
-            };
-
             query = format!(
                 "{} \
                 WHERE cs.channel_id > ${}",
                 query.as_str(),
-                counter_value
+                counter.get_next_value()?,
             );
 
             prepared_statemant_parameter_convertation_resolver.add_parameter(
@@ -487,26 +329,12 @@ impl PostgresqlRepository<Common1> {
             );
         }
 
-        counter_value = match counter.get_next_value() {
-            Ok(counter_value_) => counter_value_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-
-                return Err(error);
-            }
-        };
-
         query = format!(
             "{} \
             ORDER BY cs.channel_id ASC \
             LIMIT ${};",
             query.as_str(),
-            counter_value
+            counter.get_next_value()?,
         );
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(

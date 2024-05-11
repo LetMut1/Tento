@@ -8,7 +8,7 @@ use bb8::Pool;
 use bb8_redis::RedisConnectionManager;
 use redis::ConnectionInfo;
 use std::clone::Clone;
-use crate::infrastructure_layer::data::error::Runtime;
+use crate::infrastructure_layer::data::auditor::Converter;
 
 pub use crate::infrastructure_layer::data::control_type::RedisConnectonPool;
 
@@ -22,48 +22,12 @@ impl Creator<RedisConnectonPool> {
                 todo!();
             }
             Environment::Development | Environment::LocalDevelopment => {
-                let redis_connection_manager = match RedisConnectionManager::new(connection_info.clone()) {
-                    Ok(redis_connection_manager_) => redis_connection_manager_,
-                    Err(error) => {
-                        return Err(
-                            Auditor::<Error>::new(
-                                Error::Runtime {
-                                    runtime: Runtime::Other {
-                                        other: Runtime::new(error),
-                                    },
-                                },
-                                BacktracePart::new(
-                                    line!(),
-                                    file!(),
-                                ),
-                            ),
-                        );
-                    }
-                };
+                let redis_connection_manager = RedisConnectionManager::new(connection_info.clone()).convert(BacktracePart::new(line!(), file!()))?;
 
-                let redis_connection_pool_ = match Pool::builder() // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
+                Pool::builder() // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
                     .build(redis_connection_manager)
                     .await
-                {
-                    Ok(redis_connection_pool__) => redis_connection_pool__,
-                    Err(error) => {
-                        return Err(
-                            Auditor::<Error>::new(
-                                Error::Runtime {
-                                    runtime: Runtime::Other {
-                                        other: Runtime::new(error),
-                                    },
-                                },
-                                BacktracePart::new(
-                                    line!(),
-                                    file!(),
-                                ),
-                            ),
-                        );
-                    }
-                };
-
-                redis_connection_pool_
+                    .convert(BacktracePart::new(line!(), file!()))?
             }
         };
 

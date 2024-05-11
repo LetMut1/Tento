@@ -12,8 +12,7 @@ use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::error::Runtime;
-use crate::infrastructure_layer::data::error::Runtime;
+use crate::infrastructure_layer::data::auditor::Converter;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By3;
@@ -82,24 +81,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
             );
         }
 
-        let database_1_postgresql_pooled_connection = match database_1_postgresql_connection_pool.get().await {
-            Ok(database_1_postgresql_pooled_connection_) => database_1_postgresql_pooled_connection_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert(BacktracePart::new(line!(), file!()))?;
 
         let application_user = match PostgresqlRepository::<ApplicationUser5>::find_1(
             &*database_1_postgresql_pooled_connection,
@@ -107,23 +89,9 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
                 application_user_id: incoming_.application_user_id,
             },
         )
-        .await
+        .await?
         {
-            Ok(application_user_) => application_user_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-
-                return Err(error);
-            }
-        };
-
-        let application_user_ = match application_user {
-            Some(application_user__) => application_user__,
+            Some(application_user_) => application_user_,
             None => {
                 return Ok(
                     InvalidArgumentResult::Ok {
@@ -138,48 +106,17 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
             application_user_device_id: &incoming_.application_user_device_id,
         };
 
-        let database_2_postgresql_pooled_connection = match database_2_postgresql_connection_pool.get().await {
-            Ok(database_2_postgresql_pooled_connection_) => database_2_postgresql_pooled_connection_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert(BacktracePart::new(line!(), file!()))?;
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
-        let application_user_authorization_token = match PostgresqlRepository::<ApplicationUserAuthorizationToken5>::find_1(
+        let mut application_user_authorization_token = match PostgresqlRepository::<ApplicationUserAuthorizationToken5>::find_1(
             database_2_postgresql_connection,
             &by_4,
         )
-        .await
+        .await?
         {
-            Ok(application_user_authorization_token_) => application_user_authorization_token_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-
-                return Err(error);
-            }
-        };
-
-        let mut application_user_authorization_token_ = match application_user_authorization_token {
-            Some(application_user_authorization_token__) => application_user_authorization_token__,
+            Some(application_user_authorization_token_) => application_user_authorization_token_,
             None => {
                 return Ok(
                     InvalidArgumentResult::Ok {
@@ -189,22 +126,12 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
             }
         };
 
-        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token_.expires_at.0) {
-            if let Err(mut error) = PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::delete(
+        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token.expires_at.0) {
+            PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::delete(
                 database_2_postgresql_connection,
                 &by_4,
             )
-            .await
-            {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-
-                return Err(error);
-            }
+            .await?;
 
             return Ok(
                 InvalidArgumentResult::Ok {
@@ -213,7 +140,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
             );
         }
 
-        if !ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token_.can_be_resent_from.0) {
+        if !ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token.can_be_resent_from.0) {
             return Ok(
                 InvalidArgumentResult::Ok {
                     subject: UnifiedReport::precedent(Precedent::ApplicationUserAuthorizationToken_TimeToResendHasNotCome),
@@ -221,56 +148,25 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
             );
         }
 
-        application_user_authorization_token_.can_be_resent_from = match Generator::<ApplicationUserAuthorizationToken_CanBeResentFrom>::generate() {
-            Ok(application_user_authorization_token_can_be_resent_from) => application_user_authorization_token_can_be_resent_from,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
+        application_user_authorization_token.can_be_resent_from = Generator::<ApplicationUserAuthorizationToken_CanBeResentFrom>::generate()?;
 
-                return Err(error);
-            }
-        };
-
-        if let Err(mut error) = PostgresqlRepository::<ApplicationUserAuthorizationToken3>::update(
+        PostgresqlRepository::<ApplicationUserAuthorizationToken3>::update(
             database_2_postgresql_connection,
             &Update5 {
-                application_user_authorization_token_can_be_resent_from: application_user_authorization_token_.can_be_resent_from,
+                application_user_authorization_token_can_be_resent_from: application_user_authorization_token.can_be_resent_from,
             },
             &by_4,
         )
-        .await
-        {
-            error.add_backtrace_part(
-                BacktracePart::new(
-                    line!(),
-                    file!(),
-                ),
-            );
+        .await?;
 
-            return Err(error);
-        }
-
-        if let Err(mut error) = EmailSender::<ApplicationUserAuthorizationToken<'_>>::send(
-            &application_user_authorization_token_.value,
-            &application_user_.email,
+        EmailSender::<ApplicationUserAuthorizationToken<'_>>::send(
+            &application_user_authorization_token.value,
+            &application_user.email,
             &incoming_.application_user_device_id,
-        ) {
-            error.add_backtrace_part(
-                BacktracePart::new(
-                    line!(),
-                    file!(),
-                ),
-            );
-
-            return Err(error);
-        }
+        )?;
 
         let outcoming = Outcoming {
-            application_user_authorization_token_can_be_resent_from: application_user_authorization_token_.can_be_resent_from,
+            application_user_authorization_token_can_be_resent_from: application_user_authorization_token.can_be_resent_from,
         };
 
         return Ok(

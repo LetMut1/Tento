@@ -2,10 +2,7 @@ use super::Encoder;
 use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::error::Runtime;
-use crate::infrastructure_layer::data::error::Runtime;
-use argon2::hash_encoded;
-use argon2::verify_encoded;
+use crate::infrastructure_layer::data::auditor::Converter;
 use argon2::Config;
 use uuid::Uuid;
 
@@ -17,28 +14,12 @@ impl Encoder<Argon2Id> {
 
         let salt = Uuid::new_v4();
 
-        let value = match hash_encoded(
+        let value = argon2::hash_encoded(
             data,
             salt.as_bytes().as_slice(),
             &config,
-        ) {
-            Ok(value_) => value_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        )
+        .convert(BacktracePart::new(line!(), file!()))?;
 
         return Ok(value);
     }
@@ -47,27 +28,11 @@ impl Encoder<Argon2Id> {
         data: &'a [u8],
         encoded_data: &'a str,
     ) -> Result<bool, Auditor<Error>> {
-        let value = match verify_encoded(
+        let value = argon2::verify_encoded(
             encoded_data,
             data,
-        ) {
-            Ok(value_) => value_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        )
+        .convert(BacktracePart::new(line!(), file!()))?;
 
         return Ok(value);
     }

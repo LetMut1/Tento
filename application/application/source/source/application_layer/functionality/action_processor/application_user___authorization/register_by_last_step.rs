@@ -26,9 +26,8 @@ use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::control_type::TokioNonBlockingTask;
 use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::error::Runtime;
+use crate::infrastructure_layer::data::auditor::Converter;
 use crate::infrastructure_layer::functionality::service::spawner::Spawner;
-use crate::infrastructure_layer::data::error::Runtime;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By1;
@@ -107,21 +106,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
             );
         }
 
-        let is_valid_email = match Validator::<ApplicationUser_Email>::is_valid(&incoming_.application_user_email) {
-            Ok(is_valid_email_) => is_valid_email_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-
-                return Err(error);
-            }
-        };
-
-        if !is_valid_email {
+        if !Validator::<ApplicationUser_Email>::is_valid(&incoming_.application_user_email)? {
             return Ok(
                 InvalidArgumentResult::InvalidArgument {
                     invalid_argument: InvalidArgument::ApplicationUser_Email,
@@ -129,21 +114,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
             );
         }
 
-        let is_valid_value = match Validator::<ApplicationUserRegistrationToken_Value>::is_valid(&incoming_.application_user_registration_token_value) {
-            Ok(is_valid_value_) => is_valid_value_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-
-                return Err(error);
-            }
-        };
-
-        if !is_valid_value {
+        if !Validator::<ApplicationUserRegistrationToken_Value>::is_valid(&incoming_.application_user_registration_token_value)? {
             return Ok(
                 InvalidArgumentResult::InvalidArgument {
                     invalid_argument: InvalidArgument::ApplicationUserRegistrationToken_Value,
@@ -159,49 +130,18 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
             );
         }
 
-        let database_1_postgresql_pooled_connection = match database_1_postgresql_connection_pool.get().await {
-            Ok(database_1_postgresql_pooled_connection_) => database_1_postgresql_pooled_connection_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert(BacktracePart::new(line!(), file!()))?;
 
         let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
 
-        let is_exist_1 = match PostgresqlRepository::<ApplicationUser<'_>>::is_exist_1(
+        if PostgresqlRepository::<ApplicationUser<'_>>::is_exist_1(
             database_1_postgresql_connection,
             &By1 {
                 application_user_nickname: &incoming_.application_user_nickname,
             },
         )
-        .await
+        .await?
         {
-            Ok(is_exist_1_) => is_exist_1_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-
-                return Err(error);
-            }
-        };
-
-        if is_exist_1 {
             return Ok(
                 InvalidArgumentResult::Ok {
                     subject: UnifiedReport::precedent(Precedent::ApplicationUser_NicknameAlreadyExist),
@@ -209,28 +149,14 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
             );
         }
 
-        let is_exist_2 = match PostgresqlRepository::<ApplicationUser<'_>>::is_exist_2(
+        if PostgresqlRepository::<ApplicationUser<'_>>::is_exist_2(
             database_1_postgresql_connection,
             &By2 {
                 application_user_email: &incoming_.application_user_email,
             },
         )
-        .await
+        .await?
         {
-            Ok(is_exist_2_) => is_exist_2_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-
-                return Err(error);
-            }
-        };
-
-        if is_exist_2 {
             return Ok(
                 InvalidArgumentResult::Ok {
                     subject: UnifiedReport::precedent(Precedent::ApplicationUser_EmailAlreadyExist),
@@ -243,48 +169,17 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
             application_user_device_id: &incoming_.application_user_device_id,
         };
 
-        let database_2_postgresql_pooled_connection = match database_2_postgresql_connection_pool.get().await {
-            Ok(database_2_postgresql_pooled_connection_) => database_2_postgresql_pooled_connection_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert(BacktracePart::new(line!(), file!()))?;
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
-        let application_user_registration_token = match PostgresqlRepository::<ApplicationUserRegistrationToken3>::find_1(
+        let mut application_user_registration_token = match PostgresqlRepository::<ApplicationUserRegistrationToken3>::find_1(
             database_2_postgresql_connection,
             &by_5,
         )
-        .await
+        .await?
         {
-            Ok(application_user_registration_token_) => application_user_registration_token_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-
-                return Err(error);
-            }
-        };
-
-        let mut application_user_registration_token_ = match application_user_registration_token {
-            Some(application_user_registration_token__) => application_user_registration_token__,
+            Some(application_user_registration_token_) => application_user_registration_token_,
             None => {
                 return Ok(
                     InvalidArgumentResult::Ok {
@@ -294,22 +189,12 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
             }
         };
 
-        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token_.expires_at.0) {
-            if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete(
+        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token.expires_at.0) {
+            PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete(
                 database_2_postgresql_connection,
                 &by_5,
             )
-            .await
-            {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-
-                return Err(error);
-            }
+            .await?;
 
             return Ok(
                 InvalidArgumentResult::Ok {
@@ -318,7 +203,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
             );
         }
 
-        if !application_user_registration_token_.is_approved.0 {
+        if !application_user_registration_token.is_approved.0 {
             return Ok(
                 InvalidArgumentResult::Ok {
                     subject: UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_IsNotApproved),
@@ -326,53 +211,24 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
             );
         }
 
-        if application_user_registration_token_.value.0 != incoming_.application_user_registration_token_value.0 {
-            if let Err(mut error) = Incrementor::<ApplicationUserRegistrationToken_WrongEnterTriesQuantity>::increment(&mut application_user_registration_token_.wrong_enter_tries_quantity) {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
+        if application_user_registration_token.value.0 != incoming_.application_user_registration_token_value.0 {
+            Incrementor::<ApplicationUserRegistrationToken_WrongEnterTriesQuantity>::increment(&mut application_user_registration_token.wrong_enter_tries_quantity)?;
 
-                return Err(error);
-            };
-
-            if application_user_registration_token_.wrong_enter_tries_quantity.0 < ApplicationUserRegistrationToken_WrongEnterTriesQuantity::LIMIT {
-                if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken4>::update(
+            if application_user_registration_token.wrong_enter_tries_quantity.0 < ApplicationUserRegistrationToken_WrongEnterTriesQuantity::LIMIT {
+                PostgresqlRepository::<ApplicationUserRegistrationToken4>::update(
                     database_2_postgresql_connection,
                     &Update10 {
-                        application_user_registration_token_wrong_enter_tries_quantity: application_user_registration_token_.wrong_enter_tries_quantity,
+                        application_user_registration_token_wrong_enter_tries_quantity: application_user_registration_token.wrong_enter_tries_quantity,
                     },
                     &by_5,
                 )
-                .await
-                {
-                    error.add_backtrace_part(
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    );
-
-                    return Err(error);
-                }
+                .await?;
             } else {
-                if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete(
+                PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete(
                     database_2_postgresql_connection,
                     &by_5,
                 )
-                .await
-                {
-                    error.add_backtrace_part(
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    );
-
-                    return Err(error);
-                }
+                .await?;
             }
 
             return Ok(
@@ -388,151 +244,40 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
             }
         );
 
-        let application_user_password_hash = match join_handle.await {
-            Ok(application_user_password_hash_) => application_user_password_hash_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
-
-        let application_user_password_hash_ = match application_user_password_hash {
-            Ok(application_user_password_hash__) => application_user_password_hash__,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-
-                return Err(error);
-            }
-        };
-
-        let application_user = match PostgresqlRepository::<ApplicationUser<'_>>::create(
+        let application_user = PostgresqlRepository::<ApplicationUser<'_>>::create(
             database_1_postgresql_connection,
             Insert1 {
                 application_user_email: incoming_.application_user_email,
                 application_user_nickname: incoming_.application_user_nickname,
-                application_user_password_hash: application_user_password_hash_,
+                application_user_password_hash: join_handle.await.convert(BacktracePart::new(line!(), file!()))??,
             },
         )
-        .await
-        {
-            Ok(application_user_) => application_user_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-
-                return Err(error);
-            }
-        };
-
-        let application_user_acces_token_expires_at = match Generator::<ApplicationUserAccessToken_ExpiresAt>::generate() {
-            Ok(expires_at_) => expires_at_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-
-                return Err(error);
-            }
-        };
+        .await?;
 
         let application_user_access_token = ApplicationUserAccessToken {
             id: Generator::<ApplicationUserAccessToken_Id>::generate(),
             application_user_id: application_user.id,
             application_user_device_id: Cow::Borrowed(&incoming_.application_user_device_id),
-            expires_at: application_user_acces_token_expires_at,
-        };
-
-        let application_user_access_refresh_token_expires_at = match Generator::<ApplicationUserAccessRefreshToken_ExpiresAt>::generate() {
-            Ok(application_user_access_refresh_token_expires_at_) => application_user_access_refresh_token_expires_at_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-
-                return Err(error);
-            }
+            expires_at: Generator::<ApplicationUserAccessToken_ExpiresAt>::generate()?,
         };
 
 // TODO  TRANZACTION посмотреть, необходимо ли здесь сделать транзакцию
-        let application_user_access_refresh_token = match PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::create(
+        let application_user_access_refresh_token = PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::create(
             database_2_postgresql_connection,
             Insert2 {
                 application_user_id: application_user.id,
                 application_user_device_id: &incoming_.application_user_device_id,
                 application_user_access_token_id: &application_user_access_token.id,
                 application_user_access_refresh_token_obfuscation_value: Generator::<ApplicationUserAccessRefreshToken_ObfuscationValue>::generate(),
-                application_user_access_refresh_token_expires_at,
+                application_user_access_refresh_token_expires_at: Generator::<ApplicationUserAccessRefreshToken_ExpiresAt>::generate()?,
                 application_user_access_refresh_token_updated_at: Generator::<ApplicationUserAccessRefreshToken_UpdatedAt>::generate(),
             },
         )
-        .await
-        {
-            Ok(application_user_access_refresh_token_) => application_user_access_refresh_token_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
+        .await?;
 
-                return Err(error);
-            }
-        };
+        let application_user_access_token_encrypted = FormResolver::<ApplicationUserAccessToken<'_>>::to_encrypted(&application_user_access_token)?;
 
-        let application_user_access_token_encrypted = match FormResolver::<ApplicationUserAccessToken<'_>>::to_encrypted(&application_user_access_token) {
-            Ok(application_user_access_token_encrypted_) => application_user_access_token_encrypted_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-
-                return Err(error);
-            }
-        };
-
-        let application_user_access_refresh_token_encrypted = match FormResolver::<ApplicationUserAccessRefreshToken<'_>>::to_encrypted(&application_user_access_refresh_token) {
-            Ok(application_user_access_refresh_token_encrypted_) => application_user_access_refresh_token_encrypted_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-
-                return Err(error);
-            }
-        };
+        let application_user_access_refresh_token_encrypted = FormResolver::<ApplicationUserAccessRefreshToken<'_>>::to_encrypted(&application_user_access_refresh_token)?;
 
         let database_1_postgresql_connection_pool_ = database_1_postgresql_connection_pool.clone();
 
@@ -540,84 +285,27 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
 
         Spawner::<TokioNonBlockingTask>::spawn_into_background(
             async move {
-                let database_1_postgresql_pooled_connection_ = match database_1_postgresql_connection_pool_.get().await {
-                    Ok(database_1_postgresql_pooled_connection__) => database_1_postgresql_pooled_connection__,
-                    Err(error) => {
-                        return Err(
-                            Auditor::<Error>::new(
-                                Error::Runtime {
-                                    runtime: Runtime::Other {
-                                        other: Runtime::new(error),
-                                    },
-                                },
-                                BacktracePart::new(
-                                    line!(),
-                                    file!(),
-                                ),
-                            ),
-                        );
-                    }
-                };
+                let database_1_postgresql_pooled_connection_ = database_1_postgresql_connection_pool_.get().await.convert(BacktracePart::new(line!(), file!()))?;
 
-                let application_user_device = match PostgresqlRepository::<ApplicationUserDevice>::create(
+                let application_user_device = PostgresqlRepository::<ApplicationUserDevice>::create(
                     &*database_1_postgresql_pooled_connection_,
                     Insert4 {
                         application_user_device_id: incoming_.application_user_device_id,
                         application_user_id: application_user.id,
                     },
                 )
-                .await
-                {
-                    Ok(application_user_device_) => application_user_device_,
-                    Err(mut error) => {
-                        error.add_backtrace_part(
-                            BacktracePart::new(
-                                line!(),
-                                file!(),
-                            ),
-                        );
+                .await?;
 
-                        return Err(error);
-                    }
-                };
+                let database_2_postgresql_pooled_connection_ = database_2_postgresql_connection_pool_.get().await.convert(BacktracePart::new(line!(), file!()))?;
 
-                let database_2_postgresql_pooled_connection_ = match database_2_postgresql_connection_pool_.get().await {
-                    Ok(database_2_postgresql_pooled_connection__) => database_2_postgresql_pooled_connection__,
-                    Err(error) => {
-                        return Err(
-                            Auditor::<Error>::new(
-                                Error::Runtime {
-                                    runtime: Runtime::Other {
-                                        other: Runtime::new(error),
-                                    },
-                                },
-                                BacktracePart::new(
-                                    line!(),
-                                    file!(),
-                                ),
-                            ),
-                        );
-                    }
-                };
-
-                if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete(
+                PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete(
                     &*database_2_postgresql_pooled_connection_,
                     &By5 {
                         application_user_email: &application_user.email,
                         application_user_device_id: &application_user_device.id,
                     },
                 )
-                .await
-                {
-                    error.add_backtrace_part(
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    );
-
-                    return Err(error);
-                }
+                .await?;
 
                 return Ok(());
             }

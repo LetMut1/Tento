@@ -13,8 +13,7 @@ use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::error::Runtime;
-use crate::infrastructure_layer::data::error::Runtime;
+use crate::infrastructure_layer::data::auditor::Converter;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::data::void::Void;
@@ -67,21 +66,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
             }
         };
 
-        let is_valid_email = match Validator::<ApplicationUser_Email>::is_valid(&incoming_.application_user_email) {
-            Ok(is_valid_email_) => is_valid_email_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-
-                return Err(error);
-            }
-        };
-
-        if !is_valid_email {
+        if !Validator::<ApplicationUser_Email>::is_valid(&incoming_.application_user_email)? {
             return Ok(
                 InvalidArgumentResult::InvalidArgument {
                     invalid_argument: InvalidArgument::ApplicationUser_Email,
@@ -97,21 +82,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
             );
         }
 
-        let is_valid_value = match Validator::<ApplicationUserRegistrationToken_Value>::is_valid(&incoming_.application_user_registration_token_value) {
-            Ok(is_valid_value_) => is_valid_value_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-
-                return Err(error);
-            }
-        };
-
-        if !is_valid_value {
+        if !Validator::<ApplicationUserRegistrationToken_Value>::is_valid(&incoming_.application_user_registration_token_value)? {
             return Ok(
                 InvalidArgumentResult::InvalidArgument {
                     invalid_argument: InvalidArgument::ApplicationUserRegistrationToken_Value,
@@ -124,48 +95,17 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
             application_user_device_id: &incoming_.application_user_device_id,
         };
 
-        let database_2_postgresql_pooled_connection = match database_2_postgresql_connection_pool.get().await {
-            Ok(database_2_postgresql_pooled_connection_) => database_2_postgresql_pooled_connection_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert(BacktracePart::new(line!(), file!()))?;
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
-        let application_user_registration_token = match PostgresqlRepository::<ApplicationUserRegistrationToken3>::find_1(
+        let mut application_user_registration_token = match PostgresqlRepository::<ApplicationUserRegistrationToken3>::find_1(
             database_2_postgresql_connection,
             &by_5,
         )
-        .await
+        .await?
         {
-            Ok(application_user_registration_token_) => application_user_registration_token_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-
-                return Err(error);
-            }
-        };
-
-        let mut application_user_registration_token_ = match application_user_registration_token {
-            Some(application_user_registration_token__) => application_user_registration_token__,
+            Some(application_user_registration_token_) => application_user_registration_token_,
             None => {
                 return Ok(
                     InvalidArgumentResult::Ok {
@@ -175,22 +115,12 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
             }
         };
 
-        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token_.expires_at.0) {
-            if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete(
+        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token.expires_at.0) {
+            PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete(
                 database_2_postgresql_connection,
                 &by_5,
             )
-            .await
-            {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-
-                return Err(error);
-            }
+            .await?;
 
             return Ok(
                 InvalidArgumentResult::Ok {
@@ -199,7 +129,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
             );
         }
 
-        if application_user_registration_token_.is_approved.0 {
+        if application_user_registration_token.is_approved.0 {
             return Ok(
                 InvalidArgumentResult::Ok {
                     subject: UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_AlreadyApproved),
@@ -207,86 +137,47 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
             );
         }
 
-        if application_user_registration_token_.value.0 != incoming_.application_user_registration_token_value.0 {
-            if let Err(mut error) = Incrementor::<ApplicationUserRegistrationToken_WrongEnterTriesQuantity>::increment(&mut application_user_registration_token_.wrong_enter_tries_quantity) {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
+        if application_user_registration_token.value.0 != incoming_.application_user_registration_token_value.0 {
+            Incrementor::<ApplicationUserRegistrationToken_WrongEnterTriesQuantity>::increment(&mut application_user_registration_token.wrong_enter_tries_quantity)?;
 
-                return Err(error);
-            };
-
-            if application_user_registration_token_.wrong_enter_tries_quantity.0 < ApplicationUserRegistrationToken_WrongEnterTriesQuantity::LIMIT {
-                if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken4>::update(
+            if application_user_registration_token.wrong_enter_tries_quantity.0 < ApplicationUserRegistrationToken_WrongEnterTriesQuantity::LIMIT {
+                PostgresqlRepository::<ApplicationUserRegistrationToken4>::update(
                     database_2_postgresql_connection,
                     &Update10 {
-                        application_user_registration_token_wrong_enter_tries_quantity: application_user_registration_token_.wrong_enter_tries_quantity,
+                        application_user_registration_token_wrong_enter_tries_quantity: application_user_registration_token.wrong_enter_tries_quantity,
                     },
                     &by_5,
                 )
-                .await
-                {
-                    error.add_backtrace_part(
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    );
-
-                    return Err(error);
-                }
+                .await?;
             } else {
-                if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete(
+                PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete(
                     database_2_postgresql_connection,
                     &by_5,
                 )
-                .await
-                {
-                    error.add_backtrace_part(
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    );
-
-                    return Err(error);
-                }
+                .await?;
             }
 
             return Ok(
                 InvalidArgumentResult::Ok {
                     subject: UnifiedReport::precedent(
                         Precedent::ApplicationUserRegistrationToken_WrongValue {
-                            application_user_registration_token_wrong_enter_tries_quantity: application_user_registration_token_.wrong_enter_tries_quantity,
+                            application_user_registration_token_wrong_enter_tries_quantity: application_user_registration_token.wrong_enter_tries_quantity,
                         },
                     ),
                 },
             );
         }
 
-        application_user_registration_token_.is_approved = ApplicationUserRegistrationToken_IsApproved(true);
+        application_user_registration_token.is_approved = ApplicationUserRegistrationToken_IsApproved(true);
 
-        if let Err(mut error) = PostgresqlRepository::<ApplicationUserRegistrationToken5>::update(
+        PostgresqlRepository::<ApplicationUserRegistrationToken5>::update(
             database_2_postgresql_connection,
             &Update11 {
-                application_user_registration_token_is_approved: application_user_registration_token_.is_approved,
+                application_user_registration_token_is_approved: application_user_registration_token.is_approved,
             },
             &by_5,
         )
-        .await
-        {
-            error.add_backtrace_part(
-                BacktracePart::new(
-                    line!(),
-                    file!(),
-                ),
-            );
-
-            return Err(error);
-        }
+        .await?;
 
         return Ok(
             InvalidArgumentResult::Ok {

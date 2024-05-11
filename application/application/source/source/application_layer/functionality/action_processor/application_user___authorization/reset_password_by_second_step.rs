@@ -13,8 +13,7 @@ use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::error::Runtime;
-use crate::infrastructure_layer::data::error::Runtime;
+use crate::infrastructure_layer::data::auditor::Converter;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::data::void::Void;
@@ -67,21 +66,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordBySecondStep>
             }
         };
 
-        let is_valid_value = match Validator::<ApplicationUserResetPasswordToken_Value>::is_valid(&incoming_.application_user_reset_password_token_value) {
-            Ok(is_valid_value_) => is_valid_value_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-
-                return Err(error);
-            }
-        };
-
-        if !is_valid_value {
+        if !Validator::<ApplicationUserResetPasswordToken_Value>::is_valid(&incoming_.application_user_reset_password_token_value)? {
             return Ok(
                 InvalidArgumentResult::InvalidArgument {
                     invalid_argument: InvalidArgument::ApplicationUserResetPasswordToken_Value,
@@ -110,48 +95,17 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordBySecondStep>
             application_user_device_id: &incoming_.application_user_device_id,
         };
 
-        let database_2_postgresql_pooled_connection = match database_2_postgresql_connection_pool.get().await {
-            Ok(database_2_postgresql_pooled_connection_) => database_2_postgresql_pooled_connection_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert(BacktracePart::new(line!(), file!()))?;
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
-        let application_user_reset_password_token = match PostgresqlRepository::<ApplicationUserResetPasswordToken3>::find_1(
+        let mut application_user_reset_password_token = match PostgresqlRepository::<ApplicationUserResetPasswordToken3>::find_1(
             database_2_postgresql_connection,
             &by_4,
         )
-        .await
+        .await?
         {
-            Ok(application_user_reset_password_token_) => application_user_reset_password_token_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-
-                return Err(error);
-            }
-        };
-
-        let mut application_user_reset_password_token_ = match application_user_reset_password_token {
-            Some(application_user_reset_password_token__) => application_user_reset_password_token__,
+            Some(application_user_reset_password_token_) => application_user_reset_password_token_,
             None => {
                 return Ok(
                     InvalidArgumentResult::Ok {
@@ -161,22 +115,12 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordBySecondStep>
             }
         };
 
-        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_reset_password_token_.expires_at.0) {
-            if let Err(mut error) = PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete(
+        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_reset_password_token.expires_at.0) {
+            PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete(
                 database_2_postgresql_connection,
                 &by_4,
             )
-            .await
-            {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-
-                return Err(error);
-            }
+            .await?;
 
             return Ok(
                 InvalidArgumentResult::Ok {
@@ -185,7 +129,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordBySecondStep>
             );
         }
 
-        if application_user_reset_password_token_.is_approved.0 {
+        if application_user_reset_password_token.is_approved.0 {
             return Ok(
                 InvalidArgumentResult::Ok {
                     subject: UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_AlreadyApproved),
@@ -193,86 +137,47 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordBySecondStep>
             );
         }
 
-        if application_user_reset_password_token_.value.0 != incoming_.application_user_reset_password_token_value.0 {
-            if let Err(mut error) = Incrementor::<ApplicationUserResetPasswordToken_WrongEnterTriesQuantity>::increment(&mut application_user_reset_password_token_.wrong_enter_tries_quantity) {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
+        if application_user_reset_password_token.value.0 != incoming_.application_user_reset_password_token_value.0 {
+            Incrementor::<ApplicationUserResetPasswordToken_WrongEnterTriesQuantity>::increment(&mut application_user_reset_password_token.wrong_enter_tries_quantity)?;
 
-                return Err(error);
-            }
-
-            if application_user_reset_password_token_.wrong_enter_tries_quantity.0 < ApplicationUserResetPasswordToken_WrongEnterTriesQuantity::LIMIT {
-                if let Err(mut error) = PostgresqlRepository::<ApplicationUserResetPasswordToken4>::update(
+            if application_user_reset_password_token.wrong_enter_tries_quantity.0 < ApplicationUserResetPasswordToken_WrongEnterTriesQuantity::LIMIT {
+                PostgresqlRepository::<ApplicationUserResetPasswordToken4>::update(
                     database_2_postgresql_connection,
                     &Update15 {
-                        application_user_reset_password_token_wrong_enter_tries_quantity: application_user_reset_password_token_.wrong_enter_tries_quantity,
+                        application_user_reset_password_token_wrong_enter_tries_quantity: application_user_reset_password_token.wrong_enter_tries_quantity,
                     },
                     &by_4,
                 )
-                .await
-                {
-                    error.add_backtrace_part(
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    );
-
-                    return Err(error);
-                }
+                .await?;
             } else {
-                if let Err(mut error) = PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete(
+                PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete(
                     database_2_postgresql_connection,
                     &by_4,
                 )
-                .await
-                {
-                    error.add_backtrace_part(
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    );
-
-                    return Err(error);
-                }
+                .await?;
             }
 
             return Ok(
                 InvalidArgumentResult::Ok {
                     subject: UnifiedReport::precedent(
                         Precedent::ApplicationUserResetPasswordToken_WrongValue {
-                            application_user_reset_password_token_wrong_enter_tries_quantity: application_user_reset_password_token_.wrong_enter_tries_quantity,
+                            application_user_reset_password_token_wrong_enter_tries_quantity: application_user_reset_password_token.wrong_enter_tries_quantity,
                         },
                     ),
                 },
             );
         }
 
-        application_user_reset_password_token_.is_approved = ApplicationUserResetPasswordToken_IsApproved(true);
+        application_user_reset_password_token.is_approved = ApplicationUserResetPasswordToken_IsApproved(true);
 
-        if let Err(mut error) = PostgresqlRepository::<ApplicationUserResetPasswordToken5>::update(
+        PostgresqlRepository::<ApplicationUserResetPasswordToken5>::update(
             database_2_postgresql_connection,
             &Update16 {
-                application_user_reset_password_token_is_approved: application_user_reset_password_token_.is_approved,
+                application_user_reset_password_token_is_approved: application_user_reset_password_token.is_approved,
             },
             &by_4,
         )
-        .await
-        {
-            error.add_backtrace_part(
-                BacktracePart::new(
-                    line!(),
-                    file!(),
-                ),
-            );
-
-            return Err(error);
-        }
+        .await?;
 
         return Ok(
             InvalidArgumentResult::Ok {

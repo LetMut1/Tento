@@ -3,34 +3,16 @@ use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::error::Runtime;
-use crate::infrastructure_layer::data::error::Runtime;
+use crate::infrastructure_layer::data::auditor::Converter;
 use regex::Regex;
 
 impl Validator<ApplicationUser_Email> {
     pub fn is_valid<'a>(application_user_email: &'a ApplicationUser_Email) -> Result<bool, Auditor<Error>> {
         let application_user_email_ = application_user_email.0.as_str();
 
-        todo!("Объект в статическую переменную");
+        todo!("Объект в статическую переменную и везде, где есть regex");
 
-        let regex = match Regex::new(ApplicationUser_Email::REGULAR_EXPRESSION) {
-            Ok(regex_) => regex_,
-            Err(error) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Runtime {
-                            runtime: Runtime::Other {
-                                other: Runtime::new(error),
-                            },
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        let regex = Regex::new(ApplicationUser_Email::REGULAR_EXPRESSION).convert(BacktracePart::new(line!(), file!()))?;
 
         return Ok(regex.is_match(application_user_email_) && application_user_email_.chars().count() <= ApplicationUser_Email::MAXIMUM_LENGTH);
     }

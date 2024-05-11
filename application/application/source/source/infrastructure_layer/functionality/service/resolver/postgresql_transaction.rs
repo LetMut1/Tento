@@ -2,9 +2,8 @@ use super::Resolver;
 use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::error::Runtime;
 use tokio_postgres::Client as Connection;
-use crate::infrastructure_layer::data::error::Runtime;
+use crate::infrastructure_layer::data::auditor::Converter;
 
 pub use crate::infrastructure_layer::data::control_type::PostgresqlTransaction;
 
@@ -40,27 +39,13 @@ impl Resolver<PostgresqlTransaction> {
             }
         }
 
-        if let Err(error) = connection
+        connection
             .execute(
                 query.as_str(),
                 &[],
             )
             .await
-        {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Runtime::new(error),
-                        },
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        }
+            .convert(BacktracePart::new(line!(), file!()))?;
 
         return Ok(Self::new());
     }
@@ -71,27 +56,13 @@ impl Resolver<PostgresqlTransaction> {
     ) -> Result<(), Auditor<Error>> {
         let query = "COMMIT;";
 
-        if let Err(error) = connection
+        connection
             .execute(
                 query,
                 &[],
             )
             .await
-        {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Runtime::new(error),
-                        },
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        }
+            .convert(BacktracePart::new(line!(), file!()))?;
 
         return Ok(());
     }
@@ -102,27 +73,13 @@ impl Resolver<PostgresqlTransaction> {
     ) -> Result<(), Auditor<Error>> {
         let query = "ROLLBACK;";
 
-        if let Err(error) = connection
+        connection
             .execute(
                 query,
                 &[],
             )
             .await
-        {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Runtime {
-                        runtime: Runtime::Other {
-                            other: Runtime::new(error),
-                        },
-                    },
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        }
+            .convert(BacktracePart::new(line!(), file!()))?;
 
         return Ok(());
     }
