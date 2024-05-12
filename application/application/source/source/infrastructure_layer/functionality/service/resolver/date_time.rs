@@ -3,6 +3,7 @@ use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use chrono::DateTime as ChronoDateTime;
+use crate::infrastructure_layer::data::auditor::OptionConverter;
 use chrono::Utc;
 
 pub use crate::infrastructure_layer::data::control_type::DateTime;
@@ -18,39 +19,9 @@ impl Resolver<DateTime> {
     }
 
     pub fn unixtime_add_minutes_interval_from_now(quantity_of_minutes: i64) -> Result<i64, Auditor<Error>> {
-        let mut quantity_of_seconds = match quantity_of_minutes.checked_mul(60) {
-            Some(quantity_of_seconds_) => quantity_of_seconds_,
-            None => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Logic {
-                            message: "Too big quantity of minutes must not be added.",
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        let mut quantity_of_seconds = quantity_of_minutes.checked_mul(60).convert_out_of_range(BacktracePart::new(line!(), file!()))?;
 
-        quantity_of_seconds = match Utc::now().timestamp().checked_add(quantity_of_seconds) {
-            Some(quantity_of_seconds_) => quantity_of_seconds_,
-            None => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Logic {
-                            message: "Too big quantity of minutes must not be added.",
-                        },
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        quantity_of_seconds = Utc::now().timestamp().checked_add(quantity_of_seconds).convert_out_of_range(BacktracePart::new(line!(), file!()))?;
 
         return Ok(quantity_of_seconds);
     }
