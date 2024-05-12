@@ -1,7 +1,6 @@
 use crate::infrastructure_layer::data::auditor::Auditor;
 use std::marker::Send;
 use tokio::task::JoinHandle;
-use tokio::task::spawn_blocking;
 use crate::infrastructure_layer::functionality::service::logger::Logger;
 use super::Spawner;
 use crate::infrastructure_layer::data::error::Error;
@@ -14,10 +13,10 @@ impl Spawner<TokioBlockingTask> {
         F: FnOnce() -> Result<T, Auditor<Error>> + Send + 'static,
         T: Send + 'static,
     {
-        spawn_blocking(
+        tokio::task::spawn_blocking(
             || -> _ {
-                if let Err(error) = closure() {
-                    Logger::<Auditor<Error>>::log(&error);
+                if let Err(error_auditor) = closure() {
+                    Logger::<Auditor<Error>>::log(&error_auditor);
                 }
 
                 return ();
@@ -30,6 +29,6 @@ impl Spawner<TokioBlockingTask> {
         F: FnOnce() -> R + Send + 'static,
         R: Send + 'static,
     {
-        return spawn_blocking(closure);
+        return tokio::task::spawn_blocking(closure);
     }
 }

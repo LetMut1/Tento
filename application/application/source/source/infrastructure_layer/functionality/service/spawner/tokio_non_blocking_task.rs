@@ -2,7 +2,6 @@ use crate::infrastructure_layer::data::auditor::Auditor;
 use std::future::Future;
 use std::marker::Send;
 use tokio::task::JoinHandle;
-use tokio::spawn;
 use crate::infrastructure_layer::functionality::service::logger::Logger;
 use super::Spawner;
 use crate::infrastructure_layer::data::error::Error;
@@ -14,10 +13,10 @@ impl Spawner<TokioNonBlockingTask> {
     where
         F: Future<Output = Result<T, Auditor<Error>>> + Send + 'static,
     {
-        spawn(
+        tokio::spawn(
             async move {
-                if let Err(error) = future.await {
-                    Logger::<Auditor<Error>>::log(&error);
+                if let Err(error_auditor) = future.await {
+                    Logger::<Auditor<Error>>::log(&error_auditor);
                 }
 
                 return ();
@@ -30,6 +29,6 @@ impl Spawner<TokioNonBlockingTask> {
         F: Future + Send + 'static,
         <F as Future>::Output: Send + 'static,
     {
-        return spawn(future);
+        return tokio::spawn(future);
     }
 }

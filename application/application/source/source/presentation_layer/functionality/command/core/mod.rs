@@ -105,19 +105,19 @@ fn process() -> Result<(), Box<dyn StdError + 'static>> {
     let subcommand_arg_matches = match arg_matches.subcommand() {
         Some(subcommand_arg_matches_) => subcommand_arg_matches_,
         None => {
-            return Err("Logic error. Exhausted list of subcommands and subcommand_required prevents `None`.".into());
+            return Err("Exhausted list of subcommands and subcommand_required prevents `None`.".into());
         }
     };
 
     match subcommand_arg_matches {
         (RUN_SERVER, _) => {
-            if let Err(error) = CommandProcessor::<RunServer>::process() {
-                return Err(Formatter::<Auditor<Error>>::format(&error).into());
+            if let Err(error_auditor) = CommandProcessor::<RunServer>::process() {
+                return Err(Formatter::<Auditor<Error>>::format(&error_auditor).into());
             }
         }
         (CREATE_FIXTURES, _) => {
-            if let Err(error) = CommandProcessor::<CreateFixtures>::process() {
-                return Err(Formatter::<Auditor<Error>>::format(&error).into());
+            if let Err(error_auditor) = CommandProcessor::<CreateFixtures>::process() {
+                return Err(Formatter::<Auditor<Error>>::format(&error_auditor).into());
             }
         }
         _ => {

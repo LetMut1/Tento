@@ -313,26 +313,13 @@ impl CommandProcessor<CreateFixtures> {
                     );
                 }
 
-                let channel = match PostgresqlRepository::<Channel<'_>>::find_2(
+                let channel = PostgresqlRepository::<Channel<'_>>::find_2(
                     database_1_postgresql_connection,
                     &By7 {
                         channel_name: &channel_name,
                     },
                 )
-                .await
-                {
-                    Ok(channel_) => channel_,
-                    Err(mut error) => {
-                        error.add_backtrace_part(
-                            BacktracePart::new(
-                                line!(),
-                                file!(),
-                            ),
-                        );
-
-                        return Err(error);
-                    }
-                };
+                .await?;
 
                 match channel {
                     Some(_) => {

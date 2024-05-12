@@ -68,10 +68,10 @@ impl Processor<GeneralizedAction> {
         .await
         {
             Ok(incoming_) => incoming_,
-            Err(error) => {
+            Err(error_auditor) => {
                 let response = Creator::<Response>::create_internal_server_error();
 
-                Reactor::<(ActionRound, Auditor<Error>)>::react(parts, &response, error);
+                Reactor::<(ActionRound, Auditor<Error>)>::react(parts, &response, error_auditor);
 
                 return response;
             }
@@ -101,10 +101,10 @@ impl Processor<GeneralizedAction> {
         .await
         {
             Ok(unified_report_) => unified_report_,
-            Err(error) => {
+            Err(error_auditor) => {
                 let response = Creator::<Response>::create_internal_server_error();
 
-                Reactor::<(ActionRound, Auditor<Error>)>::react(parts, &response, error);
+                Reactor::<(ActionRound, Auditor<Error>)>::react(parts, &response, error_auditor);
 
                 return response;
             }
@@ -127,10 +127,10 @@ impl Processor<GeneralizedAction> {
 
         let data = match Serializer::<SF>::serialize(&unified_report_) {
             Ok(data_) => data_,
-            Err(error) => {
+            Err(error_auditor) => {
                 let response = Creator::<Response>::create_internal_server_error();
 
-                Reactor::<(ActionRound, Auditor<Error>)>::react(parts, &response, error);
+                Reactor::<(ActionRound, Auditor<Error>)>::react(parts, &response, error_auditor);
 
                 return response;
             }

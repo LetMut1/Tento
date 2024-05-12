@@ -22,20 +22,11 @@ impl EmailSender<ApplicationUserResetPasswordToken<'_>> {
             application_user_device_id.0.as_str(),
         );
 
-        if let Err(mut error) = Sender::<Email>::send(
+        Sender::<Email>::send(
             "Reset password confirmation",
             message_body,
             application_user_email.0.as_str(),
-        ) {
-            error.add_backtrace_part(
-                BacktracePart::new(
-                    line!(),
-                    file!(),
-                ),
-            );
-
-            return Err(error);
-        }
+        )?;
 
         return Ok(());
     }

@@ -11,24 +11,10 @@ use crate::infrastructure_layer::functionality::service::expiration_time_checker
 
 impl Extractor<ApplicationUserAccessToken<'_>> {
     pub async fn extract<'a>(application_user_access_token_encrypted: &'a ApplicationUserAccessTokenEncrypted) -> Result<InvalidArgumentResult<ExtractorResult>, Auditor<Error>> {
-        let application_user_access_token = match FormResolver::<ApplicationUserAccessToken<'_>>::from_encrypted(application_user_access_token_encrypted) {
-            Ok(application_user_access_token_) => application_user_access_token_,
-            Err(mut error) => {
-                error.add_backtrace_part(
-                    BacktracePart::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-
-                return Err(error);
-            }
-        };
-
-        let application_user_access_token_ = match application_user_access_token {
+        let application_user_access_token = match FormResolver::<ApplicationUserAccessToken<'_>>::from_encrypted(application_user_access_token_encrypted)? {
             InvalidArgumentResult::Ok {
-                subject: application_user_access_token__,
-            } => application_user_access_token__,
+                subject: application_user_access_token_,
+            } => application_user_access_token_,
             InvalidArgumentResult::InvalidArgument {
                 invalid_argument,
             } => {
@@ -40,7 +26,7 @@ impl Extractor<ApplicationUserAccessToken<'_>> {
             }
         };
 
-        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_access_token_.expires_at.0) {
+        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_access_token.expires_at.0) {
             return Ok(
                 InvalidArgumentResult::Ok {
                     subject: ExtractorResult::ApplicationUserAccessTokenAlreadyExpired,
@@ -51,7 +37,7 @@ impl Extractor<ApplicationUserAccessToken<'_>> {
         return Ok(
             InvalidArgumentResult::Ok {
                 subject: ExtractorResult::ApplicationUserAccessToken {
-                    application_user_access_token: application_user_access_token_,
+                    application_user_access_token,
                 },
             },
         );
