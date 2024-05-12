@@ -4,7 +4,7 @@ use crate::infrastructure_layer::data::environment_configuration::ENVIRONMENT_CO
 use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::auditor::Converter;
+use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use lettre::smtp::SmtpClient;
 use lettre::ClientSecurity;
 use lettre::Transport;

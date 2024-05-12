@@ -22,7 +22,7 @@ use crate::infrastructure_layer::functionality::service::prepared_statemant_para
 use std::borrow::Cow;
 use std::marker::PhantomData;
 use tokio_postgres::types::Type;
-use crate::infrastructure_layer::data::auditor::Converter;
+use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use tokio_postgres::Client as Connection;
 
 impl PostgresqlRepository<ApplicationUser<'_>> {

@@ -23,7 +23,7 @@ use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 pub use action_processor_incoming_outcoming::Channel1;
 use std::borrow::Cow;
-use crate::infrastructure_layer::data::auditor::Converter;
+use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use tokio_postgres::types::Type;
 use tokio_postgres::Client as Connection;
 

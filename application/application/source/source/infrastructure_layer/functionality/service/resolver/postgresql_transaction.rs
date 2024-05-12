@@ -3,7 +3,7 @@ use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use tokio_postgres::Client as Connection;
-use crate::infrastructure_layer::data::auditor::Converter;
+use crate::infrastructure_layer::data::auditor::ErrorConverter;
 
 pub use crate::infrastructure_layer::data::control_type::PostgresqlTransaction;
 

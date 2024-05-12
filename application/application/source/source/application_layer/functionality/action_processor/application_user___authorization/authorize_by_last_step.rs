@@ -24,7 +24,7 @@ use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::control_type::TokioNonBlockingTask;
-use crate::infrastructure_layer::data::auditor::Converter;
+use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::functionality::service::spawner::Spawner;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
@@ -41,6 +41,7 @@ use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use bb8_redis::RedisConnectionManager;
 use std::borrow::Cow;
+use crate::infrastructure_layer::data::auditor::OptionConverter;
 use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
@@ -67,20 +68,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let incoming_ = match incoming {
-            Some(incoming__) => incoming__,
-            None => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::new_logic_incoming_invalid_state(),
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        let incoming_ = incoming.convert_value_should_exist(BacktracePart::new(line!(), file!()))?;
 
         if !Validator::<ApplicationUser_Id>::is_valid(incoming_.application_user_id) {
             return Ok(

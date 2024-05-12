@@ -5,7 +5,7 @@ use hmac::digest::CtOutput;
 use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::auditor::Converter;
+use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use sha3::Sha512;
 
 pub type HmacSha3512 = Hmac<Sha512>;

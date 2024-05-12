@@ -7,7 +7,7 @@ use bb8::Pool;
 use bb8_redis::RedisConnectionManager;
 use redis::ConnectionInfo;
 use std::clone::Clone;
-use crate::infrastructure_layer::data::auditor::Converter;
+use crate::infrastructure_layer::data::auditor::ErrorConverter;
 
 pub use crate::infrastructure_layer::data::control_type::RedisConnectonPool;
 

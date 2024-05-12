@@ -1,6 +1,6 @@
 use auditor::Auditor;
 use auditor::BacktracePart;
-use auditor::Converter;
+use auditor::ErrorConverter;
 use error::Error;
 use std::path::Path;
 use super::environment_configuration_file::EnvironmentConfigurationFile;

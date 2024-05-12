@@ -20,9 +20,9 @@ impl Error {
         };
     }
 
-    pub fn new_logic_incoming_invalid_state() -> Self {
+    pub fn new_logic_value_should_exist() -> Self {
         return Self::Logic {
-            message: "The action processor Incoming in invalid state.",
+            message: "Value should exist.",
         };
     }
 

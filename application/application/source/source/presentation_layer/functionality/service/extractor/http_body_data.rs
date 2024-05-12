@@ -10,7 +10,7 @@ use serde::Deserialize;
 use super::Extractor;
 use hyper::body::to_bytes;
 use crate::infrastructure_layer::data::error::Error;
-use crate::infrastructure_layer::data::auditor::Converter;
+use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use bytes::Buf;
 
 pub use crate::infrastructure_layer::data::control_type::HttpBodyData;

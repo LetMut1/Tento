@@ -3,7 +3,7 @@ use crate::domain_layer::data::entity::application_user_registration_token::Appl
 use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::auditor::Converter;
+use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use regex::Regex;
 
 impl Validator<ApplicationUserRegistrationToken_Value> {

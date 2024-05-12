@@ -6,7 +6,7 @@ use crate::domain_layer::functionality::service::extractor::Extractor;
 use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::auditor::Converter;
+use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By3;
@@ -14,6 +14,7 @@ use crate::infrastructure_layer::functionality::repository::postgresql::Postgres
 use crate::infrastructure_layer::functionality::service::resolver::cloud_message::CloudMessage;
 use crate::infrastructure_layer::functionality::service::resolver::Resolver;
 use bb8::Pool;
+use crate::infrastructure_layer::data::auditor::OptionConverter;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use bb8_redis::RedisConnectionManager;
 use tokio_postgres::tls::MakeTlsConnect;
@@ -42,20 +43,7 @@ impl ActionProcessor<ApplicationUser__Authorization___DeauthorizeFromAllDevices>
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let incoming_ = match incoming {
-            Some(incoming__) => incoming__,
-            None => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::new_logic_incoming_invalid_state(),
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        let incoming_ = incoming.convert_value_should_exist(BacktracePart::new(line!(), file!()))?;
 
         let application_user_access_token = match Extractor::<ApplicationUserAccessToken<'_>>::extract(&incoming_.application_user_access_token_encrypted).await? {
             InvalidArgumentResult::Ok {

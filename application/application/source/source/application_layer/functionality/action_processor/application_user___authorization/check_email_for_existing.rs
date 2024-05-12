@@ -5,7 +5,7 @@ use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::auditor::Converter;
+use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::data::void::Void;
@@ -19,6 +19,7 @@ use std::marker::Send;
 use std::marker::Sync;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
+use crate::infrastructure_layer::data::auditor::OptionConverter;
 use tokio_postgres::Socket;
 use crate::application_layer::functionality::action_processor::ActionProcessor;
 
@@ -39,20 +40,7 @@ impl ActionProcessor<ApplicationUser__Authorization___CheckEmailForExisting> {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let incoming_ = match incoming {
-            Some(incoming__) => incoming__,
-            None => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::new_logic_incoming_invalid_state(),
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        let incoming_ = incoming.convert_value_should_exist(BacktracePart::new(line!(), file!()))?;
 
         if !Validator::<ApplicationUser_Email>::is_valid(&incoming_.application_user_email)? {
             return Ok(

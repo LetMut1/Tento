@@ -86,11 +86,11 @@ impl BacktracePart {
     }
 }
 
-pub trait Converter<T> {
+pub trait ErrorConverter<T> {
     fn convert(self, backtrace_part: BacktracePart) -> Result<T, Auditor<Error>>;
 }
 
-impl<E, T> Converter<T> for Result<T, E>
+impl<E, T> ErrorConverter<T> for Result<T, E>
 where
     E: StdError + Send + Sync + 'static,
 {
@@ -109,11 +109,11 @@ where
     }
 }
 
-pub trait Converter_<T> {
+pub trait ErrorConverter_<T> {
     fn convert(self, backtrace_part: BacktracePart) -> Result<T, Auditor<Error>>;
 }
 
-impl<T> Converter_<T> for Result<T, Box<dyn StdError + Sync + Send + 'static>> {
+impl<T> ErrorConverter_<T> for Result<T, Box<dyn StdError + Sync + Send + 'static>> {
     fn convert(self, backtrace_part: BacktracePart) -> Result<T, Auditor<Error>> {
         let result = match self {
             Ok(value) => Ok(value),
@@ -123,6 +123,64 @@ impl<T> Converter_<T> for Result<T, Box<dyn StdError + Sync + Send + 'static>> {
                     backtrace_part,
                 )
             )
+        };
+
+        return result;
+    }
+}
+
+pub trait OptionConverter<T> {
+    fn convert_unreachable_state(self, backtrace_part: BacktracePart) -> Result<T, Auditor<Error>>;
+
+    fn convert_out_of_range(self, backtrace_part: BacktracePart) -> Result<T, Auditor<Error>>;
+
+    fn convert_value_should_exist(self, backtrace_part: BacktracePart) -> Result<T, Auditor<Error>>;
+}
+
+impl<T> OptionConverter<T> for Option<T> {
+    fn convert_unreachable_state(self, backtrace_part: BacktracePart) -> Result<T, Auditor<Error>> {
+        let result = match self {
+            Some(value) => Ok(value),
+            None => {
+                return Err(
+                    Auditor::<Error>::new(
+                        Error::new_logic_unreachable_state(),
+                        backtrace_part,
+                    ),
+                );
+            }
+        };
+
+        return result;
+    }
+
+    fn convert_out_of_range(self, backtrace_part: BacktracePart) -> Result<T, Auditor<Error>> {
+        let result = match self {
+            Some(value) => Ok(value),
+            None => {
+                return Err(
+                    Auditor::<Error>::new(
+                        Error::new_logic_out_of_range(),
+                        backtrace_part,
+                    ),
+                );
+            }
+        };
+
+        return result;
+    }
+
+    fn convert_value_should_exist(self, backtrace_part: BacktracePart) -> Result<T, Auditor<Error>> {
+        let result = match self {
+            Some(value) => Ok(value),
+            None => {
+                return Err(
+                    Auditor::<Error>::new(
+                        Error::new_logic_value_should_exist(),
+                        backtrace_part,
+                    ),
+                );
+            }
         };
 
         return result;

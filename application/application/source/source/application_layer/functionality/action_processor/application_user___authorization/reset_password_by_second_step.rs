@@ -13,10 +13,11 @@ use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::auditor::Converter;
+use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::data::void::Void;
+use crate::infrastructure_layer::data::auditor::OptionConverter;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By4;
 use crate::infrastructure_layer::functionality::repository::postgresql::update::Update15;
 use crate::infrastructure_layer::functionality::repository::postgresql::update::Update16;
@@ -51,20 +52,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordBySecondStep>
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let incoming_ = match incoming {
-            Some(incoming__) => incoming__,
-            None => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::new_logic_incoming_invalid_state(),
-                        BacktracePart::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-        };
+        let incoming_ = incoming.convert_value_should_exist(BacktracePart::new(line!(), file!()))?;
 
         if !Validator::<ApplicationUserResetPasswordToken_Value>::is_valid(&incoming_.application_user_reset_password_token_value)? {
             return Ok(

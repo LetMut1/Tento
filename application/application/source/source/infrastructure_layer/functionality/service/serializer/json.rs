@@ -3,7 +3,7 @@ use super::Serializer;
 use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::auditor::Converter;
+use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use serde::Deserialize;
 use serde::Serialize as SerdeSerialize;
 use serde_json;
