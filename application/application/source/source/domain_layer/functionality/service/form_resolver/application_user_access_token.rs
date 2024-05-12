@@ -9,7 +9,7 @@ use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::functionality::service::encoder::base64::Base64;
 use crate::infrastructure_layer::functionality::service::encoder::Encoder as Encoder_;
-use crate::infrastructure_layer::functionality::service::encoder::hmac::Hmac_Sha3_512;
+use crate::infrastructure_layer::functionality::service::encoder::hmac::HmacSha3512;
 use crate::infrastructure_layer::functionality::service::serializer::message_pack::MessagePack;
 use crate::infrastructure_layer::functionality::service::serializer::Serialize;
 use crate::infrastructure_layer::functionality::service::serializer::Serializer;
@@ -92,7 +92,7 @@ struct Signature;
 
 impl Encoder<Signature> {
     fn encode<'a>(application_user_access_token_serialized: &'a [u8]) -> Result<String, Auditor<Error>> {
-        let application_user_access_token_serialized_encoded = Encoder_::<Hmac_Sha3_512>::encode(
+        let application_user_access_token_serialized_encoded = Encoder_::<HmacSha3512>::encode(
             ENVIRONMENT_CONFIGURATION.encryption.private_key.application_user_access_token.0.as_bytes(),
             application_user_access_token_serialized,
         )?;
@@ -109,7 +109,7 @@ impl Encoder<Signature> {
         let application_user_access_token_serialized_encoded = Encoder_::<Base64>::decode(application_user_access_token_serialized_signature)?;
 
         return Ok(
-            Encoder_::<Hmac_Sha3_512>::is_valid(
+            Encoder_::<HmacSha3512>::is_valid(
                 ENVIRONMENT_CONFIGURATION.encryption.private_key.application_user_access_token.0.as_bytes(),
                 application_user_access_token_serialized,
                 application_user_access_token_serialized_encoded.as_slice(),

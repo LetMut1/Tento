@@ -2,7 +2,6 @@ use super::Extractor;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::data::entity::application_user_access_token_encrypted::ApplicationUserAccessTokenEncrypted;
 use crate::domain_layer::functionality::service::form_resolver::FormResolver;
-use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;

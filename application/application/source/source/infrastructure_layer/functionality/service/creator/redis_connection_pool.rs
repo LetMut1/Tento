@@ -3,7 +3,6 @@ use crate::infrastructure_layer::data::environment_configuration::Environment;
 use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::error::Runtime;
 use bb8::Pool;
 use bb8_redis::RedisConnectionManager;
 use redis::ConnectionInfo;

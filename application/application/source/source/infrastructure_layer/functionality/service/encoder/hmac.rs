@@ -8,13 +8,13 @@ use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::Converter;
 use sha3::Sha512;
 
-pub type Hmac_Sha3_512 = Hmac<Sha512>;
+pub type HmacSha3512 = Hmac<Sha512>;
 
-impl Encoder<Hmac_Sha3_512> {
+impl Encoder<HmacSha3512> {
     pub fn encode<'a>(
         salt: &'a [u8],
         data: &'a [u8],
-    ) -> Result<CtOutput<Hmac_Sha3_512>, Auditor<Error>> {
+    ) -> Result<CtOutput<HmacSha3512>, Auditor<Error>> {
         let hmac = Self::prepare_hmac(salt, data)?;
 
         let result = hmac.finalize();
@@ -39,8 +39,8 @@ impl Encoder<Hmac_Sha3_512> {
     fn prepare_hmac<'a>(
         salt: &'a [u8],
         data: &'a [u8],
-    ) -> Result<Hmac_Sha3_512, Auditor<Error>> {
-        let mut hmac = Hmac_Sha3_512::new_from_slice(salt).convert(BacktracePart::new(line!(), file!()))?;
+    ) -> Result<HmacSha3512, Auditor<Error>> {
+        let mut hmac = HmacSha3512::new_from_slice(salt).convert(BacktracePart::new(line!(), file!()))?;
 
         hmac.update(data);
 

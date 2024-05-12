@@ -1,6 +1,5 @@
 use super::Generator;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_CanBeResentFrom;
-use crate::infrastructure_layer::data::auditor::BacktracePart;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::functionality::service::resolver::date_time::DateTime;
 use crate::infrastructure_layer::functionality::service::resolver::Resolver;

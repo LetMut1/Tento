@@ -136,7 +136,6 @@ use action_processor_incoming_outcoming::action_processor::channel___base::get_o
 use action_processor_incoming_outcoming::action_processor::channel___base::get_one_by_id::Precedent as Channel__Base___GetOneById___Precedent_;
 use action_processor_incoming_outcoming::action_processor::channel_subscription___base::create::Incoming as ChannelSubscription__Base___Create___Incoming_;
 use action_processor_incoming_outcoming::action_processor::channel_subscription___base::create::Precedent as ChannelSubscription__Base___Create___Precedent_;
-use auditor::Auditor;
 use entity::application_user_access_refresh_token_encrypted::ApplicationUserAccessRefreshTokenEncrypted;
 use entity::application_user_access_token_encrypted::ApplicationUserAccessTokenEncrypted;
 use entity::application_user_authorization_token::ApplicationUserAuthorizationToken_Value;
@@ -149,8 +148,6 @@ use entity::application_user::ApplicationUser_Nickname;
 use entity::application_user::ApplicationUser_Password;
 use entity::channel::Channel_Id;
 use entity::channel::Channel_Name;
-use error::Error;
-use formatter::Formatter;
 use libc::c_char;
 use libc::c_long;
 use libc::c_short;
@@ -3380,16 +3377,16 @@ mod test {
         const STRING_LITERAL: &'static str = "qwerty";
 
         mod server_response_data_deserialization {
-            use super::*;
-            use entity::application_user::ApplicationUser_Id;
-            use entity::application_user_authorization_token::ApplicationUserAuthorizationToken_CanBeResentFrom;
-            use entity::application_user_authorization_token::ApplicationUserAuthorizationToken_WrongEnterTriesQuantity;
+            use auditor::Auditor;
             use entity::application_user_access_refresh_token_encrypted::ApplicationUserAccessRefreshTokenEncrypted;
             use entity::application_user_access_token_encrypted::ApplicationUserAccessTokenEncrypted;
+            use entity::application_user_authorization_token::ApplicationUserAuthorizationToken_CanBeResentFrom;
+            use entity::application_user_authorization_token::ApplicationUserAuthorizationToken_WrongEnterTriesQuantity;
             use entity::application_user_registration_token::ApplicationUserRegistrationToken_CanBeResentFrom;
             use entity::application_user_registration_token::ApplicationUserRegistrationToken_WrongEnterTriesQuantity;
             use entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_CanBeResentFrom;
             use entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_WrongEnterTriesQuantity;
+            use entity::application_user::ApplicationUser_Id;
             use entity::channel_outer_link::ChannelOuterLink_Address;
             use entity::channel_outer_link::ChannelOuterLink_Alias;
             use entity::channel::Channel_AccessModifier;
@@ -3404,6 +3401,9 @@ mod test {
             use entity::channel::Channel_SubscribersQuantity;
             use entity::channel::Channel_ViewingQuantity;
             use entity::channel::Channel_VisabilityModifier;
+            use error::Error;
+            use formatter::Formatter;
+            use super::*;
 
             fn run_by_template<'a, T, E, A, D>(
                 data: &'a T,

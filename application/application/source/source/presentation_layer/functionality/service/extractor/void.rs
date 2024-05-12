@@ -7,8 +7,6 @@ use super::Extractor;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::void::Void;
 
-pub use crate::infrastructure_layer::data::control_type::HttpBodyData;
-
 impl Extractor<Void> {
     pub async fn extract<'a>(
         _body: &'a mut Body,

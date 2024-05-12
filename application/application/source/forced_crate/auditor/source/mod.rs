@@ -1,6 +1,5 @@
 use error::Error;
 use std::error::Error as StdError;
-use error::Runtime;
 use std::boxed::Box;
 
 pub struct Auditor<T> {
