@@ -1,5 +1,5 @@
 pub use super::Encoder;
-use crate::infrastructure_layer::data::auditor::BacktracePart;
+use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
@@ -23,7 +23,7 @@ impl Encoder<Base64> {
             encoded_data,
             Self::BASE64_STANDARD_CONFIGURATION,
         )
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(data);
     }

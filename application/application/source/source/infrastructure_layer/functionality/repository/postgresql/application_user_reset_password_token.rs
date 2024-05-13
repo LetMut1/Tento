@@ -18,7 +18,7 @@ use crate::domain_layer::data::entity::application_user_reset_password_token::Ap
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_IsApproved;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_Value;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_WrongEnterTriesQuantity;
-use crate::infrastructure_layer::data::auditor::BacktracePart;
+use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
@@ -93,7 +93,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         database_2_connection
             .query(
@@ -101,7 +101,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(
             ApplicationUserResetPasswordToken {
@@ -144,7 +144,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         database_2_connection
             .query(
@@ -152,7 +152,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(());
     }
@@ -223,7 +223,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken1> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         database_2_connection
             .query(
@@ -231,7 +231,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken1> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(());
     }
@@ -270,7 +270,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken1> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         let row_registry = database_2_connection
             .query(
@@ -278,7 +278,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken1> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-.convert(BacktracePart::new(line!(), file!()))?;
+.convert(Backtrace::new(line!(), file!()))?;
 
         if row_registry.is_empty() {
             return Ok(None);
@@ -287,11 +287,11 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken1> {
         return Ok(
             Some(
                 ApplicationUserResetPasswordToken1 {
-                    value: ApplicationUserResetPasswordToken_Value(row_registry[0].try_get::<'_, usize, String>(0).convert(BacktracePart::new(line!(), file!()))?),
-                    wrong_enter_tries_quantity: ApplicationUserResetPasswordToken_WrongEnterTriesQuantity(row_registry[0].try_get::<'_, usize, i16>(1).convert(BacktracePart::new(line!(), file!()))?),
-                    is_approved: ApplicationUserResetPasswordToken_IsApproved(row_registry[0].try_get::<'_, usize, bool>(2).convert(BacktracePart::new(line!(), file!()))?),
-                    expires_at: ApplicationUserResetPasswordToken_ExpiresAt(row_registry[0].try_get::<'_, usize, i64>(3).convert(BacktracePart::new(line!(), file!()))?),
-                    can_be_resent_from: ApplicationUserResetPasswordToken_CanBeResentFrom(row_registry[0].try_get::<'_, usize, i64>(4).convert(BacktracePart::new(line!(), file!()))?),
+                    value: ApplicationUserResetPasswordToken_Value(row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?),
+                    wrong_enter_tries_quantity: ApplicationUserResetPasswordToken_WrongEnterTriesQuantity(row_registry[0].try_get::<'_, usize, i16>(1).convert(Backtrace::new(line!(), file!()))?),
+                    is_approved: ApplicationUserResetPasswordToken_IsApproved(row_registry[0].try_get::<'_, usize, bool>(2).convert(Backtrace::new(line!(), file!()))?),
+                    expires_at: ApplicationUserResetPasswordToken_ExpiresAt(row_registry[0].try_get::<'_, usize, i64>(3).convert(Backtrace::new(line!(), file!()))?),
+                    can_be_resent_from: ApplicationUserResetPasswordToken_CanBeResentFrom(row_registry[0].try_get::<'_, usize, i64>(4).convert(Backtrace::new(line!(), file!()))?),
                 },
             ),
         );
@@ -337,7 +337,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken2> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         database_2_connection
             .query(
@@ -345,7 +345,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken2> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(());
     }
@@ -410,7 +410,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken3> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         database_2_connection
             .query(
@@ -418,7 +418,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken3> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(());
     }
@@ -456,7 +456,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken3> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         let row_registry = database_2_connection
             .query(
@@ -464,7 +464,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken3> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-.convert(BacktracePart::new(line!(), file!()))?;
+.convert(Backtrace::new(line!(), file!()))?;
 
         if row_registry.is_empty() {
             return Ok(None);
@@ -473,10 +473,10 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken3> {
         return Ok(
             Some(
                 ApplicationUserResetPasswordToken3 {
-                    value: ApplicationUserResetPasswordToken_Value(row_registry[0].try_get::<'_, usize, String>(0).convert(BacktracePart::new(line!(), file!()))?),
-                    wrong_enter_tries_quantity: ApplicationUserResetPasswordToken_WrongEnterTriesQuantity(row_registry[0].try_get::<'_, usize, i16>(1).convert(BacktracePart::new(line!(), file!()))?),
-                    is_approved: ApplicationUserResetPasswordToken_IsApproved(row_registry[0].try_get::<'_, usize, bool>(2).convert(BacktracePart::new(line!(), file!()))?),
-                    expires_at: ApplicationUserResetPasswordToken_ExpiresAt(row_registry[0].try_get::<'_, usize, i64>(3).convert(BacktracePart::new(line!(), file!()))?),
+                    value: ApplicationUserResetPasswordToken_Value(row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?),
+                    wrong_enter_tries_quantity: ApplicationUserResetPasswordToken_WrongEnterTriesQuantity(row_registry[0].try_get::<'_, usize, i16>(1).convert(Backtrace::new(line!(), file!()))?),
+                    is_approved: ApplicationUserResetPasswordToken_IsApproved(row_registry[0].try_get::<'_, usize, bool>(2).convert(Backtrace::new(line!(), file!()))?),
+                    expires_at: ApplicationUserResetPasswordToken_ExpiresAt(row_registry[0].try_get::<'_, usize, i64>(3).convert(Backtrace::new(line!(), file!()))?),
                 },
             ),
         );
@@ -522,7 +522,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken4> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         database_2_connection
             .query(
@@ -530,7 +530,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken4> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(());
     }
@@ -575,7 +575,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken5> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         database_2_connection
             .query(
@@ -583,7 +583,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken5> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(());
     }
@@ -623,7 +623,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken6> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         let row_registry = database_2_connection
             .query(
@@ -631,7 +631,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken6> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-.convert(BacktracePart::new(line!(), file!()))?;
+.convert(Backtrace::new(line!(), file!()))?;
 
         if row_registry.is_empty() {
             return Ok(None);
@@ -640,10 +640,10 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken6> {
         return Ok(
             Some(
                 ApplicationUserResetPasswordToken6 {
-                    value: ApplicationUserResetPasswordToken_Value(row_registry[0].try_get::<'_, usize, String>(0).convert(BacktracePart::new(line!(), file!()))?),
-                    is_approved: ApplicationUserResetPasswordToken_IsApproved(row_registry[0].try_get::<'_, usize, bool>(1).convert(BacktracePart::new(line!(), file!()))?),
-                    expires_at: ApplicationUserResetPasswordToken_ExpiresAt( row_registry[0].try_get::<'_, usize, i64>(2).convert(BacktracePart::new(line!(), file!()))?),
-                    can_be_resent_from: ApplicationUserResetPasswordToken_CanBeResentFrom(row_registry[0].try_get::<'_, usize, i64>(3).convert(BacktracePart::new(line!(), file!()))?),
+                    value: ApplicationUserResetPasswordToken_Value(row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?),
+                    is_approved: ApplicationUserResetPasswordToken_IsApproved(row_registry[0].try_get::<'_, usize, bool>(1).convert(Backtrace::new(line!(), file!()))?),
+                    expires_at: ApplicationUserResetPasswordToken_ExpiresAt( row_registry[0].try_get::<'_, usize, i64>(2).convert(Backtrace::new(line!(), file!()))?),
+                    can_be_resent_from: ApplicationUserResetPasswordToken_CanBeResentFrom(row_registry[0].try_get::<'_, usize, i64>(3).convert(Backtrace::new(line!(), file!()))?),
                 },
             ),
         );

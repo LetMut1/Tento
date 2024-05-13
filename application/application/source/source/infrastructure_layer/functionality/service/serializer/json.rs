@@ -1,6 +1,6 @@
 use super::Serialize;
 use super::Serializer;
-use crate::infrastructure_layer::data::auditor::BacktracePart;
+use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
@@ -17,13 +17,13 @@ impl Serialize for Serializer<Json> {
     where
         T: SerdeSerialize,
     {
-        return Ok(serde_json::to_vec(subject).convert(BacktracePart::new(line!(), file!()))?);
+        return Ok(serde_json::to_vec(subject).convert(Backtrace::new(line!(), file!()))?);
     }
 
     fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, Auditor<Error>>
     where
         T: Deserialize<'a>,
     {
-        return Ok(serde_json::from_slice::<'_, T>(data).convert(BacktracePart::new(line!(), file!()))?);
+        return Ok(serde_json::from_slice::<'_, T>(data).convert(Backtrace::new(line!(), file!()))?);
     }
 }

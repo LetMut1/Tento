@@ -17,7 +17,7 @@ use crate::domain_layer::functionality::service::email_sender::EmailSender;
 use crate::domain_layer::functionality::service::encoder::Encoder;
 use crate::domain_layer::functionality::service::generator::Generator;
 use crate::domain_layer::functionality::service::validator::Validator;
-use crate::infrastructure_layer::data::auditor::BacktracePart;
+use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::control_type::TokioBlockingTask;
 use crate::infrastructure_layer::functionality::service::spawner::Spawner;
@@ -66,7 +66,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let incoming_ = incoming.convert_value_should_exist(BacktracePart::new(line!(), file!()))?;
+        let incoming_ = incoming.convert_value_should_exist(Backtrace::new(line!(), file!()))?;
 
         if !Validator::<ApplicationUser_Password>::is_valid_part_1(&incoming_.application_user_password) {
             return Ok(
@@ -86,7 +86,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
 
         let application_user_email = ApplicationUser_Email(incoming_.application_user_email_or_application_user_nickname);
 
-        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert(BacktracePart::new(line!(), file!()))?;
+        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
 
         let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
 
@@ -175,7 +175,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
             }
         );
 
-        if !join_handle.await.convert(BacktracePart::new(line!(), file!()))?? {
+        if !join_handle.await.convert(Backtrace::new(line!(), file!()))?? {
             return Ok(
                 InvalidArgumentResult::Ok {
                     subject: UnifiedReport::precedent(Precedent::ApplicationUser_WrongEmailOrNicknameOrPassword),
@@ -188,7 +188,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
             application_user_device_id: &incoming_.application_user_device_id,
         };
 
-        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert(BacktracePart::new(line!(), file!()))?;
+        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 

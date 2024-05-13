@@ -1,5 +1,5 @@
 use super::Encoder;
-use crate::infrastructure_layer::data::auditor::BacktracePart;
+use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
@@ -19,7 +19,7 @@ impl Encoder<Argon2Id> {
             salt.as_bytes().as_slice(),
             &config,
         )
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(value);
     }
@@ -32,7 +32,7 @@ impl Encoder<Argon2Id> {
             encoded_data,
             data,
         )
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(value);
     }

@@ -1,4 +1,4 @@
-use crate::infrastructure_layer::data::auditor::BacktracePart;
+use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::OptionConverter;
@@ -29,7 +29,7 @@ impl Counter<i16> {
     }
 
     pub fn get_next_value<'a>(&'a mut self) -> Result<i16, Auditor<Error>> {
-        self.value = self.value.checked_add(self.step_size).convert_out_of_range(BacktracePart::new(line!(), file!()))?;
+        self.value = self.value.checked_add(self.step_size).convert_out_of_range(Backtrace::new(line!(), file!()))?;
 
         return Ok(self.value);
     }

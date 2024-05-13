@@ -1,6 +1,6 @@
 use super::Validator;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
-use crate::infrastructure_layer::data::auditor::BacktracePart;
+use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
@@ -12,7 +12,7 @@ impl Validator<ApplicationUser_Email> {
 
         todo!("Объект в статическую переменную и везде, где есть regex");
 
-        let regex = Regex::new(ApplicationUser_Email::REGULAR_EXPRESSION).convert(BacktracePart::new(line!(), file!()))?;
+        let regex = Regex::new(ApplicationUser_Email::REGULAR_EXPRESSION).convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(regex.is_match(application_user_email_) && application_user_email_.chars().count() <= ApplicationUser_Email::MAXIMUM_LENGTH);
     }

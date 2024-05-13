@@ -15,7 +15,7 @@ use crate::domain_layer::data::entity::application_user_authorization_token::App
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_Value;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_WrongEnterTriesQuantity;
-use crate::infrastructure_layer::data::auditor::BacktracePart;
+use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
@@ -84,7 +84,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert(BacktracePart::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         database_2_connection
             .query(
@@ -92,7 +92,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert(BacktracePart::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(
             ApplicationUserAuthorizationToken {
@@ -134,7 +134,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert(BacktracePart::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         database_2_connection
             .query(
@@ -142,7 +142,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert(BacktracePart::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(());
     }
@@ -207,7 +207,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken1> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert(BacktracePart::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         database_2_connection
             .query(
@@ -215,7 +215,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken1> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert(BacktracePart::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(());
     }
@@ -253,7 +253,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken1> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert(BacktracePart::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         let row_registry = database_2_connection
             .query(
@@ -261,7 +261,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken1> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert(BacktracePart::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         if row_registry.is_empty() {
             return Ok(None);
@@ -270,10 +270,10 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken1> {
         return Ok(
             Some(
                 ApplicationUserAuthorizationToken1 {
-                    value: ApplicationUserAuthorizationToken_Value(row_registry[0].try_get::<'_, usize, String>(0).convert(BacktracePart::new(line!(), file!()))?),
-                    wrong_enter_tries_quantity: ApplicationUserAuthorizationToken_WrongEnterTriesQuantity(row_registry[0].try_get::<'_, usize, i16>(1).convert(BacktracePart::new(line!(), file!()))?),
-                    expires_at: ApplicationUserAuthorizationToken_ExpiresAt(row_registry[0].try_get::<'_, usize, i64>(2).convert(BacktracePart::new(line!(), file!()))?),
-                    can_be_resent_from: ApplicationUserAuthorizationToken_CanBeResentFrom(row_registry[0].try_get::<'_, usize, i64>(3).convert(BacktracePart::new(line!(), file!()))?),
+                    value: ApplicationUserAuthorizationToken_Value(row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?),
+                    wrong_enter_tries_quantity: ApplicationUserAuthorizationToken_WrongEnterTriesQuantity(row_registry[0].try_get::<'_, usize, i16>(1).convert(Backtrace::new(line!(), file!()))?),
+                    expires_at: ApplicationUserAuthorizationToken_ExpiresAt(row_registry[0].try_get::<'_, usize, i64>(2).convert(Backtrace::new(line!(), file!()))?),
+                    can_be_resent_from: ApplicationUserAuthorizationToken_CanBeResentFrom(row_registry[0].try_get::<'_, usize, i64>(3).convert(Backtrace::new(line!(), file!()))?),
                 },
             ),
         );
@@ -333,7 +333,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken2> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert(BacktracePart::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         database_2_connection
             .query(
@@ -341,7 +341,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken2> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert(BacktracePart::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(());
     }
@@ -378,7 +378,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken2> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert(BacktracePart::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         let row_registry = database_2_connection
             .query(
@@ -386,7 +386,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken2> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert(BacktracePart::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         if row_registry.is_empty() {
             return Ok(None);
@@ -395,9 +395,9 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken2> {
         return Ok(
             Some(
                 ApplicationUserAuthorizationToken2 {
-                    value: ApplicationUserAuthorizationToken_Value(row_registry[0].try_get::<'_, usize, String>(0).convert(BacktracePart::new(line!(), file!()))?),
-                    wrong_enter_tries_quantity: ApplicationUserAuthorizationToken_WrongEnterTriesQuantity(row_registry[0].try_get::<'_, usize, i16>(1).convert(BacktracePart::new(line!(), file!()))?),
-                    expires_at: ApplicationUserAuthorizationToken_ExpiresAt(row_registry[0].try_get::<'_, usize, i64>(2).convert(BacktracePart::new(line!(), file!()))?),
+                    value: ApplicationUserAuthorizationToken_Value(row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?),
+                    wrong_enter_tries_quantity: ApplicationUserAuthorizationToken_WrongEnterTriesQuantity(row_registry[0].try_get::<'_, usize, i16>(1).convert(Backtrace::new(line!(), file!()))?),
+                    expires_at: ApplicationUserAuthorizationToken_ExpiresAt(row_registry[0].try_get::<'_, usize, i64>(2).convert(Backtrace::new(line!(), file!()))?),
                 },
             ),
         );
@@ -443,7 +443,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken3> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert(BacktracePart::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         database_2_connection
             .query(
@@ -451,7 +451,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken3> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert(BacktracePart::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(());
     }
@@ -496,7 +496,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken4> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert(BacktracePart::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         database_2_connection
             .query(
@@ -504,7 +504,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken4> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert(BacktracePart::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(());
     }
@@ -543,7 +543,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken5> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert(BacktracePart::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         let row_registry = database_2_connection
             .query(
@@ -551,7 +551,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken5> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert(BacktracePart::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         if row_registry.is_empty() {
             return Ok(None);
@@ -560,9 +560,9 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken5> {
         return Ok(
             Some(
                 ApplicationUserAuthorizationToken5 {
-                    value: ApplicationUserAuthorizationToken_Value(row_registry[0].try_get::<'_, usize, String>(0).convert(BacktracePart::new(line!(), file!()))?),
-                    expires_at: ApplicationUserAuthorizationToken_ExpiresAt(row_registry[0].try_get::<'_, usize, i64>(1).convert(BacktracePart::new(line!(), file!()))?),
-                    can_be_resent_from: ApplicationUserAuthorizationToken_CanBeResentFrom(row_registry[0].try_get::<'_, usize, i64>(2).convert(BacktracePart::new(line!(), file!()))?),
+                    value: ApplicationUserAuthorizationToken_Value(row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?),
+                    expires_at: ApplicationUserAuthorizationToken_ExpiresAt(row_registry[0].try_get::<'_, usize, i64>(1).convert(Backtrace::new(line!(), file!()))?),
+                    can_be_resent_from: ApplicationUserAuthorizationToken_CanBeResentFrom(row_registry[0].try_get::<'_, usize, i64>(2).convert(Backtrace::new(line!(), file!()))?),
                 },
             ),
         );

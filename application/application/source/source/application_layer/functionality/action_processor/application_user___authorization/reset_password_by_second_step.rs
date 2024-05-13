@@ -10,7 +10,7 @@ use crate::domain_layer::data::entity::application_user_reset_password_token::Ap
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_WrongEnterTriesQuantity;
 use crate::domain_layer::functionality::service::incrementor::Incrementor;
 use crate::domain_layer::functionality::service::validator::Validator;
-use crate::infrastructure_layer::data::auditor::BacktracePart;
+use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
@@ -52,7 +52,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordBySecondStep>
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let incoming_ = incoming.convert_value_should_exist(BacktracePart::new(line!(), file!()))?;
+        let incoming_ = incoming.convert_value_should_exist(Backtrace::new(line!(), file!()))?;
 
         if !Validator::<ApplicationUserResetPasswordToken_Value>::is_valid(&incoming_.application_user_reset_password_token_value)? {
             return Ok(
@@ -83,7 +83,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordBySecondStep>
             application_user_device_id: &incoming_.application_user_device_id,
         };
 
-        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert(BacktracePart::new(line!(), file!()))?;
+        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 

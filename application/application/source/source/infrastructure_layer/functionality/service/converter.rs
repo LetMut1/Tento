@@ -1,4 +1,4 @@
-use crate::infrastructure_layer::data::auditor::BacktracePart;
+use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::ErrorConverter as _;
@@ -17,6 +17,6 @@ where
 
 impl Convert<u16, i16> for Converter {
     fn convert(subject: u16) -> Result<i16, Auditor<Error>> {
-        return Ok(i16::try_from(subject).convert(BacktracePart::new(line!(), file!()))?);
+        return Ok(i16::try_from(subject).convert(Backtrace::new(line!(), file!()))?);
     }
 }

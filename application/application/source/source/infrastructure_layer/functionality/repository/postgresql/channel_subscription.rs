@@ -3,7 +3,7 @@ use super::insert::Insert10;
 use super::PostgresqlRepository;
 use crate::domain_layer::data::entity::channel_subscription::ChannelSubscription;
 use crate::domain_layer::data::entity::channel_subscription::ChannelSubscription_CreatedAt;
-use crate::infrastructure_layer::data::auditor::BacktracePart;
+use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
@@ -47,7 +47,7 @@ impl PostgresqlRepository<ChannelSubscription> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         let row_registry = database_1_connection
             .query(
@@ -55,12 +55,12 @@ impl PostgresqlRepository<ChannelSubscription> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-.convert(BacktracePart::new(line!(), file!()))?;
+.convert(Backtrace::new(line!(), file!()))?;
 
         let channel_subscription = ChannelSubscription {
             application_user_id: insert_10.application_user_id,
             channel_id: insert_10.channel_id,
-            created_at: ChannelSubscription_CreatedAt(row_registry[0].try_get::<'_, usize, String>(0).convert(BacktracePart::new(line!(), file!()))?),
+            created_at: ChannelSubscription_CreatedAt(row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?),
         };
 
         return Ok(channel_subscription);
@@ -94,7 +94,7 @@ impl PostgresqlRepository<ChannelSubscription> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         let row_registry = database_1_connection
             .query(
@@ -102,7 +102,7 @@ impl PostgresqlRepository<ChannelSubscription> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-.convert(BacktracePart::new(line!(), file!()))?;
+.convert(Backtrace::new(line!(), file!()))?;
 
         if row_registry.is_empty() {
             return Ok(false);

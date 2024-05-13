@@ -2,7 +2,7 @@ use crate::infrastructure_layer::data::control_type::Request;
 use crate::infrastructure_layer::data::control_type::Response;
 use crate::infrastructure_layer::data::environment_configuration::Environment;
 use crate::infrastructure_layer::data::environment_configuration::ENVIRONMENT_CONFIGURATION;
-use crate::infrastructure_layer::data::auditor::BacktracePart;
+use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
@@ -105,7 +105,7 @@ impl CommandProcessor<RunServer> {
             .with_ansi(false)
             .finish();
 
-        tracing::subscriber::set_global_default(fmt_subscriber).convert(BacktracePart::new(line!(), file!()))?;
+        tracing::subscriber::set_global_default(fmt_subscriber).convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(worker_guard);
     }
@@ -120,7 +120,7 @@ impl CommandProcessor<RunServer> {
                     Error::Logic {
                         message: "Invalid Tokio runtime configuration.",
                     },
-                    BacktracePart::new(
+                    Backtrace::new(
                         line!(),
                         file!(),
                     ),
@@ -134,7 +134,7 @@ impl CommandProcessor<RunServer> {
             .thread_stack_size(ENVIRONMENT_CONFIGURATION.tokio_runtime.worker_thread_stack_size)
             .enable_all()
             .build()
-            .convert(BacktracePart::new(line!(), file!()))?
+            .convert(Backtrace::new(line!(), file!()))?
             .block_on(Self::run_server())?;
 
         return Ok(());
@@ -151,7 +151,7 @@ impl CommandProcessor<RunServer> {
 
         let router = Self::create_router()?;
 
-        let mut application_http_socket_address_registry = ENVIRONMENT_CONFIGURATION.application_server.tcp.socket_address.0.to_socket_addrs().convert(BacktracePart::new(line!(), file!()))?;
+        let mut application_http_socket_address_registry = ENVIRONMENT_CONFIGURATION.application_server.tcp.socket_address.0.to_socket_addrs().convert(Backtrace::new(line!(), file!()))?;
 
         let application_http_socket_address = match application_http_socket_address_registry.next() {
             Some(application_http_socket_address_) => application_http_socket_address_,
@@ -161,7 +161,7 @@ impl CommandProcessor<RunServer> {
                         Error::Logic {
                             message: "Invalid socket address.",
                         },
-                        BacktracePart::new(
+                        Backtrace::new(
                             line!(),
                             file!(),
                         ),
@@ -170,7 +170,7 @@ impl CommandProcessor<RunServer> {
             }
         };
 
-        let mut server_builder = Server::try_bind(&application_http_socket_address).convert(BacktracePart::new(line!(), file!()))?;
+        let mut server_builder = Server::try_bind(&application_http_socket_address).convert(Backtrace::new(line!(), file!()))?;
 
         server_builder = server_builder
             .tcp_nodelay(ENVIRONMENT_CONFIGURATION.application_server.tcp.nodelay)
@@ -220,11 +220,11 @@ impl CommandProcessor<RunServer> {
             server_builder = server_builder.http2_only(false);
         }
 
-        let database_1_postgresql_configuration = PostgresqlConfiguration::from_str(ENVIRONMENT_CONFIGURATION.resource.postgresql.database_1_url.0).convert(BacktracePart::new(line!(), file!()))?;
+        let database_1_postgresql_configuration = PostgresqlConfiguration::from_str(ENVIRONMENT_CONFIGURATION.resource.postgresql.database_1_url.0).convert(Backtrace::new(line!(), file!()))?;
 
-        let database_2_postgresql_configuration = PostgresqlConfiguration::from_str(ENVIRONMENT_CONFIGURATION.resource.postgresql.database_2_url.0).convert(BacktracePart::new(line!(), file!()))?;
+        let database_2_postgresql_configuration = PostgresqlConfiguration::from_str(ENVIRONMENT_CONFIGURATION.resource.postgresql.database_2_url.0).convert(Backtrace::new(line!(), file!()))?;
 
-        let database_1_redis_connection_info = ConnectionInfo::from_str(ENVIRONMENT_CONFIGURATION.resource.redis.database_1_url.0).convert(BacktracePart::new(line!(), file!()))?;
+        let database_1_redis_connection_info = ConnectionInfo::from_str(ENVIRONMENT_CONFIGURATION.resource.redis.database_1_url.0).convert(Backtrace::new(line!(), file!()))?;
 
         let postgresql_connection_pool_aggregator = match ENVIRONMENT_CONFIGURATION.environment {
             Environment::Production => {
@@ -324,7 +324,7 @@ impl CommandProcessor<RunServer> {
             }
         };
 
-        server_builder.serve(service).with_graceful_shutdown(graceful_shutdown_signal_future).await.convert(BacktracePart::new(line!(), file!()))?;
+        server_builder.serve(service).with_graceful_shutdown(graceful_shutdown_signal_future).await.convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(());
     }
@@ -338,7 +338,7 @@ impl CommandProcessor<RunServer> {
                 application_user___authorization: ApplicationUser__Authorization_::CheckNicknameForExisting,
             },
         )
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         router.insert(
             ACTION_ROUTE.application_user___authorization.check_email_for_existing,
@@ -346,7 +346,7 @@ impl CommandProcessor<RunServer> {
                 application_user___authorization: ApplicationUser__Authorization_::CheckEmailForExisting,
             },
         )
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         router.insert(
             ACTION_ROUTE.application_user___authorization.regisgter_by_first_step,
@@ -354,7 +354,7 @@ impl CommandProcessor<RunServer> {
                 application_user___authorization: ApplicationUser__Authorization_::RegisterByFirstStep,
             },
         )
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         router.insert(
             ACTION_ROUTE.application_user___authorization.regisgter_by_second_step,
@@ -362,7 +362,7 @@ impl CommandProcessor<RunServer> {
                 application_user___authorization: ApplicationUser__Authorization_::RegisterBySecondStep,
             },
         )
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         router.insert(
             ACTION_ROUTE.application_user___authorization.regisgter_by_last_step,
@@ -370,7 +370,7 @@ impl CommandProcessor<RunServer> {
                 application_user___authorization: ApplicationUser__Authorization_::RegisterByLastStep,
             },
         )
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         router.insert(
             ACTION_ROUTE.application_user___authorization.send_email_for_register,
@@ -378,7 +378,7 @@ impl CommandProcessor<RunServer> {
                 application_user___authorization: ApplicationUser__Authorization_::SendEmailForRegister,
             },
         )
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         router.insert(
             ACTION_ROUTE.application_user___authorization.authorize_by_first_step,
@@ -386,7 +386,7 @@ impl CommandProcessor<RunServer> {
                 application_user___authorization: ApplicationUser__Authorization_::AuthorizeByFirstStep,
             },
         )
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         router.insert(
             ACTION_ROUTE.application_user___authorization.authorize_by_last_step,
@@ -394,7 +394,7 @@ impl CommandProcessor<RunServer> {
                 application_user___authorization: ApplicationUser__Authorization_::AuthorizeByLastStep,
             },
         )
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         router.insert(
             ACTION_ROUTE.application_user___authorization.send_email_for_authorize,
@@ -402,7 +402,7 @@ impl CommandProcessor<RunServer> {
                 application_user___authorization: ApplicationUser__Authorization_::SendEmailForAuthorize,
             },
         )
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         router.insert(
             ACTION_ROUTE.application_user___authorization.reset_password_by_first_step,
@@ -410,7 +410,7 @@ impl CommandProcessor<RunServer> {
                 application_user___authorization: ApplicationUser__Authorization_::ResetPasswordByFirstStep,
             },
         )
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         router.insert(
             ACTION_ROUTE.application_user___authorization.reset_password_by_second_step,
@@ -418,7 +418,7 @@ impl CommandProcessor<RunServer> {
                 application_user___authorization: ApplicationUser__Authorization_::ResetPasswordBySecondStep,
             },
         )
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         router.insert(
             ACTION_ROUTE.application_user___authorization.reset_password_by_last_step,
@@ -426,7 +426,7 @@ impl CommandProcessor<RunServer> {
                 application_user___authorization: ApplicationUser__Authorization_::ResetPasswordByLastStep,
             },
         )
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         router.insert(
             ACTION_ROUTE.application_user___authorization.send_email_for_reset_password,
@@ -434,7 +434,7 @@ impl CommandProcessor<RunServer> {
                 application_user___authorization: ApplicationUser__Authorization_::SendEmailForResetPassword,
             },
         )
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         router.insert(
             ACTION_ROUTE.application_user___authorization.refresh_access_token,
@@ -442,7 +442,7 @@ impl CommandProcessor<RunServer> {
                 application_user___authorization: ApplicationUser__Authorization_::RefreshAccessToken,
             },
         )
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         router.insert(
             ACTION_ROUTE.application_user___authorization.deauthorize_from_one_device,
@@ -450,7 +450,7 @@ impl CommandProcessor<RunServer> {
                 application_user___authorization: ApplicationUser__Authorization_::DeauthorizeFromOneDevice,
             },
         )
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         router.insert(
             ACTION_ROUTE.application_user___authorization.deauthorize_from_all_devices,
@@ -458,7 +458,7 @@ impl CommandProcessor<RunServer> {
                 application_user___authorization: ApplicationUser__Authorization_::DeauthorizeFromAllDevices,
             },
         )
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         router.insert(
             ACTION_ROUTE.channel___base.get_one_by_id,
@@ -466,7 +466,7 @@ impl CommandProcessor<RunServer> {
                 channel___base: Channel__Base_::GetOneById,
             },
         )
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         router.insert(
             ACTION_ROUTE.channel___base.get_many_by_name_in_subscription,
@@ -474,7 +474,7 @@ impl CommandProcessor<RunServer> {
                 channel___base: Channel__Base_::GetManyByNameInSubscriptions,
             },
         )
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         router.insert(
             ACTION_ROUTE.channel___base.get_many_by_subscription,
@@ -482,7 +482,7 @@ impl CommandProcessor<RunServer> {
                 channel___base: Channel__Base_::GetManyBySubscription,
             },
         )
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         router.insert(
             ACTION_ROUTE.channel___base.get_many_piblic_by_name,
@@ -490,7 +490,7 @@ impl CommandProcessor<RunServer> {
                 channel___base: Channel__Base_::GetManyPublicByName,
             },
         )
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         router.insert(
             ACTION_ROUTE.channel_subscription___base.create,
@@ -498,7 +498,7 @@ impl CommandProcessor<RunServer> {
                 channel_subscription___base: ChannelSubscription__Base_::Create,
             },
         )
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         #[cfg(feature = "manual_testing")]
         {
@@ -508,7 +508,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::CheckNicknameForExisting_,
                 },
             )
-.convert(BacktracePart::new(line!(), file!()))?;
+.convert(Backtrace::new(line!(), file!()))?;
 
              router.insert(
                 ACTION_ROUTE.application_user___authorization.check_email_for_existing_,
@@ -516,7 +516,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::CheckEmailForExisting_,
                 },
             )
-.convert(BacktracePart::new(line!(), file!()))?;
+.convert(Backtrace::new(line!(), file!()))?;
 
              router.insert(
                 ACTION_ROUTE.application_user___authorization.regisgter_by_first_step_,
@@ -524,7 +524,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::RegisterByFirstStep_,
                 },
             )
-.convert(BacktracePart::new(line!(), file!()))?;
+.convert(Backtrace::new(line!(), file!()))?;
 
              router.insert(
                 ACTION_ROUTE.application_user___authorization.regisgter_by_second_step_,
@@ -532,7 +532,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::RegisterBySecondStep_,
                 },
             )
-.convert(BacktracePart::new(line!(), file!()))?;
+.convert(Backtrace::new(line!(), file!()))?;
 
              router.insert(
                 ACTION_ROUTE.application_user___authorization.regisgter_by_last_step_,
@@ -540,7 +540,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::RegisterByLastStep_,
                 },
             )
-.convert(BacktracePart::new(line!(), file!()))?;
+.convert(Backtrace::new(line!(), file!()))?;
 
              router.insert(
                 ACTION_ROUTE.application_user___authorization.send_email_for_register_,
@@ -548,7 +548,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::SendEmailForRegister_,
                 },
             )
-.convert(BacktracePart::new(line!(), file!()))?;
+.convert(Backtrace::new(line!(), file!()))?;
 
              router.insert(
                 ACTION_ROUTE.application_user___authorization.authorize_by_first_step_,
@@ -556,7 +556,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::AuthorizeByFirstStep_,
                 },
             )
-.convert(BacktracePart::new(line!(), file!()))?;
+.convert(Backtrace::new(line!(), file!()))?;
 
              router.insert(
                 ACTION_ROUTE.application_user___authorization.authorize_by_last_step_,
@@ -564,7 +564,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::AuthorizeByLastStep_,
                 },
             )
-.convert(BacktracePart::new(line!(), file!()))?;
+.convert(Backtrace::new(line!(), file!()))?;
 
              router.insert(
                 ACTION_ROUTE.application_user___authorization.send_email_for_authorize_,
@@ -572,7 +572,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::SendEmailForAuthorize_,
                 },
             )
-.convert(BacktracePart::new(line!(), file!()))?;
+.convert(Backtrace::new(line!(), file!()))?;
 
              router.insert(
                 ACTION_ROUTE.application_user___authorization.reset_password_by_first_step_,
@@ -580,7 +580,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::ResetPasswordByFirstStep_,
                 },
             )
-.convert(BacktracePart::new(line!(), file!()))?;
+.convert(Backtrace::new(line!(), file!()))?;
 
              router.insert(
                 ACTION_ROUTE.application_user___authorization.reset_password_by_second_step_,
@@ -588,7 +588,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::ResetPasswordBySecondStep_,
                 },
             )
-.convert(BacktracePart::new(line!(), file!()))?;
+.convert(Backtrace::new(line!(), file!()))?;
 
              router.insert(
                 ACTION_ROUTE.application_user___authorization.reset_password_by_last_step_,
@@ -596,7 +596,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::ResetPasswordByLastStep_,
                 },
             )
-.convert(BacktracePart::new(line!(), file!()))?;
+.convert(Backtrace::new(line!(), file!()))?;
 
              router.insert(
                 ACTION_ROUTE.application_user___authorization.send_email_for_reset_password_,
@@ -604,7 +604,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::SendEmailForResetPassword_,
                 },
             )
-.convert(BacktracePart::new(line!(), file!()))?;
+.convert(Backtrace::new(line!(), file!()))?;
 
              router.insert(
                 ACTION_ROUTE.application_user___authorization.refresh_access_token_,
@@ -612,7 +612,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::RefreshAccessToken_,
                 },
             )
-.convert(BacktracePart::new(line!(), file!()))?;
+.convert(Backtrace::new(line!(), file!()))?;
 
              router.insert(
                 ACTION_ROUTE.application_user___authorization.deauthorize_from_one_device_,
@@ -620,7 +620,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::DeauthorizeFromOneDevice_,
                 },
             )
-.convert(BacktracePart::new(line!(), file!()))?;
+.convert(Backtrace::new(line!(), file!()))?;
 
              router.insert(
                 ACTION_ROUTE.application_user___authorization.deauthorize_from_all_devices_,
@@ -628,7 +628,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::DeauthorizeFromAllDevices_,
                 },
             )
-.convert(BacktracePart::new(line!(), file!()))?;
+.convert(Backtrace::new(line!(), file!()))?;
 
              router.insert(
                 ACTION_ROUTE.channel___base.get_one_by_id_,
@@ -636,7 +636,7 @@ impl CommandProcessor<RunServer> {
                     channel___base: Channel__Base_::GetOneById_,
                 },
             )
-.convert(BacktracePart::new(line!(), file!()))?;
+.convert(Backtrace::new(line!(), file!()))?;
 
              router.insert(
                 ACTION_ROUTE.channel___base.get_many_by_name_in_subscription_,
@@ -644,7 +644,7 @@ impl CommandProcessor<RunServer> {
                     channel___base: Channel__Base_::GetManyByNameInSubscriptions_,
                 },
             )
-.convert(BacktracePart::new(line!(), file!()))?;
+.convert(Backtrace::new(line!(), file!()))?;
 
              router.insert(
                 ACTION_ROUTE.channel___base.get_many_by_subscription_,
@@ -652,7 +652,7 @@ impl CommandProcessor<RunServer> {
                     channel___base: Channel__Base_::GetManyBySubscription_,
                 },
             )
-.convert(BacktracePart::new(line!(), file!()))?;
+.convert(Backtrace::new(line!(), file!()))?;
 
              router.insert(
                 ACTION_ROUTE.channel___base.get_many_piblic_by_name_,
@@ -660,7 +660,7 @@ impl CommandProcessor<RunServer> {
                     channel___base: Channel__Base_::GetManyPublicByName_,
                 },
             )
-.convert(BacktracePart::new(line!(), file!()))?;
+.convert(Backtrace::new(line!(), file!()))?;
 
              router.insert(
                 ACTION_ROUTE.channel_subscription___base.create_,
@@ -668,7 +668,7 @@ impl CommandProcessor<RunServer> {
                     channel_subscription___base: ChannelSubscription__Base_::Create_,
                 },
             )
-.convert(BacktracePart::new(line!(), file!()))?;
+.convert(Backtrace::new(line!(), file!()))?;
         }
 
         return Ok(router);
@@ -1237,7 +1237,7 @@ impl CommandProcessor<RunServer> {
     }
 
     fn create_signal(signal_kind: SignalKind) -> Result<impl Future<Output = ()>, Auditor<Error>> {
-        let mut signal = tokio::signal::unix::signal(signal_kind).convert(BacktracePart::new(line!(), file!()))?;
+        let mut signal = tokio::signal::unix::signal(signal_kind).convert(Backtrace::new(line!(), file!()))?;
 
         let signal_ = async move {
             signal.recv().await;

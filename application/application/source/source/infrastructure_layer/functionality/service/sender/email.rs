@@ -1,7 +1,7 @@
 use super::Sender;
 use crate::infrastructure_layer::data::environment_configuration::Environment;
 use crate::infrastructure_layer::data::environment_configuration::ENVIRONMENT_CONFIGURATION;
-use crate::infrastructure_layer::data::auditor::BacktracePart;
+use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
@@ -27,10 +27,10 @@ impl Sender<Email> {
             .from("from_changethis@yandex.ru".to_string())
             .to(to)
             .build()
-            .convert(BacktracePart::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         // TODO В static OnceLock
-        let mut email_server_socket_address_registry = ENVIRONMENT_CONFIGURATION.resource.email_server.socket_address.0.to_socket_addrs().convert(BacktracePart::new(line!(), file!()))?;
+        let mut email_server_socket_address_registry = ENVIRONMENT_CONFIGURATION.resource.email_server.socket_address.0.to_socket_addrs().convert(Backtrace::new(line!(), file!()))?;
 
         let email_server_socket_address = match email_server_socket_address_registry.next() {
             Some(email_server_socket_address_) => email_server_socket_address_,
@@ -40,7 +40,7 @@ impl Sender<Email> {
                         Error::Logic {
                             message: "Invalid socket address.",
                         },
-                        BacktracePart::new(
+                        Backtrace::new(
                             line!(),
                             file!(),
                         ),
@@ -58,11 +58,11 @@ impl Sender<Email> {
                     &email_server_socket_address,
                     ClientSecurity::None,
                 )
-                .convert(BacktracePart::new(line!(), file!()))?
+                .convert(Backtrace::new(line!(), file!()))?
             }
         };
 
-        smtp_client.transport().send(email.into()).convert(BacktracePart::new(line!(), file!()))?;
+        smtp_client.transport().send(email.into()).convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(());
     }

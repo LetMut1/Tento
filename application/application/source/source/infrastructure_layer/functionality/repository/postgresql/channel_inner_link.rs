@@ -4,7 +4,7 @@ use super::PostgresqlRepository;
 use crate::domain_layer::data::entity::channel::Channel_Id;
 use crate::domain_layer::data::entity::channel_inner_link::ChannelInnerLink;
 use crate::domain_layer::data::entity::channel_inner_link::ChannelInnerLink_CreatedAt;
-use crate::infrastructure_layer::data::auditor::BacktracePart;
+use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
@@ -49,7 +49,7 @@ impl PostgresqlRepository<ChannelInnerLink> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         let row_registry = database_1_connection
             .query(
@@ -57,13 +57,13 @@ impl PostgresqlRepository<ChannelInnerLink> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-.convert(BacktracePart::new(line!(), file!()))?;
+.convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(
             ChannelInnerLink {
                 from: insert_8.channel_inner_link_from,
                 to: insert_8.channel_inner_link_to,
-                created_at: ChannelInnerLink_CreatedAt(row_registry[0].try_get::<'_, usize, String>(0).convert(BacktracePart::new(line!(), file!()))?),
+                created_at: ChannelInnerLink_CreatedAt(row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?),
             },
         );
     }
@@ -98,7 +98,7 @@ impl PostgresqlRepository<ChannelInnerLink> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         let row_registry = database_1_connection
             .query(
@@ -106,7 +106,7 @@ impl PostgresqlRepository<ChannelInnerLink> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-.convert(BacktracePart::new(line!(), file!()))?;
+.convert(Backtrace::new(line!(), file!()))?;
 
         let mut channel_inner_link_registry: Vec<ChannelInnerLink1> = vec![];
 
@@ -116,7 +116,7 @@ impl PostgresqlRepository<ChannelInnerLink> {
 
         '_a: for row in row_registry.iter() {
             let channel_inner_link = ChannelInnerLink1 {
-                channel_inner_link_to: Channel_Id(row.try_get::<'_, usize, i64>(0).convert(BacktracePart::new(line!(), file!()))?),
+                channel_inner_link_to: Channel_Id(row.try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?),
             };
 
             channel_inner_link_registry.push(channel_inner_link);

@@ -1,7 +1,7 @@
 use http::request::Parts;
 use hyper::Body;
 use matchit::Params;
-use crate::infrastructure_layer::data::auditor::BacktracePart;
+use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::functionality::service::serializer::Serialize;
@@ -25,7 +25,7 @@ impl Extractor<HttpBodyData> {
         D: for<'de> Deserialize<'de>,
         Serializer<SF>: Serialize,
     {
-        let bytes = to_bytes(body).await.convert(BacktracePart::new(line!(), file!()))?;
+        let bytes = to_bytes(body).await.convert(Backtrace::new(line!(), file!()))?;
 
         let data = Serializer::<SF>::deserialize::<'_, D>(bytes.chunk())?;
 

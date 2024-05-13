@@ -22,7 +22,7 @@ use crate::domain_layer::functionality::service::form_resolver::FormResolver;
 use crate::domain_layer::functionality::service::generator::Generator;
 use crate::domain_layer::functionality::service::incrementor::Incrementor;
 use crate::domain_layer::functionality::service::validator::Validator;
-use crate::infrastructure_layer::data::auditor::BacktracePart;
+use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::auditor::OptionConverter;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::control_type::TokioNonBlockingTask;
@@ -72,7 +72,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let incoming_ = incoming.convert_value_should_exist(BacktracePart::new(line!(), file!()))?;
+        let incoming_ = incoming.convert_value_should_exist(Backtrace::new(line!(), file!()))?;
 
         if !Validator::<ApplicationUser_Password>::is_valid(
             &incoming_.application_user_password,
@@ -118,7 +118,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
             );
         }
 
-        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert(BacktracePart::new(line!(), file!()))?;
+        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
 
         let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
 
@@ -157,7 +157,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
             application_user_device_id: &incoming_.application_user_device_id,
         };
 
-        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert(BacktracePart::new(line!(), file!()))?;
+        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
@@ -237,7 +237,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
             Insert1 {
                 application_user_email: incoming_.application_user_email,
                 application_user_nickname: incoming_.application_user_nickname,
-                application_user_password_hash: join_handle.await.convert(BacktracePart::new(line!(), file!()))??,
+                application_user_password_hash: join_handle.await.convert(Backtrace::new(line!(), file!()))??,
             },
         )
         .await?;
@@ -273,7 +273,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
 
         Spawner::<TokioNonBlockingTask>::spawn_into_background(
             async move {
-                let database_1_postgresql_pooled_connection_ = database_1_postgresql_connection_pool_.get().await.convert(BacktracePart::new(line!(), file!()))?;
+                let database_1_postgresql_pooled_connection_ = database_1_postgresql_connection_pool_.get().await.convert(Backtrace::new(line!(), file!()))?;
 
                 let application_user_device = PostgresqlRepository::<ApplicationUserDevice>::create(
                     &*database_1_postgresql_pooled_connection_,
@@ -284,7 +284,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
                 )
                 .await?;
 
-                let database_2_postgresql_pooled_connection_ = database_2_postgresql_connection_pool_.get().await.convert(BacktracePart::new(line!(), file!()))?;
+                let database_2_postgresql_pooled_connection_ = database_2_postgresql_connection_pool_.get().await.convert(Backtrace::new(line!(), file!()))?;
 
                 PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete(
                     &*database_2_postgresql_pooled_connection_,

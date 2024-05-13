@@ -2,7 +2,7 @@ use super::Encoder;
 use hmac::Hmac;
 use hmac::Mac;
 use hmac::digest::CtOutput;
-use crate::infrastructure_layer::data::auditor::BacktracePart;
+use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
@@ -40,7 +40,7 @@ impl Encoder<HmacSha3512> {
         salt: &'a [u8],
         data: &'a [u8],
     ) -> Result<HmacSha3512, Auditor<Error>> {
-        let mut hmac = HmacSha3512::new_from_slice(salt).convert(BacktracePart::new(line!(), file!()))?;
+        let mut hmac = HmacSha3512::new_from_slice(salt).convert(Backtrace::new(line!(), file!()))?;
 
         hmac.update(data);
 

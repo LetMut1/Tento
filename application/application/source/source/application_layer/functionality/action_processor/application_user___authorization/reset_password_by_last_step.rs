@@ -13,7 +13,7 @@ use crate::domain_layer::functionality::service::encoder::Encoder;
 use crate::domain_layer::functionality::service::incrementor::Incrementor;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::auditor::OptionConverter;
-use crate::infrastructure_layer::data::auditor::BacktracePart;
+use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
@@ -60,7 +60,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let incoming_ = incoming.convert_value_should_exist(BacktracePart::new(line!(), file!()))?;
+        let incoming_ = incoming.convert_value_should_exist(Backtrace::new(line!(), file!()))?;
 
         if !Validator::<ApplicationUserResetPasswordToken_Value>::is_valid(&incoming_.application_user_reset_password_token_value)? {
             return Ok(
@@ -99,7 +99,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
             application_user_device_id: &incoming_.application_user_device_id,
         };
 
-        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert(BacktracePart::new(line!(), file!()))?;
+        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
@@ -172,7 +172,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
             application_user_id: incoming_.application_user_id,
         };
 
-        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert(BacktracePart::new(line!(), file!()))?;
+        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
 
         let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
 
@@ -210,7 +210,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
             }
         );
 
-        application_user.password_hash = join_handle.await.convert(BacktracePart::new(line!(), file!()))??;
+        application_user.password_hash = join_handle.await.convert(Backtrace::new(line!(), file!()))??;
 
         PostgresqlRepository::<ApplicationUser4>::update(
             database_1_postgresql_connection,
@@ -233,7 +233,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
 
         Spawner::<TokioNonBlockingTask>::spawn_into_background(
             async move {
-                let database_2_postgresql_pooled_connection_ = database_2_postgresql_connection_pool_.get().await.convert(BacktracePart::new(line!(), file!()))?;
+                let database_2_postgresql_pooled_connection_ = database_2_postgresql_connection_pool_.get().await.convert(Backtrace::new(line!(), file!()))?;
 
                 PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete(
                     &*database_2_postgresql_pooled_connection_,

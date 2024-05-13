@@ -3,70 +3,28 @@ use std::error::Error as StdError;
 use std::boxed::Box;
 
 pub struct Auditor<T> {
-    subject: T,
-    backtrace: Backtrace,
+    pub subject: T,
+    pub backtrace: Backtrace,
 }
 
 impl<T> Auditor<T> {
     pub fn new(
         subject: T,
-        backtrace_part: BacktracePart,
+        backtrace: Backtrace,
     ) -> Self {
         return Self {
             subject,
-            backtrace: Backtrace::new(backtrace_part),
+            backtrace,
         };
-    }
-
-    pub fn add_backtrace_part<'a>(
-        &'a mut self,
-        backtrace_part: BacktracePart,
-    ) -> () {
-        self.backtrace.add(backtrace_part);
-
-        return ();
-    }
-
-    pub fn get_subject<'a>(&'a self) -> &'a T {
-        return &self.subject;
-    }
-
-    pub fn get_backtrace<'a>(&'a self) -> &'a Backtrace {
-        return &self.backtrace;
     }
 }
 
 pub struct Backtrace {
-    backtrace_part_registry: Vec<BacktracePart>,
+    pub line_number: u32,
+    pub file_path: &'static str,
 }
 
 impl Backtrace {
-    pub fn new(backtrace_part: BacktracePart) -> Self {
-        return Self {
-            backtrace_part_registry: vec![backtrace_part],
-        };
-    }
-
-    pub fn add<'a>(
-        &'a mut self,
-        backtrace_part: BacktracePart,
-    ) -> () {
-        self.backtrace_part_registry.push(backtrace_part);
-
-        return ();
-    }
-
-    pub fn get_backtrace_part_registry<'a>(&'a self) -> &'a [BacktracePart] {
-        return self.backtrace_part_registry.as_slice();
-    }
-}
-
-pub struct BacktracePart {
-    line_number: u32,
-    file_path: &'static str,
-}
-
-impl BacktracePart {
     pub fn new(
         line_number: u32,
         file_path: &'static str,
@@ -76,25 +34,17 @@ impl BacktracePart {
             file_path,
         };
     }
-
-    pub fn get_line_number<'a>(&'a self) -> u32 {
-        return self.line_number;
-    }
-
-    pub fn get_file_path<'a>(&'a self) -> &'static str {
-        return self.file_path;
-    }
 }
 
 pub trait ErrorConverter<T> {
-    fn convert(self, backtrace_part: BacktracePart) -> Result<T, Auditor<Error>>;
+    fn convert(self, backtrace_part: Backtrace) -> Result<T, Auditor<Error>>;
 }
 
 impl<E, T> ErrorConverter<T> for Result<T, E>
 where
     E: StdError + Send + Sync + 'static,
 {
-    fn convert(self, backtrace_part: BacktracePart) -> Result<T, Auditor<Error>> {
+    fn convert(self, backtrace_part: Backtrace) -> Result<T, Auditor<Error>> {
         let result = match self {
             Ok(value) => Ok(value),
             Err(error) => Err(
@@ -110,11 +60,11 @@ where
 }
 
 pub trait ErrorConverter_<T> {
-    fn convert(self, backtrace_part: BacktracePart) -> Result<T, Auditor<Error>>;
+    fn convert(self, backtrace_part: Backtrace) -> Result<T, Auditor<Error>>;
 }
 
 impl<T> ErrorConverter_<T> for Result<T, Box<dyn StdError + Sync + Send + 'static>> {
-    fn convert(self, backtrace_part: BacktracePart) -> Result<T, Auditor<Error>> {
+    fn convert(self, backtrace_part: Backtrace) -> Result<T, Auditor<Error>> {
         let result = match self {
             Ok(value) => Ok(value),
             Err(error) => Err(
@@ -130,15 +80,15 @@ impl<T> ErrorConverter_<T> for Result<T, Box<dyn StdError + Sync + Send + 'stati
 }
 
 pub trait OptionConverter<T> {
-    fn convert_unreachable_state(self, backtrace_part: BacktracePart) -> Result<T, Auditor<Error>>;
+    fn convert_unreachable_state(self, backtrace_part: Backtrace) -> Result<T, Auditor<Error>>;
 
-    fn convert_out_of_range(self, backtrace_part: BacktracePart) -> Result<T, Auditor<Error>>;
+    fn convert_out_of_range(self, backtrace_part: Backtrace) -> Result<T, Auditor<Error>>;
 
-    fn convert_value_should_exist(self, backtrace_part: BacktracePart) -> Result<T, Auditor<Error>>;
+    fn convert_value_should_exist(self, backtrace_part: Backtrace) -> Result<T, Auditor<Error>>;
 }
 
 impl<T> OptionConverter<T> for Option<T> {
-    fn convert_unreachable_state(self, backtrace_part: BacktracePart) -> Result<T, Auditor<Error>> {
+    fn convert_unreachable_state(self, backtrace_part: Backtrace) -> Result<T, Auditor<Error>> {
         let result = match self {
             Some(value) => Ok(value),
             None => {
@@ -154,7 +104,7 @@ impl<T> OptionConverter<T> for Option<T> {
         return result;
     }
 
-    fn convert_out_of_range(self, backtrace_part: BacktracePart) -> Result<T, Auditor<Error>> {
+    fn convert_out_of_range(self, backtrace_part: Backtrace) -> Result<T, Auditor<Error>> {
         let result = match self {
             Some(value) => Ok(value),
             None => {
@@ -170,7 +120,7 @@ impl<T> OptionConverter<T> for Option<T> {
         return result;
     }
 
-    fn convert_value_should_exist(self, backtrace_part: BacktracePart) -> Result<T, Auditor<Error>> {
+    fn convert_value_should_exist(self, backtrace_part: Backtrace) -> Result<T, Auditor<Error>> {
         let result = match self {
             Some(value) => Ok(value),
             None => {

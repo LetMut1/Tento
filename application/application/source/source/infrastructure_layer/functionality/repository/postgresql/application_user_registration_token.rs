@@ -18,7 +18,7 @@ use crate::domain_layer::data::entity::application_user_registration_token::Appl
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_IsApproved;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_Value;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_WrongEnterTriesQuantity;
-use crate::infrastructure_layer::data::auditor::BacktracePart;
+use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
@@ -95,7 +95,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert(BacktracePart::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         database_2_connection
             .query(
@@ -103,7 +103,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert(BacktracePart::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(
             ApplicationUserRegistrationToken {
@@ -148,7 +148,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert(BacktracePart::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         database_2_connection
             .query(
@@ -156,7 +156,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(());
     }
@@ -229,7 +229,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         database_2_connection
             .query(
@@ -237,7 +237,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(());
     }
@@ -278,7 +278,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         let row_registry = database_2_connection
             .query(
@@ -286,7 +286,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-.convert(BacktracePart::new(line!(), file!()))?;
+.convert(Backtrace::new(line!(), file!()))?;
 
         if row_registry.is_empty() {
             return Ok(None);
@@ -295,11 +295,11 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
         return Ok(
             Some(
                 ApplicationUserRegistrationToken1 {
-                    value: ApplicationUserRegistrationToken_Value(row_registry[0].try_get::<'_, usize, String>(0).convert(BacktracePart::new(line!(), file!()))?),
-                    wrong_enter_tries_quantity: ApplicationUserRegistrationToken_WrongEnterTriesQuantity(row_registry[0].try_get::<'_, usize, i16>(1).convert(BacktracePart::new(line!(), file!()))?),
-                    is_approved: ApplicationUserRegistrationToken_IsApproved(row_registry[0].try_get::<'_, usize, bool>(2).convert(BacktracePart::new(line!(), file!()))?),
-                    expires_at: ApplicationUserRegistrationToken_ExpiresAt(row_registry[0].try_get::<'_, usize, i64>(3).convert(BacktracePart::new(line!(), file!()))?),
-                    can_be_resent_from: ApplicationUserRegistrationToken_CanBeResentFrom(row_registry[0].try_get::<'_, usize, i64>(4).convert(BacktracePart::new(line!(), file!()))?),
+                    value: ApplicationUserRegistrationToken_Value(row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?),
+                    wrong_enter_tries_quantity: ApplicationUserRegistrationToken_WrongEnterTriesQuantity(row_registry[0].try_get::<'_, usize, i16>(1).convert(Backtrace::new(line!(), file!()))?),
+                    is_approved: ApplicationUserRegistrationToken_IsApproved(row_registry[0].try_get::<'_, usize, bool>(2).convert(Backtrace::new(line!(), file!()))?),
+                    expires_at: ApplicationUserRegistrationToken_ExpiresAt(row_registry[0].try_get::<'_, usize, i64>(3).convert(Backtrace::new(line!(), file!()))?),
+                    can_be_resent_from: ApplicationUserRegistrationToken_CanBeResentFrom(row_registry[0].try_get::<'_, usize, i64>(4).convert(Backtrace::new(line!(), file!()))?),
                 },
             ),
         );
@@ -347,7 +347,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken2> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         database_2_connection
             .query(
@@ -355,7 +355,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken2> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(());
     }
@@ -422,7 +422,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         database_2_connection
             .query(
@@ -430,7 +430,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(());
     }
@@ -470,7 +470,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         let row_registry = database_2_connection
             .query(
@@ -478,7 +478,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-.convert(BacktracePart::new(line!(), file!()))?;
+.convert(Backtrace::new(line!(), file!()))?;
 
         if row_registry.is_empty() {
             return Ok(None);
@@ -487,10 +487,10 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
         return Ok(
             Some(
                 ApplicationUserRegistrationToken3 {
-                    value: ApplicationUserRegistrationToken_Value(row_registry[0].try_get::<'_, usize, String>(0).convert(BacktracePart::new(line!(), file!()))?),
-                    wrong_enter_tries_quantity: ApplicationUserRegistrationToken_WrongEnterTriesQuantity(row_registry[0].try_get::<'_, usize, i16>(1).convert(BacktracePart::new(line!(), file!()))?),
-                    is_approved: ApplicationUserRegistrationToken_IsApproved(row_registry[0].try_get::<'_, usize, bool>(2).convert(BacktracePart::new(line!(), file!()))?),
-                    expires_at: ApplicationUserRegistrationToken_ExpiresAt(row_registry[0].try_get::<'_, usize, i64>(3).convert(BacktracePart::new(line!(), file!()))?),
+                    value: ApplicationUserRegistrationToken_Value(row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?),
+                    wrong_enter_tries_quantity: ApplicationUserRegistrationToken_WrongEnterTriesQuantity(row_registry[0].try_get::<'_, usize, i16>(1).convert(Backtrace::new(line!(), file!()))?),
+                    is_approved: ApplicationUserRegistrationToken_IsApproved(row_registry[0].try_get::<'_, usize, bool>(2).convert(Backtrace::new(line!(), file!()))?),
+                    expires_at: ApplicationUserRegistrationToken_ExpiresAt(row_registry[0].try_get::<'_, usize, i64>(3).convert(Backtrace::new(line!(), file!()))?),
                 },
             ),
         );
@@ -538,7 +538,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken4> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         database_2_connection
             .query(
@@ -546,7 +546,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken4> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(());
     }
@@ -593,7 +593,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken5> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         database_2_connection
             .query(
@@ -601,7 +601,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken5> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(());
     }
@@ -643,7 +643,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken6> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         let row_registry = database_2_connection
             .query(
@@ -651,7 +651,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken6> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-.convert(BacktracePart::new(line!(), file!()))?;
+.convert(Backtrace::new(line!(), file!()))?;
 
         if row_registry.is_empty() {
             return Ok(None);
@@ -660,10 +660,10 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken6> {
         return Ok(
             Some(
                 ApplicationUserRegistrationToken6 {
-                    value: ApplicationUserRegistrationToken_Value(row_registry[0].try_get::<'_, usize, String>(0).convert(BacktracePart::new(line!(), file!()))?),
-                    is_approved: ApplicationUserRegistrationToken_IsApproved(row_registry[0].try_get::<'_, usize, bool>(1).convert(BacktracePart::new(line!(), file!()))?),
-                    expires_at: ApplicationUserRegistrationToken_ExpiresAt(row_registry[0].try_get::<'_, usize, i64>(2).convert(BacktracePart::new(line!(), file!()))?),
-                    can_be_resent_from: ApplicationUserRegistrationToken_CanBeResentFrom(row_registry[0].try_get::<'_, usize, i64>(3).convert(BacktracePart::new(line!(), file!()))?),
+                    value: ApplicationUserRegistrationToken_Value(row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?),
+                    is_approved: ApplicationUserRegistrationToken_IsApproved(row_registry[0].try_get::<'_, usize, bool>(1).convert(Backtrace::new(line!(), file!()))?),
+                    expires_at: ApplicationUserRegistrationToken_ExpiresAt(row_registry[0].try_get::<'_, usize, i64>(2).convert(Backtrace::new(line!(), file!()))?),
+                    can_be_resent_from: ApplicationUserRegistrationToken_CanBeResentFrom(row_registry[0].try_get::<'_, usize, i64>(3).convert(Backtrace::new(line!(), file!()))?),
                 },
             ),
         );

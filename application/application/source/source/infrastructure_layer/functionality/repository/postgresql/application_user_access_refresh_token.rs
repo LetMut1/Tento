@@ -9,7 +9,7 @@ use crate::domain_layer::data::entity::application_user_access_refresh_token::Ap
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ObfuscationValue;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_UpdatedAt;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken_Id;
-use crate::infrastructure_layer::data::auditor::BacktracePart;
+use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
@@ -80,7 +80,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert(BacktracePart::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         database_2_connection
             .query(
@@ -88,7 +88,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert(BacktracePart::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(
             ApplicationUserAccessRefreshToken {
@@ -129,7 +129,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert(BacktracePart::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         database_2_connection
             .query(
@@ -137,7 +137,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert(BacktracePart::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(());
     }
@@ -163,7 +163,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert(BacktracePart::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         database_2_connection
             .query(
@@ -171,7 +171,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert(BacktracePart::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(());
     }
@@ -209,7 +209,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert(BacktracePart::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         let row_registry = database_2_connection
             .query(
@@ -217,7 +217,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert(BacktracePart::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         if row_registry.is_empty() {
             return Ok(None);
@@ -228,10 +228,10 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 ApplicationUserAccessRefreshToken {
                     application_user_id: by_4.application_user_id,
                     application_user_device_id: Cow::Borrowed(by_4.application_user_device_id),
-                    application_user_access_token_id: Cow::Owned(ApplicationUserAccessToken_Id(row_registry[0].try_get::<'_, usize, String>(0).convert(BacktracePart::new(line!(), file!()))?)),
-                    obfuscation_value: ApplicationUserAccessRefreshToken_ObfuscationValue(row_registry[0].try_get::<'_, usize, String>(1).convert(BacktracePart::new(line!(), file!()))?),
-                    expires_at: ApplicationUserAccessRefreshToken_ExpiresAt(row_registry[0].try_get::<'_, usize, i64>(2).convert(BacktracePart::new(line!(), file!()))?),
-                    updated_at: ApplicationUserAccessRefreshToken_UpdatedAt(row_registry[0].try_get::<'_, usize, i64>(3).convert(BacktracePart::new(line!(), file!()))?),
+                    application_user_access_token_id: Cow::Owned(ApplicationUserAccessToken_Id(row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?)),
+                    obfuscation_value: ApplicationUserAccessRefreshToken_ObfuscationValue(row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?),
+                    expires_at: ApplicationUserAccessRefreshToken_ExpiresAt(row_registry[0].try_get::<'_, usize, i64>(2).convert(Backtrace::new(line!(), file!()))?),
+                    updated_at: ApplicationUserAccessRefreshToken_UpdatedAt(row_registry[0].try_get::<'_, usize, i64>(3).convert(Backtrace::new(line!(), file!()))?),
                 },
             ),
         );
@@ -299,7 +299,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken1> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert(BacktracePart::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         database_2_connection
             .query(
@@ -307,7 +307,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken1> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert(BacktracePart::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(());
     }

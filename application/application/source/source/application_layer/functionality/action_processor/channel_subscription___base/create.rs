@@ -9,7 +9,7 @@ use crate::domain_layer::functionality::service::extractor::application_user_acc
 use crate::domain_layer::functionality::service::extractor::Extractor;
 use crate::domain_layer::functionality::service::form_resolver::FormResolver;
 use crate::domain_layer::functionality::service::validator::Validator;
-use crate::infrastructure_layer::data::auditor::BacktracePart;
+use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
@@ -48,7 +48,7 @@ impl ActionProcessor<ChannelSubscription__Base___Create> {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let incoming_ = incoming.convert_value_should_exist(BacktracePart::new(line!(), file!()))?;
+        let incoming_ = incoming.convert_value_should_exist(Backtrace::new(line!(), file!()))?;
 
         let application_user_access_token = match Extractor::<ApplicationUserAccessToken<'_>>::extract(&incoming_.application_user_access_token_encrypted).await? {
             InvalidArgumentResult::Ok {
@@ -95,7 +95,7 @@ impl ActionProcessor<ChannelSubscription__Base___Create> {
             );
         }
 
-        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert(BacktracePart::new(line!(), file!()))?;
+        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
 
         let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
 

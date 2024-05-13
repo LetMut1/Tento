@@ -9,7 +9,7 @@ use crate::domain_layer::data::entity::application_user_device::ApplicationUserD
 use crate::domain_layer::functionality::service::email_sender::EmailSender;
 use crate::domain_layer::functionality::service::generator::Generator;
 use crate::domain_layer::functionality::service::validator::Validator;
-use crate::infrastructure_layer::data::auditor::BacktracePart;
+use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
@@ -51,7 +51,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let incoming_ = incoming.convert_value_should_exist(BacktracePart::new(line!(), file!()))?;
+        let incoming_ = incoming.convert_value_should_exist(Backtrace::new(line!(), file!()))?;
 
         if !Validator::<ApplicationUserDevice_Id>::is_valid(&incoming_.application_user_device_id) {
             return Ok(
@@ -69,7 +69,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
             );
         }
 
-        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert(BacktracePart::new(line!(), file!()))?;
+        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
 
         let application_user = match PostgresqlRepository::<ApplicationUser5>::find_1(
             &*database_1_postgresql_pooled_connection,
@@ -94,7 +94,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
             application_user_device_id: &incoming_.application_user_device_id,
         };
 
-        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert(BacktracePart::new(line!(), file!()))?;
+        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 

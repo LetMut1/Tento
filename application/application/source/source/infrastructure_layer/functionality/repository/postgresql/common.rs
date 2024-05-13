@@ -9,7 +9,7 @@ use crate::domain_layer::data::entity::channel::Channel_Id;
 use crate::domain_layer::data::entity::channel::Channel_LinkedName;
 use crate::domain_layer::data::entity::channel::Channel_Name;
 use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier;
-use crate::infrastructure_layer::data::auditor::BacktracePart;
+use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use super::channel::Channel1;
@@ -104,7 +104,7 @@ impl PostgresqlRepository<Common1> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         let row_registry = database_1_connection
             .query(
@@ -112,7 +112,7 @@ impl PostgresqlRepository<Common1> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-.convert(BacktracePart::new(line!(), file!()))?;
+.convert(Backtrace::new(line!(), file!()))?;
 
         let mut common_registry: Vec<Common1> = vec![];
 
@@ -121,27 +121,27 @@ impl PostgresqlRepository<Common1> {
         }
 
         '_a: for row in row_registry.iter() {
-            let channel_cover_image_path = match row.try_get::<'_, usize, Option<String>>(4).convert(BacktracePart::new(line!(), file!()))? {
+            let channel_cover_image_path = match row.try_get::<'_, usize, Option<String>>(4).convert(Backtrace::new(line!(), file!()))? {
                 Some(channel_cover_image_path_) => Some(Channel_CoverImagePath(channel_cover_image_path_)),
                 None => None,
             };
 
-            let channel_background_image_path = match row.try_get::<'_, usize, Option<String>>(5).convert(BacktracePart::new(line!(), file!()))? {
+            let channel_background_image_path = match row.try_get::<'_, usize, Option<String>>(5).convert(Backtrace::new(line!(), file!()))? {
                 Some(channel_background_image_path_) => Some(Channel_BackgroundImagePath(channel_background_image_path_)),
                 None => None,
             };
 
             let channel = Channel1 {
-                channel_id: Channel_Id(row.try_get::<'_, usize, i64>(0).convert(BacktracePart::new(line!(), file!()))?),
-                channel_name: Channel_Name(row.try_get::<'_, usize, String>(1).convert(BacktracePart::new(line!(), file!()))?),
-                channel_linked_name: Channel_LinkedName(row.try_get::<'_, usize, String>(2).convert(BacktracePart::new(line!(), file!()))?),
-                channel_access_modifier: Channel_AccessModifier(row.try_get::<'_, usize, i16>(3).convert(BacktracePart::new(line!(), file!()))?),
+                channel_id: Channel_Id(row.try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?),
+                channel_name: Channel_Name(row.try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?),
+                channel_linked_name: Channel_LinkedName(row.try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?),
+                channel_access_modifier: Channel_AccessModifier(row.try_get::<'_, usize, i16>(3).convert(Backtrace::new(line!(), file!()))?),
                 channel_visability_modifier: by_11.channel_visability_modifier,
                 channel_cover_image_path,
                 channel_background_image_path,
             };
 
-            let is_application_user_subscribed = match row.try_get::<'_, usize, Option<i64>>(6).convert(BacktracePart::new(line!(), file!()))? {
+            let is_application_user_subscribed = match row.try_get::<'_, usize, Option<i64>>(6).convert(Backtrace::new(line!(), file!()))? {
                 Some(_) => true,
                 None => false,
             };
@@ -235,7 +235,7 @@ impl PostgresqlRepository<Common1> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         let row_registry = database_1_connection
             .query(
@@ -243,7 +243,7 @@ impl PostgresqlRepository<Common1> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-.convert(BacktracePart::new(line!(), file!()))?;
+.convert(Backtrace::new(line!(), file!()))?;
 
         let mut common_registry: Vec<Common1> = vec![];
 
@@ -252,22 +252,22 @@ impl PostgresqlRepository<Common1> {
         }
 
         '_a: for row in row_registry.iter() {
-            let channel_cover_image_path = match row.try_get::<'_, usize, Option<String>>(5).convert(BacktracePart::new(line!(), file!()))? {
+            let channel_cover_image_path = match row.try_get::<'_, usize, Option<String>>(5).convert(Backtrace::new(line!(), file!()))? {
                 Some(channel_cover_image_path_) => Some(Channel_CoverImagePath(channel_cover_image_path_)),
                 None => None,
             };
 
-            let channel_background_image_path = match row.try_get::<'_, usize, Option<String>>(6).convert(BacktracePart::new(line!(), file!()))? {
+            let channel_background_image_path = match row.try_get::<'_, usize, Option<String>>(6).convert(Backtrace::new(line!(), file!()))? {
                 Some(channel_background_image_path_) => Some(Channel_BackgroundImagePath(channel_background_image_path_)),
                 None => None,
             };
 
             let channel = Channel1 {
-                channel_id: Channel_Id(row.try_get::<'_, usize, i64>(0).convert(BacktracePart::new(line!(), file!()))?),
-                channel_name: Channel_Name(row.try_get::<'_, usize, String>(1).convert(BacktracePart::new(line!(), file!()))?),
-                channel_linked_name: Channel_LinkedName(row.try_get::<'_, usize, String>(2).convert(BacktracePart::new(line!(), file!()))?),
-                channel_access_modifier: Channel_AccessModifier(row.try_get::<'_, usize, i16>(3).convert(BacktracePart::new(line!(), file!()))?),
-                channel_visability_modifier: Channel_VisabilityModifier(row.try_get::<'_, usize, i16>(4).convert(BacktracePart::new(line!(), file!()))?),
+                channel_id: Channel_Id(row.try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?),
+                channel_name: Channel_Name(row.try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?),
+                channel_linked_name: Channel_LinkedName(row.try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?),
+                channel_access_modifier: Channel_AccessModifier(row.try_get::<'_, usize, i16>(3).convert(Backtrace::new(line!(), file!()))?),
+                channel_visability_modifier: Channel_VisabilityModifier(row.try_get::<'_, usize, i16>(4).convert(Backtrace::new(line!(), file!()))?),
                 channel_cover_image_path,
                 channel_background_image_path,
             };
@@ -348,7 +348,7 @@ impl PostgresqlRepository<Common1> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         let row_registry = database_1_connection
             .query(
@@ -356,7 +356,7 @@ impl PostgresqlRepository<Common1> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-.convert(BacktracePart::new(line!(), file!()))?;
+.convert(Backtrace::new(line!(), file!()))?;
 
         let mut common_registry: Vec<Common1> = vec![];
 
@@ -365,22 +365,22 @@ impl PostgresqlRepository<Common1> {
         }
 
         '_a: for row in row_registry.iter() {
-            let channel_cover_image_path = match row.try_get::<'_, usize, Option<String>>(5).convert(BacktracePart::new(line!(), file!()))? {
+            let channel_cover_image_path = match row.try_get::<'_, usize, Option<String>>(5).convert(Backtrace::new(line!(), file!()))? {
                 Some(channel_cover_image_path_) => Some(Channel_CoverImagePath(channel_cover_image_path_)),
                 None => None,
             };
 
-            let channel_background_image_path = match row.try_get::<'_, usize, Option<String>>(6).convert(BacktracePart::new(line!(), file!()))? {
+            let channel_background_image_path = match row.try_get::<'_, usize, Option<String>>(6).convert(Backtrace::new(line!(), file!()))? {
                 Some(channel_background_image_path_) => Some(Channel_BackgroundImagePath(channel_background_image_path_)),
                 None => None,
             };
 
             let channel = Channel1 {
-                channel_id: Channel_Id(row.try_get::<'_, usize, i64>(0).convert(BacktracePart::new(line!(), file!()))?),
-                channel_name: Channel_Name(row.try_get::<'_, usize, String>(1).convert(BacktracePart::new(line!(), file!()))?),
-                channel_linked_name: Channel_LinkedName(row.try_get::<'_, usize, String>(2).convert(BacktracePart::new(line!(), file!()))?),
-                channel_access_modifier: Channel_AccessModifier(row.try_get::<'_, usize, i16>(3).convert(BacktracePart::new(line!(), file!()))?),
-                channel_visability_modifier: Channel_VisabilityModifier(row.try_get::<'_, usize, i16>(4).convert(BacktracePart::new(line!(), file!()))?),
+                channel_id: Channel_Id(row.try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?),
+                channel_name: Channel_Name(row.try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?),
+                channel_linked_name: Channel_LinkedName(row.try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?),
+                channel_access_modifier: Channel_AccessModifier(row.try_get::<'_, usize, i16>(3).convert(Backtrace::new(line!(), file!()))?),
+                channel_visability_modifier: Channel_VisabilityModifier(row.try_get::<'_, usize, i16>(4).convert(Backtrace::new(line!(), file!()))?),
                 channel_cover_image_path,
                 channel_background_image_path,
             };

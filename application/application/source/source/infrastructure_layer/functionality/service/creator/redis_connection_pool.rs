@@ -1,6 +1,6 @@
 use super::Creator;
 use crate::infrastructure_layer::data::environment_configuration::Environment;
-use crate::infrastructure_layer::data::auditor::BacktracePart;
+use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use bb8::Pool;
@@ -21,12 +21,12 @@ impl Creator<RedisConnectonPool> {
                 todo!();
             }
             Environment::Development | Environment::LocalDevelopment => {
-                let redis_connection_manager = RedisConnectionManager::new(connection_info.clone()).convert(BacktracePart::new(line!(), file!()))?;
+                let redis_connection_manager = RedisConnectionManager::new(connection_info.clone()).convert(Backtrace::new(line!(), file!()))?;
 
                 Pool::builder() // TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ
                     .build(redis_connection_manager)
                     .await
-                    .convert(BacktracePart::new(line!(), file!()))?
+                    .convert(Backtrace::new(line!(), file!()))?
             }
         };
 

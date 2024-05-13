@@ -1,7 +1,7 @@
 use super::insert::Insert4;
 use super::PostgresqlRepository;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice;
-use crate::infrastructure_layer::data::auditor::BacktracePart;
+use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
@@ -44,7 +44,7 @@ impl PostgresqlRepository<ApplicationUserDevice> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert(BacktracePart::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         database_1_connection
             .query(
@@ -52,7 +52,7 @@ impl PostgresqlRepository<ApplicationUserDevice> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert(BacktracePart::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(
             ApplicationUserDevice {

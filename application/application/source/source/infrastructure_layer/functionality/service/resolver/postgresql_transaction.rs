@@ -1,5 +1,5 @@
 use super::Resolver;
-use crate::infrastructure_layer::data::auditor::BacktracePart;
+use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use tokio_postgres::Client as Connection;
@@ -45,7 +45,7 @@ impl Resolver<PostgresqlTransaction> {
                 &[],
             )
             .await
-            .convert(BacktracePart::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(Self::new());
     }
@@ -62,7 +62,7 @@ impl Resolver<PostgresqlTransaction> {
                 &[],
             )
             .await
-            .convert(BacktracePart::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(());
     }
@@ -79,7 +79,7 @@ impl Resolver<PostgresqlTransaction> {
                 &[],
             )
             .await
-            .convert(BacktracePart::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(());
     }

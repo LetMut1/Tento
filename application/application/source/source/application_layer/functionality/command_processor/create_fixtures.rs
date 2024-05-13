@@ -23,7 +23,7 @@ use crate::domain_layer::functionality::service::form_resolver::FormResolver;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::environment_configuration::Environment;
 use crate::infrastructure_layer::data::environment_configuration::ENVIRONMENT_CONFIGURATION;
-use crate::infrastructure_layer::data::auditor::BacktracePart;
+use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
@@ -61,7 +61,7 @@ impl CommandProcessor<CreateFixtures> {
                     Error::Logic {
                         message: "Should process only not in production environment.",
                     },
-                    BacktracePart::new(
+                    Backtrace::new(
                         line!(),
                         file!(),
                     ),
@@ -69,13 +69,13 @@ impl CommandProcessor<CreateFixtures> {
             );
         }
 
-        Builder::new_current_thread().enable_all().build().convert(BacktracePart::new(line!(), file!()))?.block_on(Self::create_fixtures())?;
+        Builder::new_current_thread().enable_all().build().convert(Backtrace::new(line!(), file!()))?.block_on(Self::create_fixtures())?;
 
         return Ok(());
     }
 
     async fn create_fixtures<'a>() -> Result<(), Auditor<Error>> {
-        let database_1_postgresql_configuration = PostgresqlConfiguration::from_str(ENVIRONMENT_CONFIGURATION.resource.postgresql.database_1_url.0).convert(BacktracePart::new(line!(), file!()))?;
+        let database_1_postgresql_configuration = PostgresqlConfiguration::from_str(ENVIRONMENT_CONFIGURATION.resource.postgresql.database_1_url.0).convert(Backtrace::new(line!(), file!()))?;
 
         let database_1_postgresql_connection_pool = Creator::<PostgresqlConnectionPoolNoTls>::create(
             &ENVIRONMENT_CONFIGURATION.environment,
@@ -87,7 +87,7 @@ impl CommandProcessor<CreateFixtures> {
 
         let application_user_password_hash = Encoder::<ApplicationUser_Password>::encode(&application_user_password)?;
 
-        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert(BacktracePart::new(line!(), file!()))?;
+        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
 
         let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
 
@@ -112,7 +112,7 @@ impl CommandProcessor<CreateFixtures> {
                         Error::Logic {
                             message: "Application_user nickname should be valid.",
                         },
-                        BacktracePart::new(
+                        Backtrace::new(
                             line!(),
                             file!(),
                         ),
@@ -133,7 +133,7 @@ impl CommandProcessor<CreateFixtures> {
                         Error::Logic {
                             message: "Application_user email should be valid.",
                         },
-                        BacktracePart::new(
+                        Backtrace::new(
                             line!(),
                             file!(),
                         ),
@@ -151,7 +151,7 @@ impl CommandProcessor<CreateFixtures> {
                         Error::Logic {
                             message: "Application_user_password should be valid.",
                         },
-                        BacktracePart::new(
+                        Backtrace::new(
                             line!(),
                             file!(),
                         ),
@@ -197,7 +197,7 @@ impl CommandProcessor<CreateFixtures> {
                         Error::Logic {
                             message: "Application_user_device id should be valid.",
                         },
-                        BacktracePart::new(
+                        Backtrace::new(
                             line!(),
                             file!(),
                         ),
@@ -235,7 +235,7 @@ impl CommandProcessor<CreateFixtures> {
                             Error::Logic {
                                 message: "Channel name should be valid.",
                             },
-                            BacktracePart::new(
+                            Backtrace::new(
                                 line!(),
                                 file!(),
                             ),
@@ -251,7 +251,7 @@ impl CommandProcessor<CreateFixtures> {
                             Error::Logic {
                                 message: "Channel linked name should be valid.",
                             },
-                            BacktracePart::new(
+                            Backtrace::new(
                                 line!(),
                                 file!(),
                             ),
@@ -280,7 +280,7 @@ impl CommandProcessor<CreateFixtures> {
                                 Error::Logic {
                                     message: "Channel description should be valid.",
                                 },
-                                BacktracePart::new(
+                                Backtrace::new(
                                     line!(),
                                     file!(),
                                 ),
@@ -305,7 +305,7 @@ impl CommandProcessor<CreateFixtures> {
                             Error::Logic {
                                 message: "Channel orientation email should be valid.",
                             },
-                            BacktracePart::new(
+                            Backtrace::new(
                                 line!(),
                                 file!(),
                             ),

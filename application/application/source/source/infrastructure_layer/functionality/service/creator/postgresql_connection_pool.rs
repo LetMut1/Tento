@@ -1,6 +1,6 @@
 use super::Creator;
 use crate::infrastructure_layer::data::environment_configuration::Environment;
-use crate::infrastructure_layer::data::auditor::BacktracePart;
+use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
@@ -24,7 +24,7 @@ impl Creator<PostgresqlConnectionPoolNoTls> {
                         Error::Logic {
                             message: "NoTls should be only not in production environment.",
                         },
-                        BacktracePart::new(
+                        Backtrace::new(
                             line!(),
                             file!(),
                         ),
@@ -40,7 +40,7 @@ impl Creator<PostgresqlConnectionPoolNoTls> {
                         ),
                     )
                     .await
-                    .convert(BacktracePart::new(line!(), file!()))?
+                    .convert(Backtrace::new(line!(), file!()))?
             }
         };
 

@@ -17,7 +17,7 @@ use crate::domain_layer::data::entity::channel::Channel_Orientation;
 use crate::domain_layer::data::entity::channel::Channel_SubscribersQuantity;
 use crate::domain_layer::data::entity::channel::Channel_ViewingQuantity;
 use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier;
-use crate::infrastructure_layer::data::auditor::BacktracePart;
+use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
@@ -147,7 +147,7 @@ impl PostgresqlRepository<Channel<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         let row_registry = database_1_connection
             .query(
@@ -155,11 +155,11 @@ impl PostgresqlRepository<Channel<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-.convert(BacktracePart::new(line!(), file!()))?;
+.convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(
             Channel {
-                id: Channel_Id(row_registry[0].try_get::<'_, usize, i64>(0).convert(BacktracePart::new(line!(), file!()))?),
+                id: Channel_Id(row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?),
                 owner: insert_7.channel_owner,
                 name: Cow::Owned(insert_7.channel_name),
                 linked_name: insert_7.channel_linked_name,
@@ -172,7 +172,7 @@ impl PostgresqlRepository<Channel<'_>> {
                 subscribers_quantity: insert_7.channel_subscribers_quantity,
                 marks_quantity: insert_7.channel_marks_quantity,
                 viewing_quantity: insert_7.channel_viewing_quantity,
-                created_at: Channel_CreatedAt(row_registry[0].try_get::<'_, usize, String>(1).convert(BacktracePart::new(line!(), file!()))?),
+                created_at: Channel_CreatedAt(row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?),
             },
         );
     }
@@ -212,7 +212,7 @@ impl PostgresqlRepository<Channel<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         let row_registry = database_1_connection
             .query(
@@ -220,24 +220,24 @@ impl PostgresqlRepository<Channel<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-.convert(BacktracePart::new(line!(), file!()))?;
+.convert(Backtrace::new(line!(), file!()))?;
 
         if row_registry.is_empty() {
             return Ok(None);
         }
 
 
-        let channel_description = match row_registry[0].try_get::<'_, usize, Option<String>>(3).convert(BacktracePart::new(line!(), file!()))? {
+        let channel_description = match row_registry[0].try_get::<'_, usize, Option<String>>(3).convert(Backtrace::new(line!(), file!()))? {
             Some(channel_decription_) => Some(Channel_Description(channel_decription_)),
             None => None,
         };
 
-        let channel_cover_image_path = match row_registry[0].try_get::<'_, usize, Option<String>>(7).convert(BacktracePart::new(line!(), file!()))? {
+        let channel_cover_image_path = match row_registry[0].try_get::<'_, usize, Option<String>>(7).convert(Backtrace::new(line!(), file!()))? {
             Some(channel_cover_image_path_) => Some(Channel_CoverImagePath(channel_cover_image_path_)),
             None => None,
         };
 
-        let channel_background_image_path = match row_registry[0].try_get::<'_, usize, Option<String>>(8).convert(BacktracePart::new(line!(), file!()))? {
+        let channel_background_image_path = match row_registry[0].try_get::<'_, usize, Option<String>>(8).convert(Backtrace::new(line!(), file!()))? {
             Some(channel_background_image_path_) => Some(Channel_BackgroundImagePath(channel_background_image_path_)),
             None => None,
         };
@@ -246,19 +246,19 @@ impl PostgresqlRepository<Channel<'_>> {
             Some(
                 Channel {
                     id: by_6.channel_id,
-                    owner: ApplicationUser_Id(row_registry[0].try_get::<'_, usize, i64>(0).convert(BacktracePart::new(line!(), file!()))?),
-                    name: Cow::Owned(Channel_Name(row_registry[0].try_get::<'_, usize, String>(1).convert(BacktracePart::new(line!(), file!()))?)),
-                    linked_name: Channel_LinkedName(row_registry[0].try_get::<'_, usize, String>(2).convert(BacktracePart::new(line!(), file!()))?),
+                    owner: ApplicationUser_Id(row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?),
+                    name: Cow::Owned(Channel_Name(row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?)),
+                    linked_name: Channel_LinkedName(row_registry[0].try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?),
                     description: channel_description,
-                    access_modifier: Channel_AccessModifier(row_registry[0].try_get::<'_, usize, i16>(4).convert(BacktracePart::new(line!(), file!()))?),
-                    visability_modifier: Channel_VisabilityModifier(row_registry[0].try_get::<'_, usize, i16>(5).convert(BacktracePart::new(line!(), file!()))?),
-                    orientation: Channel_Orientation(row_registry[0].try_get::<'_, usize, Vec<i16>>(6).convert(BacktracePart::new(line!(), file!()))?),
+                    access_modifier: Channel_AccessModifier(row_registry[0].try_get::<'_, usize, i16>(4).convert(Backtrace::new(line!(), file!()))?),
+                    visability_modifier: Channel_VisabilityModifier(row_registry[0].try_get::<'_, usize, i16>(5).convert(Backtrace::new(line!(), file!()))?),
+                    orientation: Channel_Orientation(row_registry[0].try_get::<'_, usize, Vec<i16>>(6).convert(Backtrace::new(line!(), file!()))?),
                     cover_image_path: channel_cover_image_path,
                     background_image_path: channel_background_image_path,
-                    subscribers_quantity: Channel_SubscribersQuantity(row_registry[0].try_get::<'_, usize, i64>(9).convert(BacktracePart::new(line!(), file!()))?),
-                    marks_quantity: Channel_MarksQuantity(row_registry[0].try_get::<'_, usize, i64>(10).convert(BacktracePart::new(line!(), file!()))?),
-                    viewing_quantity: Channel_ViewingQuantity(row_registry[0].try_get::<'_, usize, i64>(11).convert(BacktracePart::new(line!(), file!()))?),
-                    created_at: Channel_CreatedAt(row_registry[0].try_get::<'_, usize, String>(12).convert(BacktracePart::new(line!(), file!()))?),
+                    subscribers_quantity: Channel_SubscribersQuantity(row_registry[0].try_get::<'_, usize, i64>(9).convert(Backtrace::new(line!(), file!()))?),
+                    marks_quantity: Channel_MarksQuantity(row_registry[0].try_get::<'_, usize, i64>(10).convert(Backtrace::new(line!(), file!()))?),
+                    viewing_quantity: Channel_ViewingQuantity(row_registry[0].try_get::<'_, usize, i64>(11).convert(Backtrace::new(line!(), file!()))?),
+                    created_at: Channel_CreatedAt(row_registry[0].try_get::<'_, usize, String>(12).convert(Backtrace::new(line!(), file!()))?),
                 },
             ),
         );
@@ -301,7 +301,7 @@ impl PostgresqlRepository<Channel<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        .convert(BacktracePart::new(line!(), file!()))?;
+        .convert(Backtrace::new(line!(), file!()))?;
 
         let row_registry = database_1_connection
             .query(
@@ -309,23 +309,23 @@ impl PostgresqlRepository<Channel<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-.convert(BacktracePart::new(line!(), file!()))?;
+.convert(Backtrace::new(line!(), file!()))?;
 
         if row_registry.is_empty() {
             return Ok(None);
         }
 
-        let channel_description = match row_registry[0].try_get::<'_, usize, Option<String>>(3).convert(BacktracePart::new(line!(), file!()))? {
+        let channel_description = match row_registry[0].try_get::<'_, usize, Option<String>>(3).convert(Backtrace::new(line!(), file!()))? {
             Some(channel_description_) => Some(Channel_Description(channel_description_)),
             None => None,
         };
 
-        let channel_cover_image_path = match row_registry[0].try_get::<'_, usize, Option<String>>(7).convert(BacktracePart::new(line!(), file!()))? {
+        let channel_cover_image_path = match row_registry[0].try_get::<'_, usize, Option<String>>(7).convert(Backtrace::new(line!(), file!()))? {
             Some(channel_cover_image_path_) => Some(Channel_CoverImagePath(channel_cover_image_path_)),
             None => None,
         };
 
-        let channel_background_image_path = match row_registry[0].try_get::<'_, usize, Option<String>>(8).convert(BacktracePart::new(line!(), file!()))? {
+        let channel_background_image_path = match row_registry[0].try_get::<'_, usize, Option<String>>(8).convert(Backtrace::new(line!(), file!()))? {
             Some(channel_background_image_path_) => Some(Channel_BackgroundImagePath(channel_background_image_path_)),
             None => None,
         };
@@ -333,20 +333,20 @@ impl PostgresqlRepository<Channel<'_>> {
         return Ok(
             Some(
                 Channel {
-                    id: Channel_Id(row_registry[0].try_get::<'_, usize, i64>(0).convert(BacktracePart::new(line!(), file!()))?),
-                    owner: ApplicationUser_Id(row_registry[0].try_get::<'_, usize, i64>(1).convert(BacktracePart::new(line!(), file!()))?),
+                    id: Channel_Id(row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?),
+                    owner: ApplicationUser_Id(row_registry[0].try_get::<'_, usize, i64>(1).convert(Backtrace::new(line!(), file!()))?),
                     name: Cow::Borrowed(by_7.channel_name),
-                    linked_name: Channel_LinkedName(row_registry[0].try_get::<'_, usize, String>(2).convert(BacktracePart::new(line!(), file!()))?),
+                    linked_name: Channel_LinkedName(row_registry[0].try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?),
                     description: channel_description,
-                    access_modifier: Channel_AccessModifier(row_registry[0].try_get::<'_, usize, i16>(4).convert(BacktracePart::new(line!(), file!()))?),
-                    visability_modifier: Channel_VisabilityModifier(row_registry[0].try_get::<'_, usize, i16>(5).convert(BacktracePart::new(line!(), file!()))?),
-                    orientation: Channel_Orientation(row_registry[0].try_get::<'_, usize, Vec<i16>>(6).convert(BacktracePart::new(line!(), file!()))?),
+                    access_modifier: Channel_AccessModifier(row_registry[0].try_get::<'_, usize, i16>(4).convert(Backtrace::new(line!(), file!()))?),
+                    visability_modifier: Channel_VisabilityModifier(row_registry[0].try_get::<'_, usize, i16>(5).convert(Backtrace::new(line!(), file!()))?),
+                    orientation: Channel_Orientation(row_registry[0].try_get::<'_, usize, Vec<i16>>(6).convert(Backtrace::new(line!(), file!()))?),
                     cover_image_path: channel_cover_image_path,
                     background_image_path: channel_background_image_path,
-                    subscribers_quantity: Channel_SubscribersQuantity(row_registry[0].try_get::<'_, usize, i64>(9).convert(BacktracePart::new(line!(), file!()))?),
-                    marks_quantity: Channel_MarksQuantity(row_registry[0].try_get::<'_, usize, i64>(10).convert(BacktracePart::new(line!(), file!()))?),
-                    viewing_quantity: Channel_ViewingQuantity(row_registry[0].try_get::<'_, usize, i64>(11).convert(BacktracePart::new(line!(), file!()))?),
-                    created_at: Channel_CreatedAt(row_registry[0].try_get::<'_, usize, String>(12).convert(BacktracePart::new(line!(), file!()))?),
+                    subscribers_quantity: Channel_SubscribersQuantity(row_registry[0].try_get::<'_, usize, i64>(9).convert(Backtrace::new(line!(), file!()))?),
+                    marks_quantity: Channel_MarksQuantity(row_registry[0].try_get::<'_, usize, i64>(10).convert(Backtrace::new(line!(), file!()))?),
+                    viewing_quantity: Channel_ViewingQuantity(row_registry[0].try_get::<'_, usize, i64>(11).convert(Backtrace::new(line!(), file!()))?),
+                    created_at: Channel_CreatedAt(row_registry[0].try_get::<'_, usize, String>(12).convert(Backtrace::new(line!(), file!()))?),
                 },
             ),
         );
