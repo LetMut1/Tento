@@ -109,13 +109,11 @@ dependencies = [
  "bb8",
  "bb8-postgres",
  "bb8-redis",
- "build_script_constant",
  "bytes",
  "cargo-emit",
  "chrono",
  "const_format",
  "entity",
- "environment_configuration",
  "error",
  "formatter",
  "hmac",
@@ -313,10 +311,6 @@ name = "bufstream"
 version = "0.1.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "40e38929add23cdf8a366df9b0e088953150724bcbe5fc330b0d8eb3b328eec8"
-
-[[package]]
-name = "build_script_constant"
-version = "1.0.0"
 
 [[package]]
 name = "bumpalo"
@@ -623,17 +617,6 @@ name = "entity"
 version = "1.0.0"
 dependencies = [
  "serde",
-]
-
-[[package]]
-name = "environment_configuration"
-version = "1.0.0"
-dependencies = [
- "auditor",
- "error",
- "serde",
- "toml",
- "void",
 ]
 
 [[package]]

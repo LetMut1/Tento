@@ -1,7 +1,5 @@
 use crate::infrastructure_layer::data::control_type::Request;
 use crate::infrastructure_layer::data::control_type::Response;
-use crate::infrastructure_layer::data::environment_configuration::Environment;
-use crate::infrastructure_layer::data::environment_configuration::ENVIRONMENT_CONFIGURATION;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
@@ -66,24 +64,72 @@ use tracing_appender::rolling::RollingFileAppender;
 use tracing_appender::non_blocking::NonBlockingBuilder;
 use tracing_subscriber::FmtSubscriber;
 use tracing::Level;
+use crate::infrastructure_layer::data::auditor::OptionConverter;
+use std::sync::OnceLock;
 use tracing_appender::non_blocking::WorkerGuard;
+use crate::infrastructure_layer::data::environment_configuration::Environment as EnvironmentXXX; // TODO TODO TODO
+use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
+use crate::infrastructure_layer::functionality::service::loader::Loader;
 
 pub use crate::infrastructure_layer::data::control_type::RunServer;
 
+static ENVIRONMENT_CONFIGURATION: OnceLock<EnvironmentConfiguration> = OnceLock::new();
+
 impl CommandProcessor<RunServer> {
     pub fn process() -> Result<(), Auditor<Error>> {
-        let _worker_guard = Self::configure_logger()?;
+        let environment_configuration = Self:: initialize_environment()?;
 
-        Self::run_runtime()?;
+        let _worker_guard = Self::initialize_logger(environment_configuration)?;
+
+        Self::run_runtime(environment_configuration)?;
 
         return Ok(());
     }
 
-    fn configure_logger() -> Result<WorkerGuard, Auditor<Error>> {
+    fn initialize_environment() -> Result<&'static EnvironmentConfiguration, Auditor<Error>> {
+        let environment_configuration_file_path = format!(
+            "{}/environment_configuration",
+            std::env::var("CARGO_MANIFEST_DIR").convert(Backtrace::new(line!(), file!()))?.as_str(),
+        );
+
+        let environment_configuration = Loader::load_from_file(environment_configuration_file_path.as_str())?;
+
+        match ENVIRONMENT_CONFIGURATION.get() {
+            Some(_) => {
+                return Err(
+                    Auditor::<Error>::new(
+                        Error::new_logic_value_already_exist(),
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                );
+            }
+            None => {
+                if let Err(_) = ENVIRONMENT_CONFIGURATION.set(environment_configuration) {
+                    return Err(
+                        Auditor::<Error>::new(
+                            Error::new_logic_value_already_exist(),
+                            Backtrace::new(
+                                line!(),
+                                file!(),
+                            ),
+                        ),
+                    );
+                }
+            }
+        }
+
+        return Ok(ENVIRONMENT_CONFIGURATION.get().convert_value_does_not_exist(Backtrace::new(line!(),file!()))?);
+    }
+
+    fn initialize_logger(environment_configuration: &'static EnvironmentConfiguration) -> Result<WorkerGuard, Auditor<Error>> {
+
         let rolling_file_appender = RollingFileAppender::new(
             Rotation::DAILY,
-            ENVIRONMENT_CONFIGURATION.logging.directory_path.0,
-            ENVIRONMENT_CONFIGURATION.logging.file_name_prefix.0,
+            environment_configuration.logging.directory_path,
+            environment_configuration.logging.file_name_prefix,
         );
 
         let (non_blocking, worker_guard) = NonBlockingBuilder::default().finish(rolling_file_appender);
@@ -110,10 +156,10 @@ impl CommandProcessor<RunServer> {
         return Ok(worker_guard);
     }
 
-    fn run_runtime() -> Result<(), Auditor<Error>> {
-        if ENVIRONMENT_CONFIGURATION.tokio_runtime.maximum_blocking_threads_quantity == 0
-            || ENVIRONMENT_CONFIGURATION.tokio_runtime.worker_threads_quantity == 0
-            || ENVIRONMENT_CONFIGURATION.tokio_runtime.worker_thread_stack_size < (1024 * 1024)
+    fn run_runtime(environment_configuration: &'static EnvironmentConfiguration) -> Result<(), Auditor<Error>> {
+        if environment_configuration.tokio_runtime.maximum_blocking_threads_quantity == 0
+            || environment_configuration.tokio_runtime.worker_threads_quantity == 0
+            || environment_configuration.tokio_runtime.worker_thread_stack_size < (1024 * 1024)
         {
             return Err(
                 Auditor::<Error>::new(
@@ -129,18 +175,18 @@ impl CommandProcessor<RunServer> {
         }
 
         Builder::new_multi_thread()
-            .max_blocking_threads(ENVIRONMENT_CONFIGURATION.tokio_runtime.maximum_blocking_threads_quantity)
-            .worker_threads(ENVIRONMENT_CONFIGURATION.tokio_runtime.worker_threads_quantity)
-            .thread_stack_size(ENVIRONMENT_CONFIGURATION.tokio_runtime.worker_thread_stack_size)
+            .max_blocking_threads(environment_configuration.tokio_runtime.maximum_blocking_threads_quantity)
+            .worker_threads(environment_configuration.tokio_runtime.worker_threads_quantity)
+            .thread_stack_size(environment_configuration.tokio_runtime.worker_thread_stack_size)
             .enable_all()
             .build()
             .convert(Backtrace::new(line!(), file!()))?
-            .block_on(Self::run_server())?;
+            .block_on(Self::run_server(environment_configuration))?;
 
         return Ok(());
     }
 
-    async fn run_server() -> Result<(), Auditor<Error>> {
+    async fn run_server(environment_configuration: &'static EnvironmentConfiguration) -> Result<(), Auditor<Error>> {
         #[derive(Clone)]
         enum PostgresqlConnectionPoolAggregator {
             LocalDevelopment {
@@ -151,7 +197,8 @@ impl CommandProcessor<RunServer> {
 
         let router = Self::create_router()?;
 
-        let mut application_http_socket_address_registry = ENVIRONMENT_CONFIGURATION.application_server.tcp.socket_address.0.to_socket_addrs().convert(Backtrace::new(line!(), file!()))?;
+        // TODO TODO в Env
+        let mut application_http_socket_address_registry = environment_configuration.application_server.tcp.socket_address.to_socket_addrs().convert(Backtrace::new(line!(), file!()))?;
 
         let application_http_socket_address = match application_http_socket_address_registry.next() {
             Some(application_http_socket_address_) => application_http_socket_address_,
@@ -173,45 +220,45 @@ impl CommandProcessor<RunServer> {
         let mut server_builder = Server::try_bind(&application_http_socket_address).convert(Backtrace::new(line!(), file!()))?;
 
         server_builder = server_builder
-            .tcp_nodelay(ENVIRONMENT_CONFIGURATION.application_server.tcp.nodelay)
-            .tcp_sleep_on_accept_errors(ENVIRONMENT_CONFIGURATION.application_server.tcp.sleep_on_accept_errors)
-            .tcp_keepalive_retries(ENVIRONMENT_CONFIGURATION.application_server.tcp.keepalive.retries_quantity);
+            .tcp_nodelay(environment_configuration.application_server.tcp.nodelay)
+            .tcp_sleep_on_accept_errors(environment_configuration.application_server.tcp.sleep_on_accept_errors)
+            .tcp_keepalive_retries(environment_configuration.application_server.tcp.keepalive.retries_quantity);
 
-        server_builder = match ENVIRONMENT_CONFIGURATION.application_server.tcp.keepalive.duration {
+        server_builder = match environment_configuration.application_server.tcp.keepalive.duration {
             Some(duration) => server_builder.tcp_keepalive(Some(Duration::from_secs(duration))),
             None => server_builder.tcp_keepalive(None),
         };
 
-        server_builder = match ENVIRONMENT_CONFIGURATION.application_server.tcp.keepalive.interval_duration {
+        server_builder = match environment_configuration.application_server.tcp.keepalive.interval_duration {
             Some(interval_duration) => server_builder.tcp_keepalive_interval(Some(Duration::from_secs(interval_duration))),
             None => server_builder.tcp_keepalive_interval(None),
         };
 
         server_builder = server_builder
             .http2_only(true)
-            .http2_max_header_list_size(ENVIRONMENT_CONFIGURATION.application_server.http.maximum_header_list_size)
-            .http2_adaptive_window(ENVIRONMENT_CONFIGURATION.application_server.http.adaptive_window)
-            .http2_initial_connection_window_size(Some(ENVIRONMENT_CONFIGURATION.application_server.http.connection_window_size))
-            .http2_initial_stream_window_size(Some(ENVIRONMENT_CONFIGURATION.application_server.http.stream_window_size))
+            .http2_max_header_list_size(environment_configuration.application_server.http.maximum_header_list_size)
+            .http2_adaptive_window(environment_configuration.application_server.http.adaptive_window)
+            .http2_initial_connection_window_size(Some(environment_configuration.application_server.http.connection_window_size))
+            .http2_initial_stream_window_size(Some(environment_configuration.application_server.http.stream_window_size))
             .http2_max_concurrent_streams(u32::MAX)
-            .http2_max_frame_size(Some(ENVIRONMENT_CONFIGURATION.application_server.http.maximum_frame_size))
-            .http2_max_send_buf_size(ENVIRONMENT_CONFIGURATION.application_server.http.maximum_sending_buffer_size as usize);
+            .http2_max_frame_size(Some(environment_configuration.application_server.http.maximum_frame_size))
+            .http2_max_send_buf_size(environment_configuration.application_server.http.maximum_sending_buffer_size as usize);
 
-        if ENVIRONMENT_CONFIGURATION.application_server.http.enable_connect_protocol {
+        if environment_configuration.application_server.http.enable_connect_protocol {
             server_builder = server_builder.http2_enable_connect_protocol();
         };
 
-        server_builder = match ENVIRONMENT_CONFIGURATION.application_server.http.keepalive {
+        server_builder = match environment_configuration.application_server.http.keepalive {
             Some(ref keepalive_) => server_builder.http2_keep_alive_interval(Some(Duration::from_secs(keepalive_.interval_duration))).http2_keep_alive_timeout(Duration::from_secs(keepalive_.timeout_duration)),
             None => server_builder.http2_keep_alive_interval(None),
         };
 
-        server_builder = match ENVIRONMENT_CONFIGURATION.application_server.http.maximum_pending_accept_reset_streams {
+        server_builder = match environment_configuration.application_server.http.maximum_pending_accept_reset_streams {
             Some(maximum_pending_accept_reset_streams_) => server_builder.http2_max_pending_accept_reset_streams(Some(maximum_pending_accept_reset_streams_)),
             None => server_builder.http2_max_pending_accept_reset_streams(None),
         };
 
-        if let Some(ref tls) = ENVIRONMENT_CONFIGURATION.application_server.http.tls {
+        if let Some(ref tls) = environment_configuration.application_server.http.tls {
             todo!("// TODO ssl_protocolsTLSv1 TLSv1.1 TLSv1.2 TLSv1.3;  ssl_ciphers HIGH:!aNULL:!MD5;")
         }
 
@@ -220,25 +267,25 @@ impl CommandProcessor<RunServer> {
             server_builder = server_builder.http2_only(false);
         }
 
-        let database_1_postgresql_configuration = PostgresqlConfiguration::from_str(ENVIRONMENT_CONFIGURATION.resource.postgresql.database_1_url.0).convert(Backtrace::new(line!(), file!()))?;
+        let database_1_postgresql_configuration = PostgresqlConfiguration::from_str(environment_configuration.resource.postgresql.database_1_url.as_str()).convert(Backtrace::new(line!(), file!()))?;
 
-        let database_2_postgresql_configuration = PostgresqlConfiguration::from_str(ENVIRONMENT_CONFIGURATION.resource.postgresql.database_2_url.0).convert(Backtrace::new(line!(), file!()))?;
+        let database_2_postgresql_configuration = PostgresqlConfiguration::from_str(environment_configuration.resource.postgresql.database_2_url.as_str()).convert(Backtrace::new(line!(), file!()))?;
 
-        let database_1_redis_connection_info = ConnectionInfo::from_str(ENVIRONMENT_CONFIGURATION.resource.redis.database_1_url.0).convert(Backtrace::new(line!(), file!()))?;
+        let database_1_redis_connection_info = ConnectionInfo::from_str(environment_configuration.resource.redis.database_1_url.as_str()).convert(Backtrace::new(line!(), file!()))?;
 
-        let postgresql_connection_pool_aggregator = match ENVIRONMENT_CONFIGURATION.environment {
-            Environment::Production => {
+        let postgresql_connection_pool_aggregator = match environment_configuration.environment {
+            EnvironmentXXX::Production => {
                 todo!("TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ");
             }
-            Environment::Development | Environment::LocalDevelopment => {
+            EnvironmentXXX::Development | EnvironmentXXX::LocalDevelopment => {
                 let database_1_postgresql_connection_pool = Creator::<PostgresqlConnectionPoolNoTls>::create(
-                    &ENVIRONMENT_CONFIGURATION.environment,
+                    &environment_configuration.environment,
                     &database_1_postgresql_configuration,
                 )
                 .await?;
 
                 let database_2_postgresql_connection_pool = Creator::<PostgresqlConnectionPoolNoTls>::create(
-                    &ENVIRONMENT_CONFIGURATION.environment,
+                    &environment_configuration.environment,
                     &database_2_postgresql_configuration,
                 )
                 .await?;
@@ -251,7 +298,7 @@ impl CommandProcessor<RunServer> {
         };
 
         let database_1_redis_connection_pool = Creator::<RedisConnectonPool>::create(
-            &ENVIRONMENT_CONFIGURATION.environment,
+            &environment_configuration.environment,
             &database_1_redis_connection_info,
         )
         .await?;
@@ -287,6 +334,7 @@ impl CommandProcessor<RunServer> {
 
                             let future_ = async move {
                                 let response = Self::resolve(
+                                    environment_configuration,
                                     router___,
                                     request,
                                     &database_1_postgresql_connection_pool_,
@@ -675,6 +723,7 @@ impl CommandProcessor<RunServer> {
     }
 
     async fn resolve<'a, T>(
+        environment_configuration: &'static EnvironmentConfiguration,
         router: Arc<Router<ActionRoute_>>,
         request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,

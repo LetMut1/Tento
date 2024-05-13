@@ -20,9 +20,15 @@ impl Error {
         };
     }
 
-    pub fn new_logic_value_should_exist() -> Self {
+    pub fn new_logic_value_does_not_exist() -> Self {
         return Self::Logic {
-            message: "Value should exist.",
+            message: "Value does not exist.",
+        };
+    }
+
+    pub fn new_logic_value_already_exist() -> Self {
+        return Self::Logic {
+            message: "Value already exist.",
         };
     }
 

@@ -84,7 +84,7 @@ pub trait OptionConverter<T> {
 
     fn convert_out_of_range(self, backtrace_part: Backtrace) -> Result<T, Auditor<Error>>;
 
-    fn convert_value_should_exist(self, backtrace_part: Backtrace) -> Result<T, Auditor<Error>>;
+    fn convert_value_does_not_exist(self, backtrace_part: Backtrace) -> Result<T, Auditor<Error>>;
 }
 
 impl<T> OptionConverter<T> for Option<T> {
@@ -120,13 +120,13 @@ impl<T> OptionConverter<T> for Option<T> {
         return result;
     }
 
-    fn convert_value_should_exist(self, backtrace_part: Backtrace) -> Result<T, Auditor<Error>> {
+    fn convert_value_does_not_exist(self, backtrace_part: Backtrace) -> Result<T, Auditor<Error>> {
         let result = match self {
             Some(value) => Ok(value),
             None => {
                 return Err(
                     Auditor::<Error>::new(
-                        Error::new_logic_value_should_exist(),
+                        Error::new_logic_value_does_not_exist(),
                         backtrace_part,
                     ),
                 );

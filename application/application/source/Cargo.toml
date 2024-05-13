@@ -26,11 +26,9 @@ base64 = { package = "base64", version = "0.13.1", default-features = true, feat
 bb8 = { package = "bb8", version = "0.7.1", default-features = true, features = [], optional = false }
 bb8_postgres = { package = "bb8-postgres", version = "0.7.0", default-features = true, features = [], optional = false }
 bb8_redis = { package = "bb8-redis", version = "0.10.1", default-features = true, features = [], optional = false }
-build_script_constant = { path = "./forced_crate/build_script_constant", package = "build_script_constant", version = "1.0.0", default-features = true, features = [], optional = false }
 bytes = { package = "bytes", version = "1.1.0", default-features = true, features = [], optional = false }
 chrono = { package = "chrono", version = "0.4.31", default-features = true, features = [], optional = false }
 entity = { path = "./forced_crate/entity", package = "entity", version = "1.0.0", default-features = true, features = [], optional = false }
-environment_configuration = { path = "./forced_crate/environment_configuration", package = "environment_configuration", version = "1.0.0", default-features = true, features = [], optional = false }
 error = { path = "./forced_crate/error", package = "error", version = "1.0.0", default-features = true, features = [], optional = false }
 formatter = { path = "./forced_crate/formatter", package = "formatter", version = "1.0.0", default-features = true, features = [], optional = false }
 hmac = { package = "hmac", version = "0.12.1", default-features = true, features = [], optional = false }
@@ -59,11 +57,7 @@ const_format = { package = "const_format", version = "0.2.31", default-features 
 serde_json = { package = "serde_json", version = "1.0.107", default-features = true, features = [], optional = true }
 
 [build-dependencies]
-build_script_constant = { path = "./forced_crate/build_script_constant", package = "build_script_constant", version = "1.0.0", default-features = true, features = [], optional = false }
 cargo-emit = { package = "cargo-emit", version = "0.2.1", default-features = true, features = [], optional = false }
-environment_configuration = { path = "./forced_crate/environment_configuration", package = "environment_configuration", version = "1.0.0", default-features = true, features = [], optional = false }
-error = { path = "./forced_crate/error", package = "error", version = "1.0.0", default-features = true, features = [], optional = false }
-formatter = { path = "./forced_crate/formatter", package = "formatter", version = "1.0.0", default-features = true, features = [], optional = false }
 uuid = { package = "uuid", version = "0.8.2", default-features = true, features = ["v4"], optional = false }
 
 [features]

@@ -1,36 +1,34 @@
-use auditor::Auditor;
-use auditor::Backtrace;
-use auditor::ErrorConverter;
-use error::Error;
+use crate::infrastructure_layer::data::auditor::Auditor;
+use crate::infrastructure_layer::data::auditor::Backtrace;
+use crate::infrastructure_layer::data::auditor::ErrorConverter;
+use crate::infrastructure_layer::data::environment_configuration::ApplicationServer;
+use crate::infrastructure_layer::data::environment_configuration::EmailServer;
+use crate::infrastructure_layer::data::environment_configuration::Encryption;
+use crate::infrastructure_layer::data::environment_configuration::environment_configuration_file::EnvironmentConfigurationFile;
+use crate::infrastructure_layer::data::environment_configuration::Environment;
+use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
+use crate::infrastructure_layer::data::environment_configuration::Http;
+use crate::infrastructure_layer::data::environment_configuration::HttpKeepalive;
+use crate::infrastructure_layer::data::environment_configuration::Logging;
+use crate::infrastructure_layer::data::environment_configuration::Postgresql;
+use crate::infrastructure_layer::data::environment_configuration::PrivateKey;
+use crate::infrastructure_layer::data::environment_configuration::Redis;
+use crate::infrastructure_layer::data::environment_configuration::Resource;
+use crate::infrastructure_layer::data::environment_configuration::Tcp;
+use crate::infrastructure_layer::data::environment_configuration::TcpKeepalive;
+use crate::infrastructure_layer::data::environment_configuration::Tls;
+use crate::infrastructure_layer::data::environment_configuration::TokioRuntime;
+use crate::infrastructure_layer::data::error::Error;
 use std::path::Path;
-use super::environment_configuration_file::EnvironmentConfigurationFile;
-use super::environment_configuration::ApplicationServer;
-use super::environment_configuration::EmailServer;
-use super::environment_configuration::Encryption;
-use super::environment_configuration::Environment;
-use super::environment_configuration::EnvironmentConfiguration;
-use super::environment_configuration::Http;
-use super::environment_configuration::HttpKeepalive;
-use super::environment_configuration::Logging;
-use super::environment_configuration::Postgresql;
-use super::environment_configuration::PrivateKey;
-use super::environment_configuration::Redis;
-use super::environment_configuration::Resource;
-use super::environment_configuration::Tcp;
-use super::environment_configuration::TcpKeepalive;
-use super::environment_configuration::Tls;
-use super::environment_configuration::TokioRuntime;
-use super::sealed::String_;
+use super::Loader;
 
-pub struct Loader;
-
-impl Loader {
+impl Loader<EnvironmentConfiguration> {
     const PRODUCTION_ENVIRONMENT_DIRECTORY_NAME: &'static str = "production";
     const DEVELOPMENT_ENVIRONMENT_DIRECTORY_NAME: &'static str = "development";
     const LOCAL_DEVELOPMENT_ENVIRONMENT_DIRECTORY_NAME: &'static str = "local_development";
     const ENVIRONMENT_FILE_NAME: &'static str = "environment.toml";
 
-    pub fn load_from_file<'a>(environment_configuration_directory_path: &'a str) -> Result<EnvironmentConfiguration<String_>, Auditor<Error>> {
+    pub fn load_from_file<'a>(environment_configuration_directory_path: &'a str) -> Result<EnvironmentConfiguration, Auditor<Error>> {
         let production_environment_file_path = format!(
             "{}/{}/{}",
             environment_configuration_directory_path,
@@ -120,7 +118,7 @@ impl Loader {
                 };
 
                 Tcp {
-                    socket_address: String_(environment_configuration_file.application_server.tcp.socket_address.value),
+                    socket_address: environment_configuration_file.application_server.tcp.socket_address.value,
                     nodelay: environment_configuration_file.application_server.tcp.nodelay.value,
                     sleep_on_accept_errors: environment_configuration_file.application_server.tcp.sleep_on_accept_errors.value,
                     keepalive,
@@ -142,8 +140,8 @@ impl Loader {
                 let tls = if environment_configuration_file.application_server.http.tls.is_exist {
                     Some(
                         Tls {
-                            certificate_crt_file_path: String_(environment_configuration_file.application_server.http.tls.certificate_crt_file_path.value),
-                            certificate_key_file_path: String_(environment_configuration_file.application_server.http.tls.certificate_key_file_path.value),
+                            certificate_crt_file_path: environment_configuration_file.application_server.http.tls.certificate_crt_file_path.value,
+                            certificate_key_file_path: environment_configuration_file.application_server.http.tls.certificate_key_file_path.value,
                         },
                     )
                 } else {
@@ -185,25 +183,25 @@ impl Loader {
             },
             application_server,
             logging: Logging {
-                directory_path: String_(environment_configuration_file.logging.directory_path.value),
-                file_name_prefix: String_(environment_configuration_file.logging.file_name_prefix.value),
+                directory_path: environment_configuration_file.logging.directory_path.value,
+                file_name_prefix: environment_configuration_file.logging.file_name_prefix.value,
             },
             resource: Resource {
                 postgresql: Postgresql {
-                    database_1_url: String_(environment_configuration_file.resource.postgresql.database_1_url.value),
-                    database_2_url: String_(environment_configuration_file.resource.postgresql.database_2_url.value),
+                    database_1_url: environment_configuration_file.resource.postgresql.database_1_url.value,
+                    database_2_url: environment_configuration_file.resource.postgresql.database_2_url.value,
                 },
                 redis: Redis {
-                    database_1_url: String_(environment_configuration_file.resource.redis.database_1_url.value),
+                    database_1_url: environment_configuration_file.resource.redis.database_1_url.value,
                 },
                 email_server: EmailServer {
-                    socket_address: String_(environment_configuration_file.resource.email_server.socket_address.value),
+                    socket_address: environment_configuration_file.resource.email_server.socket_address.value,
                 },
             },
             encryption: Encryption {
                 private_key: PrivateKey {
-                    application_user_access_token: String_(environment_configuration_file.encryption.private_key.application_user_access_token.value),
-                    application_user_access_refresh_token: String_(environment_configuration_file.encryption.private_key.application_user_access_refresh_token.value),
+                    application_user_access_token: environment_configuration_file.encryption.private_key.application_user_access_token.value,
+                    application_user_access_refresh_token: environment_configuration_file.encryption.private_key.application_user_access_refresh_token.value,
                 },
             }
         };
