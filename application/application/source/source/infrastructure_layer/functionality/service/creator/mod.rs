@@ -1,5 +1,4 @@
 pub mod postgresql_connection_pool;
-pub mod redis_connection_pool;
 pub mod response;
 
 use std::marker::PhantomData;

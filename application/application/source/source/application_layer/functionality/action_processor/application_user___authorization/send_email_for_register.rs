@@ -22,7 +22,6 @@ use crate::infrastructure_layer::functionality::service::expiration_time_checker
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::unix_time::UnixTime;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
-use bb8_redis::RedisConnectionManager;
 use std::clone::Clone;
 use std::marker::Send;
 use crate::infrastructure_layer::data::auditor::OptionConverter;
@@ -42,7 +41,6 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForRegister> {
         environment_configuration: &'static EnvironmentConfiguration,
         _database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
-        _database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
         incoming: Option<Incoming>,
     ) -> Result<InvalidArgumentResult<UnifiedReport<Outcoming, Precedent>>, Auditor<Error>>
     where

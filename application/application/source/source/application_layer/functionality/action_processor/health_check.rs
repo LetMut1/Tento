@@ -6,7 +6,6 @@ use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentR
 use crate::infrastructure_layer::data::void::Void;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
-use bb8_redis::RedisConnectionManager;
 use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
@@ -22,7 +21,6 @@ impl ActionProcessor<HealthCheck> {
         _environment_configuration: &'static EnvironmentConfiguration,
         _database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
-        _database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
         _incoming: Option<Void>,
     ) -> Result<InvalidArgumentResult<UnifiedReport<Void, Void>>, Auditor<Error>>
     where

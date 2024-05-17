@@ -19,7 +19,6 @@ use crate::infrastructure_layer::functionality::repository::postgresql::by::By11
 use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
-use bb8_redis::RedisConnectionManager;
 use std::clone::Clone;
 use crate::infrastructure_layer::data::auditor::OptionConverter;
 use std::marker::Send;
@@ -41,7 +40,6 @@ impl ActionProcessor<Channel__Base___GetManyPublicByName> {
         environment_configuration: &'static EnvironmentConfiguration,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
-        _database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
         incoming: Option<Incoming>,
     ) -> Result<InvalidArgumentResult<UnifiedReport<Outcoming, Precedent>>, Auditor<Error>>
     where

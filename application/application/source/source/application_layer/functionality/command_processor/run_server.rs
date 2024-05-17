@@ -7,10 +7,8 @@ use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::service::creator::Creator;
 use crate::infrastructure_layer::functionality::service::creator::postgresql_connection_pool::PostgresqlConnectionPoolNoTls;
-use crate::infrastructure_layer::functionality::service::creator::redis_connection_pool::RedisConnectonPool;
 use crate::presentation_layer::data::action_route::ActionRoute_;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
-use bb8_redis::RedisConnectionManager;
 use bb8::Pool;
 use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___AuthorizeByFirstStep;
 use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___AuthorizeByLastStep;
@@ -42,14 +40,12 @@ use hyper::server::conn::AddrStream;
 use hyper::Method;
 use hyper::Server;
 use matchit::Router;
-use redis::ConnectionInfo;
 use std::clone::Clone;
 use std::future::Future;
 use std::marker::Send;
 use crate::presentation_layer::functionality::action::Action;
 use std::marker::Sync;
 use std::net::ToSocketAddrs;
-use std::str::FromStr;
 use std::sync::Arc;
 use std::time::Duration;
 use tokio::runtime::Builder;
@@ -265,8 +261,6 @@ impl CommandProcessor<RunServer> {
             server_builder = server_builder.http2_only(false);
         }
 
-        let database_1_redis_connection_info = ConnectionInfo::from_str(environment_configuration.resource.redis.database_1_url.as_str()).convert(Backtrace::new(line!(), file!()))?;
-
         let postgresql_connection_pool_aggregator = match environment_configuration.environment {
             Environment::Production => {
                 todo!("TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ");
@@ -289,12 +283,6 @@ impl CommandProcessor<RunServer> {
             }
         };
 
-        let database_1_redis_connection_pool = Creator::<RedisConnectonPool>::create(
-            &environment_configuration.environment,
-            &database_1_redis_connection_info,
-        )
-        .await?;
-
         let router_ = Arc::new(router);
 
         let service = hyper::service::make_service_fn(
@@ -303,16 +291,12 @@ impl CommandProcessor<RunServer> {
 
                 let postgresql_connection_pool_aggregator_ = postgresql_connection_pool_aggregator.clone();
 
-                let database_1_redis_connection_pool_ = database_1_redis_connection_pool.clone();
-
                 let future = async move {
                     let service_fn = hyper::service::service_fn(
                         move |request: Request| -> _ {
                             let router___ = router__.clone();
 
                             let postgresql_connection_pool_aggregator__ = postgresql_connection_pool_aggregator_.clone();
-
-                            let database_1_redis_connection_pool__ = database_1_redis_connection_pool_.clone();
 
                             let (database_1_postgresql_connection_pool_, database_2_postgresql_connection_pool_) = match postgresql_connection_pool_aggregator__ {
                                 PostgresqlConnectionPoolAggregator::LocalDevelopment {
@@ -331,7 +315,6 @@ impl CommandProcessor<RunServer> {
                                     request,
                                     &database_1_postgresql_connection_pool_,
                                     &database_2_postgresql_connection_pool_,
-                                    &database_1_redis_connection_pool__,
                                 )
                                 .await;
 
@@ -720,7 +703,6 @@ impl CommandProcessor<RunServer> {
         request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
-        database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
     ) -> Response
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -754,7 +736,6 @@ impl CommandProcessor<RunServer> {
                             &r#match.params,
                             database_1_postgresql_connection_pool,
                             database_2_postgresql_connection_pool,
-                            database_1_redis_connection_pool,
                         )
                         .await;
                     }
@@ -767,7 +748,6 @@ impl CommandProcessor<RunServer> {
                             &r#match.params,
                             database_1_postgresql_connection_pool,
                             database_2_postgresql_connection_pool,
-                            database_1_redis_connection_pool,
                         )
                         .await;
                     }
@@ -779,7 +759,6 @@ impl CommandProcessor<RunServer> {
                             &r#match.params,
                             database_1_postgresql_connection_pool,
                             database_2_postgresql_connection_pool,
-                            database_1_redis_connection_pool,
                         )
                         .await;
                     }
@@ -791,7 +770,6 @@ impl CommandProcessor<RunServer> {
                             &r#match.params,
                             database_1_postgresql_connection_pool,
                             database_2_postgresql_connection_pool,
-                            database_1_redis_connection_pool,
                         )
                         .await;
                     }
@@ -803,7 +781,6 @@ impl CommandProcessor<RunServer> {
                             &r#match.params,
                             database_1_postgresql_connection_pool,
                             database_2_postgresql_connection_pool,
-                            database_1_redis_connection_pool,
                         )
                         .await;
                     }
@@ -815,7 +792,6 @@ impl CommandProcessor<RunServer> {
                             &r#match.params,
                             database_1_postgresql_connection_pool,
                             database_2_postgresql_connection_pool,
-                            database_1_redis_connection_pool,
                         )
                         .await;
                     }
@@ -827,7 +803,6 @@ impl CommandProcessor<RunServer> {
                             &r#match.params,
                             database_1_postgresql_connection_pool,
                             database_2_postgresql_connection_pool,
-                            database_1_redis_connection_pool,
                         )
                         .await;
                     }
@@ -839,7 +814,6 @@ impl CommandProcessor<RunServer> {
                             &r#match.params,
                             database_1_postgresql_connection_pool,
                             database_2_postgresql_connection_pool,
-                            database_1_redis_connection_pool,
                         )
                         .await;
                     }
@@ -851,7 +825,6 @@ impl CommandProcessor<RunServer> {
                             &r#match.params,
                             database_1_postgresql_connection_pool,
                             database_2_postgresql_connection_pool,
-                            database_1_redis_connection_pool,
                         )
                         .await;
                     }
@@ -863,7 +836,6 @@ impl CommandProcessor<RunServer> {
                             &r#match.params,
                             database_1_postgresql_connection_pool,
                             database_2_postgresql_connection_pool,
-                            database_1_redis_connection_pool,
                         )
                         .await;
                     }
@@ -875,7 +847,6 @@ impl CommandProcessor<RunServer> {
                             &r#match.params,
                             database_1_postgresql_connection_pool,
                             database_2_postgresql_connection_pool,
-                            database_1_redis_connection_pool,
                         )
                         .await;
                     }
@@ -887,7 +858,6 @@ impl CommandProcessor<RunServer> {
                             &r#match.params,
                             database_1_postgresql_connection_pool,
                             database_2_postgresql_connection_pool,
-                            database_1_redis_connection_pool,
                         )
                         .await;
                     }
@@ -899,7 +869,6 @@ impl CommandProcessor<RunServer> {
                             &r#match.params,
                             database_1_postgresql_connection_pool,
                             database_2_postgresql_connection_pool,
-                            database_1_redis_connection_pool,
                         )
                         .await;
                     }
@@ -911,7 +880,6 @@ impl CommandProcessor<RunServer> {
                             &r#match.params,
                             database_1_postgresql_connection_pool,
                             database_2_postgresql_connection_pool,
-                            database_1_redis_connection_pool,
                         )
                         .await;
                     }
@@ -923,7 +891,6 @@ impl CommandProcessor<RunServer> {
                             &r#match.params,
                             database_1_postgresql_connection_pool,
                             database_2_postgresql_connection_pool,
-                            database_1_redis_connection_pool,
                         )
                         .await;
                     }
@@ -935,7 +902,6 @@ impl CommandProcessor<RunServer> {
                             &r#match.params,
                             database_1_postgresql_connection_pool,
                             database_2_postgresql_connection_pool,
-                            database_1_redis_connection_pool,
                         )
                         .await;
                     }
@@ -955,7 +921,6 @@ impl CommandProcessor<RunServer> {
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
                                         database_2_postgresql_connection_pool,
-                                        database_1_redis_connection_pool,
                                     )
                                     .await;
                                 }
@@ -968,7 +933,6 @@ impl CommandProcessor<RunServer> {
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
                                         database_2_postgresql_connection_pool,
-                                        database_1_redis_connection_pool,
                                     )
                                     .await;
                                 }
@@ -980,7 +944,6 @@ impl CommandProcessor<RunServer> {
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
                                         database_2_postgresql_connection_pool,
-                                        database_1_redis_connection_pool,
                                     )
                                     .await;
                                 }
@@ -992,7 +955,6 @@ impl CommandProcessor<RunServer> {
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
                                         database_2_postgresql_connection_pool,
-                                        database_1_redis_connection_pool,
                                     )
                                     .await;
                                 }
@@ -1004,7 +966,6 @@ impl CommandProcessor<RunServer> {
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
                                         database_2_postgresql_connection_pool,
-                                        database_1_redis_connection_pool,
                                     )
                                     .await;
                                 }
@@ -1016,7 +977,6 @@ impl CommandProcessor<RunServer> {
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
                                         database_2_postgresql_connection_pool,
-                                        database_1_redis_connection_pool,
                                     )
                                     .await;
                                 }
@@ -1028,7 +988,6 @@ impl CommandProcessor<RunServer> {
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
                                         database_2_postgresql_connection_pool,
-                                        database_1_redis_connection_pool,
                                     )
                                     .await;
                                 }
@@ -1040,7 +999,6 @@ impl CommandProcessor<RunServer> {
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
                                         database_2_postgresql_connection_pool,
-                                        database_1_redis_connection_pool,
                                     )
                                     .await;
                                 }
@@ -1052,7 +1010,6 @@ impl CommandProcessor<RunServer> {
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
                                         database_2_postgresql_connection_pool,
-                                        database_1_redis_connection_pool,
                                     )
                                     .await;
                                 }
@@ -1064,7 +1021,6 @@ impl CommandProcessor<RunServer> {
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
                                         database_2_postgresql_connection_pool,
-                                        database_1_redis_connection_pool,
                                     )
                                     .await;
                                 }
@@ -1076,7 +1032,6 @@ impl CommandProcessor<RunServer> {
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
                                         database_2_postgresql_connection_pool,
-                                        database_1_redis_connection_pool,
                                     )
                                     .await;
                                 }
@@ -1088,7 +1043,6 @@ impl CommandProcessor<RunServer> {
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
                                         database_2_postgresql_connection_pool,
-                                        database_1_redis_connection_pool,
                                     )
                                     .await;
                                 }
@@ -1100,7 +1054,6 @@ impl CommandProcessor<RunServer> {
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
                                         database_2_postgresql_connection_pool,
-                                        database_1_redis_connection_pool,
                                     )
                                     .await;
                                 }
@@ -1112,7 +1065,6 @@ impl CommandProcessor<RunServer> {
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
                                         database_2_postgresql_connection_pool,
-                                        database_1_redis_connection_pool,
                                     )
                                     .await;
                                 }
@@ -1124,7 +1076,6 @@ impl CommandProcessor<RunServer> {
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
                                         database_2_postgresql_connection_pool,
-                                        database_1_redis_connection_pool,
                                     )
                                     .await;
                                 }
@@ -1136,7 +1087,6 @@ impl CommandProcessor<RunServer> {
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
                                         database_2_postgresql_connection_pool,
-                                        database_1_redis_connection_pool,
                                     )
                                     .await;
                                 }
@@ -1162,7 +1112,6 @@ impl CommandProcessor<RunServer> {
                             &r#match.params,
                             database_1_postgresql_connection_pool,
                             database_2_postgresql_connection_pool,
-                            database_1_redis_connection_pool,
                         )
                         .await;
                     }
@@ -1175,7 +1124,6 @@ impl CommandProcessor<RunServer> {
                             &r#match.params,
                             database_1_postgresql_connection_pool,
                             database_2_postgresql_connection_pool,
-                            database_1_redis_connection_pool,
                         )
                         .await;
                     }
@@ -1188,7 +1136,6 @@ impl CommandProcessor<RunServer> {
                             &r#match.params,
                             database_1_postgresql_connection_pool,
                             database_2_postgresql_connection_pool,
-                            database_1_redis_connection_pool,
                         )
                         .await;
                     }
@@ -1201,7 +1148,6 @@ impl CommandProcessor<RunServer> {
                             &r#match.params,
                             database_1_postgresql_connection_pool,
                             database_2_postgresql_connection_pool,
-                            database_1_redis_connection_pool,
                         )
                         .await;
                     }
@@ -1221,7 +1167,6 @@ impl CommandProcessor<RunServer> {
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
                                         database_2_postgresql_connection_pool,
-                                        database_1_redis_connection_pool,
                                     )
                                     .await;
                                 }
@@ -1234,7 +1179,6 @@ impl CommandProcessor<RunServer> {
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
                                         database_2_postgresql_connection_pool,
-                                        database_1_redis_connection_pool,
                                     )
                                     .await;
                                 }
@@ -1247,7 +1191,6 @@ impl CommandProcessor<RunServer> {
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
                                         database_2_postgresql_connection_pool,
-                                        database_1_redis_connection_pool,
                                     )
                                     .await;
                                 }
@@ -1260,7 +1203,6 @@ impl CommandProcessor<RunServer> {
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
                                         database_2_postgresql_connection_pool,
-                                        database_1_redis_connection_pool,
                                     )
                                     .await;
                                 }
@@ -1285,7 +1227,6 @@ impl CommandProcessor<RunServer> {
                             &r#match.params,
                             database_1_postgresql_connection_pool,
                             database_2_postgresql_connection_pool,
-                            database_1_redis_connection_pool,
                         )
                         .await;
                     }
@@ -1304,7 +1245,6 @@ impl CommandProcessor<RunServer> {
                                         &r#match.params,
                                         database_1_postgresql_connection_pool,
                                         database_2_postgresql_connection_pool,
-                                        database_1_redis_connection_pool,
                                     )
                                     .await;
                                 }

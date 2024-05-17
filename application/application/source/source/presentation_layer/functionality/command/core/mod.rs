@@ -262,3 +262,5 @@ fn process() -> Result<(), Box<dyn StdError + 'static>> {
 // ПОсылка писем через async клиент в бэкграунд таске
 // Auditor<InvalidArgument>
 // логгер в stdout
+// newtype pattern remove
+// control type - в сервисы? убрать Пабюз для сервисов, где фантомдата.

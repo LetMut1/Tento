@@ -1,6 +1,5 @@
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
-use bb8_redis::RedisConnectionManager;
 use hyper::Body;
 use hyper::Request as HyperRequest;
 use hyper::Response as HyperResponse;
@@ -46,7 +45,6 @@ pub struct TokioBlockingTask;
 pub struct TokioNonBlockingTask;
 pub struct UnixTime;
 pub type PostgresqlConnectionPoolNoTls = Pool<PostgresqlConnectionManager<NoTls>>;
-pub type RedisConnectonPool = Pool<RedisConnectionManager>;
 pub type Request = HyperRequest<Body>;
 pub type Response = HyperResponse<Body>;
 

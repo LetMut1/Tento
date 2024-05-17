@@ -11,7 +11,6 @@ use crate::infrastructure_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::control_type::ActionRound;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
-use bb8_redis::RedisConnectionManager;
 use serde::Serialize as SerdeSerialize;
 use std::clone::Clone;
 use std::future::Future;
@@ -37,7 +36,6 @@ impl Processor<GeneralizedAction> {
         route_parameters: &'a Params<'b, 'c>,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
-        database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
         data_extractor: DE,
         action_processor: AP,
     ) -> Response
@@ -48,7 +46,7 @@ impl Processor<GeneralizedAction> {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
         DE: FnOnce(&'a mut Body, &'a Parts, &'a Params<'b, 'c>) -> F1,
         F1: Future<Output = Result<InvalidArgumentResult<Option<I>>, Auditor<Error>>>,
-        AP: FnOnce(&'static EnvironmentConfiguration, &'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<RedisConnectionManager>, Option<I>) -> F2,
+        AP: FnOnce(&'static EnvironmentConfiguration, &'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<PostgresqlConnectionManager<T>>, Option<I>) -> F2,
         F2: Future<Output = Result<InvalidArgumentResult<UnifiedReport<O, P>>, Auditor<Error>>>,
         O: SerdeSerialize,
         P: SerdeSerialize,
@@ -98,7 +96,6 @@ impl Processor<GeneralizedAction> {
             environment_configuration,
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
-            database_1_redis_connection_pool,
             action_processor_incoming_,
         )
         .await

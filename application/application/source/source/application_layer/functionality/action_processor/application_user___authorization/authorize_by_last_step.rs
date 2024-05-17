@@ -40,7 +40,6 @@ use crate::infrastructure_layer::functionality::service::expiration_time_checker
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::unix_time::UnixTime;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
-use bb8_redis::RedisConnectionManager;
 use std::borrow::Cow;
 use crate::infrastructure_layer::data::auditor::OptionConverter;
 use std::clone::Clone;
@@ -61,7 +60,6 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
         environment_configuration: &'static EnvironmentConfiguration,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>, // TODO  TODO  TODO  TODO  TODO МОжет ли хакер войти на этом шаге, если пользователь сделал первый шаг.
-        _database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
         incoming: Option<Incoming>,
     ) -> Result<InvalidArgumentResult<UnifiedReport<Outcoming, Precedent>>, Auditor<Error>>
     where

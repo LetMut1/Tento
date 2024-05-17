@@ -25,7 +25,6 @@ auditor = { path = "./forced_crate/auditor", package = "auditor", version = "1.0
 base64 = { package = "base64", version = "0.13.1", default-features = true, features = [], optional = false }
 bb8 = { package = "bb8", version = "0.7.1", default-features = true, features = [], optional = false }
 bb8_postgres = { package = "bb8-postgres", version = "0.7.0", default-features = true, features = [], optional = false }
-bb8_redis = { package = "bb8-redis", version = "0.10.1", default-features = true, features = [], optional = false }
 bytes = { package = "bytes", version = "1.1.0", default-features = true, features = [], optional = false }
 chrono = { package = "chrono", version = "0.4.31", default-features = true, features = [], optional = false }
 entity = { path = "./forced_crate/entity", package = "entity", version = "1.0.0", default-features = true, features = [], optional = false }
@@ -39,7 +38,6 @@ lettre_email = { package = "lettre_email", version = "0.9.4", default-features =
 matchit = { package = "matchit", version = "0.7.3", default-features = true, features = [], optional = false }
 message_pack_serializer = { path = "./forced_crate/message_pack_serializer", package = "message_pack_serializer", version = "1.0.0", default-features = true, features = [], optional = false }
 rand = { package = "rand", version = "0.8.5", default-features = true, features = [], optional = false }
-redis = { package = "redis", version = "0.21.7", default-features = true, features = ["tokio-comp", "tokio-native-tls-comp"], optional = false }
 regex = { package = "regex", version = "1.4.6", default-features = true, features = [], optional = false }
 serde = { package = "serde", version = "1.0.188", default-features = true, features = ["derive"], optional = false }
 sha3 = { package = "sha2", version = "0.10.8", default-features = true, features = [], optional = false }

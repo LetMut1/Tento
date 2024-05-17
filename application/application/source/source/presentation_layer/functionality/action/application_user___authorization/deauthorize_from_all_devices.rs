@@ -5,7 +5,6 @@ use crate::infrastructure_layer::data::environment_configuration::EnvironmentCon
 use crate::infrastructure_layer::functionality::service::serializer::message_pack::MessagePack;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
-use bb8_redis::RedisConnectionManager;
 use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
@@ -33,7 +32,6 @@ impl Action<ApplicationUser__Authorization___DeauthorizeFromAllDevices> {
         route_parameters: &'a Params<'_, '_>,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
-        database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
     ) -> Response
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -48,7 +46,6 @@ impl Action<ApplicationUser__Authorization___DeauthorizeFromAllDevices> {
             route_parameters,
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
-            database_1_redis_connection_pool,
             Extractor::<HttpBodyData>::extract::<_, MessagePack>,
             ActionProcessor::<ApplicationUser__Authorization___DeauthorizeFromAllDevices>::process,
         )
@@ -65,7 +62,6 @@ impl Action<ApplicationUser__Authorization___DeauthorizeFromAllDevices> {
         route_parameters: &'a Params<'_, '_>,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
-        database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
     ) -> Response
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -80,7 +76,6 @@ impl Action<ApplicationUser__Authorization___DeauthorizeFromAllDevices> {
             route_parameters,
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
-            database_1_redis_connection_pool,
             Extractor::<HttpBodyData>::extract::<_, Json>,
             ActionProcessor::<ApplicationUser__Authorization___DeauthorizeFromAllDevices>::process,
         )
