@@ -1,5 +1,6 @@
 use crate::application_layer::data::unified_report::UnifiedReport;
 use crate::infrastructure_layer::data::auditor::Auditor;
+use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::functionality::service::creator::Creator;
@@ -30,6 +31,7 @@ pub use crate::infrastructure_layer::data::control_type::GeneralizedAction;
 
 impl Processor<GeneralizedAction> {
     pub async fn process<'a, 'b, 'c, T, DE, F1, AP, F2, I, O, P, SF>(
+        environment_configuration: &'static EnvironmentConfiguration,
         body: &'a mut Body,
         parts: &'a Parts,
         route_parameters: &'a Params<'b, 'c>,
@@ -46,7 +48,7 @@ impl Processor<GeneralizedAction> {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
         DE: FnOnce(&'a mut Body, &'a Parts, &'a Params<'b, 'c>) -> F1,
         F1: Future<Output = Result<InvalidArgumentResult<Option<I>>, Auditor<Error>>>,
-        AP: FnOnce(&'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<RedisConnectionManager>, Option<I>) -> F2,
+        AP: FnOnce(&'static EnvironmentConfiguration, &'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<RedisConnectionManager>, Option<I>) -> F2,
         F2: Future<Output = Result<InvalidArgumentResult<UnifiedReport<O, P>>, Auditor<Error>>>,
         O: SerdeSerialize,
         P: SerdeSerialize,
@@ -93,6 +95,7 @@ impl Processor<GeneralizedAction> {
         };
 
         let unified_report = match action_processor(
+            environment_configuration,
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
             database_1_redis_connection_pool,

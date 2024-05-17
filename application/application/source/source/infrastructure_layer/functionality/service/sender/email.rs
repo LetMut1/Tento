@@ -1,6 +1,6 @@
 use super::Sender;
-use crate::infrastructure_layer::data::environment_configurationxxx::Environment;
-use crate::infrastructure_layer::data::environment_configurationxxx::ENVIRONMENT_CONFIGURATION;
+use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
+use crate::infrastructure_layer::data::environment_configuration::Environment;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
@@ -17,6 +17,7 @@ pub use crate::infrastructure_layer::data::control_type::Email;
 impl Sender<Email> {
     // TODO Возможно, сразу можно положить объект в константу.  // TODO В предпродакшене, когда будет smtp-ссервер, настройить все через константы и енв
     pub fn send<'a>(
+        environment_configuration: &'static EnvironmentConfiguration,
         subject: &'a str,
         body: String,
         to: &'a str,
@@ -30,7 +31,7 @@ impl Sender<Email> {
             .convert(Backtrace::new(line!(), file!()))?;
 
         // TODO В static OnceLock
-        let mut email_server_socket_address_registry = ENVIRONMENT_CONFIGURATION.resource.email_server.socket_address.0.to_socket_addrs().convert(Backtrace::new(line!(), file!()))?;
+        let mut email_server_socket_address_registry = environment_configuration.resource.email_server.socket_address.to_socket_addrs().convert(Backtrace::new(line!(), file!()))?;
 
         let email_server_socket_address = match email_server_socket_address_registry.next() {
             Some(email_server_socket_address_) => email_server_socket_address_,
@@ -49,7 +50,7 @@ impl Sender<Email> {
             }
         };
 
-        let smtp_client = match ENVIRONMENT_CONFIGURATION.environment {
+        let smtp_client = match environment_configuration.environment {
             Environment::Production => {
                 todo!();
             }

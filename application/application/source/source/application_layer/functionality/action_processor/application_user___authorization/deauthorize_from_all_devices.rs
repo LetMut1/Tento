@@ -4,6 +4,7 @@ use crate::domain_layer::data::entity::application_user_access_token::Applicatio
 use crate::domain_layer::functionality::service::extractor::application_user_access_token::ExtractorResult;
 use crate::domain_layer::functionality::service::extractor::Extractor;
 use crate::infrastructure_layer::data::auditor::Backtrace;
+use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
@@ -31,6 +32,7 @@ pub use crate::infrastructure_layer::data::control_type::ApplicationUser__Author
 
 impl ActionProcessor<ApplicationUser__Authorization___DeauthorizeFromAllDevices> {
     pub async fn process<'a, T>(
+        environment_configuration: &'static EnvironmentConfiguration,
         // TODO TODO TODO УДАляются ли АккессТокены все при массовом разлогине? Если не удаляются, можно просто при Ектракте АккессТокена использовать проверку на наличие рефреша, если нет, значит произошел разлогин.
         _database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -45,7 +47,7 @@ impl ActionProcessor<ApplicationUser__Authorization___DeauthorizeFromAllDevices>
     {
         let incoming_ = incoming.convert_value_does_not_exist(Backtrace::new(line!(), file!()))?;
 
-        let application_user_access_token = match Extractor::<ApplicationUserAccessToken<'_>>::extract(&incoming_.application_user_access_token_encrypted).await? {
+        let application_user_access_token = match Extractor::<ApplicationUserAccessToken<'_>>::extract(environment_configuration, &incoming_.application_user_access_token_encrypted).await? {
             InvalidArgumentResult::Ok {
                 subject: extractor_result,
             } => {

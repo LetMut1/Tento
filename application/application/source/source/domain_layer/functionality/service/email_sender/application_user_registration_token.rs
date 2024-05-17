@@ -4,6 +4,7 @@ use crate::domain_layer::data::entity::application_user_device::ApplicationUserD
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_Value;
 use crate::infrastructure_layer::data::auditor::Auditor;
+use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error::Error;
 
 use crate::infrastructure_layer::functionality::service::sender::email::Email;
@@ -11,6 +12,7 @@ use crate::infrastructure_layer::functionality::service::sender::Sender;
 
 impl EmailSender<ApplicationUserRegistrationToken<'_>> {
     pub fn send<'a>(
+        environment_configuration: &'static EnvironmentConfiguration,
         application_user_registration_token_value: &'a ApplicationUserRegistrationToken_Value,
         application_user_email: &'a ApplicationUser_Email,
         application_user_device_id: &'a ApplicationUserDevice_Id,
@@ -22,6 +24,7 @@ impl EmailSender<ApplicationUserRegistrationToken<'_>> {
         );
 
         Sender::<Email>::send(
+            environment_configuration,
             "Registration confirmation",
             message_body,
             application_user_email.0.as_str(),

@@ -10,6 +10,7 @@ use crate::domain_layer::functionality::service::email_sender::EmailSender;
 use crate::domain_layer::functionality::service::generator::Generator;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::auditor::Backtrace;
+use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
@@ -40,6 +41,7 @@ pub use crate::infrastructure_layer::data::control_type::ApplicationUser__Author
 
 impl ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
     pub async fn process<'a, T>(
+        environment_configuration: &'static EnvironmentConfiguration,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
@@ -148,6 +150,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
         .await?;
 
         EmailSender::<ApplicationUserAuthorizationToken<'_>>::send(
+            environment_configuration,
             &application_user_authorization_token.value,
             &application_user.email,
             &incoming_.application_user_device_id,

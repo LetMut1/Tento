@@ -1,15 +1,37 @@
+use std::sync::OnceLock;
+
 use super::Validator;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_Value;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
+use crate::infrastructure_layer::data::auditor::OptionConverter;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use regex::Regex;
 
+static REGULAR_EXPRESSION: OnceLock<Regex> = OnceLock::new();
+
 impl Validator<ApplicationUserAuthorizationToken_Value> {
     pub fn is_valid<'a>(application_user_authorization_token_value: &'a ApplicationUserAuthorizationToken_Value) -> Result<bool, Auditor<Error>> {
-        let regex = Regex::new(ApplicationUserAuthorizationToken_Value::REGULAR_EXPRESSION).convert(Backtrace::new(line!(), file!()))?;
+        let regular_expression = match REGULAR_EXPRESSION.get() {
+            Some(regular_expression_) => regular_expression_,
+            None => {
+                if let Err(_) = REGULAR_EXPRESSION.set(Regex::new(ApplicationUserAuthorizationToken_Value::REGULAR_EXPRESSION).convert(Backtrace::new(line!(), file!()))?) {
+                    return Err(
+                        Auditor::<Error>::new(
+                            Error::new_logic_value_already_exist(),
+                            Backtrace::new(
+                                line!(),
+                                file!(),
+                            ),
+                        ),
+                    );
+                }
 
-        return Ok(regex.is_match(application_user_authorization_token_value.0.as_str()));
+                REGULAR_EXPRESSION.get().convert_value_does_not_exist(Backtrace::new(line!(),file!()))?
+            }
+        };
+
+        return Ok(regular_expression.is_match(application_user_authorization_token_value.0.as_str()));
     }
 }

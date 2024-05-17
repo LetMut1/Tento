@@ -1,5 +1,6 @@
 use crate::application_layer::data::unified_report::UnifiedReport;
 use crate::infrastructure_layer::data::auditor::Auditor;
+use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::data::void::Void;
@@ -18,10 +19,11 @@ pub use crate::infrastructure_layer::data::control_type::HealthCheck;
 
 impl ActionProcessor<HealthCheck> {
     pub async fn process<'a, T>(
-        database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
-        database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
-        database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
-        incoming: Option<Void>,
+        _environment_configuration: &'static EnvironmentConfiguration,
+        _database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
+        _database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
+        _database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
+        _incoming: Option<Void>,
     ) -> Result<InvalidArgumentResult<UnifiedReport<Void, Void>>, Auditor<Error>>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,

@@ -21,9 +21,9 @@ use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier_;
 use crate::domain_layer::functionality::service::encoder::Encoder;
 use crate::domain_layer::functionality::service::form_resolver::FormResolver;
 use crate::domain_layer::functionality::service::validator::Validator;
-use crate::infrastructure_layer::data::environment_configurationxxx::Environment;
-use crate::infrastructure_layer::data::environment_configurationxxx::ENVIRONMENT_CONFIGURATION;
+use crate::infrastructure_layer::data::environment_configuration::Environment;
 use crate::infrastructure_layer::data::auditor::Backtrace;
+use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
@@ -37,9 +37,8 @@ use crate::infrastructure_layer::functionality::service::creator::Creator;
 use crate::infrastructure_layer::functionality::service::creator::postgresql_connection_pool::PostgresqlConnectionPoolNoTls;
 use rand::thread_rng;
 use rand::Rng;
-use std::str::FromStr;
 use tokio::runtime::Builder;
-use tokio_postgres::Config as PostgresqlConfiguration;
+use crate::infrastructure_layer::data::control_type::RunServer;
 use super::CommandProcessor;
 
 pub use crate::infrastructure_layer::data::control_type::CreateFixtures;
@@ -55,7 +54,9 @@ impl CommandProcessor<CreateFixtures> {
     ];
 
     pub fn process() -> Result<(), Auditor<Error>> {
-        if let Environment::Production = ENVIRONMENT_CONFIGURATION.environment {
+        let environment_configuration = CommandProcessor::<RunServer>:: initialize_environment()?;
+
+        if let Environment::Production = environment_configuration.environment {
             return Err(
                 Auditor::<Error>::new(
                     Error::Logic {
@@ -69,17 +70,24 @@ impl CommandProcessor<CreateFixtures> {
             );
         }
 
-        Builder::new_current_thread().enable_all().build().convert(Backtrace::new(line!(), file!()))?.block_on(Self::create_fixtures())?;
+        Self::run_runtime(environment_configuration)?;
 
         return Ok(());
     }
 
-    async fn create_fixtures<'a>() -> Result<(), Auditor<Error>> {
-        let database_1_postgresql_configuration = PostgresqlConfiguration::from_str(ENVIRONMENT_CONFIGURATION.resource.postgresql.database_1_url.0).convert(Backtrace::new(line!(), file!()))?;
+    fn run_runtime(environment_configuration: &'static EnvironmentConfiguration) -> Result<(), Auditor<Error>> {
+        Builder::new_current_thread()
+            .enable_all()
+            .build()
+            .convert(Backtrace::new(line!(), file!()))?
+            .block_on(Self::create_fixtures(environment_configuration))?;
 
-        let database_1_postgresql_connection_pool = Creator::<PostgresqlConnectionPoolNoTls>::create(
-            &ENVIRONMENT_CONFIGURATION.environment,
-            &database_1_postgresql_configuration,
+        return Ok(());
+    }
+
+    async fn create_fixtures<'a>(environment_configuration: &'static EnvironmentConfiguration) -> Result<(), Auditor<Error>> {
+        let database_1_postgresql_connection_pool = Creator::<PostgresqlConnectionPoolNoTls>::create_database_1(
+            environment_configuration,
         )
         .await?;
 

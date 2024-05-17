@@ -1,6 +1,7 @@
 use crate::application_layer::functionality::service::processor::Processor;
 use crate::application_layer::functionality::service::processor::generalized_action::GeneralizedAction;
 use crate::infrastructure_layer::data::control_type::Response;
+use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::service::serializer::message_pack::MessagePack;
 use bb8::Pool;
@@ -23,6 +24,7 @@ pub use crate::application_layer::functionality::action_processor::health_check:
 
 impl Action<HealthCheck> {
     pub async fn run<'a, T>(
+        environment_configuration: &'static EnvironmentConfiguration,
         body: &'a mut Body,
         parts: &'a Parts,
         route_parameters: &'a Params<'_, '_>,
@@ -37,6 +39,7 @@ impl Action<HealthCheck> {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
         return Processor::<GeneralizedAction>::process::<'_, '_, '_, _, _, _, _, _, _, _, _, MessagePack>(
+            environment_configuration,
             body,
             parts,
             route_parameters,

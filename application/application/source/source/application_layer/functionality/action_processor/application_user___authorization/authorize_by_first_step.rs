@@ -18,6 +18,7 @@ use crate::domain_layer::functionality::service::encoder::Encoder;
 use crate::domain_layer::functionality::service::generator::Generator;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::auditor::Backtrace;
+use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::control_type::TokioBlockingTask;
 use crate::infrastructure_layer::functionality::service::spawner::Spawner;
@@ -54,6 +55,7 @@ pub use crate::infrastructure_layer::data::control_type::ApplicationUser__Author
 
 impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
     pub async fn process<'a, T>(
+        environment_configuration: &'static EnvironmentConfiguration,
         // TODO Если два логина на разные устройства, и коды подтверждения еще не введены? То есть, приийдет пользоватею два разных кода, а оне не узнает, какой код к какому устройству
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
@@ -293,6 +295,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
 
         if can_send {
             EmailSender::<ApplicationUserAuthorizationToken<'_>>::send(
+                environment_configuration,
                 &application_user_authorization_token_value,
                 &application_user_email,
                 &incoming_.application_user_device_id,

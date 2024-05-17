@@ -260,3 +260,5 @@ fn process() -> Result<(), Box<dyn StdError + 'static>> {
 
 
 // ПОсылка писем через async клиент в бэкграунд таске
+// Auditor<InvalidArgument>
+// логгер в stdout

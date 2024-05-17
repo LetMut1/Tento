@@ -2,7 +2,7 @@ use super::FormResolver;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::data::entity::application_user_access_token_encrypted::ApplicationUserAccessTokenEncrypted;
 use crate::domain_layer::functionality::service::encoder::Encoder;
-use crate::infrastructure_layer::data::environment_configurationxxx::ENVIRONMENT_CONFIGURATION;
+use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
@@ -17,12 +17,15 @@ use crate::infrastructure_layer::functionality::service::serializer::Serializer;
 impl FormResolver<ApplicationUserAccessToken<'_>> {
     const TOKEN_PARTS_SEPARATOR: &'static str = ".";
 
-    pub fn to_encrypted<'a>(application_user_access_token: &'a ApplicationUserAccessToken<'_>) -> Result<ApplicationUserAccessTokenEncrypted, Auditor<Error>> {
+    pub fn to_encrypted<'a>(environment_configuration: &'static EnvironmentConfiguration, application_user_access_token: &'a ApplicationUserAccessToken<'_>) -> Result<ApplicationUserAccessTokenEncrypted, Auditor<Error>> {
         let data = Serializer::<MessagePack>::serialize(application_user_access_token)?;
 
         let application_user_access_token_serialized = Encoder_::<Base64>::encode(data.as_slice());
 
-        let application_user_access_token_serialized_signature = Encoder::<Signature>::encode(application_user_access_token_serialized.as_bytes())?;
+        let application_user_access_token_serialized_signature = Encoder::<Signature>::encode(
+            environment_configuration,
+            application_user_access_token_serialized.as_bytes()
+        )?;
 
         let application_user_access_token_encrypted = format!(
             "{}{}{}",
@@ -36,7 +39,7 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
         );
     }
 
-    pub fn from_encrypted<'a>(application_user_access_token_encrypted: &'a ApplicationUserAccessTokenEncrypted) -> Result<InvalidArgumentResult<ApplicationUserAccessToken<'static>>, Auditor<Error>> {
+    pub fn from_encrypted<'a>(environment_configuration: &'static EnvironmentConfiguration, application_user_access_token_encrypted: &'a ApplicationUserAccessTokenEncrypted) -> Result<InvalidArgumentResult<ApplicationUserAccessToken<'static>>, Auditor<Error>> {
         let mut token_part_registry = application_user_access_token_encrypted.0.as_str().splitn::<'_, &'_ str>(
             2,
             Self::TOKEN_PARTS_SEPARATOR,
@@ -65,6 +68,7 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
         };
 
         if !Encoder::<Signature>::is_valid(
+            environment_configuration,
             application_user_access_token_serialized.as_bytes(),
             application_user_access_token_serialized_signature.as_bytes(),
         )?
@@ -91,9 +95,9 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
 struct Signature;
 
 impl Encoder<Signature> {
-    fn encode<'a>(application_user_access_token_serialized: &'a [u8]) -> Result<String, Auditor<Error>> {
+    fn encode<'a>(environment_configuration: &'static EnvironmentConfiguration, application_user_access_token_serialized: &'a [u8]) -> Result<String, Auditor<Error>> {
         let application_user_access_token_serialized_encoded = Encoder_::<HmacSha3512>::encode(
-            ENVIRONMENT_CONFIGURATION.encryption.private_key.application_user_access_token.0.as_bytes(),
+            environment_configuration.encryption.private_key.application_user_access_token.as_bytes(),
             application_user_access_token_serialized,
         )?;
 
@@ -103,6 +107,7 @@ impl Encoder<Signature> {
     }
 
     fn is_valid<'a>(
+        environment_configuration: &'static EnvironmentConfiguration,
         application_user_access_token_serialized: &'a [u8],
         application_user_access_token_serialized_signature: &'a [u8],
     ) -> Result<bool, Auditor<Error>> {
@@ -110,7 +115,7 @@ impl Encoder<Signature> {
 
         return Ok(
             Encoder_::<HmacSha3512>::is_valid(
-                ENVIRONMENT_CONFIGURATION.encryption.private_key.application_user_access_token.0.as_bytes(),
+                environment_configuration.encryption.private_key.application_user_access_token.as_bytes(),
                 application_user_access_token_serialized,
                 application_user_access_token_serialized_encoded.as_slice(),
             )?

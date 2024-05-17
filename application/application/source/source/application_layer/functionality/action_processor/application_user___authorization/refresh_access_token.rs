@@ -11,6 +11,7 @@ use crate::domain_layer::functionality::service::form_resolver::FormResolver;
 use crate::domain_layer::functionality::service::generator::Generator;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::auditor::OptionConverter;
+use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
@@ -40,6 +41,7 @@ pub use crate::infrastructure_layer::data::control_type::ApplicationUser__Author
 
 impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
     pub async fn process<'a, T>(
+        environment_configuration: &'static EnvironmentConfiguration,
         _database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
@@ -53,7 +55,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
     {
         let incoming_ = incoming.convert_value_does_not_exist(Backtrace::new(line!(), file!()))?;
 
-        let application_user_access_token = match FormResolver::<ApplicationUserAccessToken<'_>>::from_encrypted(&incoming_.application_user_access_token_encrypted)? {
+        let application_user_access_token = match FormResolver::<ApplicationUserAccessToken<'_>>::from_encrypted(environment_configuration, &incoming_.application_user_access_token_encrypted)? {
             InvalidArgumentResult::Ok {
                 subject: application_user_access_token_,
             } => application_user_access_token_,
@@ -94,6 +96,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
         };
 
         let is_valid = FormResolver::<ApplicationUserAccessRefreshToken<'_>>::is_valid(
+            environment_configuration,
             &application_user_access_refresh_token,
             &incoming_.application_user_access_refresh_token_encrypted,
         )?;
@@ -148,8 +151,8 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
         .await?;
 
         let outcoming = Outcoming {
-            application_user_access_token_encrypted: FormResolver::<ApplicationUserAccessToken<'_>>::to_encrypted(&application_user_access_token_new)?,
-            application_user_access_refresh_token_encrypted: FormResolver::<ApplicationUserAccessRefreshToken<'_>>::to_encrypted(&application_user_access_refresh_token)?,
+            application_user_access_token_encrypted: FormResolver::<ApplicationUserAccessToken<'_>>::to_encrypted(environment_configuration, &application_user_access_token_new)?,
+            application_user_access_refresh_token_encrypted: FormResolver::<ApplicationUserAccessRefreshToken<'_>>::to_encrypted(environment_configuration, &application_user_access_refresh_token)?,
         };
 
         return Ok(

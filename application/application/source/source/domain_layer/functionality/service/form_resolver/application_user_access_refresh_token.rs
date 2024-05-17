@@ -1,7 +1,7 @@
 use super::FormResolver;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
 use crate::domain_layer::data::entity::application_user_access_refresh_token_encrypted::ApplicationUserAccessRefreshTokenEncrypted;
-use crate::infrastructure_layer::data::environment_configurationxxx::ENVIRONMENT_CONFIGURATION;
+use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::functionality::service::encoder::base64::Base64;
 use crate::infrastructure_layer::functionality::service::encoder::Encoder;
@@ -12,11 +12,11 @@ use crate::infrastructure_layer::functionality::service::serializer::Serializer;
 use crate::infrastructure_layer::data::error::Error;
 
 impl FormResolver<ApplicationUserAccessRefreshToken<'_>> {
-    pub fn to_encrypted<'a>(application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>) -> Result<ApplicationUserAccessRefreshTokenEncrypted, Auditor<Error>> {
+    pub fn to_encrypted<'a>(environment_configuration: &'static EnvironmentConfiguration, application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>) -> Result<ApplicationUserAccessRefreshTokenEncrypted, Auditor<Error>> {
         let data = Serializer::<MessagePack>::serialize(application_user_access_refresh_token)?;
 
         let encoded_data = Encoder::<HmacSha3512>::encode(
-            ENVIRONMENT_CONFIGURATION.encryption.private_key.application_user_access_refresh_token.0.as_bytes(),
+            environment_configuration.encryption.private_key.application_user_access_refresh_token.as_bytes(),
             data.as_slice(),
         )?;
 
@@ -28,6 +28,7 @@ impl FormResolver<ApplicationUserAccessRefreshToken<'_>> {
     }
 
     pub fn is_valid<'a>(
+        environment_configuration: &'static EnvironmentConfiguration,
         application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>,
         application_user_access_refresh_token_encrypted: &'a ApplicationUserAccessRefreshTokenEncrypted,
     ) -> Result<bool, Auditor<Error>> {
@@ -37,7 +38,7 @@ impl FormResolver<ApplicationUserAccessRefreshToken<'_>> {
 
         return Ok(
             Encoder::<HmacSha3512>::is_valid(
-                ENVIRONMENT_CONFIGURATION.encryption.private_key.application_user_access_refresh_token.0.as_bytes(),
+                environment_configuration.encryption.private_key.application_user_access_refresh_token.as_bytes(),
                 data.as_slice(),
                 encoded_data.as_slice(),
             )?

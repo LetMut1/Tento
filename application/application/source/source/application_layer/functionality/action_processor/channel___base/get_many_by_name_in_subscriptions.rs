@@ -5,6 +5,7 @@ use crate::domain_layer::functionality::service::extractor::application_user_acc
 use crate::domain_layer::functionality::service::extractor::Extractor;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::auditor::Backtrace;
+use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
@@ -34,6 +35,7 @@ impl ActionProcessor<Channel__Base___GetManyByNameInSubscriptions> {
     const LIMIT: i16 = 100;
 
     pub async fn process<'a, T>(
+        environment_configuration: &'static EnvironmentConfiguration,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_1_redis_connection_pool: &'a Pool<RedisConnectionManager>,
@@ -47,7 +49,7 @@ impl ActionProcessor<Channel__Base___GetManyByNameInSubscriptions> {
     {
         let incoming_ = incoming.convert_value_does_not_exist(Backtrace::new(line!(), file!()))?;
 
-        let application_user_access_token = match Extractor::<ApplicationUserAccessToken<'_>>::extract(&incoming_.application_user_access_token_encrypted).await? {
+        let application_user_access_token = match Extractor::<ApplicationUserAccessToken<'_>>::extract(environment_configuration, &incoming_.application_user_access_token_encrypted).await? {
             InvalidArgumentResult::Ok {
                 subject: extractor_result,
             } => {

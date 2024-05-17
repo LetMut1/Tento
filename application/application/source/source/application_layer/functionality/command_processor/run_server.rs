@@ -56,7 +56,6 @@ use tokio::runtime::Builder;
 use tokio::signal::unix::SignalKind;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
-use tokio_postgres::Config as PostgresqlConfiguration;
 use tokio_postgres::Socket;
 use super::CommandProcessor;
 use tracing_appender::rolling::Rotation;
@@ -67,7 +66,7 @@ use tracing::Level;
 use crate::infrastructure_layer::data::auditor::OptionConverter;
 use std::sync::OnceLock;
 use tracing_appender::non_blocking::WorkerGuard;
-use crate::infrastructure_layer::data::environment_configuration::Environment as EnvironmentXXX; // TODO TODO TODO
+use crate::infrastructure_layer::data::environment_configuration::Environment;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::functionality::service::loader::Loader;
 
@@ -86,7 +85,7 @@ impl CommandProcessor<RunServer> {
         return Ok(());
     }
 
-    fn initialize_environment() -> Result<&'static EnvironmentConfiguration, Auditor<Error>> {
+    pub fn initialize_environment() -> Result<&'static EnvironmentConfiguration, Auditor<Error>> {
         let environment_configuration_file_path = format!(
             "{}/environment_configuration",
             std::env::var("CARGO_MANIFEST_DIR").convert(Backtrace::new(line!(), file!()))?.as_str(),
@@ -125,11 +124,10 @@ impl CommandProcessor<RunServer> {
     }
 
     fn initialize_logger(environment_configuration: &'static EnvironmentConfiguration) -> Result<WorkerGuard, Auditor<Error>> {
-
         let rolling_file_appender = RollingFileAppender::new(
             Rotation::DAILY,
-            environment_configuration.logging.directory_path,
-            environment_configuration.logging.file_name_prefix,
+            environment_configuration.logging.directory_path.as_str(),
+            environment_configuration.logging.file_name_prefix.as_str(),
         );
 
         let (non_blocking, worker_guard) = NonBlockingBuilder::default().finish(rolling_file_appender);
@@ -258,7 +256,7 @@ impl CommandProcessor<RunServer> {
             None => server_builder.http2_max_pending_accept_reset_streams(None),
         };
 
-        if let Some(ref tls) = environment_configuration.application_server.http.tls {
+        if let Some(ref _tls) = environment_configuration.application_server.http.tls {
             todo!("// TODO ssl_protocolsTLSv1 TLSv1.1 TLSv1.2 TLSv1.3;  ssl_ciphers HIGH:!aNULL:!MD5;")
         }
 
@@ -267,26 +265,20 @@ impl CommandProcessor<RunServer> {
             server_builder = server_builder.http2_only(false);
         }
 
-        let database_1_postgresql_configuration = PostgresqlConfiguration::from_str(environment_configuration.resource.postgresql.database_1_url.as_str()).convert(Backtrace::new(line!(), file!()))?;
-
-        let database_2_postgresql_configuration = PostgresqlConfiguration::from_str(environment_configuration.resource.postgresql.database_2_url.as_str()).convert(Backtrace::new(line!(), file!()))?;
-
         let database_1_redis_connection_info = ConnectionInfo::from_str(environment_configuration.resource.redis.database_1_url.as_str()).convert(Backtrace::new(line!(), file!()))?;
 
         let postgresql_connection_pool_aggregator = match environment_configuration.environment {
-            EnvironmentXXX::Production => {
+            Environment::Production => {
                 todo!("TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ");
             }
-            EnvironmentXXX::Development | EnvironmentXXX::LocalDevelopment => {
-                let database_1_postgresql_connection_pool = Creator::<PostgresqlConnectionPoolNoTls>::create(
-                    &environment_configuration.environment,
-                    &database_1_postgresql_configuration,
+            Environment::Development | Environment::LocalDevelopment => {
+                let database_1_postgresql_connection_pool = Creator::<PostgresqlConnectionPoolNoTls>::create_database_1(
+                    environment_configuration,
                 )
                 .await?;
 
-                let database_2_postgresql_connection_pool = Creator::<PostgresqlConnectionPoolNoTls>::create(
-                    &environment_configuration.environment,
-                    &database_2_postgresql_configuration,
+                let database_2_postgresql_connection_pool = Creator::<PostgresqlConnectionPoolNoTls>::create_database_2(
+                    environment_configuration,
                 )
                 .await?;
 
@@ -756,6 +748,7 @@ impl CommandProcessor<RunServer> {
                     // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                     (&ApplicationUser__Authorization_::CheckNicknameForExisting, &Method::POST) => {
                         return Action::<ApplicationUser__Authorization___CheckNicknameForExisting>::run(
+                            environment_configuration,
                             &mut body,
                             &parts,
                             &r#match.params,
@@ -768,6 +761,7 @@ impl CommandProcessor<RunServer> {
                     // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                     (&ApplicationUser__Authorization_::CheckEmailForExisting, &Method::POST) => {
                         return Action::<ApplicationUser__Authorization___CheckEmailForExisting>::run(
+                            environment_configuration,
                             &mut body,
                             &parts,
                             &r#match.params,
@@ -779,6 +773,7 @@ impl CommandProcessor<RunServer> {
                     }
                     (&ApplicationUser__Authorization_::RegisterByFirstStep, &Method::POST) => {
                         return Action::<ApplicationUser__Authorization___RegisterByFirstStep>::run(
+                            environment_configuration,
                             &mut body,
                             &parts,
                             &r#match.params,
@@ -790,6 +785,7 @@ impl CommandProcessor<RunServer> {
                     }
                     (&ApplicationUser__Authorization_::RegisterBySecondStep, &Method::POST) => {
                         return Action::<ApplicationUser__Authorization___RegisterBySecondStep>::run(
+                            environment_configuration,
                             &mut body,
                             &parts,
                             &r#match.params,
@@ -801,6 +797,7 @@ impl CommandProcessor<RunServer> {
                     }
                     (&ApplicationUser__Authorization_::RegisterByLastStep, &Method::POST) => {
                         return Action::<ApplicationUser__Authorization___RegisterByLastStep>::run(
+                            environment_configuration,
                             &mut body,
                             &parts,
                             &r#match.params,
@@ -812,6 +809,7 @@ impl CommandProcessor<RunServer> {
                     }
                     (&ApplicationUser__Authorization_::SendEmailForRegister, &Method::POST) => {
                         return Action::<ApplicationUser__Authorization___SendEmailForRegister>::run(
+                            environment_configuration,
                             &mut body,
                             &parts,
                             &r#match.params,
@@ -823,6 +821,7 @@ impl CommandProcessor<RunServer> {
                     }
                     (&ApplicationUser__Authorization_::AuthorizeByFirstStep, &Method::POST) => {
                         return Action::<ApplicationUser__Authorization___AuthorizeByFirstStep>::run(
+                            environment_configuration,
                             &mut body,
                             &parts,
                             &r#match.params,
@@ -834,6 +833,7 @@ impl CommandProcessor<RunServer> {
                     }
                     (&ApplicationUser__Authorization_::AuthorizeByLastStep, &Method::POST) => {
                         return Action::<ApplicationUser__Authorization___AuthorizeByLastStep>::run(
+                            environment_configuration,
                             &mut body,
                             &parts,
                             &r#match.params,
@@ -845,6 +845,7 @@ impl CommandProcessor<RunServer> {
                     }
                     (&ApplicationUser__Authorization_::SendEmailForAuthorize, &Method::POST) => {
                         return Action::<ApplicationUser__Authorization___SendEmailForAuthorize>::run(
+                            environment_configuration,
                             &mut body,
                             &parts,
                             &r#match.params,
@@ -856,6 +857,7 @@ impl CommandProcessor<RunServer> {
                     }
                     (&ApplicationUser__Authorization_::ResetPasswordByFirstStep, &Method::POST) => {
                         return Action::<ApplicationUser__Authorization___ResetPasswordByFirstStep>::run(
+                            environment_configuration,
                             &mut body,
                             &parts,
                             &r#match.params,
@@ -867,6 +869,7 @@ impl CommandProcessor<RunServer> {
                     }
                     (&ApplicationUser__Authorization_::ResetPasswordBySecondStep, &Method::POST) => {
                         return Action::<ApplicationUser__Authorization___ResetPasswordBySecondStep>::run(
+                            environment_configuration,
                             &mut body,
                             &parts,
                             &r#match.params,
@@ -878,6 +881,7 @@ impl CommandProcessor<RunServer> {
                     }
                     (&ApplicationUser__Authorization_::ResetPasswordByLastStep, &Method::POST) => {
                         return Action::<ApplicationUser__Authorization___ResetPasswordByLastStep>::run(
+                            environment_configuration,
                             &mut body,
                             &parts,
                             &r#match.params,
@@ -889,6 +893,7 @@ impl CommandProcessor<RunServer> {
                     }
                     (&ApplicationUser__Authorization_::SendEmailForResetPassword, &Method::POST) => {
                         return Action::<ApplicationUser__Authorization___SendEmailForResetPassword>::run(
+                            environment_configuration,
                             &mut body,
                             &parts,
                             &r#match.params,
@@ -900,6 +905,7 @@ impl CommandProcessor<RunServer> {
                     }
                     (&ApplicationUser__Authorization_::RefreshAccessToken, &Method::POST) => {
                         return Action::<ApplicationUser__Authorization___RefreshAccessToken>::run(
+                            environment_configuration,
                             &mut body,
                             &parts,
                             &r#match.params,
@@ -911,6 +917,7 @@ impl CommandProcessor<RunServer> {
                     }
                     (&ApplicationUser__Authorization_::DeauthorizeFromOneDevice, &Method::POST) => {
                         return Action::<ApplicationUser__Authorization___DeauthorizeFromOneDevice>::run(
+                            environment_configuration,
                             &mut body,
                             &parts,
                             &r#match.params,
@@ -922,6 +929,7 @@ impl CommandProcessor<RunServer> {
                     }
                     (&ApplicationUser__Authorization_::DeauthorizeFromAllDevices, &Method::POST) => {
                         return Action::<ApplicationUser__Authorization___DeauthorizeFromAllDevices>::run(
+                            environment_configuration,
                             &mut body,
                             &parts,
                             &r#match.params,
@@ -941,6 +949,7 @@ impl CommandProcessor<RunServer> {
                                 // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                                 (&ApplicationUser__Authorization_::CheckNicknameForExisting_, &Method::POST) => {
                                     return Action::<ApplicationUser__Authorization___CheckNicknameForExisting>::run_(
+                                        environment_configuration,
                                         &mut body,
                                         &parts,
                                         &r#match.params,
@@ -953,6 +962,7 @@ impl CommandProcessor<RunServer> {
                                 // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                                 (&ApplicationUser__Authorization_::CheckEmailForExisting_, &Method::POST) => {
                                     return Action::<ApplicationUser__Authorization___CheckEmailForExisting>::run_(
+                                        environment_configuration,
                                         &mut body,
                                         &parts,
                                         &r#match.params,
@@ -964,6 +974,7 @@ impl CommandProcessor<RunServer> {
                                 }
                                 (&ApplicationUser__Authorization_::RegisterByFirstStep_, &Method::POST) => {
                                     return Action::<ApplicationUser__Authorization___RegisterByFirstStep>::run_(
+                                        environment_configuration,
                                         &mut body,
                                         &parts,
                                         &r#match.params,
@@ -975,6 +986,7 @@ impl CommandProcessor<RunServer> {
                                 }
                                 (&ApplicationUser__Authorization_::RegisterBySecondStep_, &Method::POST) => {
                                     return Action::<ApplicationUser__Authorization___RegisterBySecondStep>::run_(
+                                        environment_configuration,
                                         &mut body,
                                         &parts,
                                         &r#match.params,
@@ -986,6 +998,7 @@ impl CommandProcessor<RunServer> {
                                 }
                                 (&ApplicationUser__Authorization_::RegisterByLastStep_, &Method::POST) => {
                                     return Action::<ApplicationUser__Authorization___RegisterByLastStep>::run_(
+                                        environment_configuration,
                                         &mut body,
                                         &parts,
                                         &r#match.params,
@@ -997,6 +1010,7 @@ impl CommandProcessor<RunServer> {
                                 }
                                 (&ApplicationUser__Authorization_::SendEmailForRegister_, &Method::POST) => {
                                     return Action::<ApplicationUser__Authorization___SendEmailForRegister>::run_(
+                                        environment_configuration,
                                         &mut body,
                                         &parts,
                                         &r#match.params,
@@ -1008,6 +1022,7 @@ impl CommandProcessor<RunServer> {
                                 }
                                 (&ApplicationUser__Authorization_::AuthorizeByFirstStep_, &Method::POST) => {
                                     return Action::<ApplicationUser__Authorization___AuthorizeByFirstStep>::run_(
+                                        environment_configuration,
                                         &mut body,
                                         &parts,
                                         &r#match.params,
@@ -1019,6 +1034,7 @@ impl CommandProcessor<RunServer> {
                                 }
                                 (&ApplicationUser__Authorization_::AuthorizeByLastStep_, &Method::POST) => {
                                     return Action::<ApplicationUser__Authorization___AuthorizeByLastStep>::run_(
+                                        environment_configuration,
                                         &mut body,
                                         &parts,
                                         &r#match.params,
@@ -1030,6 +1046,7 @@ impl CommandProcessor<RunServer> {
                                 }
                                 (&ApplicationUser__Authorization_::SendEmailForAuthorize_, &Method::POST) => {
                                     return Action::<ApplicationUser__Authorization___SendEmailForAuthorize>::run_(
+                                        environment_configuration,
                                         &mut body,
                                         &parts,
                                         &r#match.params,
@@ -1041,6 +1058,7 @@ impl CommandProcessor<RunServer> {
                                 }
                                 (&ApplicationUser__Authorization_::ResetPasswordByFirstStep_, &Method::POST) => {
                                     return Action::<ApplicationUser__Authorization___ResetPasswordByFirstStep>::run_(
+                                        environment_configuration,
                                         &mut body,
                                         &parts,
                                         &r#match.params,
@@ -1052,6 +1070,7 @@ impl CommandProcessor<RunServer> {
                                 }
                                 (&ApplicationUser__Authorization_::ResetPasswordBySecondStep_, &Method::POST) => {
                                     return Action::<ApplicationUser__Authorization___ResetPasswordBySecondStep>::run_(
+                                        environment_configuration,
                                         &mut body,
                                         &parts,
                                         &r#match.params,
@@ -1063,6 +1082,7 @@ impl CommandProcessor<RunServer> {
                                 }
                                 (&ApplicationUser__Authorization_::ResetPasswordByLastStep_, &Method::POST) => {
                                     return Action::<ApplicationUser__Authorization___ResetPasswordByLastStep>::run_(
+                                        environment_configuration,
                                         &mut body,
                                         &parts,
                                         &r#match.params,
@@ -1074,6 +1094,7 @@ impl CommandProcessor<RunServer> {
                                 }
                                 (&ApplicationUser__Authorization_::SendEmailForResetPassword_, &Method::POST) => {
                                     return Action::<ApplicationUser__Authorization___SendEmailForResetPassword>::run_(
+                                        environment_configuration,
                                         &mut body,
                                         &parts,
                                         &r#match.params,
@@ -1085,6 +1106,7 @@ impl CommandProcessor<RunServer> {
                                 }
                                 (&ApplicationUser__Authorization_::RefreshAccessToken_, &Method::POST) => {
                                     return Action::<ApplicationUser__Authorization___RefreshAccessToken>::run_(
+                                        environment_configuration,
                                         &mut body,
                                         &parts,
                                         &r#match.params,
@@ -1096,6 +1118,7 @@ impl CommandProcessor<RunServer> {
                                 }
                                 (&ApplicationUser__Authorization_::DeauthorizeFromOneDevice_, &Method::POST) => {
                                     return Action::<ApplicationUser__Authorization___DeauthorizeFromOneDevice>::run_(
+                                        environment_configuration,
                                         &mut body,
                                         &parts,
                                         &r#match.params,
@@ -1107,6 +1130,7 @@ impl CommandProcessor<RunServer> {
                                 }
                                 (&ApplicationUser__Authorization_::DeauthorizeFromAllDevices_, &Method::POST) => {
                                     return Action::<ApplicationUser__Authorization___DeauthorizeFromAllDevices>::run_(
+                                        environment_configuration,
                                         &mut body,
                                         &parts,
                                         &r#match.params,
@@ -1132,6 +1156,7 @@ impl CommandProcessor<RunServer> {
                     // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                     (&Channel__Base_::GetOneById, &Method::POST) => {
                         return Action::<Channel__Base___GetOneById>::run(
+                            environment_configuration,
                             &mut body,
                             &parts,
                             &r#match.params,
@@ -1144,6 +1169,7 @@ impl CommandProcessor<RunServer> {
                     // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                     (&Channel__Base_::GetManyByNameInSubscriptions, &Method::POST) => {
                         return Action::<Channel__Base___GetManyByNameInSubscriptions>::run(
+                            environment_configuration,
                             &mut body,
                             &parts,
                             &r#match.params,
@@ -1156,6 +1182,7 @@ impl CommandProcessor<RunServer> {
                     // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                     (&Channel__Base_::GetManyBySubscription, &Method::POST) => {
                         return Action::<Channel__Base___GetManyBySubscription>::run(
+                            environment_configuration,
                             &mut body,
                             &parts,
                             &r#match.params,
@@ -1168,6 +1195,7 @@ impl CommandProcessor<RunServer> {
                     // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                     (&Channel__Base_::GetManyPublicByName, &Method::POST) => {
                         return Action::<Channel__Base___GetManyPublicByName>::run(
+                            environment_configuration,
                             &mut body,
                             &parts,
                             &r#match.params,
@@ -1187,6 +1215,7 @@ impl CommandProcessor<RunServer> {
                                 // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                                 (&Channel__Base_::GetOneById_, &Method::POST) => {
                                     return Action::<Channel__Base___GetOneById>::run_(
+                                        environment_configuration,
                                         &mut body,
                                         &parts,
                                         &r#match.params,
@@ -1199,6 +1228,7 @@ impl CommandProcessor<RunServer> {
                                 // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                                 (&Channel__Base_::GetManyByNameInSubscriptions_, &Method::POST) => {
                                     return Action::<Channel__Base___GetManyByNameInSubscriptions>::run_(
+                                        environment_configuration,
                                         &mut body,
                                         &parts,
                                         &r#match.params,
@@ -1211,6 +1241,7 @@ impl CommandProcessor<RunServer> {
                                 // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                                 (&Channel__Base_::GetManyBySubscription_, &Method::POST) => {
                                     return Action::<Channel__Base___GetManyBySubscription>::run_(
+                                        environment_configuration,
                                         &mut body,
                                         &parts,
                                         &r#match.params,
@@ -1223,6 +1254,7 @@ impl CommandProcessor<RunServer> {
                                 // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                                 (&Channel__Base_::GetManyPublicByName_, &Method::POST) => {
                                     return Action::<Channel__Base___GetManyPublicByName>::run_(
+                                        environment_configuration,
                                         &mut body,
                                         &parts,
                                         &r#match.params,
@@ -1247,6 +1279,7 @@ impl CommandProcessor<RunServer> {
                 ) {
                     (&ChannelSubscription__Base_::Create, &Method::POST) => {
                         return Action::<ChannelSubscription__Base___Create>::run(
+                            environment_configuration,
                             &mut body,
                             &parts,
                             &r#match.params,
@@ -1265,6 +1298,7 @@ impl CommandProcessor<RunServer> {
                             ) {
                                 (&ChannelSubscription__Base_::Create_, &Method::POST) => {
                                     return Action::<ChannelSubscription__Base___Create>::run_(
+                                        environment_configuration,
                                         &mut body,
                                         &parts,
                                         &r#match.params,

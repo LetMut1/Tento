@@ -1,9 +1,11 @@
 use super::Creator;
-use crate::infrastructure_layer::data::environment_configurationxxx::Environment;
+use crate::infrastructure_layer::data::environment_configuration::Environment;
 use crate::infrastructure_layer::data::auditor::Backtrace;
+use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
+use std::str::FromStr;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use std::clone::Clone;
@@ -13,7 +15,29 @@ use tokio_postgres::NoTls;
 pub use crate::infrastructure_layer::data::control_type::PostgresqlConnectionPoolNoTls;
 
 impl Creator<PostgresqlConnectionPoolNoTls> {
-    pub async fn create<'a>(
+    pub async fn create_database_1<'a>(
+        environment_configuration: &'static EnvironmentConfiguration,
+    ) -> Result<Pool<PostgresqlConnectionManager<NoTls>>, Auditor<Error>> {
+        return Ok(
+            Self::create(
+                &environment_configuration.environment,
+                &Config::from_str(environment_configuration.resource.postgresql.database_1_url.as_str()).convert(Backtrace::new(line!(), file!()))?
+            ).await?
+        );
+    }
+
+    pub async fn create_database_2<'a>(
+        environment_configuration: &'static EnvironmentConfiguration,
+    ) -> Result<Pool<PostgresqlConnectionManager<NoTls>>, Auditor<Error>> {
+        return Ok(
+            Self::create(
+                &environment_configuration.environment,
+                &Config::from_str(environment_configuration.resource.postgresql.database_2_url.as_str()).convert(Backtrace::new(line!(), file!()))?
+            ).await?
+        );
+    }
+
+    async fn create<'a>(
         environment: &'a Environment,
         configuration: &'a Config,
     ) -> Result<Pool<PostgresqlConnectionManager<NoTls>>, Auditor<Error>> {
