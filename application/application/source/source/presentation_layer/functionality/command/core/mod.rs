@@ -264,3 +264,6 @@ fn process() -> Result<(), Box<dyn StdError + 'static>> {
 // логгер в stdout
 // newtype pattern remove
 // control type - в сервисы? убрать Пабюз для сервисов, где фантомдата.
+// invalid_argument__?__auditor
+// весь декодинг конвертируем в invalid_argument? или же в Error:decoding
+// убрать реактор

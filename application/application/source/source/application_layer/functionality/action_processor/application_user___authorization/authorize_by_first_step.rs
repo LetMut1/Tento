@@ -25,8 +25,7 @@ use crate::infrastructure_layer::functionality::service::spawner::Spawner;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::data::auditor::OptionConverter;
-use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
-use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
+use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By1;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By2;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By4;
@@ -59,7 +58,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         incoming: Option<Incoming>,
-    ) -> Result<InvalidArgumentResult<UnifiedReport<Outcoming, Precedent>>, Auditor<Error>>
+    ) -> Result<Result<UnifiedReport<Outcoming, Precedent>, Auditor<InvalidArgument>>, Auditor<Error>>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -70,17 +69,29 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
 
         if !Validator::<ApplicationUser_Password>::is_valid_part_1(&incoming_.application_user_password) {
             return Ok(
-                InvalidArgumentResult::InvalidArgument {
-                    invalid_argument: InvalidArgument::ApplicationUser_Password,
-                },
+                Err(
+                    Auditor::<InvalidArgument>::new(
+                        InvalidArgument,
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                ),
             );
         }
 
         if !Validator::<ApplicationUserDevice_Id>::is_valid(&incoming_.application_user_device_id) {
             return Ok(
-                InvalidArgumentResult::InvalidArgument {
-                    invalid_argument: InvalidArgument::ApplicationUserDevice_Id,
-                },
+                Err(
+                    Auditor::<InvalidArgument>::new(
+                        InvalidArgument,
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                ),
             );
         }
 
@@ -102,11 +113,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
             let application_user__ = match application_user_ {
                 Some(application_user___) => application_user___,
                 None => {
-                    return Ok(
-                        InvalidArgumentResult::Ok {
-                            subject: UnifiedReport::precedent(Precedent::ApplicationUser_WrongEmailOrNicknameOrPassword),
-                        },
-                    );
+                    return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUser_WrongEmailOrNicknameOrPassword)));
                 }
             };
 
@@ -131,11 +138,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                 let application_user__ = match application_user_ {
                     Some(application_user___) => application_user___,
                     None => {
-                        return Ok(
-                            InvalidArgumentResult::Ok {
-                                subject: UnifiedReport::precedent(Precedent::ApplicationUser_WrongEmailOrNicknameOrPassword),
-                            },
-                        );
+                        return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUser_WrongEmailOrNicknameOrPassword)));
                     }
                 };
 
@@ -147,9 +150,15 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                 )
             } else {
                 return Ok(
-                    InvalidArgumentResult::InvalidArgument {
-                        invalid_argument: InvalidArgument::ApplicationUser_Nickname,
-                    },
+                    Err(
+                        Auditor::<InvalidArgument>::new(
+                            InvalidArgument,
+                            Backtrace::new(
+                                line!(),
+                                file!(),
+                            ),
+                        ),
+                    ),
                 );
             }
         };
@@ -160,9 +169,15 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
             &application_user_nickname,
         ) {
             return Ok(
-                InvalidArgumentResult::InvalidArgument {
-                    invalid_argument: InvalidArgument::ApplicationUser_Password,
-                },
+                Err(
+                    Auditor::<InvalidArgument>::new(
+                        InvalidArgument,
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                ),
             );
         }
 
@@ -176,11 +191,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
         );
 
         if !join_handle.await.convert(Backtrace::new(line!(), file!()))?? {
-            return Ok(
-                InvalidArgumentResult::Ok {
-                    subject: UnifiedReport::precedent(Precedent::ApplicationUser_WrongEmailOrNicknameOrPassword),
-                },
-            );
+            return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUser_WrongEmailOrNicknameOrPassword)));
         }
 
         let by_4 = By4 {
@@ -308,10 +319,6 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
             application_user_authorization_token_wrong_enter_tries_quantity_limit: ApplicationUserAuthorizationToken_WrongEnterTriesQuantity::LIMIT,
         };
 
-        return Ok(
-            InvalidArgumentResult::Ok {
-                subject: UnifiedReport::target_filled(outcoming),
-            },
-        );
+        return Ok(Ok(UnifiedReport::target_filled(outcoming)));
     }
 }

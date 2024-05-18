@@ -1,8 +1,8 @@
 use crate::application_layer::data::unified_report::UnifiedReport;
+use crate::application_layer::functionality::service::reactor::action_round___invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error::Error;
-use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::data::void::Void;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
@@ -22,7 +22,7 @@ impl ActionProcessor<HealthCheck> {
         _database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _incoming: Option<Void>,
-    ) -> Result<InvalidArgumentResult<UnifiedReport<Void, Void>>, Auditor<Error>>
+    ) -> Result<Result<UnifiedReport<Void, Void>, Auditor<InvalidArgument>>, Auditor<Error>>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,

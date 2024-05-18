@@ -1,5 +1,4 @@
 use crate::infrastructure_layer::functionality::service::formatter::Formatter;
-use tracing::info;
 use super::Logger;
 
 pub use crate::infrastructure_layer::data::control_type::Response;
@@ -18,7 +17,7 @@ impl Logger<(ActionRound, Response)> {
             None
         );
 
-        info!("{}", message.as_str());
+        tracing::info!("{}", message.as_str());
 
         return ();
     }

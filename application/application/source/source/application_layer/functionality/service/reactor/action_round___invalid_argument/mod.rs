@@ -6,13 +6,14 @@ use crate::infrastructure_layer::data::control_type::TokioNonBlockingTask;
 use crate::infrastructure_layer::functionality::service::spawner::Spawner;
 
 pub use crate::infrastructure_layer::data::control_type::ActionRound;
-pub use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
+pub use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
+pub use crate::infrastructure_layer::data::auditor::Auditor;
 
-impl Reactor<(ActionRound, InvalidArgument)> {
+impl Reactor<(ActionRound, Auditor<InvalidArgument>)> {
     pub fn react<'a>(
         request_parts: &'a Parts,
         response: &'a Response,
-        invalid_argument: InvalidArgument
+        invalid_argument_auditor: Auditor<InvalidArgument>,
     ) -> () {
         let request_uri = request_parts.uri.path().to_string();
 
@@ -22,11 +23,11 @@ impl Reactor<(ActionRound, InvalidArgument)> {
 
         Spawner::<TokioNonBlockingTask>::spawn_into_background(
             async move {
-                Logger::<(ActionRound, InvalidArgument)>::log(
+                Logger::<(ActionRound, Auditor<InvalidArgument>)>::log(
                     request_uri.as_str(),
                     request_method.as_str(),
                     response_status_code,
-                    &invalid_argument,
+                    &invalid_argument_auditor,
                 );
 
                 return Ok(());

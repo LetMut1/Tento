@@ -18,10 +18,9 @@ use crate::infrastructure_layer::data::environment_configuration::EnvironmentCon
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
-use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
+use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::data::control_type::TokioBlockingTask;
 use crate::infrastructure_layer::functionality::service::spawner::Spawner;
-use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
 use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By3;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By4;
@@ -53,7 +52,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         incoming: Option<Incoming>,
-    ) -> Result<InvalidArgumentResult<UnifiedReport<Void, Precedent>>, Auditor<Error>>
+    ) -> Result<Result<UnifiedReport<Void, Precedent>, Auditor<InvalidArgument>>, Auditor<Error>>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -64,33 +63,57 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
 
         if !Validator::<ApplicationUserResetPasswordToken_Value>::is_valid(&incoming_.application_user_reset_password_token_value)? {
             return Ok(
-                InvalidArgumentResult::InvalidArgument {
-                    invalid_argument: InvalidArgument::ApplicationUserResetPasswordToken_Value,
-                },
+                Err(
+                    Auditor::<InvalidArgument>::new(
+                        InvalidArgument,
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                ),
             );
         }
 
         if !Validator::<ApplicationUser_Id>::is_valid(incoming_.application_user_id) {
             return Ok(
-                InvalidArgumentResult::InvalidArgument {
-                    invalid_argument: InvalidArgument::ApplicationUser_Id,
-                },
+                Err(
+                    Auditor::<InvalidArgument>::new(
+                        InvalidArgument,
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                ),
             );
         }
 
         if !Validator::<ApplicationUser_Password>::is_valid_part_1(&incoming_.application_user_password) {
             return Ok(
-                InvalidArgumentResult::InvalidArgument {
-                    invalid_argument: InvalidArgument::ApplicationUser_Password,
-                },
+                Err(
+                    Auditor::<InvalidArgument>::new(
+                        InvalidArgument,
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                ),
             );
         }
 
         if !Validator::<ApplicationUserDevice_Id>::is_valid(&incoming_.application_user_device_id) {
             return Ok(
-                InvalidArgumentResult::InvalidArgument {
-                    invalid_argument: InvalidArgument::ApplicationUserDevice_Id,
-                },
+                Err(
+                    Auditor::<InvalidArgument>::new(
+                        InvalidArgument,
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                ),
             );
         }
 
@@ -111,11 +134,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
         {
             Some(application_user_reset_password_token_) => application_user_reset_password_token_,
             None => {
-                return Ok(
-                    InvalidArgumentResult::Ok {
-                        subject: UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_NotFound),
-                    },
-                );
+                return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_NotFound)));
             }
         };
 
@@ -126,19 +145,11 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
             )
             .await?;
 
-            return Ok(
-                InvalidArgumentResult::Ok {
-                    subject: UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_AlreadyExpired),
-                },
-            );
+            return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_AlreadyExpired)));
         }
 
         if !application_user_reset_password_token.is_approved.0 {
-            return Ok(
-                InvalidArgumentResult::Ok {
-                    subject: UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_IsNotApproved),
-                },
-            );
+            return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_IsNotApproved)));
         }
 
         if application_user_reset_password_token.value.0 != incoming_.application_user_reset_password_token_value.0 {
@@ -161,11 +172,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
                 .await?;
             }
 
-            return Ok(
-                InvalidArgumentResult::Ok {
-                    subject: UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_WrongValue),
-                },
-            );
+            return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_WrongValue)));
         }
 
         let by_3 = By3 {
@@ -184,11 +191,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
         {
             Some(application_user_) => application_user_,
             None => {
-                return Ok(
-                    InvalidArgumentResult::Ok {
-                        subject: UnifiedReport::precedent(Precedent::ApplicationUser_NotFound),
-                    },
-                );
+                return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUser_NotFound)));
             }
         };
 
@@ -198,9 +201,15 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
             &application_user.nickname,
         ) {
             return Ok(
-                InvalidArgumentResult::InvalidArgument {
-                    invalid_argument: InvalidArgument::ApplicationUser_Password,
-                },
+                Err(
+                    Auditor::<InvalidArgument>::new(
+                        InvalidArgument,
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                ),
             );
         }
 
@@ -248,10 +257,6 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
             }
         );
 
-        return Ok(
-            InvalidArgumentResult::Ok {
-                subject: UnifiedReport::target_empty(),
-            },
-        );
+        return Ok(Ok(UnifiedReport::target_empty()));
     }
 }

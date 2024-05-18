@@ -27,8 +27,7 @@ use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::control_type::TokioNonBlockingTask;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::functionality::service::spawner::Spawner;
-use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
-use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
+use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By3;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By4;
 use crate::infrastructure_layer::functionality::repository::postgresql::insert::Insert2;
@@ -61,7 +60,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>, // TODO  TODO  TODO  TODO  TODO МОжет ли хакер войти на этом шаге, если пользователь сделал первый шаг.
         incoming: Option<Incoming>,
-    ) -> Result<InvalidArgumentResult<UnifiedReport<Outcoming, Precedent>>, Auditor<Error>>
+    ) -> Result<Result<UnifiedReport<Outcoming, Precedent>, Auditor<InvalidArgument>>, Auditor<Error>>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -72,25 +71,43 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
 
         if !Validator::<ApplicationUser_Id>::is_valid(incoming_.application_user_id) {
             return Ok(
-                InvalidArgumentResult::InvalidArgument {
-                    invalid_argument: InvalidArgument::ApplicationUser_Id,
-                },
+                Err(
+                    Auditor::<InvalidArgument>::new(
+                        InvalidArgument,
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                ),
             );
         }
 
         if !Validator::<ApplicationUserAuthorizationToken_Value>::is_valid(&incoming_.application_user_authorization_token_value)? {
             return Ok(
-                InvalidArgumentResult::InvalidArgument {
-                    invalid_argument: InvalidArgument::ApplicationUserAuthorizationToken_Value,
-                },
+                Err(
+                    Auditor::<InvalidArgument>::new(
+                        InvalidArgument,
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                ),
             );
         }
 
         if !Validator::<ApplicationUserDevice_Id>::is_valid(&incoming_.application_user_device_id) {
             return Ok(
-                InvalidArgumentResult::InvalidArgument {
-                    invalid_argument: InvalidArgument::ApplicationUserDevice_Id,
-                },
+                Err(
+                    Auditor::<InvalidArgument>::new(
+                        InvalidArgument,
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                ),
             );
         }
 
@@ -112,11 +129,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
         let mut application_user_authorization_token_ = match application_user_authorization_token {
             Some(application_user_authorization_token__) => application_user_authorization_token__,
             None => {
-                return Ok(
-                    InvalidArgumentResult::Ok {
-                        subject: UnifiedReport::precedent(Precedent::ApplicationUserAuthorizationToken_NotFound),
-                    },
-                );
+                return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserAuthorizationToken_NotFound)));
             }
         };
 
@@ -127,11 +140,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
             )
             .await?;
 
-            return Ok(
-                InvalidArgumentResult::Ok {
-                    subject: UnifiedReport::precedent(Precedent::ApplicationUserAuthorizationToken_AlreadyExpired),
-                },
-            );
+            return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserAuthorizationToken_AlreadyExpired)));
         }
 
         if application_user_authorization_token_.value.0 != incoming_.application_user_authorization_token_value.0 {
@@ -155,13 +164,13 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
             }
 
             return Ok(
-                InvalidArgumentResult::Ok {
-                    subject: UnifiedReport::precedent(
+                Ok(
+                    UnifiedReport::precedent(
                         Precedent::ApplicationUserAuthorizationToken_WrongValue {
                             application_user_authorization_token_wrong_enter_tries_quantity: application_user_authorization_token_.wrong_enter_tries_quantity,
                         },
                     ),
-                },
+                ),
             );
         }
 
@@ -177,11 +186,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
         )
         .await?
         {
-            return Ok(
-                InvalidArgumentResult::Ok {
-                    subject: UnifiedReport::precedent(Precedent::ApplicationUser_NotFound),
-                },
-            );
+            return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUser_NotFound)));
         }
 
         let application_user_access_token = ApplicationUserAccessToken {
@@ -288,10 +293,6 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
             application_user_access_refresh_token_encrypted,
         };
 
-        return Ok(
-            InvalidArgumentResult::Ok {
-                subject: UnifiedReport::target_filled(outcoming),
-            },
-        );
+        return Ok(Ok(UnifiedReport::target_filled(outcoming)));
     }
 }

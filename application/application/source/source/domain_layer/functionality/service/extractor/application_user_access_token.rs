@@ -5,41 +5,32 @@ use crate::domain_layer::functionality::service::form_resolver::FormResolver;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error::Error;
-use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
+use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::unix_time::UnixTime;
 
 impl Extractor<ApplicationUserAccessToken<'_>> {
-    pub async fn extract<'a>(environment_configuration: &'static EnvironmentConfiguration, application_user_access_token_encrypted: &'a ApplicationUserAccessTokenEncrypted) -> Result<InvalidArgumentResult<ExtractorResult>, Auditor<Error>> {
+    pub async fn extract<'a>(
+        environment_configuration: &'static EnvironmentConfiguration,
+        application_user_access_token_encrypted: &'a ApplicationUserAccessTokenEncrypted
+    ) -> Result<Result<ExtractorResult, Auditor<InvalidArgument>>, Auditor<Error>> {
         let application_user_access_token = match FormResolver::<ApplicationUserAccessToken<'_>>::from_encrypted(environment_configuration, application_user_access_token_encrypted)? {
-            InvalidArgumentResult::Ok {
-                subject: application_user_access_token_,
-            } => application_user_access_token_,
-            InvalidArgumentResult::InvalidArgument {
-                invalid_argument,
-            } => {
-                return Ok(
-                    InvalidArgumentResult::InvalidArgument {
-                        invalid_argument,
-                    },
-                );
+            Ok(application_user_access_token_) => application_user_access_token_,
+            Err(invalid_argument_auditor) => {
+                return Ok(Err(invalid_argument_auditor));
             }
         };
 
         if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_access_token.expires_at.0) {
-            return Ok(
-                InvalidArgumentResult::Ok {
-                    subject: ExtractorResult::ApplicationUserAccessTokenAlreadyExpired,
-                },
-            );
+            return Ok(Ok(ExtractorResult::ApplicationUserAccessTokenAlreadyExpired));
         }
 
         return Ok(
-            InvalidArgumentResult::Ok {
-                subject: ExtractorResult::ApplicationUserAccessToken {
+            Ok(
+                ExtractorResult::ApplicationUserAccessToken {
                     application_user_access_token,
                 },
-            },
+            ),
         );
     }
 }

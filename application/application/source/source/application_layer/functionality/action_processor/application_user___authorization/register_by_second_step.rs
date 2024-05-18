@@ -15,8 +15,7 @@ use crate::infrastructure_layer::data::environment_configuration::EnvironmentCon
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
-use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
-use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
+use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By5;
 use crate::infrastructure_layer::functionality::repository::postgresql::update::Update10;
@@ -45,7 +44,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
         _database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         incoming: Option<Incoming>,
-    ) -> Result<InvalidArgumentResult<UnifiedReport<Void, Precedent>>, Auditor<Error>>
+    ) -> Result<Result<UnifiedReport<Void, Precedent>, Auditor<InvalidArgument>>, Auditor<Error>>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -56,25 +55,43 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
 
         if !Validator::<ApplicationUser_Email>::is_valid(&incoming_.application_user_email)? {
             return Ok(
-                InvalidArgumentResult::InvalidArgument {
-                    invalid_argument: InvalidArgument::ApplicationUser_Email,
-                },
+                Err(
+                    Auditor::<InvalidArgument>::new(
+                        InvalidArgument,
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                ),
             );
         }
 
         if !Validator::<ApplicationUserDevice_Id>::is_valid(&incoming_.application_user_device_id) {
             return Ok(
-                InvalidArgumentResult::InvalidArgument {
-                    invalid_argument: InvalidArgument::ApplicationUserDevice_Id,
-                },
+                Err(
+                    Auditor::<InvalidArgument>::new(
+                        InvalidArgument,
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                ),
             );
         }
 
         if !Validator::<ApplicationUserRegistrationToken_Value>::is_valid(&incoming_.application_user_registration_token_value)? {
             return Ok(
-                InvalidArgumentResult::InvalidArgument {
-                    invalid_argument: InvalidArgument::ApplicationUserRegistrationToken_Value,
-                },
+                Err(
+                    Auditor::<InvalidArgument>::new(
+                        InvalidArgument,
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                ),
             );
         }
 
@@ -95,11 +112,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
         {
             Some(application_user_registration_token_) => application_user_registration_token_,
             None => {
-                return Ok(
-                    InvalidArgumentResult::Ok {
-                        subject: UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_NotFound),
-                    },
-                );
+                return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_NotFound)));
             }
         };
 
@@ -110,19 +123,11 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
             )
             .await?;
 
-            return Ok(
-                InvalidArgumentResult::Ok {
-                    subject: UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_AlreadyExpired),
-                },
-            );
+            return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_AlreadyExpired)));
         }
 
         if application_user_registration_token.is_approved.0 {
-            return Ok(
-                InvalidArgumentResult::Ok {
-                    subject: UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_AlreadyApproved),
-                },
-            );
+            return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_AlreadyApproved)));
         }
 
         if application_user_registration_token.value.0 != incoming_.application_user_registration_token_value.0 {
@@ -146,13 +151,13 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
             }
 
             return Ok(
-                InvalidArgumentResult::Ok {
-                    subject: UnifiedReport::precedent(
+                Ok(
+                    UnifiedReport::precedent(
                         Precedent::ApplicationUserRegistrationToken_WrongValue {
                             application_user_registration_token_wrong_enter_tries_quantity: application_user_registration_token.wrong_enter_tries_quantity,
                         },
                     ),
-                },
+                ),
             );
         }
 
@@ -167,10 +172,6 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
         )
         .await?;
 
-        return Ok(
-            InvalidArgumentResult::Ok {
-                subject: UnifiedReport::target_empty(),
-            },
-        );
+        return Ok(Ok(UnifiedReport::target_empty()));
     }
 }

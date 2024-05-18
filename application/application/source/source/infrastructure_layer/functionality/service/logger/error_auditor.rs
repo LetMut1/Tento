@@ -1,5 +1,4 @@
 use crate::infrastructure_layer::functionality::service::formatter::Formatter;
-use tracing::error;
 use super::Logger;
 
 pub use crate::infrastructure_layer::data::auditor::Auditor;
@@ -11,7 +10,7 @@ impl Logger<Auditor<Error>> {
     ) -> () {
         let message = Formatter::<Auditor<Error>>::format(error_auditor);
 
-        error!("{}", message.as_str());
+        tracing::error!("{}", message.as_str());
 
         return ();
     }

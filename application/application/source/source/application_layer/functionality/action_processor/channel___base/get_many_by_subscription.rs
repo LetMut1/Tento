@@ -10,8 +10,7 @@ use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::OptionConverter;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
-use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
-use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
+use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::functionality::repository::postgresql::common::Common1;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By13;
 use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
@@ -38,7 +37,7 @@ impl ActionProcessor<Channel__Base___GetManyBySubscription> {
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         incoming: Option<Incoming>,
-    ) -> Result<InvalidArgumentResult<UnifiedReport<Outcoming, Precedent>>, Auditor<Error>>
+    ) -> Result<Result<UnifiedReport<Outcoming, Precedent>, Auditor<InvalidArgument>>, Auditor<Error>>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -48,57 +47,53 @@ impl ActionProcessor<Channel__Base___GetManyBySubscription> {
         let incoming_ = incoming.convert_value_does_not_exist(Backtrace::new(line!(), file!()))?;
 
         let application_user_access_token = match Extractor::<ApplicationUserAccessToken<'_>>::extract(environment_configuration, &incoming_.application_user_access_token_encrypted).await? {
-            InvalidArgumentResult::Ok {
-                subject: extractor_result,
-            } => {
+            Ok(extractor_result) => {
                 let application_user_access_token_ = match extractor_result {
                     ExtractorResult::ApplicationUserAccessToken {
                         application_user_access_token: application_user_access_token__,
                     } => application_user_access_token__,
                     ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
-                        return Ok(
-                            InvalidArgumentResult::Ok {
-                                subject: UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_AlreadyExpired),
-                            },
-                        );
+                        return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_AlreadyExpired)));
                     }
                     ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
-                        return Ok(
-                            InvalidArgumentResult::Ok {
-                                subject: UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList),
-                            },
-                        );
+                        return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList)));
                     }
                 };
 
                 application_user_access_token_
             }
-            InvalidArgumentResult::InvalidArgument {
-                invalid_argument,
-            } => {
-                return Ok(
-                    InvalidArgumentResult::InvalidArgument {
-                        invalid_argument,
-                    },
-                );
+            Err(invalid_argument_auditor) => {
+                return Ok(Err(invalid_argument_auditor));
             }
         };
 
         if let Some(requery_channel_id_) = incoming_.requery_channel_id {
             if !Validator::<Channel_Id>::is_valid(requery_channel_id_) {
                 return Ok(
-                    InvalidArgumentResult::InvalidArgument {
-                        invalid_argument: InvalidArgument::Channel_Id,
-                    },
+                    Err(
+                        Auditor::<InvalidArgument>::new(
+                            InvalidArgument,
+                            Backtrace::new(
+                                line!(),
+                                file!(),
+                            ),
+                        ),
+                    ),
                 );
             }
         }
 
         if incoming_.limit <= 0 || incoming_.limit > Self::LIMIT {
             return Ok(
-                InvalidArgumentResult::InvalidArgument {
-                    invalid_argument: InvalidArgument::Limit,
-                },
+                Err(
+                    Auditor::<InvalidArgument>::new(
+                        InvalidArgument,
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                ),
             );
         }
 
@@ -118,10 +113,6 @@ impl ActionProcessor<Channel__Base___GetManyBySubscription> {
             common_registry,
         };
 
-        return Ok(
-            InvalidArgumentResult::Ok {
-                subject: UnifiedReport::target_filled(outcoming),
-            },
-        );
+        return Ok(Ok(UnifiedReport::target_filled(outcoming)));
     }
 }

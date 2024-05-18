@@ -15,8 +15,7 @@ use crate::infrastructure_layer::data::environment_configuration::EnvironmentCon
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
-use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
-use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
+use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By4;
 use crate::infrastructure_layer::functionality::repository::postgresql::update::Update2;
 use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
@@ -44,7 +43,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
         _database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         incoming: Option<Incoming>,
-    ) -> Result<InvalidArgumentResult<UnifiedReport<Outcoming, Precedent>>, Auditor<Error>>
+    ) -> Result<Result<UnifiedReport<Outcoming, Precedent>, Auditor<InvalidArgument>>, Auditor<Error>>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -54,17 +53,9 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
         let incoming_ = incoming.convert_value_does_not_exist(Backtrace::new(line!(), file!()))?;
 
         let application_user_access_token = match FormResolver::<ApplicationUserAccessToken<'_>>::from_encrypted(environment_configuration, &incoming_.application_user_access_token_encrypted)? {
-            InvalidArgumentResult::Ok {
-                subject: application_user_access_token_,
-            } => application_user_access_token_,
-            InvalidArgumentResult::InvalidArgument {
-                invalid_argument,
-            } => {
-                return Ok(
-                    InvalidArgumentResult::InvalidArgument {
-                        invalid_argument,
-                    },
-                );
+            Ok(application_user_access_token_) => application_user_access_token_,
+            Err(invalid_argument_auditor) => {
+                return Ok(Err(invalid_argument_auditor));
             }
         };
 
@@ -85,11 +76,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
         {
             Some(application_user_access_refresh_token_) => application_user_access_refresh_token_,
             None => {
-                return Ok(
-                    InvalidArgumentResult::Ok {
-                        subject: UnifiedReport::precedent(Precedent::ApplicationUserAccessRefreshToken_NotFound),
-                    },
-                );
+                return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessRefreshToken_NotFound)));
             }
         };
 
@@ -101,9 +88,15 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
 
         if !is_valid || application_user_access_token.id.0 != application_user_access_refresh_token.application_user_access_token_id.as_ref().0 {
             return Ok(
-                InvalidArgumentResult::InvalidArgument {
-                    invalid_argument: InvalidArgument::ApplicationUserAccessRefreshTokenEncrypted,
-                },
+                Err(
+                    Auditor::<InvalidArgument>::new(
+                        InvalidArgument,
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                ),
             );
         }
 
@@ -114,11 +107,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
             )
             .await?;
 
-            return Ok(
-                InvalidArgumentResult::Ok {
-                    subject: UnifiedReport::precedent(Precedent::ApplicationUserAccessRefreshToken_AlreadyExpired),
-                },
-            );
+            return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessRefreshToken_AlreadyExpired)));
         }
 
         let application_user_access_token_new = ApplicationUserAccessToken {
@@ -153,10 +142,6 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
             application_user_access_refresh_token_encrypted: FormResolver::<ApplicationUserAccessRefreshToken<'_>>::to_encrypted(environment_configuration, &application_user_access_refresh_token)?,
         };
 
-        return Ok(
-            InvalidArgumentResult::Ok {
-                subject: UnifiedReport::target_filled(outcoming),
-            },
-        );
+        return Ok(Ok(UnifiedReport::target_filled(outcoming)));
     }
 }

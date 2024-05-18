@@ -5,8 +5,8 @@ use crate::domain_layer::functionality::service::encoder::Encoder;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
-use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
+use crate::infrastructure_layer::data::auditor::Backtrace;
+use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::functionality::service::encoder::base64::Base64;
 use crate::infrastructure_layer::functionality::service::encoder::Encoder as Encoder_;
 use crate::infrastructure_layer::functionality::service::encoder::hmac::HmacSha3512;
@@ -39,7 +39,10 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
         );
     }
 
-    pub fn from_encrypted<'a>(environment_configuration: &'static EnvironmentConfiguration, application_user_access_token_encrypted: &'a ApplicationUserAccessTokenEncrypted) -> Result<InvalidArgumentResult<ApplicationUserAccessToken<'static>>, Auditor<Error>> {
+    pub fn from_encrypted<'a>(
+        environment_configuration: &'static EnvironmentConfiguration,
+        application_user_access_token_encrypted: &'a ApplicationUserAccessTokenEncrypted
+    ) -> Result<Result<ApplicationUserAccessToken<'static>, Auditor<InvalidArgument>>, Auditor<Error>> {
         let mut token_part_registry = application_user_access_token_encrypted.0.as_str().splitn::<'_, &'_ str>(
             2,
             Self::TOKEN_PARTS_SEPARATOR,
@@ -49,9 +52,15 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
             Some(application_user_access_token_serialized_) => application_user_access_token_serialized_,
             None => {
                 return Ok(
-                    InvalidArgumentResult::InvalidArgument {
-                        invalid_argument: InvalidArgument::ApplicationUserAccessTokenEncrypted,
-                    }
+                    Err(
+                        Auditor::<InvalidArgument>::new(
+                            InvalidArgument,
+                            Backtrace::new(
+                                line!(),
+                                file!(),
+                            ),
+                        ),
+                    )
                 );
             }
         };
@@ -60,9 +69,15 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
             Some(application_user_access_token_serialized_signature_) => application_user_access_token_serialized_signature_,
             None => {
                 return Ok(
-                    InvalidArgumentResult::InvalidArgument {
-                        invalid_argument: InvalidArgument::ApplicationUserAccessTokenEncrypted,
-                    }
+                    Err(
+                        Auditor::<InvalidArgument>::new(
+                            InvalidArgument,
+                            Backtrace::new(
+                                line!(),
+                                file!(),
+                            ),
+                        ),
+                    )
                 );
             }
         };
@@ -74,21 +89,53 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
         )?
         {
             return Ok(
-                InvalidArgumentResult::InvalidArgument {
-                    invalid_argument: InvalidArgument::ApplicationUserAccessTokenEncrypted,
-                }
+                Err(
+                    Auditor::<InvalidArgument>::new(
+                        InvalidArgument,
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                )
             );
         }
 
-        let data = Encoder_::<Base64>::decode(application_user_access_token_serialized.as_bytes())?;
+        let data = match Encoder_::<Base64>::decode(application_user_access_token_serialized.as_bytes()) {
+            Ok(data_) => data_,
+            Err(_) => {
+                return Ok(
+                    Err(
+                        Auditor::<InvalidArgument>::new(
+                            InvalidArgument,
+                            Backtrace::new(
+                                line!(),
+                                file!(),
+                            ),
+                        ),
+                    )
+                );
+            }
+        };
 
-        let application_user_access_token = Serializer::<MessagePack>::deserialize::<'_, ApplicationUserAccessToken<'static>>(data.as_slice())?;
+        let application_user_access_token = match Serializer::<MessagePack>::deserialize::<'_, ApplicationUserAccessToken<'static>>(data.as_slice()) {
+            Ok(application_user_access_token_) => application_user_access_token_,
+            Err(_) => {
+                return Ok(
+                    Err(
+                        Auditor::<InvalidArgument>::new(
+                            InvalidArgument,
+                            Backtrace::new(
+                                line!(),
+                                file!(),
+                            ),
+                        ),
+                    )
+                );
+            }
+        };
 
-        return Ok(
-            InvalidArgumentResult::Ok {
-                subject: application_user_access_token,
-            },
-        );
+        return Ok(Ok(application_user_access_token));
     }
 }
 

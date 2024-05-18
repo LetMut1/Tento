@@ -19,8 +19,7 @@ use crate::infrastructure_layer::data::environment_configuration::EnvironmentCon
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
-use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
-use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
+use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By2;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By4;
 use crate::infrastructure_layer::functionality::repository::postgresql::insert::Insert6;
@@ -52,7 +51,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByFirstStep> 
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         incoming: Option<Incoming>,
-    ) -> Result<InvalidArgumentResult<UnifiedReport<Outcoming, Precedent>>, Auditor<Error>>
+    ) -> Result<Result<UnifiedReport<Outcoming, Precedent>, Auditor<InvalidArgument>>, Auditor<Error>>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -63,17 +62,29 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByFirstStep> 
 
         if !Validator::<ApplicationUser_Email>::is_valid(&incoming_.application_user_email)? {
             return Ok(
-                InvalidArgumentResult::InvalidArgument {
-                    invalid_argument: InvalidArgument::ApplicationUser_Email,
-                },
+                Err(
+                    Auditor::<InvalidArgument>::new(
+                        InvalidArgument,
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                ),
             );
         }
 
         if !Validator::<ApplicationUserDevice_Id>::is_valid(&incoming_.application_user_device_id) {
             return Ok(
-                InvalidArgumentResult::InvalidArgument {
-                    invalid_argument: InvalidArgument::ApplicationUserDevice_Id,
-                },
+                Err(
+                    Auditor::<InvalidArgument>::new(
+                        InvalidArgument,
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                ),
             );
         }
 
@@ -90,11 +101,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByFirstStep> 
         let application_user_ = match application_user {
             Some(application_user__) => application_user__,
             None => {
-                return Ok(
-                    InvalidArgumentResult::Ok {
-                        subject: UnifiedReport::precedent(Precedent::ApplicationUser_NotFound),
-                    },
-                );
+                return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUser_NotFound)));
             }
         };
 
@@ -228,10 +235,6 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByFirstStep> 
             application_user_reset_password_token_wrong_enter_tries_quantity_limit: ApplicationUserResetPasswordToken_WrongEnterTriesQuantity::LIMIT,
         };
 
-        return Ok(
-            InvalidArgumentResult::Ok {
-                subject: UnifiedReport::target_filled(outcoming),
-            },
-        );
+        return Ok(Ok(UnifiedReport::target_filled(outcoming)));
     }
 }

@@ -1,8 +1,7 @@
 use crate::application_layer::data::unified_report::UnifiedReport;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
-use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgument;
-use crate::infrastructure_layer::data::invalid_argument_result::InvalidArgumentResult;
+use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::functionality::service::creator::Creator;
 use crate::infrastructure_layer::functionality::service::creator::response::Response;
 use crate::infrastructure_layer::functionality::service::serializer::Serialize;
@@ -10,6 +9,7 @@ use crate::infrastructure_layer::functionality::service::serializer::Serializer;
 use crate::infrastructure_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::control_type::ActionRound;
 use bb8::Pool;
+use crate::infrastructure_layer::data::auditor::Backtrace;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use serde::Serialize as SerdeSerialize;
 use std::clone::Clone;
@@ -45,9 +45,9 @@ impl Processor<GeneralizedAction> {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
         DE: FnOnce(&'a mut Body, &'a Parts, &'a Params<'b, 'c>) -> F1,
-        F1: Future<Output = Result<InvalidArgumentResult<Option<I>>, Auditor<Error>>>,
+        F1: Future<Output = Result<Result<Option<I>, Auditor<InvalidArgument>>, Auditor<Error>>>,
         AP: FnOnce(&'static EnvironmentConfiguration, &'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<PostgresqlConnectionManager<T>>, Option<I>) -> F2,
-        F2: Future<Output = Result<InvalidArgumentResult<UnifiedReport<O, P>>, Auditor<Error>>>,
+        F2: Future<Output = Result<Result<UnifiedReport<O, P>, Auditor<InvalidArgument>>, Auditor<Error>>>,
         O: SerdeSerialize,
         P: SerdeSerialize,
         Serializer<SF>: Serialize,
@@ -55,7 +55,17 @@ impl Processor<GeneralizedAction> {
         if !Validator::<Parts>::is_valid(parts) {
             let response = Creator::<Response>::create_bad_request();
 
-            Reactor::<(ActionRound, InvalidArgument)>::react(parts, &response, InvalidArgument::HttpHeader);
+            Reactor::<(ActionRound, Auditor<InvalidArgument>)>::react(
+                parts,
+                &response,
+                Auditor::<InvalidArgument>::new(
+                    InvalidArgument,
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                ),
+            );
 
             return response;
         }
@@ -77,16 +87,12 @@ impl Processor<GeneralizedAction> {
             }
         };
 
-        let action_processor_incoming_ = match incoming {
-            InvalidArgumentResult::Ok {
-                subject: action_processor_incoming__,
-            } => action_processor_incoming__,
-            InvalidArgumentResult::InvalidArgument {
-                invalid_argument,
-            } => {
+        let incoming_ = match incoming {
+            Ok(incoming__) => incoming__,
+            Err(invalid_argument_auditor) => {
                 let response = Creator::<Response>::create_bad_request();
 
-                Reactor::<(ActionRound, InvalidArgument)>::react(parts, &response, invalid_argument);
+                Reactor::<(ActionRound, Auditor<InvalidArgument>)>::react(parts, &response, invalid_argument_auditor);
 
                 return response;
             }
@@ -96,7 +102,7 @@ impl Processor<GeneralizedAction> {
             environment_configuration,
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
-            action_processor_incoming_,
+            incoming_,
         )
         .await
         {
@@ -111,15 +117,11 @@ impl Processor<GeneralizedAction> {
         };
 
         let unified_report_ = match unified_report {
-            InvalidArgumentResult::Ok {
-                subject: unified_report__,
-            } => unified_report__,
-            InvalidArgumentResult::InvalidArgument {
-                invalid_argument,
-            } => {
+            Ok(unified_report__)=> unified_report__,
+            Err(invalid_argument_auditor)=> {
                 let response = Creator::<Response>::create_bad_request();
 
-                Reactor::<(ActionRound, InvalidArgument)>::react(parts, &response, invalid_argument);
+                Reactor::<(ActionRound, Auditor<InvalidArgument>)>::react(parts, &response, invalid_argument_auditor);
 
                 return response;
             }
