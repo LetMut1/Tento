@@ -31,7 +31,7 @@ pub use crate::infrastructure_layer::data::control_type::ApplicationUser__Author
 
 impl ActionProcessor<ApplicationUser__Authorization___DeauthorizeFromAllDevices> {
     pub async fn process<'a, T>(
-        environment_configuration: &'static EnvironmentConfiguration,
+        environment_configuration: &'a EnvironmentConfiguration,
         // TODO TODO TODO УДАляются ли АккессТокены все при массовом разлогине? Если не удаляются, можно просто при Ектракте АккессТокена использовать проверку на наличие рефреша, если нет, значит произошел разлогин.
         _database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,

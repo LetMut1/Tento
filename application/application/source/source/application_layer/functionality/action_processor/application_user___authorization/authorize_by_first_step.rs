@@ -53,7 +53,7 @@ pub use crate::infrastructure_layer::data::control_type::ApplicationUser__Author
 
 impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
     pub async fn process<'a, T>(
-        environment_configuration: &'static EnvironmentConfiguration,
+        environment_configuration: &'a EnvironmentConfiguration,
         // TODO Если два логина на разные устройства, и коды подтверждения еще не введены? То есть, приийдет пользоватею два разных кода, а оне не узнает, какой код к какому устройству
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,

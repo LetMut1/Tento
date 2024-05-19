@@ -17,7 +17,7 @@ use crate::infrastructure_layer::functionality::service::serializer::Serializer;
 impl FormResolver<ApplicationUserAccessToken<'_>> {
     const TOKEN_PARTS_SEPARATOR: &'static str = ".";
 
-    pub fn to_encrypted<'a>(environment_configuration: &'static EnvironmentConfiguration, application_user_access_token: &'a ApplicationUserAccessToken<'_>) -> Result<ApplicationUserAccessTokenEncrypted, Auditor<Error>> {
+    pub fn to_encrypted<'a>(environment_configuration: &'a EnvironmentConfiguration, application_user_access_token: &'a ApplicationUserAccessToken<'_>) -> Result<ApplicationUserAccessTokenEncrypted, Auditor<Error>> {
         let data = Serializer::<MessagePack>::serialize(application_user_access_token)?;
 
         let application_user_access_token_serialized = Encoder_::<Base64>::encode(data.as_slice());
@@ -40,7 +40,7 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
     }
 
     pub fn from_encrypted<'a>(
-        environment_configuration: &'static EnvironmentConfiguration,
+        environment_configuration: &'a EnvironmentConfiguration,
         application_user_access_token_encrypted: &'a ApplicationUserAccessTokenEncrypted
     ) -> Result<Result<ApplicationUserAccessToken<'static>, Auditor<InvalidArgument>>, Auditor<Error>> {
         let mut token_part_registry = application_user_access_token_encrypted.0.as_str().splitn::<'_, &'_ str>(
@@ -142,7 +142,7 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
 struct Signature;
 
 impl Encoder<Signature> {
-    fn encode<'a>(environment_configuration: &'static EnvironmentConfiguration, application_user_access_token_serialized: &'a [u8]) -> Result<String, Auditor<Error>> {
+    fn encode<'a>(environment_configuration: &'a EnvironmentConfiguration, application_user_access_token_serialized: &'a [u8]) -> Result<String, Auditor<Error>> {
         let application_user_access_token_serialized_encoded = Encoder_::<HmacSha3512>::encode(
             environment_configuration.encryption.private_key.application_user_access_token.as_bytes(),
             application_user_access_token_serialized,
@@ -154,7 +154,7 @@ impl Encoder<Signature> {
     }
 
     fn is_valid<'a>(
-        environment_configuration: &'static EnvironmentConfiguration,
+        environment_configuration: &'a EnvironmentConfiguration,
         application_user_access_token_serialized: &'a [u8],
         application_user_access_token_serialized_signature: &'a [u8],
     ) -> Result<bool, Auditor<Error>> {

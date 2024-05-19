@@ -48,7 +48,7 @@ pub use crate::infrastructure_layer::data::control_type::ApplicationUser__Author
 
 impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
     pub async fn process<'a, T>(
-        _environment_configuration: &'static EnvironmentConfiguration,
+        _environment_configuration: &'a EnvironmentConfiguration,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         incoming: Option<Incoming>,

@@ -81,13 +81,13 @@ impl CommandProcessor<RunServer> {
         return Ok(());
     }
 
-    pub fn initialize_environment() -> Result<&'static EnvironmentConfiguration, Auditor<Error>> {
+    fn initialize_environment() -> Result<&'static EnvironmentConfiguration, Auditor<Error>> {
         let environment_configuration_file_path = format!(
             "{}/environment_configuration",
             std::env::var("CARGO_MANIFEST_DIR").convert(Backtrace::new(line!(), file!()))?.as_str(),
         );
 
-        let environment_configuration = Loader::load_from_file(environment_configuration_file_path.as_str())?;
+        let environment_configuration = Loader::<EnvironmentConfiguration>::load_from_file(environment_configuration_file_path.as_str())?;
 
         match ENVIRONMENT_CONFIGURATION.get() {
             Some(_) => {
@@ -119,7 +119,7 @@ impl CommandProcessor<RunServer> {
         return Ok(ENVIRONMENT_CONFIGURATION.get().convert_value_does_not_exist(Backtrace::new(line!(),file!()))?);
     }
 
-    fn initialize_logger(environment_configuration: &'static EnvironmentConfiguration) -> Result<WorkerGuard, Auditor<Error>> {
+    fn initialize_logger<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<WorkerGuard, Auditor<Error>> {
         let rolling_file_appender = RollingFileAppender::new(
             Rotation::DAILY,
             environment_configuration.logging.directory_path.as_str(),
@@ -698,7 +698,7 @@ impl CommandProcessor<RunServer> {
     }
 
     async fn resolve<'a, T>(
-        environment_configuration: &'static EnvironmentConfiguration,
+        environment_configuration: &'a EnvironmentConfiguration,
         router: Arc<Router<ActionRoute_>>,
         request: Request,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,

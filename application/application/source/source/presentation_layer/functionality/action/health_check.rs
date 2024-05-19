@@ -23,7 +23,7 @@ pub use crate::application_layer::functionality::action_processor::health_check:
 
 impl Action<HealthCheck> {
     pub async fn run<'a, T>(
-        environment_configuration: &'static EnvironmentConfiguration,
+        environment_configuration: &'a EnvironmentConfiguration,
         body: &'a mut Body,
         parts: &'a Parts,
         route_parameters: &'a Params<'_, '_>,

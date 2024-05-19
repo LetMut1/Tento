@@ -30,7 +30,7 @@ pub use crate::infrastructure_layer::data::control_type::GeneralizedAction;
 
 impl Processor<GeneralizedAction> {
     pub async fn process<'a, 'b, 'c, T, DE, F1, AP, F2, I, O, P, SF>(
-        environment_configuration: &'static EnvironmentConfiguration,
+        environment_configuration: &'a EnvironmentConfiguration,
         body: &'a mut Body,
         parts: &'a Parts,
         route_parameters: &'a Params<'b, 'c>,
@@ -46,7 +46,7 @@ impl Processor<GeneralizedAction> {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
         DE: FnOnce(&'a mut Body, &'a Parts, &'a Params<'b, 'c>) -> F1,
         F1: Future<Output = Result<Result<Option<I>, Auditor<InvalidArgument>>, Auditor<Error>>>,
-        AP: FnOnce(&'static EnvironmentConfiguration, &'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<PostgresqlConnectionManager<T>>, Option<I>) -> F2,
+        AP: FnOnce(&'a EnvironmentConfiguration, &'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<PostgresqlConnectionManager<T>>, Option<I>) -> F2,
         F2: Future<Output = Result<Result<UnifiedReport<O, P>, Auditor<InvalidArgument>>, Auditor<Error>>>,
         O: SerdeSerialize,
         P: SerdeSerialize,

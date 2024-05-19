@@ -11,7 +11,7 @@ use crate::infrastructure_layer::data::error::Error;
 
 impl EmailSender<ApplicationUserAuthorizationToken<'_>> {
     pub fn send<'a>(
-        environment_configuration: &'static EnvironmentConfiguration,
+        environment_configuration: &'a EnvironmentConfiguration,
         application_user_authorization_token_value: &'a ApplicationUserAuthorizationToken_Value,
         application_user_email: &'a ApplicationUser_Email,
         application_user_device_id: &'a ApplicationUserDevice_Id,

@@ -12,7 +12,7 @@ use crate::infrastructure_layer::functionality::service::serializer::Serializer;
 use crate::infrastructure_layer::data::error::Error;
 
 impl FormResolver<ApplicationUserAccessRefreshToken<'_>> {
-    pub fn to_encrypted<'a>(environment_configuration: &'static EnvironmentConfiguration, application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>) -> Result<ApplicationUserAccessRefreshTokenEncrypted, Auditor<Error>> {
+    pub fn to_encrypted<'a>(environment_configuration: &'a EnvironmentConfiguration, application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>) -> Result<ApplicationUserAccessRefreshTokenEncrypted, Auditor<Error>> {
         let data = Serializer::<MessagePack>::serialize(application_user_access_refresh_token)?;
 
         let encoded_data = Encoder::<HmacSha3512>::encode(
@@ -28,7 +28,7 @@ impl FormResolver<ApplicationUserAccessRefreshToken<'_>> {
     }
 
     pub fn is_valid<'a>(
-        environment_configuration: &'static EnvironmentConfiguration,
+        environment_configuration: &'a EnvironmentConfiguration,
         application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>,
         application_user_access_refresh_token_encrypted: &'a ApplicationUserAccessRefreshTokenEncrypted,
     ) -> Result<bool, Auditor<Error>> {

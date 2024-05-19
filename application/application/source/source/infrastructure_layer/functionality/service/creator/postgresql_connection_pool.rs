@@ -16,7 +16,7 @@ pub use crate::infrastructure_layer::data::control_type::PostgresqlConnectionPoo
 
 impl Creator<PostgresqlConnectionPoolNoTls> {
     pub async fn create_database_1<'a>(
-        environment_configuration: &'static EnvironmentConfiguration,
+        environment_configuration: &'a EnvironmentConfiguration,
     ) -> Result<Pool<PostgresqlConnectionManager<NoTls>>, Auditor<Error>> {
         return Ok(
             Self::create(
@@ -27,7 +27,7 @@ impl Creator<PostgresqlConnectionPoolNoTls> {
     }
 
     pub async fn create_database_2<'a>(
-        environment_configuration: &'static EnvironmentConfiguration,
+        environment_configuration: &'a EnvironmentConfiguration,
     ) -> Result<Pool<PostgresqlConnectionManager<NoTls>>, Auditor<Error>> {
         return Ok(
             Self::create(

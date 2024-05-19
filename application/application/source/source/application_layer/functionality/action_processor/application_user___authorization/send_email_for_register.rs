@@ -37,7 +37,7 @@ pub use crate::infrastructure_layer::data::control_type::ApplicationUser__Author
 
 impl ActionProcessor<ApplicationUser__Authorization___SendEmailForRegister> {
     pub async fn process<'a, T>(
-        environment_configuration: &'static EnvironmentConfiguration,
+        environment_configuration: &'a EnvironmentConfiguration,
         _database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         incoming: Option<Incoming>,

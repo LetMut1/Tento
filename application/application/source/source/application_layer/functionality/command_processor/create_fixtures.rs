@@ -37,8 +37,8 @@ use crate::infrastructure_layer::functionality::service::creator::Creator;
 use crate::infrastructure_layer::functionality::service::creator::postgresql_connection_pool::PostgresqlConnectionPoolNoTls;
 use rand::thread_rng;
 use rand::Rng;
+use crate::infrastructure_layer::functionality::service::loader::Loader;
 use tokio::runtime::Builder;
-use crate::infrastructure_layer::data::control_type::RunServer;
 use super::CommandProcessor;
 
 pub use crate::infrastructure_layer::data::control_type::CreateFixtures;
@@ -54,7 +54,7 @@ impl CommandProcessor<CreateFixtures> {
     ];
 
     pub fn process() -> Result<(), Auditor<Error>> {
-        let environment_configuration = CommandProcessor::<RunServer>:: initialize_environment()?;
+        let environment_configuration = Self::initialize_environment()?;
 
         if let Environment::Production = environment_configuration.environment {
             return Err(
@@ -70,12 +70,21 @@ impl CommandProcessor<CreateFixtures> {
             );
         }
 
-        Self::run_runtime(environment_configuration)?;
+        Self::run_runtime(&environment_configuration)?;
 
         return Ok(());
     }
 
-    fn run_runtime(environment_configuration: &'static EnvironmentConfiguration) -> Result<(), Auditor<Error>> {
+    fn initialize_environment() -> Result<EnvironmentConfiguration, Auditor<Error>> {
+        let environment_configuration_file_path = format!(
+            "{}/environment_configuration",
+            std::env::var("CARGO_MANIFEST_DIR").convert(Backtrace::new(line!(), file!()))?.as_str(),
+        );
+
+        return Ok(Loader::<EnvironmentConfiguration>::load_from_file(environment_configuration_file_path.as_str())?);
+    }
+
+    fn run_runtime<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<(), Auditor<Error>> {
         Builder::new_current_thread()
             .enable_all()
             .build()
@@ -85,7 +94,7 @@ impl CommandProcessor<CreateFixtures> {
         return Ok(());
     }
 
-    async fn create_fixtures<'a>(environment_configuration: &'static EnvironmentConfiguration) -> Result<(), Auditor<Error>> {
+    async fn create_fixtures<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<(), Auditor<Error>> {
         let database_1_postgresql_connection_pool = Creator::<PostgresqlConnectionPoolNoTls>::create_database_1(
             environment_configuration,
         )

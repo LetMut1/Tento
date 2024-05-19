@@ -267,3 +267,4 @@ fn process() -> Result<(), Box<dyn StdError + 'static>> {
 // invalid_argument__?__auditor
 // весь декодинг конвертируем в invalid_argument? или же в Error:decoding
 // убрать реактор
+// новая версия языка.

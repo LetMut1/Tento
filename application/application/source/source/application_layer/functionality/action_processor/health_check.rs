@@ -18,7 +18,7 @@ pub use crate::infrastructure_layer::data::control_type::HealthCheck;
 
 impl ActionProcessor<HealthCheck> {
     pub async fn process<'a, T>(
-        _environment_configuration: &'static EnvironmentConfiguration,
+        _environment_configuration: &'a EnvironmentConfiguration,
         _database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _incoming: Option<Void>,

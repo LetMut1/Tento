@@ -17,7 +17,7 @@ pub use crate::infrastructure_layer::data::control_type::Email;
 impl Sender<Email> {
     // TODO Возможно, сразу можно положить объект в константу.  // TODO В предпродакшене, когда будет smtp-ссервер, настройить все через константы и енв
     pub fn send<'a>(
-        environment_configuration: &'static EnvironmentConfiguration,
+        environment_configuration: &'a EnvironmentConfiguration,
         subject: &'a str,
         body: String,
         to: &'a str,

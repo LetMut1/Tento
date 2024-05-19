@@ -12,7 +12,7 @@ use crate::infrastructure_layer::functionality::service::sender::Sender;
 
 impl EmailSender<ApplicationUserResetPasswordToken<'_>> {
     pub fn send<'a>(
-        environment_configuration: &'static EnvironmentConfiguration,
+        environment_configuration: &'a EnvironmentConfiguration,
         application_user_reset_password_token_value: &'a ApplicationUserResetPasswordToken_Value,
         application_user_email: &'a ApplicationUser_Email,
         application_user_device_id: &'a ApplicationUserDevice_Id,

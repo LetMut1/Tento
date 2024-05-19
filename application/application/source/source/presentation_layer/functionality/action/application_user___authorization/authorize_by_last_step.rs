@@ -26,7 +26,7 @@ use crate::infrastructure_layer::functionality::service::serializer::json::Json;
 
 impl Action<ApplicationUser__Authorization___AuthorizeByLastStep> {
     pub async fn run<'a, T>(
-        environment_configuration: &'static EnvironmentConfiguration,
+        environment_configuration: &'a EnvironmentConfiguration,
         body: &'a mut Body,
         parts: &'a Parts,
         route_parameters: &'a Params<'_, '_>,
@@ -56,7 +56,7 @@ impl Action<ApplicationUser__Authorization___AuthorizeByLastStep> {
 #[cfg(feature = "manual_testing")]
 impl Action<ApplicationUser__Authorization___AuthorizeByLastStep> {
     pub async fn run_<'a, T>(
-        environment_configuration: &'static EnvironmentConfiguration,
+        environment_configuration: &'a EnvironmentConfiguration,
         body: &'a mut Body,
         parts: &'a Parts,
         route_parameters: &'a Params<'_, '_>,

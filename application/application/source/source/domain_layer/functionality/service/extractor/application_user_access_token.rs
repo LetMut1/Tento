@@ -11,7 +11,7 @@ use crate::infrastructure_layer::functionality::service::expiration_time_checker
 
 impl Extractor<ApplicationUserAccessToken<'_>> {
     pub async fn extract<'a>(
-        environment_configuration: &'static EnvironmentConfiguration,
+        environment_configuration: &'a EnvironmentConfiguration,
         application_user_access_token_encrypted: &'a ApplicationUserAccessTokenEncrypted
     ) -> Result<Result<ExtractorResult, Auditor<InvalidArgument>>, Auditor<Error>> {
         let application_user_access_token = match FormResolver::<ApplicationUserAccessToken<'_>>::from_encrypted(environment_configuration, application_user_access_token_encrypted)? {

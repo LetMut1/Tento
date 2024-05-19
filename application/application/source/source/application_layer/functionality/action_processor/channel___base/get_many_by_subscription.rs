@@ -33,7 +33,7 @@ impl ActionProcessor<Channel__Base___GetManyBySubscription> {
     const LIMIT: i16 = 100;
 
     pub async fn process<'a, T>(
-        environment_configuration: &'static EnvironmentConfiguration,
+        environment_configuration: &'a EnvironmentConfiguration,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         incoming: Option<Incoming>,

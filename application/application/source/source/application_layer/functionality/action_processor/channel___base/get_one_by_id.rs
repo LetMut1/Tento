@@ -41,7 +41,7 @@ pub use crate::infrastructure_layer::data::control_type::Channel__Base___GetOneB
 
 impl ActionProcessor<Channel__Base___GetOneById> {
     pub async fn process<'a, T>(
-        environment_configuration: &'static EnvironmentConfiguration,
+        environment_configuration: &'a EnvironmentConfiguration,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         incoming: Option<Incoming>,
