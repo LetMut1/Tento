@@ -102,7 +102,7 @@ impl ActionProcessor<ChannelSubscription__Base___Create> {
             }
         };
 
-        if channel.owner.0 == application_user_access_token.application_user_id.0 {
+        if channel.owner == application_user_access_token.application_user_id {
             return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUser_IsChannelOwner)));
         }
 

@@ -1,4 +1,3 @@
-use entity::application_user::ApplicationUser_Id;
 use entity::application_user::ApplicationUser_Password;
 use entity::application_user_device::ApplicationUserDevice_Id;
 use entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_Value;
@@ -10,7 +9,7 @@ use common_precedent::CommonPrecedent;
 #[derive(Serialize, Deserialize)]
 pub struct Incoming {
     pub application_user_device_id: ApplicationUserDevice_Id,
-    pub application_user_id: ApplicationUser_Id,
+    pub application_user_id: i64,
     pub application_user_password: ApplicationUser_Password,
     pub application_user_reset_password_token_value: ApplicationUserResetPasswordToken_Value,
 }

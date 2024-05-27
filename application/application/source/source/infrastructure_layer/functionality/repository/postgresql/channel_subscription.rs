@@ -33,7 +33,7 @@ impl PostgresqlRepository<ChannelSubscription> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &insert_10.application_user_id.0,
+                &insert_10.application_user_id,
                 Type::INT8,
             )
             .add_parameter(
@@ -57,11 +57,11 @@ impl PostgresqlRepository<ChannelSubscription> {
             .await
 .convert(Backtrace::new(line!(), file!()))?;
 
-        let channel_subscription = ChannelSubscription {
-            application_user_id: insert_10.application_user_id,
-            channel_id: insert_10.channel_id,
-            created_at: ChannelSubscription_CreatedAt(row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?),
-        };
+        let channel_subscription = ChannelSubscription::new(
+            insert_10.application_user_id,
+            insert_10.channel_id,
+            ChannelSubscription_CreatedAt(row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?),
+        );
 
         return Ok(channel_subscription);
     }
@@ -80,7 +80,7 @@ impl PostgresqlRepository<ChannelSubscription> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &by_10.application_user_id.0,
+                &by_10.application_user_id,
                 Type::INT8,
             )
             .add_parameter(

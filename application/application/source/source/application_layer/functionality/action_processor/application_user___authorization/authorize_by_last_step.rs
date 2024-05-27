@@ -189,12 +189,12 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
             return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUser_NotFound)));
         }
 
-        let application_user_access_token = ApplicationUserAccessToken {
-            id: Generator::<ApplicationUserAccessToken_Id>::generate(),
-            application_user_id: incoming_.application_user_id,
-            application_user_device_id: Cow::Borrowed(&incoming_.application_user_device_id),
-            expires_at: Generator::<ApplicationUserAccessToken_ExpiresAt>::generate()?,
-        };
+        let application_user_access_token = ApplicationUserAccessToken::new(
+            Generator::<ApplicationUserAccessToken_Id>::generate(),
+            incoming_.application_user_id,
+            Cow::Borrowed(&incoming_.application_user_device_id),
+            Generator::<ApplicationUserAccessToken_ExpiresAt>::generate()?,
+        );
 
         let application_user_access_token_id = &application_user_access_token.id;
 

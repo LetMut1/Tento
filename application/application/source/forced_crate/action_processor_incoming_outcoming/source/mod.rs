@@ -83,7 +83,6 @@
 
 pub mod action_processor;
 
-use entity::application_user::ApplicationUser_Id;
 use entity::channel_outer_link::ChannelOuterLink_Address;
 use entity::channel_outer_link::ChannelOuterLink_Alias;
 use entity::channel::Channel_AccessModifier;
@@ -120,7 +119,7 @@ pub struct Channel1 {
 
 #[derive(Serialize, Deserialize)]
 pub struct Channel2 {
-    pub channel_owner: ApplicationUser_Id,
+    pub channel_owner: i64,
     pub channel_name: Channel_Name,
     pub channel_linked_name: Channel_LinkedName,
     pub channel_description: Option<Channel_Description>,

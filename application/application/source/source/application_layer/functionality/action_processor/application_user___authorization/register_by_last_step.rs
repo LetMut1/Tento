@@ -247,12 +247,12 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
         )
         .await?;
 
-        let application_user_access_token = ApplicationUserAccessToken {
-            id: Generator::<ApplicationUserAccessToken_Id>::generate(),
-            application_user_id: application_user.id,
-            application_user_device_id: Cow::Borrowed(&incoming_.application_user_device_id),
-            expires_at: Generator::<ApplicationUserAccessToken_ExpiresAt>::generate()?,
-        };
+        let application_user_access_token = ApplicationUserAccessToken::new(
+            Generator::<ApplicationUserAccessToken_Id>::generate(),
+            application_user.id,
+            Cow::Borrowed(&incoming_.application_user_device_id),
+            Generator::<ApplicationUserAccessToken_ExpiresAt>::generate()?,
+        );
 
 // TODO  TRANZACTION посмотреть, необходимо ли здесь сделать транзакцию
         let application_user_access_refresh_token = PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::create(

@@ -59,7 +59,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &insert_6.application_user_id.0,
+                &insert_6.application_user_id,
                 Type::INT8,
             )
             .add_parameter(
@@ -104,15 +104,15 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
         .convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(
-            ApplicationUserResetPasswordToken {
-                application_user_id: insert_6.application_user_id,
-                application_user_device_id: Cow::Borrowed(insert_6.application_user_device_id),
-                value: insert_6.application_user_reset_password_token_value,
-                wrong_enter_tries_quantity: insert_6.application_user_reset_password_token_wrong_enter_tries_quantity,
-                is_approved: insert_6.application_user_reset_password_token_is_approved,
-                expires_at: insert_6.application_user_reset_password_token_expires_at,
-                can_be_resent_from: insert_6.application_user_reset_password_token_can_be_resent_from,
-            },
+            ApplicationUserResetPasswordToken::new(
+                insert_6.application_user_id,
+                Cow::Borrowed(insert_6.application_user_device_id),
+                insert_6.application_user_reset_password_token_value,
+                insert_6.application_user_reset_password_token_wrong_enter_tries_quantity,
+                insert_6.application_user_reset_password_token_is_approved,
+                insert_6.application_user_reset_password_token_expires_at,
+                insert_6.application_user_reset_password_token_can_be_resent_from,
+            ),
         );
     }
 
@@ -130,7 +130,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &by_4.application_user_id.0,
+                &by_4.application_user_id,
                 Type::INT8,
             )
             .add_parameter(
@@ -209,7 +209,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken1> {
                 Type::INT8,
             )
             .add_parameter(
-                &by_4.application_user_id.0,
+                &by_4.application_user_id,
                 Type::INT8,
             )
             .add_parameter(
@@ -256,7 +256,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken1> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &by_4.application_user_id.0,
+                &by_4.application_user_id,
                 Type::INT8,
             )
             .add_parameter(
@@ -323,7 +323,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken2> {
                 Type::INT8,
             )
             .add_parameter(
-                &by_4.application_user_id.0,
+                &by_4.application_user_id,
                 Type::INT8,
             )
             .add_parameter(
@@ -396,7 +396,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken3> {
                 Type::INT8,
             )
             .add_parameter(
-                &by_4.application_user_id.0,
+                &by_4.application_user_id,
                 Type::INT8,
             )
             .add_parameter(
@@ -442,7 +442,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken3> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &by_4.application_user_id.0,
+                &by_4.application_user_id,
                 Type::INT8,
             )
             .add_parameter(
@@ -508,7 +508,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken4> {
                 Type::INT2,
             )
             .add_parameter(
-                &by_4.application_user_id.0,
+                &by_4.application_user_id,
                 Type::INT8,
             )
             .add_parameter(
@@ -561,7 +561,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken5> {
                 Type::BOOL,
             )
             .add_parameter(
-                &by_4.application_user_id.0,
+                &by_4.application_user_id,
                 Type::INT8,
             )
             .add_parameter(
@@ -609,7 +609,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken6> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &by_4.application_user_id.0,
+                &by_4.application_user_id,
                 Type::INT8,
             )
             .add_parameter(

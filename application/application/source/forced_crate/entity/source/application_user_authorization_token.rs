@@ -2,12 +2,72 @@ use super::application_user::ApplicationUser_Id;
 use super::application_user_device::ApplicationUserDevice_Id;
 use serde::Deserialize;
 use serde::Serialize;
+use std::marker::PhantomData;
 use std::borrow::Cow;
 
 pub use self::CanBeResentFrom as ApplicationUserAuthorizationToken_CanBeResentFrom;
 pub use self::ExpiresAt as ApplicationUserAuthorizationToken_ExpiresAt;
 pub use self::Value as ApplicationUserAuthorizationToken_Value;
 pub use self::WrongEnterTriesQuantity as ApplicationUserAuthorizationToken_WrongEnterTriesQuantity;
+
+pub struct ApplicationUserAuthorizationToken<'a> {
+    pub application_user_id: i64,
+    _application_user_id: PhantomData<ApplicationUser_Id>,
+
+    pub application_user_device_id: Cow<'a, ApplicationUserDevice_Id>,
+    pub value: Value,
+    pub wrong_enter_tries_quantity: WrongEnterTriesQuantity,
+    pub expires_at: ExpiresAt,
+    pub can_be_resent_from: CanBeResentFrom,
+}
+
+impl<'a> ApplicationUserAuthorizationToken<'a> {
+    pub fn new(
+        application_user_id: i64,
+        application_user_device_id: Cow<'a, ApplicationUserDevice_Id>,
+        value: Value,
+        wrong_enter_tries_quantity: WrongEnterTriesQuantity,
+        expires_at: ExpiresAt,
+        can_be_resent_from: CanBeResentFrom,
+    ) -> Self {
+        return Self {
+            application_user_id,
+            _application_user_id: PhantomData,
+            application_user_device_id,
+            value,
+            wrong_enter_tries_quantity,
+            expires_at,
+            can_be_resent_from,
+        };
+    }
+}
+
+pub struct ApplicationUserAuthorizationToken1 {
+    pub value: Value,
+    pub wrong_enter_tries_quantity: WrongEnterTriesQuantity,
+    pub expires_at: ExpiresAt,
+    pub can_be_resent_from: CanBeResentFrom,
+}
+
+pub struct ApplicationUserAuthorizationToken2 {
+    pub value: Value,
+    pub wrong_enter_tries_quantity: WrongEnterTriesQuantity,
+    pub expires_at: ExpiresAt,
+}
+
+pub struct ApplicationUserAuthorizationToken3 {
+    pub can_be_resent_from: CanBeResentFrom,
+}
+
+pub struct ApplicationUserAuthorizationToken4 {
+    pub wrong_enter_tries_quantity: WrongEnterTriesQuantity,
+}
+
+pub struct ApplicationUserAuthorizationToken5 {
+    pub value: Value,
+    pub expires_at: ExpiresAt,
+    pub can_be_resent_from: CanBeResentFrom,
+}
 
 #[derive(Serialize, Deserialize)]
 #[serde(transparent)]
@@ -38,40 +98,4 @@ pub struct CanBeResentFrom(pub i64);
 
 impl CanBeResentFrom {
     pub const QUANTITY_OF_MINUTES_BEFORE_RESENDING: i64 = 1;
-}
-
-pub struct ApplicationUserAuthorizationToken<'a> {
-    pub application_user_id: ApplicationUser_Id,
-    pub application_user_device_id: Cow<'a, ApplicationUserDevice_Id>,
-    pub value: Value,
-    pub wrong_enter_tries_quantity: WrongEnterTriesQuantity,
-    pub expires_at: ExpiresAt,
-    pub can_be_resent_from: CanBeResentFrom,
-}
-
-pub struct ApplicationUserAuthorizationToken1 {
-    pub value: Value,
-    pub wrong_enter_tries_quantity: WrongEnterTriesQuantity,
-    pub expires_at: ExpiresAt,
-    pub can_be_resent_from: CanBeResentFrom,
-}
-
-pub struct ApplicationUserAuthorizationToken2 {
-    pub value: Value,
-    pub wrong_enter_tries_quantity: WrongEnterTriesQuantity,
-    pub expires_at: ExpiresAt,
-}
-
-pub struct ApplicationUserAuthorizationToken3 {
-    pub can_be_resent_from: CanBeResentFrom,
-}
-
-pub struct ApplicationUserAuthorizationToken4 {
-    pub wrong_enter_tries_quantity: WrongEnterTriesQuantity,
-}
-
-pub struct ApplicationUserAuthorizationToken5 {
-    pub value: Value,
-    pub expires_at: ExpiresAt,
-    pub can_be_resent_from: CanBeResentFrom,
 }

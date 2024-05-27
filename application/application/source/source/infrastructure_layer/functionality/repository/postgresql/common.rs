@@ -56,7 +56,7 @@ impl PostgresqlRepository<Common1> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &by_11.application_user_id.0,
+                &by_11.application_user_id,
                 Type::INT8,
             )
             .add_parameter(
@@ -191,7 +191,7 @@ impl PostgresqlRepository<Common1> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &by_12.application_user_id.0,
+                &by_12.application_user_id,
                 Type::INT8,
             )
             .add_parameter(
@@ -307,7 +307,7 @@ impl PostgresqlRepository<Common1> {
         );
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(
-            &by_13.application_user_id.0,
+            &by_13.application_user_id,
             Type::INT8,
         );
 

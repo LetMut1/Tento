@@ -34,7 +34,7 @@ impl PostgresqlRepository<ApplicationUserDevice> {
                 Type::TEXT,
             )
             .add_parameter(
-                &insert_4.application_user_id.0,
+                &insert_4.application_user_id,
                 Type::INT8,
             );
 
@@ -55,10 +55,10 @@ impl PostgresqlRepository<ApplicationUserDevice> {
             .convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(
-            ApplicationUserDevice {
-                id: insert_4.application_user_device_id,
-                application_user_id: insert_4.application_user_id,
-            },
+            ApplicationUserDevice::new(
+                insert_4.application_user_device_id,
+                insert_4.application_user_id,
+            ),
         );
     }
 }

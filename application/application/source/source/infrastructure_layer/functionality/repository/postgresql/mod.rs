@@ -18,7 +18,6 @@ pub struct PostgresqlRepository<E> {
 
 pub mod by {
     use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
-    use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
     use crate::domain_layer::data::entity::application_user::ApplicationUser_Nickname;
     use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
     use crate::domain_layer::data::entity::channel::Channel_Id;
@@ -34,11 +33,11 @@ pub mod by {
     }
 
     pub struct By3 {
-        pub application_user_id: ApplicationUser_Id,
+        pub application_user_id: i64,
     }
 
     pub struct By4<'a> {
-        pub application_user_id: ApplicationUser_Id,
+        pub application_user_id: i64,
         pub application_user_device_id: &'a ApplicationUserDevice_Id,
     }
 
@@ -64,25 +63,25 @@ pub mod by {
     }
 
     pub struct By10 {
-        pub application_user_id: ApplicationUser_Id,
+        pub application_user_id: i64,
         pub channel_id: Channel_Id,
     }
 
     pub struct By11<'a> {
-        pub application_user_id: ApplicationUser_Id,
+        pub application_user_id: i64,
         pub channel_name: &'a Channel_Name,
         pub requery_channel_name: &'a Option<Channel_Name>,
         pub channel_visability_modifier: Channel_VisabilityModifier,
     }
 
     pub struct By12<'a> {
-        pub application_user_id: ApplicationUser_Id,
+        pub application_user_id: i64,
         pub channel_name: &'a Channel_Name,
         pub requery_channel_name: &'a Option<Channel_Name>,
     }
 
     pub struct By13 {
-        pub application_user_id: ApplicationUser_Id,
+        pub application_user_id: i64,
         pub requery_channel_id: Option<Channel_Id>,
     }
 }
@@ -241,7 +240,7 @@ pub mod insert {
     }
 
     pub struct Insert2<'a> {
-        pub application_user_id: ApplicationUser_Id,
+        pub application_user_id: i64,
         pub application_user_device_id: &'a ApplicationUserDevice_Id,
         pub application_user_access_token_id: &'a ApplicationUserAccessToken_Id,
         pub application_user_access_refresh_token_obfuscation_value: ApplicationUserAccessRefreshToken_ObfuscationValue,
@@ -250,7 +249,7 @@ pub mod insert {
     }
 
     pub struct Insert3<'a> {
-        pub application_user_id: ApplicationUser_Id,
+        pub application_user_id: i64,
         pub application_user_device_id: &'a ApplicationUserDevice_Id,
         pub application_user_authorization_token_value: ApplicationUserAuthorizationToken_Value,
         pub application_user_authorization_token_wrong_enter_tries_quantity: ApplicationUserAuthorizationToken_WrongEnterTriesQuantity,
@@ -260,7 +259,7 @@ pub mod insert {
 
     pub struct Insert4 {
         pub application_user_device_id: ApplicationUserDevice_Id,
-        pub application_user_id: ApplicationUser_Id,
+        pub application_user_id: i64,
     }
 
     pub struct Insert5<'a> {
@@ -274,7 +273,7 @@ pub mod insert {
     }
 
     pub struct Insert6<'a> {
-        pub application_user_id: ApplicationUser_Id,
+        pub application_user_id: i64,
         pub application_user_device_id: &'a ApplicationUserDevice_Id,
         pub application_user_reset_password_token_value: ApplicationUserResetPasswordToken_Value,
         pub application_user_reset_password_token_wrong_enter_tries_quantity: ApplicationUserResetPasswordToken_WrongEnterTriesQuantity,
@@ -284,7 +283,7 @@ pub mod insert {
     }
 
     pub struct Insert7 {
-        pub channel_owner: ApplicationUser_Id,
+        pub channel_owner: i64,
         pub channel_name: Channel_Name,
         pub channel_linked_name: Channel_LinkedName,
         pub channel_description: Option<Channel_Description>,
@@ -310,7 +309,7 @@ pub mod insert {
     }
 
     pub struct Insert10 {
-        pub application_user_id: ApplicationUser_Id,
+        pub application_user_id: i64,
         pub channel_id: Channel_Id,
     }
 }

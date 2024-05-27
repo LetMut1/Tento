@@ -2,7 +2,7 @@ use super::application_user::ApplicationUser_Id;
 use serde::Deserialize;
 use serde::Serialize;
 use std::borrow::Cow;
-
+use std::marker::PhantomData;
 pub use self::AccessModifier as Channel_AccessModifier;
 pub use self::AccessModifier_ as Channel_AccessModifier_;
 pub use self::BackgroundImagePath as Channel_BackgroundImagePath;
@@ -18,6 +18,62 @@ pub use self::SubscribersQuantity as Channel_SubscribersQuantity;
 pub use self::ViewingQuantity as Channel_ViewingQuantity;
 pub use self::VisabilityModifier as Channel_VisabilityModifier;
 pub use self::VisabilityModifier_ as Channel_VisabilityModifier_;
+
+pub struct Channel<'a> {
+    pub id: Id,
+    pub owner: i64,
+    _owner: PhantomData<ApplicationUser_Id>,
+
+    pub name: Cow<'a, Name>,
+    pub linked_name: LinkedName,
+    pub description: Option<Description>,
+    pub access_modifier: AccessModifier,
+    pub visability_modifier: VisabilityModifier,
+    pub orientation: Orientation,
+    pub cover_image_path: Option<CoverImagePath>,
+    pub background_image_path: Option<BackgroundImagePath>,
+    pub subscribers_quantity: SubscribersQuantity,
+    pub marks_quantity: MarksQuantity,
+    pub viewing_quantity: ViewingQuantity,
+    pub created_at: CreatedAt,
+}
+
+impl<'a> Channel<'a> {
+    pub fn new(
+        id: Id,
+        owner: i64,
+        name: Cow<'a, Name>,
+        linked_name: LinkedName,
+        description: Option<Description>,
+        access_modifier: AccessModifier,
+        visability_modifier: VisabilityModifier,
+        orientation: Orientation,
+        cover_image_path: Option<CoverImagePath>,
+        background_image_path: Option<BackgroundImagePath>,
+        subscribers_quantity: SubscribersQuantity,
+        marks_quantity: MarksQuantity,
+        viewing_quantity: ViewingQuantity,
+        created_at: CreatedAt,
+    ) -> Self {
+        return Self {
+            id,
+            owner,
+            _owner: PhantomData,
+            name,
+            linked_name,
+            description,
+            access_modifier,
+            visability_modifier,
+            orientation,
+            cover_image_path,
+            background_image_path,
+            subscribers_quantity,
+            marks_quantity,
+            viewing_quantity,
+            created_at,
+        };
+    }
+}
 
 #[derive(Clone, Copy, Serialize, Deserialize)]
 #[serde(transparent)]
@@ -96,20 +152,3 @@ pub struct MarksQuantity(pub i64);
 pub struct ViewingQuantity(pub i64);
 
 pub struct CreatedAt(pub String);
-
-pub struct Channel<'a> {
-    pub id: Id,
-    pub owner: ApplicationUser_Id,
-    pub name: Cow<'a, Name>,
-    pub linked_name: LinkedName,
-    pub description: Option<Description>,
-    pub access_modifier: AccessModifier,
-    pub visability_modifier: VisabilityModifier,
-    pub orientation: Orientation,
-    pub cover_image_path: Option<CoverImagePath>,
-    pub background_image_path: Option<BackgroundImagePath>,
-    pub subscribers_quantity: SubscribersQuantity,
-    pub marks_quantity: MarksQuantity,
-    pub viewing_quantity: ViewingQuantity,
-    pub created_at: CreatedAt,
-}

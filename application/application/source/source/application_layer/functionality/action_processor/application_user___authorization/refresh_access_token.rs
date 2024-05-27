@@ -110,12 +110,12 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
             return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessRefreshToken_AlreadyExpired)));
         }
 
-        let application_user_access_token_new = ApplicationUserAccessToken {
-            id: Generator::<ApplicationUserAccessToken_Id>::generate(),
-            application_user_id: application_user_access_token.application_user_id,
-            application_user_device_id: Cow::Borrowed(application_user_access_token.application_user_device_id.as_ref()),
-            expires_at: Generator::<ApplicationUserAccessToken_ExpiresAt>::generate()?,
-        };
+        let application_user_access_token_new = ApplicationUserAccessToken::new(
+            Generator::<ApplicationUserAccessToken_Id>::generate(),
+            application_user_access_token.application_user_id,
+            Cow::Borrowed(application_user_access_token.application_user_device_id.as_ref()),
+            Generator::<ApplicationUserAccessToken_ExpiresAt>::generate()?,
+        );
 
         application_user_access_refresh_token.application_user_access_token_id = Cow::Borrowed(&application_user_access_token_new.id);
 

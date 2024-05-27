@@ -50,7 +50,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &insert_2.application_user_id.0,
+                &insert_2.application_user_id,
                 Type::INT8,
             )
             .add_parameter(
@@ -91,14 +91,14 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
             .convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(
-            ApplicationUserAccessRefreshToken {
-                application_user_id: insert_2.application_user_id,
-                application_user_device_id: Cow::Borrowed(insert_2.application_user_device_id),
-                application_user_access_token_id: Cow::Borrowed(insert_2.application_user_access_token_id),
-                obfuscation_value: insert_2.application_user_access_refresh_token_obfuscation_value,
-                expires_at: insert_2.application_user_access_refresh_token_expires_at,
-                updated_at: insert_2.application_user_access_refresh_token_updated_at,
-            },
+            ApplicationUserAccessRefreshToken::new(
+                insert_2.application_user_id,
+                Cow::Borrowed(insert_2.application_user_device_id),
+                Cow::Borrowed(insert_2.application_user_access_token_id),
+                insert_2.application_user_access_refresh_token_obfuscation_value,
+                insert_2.application_user_access_refresh_token_expires_at,
+                insert_2.application_user_access_refresh_token_updated_at,
+            ),
         );
     }
 
@@ -115,7 +115,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &by_4.application_user_id.0,
+                &by_4.application_user_id,
                 Type::INT8,
             )
             .add_parameter(
@@ -153,7 +153,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
             WHERE auart.application_user_id = $1;";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(
-            &by_3.application_user_id.0,
+            &by_3.application_user_id,
             Type::INT8,
         );
 
@@ -195,7 +195,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &by_4.application_user_id.0,
+                &by_4.application_user_id,
                 Type::INT8,
             )
             .add_parameter(
@@ -225,14 +225,14 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
 
         return Ok(
             Some(
-                ApplicationUserAccessRefreshToken {
-                    application_user_id: by_4.application_user_id,
-                    application_user_device_id: Cow::Borrowed(by_4.application_user_device_id),
-                    application_user_access_token_id: Cow::Owned(ApplicationUserAccessToken_Id(row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?)),
-                    obfuscation_value: ApplicationUserAccessRefreshToken_ObfuscationValue(row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?),
-                    expires_at: ApplicationUserAccessRefreshToken_ExpiresAt(row_registry[0].try_get::<'_, usize, i64>(2).convert(Backtrace::new(line!(), file!()))?),
-                    updated_at: ApplicationUserAccessRefreshToken_UpdatedAt(row_registry[0].try_get::<'_, usize, i64>(3).convert(Backtrace::new(line!(), file!()))?),
-                },
+                ApplicationUserAccessRefreshToken::new(
+                    by_4.application_user_id,
+                    Cow::Borrowed(by_4.application_user_device_id),
+                    Cow::Owned(ApplicationUserAccessToken_Id(row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?)),
+                    ApplicationUserAccessRefreshToken_ObfuscationValue(row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?),
+                    ApplicationUserAccessRefreshToken_ExpiresAt(row_registry[0].try_get::<'_, usize, i64>(2).convert(Backtrace::new(line!(), file!()))?),
+                    ApplicationUserAccessRefreshToken_UpdatedAt(row_registry[0].try_get::<'_, usize, i64>(3).convert(Backtrace::new(line!(), file!()))?),
+                ),
             ),
         );
     }
@@ -285,7 +285,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken1> {
                 Type::INT8,
             )
             .add_parameter(
-                &by_4.application_user_id.0,
+                &by_4.application_user_id,
                 Type::INT8,
             )
             .add_parameter(

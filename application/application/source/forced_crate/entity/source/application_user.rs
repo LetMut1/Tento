@@ -10,9 +10,38 @@ pub use self::Nickname as ApplicationUser_Nickname;
 pub use self::Password as ApplicationUser_Password;
 pub use self::PasswordHash as ApplicationUser_PasswordHash;
 
-#[derive(Clone, Copy, Serialize, Deserialize)]
-#[serde(transparent)]
-pub struct Id(pub i64);
+pub struct ApplicationUser<'a> {
+    pub id: i64,
+    _id: PhantomData<Id>,
+    pub email: Email,
+    pub nickname: Cow<'a, Nickname>,
+    pub _password: PhantomData<Password>,
+    pub password_hash: PasswordHash,
+    pub created_at: CreatedAt,
+}
+
+impl<'a> ApplicationUser<'a> {
+    pub fn new(
+        id: i64,
+        email: Email,
+        nickname: Cow<'a, Nickname>,
+        password_hash: PasswordHash,
+        created_at: CreatedAt,
+    ) -> Self {
+        return Self {
+            id,
+            _id: PhantomData,
+            email,
+            nickname,
+            _password: PhantomData,
+            password_hash,
+            created_at,
+        };
+    }
+}
+
+#[derive(Deserialize, Serialize)]
+pub struct Id;
 
 #[derive(Clone, Deserialize, Serialize)]
 #[serde(transparent)]
@@ -45,29 +74,20 @@ pub struct PasswordHash(pub String);
 
 pub struct CreatedAt(pub String);
 
-pub struct ApplicationUser<'a> {
-    pub id: Id,
-    pub email: Email,
-    pub nickname: Cow<'a, Nickname>,
-    pub _password: PhantomData<Password>,
-    pub password_hash: PasswordHash,
-    pub created_at: CreatedAt,
-}
-
 pub struct ApplicationUser1 {
-    pub id: Id,
+    pub id: i64,
     pub email: Email,
     pub password_hash: PasswordHash,
 }
 
 pub struct ApplicationUser2 {
-    pub id: Id,
+    pub id: i64,
     pub nickname: Nickname,
     pub password_hash: PasswordHash,
 }
 
 pub struct ApplicationUser3 {
-    pub id: Id,
+    pub id: i64,
 }
 
 pub struct ApplicationUser4 {

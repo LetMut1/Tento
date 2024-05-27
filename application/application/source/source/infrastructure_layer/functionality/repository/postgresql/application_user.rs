@@ -12,7 +12,6 @@ use crate::domain_layer::data::entity::application_user::ApplicationUser4;
 use crate::domain_layer::data::entity::application_user::ApplicationUser5;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_CreatedAt;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
-use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Nickname;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_PasswordHash;
 use crate::infrastructure_layer::data::auditor::Backtrace;
@@ -20,7 +19,6 @@ use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 use std::borrow::Cow;
-use std::marker::PhantomData;
 use tokio_postgres::types::Type;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use tokio_postgres::Client as Connection;
@@ -87,14 +85,13 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
 .convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(
-            ApplicationUser {
-                id: ApplicationUser_Id(row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?),
-                email: insert_1.application_user_email,
-                nickname: Cow::Owned(insert_1.application_user_nickname),
-                _password: PhantomData,
-                password_hash: insert_1.application_user_password_hash,
-                created_at: ApplicationUser_CreatedAt(row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?),
-            },
+            ApplicationUser::new(
+                row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
+                insert_1.application_user_email,
+                Cow::Owned(insert_1.application_user_nickname),
+                insert_1.application_user_password_hash,
+                ApplicationUser_CreatedAt(row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?),
+            ),
         );
     }
 
@@ -195,7 +192,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             WHERE au.id = $1;";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(
-            &by_3.application_user_id.0,
+            &by_3.application_user_id,
             Type::INT8,
         );
 
@@ -266,14 +263,13 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
 
         return Ok(
             Some(
-                ApplicationUser {
-                    id: ApplicationUser_Id(row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?),
-                    email: ApplicationUser_Email(row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?),
-                    nickname: Cow::Borrowed(by_1.application_user_nickname),
-                    _password: PhantomData,
-                    password_hash: ApplicationUser_PasswordHash(row_registry[0].try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?),
-                    created_at: ApplicationUser_CreatedAt(row_registry[0].try_get::<'_, usize, String>(3).convert(Backtrace::new(line!(), file!()))?),
-                },
+                ApplicationUser::new(
+                    row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
+                    ApplicationUser_Email(row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?),
+                    Cow::Borrowed(by_1.application_user_nickname),
+                    ApplicationUser_PasswordHash(row_registry[0].try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?),
+                    ApplicationUser_CreatedAt(row_registry[0].try_get::<'_, usize, String>(3).convert(Backtrace::new(line!(), file!()))?),
+                ),
             ),
         );
     }
@@ -324,7 +320,7 @@ impl PostgresqlRepository<ApplicationUser1> {
         return Ok(
             Some(
                 ApplicationUser1 {
-                    id: ApplicationUser_Id(row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?),
+                    id: row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
                     email: ApplicationUser_Email(row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?),
                     password_hash: ApplicationUser_PasswordHash(row_registry[0].try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?),
                 },
@@ -378,7 +374,7 @@ impl PostgresqlRepository<ApplicationUser2> {
         return Ok(
             Some(
                 ApplicationUser2 {
-                    id: ApplicationUser_Id(row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?),
+                    id: row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
                     nickname: ApplicationUser_Nickname(row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?),
                     password_hash: ApplicationUser_PasswordHash(row_registry[0].try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?),
                 },
@@ -430,7 +426,7 @@ impl PostgresqlRepository<ApplicationUser3> {
         return Ok(
             Some(
                 ApplicationUser3 {
-                    id: ApplicationUser_Id(row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?),
+                    id: row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
                 },
             ),
         );
@@ -464,7 +460,7 @@ impl PostgresqlRepository<ApplicationUser4> {
                 Type::TEXT,
             )
             .add_parameter(
-                &by_3.application_user_id.0,
+                &by_3.application_user_id,
                 Type::INT8,
             );
 
@@ -502,7 +498,7 @@ impl PostgresqlRepository<ApplicationUser4> {
             WHERE au.id = $1;";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(
-            &by_3.application_user_id.0,
+            &by_3.application_user_id,
             Type::INT8,
         );
 
@@ -552,7 +548,7 @@ impl PostgresqlRepository<ApplicationUser5> {
             WHERE au.id = $1;";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(
-            &by_3.application_user_id.0,
+            &by_3.application_user_id,
             Type::INT8,
         );
 

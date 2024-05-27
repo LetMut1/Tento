@@ -1,4 +1,3 @@
-use entity::application_user::ApplicationUser_Id;
 use entity::application_user::ApplicationUser_Password;
 use entity::application_user_authorization_token::ApplicationUserAuthorizationToken_CanBeResentFrom;
 use entity::application_user_authorization_token::ApplicationUserAuthorizationToken_WrongEnterTriesQuantity;
@@ -17,7 +16,7 @@ pub struct Incoming {
 
 #[derive(Serialize, Deserialize)]
 pub struct Outcoming {
-    pub application_user_id: ApplicationUser_Id,
+    pub application_user_id: i64,
     pub verification_message_sent: bool,
     pub application_user_authorization_token_can_be_resent_from: ApplicationUserAuthorizationToken_CanBeResentFrom,
     pub application_user_authorization_token_wrong_enter_tries_quantity: ApplicationUserAuthorizationToken_WrongEnterTriesQuantity,

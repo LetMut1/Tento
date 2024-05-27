@@ -54,7 +54,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &insert_3.application_user_id.0,
+                &insert_3.application_user_id,
                 Type::INT8,
             )
             .add_parameter(
@@ -95,14 +95,14 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
             .convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(
-            ApplicationUserAuthorizationToken {
-                application_user_id: insert_3.application_user_id,
-                application_user_device_id: Cow::Borrowed(insert_3.application_user_device_id),
-                value: insert_3.application_user_authorization_token_value,
-                wrong_enter_tries_quantity: insert_3.application_user_authorization_token_wrong_enter_tries_quantity,
-                expires_at: insert_3.application_user_authorization_token_expires_at,
-                can_be_resent_from: insert_3.application_user_authorization_token_can_be_resent_from,
-            },
+            ApplicationUserAuthorizationToken::new(
+                insert_3.application_user_id,
+                Cow::Borrowed(insert_3.application_user_device_id),
+                insert_3.application_user_authorization_token_value,
+                insert_3.application_user_authorization_token_wrong_enter_tries_quantity,
+                insert_3.application_user_authorization_token_expires_at,
+                insert_3.application_user_authorization_token_can_be_resent_from,
+            ),
         );
     }
 
@@ -120,7 +120,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &by_4.application_user_id.0,
+                &by_4.application_user_id,
                 Type::INT8,
             )
             .add_parameter(
@@ -193,7 +193,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken1> {
                 Type::INT8,
             )
             .add_parameter(
-                &by_4.application_user_id.0,
+                &by_4.application_user_id,
                 Type::INT8,
             )
             .add_parameter(
@@ -239,7 +239,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken1> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &by_4.application_user_id.0,
+                &by_4.application_user_id,
                 Type::INT8,
             )
             .add_parameter(
@@ -319,7 +319,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken2> {
                 Type::INT8,
             )
             .add_parameter(
-                &by_4.application_user_id.0,
+                &by_4.application_user_id,
                 Type::INT8,
             )
             .add_parameter(
@@ -364,7 +364,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken2> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &by_4.application_user_id.0,
+                &by_4.application_user_id,
                 Type::INT8,
             )
             .add_parameter(
@@ -429,7 +429,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken3> {
                 Type::INT8,
             )
             .add_parameter(
-                &by_4.application_user_id.0,
+                &by_4.application_user_id,
                 Type::INT8,
             )
             .add_parameter(
@@ -482,7 +482,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken4> {
                 Type::INT2,
             )
             .add_parameter(
-                &by_4.application_user_id.0,
+                &by_4.application_user_id,
                 Type::INT8,
             )
             .add_parameter(
@@ -529,7 +529,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken5> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &by_4.application_user_id.0,
+                &by_4.application_user_id,
                 Type::INT8,
             )
             .add_parameter(

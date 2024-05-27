@@ -115,7 +115,7 @@ impl ActionProcessor<Channel__Base___GetOneById> {
             )
             .await?;
 
-            if !is_exist && application_user_access_token.application_user_id.0 != channel.owner.0 {
+            if !is_exist && application_user_access_token.application_user_id != channel.owner {
                 return Ok(Ok(UnifiedReport::precedent(Precedent::Channel_IsClose)));
             }
         }
@@ -138,36 +138,19 @@ impl ActionProcessor<Channel__Base___GetOneById> {
         )
         .await?;
 
-        let EntityChannel {
-            id: _,
-            owner: channel_owner,
-            name: channel_name,
-            linked_name: channel_linked_name,
-            description: channel_description,
-            access_modifier: channel_access_modifier,
-            visability_modifier: channel_visability_modifier,
-            orientation: channel_orientation,
-            cover_image_path: channel_cover_image_path,
-            background_image_path: channel_background_image_path,
-            subscribers_quantity: channel_subscribers_quantity,
-            marks_quantity: channel_marks_quantity,
-            viewing_quantity: channel_viewing_quantity,
-            created_at: _,
-        } = channel;
-
         let channel_2 = Channel2 {
-            channel_owner,
-            channel_name: channel_name.into_owned(),
-            channel_linked_name,
-            channel_description,
-            channel_access_modifier,
-            channel_visability_modifier,
-            channel_orientation,
-            channel_cover_image_path,
-            channel_background_image_path,
-            channel_subscribers_quantity,
-            channel_marks_quantity,
-            channel_viewing_quantity,
+            channel_owner: channel.owner,
+            channel_name: channel.name.into_owned(),
+            channel_linked_name: channel.linked_name,
+            channel_description: channel.description,
+            channel_access_modifier: channel.access_modifier,
+            channel_visability_modifier: channel.visability_modifier,
+            channel_orientation: channel.orientation,
+            channel_cover_image_path: channel.cover_image_path,
+            channel_background_image_path: channel.background_image_path,
+            channel_subscribers_quantity: channel.subscribers_quantity,
+            channel_marks_quantity: channel.marks_quantity,
+            channel_viewing_quantity: channel.viewing_quantity,
         };
 
         let outcoming = Outcoming {

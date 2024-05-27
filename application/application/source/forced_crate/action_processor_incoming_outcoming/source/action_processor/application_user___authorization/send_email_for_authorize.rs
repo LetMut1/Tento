@@ -1,4 +1,3 @@
-use entity::application_user::ApplicationUser_Id;
 use entity::application_user_authorization_token::ApplicationUserAuthorizationToken_CanBeResentFrom;
 use entity::application_user_device::ApplicationUserDevice_Id;
 use serde::Deserialize;
@@ -9,7 +8,7 @@ use common_precedent::CommonPrecedent;
 #[derive(Serialize, Deserialize)]
 pub struct Incoming {
     pub application_user_device_id: ApplicationUserDevice_Id,
-    pub application_user_id: ApplicationUser_Id,
+    pub application_user_id: i64,
 }
 
 #[derive(Serialize, Deserialize)]

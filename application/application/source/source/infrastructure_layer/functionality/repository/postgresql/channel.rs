@@ -2,7 +2,6 @@ use super::by::By6;
 use super::by::By7;
 use super::insert::Insert7;
 use super::PostgresqlRepository;
-use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
 use crate::domain_layer::data::entity::channel::Channel;
 use crate::domain_layer::data::entity::channel::Channel_AccessModifier;
 use crate::domain_layer::data::entity::channel::Channel_BackgroundImagePath;
@@ -93,7 +92,7 @@ impl PostgresqlRepository<Channel<'_>> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &insert_7.channel_owner.0,
+                &insert_7.channel_owner,
                 Type::INT8,
             )
             .add_parameter(
@@ -158,22 +157,22 @@ impl PostgresqlRepository<Channel<'_>> {
 .convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(
-            Channel {
-                id: Channel_Id(row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?),
-                owner: insert_7.channel_owner,
-                name: Cow::Owned(insert_7.channel_name),
-                linked_name: insert_7.channel_linked_name,
-                description: insert_7.channel_description,
-                access_modifier: insert_7.channel_access_modifier,
-                visability_modifier: insert_7.channel_visability_modifier,
-                orientation: insert_7.channel_orientation,
-                cover_image_path: insert_7.channel_cover_image_path,
-                background_image_path: insert_7.channel_background_image_path,
-                subscribers_quantity: insert_7.channel_subscribers_quantity,
-                marks_quantity: insert_7.channel_marks_quantity,
-                viewing_quantity: insert_7.channel_viewing_quantity,
-                created_at: Channel_CreatedAt(row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?),
-            },
+            Channel::new(
+                Channel_Id(row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?),
+                insert_7.channel_owner,
+                Cow::Owned(insert_7.channel_name),
+                insert_7.channel_linked_name,
+                insert_7.channel_description,
+                insert_7.channel_access_modifier,
+                insert_7.channel_visability_modifier,
+                insert_7.channel_orientation,
+                insert_7.channel_cover_image_path,
+                insert_7.channel_background_image_path,
+                insert_7.channel_subscribers_quantity,
+                insert_7.channel_marks_quantity,
+                insert_7.channel_viewing_quantity,
+                Channel_CreatedAt(row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?),
+            ),
         );
     }
 
@@ -244,22 +243,22 @@ impl PostgresqlRepository<Channel<'_>> {
 
         return Ok(
             Some(
-                Channel {
-                    id: by_6.channel_id,
-                    owner: ApplicationUser_Id(row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?),
-                    name: Cow::Owned(Channel_Name(row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?)),
-                    linked_name: Channel_LinkedName(row_registry[0].try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?),
-                    description: channel_description,
-                    access_modifier: Channel_AccessModifier(row_registry[0].try_get::<'_, usize, i16>(4).convert(Backtrace::new(line!(), file!()))?),
-                    visability_modifier: Channel_VisabilityModifier(row_registry[0].try_get::<'_, usize, i16>(5).convert(Backtrace::new(line!(), file!()))?),
-                    orientation: Channel_Orientation(row_registry[0].try_get::<'_, usize, Vec<i16>>(6).convert(Backtrace::new(line!(), file!()))?),
-                    cover_image_path: channel_cover_image_path,
-                    background_image_path: channel_background_image_path,
-                    subscribers_quantity: Channel_SubscribersQuantity(row_registry[0].try_get::<'_, usize, i64>(9).convert(Backtrace::new(line!(), file!()))?),
-                    marks_quantity: Channel_MarksQuantity(row_registry[0].try_get::<'_, usize, i64>(10).convert(Backtrace::new(line!(), file!()))?),
-                    viewing_quantity: Channel_ViewingQuantity(row_registry[0].try_get::<'_, usize, i64>(11).convert(Backtrace::new(line!(), file!()))?),
-                    created_at: Channel_CreatedAt(row_registry[0].try_get::<'_, usize, String>(12).convert(Backtrace::new(line!(), file!()))?),
-                },
+                Channel::new(
+                    by_6.channel_id,
+                    row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
+                    Cow::Owned(Channel_Name(row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?)),
+                    Channel_LinkedName(row_registry[0].try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?),
+                    channel_description,
+                    Channel_AccessModifier(row_registry[0].try_get::<'_, usize, i16>(4).convert(Backtrace::new(line!(), file!()))?),
+                    Channel_VisabilityModifier(row_registry[0].try_get::<'_, usize, i16>(5).convert(Backtrace::new(line!(), file!()))?),
+                    Channel_Orientation(row_registry[0].try_get::<'_, usize, Vec<i16>>(6).convert(Backtrace::new(line!(), file!()))?),
+                    channel_cover_image_path,
+                    channel_background_image_path,
+                    Channel_SubscribersQuantity(row_registry[0].try_get::<'_, usize, i64>(9).convert(Backtrace::new(line!(), file!()))?),
+                    Channel_MarksQuantity(row_registry[0].try_get::<'_, usize, i64>(10).convert(Backtrace::new(line!(), file!()))?),
+                    Channel_ViewingQuantity(row_registry[0].try_get::<'_, usize, i64>(11).convert(Backtrace::new(line!(), file!()))?),
+                    Channel_CreatedAt(row_registry[0].try_get::<'_, usize, String>(12).convert(Backtrace::new(line!(), file!()))?),
+                ),
             ),
         );
     }
@@ -332,22 +331,22 @@ impl PostgresqlRepository<Channel<'_>> {
 
         return Ok(
             Some(
-                Channel {
-                    id: Channel_Id(row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?),
-                    owner: ApplicationUser_Id(row_registry[0].try_get::<'_, usize, i64>(1).convert(Backtrace::new(line!(), file!()))?),
-                    name: Cow::Borrowed(by_7.channel_name),
-                    linked_name: Channel_LinkedName(row_registry[0].try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?),
-                    description: channel_description,
-                    access_modifier: Channel_AccessModifier(row_registry[0].try_get::<'_, usize, i16>(4).convert(Backtrace::new(line!(), file!()))?),
-                    visability_modifier: Channel_VisabilityModifier(row_registry[0].try_get::<'_, usize, i16>(5).convert(Backtrace::new(line!(), file!()))?),
-                    orientation: Channel_Orientation(row_registry[0].try_get::<'_, usize, Vec<i16>>(6).convert(Backtrace::new(line!(), file!()))?),
-                    cover_image_path: channel_cover_image_path,
-                    background_image_path: channel_background_image_path,
-                    subscribers_quantity: Channel_SubscribersQuantity(row_registry[0].try_get::<'_, usize, i64>(9).convert(Backtrace::new(line!(), file!()))?),
-                    marks_quantity: Channel_MarksQuantity(row_registry[0].try_get::<'_, usize, i64>(10).convert(Backtrace::new(line!(), file!()))?),
-                    viewing_quantity: Channel_ViewingQuantity(row_registry[0].try_get::<'_, usize, i64>(11).convert(Backtrace::new(line!(), file!()))?),
-                    created_at: Channel_CreatedAt(row_registry[0].try_get::<'_, usize, String>(12).convert(Backtrace::new(line!(), file!()))?),
-                },
+                Channel::new(
+                    Channel_Id(row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?),
+                    row_registry[0].try_get::<'_, usize, i64>(1).convert(Backtrace::new(line!(), file!()))?,
+                    Cow::Borrowed(by_7.channel_name),
+                    Channel_LinkedName(row_registry[0].try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?),
+                    channel_description,
+                    Channel_AccessModifier(row_registry[0].try_get::<'_, usize, i16>(4).convert(Backtrace::new(line!(), file!()))?),
+                    Channel_VisabilityModifier(row_registry[0].try_get::<'_, usize, i16>(5).convert(Backtrace::new(line!(), file!()))?),
+                    Channel_Orientation(row_registry[0].try_get::<'_, usize, Vec<i16>>(6).convert(Backtrace::new(line!(), file!()))?),
+                    channel_cover_image_path,
+                    channel_background_image_path,
+                    Channel_SubscribersQuantity(row_registry[0].try_get::<'_, usize, i64>(9).convert(Backtrace::new(line!(), file!()))?),
+                    Channel_MarksQuantity(row_registry[0].try_get::<'_, usize, i64>(10).convert(Backtrace::new(line!(), file!()))?),
+                    Channel_ViewingQuantity(row_registry[0].try_get::<'_, usize, i64>(11).convert(Backtrace::new(line!(), file!()))?),
+                    Channel_CreatedAt(row_registry[0].try_get::<'_, usize, String>(12).convert(Backtrace::new(line!(), file!()))?),
+                ),
             ),
         );
     }

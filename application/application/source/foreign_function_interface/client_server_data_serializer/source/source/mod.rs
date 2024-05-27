@@ -143,7 +143,6 @@ use entity::application_user_device::ApplicationUserDevice_Id;
 use entity::application_user_registration_token::ApplicationUserRegistrationToken_Value;
 use entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_Value;
 use entity::application_user::ApplicationUser_Email;
-use entity::application_user::ApplicationUser_Id;
 use entity::application_user::ApplicationUser_Nickname;
 use entity::application_user::ApplicationUser_Password;
 use entity::channel::Channel_Id;
@@ -678,7 +677,7 @@ pub extern "C" fn application_user___authorization____authorize_by_first_step___
                     }
                     Data::Filled { data: data__ } => {
                         let outcoming = ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming {
-                            application_user_id: data__.application_user_id.0,
+                            application_user_id: data__.application_user_id,
                             verification_message_sent: data__.verification_message_sent,
                             application_user_authorization_token_can_be_resent_from: data__.application_user_authorization_token_can_be_resent_from.0,
                             application_user_authorization_token_wrong_enter_tries_quantity: data__.application_user_authorization_token_wrong_enter_tries_quantity.0,
@@ -739,7 +738,7 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: ApplicationUser__Authorization___AuthorizeByLastStep___Incoming| -> Result<ApplicationUser__Authorization___AuthorizeByLastStep___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___AuthorizeByLastStep___Incoming_ {
-            application_user_id: ApplicationUser_Id(incoming.application_user_id),
+            application_user_id: incoming.application_user_id,
             application_user_device_id: ApplicationUserDevice_Id(incoming.application_user_device_id.to_string()?),
             application_user_authorization_token_value: ApplicationUserAuthorizationToken_Value(incoming.application_user_authorization_token_value.to_string()?),
         };
@@ -1816,7 +1815,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_first_st
                     }
                     Data::Filled { data: data__ } => {
                         let outcoming = ApplicationUser__Authorization___ResetPasswordByFirstStep___Outcoming {
-                            application_user_id: data__.application_user_id.0,
+                            application_user_id: data__.application_user_id,
                             verification_message_sent: data__.verification_message_sent,
                             application_user_reset_password_token_can_be_resent_from: data__.application_user_reset_password_token_can_be_resent_from.0,
                             application_user_reset_password_token_wrong_enter_tries_quantity: data__.application_user_reset_password_token_wrong_enter_tries_quantity.0,
@@ -1877,7 +1876,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_second_s
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming| -> Result<ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming_ {
-            application_user_id: ApplicationUser_Id(incoming.application_user_id),
+            application_user_id: incoming.application_user_id,
             application_user_device_id: ApplicationUserDevice_Id(incoming.application_user_device_id.to_string()?),
             application_user_reset_password_token_value: ApplicationUserResetPasswordToken_Value(incoming.application_user_reset_password_token_value.to_string()?),
         };
@@ -2004,7 +2003,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_last_ste
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming| -> Result<ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming_ {
-            application_user_id: ApplicationUser_Id(incoming.application_user_id),
+            application_user_id: incoming.application_user_id,
             application_user_device_id: ApplicationUserDevice_Id(incoming.application_user_device_id.to_string()?),
             application_user_password: ApplicationUser_Password(incoming.application_user_password.to_string()?),
             application_user_reset_password_token_value: ApplicationUserResetPasswordToken_Value(incoming.application_user_reset_password_token_value.to_string()?),
@@ -2252,7 +2251,7 @@ pub extern "C" fn application_user___authorization____send_email_for_authorize__
     let converter = move |incoming: ApplicationUser__Authorization___SendEmailForAuthorize___Incoming| -> Result<ApplicationUser__Authorization___SendEmailForAuthorize___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___SendEmailForAuthorize___Incoming_ {
             application_user_device_id: ApplicationUserDevice_Id(incoming.application_user_device_id.to_string()?),
-            application_user_id: ApplicationUser_Id(incoming.application_user_id),
+            application_user_id: incoming.application_user_id,
         };
 
         return Ok(incoming_);
@@ -2375,7 +2374,7 @@ pub extern "C" fn application_user___authorization____send_email_for_reset_passw
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: ApplicationUser__Authorization___SendEmailForResetPassword___Incoming| -> Result<ApplicationUser__Authorization___SendEmailForResetPassword___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___SendEmailForResetPassword___Incoming_ {
-            application_user_id: ApplicationUser_Id(incoming.application_user_id),
+            application_user_id: incoming.application_user_id,
             application_user_device_id: ApplicationUserDevice_Id(incoming.application_user_device_id.to_string()?),
         };
 
@@ -3107,7 +3106,7 @@ pub extern "C" fn channel___base____get_one_by_id____deserialize(
                         };
 
                         let channel_2 = Channel2 {
-                            channel_owner: data__.channel.channel_owner.0,
+                            channel_owner: data__.channel.channel_owner,
                             channel_name: Allocator::<C_String>::allocate(data__.channel.channel_name.0),
                             channel_linked_name: Allocator::<C_String>::allocate(data__.channel.channel_linked_name.0),
                             channel_description,
@@ -3386,7 +3385,6 @@ mod test {
             use entity::application_user_registration_token::ApplicationUserRegistrationToken_WrongEnterTriesQuantity;
             use entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_CanBeResentFrom;
             use entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_WrongEnterTriesQuantity;
-            use entity::application_user::ApplicationUser_Id;
             use entity::channel_outer_link::ChannelOuterLink_Address;
             use entity::channel_outer_link::ChannelOuterLink_Alias;
             use entity::channel::Channel_AccessModifier;
@@ -3483,7 +3481,7 @@ mod test {
                 #[test]
                 fn target_filled____application_user___authorization____authorize_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
                     let outcoming = ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming_ {
-                        application_user_id: ApplicationUser_Id(0),
+                        application_user_id: 0,
                         verification_message_sent: false,
                         application_user_authorization_token_can_be_resent_from: ApplicationUserAuthorizationToken_CanBeResentFrom(0),
                         application_user_authorization_token_wrong_enter_tries_quantity: ApplicationUserAuthorizationToken_WrongEnterTriesQuantity(0),
@@ -4183,7 +4181,7 @@ mod test {
                 #[test]
                 fn target_filled____application_user___authorization____reset_password_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
                     let outcoming = ApplicationUser__Authorization___ResetPasswordByFirstStep___Outcoming_ {
-                        application_user_id: ApplicationUser_Id(0),
+                        application_user_id: 0,
                         verification_message_sent: false,
                         application_user_reset_password_token_can_be_resent_from: ApplicationUserResetPasswordToken_CanBeResentFrom(0),
                         application_user_reset_password_token_wrong_enter_tries_quantity: ApplicationUserResetPasswordToken_WrongEnterTriesQuantity(0),
@@ -4970,7 +4968,7 @@ mod test {
                     }
 
                     let channel_2 = Channel2_ {
-                        channel_owner: ApplicationUser_Id(0),
+                        channel_owner: 0,
                         channel_name: Channel_Name(STRING_LITERAL.to_string()),
                         channel_linked_name: Channel_LinkedName(STRING_LITERAL.to_string()),
                         channel_description: Some(Channel_Description(STRING_LITERAL.to_string())),
