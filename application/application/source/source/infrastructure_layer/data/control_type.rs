@@ -33,6 +33,7 @@ pub struct CloudMessage;
 pub struct CreateFixtures;
 pub struct DateTime;
 pub struct Email;
+pub struct RemoveIncompliteState;
 pub struct GeneralizedAction;
 pub struct HealthCheck;
 pub struct HttpBodyData;

@@ -74,8 +74,10 @@
 use std::error::Error as StdError;
 use application::application_layer::functionality::command_processor::CommandProcessor;
 use application::application_layer::functionality::command_processor::run_server::RunServer;
+use application::infrastructure_layer::data::auditor::Backtrace;
 use application::infrastructure_layer::functionality::service::formatter::Formatter;
 use application::application_layer::functionality::command_processor::create_fixtures::CreateFixtures;
+use application::application_layer::functionality::command_processor::remove_incomplite_state::RemoveIncompliteState;
 use application::infrastructure_layer::data::error::Error;
 use application::infrastructure_layer::data::auditor::Auditor;
 use clap::command;
@@ -83,6 +85,7 @@ use clap::Command;
 
 const RUN_SERVER: &'static str = "run_server";
 const CREATE_FIXTURES: &'static str = "create_fixtures";
+const REMOVE_INCOMPLITE_STATE: &'static str = "remove_incomplite_state";
 
 fn main() -> Result<(), Box<dyn StdError + 'static>> {
     if let Err(error) = process() {
@@ -109,23 +112,52 @@ fn process() -> Result<(), Box<dyn StdError + 'static>> {
         }
     };
 
-    match subcommand_arg_matches {
+    let error_auditor = match subcommand_arg_matches {
         (RUN_SERVER, _) => {
-            if let Err(error_auditor) = CommandProcessor::<RunServer>::process() {
-                return Err(Formatter::<Auditor<Error>>::format(&error_auditor).into());
-            }
+            let error_auditor_ = match CommandProcessor::<RunServer>::process() {
+                Ok(_) => None,
+                Err(error_auditor__) => Some(error_auditor__)
+            };
+
+            error_auditor_
         }
         (CREATE_FIXTURES, _) => {
-            if let Err(error_auditor) = CommandProcessor::<CreateFixtures>::process() {
-                return Err(Formatter::<Auditor<Error>>::format(&error_auditor).into());
-            }
+            let error_auditor_ = match CommandProcessor::<CreateFixtures>::process() {
+                Ok(_) => None,
+                Err(error_auditor__) => Some(error_auditor__)
+            };
+
+            error_auditor_
+        }
+        (REMOVE_INCOMPLITE_STATE, _) => {
+            let error_auditor_ = match CommandProcessor::<RemoveIncompliteState>::process() {
+                Ok(_) => None,
+                Err(error_auditor__) => Some(error_auditor__)
+            };
+
+            error_auditor_
         }
         _ => {
-            return Err("Unexpexted subcommand.".into());
+            Some(
+                Auditor::<Error>::new(
+                    Error::new_runtime_("Unexpexted subcommand.".into()),
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                ),
+            )
+        }
+    };
+
+    match error_auditor {
+        Some(error_auditor_) => {
+            return Err(Formatter::<Auditor<Error>>::format(&error_auditor_).into());
+        }
+        None => {
+            return Ok(());
         }
     }
-
-    return Ok(());
 }
 
 // Основной TODO лист, помимо TODO, проставленных в коде:
@@ -268,3 +300,4 @@ fn process() -> Result<(), Box<dyn StdError + 'static>> {
 // весь декодинг конвертируем в invalid_argument? или же в Error:decoding
 // убрать реактор
 // новая версия языка.
+// Entity_X -> submodule
