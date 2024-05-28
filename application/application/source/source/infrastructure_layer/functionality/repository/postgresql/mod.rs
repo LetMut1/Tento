@@ -193,7 +193,6 @@ pub mod update {
 }
 
 pub mod insert {
-    use crate::domain_layer::data::entity::application_user::ApplicationUser_Nickname;
     use crate::domain_layer::data::entity::application_user::ApplicationUser_PasswordHash;
     use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ExpiresAt;
     use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ObfuscationValue;

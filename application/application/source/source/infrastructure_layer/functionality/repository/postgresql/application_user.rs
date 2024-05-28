@@ -11,7 +11,6 @@ use crate::domain_layer::data::entity::application_user::ApplicationUser3;
 use crate::domain_layer::data::entity::application_user::ApplicationUser4;
 use crate::domain_layer::data::entity::application_user::ApplicationUser5;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_CreatedAt;
-use crate::domain_layer::data::entity::application_user::ApplicationUser_Nickname;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_PasswordHash;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
