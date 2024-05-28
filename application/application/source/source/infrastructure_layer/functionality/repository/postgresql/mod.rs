@@ -17,15 +17,13 @@ pub struct PostgresqlRepository<E> {
 }
 
 pub mod by {
-    use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
-    use crate::domain_layer::data::entity::application_user::ApplicationUser_Nickname;
     use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
     use crate::domain_layer::data::entity::channel::Channel_Id;
     use crate::domain_layer::data::entity::channel::Channel_Name;
     use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier;
 
     pub struct By1<'a> {
-        pub application_user_nickname: &'a ApplicationUser_Nickname,
+        pub application_user_nickname: &'a str,
     }
 
     pub struct By2<'a> {
@@ -233,7 +231,7 @@ pub mod insert {
 
     pub struct Insert1 {
         pub application_user_email: String,
-        pub application_user_nickname: ApplicationUser_Nickname,
+        pub application_user_nickname: String,
         pub application_user_password_hash: ApplicationUser_PasswordHash,
     }
 

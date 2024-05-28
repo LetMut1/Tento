@@ -142,7 +142,6 @@ use entity::application_user_authorization_token::ApplicationUserAuthorizationTo
 use entity::application_user_device::ApplicationUserDevice_Id;
 use entity::application_user_registration_token::ApplicationUserRegistrationToken_Value;
 use entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_Value;
-use entity::application_user::ApplicationUser_Nickname;
 use entity::application_user::ApplicationUser_Password;
 use entity::channel::Channel_Id;
 use entity::channel::Channel_Name;
@@ -969,7 +968,7 @@ pub extern "C" fn application_user___authorization____check_nickname_for_existin
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: ApplicationUser__Authorization___CheckNicknameForExisting___Incoming| -> Result<ApplicationUser__Authorization___CheckNicknameForExisting___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___CheckNicknameForExisting___Incoming_ {
-            application_user_nickname: ApplicationUser_Nickname(incoming.application_user_nickname.to_string()?),
+            application_user_nickname: incoming.application_user_nickname.to_string()?,
         };
 
         return Ok(incoming_);
@@ -1613,7 +1612,7 @@ pub extern "C" fn application_user___authorization____register_by_last_step____s
         let incoming_ = ApplicationUser__Authorization___RegisterByLastStep___Incoming_ {
             application_user_device_id: ApplicationUserDevice_Id(incoming.application_user_device_id.to_string()?),
             application_user_email: incoming.application_user_email.to_string()?,
-            application_user_nickname: ApplicationUser_Nickname(incoming.application_user_nickname.to_string()?),
+            application_user_nickname: incoming.application_user_nickname.to_string()?,
             application_user_password: ApplicationUser_Password(incoming.application_user_password.to_string()?),
             application_user_registration_token_value: ApplicationUserRegistrationToken_Value(incoming.application_user_registration_token_value.to_string()?),
         };

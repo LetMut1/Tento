@@ -41,7 +41,7 @@ impl ActionProcessor<ApplicationUser__Authorization___CheckNicknameForExisting> 
     {
         let incoming_ = incoming.convert_value_does_not_exist(Backtrace::new(line!(), file!()))?;
 
-        if !Validator::<ApplicationUser_Nickname>::is_valid(&incoming_.application_user_nickname) {
+        if !Validator::<ApplicationUser_Nickname>::is_valid(incoming_.application_user_nickname.as_str()) {
             return Ok(
                 Err(
                     Auditor::<InvalidArgument>::new(
@@ -60,7 +60,7 @@ impl ActionProcessor<ApplicationUser__Authorization___CheckNicknameForExisting> 
         let is_exist = PostgresqlRepository::<ApplicationUser<'_>>::is_exist_1(
             &*database_1_postgresql_pooled_connection,
             &By1 {
-                application_user_nickname: &incoming_.application_user_nickname,
+                application_user_nickname: incoming_.application_user_nickname.as_str(),
             },
         )
         .await?;

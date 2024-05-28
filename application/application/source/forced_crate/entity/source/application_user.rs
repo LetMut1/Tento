@@ -17,8 +17,9 @@ pub struct ApplicationUser<'a> {
     pub email: String,
     _email: PhantomData<Email>,
 
-    pub nickname: Cow<'a, Nickname>,
-    pub _password: PhantomData<Password>,
+    pub nickname: Cow<'a, str>,
+    _nickname: PhantomData<Nickname>,
+
     pub password_hash: PasswordHash,
     pub created_at: CreatedAt,
 }
@@ -27,7 +28,7 @@ impl<'a> ApplicationUser<'a> {
     pub fn new(
         id: i64,
         email: String,
-        nickname: Cow<'a, Nickname>,
+        nickname: Cow<'a, str>,
         password_hash: PasswordHash,
         created_at: CreatedAt,
     ) -> Self {
@@ -37,7 +38,7 @@ impl<'a> ApplicationUser<'a> {
             email,
             _email: PhantomData,
             nickname,
-            _password: PhantomData,
+            _nickname: PhantomData,
             password_hash,
             created_at,
         };
@@ -55,9 +56,8 @@ impl Email {
     pub const MAXIMUM_LENGTH: usize = 320;
 }
 
-#[derive(Clone, Deserialize, Serialize)]
-#[serde(transparent)]
-pub struct Nickname(pub String);
+#[derive(Deserialize, Serialize)]
+pub struct Nickname;
 
 impl Nickname {
     pub const MAXIMUM_LENGTH: usize = 55;
@@ -85,7 +85,7 @@ pub struct ApplicationUser1 {
 
 pub struct ApplicationUser2 {
     pub id: i64,
-    pub nickname: Nickname,
+    pub nickname: String,
     pub password_hash: PasswordHash,
 }
 
@@ -95,7 +95,7 @@ pub struct ApplicationUser3 {
 
 pub struct ApplicationUser4 {
     pub email: String,
-    pub nickname: Nickname,
+    pub nickname: String,
     pub password_hash: PasswordHash,
 }
 

@@ -109,21 +109,19 @@ impl CommandProcessor<CreateFixtures> {
         let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
 
         '_a: for _ in 1..=Self::QUANTITY_OF_APPLICATION_USERS {
-            let mut application_user_nickname = ApplicationUser_Nickname(String::new());
+            let mut application_user_nickname = String::new();
 
             '_b: for _ in 1..=thread_rng().gen_range::<usize, _>(1..=ApplicationUser_Nickname::MAXIMUM_LENGTH) {
                 let character = Self::ASCII_CHARACTER_REGISTRY[thread_rng().gen_range::<usize, _>(0..Self::ASCII_CHARACTER_REGISTRY.len())];
 
-                application_user_nickname = ApplicationUser_Nickname(
-                    format!(
-                        "{}{}",
-                        application_user_nickname.0.as_str(),
-                        character
-                    ),
+                application_user_nickname = format!(
+                    "{}{}",
+                    application_user_nickname.as_str(),
+                    character
                 );
             }
 
-            if !Validator::<ApplicationUser_Nickname>::is_valid(&application_user_nickname) {
+            if !Validator::<ApplicationUser_Nickname>::is_valid(application_user_nickname.as_str()) {
                 return Err(
                     Auditor::<Error>::new(
                         Error::Logic {
@@ -139,7 +137,7 @@ impl CommandProcessor<CreateFixtures> {
 
             let application_user_email = format!(
                 "{}@fixture.com",
-                application_user_nickname.0.as_str()
+                application_user_nickname.as_str()
             );
 
             if !Validator::<ApplicationUser_Email>::is_valid(&application_user_email)? {
@@ -159,7 +157,7 @@ impl CommandProcessor<CreateFixtures> {
             if !Validator::<ApplicationUser_Password>::is_valid(
                 &application_user_password,
                 &application_user_email,
-                &application_user_nickname,
+                application_user_nickname.as_str(),
             ) {
                 return Err(
                     Auditor::<Error>::new(
@@ -175,7 +173,7 @@ impl CommandProcessor<CreateFixtures> {
             }
 
             let by_1 = By1 {
-                application_user_nickname: &application_user_nickname,
+                application_user_nickname: application_user_nickname.as_str(),
             };
 
             let application_user = match PostgresqlRepository::<ApplicationUser<'_>>::find_1(
@@ -201,7 +199,7 @@ impl CommandProcessor<CreateFixtures> {
             let application_user_device_id = ApplicationUserDevice_Id(
                 format!(
                     "{}_{}",
-                    application_user.nickname.0.as_str(),
+                    application_user.nickname.as_ref(),
                     Self::APPLICATION_USER_DEVICE__ID_PART
                 ),
             );

@@ -76,7 +76,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
         if !Validator::<ApplicationUser_Password>::is_valid(
             &incoming_.application_user_password,
             incoming_.application_user_email.as_str(),
-            &incoming_.application_user_nickname,
+            incoming_.application_user_nickname.as_str(),
         ) {
             return Ok(
                 Err(
@@ -91,7 +91,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
             );
         }
 
-        if !Validator::<ApplicationUser_Nickname>::is_valid(&incoming_.application_user_nickname) {
+        if !Validator::<ApplicationUser_Nickname>::is_valid(incoming_.application_user_nickname.as_str()) {
             return Ok(
                 Err(
                     Auditor::<InvalidArgument>::new(
@@ -154,7 +154,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
         if PostgresqlRepository::<ApplicationUser<'_>>::is_exist_1(
             database_1_postgresql_connection,
             &By1 {
-                application_user_nickname: &incoming_.application_user_nickname,
+                application_user_nickname: incoming_.application_user_nickname.as_str(),
             },
         )
         .await?

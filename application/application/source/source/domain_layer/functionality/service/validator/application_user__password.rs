@@ -6,7 +6,7 @@ impl Validator<ApplicationUser_Password> {
     pub fn is_valid<'a>(
         application_user_password: &'a ApplicationUser_Password,
         application_user_email: &'a str,
-        application_user_nickname: &'a ApplicationUser_Nickname,
+        application_user_nickname: &'a str,
     ) -> bool {
         return Self::is_valid_part_1(application_user_password)
             && Self::is_valid_part_2(
@@ -25,10 +25,10 @@ impl Validator<ApplicationUser_Password> {
     pub fn is_valid_part_2<'a>(
         application_user_password: &'a ApplicationUser_Password,
         application_user_email: &'a str,
-        application_user_nickname: &'a ApplicationUser_Nickname,
+        application_user_nickname: &'a str,
     ) -> bool {
         let application_user_password_ = application_user_password.0.as_str();
 
-        return application_user_password_ != application_user_email && application_user_password_ != application_user_nickname.0.as_str();
+        return application_user_password_ != application_user_email && application_user_password_ != application_user_nickname;
     }
 }

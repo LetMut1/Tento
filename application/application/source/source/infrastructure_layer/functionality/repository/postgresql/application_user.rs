@@ -29,7 +29,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
     ) -> Result<ApplicationUser<'static>, Auditor<Error>> {
         let application_user_email = insert_1.application_user_email.as_str();
 
-        let application_user_nickname = insert_1.application_user_nickname.0.as_str();
+        let application_user_nickname = insert_1.application_user_nickname.as_str();
 
         let application_user_password_hash = insert_1.application_user_password_hash.0.as_str();
 
@@ -98,7 +98,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         database_1_connection: &'a Connection,
         by_1: &'a By1<'_>,
     ) -> Result<bool, Auditor<Error>> {
-        let application_user_nickname = by_1.application_user_nickname.0.as_str();
+        let application_user_nickname = by_1.application_user_nickname;
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -222,7 +222,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         database_1_connection: &'a Connection,
         by_1: &'a By1<'b>,
     ) -> Result<Option<ApplicationUser<'b>>, Auditor<Error>> {
-        let application_user_nickname = by_1.application_user_nickname.0.as_str();
+        let application_user_nickname = by_1.application_user_nickname;
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -279,7 +279,7 @@ impl PostgresqlRepository<ApplicationUser1> {
         database_1_connection: &'a Connection,
         by_1: &'a By1<'_>,
     ) -> Result<Option<ApplicationUser1>, Auditor<Error>> {
-        let application_user_nickname = by_1.application_user_nickname.0.as_str();
+        let application_user_nickname = by_1.application_user_nickname;
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -374,7 +374,7 @@ impl PostgresqlRepository<ApplicationUser2> {
             Some(
                 ApplicationUser2 {
                     id: row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
-                    nickname: ApplicationUser_Nickname(row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?),
+                    nickname: row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
                     password_hash: ApplicationUser_PasswordHash(row_registry[0].try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?),
                 },
             ),
@@ -525,7 +525,7 @@ impl PostgresqlRepository<ApplicationUser4> {
             Some(
                 ApplicationUser4 {
                     email: row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
-                    nickname: ApplicationUser_Nickname(row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?),
+                    nickname: row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
                     password_hash: ApplicationUser_PasswordHash(row_registry[0].try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?),
                 },
             ),
