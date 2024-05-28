@@ -1,5 +1,4 @@
 use super::EmailSender;
-use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_Value;
@@ -14,7 +13,7 @@ impl EmailSender<ApplicationUserResetPasswordToken<'_>> {
     pub fn send<'a>(
         environment_configuration: &'a EnvironmentConfiguration,
         application_user_reset_password_token_value: &'a ApplicationUserResetPasswordToken_Value,
-        application_user_email: &'a ApplicationUser_Email,
+        application_user_email: &'a str,
         application_user_device_id: &'a ApplicationUserDevice_Id,
     ) -> Result<(), Auditor<Error>> {
         let message_body = format!(
@@ -27,7 +26,7 @@ impl EmailSender<ApplicationUserResetPasswordToken<'_>> {
             environment_configuration,
             "Reset password confirmation",
             message_body,
-            application_user_email.0.as_str(),
+            application_user_email,
         )?;
 
         return Ok(());

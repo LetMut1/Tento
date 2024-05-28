@@ -1,10 +1,9 @@
-use entity::application_user::ApplicationUser_Email;
 use serde::Deserialize;
 use serde::Serialize;
 
 #[derive(Serialize, Deserialize)]
 pub struct Incoming {
-    pub application_user_email: ApplicationUser_Email,
+    pub application_user_email: String,
 }
 
 #[derive(Serialize, Deserialize)]

@@ -11,9 +11,7 @@ use regex::Regex;
 static REGULAR_EXPRESSION: OnceLock<Regex> = OnceLock::new();
 
 impl Validator<ApplicationUser_Email> {
-    pub fn is_valid<'a>(application_user_email: &'a ApplicationUser_Email) -> Result<bool, Auditor<Error>> {
-        let application_user_email_ = application_user_email.0.as_str();
-
+    pub fn is_valid<'a>(application_user_email: &'a str) -> Result<bool, Auditor<Error>> {
         let regular_expression = match REGULAR_EXPRESSION.get() {
             Some(regular_expression_) => regular_expression_,
             None => {
@@ -33,6 +31,6 @@ impl Validator<ApplicationUser_Email> {
             }
         };
 
-        return Ok(regular_expression.is_match(application_user_email_) && application_user_email_.chars().count() <= ApplicationUser_Email::MAXIMUM_LENGTH);
+        return Ok(regular_expression.is_match(application_user_email) && application_user_email.chars().count() <= ApplicationUser_Email::MAXIMUM_LENGTH);
     }
 }

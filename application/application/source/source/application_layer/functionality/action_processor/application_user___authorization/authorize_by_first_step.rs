@@ -95,7 +95,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
             );
         }
 
-        let application_user_email = ApplicationUser_Email(incoming_.application_user_email_or_application_user_nickname);
+        let application_user_email = incoming_.application_user_email_or_application_user_nickname;
 
         let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
 
@@ -105,7 +105,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
             let application_user_ = PostgresqlRepository::<ApplicationUser2>::find_1(
                 database_1_postgresql_connection,
                 &By2 {
-                    application_user_email: &application_user_email,
+                    application_user_email: application_user_email.as_str(),
                 },
             )
             .await?;
@@ -124,7 +124,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                 application_user__.password_hash,
             )
         } else {
-            let application_user_nickname = ApplicationUser_Nickname(application_user_email.0);
+            let application_user_nickname = ApplicationUser_Nickname(application_user_email);
 
             if Validator::<ApplicationUser_Nickname>::is_valid(&application_user_nickname) {
                 let application_user_ = PostgresqlRepository::<ApplicationUser1>::find_1(

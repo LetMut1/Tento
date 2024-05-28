@@ -60,7 +60,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
     {
         let incoming_ = incoming.convert_value_does_not_exist(Backtrace::new(line!(), file!()))?;
 
-        if !Validator::<ApplicationUser_Email>::is_valid(&incoming_.application_user_email)? {
+        if !Validator::<ApplicationUser_Email>::is_valid(incoming_.application_user_email.as_str())? {
             return Ok(
                 Err(
                     Auditor::<InvalidArgument>::new(
@@ -93,7 +93,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
         if PostgresqlRepository::<ApplicationUser<'_>>::is_exist_2(
             &*database_1_postgresql_pooled_connection,
             &By2 {
-                application_user_email: &incoming_.application_user_email,
+                application_user_email: incoming_.application_user_email.as_str(),
             },
         )
         .await?
@@ -102,7 +102,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
         }
 
         let by_5 = By5 {
-            application_user_email: &incoming_.application_user_email,
+            application_user_email: incoming_.application_user_email.as_str(),
             application_user_device_id: &incoming_.application_user_device_id,
         };
 
@@ -194,7 +194,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
                 let application_user_registration_token = PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::create(
                     database_2_postgresql_connection,
                     Insert5 {
-                        application_user_email: &incoming_.application_user_email,
+                        application_user_email: incoming_.application_user_email.as_str(),
                         application_user_device_id: &incoming_.application_user_device_id,
                         application_user_registration_token_value: Generator::<ApplicationUserRegistrationToken_Value>::generate(),
                         application_user_registration_token_wrong_enter_tries_quantity: ApplicationUserRegistrationToken_WrongEnterTriesQuantity(0),
@@ -218,7 +218,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
             EmailSender::<ApplicationUserRegistrationToken<'_>>::send(
                 environment_configuration,
                 &application_user_registration_token_value,
-                &incoming_.application_user_email,
+                incoming_.application_user_email.as_str(),
                 &incoming_.application_user_device_id,
             )?;
         }

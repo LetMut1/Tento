@@ -1,4 +1,3 @@
-use entity::application_user::ApplicationUser_Email;
 use entity::application_user_device::ApplicationUserDevice_Id;
 use entity::application_user_registration_token::ApplicationUserRegistrationToken_Value;
 use entity::application_user_registration_token::ApplicationUserRegistrationToken_WrongEnterTriesQuantity;
@@ -9,7 +8,7 @@ use serde::Serialize;
 
 #[derive(Serialize, Deserialize)]
 pub struct Incoming {
-    pub application_user_email: ApplicationUser_Email,
+    pub application_user_email: String,
     pub application_user_device_id: ApplicationUserDevice_Id,
     pub application_user_registration_token_value: ApplicationUserRegistrationToken_Value,
 }

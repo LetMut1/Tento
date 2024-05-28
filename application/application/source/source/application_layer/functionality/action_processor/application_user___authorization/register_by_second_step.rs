@@ -53,7 +53,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
     {
         let incoming_ = incoming.convert_value_does_not_exist(Backtrace::new(line!(), file!()))?;
 
-        if !Validator::<ApplicationUser_Email>::is_valid(&incoming_.application_user_email)? {
+        if !Validator::<ApplicationUser_Email>::is_valid(incoming_.application_user_email.as_str())? {
             return Ok(
                 Err(
                     Auditor::<InvalidArgument>::new(
@@ -96,7 +96,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
         }
 
         let by_5 = By5 {
-            application_user_email: &incoming_.application_user_email,
+            application_user_email: incoming_.application_user_email.as_str(),
             application_user_device_id: &incoming_.application_user_device_id,
         };
 

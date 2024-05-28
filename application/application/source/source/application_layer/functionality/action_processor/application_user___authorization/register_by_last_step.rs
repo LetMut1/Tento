@@ -75,7 +75,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
 
         if !Validator::<ApplicationUser_Password>::is_valid(
             &incoming_.application_user_password,
-            &incoming_.application_user_email,
+            incoming_.application_user_email.as_str(),
             &incoming_.application_user_nickname,
         ) {
             return Ok(
@@ -105,7 +105,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
             );
         }
 
-        if !Validator::<ApplicationUser_Email>::is_valid(&incoming_.application_user_email)? {
+        if !Validator::<ApplicationUser_Email>::is_valid(incoming_.application_user_email.as_str())? {
             return Ok(
                 Err(
                     Auditor::<InvalidArgument>::new(
@@ -165,7 +165,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
         if PostgresqlRepository::<ApplicationUser<'_>>::is_exist_2(
             database_1_postgresql_connection,
             &By2 {
-                application_user_email: &incoming_.application_user_email,
+                application_user_email: incoming_.application_user_email.as_str(),
             },
         )
         .await?
@@ -174,7 +174,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
         }
 
         let by_5 = By5 {
-            application_user_email: &incoming_.application_user_email,
+            application_user_email: incoming_.application_user_email.as_str(),
             application_user_device_id: &incoming_.application_user_device_id,
         };
 
@@ -294,7 +294,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
                 PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete(
                     &*database_2_postgresql_pooled_connection_,
                     &By5 {
-                        application_user_email: &application_user.email,
+                        application_user_email: application_user.email.as_str(),
                         application_user_device_id: &application_user_device.id,
                     },
                 )

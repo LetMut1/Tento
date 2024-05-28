@@ -13,7 +13,10 @@ pub use self::PasswordHash as ApplicationUser_PasswordHash;
 pub struct ApplicationUser<'a> {
     pub id: i64,
     _id: PhantomData<Id>,
-    pub email: Email,
+
+    pub email: String,
+    _email: PhantomData<Email>,
+
     pub nickname: Cow<'a, Nickname>,
     pub _password: PhantomData<Password>,
     pub password_hash: PasswordHash,
@@ -23,7 +26,7 @@ pub struct ApplicationUser<'a> {
 impl<'a> ApplicationUser<'a> {
     pub fn new(
         id: i64,
-        email: Email,
+        email: String,
         nickname: Cow<'a, Nickname>,
         password_hash: PasswordHash,
         created_at: CreatedAt,
@@ -32,6 +35,7 @@ impl<'a> ApplicationUser<'a> {
             id,
             _id: PhantomData,
             email,
+            _email: PhantomData,
             nickname,
             _password: PhantomData,
             password_hash,
@@ -43,9 +47,8 @@ impl<'a> ApplicationUser<'a> {
 #[derive(Deserialize, Serialize)]
 pub struct Id;
 
-#[derive(Clone, Deserialize, Serialize)]
-#[serde(transparent)]
-pub struct Email(pub String);
+#[derive(Deserialize, Serialize)]
+pub struct Email;
 
 impl Email {
     pub const REGULAR_EXPRESSION: &'static str = r#"(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])"#;
@@ -76,7 +79,7 @@ pub struct CreatedAt(pub String);
 
 pub struct ApplicationUser1 {
     pub id: i64,
-    pub email: Email,
+    pub email: String,
     pub password_hash: PasswordHash,
 }
 
@@ -91,11 +94,11 @@ pub struct ApplicationUser3 {
 }
 
 pub struct ApplicationUser4 {
-    pub email: Email,
+    pub email: String,
     pub nickname: Nickname,
     pub password_hash: PasswordHash,
 }
 
 pub struct ApplicationUser5 {
-    pub email: Email,
+    pub email: String,
 }

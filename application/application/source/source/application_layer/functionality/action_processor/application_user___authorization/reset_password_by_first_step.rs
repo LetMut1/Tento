@@ -60,7 +60,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByFirstStep> 
     {
         let incoming_ = incoming.convert_value_does_not_exist(Backtrace::new(line!(), file!()))?;
 
-        if !Validator::<ApplicationUser_Email>::is_valid(&incoming_.application_user_email)? {
+        if !Validator::<ApplicationUser_Email>::is_valid(incoming_.application_user_email.as_str())? {
             return Ok(
                 Err(
                     Auditor::<InvalidArgument>::new(
@@ -93,7 +93,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByFirstStep> 
         let application_user = PostgresqlRepository::<ApplicationUser3>::find_1(
             &*database_1_postgresql_pooled_connection,
             &By2 {
-                application_user_email: &incoming_.application_user_email,
+                application_user_email: incoming_.application_user_email.as_str(),
             },
         )
         .await?;
@@ -222,7 +222,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByFirstStep> 
             EmailSender::<ApplicationUserResetPasswordToken<'_>>::send(
                 environment_configuration,
                 &application_user_reset_password_token_value,
-                &incoming_.application_user_email,
+                incoming_.application_user_email.as_str(),
                 &incoming_.application_user_device_id,
             )?;
         }

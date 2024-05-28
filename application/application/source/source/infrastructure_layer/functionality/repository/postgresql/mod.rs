@@ -29,7 +29,7 @@ pub mod by {
     }
 
     pub struct By2<'a> {
-        pub application_user_email: &'a ApplicationUser_Email,
+        pub application_user_email: &'a str,
     }
 
     pub struct By3 {
@@ -42,7 +42,7 @@ pub mod by {
     }
 
     pub struct By5<'a> {
-        pub application_user_email: &'a ApplicationUser_Email,
+        pub application_user_email: &'a str,
         pub application_user_device_id: &'a ApplicationUserDevice_Id,
     }
 
@@ -195,8 +195,6 @@ pub mod update {
 }
 
 pub mod insert {
-    use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
-    use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
     use crate::domain_layer::data::entity::application_user::ApplicationUser_Nickname;
     use crate::domain_layer::data::entity::application_user::ApplicationUser_PasswordHash;
     use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ExpiresAt;
@@ -234,7 +232,7 @@ pub mod insert {
     use crate::domain_layer::data::entity::channel_outer_link::ChannelOuterLink_Alias;
 
     pub struct Insert1 {
-        pub application_user_email: ApplicationUser_Email,
+        pub application_user_email: String,
         pub application_user_nickname: ApplicationUser_Nickname,
         pub application_user_password_hash: ApplicationUser_PasswordHash,
     }
@@ -263,7 +261,7 @@ pub mod insert {
     }
 
     pub struct Insert5<'a> {
-        pub application_user_email: &'a ApplicationUser_Email,
+        pub application_user_email: &'a str,
         pub application_user_device_id: &'a ApplicationUserDevice_Id,
         pub application_user_registration_token_value: ApplicationUserRegistrationToken_Value,
         pub application_user_registration_token_wrong_enter_tries_quantity: ApplicationUserRegistrationToken_WrongEnterTriesQuantity,

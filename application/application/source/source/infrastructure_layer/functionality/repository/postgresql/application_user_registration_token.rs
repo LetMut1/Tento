@@ -32,7 +32,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
         database_2_connection: &'a Connection,
         insert_5: Insert5<'a>,
     ) -> Result<ApplicationUserRegistrationToken<'a>, Auditor<Error>> {
-        let application_user_email = insert_5.application_user_email.0.as_str();
+        let application_user_email = insert_5.application_user_email;
 
         let application_user_device_id = insert_5.application_user_device_id.0.as_str();
 
@@ -106,15 +106,15 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
             .convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(
-            ApplicationUserRegistrationToken {
-                application_user_email: Cow::Borrowed(insert_5.application_user_email),
-                application_user_device_id: Cow::Borrowed(insert_5.application_user_device_id),
-                value: insert_5.application_user_registration_token_value,
-                wrong_enter_tries_quantity: insert_5.application_user_registration_token_wrong_enter_tries_quantity,
-                is_approved: insert_5.application_user_registration_token_is_approved,
-                expires_at: insert_5.application_user_registration_token_expires_at,
-                can_be_resent_from: insert_5.application_user_registration_token_can_be_resent_from,
-            },
+            ApplicationUserRegistrationToken::new(
+                Cow::Borrowed(insert_5.application_user_email),
+                Cow::Borrowed(insert_5.application_user_device_id),
+                insert_5.application_user_registration_token_value,
+                insert_5.application_user_registration_token_wrong_enter_tries_quantity,
+                insert_5.application_user_registration_token_is_approved,
+                insert_5.application_user_registration_token_expires_at,
+                insert_5.application_user_registration_token_can_be_resent_from,
+            ),
         );
     }
 
@@ -122,7 +122,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
         database_2_connection: &'a Connection,
         by_5: &'a By5<'_>,
     ) -> Result<(), Auditor<Error>> {
-        let application_user_email = by_5.application_user_email.0.as_str();
+        let application_user_email = by_5.application_user_email;
 
         let application_user_device_id = by_5.application_user_device_id.0.as_str();
 
@@ -168,7 +168,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
         update_7: &'a Update7<'_>,
         by_5: &'a By5<'_>,
     ) -> Result<(), Auditor<Error>> {
-        let application_user_email = by_5.application_user_email.0.as_str();
+        let application_user_email = by_5.application_user_email;
 
         let application_user_device_id = by_5.application_user_device_id.0.as_str();
 
@@ -246,7 +246,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
         database_2_connection: &'a Connection,
         by_5: &'a By5<'_>,
     ) -> Result<Option<ApplicationUserRegistrationToken1>, Auditor<Error>> {
-        let application_user_email = by_5.application_user_email.0.as_str();
+        let application_user_email = by_5.application_user_email;
 
         let application_user_device_id = by_5.application_user_device_id.0.as_str();
 
@@ -312,7 +312,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken2> {
         update_8: &'a Update8,
         by_5: &'a By5<'_>,
     ) -> Result<(), Auditor<Error>> {
-        let application_user_email = by_5.application_user_email.0.as_str();
+        let application_user_email = by_5.application_user_email;
 
         let application_user_device_id = by_5.application_user_device_id.0.as_str();
 
@@ -367,7 +367,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
         update_9: &'a Update9<'_>,
         by_5: &'a By5<'_>,
     ) -> Result<(), Auditor<Error>> {
-        let application_user_email = by_5.application_user_email.0.as_str();
+        let application_user_email = by_5.application_user_email;
 
         let application_user_device_id = by_5.application_user_device_id.0.as_str();
 
@@ -439,7 +439,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
         database_2_connection: &'a Connection,
         by_5: &'a By5<'_>,
     ) -> Result<Option<ApplicationUserRegistrationToken3>, Auditor<Error>> {
-        let application_user_email = by_5.application_user_email.0.as_str();
+        let application_user_email = by_5.application_user_email;
 
         let application_user_device_id = by_5.application_user_device_id.0.as_str();
 
@@ -503,7 +503,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken4> {
         update_10: &'a Update10,
         by_5: &'a By5<'_>,
     ) -> Result<(), Auditor<Error>> {
-        let application_user_email = by_5.application_user_email.0.as_str();
+        let application_user_email = by_5.application_user_email;
 
         let application_user_device_id = by_5.application_user_device_id.0.as_str();
 
@@ -558,7 +558,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken5> {
         update_11: &'a Update11,
         by_5: &'a By5<'_>,
     ) -> Result<(), Auditor<Error>> {
-        let application_user_email = by_5.application_user_email.0.as_str();
+        let application_user_email = by_5.application_user_email;
 
         let application_user_device_id = by_5.application_user_device_id.0.as_str();
 
@@ -612,7 +612,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken6> {
         database_2_connection: &'a Connection,
         by_5: &'a By5<'_>,
     ) -> Result<Option<ApplicationUserRegistrationToken6>, Auditor<Error>> {
-        let application_user_email = by_5.application_user_email.0.as_str();
+        let application_user_email = by_5.application_user_email;
 
         let application_user_device_id = by_5.application_user_device_id.0.as_str();
 

@@ -137,11 +137,9 @@ impl CommandProcessor<CreateFixtures> {
                 );
             }
 
-            let application_user_email = ApplicationUser_Email(
-                format!(
-                    "{}@fixture.com",
-                    application_user_nickname.0.as_str()
-                ),
+            let application_user_email = format!(
+                "{}@fixture.com",
+                application_user_nickname.0.as_str()
             );
 
             if !Validator::<ApplicationUser_Email>::is_valid(&application_user_email)? {
