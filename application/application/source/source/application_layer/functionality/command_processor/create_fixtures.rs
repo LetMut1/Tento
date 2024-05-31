@@ -140,7 +140,7 @@ impl CommandProcessor<CreateFixtures> {
                 application_user_nickname.as_str()
             );
 
-            if !Validator::<ApplicationUser_Email>::is_valid(&application_user_email)? {
+            if !Validator::<ApplicationUser_Email>::is_valid(application_user_email.as_str())? {
                 return Err(
                     Auditor::<Error>::new(
                         Error::Logic {
@@ -155,8 +155,8 @@ impl CommandProcessor<CreateFixtures> {
             }
 
             if !Validator::<ApplicationUser_Password>::is_valid(
-                &application_user_password,
-                &application_user_email,
+                application_user_password.as_str(),
+                application_user_email.as_str(),
                 application_user_nickname.as_str(),
             ) {
                 return Err(

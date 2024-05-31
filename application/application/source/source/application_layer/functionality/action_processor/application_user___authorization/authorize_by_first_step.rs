@@ -303,7 +303,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
             EmailSender::<ApplicationUserAuthorizationToken<'_>>::send(
                 environment_configuration,
                 &application_user_authorization_token_value,
-                &application_user_email,
+                application_user_email.as_str(),
                 &incoming_.application_user_device_id,
             )?;
         }

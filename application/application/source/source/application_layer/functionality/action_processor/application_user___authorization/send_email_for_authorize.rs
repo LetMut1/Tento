@@ -145,7 +145,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
         EmailSender::<ApplicationUserAuthorizationToken<'_>>::send(
             environment_configuration,
             &application_user_authorization_token.value,
-            &application_user.email,
+            application_user.email.as_str(),
             &incoming_.application_user_device_id,
         )?;
 
