@@ -83,7 +83,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
         let is_valid = FormResolver::<ApplicationUserAccessRefreshToken<'_>>::is_valid(
             environment_configuration,
             &application_user_access_refresh_token,
-            &incoming_.application_user_access_refresh_token_encrypted,
+            incoming_.application_user_access_refresh_token_encrypted.as_str(),
         )?;
 
         if !is_valid || application_user_access_token.id.0 != application_user_access_refresh_token.application_user_access_token_id.as_ref().0 {

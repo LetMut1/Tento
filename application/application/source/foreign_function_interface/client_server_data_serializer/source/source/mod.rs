@@ -136,7 +136,6 @@ use action_processor_incoming_outcoming::action_processor::channel___base::get_o
 use action_processor_incoming_outcoming::action_processor::channel___base::get_one_by_id::Precedent as Channel__Base___GetOneById___Precedent_;
 use action_processor_incoming_outcoming::action_processor::channel_subscription___base::create::Incoming as ChannelSubscription__Base___Create___Incoming_;
 use action_processor_incoming_outcoming::action_processor::channel_subscription___base::create::Precedent as ChannelSubscription__Base___Create___Precedent_;
-use entity::application_user_access_refresh_token_encrypted::ApplicationUserAccessRefreshTokenEncrypted;
 use entity::application_user_access_token_encrypted::ApplicationUserAccessTokenEncrypted;
 use entity::application_user_authorization_token::ApplicationUserAuthorizationToken_Value;
 use entity::application_user_device::ApplicationUserDevice_Id;
@@ -794,7 +793,7 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
                     Data::Filled { data: data__ } => {
                         let outcoming = ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming {
                             application_user_access_token_encrypted: Allocator::<C_String>::allocate(data__.application_user_access_token_encrypted.0),
-                            application_user_access_refresh_token_encrypted: Allocator::<C_String>::allocate(data__.application_user_access_refresh_token_encrypted.0),
+                            application_user_access_refresh_token_encrypted: Allocator::<C_String>::allocate(data__.application_user_access_refresh_token_encrypted),
                         };
 
                         C_Data::filled(outcoming)
@@ -1251,7 +1250,7 @@ pub extern "C" fn application_user___authorization____refresh_access_token____se
     let converter = move |incoming: ApplicationUser__Authorization___RefreshAccessToken___Incoming| -> Result<ApplicationUser__Authorization___RefreshAccessToken___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___RefreshAccessToken___Incoming_ {
             application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted(incoming.application_user_access_token_encrypted.to_string()?),
-            application_user_access_refresh_token_encrypted: ApplicationUserAccessRefreshTokenEncrypted(incoming.application_user_access_refresh_token_encrypted.to_string()?),
+            application_user_access_refresh_token_encrypted: incoming.application_user_access_refresh_token_encrypted.to_string()?,
         };
 
         return Ok(incoming_);
@@ -1299,7 +1298,7 @@ pub extern "C" fn application_user___authorization____refresh_access_token____de
                     Data::Filled { data: data__ } => {
                         let outcoming = ApplicationUser__Authorization___RefreshAccessToken___Outcoming {
                             application_user_access_token_encrypted: Allocator::<C_String>::allocate(data__.application_user_access_token_encrypted.0),
-                            application_user_access_refresh_token_encrypted: Allocator::<C_String>::allocate(data__.application_user_access_refresh_token_encrypted.0),
+                            application_user_access_refresh_token_encrypted: Allocator::<C_String>::allocate(data__.application_user_access_refresh_token_encrypted),
                         };
 
                         C_Data::filled(outcoming)
@@ -1665,7 +1664,7 @@ pub extern "C" fn application_user___authorization____register_by_last_step____d
                     Data::Filled { data: data__ } => {
                         let outcoming = ApplicationUser__Authorization___RegisterByLastStep___Outcoming {
                             application_user_access_token_encrypted: Allocator::<C_String>::allocate(data__.application_user_access_token_encrypted.0),
-                            application_user_access_refresh_token_encrypted: Allocator::<C_String>::allocate(data__.application_user_access_refresh_token_encrypted.0),
+                            application_user_access_refresh_token_encrypted: Allocator::<C_String>::allocate(data__.application_user_access_refresh_token_encrypted),
                         };
 
                         C_Data::filled(outcoming)
@@ -3374,7 +3373,6 @@ mod test {
 
         mod server_response_data_deserialization {
             use auditor::Auditor;
-            use entity::application_user_access_refresh_token_encrypted::ApplicationUserAccessRefreshTokenEncrypted;
             use entity::application_user_access_token_encrypted::ApplicationUserAccessTokenEncrypted;
             use entity::application_user_authorization_token::ApplicationUserAuthorizationToken_CanBeResentFrom;
             use entity::application_user_authorization_token::ApplicationUserAuthorizationToken_WrongEnterTriesQuantity;
@@ -3552,7 +3550,7 @@ mod test {
                 fn target_filled____application_user___authorization____authorize_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
                     let outcoming = ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming_ {
                         application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted(STRING_LITERAL.to_string()),
-                        application_user_access_refresh_token_encrypted: ApplicationUserAccessRefreshTokenEncrypted(STRING_LITERAL.to_string()),
+                        application_user_access_refresh_token_encrypted: STRING_LITERAL.to_string(),
                     };
 
                     let unified_report = UnifiedReport::<ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming_, ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_>::target_filled(outcoming);
@@ -3866,7 +3864,7 @@ mod test {
                 fn target_filled____application_user___authorization____refresh_access_token() -> Result<(), Box<dyn StdError + 'static>> {
                     let outcoming = ApplicationUser__Authorization___RefreshAccessToken___Outcoming_ {
                         application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted(STRING_LITERAL.to_string()),
-                        application_user_access_refresh_token_encrypted: ApplicationUserAccessRefreshTokenEncrypted(STRING_LITERAL.to_string()),
+                        application_user_access_refresh_token_encrypted: STRING_LITERAL.to_string(),
                     };
 
                     let unified_report = UnifiedReport::<ApplicationUser__Authorization___RefreshAccessToken___Outcoming_, ApplicationUser__Authorization___RefreshAccessToken___Precedent_>::target_filled(outcoming);
@@ -4089,7 +4087,7 @@ mod test {
                 fn target_filled____application_user___authorization____register_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
                     let outcoming = ApplicationUser__Authorization___RegisterByLastStep___Outcoming_ {
                         application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted(STRING_LITERAL.to_string()),
-                        application_user_access_refresh_token_encrypted: ApplicationUserAccessRefreshTokenEncrypted(STRING_LITERAL.to_string()),
+                        application_user_access_refresh_token_encrypted: STRING_LITERAL.to_string(),
                     };
 
                     let unified_report = UnifiedReport::<ApplicationUser__Authorization___RegisterByLastStep___Outcoming_, ApplicationUser__Authorization___RegisterByLastStep___Precedent_>::target_filled(outcoming);

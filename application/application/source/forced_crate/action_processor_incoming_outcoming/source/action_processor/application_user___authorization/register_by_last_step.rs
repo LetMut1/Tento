@@ -1,4 +1,3 @@
-use entity::application_user_access_refresh_token_encrypted::ApplicationUserAccessRefreshTokenEncrypted;
 use entity::application_user_access_token_encrypted::ApplicationUserAccessTokenEncrypted;
 use entity::application_user_device::ApplicationUserDevice_Id;
 use entity::application_user_registration_token::ApplicationUserRegistrationToken_Value;
@@ -19,7 +18,7 @@ pub struct Incoming {
 #[derive(Serialize, Deserialize)]
 pub struct Outcoming {
     pub application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
-    pub application_user_access_refresh_token_encrypted: ApplicationUserAccessRefreshTokenEncrypted,
+    pub application_user_access_refresh_token_encrypted: String,
 }
 
 r#enum!(

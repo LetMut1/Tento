@@ -1,6 +1,5 @@
 pub use entity::application_user;
 pub use entity::application_user_access_refresh_token;
-pub use entity::application_user_access_refresh_token_encrypted;
 pub use entity::application_user_access_token;
 pub use entity::application_user_access_token_encrypted;
 pub use entity::application_user_authorization_token;

@@ -1,4 +1,3 @@
-use entity::application_user_access_refresh_token_encrypted::ApplicationUserAccessRefreshTokenEncrypted;
 use entity::application_user_access_token_encrypted::ApplicationUserAccessTokenEncrypted;
 use serde::Deserialize;
 use serde::Serialize;
@@ -8,13 +7,13 @@ use common_precedent::CommonPrecedent;
 #[derive(Serialize, Deserialize)]
 pub struct Incoming {
     pub application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
-    pub application_user_access_refresh_token_encrypted: ApplicationUserAccessRefreshTokenEncrypted,
+    pub application_user_access_refresh_token_encrypted: String,
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct Outcoming {
     pub application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
-    pub application_user_access_refresh_token_encrypted: ApplicationUserAccessRefreshTokenEncrypted,
+    pub application_user_access_refresh_token_encrypted: String,
 }
 
 r#enum!(
