@@ -100,7 +100,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
             );
         }
 
-        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_access_refresh_token.expires_at.0) {
+        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_access_refresh_token.expires_at) {
             PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::delete_1(
                 database_2_postgresql_connection,
                 &by_4,

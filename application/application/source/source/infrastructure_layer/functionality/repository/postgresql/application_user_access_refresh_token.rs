@@ -5,7 +5,6 @@ use super::update::Update2;
 use super::PostgresqlRepository;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken1;
-use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_UpdatedAt;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
@@ -62,7 +61,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 Type::TEXT,
             )
             .add_parameter(
-                &insert_2.application_user_access_refresh_token_expires_at.0,
+                &insert_2.application_user_access_refresh_token_expires_at,
                 Type::INT8,
             )
             .add_parameter(
@@ -226,7 +225,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                     Cow::Borrowed(by_4.application_user_device_id),
                     Cow::Owned(row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?),
                     row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
-                    ApplicationUserAccessRefreshToken_ExpiresAt(row_registry[0].try_get::<'_, usize, i64>(2).convert(Backtrace::new(line!(), file!()))?),
+                    row_registry[0].try_get::<'_, usize, i64>(2).convert(Backtrace::new(line!(), file!()))?,
                     ApplicationUserAccessRefreshToken_UpdatedAt(row_registry[0].try_get::<'_, usize, i64>(3).convert(Backtrace::new(line!(), file!()))?),
                 ),
             ),
@@ -269,7 +268,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken1> {
                 Type::TEXT,
             )
             .add_parameter(
-                &update_2.application_user_access_refresh_token_expires_at.0,
+                &update_2.application_user_access_refresh_token_expires_at,
                 Type::INT8,
             )
             .add_parameter(

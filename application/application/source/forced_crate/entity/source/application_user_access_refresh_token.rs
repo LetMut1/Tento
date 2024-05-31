@@ -21,7 +21,10 @@ pub struct ApplicationUserAccessRefreshToken<'a> {
 
     pub obfuscation_value: String,
     _obfuscation_value: PhantomData<ObfuscationValue>,
-    pub expires_at: ExpiresAt,
+
+    pub expires_at: i64,
+    _expires_at: PhantomData<ExpiresAt>,
+
     pub updated_at: UpdatedAt,
 }
 
@@ -31,7 +34,7 @@ impl<'a> ApplicationUserAccessRefreshToken<'a> {
         application_user_device_id: Cow<'a, ApplicationUserDevice_Id>,
         application_user_access_token_id: Cow<'a, str>,
         obfuscation_value: String,
-        expires_at: ExpiresAt,
+        expires_at: i64,
         updated_at: UpdatedAt,
     ) -> Self {
         return Self {
@@ -43,6 +46,7 @@ impl<'a> ApplicationUserAccessRefreshToken<'a> {
             obfuscation_value,
             _obfuscation_value: PhantomData,
             expires_at,
+            _expires_at: PhantomData,
             updated_at,
         };
     }
@@ -51,16 +55,15 @@ impl<'a> ApplicationUserAccessRefreshToken<'a> {
 pub struct ApplicationUserAccessRefreshToken1 {
     pub application_user_access_token_id: String,
     pub obfuscation_value: String,
-    pub expires_at: ExpiresAt,
+    pub expires_at: i64,
     pub updated_at: UpdatedAt,
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct ObfuscationValue;
 
-#[derive(Clone, Copy, Serialize, Deserialize)]
-#[serde(transparent)]
-pub struct ExpiresAt(pub i64);
+#[derive(Serialize, Deserialize)]
+pub struct ExpiresAt;
 
 impl ExpiresAt {
     pub const QUANTITY_OF_MINUTES_FOR_EXPIRATION: i64 = 60 * 24 * 30 * 3;
