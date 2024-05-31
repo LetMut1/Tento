@@ -182,7 +182,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
             move || -> _ {
                 return Encoder::<ApplicationUser_Password>::is_valid(
                     &incoming_.application_user_password,
-                    &application_user_password_hash,
+                    application_user_password_hash.as_str(),
                 );
             }
         );

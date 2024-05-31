@@ -85,7 +85,6 @@ pub mod by {
 }
 
 pub mod update {
-    use crate::domain_layer::data::entity::application_user::ApplicationUser_PasswordHash;
     use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ExpiresAt;
     use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ObfuscationValue;
     use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_UpdatedAt;
@@ -106,7 +105,7 @@ pub mod update {
     use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_WrongEnterTriesQuantity;
 
     pub struct Update1<'a> {
-        pub application_user_password_hash: &'a ApplicationUser_PasswordHash,
+        pub application_user_password_hash: &'a str,
     }
 
     pub struct Update2<'a> {
@@ -193,7 +192,6 @@ pub mod update {
 }
 
 pub mod insert {
-    use crate::domain_layer::data::entity::application_user::ApplicationUser_PasswordHash;
     use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ExpiresAt;
     use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ObfuscationValue;
     use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_UpdatedAt;
@@ -231,7 +229,7 @@ pub mod insert {
     pub struct Insert1 {
         pub application_user_email: String,
         pub application_user_nickname: String,
-        pub application_user_password_hash: ApplicationUser_PasswordHash,
+        pub application_user_password_hash: String,
     }
 
     pub struct Insert2<'a> {

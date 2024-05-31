@@ -11,7 +11,6 @@ use crate::domain_layer::data::entity::application_user::ApplicationUser3;
 use crate::domain_layer::data::entity::application_user::ApplicationUser4;
 use crate::domain_layer::data::entity::application_user::ApplicationUser5;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_CreatedAt;
-use crate::domain_layer::data::entity::application_user::ApplicationUser_PasswordHash;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
@@ -30,7 +29,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
 
         let application_user_nickname = insert_1.application_user_nickname.as_str();
 
-        let application_user_password_hash = insert_1.application_user_password_hash.0.as_str();
+        let application_user_password_hash = insert_1.application_user_password_hash.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -265,7 +264,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                     row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
                     row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
                     Cow::Borrowed(by_1.application_user_nickname),
-                    ApplicationUser_PasswordHash(row_registry[0].try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?),
+                    row_registry[0].try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?,
                     ApplicationUser_CreatedAt(row_registry[0].try_get::<'_, usize, String>(3).convert(Backtrace::new(line!(), file!()))?),
                 ),
             ),
@@ -320,7 +319,7 @@ impl PostgresqlRepository<ApplicationUser1> {
                 ApplicationUser1 {
                     id: row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
                     email: row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
-                    password_hash: ApplicationUser_PasswordHash(row_registry[0].try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?),
+                    password_hash: row_registry[0].try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?,
                 },
             ),
         );
@@ -374,7 +373,7 @@ impl PostgresqlRepository<ApplicationUser2> {
                 ApplicationUser2 {
                     id: row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
                     nickname: row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
-                    password_hash: ApplicationUser_PasswordHash(row_registry[0].try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?),
+                    password_hash: row_registry[0].try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?,
                 },
             ),
         );
@@ -437,8 +436,6 @@ impl PostgresqlRepository<ApplicationUser4> {
         update_1: &'a Update1<'_>,
         by_3: &'a By3,
     ) -> Result<(), Auditor<Error>> {
-        let application_user_password_hash = update_1.application_user_password_hash.0.as_str();
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
@@ -454,7 +451,7 @@ impl PostgresqlRepository<ApplicationUser4> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &application_user_password_hash,
+                &update_1.application_user_password_hash,
                 Type::TEXT,
             )
             .add_parameter(
@@ -525,7 +522,7 @@ impl PostgresqlRepository<ApplicationUser4> {
                 ApplicationUser4 {
                     email: row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
                     nickname: row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
-                    password_hash: ApplicationUser_PasswordHash(row_registry[0].try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?),
+                    password_hash: row_registry[0].try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?,
                 },
             ),
         );

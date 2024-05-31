@@ -20,7 +20,9 @@ pub struct ApplicationUser<'a> {
     pub nickname: Cow<'a, str>,
     _nickname: PhantomData<Nickname>,
 
-    pub password_hash: PasswordHash,
+    pub password_hash: String,
+    _password_hash: PhantomData<PasswordHash>,
+
     pub created_at: CreatedAt,
 }
 
@@ -29,7 +31,7 @@ impl<'a> ApplicationUser<'a> {
         id: i64,
         email: String,
         nickname: Cow<'a, str>,
-        password_hash: PasswordHash,
+        password_hash: String,
         created_at: CreatedAt,
     ) -> Self {
         return Self {
@@ -40,6 +42,7 @@ impl<'a> ApplicationUser<'a> {
             nickname,
             _nickname: PhantomData,
             password_hash,
+            _password_hash: PhantomData,
             created_at,
         };
     }
@@ -72,21 +75,20 @@ impl Password {
     pub const MAXIMUM_LENGTH: usize = 65; // TODO Нужна ли максимальная длина? // TODO TODO TODO TODO TODO усилить пароль (ввести обязательность цифр,  и так далее)
 }
 
-#[derive(Clone)]
-pub struct PasswordHash(pub String);
+pub struct PasswordHash;
 
 pub struct CreatedAt(pub String);
 
 pub struct ApplicationUser1 {
     pub id: i64,
     pub email: String,
-    pub password_hash: PasswordHash,
+    pub password_hash: String,
 }
 
 pub struct ApplicationUser2 {
     pub id: i64,
     pub nickname: String,
-    pub password_hash: PasswordHash,
+    pub password_hash: String,
 }
 
 pub struct ApplicationUser3 {
@@ -96,7 +98,7 @@ pub struct ApplicationUser3 {
 pub struct ApplicationUser4 {
     pub email: String,
     pub nickname: String,
-    pub password_hash: PasswordHash,
+    pub password_hash: String,
 }
 
 pub struct ApplicationUser5 {

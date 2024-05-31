@@ -224,7 +224,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
         PostgresqlRepository::<ApplicationUser4>::update(
             database_1_postgresql_connection,
             &Update1 {
-                application_user_password_hash: &application_user.password_hash,
+                application_user_password_hash: application_user.password_hash.as_str(),
             },
             &by_3,
         )
