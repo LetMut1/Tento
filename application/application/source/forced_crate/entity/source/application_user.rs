@@ -23,7 +23,8 @@ pub struct ApplicationUser<'a> {
     pub password_hash: String,
     _password_hash: PhantomData<PasswordHash>,
 
-    pub created_at: CreatedAt,
+    pub created_at: String,
+    _created_at: PhantomData<CreatedAt>,
 }
 
 impl<'a> ApplicationUser<'a> {
@@ -32,7 +33,7 @@ impl<'a> ApplicationUser<'a> {
         email: String,
         nickname: Cow<'a, str>,
         password_hash: String,
-        created_at: CreatedAt,
+        created_at: String,
     ) -> Self {
         return Self {
             id,
@@ -44,6 +45,7 @@ impl<'a> ApplicationUser<'a> {
             password_hash,
             _password_hash: PhantomData,
             created_at,
+            _created_at: PhantomData
         };
     }
 }
@@ -76,7 +78,7 @@ impl Password {
 
 pub struct PasswordHash;
 
-pub struct CreatedAt(pub String);
+pub struct CreatedAt;
 
 pub struct ApplicationUser1 {
     pub id: i64,

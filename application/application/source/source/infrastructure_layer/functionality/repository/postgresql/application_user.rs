@@ -10,7 +10,6 @@ use crate::domain_layer::data::entity::application_user::ApplicationUser2;
 use crate::domain_layer::data::entity::application_user::ApplicationUser3;
 use crate::domain_layer::data::entity::application_user::ApplicationUser4;
 use crate::domain_layer::data::entity::application_user::ApplicationUser5;
-use crate::domain_layer::data::entity::application_user::ApplicationUser_CreatedAt;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
@@ -87,7 +86,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 insert_1.application_user_email,
                 Cow::Owned(insert_1.application_user_nickname),
                 insert_1.application_user_password_hash,
-                ApplicationUser_CreatedAt(row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?),
+                row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
             ),
         );
     }
@@ -265,7 +264,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                     row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
                     Cow::Borrowed(by_1.application_user_nickname),
                     row_registry[0].try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?,
-                    ApplicationUser_CreatedAt(row_registry[0].try_get::<'_, usize, String>(3).convert(Backtrace::new(line!(), file!()))?),
+                    row_registry[0].try_get::<'_, usize, String>(3).convert(Backtrace::new(line!(), file!()))?,
                 ),
             ),
         );
