@@ -223,7 +223,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
                     database_2_postgresql_connection,
                     &Update2 {
                         application_user_access_token_id: application_user_access_refresh_token_.application_user_access_token_id.as_ref(),
-                        application_user_access_refresh_token_obfuscation_value: &application_user_access_refresh_token_.obfuscation_value,
+                        application_user_access_refresh_token_obfuscation_value: application_user_access_refresh_token_.obfuscation_value.as_str(),
                         application_user_access_refresh_token_expires_at: application_user_access_refresh_token_.expires_at,
                         application_user_access_refresh_token_updated_at: application_user_access_refresh_token_.updated_at,
                     },

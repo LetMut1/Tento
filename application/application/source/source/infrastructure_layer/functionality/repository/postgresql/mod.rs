@@ -86,7 +86,6 @@ pub mod by {
 
 pub mod update {
     use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ExpiresAt;
-    use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ObfuscationValue;
     use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_UpdatedAt;
     use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_CanBeResentFrom;
     use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_ExpiresAt;
@@ -109,7 +108,7 @@ pub mod update {
 
     pub struct Update2<'a> {
         pub application_user_access_token_id: &'a str,
-        pub application_user_access_refresh_token_obfuscation_value: &'a ApplicationUserAccessRefreshToken_ObfuscationValue,
+        pub application_user_access_refresh_token_obfuscation_value: &'a str,
         pub application_user_access_refresh_token_expires_at: ApplicationUserAccessRefreshToken_ExpiresAt,
         pub application_user_access_refresh_token_updated_at: ApplicationUserAccessRefreshToken_UpdatedAt,
     }
@@ -192,7 +191,6 @@ pub mod update {
 
 pub mod insert {
     use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ExpiresAt;
-    use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ObfuscationValue;
     use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_UpdatedAt;
     use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_CanBeResentFrom;
     use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_ExpiresAt;
@@ -234,7 +232,7 @@ pub mod insert {
         pub application_user_id: i64,
         pub application_user_device_id: &'a ApplicationUserDevice_Id,
         pub application_user_access_token_id: &'a str,
-        pub application_user_access_refresh_token_obfuscation_value: ApplicationUserAccessRefreshToken_ObfuscationValue,
+        pub application_user_access_refresh_token_obfuscation_value: String,
         pub application_user_access_refresh_token_expires_at: ApplicationUserAccessRefreshToken_ExpiresAt,
         pub application_user_access_refresh_token_updated_at: ApplicationUserAccessRefreshToken_UpdatedAt,
     }

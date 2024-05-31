@@ -19,7 +19,8 @@ pub struct ApplicationUserAccessRefreshToken<'a> {
     pub application_user_access_token_id: Cow<'a, str>,
     _application_user_access_token_id: PhantomData<ApplicationUserAccessToken_Id>,
 
-    pub obfuscation_value: ObfuscationValue,
+    pub obfuscation_value: String,
+    _obfuscation_value: PhantomData<ObfuscationValue>,
     pub expires_at: ExpiresAt,
     pub updated_at: UpdatedAt,
 }
@@ -29,7 +30,7 @@ impl<'a> ApplicationUserAccessRefreshToken<'a> {
         application_user_id: i64,
         application_user_device_id: Cow<'a, ApplicationUserDevice_Id>,
         application_user_access_token_id: Cow<'a, str>,
-        obfuscation_value: ObfuscationValue,
+        obfuscation_value: String,
         expires_at: ExpiresAt,
         updated_at: UpdatedAt,
     ) -> Self {
@@ -40,6 +41,7 @@ impl<'a> ApplicationUserAccessRefreshToken<'a> {
             application_user_access_token_id,
             _application_user_access_token_id: PhantomData,
             obfuscation_value,
+            _obfuscation_value: PhantomData,
             expires_at,
             updated_at,
         };
@@ -48,14 +50,13 @@ impl<'a> ApplicationUserAccessRefreshToken<'a> {
 
 pub struct ApplicationUserAccessRefreshToken1 {
     pub application_user_access_token_id: String,
-    pub obfuscation_value: ObfuscationValue,
+    pub obfuscation_value: String,
     pub expires_at: ExpiresAt,
     pub updated_at: UpdatedAt,
 }
 
 #[derive(Serialize, Deserialize)]
-#[serde(transparent)]
-pub struct ObfuscationValue(pub String);
+pub struct ObfuscationValue;
 
 #[derive(Clone, Copy, Serialize, Deserialize)]
 #[serde(transparent)]
