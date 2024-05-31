@@ -17,7 +17,8 @@ pub struct ApplicationUserAccessToken<'a> {
     _application_user_id: PhantomData<ApplicationUser_Id>,
 
     pub application_user_device_id: Cow<'a, ApplicationUserDevice_Id>,
-    pub expires_at: ExpiresAt,
+    pub expires_at: i64,
+    _expires_at: PhantomData<ExpiresAt>,
 }
 
 impl<'a> ApplicationUserAccessToken<'a> {
@@ -25,7 +26,7 @@ impl<'a> ApplicationUserAccessToken<'a> {
         id: String,
         application_user_id: i64,
         application_user_device_id: Cow<'a, ApplicationUserDevice_Id>,
-        expires_at: ExpiresAt,
+        expires_at: i64,
     ) -> Self {
         return Self {
             id,
@@ -34,6 +35,7 @@ impl<'a> ApplicationUserAccessToken<'a> {
             _application_user_id: PhantomData,
             application_user_device_id,
             expires_at,
+            _expires_at: PhantomData,
         };
     }
 }
@@ -41,9 +43,8 @@ impl<'a> ApplicationUserAccessToken<'a> {
 #[derive(Serialize, Deserialize)]
 pub struct Id;
 
-#[derive(Clone, Copy, Serialize, Deserialize)]
-#[serde(transparent)]
-pub struct ExpiresAt(pub i64);
+#[derive(Serialize, Deserialize)]
+pub struct ExpiresAt;
 
 impl ExpiresAt {
     pub const QUANTITY_OF_MINUTES_FOR_EXPIRATION: i64 = 30;

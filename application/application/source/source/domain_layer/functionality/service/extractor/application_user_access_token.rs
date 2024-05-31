@@ -20,7 +20,7 @@ impl Extractor<ApplicationUserAccessToken<'_>> {
             }
         };
 
-        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_access_token.expires_at.0) {
+        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_access_token.expires_at) {
             return Ok(Ok(ExtractorResult::ApplicationUserAccessTokenAlreadyExpired));
         }
 
