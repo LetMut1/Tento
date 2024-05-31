@@ -102,7 +102,7 @@ impl CommandProcessor<CreateFixtures> {
 
         let application_user_password = Self::APPLICATION_USER__PASSWORD.to_string();
 
-        let application_user_password_hash = Encoder::<ApplicationUser_Password>::encode(&application_user_password)?;
+        let application_user_password_hash = Encoder::<ApplicationUser_Password>::encode(application_user_password.as_str())?;
 
         let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
 
