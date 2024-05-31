@@ -196,7 +196,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
             Generator::<ApplicationUserAccessToken_ExpiresAt>::generate()?,
         );
 
-        let application_user_access_token_id = &application_user_access_token.id;
+        let application_user_access_token_id = application_user_access_token.id.as_str();
 
         let application_user_access_refresh_token_obfuscation_value = Generator::<ApplicationUserAccessRefreshToken_ObfuscationValue>::generate();
 

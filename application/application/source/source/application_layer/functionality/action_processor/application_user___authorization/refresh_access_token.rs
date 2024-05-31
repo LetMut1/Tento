@@ -86,7 +86,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
             incoming_.application_user_access_refresh_token_encrypted.as_str(),
         )?;
 
-        if !is_valid || application_user_access_token.id.0 != application_user_access_refresh_token.application_user_access_token_id.as_ref().0 {
+        if !is_valid || application_user_access_token.id != application_user_access_refresh_token.application_user_access_token_id.as_ref() {
             return Ok(
                 Err(
                     Auditor::<InvalidArgument>::new(
@@ -117,7 +117,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
             Generator::<ApplicationUserAccessToken_ExpiresAt>::generate()?,
         );
 
-        application_user_access_refresh_token.application_user_access_token_id = Cow::Borrowed(&application_user_access_token_new.id);
+        application_user_access_refresh_token.application_user_access_token_id = Cow::Borrowed(application_user_access_token_new.id.as_str());
 
         application_user_access_refresh_token.obfuscation_value = Generator::<ApplicationUserAccessRefreshToken_ObfuscationValue>::generate();
 

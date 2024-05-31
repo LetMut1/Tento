@@ -3,7 +3,7 @@ use crate::domain_layer::data::entity::application_user_access_token::Applicatio
 use uuid::Uuid;
 
 impl Generator<ApplicationUserAccessToken_Id> {
-    pub fn generate() -> ApplicationUserAccessToken_Id {
-        return ApplicationUserAccessToken_Id(Uuid::new_v4().to_string());
+    pub fn generate() -> String {
+        return Uuid::new_v4().to_string();
     }
 }

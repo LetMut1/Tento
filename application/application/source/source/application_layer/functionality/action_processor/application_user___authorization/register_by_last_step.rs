@@ -260,7 +260,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
             Insert2 {
                 application_user_id: application_user.id,
                 application_user_device_id: &incoming_.application_user_device_id,
-                application_user_access_token_id: &application_user_access_token.id,
+                application_user_access_token_id: application_user_access_token.id.as_str(),
                 application_user_access_refresh_token_obfuscation_value: Generator::<ApplicationUserAccessRefreshToken_ObfuscationValue>::generate(),
                 application_user_access_refresh_token_expires_at: Generator::<ApplicationUserAccessRefreshToken_ExpiresAt>::generate()?,
                 application_user_access_refresh_token_updated_at: Generator::<ApplicationUserAccessRefreshToken_UpdatedAt>::generate(),

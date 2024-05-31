@@ -8,7 +8,6 @@ use crate::domain_layer::data::entity::application_user_access_refresh_token::Ap
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ObfuscationValue;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_UpdatedAt;
-use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken_Id;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
@@ -24,8 +23,6 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
         insert_2: Insert2<'a>,
     ) -> Result<ApplicationUserAccessRefreshToken<'a>, Auditor<Error>> {
         let application_user_device_id = insert_2.application_user_device_id.0.as_str();
-
-        let application_user_access_token_id = insert_2.application_user_access_token_id.0.as_str();
 
         let application_user_access_refresh_token_obfuscation_value = insert_2.application_user_access_refresh_token_obfuscation_value.0.as_str();
 
@@ -58,7 +55,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 Type::TEXT,
             )
             .add_parameter(
-                &application_user_access_token_id,
+                &insert_2.application_user_access_token_id,
                 Type::TEXT,
             )
             .add_parameter(
@@ -228,7 +225,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 ApplicationUserAccessRefreshToken::new(
                     by_4.application_user_id,
                     Cow::Borrowed(by_4.application_user_device_id),
-                    Cow::Owned(ApplicationUserAccessToken_Id(row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?)),
+                    Cow::Owned(row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?),
                     ApplicationUserAccessRefreshToken_ObfuscationValue(row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?),
                     ApplicationUserAccessRefreshToken_ExpiresAt(row_registry[0].try_get::<'_, usize, i64>(2).convert(Backtrace::new(line!(), file!()))?),
                     ApplicationUserAccessRefreshToken_UpdatedAt(row_registry[0].try_get::<'_, usize, i64>(3).convert(Backtrace::new(line!(), file!()))?),
@@ -245,8 +242,6 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken1> {
         by_4: &'a By4<'_>,
     ) -> Result<(), Auditor<Error>> {
         let application_user_device_id = by_4.application_user_device_id.0.as_str();
-
-        let application_user_access_token_id = update_2.application_user_access_token_id.0.as_str();
 
         let application_user_access_refresh_token_obfuscation_value = update_2.application_user_access_refresh_token_obfuscation_value.0.as_str();
 
@@ -269,7 +264,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken1> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &application_user_access_token_id,
+                &update_2.application_user_access_token_id,
                 Type::TEXT,
             )
             .add_parameter(

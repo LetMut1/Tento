@@ -10,7 +10,9 @@ pub use self::Id as ApplicationUserAccessToken_Id;
 
 #[derive(Serialize, Deserialize)]
 pub struct ApplicationUserAccessToken<'a> {
-    pub id: Id,
+    pub id: String,
+    _id: PhantomData<Id>,
+
     pub application_user_id: i64,
     _application_user_id: PhantomData<ApplicationUser_Id>,
 
@@ -20,13 +22,14 @@ pub struct ApplicationUserAccessToken<'a> {
 
 impl<'a> ApplicationUserAccessToken<'a> {
     pub fn new(
-        id: Id,
+        id: String,
         application_user_id: i64,
         application_user_device_id: Cow<'a, ApplicationUserDevice_Id>,
         expires_at: ExpiresAt,
     ) -> Self {
         return Self {
             id,
+            _id: PhantomData,
             application_user_id,
             _application_user_id: PhantomData,
             application_user_device_id,
@@ -35,9 +38,8 @@ impl<'a> ApplicationUserAccessToken<'a> {
     }
 }
 
-#[derive(Clone, Serialize, Deserialize)]
-#[serde(transparent)]
-pub struct Id(pub String);
+#[derive(Serialize, Deserialize)]
+pub struct Id;
 
 #[derive(Clone, Copy, Serialize, Deserialize)]
 #[serde(transparent)]
