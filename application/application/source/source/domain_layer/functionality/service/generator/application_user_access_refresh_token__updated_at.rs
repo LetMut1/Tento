@@ -4,7 +4,7 @@ use crate::infrastructure_layer::functionality::service::resolver::date_time::Da
 use crate::infrastructure_layer::functionality::service::resolver::Resolver;
 
 impl Generator<ApplicationUserAccessRefreshToken_UpdatedAt> {
-    pub fn generate() -> ApplicationUserAccessRefreshToken_UpdatedAt {
-        return ApplicationUserAccessRefreshToken_UpdatedAt(Resolver::<DateTime>::unixtime_get_now());
+    pub fn generate() -> i64 {
+        return Resolver::<DateTime>::unixtime_get_now();
     }
 }

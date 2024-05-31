@@ -85,7 +85,6 @@ pub mod by {
 }
 
 pub mod update {
-    use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_UpdatedAt;
     use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_CanBeResentFrom;
     use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_ExpiresAt;
     use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_Value;
@@ -109,7 +108,7 @@ pub mod update {
         pub application_user_access_token_id: &'a str,
         pub application_user_access_refresh_token_obfuscation_value: &'a str,
         pub application_user_access_refresh_token_expires_at: i64,
-        pub application_user_access_refresh_token_updated_at: ApplicationUserAccessRefreshToken_UpdatedAt,
+        pub application_user_access_refresh_token_updated_at: i64,
     }
 
     pub struct Update3<'a> {
@@ -189,7 +188,6 @@ pub mod update {
 }
 
 pub mod insert {
-    use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_UpdatedAt;
     use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_CanBeResentFrom;
     use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_ExpiresAt;
     use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_Value;
@@ -232,7 +230,7 @@ pub mod insert {
         pub application_user_access_token_id: &'a str,
         pub application_user_access_refresh_token_obfuscation_value: String,
         pub application_user_access_refresh_token_expires_at: i64,
-        pub application_user_access_refresh_token_updated_at: ApplicationUserAccessRefreshToken_UpdatedAt,
+        pub application_user_access_refresh_token_updated_at: i64,
     }
 
     pub struct Insert3<'a> {

@@ -5,7 +5,6 @@ use super::update::Update2;
 use super::PostgresqlRepository;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken1;
-use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_UpdatedAt;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
@@ -65,7 +64,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 Type::INT8,
             )
             .add_parameter(
-                &insert_2.application_user_access_refresh_token_updated_at.0,
+                &insert_2.application_user_access_refresh_token_updated_at,
                 Type::INT8,
             );
 
@@ -226,7 +225,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                     Cow::Owned(row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?),
                     row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
                     row_registry[0].try_get::<'_, usize, i64>(2).convert(Backtrace::new(line!(), file!()))?,
-                    ApplicationUserAccessRefreshToken_UpdatedAt(row_registry[0].try_get::<'_, usize, i64>(3).convert(Backtrace::new(line!(), file!()))?),
+                    row_registry[0].try_get::<'_, usize, i64>(3).convert(Backtrace::new(line!(), file!()))?,
                 ),
             ),
         );
@@ -272,7 +271,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken1> {
                 Type::INT8,
             )
             .add_parameter(
-                &update_2.application_user_access_refresh_token_updated_at.0,
+                &update_2.application_user_access_refresh_token_updated_at,
                 Type::INT8,
             )
             .add_parameter(
