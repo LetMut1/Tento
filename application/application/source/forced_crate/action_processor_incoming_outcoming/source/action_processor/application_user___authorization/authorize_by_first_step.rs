@@ -1,4 +1,3 @@
-use entity::application_user::ApplicationUser_Password;
 use entity::application_user_authorization_token::ApplicationUserAuthorizationToken_CanBeResentFrom;
 use entity::application_user_authorization_token::ApplicationUserAuthorizationToken_WrongEnterTriesQuantity;
 use entity::application_user_device::ApplicationUserDevice_Id;
@@ -11,7 +10,7 @@ use common_precedent::CommonPrecedent;
 pub struct Incoming {
     pub application_user_device_id: ApplicationUserDevice_Id,
     pub application_user_email_or_application_user_nickname: String,
-    pub application_user_password: ApplicationUser_Password,
+    pub application_user_password: String,
 }
 
 #[derive(Serialize, Deserialize)]

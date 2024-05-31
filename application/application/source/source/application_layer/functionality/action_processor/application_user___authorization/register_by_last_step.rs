@@ -74,7 +74,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
         let incoming_ = incoming.convert_value_does_not_exist(Backtrace::new(line!(), file!()))?;
 
         if !Validator::<ApplicationUser_Password>::is_valid(
-            &incoming_.application_user_password,
+            incoming_.application_user_password.as_str(),
             incoming_.application_user_email.as_str(),
             incoming_.application_user_nickname.as_str(),
         ) {
@@ -233,7 +233,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
 
         let join_handle = Spawner::<TokioBlockingTask>::spawn_processed(
             move || -> _ {
-                return Encoder::<ApplicationUser_Password>::encode(&incoming_.application_user_password);
+                return Encoder::<ApplicationUser_Password>::encode(incoming_.application_user_password.as_str());
             }
         );
 

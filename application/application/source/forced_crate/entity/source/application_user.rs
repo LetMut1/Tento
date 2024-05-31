@@ -67,8 +67,7 @@ impl Nickname {
 }
 
 #[derive(Deserialize, Serialize)]
-#[serde(transparent)]
-pub struct Password(pub String);
+pub struct Password;
 
 impl Password {
     pub const MINIMUM_LENGTH: usize = 7;

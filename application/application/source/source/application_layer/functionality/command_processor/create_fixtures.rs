@@ -100,7 +100,7 @@ impl CommandProcessor<CreateFixtures> {
         )
         .await?;
 
-        let application_user_password = ApplicationUser_Password(Self::APPLICATION_USER__PASSWORD.to_string());
+        let application_user_password = Self::APPLICATION_USER__PASSWORD.to_string();
 
         let application_user_password_hash = Encoder::<ApplicationUser_Password>::encode(&application_user_password)?;
 

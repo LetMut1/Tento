@@ -142,7 +142,6 @@ use entity::application_user_authorization_token::ApplicationUserAuthorizationTo
 use entity::application_user_device::ApplicationUserDevice_Id;
 use entity::application_user_registration_token::ApplicationUserRegistrationToken_Value;
 use entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_Value;
-use entity::application_user::ApplicationUser_Password;
 use entity::channel::Channel_Id;
 use entity::channel::Channel_Name;
 use libc::c_char;
@@ -625,7 +624,7 @@ pub extern "C" fn application_user___authorization____authorize_by_first_step___
         let incoming_ = ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming_ {
             application_user_device_id: ApplicationUserDevice_Id(incoming.application_user_device_id.to_string()?),
             application_user_email_or_application_user_nickname: incoming.application_user_email_or_application_user_nickname.to_string()?,
-            application_user_password: ApplicationUser_Password(incoming.application_user_password.to_string()?),
+            application_user_password: incoming.application_user_password.to_string()?,
         };
 
         return Ok(incoming_);
@@ -1613,7 +1612,7 @@ pub extern "C" fn application_user___authorization____register_by_last_step____s
             application_user_device_id: ApplicationUserDevice_Id(incoming.application_user_device_id.to_string()?),
             application_user_email: incoming.application_user_email.to_string()?,
             application_user_nickname: incoming.application_user_nickname.to_string()?,
-            application_user_password: ApplicationUser_Password(incoming.application_user_password.to_string()?),
+            application_user_password: incoming.application_user_password.to_string()?,
             application_user_registration_token_value: ApplicationUserRegistrationToken_Value(incoming.application_user_registration_token_value.to_string()?),
         };
 
@@ -2003,7 +2002,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_last_ste
         let incoming_ = ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming_ {
             application_user_id: incoming.application_user_id,
             application_user_device_id: ApplicationUserDevice_Id(incoming.application_user_device_id.to_string()?),
-            application_user_password: ApplicationUser_Password(incoming.application_user_password.to_string()?),
+            application_user_password: incoming.application_user_password.to_string()?,
             application_user_reset_password_token_value: ApplicationUserResetPasswordToken_Value(incoming.application_user_reset_password_token_value.to_string()?),
         };
 

@@ -67,7 +67,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
     {
         let incoming_ = incoming.convert_value_does_not_exist(Backtrace::new(line!(), file!()))?;
 
-        if !Validator::<ApplicationUser_Password>::is_valid_part_1(&incoming_.application_user_password) {
+        if !Validator::<ApplicationUser_Password>::is_valid_part_1(incoming_.application_user_password.as_str()) {
             return Ok(
                 Err(
                     Auditor::<InvalidArgument>::new(
@@ -161,9 +161,9 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
         };
 
         if !Validator::<ApplicationUser_Password>::is_valid_part_2(
-            &incoming_.application_user_password,
-            &application_user_email,
-            &application_user_nickname,
+            incoming_.application_user_password.as_str(),
+            application_user_email.as_str(),
+            application_user_nickname.as_str(),
         ) {
             return Ok(
                 Err(
@@ -181,7 +181,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
         let join_handle = Spawner::<TokioBlockingTask>::spawn_processed(
             move || -> _ {
                 return Encoder::<ApplicationUser_Password>::is_valid(
-                    &incoming_.application_user_password,
+                    incoming_.application_user_password.as_str(),
                     application_user_password_hash.as_str(),
                 );
             }
