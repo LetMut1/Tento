@@ -1,5 +1,3 @@
-
-use entity::application_user_access_token_encrypted::ApplicationUserAccessTokenEncrypted;
 use entity::application_user_authorization_token::ApplicationUserAuthorizationToken_Value;
 use entity::application_user_device::ApplicationUserDevice_Id;
 use entity::application_user_authorization_token::ApplicationUserAuthorizationToken_WrongEnterTriesQuantity;
@@ -17,7 +15,7 @@ pub struct Incoming {
 
 #[derive(Serialize, Deserialize)]
 pub struct Outcoming {
-    pub application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
+    pub application_user_access_token_encrypted: String,
     pub application_user_access_refresh_token_encrypted: String,
 }
 

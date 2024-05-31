@@ -1,4 +1,3 @@
-use entity::application_user_access_token_encrypted::ApplicationUserAccessTokenEncrypted;
 use entity::channel::Channel_Id;
 use serde::Deserialize;
 use serde::Serialize;
@@ -7,7 +6,7 @@ use common_precedent::CommonPrecedent;
 
 #[derive(Serialize, Deserialize)]
 pub struct Incoming {
-    pub application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
+    pub application_user_access_token_encrypted: String,
     pub channel_id: Channel_Id,
 }
 

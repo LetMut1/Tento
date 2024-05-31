@@ -57,7 +57,7 @@ Deauthorizes application user from one device.
 ```
 Request data:
 struct Incoming {
-    application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted
+    application_user_access_token_encrypted: String
 }
 ```
 ```
@@ -75,7 +75,7 @@ Deauthorizes application user from all devices.
 ```
 Request data:
 struct Incoming {
-    application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted
+    application_user_access_token_encrypted: String
 }
 ```
 ```
@@ -93,7 +93,7 @@ Returns channel data by id.
 ```
 Request data:
 struct Incoming {
-    application_user_access_token_encrypted_value: String
+    application_user_access_token_encrypted: String
     channel_id: i64
 }
 ```
@@ -144,7 +144,7 @@ Returns channels the user is subscribed to by name.
 ```
 Request data:
 struct Incoming {
-    application_user_access_token_encrypted_value: String
+    application_user_access_token_encrypted: String
     channel_name: String,
     requery_channel_name: Option<String>,
     limit: i16
@@ -192,7 +192,7 @@ Returns channels the user is subscribed to.
 ```
 Request data:
 struct Incoming {
-    application_user_access_token_encrypted_value: String
+    application_user_access_token_encrypted: String
     requery_channel_id: Option<i64>,
     limit: i16
 }
@@ -239,7 +239,7 @@ Returns public channels by name.
 ```
 Request data:
 struct Incoming {
-    application_user_access_token_encrypted_value: String
+    application_user_access_token_encrypted: String
     channel_name: String,
     requery_channel_name: Option<String>,
     limit: i16
@@ -287,7 +287,7 @@ Subscribes application user to channel.
 ```
 Request data:
 struct Incoming {
-    application_user_access_token_encrypted_value: String
+    application_user_access_token_encrypted: String
     channel_id: i64
 }
 ```
@@ -411,7 +411,7 @@ struct Incoming {
 ```
 Result data:
 struct Outcoming {
-    application_user_access_token_encrypted_value: String
+    application_user_access_token_encrypted: String
     application_user_access_refresh_token_encrypted: String
 }
 ```
@@ -492,7 +492,7 @@ struct Incoming {
 ```
 Result data:
 struct Outcoming {
-    application_user_access_token_encrypted_value: String
+    application_user_access_token_encrypted: String
     application_user_access_refresh_token_encrypted: String
 }
 ```
@@ -628,14 +628,14 @@ Refreshs application user access token.
 ```
 Request data:
 struct Incoming {
-    application_user_access_token_encrypted_value: String
+    application_user_access_token_encrypted: String
     application_user_access_refresh_token_encrypted: String
 }
 ```
 ```
 Result data:
 struct Outcoming {
-    application_user_access_token_encrypted_value: String
+    application_user_access_token_encrypted: String
     application_user_access_refresh_token_encrypted: String
 }
 ```

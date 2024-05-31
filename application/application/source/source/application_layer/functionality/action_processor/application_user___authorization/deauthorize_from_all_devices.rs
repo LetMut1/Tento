@@ -45,7 +45,7 @@ impl ActionProcessor<ApplicationUser__Authorization___DeauthorizeFromAllDevices>
     {
         let incoming_ = incoming.convert_value_does_not_exist(Backtrace::new(line!(), file!()))?;
 
-        let application_user_access_token = match Extractor::<ApplicationUserAccessToken<'_>>::extract(environment_configuration, &incoming_.application_user_access_token_encrypted).await? {
+        let application_user_access_token = match Extractor::<ApplicationUserAccessToken<'_>>::extract(environment_configuration, incoming_.application_user_access_token_encrypted.as_str()).await? {
             Ok(extractor_result) => {
                 let application_user_access_token_ = match extractor_result {
                     ExtractorResult::ApplicationUserAccessToken {

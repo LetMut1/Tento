@@ -85,7 +85,6 @@ pub mod application_user;
 pub mod application_user_access_refresh_token;
 pub mod application_user_access_token;
 pub mod application_user_access_token_black_list;
-pub mod application_user_access_token_encrypted;
 pub mod application_user_authorization_token;
 pub mod application_user_device;
 pub mod application_user_direct_message;

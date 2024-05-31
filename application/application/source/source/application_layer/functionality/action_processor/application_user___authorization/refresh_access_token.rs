@@ -52,7 +52,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
     {
         let incoming_ = incoming.convert_value_does_not_exist(Backtrace::new(line!(), file!()))?;
 
-        let application_user_access_token = match FormResolver::<ApplicationUserAccessToken<'_>>::from_encrypted(environment_configuration, &incoming_.application_user_access_token_encrypted)? {
+        let application_user_access_token = match FormResolver::<ApplicationUserAccessToken<'_>>::from_encrypted(environment_configuration, incoming_.application_user_access_token_encrypted.as_str())? {
             Ok(application_user_access_token_) => application_user_access_token_,
             Err(invalid_argument_auditor) => {
                 return Ok(Err(invalid_argument_auditor));

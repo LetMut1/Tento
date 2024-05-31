@@ -1,6 +1,5 @@
 use super::Extractor;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
-use crate::domain_layer::data::entity::application_user_access_token_encrypted::ApplicationUserAccessTokenEncrypted;
 use crate::domain_layer::functionality::service::form_resolver::FormResolver;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
@@ -12,7 +11,7 @@ use crate::infrastructure_layer::functionality::service::expiration_time_checker
 impl Extractor<ApplicationUserAccessToken<'_>> {
     pub async fn extract<'a>(
         environment_configuration: &'a EnvironmentConfiguration,
-        application_user_access_token_encrypted: &'a ApplicationUserAccessTokenEncrypted
+        application_user_access_token_encrypted: &'a str
     ) -> Result<Result<ExtractorResult, Auditor<InvalidArgument>>, Auditor<Error>> {
         let application_user_access_token = match FormResolver::<ApplicationUserAccessToken<'_>>::from_encrypted(environment_configuration, application_user_access_token_encrypted)? {
             Ok(application_user_access_token_) => application_user_access_token_,

@@ -1,6 +1,5 @@
 use super::FormResolver;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
-use crate::domain_layer::data::entity::application_user_access_token_encrypted::ApplicationUserAccessTokenEncrypted;
 use crate::domain_layer::functionality::service::encoder::Encoder;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error::Error;
@@ -17,7 +16,7 @@ use crate::infrastructure_layer::functionality::service::serializer::Serializer;
 impl FormResolver<ApplicationUserAccessToken<'_>> {
     const TOKEN_PARTS_SEPARATOR: &'static str = ".";
 
-    pub fn to_encrypted<'a>(environment_configuration: &'a EnvironmentConfiguration, application_user_access_token: &'a ApplicationUserAccessToken<'_>) -> Result<ApplicationUserAccessTokenEncrypted, Auditor<Error>> {
+    pub fn to_encrypted<'a>(environment_configuration: &'a EnvironmentConfiguration, application_user_access_token: &'a ApplicationUserAccessToken<'_>) -> Result<String, Auditor<Error>> {
         let data = Serializer::<MessagePack>::serialize(application_user_access_token)?;
 
         let application_user_access_token_serialized = Encoder_::<Base64>::encode(data.as_slice());
@@ -34,16 +33,14 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
             application_user_access_token_serialized_signature.as_str()
         );
 
-        return Ok(
-            ApplicationUserAccessTokenEncrypted(application_user_access_token_encrypted)
-        );
+        return Ok(application_user_access_token_encrypted);
     }
 
     pub fn from_encrypted<'a>(
         environment_configuration: &'a EnvironmentConfiguration,
-        application_user_access_token_encrypted: &'a ApplicationUserAccessTokenEncrypted
+        application_user_access_token_encrypted: &'a str,
     ) -> Result<Result<ApplicationUserAccessToken<'static>, Auditor<InvalidArgument>>, Auditor<Error>> {
-        let mut token_part_registry = application_user_access_token_encrypted.0.as_str().splitn::<'_, &'_ str>(
+        let mut token_part_registry = application_user_access_token_encrypted.splitn::<'_, &'_ str>(
             2,
             Self::TOKEN_PARTS_SEPARATOR,
         );
