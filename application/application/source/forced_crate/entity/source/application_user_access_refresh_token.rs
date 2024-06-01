@@ -15,7 +15,9 @@ pub struct ApplicationUserAccessRefreshToken<'a> {
     pub application_user_id: i64,
     _application_user_id: PhantomData<ApplicationUser_Id>,
 
-    pub application_user_device_id: Cow<'a, ApplicationUserDevice_Id>,
+    pub application_user_device_id: Cow<'a, str>,
+    _application_user_device_id: PhantomData<ApplicationUserDevice_Id>,
+
     pub application_user_access_token_id: Cow<'a, str>,
     _application_user_access_token_id: PhantomData<ApplicationUserAccessToken_Id>,
 
@@ -32,7 +34,7 @@ pub struct ApplicationUserAccessRefreshToken<'a> {
 impl<'a> ApplicationUserAccessRefreshToken<'a> {
     pub fn new(
         application_user_id: i64,
-        application_user_device_id: Cow<'a, ApplicationUserDevice_Id>,
+        application_user_device_id: Cow<'a, str>,
         application_user_access_token_id: Cow<'a, str>,
         obfuscation_value: String,
         expires_at: i64,
@@ -42,6 +44,7 @@ impl<'a> ApplicationUserAccessRefreshToken<'a> {
             application_user_id,
             _application_user_id: PhantomData,
             application_user_device_id,
+            _application_user_device_id: PhantomData,
             application_user_access_token_id,
             _application_user_access_token_id: PhantomData,
             obfuscation_value,

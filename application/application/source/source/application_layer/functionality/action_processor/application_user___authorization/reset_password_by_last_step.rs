@@ -103,7 +103,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
             );
         }
 
-        if !Validator::<ApplicationUserDevice_Id>::is_valid(&incoming_.application_user_device_id) {
+        if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming_.application_user_device_id.as_str()) {
             return Ok(
                 Err(
                     Auditor::<InvalidArgument>::new(
@@ -119,7 +119,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
 
         let by_4 = By4 {
             application_user_id: incoming_.application_user_id,
-            application_user_device_id: &incoming_.application_user_device_id,
+            application_user_device_id: incoming_.application_user_device_id.as_str(),
         };
 
         let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
@@ -248,7 +248,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
                     &*database_2_postgresql_pooled_connection_,
                     &By4 {
                         application_user_id: incoming_.application_user_id,
-                        application_user_device_id: &incoming_.application_user_device_id,
+                        application_user_device_id: incoming_.application_user_device_id.as_str(),
                     },
                 )
                 .await?;

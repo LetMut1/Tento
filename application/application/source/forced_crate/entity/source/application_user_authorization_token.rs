@@ -14,7 +14,9 @@ pub struct ApplicationUserAuthorizationToken<'a> {
     pub application_user_id: i64,
     _application_user_id: PhantomData<ApplicationUser_Id>,
 
-    pub application_user_device_id: Cow<'a, ApplicationUserDevice_Id>,
+    pub application_user_device_id: Cow<'a, str>,
+    _application_user_device_id: PhantomData<ApplicationUserDevice_Id>,
+
     pub value: Value,
     pub wrong_enter_tries_quantity: WrongEnterTriesQuantity,
     pub expires_at: ExpiresAt,
@@ -24,7 +26,7 @@ pub struct ApplicationUserAuthorizationToken<'a> {
 impl<'a> ApplicationUserAuthorizationToken<'a> {
     pub fn new(
         application_user_id: i64,
-        application_user_device_id: Cow<'a, ApplicationUserDevice_Id>,
+        application_user_device_id: Cow<'a, str>,
         value: Value,
         wrong_enter_tries_quantity: WrongEnterTriesQuantity,
         expires_at: ExpiresAt,
@@ -34,6 +36,7 @@ impl<'a> ApplicationUserAuthorizationToken<'a> {
             application_user_id,
             _application_user_id: PhantomData,
             application_user_device_id,
+            _application_user_device_id: PhantomData,
             value,
             wrong_enter_tries_quantity,
             expires_at,

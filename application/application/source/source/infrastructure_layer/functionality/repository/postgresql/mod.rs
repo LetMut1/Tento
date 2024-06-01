@@ -17,7 +17,6 @@ pub struct PostgresqlRepository<E> {
 }
 
 pub mod by {
-    use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
     use crate::domain_layer::data::entity::channel::Channel_Id;
     use crate::domain_layer::data::entity::channel::Channel_Name;
     use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier;
@@ -36,12 +35,12 @@ pub mod by {
 
     pub struct By4<'a> {
         pub application_user_id: i64,
-        pub application_user_device_id: &'a ApplicationUserDevice_Id,
+        pub application_user_device_id: &'a str,
     }
 
     pub struct By5<'a> {
         pub application_user_email: &'a str,
-        pub application_user_device_id: &'a ApplicationUserDevice_Id,
+        pub application_user_device_id: &'a str,
     }
 
     pub struct By6 {
@@ -192,7 +191,6 @@ pub mod insert {
     use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_ExpiresAt;
     use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_Value;
     use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_WrongEnterTriesQuantity;
-    use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
     use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_CanBeResentFrom;
     use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_ExpiresAt;
     use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_IsApproved;
@@ -226,7 +224,7 @@ pub mod insert {
 
     pub struct Insert2<'a> {
         pub application_user_id: i64,
-        pub application_user_device_id: &'a ApplicationUserDevice_Id,
+        pub application_user_device_id: &'a str,
         pub application_user_access_token_id: &'a str,
         pub application_user_access_refresh_token_obfuscation_value: String,
         pub application_user_access_refresh_token_expires_at: i64,
@@ -235,7 +233,7 @@ pub mod insert {
 
     pub struct Insert3<'a> {
         pub application_user_id: i64,
-        pub application_user_device_id: &'a ApplicationUserDevice_Id,
+        pub application_user_device_id: &'a str,
         pub application_user_authorization_token_value: ApplicationUserAuthorizationToken_Value,
         pub application_user_authorization_token_wrong_enter_tries_quantity: ApplicationUserAuthorizationToken_WrongEnterTriesQuantity,
         pub application_user_authorization_token_expires_at: ApplicationUserAuthorizationToken_ExpiresAt,
@@ -243,13 +241,13 @@ pub mod insert {
     }
 
     pub struct Insert4 {
-        pub application_user_device_id: ApplicationUserDevice_Id,
+        pub application_user_device_id: String,
         pub application_user_id: i64,
     }
 
     pub struct Insert5<'a> {
         pub application_user_email: &'a str,
-        pub application_user_device_id: &'a ApplicationUserDevice_Id,
+        pub application_user_device_id: &'a str,
         pub application_user_registration_token_value: ApplicationUserRegistrationToken_Value,
         pub application_user_registration_token_wrong_enter_tries_quantity: ApplicationUserRegistrationToken_WrongEnterTriesQuantity,
         pub application_user_registration_token_is_approved: ApplicationUserRegistrationToken_IsApproved,
@@ -259,7 +257,7 @@ pub mod insert {
 
     pub struct Insert6<'a> {
         pub application_user_id: i64,
-        pub application_user_device_id: &'a ApplicationUserDevice_Id,
+        pub application_user_device_id: &'a str,
         pub application_user_reset_password_token_value: ApplicationUserResetPasswordToken_Value,
         pub application_user_reset_password_token_wrong_enter_tries_quantity: ApplicationUserResetPasswordToken_WrongEnterTriesQuantity,
         pub application_user_reset_password_token_is_approved: ApplicationUserResetPasswordToken_IsApproved,

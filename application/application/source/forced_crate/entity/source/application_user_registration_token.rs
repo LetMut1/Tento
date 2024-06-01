@@ -11,6 +11,44 @@ pub use self::IsApproved as ApplicationUserRegistrationToken_IsApproved;
 pub use self::Value as ApplicationUserRegistrationToken_Value;
 pub use self::WrongEnterTriesQuantity as ApplicationUserRegistrationToken_WrongEnterTriesQuantity;
 
+pub struct ApplicationUserRegistrationToken<'a> {
+    pub application_user_email: Cow<'a, str>,
+    _application_user_email: PhantomData<ApplicationUser_Email>,
+
+    pub application_user_device_id: Cow<'a, str>,
+    _application_user_device_id: PhantomData<ApplicationUserDevice_Id>,
+
+    pub value: Value,
+    pub wrong_enter_tries_quantity: WrongEnterTriesQuantity,
+    pub is_approved: IsApproved,
+    pub expires_at: ExpiresAt,
+    pub can_be_resent_from: CanBeResentFrom,
+}
+
+impl<'a> ApplicationUserRegistrationToken<'a> {
+    pub fn new(
+        application_user_email: Cow<'a, str>,
+        application_user_device_id: Cow<'a, str>,
+        value: Value,
+        wrong_enter_tries_quantity: WrongEnterTriesQuantity,
+        is_approved: IsApproved,
+        expires_at: ExpiresAt,
+        can_be_resent_from: CanBeResentFrom,
+    ) -> Self {
+        return Self {
+            application_user_email,
+            _application_user_email: PhantomData,
+            application_user_device_id,
+            _application_user_device_id: PhantomData,
+            value,
+            wrong_enter_tries_quantity,
+            is_approved,
+            expires_at,
+            can_be_resent_from,
+        };
+    }
+}
+
 #[derive(Serialize, Deserialize)]
 #[serde(transparent)]
 pub struct Value(pub String);
@@ -43,41 +81,6 @@ pub struct CanBeResentFrom(pub i64);
 
 impl CanBeResentFrom {
     pub const QUANTITY_OF_MINUTES_BEFORE_RESENDING: i64 = 1;
-}
-
-pub struct ApplicationUserRegistrationToken<'a> {
-    pub application_user_email: Cow<'a, str>,
-    _application_user_email: PhantomData<ApplicationUser_Email>,
-
-    pub application_user_device_id: Cow<'a, ApplicationUserDevice_Id>,
-    pub value: Value,
-    pub wrong_enter_tries_quantity: WrongEnterTriesQuantity,
-    pub is_approved: IsApproved,
-    pub expires_at: ExpiresAt,
-    pub can_be_resent_from: CanBeResentFrom,
-}
-
-impl<'a> ApplicationUserRegistrationToken<'a> {
-    pub fn new(
-        application_user_email: Cow<'a, str>,
-        application_user_device_id: Cow<'a, ApplicationUserDevice_Id>,
-        value: Value,
-        wrong_enter_tries_quantity: WrongEnterTriesQuantity,
-        is_approved: IsApproved,
-        expires_at: ExpiresAt,
-        can_be_resent_from: CanBeResentFrom,
-    ) -> Self {
-        return Self {
-            application_user_email,
-            _application_user_email: PhantomData,
-            application_user_device_id,
-            value,
-            wrong_enter_tries_quantity,
-            is_approved,
-            expires_at,
-            can_be_resent_from,
-        };
-    }
 }
 
 pub struct ApplicationUserRegistrationToken1 {

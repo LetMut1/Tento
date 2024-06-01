@@ -1,5 +1,4 @@
 use super::EmailSender;
-use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_Value;
 use crate::infrastructure_layer::data::auditor::Auditor;
@@ -14,12 +13,12 @@ impl EmailSender<ApplicationUserResetPasswordToken<'_>> {
         environment_configuration: &'a EnvironmentConfiguration,
         application_user_reset_password_token_value: &'a ApplicationUserResetPasswordToken_Value,
         application_user_email: &'a str,
-        application_user_device_id: &'a ApplicationUserDevice_Id,
+        application_user_device_id: &'a str,
     ) -> Result<(), Auditor<Error>> {
         let message_body = format!(
             "Your code: {} for device {}.",
             application_user_reset_password_token_value.0.as_str(),
-            application_user_device_id.0.as_str(),
+            application_user_device_id,
         );
 
         Sender::<Email>::send(

@@ -29,8 +29,6 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
         database_2_connection: &'a Connection,
         insert_3: Insert3<'a>,
     ) -> Result<ApplicationUserAuthorizationToken<'a>, Auditor<Error>> {
-        let application_user_device_id = insert_3.application_user_device_id.0.as_str();
-
         let application_user_authorization_token_value = insert_3.application_user_authorization_token_value.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -58,7 +56,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                 Type::INT8,
             )
             .add_parameter(
-                &application_user_device_id,
+                &insert_3.application_user_device_id,
                 Type::TEXT,
             )
             .add_parameter(
@@ -110,8 +108,6 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
         database_2_connection: &'a Connection,
         by_4: &'a By4<'_>,
     ) -> Result<(), Auditor<Error>> {
-        let application_user_device_id = by_4.application_user_device_id.0.as_str();
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
@@ -124,7 +120,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                 Type::INT8,
             )
             .add_parameter(
-                &application_user_device_id,
+                &by_4.application_user_device_id,
                 Type::TEXT,
             );
 
@@ -154,8 +150,6 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken1> {
         update_3: &'a Update3<'_>,
         by_4: &'a By4<'_>,
     ) -> Result<(), Auditor<Error>> {
-        let application_user_device_id = by_4.application_user_device_id.0.as_str();
-
         let application_user_authorization_token_value = update_3.application_user_authorization_token_value.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -197,7 +191,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken1> {
                 Type::INT8,
             )
             .add_parameter(
-                &application_user_device_id,
+                &by_4.application_user_device_id,
                 Type::TEXT,
             );
 
@@ -224,8 +218,6 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken1> {
         database_2_connection: &'a Connection,
         by_4: &'a By4<'_>,
     ) -> Result<Option<ApplicationUserAuthorizationToken1>, Auditor<Error>> {
-        let application_user_device_id = by_4.application_user_device_id.0.as_str();
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
@@ -243,7 +235,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken1> {
                 Type::INT8,
             )
             .add_parameter(
-                &application_user_device_id,
+                &by_4.application_user_device_id,
                 Type::TEXT,
             );
 
@@ -286,8 +278,6 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken2> {
         update_4: &'a Update4<'_>,
         by_4: &'a By4<'_>,
     ) -> Result<(), Auditor<Error>> {
-        let application_user_device_id = by_4.application_user_device_id.0.as_str();
-
         let application_user_authorization_token_value = update_4.application_user_authorization_token_value.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -323,7 +313,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken2> {
                 Type::INT8,
             )
             .add_parameter(
-                &application_user_device_id,
+                &by_4.application_user_device_id,
                 Type::TEXT,
             );
 
@@ -350,8 +340,6 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken2> {
         database_2_connection: &'a Connection,
         by_4: &'a By4<'_>,
     ) -> Result<Option<ApplicationUserAuthorizationToken2>, Auditor<Error>> {
-        let application_user_device_id = by_4.application_user_device_id.0.as_str();
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
@@ -368,7 +356,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken2> {
                 Type::INT8,
             )
             .add_parameter(
-                &application_user_device_id,
+                &by_4.application_user_device_id,
                 Type::TEXT,
             );
 
@@ -410,8 +398,6 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken3> {
         update_5: &'a Update5,
         by_4: &'a By4<'_>,
     ) -> Result<(), Auditor<Error>> {
-        let application_user_device_id = by_4.application_user_device_id.0.as_str();
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
@@ -433,7 +419,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken3> {
                 Type::INT8,
             )
             .add_parameter(
-                &application_user_device_id,
+                &by_4.application_user_device_id,
                 Type::TEXT,
             );
 
@@ -463,8 +449,6 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken4> {
         update_6: &'a Update6,
         by_4: &'a By4<'_>,
     ) -> Result<(), Auditor<Error>> {
-        let application_user_device_id = by_4.application_user_device_id.0.as_str();
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
@@ -486,7 +470,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken4> {
                 Type::INT8,
             )
             .add_parameter(
-                &application_user_device_id,
+                &by_4.application_user_device_id,
                 Type::TEXT,
             );
 
@@ -515,8 +499,6 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken5> {
         database_2_connection: &'a Connection,
         by_4: &'a By4<'_>,
     ) -> Result<Option<ApplicationUserAuthorizationToken5>, Auditor<Error>> {
-        let application_user_device_id = by_4.application_user_device_id.0.as_str();
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
@@ -533,7 +515,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken5> {
                 Type::INT8,
             )
             .add_parameter(
-                &application_user_device_id,
+                &by_4.application_user_device_id,
                 Type::TEXT,
             );
 

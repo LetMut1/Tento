@@ -1,4 +1,3 @@
-use entity::application_user_device::ApplicationUserDevice_Id;
 use entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_CanBeResentFrom;
 use serde::Deserialize;
 use macro_rules::r#enum;
@@ -8,7 +7,7 @@ use serde::Serialize;
 #[derive(Serialize, Deserialize)]
 pub struct Incoming {
     pub application_user_id: i64,
-    pub application_user_device_id: ApplicationUserDevice_Id,
+    pub application_user_device_id: String,
 }
 
 #[derive(Serialize, Deserialize)]

@@ -32,10 +32,6 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
         database_2_connection: &'a Connection,
         insert_5: Insert5<'a>,
     ) -> Result<ApplicationUserRegistrationToken<'a>, Auditor<Error>> {
-        let application_user_email = insert_5.application_user_email;
-
-        let application_user_device_id = insert_5.application_user_device_id.0.as_str();
-
         let application_user_registration_token_value = insert_5.application_user_registration_token_value.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -61,11 +57,11 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &application_user_email,
+                &insert_5.application_user_email,
                 Type::TEXT,
             )
             .add_parameter(
-                &application_user_device_id,
+                &insert_5.application_user_device_id,
                 Type::TEXT,
             )
             .add_parameter(
@@ -122,10 +118,6 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
         database_2_connection: &'a Connection,
         by_5: &'a By5<'_>,
     ) -> Result<(), Auditor<Error>> {
-        let application_user_email = by_5.application_user_email;
-
-        let application_user_device_id = by_5.application_user_device_id.0.as_str();
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
@@ -134,11 +126,11 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &application_user_email,
+                &by_5.application_user_email,
                 Type::TEXT,
             )
             .add_parameter(
-                &application_user_device_id,
+                &by_5.application_user_device_id,
                 Type::TEXT,
             );
 
@@ -168,10 +160,6 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
         update_7: &'a Update7<'_>,
         by_5: &'a By5<'_>,
     ) -> Result<(), Auditor<Error>> {
-        let application_user_email = by_5.application_user_email;
-
-        let application_user_device_id = by_5.application_user_device_id.0.as_str();
-
         let application_user_registration_token_value = update_7.application_user_registration_token_value.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -215,11 +203,11 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
                 Type::INT8,
             )
             .add_parameter(
-                &application_user_email,
+                &by_5.application_user_email,
                 Type::TEXT,
             )
             .add_parameter(
-                &application_user_device_id,
+                &by_5.application_user_device_id,
                 Type::TEXT,
             );
 
@@ -246,10 +234,6 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
         database_2_connection: &'a Connection,
         by_5: &'a By5<'_>,
     ) -> Result<Option<ApplicationUserRegistrationToken1>, Auditor<Error>> {
-        let application_user_email = by_5.application_user_email;
-
-        let application_user_device_id = by_5.application_user_device_id.0.as_str();
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
@@ -264,11 +248,11 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &application_user_email,
+                &by_5.application_user_email,
                 Type::TEXT,
             )
             .add_parameter(
-                &application_user_device_id,
+                &by_5.application_user_device_id,
                 Type::TEXT,
             );
 
@@ -312,10 +296,6 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken2> {
         update_8: &'a Update8,
         by_5: &'a By5<'_>,
     ) -> Result<(), Auditor<Error>> {
-        let application_user_email = by_5.application_user_email;
-
-        let application_user_device_id = by_5.application_user_device_id.0.as_str();
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
@@ -333,11 +313,11 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken2> {
                 Type::INT8,
             )
             .add_parameter(
-                &application_user_email,
+                &by_5.application_user_email,
                 Type::TEXT,
             )
             .add_parameter(
-                &application_user_device_id,
+                &by_5.application_user_device_id,
                 Type::TEXT,
             );
 
@@ -367,10 +347,6 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
         update_9: &'a Update9<'_>,
         by_5: &'a By5<'_>,
     ) -> Result<(), Auditor<Error>> {
-        let application_user_email = by_5.application_user_email;
-
-        let application_user_device_id = by_5.application_user_device_id.0.as_str();
-
         let application_user_registration_token_value = update_9.application_user_registration_token_value.0.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -408,11 +384,11 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
                 Type::INT8,
             )
             .add_parameter(
-                &application_user_email,
+                &by_5.application_user_email,
                 Type::TEXT,
             )
             .add_parameter(
-                &application_user_device_id,
+                &by_5.application_user_device_id,
                 Type::TEXT,
             );
 
@@ -439,10 +415,6 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
         database_2_connection: &'a Connection,
         by_5: &'a By5<'_>,
     ) -> Result<Option<ApplicationUserRegistrationToken3>, Auditor<Error>> {
-        let application_user_email = by_5.application_user_email;
-
-        let application_user_device_id = by_5.application_user_device_id.0.as_str();
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
@@ -456,11 +428,11 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &application_user_email,
+                &by_5.application_user_email,
                 Type::TEXT,
             )
             .add_parameter(
-                &application_user_device_id,
+                &by_5.application_user_device_id,
                 Type::TEXT,
             );
 
@@ -503,10 +475,6 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken4> {
         update_10: &'a Update10,
         by_5: &'a By5<'_>,
     ) -> Result<(), Auditor<Error>> {
-        let application_user_email = by_5.application_user_email;
-
-        let application_user_device_id = by_5.application_user_device_id.0.as_str();
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
@@ -524,11 +492,11 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken4> {
                 Type::INT2,
             )
             .add_parameter(
-                &application_user_email,
+                &by_5.application_user_email,
                 Type::TEXT,
             )
             .add_parameter(
-                &application_user_device_id,
+                &by_5.application_user_device_id,
                 Type::TEXT,
             );
 
@@ -558,10 +526,6 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken5> {
         update_11: &'a Update11,
         by_5: &'a By5<'_>,
     ) -> Result<(), Auditor<Error>> {
-        let application_user_email = by_5.application_user_email;
-
-        let application_user_device_id = by_5.application_user_device_id.0.as_str();
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
@@ -579,11 +543,11 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken5> {
                 Type::BOOL,
             )
             .add_parameter(
-                &application_user_email,
+                &by_5.application_user_email,
                 Type::TEXT,
             )
             .add_parameter(
-                &application_user_device_id,
+                &by_5.application_user_device_id,
                 Type::TEXT,
             );
 
@@ -612,10 +576,6 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken6> {
         database_2_connection: &'a Connection,
         by_5: &'a By5<'_>,
     ) -> Result<Option<ApplicationUserRegistrationToken6>, Auditor<Error>> {
-        let application_user_email = by_5.application_user_email;
-
-        let application_user_device_id = by_5.application_user_device_id.0.as_str();
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
@@ -629,11 +589,11 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken6> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &application_user_email,
+                &by_5.application_user_email,
                 Type::TEXT,
             )
             .add_parameter(
-                &application_user_device_id,
+                &by_5.application_user_device_id,
                 Type::TEXT,
             );
 

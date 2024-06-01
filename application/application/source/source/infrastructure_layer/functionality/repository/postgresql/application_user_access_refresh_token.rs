@@ -19,8 +19,6 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
         database_2_connection: &'a Connection,
         insert_2: Insert2<'a>,
     ) -> Result<ApplicationUserAccessRefreshToken<'a>, Auditor<Error>> {
-        let application_user_device_id = insert_2.application_user_device_id.0.as_str();
-
         let application_user_access_refresh_token_obfuscation_value = insert_2.application_user_access_refresh_token_obfuscation_value.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -48,7 +46,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 Type::INT8,
             )
             .add_parameter(
-                &application_user_device_id,
+                &insert_2.application_user_device_id,
                 Type::TEXT,
             )
             .add_parameter(
@@ -100,8 +98,6 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
         database_2_connection: &'a Connection,
         by_4: &'a By4<'_>,
     ) -> Result<(), Auditor<Error>> {
-        let application_user_device_id = by_4.application_user_device_id.0.as_str();
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "DELETE FROM ONLY public.application_user_access_refresh_token AS auart  \
@@ -113,7 +109,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 Type::INT8,
             )
             .add_parameter(
-                &application_user_device_id,
+                &by_4.application_user_device_id,
                 Type::TEXT,
             );
 
@@ -174,8 +170,6 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
         database_2_connection: &'a Connection,
         by_4: &'a By4<'b>,
     ) -> Result<Option<ApplicationUserAccessRefreshToken<'b>>, Auditor<Error>> {
-        let application_user_device_id = by_4.application_user_device_id.0.as_str();
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
@@ -193,7 +187,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 Type::INT8,
             )
             .add_parameter(
-                &application_user_device_id,
+                &by_4.application_user_device_id,
                 Type::TEXT,
             );
 
@@ -238,8 +232,6 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken1> {
         update_2: &'a Update2<'_>,
         by_4: &'a By4<'_>,
     ) -> Result<(), Auditor<Error>> {
-        let application_user_device_id = by_4.application_user_device_id.0.as_str();
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
@@ -279,7 +271,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken1> {
                 Type::INT8,
             )
             .add_parameter(
-                &application_user_device_id,
+                &by_4.application_user_device_id,
                 Type::TEXT,
             );
 

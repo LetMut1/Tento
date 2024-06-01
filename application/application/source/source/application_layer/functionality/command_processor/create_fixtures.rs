@@ -196,12 +196,10 @@ impl CommandProcessor<CreateFixtures> {
                 }
             };
 
-            let application_user_device_id = ApplicationUserDevice_Id(
-                format!(
-                    "{}_{}",
-                    application_user.nickname.as_ref(),
-                    Self::APPLICATION_USER_DEVICE__ID_PART
-                ),
+            let application_user_device_id = format!(
+                "{}_{}",
+                application_user.nickname.as_ref(),
+                Self::APPLICATION_USER_DEVICE__ID_PART
             );
 
             if !Validator::<ApplicationUserDevice_Id>::is_valid(&application_user_device_id) {

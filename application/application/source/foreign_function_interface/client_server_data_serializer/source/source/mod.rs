@@ -137,7 +137,6 @@ use action_processor_incoming_outcoming::action_processor::channel___base::get_o
 use action_processor_incoming_outcoming::action_processor::channel_subscription___base::create::Incoming as ChannelSubscription__Base___Create___Incoming_;
 use action_processor_incoming_outcoming::action_processor::channel_subscription___base::create::Precedent as ChannelSubscription__Base___Create___Precedent_;
 use entity::application_user_authorization_token::ApplicationUserAuthorizationToken_Value;
-use entity::application_user_device::ApplicationUserDevice_Id;
 use entity::application_user_registration_token::ApplicationUserRegistrationToken_Value;
 use entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_Value;
 use entity::channel::Channel_Id;
@@ -620,7 +619,7 @@ pub extern "C" fn application_user___authorization____authorize_by_first_step___
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming| -> Result<ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming_ {
-            application_user_device_id: ApplicationUserDevice_Id(incoming.application_user_device_id.to_string()?),
+            application_user_device_id: incoming.application_user_device_id.to_string()?,
             application_user_email_or_application_user_nickname: incoming.application_user_email_or_application_user_nickname.to_string()?,
             application_user_password: incoming.application_user_password.to_string()?,
         };
@@ -734,7 +733,7 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
     let converter = move |incoming: ApplicationUser__Authorization___AuthorizeByLastStep___Incoming| -> Result<ApplicationUser__Authorization___AuthorizeByLastStep___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___AuthorizeByLastStep___Incoming_ {
             application_user_id: incoming.application_user_id,
-            application_user_device_id: ApplicationUserDevice_Id(incoming.application_user_device_id.to_string()?),
+            application_user_device_id: incoming.application_user_device_id.to_string()?,
             application_user_authorization_token_value: ApplicationUserAuthorizationToken_Value(incoming.application_user_authorization_token_value.to_string()?),
         };
 
@@ -1371,7 +1370,7 @@ pub extern "C" fn application_user___authorization____register_by_first_step____
     let converter = move |incoming: ApplicationUser__Authorization___RegisterByFirstStep___Incoming| -> Result<ApplicationUser__Authorization___RegisterByFirstStep___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___RegisterByFirstStep___Incoming_ {
             application_user_email: incoming.application_user_email.to_string()?,
-            application_user_device_id: ApplicationUserDevice_Id(incoming.application_user_device_id.to_string()?),
+            application_user_device_id: incoming.application_user_device_id.to_string()?,
         };
 
         return Ok(incoming_);
@@ -1480,7 +1479,7 @@ pub extern "C" fn application_user___authorization____register_by_second_step___
     let converter = move |incoming: ApplicationUser__Authorization___RegisterBySecondStep___Incoming| -> Result<ApplicationUser__Authorization___RegisterBySecondStep___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___RegisterBySecondStep___Incoming_ {
             application_user_email: incoming.application_user_email.to_string()?,
-            application_user_device_id: ApplicationUserDevice_Id(incoming.application_user_device_id.to_string()?),
+            application_user_device_id: incoming.application_user_device_id.to_string()?,
             application_user_registration_token_value: ApplicationUserRegistrationToken_Value(incoming.application_user_registration_token_value.to_string()?),
         };
 
@@ -1607,7 +1606,7 @@ pub extern "C" fn application_user___authorization____register_by_last_step____s
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: ApplicationUser__Authorization___RegisterByLastStep___Incoming| -> Result<ApplicationUser__Authorization___RegisterByLastStep___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___RegisterByLastStep___Incoming_ {
-            application_user_device_id: ApplicationUserDevice_Id(incoming.application_user_device_id.to_string()?),
+            application_user_device_id: incoming.application_user_device_id.to_string()?,
             application_user_email: incoming.application_user_email.to_string()?,
             application_user_nickname: incoming.application_user_nickname.to_string()?,
             application_user_password: incoming.application_user_password.to_string()?,
@@ -1761,7 +1760,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_first_st
     let converter = move |incoming: ApplicationUser__Authorization___ResetPasswordByFirstStep___Incoming| -> Result<ApplicationUser__Authorization___ResetPasswordByFirstStep___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___ResetPasswordByFirstStep___Incoming_ {
             application_user_email: incoming.application_user_email.to_string()?,
-            application_user_device_id: ApplicationUserDevice_Id(incoming.application_user_device_id.to_string()?),
+            application_user_device_id: incoming.application_user_device_id.to_string()?,
         };
 
         return Ok(incoming_);
@@ -1872,7 +1871,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_second_s
     let converter = move |incoming: ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming| -> Result<ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming_ {
             application_user_id: incoming.application_user_id,
-            application_user_device_id: ApplicationUserDevice_Id(incoming.application_user_device_id.to_string()?),
+            application_user_device_id: incoming.application_user_device_id.to_string()?,
             application_user_reset_password_token_value: ApplicationUserResetPasswordToken_Value(incoming.application_user_reset_password_token_value.to_string()?),
         };
 
@@ -1999,7 +1998,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_last_ste
     let converter = move |incoming: ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming| -> Result<ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming_ {
             application_user_id: incoming.application_user_id,
-            application_user_device_id: ApplicationUserDevice_Id(incoming.application_user_device_id.to_string()?),
+            application_user_device_id: incoming.application_user_device_id.to_string()?,
             application_user_password: incoming.application_user_password.to_string()?,
             application_user_reset_password_token_value: ApplicationUserResetPasswordToken_Value(incoming.application_user_reset_password_token_value.to_string()?),
         };
@@ -2122,7 +2121,7 @@ pub extern "C" fn application_user___authorization____send_email_for_register___
     let converter = move |incoming: ApplicationUser__Authorization___SendEmailForRegister___Incoming| -> Result<ApplicationUser__Authorization___SendEmailForRegister___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___SendEmailForRegister___Incoming_ {
             application_user_email: incoming.application_user_email.to_string()?,
-            application_user_device_id: ApplicationUserDevice_Id(incoming.application_user_device_id.to_string()?),
+            application_user_device_id: incoming.application_user_device_id.to_string()?,
         };
 
         return Ok(incoming_);
@@ -2245,7 +2244,7 @@ pub extern "C" fn application_user___authorization____send_email_for_authorize__
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: ApplicationUser__Authorization___SendEmailForAuthorize___Incoming| -> Result<ApplicationUser__Authorization___SendEmailForAuthorize___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___SendEmailForAuthorize___Incoming_ {
-            application_user_device_id: ApplicationUserDevice_Id(incoming.application_user_device_id.to_string()?),
+            application_user_device_id: incoming.application_user_device_id.to_string()?,
             application_user_id: incoming.application_user_id,
         };
 
@@ -2370,7 +2369,7 @@ pub extern "C" fn application_user___authorization____send_email_for_reset_passw
     let converter = move |incoming: ApplicationUser__Authorization___SendEmailForResetPassword___Incoming| -> Result<ApplicationUser__Authorization___SendEmailForResetPassword___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___SendEmailForResetPassword___Incoming_ {
             application_user_id: incoming.application_user_id,
-            application_user_device_id: ApplicationUserDevice_Id(incoming.application_user_device_id.to_string()?),
+            application_user_device_id: incoming.application_user_device_id.to_string()?,
         };
 
         return Ok(incoming_);

@@ -1,5 +1,4 @@
 use entity::application_user_authorization_token::ApplicationUserAuthorizationToken_Value;
-use entity::application_user_device::ApplicationUserDevice_Id;
 use entity::application_user_authorization_token::ApplicationUserAuthorizationToken_WrongEnterTriesQuantity;
 use serde::Deserialize;
 use serde::Serialize;
@@ -9,7 +8,7 @@ use common_precedent::CommonPrecedent;
 #[derive(Serialize, Deserialize)]
 pub struct Incoming {
     pub application_user_id: i64,
-    pub application_user_device_id: ApplicationUserDevice_Id,
+    pub application_user_device_id: String,
     pub application_user_authorization_token_value: ApplicationUserAuthorizationToken_Value,
 }
 

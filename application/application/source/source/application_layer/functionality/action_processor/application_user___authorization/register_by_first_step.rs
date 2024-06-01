@@ -74,7 +74,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
             );
         }
 
-        if !Validator::<ApplicationUserDevice_Id>::is_valid(&incoming_.application_user_device_id) {
+        if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming_.application_user_device_id.as_str()) {
             return Ok(
                 Err(
                     Auditor::<InvalidArgument>::new(
@@ -103,7 +103,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
 
         let by_5 = By5 {
             application_user_email: incoming_.application_user_email.as_str(),
-            application_user_device_id: &incoming_.application_user_device_id,
+            application_user_device_id: incoming_.application_user_device_id.as_str(),
         };
 
         let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
@@ -195,7 +195,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
                     database_2_postgresql_connection,
                     Insert5 {
                         application_user_email: incoming_.application_user_email.as_str(),
-                        application_user_device_id: &incoming_.application_user_device_id,
+                        application_user_device_id: incoming_.application_user_device_id.as_str(),
                         application_user_registration_token_value: Generator::<ApplicationUserRegistrationToken_Value>::generate(),
                         application_user_registration_token_wrong_enter_tries_quantity: ApplicationUserRegistrationToken_WrongEnterTriesQuantity(0),
                         application_user_registration_token_is_approved: ApplicationUserRegistrationToken_IsApproved(false),
@@ -219,7 +219,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
                 environment_configuration,
                 &application_user_registration_token_value,
                 incoming_.application_user_email.as_str(),
-                &incoming_.application_user_device_id,
+                incoming_.application_user_device_id.as_str(),
             )?;
         }
 
