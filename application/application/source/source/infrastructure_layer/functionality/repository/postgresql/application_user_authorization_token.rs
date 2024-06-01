@@ -13,7 +13,6 @@ use crate::domain_layer::data::entity::application_user_authorization_token::App
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken5;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_CanBeResentFrom;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_ExpiresAt;
-use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_Value;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_WrongEnterTriesQuantity;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
@@ -29,7 +28,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
         database_2_connection: &'a Connection,
         insert_3: Insert3<'a>,
     ) -> Result<ApplicationUserAuthorizationToken<'a>, Auditor<Error>> {
-        let application_user_authorization_token_value = insert_3.application_user_authorization_token_value.0.as_str();
+        let application_user_authorization_token_value = insert_3.application_user_authorization_token_value.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -150,8 +149,6 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken1> {
         update_3: &'a Update3<'_>,
         by_4: &'a By4<'_>,
     ) -> Result<(), Auditor<Error>> {
-        let application_user_authorization_token_value = update_3.application_user_authorization_token_value.0.as_str();
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
@@ -171,7 +168,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken1> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &application_user_authorization_token_value,
+                &update_3.application_user_authorization_token_value,
                 Type::TEXT,
             )
             .add_parameter(
@@ -262,7 +259,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken1> {
         return Ok(
             Some(
                 ApplicationUserAuthorizationToken1 {
-                    value: ApplicationUserAuthorizationToken_Value(row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?),
+                    value: row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
                     wrong_enter_tries_quantity: ApplicationUserAuthorizationToken_WrongEnterTriesQuantity(row_registry[0].try_get::<'_, usize, i16>(1).convert(Backtrace::new(line!(), file!()))?),
                     expires_at: ApplicationUserAuthorizationToken_ExpiresAt(row_registry[0].try_get::<'_, usize, i64>(2).convert(Backtrace::new(line!(), file!()))?),
                     can_be_resent_from: ApplicationUserAuthorizationToken_CanBeResentFrom(row_registry[0].try_get::<'_, usize, i64>(3).convert(Backtrace::new(line!(), file!()))?),
@@ -278,8 +275,6 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken2> {
         update_4: &'a Update4<'_>,
         by_4: &'a By4<'_>,
     ) -> Result<(), Auditor<Error>> {
-        let application_user_authorization_token_value = update_4.application_user_authorization_token_value.0.as_str();
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
@@ -297,7 +292,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken2> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &application_user_authorization_token_value,
+                &update_4.application_user_authorization_token_value,
                 Type::TEXT,
             )
             .add_parameter(
@@ -383,7 +378,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken2> {
         return Ok(
             Some(
                 ApplicationUserAuthorizationToken2 {
-                    value: ApplicationUserAuthorizationToken_Value(row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?),
+                    value: row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
                     wrong_enter_tries_quantity: ApplicationUserAuthorizationToken_WrongEnterTriesQuantity(row_registry[0].try_get::<'_, usize, i16>(1).convert(Backtrace::new(line!(), file!()))?),
                     expires_at: ApplicationUserAuthorizationToken_ExpiresAt(row_registry[0].try_get::<'_, usize, i64>(2).convert(Backtrace::new(line!(), file!()))?),
                 },
@@ -542,7 +537,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken5> {
         return Ok(
             Some(
                 ApplicationUserAuthorizationToken5 {
-                    value: ApplicationUserAuthorizationToken_Value(row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?),
+                    value: row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
                     expires_at: ApplicationUserAuthorizationToken_ExpiresAt(row_registry[0].try_get::<'_, usize, i64>(1).convert(Backtrace::new(line!(), file!()))?),
                     can_be_resent_from: ApplicationUserAuthorizationToken_CanBeResentFrom(row_registry[0].try_get::<'_, usize, i64>(2).convert(Backtrace::new(line!(), file!()))?),
                 },

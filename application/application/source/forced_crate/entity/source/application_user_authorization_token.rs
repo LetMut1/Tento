@@ -17,7 +17,9 @@ pub struct ApplicationUserAuthorizationToken<'a> {
     pub application_user_device_id: Cow<'a, str>,
     _application_user_device_id: PhantomData<ApplicationUserDevice_Id>,
 
-    pub value: Value,
+    pub value: String,
+    _value: PhantomData<Value>,
+
     pub wrong_enter_tries_quantity: WrongEnterTriesQuantity,
     pub expires_at: ExpiresAt,
     pub can_be_resent_from: CanBeResentFrom,
@@ -27,7 +29,7 @@ impl<'a> ApplicationUserAuthorizationToken<'a> {
     pub fn new(
         application_user_id: i64,
         application_user_device_id: Cow<'a, str>,
-        value: Value,
+        value:String,
         wrong_enter_tries_quantity: WrongEnterTriesQuantity,
         expires_at: ExpiresAt,
         can_be_resent_from: CanBeResentFrom,
@@ -38,6 +40,7 @@ impl<'a> ApplicationUserAuthorizationToken<'a> {
             application_user_device_id,
             _application_user_device_id: PhantomData,
             value,
+            _value: PhantomData,
             wrong_enter_tries_quantity,
             expires_at,
             can_be_resent_from,
@@ -46,14 +49,14 @@ impl<'a> ApplicationUserAuthorizationToken<'a> {
 }
 
 pub struct ApplicationUserAuthorizationToken1 {
-    pub value: Value,
+    pub value: String,
     pub wrong_enter_tries_quantity: WrongEnterTriesQuantity,
     pub expires_at: ExpiresAt,
     pub can_be_resent_from: CanBeResentFrom,
 }
 
 pub struct ApplicationUserAuthorizationToken2 {
-    pub value: Value,
+    pub value: String,
     pub wrong_enter_tries_quantity: WrongEnterTriesQuantity,
     pub expires_at: ExpiresAt,
 }
@@ -67,14 +70,13 @@ pub struct ApplicationUserAuthorizationToken4 {
 }
 
 pub struct ApplicationUserAuthorizationToken5 {
-    pub value: Value,
+    pub value: String,
     pub expires_at: ExpiresAt,
     pub can_be_resent_from: CanBeResentFrom,
 }
 
 #[derive(Serialize, Deserialize)]
-#[serde(transparent)]
-pub struct Value(pub String);
+pub struct Value;
 
 impl Value {
     pub const REGULAR_EXPRESSION: &'static str = r#"^[0-9]{6}$"#;

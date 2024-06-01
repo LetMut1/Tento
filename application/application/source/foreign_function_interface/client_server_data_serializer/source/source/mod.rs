@@ -136,7 +136,6 @@ use action_processor_incoming_outcoming::action_processor::channel___base::get_o
 use action_processor_incoming_outcoming::action_processor::channel___base::get_one_by_id::Precedent as Channel__Base___GetOneById___Precedent_;
 use action_processor_incoming_outcoming::action_processor::channel_subscription___base::create::Incoming as ChannelSubscription__Base___Create___Incoming_;
 use action_processor_incoming_outcoming::action_processor::channel_subscription___base::create::Precedent as ChannelSubscription__Base___Create___Precedent_;
-use entity::application_user_authorization_token::ApplicationUserAuthorizationToken_Value;
 use entity::application_user_registration_token::ApplicationUserRegistrationToken_Value;
 use entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_Value;
 use entity::channel::Channel_Id;
@@ -734,7 +733,7 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
         let incoming_ = ApplicationUser__Authorization___AuthorizeByLastStep___Incoming_ {
             application_user_id: incoming.application_user_id,
             application_user_device_id: incoming.application_user_device_id.to_string()?,
-            application_user_authorization_token_value: ApplicationUserAuthorizationToken_Value(incoming.application_user_authorization_token_value.to_string()?),
+            application_user_authorization_token_value: incoming.application_user_authorization_token_value.to_string()?,
         };
 
         return Ok(incoming_);

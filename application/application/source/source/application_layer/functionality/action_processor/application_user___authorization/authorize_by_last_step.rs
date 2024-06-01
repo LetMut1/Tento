@@ -83,7 +83,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
             );
         }
 
-        if !Validator::<ApplicationUserAuthorizationToken_Value>::is_valid(&incoming_.application_user_authorization_token_value)? {
+        if !Validator::<ApplicationUserAuthorizationToken_Value>::is_valid(incoming_.application_user_authorization_token_value.as_str())? {
             return Ok(
                 Err(
                     Auditor::<InvalidArgument>::new(
@@ -143,7 +143,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
             return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserAuthorizationToken_AlreadyExpired)));
         }
 
-        if application_user_authorization_token_.value.0 != incoming_.application_user_authorization_token_value.0 {
+        if application_user_authorization_token_.value != incoming_.application_user_authorization_token_value {
             Incrementor::<ApplicationUserAuthorizationToken_WrongEnterTriesQuantity>::increment(&mut application_user_authorization_token_.wrong_enter_tries_quantity)?;
 
             if application_user_authorization_token_.wrong_enter_tries_quantity.0 < ApplicationUserAuthorizationToken_WrongEnterTriesQuantity::LIMIT {

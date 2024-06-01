@@ -86,7 +86,6 @@ pub mod by {
 pub mod update {
     use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_CanBeResentFrom;
     use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_ExpiresAt;
-    use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_Value;
     use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_WrongEnterTriesQuantity;
     use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_CanBeResentFrom;
     use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_ExpiresAt;
@@ -111,14 +110,14 @@ pub mod update {
     }
 
     pub struct Update3<'a> {
-        pub application_user_authorization_token_value: &'a ApplicationUserAuthorizationToken_Value,
+        pub application_user_authorization_token_value: &'a str,
         pub application_user_authorization_token_wrong_enter_tries_quantity: ApplicationUserAuthorizationToken_WrongEnterTriesQuantity,
         pub application_user_authorization_token_expires_at: ApplicationUserAuthorizationToken_ExpiresAt,
         pub application_user_authorization_token_can_be_resent_from: ApplicationUserAuthorizationToken_CanBeResentFrom,
     }
 
     pub struct Update4<'a> {
-        pub application_user_authorization_token_value: &'a ApplicationUserAuthorizationToken_Value,
+        pub application_user_authorization_token_value: &'a str,
         pub application_user_authorization_token_wrong_enter_tries_quantity: ApplicationUserAuthorizationToken_WrongEnterTriesQuantity,
         pub application_user_authorization_token_expires_at: ApplicationUserAuthorizationToken_ExpiresAt,
     }
@@ -189,7 +188,6 @@ pub mod update {
 pub mod insert {
     use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_CanBeResentFrom;
     use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_ExpiresAt;
-    use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_Value;
     use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_WrongEnterTriesQuantity;
     use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_CanBeResentFrom;
     use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_ExpiresAt;
@@ -234,7 +232,7 @@ pub mod insert {
     pub struct Insert3<'a> {
         pub application_user_id: i64,
         pub application_user_device_id: &'a str,
-        pub application_user_authorization_token_value: ApplicationUserAuthorizationToken_Value,
+        pub application_user_authorization_token_value: String,
         pub application_user_authorization_token_wrong_enter_tries_quantity: ApplicationUserAuthorizationToken_WrongEnterTriesQuantity,
         pub application_user_authorization_token_expires_at: ApplicationUserAuthorizationToken_ExpiresAt,
         pub application_user_authorization_token_can_be_resent_from: ApplicationUserAuthorizationToken_CanBeResentFrom,
