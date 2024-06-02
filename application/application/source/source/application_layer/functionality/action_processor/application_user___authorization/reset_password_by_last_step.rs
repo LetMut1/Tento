@@ -61,7 +61,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
     {
         let incoming_ = incoming.convert_value_does_not_exist(Backtrace::new(line!(), file!()))?;
 
-        if !Validator::<ApplicationUserResetPasswordToken_Value>::is_valid(&incoming_.application_user_reset_password_token_value)? {
+        if !Validator::<ApplicationUserResetPasswordToken_Value>::is_valid(incoming_.application_user_reset_password_token_value.as_str())? {
             return Ok(
                 Err(
                     Auditor::<InvalidArgument>::new(
@@ -152,7 +152,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
             return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_IsNotApproved)));
         }
 
-        if application_user_reset_password_token.value.0 != incoming_.application_user_reset_password_token_value.0 {
+        if application_user_reset_password_token.value != incoming_.application_user_reset_password_token_value {
             Incrementor::<ApplicationUserResetPasswordToken_WrongEnterTriesQuantity>::increment(&mut application_user_reset_password_token.wrong_enter_tries_quantity)?;
 
             if application_user_reset_password_token.wrong_enter_tries_quantity.0 < ApplicationUserResetPasswordToken_WrongEnterTriesQuantity::LIMIT {

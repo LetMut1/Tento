@@ -151,7 +151,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByFirstStep> 
                     PostgresqlRepository::<ApplicationUserResetPasswordToken1>::update(
                         database_2_postgresql_connection,
                         &Update12 {
-                            application_user_reset_password_token_value: &application_user_reset_password_token.value,
+                            application_user_reset_password_token_value: application_user_reset_password_token.value.as_str(),
                             application_user_reset_password_token_wrong_enter_tries_quantity: application_user_reset_password_token.wrong_enter_tries_quantity,
                             application_user_reset_password_token_is_approved: application_user_reset_password_token.is_approved,
                             application_user_reset_password_token_expires_at: application_user_reset_password_token.expires_at,
@@ -176,7 +176,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByFirstStep> 
                         PostgresqlRepository::<ApplicationUserResetPasswordToken3>::update(
                             database_2_postgresql_connection,
                             &Update14 {
-                                application_user_reset_password_token_value: &application_user_reset_password_token.value,
+                                application_user_reset_password_token_value: application_user_reset_password_token.value.as_str(),
                                 application_user_reset_password_token_wrong_enter_tries_quantity: application_user_reset_password_token.wrong_enter_tries_quantity,
                                 application_user_reset_password_token_is_approved: application_user_reset_password_token.is_approved,
                                 application_user_reset_password_token_expires_at: application_user_reset_password_token.expires_at,
@@ -221,7 +221,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByFirstStep> 
         if can_send {
             EmailSender::<ApplicationUserResetPasswordToken<'_>>::send(
                 environment_configuration,
-                &application_user_reset_password_token_value,
+                application_user_reset_password_token_value.as_str(),
                 incoming_.application_user_email.as_str(),
                 incoming_.application_user_device_id.as_str(),
             )?;

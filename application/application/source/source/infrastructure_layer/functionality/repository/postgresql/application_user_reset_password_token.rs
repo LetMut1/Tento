@@ -16,7 +16,6 @@ use crate::domain_layer::data::entity::application_user_reset_password_token::Ap
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_CanBeResentFrom;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_IsApproved;
-use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_Value;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_WrongEnterTriesQuantity;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
@@ -32,7 +31,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
         database_2_connection: &'a Connection,
         insert_6: Insert6<'a>,
     ) -> Result<ApplicationUserResetPasswordToken<'a>, Auditor<Error>> {
-        let application_user_reset_password_token_value = insert_6.application_user_reset_password_token_value.0.as_str();
+        let application_user_reset_password_token_value = insert_6.application_user_reset_password_token_value.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -160,8 +159,6 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken1> {
         update_12: &'a Update12<'_>,
         by_4: &'a By4<'_>,
     ) -> Result<(), Auditor<Error>> {
-        let application_user_reset_password_token_value = update_12.application_user_reset_password_token_value.0.as_str();
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
@@ -183,7 +180,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken1> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &application_user_reset_password_token_value,
+                &update_12.application_user_reset_password_token_value,
                 Type::TEXT,
             )
             .add_parameter(
@@ -279,7 +276,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken1> {
         return Ok(
             Some(
                 ApplicationUserResetPasswordToken1 {
-                    value: ApplicationUserResetPasswordToken_Value(row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?),
+                    value: row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
                     wrong_enter_tries_quantity: ApplicationUserResetPasswordToken_WrongEnterTriesQuantity(row_registry[0].try_get::<'_, usize, i16>(1).convert(Backtrace::new(line!(), file!()))?),
                     is_approved: ApplicationUserResetPasswordToken_IsApproved(row_registry[0].try_get::<'_, usize, bool>(2).convert(Backtrace::new(line!(), file!()))?),
                     expires_at: ApplicationUserResetPasswordToken_ExpiresAt(row_registry[0].try_get::<'_, usize, i64>(3).convert(Backtrace::new(line!(), file!()))?),
@@ -347,8 +344,6 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken3> {
         update_14: &'a Update14<'_>,
         by_4: &'a By4<'_>,
     ) -> Result<(), Auditor<Error>> {
-        let application_user_reset_password_token_value = update_14.application_user_reset_password_token_value.0.as_str();
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
@@ -368,7 +363,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken3> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &application_user_reset_password_token_value,
+                &update_14.application_user_reset_password_token_value,
                 Type::TEXT,
             )
             .add_parameter(
@@ -459,7 +454,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken3> {
         return Ok(
             Some(
                 ApplicationUserResetPasswordToken3 {
-                    value: ApplicationUserResetPasswordToken_Value(row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?),
+                    value: row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
                     wrong_enter_tries_quantity: ApplicationUserResetPasswordToken_WrongEnterTriesQuantity(row_registry[0].try_get::<'_, usize, i16>(1).convert(Backtrace::new(line!(), file!()))?),
                     is_approved: ApplicationUserResetPasswordToken_IsApproved(row_registry[0].try_get::<'_, usize, bool>(2).convert(Backtrace::new(line!(), file!()))?),
                     expires_at: ApplicationUserResetPasswordToken_ExpiresAt(row_registry[0].try_get::<'_, usize, i64>(3).convert(Backtrace::new(line!(), file!()))?),
@@ -620,7 +615,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken6> {
         return Ok(
             Some(
                 ApplicationUserResetPasswordToken6 {
-                    value: ApplicationUserResetPasswordToken_Value(row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?),
+                    value: row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
                     is_approved: ApplicationUserResetPasswordToken_IsApproved(row_registry[0].try_get::<'_, usize, bool>(1).convert(Backtrace::new(line!(), file!()))?),
                     expires_at: ApplicationUserResetPasswordToken_ExpiresAt( row_registry[0].try_get::<'_, usize, i64>(2).convert(Backtrace::new(line!(), file!()))?),
                     can_be_resent_from: ApplicationUserResetPasswordToken_CanBeResentFrom(row_registry[0].try_get::<'_, usize, i64>(3).convert(Backtrace::new(line!(), file!()))?),

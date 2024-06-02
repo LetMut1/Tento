@@ -148,7 +148,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForResetPassword>
 
         EmailSender::<ApplicationUserResetPasswordToken<'_>>::send(
             environment_configuration,
-            &application_user_reset_password_token.value,
+            application_user_reset_password_token.value.as_str(),
             application_user.email.as_str(),
             incoming_.application_user_device_id.as_str(),
         )?;
