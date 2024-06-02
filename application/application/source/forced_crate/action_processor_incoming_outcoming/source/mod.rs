@@ -91,7 +91,6 @@ use entity::channel::Channel_MarksQuantity;
 use entity::channel::Channel_Orientation;
 use entity::channel::Channel_SubscribersQuantity;
 use entity::channel::Channel_ViewingQuantity;
-use entity::channel::Channel_VisabilityModifier;
 use serde::Deserialize;
 use serde::Serialize;
 
@@ -107,7 +106,7 @@ pub struct Channel1 {
     pub channel_name: String,
     pub channel_linked_name: String,
     pub channel_access_modifier: i16,
-    pub channel_visability_modifier: Channel_VisabilityModifier,
+    pub channel_visability_modifier: i16,
     pub channel_cover_image_path: Option<Channel_CoverImagePath>,
     pub channel_background_image_path: Option<Channel_BackgroundImagePath>,
 }
@@ -119,7 +118,7 @@ pub struct Channel2 {
     pub channel_linked_name: String,
     pub channel_description: Option<String>,
     pub channel_access_modifier: i16,
-    pub channel_visability_modifier: Channel_VisabilityModifier,
+    pub channel_visability_modifier: i16,
     pub channel_orientation: Channel_Orientation,
     pub channel_cover_image_path: Option<Channel_CoverImagePath>,
     pub channel_background_image_path: Option<Channel_BackgroundImagePath>,

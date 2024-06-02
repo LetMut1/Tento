@@ -38,7 +38,9 @@ pub struct Channel<'a> {
     pub access_modifier: i16,
     _access_modifier: PhantomData<AccessModifier>,
 
-    pub visability_modifier: VisabilityModifier,
+    pub visability_modifier: i16,
+    _visability_modifier: PhantomData<VisabilityModifier>,
+
     pub orientation: Orientation,
     pub cover_image_path: Option<CoverImagePath>,
     pub background_image_path: Option<BackgroundImagePath>,
@@ -56,7 +58,7 @@ impl<'a> Channel<'a> {
         linked_name: String,
         description: Option<String>,
         access_modifier: i16,
-        visability_modifier: VisabilityModifier,
+        visability_modifier: i16,
         orientation: Orientation,
         cover_image_path: Option<CoverImagePath>,
         background_image_path: Option<BackgroundImagePath>,
@@ -79,6 +81,7 @@ impl<'a> Channel<'a> {
             access_modifier,
             _access_modifier: PhantomData,
             visability_modifier,
+            _visability_modifier: PhantomData,
             orientation,
             cover_image_path,
             background_image_path,
@@ -123,9 +126,8 @@ pub enum AccessModifier_ {
     Close = AccessModifier::CLOSE as isize,
 }
 
-#[derive(Clone, Copy, Serialize, Deserialize)]
-#[serde(transparent)]
-pub struct VisabilityModifier(pub i16);
+#[derive(Serialize, Deserialize)]
+pub struct VisabilityModifier;
 
 impl VisabilityModifier {
     pub const PUBLIC: i16 = 0;

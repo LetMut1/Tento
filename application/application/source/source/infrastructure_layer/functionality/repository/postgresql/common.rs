@@ -4,7 +4,6 @@ use super::by::By13;
 use super::PostgresqlRepository;
 use crate::domain_layer::data::entity::channel::Channel_BackgroundImagePath;
 use crate::domain_layer::data::entity::channel::Channel_CoverImagePath;
-use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
@@ -54,7 +53,7 @@ impl PostgresqlRepository<Common1> {
                 Type::INT8,
             )
             .add_parameter(
-                &by_11.channel_visability_modifier.0,
+                &by_11.channel_visability_modifier,
                 Type::INT2,
             )
             .add_parameter(
@@ -259,7 +258,7 @@ impl PostgresqlRepository<Common1> {
                 channel_name: row.try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
                 channel_linked_name: row.try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?,
                 channel_access_modifier: row.try_get::<'_, usize, i16>(3).convert(Backtrace::new(line!(), file!()))?,
-                channel_visability_modifier: Channel_VisabilityModifier(row.try_get::<'_, usize, i16>(4).convert(Backtrace::new(line!(), file!()))?),
+                channel_visability_modifier: row.try_get::<'_, usize, i16>(4).convert(Backtrace::new(line!(), file!()))?,
                 channel_cover_image_path,
                 channel_background_image_path,
             };
@@ -372,7 +371,7 @@ impl PostgresqlRepository<Common1> {
                 channel_name: row.try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
                 channel_linked_name: row.try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?,
                 channel_access_modifier: row.try_get::<'_, usize, i16>(3).convert(Backtrace::new(line!(), file!()))?,
-                channel_visability_modifier: Channel_VisabilityModifier(row.try_get::<'_, usize, i16>(4).convert(Backtrace::new(line!(), file!()))?),
+                channel_visability_modifier: row.try_get::<'_, usize, i16>(4).convert(Backtrace::new(line!(), file!()))?,
                 channel_cover_image_path,
                 channel_background_image_path,
             };

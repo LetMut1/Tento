@@ -17,8 +17,6 @@ pub struct PostgresqlRepository<E> {
 }
 
 pub mod by {
-    use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier;
-
     pub struct By1<'a> {
         pub application_user_nickname: &'a str,
     }
@@ -66,7 +64,7 @@ pub mod by {
         pub application_user_id: i64,
         pub channel_name: &'a str,
         pub requery_channel_name: &'a Option<String>,
-        pub channel_visability_modifier: Channel_VisabilityModifier,
+        pub channel_visability_modifier: i16,
     }
 
     pub struct By12<'a> {
@@ -176,7 +174,6 @@ pub mod insert {
     use crate::domain_layer::data::entity::channel::Channel_Orientation;
     use crate::domain_layer::data::entity::channel::Channel_SubscribersQuantity;
     use crate::domain_layer::data::entity::channel::Channel_ViewingQuantity;
-    use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier;
     use crate::domain_layer::data::entity::channel_outer_link::ChannelOuterLink_Address;
     use crate::domain_layer::data::entity::channel_outer_link::ChannelOuterLink_Alias;
 
@@ -235,7 +232,7 @@ pub mod insert {
         pub channel_linked_name: String,
         pub channel_description: Option<String>,
         pub channel_access_modifier: i16,
-        pub channel_visability_modifier: Channel_VisabilityModifier,
+        pub channel_visability_modifier: i16,
         pub channel_orientation: Channel_Orientation,
         pub channel_cover_image_path: Option<Channel_CoverImagePath>,
         pub channel_background_image_path: Option<Channel_BackgroundImagePath>,
