@@ -147,7 +147,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
                     PostgresqlRepository::<ApplicationUserRegistrationToken1>::update(
                         database_2_postgresql_connection,
                         &Update7 {
-                            application_user_registration_token_value: &application_user_registration_token.value,
+                            application_user_registration_token_value: application_user_registration_token.value.as_str(),
                             application_user_registration_token_wrong_enter_tries_quantity: application_user_registration_token.wrong_enter_tries_quantity,
                             application_user_registration_token_is_approved: application_user_registration_token.is_approved,
                             application_user_registration_token_expires_at: application_user_registration_token.expires_at,
@@ -172,7 +172,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
                         PostgresqlRepository::<ApplicationUserRegistrationToken3>::update(
                             database_2_postgresql_connection,
                             &Update9 {
-                                application_user_registration_token_value: &application_user_registration_token.value,
+                                application_user_registration_token_value: application_user_registration_token.value.as_str(),
                                 application_user_registration_token_wrong_enter_tries_quantity: application_user_registration_token.wrong_enter_tries_quantity,
                                 application_user_registration_token_is_approved: application_user_registration_token.is_approved,
                                 application_user_registration_token_expires_at: application_user_registration_token.expires_at,
@@ -217,7 +217,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
         if can_send {
             EmailSender::<ApplicationUserRegistrationToken<'_>>::send(
                 environment_configuration,
-                &application_user_registration_token_value,
+                application_user_registration_token_value.as_str(),
                 incoming_.application_user_email.as_str(),
                 incoming_.application_user_device_id.as_str(),
             )?;

@@ -12,7 +12,7 @@ use regex::Regex;
 static REGULAR_EXPRESSION: OnceLock<Regex> = OnceLock::new();
 
 impl Validator<ApplicationUserRegistrationToken_Value> {
-    pub fn is_valid<'a>(application_user_authorization_token_value: &'a ApplicationUserRegistrationToken_Value) -> Result<bool, Auditor<Error>> {
+    pub fn is_valid<'a>(application_user_authorization_token_value: &'a str) -> Result<bool, Auditor<Error>> {
         let regular_expression = match REGULAR_EXPRESSION.get() {
             Some(regular_expression_) => regular_expression_,
             None => {
@@ -32,6 +32,6 @@ impl Validator<ApplicationUserRegistrationToken_Value> {
             }
         };
 
-        return Ok(regular_expression.is_match(application_user_authorization_token_value.0.as_str()));
+        return Ok(regular_expression.is_match(application_user_authorization_token_value));
     }
 }

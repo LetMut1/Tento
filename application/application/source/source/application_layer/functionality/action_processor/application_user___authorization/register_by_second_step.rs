@@ -81,7 +81,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
             );
         }
 
-        if !Validator::<ApplicationUserRegistrationToken_Value>::is_valid(&incoming_.application_user_registration_token_value)? {
+        if !Validator::<ApplicationUserRegistrationToken_Value>::is_valid(incoming_.application_user_registration_token_value.as_str())? {
             return Ok(
                 Err(
                     Auditor::<InvalidArgument>::new(
@@ -130,7 +130,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
             return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_AlreadyApproved)));
         }
 
-        if application_user_registration_token.value.0 != incoming_.application_user_registration_token_value.0 {
+        if application_user_registration_token.value != incoming_.application_user_registration_token_value {
             Incrementor::<ApplicationUserRegistrationToken_WrongEnterTriesQuantity>::increment(&mut application_user_registration_token.wrong_enter_tries_quantity)?;
 
             if application_user_registration_token.wrong_enter_tries_quantity.0 < ApplicationUserRegistrationToken_WrongEnterTriesQuantity::LIMIT {

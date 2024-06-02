@@ -4,7 +4,7 @@ use crate::infrastructure_layer::functionality::service::generator::Generator as
 use crate::infrastructure_layer::functionality::service::generator::number_row::NumberRow;
 
 impl Generator<ApplicationUserRegistrationToken_Value> {
-    pub fn generate() -> ApplicationUserRegistrationToken_Value {
-        return ApplicationUserRegistrationToken_Value(Generator_::<NumberRow>::generate_6());
+    pub fn generate() -> String {
+        return Generator_::<NumberRow>::generate_6();
     }
 }

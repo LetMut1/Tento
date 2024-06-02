@@ -1,4 +1,3 @@
-use entity::application_user_registration_token::ApplicationUserRegistrationToken_Value;
 use serde::Deserialize;
 use serde::Serialize;
 use macro_rules::r#enum;
@@ -10,7 +9,7 @@ pub struct Incoming {
     pub application_user_nickname: String,
     pub application_user_password: String,
     pub application_user_email: String,
-    pub application_user_registration_token_value: ApplicationUserRegistrationToken_Value,
+    pub application_user_registration_token_value: String,
 }
 
 #[derive(Serialize, Deserialize)]

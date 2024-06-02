@@ -18,7 +18,9 @@ pub struct ApplicationUserRegistrationToken<'a> {
     pub application_user_device_id: Cow<'a, str>,
     _application_user_device_id: PhantomData<ApplicationUserDevice_Id>,
 
-    pub value: Value,
+    pub value: String,
+    _value: PhantomData<Value>,
+
     pub wrong_enter_tries_quantity: WrongEnterTriesQuantity,
     pub is_approved: IsApproved,
     pub expires_at: ExpiresAt,
@@ -29,7 +31,7 @@ impl<'a> ApplicationUserRegistrationToken<'a> {
     pub fn new(
         application_user_email: Cow<'a, str>,
         application_user_device_id: Cow<'a, str>,
-        value: Value,
+        value: String,
         wrong_enter_tries_quantity: WrongEnterTriesQuantity,
         is_approved: IsApproved,
         expires_at: ExpiresAt,
@@ -41,6 +43,7 @@ impl<'a> ApplicationUserRegistrationToken<'a> {
             application_user_device_id,
             _application_user_device_id: PhantomData,
             value,
+            _value: PhantomData,
             wrong_enter_tries_quantity,
             is_approved,
             expires_at,
@@ -50,8 +53,7 @@ impl<'a> ApplicationUserRegistrationToken<'a> {
 }
 
 #[derive(Serialize, Deserialize)]
-#[serde(transparent)]
-pub struct Value(pub String);
+pub struct Value;
 
 impl Value {
     pub const REGULAR_EXPRESSION: &'static str = r#"^[0-9]{6}$"#;
@@ -84,7 +86,7 @@ impl CanBeResentFrom {
 }
 
 pub struct ApplicationUserRegistrationToken1 {
-    pub value: Value,
+    pub value: String,
     pub wrong_enter_tries_quantity: WrongEnterTriesQuantity,
     pub is_approved: IsApproved,
     pub expires_at: ExpiresAt,
@@ -96,7 +98,7 @@ pub struct ApplicationUserRegistrationToken2 {
 }
 
 pub struct ApplicationUserRegistrationToken3 {
-    pub value: Value,
+    pub value: String,
     pub wrong_enter_tries_quantity: WrongEnterTriesQuantity,
     pub is_approved: IsApproved,
     pub expires_at: ExpiresAt,
@@ -111,7 +113,7 @@ pub struct ApplicationUserRegistrationToken5 {
 }
 
 pub struct ApplicationUserRegistrationToken6 {
-    pub value: Value,
+    pub value: String,
     pub is_approved: IsApproved,
     pub expires_at: ExpiresAt,
     pub can_be_resent_from: CanBeResentFrom,
