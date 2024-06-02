@@ -30,7 +30,8 @@ pub struct ApplicationUserRegistrationToken<'a> {
     pub expires_at: i64,
     _expires_at: PhantomData<ExpiresAt>,
 
-    pub can_be_resent_from: CanBeResentFrom,
+    pub can_be_resent_from: i64,
+    _can_be_resent_from: PhantomData<CanBeResentFrom>
 }
 
 impl<'a> ApplicationUserRegistrationToken<'a> {
@@ -41,7 +42,7 @@ impl<'a> ApplicationUserRegistrationToken<'a> {
         wrong_enter_tries_quantity: i16,
         is_approved: bool,
         expires_at: i64,
-        can_be_resent_from: CanBeResentFrom,
+        can_be_resent_from: i64,
     ) -> Self {
         return Self {
             application_user_email,
@@ -57,6 +58,7 @@ impl<'a> ApplicationUserRegistrationToken<'a> {
             expires_at,
             _expires_at: PhantomData,
             can_be_resent_from,
+            _can_be_resent_from: PhantomData,
         };
     }
 }
@@ -83,9 +85,8 @@ impl ExpiresAt {
     pub const QUANTITY_OF_MINUTES_FOR_EXPIRATION: i64 = 60 * 3;
 }
 
-#[derive(Clone, Copy, Serialize, Deserialize)]
-#[serde(transparent)]
-pub struct CanBeResentFrom(pub i64);
+#[derive(Serialize, Deserialize)]
+pub struct CanBeResentFrom;
 
 impl CanBeResentFrom {
     pub const QUANTITY_OF_MINUTES_BEFORE_RESENDING: i64 = 1;
@@ -96,11 +97,11 @@ pub struct ApplicationUserRegistrationToken1 {
     pub wrong_enter_tries_quantity: i16,
     pub is_approved: bool,
     pub expires_at: i64,
-    pub can_be_resent_from: CanBeResentFrom,
+    pub can_be_resent_from: i64,
 }
 
 pub struct ApplicationUserRegistrationToken2 {
-    pub can_be_resent_from: CanBeResentFrom,
+    pub can_be_resent_from: i64,
 }
 
 pub struct ApplicationUserRegistrationToken3 {
@@ -122,5 +123,5 @@ pub struct ApplicationUserRegistrationToken6 {
     pub value: String,
     pub is_approved: bool,
     pub expires_at: i64,
-    pub can_be_resent_from: CanBeResentFrom,
+    pub can_be_resent_from: i64,
 }

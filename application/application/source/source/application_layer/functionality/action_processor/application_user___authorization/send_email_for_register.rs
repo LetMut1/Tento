@@ -113,7 +113,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForRegister> {
             return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_AlreadyApproved)));
         }
 
-        if !ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token.can_be_resent_from.0) {
+        if !ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token.can_be_resent_from) {
             return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_TimeToResendHasNotCome)));
         }
 

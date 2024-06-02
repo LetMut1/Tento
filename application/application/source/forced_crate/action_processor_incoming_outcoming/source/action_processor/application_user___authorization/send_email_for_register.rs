@@ -1,4 +1,3 @@
-use entity::application_user_registration_token::ApplicationUserRegistrationToken_CanBeResentFrom;
 use serde::Deserialize;
 use serde::Serialize;
 use macro_rules::r#enum;
@@ -12,7 +11,7 @@ pub struct Incoming {
 
 #[derive(Serialize, Deserialize)]
 pub struct Outcoming {
-    pub application_user_registration_token_can_be_resent_from: ApplicationUserRegistrationToken_CanBeResentFrom,
+    pub application_user_registration_token_can_be_resent_from: i64,
 }
 
 r#enum!(

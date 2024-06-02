@@ -27,7 +27,7 @@ pub struct ApplicationUserAuthorizationToken<'a> {
     _expires_at: PhantomData<ExpiresAt>,
 
     pub can_be_resent_from: i64,
-    _can_be_resent_from: PhantomData<CanBeResentFrom>
+    _can_be_resent_from: PhantomData<CanBeResentFrom>,
 }
 
 impl<'a> ApplicationUserAuthorizationToken<'a> {

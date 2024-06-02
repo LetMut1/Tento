@@ -1417,7 +1417,7 @@ pub extern "C" fn application_user___authorization____register_by_first_step____
                     Data::Filled { data: data__ } => {
                         let outcoming = ApplicationUser__Authorization___RegisterByFirstStep___Outcoming {
                             verification_message_sent: data__.verification_message_sent,
-                            application_user_registration_token_can_be_resent_from: data__.application_user_registration_token_can_be_resent_from.0,
+                            application_user_registration_token_can_be_resent_from: data__.application_user_registration_token_can_be_resent_from,
                             application_user_registration_token_wrong_enter_tries_quantity: data__.application_user_registration_token_wrong_enter_tries_quantity,
                             application_user_registration_token_wrong_enter_tries_quantity_limit: data__.application_user_registration_token_wrong_enter_tries_quantity_limit,
                         };
@@ -2167,7 +2167,7 @@ pub extern "C" fn application_user___authorization____send_email_for_register___
                     }
                     Data::Filled { data: data__ } => {
                         let outcoming = ApplicationUser__Authorization___SendEmailForRegister___Outcoming {
-                            application_user_registration_token_can_be_resent_from: data__.application_user_registration_token_can_be_resent_from.0,
+                            application_user_registration_token_can_be_resent_from: data__.application_user_registration_token_can_be_resent_from,
                         };
 
                         C_Data::filled(outcoming)
@@ -3369,7 +3369,6 @@ mod test {
 
         mod server_response_data_deserialization {
             use auditor::Auditor;
-            use entity::application_user_registration_token::ApplicationUserRegistrationToken_CanBeResentFrom;
             use entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_CanBeResentFrom;
             use entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_WrongEnterTriesQuantity;
             use entity::channel_outer_link::ChannelOuterLink_Address;
@@ -3938,7 +3937,7 @@ mod test {
                 fn target_filled____application_user___authorization____register_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
                     let outcoming = ApplicationUser__Authorization___RegisterByFirstStep___Outcoming_ {
                         verification_message_sent: false,
-                        application_user_registration_token_can_be_resent_from: ApplicationUserRegistrationToken_CanBeResentFrom(0),
+                        application_user_registration_token_can_be_resent_from: 0,
                         application_user_registration_token_wrong_enter_tries_quantity: 0,
                         application_user_registration_token_wrong_enter_tries_quantity_limit: 0,
                     };
@@ -4377,7 +4376,7 @@ mod test {
                 #[test]
                 fn target_filled____application_user___authorization____send_email_for_register() -> Result<(), Box<dyn StdError + 'static>> {
                     let outcoming = ApplicationUser__Authorization___SendEmailForRegister___Outcoming_ {
-                        application_user_registration_token_can_be_resent_from: ApplicationUserRegistrationToken_CanBeResentFrom(0),
+                        application_user_registration_token_can_be_resent_from: 0,
                     };
 
                     let unified_report = UnifiedReport::<ApplicationUser__Authorization___SendEmailForRegister___Outcoming_, ApplicationUser__Authorization___SendEmailForRegister___Precedent_>::target_filled(outcoming);
