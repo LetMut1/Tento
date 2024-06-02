@@ -35,7 +35,9 @@ pub struct Channel<'a> {
     pub description: Option<String>,
     _description: PhantomData<Description>,
 
-    pub access_modifier: AccessModifier,
+    pub access_modifier: i16,
+    _access_modifier: PhantomData<AccessModifier>,
+
     pub visability_modifier: VisabilityModifier,
     pub orientation: Orientation,
     pub cover_image_path: Option<CoverImagePath>,
@@ -53,7 +55,7 @@ impl<'a> Channel<'a> {
         name: Cow<'a, str>,
         linked_name: String,
         description: Option<String>,
-        access_modifier: AccessModifier,
+        access_modifier: i16,
         visability_modifier: VisabilityModifier,
         orientation: Orientation,
         cover_image_path: Option<CoverImagePath>,
@@ -75,6 +77,7 @@ impl<'a> Channel<'a> {
             description,
             _description: PhantomData,
             access_modifier,
+            _access_modifier: PhantomData,
             visability_modifier,
             orientation,
             cover_image_path,
@@ -107,9 +110,8 @@ impl Description {
     pub const MAXIMUM_LENGTH: usize = 500;
 }
 
-#[derive(Clone, Copy, Serialize, Deserialize)]
-#[serde(transparent)]
-pub struct AccessModifier(pub i16);
+#[derive(Serialize, Deserialize)]
+pub struct AccessModifier;
 
 impl AccessModifier {
     pub const OPEN: i16 = 0;

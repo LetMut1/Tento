@@ -2568,7 +2568,7 @@ pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____deseria
                                     channel_id: common_1.channel.channel_id,
                                     channel_name: Allocator::<C_String>::allocate(common_1.channel.channel_name),
                                     channel_linked_name: Allocator::<C_String>::allocate(common_1.channel.channel_linked_name),
-                                    channel_access_modifier: common_1.channel.channel_access_modifier.0,
+                                    channel_access_modifier: common_1.channel.channel_access_modifier,
                                     channel_visability_modifier: common_1.channel.channel_visability_modifier.0,
                                     channel_cover_image_path,
                                     channel_background_image_path,
@@ -2741,7 +2741,7 @@ pub extern "C" fn channel___base____get_many_by_subscription____deserialize(
                                     channel_id: common_1.channel.channel_id,
                                     channel_name: Allocator::<C_String>::allocate(common_1.channel.channel_name),
                                     channel_linked_name: Allocator::<C_String>::allocate(common_1.channel.channel_linked_name),
-                                    channel_access_modifier: common_1.channel.channel_access_modifier.0,
+                                    channel_access_modifier: common_1.channel.channel_access_modifier,
                                     channel_visability_modifier: common_1.channel.channel_visability_modifier.0,
                                     channel_cover_image_path,
                                     channel_background_image_path,
@@ -2916,7 +2916,7 @@ pub extern "C" fn channel___base____get_many_public_by_name____deserialize(
                                     channel_id: common_1.channel.channel_id,
                                     channel_name: Allocator::<C_String>::allocate(common_1.channel.channel_name),
                                     channel_linked_name: Allocator::<C_String>::allocate(common_1.channel.channel_linked_name),
-                                    channel_access_modifier: common_1.channel.channel_access_modifier.0,
+                                    channel_access_modifier: common_1.channel.channel_access_modifier,
                                     channel_visability_modifier: common_1.channel.channel_visability_modifier.0,
                                     channel_cover_image_path,
                                     channel_background_image_path,
@@ -3087,7 +3087,7 @@ pub extern "C" fn channel___base____get_one_by_id____deserialize(
                             channel_name: Allocator::<C_String>::allocate(data__.channel.channel_name),
                             channel_linked_name: Allocator::<C_String>::allocate(data__.channel.channel_linked_name),
                             channel_description,
-                            channel_access_modifier: data__.channel.channel_access_modifier.0,
+                            channel_access_modifier: data__.channel.channel_access_modifier,
                             channel_visability_modifier: data__.channel.channel_visability_modifier.0,
                             channel_orientation: Allocator::<C_Vector<_>>::allocate(data__.channel.channel_orientation.0),
                             channel_cover_image_path,
@@ -3356,7 +3356,6 @@ mod test {
             use auditor::Auditor;
             use entity::channel_outer_link::ChannelOuterLink_Address;
             use entity::channel_outer_link::ChannelOuterLink_Alias;
-            use entity::channel::Channel_AccessModifier;
             use entity::channel::Channel_BackgroundImagePath;
             use entity::channel::Channel_CoverImagePath;
             use entity::channel::Channel_MarksQuantity;
@@ -4619,7 +4618,7 @@ mod test {
                                 channel_id: 0,
                                 channel_name: STRING_LITERAL.to_string(),
                                 channel_linked_name: STRING_LITERAL.to_string(),
-                                channel_access_modifier: Channel_AccessModifier(0),
+                                channel_access_modifier: 0,
                                 channel_visability_modifier: Channel_VisabilityModifier(0),
                                 channel_background_image_path: Some(Channel_BackgroundImagePath(STRING_LITERAL.to_string())),
                                 channel_cover_image_path: Some(Channel_CoverImagePath(STRING_LITERAL.to_string())),
@@ -4719,7 +4718,7 @@ mod test {
                                 channel_id: 0,
                                 channel_name: STRING_LITERAL.to_string(),
                                 channel_linked_name: STRING_LITERAL.to_string(),
-                                channel_access_modifier: Channel_AccessModifier(0),
+                                channel_access_modifier: 0,
                                 channel_visability_modifier: Channel_VisabilityModifier(0),
                                 channel_background_image_path: Some(Channel_BackgroundImagePath(STRING_LITERAL.to_string())),
                                 channel_cover_image_path: Some(Channel_CoverImagePath(STRING_LITERAL.to_string())),
@@ -4819,7 +4818,7 @@ mod test {
                                 channel_id: 0,
                                 channel_name: STRING_LITERAL.to_string(),
                                 channel_linked_name: STRING_LITERAL.to_string(),
-                                channel_access_modifier: Channel_AccessModifier(0),
+                                channel_access_modifier: 0,
                                 channel_visability_modifier: Channel_VisabilityModifier(0),
                                 channel_background_image_path: Some(Channel_BackgroundImagePath(STRING_LITERAL.to_string())),
                                 channel_cover_image_path: Some(Channel_CoverImagePath(STRING_LITERAL.to_string())),
@@ -4937,7 +4936,7 @@ mod test {
                         channel_name: STRING_LITERAL.to_string(),
                         channel_linked_name: STRING_LITERAL.to_string(),
                         channel_description: Some(STRING_LITERAL.to_string()),
-                        channel_access_modifier: Channel_AccessModifier(0),
+                        channel_access_modifier: 0,
                         channel_visability_modifier: Channel_VisabilityModifier(0),
                         channel_orientation: Channel_Orientation(vec![0, 0, 0]),
                         channel_background_image_path: Some(Channel_BackgroundImagePath(STRING_LITERAL.to_string())),
