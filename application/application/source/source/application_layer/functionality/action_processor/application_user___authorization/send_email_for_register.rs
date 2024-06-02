@@ -130,7 +130,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForRegister> {
 
         EmailSender::<ApplicationUserRegistrationToken<'_>>::send(
             environment_configuration,
-            &application_user_registration_token.value,
+            application_user_registration_token.value.as_str(),
             incoming_.application_user_email.as_str(),
             incoming_.application_user_device_id.as_str(),
         )?;
