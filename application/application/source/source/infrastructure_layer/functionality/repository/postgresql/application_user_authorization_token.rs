@@ -12,7 +12,6 @@ use crate::domain_layer::data::entity::application_user_authorization_token::App
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken4;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken5;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_CanBeResentFrom;
-use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_ExpiresAt;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
@@ -66,7 +65,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                 Type::INT2,
             )
             .add_parameter(
-                &insert_3.application_user_authorization_token_expires_at.0,
+                &insert_3.application_user_authorization_token_expires_at,
                 Type::INT8,
             )
             .add_parameter(
@@ -175,7 +174,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken1> {
                 Type::INT2,
             )
             .add_parameter(
-                &update_3.application_user_authorization_token_expires_at.0,
+                &update_3.application_user_authorization_token_expires_at,
                 Type::INT8,
             )
             .add_parameter(
@@ -260,7 +259,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken1> {
                 ApplicationUserAuthorizationToken1 {
                     value: row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
                     wrong_enter_tries_quantity: row_registry[0].try_get::<'_, usize, i16>(1).convert(Backtrace::new(line!(), file!()))?,
-                    expires_at: ApplicationUserAuthorizationToken_ExpiresAt(row_registry[0].try_get::<'_, usize, i64>(2).convert(Backtrace::new(line!(), file!()))?),
+                    expires_at: row_registry[0].try_get::<'_, usize, i64>(2).convert(Backtrace::new(line!(), file!()))?,
                     can_be_resent_from: ApplicationUserAuthorizationToken_CanBeResentFrom(row_registry[0].try_get::<'_, usize, i64>(3).convert(Backtrace::new(line!(), file!()))?),
                 },
             ),
@@ -299,7 +298,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken2> {
                 Type::INT2,
             )
             .add_parameter(
-                &update_4.application_user_authorization_token_expires_at.0,
+                &update_4.application_user_authorization_token_expires_at,
                 Type::INT8,
             )
             .add_parameter(
@@ -379,7 +378,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken2> {
                 ApplicationUserAuthorizationToken2 {
                     value: row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
                     wrong_enter_tries_quantity: row_registry[0].try_get::<'_, usize, i16>(1).convert(Backtrace::new(line!(), file!()))?,
-                    expires_at: ApplicationUserAuthorizationToken_ExpiresAt(row_registry[0].try_get::<'_, usize, i64>(2).convert(Backtrace::new(line!(), file!()))?),
+                    expires_at: row_registry[0].try_get::<'_, usize, i64>(2).convert(Backtrace::new(line!(), file!()))?,
                 },
             ),
         );
@@ -537,7 +536,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken5> {
             Some(
                 ApplicationUserAuthorizationToken5 {
                     value: row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
-                    expires_at: ApplicationUserAuthorizationToken_ExpiresAt(row_registry[0].try_get::<'_, usize, i64>(1).convert(Backtrace::new(line!(), file!()))?),
+                    expires_at: row_registry[0].try_get::<'_, usize, i64>(1).convert(Backtrace::new(line!(), file!()))?,
                     can_be_resent_from: ApplicationUserAuthorizationToken_CanBeResentFrom(row_registry[0].try_get::<'_, usize, i64>(2).convert(Backtrace::new(line!(), file!()))?),
                 },
             ),

@@ -117,7 +117,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
             }
         };
 
-        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token.expires_at.0) {
+        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token.expires_at) {
             PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::delete(
                 database_2_postgresql_connection,
                 &by_4,

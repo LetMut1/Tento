@@ -23,7 +23,9 @@ pub struct ApplicationUserAuthorizationToken<'a> {
     pub wrong_enter_tries_quantity: i16,
     _wrong_enter_tries_quantity: PhantomData<WrongEnterTriesQuantity>,
 
-    pub expires_at: ExpiresAt,
+    pub expires_at: i64,
+    _expires_at: PhantomData<ExpiresAt>,
+
     pub can_be_resent_from: CanBeResentFrom,
 }
 
@@ -33,7 +35,7 @@ impl<'a> ApplicationUserAuthorizationToken<'a> {
         application_user_device_id: Cow<'a, str>,
         value:String,
         wrong_enter_tries_quantity: i16,
-        expires_at: ExpiresAt,
+        expires_at: i64,
         can_be_resent_from: CanBeResentFrom,
     ) -> Self {
         return Self {
@@ -46,6 +48,7 @@ impl<'a> ApplicationUserAuthorizationToken<'a> {
             wrong_enter_tries_quantity,
             _wrong_enter_tries_quantity: PhantomData,
             expires_at,
+            _expires_at: PhantomData,
             can_be_resent_from,
         };
     }
@@ -54,14 +57,14 @@ impl<'a> ApplicationUserAuthorizationToken<'a> {
 pub struct ApplicationUserAuthorizationToken1 {
     pub value: String,
     pub wrong_enter_tries_quantity: i16,
-    pub expires_at: ExpiresAt,
+    pub expires_at: i64,
     pub can_be_resent_from: CanBeResentFrom,
 }
 
 pub struct ApplicationUserAuthorizationToken2 {
     pub value: String,
     pub wrong_enter_tries_quantity: i16,
-    pub expires_at: ExpiresAt,
+    pub expires_at: i64,
 }
 
 pub struct ApplicationUserAuthorizationToken3 {
@@ -74,7 +77,7 @@ pub struct ApplicationUserAuthorizationToken4 {
 
 pub struct ApplicationUserAuthorizationToken5 {
     pub value: String,
-    pub expires_at: ExpiresAt,
+    pub expires_at: i64,
     pub can_be_resent_from: CanBeResentFrom,
 }
 
@@ -92,8 +95,7 @@ impl WrongEnterTriesQuantity {
     pub const LIMIT: i16 = 5;
 }
 
-#[derive(Clone, Copy)]
-pub struct ExpiresAt(pub i64);
+pub struct ExpiresAt;
 
 impl ExpiresAt {
     pub const QUANTITY_OF_MINUTES_FOR_EXPIRATION: i64 = 10;

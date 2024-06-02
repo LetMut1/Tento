@@ -6,11 +6,11 @@ use crate::infrastructure_layer::functionality::service::resolver::Resolver;
 use crate::infrastructure_layer::data::error::Error;
 
 impl Generator<ApplicationUserAuthorizationToken_ExpiresAt> {
-    pub fn generate() -> Result<ApplicationUserAuthorizationToken_ExpiresAt, Auditor<Error>> {
+    pub fn generate() -> Result<i64, Auditor<Error>> {
         return Ok(
-            ApplicationUserAuthorizationToken_ExpiresAt(
-                Resolver::<DateTime>::unixtime_add_minutes_interval_from_now(ApplicationUserAuthorizationToken_ExpiresAt::QUANTITY_OF_MINUTES_FOR_EXPIRATION)?
-            )
+            Resolver::<DateTime>::unixtime_add_minutes_interval_from_now(
+                ApplicationUserAuthorizationToken_ExpiresAt::QUANTITY_OF_MINUTES_FOR_EXPIRATION
+            )?
         );
     }
 }

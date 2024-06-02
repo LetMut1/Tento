@@ -219,7 +219,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                     )
                 };
 
-                let need_to_update_2 = if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token.expires_at.0) {
+                let need_to_update_2 = if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token.expires_at) {
                     application_user_authorization_token.value = Generator::<ApplicationUserAuthorizationToken_Value>::generate();
 
                     application_user_authorization_token.wrong_enter_tries_quantity = 0;
