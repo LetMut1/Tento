@@ -6,11 +6,11 @@ use crate::infrastructure_layer::functionality::service::resolver::Resolver;
 use crate::infrastructure_layer::data::error::Error;
 
 impl Generator<ApplicationUserResetPasswordToken_CanBeResentFrom> {
-    pub fn generate() -> Result<ApplicationUserResetPasswordToken_CanBeResentFrom, Auditor<Error>> {
+    pub fn generate() -> Result<i64, Auditor<Error>> {
         return Ok(
-            ApplicationUserResetPasswordToken_CanBeResentFrom(
-                Resolver::<DateTime>::unixtime_add_minutes_interval_from_now(ApplicationUserResetPasswordToken_CanBeResentFrom::QUANTITY_OF_MINUTES_BEFORE_RESENDING)?
-            )
+            Resolver::<DateTime>::unixtime_add_minutes_interval_from_now(
+                ApplicationUserResetPasswordToken_CanBeResentFrom::QUANTITY_OF_MINUTES_BEFORE_RESENDING
+            )?
         );
     }
 }

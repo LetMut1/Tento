@@ -131,7 +131,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForResetPassword>
             return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_AlreadyApproved)));
         }
 
-        if !ExpirationTimeChecker::<UnixTime>::is_expired(application_user_reset_password_token.can_be_resent_from.0) {
+        if !ExpirationTimeChecker::<UnixTime>::is_expired(application_user_reset_password_token.can_be_resent_from) {
             return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_TimeToResendHasNotCome)));
         }
 

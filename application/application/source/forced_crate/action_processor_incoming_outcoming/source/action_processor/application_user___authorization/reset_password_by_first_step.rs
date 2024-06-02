@@ -1,4 +1,3 @@
-use entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_CanBeResentFrom;
 use serde::Deserialize;
 use serde::Serialize;
 use macro_rules::r#enum;
@@ -14,7 +13,7 @@ pub struct Incoming {
 pub struct Outcoming {
     pub application_user_id: i64,
     pub verification_message_sent: bool,
-    pub application_user_reset_password_token_can_be_resent_from: ApplicationUserResetPasswordToken_CanBeResentFrom,
+    pub application_user_reset_password_token_can_be_resent_from: i64,
     pub application_user_reset_password_token_wrong_enter_tries_quantity: i16,
     pub application_user_reset_password_token_wrong_enter_tries_quantity_limit: i16,
 }

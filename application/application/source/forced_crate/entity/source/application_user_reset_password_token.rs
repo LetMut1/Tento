@@ -30,7 +30,8 @@ pub struct ApplicationUserResetPasswordToken<'a> {
     pub expires_at: i64,
     _expires_at: PhantomData<ExpiresAt>,
 
-    pub can_be_resent_from: CanBeResentFrom,
+    pub can_be_resent_from: i64,
+    _can_be_resent_from: PhantomData<CanBeResentFrom>,
 }
 
 impl<'a> ApplicationUserResetPasswordToken<'a> {
@@ -41,7 +42,7 @@ impl<'a> ApplicationUserResetPasswordToken<'a> {
         wrong_enter_tries_quantity: i16,
         is_approved: bool,
         expires_at: i64,
-        can_be_resent_from: CanBeResentFrom,
+        can_be_resent_from: i64,
     ) -> Self {
         return Self {
             application_user_id,
@@ -57,6 +58,7 @@ impl<'a> ApplicationUserResetPasswordToken<'a> {
             expires_at,
             _expires_at: PhantomData,
             can_be_resent_from,
+            _can_be_resent_from: PhantomData,
         };
     }
 }
@@ -66,11 +68,11 @@ pub struct ApplicationUserResetPasswordToken1 {
     pub wrong_enter_tries_quantity: i16,
     pub is_approved: bool,
     pub expires_at: i64,
-    pub can_be_resent_from: CanBeResentFrom,
+    pub can_be_resent_from: i64,
 }
 
 pub struct ApplicationUserResetPasswordToken2 {
-    pub can_be_resent_from: CanBeResentFrom,
+    pub can_be_resent_from: i64,
 }
 
 pub struct ApplicationUserResetPasswordToken3 {
@@ -92,7 +94,7 @@ pub struct ApplicationUserResetPasswordToken6 {
     pub value: String,
     pub is_approved: bool,
     pub expires_at: i64,
-    pub can_be_resent_from: CanBeResentFrom,
+    pub can_be_resent_from: i64,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -117,9 +119,8 @@ impl ExpiresAt {
     pub const QUANTITY_OF_MINUTES_FOR_EXPIRATION: i64 = 10;
 }
 
-#[derive(Clone, Copy, Serialize, Deserialize)]
-#[serde(transparent)]
-pub struct CanBeResentFrom(pub i64);
+#[derive(Serialize, Deserialize)]
+pub struct CanBeResentFrom;
 
 impl CanBeResentFrom {
     pub const QUANTITY_OF_MINUTES_BEFORE_RESENDING: i64 = 1;

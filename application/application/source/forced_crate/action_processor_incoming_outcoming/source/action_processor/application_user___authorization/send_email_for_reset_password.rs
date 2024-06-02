@@ -1,4 +1,3 @@
-use entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_CanBeResentFrom;
 use serde::Deserialize;
 use macro_rules::r#enum;
 use common_precedent::CommonPrecedent;
@@ -12,7 +11,7 @@ pub struct Incoming {
 
 #[derive(Serialize, Deserialize)]
 pub struct Outcoming {
-    pub application_user_reset_password_token_can_be_resent_from: ApplicationUserResetPasswordToken_CanBeResentFrom,
+    pub application_user_reset_password_token_can_be_resent_from: i64,
 }
 
 r#enum!(
