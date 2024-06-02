@@ -21,7 +21,9 @@ pub struct ApplicationUserResetPasswordToken<'a> {
     pub value: String,
     _value: PhantomData<Value>,
 
-    pub wrong_enter_tries_quantity: WrongEnterTriesQuantity,
+    pub wrong_enter_tries_quantity: i16,
+    _wrong_enter_tries_quantity: PhantomData<WrongEnterTriesQuantity>,
+
     pub is_approved: IsApproved,
     pub expires_at: ExpiresAt,
     pub can_be_resent_from: CanBeResentFrom,
@@ -32,7 +34,7 @@ impl<'a> ApplicationUserResetPasswordToken<'a> {
         application_user_id: i64,
         application_user_device_id: Cow<'a, str>,
         value: String,
-        wrong_enter_tries_quantity: WrongEnterTriesQuantity,
+        wrong_enter_tries_quantity: i16,
         is_approved: IsApproved,
         expires_at: ExpiresAt,
         can_be_resent_from: CanBeResentFrom,
@@ -45,6 +47,7 @@ impl<'a> ApplicationUserResetPasswordToken<'a> {
             value,
             _value: PhantomData,
             wrong_enter_tries_quantity,
+            _wrong_enter_tries_quantity: PhantomData,
             is_approved,
             expires_at,
             can_be_resent_from,
@@ -54,7 +57,7 @@ impl<'a> ApplicationUserResetPasswordToken<'a> {
 
 pub struct ApplicationUserResetPasswordToken1 {
     pub value: String,
-    pub wrong_enter_tries_quantity: WrongEnterTriesQuantity,
+    pub wrong_enter_tries_quantity: i16,
     pub is_approved: IsApproved,
     pub expires_at: ExpiresAt,
     pub can_be_resent_from: CanBeResentFrom,
@@ -66,13 +69,13 @@ pub struct ApplicationUserResetPasswordToken2 {
 
 pub struct ApplicationUserResetPasswordToken3 {
     pub value: String,
-    pub wrong_enter_tries_quantity: WrongEnterTriesQuantity,
+    pub wrong_enter_tries_quantity: i16,
     pub is_approved: IsApproved,
     pub expires_at: ExpiresAt,
 }
 
 pub struct ApplicationUserResetPasswordToken4 {
-    pub wrong_enter_tries_quantity: WrongEnterTriesQuantity,
+    pub wrong_enter_tries_quantity: i16,
 }
 
 pub struct ApplicationUserResetPasswordToken5 {
@@ -93,9 +96,8 @@ impl Value {
     pub const REGULAR_EXPRESSION: &'static str = r#"^[0-9]{6}$"#;
 }
 
-#[derive(Clone, Copy, Serialize, Deserialize)]
-#[serde(transparent)]
-pub struct WrongEnterTriesQuantity(pub i16);
+#[derive(Serialize, Deserialize)]
+pub struct WrongEnterTriesQuantity;
 
 impl WrongEnterTriesQuantity {
     pub const LIMIT: i16 = 3;

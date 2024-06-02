@@ -8,7 +8,6 @@ use crate::domain_layer::data::entity::application_user_reset_password_token::Ap
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_IsApproved;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_Value;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_WrongEnterTriesQuantity;
-use crate::domain_layer::functionality::service::incrementor::Incrementor;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
@@ -131,9 +130,11 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordBySecondStep>
         }
 
         if application_user_reset_password_token.value != incoming_.application_user_reset_password_token_value {
-            Incrementor::<ApplicationUserResetPasswordToken_WrongEnterTriesQuantity>::increment(&mut application_user_reset_password_token.wrong_enter_tries_quantity)?;
+            application_user_reset_password_token.wrong_enter_tries_quantity = application_user_reset_password_token.wrong_enter_tries_quantity
+                .checked_add(1)
+                .convert_out_of_range(Backtrace::new(line!(), file!()))?;
 
-            if application_user_reset_password_token.wrong_enter_tries_quantity.0 < ApplicationUserResetPasswordToken_WrongEnterTriesQuantity::LIMIT {
+            if application_user_reset_password_token.wrong_enter_tries_quantity < ApplicationUserResetPasswordToken_WrongEnterTriesQuantity::LIMIT {
                 PostgresqlRepository::<ApplicationUserResetPasswordToken4>::update(
                     database_2_postgresql_connection,
                     &Update15 {

@@ -1809,7 +1809,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_first_st
                             application_user_id: data__.application_user_id,
                             verification_message_sent: data__.verification_message_sent,
                             application_user_reset_password_token_can_be_resent_from: data__.application_user_reset_password_token_can_be_resent_from.0,
-                            application_user_reset_password_token_wrong_enter_tries_quantity: data__.application_user_reset_password_token_wrong_enter_tries_quantity.0,
+                            application_user_reset_password_token_wrong_enter_tries_quantity: data__.application_user_reset_password_token_wrong_enter_tries_quantity,
                             application_user_reset_password_token_wrong_enter_tries_quantity_limit: data__.application_user_reset_password_token_wrong_enter_tries_quantity_limit,
                         };
 
@@ -1947,7 +1947,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_second_s
                         ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent {
                             application_user_reset_password_token__wrong_value: ApplicationUserResetPasswordToken_WrongValue {
                                 is_exist: true,
-                                application_user_reset_password_token_wrong_enter_tries_quantity: application_user_reset_password_token_wrong_enter_tries_quantity.0,
+                                application_user_reset_password_token_wrong_enter_tries_quantity: application_user_reset_password_token_wrong_enter_tries_quantity,
                             },
                             ..Default::default()
                         }
@@ -3369,7 +3369,6 @@ mod test {
         mod server_response_data_deserialization {
             use auditor::Auditor;
             use entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_CanBeResentFrom;
-            use entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_WrongEnterTriesQuantity;
             use entity::channel_outer_link::ChannelOuterLink_Address;
             use entity::channel_outer_link::ChannelOuterLink_Alias;
             use entity::channel::Channel_AccessModifier;
@@ -4169,7 +4168,7 @@ mod test {
                         application_user_id: 0,
                         verification_message_sent: false,
                         application_user_reset_password_token_can_be_resent_from: ApplicationUserResetPasswordToken_CanBeResentFrom(0),
-                        application_user_reset_password_token_wrong_enter_tries_quantity: ApplicationUserResetPasswordToken_WrongEnterTriesQuantity(0),
+                        application_user_reset_password_token_wrong_enter_tries_quantity: 0,
                         application_user_reset_password_token_wrong_enter_tries_quantity_limit: 0,
                     };
 
@@ -4273,7 +4272,7 @@ mod test {
 
                     precedent_registry.push(
                         ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_::ApplicationUserResetPasswordToken_WrongValue {
-                            application_user_reset_password_token_wrong_enter_tries_quantity: ApplicationUserResetPasswordToken_WrongEnterTriesQuantity(0),
+                            application_user_reset_password_token_wrong_enter_tries_quantity: 0,
                         }
                     );
 

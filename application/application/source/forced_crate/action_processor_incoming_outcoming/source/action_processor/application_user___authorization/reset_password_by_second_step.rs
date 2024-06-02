@@ -1,5 +1,4 @@
 use serde::Deserialize;
-use entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_WrongEnterTriesQuantity;
 use serde::Serialize;
 use macro_rules::r#enum;
 use common_precedent::CommonPrecedent;
@@ -17,7 +16,7 @@ r#enum!(
         CommonPrecedent::ApplicationUserResetPasswordToken_AlreadyExpired,
         CommonPrecedent::ApplicationUserResetPasswordToken_AlreadyApproved,
         CommonPrecedent::ApplicationUserResetPasswordToken_WrongValue {
-            application_user_reset_password_token_wrong_enter_tries_quantity: ApplicationUserResetPasswordToken_WrongEnterTriesQuantity,
+            application_user_reset_password_token_wrong_enter_tries_quantity: i16,
         },
     }
 );

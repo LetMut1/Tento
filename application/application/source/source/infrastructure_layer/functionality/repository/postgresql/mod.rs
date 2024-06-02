@@ -87,7 +87,6 @@ pub mod update {
     use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_CanBeResentFrom;
     use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_ExpiresAt;
     use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_IsApproved;
-    use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_WrongEnterTriesQuantity;
 
     pub struct Update1<'a> {
         pub application_user_password_hash: &'a str,
@@ -150,7 +149,7 @@ pub mod update {
 
     pub struct Update12<'a> {
         pub application_user_reset_password_token_value: &'a str,
-        pub application_user_reset_password_token_wrong_enter_tries_quantity: ApplicationUserResetPasswordToken_WrongEnterTriesQuantity,
+        pub application_user_reset_password_token_wrong_enter_tries_quantity: i16,
         pub application_user_reset_password_token_is_approved: ApplicationUserResetPasswordToken_IsApproved,
         pub application_user_reset_password_token_expires_at: ApplicationUserResetPasswordToken_ExpiresAt,
         pub application_user_reset_password_token_can_be_resent_from: ApplicationUserResetPasswordToken_CanBeResentFrom,
@@ -162,13 +161,13 @@ pub mod update {
 
     pub struct Update14<'a> {
         pub application_user_reset_password_token_value: &'a str,
-        pub application_user_reset_password_token_wrong_enter_tries_quantity: ApplicationUserResetPasswordToken_WrongEnterTriesQuantity,
+        pub application_user_reset_password_token_wrong_enter_tries_quantity: i16,
         pub application_user_reset_password_token_is_approved: ApplicationUserResetPasswordToken_IsApproved,
         pub application_user_reset_password_token_expires_at: ApplicationUserResetPasswordToken_ExpiresAt,
     }
 
     pub struct Update15 {
-        pub application_user_reset_password_token_wrong_enter_tries_quantity: ApplicationUserResetPasswordToken_WrongEnterTriesQuantity,
+        pub application_user_reset_password_token_wrong_enter_tries_quantity: i16,
     }
 
     pub struct Update16 {
@@ -180,7 +179,6 @@ pub mod insert {
     use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_CanBeResentFrom;
     use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_ExpiresAt;
     use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_IsApproved;
-    use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_WrongEnterTriesQuantity;
     use crate::domain_layer::data::entity::channel::Channel_AccessModifier;
     use crate::domain_layer::data::entity::channel::Channel_BackgroundImagePath;
     use crate::domain_layer::data::entity::channel::Channel_CoverImagePath;
@@ -239,7 +237,7 @@ pub mod insert {
         pub application_user_id: i64,
         pub application_user_device_id: &'a str,
         pub application_user_reset_password_token_value: String,
-        pub application_user_reset_password_token_wrong_enter_tries_quantity: ApplicationUserResetPasswordToken_WrongEnterTriesQuantity,
+        pub application_user_reset_password_token_wrong_enter_tries_quantity: i16,
         pub application_user_reset_password_token_is_approved: ApplicationUserResetPasswordToken_IsApproved,
         pub application_user_reset_password_token_expires_at: ApplicationUserResetPasswordToken_ExpiresAt,
         pub application_user_reset_password_token_can_be_resent_from: ApplicationUserResetPasswordToken_CanBeResentFrom,
