@@ -37,7 +37,7 @@ impl PostgresqlRepository<ChannelSubscription> {
                 Type::INT8,
             )
             .add_parameter(
-                &insert_10.channel_id.0,
+                &insert_10.channel_id,
                 Type::INT8,
             );
 
@@ -84,7 +84,7 @@ impl PostgresqlRepository<ChannelSubscription> {
                 Type::INT8,
             )
             .add_parameter(
-                &by_10.channel_id.0,
+                &by_10.channel_id,
                 Type::INT8,
             );
 

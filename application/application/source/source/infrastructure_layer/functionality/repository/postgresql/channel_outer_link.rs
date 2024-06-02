@@ -42,7 +42,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &insert_9.channel_outer_link_from.0,
+                &insert_9.channel_outer_link_from,
                 Type::INT8,
             )
             .add_parameter(
@@ -70,12 +70,12 @@ impl PostgresqlRepository<ChannelOuterLink> {
             .await
 .convert(Backtrace::new(line!(), file!()))?;
 
-        let channel_outer_link = ChannelOuterLink {
-            from: insert_9.channel_outer_link_from,
-            alias: insert_9.channel_outer_link_alias,
-            address: insert_9.channel_outer_link_address,
-            created_at: ChannelOuterLink_CreatedAt(row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?),
-        };
+        let channel_outer_link = ChannelOuterLink::new(
+            insert_9.channel_outer_link_from,
+            insert_9.channel_outer_link_alias,
+            insert_9.channel_outer_link_address,
+            ChannelOuterLink_CreatedAt(row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?),
+        );
 
         return Ok(channel_outer_link);
     }
@@ -97,7 +97,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &by_9.channel_outer_link_from.0,
+                &by_9.channel_outer_link_from,
                 Type::INT8,
             )
             .add_parameter(

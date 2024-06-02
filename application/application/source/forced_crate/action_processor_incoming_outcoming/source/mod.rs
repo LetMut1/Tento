@@ -89,7 +89,6 @@ use entity::channel::Channel_AccessModifier;
 use entity::channel::Channel_BackgroundImagePath;
 use entity::channel::Channel_CoverImagePath;
 use entity::channel::Channel_Description;
-use entity::channel::Channel_Id;
 use entity::channel::Channel_LinkedName;
 use entity::channel::Channel_MarksQuantity;
 use entity::channel::Channel_Name;
@@ -108,7 +107,7 @@ pub struct Common1 {
 
 #[derive(Serialize, Deserialize)]
 pub struct Channel1 {
-    pub channel_id: Channel_Id,
+    pub channel_id: i64,
     pub channel_name: Channel_Name,
     pub channel_linked_name: Channel_LinkedName,
     pub channel_access_modifier: Channel_AccessModifier,
@@ -135,7 +134,7 @@ pub struct Channel2 {
 
 #[derive(Serialize, Deserialize)]
 pub struct ChannelInnerLink1 {
-    pub channel_inner_link_to: Channel_Id,
+    pub channel_inner_link_to: i64,
 }
 
 #[derive(Serialize, Deserialize)]

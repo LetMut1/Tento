@@ -1,7 +1,6 @@
 use super::by::By8;
 use super::insert::Insert8;
 use super::PostgresqlRepository;
-use crate::domain_layer::data::entity::channel::Channel_Id;
 use crate::domain_layer::data::entity::channel_inner_link::ChannelInnerLink;
 use crate::domain_layer::data::entity::channel_inner_link::ChannelInnerLink_CreatedAt;
 use crate::infrastructure_layer::data::auditor::Backtrace;
@@ -35,11 +34,11 @@ impl PostgresqlRepository<ChannelInnerLink> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &insert_8.channel_inner_link_from.0,
+                &insert_8.channel_inner_link_from,
                 Type::INT8,
             )
             .add_parameter(
-                &insert_8.channel_inner_link_to.0,
+                &insert_8.channel_inner_link_to,
                 Type::INT8,
             );
 
@@ -60,11 +59,11 @@ impl PostgresqlRepository<ChannelInnerLink> {
 .convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(
-            ChannelInnerLink {
-                from: insert_8.channel_inner_link_from,
-                to: insert_8.channel_inner_link_to,
-                created_at: ChannelInnerLink_CreatedAt(row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?),
-            },
+            ChannelInnerLink::new(
+                insert_8.channel_inner_link_from,
+                insert_8.channel_inner_link_to,
+                ChannelInnerLink_CreatedAt(row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?),
+            ),
         );
     }
 
@@ -84,7 +83,7 @@ impl PostgresqlRepository<ChannelInnerLink> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &by_8.channel_inner_link_from.0,
+                &by_8.channel_inner_link_from,
                 Type::INT8,
             )
             .add_parameter(
@@ -116,7 +115,7 @@ impl PostgresqlRepository<ChannelInnerLink> {
 
         '_a: for row in row_registry.iter() {
             let channel_inner_link = ChannelInnerLink1 {
-                channel_inner_link_to: Channel_Id(row.try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?),
+                channel_inner_link_to: row.try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
             };
 
             channel_inner_link_registry.push(channel_inner_link);

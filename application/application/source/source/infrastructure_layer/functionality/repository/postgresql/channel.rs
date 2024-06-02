@@ -8,7 +8,6 @@ use crate::domain_layer::data::entity::channel::Channel_BackgroundImagePath;
 use crate::domain_layer::data::entity::channel::Channel_CoverImagePath;
 use crate::domain_layer::data::entity::channel::Channel_CreatedAt;
 use crate::domain_layer::data::entity::channel::Channel_Description;
-use crate::domain_layer::data::entity::channel::Channel_Id;
 use crate::domain_layer::data::entity::channel::Channel_LinkedName;
 use crate::domain_layer::data::entity::channel::Channel_MarksQuantity;
 use crate::domain_layer::data::entity::channel::Channel_Name;
@@ -158,7 +157,7 @@ impl PostgresqlRepository<Channel<'_>> {
 
         return Ok(
             Channel::new(
-                Channel_Id(row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?),
+                row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
                 insert_7.channel_owner,
                 Cow::Owned(insert_7.channel_name),
                 insert_7.channel_linked_name,
@@ -201,7 +200,7 @@ impl PostgresqlRepository<Channel<'_>> {
             WHERE c.id = $1;";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(
-            &by_6.channel_id.0,
+            &by_6.channel_id,
             Type::INT8,
         );
 
@@ -332,7 +331,7 @@ impl PostgresqlRepository<Channel<'_>> {
         return Ok(
             Some(
                 Channel::new(
-                    Channel_Id(row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?),
+                    row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
                     row_registry[0].try_get::<'_, usize, i64>(1).convert(Backtrace::new(line!(), file!()))?,
                     Cow::Borrowed(by_7.channel_name),
                     Channel_LinkedName(row_registry[0].try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?),

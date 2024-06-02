@@ -1,4 +1,3 @@
-use entity::channel::Channel_Id;
 use serde::Deserialize;
 use serde::Serialize;
 use macro_rules::r#enum;
@@ -7,7 +6,7 @@ use common_precedent::CommonPrecedent;
 #[derive(Serialize, Deserialize)]
 pub struct Incoming {
     pub application_user_access_token_encrypted: String,
-    pub channel_id: Channel_Id,
+    pub channel_id: i64,
 }
 
 r#enum!(

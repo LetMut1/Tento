@@ -1,7 +1,6 @@
 use common_precedent::CommonPrecedent;
 use crate::ChannelInnerLink1;
 use crate::ChannelOuterLink1;
-use entity::channel::Channel_Id;
 use macro_rules::r#enum;
 use serde::Deserialize;
 use serde::Serialize;
@@ -11,7 +10,7 @@ pub use crate::Channel2;
 #[derive(Serialize, Deserialize)]
 pub struct Incoming {
     pub application_user_access_token_encrypted: String,
-    pub channel_id: Channel_Id,
+    pub channel_id: i64,
 }
 
 #[derive(Serialize, Deserialize)]

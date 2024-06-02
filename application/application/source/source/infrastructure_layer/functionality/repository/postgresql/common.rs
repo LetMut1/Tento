@@ -5,7 +5,6 @@ use super::PostgresqlRepository;
 use crate::domain_layer::data::entity::channel::Channel_AccessModifier;
 use crate::domain_layer::data::entity::channel::Channel_BackgroundImagePath;
 use crate::domain_layer::data::entity::channel::Channel_CoverImagePath;
-use crate::domain_layer::data::entity::channel::Channel_Id;
 use crate::domain_layer::data::entity::channel::Channel_LinkedName;
 use crate::domain_layer::data::entity::channel::Channel_Name;
 use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier;
@@ -132,7 +131,7 @@ impl PostgresqlRepository<Common1> {
             };
 
             let channel = Channel1 {
-                channel_id: Channel_Id(row.try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?),
+                channel_id: row.try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
                 channel_name: Channel_Name(row.try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?),
                 channel_linked_name: Channel_LinkedName(row.try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?),
                 channel_access_modifier: Channel_AccessModifier(row.try_get::<'_, usize, i16>(3).convert(Backtrace::new(line!(), file!()))?),
@@ -263,7 +262,7 @@ impl PostgresqlRepository<Common1> {
             };
 
             let channel = Channel1 {
-                channel_id: Channel_Id(row.try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?),
+                channel_id: row.try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
                 channel_name: Channel_Name(row.try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?),
                 channel_linked_name: Channel_LinkedName(row.try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?),
                 channel_access_modifier: Channel_AccessModifier(row.try_get::<'_, usize, i16>(3).convert(Backtrace::new(line!(), file!()))?),
@@ -314,7 +313,7 @@ impl PostgresqlRepository<Common1> {
         let requery_channel_id: i64;
 
         if let Some(requery_channel_id_) = by_13.requery_channel_id {
-            requery_channel_id = requery_channel_id_.0;
+            requery_channel_id = requery_channel_id_;
 
             query = format!(
                 "{} \
@@ -376,7 +375,7 @@ impl PostgresqlRepository<Common1> {
             };
 
             let channel = Channel1 {
-                channel_id: Channel_Id(row.try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?),
+                channel_id: row.try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
                 channel_name: Channel_Name(row.try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?),
                 channel_linked_name: Channel_LinkedName(row.try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?),
                 channel_access_modifier: Channel_AccessModifier(row.try_get::<'_, usize, i16>(3).convert(Backtrace::new(line!(), file!()))?),

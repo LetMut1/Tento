@@ -20,7 +20,9 @@ pub use self::VisabilityModifier as Channel_VisabilityModifier;
 pub use self::VisabilityModifier_ as Channel_VisabilityModifier_;
 
 pub struct Channel<'a> {
-    pub id: Id,
+    pub id: i64,
+    _id: PhantomData<Id>,
+
     pub owner: i64,
     _owner: PhantomData<ApplicationUser_Id>,
 
@@ -40,7 +42,7 @@ pub struct Channel<'a> {
 
 impl<'a> Channel<'a> {
     pub fn new(
-        id: Id,
+        id: i64,
         owner: i64,
         name: Cow<'a, Name>,
         linked_name: LinkedName,
@@ -57,6 +59,7 @@ impl<'a> Channel<'a> {
     ) -> Self {
         return Self {
             id,
+            _id: PhantomData,
             owner,
             _owner: PhantomData,
             name,
@@ -75,9 +78,8 @@ impl<'a> Channel<'a> {
     }
 }
 
-#[derive(Clone, Copy, Serialize, Deserialize)]
-#[serde(transparent)]
-pub struct Id(pub i64);
+#[derive(Serialize, Deserialize)]
+pub struct Id;
 
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(transparent)]

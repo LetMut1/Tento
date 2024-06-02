@@ -17,7 +17,6 @@ pub struct PostgresqlRepository<E> {
 }
 
 pub mod by {
-    use crate::domain_layer::data::entity::channel::Channel_Id;
     use crate::domain_layer::data::entity::channel::Channel_Name;
     use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier;
 
@@ -44,7 +43,7 @@ pub mod by {
     }
 
     pub struct By6 {
-        pub channel_id: Channel_Id,
+        pub channel_id: i64,
     }
 
     pub struct By7<'a> {
@@ -52,16 +51,16 @@ pub mod by {
     }
 
     pub struct By8 {
-        pub channel_inner_link_from: Channel_Id,
+        pub channel_inner_link_from: i64,
     }
 
     pub struct By9 {
-        pub channel_outer_link_from: Channel_Id,
+        pub channel_outer_link_from: i64,
     }
 
     pub struct By10 {
         pub application_user_id: i64,
-        pub channel_id: Channel_Id,
+        pub channel_id: i64,
     }
 
     pub struct By11<'a> {
@@ -79,7 +78,7 @@ pub mod by {
 
     pub struct By13 {
         pub application_user_id: i64,
-        pub requery_channel_id: Option<Channel_Id>,
+        pub requery_channel_id: Option<i64>,
     }
 }
 
@@ -176,7 +175,6 @@ pub mod insert {
     use crate::domain_layer::data::entity::channel::Channel_BackgroundImagePath;
     use crate::domain_layer::data::entity::channel::Channel_CoverImagePath;
     use crate::domain_layer::data::entity::channel::Channel_Description;
-    use crate::domain_layer::data::entity::channel::Channel_Id;
     use crate::domain_layer::data::entity::channel::Channel_LinkedName;
     use crate::domain_layer::data::entity::channel::Channel_MarksQuantity;
     use crate::domain_layer::data::entity::channel::Channel_Name;
@@ -252,18 +250,18 @@ pub mod insert {
     }
 
     pub struct Insert8 {
-        pub channel_inner_link_from: Channel_Id,
-        pub channel_inner_link_to: Channel_Id,
+        pub channel_inner_link_from: i64,
+        pub channel_inner_link_to: i64,
     }
 
     pub struct Insert9 {
-        pub channel_outer_link_from: Channel_Id,
+        pub channel_outer_link_from: i64,
         pub channel_outer_link_alias: ChannelOuterLink_Alias,
         pub channel_outer_link_address: ChannelOuterLink_Address,
     }
 
     pub struct Insert10 {
         pub application_user_id: i64,
-        pub channel_id: Channel_Id,
+        pub channel_id: i64,
     }
 }
