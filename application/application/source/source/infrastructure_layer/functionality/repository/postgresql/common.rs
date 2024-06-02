@@ -6,7 +6,6 @@ use crate::domain_layer::data::entity::channel::Channel_AccessModifier;
 use crate::domain_layer::data::entity::channel::Channel_BackgroundImagePath;
 use crate::domain_layer::data::entity::channel::Channel_CoverImagePath;
 use crate::domain_layer::data::entity::channel::Channel_LinkedName;
-use crate::domain_layer::data::entity::channel::Channel_Name;
 use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
@@ -25,8 +24,6 @@ impl PostgresqlRepository<Common1> {
         by_11: &'a By11<'_>,
         limit: i16,
     ) -> Result<Vec<Common1>, Auditor<Error>> {
-        let channel_name = by_11.channel_name.0.as_str();
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let mut counter = Counter::<i16>::new_classic();
@@ -50,7 +47,7 @@ impl PostgresqlRepository<Common1> {
 
         let wildcard = format!(
             "{}%",
-            channel_name
+            by_11.channel_name,
         );
 
         prepared_statemant_parameter_convertation_resolver
@@ -70,7 +67,7 @@ impl PostgresqlRepository<Common1> {
         let requery_channel_name: &'_ str;
 
         if let Some(requery_channel_name_) = by_11.requery_channel_name {
-            requery_channel_name = requery_channel_name_.0.as_str();
+            requery_channel_name = requery_channel_name_.as_str();
 
             query = format!(
                 "{} AND c.name > ${}",
@@ -132,7 +129,7 @@ impl PostgresqlRepository<Common1> {
 
             let channel = Channel1 {
                 channel_id: row.try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
-                channel_name: Channel_Name(row.try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?),
+                channel_name: row.try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
                 channel_linked_name: Channel_LinkedName(row.try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?),
                 channel_access_modifier: Channel_AccessModifier(row.try_get::<'_, usize, i16>(3).convert(Backtrace::new(line!(), file!()))?),
                 channel_visability_modifier: by_11.channel_visability_modifier,
@@ -161,8 +158,6 @@ impl PostgresqlRepository<Common1> {
         by_12: &'a By12<'_>,
         limit: i16,
     ) -> Result<Vec<Common1>, Auditor<Error>> {
-        let channel_name = by_12.channel_name.0.as_str();
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let mut counter = Counter::<i16>::new_classic();
@@ -185,7 +180,7 @@ impl PostgresqlRepository<Common1> {
 
         let wildcard = format!(
             "{}%",
-            channel_name
+            by_12.channel_name,
         );
 
         prepared_statemant_parameter_convertation_resolver
@@ -201,7 +196,7 @@ impl PostgresqlRepository<Common1> {
         let requery_channel_name: &'_ str;
 
         if let Some(requery_channel_name_) = by_12.requery_channel_name {
-            requery_channel_name = requery_channel_name_.0.as_str();
+            requery_channel_name = requery_channel_name_.as_str();
 
             query = format!(
                 "{} AND c.name > ${}",
@@ -263,7 +258,7 @@ impl PostgresqlRepository<Common1> {
 
             let channel = Channel1 {
                 channel_id: row.try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
-                channel_name: Channel_Name(row.try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?),
+                channel_name: row.try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
                 channel_linked_name: Channel_LinkedName(row.try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?),
                 channel_access_modifier: Channel_AccessModifier(row.try_get::<'_, usize, i16>(3).convert(Backtrace::new(line!(), file!()))?),
                 channel_visability_modifier: Channel_VisabilityModifier(row.try_get::<'_, usize, i16>(4).convert(Backtrace::new(line!(), file!()))?),
@@ -376,7 +371,7 @@ impl PostgresqlRepository<Common1> {
 
             let channel = Channel1 {
                 channel_id: row.try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
-                channel_name: Channel_Name(row.try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?),
+                channel_name: row.try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
                 channel_linked_name: Channel_LinkedName(row.try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?),
                 channel_access_modifier: Channel_AccessModifier(row.try_get::<'_, usize, i16>(3).convert(Backtrace::new(line!(), file!()))?),
                 channel_visability_modifier: Channel_VisabilityModifier(row.try_get::<'_, usize, i16>(4).convert(Backtrace::new(line!(), file!()))?),

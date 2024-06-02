@@ -226,21 +226,19 @@ impl CommandProcessor<CreateFixtures> {
             .await?;
 
             'b: for _ in 1..=Self::QUANTITY_OF_CHANNELS {
-                let mut channel_name = Channel_Name(String::new());
+                let mut channel_name = String::new();
 
                 '_c: for _ in 1..=thread_rng().gen_range::<usize, _>(1..=Channel_Name::MAXIMUM_LENGTH) {
                     let character = Self::ASCII_CHARACTER_REGISTRY[thread_rng().gen_range::<usize, _>(0..Self::ASCII_CHARACTER_REGISTRY.len())];
 
-                    channel_name = Channel_Name(
-                        format!(
-                            "{}{}",
-                            channel_name.0.as_str(),
-                            character
-                        ),
+                    channel_name = format!(
+                        "{}{}",
+                        channel_name.as_str(),
+                        character,
                     );
                 }
 
-                if !Validator::<Channel_Name>::is_valid(&channel_name) {
+                if !Validator::<Channel_Name>::is_valid(channel_name.as_str()) {
                     return Err(
                         Auditor::<Error>::new(
                             Error::Logic {
@@ -254,7 +252,7 @@ impl CommandProcessor<CreateFixtures> {
                     );
                 }
 
-                let channel_linked_name = Channel_LinkedName(channel_name.0.clone());
+                let channel_linked_name = Channel_LinkedName(channel_name.clone());
 
                 if !Validator::<Channel_LinkedName>::is_valid(&channel_linked_name) {
                     return Err(
@@ -327,7 +325,7 @@ impl CommandProcessor<CreateFixtures> {
                 let channel = PostgresqlRepository::<Channel<'_>>::find_2(
                     database_1_postgresql_connection,
                     &By7 {
-                        channel_name: &channel_name,
+                        channel_name: channel_name.as_str(),
                     },
                 )
                 .await?;

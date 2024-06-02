@@ -17,7 +17,6 @@ pub struct PostgresqlRepository<E> {
 }
 
 pub mod by {
-    use crate::domain_layer::data::entity::channel::Channel_Name;
     use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier;
 
     pub struct By1<'a> {
@@ -47,7 +46,7 @@ pub mod by {
     }
 
     pub struct By7<'a> {
-        pub channel_name: &'a Channel_Name,
+        pub channel_name: &'a str,
     }
 
     pub struct By8 {
@@ -65,15 +64,15 @@ pub mod by {
 
     pub struct By11<'a> {
         pub application_user_id: i64,
-        pub channel_name: &'a Channel_Name,
-        pub requery_channel_name: &'a Option<Channel_Name>,
+        pub channel_name: &'a str,
+        pub requery_channel_name: &'a Option<String>,
         pub channel_visability_modifier: Channel_VisabilityModifier,
     }
 
     pub struct By12<'a> {
         pub application_user_id: i64,
-        pub channel_name: &'a Channel_Name,
-        pub requery_channel_name: &'a Option<Channel_Name>,
+        pub channel_name: &'a str,
+        pub requery_channel_name: &'a Option<String>,
     }
 
     pub struct By13 {
@@ -177,7 +176,6 @@ pub mod insert {
     use crate::domain_layer::data::entity::channel::Channel_Description;
     use crate::domain_layer::data::entity::channel::Channel_LinkedName;
     use crate::domain_layer::data::entity::channel::Channel_MarksQuantity;
-    use crate::domain_layer::data::entity::channel::Channel_Name;
     use crate::domain_layer::data::entity::channel::Channel_Orientation;
     use crate::domain_layer::data::entity::channel::Channel_SubscribersQuantity;
     use crate::domain_layer::data::entity::channel::Channel_ViewingQuantity;
@@ -236,7 +234,7 @@ pub mod insert {
 
     pub struct Insert7 {
         pub channel_owner: i64,
-        pub channel_name: Channel_Name,
+        pub channel_name: String,
         pub channel_linked_name: Channel_LinkedName,
         pub channel_description: Option<Channel_Description>,
         pub channel_access_modifier: Channel_AccessModifier,

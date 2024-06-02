@@ -10,7 +10,6 @@ use crate::domain_layer::data::entity::channel::Channel_CreatedAt;
 use crate::domain_layer::data::entity::channel::Channel_Description;
 use crate::domain_layer::data::entity::channel::Channel_LinkedName;
 use crate::domain_layer::data::entity::channel::Channel_MarksQuantity;
-use crate::domain_layer::data::entity::channel::Channel_Name;
 use crate::domain_layer::data::entity::channel::Channel_Orientation;
 use crate::domain_layer::data::entity::channel::Channel_SubscribersQuantity;
 use crate::domain_layer::data::entity::channel::Channel_ViewingQuantity;
@@ -30,7 +29,7 @@ impl PostgresqlRepository<Channel<'_>> {
         database_1_connection: &'a Connection,
         insert_7: Insert7,
     ) -> Result<Channel<'static>, Auditor<Error>> {
-        let channel_name = insert_7.channel_name.0.as_str();
+        let channel_name = insert_7.channel_name.as_str();
 
         let channel_linked_name = insert_7.channel_linked_name.0.as_str();
 
@@ -245,7 +244,7 @@ impl PostgresqlRepository<Channel<'_>> {
                 Channel::new(
                     by_6.channel_id,
                     row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
-                    Cow::Owned(Channel_Name(row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?)),
+                    Cow::Owned(row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?),
                     Channel_LinkedName(row_registry[0].try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?),
                     channel_description,
                     Channel_AccessModifier(row_registry[0].try_get::<'_, usize, i16>(4).convert(Backtrace::new(line!(), file!()))?),
@@ -266,8 +265,6 @@ impl PostgresqlRepository<Channel<'_>> {
         database_1_connection: &'a Connection,
         by_7: &'a By7<'b>,
     ) -> Result<Option<Channel<'b>>, Auditor<Error>> {
-        let channel_name = by_7.channel_name.0.as_str();
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
@@ -289,7 +286,7 @@ impl PostgresqlRepository<Channel<'_>> {
             WHERE c.name = $1;";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(
-            &channel_name,
+            &by_7.channel_name,
             Type::TEXT,
         );
 

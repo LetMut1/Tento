@@ -26,7 +26,9 @@ pub struct Channel<'a> {
     pub owner: i64,
     _owner: PhantomData<ApplicationUser_Id>,
 
-    pub name: Cow<'a, Name>,
+    pub name: Cow<'a, str>,
+    _name: PhantomData<Name>,
+
     pub linked_name: LinkedName,
     pub description: Option<Description>,
     pub access_modifier: AccessModifier,
@@ -44,7 +46,7 @@ impl<'a> Channel<'a> {
     pub fn new(
         id: i64,
         owner: i64,
-        name: Cow<'a, Name>,
+        name: Cow<'a, str>,
         linked_name: LinkedName,
         description: Option<Description>,
         access_modifier: AccessModifier,
@@ -63,6 +65,7 @@ impl<'a> Channel<'a> {
             owner,
             _owner: PhantomData,
             name,
+            _name: PhantomData,
             linked_name,
             description,
             access_modifier,
@@ -81,9 +84,8 @@ impl<'a> Channel<'a> {
 #[derive(Serialize, Deserialize)]
 pub struct Id;
 
-#[derive(Clone, Serialize, Deserialize)]
-#[serde(transparent)]
-pub struct Name(pub String);
+#[derive(Serialize, Deserialize)]
+pub struct Name;
 
 impl Name {
     pub const MAXIMUM_LENGTH: usize = 75;

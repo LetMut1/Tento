@@ -136,7 +136,6 @@ use action_processor_incoming_outcoming::action_processor::channel___base::get_o
 use action_processor_incoming_outcoming::action_processor::channel___base::get_one_by_id::Precedent as Channel__Base___GetOneById___Precedent_;
 use action_processor_incoming_outcoming::action_processor::channel_subscription___base::create::Incoming as ChannelSubscription__Base___Create___Incoming_;
 use action_processor_incoming_outcoming::action_processor::channel_subscription___base::create::Precedent as ChannelSubscription__Base___Create___Precedent_;
-use entity::channel::Channel_Name;
 use libc::c_char;
 use libc::c_long;
 use libc::c_short;
@@ -2497,18 +2496,14 @@ pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____seriali
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: Channel__Base___GetManyByNameInSubscriptions___Incoming| -> Result<Channel__Base___GetManyByNameInSubscriptions___Incoming_, Box<dyn StdError + 'static>> {
         let requery_channel_name = if incoming.requery_channel_name.is_data {
-            Some(
-                Channel_Name(
-                    incoming.requery_channel_name.data.to_string()?
-                )
-            )
+            Some(incoming.requery_channel_name.data.to_string()?)
         } else {
             None
         };
 
         let incoming_ = Channel__Base___GetManyByNameInSubscriptions___Incoming_ {
             application_user_access_token_encrypted: incoming.application_user_access_token_encrypted.to_string()?,
-            channel_name: Channel_Name(incoming.channel_name.to_string()?),
+            channel_name: incoming.channel_name.to_string()?,
             requery_channel_name,
             limit: incoming.limit,
         };
@@ -2571,7 +2566,7 @@ pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____deseria
                             let common_1_ = Common1 {
                                 channel: Channel1 {
                                     channel_id: common_1.channel.channel_id,
-                                    channel_name: Allocator::<C_String>::allocate(common_1.channel.channel_name.0),
+                                    channel_name: Allocator::<C_String>::allocate(common_1.channel.channel_name),
                                     channel_linked_name: Allocator::<C_String>::allocate(common_1.channel.channel_linked_name.0),
                                     channel_access_modifier: common_1.channel.channel_access_modifier.0,
                                     channel_visability_modifier: common_1.channel.channel_visability_modifier.0,
@@ -2744,7 +2739,7 @@ pub extern "C" fn channel___base____get_many_by_subscription____deserialize(
                             let common_1_ = Common1 {
                                 channel: Channel1 {
                                     channel_id: common_1.channel.channel_id,
-                                    channel_name: Allocator::<C_String>::allocate(common_1.channel.channel_name.0),
+                                    channel_name: Allocator::<C_String>::allocate(common_1.channel.channel_name),
                                     channel_linked_name: Allocator::<C_String>::allocate(common_1.channel.channel_linked_name.0),
                                     channel_access_modifier: common_1.channel.channel_access_modifier.0,
                                     channel_visability_modifier: common_1.channel.channel_visability_modifier.0,
@@ -2849,18 +2844,14 @@ pub extern "C" fn channel___base____get_many_public_by_name____serialize(
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: Channel__Base___GetManyPublicByName___Incoming| -> Result<Channel__Base___GetManyPublicByName___Incoming_, Box<dyn StdError + 'static>> {
         let requery_channel_name = if incoming.requery_channel_name.is_data {
-            Some(
-                Channel_Name(
-                    incoming.requery_channel_name.data.to_string()?
-                )
-            )
+            Some(incoming.requery_channel_name.data.to_string()?)
         } else {
             None
         };
 
         let incoming_ = Channel__Base___GetManyPublicByName___Incoming_ {
             application_user_access_token_encrypted: incoming.application_user_access_token_encrypted.to_string()?,
-            channel_name: Channel_Name(incoming.channel_name.to_string()?),
+            channel_name: incoming.channel_name.to_string()?,
             requery_channel_name,
             limit: incoming.limit,
         };
@@ -2923,7 +2914,7 @@ pub extern "C" fn channel___base____get_many_public_by_name____deserialize(
                             let common_1_ = Common1 {
                                 channel: Channel1 {
                                     channel_id: common_1.channel.channel_id,
-                                    channel_name: Allocator::<C_String>::allocate(common_1.channel.channel_name.0),
+                                    channel_name: Allocator::<C_String>::allocate(common_1.channel.channel_name),
                                     channel_linked_name: Allocator::<C_String>::allocate(common_1.channel.channel_linked_name.0),
                                     channel_access_modifier: common_1.channel.channel_access_modifier.0,
                                     channel_visability_modifier: common_1.channel.channel_visability_modifier.0,
@@ -3093,7 +3084,7 @@ pub extern "C" fn channel___base____get_one_by_id____deserialize(
 
                         let channel_2 = Channel2 {
                             channel_owner: data__.channel.channel_owner,
-                            channel_name: Allocator::<C_String>::allocate(data__.channel.channel_name.0),
+                            channel_name: Allocator::<C_String>::allocate(data__.channel.channel_name),
                             channel_linked_name: Allocator::<C_String>::allocate(data__.channel.channel_linked_name.0),
                             channel_description,
                             channel_access_modifier: data__.channel.channel_access_modifier.0,
@@ -3371,7 +3362,6 @@ mod test {
             use entity::channel::Channel_Description;
             use entity::channel::Channel_LinkedName;
             use entity::channel::Channel_MarksQuantity;
-            use entity::channel::Channel_Name;
             use entity::channel::Channel_Orientation;
             use entity::channel::Channel_SubscribersQuantity;
             use entity::channel::Channel_ViewingQuantity;
@@ -4629,7 +4619,7 @@ mod test {
                         let common_1 = Common1_ {
                             channel: Channel1_ {
                                 channel_id: 0,
-                                channel_name: Channel_Name(STRING_LITERAL.to_string()),
+                                channel_name: STRING_LITERAL.to_string(),
                                 channel_linked_name: Channel_LinkedName(STRING_LITERAL.to_string()),
                                 channel_access_modifier: Channel_AccessModifier(0),
                                 channel_visability_modifier: Channel_VisabilityModifier(0),
@@ -4729,7 +4719,7 @@ mod test {
                         let common_1 = Common1_ {
                             channel: Channel1_ {
                                 channel_id: 0,
-                                channel_name: Channel_Name(STRING_LITERAL.to_string()),
+                                channel_name: STRING_LITERAL.to_string(),
                                 channel_linked_name: Channel_LinkedName(STRING_LITERAL.to_string()),
                                 channel_access_modifier: Channel_AccessModifier(0),
                                 channel_visability_modifier: Channel_VisabilityModifier(0),
@@ -4829,7 +4819,7 @@ mod test {
                         let common_1 = Common1_ {
                             channel: Channel1_ {
                                 channel_id: 0,
-                                channel_name: Channel_Name(STRING_LITERAL.to_string()),
+                                channel_name: STRING_LITERAL.to_string(),
                                 channel_linked_name: Channel_LinkedName(STRING_LITERAL.to_string()),
                                 channel_access_modifier: Channel_AccessModifier(0),
                                 channel_visability_modifier: Channel_VisabilityModifier(0),
@@ -4946,7 +4936,7 @@ mod test {
 
                     let channel_2 = Channel2_ {
                         channel_owner: 0,
-                        channel_name: Channel_Name(STRING_LITERAL.to_string()),
+                        channel_name: STRING_LITERAL.to_string(),
                         channel_linked_name: Channel_LinkedName(STRING_LITERAL.to_string()),
                         channel_description: Some(Channel_Description(STRING_LITERAL.to_string())),
                         channel_access_modifier: Channel_AccessModifier(0),

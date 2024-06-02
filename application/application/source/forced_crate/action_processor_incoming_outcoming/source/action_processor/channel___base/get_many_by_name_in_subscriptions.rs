@@ -1,5 +1,4 @@
 use crate::Common1;
-use entity::channel::Channel_Name;
 use serde::Deserialize;
 use serde::Serialize;
 use macro_rules::r#enum;
@@ -8,8 +7,8 @@ use common_precedent::CommonPrecedent;
 #[derive(Serialize, Deserialize)]
 pub struct Incoming {
     pub application_user_access_token_encrypted: String,
-    pub channel_name: Channel_Name,
-    pub requery_channel_name: Option<Channel_Name>,
+    pub channel_name: String,
+    pub requery_channel_name: Option<String>,
     pub limit: i16,
 }
 

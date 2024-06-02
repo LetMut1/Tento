@@ -84,7 +84,7 @@ impl ActionProcessor<Channel__Base___GetManyPublicByName> {
             );
         }
 
-        if !Validator::<Channel_Name>::is_valid(&incoming_.channel_name) {
+        if !Validator::<Channel_Name>::is_valid(incoming_.channel_name.as_str()) {
             return Ok(
                 Err(
                     Auditor::<InvalidArgument>::new(
@@ -99,7 +99,7 @@ impl ActionProcessor<Channel__Base___GetManyPublicByName> {
         }
 
         if let Some(ref requery_channel_name_) = incoming_.requery_channel_name {
-            if !Validator::<Channel_Name>::is_valid(requery_channel_name_) {
+            if !Validator::<Channel_Name>::is_valid(requery_channel_name_.as_str()) {
                 return Ok(
                     Err(
                         Auditor::<InvalidArgument>::new(
@@ -120,7 +120,7 @@ impl ActionProcessor<Channel__Base___GetManyPublicByName> {
             &*database_1_postgresql_pooled_connection,
             &By11 {
                 application_user_id: application_user_access_token.application_user_id,
-                channel_name: &incoming_.channel_name,
+                channel_name: incoming_.channel_name.as_str(),
                 requery_channel_name: &incoming_.requery_channel_name,
                 channel_visability_modifier: FormResolver::<Channel_VisabilityModifier>::from_representation(Channel_VisabilityModifier_::Public),
             },
