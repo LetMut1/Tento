@@ -85,7 +85,6 @@ pub mod by {
 
 pub mod update {
     use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_CanBeResentFrom;
-    use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_ExpiresAt;
     use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_CanBeResentFrom;
     use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_ExpiresAt;
     use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_IsApproved;
@@ -128,7 +127,7 @@ pub mod update {
         pub application_user_registration_token_value: &'a str,
         pub application_user_registration_token_wrong_enter_tries_quantity: i16,
         pub application_user_registration_token_is_approved: bool,
-        pub application_user_registration_token_expires_at: ApplicationUserRegistrationToken_ExpiresAt,
+        pub application_user_registration_token_expires_at: i64,
         pub application_user_registration_token_can_be_resent_from: ApplicationUserRegistrationToken_CanBeResentFrom,
     }
 
@@ -140,7 +139,7 @@ pub mod update {
         pub application_user_registration_token_value: &'a str,
         pub application_user_registration_token_wrong_enter_tries_quantity: i16,
         pub application_user_registration_token_is_approved: bool,
-        pub application_user_registration_token_expires_at: ApplicationUserRegistrationToken_ExpiresAt,
+        pub application_user_registration_token_expires_at: i64,
     }
 
     pub struct Update10 {
@@ -181,7 +180,6 @@ pub mod update {
 
 pub mod insert {
     use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_CanBeResentFrom;
-    use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_ExpiresAt;
     use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_CanBeResentFrom;
     use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_ExpiresAt;
     use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_IsApproved;
@@ -237,7 +235,7 @@ pub mod insert {
         pub application_user_registration_token_value: String,
         pub application_user_registration_token_wrong_enter_tries_quantity: i16,
         pub application_user_registration_token_is_approved: bool,
-        pub application_user_registration_token_expires_at: ApplicationUserRegistrationToken_ExpiresAt,
+        pub application_user_registration_token_expires_at: i64,
         pub application_user_registration_token_can_be_resent_from: ApplicationUserRegistrationToken_CanBeResentFrom,
     }
 

@@ -128,7 +128,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
                     )
                 };
 
-                let need_to_update_2 = if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token.expires_at.0) || application_user_registration_token.is_approved {
+                let need_to_update_2 = if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token.expires_at) || application_user_registration_token.is_approved {
                     application_user_registration_token.value = Generator::<ApplicationUserRegistrationToken_Value>::generate();
 
                     application_user_registration_token.wrong_enter_tries_quantity = 0;

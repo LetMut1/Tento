@@ -27,7 +27,9 @@ pub struct ApplicationUserRegistrationToken<'a> {
     pub is_approved: bool,
     _is_approved: PhantomData<IsApproved>,
 
-    pub expires_at: ExpiresAt,
+    pub expires_at: i64,
+    _expires_at: PhantomData<ExpiresAt>,
+
     pub can_be_resent_from: CanBeResentFrom,
 }
 
@@ -38,7 +40,7 @@ impl<'a> ApplicationUserRegistrationToken<'a> {
         value: String,
         wrong_enter_tries_quantity: i16,
         is_approved: bool,
-        expires_at: ExpiresAt,
+        expires_at: i64,
         can_be_resent_from: CanBeResentFrom,
     ) -> Self {
         return Self {
@@ -53,6 +55,7 @@ impl<'a> ApplicationUserRegistrationToken<'a> {
             is_approved,
             _is_approved: PhantomData,
             expires_at,
+            _expires_at: PhantomData,
             can_be_resent_from,
         };
     }
@@ -74,8 +77,7 @@ impl WrongEnterTriesQuantity {
 
 pub struct IsApproved;
 
-#[derive(Clone, Copy)]
-pub struct ExpiresAt(pub i64);
+pub struct ExpiresAt;
 
 impl ExpiresAt {
     pub const QUANTITY_OF_MINUTES_FOR_EXPIRATION: i64 = 60 * 3;
@@ -93,7 +95,7 @@ pub struct ApplicationUserRegistrationToken1 {
     pub value: String,
     pub wrong_enter_tries_quantity: i16,
     pub is_approved: bool,
-    pub expires_at: ExpiresAt,
+    pub expires_at: i64,
     pub can_be_resent_from: CanBeResentFrom,
 }
 
@@ -105,7 +107,7 @@ pub struct ApplicationUserRegistrationToken3 {
     pub value: String,
     pub wrong_enter_tries_quantity: i16,
     pub is_approved: bool,
-    pub expires_at: ExpiresAt,
+    pub expires_at: i64,
 }
 
 pub struct ApplicationUserRegistrationToken4 {
@@ -119,6 +121,6 @@ pub struct ApplicationUserRegistrationToken5 {
 pub struct ApplicationUserRegistrationToken6 {
     pub value: String,
     pub is_approved: bool,
-    pub expires_at: ExpiresAt,
+    pub expires_at: i64,
     pub can_be_resent_from: CanBeResentFrom,
 }
