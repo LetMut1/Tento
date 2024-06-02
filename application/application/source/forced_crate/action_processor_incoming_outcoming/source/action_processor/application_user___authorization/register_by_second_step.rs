@@ -1,4 +1,3 @@
-use entity::application_user_registration_token::ApplicationUserRegistrationToken_WrongEnterTriesQuantity;
 use serde::Deserialize;
 use macro_rules::r#enum;
 use common_precedent::CommonPrecedent;
@@ -17,7 +16,7 @@ r#enum!(
         CommonPrecedent::ApplicationUserRegistrationToken_AlreadyExpired,
         CommonPrecedent::ApplicationUserRegistrationToken_AlreadyApproved,
         CommonPrecedent::ApplicationUserRegistrationToken_WrongValue {
-            application_user_registration_token_wrong_enter_tries_quantity: ApplicationUserRegistrationToken_WrongEnterTriesQuantity,
+            application_user_registration_token_wrong_enter_tries_quantity: i16,
         },
     }
 );

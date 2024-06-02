@@ -8,7 +8,6 @@ use crate::domain_layer::data::entity::application_user_registration_token::Appl
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_IsApproved;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_Value;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_WrongEnterTriesQuantity;
-use crate::domain_layer::functionality::service::incrementor::Incrementor;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
@@ -131,9 +130,11 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
         }
 
         if application_user_registration_token.value != incoming_.application_user_registration_token_value {
-            Incrementor::<ApplicationUserRegistrationToken_WrongEnterTriesQuantity>::increment(&mut application_user_registration_token.wrong_enter_tries_quantity)?;
+            application_user_registration_token.wrong_enter_tries_quantity = application_user_registration_token.wrong_enter_tries_quantity
+            .checked_add(1)
+            .convert_out_of_range(Backtrace::new(line!(), file!()))?;
 
-            if application_user_registration_token.wrong_enter_tries_quantity.0 < ApplicationUserRegistrationToken_WrongEnterTriesQuantity::LIMIT {
+            if application_user_registration_token.wrong_enter_tries_quantity < ApplicationUserRegistrationToken_WrongEnterTriesQuantity::LIMIT {
                 PostgresqlRepository::<ApplicationUserRegistrationToken4>::update(
                     database_2_postgresql_connection,
                     &Update10 {

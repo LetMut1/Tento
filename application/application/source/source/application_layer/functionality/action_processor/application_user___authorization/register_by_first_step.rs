@@ -132,7 +132,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
                 let need_to_update_2 = if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token.expires_at.0) || application_user_registration_token.is_approved.0 {
                     application_user_registration_token.value = Generator::<ApplicationUserRegistrationToken_Value>::generate();
 
-                    application_user_registration_token.wrong_enter_tries_quantity = ApplicationUserRegistrationToken_WrongEnterTriesQuantity(0);
+                    application_user_registration_token.wrong_enter_tries_quantity = 0;
 
                     application_user_registration_token.is_approved = ApplicationUserRegistrationToken_IsApproved(false);
 
@@ -197,7 +197,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
                         application_user_email: incoming_.application_user_email.as_str(),
                         application_user_device_id: incoming_.application_user_device_id.as_str(),
                         application_user_registration_token_value: Generator::<ApplicationUserRegistrationToken_Value>::generate(),
-                        application_user_registration_token_wrong_enter_tries_quantity: ApplicationUserRegistrationToken_WrongEnterTriesQuantity(0),
+                        application_user_registration_token_wrong_enter_tries_quantity: 0,
                         application_user_registration_token_is_approved: ApplicationUserRegistrationToken_IsApproved(false),
                         application_user_registration_token_expires_at: Generator::<ApplicationUserRegistrationToken_ExpiresAt>::generate()?,
                         application_user_registration_token_can_be_resent_from: Generator::<ApplicationUserRegistrationToken_CanBeResentFrom>::generate()?,

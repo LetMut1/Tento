@@ -1,5 +1,4 @@
 use entity::application_user_registration_token::ApplicationUserRegistrationToken_CanBeResentFrom;
-use entity::application_user_registration_token::ApplicationUserRegistrationToken_WrongEnterTriesQuantity;
 use serde::Deserialize;
 use serde::Serialize;
 use macro_rules::r#enum;
@@ -15,7 +14,7 @@ pub struct Incoming {
 pub struct Outcoming {
     pub verification_message_sent: bool,
     pub application_user_registration_token_can_be_resent_from: ApplicationUserRegistrationToken_CanBeResentFrom,
-    pub application_user_registration_token_wrong_enter_tries_quantity: ApplicationUserRegistrationToken_WrongEnterTriesQuantity,
+    pub application_user_registration_token_wrong_enter_tries_quantity: i16,
     pub application_user_registration_token_wrong_enter_tries_quantity_limit: i16,
 }
 

@@ -16,7 +16,6 @@ use crate::domain_layer::data::entity::application_user_registration_token::Appl
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_CanBeResentFrom;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_IsApproved;
-use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_WrongEnterTriesQuantity;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
@@ -68,7 +67,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
                 Type::TEXT,
             )
             .add_parameter(
-                &insert_5.application_user_registration_token_wrong_enter_tries_quantity.0,
+                &insert_5.application_user_registration_token_wrong_enter_tries_quantity,
                 Type::INT2,
             )
             .add_parameter(
@@ -184,7 +183,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
                 Type::TEXT,
             )
             .add_parameter(
-                &update_7.application_user_registration_token_wrong_enter_tries_quantity.0,
+                &update_7.application_user_registration_token_wrong_enter_tries_quantity,
                 Type::INT2,
             )
             .add_parameter(
@@ -277,7 +276,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
             Some(
                 ApplicationUserRegistrationToken1 {
                     value: row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
-                    wrong_enter_tries_quantity: ApplicationUserRegistrationToken_WrongEnterTriesQuantity(row_registry[0].try_get::<'_, usize, i16>(1).convert(Backtrace::new(line!(), file!()))?),
+                    wrong_enter_tries_quantity: row_registry[0].try_get::<'_, usize, i16>(1).convert(Backtrace::new(line!(), file!()))?,
                     is_approved: ApplicationUserRegistrationToken_IsApproved(row_registry[0].try_get::<'_, usize, bool>(2).convert(Backtrace::new(line!(), file!()))?),
                     expires_at: ApplicationUserRegistrationToken_ExpiresAt(row_registry[0].try_get::<'_, usize, i64>(3).convert(Backtrace::new(line!(), file!()))?),
                     can_be_resent_from: ApplicationUserRegistrationToken_CanBeResentFrom(row_registry[0].try_get::<'_, usize, i64>(4).convert(Backtrace::new(line!(), file!()))?),
@@ -367,7 +366,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
                 Type::TEXT,
             )
             .add_parameter(
-                &update_9.application_user_registration_token_wrong_enter_tries_quantity.0,
+                &update_9.application_user_registration_token_wrong_enter_tries_quantity,
                 Type::INT2,
             )
             .add_parameter(
@@ -455,7 +454,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
             Some(
                 ApplicationUserRegistrationToken3 {
                     value: row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
-                    wrong_enter_tries_quantity: ApplicationUserRegistrationToken_WrongEnterTriesQuantity(row_registry[0].try_get::<'_, usize, i16>(1).convert(Backtrace::new(line!(), file!()))?),
+                    wrong_enter_tries_quantity: row_registry[0].try_get::<'_, usize, i16>(1).convert(Backtrace::new(line!(), file!()))?,
                     is_approved: ApplicationUserRegistrationToken_IsApproved(row_registry[0].try_get::<'_, usize, bool>(2).convert(Backtrace::new(line!(), file!()))?),
                     expires_at: ApplicationUserRegistrationToken_ExpiresAt(row_registry[0].try_get::<'_, usize, i64>(3).convert(Backtrace::new(line!(), file!()))?),
                 },
@@ -483,7 +482,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken4> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &update_10.application_user_registration_token_wrong_enter_tries_quantity.0,
+                &update_10.application_user_registration_token_wrong_enter_tries_quantity,
                 Type::INT2,
             )
             .add_parameter(
