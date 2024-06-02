@@ -673,7 +673,7 @@ pub extern "C" fn application_user___authorization____authorize_by_first_step___
                             application_user_id: data__.application_user_id,
                             verification_message_sent: data__.verification_message_sent,
                             application_user_authorization_token_can_be_resent_from: data__.application_user_authorization_token_can_be_resent_from.0,
-                            application_user_authorization_token_wrong_enter_tries_quantity: data__.application_user_authorization_token_wrong_enter_tries_quantity.0,
+                            application_user_authorization_token_wrong_enter_tries_quantity: data__.application_user_authorization_token_wrong_enter_tries_quantity,
                             application_user_authorization_token_wrong_enter_tries_quantity_limit: data__.application_user_authorization_token_wrong_enter_tries_quantity_limit,
                         };
 
@@ -817,7 +817,7 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
                         ApplicationUser__Authorization___AuthorizeByLastStep___Precedent {
                             application_user_authorization_token__wrong_value: ApplicationUserAuthorizationToken_WrongValue {
                                 is_exist: true,
-                                application_user_authorization_token_wrong_enter_tries_quantity: application_user_authorization_token_wrong_enter_tries_quantity.0,
+                                application_user_authorization_token_wrong_enter_tries_quantity,
                             },
                             ..Default::default()
                         }
@@ -3371,7 +3371,6 @@ mod test {
         mod server_response_data_deserialization {
             use auditor::Auditor;
             use entity::application_user_authorization_token::ApplicationUserAuthorizationToken_CanBeResentFrom;
-            use entity::application_user_authorization_token::ApplicationUserAuthorizationToken_WrongEnterTriesQuantity;
             use entity::application_user_registration_token::ApplicationUserRegistrationToken_CanBeResentFrom;
             use entity::application_user_registration_token::ApplicationUserRegistrationToken_WrongEnterTriesQuantity;
             use entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_CanBeResentFrom;
@@ -3475,7 +3474,7 @@ mod test {
                         application_user_id: 0,
                         verification_message_sent: false,
                         application_user_authorization_token_can_be_resent_from: ApplicationUserAuthorizationToken_CanBeResentFrom(0),
-                        application_user_authorization_token_wrong_enter_tries_quantity: ApplicationUserAuthorizationToken_WrongEnterTriesQuantity(0),
+                        application_user_authorization_token_wrong_enter_tries_quantity: 0,
                         application_user_authorization_token_wrong_enter_tries_quantity_limit: 0,
                     };
 
@@ -3598,7 +3597,7 @@ mod test {
 
                     precedent_registry.push(
                         ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_::ApplicationUserAuthorizationToken_WrongValue {
-                            application_user_authorization_token_wrong_enter_tries_quantity: ApplicationUserAuthorizationToken_WrongEnterTriesQuantity(0),
+                            application_user_authorization_token_wrong_enter_tries_quantity: 0,
                         }
                     );
 

@@ -20,7 +20,9 @@ pub struct ApplicationUserAuthorizationToken<'a> {
     pub value: String,
     _value: PhantomData<Value>,
 
-    pub wrong_enter_tries_quantity: WrongEnterTriesQuantity,
+    pub wrong_enter_tries_quantity: i16,
+    _wrong_enter_tries_quantity: PhantomData<WrongEnterTriesQuantity>,
+
     pub expires_at: ExpiresAt,
     pub can_be_resent_from: CanBeResentFrom,
 }
@@ -30,7 +32,7 @@ impl<'a> ApplicationUserAuthorizationToken<'a> {
         application_user_id: i64,
         application_user_device_id: Cow<'a, str>,
         value:String,
-        wrong_enter_tries_quantity: WrongEnterTriesQuantity,
+        wrong_enter_tries_quantity: i16,
         expires_at: ExpiresAt,
         can_be_resent_from: CanBeResentFrom,
     ) -> Self {
@@ -42,6 +44,7 @@ impl<'a> ApplicationUserAuthorizationToken<'a> {
             value,
             _value: PhantomData,
             wrong_enter_tries_quantity,
+            _wrong_enter_tries_quantity: PhantomData,
             expires_at,
             can_be_resent_from,
         };
@@ -50,14 +53,14 @@ impl<'a> ApplicationUserAuthorizationToken<'a> {
 
 pub struct ApplicationUserAuthorizationToken1 {
     pub value: String,
-    pub wrong_enter_tries_quantity: WrongEnterTriesQuantity,
+    pub wrong_enter_tries_quantity: i16,
     pub expires_at: ExpiresAt,
     pub can_be_resent_from: CanBeResentFrom,
 }
 
 pub struct ApplicationUserAuthorizationToken2 {
     pub value: String,
-    pub wrong_enter_tries_quantity: WrongEnterTriesQuantity,
+    pub wrong_enter_tries_quantity: i16,
     pub expires_at: ExpiresAt,
 }
 
@@ -66,7 +69,7 @@ pub struct ApplicationUserAuthorizationToken3 {
 }
 
 pub struct ApplicationUserAuthorizationToken4 {
-    pub wrong_enter_tries_quantity: WrongEnterTriesQuantity,
+    pub wrong_enter_tries_quantity: i16,
 }
 
 pub struct ApplicationUserAuthorizationToken5 {
@@ -82,9 +85,8 @@ impl Value {
     pub const REGULAR_EXPRESSION: &'static str = r#"^[0-9]{6}$"#;
 }
 
-#[derive(Clone, Copy, Serialize, Deserialize)]
-#[serde(transparent)]
-pub struct WrongEnterTriesQuantity(pub i16);
+#[derive(Serialize, Deserialize)]
+pub struct WrongEnterTriesQuantity;
 
 impl WrongEnterTriesQuantity {
     pub const LIMIT: i16 = 5;

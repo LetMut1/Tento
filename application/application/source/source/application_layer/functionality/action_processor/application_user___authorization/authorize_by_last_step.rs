@@ -18,7 +18,6 @@ use crate::domain_layer::data::entity::application_user_device::ApplicationUserD
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::functionality::service::form_resolver::FormResolver;
 use crate::domain_layer::functionality::service::generator::Generator;
-use crate::domain_layer::functionality::service::incrementor::Incrementor;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
@@ -144,9 +143,11 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
         }
 
         if application_user_authorization_token_.value != incoming_.application_user_authorization_token_value {
-            Incrementor::<ApplicationUserAuthorizationToken_WrongEnterTriesQuantity>::increment(&mut application_user_authorization_token_.wrong_enter_tries_quantity)?;
+            application_user_authorization_token_.wrong_enter_tries_quantity = application_user_authorization_token_.wrong_enter_tries_quantity
+                .checked_add(1)
+                .convert_out_of_range(Backtrace::new(line!(), file!()))?;
 
-            if application_user_authorization_token_.wrong_enter_tries_quantity.0 < ApplicationUserAuthorizationToken_WrongEnterTriesQuantity::LIMIT {
+            if application_user_authorization_token_.wrong_enter_tries_quantity < ApplicationUserAuthorizationToken_WrongEnterTriesQuantity::LIMIT {
                 PostgresqlRepository::<ApplicationUserAuthorizationToken4>::update(
                     database_2_postgresql_connection,
                     &Update6 {

@@ -13,7 +13,6 @@ use crate::domain_layer::data::entity::application_user_authorization_token::App
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken5;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_CanBeResentFrom;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_ExpiresAt;
-use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_WrongEnterTriesQuantity;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
@@ -63,7 +62,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                 Type::TEXT,
             )
             .add_parameter(
-                &insert_3.application_user_authorization_token_wrong_enter_tries_quantity.0,
+                &insert_3.application_user_authorization_token_wrong_enter_tries_quantity,
                 Type::INT2,
             )
             .add_parameter(
@@ -172,7 +171,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken1> {
                 Type::TEXT,
             )
             .add_parameter(
-                &update_3.application_user_authorization_token_wrong_enter_tries_quantity.0,
+                &update_3.application_user_authorization_token_wrong_enter_tries_quantity,
                 Type::INT2,
             )
             .add_parameter(
@@ -260,7 +259,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken1> {
             Some(
                 ApplicationUserAuthorizationToken1 {
                     value: row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
-                    wrong_enter_tries_quantity: ApplicationUserAuthorizationToken_WrongEnterTriesQuantity(row_registry[0].try_get::<'_, usize, i16>(1).convert(Backtrace::new(line!(), file!()))?),
+                    wrong_enter_tries_quantity: row_registry[0].try_get::<'_, usize, i16>(1).convert(Backtrace::new(line!(), file!()))?,
                     expires_at: ApplicationUserAuthorizationToken_ExpiresAt(row_registry[0].try_get::<'_, usize, i64>(2).convert(Backtrace::new(line!(), file!()))?),
                     can_be_resent_from: ApplicationUserAuthorizationToken_CanBeResentFrom(row_registry[0].try_get::<'_, usize, i64>(3).convert(Backtrace::new(line!(), file!()))?),
                 },
@@ -296,7 +295,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken2> {
                 Type::TEXT,
             )
             .add_parameter(
-                &update_4.application_user_authorization_token_wrong_enter_tries_quantity.0,
+                &update_4.application_user_authorization_token_wrong_enter_tries_quantity,
                 Type::INT2,
             )
             .add_parameter(
@@ -379,7 +378,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken2> {
             Some(
                 ApplicationUserAuthorizationToken2 {
                     value: row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
-                    wrong_enter_tries_quantity: ApplicationUserAuthorizationToken_WrongEnterTriesQuantity(row_registry[0].try_get::<'_, usize, i16>(1).convert(Backtrace::new(line!(), file!()))?),
+                    wrong_enter_tries_quantity: row_registry[0].try_get::<'_, usize, i16>(1).convert(Backtrace::new(line!(), file!()))?,
                     expires_at: ApplicationUserAuthorizationToken_ExpiresAt(row_registry[0].try_get::<'_, usize, i64>(2).convert(Backtrace::new(line!(), file!()))?),
                 },
             ),
@@ -457,7 +456,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken4> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &update_6.application_user_authorization_token_wrong_enter_tries_quantity.0,
+                &update_6.application_user_authorization_token_wrong_enter_tries_quantity,
                 Type::INT2,
             )
             .add_parameter(

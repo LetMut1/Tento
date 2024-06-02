@@ -1,4 +1,3 @@
-use entity::application_user_authorization_token::ApplicationUserAuthorizationToken_WrongEnterTriesQuantity;
 use serde::Deserialize;
 use serde::Serialize;
 use macro_rules::r#enum;
@@ -22,7 +21,7 @@ r#enum!(
         CommonPrecedent::ApplicationUserAuthorizationToken_NotFound,
         CommonPrecedent::ApplicationUserAuthorizationToken_AlreadyExpired,
         CommonPrecedent::ApplicationUserAuthorizationToken_WrongValue {
-            application_user_authorization_token_wrong_enter_tries_quantity: ApplicationUserAuthorizationToken_WrongEnterTriesQuantity,
+            application_user_authorization_token_wrong_enter_tries_quantity: i16,
         },
         CommonPrecedent::ApplicationUser_NotFound,
     }

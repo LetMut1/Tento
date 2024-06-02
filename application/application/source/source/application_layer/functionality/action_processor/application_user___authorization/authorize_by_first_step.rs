@@ -222,7 +222,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                 let need_to_update_2 = if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token.expires_at.0) {
                     application_user_authorization_token.value = Generator::<ApplicationUserAuthorizationToken_Value>::generate();
 
-                    application_user_authorization_token.wrong_enter_tries_quantity = ApplicationUserAuthorizationToken_WrongEnterTriesQuantity(0);
+                    application_user_authorization_token.wrong_enter_tries_quantity = 0;
 
                     application_user_authorization_token.expires_at = Generator::<ApplicationUserAuthorizationToken_ExpiresAt>::generate()?;
 
@@ -283,7 +283,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                         application_user_id,
                         application_user_device_id: incoming_.application_user_device_id.as_str(),
                         application_user_authorization_token_value: Generator::<ApplicationUserAuthorizationToken_Value>::generate(),
-                        application_user_authorization_token_wrong_enter_tries_quantity: ApplicationUserAuthorizationToken_WrongEnterTriesQuantity(0),
+                        application_user_authorization_token_wrong_enter_tries_quantity: 0,
                         application_user_authorization_token_expires_at: Generator::<ApplicationUserAuthorizationToken_ExpiresAt>::generate()?,
                         application_user_authorization_token_can_be_resent_from: Generator::<ApplicationUserAuthorizationToken_CanBeResentFrom>::generate()?,
                     },
