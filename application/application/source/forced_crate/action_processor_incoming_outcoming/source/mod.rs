@@ -89,7 +89,6 @@ use entity::channel::Channel_AccessModifier;
 use entity::channel::Channel_BackgroundImagePath;
 use entity::channel::Channel_CoverImagePath;
 use entity::channel::Channel_Description;
-use entity::channel::Channel_LinkedName;
 use entity::channel::Channel_MarksQuantity;
 use entity::channel::Channel_Orientation;
 use entity::channel::Channel_SubscribersQuantity;
@@ -108,7 +107,7 @@ pub struct Common1 {
 pub struct Channel1 {
     pub channel_id: i64,
     pub channel_name: String,
-    pub channel_linked_name: Channel_LinkedName,
+    pub channel_linked_name: String,
     pub channel_access_modifier: Channel_AccessModifier,
     pub channel_visability_modifier: Channel_VisabilityModifier,
     pub channel_cover_image_path: Option<Channel_CoverImagePath>,
@@ -119,7 +118,7 @@ pub struct Channel1 {
 pub struct Channel2 {
     pub channel_owner: i64,
     pub channel_name: String,
-    pub channel_linked_name: Channel_LinkedName,
+    pub channel_linked_name: String,
     pub channel_description: Option<Channel_Description>,
     pub channel_access_modifier: Channel_AccessModifier,
     pub channel_visability_modifier: Channel_VisabilityModifier,

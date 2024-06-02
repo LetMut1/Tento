@@ -174,7 +174,6 @@ pub mod insert {
     use crate::domain_layer::data::entity::channel::Channel_BackgroundImagePath;
     use crate::domain_layer::data::entity::channel::Channel_CoverImagePath;
     use crate::domain_layer::data::entity::channel::Channel_Description;
-    use crate::domain_layer::data::entity::channel::Channel_LinkedName;
     use crate::domain_layer::data::entity::channel::Channel_MarksQuantity;
     use crate::domain_layer::data::entity::channel::Channel_Orientation;
     use crate::domain_layer::data::entity::channel::Channel_SubscribersQuantity;
@@ -235,7 +234,7 @@ pub mod insert {
     pub struct Insert7 {
         pub channel_owner: i64,
         pub channel_name: String,
-        pub channel_linked_name: Channel_LinkedName,
+        pub channel_linked_name: String,
         pub channel_description: Option<Channel_Description>,
         pub channel_access_modifier: Channel_AccessModifier,
         pub channel_visability_modifier: Channel_VisabilityModifier,

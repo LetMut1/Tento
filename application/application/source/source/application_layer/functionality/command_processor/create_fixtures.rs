@@ -252,9 +252,9 @@ impl CommandProcessor<CreateFixtures> {
                     );
                 }
 
-                let channel_linked_name = Channel_LinkedName(channel_name.clone());
+                let channel_linked_name = channel_name.clone();
 
-                if !Validator::<Channel_LinkedName>::is_valid(&channel_linked_name) {
+                if !Validator::<Channel_LinkedName>::is_valid(channel_linked_name.as_str()) {
                     return Err(
                         Auditor::<Error>::new(
                             Error::Logic {

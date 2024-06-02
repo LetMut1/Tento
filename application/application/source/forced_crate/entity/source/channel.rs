@@ -29,7 +29,9 @@ pub struct Channel<'a> {
     pub name: Cow<'a, str>,
     _name: PhantomData<Name>,
 
-    pub linked_name: LinkedName,
+    pub linked_name: String,
+    _linked_name: PhantomData<LinkedName>,
+
     pub description: Option<Description>,
     pub access_modifier: AccessModifier,
     pub visability_modifier: VisabilityModifier,
@@ -47,7 +49,7 @@ impl<'a> Channel<'a> {
         id: i64,
         owner: i64,
         name: Cow<'a, str>,
-        linked_name: LinkedName,
+        linked_name: String,
         description: Option<Description>,
         access_modifier: AccessModifier,
         visability_modifier: VisabilityModifier,
@@ -67,6 +69,7 @@ impl<'a> Channel<'a> {
             name,
             _name: PhantomData,
             linked_name,
+            _linked_name: PhantomData,
             description,
             access_modifier,
             visability_modifier,
@@ -92,8 +95,7 @@ impl Name {
 }
 
 #[derive(Serialize, Deserialize)]
-#[serde(transparent)]
-pub struct LinkedName(pub String);
+pub struct LinkedName;
 
 #[derive(Serialize, Deserialize)]
 #[serde(transparent)]

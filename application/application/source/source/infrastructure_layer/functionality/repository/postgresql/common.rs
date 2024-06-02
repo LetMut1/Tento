@@ -5,7 +5,6 @@ use super::PostgresqlRepository;
 use crate::domain_layer::data::entity::channel::Channel_AccessModifier;
 use crate::domain_layer::data::entity::channel::Channel_BackgroundImagePath;
 use crate::domain_layer::data::entity::channel::Channel_CoverImagePath;
-use crate::domain_layer::data::entity::channel::Channel_LinkedName;
 use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
@@ -130,7 +129,7 @@ impl PostgresqlRepository<Common1> {
             let channel = Channel1 {
                 channel_id: row.try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
                 channel_name: row.try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
-                channel_linked_name: Channel_LinkedName(row.try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?),
+                channel_linked_name: row.try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?,
                 channel_access_modifier: Channel_AccessModifier(row.try_get::<'_, usize, i16>(3).convert(Backtrace::new(line!(), file!()))?),
                 channel_visability_modifier: by_11.channel_visability_modifier,
                 channel_cover_image_path,
@@ -259,7 +258,7 @@ impl PostgresqlRepository<Common1> {
             let channel = Channel1 {
                 channel_id: row.try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
                 channel_name: row.try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
-                channel_linked_name: Channel_LinkedName(row.try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?),
+                channel_linked_name: row.try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?,
                 channel_access_modifier: Channel_AccessModifier(row.try_get::<'_, usize, i16>(3).convert(Backtrace::new(line!(), file!()))?),
                 channel_visability_modifier: Channel_VisabilityModifier(row.try_get::<'_, usize, i16>(4).convert(Backtrace::new(line!(), file!()))?),
                 channel_cover_image_path,
@@ -372,7 +371,7 @@ impl PostgresqlRepository<Common1> {
             let channel = Channel1 {
                 channel_id: row.try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
                 channel_name: row.try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
-                channel_linked_name: Channel_LinkedName(row.try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?),
+                channel_linked_name: row.try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?,
                 channel_access_modifier: Channel_AccessModifier(row.try_get::<'_, usize, i16>(3).convert(Backtrace::new(line!(), file!()))?),
                 channel_visability_modifier: Channel_VisabilityModifier(row.try_get::<'_, usize, i16>(4).convert(Backtrace::new(line!(), file!()))?),
                 channel_cover_image_path,

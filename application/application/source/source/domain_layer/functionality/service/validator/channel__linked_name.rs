@@ -2,7 +2,7 @@ use super::Validator;
 use crate::domain_layer::data::entity::channel::Channel_LinkedName;
 
 impl Validator<Channel_LinkedName> {
-    pub fn is_valid<'a>(channel_linked_name: &'a Channel_LinkedName) -> bool {
+    pub fn is_valid<'a>(channel_linked_name: &'a str) -> bool {
         return true; // TODO;
     }
 }
