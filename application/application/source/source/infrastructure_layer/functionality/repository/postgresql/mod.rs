@@ -171,7 +171,6 @@ pub mod insert {
     use crate::domain_layer::data::entity::channel::Channel_BackgroundImagePath;
     use crate::domain_layer::data::entity::channel::Channel_CoverImagePath;
     use crate::domain_layer::data::entity::channel::Channel_MarksQuantity;
-    use crate::domain_layer::data::entity::channel::Channel_Orientation;
     use crate::domain_layer::data::entity::channel::Channel_SubscribersQuantity;
     use crate::domain_layer::data::entity::channel::Channel_ViewingQuantity;
     use crate::domain_layer::data::entity::channel_outer_link::ChannelOuterLink_Address;
@@ -233,7 +232,7 @@ pub mod insert {
         pub channel_description: Option<String>,
         pub channel_access_modifier: i16,
         pub channel_visability_modifier: i16,
-        pub channel_orientation: Channel_Orientation,
+        pub channel_orientation: Vec<i16>,
         pub channel_cover_image_path: Option<Channel_CoverImagePath>,
         pub channel_background_image_path: Option<Channel_BackgroundImagePath>,
         pub channel_subscribers_quantity: Channel_SubscribersQuantity,

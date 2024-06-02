@@ -7,7 +7,6 @@ use crate::domain_layer::data::entity::channel::Channel_BackgroundImagePath;
 use crate::domain_layer::data::entity::channel::Channel_CoverImagePath;
 use crate::domain_layer::data::entity::channel::Channel_CreatedAt;
 use crate::domain_layer::data::entity::channel::Channel_MarksQuantity;
-use crate::domain_layer::data::entity::channel::Channel_Orientation;
 use crate::domain_layer::data::entity::channel::Channel_SubscribersQuantity;
 use crate::domain_layer::data::entity::channel::Channel_ViewingQuantity;
 use crate::infrastructure_layer::data::auditor::Backtrace;
@@ -34,7 +33,7 @@ impl PostgresqlRepository<Channel<'_>> {
             None => None,
         };
 
-        let channel_orientation = insert_7.channel_orientation.0.as_slice();
+        let channel_orientation = insert_7.channel_orientation.as_slice();
 
         let channel_cover_image_path = match insert_7.channel_cover_image_path {
             Some(ref channel_cover_image_path_) => Some(channel_cover_image_path_.0.as_str()),
@@ -239,7 +238,7 @@ impl PostgresqlRepository<Channel<'_>> {
                     row_registry[0].try_get::<'_, usize, Option<String>>(3).convert(Backtrace::new(line!(), file!()))?,
                     row_registry[0].try_get::<'_, usize, i16>(4).convert(Backtrace::new(line!(), file!()))?,
                     row_registry[0].try_get::<'_, usize, i16>(5).convert(Backtrace::new(line!(), file!()))?,
-                    Channel_Orientation(row_registry[0].try_get::<'_, usize, Vec<i16>>(6).convert(Backtrace::new(line!(), file!()))?),
+                    row_registry[0].try_get::<'_, usize, Vec<i16>>(6).convert(Backtrace::new(line!(), file!()))?,
                     channel_cover_image_path,
                     channel_background_image_path,
                     Channel_SubscribersQuantity(row_registry[0].try_get::<'_, usize, i64>(9).convert(Backtrace::new(line!(), file!()))?),
@@ -320,7 +319,7 @@ impl PostgresqlRepository<Channel<'_>> {
                     row_registry[0].try_get::<'_, usize, Option<String>>(3).convert(Backtrace::new(line!(), file!()))?,
                     row_registry[0].try_get::<'_, usize, i16>(4).convert(Backtrace::new(line!(), file!()))?,
                     row_registry[0].try_get::<'_, usize, i16>(5).convert(Backtrace::new(line!(), file!()))?,
-                    Channel_Orientation(row_registry[0].try_get::<'_, usize, Vec<i16>>(6).convert(Backtrace::new(line!(), file!()))?),
+                    row_registry[0].try_get::<'_, usize, Vec<i16>>(6).convert(Backtrace::new(line!(), file!()))?,
                     channel_cover_image_path,
                     channel_background_image_path,
                     Channel_SubscribersQuantity(row_registry[0].try_get::<'_, usize, i64>(9).convert(Backtrace::new(line!(), file!()))?),

@@ -3089,7 +3089,7 @@ pub extern "C" fn channel___base____get_one_by_id____deserialize(
                             channel_description,
                             channel_access_modifier: data__.channel.channel_access_modifier,
                             channel_visability_modifier: data__.channel.channel_visability_modifier,
-                            channel_orientation: Allocator::<C_Vector<_>>::allocate(data__.channel.channel_orientation.0),
+                            channel_orientation: Allocator::<C_Vector<_>>::allocate(data__.channel.channel_orientation),
                             channel_cover_image_path,
                             channel_background_image_path,
                             channel_subscribers_quantity: data__.channel.channel_subscribers_quantity.0,
@@ -3359,7 +3359,6 @@ mod test {
             use entity::channel::Channel_BackgroundImagePath;
             use entity::channel::Channel_CoverImagePath;
             use entity::channel::Channel_MarksQuantity;
-            use entity::channel::Channel_Orientation;
             use entity::channel::Channel_SubscribersQuantity;
             use entity::channel::Channel_ViewingQuantity;
             use error::Error;
@@ -4937,7 +4936,7 @@ mod test {
                         channel_description: Some(STRING_LITERAL.to_string()),
                         channel_access_modifier: 0,
                         channel_visability_modifier: 0,
-                        channel_orientation: Channel_Orientation(vec![0, 0, 0]),
+                        channel_orientation: vec![0, 0, 0],
                         channel_background_image_path: Some(Channel_BackgroundImagePath(STRING_LITERAL.to_string())),
                         channel_cover_image_path: Some(Channel_CoverImagePath(STRING_LITERAL.to_string())),
                         channel_subscribers_quantity: Channel_SubscribersQuantity(0),

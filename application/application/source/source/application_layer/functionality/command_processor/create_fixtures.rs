@@ -300,13 +300,9 @@ impl CommandProcessor<CreateFixtures> {
                     None
                 };
 
-                let channel_orientation = Channel_Orientation(
-                    vec![
-                        0, 1, 2,
-                    ],
-                );
+                let channel_orientation: Vec<i16> = vec![0, 1, 2,];
 
-                if !Validator::<Channel_Orientation>::is_valid(&channel_orientation) {
+                if !Validator::<Channel_Orientation>::is_valid(channel_orientation.as_slice()) {
                     return Err(
                         Auditor::<Error>::new(
                             Error::Logic {
