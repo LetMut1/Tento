@@ -15,7 +15,6 @@ use crate::domain_layer::data::entity::application_user_registration_token::Appl
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken6;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_CanBeResentFrom;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_ExpiresAt;
-use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_IsApproved;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
@@ -71,7 +70,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
                 Type::INT2,
             )
             .add_parameter(
-                &insert_5.application_user_registration_token_is_approved.0,
+                &insert_5.application_user_registration_token_is_approved,
                 Type::BOOL,
             )
             .add_parameter(
@@ -187,7 +186,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
                 Type::INT2,
             )
             .add_parameter(
-                &update_7.application_user_registration_token_is_approved.0,
+                &update_7.application_user_registration_token_is_approved,
                 Type::BOOL,
             )
             .add_parameter(
@@ -277,7 +276,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
                 ApplicationUserRegistrationToken1 {
                     value: row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
                     wrong_enter_tries_quantity: row_registry[0].try_get::<'_, usize, i16>(1).convert(Backtrace::new(line!(), file!()))?,
-                    is_approved: ApplicationUserRegistrationToken_IsApproved(row_registry[0].try_get::<'_, usize, bool>(2).convert(Backtrace::new(line!(), file!()))?),
+                    is_approved: row_registry[0].try_get::<'_, usize, bool>(2).convert(Backtrace::new(line!(), file!()))?,
                     expires_at: ApplicationUserRegistrationToken_ExpiresAt(row_registry[0].try_get::<'_, usize, i64>(3).convert(Backtrace::new(line!(), file!()))?),
                     can_be_resent_from: ApplicationUserRegistrationToken_CanBeResentFrom(row_registry[0].try_get::<'_, usize, i64>(4).convert(Backtrace::new(line!(), file!()))?),
                 },
@@ -370,7 +369,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
                 Type::INT2,
             )
             .add_parameter(
-                &update_9.application_user_registration_token_is_approved.0,
+                &update_9.application_user_registration_token_is_approved,
                 Type::BOOL,
             )
             .add_parameter(
@@ -455,7 +454,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
                 ApplicationUserRegistrationToken3 {
                     value: row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
                     wrong_enter_tries_quantity: row_registry[0].try_get::<'_, usize, i16>(1).convert(Backtrace::new(line!(), file!()))?,
-                    is_approved: ApplicationUserRegistrationToken_IsApproved(row_registry[0].try_get::<'_, usize, bool>(2).convert(Backtrace::new(line!(), file!()))?),
+                    is_approved: row_registry[0].try_get::<'_, usize, bool>(2).convert(Backtrace::new(line!(), file!()))?,
                     expires_at: ApplicationUserRegistrationToken_ExpiresAt(row_registry[0].try_get::<'_, usize, i64>(3).convert(Backtrace::new(line!(), file!()))?),
                 },
             ),
@@ -533,7 +532,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken5> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &update_11.application_user_registration_token_is_approved.0,
+                &update_11.application_user_registration_token_is_approved,
                 Type::BOOL,
             )
             .add_parameter(
@@ -615,7 +614,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken6> {
             Some(
                 ApplicationUserRegistrationToken6 {
                     value: row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
-                    is_approved: ApplicationUserRegistrationToken_IsApproved(row_registry[0].try_get::<'_, usize, bool>(1).convert(Backtrace::new(line!(), file!()))?),
+                    is_approved: row_registry[0].try_get::<'_, usize, bool>(1).convert(Backtrace::new(line!(), file!()))?,
                     expires_at: ApplicationUserRegistrationToken_ExpiresAt(row_registry[0].try_get::<'_, usize, i64>(2).convert(Backtrace::new(line!(), file!()))?),
                     can_be_resent_from: ApplicationUserRegistrationToken_CanBeResentFrom(row_registry[0].try_get::<'_, usize, i64>(3).convert(Backtrace::new(line!(), file!()))?),
                 },

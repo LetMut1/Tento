@@ -109,7 +109,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForRegister> {
             return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_AlreadyExpired)));
         }
 
-        if application_user_registration_token.is_approved.0 {
+        if application_user_registration_token.is_approved {
             return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_AlreadyApproved)));
         }
 

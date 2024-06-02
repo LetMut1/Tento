@@ -24,7 +24,9 @@ pub struct ApplicationUserRegistrationToken<'a> {
     pub wrong_enter_tries_quantity: i16,
     _wrong_enter_tries_quantity: PhantomData<WrongEnterTriesQuantity>,
 
-    pub is_approved: IsApproved,
+    pub is_approved: bool,
+    _is_approved: PhantomData<IsApproved>,
+
     pub expires_at: ExpiresAt,
     pub can_be_resent_from: CanBeResentFrom,
 }
@@ -35,7 +37,7 @@ impl<'a> ApplicationUserRegistrationToken<'a> {
         application_user_device_id: Cow<'a, str>,
         value: String,
         wrong_enter_tries_quantity: i16,
-        is_approved: IsApproved,
+        is_approved: bool,
         expires_at: ExpiresAt,
         can_be_resent_from: CanBeResentFrom,
     ) -> Self {
@@ -49,6 +51,7 @@ impl<'a> ApplicationUserRegistrationToken<'a> {
             wrong_enter_tries_quantity,
             _wrong_enter_tries_quantity: PhantomData,
             is_approved,
+            _is_approved: PhantomData,
             expires_at,
             can_be_resent_from,
         };
@@ -69,8 +72,7 @@ impl WrongEnterTriesQuantity {
     pub const LIMIT: i16 = 5;
 }
 
-#[derive(Clone, Copy)]
-pub struct IsApproved(pub bool);
+pub struct IsApproved;
 
 #[derive(Clone, Copy)]
 pub struct ExpiresAt(pub i64);
@@ -90,7 +92,7 @@ impl CanBeResentFrom {
 pub struct ApplicationUserRegistrationToken1 {
     pub value: String,
     pub wrong_enter_tries_quantity: i16,
-    pub is_approved: IsApproved,
+    pub is_approved: bool,
     pub expires_at: ExpiresAt,
     pub can_be_resent_from: CanBeResentFrom,
 }
@@ -102,7 +104,7 @@ pub struct ApplicationUserRegistrationToken2 {
 pub struct ApplicationUserRegistrationToken3 {
     pub value: String,
     pub wrong_enter_tries_quantity: i16,
-    pub is_approved: IsApproved,
+    pub is_approved: bool,
     pub expires_at: ExpiresAt,
 }
 
@@ -111,12 +113,12 @@ pub struct ApplicationUserRegistrationToken4 {
 }
 
 pub struct ApplicationUserRegistrationToken5 {
-    pub is_approved: IsApproved,
+    pub is_approved: bool,
 }
 
 pub struct ApplicationUserRegistrationToken6 {
     pub value: String,
-    pub is_approved: IsApproved,
+    pub is_approved: bool,
     pub expires_at: ExpiresAt,
     pub can_be_resent_from: CanBeResentFrom,
 }

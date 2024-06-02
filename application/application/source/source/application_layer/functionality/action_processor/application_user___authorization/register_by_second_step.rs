@@ -5,7 +5,6 @@ use crate::domain_layer::data::entity::application_user_registration_token::Appl
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken3;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken4;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken5;
-use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_IsApproved;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_Value;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_WrongEnterTriesQuantity;
 use crate::domain_layer::functionality::service::validator::Validator;
@@ -125,7 +124,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
             return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_AlreadyExpired)));
         }
 
-        if application_user_registration_token.is_approved.0 {
+        if application_user_registration_token.is_approved {
             return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_AlreadyApproved)));
         }
 
@@ -162,7 +161,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
             );
         }
 
-        application_user_registration_token.is_approved = ApplicationUserRegistrationToken_IsApproved(true);
+        application_user_registration_token.is_approved = true;
 
         PostgresqlRepository::<ApplicationUserRegistrationToken5>::update(
             database_2_postgresql_connection,

@@ -8,7 +8,6 @@ use crate::domain_layer::data::entity::application_user_registration_token::Appl
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken3;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_CanBeResentFrom;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_ExpiresAt;
-use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_IsApproved;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_Value;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_WrongEnterTriesQuantity;
 use crate::domain_layer::functionality::service::email_sender::EmailSender;
@@ -129,12 +128,12 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
                     )
                 };
 
-                let need_to_update_2 = if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token.expires_at.0) || application_user_registration_token.is_approved.0 {
+                let need_to_update_2 = if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token.expires_at.0) || application_user_registration_token.is_approved {
                     application_user_registration_token.value = Generator::<ApplicationUserRegistrationToken_Value>::generate();
 
                     application_user_registration_token.wrong_enter_tries_quantity = 0;
 
-                    application_user_registration_token.is_approved = ApplicationUserRegistrationToken_IsApproved(false);
+                    application_user_registration_token.is_approved = false;
 
                     application_user_registration_token.expires_at = Generator::<ApplicationUserRegistrationToken_ExpiresAt>::generate()?;
 
@@ -198,7 +197,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
                         application_user_device_id: incoming_.application_user_device_id.as_str(),
                         application_user_registration_token_value: Generator::<ApplicationUserRegistrationToken_Value>::generate(),
                         application_user_registration_token_wrong_enter_tries_quantity: 0,
-                        application_user_registration_token_is_approved: ApplicationUserRegistrationToken_IsApproved(false),
+                        application_user_registration_token_is_approved: false,
                         application_user_registration_token_expires_at: Generator::<ApplicationUserRegistrationToken_ExpiresAt>::generate()?,
                         application_user_registration_token_can_be_resent_from: Generator::<ApplicationUserRegistrationToken_CanBeResentFrom>::generate()?,
                     },
