@@ -269,21 +269,19 @@ impl CommandProcessor<CreateFixtures> {
                 }
 
                 let channel_description = if thread_rng().gen_range::<i8, _>(0..=1) == 1 {
-                    let mut channel_description_ = Channel_Description(String::new());
+                    let mut channel_description_ = String::new();
 
                     '_c: for _ in 1..=thread_rng().gen_range::<usize, _>(1..=Channel_Description::MAXIMUM_LENGTH) {
                         let character = Self::ASCII_CHARACTER_REGISTRY[thread_rng().gen_range::<usize, _>(0..Self::ASCII_CHARACTER_REGISTRY.len())];
 
-                        channel_description_ = Channel_Description(
-                            format!(
-                                "{}{}",
-                                channel_description_.0.as_str(),
-                                character
-                            ),
+                        channel_description_ = format!(
+                            "{}{}",
+                            channel_description_.as_str(),
+                            character,
                         );
                     }
 
-                    if !Validator::<Channel_Description>::is_valid(&channel_description_) {
+                    if !Validator::<Channel_Description>::is_valid(channel_description_.as_str()) {
                         return Err(
                             Auditor::<Error>::new(
                                 Error::Logic {

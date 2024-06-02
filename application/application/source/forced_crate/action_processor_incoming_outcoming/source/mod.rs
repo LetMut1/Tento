@@ -88,7 +88,6 @@ use entity::channel_outer_link::ChannelOuterLink_Alias;
 use entity::channel::Channel_AccessModifier;
 use entity::channel::Channel_BackgroundImagePath;
 use entity::channel::Channel_CoverImagePath;
-use entity::channel::Channel_Description;
 use entity::channel::Channel_MarksQuantity;
 use entity::channel::Channel_Orientation;
 use entity::channel::Channel_SubscribersQuantity;
@@ -119,7 +118,7 @@ pub struct Channel2 {
     pub channel_owner: i64,
     pub channel_name: String,
     pub channel_linked_name: String,
-    pub channel_description: Option<Channel_Description>,
+    pub channel_description: Option<String>,
     pub channel_access_modifier: Channel_AccessModifier,
     pub channel_visability_modifier: Channel_VisabilityModifier,
     pub channel_orientation: Channel_Orientation,

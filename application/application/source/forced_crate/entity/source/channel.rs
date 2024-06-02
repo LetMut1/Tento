@@ -32,7 +32,9 @@ pub struct Channel<'a> {
     pub linked_name: String,
     _linked_name: PhantomData<LinkedName>,
 
-    pub description: Option<Description>,
+    pub description: Option<String>,
+    _description: PhantomData<Description>,
+
     pub access_modifier: AccessModifier,
     pub visability_modifier: VisabilityModifier,
     pub orientation: Orientation,
@@ -50,7 +52,7 @@ impl<'a> Channel<'a> {
         owner: i64,
         name: Cow<'a, str>,
         linked_name: String,
-        description: Option<Description>,
+        description: Option<String>,
         access_modifier: AccessModifier,
         visability_modifier: VisabilityModifier,
         orientation: Orientation,
@@ -71,6 +73,7 @@ impl<'a> Channel<'a> {
             linked_name,
             _linked_name: PhantomData,
             description,
+            _description: PhantomData,
             access_modifier,
             visability_modifier,
             orientation,
@@ -98,8 +101,7 @@ impl Name {
 pub struct LinkedName;
 
 #[derive(Serialize, Deserialize)]
-#[serde(transparent)]
-pub struct Description(pub String);
+pub struct Description;
 
 impl Description {
     pub const MAXIMUM_LENGTH: usize = 500;

@@ -7,7 +7,6 @@ use crate::domain_layer::data::entity::channel::Channel_AccessModifier;
 use crate::domain_layer::data::entity::channel::Channel_BackgroundImagePath;
 use crate::domain_layer::data::entity::channel::Channel_CoverImagePath;
 use crate::domain_layer::data::entity::channel::Channel_CreatedAt;
-use crate::domain_layer::data::entity::channel::Channel_Description;
 use crate::domain_layer::data::entity::channel::Channel_MarksQuantity;
 use crate::domain_layer::data::entity::channel::Channel_Orientation;
 use crate::domain_layer::data::entity::channel::Channel_SubscribersQuantity;
@@ -33,7 +32,7 @@ impl PostgresqlRepository<Channel<'_>> {
         let channel_linked_name = insert_7.channel_linked_name.as_str();
 
         let channel_description = match insert_7.channel_description {
-            Some(ref channel_description_) => Some(channel_description_.0.as_str()),
+            Some(ref channel_description_) => Some(channel_description_.as_str()),
             None => None,
         };
 
@@ -222,12 +221,6 @@ impl PostgresqlRepository<Channel<'_>> {
             return Ok(None);
         }
 
-
-        let channel_description = match row_registry[0].try_get::<'_, usize, Option<String>>(3).convert(Backtrace::new(line!(), file!()))? {
-            Some(channel_decription_) => Some(Channel_Description(channel_decription_)),
-            None => None,
-        };
-
         let channel_cover_image_path = match row_registry[0].try_get::<'_, usize, Option<String>>(7).convert(Backtrace::new(line!(), file!()))? {
             Some(channel_cover_image_path_) => Some(Channel_CoverImagePath(channel_cover_image_path_)),
             None => None,
@@ -245,7 +238,7 @@ impl PostgresqlRepository<Channel<'_>> {
                     row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
                     Cow::Owned(row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?),
                     row_registry[0].try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?,
-                    channel_description,
+                    row_registry[0].try_get::<'_, usize, Option<String>>(3).convert(Backtrace::new(line!(), file!()))?,
                     Channel_AccessModifier(row_registry[0].try_get::<'_, usize, i16>(4).convert(Backtrace::new(line!(), file!()))?),
                     Channel_VisabilityModifier(row_registry[0].try_get::<'_, usize, i16>(5).convert(Backtrace::new(line!(), file!()))?),
                     Channel_Orientation(row_registry[0].try_get::<'_, usize, Vec<i16>>(6).convert(Backtrace::new(line!(), file!()))?),
@@ -309,11 +302,6 @@ impl PostgresqlRepository<Channel<'_>> {
             return Ok(None);
         }
 
-        let channel_description = match row_registry[0].try_get::<'_, usize, Option<String>>(3).convert(Backtrace::new(line!(), file!()))? {
-            Some(channel_description_) => Some(Channel_Description(channel_description_)),
-            None => None,
-        };
-
         let channel_cover_image_path = match row_registry[0].try_get::<'_, usize, Option<String>>(7).convert(Backtrace::new(line!(), file!()))? {
             Some(channel_cover_image_path_) => Some(Channel_CoverImagePath(channel_cover_image_path_)),
             None => None,
@@ -331,7 +319,7 @@ impl PostgresqlRepository<Channel<'_>> {
                     row_registry[0].try_get::<'_, usize, i64>(1).convert(Backtrace::new(line!(), file!()))?,
                     Cow::Borrowed(by_7.channel_name),
                     row_registry[0].try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?,
-                    channel_description,
+                    row_registry[0].try_get::<'_, usize, Option<String>>(3).convert(Backtrace::new(line!(), file!()))?,
                     Channel_AccessModifier(row_registry[0].try_get::<'_, usize, i16>(4).convert(Backtrace::new(line!(), file!()))?),
                     Channel_VisabilityModifier(row_registry[0].try_get::<'_, usize, i16>(5).convert(Backtrace::new(line!(), file!()))?),
                     Channel_Orientation(row_registry[0].try_get::<'_, usize, Vec<i16>>(6).convert(Backtrace::new(line!(), file!()))?),
