@@ -14,7 +14,6 @@ use crate::domain_layer::data::entity::application_user_reset_password_token::Ap
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken5;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken6;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_CanBeResentFrom;
-use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_ExpiresAt;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
@@ -74,7 +73,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
                 Type::BOOL,
             )
             .add_parameter(
-                &insert_6.application_user_reset_password_token_expires_at.0,
+                &insert_6.application_user_reset_password_token_expires_at,
                 Type::INT8,
             )
             .add_parameter(
@@ -190,7 +189,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken1> {
                 Type::BOOL,
             )
             .add_parameter(
-                &update_12.application_user_reset_password_token_expires_at.0,
+                &update_12.application_user_reset_password_token_expires_at,
                 Type::INT8,
             )
             .add_parameter(
@@ -277,7 +276,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken1> {
                     value: row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
                     wrong_enter_tries_quantity: row_registry[0].try_get::<'_, usize, i16>(1).convert(Backtrace::new(line!(), file!()))?,
                     is_approved: row_registry[0].try_get::<'_, usize, bool>(2).convert(Backtrace::new(line!(), file!()))?,
-                    expires_at: ApplicationUserResetPasswordToken_ExpiresAt(row_registry[0].try_get::<'_, usize, i64>(3).convert(Backtrace::new(line!(), file!()))?),
+                    expires_at: row_registry[0].try_get::<'_, usize, i64>(3).convert(Backtrace::new(line!(), file!()))?,
                     can_be_resent_from: ApplicationUserResetPasswordToken_CanBeResentFrom(row_registry[0].try_get::<'_, usize, i64>(4).convert(Backtrace::new(line!(), file!()))?),
                 },
             ),
@@ -373,7 +372,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken3> {
                 Type::BOOL,
             )
             .add_parameter(
-                &update_14.application_user_reset_password_token_expires_at.0,
+                &update_14.application_user_reset_password_token_expires_at,
                 Type::INT8,
             )
             .add_parameter(
@@ -455,7 +454,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken3> {
                     value: row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
                     wrong_enter_tries_quantity: row_registry[0].try_get::<'_, usize, i16>(1).convert(Backtrace::new(line!(), file!()))?,
                     is_approved: row_registry[0].try_get::<'_, usize, bool>(2).convert(Backtrace::new(line!(), file!()))?,
-                    expires_at: ApplicationUserResetPasswordToken_ExpiresAt(row_registry[0].try_get::<'_, usize, i64>(3).convert(Backtrace::new(line!(), file!()))?),
+                    expires_at: row_registry[0].try_get::<'_, usize, i64>(3).convert(Backtrace::new(line!(), file!()))?,
                 },
             ),
         );
@@ -615,7 +614,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken6> {
                 ApplicationUserResetPasswordToken6 {
                     value: row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
                     is_approved: row_registry[0].try_get::<'_, usize, bool>(1).convert(Backtrace::new(line!(), file!()))?,
-                    expires_at: ApplicationUserResetPasswordToken_ExpiresAt( row_registry[0].try_get::<'_, usize, i64>(2).convert(Backtrace::new(line!(), file!()))?),
+                    expires_at: row_registry[0].try_get::<'_, usize, i64>(2).convert(Backtrace::new(line!(), file!()))?,
                     can_be_resent_from: ApplicationUserResetPasswordToken_CanBeResentFrom(row_registry[0].try_get::<'_, usize, i64>(3).convert(Backtrace::new(line!(), file!()))?),
                 },
             ),

@@ -85,7 +85,6 @@ pub mod by {
 
 pub mod update {
     use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_CanBeResentFrom;
-    use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_ExpiresAt;
 
     pub struct Update1<'a> {
         pub application_user_password_hash: &'a str,
@@ -150,7 +149,7 @@ pub mod update {
         pub application_user_reset_password_token_value: &'a str,
         pub application_user_reset_password_token_wrong_enter_tries_quantity: i16,
         pub application_user_reset_password_token_is_approved: bool,
-        pub application_user_reset_password_token_expires_at: ApplicationUserResetPasswordToken_ExpiresAt,
+        pub application_user_reset_password_token_expires_at: i64,
         pub application_user_reset_password_token_can_be_resent_from: ApplicationUserResetPasswordToken_CanBeResentFrom,
     }
 
@@ -162,7 +161,7 @@ pub mod update {
         pub application_user_reset_password_token_value: &'a str,
         pub application_user_reset_password_token_wrong_enter_tries_quantity: i16,
         pub application_user_reset_password_token_is_approved: bool,
-        pub application_user_reset_password_token_expires_at: ApplicationUserResetPasswordToken_ExpiresAt,
+        pub application_user_reset_password_token_expires_at: i64,
     }
 
     pub struct Update15 {
@@ -176,7 +175,6 @@ pub mod update {
 
 pub mod insert {
     use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_CanBeResentFrom;
-    use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_ExpiresAt;
     use crate::domain_layer::data::entity::channel::Channel_AccessModifier;
     use crate::domain_layer::data::entity::channel::Channel_BackgroundImagePath;
     use crate::domain_layer::data::entity::channel::Channel_CoverImagePath;
@@ -237,7 +235,7 @@ pub mod insert {
         pub application_user_reset_password_token_value: String,
         pub application_user_reset_password_token_wrong_enter_tries_quantity: i16,
         pub application_user_reset_password_token_is_approved: bool,
-        pub application_user_reset_password_token_expires_at: ApplicationUserResetPasswordToken_ExpiresAt,
+        pub application_user_reset_password_token_expires_at: i64,
         pub application_user_reset_password_token_can_be_resent_from: ApplicationUserResetPasswordToken_CanBeResentFrom,
     }
 
