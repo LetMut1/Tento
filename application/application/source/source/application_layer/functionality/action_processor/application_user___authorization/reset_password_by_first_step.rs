@@ -8,7 +8,6 @@ use crate::domain_layer::data::entity::application_user_reset_password_token::Ap
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken3;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_CanBeResentFrom;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_ExpiresAt;
-use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_IsApproved;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_Value;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_WrongEnterTriesQuantity;
 use crate::domain_layer::functionality::service::email_sender::EmailSender;
@@ -133,12 +132,12 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByFirstStep> 
                     )
                 };
 
-                let need_to_update_2 = if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_reset_password_token.expires_at.0) || application_user_reset_password_token.is_approved.0 {
+                let need_to_update_2 = if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_reset_password_token.expires_at.0) || application_user_reset_password_token.is_approved {
                     application_user_reset_password_token.value = Generator::<ApplicationUserResetPasswordToken_Value>::generate();
 
                     application_user_reset_password_token.wrong_enter_tries_quantity = 0;
 
-                    application_user_reset_password_token.is_approved = ApplicationUserResetPasswordToken_IsApproved(false);
+                    application_user_reset_password_token.is_approved = false;
 
                     application_user_reset_password_token.expires_at = Generator::<ApplicationUserResetPasswordToken_ExpiresAt>::generate()?;
 
@@ -202,7 +201,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByFirstStep> 
                         application_user_device_id: incoming_.application_user_device_id.as_str(),
                         application_user_reset_password_token_value: Generator::<ApplicationUserResetPasswordToken_Value>::generate(),
                         application_user_reset_password_token_wrong_enter_tries_quantity: 0,
-                        application_user_reset_password_token_is_approved: ApplicationUserResetPasswordToken_IsApproved(false),
+                        application_user_reset_password_token_is_approved: false,
                         application_user_reset_password_token_expires_at:Generator::<ApplicationUserResetPasswordToken_ExpiresAt>::generate()?,
                         application_user_reset_password_token_can_be_resent_from: Generator::<ApplicationUserResetPasswordToken_CanBeResentFrom>::generate()?,
                     },

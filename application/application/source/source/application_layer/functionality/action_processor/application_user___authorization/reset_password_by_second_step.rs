@@ -5,7 +5,6 @@ use crate::domain_layer::data::entity::application_user_reset_password_token::Ap
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken3;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken4;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken5;
-use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_IsApproved;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_Value;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_WrongEnterTriesQuantity;
 use crate::domain_layer::functionality::service::validator::Validator;
@@ -125,7 +124,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordBySecondStep>
             return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_AlreadyExpired)));
         }
 
-        if application_user_reset_password_token.is_approved.0 {
+        if application_user_reset_password_token.is_approved {
             return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_AlreadyApproved)));
         }
 
@@ -162,7 +161,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordBySecondStep>
             );
         }
 
-        application_user_reset_password_token.is_approved = ApplicationUserResetPasswordToken_IsApproved(true);
+        application_user_reset_password_token.is_approved = true;
 
         PostgresqlRepository::<ApplicationUserResetPasswordToken5>::update(
             database_2_postgresql_connection,

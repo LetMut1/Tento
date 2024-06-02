@@ -147,7 +147,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
             return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_AlreadyExpired)));
         }
 
-        if !application_user_reset_password_token.is_approved.0 {
+        if !application_user_reset_password_token.is_approved {
             return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_IsNotApproved)));
         }
 
