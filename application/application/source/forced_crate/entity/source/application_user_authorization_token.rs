@@ -26,7 +26,8 @@ pub struct ApplicationUserAuthorizationToken<'a> {
     pub expires_at: i64,
     _expires_at: PhantomData<ExpiresAt>,
 
-    pub can_be_resent_from: CanBeResentFrom,
+    pub can_be_resent_from: i64,
+    _can_be_resent_from: PhantomData<CanBeResentFrom>
 }
 
 impl<'a> ApplicationUserAuthorizationToken<'a> {
@@ -36,7 +37,7 @@ impl<'a> ApplicationUserAuthorizationToken<'a> {
         value:String,
         wrong_enter_tries_quantity: i16,
         expires_at: i64,
-        can_be_resent_from: CanBeResentFrom,
+        can_be_resent_from: i64,
     ) -> Self {
         return Self {
             application_user_id,
@@ -50,6 +51,7 @@ impl<'a> ApplicationUserAuthorizationToken<'a> {
             expires_at,
             _expires_at: PhantomData,
             can_be_resent_from,
+            _can_be_resent_from: PhantomData,
         };
     }
 }
@@ -58,7 +60,7 @@ pub struct ApplicationUserAuthorizationToken1 {
     pub value: String,
     pub wrong_enter_tries_quantity: i16,
     pub expires_at: i64,
-    pub can_be_resent_from: CanBeResentFrom,
+    pub can_be_resent_from: i64,
 }
 
 pub struct ApplicationUserAuthorizationToken2 {
@@ -68,7 +70,7 @@ pub struct ApplicationUserAuthorizationToken2 {
 }
 
 pub struct ApplicationUserAuthorizationToken3 {
-    pub can_be_resent_from: CanBeResentFrom,
+    pub can_be_resent_from: i64,
 }
 
 pub struct ApplicationUserAuthorizationToken4 {
@@ -78,7 +80,7 @@ pub struct ApplicationUserAuthorizationToken4 {
 pub struct ApplicationUserAuthorizationToken5 {
     pub value: String,
     pub expires_at: i64,
-    pub can_be_resent_from: CanBeResentFrom,
+    pub can_be_resent_from: i64,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -101,9 +103,8 @@ impl ExpiresAt {
     pub const QUANTITY_OF_MINUTES_FOR_EXPIRATION: i64 = 10;
 }
 
-#[derive(Clone, Copy, Serialize, Deserialize)]
-#[serde(transparent)]
-pub struct CanBeResentFrom(pub i64);
+#[derive(Serialize, Deserialize)]
+pub struct CanBeResentFrom;
 
 impl CanBeResentFrom {
     pub const QUANTITY_OF_MINUTES_BEFORE_RESENDING: i64 = 1;

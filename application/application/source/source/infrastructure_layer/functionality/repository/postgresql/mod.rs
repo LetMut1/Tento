@@ -84,7 +84,6 @@ pub mod by {
 }
 
 pub mod update {
-    use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_CanBeResentFrom;
     use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_CanBeResentFrom;
     use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_ExpiresAt;
     use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_IsApproved;
@@ -111,7 +110,7 @@ pub mod update {
         pub application_user_authorization_token_value: &'a str,
         pub application_user_authorization_token_wrong_enter_tries_quantity: i16,
         pub application_user_authorization_token_expires_at: i64,
-        pub application_user_authorization_token_can_be_resent_from: ApplicationUserAuthorizationToken_CanBeResentFrom,
+        pub application_user_authorization_token_can_be_resent_from: i64,
     }
 
     pub struct Update4<'a> {
@@ -121,7 +120,7 @@ pub mod update {
     }
 
     pub struct Update5 {
-        pub application_user_authorization_token_can_be_resent_from: ApplicationUserAuthorizationToken_CanBeResentFrom,
+        pub application_user_authorization_token_can_be_resent_from: i64,
     }
 
     pub struct Update6 {
@@ -184,7 +183,6 @@ pub mod update {
 }
 
 pub mod insert {
-    use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_CanBeResentFrom;
     use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_CanBeResentFrom;
     use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_ExpiresAt;
     use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_IsApproved;
@@ -231,7 +229,7 @@ pub mod insert {
         pub application_user_authorization_token_value: String,
         pub application_user_authorization_token_wrong_enter_tries_quantity: i16,
         pub application_user_authorization_token_expires_at: i64,
-        pub application_user_authorization_token_can_be_resent_from: ApplicationUserAuthorizationToken_CanBeResentFrom,
+        pub application_user_authorization_token_can_be_resent_from: i64,
     }
 
     pub struct Insert4 {
