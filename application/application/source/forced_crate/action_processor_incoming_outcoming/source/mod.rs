@@ -83,7 +83,6 @@
 
 pub mod action_processor;
 
-use entity::channel_outer_link::ChannelOuterLink_Address;
 use serde::Deserialize;
 use serde::Serialize;
 
@@ -128,5 +127,5 @@ pub struct ChannelInnerLink1 {
 #[derive(Serialize, Deserialize)]
 pub struct ChannelOuterLink1 {
     pub channel_outer_link_alias: String,
-    pub channel_outer_link_address: ChannelOuterLink_Address,
+    pub channel_outer_link_address: String,
 }

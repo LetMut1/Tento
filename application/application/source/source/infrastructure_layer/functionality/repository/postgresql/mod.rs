@@ -168,8 +168,6 @@ pub mod update {
 }
 
 pub mod insert {
-    use crate::domain_layer::data::entity::channel_outer_link::ChannelOuterLink_Address;
-
     pub struct Insert1 {
         pub application_user_email: String,
         pub application_user_nickname: String,
@@ -242,7 +240,7 @@ pub mod insert {
     pub struct Insert9 {
         pub channel_outer_link_from: i64,
         pub channel_outer_link_alias: String,
-        pub channel_outer_link_address: ChannelOuterLink_Address,
+        pub channel_outer_link_address: String,
     }
 
     pub struct Insert10 {

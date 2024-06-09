@@ -2,7 +2,6 @@ use super::by::By9;
 use super::insert::Insert9;
 use super::PostgresqlRepository;
 use crate::domain_layer::data::entity::channel_outer_link::ChannelOuterLink;
-use crate::domain_layer::data::entity::channel_outer_link::ChannelOuterLink_Address;
 use crate::domain_layer::data::entity::channel_outer_link::ChannelOuterLink_CreatedAt;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
@@ -20,7 +19,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
     ) -> Result<ChannelOuterLink, Auditor<Error>> {
         let channel_outer_link_alias = insert_9.channel_outer_link_alias.as_str();
 
-        let channel_outer_link_address = insert_9.channel_outer_link_address.0.as_str();
+        let channel_outer_link_address = insert_9.channel_outer_link_address.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -129,7 +128,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
         '_a: for row in row_registry.iter() {
             let channel_outer_link = ChannelOuterLink1 {
                 channel_outer_link_alias: row.try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
-                channel_outer_link_address: ChannelOuterLink_Address(row.try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?),
+                channel_outer_link_address: row.try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
             };
 
             channel_outer_link_registry.push(channel_outer_link);
