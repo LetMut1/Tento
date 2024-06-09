@@ -3111,7 +3111,7 @@ pub extern "C" fn channel___base____get_one_by_id____deserialize(
 
                         '_a: for channel_outer_link_1 in data__.channel_outer_link_registry {
                             let channel_outer_link_1_ = ChannelOuterLink1 {
-                                channel_outer_link_alias: Allocator::<C_String>::allocate(channel_outer_link_1.channel_outer_link_alias.0),
+                                channel_outer_link_alias: Allocator::<C_String>::allocate(channel_outer_link_1.channel_outer_link_alias),
                                 channel_outer_link_address: Allocator::<C_String>::allocate(channel_outer_link_1.channel_outer_link_address.0)
                             };
 
@@ -3355,7 +3355,6 @@ mod test {
         mod server_response_data_deserialization {
             use auditor::Auditor;
             use entity::channel_outer_link::ChannelOuterLink_Address;
-            use entity::channel_outer_link::ChannelOuterLink_Alias;
             use error::Error;
             use formatter::Formatter;
             use super::*;
@@ -4917,7 +4916,7 @@ mod test {
 
                     '_a: for _ in 1..=5 {
                         let channel_outer_link_1 = ChannelOuterLink1_ {
-                            channel_outer_link_alias: ChannelOuterLink_Alias(STRING_LITERAL.to_string()),
+                            channel_outer_link_alias: STRING_LITERAL.to_string(),
                             channel_outer_link_address: ChannelOuterLink_Address(STRING_LITERAL.to_string()),
                         };
 

@@ -169,7 +169,6 @@ pub mod update {
 
 pub mod insert {
     use crate::domain_layer::data::entity::channel_outer_link::ChannelOuterLink_Address;
-    use crate::domain_layer::data::entity::channel_outer_link::ChannelOuterLink_Alias;
 
     pub struct Insert1 {
         pub application_user_email: String,
@@ -242,7 +241,7 @@ pub mod insert {
 
     pub struct Insert9 {
         pub channel_outer_link_from: i64,
-        pub channel_outer_link_alias: ChannelOuterLink_Alias,
+        pub channel_outer_link_alias: String,
         pub channel_outer_link_address: ChannelOuterLink_Address,
     }
 
