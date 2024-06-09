@@ -21,9 +21,9 @@ use tokio_postgres::Client as Connection;
 impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
     pub async fn create_1<'a>(
         database_2_connection: &'a Connection,
-        insert_6: Insert6<'a>,
+        insert_1: Insert1<'a>,
     ) -> Result<ApplicationUserResetPasswordToken<'a>, Auditor<Error>> {
-        let application_user_reset_password_token_value = insert_6.application_user_reset_password_token_value.as_str();
+        let application_user_reset_password_token_value = insert_1.application_user_reset_password_token_value.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -48,11 +48,11 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &insert_6.application_user_id,
+                &insert_1.application_user_id,
                 Type::INT8,
             )
             .add_parameter(
-                &insert_6.application_user_device_id,
+                &insert_1.application_user_device_id,
                 Type::TEXT,
             )
             .add_parameter(
@@ -60,19 +60,19 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
                 Type::TEXT,
             )
             .add_parameter(
-                &insert_6.application_user_reset_password_token_wrong_enter_tries_quantity,
+                &insert_1.application_user_reset_password_token_wrong_enter_tries_quantity,
                 Type::INT2,
             )
             .add_parameter(
-                &insert_6.application_user_reset_password_token_is_approved,
+                &insert_1.application_user_reset_password_token_is_approved,
                 Type::BOOL,
             )
             .add_parameter(
-                &insert_6.application_user_reset_password_token_expires_at,
+                &insert_1.application_user_reset_password_token_expires_at,
                 Type::INT8,
             )
             .add_parameter(
-                &insert_6.application_user_reset_password_token_can_be_resent_from,
+                &insert_1.application_user_reset_password_token_can_be_resent_from,
                 Type::INT8,
             );
 
@@ -94,13 +94,13 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
 
         return Ok(
             ApplicationUserResetPasswordToken::new(
-                insert_6.application_user_id,
-                Cow::Borrowed(insert_6.application_user_device_id),
-                insert_6.application_user_reset_password_token_value,
-                insert_6.application_user_reset_password_token_wrong_enter_tries_quantity,
-                insert_6.application_user_reset_password_token_is_approved,
-                insert_6.application_user_reset_password_token_expires_at,
-                insert_6.application_user_reset_password_token_can_be_resent_from,
+                insert_1.application_user_id,
+                Cow::Borrowed(insert_1.application_user_device_id),
+                insert_1.application_user_reset_password_token_value,
+                insert_1.application_user_reset_password_token_wrong_enter_tries_quantity,
+                insert_1.application_user_reset_password_token_is_approved,
+                insert_1.application_user_reset_password_token_expires_at,
+                insert_1.application_user_reset_password_token_can_be_resent_from,
             ),
         );
     }
@@ -605,7 +605,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
     }
 }
 
-pub struct Insert6<'a> {
+pub struct Insert1<'a> {
     pub application_user_id: i64,
     pub application_user_device_id: &'a str,
     pub application_user_reset_password_token_value: String,

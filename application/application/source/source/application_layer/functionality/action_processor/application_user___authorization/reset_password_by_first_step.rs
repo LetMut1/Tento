@@ -18,7 +18,7 @@ use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By2;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By4;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user_reset_password_token::Insert6;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user_reset_password_token::Insert1;
 use crate::infrastructure_layer::functionality::repository::postgresql::update::Update12;
 use crate::infrastructure_layer::functionality::repository::postgresql::update::Update13;
 use crate::infrastructure_layer::functionality::repository::postgresql::update::Update14;
@@ -193,7 +193,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByFirstStep> 
             None => {
                 let application_user_reset_password_token = PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::create_1(
                     database_2_postgresql_connection,
-                    Insert6 {
+                    Insert1 {
                         application_user_id: application_user_.id,
                         application_user_device_id: incoming_.application_user_device_id.as_str(),
                         application_user_reset_password_token_value: Generator::<ApplicationUserResetPasswordToken_Value>::generate(),
