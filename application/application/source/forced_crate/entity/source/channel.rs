@@ -50,7 +50,9 @@ pub struct Channel<'a> {
     pub background_image_path: Option<String>,
     _background_image_path: PhantomData<BackgroundImagePath>,
 
-    pub subscribers_quantity: SubscribersQuantity,
+    pub subscribers_quantity: i64,
+    _subscribers_quantity: PhantomData<SubscribersQuantity>,
+
     pub marks_quantity: MarksQuantity,
     pub viewing_quantity: ViewingQuantity,
     pub created_at: CreatedAt,
@@ -68,7 +70,7 @@ impl<'a> Channel<'a> {
         orientation: Vec<i16>,
         cover_image_path: Option<String>,
         background_image_path: Option<String>,
-        subscribers_quantity: SubscribersQuantity,
+        subscribers_quantity: i64,
         marks_quantity: MarksQuantity,
         viewing_quantity: ViewingQuantity,
         created_at: CreatedAt,
@@ -95,6 +97,7 @@ impl<'a> Channel<'a> {
             background_image_path,
             _background_image_path: PhantomData,
             subscribers_quantity,
+            _subscribers_quantity: PhantomData,
             marks_quantity,
             viewing_quantity,
             created_at,
@@ -157,9 +160,8 @@ pub struct CoverImagePath;
 #[derive(Serialize, Deserialize)]
 pub struct BackgroundImagePath;
 
-#[derive(Clone, Copy, Serialize, Deserialize)]
-#[serde(transparent)]
-pub struct SubscribersQuantity(pub i64);
+#[derive(Serialize, Deserialize)]
+pub struct SubscribersQuantity;
 
 #[derive(Clone, Copy, Serialize, Deserialize)]
 #[serde(transparent)]
