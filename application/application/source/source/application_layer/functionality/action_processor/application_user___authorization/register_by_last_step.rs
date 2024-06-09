@@ -32,8 +32,8 @@ use crate::infrastructure_layer::functionality::repository::postgresql::by::By1;
 use crate::infrastructure_layer::data::control_type::TokioBlockingTask;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By2;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By5;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user::Insert1;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user_access_refresh_token::Insert2;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user::Insert1 as ApplicationUserInsert1;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user_access_refresh_token::Insert1 as ApplicationUserAccessRefreshTokenInsert1;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_device::Insert4;
 use crate::infrastructure_layer::functionality::repository::postgresql::update::Update10;
 use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
@@ -238,7 +238,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
 
         let application_user = PostgresqlRepository::<ApplicationUser<'_>>::create_1(
             database_1_postgresql_connection,
-            Insert1 {
+            ApplicationUserInsert1 {
                 application_user_email: incoming_.application_user_email,
                 application_user_nickname: incoming_.application_user_nickname,
                 application_user_password_hash: join_handle.await.convert(Backtrace::new(line!(), file!()))??,
@@ -256,7 +256,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
 // TODO  TRANZACTION посмотреть, необходимо ли здесь сделать транзакцию
         let application_user_access_refresh_token = PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::create_1(
             database_2_postgresql_connection,
-            Insert2 {
+            ApplicationUserAccessRefreshTokenInsert1 {
                 application_user_id: application_user.id,
                 application_user_device_id: incoming_.application_user_device_id.as_str(),
                 application_user_access_token_id: application_user_access_token.id.as_str(),

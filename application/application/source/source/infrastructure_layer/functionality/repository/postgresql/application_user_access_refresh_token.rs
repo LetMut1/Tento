@@ -15,9 +15,9 @@ use tokio_postgres::Client as Connection;
 impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
     pub async fn create_1<'a>(
         database_2_connection: &'a Connection,
-        insert_2: Insert2<'a>,
+        insert_1: Insert1<'a>,
     ) -> Result<ApplicationUserAccessRefreshToken<'a>, Auditor<Error>> {
-        let application_user_access_refresh_token_obfuscation_value = insert_2.application_user_access_refresh_token_obfuscation_value.as_str();
+        let application_user_access_refresh_token_obfuscation_value = insert_1.application_user_access_refresh_token_obfuscation_value.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -40,15 +40,15 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &insert_2.application_user_id,
+                &insert_1.application_user_id,
                 Type::INT8,
             )
             .add_parameter(
-                &insert_2.application_user_device_id,
+                &insert_1.application_user_device_id,
                 Type::TEXT,
             )
             .add_parameter(
-                &insert_2.application_user_access_token_id,
+                &insert_1.application_user_access_token_id,
                 Type::TEXT,
             )
             .add_parameter(
@@ -56,11 +56,11 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 Type::TEXT,
             )
             .add_parameter(
-                &insert_2.application_user_access_refresh_token_expires_at,
+                &insert_1.application_user_access_refresh_token_expires_at,
                 Type::INT8,
             )
             .add_parameter(
-                &insert_2.application_user_access_refresh_token_updated_at,
+                &insert_1.application_user_access_refresh_token_updated_at,
                 Type::INT8,
             );
 
@@ -82,12 +82,12 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
 
         return Ok(
             ApplicationUserAccessRefreshToken::new(
-                insert_2.application_user_id,
-                Cow::Borrowed(insert_2.application_user_device_id),
-                Cow::Borrowed(insert_2.application_user_access_token_id),
-                insert_2.application_user_access_refresh_token_obfuscation_value,
-                insert_2.application_user_access_refresh_token_expires_at,
-                insert_2.application_user_access_refresh_token_updated_at,
+                insert_1.application_user_id,
+                Cow::Borrowed(insert_1.application_user_device_id),
+                Cow::Borrowed(insert_1.application_user_access_token_id),
+                insert_1.application_user_access_refresh_token_obfuscation_value,
+                insert_1.application_user_access_refresh_token_expires_at,
+                insert_1.application_user_access_refresh_token_updated_at,
             ),
         );
     }
@@ -291,7 +291,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
     }
 }
 
-pub struct Insert2<'a> {
+pub struct Insert1<'a> {
     pub application_user_id: i64,
     pub application_user_device_id: &'a str,
     pub application_user_access_token_id: &'a str,

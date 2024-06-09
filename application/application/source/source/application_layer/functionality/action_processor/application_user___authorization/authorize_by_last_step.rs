@@ -26,7 +26,7 @@ use crate::infrastructure_layer::functionality::service::spawner::Spawner;
 use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By3;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By4;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user_access_refresh_token::Insert2;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user_access_refresh_token::Insert1;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_device::Insert4;
 use crate::infrastructure_layer::functionality::repository::postgresql::update::Update2;
 use crate::infrastructure_layer::functionality::repository::postgresql::update::Update6;
@@ -234,7 +234,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
             None => {
                 let application_user_access_refresh_token_ = PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::create_1(
                     database_2_postgresql_connection,
-                    Insert2 {
+                    Insert1 {
                         application_user_id: incoming_.application_user_id,
                         application_user_device_id: incoming_.application_user_device_id.as_str(),
                         application_user_access_token_id,
