@@ -2,9 +2,6 @@ use crate::application_layer::data::unified_report::UnifiedReport;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
-use crate::domain_layer::data::entity::application_user_reset_password_token::derivative::ApplicationUserResetPasswordToken3;
-use crate::domain_layer::data::entity::application_user_reset_password_token::derivative::ApplicationUserResetPasswordToken4;
-use crate::domain_layer::data::entity::application_user_reset_password_token::derivative::ApplicationUserResetPasswordToken5;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_Value;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_WrongEnterTriesQuantity;
 use crate::domain_layer::functionality::service::validator::Validator;
@@ -102,7 +99,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordBySecondStep>
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
-        let mut application_user_reset_password_token = match PostgresqlRepository::<ApplicationUserResetPasswordToken3>::find_1(
+        let mut application_user_reset_password_token = match PostgresqlRepository::<ApplicationUserResetPasswordToken>::find_2(
             database_2_postgresql_connection,
             &by_4,
         )
@@ -134,7 +131,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordBySecondStep>
                 .convert_out_of_range(Backtrace::new(line!(), file!()))?;
 
             if application_user_reset_password_token.wrong_enter_tries_quantity < ApplicationUserResetPasswordToken_WrongEnterTriesQuantity::LIMIT {
-                PostgresqlRepository::<ApplicationUserResetPasswordToken4>::update(
+                PostgresqlRepository::<ApplicationUserResetPasswordToken>::update_4(
                     database_2_postgresql_connection,
                     &Update15 {
                         application_user_reset_password_token_wrong_enter_tries_quantity: application_user_reset_password_token.wrong_enter_tries_quantity,
@@ -163,7 +160,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordBySecondStep>
 
         application_user_reset_password_token.is_approved = true;
 
-        PostgresqlRepository::<ApplicationUserResetPasswordToken5>::update(
+        PostgresqlRepository::<ApplicationUserResetPasswordToken>::update_5(
             database_2_postgresql_connection,
             &Update16 {
                 application_user_reset_password_token_is_approved: application_user_reset_password_token.is_approved,

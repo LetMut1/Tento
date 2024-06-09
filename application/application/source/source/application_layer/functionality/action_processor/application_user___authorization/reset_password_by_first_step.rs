@@ -3,9 +3,6 @@ use crate::domain_layer::data::entity::application_user::derivative::Application
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
-use crate::domain_layer::data::entity::application_user_reset_password_token::derivative::ApplicationUserResetPasswordToken1;
-use crate::domain_layer::data::entity::application_user_reset_password_token::derivative::ApplicationUserResetPasswordToken2;
-use crate::domain_layer::data::entity::application_user_reset_password_token::derivative::ApplicationUserResetPasswordToken3;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_CanBeResentFrom;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_Value;
@@ -113,7 +110,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByFirstStep> 
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
-        let (application_user_reset_password_token_value, application_user_reset_password_token_can_be_resent_from, application_user_reset_password_token_wrong_enter_tries_quantity, can_send) = match PostgresqlRepository::<ApplicationUserResetPasswordToken1>::find_1(
+        let (application_user_reset_password_token_value, application_user_reset_password_token_can_be_resent_from, application_user_reset_password_token_wrong_enter_tries_quantity, can_send) = match PostgresqlRepository::<ApplicationUserResetPasswordToken>::find_1(
             database_2_postgresql_connection,
             &by_4,
         )
@@ -147,7 +144,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByFirstStep> 
                 };
 
                 if need_to_update_1 && need_to_update_2 {
-                    PostgresqlRepository::<ApplicationUserResetPasswordToken1>::update(
+                    PostgresqlRepository::<ApplicationUserResetPasswordToken>::update_1(
                         database_2_postgresql_connection,
                         &Update12 {
                             application_user_reset_password_token_value: application_user_reset_password_token.value.as_str(),
@@ -161,7 +158,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByFirstStep> 
                     .await?;
                 } else {
                     if need_to_update_1 {
-                        PostgresqlRepository::<ApplicationUserResetPasswordToken2>::update(
+                        PostgresqlRepository::<ApplicationUserResetPasswordToken>::update_2(
                             database_2_postgresql_connection,
                             &Update13 {
                                 application_user_reset_password_token_can_be_resent_from: application_user_reset_password_token.can_be_resent_from,
@@ -172,7 +169,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByFirstStep> 
                     }
 
                     if need_to_update_2 {
-                        PostgresqlRepository::<ApplicationUserResetPasswordToken3>::update(
+                        PostgresqlRepository::<ApplicationUserResetPasswordToken>::update_3(
                             database_2_postgresql_connection,
                             &Update14 {
                                 application_user_reset_password_token_value: application_user_reset_password_token.value.as_str(),

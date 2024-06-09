@@ -5,8 +5,6 @@ use crate::domain_layer::data::entity::application_user::ApplicationUser_Passwor
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
-use crate::domain_layer::data::entity::application_user_reset_password_token::derivative::ApplicationUserResetPasswordToken3;
-use crate::domain_layer::data::entity::application_user_reset_password_token::derivative::ApplicationUserResetPasswordToken4;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_Value;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_WrongEnterTriesQuantity;
 use crate::domain_layer::functionality::service::encoder::Encoder;
@@ -125,7 +123,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
-        let mut application_user_reset_password_token = match PostgresqlRepository::<ApplicationUserResetPasswordToken3>::find_1(
+        let mut application_user_reset_password_token = match PostgresqlRepository::<ApplicationUserResetPasswordToken>::find_2(
             database_2_postgresql_connection,
             &by_4,
         )
@@ -157,7 +155,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
                 .convert_out_of_range(Backtrace::new(line!(), file!()))?;
 
             if application_user_reset_password_token.wrong_enter_tries_quantity < ApplicationUserResetPasswordToken_WrongEnterTriesQuantity::LIMIT {
-                PostgresqlRepository::<ApplicationUserResetPasswordToken4>::update(
+                PostgresqlRepository::<ApplicationUserResetPasswordToken>::update_4(
                     database_2_postgresql_connection,
                     &Update15 {
                         application_user_reset_password_token_wrong_enter_tries_quantity: application_user_reset_password_token.wrong_enter_tries_quantity,

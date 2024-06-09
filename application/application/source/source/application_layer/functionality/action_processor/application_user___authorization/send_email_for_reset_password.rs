@@ -3,8 +3,6 @@ use crate::domain_layer::data::entity::application_user::derivative::Application
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
-use crate::domain_layer::data::entity::application_user_reset_password_token::derivative::ApplicationUserResetPasswordToken2;
-use crate::domain_layer::data::entity::application_user_reset_password_token::derivative::ApplicationUserResetPasswordToken6;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_CanBeResentFrom;
 use crate::domain_layer::functionality::service::email_sender::EmailSender;
 use crate::domain_layer::functionality::service::generator::Generator;
@@ -105,7 +103,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForResetPassword>
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
-        let mut application_user_reset_password_token = match PostgresqlRepository::<ApplicationUserResetPasswordToken6>::find_1(
+        let mut application_user_reset_password_token = match PostgresqlRepository::<ApplicationUserResetPasswordToken>::find_3(
             database_2_postgresql_connection,
             &by_4,
         )
@@ -137,7 +135,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForResetPassword>
 
         application_user_reset_password_token.can_be_resent_from = Generator::<ApplicationUserResetPasswordToken_CanBeResentFrom>::generate()?;
 
-        PostgresqlRepository::<ApplicationUserResetPasswordToken2>::update(
+        PostgresqlRepository::<ApplicationUserResetPasswordToken>::update_2(
             database_2_postgresql_connection,
             &Update13 {
                 application_user_reset_password_token_can_be_resent_from: application_user_reset_password_token.can_be_resent_from,
