@@ -18,7 +18,6 @@ crate-type = ["lib"]
 required-features = []
 
 [dependencies]
-formatter = { path = "./../formatter", package = "formatter", version = "1.0.0", default-features = true, features = [], optional = false }
 serde = { package = "serde", version = "1.0.188", default-features = true, features = ["derive"], optional = false }
 
 [features]

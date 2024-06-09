@@ -470,7 +470,6 @@ dependencies = [
 name = "void"
 version = "1.0.0"
 dependencies = [
- "formatter",
  "serde",
 ]
 
