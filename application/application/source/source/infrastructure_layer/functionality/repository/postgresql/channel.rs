@@ -4,7 +4,6 @@ use super::insert::Insert7;
 use super::PostgresqlRepository;
 use crate::domain_layer::data::entity::channel::Channel;
 use crate::domain_layer::data::entity::channel::Channel_CreatedAt;
-use crate::domain_layer::data::entity::channel::Channel_MarksQuantity;
 use crate::domain_layer::data::entity::channel::Channel_ViewingQuantity;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
@@ -122,7 +121,7 @@ impl PostgresqlRepository<Channel<'_>> {
                 Type::INT8,
             )
             .add_parameter(
-                &insert_7.channel_marks_quantity.0,
+                &insert_7.channel_marks_quantity,
                 Type::INT8,
             )
             .add_parameter(
@@ -229,7 +228,7 @@ impl PostgresqlRepository<Channel<'_>> {
                     row_registry[0].try_get::<'_, usize, Option<String>>(7).convert(Backtrace::new(line!(), file!()))?,
                     row_registry[0].try_get::<'_, usize, Option<String>>(8).convert(Backtrace::new(line!(), file!()))?,
                     row_registry[0].try_get::<'_, usize, i64>(9).convert(Backtrace::new(line!(), file!()))?,
-                    Channel_MarksQuantity(row_registry[0].try_get::<'_, usize, i64>(10).convert(Backtrace::new(line!(), file!()))?),
+                    row_registry[0].try_get::<'_, usize, i64>(10).convert(Backtrace::new(line!(), file!()))?,
                     Channel_ViewingQuantity(row_registry[0].try_get::<'_, usize, i64>(11).convert(Backtrace::new(line!(), file!()))?),
                     Channel_CreatedAt(row_registry[0].try_get::<'_, usize, String>(12).convert(Backtrace::new(line!(), file!()))?),
                 ),
@@ -300,7 +299,7 @@ impl PostgresqlRepository<Channel<'_>> {
                     row_registry[0].try_get::<'_, usize, Option<String>>(7).convert(Backtrace::new(line!(), file!()))?,
                     row_registry[0].try_get::<'_, usize, Option<String>>(8).convert(Backtrace::new(line!(), file!()))?,
                     row_registry[0].try_get::<'_, usize, i64>(9).convert(Backtrace::new(line!(), file!()))?,
-                    Channel_MarksQuantity(row_registry[0].try_get::<'_, usize, i64>(10).convert(Backtrace::new(line!(), file!()))?),
+                    row_registry[0].try_get::<'_, usize, i64>(10).convert(Backtrace::new(line!(), file!()))?,
                     Channel_ViewingQuantity(row_registry[0].try_get::<'_, usize, i64>(11).convert(Backtrace::new(line!(), file!()))?),
                     Channel_CreatedAt(row_registry[0].try_get::<'_, usize, String>(12).convert(Backtrace::new(line!(), file!()))?),
                 ),

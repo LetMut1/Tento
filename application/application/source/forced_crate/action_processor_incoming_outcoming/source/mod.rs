@@ -85,7 +85,6 @@ pub mod action_processor;
 
 use entity::channel_outer_link::ChannelOuterLink_Address;
 use entity::channel_outer_link::ChannelOuterLink_Alias;
-use entity::channel::Channel_MarksQuantity;
 use entity::channel::Channel_ViewingQuantity;
 use serde::Deserialize;
 use serde::Serialize;
@@ -119,7 +118,7 @@ pub struct Channel2 {
     pub channel_cover_image_path: Option<String>,
     pub channel_background_image_path: Option<String>,
     pub channel_subscribers_quantity: i64,
-    pub channel_marks_quantity: Channel_MarksQuantity,
+    pub channel_marks_quantity: i64,
     pub channel_viewing_quantity: Channel_ViewingQuantity,
 }
 

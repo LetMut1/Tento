@@ -3093,7 +3093,7 @@ pub extern "C" fn channel___base____get_one_by_id____deserialize(
                             channel_cover_image_path,
                             channel_background_image_path,
                             channel_subscribers_quantity: data__.channel.channel_subscribers_quantity,
-                            channel_marks_quantity: data__.channel.channel_marks_quantity.0,
+                            channel_marks_quantity: data__.channel.channel_marks_quantity,
                             channel_viewing_quantity: data__.channel. channel_viewing_quantity.0,
                         };
 
@@ -3356,7 +3356,6 @@ mod test {
             use auditor::Auditor;
             use entity::channel_outer_link::ChannelOuterLink_Address;
             use entity::channel_outer_link::ChannelOuterLink_Alias;
-            use entity::channel::Channel_MarksQuantity;
             use entity::channel::Channel_ViewingQuantity;
             use error::Error;
             use formatter::Formatter;
@@ -4937,7 +4936,7 @@ mod test {
                         channel_background_image_path: Some(STRING_LITERAL.to_string()),
                         channel_cover_image_path: Some(STRING_LITERAL.to_string()),
                         channel_subscribers_quantity: 0,
-                        channel_marks_quantity: Channel_MarksQuantity(0),
+                        channel_marks_quantity: 0,
                         channel_viewing_quantity: Channel_ViewingQuantity(0),
                     };
 
