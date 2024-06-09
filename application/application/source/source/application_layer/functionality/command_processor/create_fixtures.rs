@@ -4,9 +4,8 @@ use crate::domain_layer::data::entity::application_user::ApplicationUser_Nicknam
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Password;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
-use crate::domain_layer::data::entity::channel::AccessModifier;
 use crate::domain_layer::data::entity::channel::Channel;
-use crate::domain_layer::data::entity::channel::Channel_AccessModifier_;
+use crate::domain_layer::data::entity::channel::Channel_AccessModifier;
 use crate::domain_layer::data::entity::channel::Channel_Description;
 use crate::domain_layer::data::entity::channel::Channel_LinkedName;
 use crate::domain_layer::data::entity::channel::Channel_Name;
@@ -331,7 +330,7 @@ impl CommandProcessor<CreateFixtures> {
                                 channel_name,
                                 channel_linked_name,
                                 channel_description,
-                                channel_access_modifier: FormResolver::<AccessModifier>::from_representation(Channel_AccessModifier_::Open),
+                                channel_access_modifier: Channel_AccessModifier::from_representation(Channel_AccessModifier::Open),
                                 channel_visability_modifier: FormResolver::<Channel_VisabilityModifier>::from_representation(Channel_VisabilityModifier_::Public),
                                 channel_orientation,
                                 channel_cover_image_path: Some(Self::STUB.to_string()),

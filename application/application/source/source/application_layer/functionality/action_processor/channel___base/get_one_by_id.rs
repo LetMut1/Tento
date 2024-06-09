@@ -2,14 +2,12 @@ use crate::application_layer::data::unified_report::UnifiedReport;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::data::entity::channel::Channel as EntityChannel;
 use crate::domain_layer::data::entity::channel::Channel_AccessModifier;
-use crate::domain_layer::data::entity::channel::Channel_AccessModifier_;
 use crate::domain_layer::data::entity::channel::Channel_Id;
 use crate::domain_layer::data::entity::channel_inner_link::ChannelInnerLink;
 use crate::domain_layer::data::entity::channel_outer_link::ChannelOuterLink;
 use crate::domain_layer::data::entity::channel_subscription::ChannelSubscription;
 use crate::domain_layer::functionality::service::extractor::application_user_access_token::ExtractorResult;
 use crate::domain_layer::functionality::service::extractor::Extractor;
-use crate::domain_layer::functionality::service::form_resolver::FormResolver;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
@@ -105,7 +103,7 @@ impl ActionProcessor<Channel__Base___GetOneById> {
             }
         };
 
-        if let Channel_AccessModifier_::Close = FormResolver::<Channel_AccessModifier>::to_representation(channel.access_modifier) {
+        if let Channel_AccessModifier::Close = Channel_AccessModifier::to_representation(channel.access_modifier) {
             let is_exist = PostgresqlRepository::<ChannelSubscription>::is_exist_1(
                 &*database_1_postgresql_pooled_connection,
                 &By10 {

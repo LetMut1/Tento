@@ -2,7 +2,6 @@ use super::application_user::ApplicationUser_Id;
 use std::borrow::Cow;
 use std::marker::PhantomData;
 pub use self::AccessModifier as Channel_AccessModifier;
-pub use self::AccessModifier_ as Channel_AccessModifier_;
 pub use self::Description as Channel_Description;
 pub use self::Id as Channel_Id;
 pub use self::LinkedName as Channel_LinkedName;
@@ -121,16 +120,29 @@ impl Description {
     pub const MAXIMUM_LENGTH: usize = 500;
 }
 
-pub struct AccessModifier;
+pub enum AccessModifier {
+    Open,
+    Close,
+}
 
 impl AccessModifier {
     pub const OPEN: i16 = 0;
     pub const CLOSE: i16 = 1;
-}
 
-pub enum AccessModifier_ {
-    Open = AccessModifier::OPEN as isize,
-    Close = AccessModifier::CLOSE as isize,
+    pub fn from_representation(access_modifier: AccessModifier) -> i16 {
+        return match access_modifier {
+            Self::Open => Self::OPEN,
+            Self::Close => Self::CLOSE,
+        };
+    }
+
+    pub fn to_representation(access_modifier: i16) -> AccessModifier {
+        return if access_modifier == Self::OPEN {
+            Self::Open
+        } else {
+            Self::Close
+        };
+    }
 }
 
 pub struct VisabilityModifier;
