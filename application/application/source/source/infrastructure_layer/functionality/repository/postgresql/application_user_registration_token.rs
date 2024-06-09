@@ -20,7 +20,7 @@ use tokio_postgres::types::Type;
 use tokio_postgres::Client as Connection;
 
 impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
-    pub async fn create<'a>(
+    pub async fn create_1<'a>(
         database_2_connection: &'a Connection,
         insert_5: Insert5<'a>,
     ) -> Result<ApplicationUserRegistrationToken<'a>, Auditor<Error>> {
@@ -106,7 +106,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
         );
     }
 
-    pub async fn delete<'a>(
+    pub async fn delete_2<'a>(
         database_2_connection: &'a Connection,
         by_5: &'a By5<'_>,
     ) -> Result<(), Auditor<Error>> {

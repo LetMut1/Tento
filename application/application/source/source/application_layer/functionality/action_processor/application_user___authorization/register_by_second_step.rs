@@ -112,7 +112,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
         };
 
         if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token.expires_at) {
-            PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete(
+            PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete_2(
                 database_2_postgresql_connection,
                 &by_5,
             )
@@ -140,7 +140,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
                 )
                 .await?;
             } else {
-                PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete(
+                PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete_2(
                     database_2_postgresql_connection,
                     &by_5,
                 )

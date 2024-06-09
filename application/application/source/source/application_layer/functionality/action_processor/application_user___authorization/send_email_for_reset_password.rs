@@ -116,7 +116,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForResetPassword>
         };
 
         if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_reset_password_token.expires_at) {
-            PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete(
+            PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete_2(
                 database_2_postgresql_connection,
                 &by_4,
             )

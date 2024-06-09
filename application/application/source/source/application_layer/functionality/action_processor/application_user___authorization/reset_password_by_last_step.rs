@@ -136,7 +136,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
         };
 
         if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_reset_password_token.expires_at) {
-            PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete(
+            PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete_2(
                 database_2_postgresql_connection,
                 &by_4,
             )
@@ -164,7 +164,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
                 )
                 .await?;
             } else {
-                PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete(
+                PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete_2(
                     database_2_postgresql_connection,
                     &by_4,
                 )
@@ -220,7 +220,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
 
         application_user.password_hash = join_handle.await.convert(Backtrace::new(line!(), file!()))??;
 
-        PostgresqlRepository::<ApplicationUser>::update(
+        PostgresqlRepository::<ApplicationUser>::update_1(
             database_1_postgresql_connection,
             &Update1 {
                 application_user_password_hash: application_user.password_hash.as_str(),
@@ -243,7 +243,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
             async move {
                 let database_2_postgresql_pooled_connection_ = database_2_postgresql_connection_pool_.get().await.convert(Backtrace::new(line!(), file!()))?;
 
-                PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete(
+                PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete_2(
                     &*database_2_postgresql_pooled_connection_,
                     &By4 {
                         application_user_id: incoming_.application_user_id,

@@ -176,7 +176,7 @@ impl CommandProcessor<CreateFixtures> {
             {
                 Some(application_user_) => application_user_,
                 None => {
-                    PostgresqlRepository::<ApplicationUser<'_>>::create(
+                    PostgresqlRepository::<ApplicationUser<'_>>::create_1(
                         database_1_postgresql_connection,
                         Insert1 {
                             application_user_email,
@@ -208,7 +208,7 @@ impl CommandProcessor<CreateFixtures> {
                 );
             }
 
-            PostgresqlRepository::<ApplicationUserDevice>::create(
+            PostgresqlRepository::<ApplicationUserDevice>::create_1(
                 database_1_postgresql_connection,
                 Insert4 {
                     application_user_device_id,
@@ -321,7 +321,7 @@ impl CommandProcessor<CreateFixtures> {
                         continue 'b;
                     }
                     None => {
-                        PostgresqlRepository::<Channel<'_>>::create(
+                        PostgresqlRepository::<Channel<'_>>::create_1(
                             database_1_postgresql_connection,
                             Insert7 {
                                 channel_owner: application_user.id,

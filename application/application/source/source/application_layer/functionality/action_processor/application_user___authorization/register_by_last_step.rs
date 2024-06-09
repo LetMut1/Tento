@@ -192,7 +192,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
         };
 
         if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token.expires_at) {
-            PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete(
+            PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete_2(
                 database_2_postgresql_connection,
                 &by_5,
             )
@@ -220,7 +220,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
                 )
                 .await?;
             } else {
-                PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete(
+                PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete_2(
                     database_2_postgresql_connection,
                     &by_5,
                 )
@@ -236,7 +236,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
             }
         );
 
-        let application_user = PostgresqlRepository::<ApplicationUser<'_>>::create(
+        let application_user = PostgresqlRepository::<ApplicationUser<'_>>::create_1(
             database_1_postgresql_connection,
             Insert1 {
                 application_user_email: incoming_.application_user_email,
@@ -254,7 +254,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
         );
 
 // TODO  TRANZACTION посмотреть, необходимо ли здесь сделать транзакцию
-        let application_user_access_refresh_token = PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::create(
+        let application_user_access_refresh_token = PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::create_1(
             database_2_postgresql_connection,
             Insert2 {
                 application_user_id: application_user.id,
@@ -279,7 +279,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
             async move {
                 let database_1_postgresql_pooled_connection_ = database_1_postgresql_connection_pool_.get().await.convert(Backtrace::new(line!(), file!()))?;
 
-                let application_user_device = PostgresqlRepository::<ApplicationUserDevice>::create(
+                let application_user_device = PostgresqlRepository::<ApplicationUserDevice>::create_1(
                     &*database_1_postgresql_pooled_connection_,
                     Insert4 {
                         application_user_device_id: incoming_.application_user_device_id,
@@ -290,7 +290,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
 
                 let database_2_postgresql_pooled_connection_ = database_2_postgresql_connection_pool_.get().await.convert(Backtrace::new(line!(), file!()))?;
 
-                PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete(
+                PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete_2(
                     &*database_2_postgresql_pooled_connection_,
                     &By5 {
                         application_user_email: application_user.email.as_str(),

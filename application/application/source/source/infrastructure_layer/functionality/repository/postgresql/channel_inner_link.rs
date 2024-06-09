@@ -12,7 +12,7 @@ use tokio_postgres::Client as Connection;
 pub use action_processor_incoming_outcoming::ChannelInnerLink1;
 
 impl PostgresqlRepository<ChannelInnerLink> {
-    pub async fn create<'a>(
+    pub async fn create_1<'a>(
         database_1_connection: &'a Connection,
         insert_8: Insert8,
     ) -> Result<ChannelInnerLink, Auditor<Error>> {

@@ -14,7 +14,7 @@ use tokio_postgres::types::Type;
 use tokio_postgres::Client as Connection;
 
 impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
-    pub async fn create<'a>(
+    pub async fn create_1<'a>(
         database_2_connection: &'a Connection,
         insert_2: Insert2<'a>,
     ) -> Result<ApplicationUserAccessRefreshToken<'a>, Auditor<Error>> {
@@ -93,7 +93,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
         );
     }
 
-    pub async fn update<'a>(
+    pub async fn update_1<'a>(
         database_2_connection: &'a Connection,
         update_2: &'a Update2<'_>,
         by_4: &'a By4<'_>,

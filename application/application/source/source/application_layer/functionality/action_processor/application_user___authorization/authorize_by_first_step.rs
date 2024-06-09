@@ -273,7 +273,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                 )
             }
             None => {
-                let application_user_authorization_token = PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::create(
+                let application_user_authorization_token = PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::create_1(
                     database_2_postgresql_connection,
                     Insert3 {
                         application_user_id,

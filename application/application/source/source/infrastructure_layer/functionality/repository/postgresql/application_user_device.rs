@@ -10,7 +10,7 @@ use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use tokio_postgres::Client as Connection;
 
 impl PostgresqlRepository<ApplicationUserDevice> {
-    pub async fn create<'a>(
+    pub async fn create_1<'a>(
         database_1_connection: &'a Connection,
         insert_4: Insert4,
     ) -> Result<ApplicationUserDevice, Auditor<Error>> {

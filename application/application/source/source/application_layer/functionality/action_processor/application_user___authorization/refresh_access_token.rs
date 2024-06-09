@@ -124,7 +124,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
 
         application_user_access_refresh_token.updated_at = Generator::<ApplicationUserAccessRefreshToken_UpdatedAt>::generate();
 
-        PostgresqlRepository::<ApplicationUserAccessRefreshToken>::update(
+        PostgresqlRepository::<ApplicationUserAccessRefreshToken>::update_1(
             database_2_postgresql_connection,
             &Update2 {
                 application_user_access_token_id: application_user_access_refresh_token.application_user_access_token_id.as_ref(),

@@ -130,7 +130,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
         };
 
         if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token_.expires_at) {
-            PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::delete(
+            PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::delete_1(
                 database_2_postgresql_connection,
                 &by_4,
             )
@@ -154,7 +154,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
                 )
                 .await?;
             } else {
-                PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::delete(
+                PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::delete_1(
                     database_2_postgresql_connection,
                     &by_4,
                 )
@@ -217,7 +217,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
 
                 application_user_access_refresh_token_.updated_at = application_user_access_refresh_token_updated_at;
 
-                PostgresqlRepository::<ApplicationUserAccessRefreshToken>::update(
+                PostgresqlRepository::<ApplicationUserAccessRefreshToken>::update_1(
                     database_2_postgresql_connection,
                     &Update2 {
                         application_user_access_token_id: application_user_access_refresh_token_.application_user_access_token_id.as_ref(),
@@ -232,7 +232,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
                 application_user_access_refresh_token_
             }
             None => {
-                let application_user_access_refresh_token_ = PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::create(
+                let application_user_access_refresh_token_ = PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::create_1(
                     database_2_postgresql_connection,
                     Insert2 {
                         application_user_id: incoming_.application_user_id,
@@ -262,7 +262,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
             async move {
                 let database_1_postgresql_pooled_connection_ = database_1_postgresql_connection_pool_.get().await.convert(Backtrace::new(line!(), file!()))?;
 
-                let application_user_device = PostgresqlRepository::<ApplicationUserDevice>::create(
+                let application_user_device = PostgresqlRepository::<ApplicationUserDevice>::create_1(
                     &*database_1_postgresql_pooled_connection_,
                     Insert4 {
                         application_user_device_id: incoming_.application_user_device_id,
@@ -273,7 +273,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
 
                 let database_2_postgresql_pooled_connection_ = database_2_postgresql_connection_pool_.get().await.convert(Backtrace::new(line!(), file!()))?;
 
-                PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::delete(
+                PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::delete_1(
                     &*database_2_postgresql_pooled_connection_,
                     &By4 {
                         application_user_id: application_user_device.application_user_id,

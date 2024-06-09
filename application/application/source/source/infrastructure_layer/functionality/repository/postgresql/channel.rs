@@ -14,7 +14,7 @@ use tokio_postgres::types::Type;
 use tokio_postgres::Client as Connection;
 
 impl PostgresqlRepository<Channel<'_>> {
-    pub async fn create<'a>(
+    pub async fn create_1<'a>(
         database_1_connection: &'a Connection,
         insert_7: Insert7,
     ) -> Result<Channel<'static>, Auditor<Error>> {

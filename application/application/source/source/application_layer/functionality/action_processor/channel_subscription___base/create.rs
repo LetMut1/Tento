@@ -108,7 +108,7 @@ impl ActionProcessor<ChannelSubscription__Base___Create> {
             return Ok(Ok(UnifiedReport::precedent(Precedent::Channel_IsClose)));
         }
 
-        PostgresqlRepository::<ChannelSubscription>::create(
+        PostgresqlRepository::<ChannelSubscription>::create_1(
             database_1_postgresql_connection,
             Insert10 {
                 application_user_id: application_user_access_token.application_user_id,

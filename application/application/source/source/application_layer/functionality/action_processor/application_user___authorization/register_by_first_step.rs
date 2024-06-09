@@ -187,7 +187,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
                 )
             }
             None => {
-                let application_user_registration_token = PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::create(
+                let application_user_registration_token = PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::create_1(
                     database_2_postgresql_connection,
                     Insert5 {
                         application_user_email: incoming_.application_user_email.as_str(),

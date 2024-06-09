@@ -12,7 +12,7 @@ use crate::infrastructure_layer::data::auditor::ErrorConverter;
 pub use action_processor_incoming_outcoming::ChannelOuterLink1;
 
 impl PostgresqlRepository<ChannelOuterLink> {
-    pub async fn create<'a>(
+    pub async fn create_1<'a>(
         database_1_connection: &'a Connection,
         insert_9: Insert9,
     ) -> Result<ChannelOuterLink, Auditor<Error>> {

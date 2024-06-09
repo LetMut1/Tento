@@ -191,7 +191,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByFirstStep> 
                 )
             }
             None => {
-                let application_user_reset_password_token = PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::create(
+                let application_user_reset_password_token = PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::create_1(
                     database_2_postgresql_connection,
                     Insert6 {
                         application_user_id: application_user_.id,
