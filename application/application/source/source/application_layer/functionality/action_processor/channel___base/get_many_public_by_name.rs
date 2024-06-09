@@ -119,7 +119,7 @@ impl ActionProcessor<Channel__Base___GetManyPublicByName> {
             &By11 {
                 application_user_id: application_user_access_token.application_user_id,
                 channel_name: incoming_.channel_name.as_str(),
-                requery_channel_name: &incoming_.requery_channel_name,
+                requery_channel_name: incoming_.requery_channel_name.as_deref(),
                 channel_visability_modifier: Channel_VisabilityModifier::from_representation(Channel_VisabilityModifier::Public),
             },
             incoming_.limit,

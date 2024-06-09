@@ -63,14 +63,14 @@ pub mod by {
     pub struct By11<'a> {
         pub application_user_id: i64,
         pub channel_name: &'a str,
-        pub requery_channel_name: &'a Option<String>,
+        pub requery_channel_name: Option<&'a str>,
         pub channel_visability_modifier: i16,
     }
 
     pub struct By12<'a> {
         pub application_user_id: i64,
         pub channel_name: &'a str,
-        pub requery_channel_name: &'a Option<String>,
+        pub requery_channel_name: Option<&'a str>,
     }
 
     pub struct By13 {

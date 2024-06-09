@@ -59,11 +59,7 @@ impl PostgresqlRepository<Common1> {
                 Type::TEXT,
             );
 
-        let requery_channel_name: &'_ str;
-
-        if let Some(requery_channel_name_) = by_11.requery_channel_name {
-            requery_channel_name = requery_channel_name_.as_str();
-
+        if let Some(ref requery_channel_name) = by_11.requery_channel_name {
             query = format!(
                 "{} AND c.name > ${}",
                 query.as_str(),
@@ -71,7 +67,7 @@ impl PostgresqlRepository<Common1> {
             );
 
             prepared_statemant_parameter_convertation_resolver.add_parameter(
-                &requery_channel_name,
+                requery_channel_name,
                 Type::TEXT,
             );
         }
@@ -178,11 +174,7 @@ impl PostgresqlRepository<Common1> {
                 Type::TEXT,
             );
 
-        let requery_channel_name: &'_ str;
-
-        if let Some(requery_channel_name_) = by_12.requery_channel_name {
-            requery_channel_name = requery_channel_name_.as_str();
-
+        if let Some(ref requery_channel_name) = by_12.requery_channel_name {
             query = format!(
                 "{} AND c.name > ${}",
                 query.as_str(),
@@ -190,7 +182,7 @@ impl PostgresqlRepository<Common1> {
             );
 
             prepared_statemant_parameter_convertation_resolver.add_parameter(
-                &requery_channel_name,
+                requery_channel_name,
                 Type::TEXT,
             );
         }

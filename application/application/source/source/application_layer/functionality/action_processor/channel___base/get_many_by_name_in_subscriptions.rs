@@ -118,7 +118,7 @@ impl ActionProcessor<Channel__Base___GetManyByNameInSubscriptions> {
             &By12 {
                 application_user_id: application_user_access_token.application_user_id,
                 channel_name: incoming_.channel_name.as_str(),
-                requery_channel_name: &incoming_.requery_channel_name,
+                requery_channel_name: incoming_.requery_channel_name.as_deref(),
             },
             incoming_.limit,
         )
