@@ -34,7 +34,7 @@ use crate::infrastructure_layer::functionality::repository::postgresql::by::By2;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By5;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user::Insert1 as ApplicationUserInsert1;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_access_refresh_token::Insert1 as ApplicationUserAccessRefreshTokenInsert1;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user_device::Insert4;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user_device::Insert1;
 use crate::infrastructure_layer::functionality::repository::postgresql::update::Update10;
 use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
@@ -281,7 +281,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
 
                 let application_user_device = PostgresqlRepository::<ApplicationUserDevice>::create_1(
                     &*database_1_postgresql_pooled_connection_,
-                    Insert4 {
+                    Insert1 {
                         application_user_device_id: incoming_.application_user_device_id,
                         application_user_id: application_user.id,
                     },

@@ -21,8 +21,8 @@ use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By1;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By7;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user::Insert1;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user_device::Insert4;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user::Insert1 as ApplicationUserInsert1;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user_device::Insert1 as ApplicationUserDeviceInsert1;
 use crate::infrastructure_layer::functionality::repository::postgresql::channel::Insert7;
 use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::creator::Creator;
@@ -178,7 +178,7 @@ impl CommandProcessor<CreateFixtures> {
                 None => {
                     PostgresqlRepository::<ApplicationUser<'_>>::create_1(
                         database_1_postgresql_connection,
-                        Insert1 {
+                        ApplicationUserInsert1 {
                             application_user_email,
                             application_user_nickname,
                             application_user_password_hash: application_user_password_hash.clone(),
@@ -210,7 +210,7 @@ impl CommandProcessor<CreateFixtures> {
 
             PostgresqlRepository::<ApplicationUserDevice>::create_1(
                 database_1_postgresql_connection,
-                Insert4 {
+                ApplicationUserDeviceInsert1 {
                     application_user_device_id,
                     application_user_id: application_user.id,
                 },

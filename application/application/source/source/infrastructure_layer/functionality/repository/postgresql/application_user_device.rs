@@ -11,9 +11,9 @@ use tokio_postgres::Client as Connection;
 impl PostgresqlRepository<ApplicationUserDevice> {
     pub async fn create_1<'a>(
         database_1_connection: &'a Connection,
-        insert_4: Insert4,
+        insert_1: Insert1,
     ) -> Result<ApplicationUserDevice, Auditor<Error>> {
-        let application_user_device_id = insert_4.application_user_device_id.as_str();
+        let application_user_device_id = insert_1.application_user_device_id.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -33,7 +33,7 @@ impl PostgresqlRepository<ApplicationUserDevice> {
                 Type::TEXT,
             )
             .add_parameter(
-                &insert_4.application_user_id,
+                &insert_1.application_user_id,
                 Type::INT8,
             );
 
@@ -55,14 +55,14 @@ impl PostgresqlRepository<ApplicationUserDevice> {
 
         return Ok(
             ApplicationUserDevice::new(
-                insert_4.application_user_device_id,
-                insert_4.application_user_id,
+                insert_1.application_user_device_id,
+                insert_1.application_user_id,
             ),
         );
     }
 }
 
-pub struct Insert4 {
+pub struct Insert1 {
     pub application_user_device_id: String,
     pub application_user_id: i64,
 }
