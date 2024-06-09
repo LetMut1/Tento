@@ -3,7 +3,6 @@ use super::by::By7;
 use super::insert::Insert7;
 use super::PostgresqlRepository;
 use crate::domain_layer::data::entity::channel::Channel;
-use crate::domain_layer::data::entity::channel::Channel_CreatedAt;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
@@ -159,7 +158,7 @@ impl PostgresqlRepository<Channel<'_>> {
                 insert_7.channel_subscribers_quantity,
                 insert_7.channel_marks_quantity,
                 insert_7.channel_viewing_quantity,
-                Channel_CreatedAt(row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?),
+                row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
             ),
         );
     }
@@ -229,7 +228,7 @@ impl PostgresqlRepository<Channel<'_>> {
                     row_registry[0].try_get::<'_, usize, i64>(9).convert(Backtrace::new(line!(), file!()))?,
                     row_registry[0].try_get::<'_, usize, i64>(10).convert(Backtrace::new(line!(), file!()))?,
                     row_registry[0].try_get::<'_, usize, i64>(11).convert(Backtrace::new(line!(), file!()))?,
-                    Channel_CreatedAt(row_registry[0].try_get::<'_, usize, String>(12).convert(Backtrace::new(line!(), file!()))?),
+                    row_registry[0].try_get::<'_, usize, String>(12).convert(Backtrace::new(line!(), file!()))?,
                 ),
             ),
         );
@@ -300,7 +299,7 @@ impl PostgresqlRepository<Channel<'_>> {
                     row_registry[0].try_get::<'_, usize, i64>(9).convert(Backtrace::new(line!(), file!()))?,
                     row_registry[0].try_get::<'_, usize, i64>(10).convert(Backtrace::new(line!(), file!()))?,
                     row_registry[0].try_get::<'_, usize, i64>(11).convert(Backtrace::new(line!(), file!()))?,
-                    Channel_CreatedAt(row_registry[0].try_get::<'_, usize, String>(12).convert(Backtrace::new(line!(), file!()))?),
+                    row_registry[0].try_get::<'_, usize, String>(12).convert(Backtrace::new(line!(), file!()))?,
                 ),
             ),
         );

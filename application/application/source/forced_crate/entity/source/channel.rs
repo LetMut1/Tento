@@ -59,7 +59,8 @@ pub struct Channel<'a> {
     pub viewing_quantity: i64,
     _viewing_quantity: PhantomData<ViewingQuantity>,
 
-    pub created_at: CreatedAt,
+    pub created_at: String,
+    _created_at: PhantomData<CreatedAt>
 }
 
 impl<'a> Channel<'a> {
@@ -77,7 +78,7 @@ impl<'a> Channel<'a> {
         subscribers_quantity: i64,
         marks_quantity: i64,
         viewing_quantity: i64,
-        created_at: CreatedAt,
+        created_at: String,
     ) -> Self {
         return Self {
             id,
@@ -107,6 +108,7 @@ impl<'a> Channel<'a> {
             viewing_quantity,
             _viewing_quantity: PhantomData,
             created_at,
+            _created_at: PhantomData,
         };
     }
 }
@@ -175,4 +177,4 @@ pub struct MarksQuantity;
 #[derive(Serialize, Deserialize)]
 pub struct ViewingQuantity;
 
-pub struct CreatedAt(pub String);
+pub struct CreatedAt;
