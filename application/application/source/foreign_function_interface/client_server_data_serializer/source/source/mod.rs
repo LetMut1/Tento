@@ -2559,7 +2559,7 @@ pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____deseria
                             };
 
                             let channel_background_image_path = match common_1.channel.channel_background_image_path {
-                                Some(channel_background_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel_background_image_path_.0)),
+                                Some(channel_background_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel_background_image_path_)),
                                 None => C_Option::none()
                             };
 
@@ -2732,7 +2732,7 @@ pub extern "C" fn channel___base____get_many_by_subscription____deserialize(
                             };
 
                             let channel_background_image_path = match common_1.channel.channel_background_image_path {
-                                Some(channel_background_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel_background_image_path_.0)),
+                                Some(channel_background_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel_background_image_path_)),
                                 None => C_Option::none()
                             };
 
@@ -2907,7 +2907,7 @@ pub extern "C" fn channel___base____get_many_public_by_name____deserialize(
                             };
 
                             let channel_background_image_path = match common_1.channel.channel_background_image_path {
-                                Some(channel_background_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel_background_image_path_.0)),
+                                Some(channel_background_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel_background_image_path_)),
                                 None => C_Option::none()
                             };
 
@@ -3078,7 +3078,7 @@ pub extern "C" fn channel___base____get_one_by_id____deserialize(
                         };
 
                         let channel_background_image_path = match data__.channel.channel_background_image_path {
-                            Some(channel_background_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel_background_image_path_.0)),
+                            Some(channel_background_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel_background_image_path_)),
                             None => C_Option::none()
                         };
 
@@ -3356,7 +3356,6 @@ mod test {
             use auditor::Auditor;
             use entity::channel_outer_link::ChannelOuterLink_Address;
             use entity::channel_outer_link::ChannelOuterLink_Alias;
-            use entity::channel::Channel_BackgroundImagePath;
             use entity::channel::Channel_MarksQuantity;
             use entity::channel::Channel_SubscribersQuantity;
             use entity::channel::Channel_ViewingQuantity;
@@ -4617,7 +4616,7 @@ mod test {
                                 channel_linked_name: STRING_LITERAL.to_string(),
                                 channel_access_modifier: 0,
                                 channel_visability_modifier: 0,
-                                channel_background_image_path: Some(Channel_BackgroundImagePath(STRING_LITERAL.to_string())),
+                                channel_background_image_path: Some(STRING_LITERAL.to_string()),
                                 channel_cover_image_path: Some(STRING_LITERAL.to_string()),
                             },
                             is_application_user_subscribed: false,
@@ -4717,7 +4716,7 @@ mod test {
                                 channel_linked_name: STRING_LITERAL.to_string(),
                                 channel_access_modifier: 0,
                                 channel_visability_modifier: 0,
-                                channel_background_image_path: Some(Channel_BackgroundImagePath(STRING_LITERAL.to_string())),
+                                channel_background_image_path: Some(STRING_LITERAL.to_string()),
                                 channel_cover_image_path: Some(STRING_LITERAL.to_string()),
                             },
                             is_application_user_subscribed: false,
@@ -4817,7 +4816,7 @@ mod test {
                                 channel_linked_name: STRING_LITERAL.to_string(),
                                 channel_access_modifier: 0,
                                 channel_visability_modifier: 0,
-                                channel_background_image_path: Some(Channel_BackgroundImagePath(STRING_LITERAL.to_string())),
+                                channel_background_image_path: Some(STRING_LITERAL.to_string()),
                                 channel_cover_image_path: Some(STRING_LITERAL.to_string()),
                             },
                             is_application_user_subscribed: false,
@@ -4936,7 +4935,7 @@ mod test {
                         channel_access_modifier: 0,
                         channel_visability_modifier: 0,
                         channel_orientation: vec![0, 0, 0],
-                        channel_background_image_path: Some(Channel_BackgroundImagePath(STRING_LITERAL.to_string())),
+                        channel_background_image_path: Some(STRING_LITERAL.to_string()),
                         channel_cover_image_path: Some(STRING_LITERAL.to_string()),
                         channel_subscribers_quantity: Channel_SubscribersQuantity(0),
                         channel_marks_quantity: Channel_MarksQuantity(0),
