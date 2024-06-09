@@ -4,7 +4,7 @@ use super::insert::Insert2;
 use super::update::Update2;
 use super::PostgresqlRepository;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
-use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken1;
+use crate::domain_layer::data::entity::application_user_access_refresh_token::derivative::ApplicationUserAccessRefreshToken1;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;

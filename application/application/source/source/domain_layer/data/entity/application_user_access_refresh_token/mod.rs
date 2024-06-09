@@ -1,3 +1,5 @@
+pub mod derivative;
+
 use super::application_user::ApplicationUser_Id;
 use super::application_user_access_token::ApplicationUserAccessToken_Id;
 use super::application_user_device::ApplicationUserDevice_Id;
@@ -55,13 +57,6 @@ impl<'a> ApplicationUserAccessRefreshToken<'a> {
             _updated_at: PhantomData,
         };
     }
-}
-
-pub struct ApplicationUserAccessRefreshToken1 {
-    pub application_user_access_token_id: String,
-    pub obfuscation_value: String,
-    pub expires_at: i64,
-    pub updated_at: i64,
 }
 
 pub struct ObfuscationValue;
