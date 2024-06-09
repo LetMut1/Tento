@@ -1,7 +1,5 @@
 use super::application_user::ApplicationUser_Email;
 use super::application_user_device::ApplicationUserDevice_Id;
-use serde::Deserialize;
-use serde::Serialize;
 use std::marker::PhantomData;
 use std::borrow::Cow;
 
@@ -63,14 +61,12 @@ impl<'a> ApplicationUserRegistrationToken<'a> {
     }
 }
 
-#[derive(Serialize, Deserialize)]
 pub struct Value;
 
 impl Value {
     pub const REGULAR_EXPRESSION: &'static str = r#"^[0-9]{6}$"#;
 }
 
-#[derive(Serialize, Deserialize)]
 pub struct WrongEnterTriesQuantity;
 
 impl WrongEnterTriesQuantity {
@@ -85,7 +81,6 @@ impl ExpiresAt {
     pub const QUANTITY_OF_MINUTES_FOR_EXPIRATION: i64 = 60 * 3;
 }
 
-#[derive(Serialize, Deserialize)]
 pub struct CanBeResentFrom;
 
 impl CanBeResentFrom {

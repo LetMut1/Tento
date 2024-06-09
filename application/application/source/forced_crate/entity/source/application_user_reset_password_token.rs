@@ -1,7 +1,5 @@
 use super::application_user::ApplicationUser_Id;
 use super::application_user_device::ApplicationUserDevice_Id;
-use serde::Deserialize;
-use serde::Serialize;
 use std::borrow::Cow;
 use std::marker::PhantomData;
 
@@ -97,14 +95,12 @@ pub struct ApplicationUserResetPasswordToken6 {
     pub can_be_resent_from: i64,
 }
 
-#[derive(Serialize, Deserialize)]
 pub struct Value;
 
 impl Value {
     pub const REGULAR_EXPRESSION: &'static str = r#"^[0-9]{6}$"#;
 }
 
-#[derive(Serialize, Deserialize)]
 pub struct WrongEnterTriesQuantity;
 
 impl WrongEnterTriesQuantity {
@@ -119,7 +115,6 @@ impl ExpiresAt {
     pub const QUANTITY_OF_MINUTES_FOR_EXPIRATION: i64 = 10;
 }
 
-#[derive(Serialize, Deserialize)]
 pub struct CanBeResentFrom;
 
 impl CanBeResentFrom {

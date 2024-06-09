@@ -2,7 +2,6 @@ use super::by::By8;
 use super::insert::Insert8;
 use super::PostgresqlRepository;
 use crate::domain_layer::data::entity::channel_inner_link::ChannelInnerLink;
-use crate::domain_layer::data::entity::channel_inner_link::ChannelInnerLink_CreatedAt;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
@@ -62,7 +61,7 @@ impl PostgresqlRepository<ChannelInnerLink> {
             ChannelInnerLink::new(
                 insert_8.channel_inner_link_from,
                 insert_8.channel_inner_link_to,
-                ChannelInnerLink_CreatedAt(row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?),
+                row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
             ),
         );
     }

@@ -43,10 +43,8 @@ impl<'a> ApplicationUserAccessToken<'a> {
     }
 }
 
-#[derive(Serialize, Deserialize)]
 pub struct Id;
 
-#[derive(Serialize, Deserialize)]
 pub struct ExpiresAt;
 
 impl ExpiresAt {

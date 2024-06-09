@@ -1,5 +1,3 @@
-use serde::Deserialize;
-use serde::Serialize;
 use std::borrow::Cow;
 use std::marker::PhantomData;
 
@@ -50,10 +48,8 @@ impl<'a> ApplicationUser<'a> {
     }
 }
 
-#[derive(Deserialize, Serialize)]
 pub struct Id;
 
-#[derive(Deserialize, Serialize)]
 pub struct Email;
 
 impl Email {
@@ -61,14 +57,12 @@ impl Email {
     pub const MAXIMUM_LENGTH: usize = 320;
 }
 
-#[derive(Deserialize, Serialize)]
 pub struct Nickname;
 
 impl Nickname {
     pub const MAXIMUM_LENGTH: usize = 55;
 }
 
-#[derive(Deserialize, Serialize)]
 pub struct Password;
 
 impl Password {

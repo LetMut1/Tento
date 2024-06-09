@@ -1,6 +1,4 @@
 use super::channel::Channel_Id;
-use serde::Serialize;
-use serde::Deserialize;
 use std::marker::PhantomData;
 
 pub use self::Address as ChannelOuterLink_Address;
@@ -43,10 +41,8 @@ impl ChannelOuterLink {
     }
 }
 
-#[derive(Serialize, Deserialize)]
 pub struct Alias;
 
-#[derive(Serialize, Deserialize)]
 pub struct Address;
 
 pub struct CreatedAt;

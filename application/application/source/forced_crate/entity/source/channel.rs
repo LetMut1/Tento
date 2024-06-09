@@ -1,6 +1,4 @@
 use super::application_user::ApplicationUser_Id;
-use serde::Deserialize;
-use serde::Serialize;
 use std::borrow::Cow;
 use std::marker::PhantomData;
 pub use self::AccessModifier as Channel_AccessModifier;
@@ -113,27 +111,22 @@ impl<'a> Channel<'a> {
     }
 }
 
-#[derive(Serialize, Deserialize)]
 pub struct Id;
 
-#[derive(Serialize, Deserialize)]
 pub struct Name;
 
 impl Name {
     pub const MAXIMUM_LENGTH: usize = 75;
 }
 
-#[derive(Serialize, Deserialize)]
 pub struct LinkedName;
 
-#[derive(Serialize, Deserialize)]
 pub struct Description;
 
 impl Description {
     pub const MAXIMUM_LENGTH: usize = 500;
 }
 
-#[derive(Serialize, Deserialize)]
 pub struct AccessModifier;
 
 impl AccessModifier {
@@ -146,7 +139,6 @@ pub enum AccessModifier_ {
     Close = AccessModifier::CLOSE as isize,
 }
 
-#[derive(Serialize, Deserialize)]
 pub struct VisabilityModifier;
 
 impl VisabilityModifier {
@@ -159,22 +151,16 @@ pub enum VisabilityModifier_ {
     Private = VisabilityModifier::PRIVATE as isize,
 }
 
-#[derive(Serialize, Deserialize)]
 pub struct Orientation;
 
-#[derive(Serialize, Deserialize)]
 pub struct CoverImagePath;
 
-#[derive(Serialize, Deserialize)]
 pub struct BackgroundImagePath;
 
-#[derive(Serialize, Deserialize)]
 pub struct SubscribersQuantity;
 
-#[derive(Serialize, Deserialize)]
 pub struct MarksQuantity;
 
-#[derive(Serialize, Deserialize)]
 pub struct ViewingQuantity;
 
 pub struct CreatedAt;

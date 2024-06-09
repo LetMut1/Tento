@@ -10,7 +10,8 @@ pub struct ChannelInnerLink {
     pub to: i64,
     _to: PhantomData<Channel_Id>,
 
-    pub created_at: CreatedAt,
+    pub created_at: String,
+    _created_at: PhantomData<CreatedAt>
 }
 
 impl ChannelInnerLink {
@@ -19,7 +20,7 @@ impl ChannelInnerLink {
     pub fn new(
         from: i64,
         to: i64,
-        created_at: CreatedAt,
+        created_at: String,
     ) -> Self {
         return Self {
             from,
@@ -27,8 +28,9 @@ impl ChannelInnerLink {
             to,
             _to: PhantomData,
             created_at,
+            _created_at: PhantomData,
         };
     }
 }
 
-pub struct CreatedAt(pub String);
+pub struct CreatedAt;

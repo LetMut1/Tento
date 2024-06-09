@@ -1,6 +1,4 @@
 use super::application_user::ApplicationUser_Id;
-use serde::Deserialize;
-use serde::Serialize;
 use std::marker::PhantomData;
 
 pub use self::Id as ApplicationUserDevice_Id;
@@ -27,5 +25,4 @@ impl ApplicationUserDevice {
     }
 }
 
-#[derive(Serialize, Deserialize)]
 pub struct Id;

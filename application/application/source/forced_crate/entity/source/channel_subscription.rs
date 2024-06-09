@@ -32,4 +32,4 @@ impl ChannelSubscription {
     }
 }
 
-pub struct CreatedAt(pub String);
+pub struct CreatedAt;
