@@ -9,8 +9,6 @@ use crate::domain_layer::data::entity::application_user_authorization_token::App
 use crate::domain_layer::data::entity::application_user_authorization_token::derivative::ApplicationUserAuthorizationToken1;
 use crate::domain_layer::data::entity::application_user_authorization_token::derivative::ApplicationUserAuthorizationToken2;
 use crate::domain_layer::data::entity::application_user_authorization_token::derivative::ApplicationUserAuthorizationToken3;
-use crate::domain_layer::data::entity::application_user_authorization_token::derivative::ApplicationUserAuthorizationToken4;
-use crate::domain_layer::data::entity::application_user_authorization_token::derivative::ApplicationUserAuthorizationToken5;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
@@ -138,10 +136,8 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
 
         return Ok(());
     }
-}
 
-impl PostgresqlRepository<ApplicationUserAuthorizationToken1> {
-    pub async fn update<'a>(
+    pub async fn update_1<'a>(
         database_2_connection: &'a Connection,
         update_3: &'a Update3<'_>,
         by_4: &'a By4<'_>,
@@ -179,6 +175,165 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken1> {
             .add_parameter(
                 &update_3.application_user_authorization_token_can_be_resent_from,
                 Type::INT8,
+            )
+            .add_parameter(
+                &by_4.application_user_id,
+                Type::INT8,
+            )
+            .add_parameter(
+                &by_4.application_user_device_id,
+                Type::TEXT,
+            );
+
+        let statement = database_2_connection
+            .prepare_typed(
+                query,
+                prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
+            )
+            .await
+            .convert(Backtrace::new(line!(), file!()))?;
+
+        database_2_connection
+            .query(
+                &statement,
+                prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
+            )
+            .await
+            .convert(Backtrace::new(line!(), file!()))?;
+
+        return Ok(());
+    }
+
+    pub async fn update_2<'a>(
+        database_2_connection: &'a Connection,
+        update_4: &'a Update4<'_>,
+        by_4: &'a By4<'_>,
+    ) -> Result<(), Auditor<Error>> {
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
+
+        let query = "\
+            UPDATE ONLY public.application_user_authorization_token AS auat \
+            SET ( \
+                value, \
+                wrong_enter_tries_quantity, \
+                expires_at \
+            ) = ROW( \
+                $1, \
+                $2, \
+                $3 \
+            ) \
+            WHERE auat.application_user_id = $4 AND auat.application_user_device_id = $5;";
+
+        prepared_statemant_parameter_convertation_resolver
+            .add_parameter(
+                &update_4.application_user_authorization_token_value,
+                Type::TEXT,
+            )
+            .add_parameter(
+                &update_4.application_user_authorization_token_wrong_enter_tries_quantity,
+                Type::INT2,
+            )
+            .add_parameter(
+                &update_4.application_user_authorization_token_expires_at,
+                Type::INT8,
+            )
+            .add_parameter(
+                &by_4.application_user_id,
+                Type::INT8,
+            )
+            .add_parameter(
+                &by_4.application_user_device_id,
+                Type::TEXT,
+            );
+
+        let statement = database_2_connection
+            .prepare_typed(
+                query,
+                prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
+            )
+            .await
+            .convert(Backtrace::new(line!(), file!()))?;
+
+        database_2_connection
+            .query(
+                &statement,
+                prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
+            )
+            .await
+            .convert(Backtrace::new(line!(), file!()))?;
+
+        return Ok(());
+    }
+
+    pub async fn update_3<'a>(
+        database_2_connection: &'a Connection,
+        update_5: &'a Update5,
+        by_4: &'a By4<'_>,
+    ) -> Result<(), Auditor<Error>> {
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
+
+        let query = "\
+            UPDATE ONLY public.application_user_authorization_token AS auat \
+            SET ( \
+                can_be_resent_from \
+            ) = ROW( \
+                $1 \
+            ) \
+            WHERE auat.application_user_id = $2 AND auat.application_user_device_id = $3;";
+
+        prepared_statemant_parameter_convertation_resolver
+            .add_parameter(
+                &update_5.application_user_authorization_token_can_be_resent_from,
+                Type::INT8,
+            )
+            .add_parameter(
+                &by_4.application_user_id,
+                Type::INT8,
+            )
+            .add_parameter(
+                &by_4.application_user_device_id,
+                Type::TEXT,
+            );
+
+        let statement = database_2_connection
+            .prepare_typed(
+                query,
+                prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
+            )
+            .await
+            .convert(Backtrace::new(line!(), file!()))?;
+
+        database_2_connection
+            .query(
+                &statement,
+                prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
+            )
+            .await
+            .convert(Backtrace::new(line!(), file!()))?;
+
+        return Ok(());
+    }
+
+    pub async fn update_4<'a>(
+        database_2_connection: &'a Connection,
+        update_6: &'a Update6,
+        by_4: &'a By4<'_>,
+    ) -> Result<(), Auditor<Error>> {
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
+
+        let query = "\
+            UPDATE ONLY public.application_user_authorization_token AS auat \
+            SET ( \
+                wrong_enter_tries_quantity \
+            ) = ROW( \
+                $1 \
+            ) \
+            WHERE auat.application_user_id = $2 AND auat.application_user_device_id = $3;";
+
+        prepared_statemant_parameter_convertation_resolver
+            .add_parameter(
+                &update_6.application_user_authorization_token_wrong_enter_tries_quantity,
+                Type::INT2,
             )
             .add_parameter(
                 &by_4.application_user_id,
@@ -264,71 +419,8 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken1> {
             ),
         );
     }
-}
 
-impl PostgresqlRepository<ApplicationUserAuthorizationToken2> {
-    pub async fn update<'a>(
-        database_2_connection: &'a Connection,
-        update_4: &'a Update4<'_>,
-        by_4: &'a By4<'_>,
-    ) -> Result<(), Auditor<Error>> {
-        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-
-        let query = "\
-            UPDATE ONLY public.application_user_authorization_token AS auat \
-            SET ( \
-                value, \
-                wrong_enter_tries_quantity, \
-                expires_at \
-            ) = ROW( \
-                $1, \
-                $2, \
-                $3 \
-            ) \
-            WHERE auat.application_user_id = $4 AND auat.application_user_device_id = $5;";
-
-        prepared_statemant_parameter_convertation_resolver
-            .add_parameter(
-                &update_4.application_user_authorization_token_value,
-                Type::TEXT,
-            )
-            .add_parameter(
-                &update_4.application_user_authorization_token_wrong_enter_tries_quantity,
-                Type::INT2,
-            )
-            .add_parameter(
-                &update_4.application_user_authorization_token_expires_at,
-                Type::INT8,
-            )
-            .add_parameter(
-                &by_4.application_user_id,
-                Type::INT8,
-            )
-            .add_parameter(
-                &by_4.application_user_device_id,
-                Type::TEXT,
-            );
-
-        let statement = database_2_connection
-            .prepare_typed(
-                query,
-                prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
-            )
-            .await
-            .convert(Backtrace::new(line!(), file!()))?;
-
-        database_2_connection
-            .query(
-                &statement,
-                prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
-            )
-            .await
-            .convert(Backtrace::new(line!(), file!()))?;
-
-        return Ok(());
-    }
-
-    pub async fn find_1<'a>(
+    pub async fn find_2<'a>(
         database_2_connection: &'a Connection,
         by_4: &'a By4<'_>,
     ) -> Result<Option<ApplicationUserAuthorizationToken2>, Auditor<Error>> {
@@ -382,115 +474,11 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken2> {
             ),
         );
     }
-}
 
-impl PostgresqlRepository<ApplicationUserAuthorizationToken3> {
-    pub async fn update<'a>(
-        database_2_connection: &'a Connection,
-        update_5: &'a Update5,
-        by_4: &'a By4<'_>,
-    ) -> Result<(), Auditor<Error>> {
-        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-
-        let query = "\
-            UPDATE ONLY public.application_user_authorization_token AS auat \
-            SET ( \
-                can_be_resent_from \
-            ) = ROW( \
-                $1 \
-            ) \
-            WHERE auat.application_user_id = $2 AND auat.application_user_device_id = $3;";
-
-        prepared_statemant_parameter_convertation_resolver
-            .add_parameter(
-                &update_5.application_user_authorization_token_can_be_resent_from,
-                Type::INT8,
-            )
-            .add_parameter(
-                &by_4.application_user_id,
-                Type::INT8,
-            )
-            .add_parameter(
-                &by_4.application_user_device_id,
-                Type::TEXT,
-            );
-
-        let statement = database_2_connection
-            .prepare_typed(
-                query,
-                prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
-            )
-            .await
-            .convert(Backtrace::new(line!(), file!()))?;
-
-        database_2_connection
-            .query(
-                &statement,
-                prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
-            )
-            .await
-            .convert(Backtrace::new(line!(), file!()))?;
-
-        return Ok(());
-    }
-}
-
-impl PostgresqlRepository<ApplicationUserAuthorizationToken4> {
-    pub async fn update<'a>(
-        database_2_connection: &'a Connection,
-        update_6: &'a Update6,
-        by_4: &'a By4<'_>,
-    ) -> Result<(), Auditor<Error>> {
-        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-
-        let query = "\
-            UPDATE ONLY public.application_user_authorization_token AS auat \
-            SET ( \
-                wrong_enter_tries_quantity \
-            ) = ROW( \
-                $1 \
-            ) \
-            WHERE auat.application_user_id = $2 AND auat.application_user_device_id = $3;";
-
-        prepared_statemant_parameter_convertation_resolver
-            .add_parameter(
-                &update_6.application_user_authorization_token_wrong_enter_tries_quantity,
-                Type::INT2,
-            )
-            .add_parameter(
-                &by_4.application_user_id,
-                Type::INT8,
-            )
-            .add_parameter(
-                &by_4.application_user_device_id,
-                Type::TEXT,
-            );
-
-        let statement = database_2_connection
-            .prepare_typed(
-                query,
-                prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
-            )
-            .await
-            .convert(Backtrace::new(line!(), file!()))?;
-
-        database_2_connection
-            .query(
-                &statement,
-                prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
-            )
-            .await
-            .convert(Backtrace::new(line!(), file!()))?;
-
-        return Ok(());
-    }
-}
-
-impl PostgresqlRepository<ApplicationUserAuthorizationToken5> {
-    pub async fn find_1<'a>(
+    pub async fn find_3<'a>(
         database_2_connection: &'a Connection,
         by_4: &'a By4<'_>,
-    ) -> Result<Option<ApplicationUserAuthorizationToken5>, Auditor<Error>> {
+    ) -> Result<Option<ApplicationUserAuthorizationToken3>, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
@@ -533,7 +521,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken5> {
 
         return Ok(
             Some(
-                ApplicationUserAuthorizationToken5 {
+                ApplicationUserAuthorizationToken3 {
                     value: row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
                     expires_at: row_registry[0].try_get::<'_, usize, i64>(1).convert(Backtrace::new(line!(), file!()))?,
                     can_be_resent_from: row_registry[0].try_get::<'_, usize, i64>(2).convert(Backtrace::new(line!(), file!()))?,

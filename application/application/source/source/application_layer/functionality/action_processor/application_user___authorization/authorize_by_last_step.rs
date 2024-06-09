@@ -9,8 +9,6 @@ use crate::domain_layer::data::entity::application_user_access_token::Applicatio
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken_Id;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken;
-use crate::domain_layer::data::entity::application_user_authorization_token::derivative::ApplicationUserAuthorizationToken2;
-use crate::domain_layer::data::entity::application_user_authorization_token::derivative::ApplicationUserAuthorizationToken4;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_Value;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_WrongEnterTriesQuantity;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice;
@@ -118,7 +116,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
-        let application_user_authorization_token = PostgresqlRepository::<ApplicationUserAuthorizationToken2>::find_1(
+        let application_user_authorization_token = PostgresqlRepository::<ApplicationUserAuthorizationToken>::find_2(
             database_2_postgresql_connection,
             &by_4,
         )
@@ -147,7 +145,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
                 .convert_out_of_range(Backtrace::new(line!(), file!()))?;
 
             if application_user_authorization_token_.wrong_enter_tries_quantity < ApplicationUserAuthorizationToken_WrongEnterTriesQuantity::LIMIT {
-                PostgresqlRepository::<ApplicationUserAuthorizationToken4>::update(
+                PostgresqlRepository::<ApplicationUserAuthorizationToken>::update_4(
                     database_2_postgresql_connection,
                     &Update6 {
                         application_user_authorization_token_wrong_enter_tries_quantity: application_user_authorization_token_.wrong_enter_tries_quantity,

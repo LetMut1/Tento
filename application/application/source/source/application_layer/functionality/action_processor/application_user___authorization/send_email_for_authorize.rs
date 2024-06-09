@@ -2,8 +2,6 @@ use crate::application_layer::data::unified_report::UnifiedReport;
 use crate::domain_layer::data::entity::application_user::derivative::ApplicationUser5;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken;
-use crate::domain_layer::data::entity::application_user_authorization_token::derivative::ApplicationUserAuthorizationToken3;
-use crate::domain_layer::data::entity::application_user_authorization_token::derivative::ApplicationUserAuthorizationToken5;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_CanBeResentFrom;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::functionality::service::email_sender::EmailSender;
@@ -105,7 +103,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
-        let mut application_user_authorization_token = match PostgresqlRepository::<ApplicationUserAuthorizationToken5>::find_1(
+        let mut application_user_authorization_token = match PostgresqlRepository::<ApplicationUserAuthorizationToken>::find_3(
             database_2_postgresql_connection,
             &by_4,
         )
@@ -133,7 +131,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
 
         application_user_authorization_token.can_be_resent_from = Generator::<ApplicationUserAuthorizationToken_CanBeResentFrom>::generate()?;
 
-        PostgresqlRepository::<ApplicationUserAuthorizationToken3>::update(
+        PostgresqlRepository::<ApplicationUserAuthorizationToken>::update_3(
             database_2_postgresql_connection,
             &Update5 {
                 application_user_authorization_token_can_be_resent_from: application_user_authorization_token.can_be_resent_from,

@@ -5,9 +5,6 @@ use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Nickname;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Password;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken;
-use crate::domain_layer::data::entity::application_user_authorization_token::derivative::ApplicationUserAuthorizationToken1;
-use crate::domain_layer::data::entity::application_user_authorization_token::derivative::ApplicationUserAuthorizationToken2;
-use crate::domain_layer::data::entity::application_user_authorization_token::derivative::ApplicationUserAuthorizationToken3;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_CanBeResentFrom;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_Value;
@@ -200,7 +197,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
-        let (application_user_authorization_token_value, application_user_authorization_token_can_be_resent_from, application_user_authorization_token_wrong_enter_tries_quantity, can_send) = match PostgresqlRepository::<ApplicationUserAuthorizationToken1>::find_1(
+        let (application_user_authorization_token_value, application_user_authorization_token_can_be_resent_from, application_user_authorization_token_wrong_enter_tries_quantity, can_send) = match PostgresqlRepository::<ApplicationUserAuthorizationToken>::find_1(
             database_2_postgresql_connection,
             &by_4,
         )
@@ -232,7 +229,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                 };
 
                 if need_to_update_1 && need_to_update_2 {
-                    PostgresqlRepository::<ApplicationUserAuthorizationToken1>::update(
+                    PostgresqlRepository::<ApplicationUserAuthorizationToken>::update_1(
                         database_2_postgresql_connection,
                         &Update3 {
                             application_user_authorization_token_value: application_user_authorization_token.value.as_str(),
@@ -245,7 +242,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                     .await?;
                 } else {
                     if need_to_update_1 {
-                        PostgresqlRepository::<ApplicationUserAuthorizationToken3>::update(
+                        PostgresqlRepository::<ApplicationUserAuthorizationToken>::update_3(
                             database_2_postgresql_connection,
                             &Update5 {
                                 application_user_authorization_token_can_be_resent_from: application_user_authorization_token.can_be_resent_from,
@@ -256,7 +253,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                     }
 
                     if need_to_update_2 {
-                        PostgresqlRepository::<ApplicationUserAuthorizationToken2>::update(
+                        PostgresqlRepository::<ApplicationUserAuthorizationToken>::update_2(
                             database_2_postgresql_connection,
                             &Update4 {
                                 application_user_authorization_token_value: application_user_authorization_token.value.as_str(),
