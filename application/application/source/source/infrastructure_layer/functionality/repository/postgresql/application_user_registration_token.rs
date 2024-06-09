@@ -21,9 +21,9 @@ use tokio_postgres::Client as Connection;
 impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
     pub async fn create_1<'a>(
         database_2_connection: &'a Connection,
-        insert_5: Insert5<'a>,
+        insert_1: Insert1<'a>,
     ) -> Result<ApplicationUserRegistrationToken<'a>, Auditor<Error>> {
-        let application_user_registration_token_value = insert_5.application_user_registration_token_value.as_str();
+        let application_user_registration_token_value = insert_1.application_user_registration_token_value.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -48,11 +48,11 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &insert_5.application_user_email,
+                &insert_1.application_user_email,
                 Type::TEXT,
             )
             .add_parameter(
-                &insert_5.application_user_device_id,
+                &insert_1.application_user_device_id,
                 Type::TEXT,
             )
             .add_parameter(
@@ -60,19 +60,19 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
                 Type::TEXT,
             )
             .add_parameter(
-                &insert_5.application_user_registration_token_wrong_enter_tries_quantity,
+                &insert_1.application_user_registration_token_wrong_enter_tries_quantity,
                 Type::INT2,
             )
             .add_parameter(
-                &insert_5.application_user_registration_token_is_approved,
+                &insert_1.application_user_registration_token_is_approved,
                 Type::BOOL,
             )
             .add_parameter(
-                &insert_5.application_user_registration_token_expires_at,
+                &insert_1.application_user_registration_token_expires_at,
                 Type::INT8,
             )
             .add_parameter(
-                &insert_5.application_user_registration_token_can_be_resent_from,
+                &insert_1.application_user_registration_token_can_be_resent_from,
                 Type::INT8,
             );
 
@@ -94,13 +94,13 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
 
         return Ok(
             ApplicationUserRegistrationToken::new(
-                Cow::Borrowed(insert_5.application_user_email),
-                Cow::Borrowed(insert_5.application_user_device_id),
-                insert_5.application_user_registration_token_value,
-                insert_5.application_user_registration_token_wrong_enter_tries_quantity,
-                insert_5.application_user_registration_token_is_approved,
-                insert_5.application_user_registration_token_expires_at,
-                insert_5.application_user_registration_token_can_be_resent_from,
+                Cow::Borrowed(insert_1.application_user_email),
+                Cow::Borrowed(insert_1.application_user_device_id),
+                insert_1.application_user_registration_token_value,
+                insert_1.application_user_registration_token_wrong_enter_tries_quantity,
+                insert_1.application_user_registration_token_is_approved,
+                insert_1.application_user_registration_token_expires_at,
+                insert_1.application_user_registration_token_can_be_resent_from,
             ),
         );
     }
@@ -605,7 +605,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
     }
 }
 
-pub struct Insert5<'a> {
+pub struct Insert1<'a> {
     pub application_user_email: &'a str,
     pub application_user_device_id: &'a str,
     pub application_user_registration_token_value: String,

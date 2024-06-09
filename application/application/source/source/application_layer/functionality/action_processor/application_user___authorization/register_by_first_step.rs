@@ -18,7 +18,7 @@ use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By2;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By5;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user_registration_token::Insert5;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user_registration_token::Insert1;
 use crate::infrastructure_layer::functionality::repository::postgresql::update::Update7;
 use crate::infrastructure_layer::functionality::repository::postgresql::update::Update8;
 use crate::infrastructure_layer::functionality::repository::postgresql::update::Update9;
@@ -189,7 +189,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
             None => {
                 let application_user_registration_token = PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::create_1(
                     database_2_postgresql_connection,
-                    Insert5 {
+                    Insert1 {
                         application_user_email: incoming_.application_user_email.as_str(),
                         application_user_device_id: incoming_.application_user_device_id.as_str(),
                         application_user_registration_token_value: Generator::<ApplicationUserRegistrationToken_Value>::generate(),
