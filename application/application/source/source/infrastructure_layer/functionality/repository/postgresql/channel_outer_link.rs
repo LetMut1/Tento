@@ -2,7 +2,6 @@ use super::by::By9;
 use super::insert::Insert9;
 use super::PostgresqlRepository;
 use crate::domain_layer::data::entity::channel_outer_link::ChannelOuterLink;
-use crate::domain_layer::data::entity::channel_outer_link::ChannelOuterLink_CreatedAt;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
@@ -72,7 +71,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
             insert_9.channel_outer_link_from,
             insert_9.channel_outer_link_alias,
             insert_9.channel_outer_link_address,
-            ChannelOuterLink_CreatedAt(row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?),
+            row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
         );
 
         return Ok(channel_outer_link);

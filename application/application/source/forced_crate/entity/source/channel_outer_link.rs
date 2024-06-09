@@ -17,7 +17,8 @@ pub struct ChannelOuterLink {
     pub address: String,
     _address: PhantomData<Address>,
 
-    pub created_at: CreatedAt,
+    pub created_at: String,
+    _created_at: PhantomData<CreatedAt>,
 }
 
 impl ChannelOuterLink {
@@ -27,7 +28,7 @@ impl ChannelOuterLink {
         from: i64,
         alias: String,
         address: String,
-        created_at: CreatedAt,
+        created_at: String,
     ) -> Self {
         return Self {
             from,
@@ -37,6 +38,7 @@ impl ChannelOuterLink {
             address,
             _address: PhantomData,
             created_at,
+            _created_at: PhantomData,
         }
     }
 }
@@ -47,4 +49,4 @@ pub struct Alias;
 #[derive(Serialize, Deserialize)]
 pub struct Address;
 
-pub struct CreatedAt(pub String);
+pub struct CreatedAt;
