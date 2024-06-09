@@ -2,9 +2,6 @@ use crate::application_layer::data::unified_report::UnifiedReport;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken;
-use crate::domain_layer::data::entity::application_user_registration_token::derivative::ApplicationUserRegistrationToken3;
-use crate::domain_layer::data::entity::application_user_registration_token::derivative::ApplicationUserRegistrationToken4;
-use crate::domain_layer::data::entity::application_user_registration_token::derivative::ApplicationUserRegistrationToken5;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_Value;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_WrongEnterTriesQuantity;
 use crate::domain_layer::functionality::service::validator::Validator;
@@ -102,7 +99,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
-        let mut application_user_registration_token = match PostgresqlRepository::<ApplicationUserRegistrationToken3>::find_1(
+        let mut application_user_registration_token = match PostgresqlRepository::<ApplicationUserRegistrationToken>::find_2(
             database_2_postgresql_connection,
             &by_5,
         )
@@ -134,7 +131,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
             .convert_out_of_range(Backtrace::new(line!(), file!()))?;
 
             if application_user_registration_token.wrong_enter_tries_quantity < ApplicationUserRegistrationToken_WrongEnterTriesQuantity::LIMIT {
-                PostgresqlRepository::<ApplicationUserRegistrationToken4>::update(
+                PostgresqlRepository::<ApplicationUserRegistrationToken>::update_4(
                     database_2_postgresql_connection,
                     &Update10 {
                         application_user_registration_token_wrong_enter_tries_quantity: application_user_registration_token.wrong_enter_tries_quantity,
@@ -163,7 +160,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
 
         application_user_registration_token.is_approved = true;
 
-        PostgresqlRepository::<ApplicationUserRegistrationToken5>::update(
+        PostgresqlRepository::<ApplicationUserRegistrationToken>::update_5(
             database_2_postgresql_connection,
             &Update11 {
                 application_user_registration_token_is_approved: application_user_registration_token.is_approved,

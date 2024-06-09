@@ -2,8 +2,6 @@ use crate::application_layer::data::unified_report::UnifiedReport;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken;
-use crate::domain_layer::data::entity::application_user_registration_token::derivative::ApplicationUserRegistrationToken2;
-use crate::domain_layer::data::entity::application_user_registration_token::derivative::ApplicationUserRegistrationToken6;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_CanBeResentFrom;
 use crate::domain_layer::functionality::service::email_sender::EmailSender;
 use crate::domain_layer::functionality::service::generator::Generator;
@@ -87,7 +85,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForRegister> {
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
-        let mut application_user_registration_token = match PostgresqlRepository::<ApplicationUserRegistrationToken6>::find_1(
+        let mut application_user_registration_token = match PostgresqlRepository::<ApplicationUserRegistrationToken>::find_3(
             database_2_postgresql_connection,
             &by_5,
         )
@@ -119,7 +117,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForRegister> {
 
         application_user_registration_token.can_be_resent_from = Generator::<ApplicationUserRegistrationToken_CanBeResentFrom>::generate()?;
 
-        PostgresqlRepository::<ApplicationUserRegistrationToken2>::update(
+        PostgresqlRepository::<ApplicationUserRegistrationToken>::update_2(
             database_2_postgresql_connection,
             &Update8 {
                 application_user_registration_token_can_be_resent_from: application_user_registration_token.can_be_resent_from,

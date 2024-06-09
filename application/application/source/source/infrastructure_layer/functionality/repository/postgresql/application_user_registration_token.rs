@@ -10,9 +10,6 @@ use crate::domain_layer::data::entity::application_user_registration_token::Appl
 use crate::domain_layer::data::entity::application_user_registration_token::derivative::ApplicationUserRegistrationToken1;
 use crate::domain_layer::data::entity::application_user_registration_token::derivative::ApplicationUserRegistrationToken2;
 use crate::domain_layer::data::entity::application_user_registration_token::derivative::ApplicationUserRegistrationToken3;
-use crate::domain_layer::data::entity::application_user_registration_token::derivative::ApplicationUserRegistrationToken4;
-use crate::domain_layer::data::entity::application_user_registration_token::derivative::ApplicationUserRegistrationToken5;
-use crate::domain_layer::data::entity::application_user_registration_token::derivative::ApplicationUserRegistrationToken6;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
@@ -147,10 +144,8 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
 
         return Ok(());
     }
-}
 
-impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
-    pub async fn update<'a>(
+    pub async fn update_1<'a>(
         database_2_connection: &'a Connection,
         update_7: &'a Update7<'_>,
         by_5: &'a By5<'_>,
@@ -194,6 +189,220 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
             .add_parameter(
                 &update_7.application_user_registration_token_can_be_resent_from,
                 Type::INT8,
+            )
+            .add_parameter(
+                &by_5.application_user_email,
+                Type::TEXT,
+            )
+            .add_parameter(
+                &by_5.application_user_device_id,
+                Type::TEXT,
+            );
+
+        let statement = database_2_connection
+            .prepare_typed(
+                query,
+                prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
+            )
+            .await
+        .convert(Backtrace::new(line!(), file!()))?;
+
+        database_2_connection
+            .query(
+                &statement,
+                prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
+            )
+            .await
+        .convert(Backtrace::new(line!(), file!()))?;
+
+        return Ok(());
+    }
+
+    pub async fn update_2<'a>(
+        database_2_connection: &'a Connection,
+        update_8: &'a Update8,
+        by_5: &'a By5<'_>,
+    ) -> Result<(), Auditor<Error>> {
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
+
+        let query = "\
+            UPDATE ONLY public.application_user_registration_token AS aurt
+            SET ( \
+                can_be_resent_from \
+            ) = ROW( \
+                $1 \
+            ) \
+            WHERE aurt.application_user_email = $2 AND aurt.application_user_device_id = $3;";
+
+        prepared_statemant_parameter_convertation_resolver
+            .add_parameter(
+                &update_8.application_user_registration_token_can_be_resent_from,
+                Type::INT8,
+            )
+            .add_parameter(
+                &by_5.application_user_email,
+                Type::TEXT,
+            )
+            .add_parameter(
+                &by_5.application_user_device_id,
+                Type::TEXT,
+            );
+
+        let statement = database_2_connection
+            .prepare_typed(
+                query,
+                prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
+            )
+            .await
+        .convert(Backtrace::new(line!(), file!()))?;
+
+        database_2_connection
+            .query(
+                &statement,
+                prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
+            )
+            .await
+        .convert(Backtrace::new(line!(), file!()))?;
+
+        return Ok(());
+    }
+
+    pub async fn update_3<'a>(
+        database_2_connection: &'a Connection,
+        update_9: &'a Update9<'_>,
+        by_5: &'a By5<'_>,
+    ) -> Result<(), Auditor<Error>> {
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
+
+        let query = "\
+            UPDATE ONLY public.application_user_registration_token AS aurt
+            SET ( \
+                value, \
+                wrong_enter_tries_quantity, \
+                is_approved, \
+                expires_at \
+            ) = ROW( \
+                $1, \
+                $2, \
+                $3, \
+                $4 \
+            ) \
+            WHERE aurt.application_user_email = $5 AND aurt.application_user_device_id = $6;";
+
+        prepared_statemant_parameter_convertation_resolver
+            .add_parameter(
+                &update_9.application_user_registration_token_value,
+                Type::TEXT,
+            )
+            .add_parameter(
+                &update_9.application_user_registration_token_wrong_enter_tries_quantity,
+                Type::INT2,
+            )
+            .add_parameter(
+                &update_9.application_user_registration_token_is_approved,
+                Type::BOOL,
+            )
+            .add_parameter(
+                &update_9.application_user_registration_token_expires_at,
+                Type::INT8,
+            )
+            .add_parameter(
+                &by_5.application_user_email,
+                Type::TEXT,
+            )
+            .add_parameter(
+                &by_5.application_user_device_id,
+                Type::TEXT,
+            );
+
+        let statement = database_2_connection
+            .prepare_typed(
+                query,
+                prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
+            )
+            .await
+        .convert(Backtrace::new(line!(), file!()))?;
+
+        database_2_connection
+            .query(
+                &statement,
+                prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
+            )
+            .await
+        .convert(Backtrace::new(line!(), file!()))?;
+
+        return Ok(());
+    }
+
+    pub async fn update_4<'a>(
+        database_2_connection: &'a Connection,
+        update_10: &'a Update10,
+        by_5: &'a By5<'_>,
+    ) -> Result<(), Auditor<Error>> {
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
+
+        let query = "\
+            UPDATE ONLY public.application_user_registration_token AS aurt
+            SET ( \
+                wrong_enter_tries_quantity \
+            ) = ROW( \
+                $1 \
+            ) \
+            WHERE aurt.application_user_email = $2 AND aurt.application_user_device_id = $3;";
+
+        prepared_statemant_parameter_convertation_resolver
+            .add_parameter(
+                &update_10.application_user_registration_token_wrong_enter_tries_quantity,
+                Type::INT2,
+            )
+            .add_parameter(
+                &by_5.application_user_email,
+                Type::TEXT,
+            )
+            .add_parameter(
+                &by_5.application_user_device_id,
+                Type::TEXT,
+            );
+
+        let statement = database_2_connection
+            .prepare_typed(
+                query,
+                prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
+            )
+            .await
+        .convert(Backtrace::new(line!(), file!()))?;
+
+        database_2_connection
+            .query(
+                &statement,
+                prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
+            )
+            .await
+        .convert(Backtrace::new(line!(), file!()))?;
+
+        return Ok(());
+    }
+
+    pub async fn update_5<'a>(
+        database_2_connection: &'a Connection,
+        update_11: &'a Update11,
+        by_5: &'a By5<'_>,
+    ) -> Result<(), Auditor<Error>> {
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
+
+        let query = "\
+            UPDATE ONLY public.application_user_registration_token AS aurt
+            SET ( \
+                is_approved \
+            ) = ROW( \
+                $1 \
+            ) \
+            WHERE aurt.application_user_email = $2 AND aurt.application_user_device_id = $3;";
+
+        prepared_statemant_parameter_convertation_resolver
+            .add_parameter(
+                &update_11.application_user_registration_token_is_approved,
+                Type::BOOL,
             )
             .add_parameter(
                 &by_5.application_user_email,
@@ -281,131 +490,11 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken1> {
             ),
         );
     }
-}
 
-impl PostgresqlRepository<ApplicationUserRegistrationToken2> {
-    pub async fn update<'a>(
-        database_2_connection: &'a Connection,
-        update_8: &'a Update8,
-        by_5: &'a By5<'_>,
-    ) -> Result<(), Auditor<Error>> {
-        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-
-        let query = "\
-            UPDATE ONLY public.application_user_registration_token AS aurt
-            SET ( \
-                can_be_resent_from \
-            ) = ROW( \
-                $1 \
-            ) \
-            WHERE aurt.application_user_email = $2 AND aurt.application_user_device_id = $3;";
-
-        prepared_statemant_parameter_convertation_resolver
-            .add_parameter(
-                &update_8.application_user_registration_token_can_be_resent_from,
-                Type::INT8,
-            )
-            .add_parameter(
-                &by_5.application_user_email,
-                Type::TEXT,
-            )
-            .add_parameter(
-                &by_5.application_user_device_id,
-                Type::TEXT,
-            );
-
-        let statement = database_2_connection
-            .prepare_typed(
-                query,
-                prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
-            )
-            .await
-        .convert(Backtrace::new(line!(), file!()))?;
-
-        database_2_connection
-            .query(
-                &statement,
-                prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
-            )
-            .await
-        .convert(Backtrace::new(line!(), file!()))?;
-
-        return Ok(());
-    }
-}
-
-impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
-    pub async fn update<'a>(
-        database_2_connection: &'a Connection,
-        update_9: &'a Update9<'_>,
-        by_5: &'a By5<'_>,
-    ) -> Result<(), Auditor<Error>> {
-        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-
-        let query = "\
-            UPDATE ONLY public.application_user_registration_token AS aurt
-            SET ( \
-                value, \
-                wrong_enter_tries_quantity, \
-                is_approved, \
-                expires_at \
-            ) = ROW( \
-                $1, \
-                $2, \
-                $3, \
-                $4 \
-            ) \
-            WHERE aurt.application_user_email = $5 AND aurt.application_user_device_id = $6;";
-
-        prepared_statemant_parameter_convertation_resolver
-            .add_parameter(
-                &update_9.application_user_registration_token_value,
-                Type::TEXT,
-            )
-            .add_parameter(
-                &update_9.application_user_registration_token_wrong_enter_tries_quantity,
-                Type::INT2,
-            )
-            .add_parameter(
-                &update_9.application_user_registration_token_is_approved,
-                Type::BOOL,
-            )
-            .add_parameter(
-                &update_9.application_user_registration_token_expires_at,
-                Type::INT8,
-            )
-            .add_parameter(
-                &by_5.application_user_email,
-                Type::TEXT,
-            )
-            .add_parameter(
-                &by_5.application_user_device_id,
-                Type::TEXT,
-            );
-
-        let statement = database_2_connection
-            .prepare_typed(
-                query,
-                prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
-            )
-            .await
-        .convert(Backtrace::new(line!(), file!()))?;
-
-        database_2_connection
-            .query(
-                &statement,
-                prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
-            )
-            .await
-        .convert(Backtrace::new(line!(), file!()))?;
-
-        return Ok(());
-    }
-
-    pub async fn find_1<'a>(
+    pub async fn find_2<'a>(
         database_2_connection: &'a Connection,
         by_5: &'a By5<'_>,
-    ) -> Result<Option<ApplicationUserRegistrationToken3>, Auditor<Error>> {
+    ) -> Result<Option<ApplicationUserRegistrationToken2>, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
@@ -449,7 +538,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
 
         return Ok(
             Some(
-                ApplicationUserRegistrationToken3 {
+                ApplicationUserRegistrationToken2 {
                     value: row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
                     wrong_enter_tries_quantity: row_registry[0].try_get::<'_, usize, i16>(1).convert(Backtrace::new(line!(), file!()))?,
                     is_approved: row_registry[0].try_get::<'_, usize, bool>(2).convert(Backtrace::new(line!(), file!()))?,
@@ -458,115 +547,11 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken3> {
             ),
         );
     }
-}
 
-impl PostgresqlRepository<ApplicationUserRegistrationToken4> {
-    pub async fn update<'a>(
-        database_2_connection: &'a Connection,
-        update_10: &'a Update10,
-        by_5: &'a By5<'_>,
-    ) -> Result<(), Auditor<Error>> {
-        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-
-        let query = "\
-            UPDATE ONLY public.application_user_registration_token AS aurt
-            SET ( \
-                wrong_enter_tries_quantity \
-            ) = ROW( \
-                $1 \
-            ) \
-            WHERE aurt.application_user_email = $2 AND aurt.application_user_device_id = $3;";
-
-        prepared_statemant_parameter_convertation_resolver
-            .add_parameter(
-                &update_10.application_user_registration_token_wrong_enter_tries_quantity,
-                Type::INT2,
-            )
-            .add_parameter(
-                &by_5.application_user_email,
-                Type::TEXT,
-            )
-            .add_parameter(
-                &by_5.application_user_device_id,
-                Type::TEXT,
-            );
-
-        let statement = database_2_connection
-            .prepare_typed(
-                query,
-                prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
-            )
-            .await
-        .convert(Backtrace::new(line!(), file!()))?;
-
-        database_2_connection
-            .query(
-                &statement,
-                prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
-            )
-            .await
-        .convert(Backtrace::new(line!(), file!()))?;
-
-        return Ok(());
-    }
-}
-
-impl PostgresqlRepository<ApplicationUserRegistrationToken5> {
-    pub async fn update<'a>(
-        database_2_connection: &'a Connection,
-        update_11: &'a Update11,
-        by_5: &'a By5<'_>,
-    ) -> Result<(), Auditor<Error>> {
-        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-
-        let query = "\
-            UPDATE ONLY public.application_user_registration_token AS aurt
-            SET ( \
-                is_approved \
-            ) = ROW( \
-                $1 \
-            ) \
-            WHERE aurt.application_user_email = $2 AND aurt.application_user_device_id = $3;";
-
-        prepared_statemant_parameter_convertation_resolver
-            .add_parameter(
-                &update_11.application_user_registration_token_is_approved,
-                Type::BOOL,
-            )
-            .add_parameter(
-                &by_5.application_user_email,
-                Type::TEXT,
-            )
-            .add_parameter(
-                &by_5.application_user_device_id,
-                Type::TEXT,
-            );
-
-        let statement = database_2_connection
-            .prepare_typed(
-                query,
-                prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
-            )
-            .await
-        .convert(Backtrace::new(line!(), file!()))?;
-
-        database_2_connection
-            .query(
-                &statement,
-                prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
-            )
-            .await
-        .convert(Backtrace::new(line!(), file!()))?;
-
-        return Ok(());
-    }
-}
-
-impl PostgresqlRepository<ApplicationUserRegistrationToken6> {
-    pub async fn find_1<'a>(
+    pub async fn find_3<'a>(
         database_2_connection: &'a Connection,
         by_5: &'a By5<'_>,
-    ) -> Result<Option<ApplicationUserRegistrationToken6>, Auditor<Error>> {
+    ) -> Result<Option<ApplicationUserRegistrationToken3>, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
         let query = "\
@@ -610,7 +595,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken6> {
 
         return Ok(
             Some(
-                ApplicationUserRegistrationToken6 {
+                ApplicationUserRegistrationToken3 {
                     value: row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
                     is_approved: row_registry[0].try_get::<'_, usize, bool>(1).convert(Backtrace::new(line!(), file!()))?,
                     expires_at: row_registry[0].try_get::<'_, usize, i64>(2).convert(Backtrace::new(line!(), file!()))?,
