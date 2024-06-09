@@ -1,5 +1,5 @@
 use crate::application_layer::data::unified_report::UnifiedReport;
-use crate::domain_layer::data::entity::application_user::derivative::ApplicationUser4;
+use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Password;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
@@ -182,7 +182,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
 
         let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
 
-        let mut application_user = match PostgresqlRepository::<ApplicationUser4>::find_1(
+        let mut application_user = match PostgresqlRepository::<ApplicationUser>::find_5(
             database_1_postgresql_connection,
             &by_3,
         )
@@ -220,7 +220,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
 
         application_user.password_hash = join_handle.await.convert(Backtrace::new(line!(), file!()))??;
 
-        PostgresqlRepository::<ApplicationUser4>::update(
+        PostgresqlRepository::<ApplicationUser>::update(
             database_1_postgresql_connection,
             &Update1 {
                 application_user_password_hash: application_user.password_hash.as_str(),

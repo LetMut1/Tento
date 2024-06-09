@@ -1,6 +1,5 @@
 use crate::application_layer::data::unified_report::UnifiedReport;
-use crate::domain_layer::data::entity::application_user::derivative::ApplicationUser1;
-use crate::domain_layer::data::entity::application_user::derivative::ApplicationUser2;
+use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Nickname;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Password;
@@ -98,7 +97,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
 
         let (application_user_id, application_user_email, application_user_nickname, application_user_password_hash) =
         if Validator::<ApplicationUser_Email>::is_valid(incoming_.application_user_email_or_application_user_nickname.as_str())? {
-            let application_user_ = PostgresqlRepository::<ApplicationUser2>::find_1(
+            let application_user_ = PostgresqlRepository::<ApplicationUser>::find_3(
                 database_1_postgresql_connection,
                 &By2 {
                     application_user_email: incoming_.application_user_email_or_application_user_nickname.as_str(),
@@ -121,7 +120,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
             )
         } else {
             if Validator::<ApplicationUser_Nickname>::is_valid(incoming_.application_user_email_or_application_user_nickname.as_str()) {
-                let application_user_ = PostgresqlRepository::<ApplicationUser1>::find_1(
+                let application_user_ = PostgresqlRepository::<ApplicationUser>::find_2(
                     database_1_postgresql_connection,
                     &By1 {
                         application_user_nickname: incoming_.application_user_email_or_application_user_nickname.as_str(),

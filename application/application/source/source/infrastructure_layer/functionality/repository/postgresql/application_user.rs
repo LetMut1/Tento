@@ -91,6 +91,53 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         );
     }
 
+    pub async fn update<'a>(
+        database_1_connection: &'a Connection,
+        update_1: &'a Update1<'_>,
+        by_3: &'a By3,
+    ) -> Result<(), Auditor<Error>> {
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
+
+        let query = "\
+            UPDATE ONLY public.application_user AS au \
+            SET ( \
+                password_hash \
+            ) = ROW( \
+                $1 \
+            ) \
+            WHERE au.id = $2 \
+            RETURNING \
+                au.id AS i;";
+
+        prepared_statemant_parameter_convertation_resolver
+            .add_parameter(
+                &update_1.application_user_password_hash,
+                Type::TEXT,
+            )
+            .add_parameter(
+                &by_3.application_user_id,
+                Type::INT8,
+            );
+
+        let statement = database_1_connection
+            .prepare_typed(
+                query,
+                prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
+            )
+            .await
+        .convert(Backtrace::new(line!(), file!()))?;
+
+        database_1_connection
+            .query(
+                &statement,
+                prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
+            )
+            .await
+            .convert(Backtrace::new(line!(), file!()))?;
+
+        return Ok(());
+    }
+
     pub async fn is_exist_1<'a>(
         database_1_connection: &'a Connection,
         by_1: &'a By1<'_>,
@@ -269,10 +316,8 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             ),
         );
     }
-}
 
-impl PostgresqlRepository<ApplicationUser1> {
-    pub async fn find_1<'a>(
+    pub async fn find_2<'a>(
         database_1_connection: &'a Connection,
         by_1: &'a By1<'_>,
     ) -> Result<Option<ApplicationUser1>, Auditor<Error>> {
@@ -323,10 +368,8 @@ impl PostgresqlRepository<ApplicationUser1> {
             ),
         );
     }
-}
 
-impl PostgresqlRepository<ApplicationUser2> {
-    pub async fn find_1<'a>(
+    pub async fn find_3<'a>(
         database_1_connection: &'a Connection,
         by_2: &'a By2<'_>,
     ) -> Result<Option<ApplicationUser2>, Auditor<Error>> {
@@ -377,10 +420,8 @@ impl PostgresqlRepository<ApplicationUser2> {
             ),
         );
     }
-}
 
-impl PostgresqlRepository<ApplicationUser3> {
-    pub async fn find_1<'a>(
+    pub async fn find_4<'a>(
         database_1_connection: &'a Connection,
         by_2: &'a By2<'_>,
     ) -> Result<Option<ApplicationUser3>, Auditor<Error>> {
@@ -427,57 +468,8 @@ impl PostgresqlRepository<ApplicationUser3> {
             ),
         );
     }
-}
 
-impl PostgresqlRepository<ApplicationUser4> {
-    pub async fn update<'a>(
-        database_1_connection: &'a Connection,
-        update_1: &'a Update1<'_>,
-        by_3: &'a By3,
-    ) -> Result<(), Auditor<Error>> {
-        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-
-        let query = "\
-            UPDATE ONLY public.application_user AS au \
-            SET ( \
-                password_hash \
-            ) = ROW( \
-                $1 \
-            ) \
-            WHERE au.id = $2 \
-            RETURNING \
-                au.id AS i;";
-
-        prepared_statemant_parameter_convertation_resolver
-            .add_parameter(
-                &update_1.application_user_password_hash,
-                Type::TEXT,
-            )
-            .add_parameter(
-                &by_3.application_user_id,
-                Type::INT8,
-            );
-
-        let statement = database_1_connection
-            .prepare_typed(
-                query,
-                prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
-            )
-            .await
-        .convert(Backtrace::new(line!(), file!()))?;
-
-        database_1_connection
-            .query(
-                &statement,
-                prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
-            )
-            .await
-            .convert(Backtrace::new(line!(), file!()))?;
-
-        return Ok(());
-    }
-
-    pub async fn find_1<'a>(
+    pub async fn find_5<'a>(
         database_1_connection: &'a Connection,
         by_3: &'a By3,
     ) -> Result<Option<ApplicationUser4>, Auditor<Error>> {
@@ -526,10 +518,8 @@ impl PostgresqlRepository<ApplicationUser4> {
             ),
         );
     }
-}
 
-impl PostgresqlRepository<ApplicationUser5> {
-    pub async fn find_1<'a>(
+    pub async fn find_6<'a>(
         database_1_connection: &'a Connection,
         by_3: &'a By3,
     ) -> Result<Option<ApplicationUser5>, Auditor<Error>> {

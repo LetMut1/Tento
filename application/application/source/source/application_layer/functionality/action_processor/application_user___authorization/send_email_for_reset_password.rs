@@ -1,5 +1,5 @@
 use crate::application_layer::data::unified_report::UnifiedReport;
-use crate::domain_layer::data::entity::application_user::derivative::ApplicationUser5;
+use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
@@ -80,7 +80,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForResetPassword>
 
         let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
 
-        let application_user = match PostgresqlRepository::<ApplicationUser5>::find_1(
+        let application_user = match PostgresqlRepository::<ApplicationUser>::find_6(
             &*database_1_postgresql_pooled_connection,
             &By3 {
                 application_user_id: incoming_.application_user_id,
