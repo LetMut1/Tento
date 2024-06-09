@@ -13,11 +13,11 @@ pub use action_processor_incoming_outcoming::ChannelOuterLink1;
 impl PostgresqlRepository<ChannelOuterLink> {
     pub async fn create_1<'a>(
         database_1_connection: &'a Connection,
-        insert_9: Insert9,
+        insert_1: Insert1,
     ) -> Result<ChannelOuterLink, Auditor<Error>> {
-        let channel_outer_link_alias = insert_9.channel_outer_link_alias.as_str();
+        let channel_outer_link_alias = insert_1.channel_outer_link_alias.as_str();
 
-        let channel_outer_link_address = insert_9.channel_outer_link_address.as_str();
+        let channel_outer_link_address = insert_1.channel_outer_link_address.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -38,7 +38,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &insert_9.channel_outer_link_from,
+                &insert_1.channel_outer_link_from,
                 Type::INT8,
             )
             .add_parameter(
@@ -67,9 +67,9 @@ impl PostgresqlRepository<ChannelOuterLink> {
 .convert(Backtrace::new(line!(), file!()))?;
 
         let channel_outer_link = ChannelOuterLink::new(
-            insert_9.channel_outer_link_from,
-            insert_9.channel_outer_link_alias,
-            insert_9.channel_outer_link_address,
+            insert_1.channel_outer_link_from,
+            insert_1.channel_outer_link_alias,
+            insert_1.channel_outer_link_address,
             row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
         );
 
@@ -136,7 +136,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
     }
 }
 
-pub struct Insert9 {
+pub struct Insert1 {
     pub channel_outer_link_from: i64,
     pub channel_outer_link_alias: String,
     pub channel_outer_link_address: String,

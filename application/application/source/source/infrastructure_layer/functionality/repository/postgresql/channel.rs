@@ -15,25 +15,25 @@ use tokio_postgres::Client as Connection;
 impl PostgresqlRepository<Channel<'_>> {
     pub async fn create_1<'a>(
         database_1_connection: &'a Connection,
-        insert_7: Insert7,
+        insert_1: Insert1,
     ) -> Result<Channel<'static>, Auditor<Error>> {
-        let channel_name = insert_7.channel_name.as_str();
+        let channel_name = insert_1.channel_name.as_str();
 
-        let channel_linked_name = insert_7.channel_linked_name.as_str();
+        let channel_linked_name = insert_1.channel_linked_name.as_str();
 
-        let channel_description = match insert_7.channel_description {
+        let channel_description = match insert_1.channel_description {
             Some(ref channel_description_) => Some(channel_description_.as_str()),
             None => None,
         };
 
-        let channel_orientation = insert_7.channel_orientation.as_slice();
+        let channel_orientation = insert_1.channel_orientation.as_slice();
 
-        let channel_cover_image_path = match insert_7.channel_cover_image_path {
+        let channel_cover_image_path = match insert_1.channel_cover_image_path {
             Some(ref channel_cover_image_path_) => Some(channel_cover_image_path_.as_str()),
             None => None,
         };
 
-        let channel_background_image_path = match insert_7.channel_background_image_path {
+        let channel_background_image_path = match insert_1.channel_background_image_path {
             Some(ref channel_background_image_path_) => Some(channel_background_image_path_.as_str()),
             None => None,
         };
@@ -78,7 +78,7 @@ impl PostgresqlRepository<Channel<'_>> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &insert_7.channel_owner,
+                &insert_1.channel_owner,
                 Type::INT8,
             )
             .add_parameter(
@@ -94,11 +94,11 @@ impl PostgresqlRepository<Channel<'_>> {
                 Type::TEXT,
             )
             .add_parameter(
-                &insert_7.channel_access_modifier,
+                &insert_1.channel_access_modifier,
                 Type::INT2,
             )
             .add_parameter(
-                &insert_7.channel_visability_modifier,
+                &insert_1.channel_visability_modifier,
                 Type::INT2,
             )
             .add_parameter(
@@ -114,15 +114,15 @@ impl PostgresqlRepository<Channel<'_>> {
                 Type::TEXT,
             )
             .add_parameter(
-                &insert_7.channel_subscribers_quantity,
+                &insert_1.channel_subscribers_quantity,
                 Type::INT8,
             )
             .add_parameter(
-                &insert_7.channel_marks_quantity,
+                &insert_1.channel_marks_quantity,
                 Type::INT8,
             )
             .add_parameter(
-                &insert_7.channel_viewing_quantity,
+                &insert_1.channel_viewing_quantity,
                 Type::INT8,
             );
 
@@ -145,18 +145,18 @@ impl PostgresqlRepository<Channel<'_>> {
         return Ok(
             Channel::new(
                 row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
-                insert_7.channel_owner,
-                Cow::Owned(insert_7.channel_name),
-                insert_7.channel_linked_name,
-                insert_7.channel_description,
-                insert_7.channel_access_modifier,
-                insert_7.channel_visability_modifier,
-                insert_7.channel_orientation,
-                insert_7.channel_cover_image_path,
-                insert_7.channel_background_image_path,
-                insert_7.channel_subscribers_quantity,
-                insert_7.channel_marks_quantity,
-                insert_7.channel_viewing_quantity,
+                insert_1.channel_owner,
+                Cow::Owned(insert_1.channel_name),
+                insert_1.channel_linked_name,
+                insert_1.channel_description,
+                insert_1.channel_access_modifier,
+                insert_1.channel_visability_modifier,
+                insert_1.channel_orientation,
+                insert_1.channel_cover_image_path,
+                insert_1.channel_background_image_path,
+                insert_1.channel_subscribers_quantity,
+                insert_1.channel_marks_quantity,
+                insert_1.channel_viewing_quantity,
                 row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
             ),
         );
@@ -305,7 +305,7 @@ impl PostgresqlRepository<Channel<'_>> {
     }
 }
 
-pub struct Insert7 {
+pub struct Insert1 {
     pub channel_owner: i64,
     pub channel_name: String,
     pub channel_linked_name: String,

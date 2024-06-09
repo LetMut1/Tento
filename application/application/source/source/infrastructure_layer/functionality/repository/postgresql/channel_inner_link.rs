@@ -13,7 +13,7 @@ pub use action_processor_incoming_outcoming::ChannelInnerLink1;
 impl PostgresqlRepository<ChannelInnerLink> {
     pub async fn create_1<'a>(
         database_1_connection: &'a Connection,
-        insert_8: Insert8,
+        insert_1: Insert1,
     ) -> Result<ChannelInnerLink, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -32,11 +32,11 @@ impl PostgresqlRepository<ChannelInnerLink> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &insert_8.channel_inner_link_from,
+                &insert_1.channel_inner_link_from,
                 Type::INT8,
             )
             .add_parameter(
-                &insert_8.channel_inner_link_to,
+                &insert_1.channel_inner_link_to,
                 Type::INT8,
             );
 
@@ -58,8 +58,8 @@ impl PostgresqlRepository<ChannelInnerLink> {
 
         return Ok(
             ChannelInnerLink::new(
-                insert_8.channel_inner_link_from,
-                insert_8.channel_inner_link_to,
+                insert_1.channel_inner_link_from,
+                insert_1.channel_inner_link_to,
                 row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
             ),
         );
@@ -123,7 +123,7 @@ impl PostgresqlRepository<ChannelInnerLink> {
     }
 }
 
-pub struct Insert8 {
+pub struct Insert1 {
     pub channel_inner_link_from: i64,
     pub channel_inner_link_to: i64,
 }

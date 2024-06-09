@@ -15,7 +15,7 @@ use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By6;
-use crate::infrastructure_layer::functionality::repository::postgresql::channel_subscription::Insert10;
+use crate::infrastructure_layer::functionality::repository::postgresql::channel_subscription::Insert1;
 use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
@@ -110,7 +110,7 @@ impl ActionProcessor<ChannelSubscription__Base___Create> {
 
         PostgresqlRepository::<ChannelSubscription>::create_1(
             database_1_postgresql_connection,
-            Insert10 {
+            Insert1 {
                 application_user_id: application_user_access_token.application_user_id,
                 channel_id: channel.id,
             },

@@ -23,7 +23,7 @@ use crate::infrastructure_layer::functionality::repository::postgresql::by::By1;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By7;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user::Insert1 as ApplicationUserInsert1;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_device::Insert1 as ApplicationUserDeviceInsert1;
-use crate::infrastructure_layer::functionality::repository::postgresql::channel::Insert7;
+use crate::infrastructure_layer::functionality::repository::postgresql::channel::Insert1 as ChannelInsert1;
 use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::creator::Creator;
 use crate::infrastructure_layer::functionality::service::creator::postgresql_connection_pool::PostgresqlConnectionPoolNoTls;
@@ -323,7 +323,7 @@ impl CommandProcessor<CreateFixtures> {
                     None => {
                         PostgresqlRepository::<Channel<'_>>::create_1(
                             database_1_postgresql_connection,
-                            Insert7 {
+                            ChannelInsert1 {
                                 channel_owner: application_user.id,
                                 channel_name,
                                 channel_linked_name,

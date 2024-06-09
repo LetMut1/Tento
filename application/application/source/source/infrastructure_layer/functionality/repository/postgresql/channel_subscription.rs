@@ -12,7 +12,7 @@ use tokio_postgres::Client as Connection;
 impl PostgresqlRepository<ChannelSubscription> {
     pub async fn create_1<'a>(
         database_1_connection: &'a Connection,
-        insert_10: Insert10,
+        insert_1: Insert1,
     ) -> Result<ChannelSubscription, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -31,11 +31,11 @@ impl PostgresqlRepository<ChannelSubscription> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &insert_10.application_user_id,
+                &insert_1.application_user_id,
                 Type::INT8,
             )
             .add_parameter(
-                &insert_10.channel_id,
+                &insert_1.channel_id,
                 Type::INT8,
             );
 
@@ -56,8 +56,8 @@ impl PostgresqlRepository<ChannelSubscription> {
 .convert(Backtrace::new(line!(), file!()))?;
 
         let channel_subscription = ChannelSubscription::new(
-            insert_10.application_user_id,
-            insert_10.channel_id,
+            insert_1.application_user_id,
+            insert_1.channel_id,
             row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
         );
 
@@ -110,7 +110,7 @@ impl PostgresqlRepository<ChannelSubscription> {
     }
 }
 
-pub struct Insert10 {
+pub struct Insert1 {
     pub application_user_id: i64,
     pub channel_id: i64,
 }
