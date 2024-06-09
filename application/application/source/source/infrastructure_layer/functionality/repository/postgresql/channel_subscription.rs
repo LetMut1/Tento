@@ -1,5 +1,4 @@
 use super::by::By10;
-use super::insert::Insert10;
 use super::PostgresqlRepository;
 use crate::domain_layer::data::entity::channel_subscription::ChannelSubscription;
 use crate::infrastructure_layer::data::auditor::Backtrace;
@@ -109,4 +108,9 @@ impl PostgresqlRepository<ChannelSubscription> {
 
         return Ok(true);
     }
+}
+
+pub struct Insert10 {
+    pub application_user_id: i64,
+    pub channel_id: i64,
 }

@@ -1,5 +1,4 @@
 use super::by::By4;
-use super::insert::Insert6;
 use super::update::Update12;
 use super::update::Update13;
 use super::update::Update14;
@@ -604,4 +603,14 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
             ),
         );
     }
+}
+
+pub struct Insert6<'a> {
+    pub application_user_id: i64,
+    pub application_user_device_id: &'a str,
+    pub application_user_reset_password_token_value: String,
+    pub application_user_reset_password_token_wrong_enter_tries_quantity: i16,
+    pub application_user_reset_password_token_is_approved: bool,
+    pub application_user_reset_password_token_expires_at: i64,
+    pub application_user_reset_password_token_can_be_resent_from: i64,
 }

@@ -1,7 +1,6 @@
 use super::by::By1;
 use super::by::By2;
 use super::by::By3;
-use super::insert::Insert1;
 use super::update::Update1;
 use super::PostgresqlRepository;
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
@@ -564,4 +563,10 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             ),
         );
     }
+}
+
+pub struct Insert1 {
+    pub application_user_email: String,
+    pub application_user_nickname: String,
+    pub application_user_password_hash: String,
 }

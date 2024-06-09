@@ -1,5 +1,4 @@
 use super::by::By4;
-use super::insert::Insert3;
 use super::update::Update3;
 use super::update::Update4;
 use super::update::Update5;
@@ -529,4 +528,13 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
             ),
         );
     }
+}
+
+pub struct Insert3<'a> {
+    pub application_user_id: i64,
+    pub application_user_device_id: &'a str,
+    pub application_user_authorization_token_value: String,
+    pub application_user_authorization_token_wrong_enter_tries_quantity: i16,
+    pub application_user_authorization_token_expires_at: i64,
+    pub application_user_authorization_token_can_be_resent_from: i64,
 }

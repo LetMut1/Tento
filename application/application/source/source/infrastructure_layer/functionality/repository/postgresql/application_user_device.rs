@@ -1,4 +1,3 @@
-use super::insert::Insert4;
 use super::PostgresqlRepository;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice;
 use crate::infrastructure_layer::data::auditor::Backtrace;
@@ -61,4 +60,9 @@ impl PostgresqlRepository<ApplicationUserDevice> {
             ),
         );
     }
+}
+
+pub struct Insert4 {
+    pub application_user_device_id: String,
+    pub application_user_id: i64,
 }

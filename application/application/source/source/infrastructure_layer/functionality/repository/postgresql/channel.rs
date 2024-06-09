@@ -1,6 +1,5 @@
 use super::by::By6;
 use super::by::By7;
-use super::insert::Insert7;
 use super::PostgresqlRepository;
 use crate::domain_layer::data::entity::channel::Channel;
 use crate::infrastructure_layer::data::auditor::Backtrace;
@@ -304,4 +303,19 @@ impl PostgresqlRepository<Channel<'_>> {
             ),
         );
     }
+}
+
+pub struct Insert7 {
+    pub channel_owner: i64,
+    pub channel_name: String,
+    pub channel_linked_name: String,
+    pub channel_description: Option<String>,
+    pub channel_access_modifier: i16,
+    pub channel_visability_modifier: i16,
+    pub channel_orientation: Vec<i16>,
+    pub channel_cover_image_path: Option<String>,
+    pub channel_background_image_path: Option<String>,
+    pub channel_subscribers_quantity: i64,
+    pub channel_marks_quantity: i64,
+    pub channel_viewing_quantity: i64,
 }

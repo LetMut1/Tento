@@ -1,5 +1,4 @@
 use super::by::By5;
-use super::insert::Insert5;
 use super::update::Update10;
 use super::update::Update11;
 use super::update::Update7;
@@ -604,4 +603,14 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
             ),
         );
     }
+}
+
+pub struct Insert5<'a> {
+    pub application_user_email: &'a str,
+    pub application_user_device_id: &'a str,
+    pub application_user_registration_token_value: String,
+    pub application_user_registration_token_wrong_enter_tries_quantity: i16,
+    pub application_user_registration_token_is_approved: bool,
+    pub application_user_registration_token_expires_at: i64,
+    pub application_user_registration_token_can_be_resent_from: i64,
 }

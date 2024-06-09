@@ -1,6 +1,5 @@
 use super::by::By3;
 use super::by::By4;
-use super::insert::Insert2;
 use super::update::Update2;
 use super::PostgresqlRepository;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
@@ -290,4 +289,13 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
             ),
         );
     }
+}
+
+pub struct Insert2<'a> {
+    pub application_user_id: i64,
+    pub application_user_device_id: &'a str,
+    pub application_user_access_token_id: &'a str,
+    pub application_user_access_refresh_token_obfuscation_value: String,
+    pub application_user_access_refresh_token_expires_at: i64,
+    pub application_user_access_refresh_token_updated_at: i64,
 }

@@ -15,7 +15,7 @@ use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By6;
-use crate::infrastructure_layer::functionality::repository::postgresql::insert::Insert10;
+use crate::infrastructure_layer::functionality::repository::postgresql::channel_subscription::Insert10;
 use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
