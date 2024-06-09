@@ -1,5 +1,3 @@
-pub mod derivative;
-
 use super::application_user::ApplicationUser_Id;
 use super::application_user_access_token::ApplicationUserAccessToken_Id;
 use super::application_user_device::ApplicationUserDevice_Id;

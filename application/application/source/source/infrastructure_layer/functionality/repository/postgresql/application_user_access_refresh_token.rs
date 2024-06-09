@@ -4,7 +4,6 @@ use super::insert::Insert2;
 use super::update::Update2;
 use super::PostgresqlRepository;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
-use crate::domain_layer::data::entity::application_user_access_refresh_token::derivative::ApplicationUserAccessRefreshToken1;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
@@ -92,6 +91,73 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 insert_2.application_user_access_refresh_token_updated_at,
             ),
         );
+    }
+
+    pub async fn update<'a>(
+        database_2_connection: &'a Connection,
+        update_2: &'a Update2<'_>,
+        by_4: &'a By4<'_>,
+    ) -> Result<(), Auditor<Error>> {
+        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
+
+        let query = "\
+            UPDATE ONLY public.application_user_access_refresh_token AS auart \
+            SET ( \
+                application_user_access_token_id, \
+                obfuscation_value, \
+                expires_at, \
+                updated_at
+            ) = ROW( \
+                $1, \
+                $2, \
+                $3, \
+                $4 \
+            ) \
+            WHERE auart.application_user_id = $5 AND auart.application_user_device_id = $6;";
+
+        prepared_statemant_parameter_convertation_resolver
+            .add_parameter(
+                &update_2.application_user_access_token_id,
+                Type::TEXT,
+            )
+            .add_parameter(
+                &update_2.application_user_access_refresh_token_obfuscation_value,
+                Type::TEXT,
+            )
+            .add_parameter(
+                &update_2.application_user_access_refresh_token_expires_at,
+                Type::INT8,
+            )
+            .add_parameter(
+                &update_2.application_user_access_refresh_token_updated_at,
+                Type::INT8,
+            )
+            .add_parameter(
+                &by_4.application_user_id,
+                Type::INT8,
+            )
+            .add_parameter(
+                &by_4.application_user_device_id,
+                Type::TEXT,
+            );
+
+        let statement = database_2_connection
+            .prepare_typed(
+                query,
+                prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
+            )
+            .await
+            .convert(Backtrace::new(line!(), file!()))?;
+
+        database_2_connection
+            .query(
+                &statement,
+                prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
+            )
+            .await
+            .convert(Backtrace::new(line!(), file!()))?;
+
+        return Ok(());
     }
 
     pub async fn delete_1<'a>(
@@ -223,74 +289,5 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 ),
             ),
         );
-    }
-}
-
-impl PostgresqlRepository<ApplicationUserAccessRefreshToken1> {
-    pub async fn update<'a>(
-        database_2_connection: &'a Connection,
-        update_2: &'a Update2<'_>,
-        by_4: &'a By4<'_>,
-    ) -> Result<(), Auditor<Error>> {
-        let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-
-        let query = "\
-            UPDATE ONLY public.application_user_access_refresh_token AS auart \
-            SET ( \
-                application_user_access_token_id, \
-                obfuscation_value, \
-                expires_at, \
-                updated_at
-            ) = ROW( \
-                $1, \
-                $2, \
-                $3, \
-                $4 \
-            ) \
-            WHERE auart.application_user_id = $5 AND auart.application_user_device_id = $6;";
-
-        prepared_statemant_parameter_convertation_resolver
-            .add_parameter(
-                &update_2.application_user_access_token_id,
-                Type::TEXT,
-            )
-            .add_parameter(
-                &update_2.application_user_access_refresh_token_obfuscation_value,
-                Type::TEXT,
-            )
-            .add_parameter(
-                &update_2.application_user_access_refresh_token_expires_at,
-                Type::INT8,
-            )
-            .add_parameter(
-                &update_2.application_user_access_refresh_token_updated_at,
-                Type::INT8,
-            )
-            .add_parameter(
-                &by_4.application_user_id,
-                Type::INT8,
-            )
-            .add_parameter(
-                &by_4.application_user_device_id,
-                Type::TEXT,
-            );
-
-        let statement = database_2_connection
-            .prepare_typed(
-                query,
-                prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
-            )
-            .await
-            .convert(Backtrace::new(line!(), file!()))?;
-
-        database_2_connection
-            .query(
-                &statement,
-                prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
-            )
-            .await
-            .convert(Backtrace::new(line!(), file!()))?;
-
-        return Ok(());
     }
 }

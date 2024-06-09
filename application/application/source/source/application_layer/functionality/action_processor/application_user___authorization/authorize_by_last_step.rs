@@ -2,7 +2,6 @@ use crate::application_layer::data::unified_report::UnifiedReport;
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
-use crate::domain_layer::data::entity::application_user_access_refresh_token::derivative::ApplicationUserAccessRefreshToken1;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ExpiresAt;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ObfuscationValue;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_UpdatedAt;
@@ -220,7 +219,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
 
                 application_user_access_refresh_token_.updated_at = application_user_access_refresh_token_updated_at;
 
-                PostgresqlRepository::<ApplicationUserAccessRefreshToken1>::update(
+                PostgresqlRepository::<ApplicationUserAccessRefreshToken>::update(
                     database_2_postgresql_connection,
                     &Update2 {
                         application_user_access_token_id: application_user_access_refresh_token_.application_user_access_token_id.as_ref(),
