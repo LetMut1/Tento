@@ -8,7 +8,6 @@ pub use self::LinkedName as Channel_LinkedName;
 pub use self::Name as Channel_Name;
 pub use self::Orientation as Channel_Orientation;
 pub use self::VisabilityModifier as Channel_VisabilityModifier;
-pub use self::VisabilityModifier_ as Channel_VisabilityModifier_;
 
 pub struct Channel<'a> {
     pub id: i64,
@@ -145,16 +144,29 @@ impl AccessModifier {
     }
 }
 
-pub struct VisabilityModifier;
+pub enum VisabilityModifier {
+    Public,
+    Private,
+}
 
 impl VisabilityModifier {
     pub const PUBLIC: i16 = 0;
     pub const PRIVATE: i16 = 1;
-}
 
-pub enum VisabilityModifier_ {
-    Public = VisabilityModifier::PUBLIC as isize,
-    Private = VisabilityModifier::PRIVATE as isize,
+    pub fn from_representation(visability_modifier: VisabilityModifier) -> i16 {
+        return match visability_modifier {
+            Self::Public => Self::PUBLIC,
+            Self::Private => Self::PRIVATE,
+        };
+    }
+
+    pub fn to_representation(visability_modifier: i16) -> VisabilityModifier {
+        return if visability_modifier == Self::PUBLIC {
+            Self::Public
+        } else {
+            Self::Private
+        };
+    }
 }
 
 pub struct Orientation;

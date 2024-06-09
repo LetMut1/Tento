@@ -2,10 +2,8 @@ use crate::application_layer::data::unified_report::UnifiedReport;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::data::entity::channel::Channel_Name;
 use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier;
-use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier_;
 use crate::domain_layer::functionality::service::extractor::application_user_access_token::ExtractorResult;
 use crate::domain_layer::functionality::service::extractor::Extractor;
-use crate::domain_layer::functionality::service::form_resolver::FormResolver;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
@@ -122,7 +120,7 @@ impl ActionProcessor<Channel__Base___GetManyPublicByName> {
                 application_user_id: application_user_access_token.application_user_id,
                 channel_name: incoming_.channel_name.as_str(),
                 requery_channel_name: &incoming_.requery_channel_name,
-                channel_visability_modifier: FormResolver::<Channel_VisabilityModifier>::from_representation(Channel_VisabilityModifier_::Public),
+                channel_visability_modifier: Channel_VisabilityModifier::from_representation(Channel_VisabilityModifier::Public),
             },
             incoming_.limit,
         )

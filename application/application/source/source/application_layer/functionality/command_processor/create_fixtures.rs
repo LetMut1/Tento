@@ -11,9 +11,7 @@ use crate::domain_layer::data::entity::channel::Channel_LinkedName;
 use crate::domain_layer::data::entity::channel::Channel_Name;
 use crate::domain_layer::data::entity::channel::Channel_Orientation;
 use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier;
-use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier_;
 use crate::domain_layer::functionality::service::encoder::Encoder;
-use crate::domain_layer::functionality::service::form_resolver::FormResolver;
 use crate::domain_layer::functionality::service::validator::Validator;
 use crate::infrastructure_layer::data::environment_configuration::Environment;
 use crate::infrastructure_layer::data::auditor::Backtrace;
@@ -331,7 +329,7 @@ impl CommandProcessor<CreateFixtures> {
                                 channel_linked_name,
                                 channel_description,
                                 channel_access_modifier: Channel_AccessModifier::from_representation(Channel_AccessModifier::Open),
-                                channel_visability_modifier: FormResolver::<Channel_VisabilityModifier>::from_representation(Channel_VisabilityModifier_::Public),
+                                channel_visability_modifier: Channel_VisabilityModifier::from_representation(Channel_VisabilityModifier::Public),
                                 channel_orientation,
                                 channel_cover_image_path: Some(Self::STUB.to_string()),
                                 channel_background_image_path: Some(Self::STUB.to_string()),
