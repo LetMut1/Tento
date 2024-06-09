@@ -2,7 +2,6 @@ use super::by::By10;
 use super::insert::Insert10;
 use super::PostgresqlRepository;
 use crate::domain_layer::data::entity::channel_subscription::ChannelSubscription;
-use crate::domain_layer::data::entity::channel_subscription::ChannelSubscription_CreatedAt;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
@@ -60,7 +59,7 @@ impl PostgresqlRepository<ChannelSubscription> {
         let channel_subscription = ChannelSubscription::new(
             insert_10.application_user_id,
             insert_10.channel_id,
-            ChannelSubscription_CreatedAt(row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?),
+            row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
         );
 
         return Ok(channel_subscription);
