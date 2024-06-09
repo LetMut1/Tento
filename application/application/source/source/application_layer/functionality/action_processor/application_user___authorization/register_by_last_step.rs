@@ -13,8 +13,8 @@ use crate::domain_layer::data::entity::application_user_access_token::Applicatio
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken;
-use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken3;
-use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken4;
+use crate::domain_layer::data::entity::application_user_registration_token::derivative::ApplicationUserRegistrationToken3;
+use crate::domain_layer::data::entity::application_user_registration_token::derivative::ApplicationUserRegistrationToken4;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_Value;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_WrongEnterTriesQuantity;
 use crate::domain_layer::functionality::service::encoder::Encoder;
