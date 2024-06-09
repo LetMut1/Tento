@@ -5,8 +5,8 @@ use crate::domain_layer::data::entity::application_user::ApplicationUser_Passwor
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
-use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken3;
-use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken4;
+use crate::domain_layer::data::entity::application_user_reset_password_token::derivative::ApplicationUserResetPasswordToken3;
+use crate::domain_layer::data::entity::application_user_reset_password_token::derivative::ApplicationUserResetPasswordToken4;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_Value;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_WrongEnterTriesQuantity;
 use crate::domain_layer::functionality::service::encoder::Encoder;
