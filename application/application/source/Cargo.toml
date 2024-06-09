@@ -27,7 +27,6 @@ bb8 = { package = "bb8", version = "0.7.1", default-features = true, features = 
 bb8_postgres = { package = "bb8-postgres", version = "0.7.0", default-features = true, features = [], optional = false }
 bytes = { package = "bytes", version = "1.1.0", default-features = true, features = [], optional = false }
 chrono = { package = "chrono", version = "0.4.31", default-features = true, features = [], optional = false }
-entity = { path = "./forced_crate/entity", package = "entity", version = "1.0.0", default-features = true, features = [], optional = false }
 error = { path = "./forced_crate/error", package = "error", version = "1.0.0", default-features = true, features = [], optional = false }
 formatter = { path = "./forced_crate/formatter", package = "formatter", version = "1.0.0", default-features = true, features = [], optional = false }
 hmac = { package = "hmac", version = "0.12.1", default-features = true, features = [], optional = false }

@@ -2,8 +2,6 @@ use super::application_user::ApplicationUser_Id;
 use super::channel::Channel_Id;
 use std::marker::PhantomData;
 
-pub use self::CreatedAt as ChannelSubscription_CreatedAt;
-
 pub struct ChannelSubscription {
     pub application_user_id: i64,
     _application_user_id: PhantomData<ApplicationUser_Id>,

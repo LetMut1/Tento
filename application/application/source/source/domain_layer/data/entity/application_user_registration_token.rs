@@ -5,7 +5,6 @@ use std::borrow::Cow;
 
 pub use self::CanBeResentFrom as ApplicationUserRegistrationToken_CanBeResentFrom;
 pub use self::ExpiresAt as ApplicationUserRegistrationToken_ExpiresAt;
-pub use self::IsApproved as ApplicationUserRegistrationToken_IsApproved;
 pub use self::Value as ApplicationUserRegistrationToken_Value;
 pub use self::WrongEnterTriesQuantity as ApplicationUserRegistrationToken_WrongEnterTriesQuantity;
 

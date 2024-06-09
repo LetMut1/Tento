@@ -1,10 +1,6 @@
 use super::channel::Channel_Id;
 use std::marker::PhantomData;
 
-pub use self::Address as ChannelOuterLink_Address;
-pub use self::Alias as ChannelOuterLink_Alias;
-pub use self::CreatedAt as ChannelOuterLink_CreatedAt;
-
 pub struct ChannelOuterLink {
     pub from: i64,
     _from: PhantomData<Channel_Id>,

@@ -5,7 +5,6 @@ use std::marker::PhantomData;
 
 pub use self::CanBeResentFrom as ApplicationUserResetPasswordToken_CanBeResentFrom;
 pub use self::ExpiresAt as ApplicationUserResetPasswordToken_ExpiresAt;
-pub use self::IsApproved as ApplicationUserResetPasswordToken_IsApproved;
 pub use self::Value as ApplicationUserResetPasswordToken_Value;
 pub use self::WrongEnterTriesQuantity as ApplicationUserResetPasswordToken_WrongEnterTriesQuantity;
 

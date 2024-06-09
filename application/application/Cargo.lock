@@ -7,7 +7,6 @@ name = "action_processor_incoming_outcoming"
 version = "1.0.0"
 dependencies = [
  "common_precedent",
- "entity",
  "macro_rules",
  "serde",
 ]
@@ -112,7 +111,6 @@ dependencies = [
  "cargo-emit",
  "chrono",
  "const_format",
- "entity",
  "error",
  "formatter",
  "hmac",
@@ -584,13 +582,6 @@ name = "encoding_index_tests"
 version = "0.1.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a246d82be1c9d791c5dfde9a2bd045fc3cbba3fa2b11ad558f27d01712f00569"
-
-[[package]]
-name = "entity"
-version = "1.0.0"
-dependencies = [
- "serde",
-]
 
 [[package]]
 name = "equivalent"
