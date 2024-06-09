@@ -168,7 +168,6 @@ pub mod update {
 }
 
 pub mod insert {
-    use crate::domain_layer::data::entity::channel::Channel_ViewingQuantity;
     use crate::domain_layer::data::entity::channel_outer_link::ChannelOuterLink_Address;
     use crate::domain_layer::data::entity::channel_outer_link::ChannelOuterLink_Alias;
 
@@ -233,7 +232,7 @@ pub mod insert {
         pub channel_background_image_path: Option<String>,
         pub channel_subscribers_quantity: i64,
         pub channel_marks_quantity: i64,
-        pub channel_viewing_quantity: Channel_ViewingQuantity,
+        pub channel_viewing_quantity: i64,
     }
 
     pub struct Insert8 {

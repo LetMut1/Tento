@@ -11,7 +11,6 @@ use crate::domain_layer::data::entity::channel::Channel_Description;
 use crate::domain_layer::data::entity::channel::Channel_LinkedName;
 use crate::domain_layer::data::entity::channel::Channel_Name;
 use crate::domain_layer::data::entity::channel::Channel_Orientation;
-use crate::domain_layer::data::entity::channel::Channel_ViewingQuantity;
 use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier;
 use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier_;
 use crate::domain_layer::functionality::service::encoder::Encoder;
@@ -339,7 +338,7 @@ impl CommandProcessor<CreateFixtures> {
                                 channel_background_image_path: Some(Self::STUB.to_string()),
                                 channel_subscribers_quantity: 0,
                                 channel_marks_quantity: 0,
-                                channel_viewing_quantity: Channel_ViewingQuantity(0),
+                                channel_viewing_quantity: 0,
                             },
                         )
                         .await?;

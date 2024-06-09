@@ -56,7 +56,9 @@ pub struct Channel<'a> {
     pub marks_quantity: i64,
     _marks_quantity: PhantomData<MarksQuantity>,
 
-    pub viewing_quantity: ViewingQuantity,
+    pub viewing_quantity: i64,
+    _viewing_quantity: PhantomData<ViewingQuantity>,
+
     pub created_at: CreatedAt,
 }
 
@@ -74,7 +76,7 @@ impl<'a> Channel<'a> {
         background_image_path: Option<String>,
         subscribers_quantity: i64,
         marks_quantity: i64,
-        viewing_quantity: ViewingQuantity,
+        viewing_quantity: i64,
         created_at: CreatedAt,
     ) -> Self {
         return Self {
@@ -103,6 +105,7 @@ impl<'a> Channel<'a> {
             marks_quantity,
             _marks_quantity: PhantomData,
             viewing_quantity,
+            _viewing_quantity: PhantomData,
             created_at,
         };
     }
@@ -169,8 +172,7 @@ pub struct SubscribersQuantity;
 #[derive(Serialize, Deserialize)]
 pub struct MarksQuantity;
 
-#[derive(Clone, Copy, Serialize, Deserialize)]
-#[serde(transparent)]
-pub struct ViewingQuantity(pub i64);
+#[derive(Serialize, Deserialize)]
+pub struct ViewingQuantity;
 
 pub struct CreatedAt(pub String);
