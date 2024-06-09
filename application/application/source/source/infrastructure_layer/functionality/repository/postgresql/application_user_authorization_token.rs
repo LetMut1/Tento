@@ -20,9 +20,9 @@ use tokio_postgres::Client as Connection;
 impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
     pub async fn create_1<'a>(
         database_2_connection: &'a Connection,
-        insert_3: Insert3<'a>,
+        insert_1: Insert1<'a>,
     ) -> Result<ApplicationUserAuthorizationToken<'a>, Auditor<Error>> {
-        let application_user_authorization_token_value = insert_3.application_user_authorization_token_value.as_str();
+        let application_user_authorization_token_value = insert_1.application_user_authorization_token_value.as_str();
 
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -45,11 +45,11 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &insert_3.application_user_id,
+                &insert_1.application_user_id,
                 Type::INT8,
             )
             .add_parameter(
-                &insert_3.application_user_device_id,
+                &insert_1.application_user_device_id,
                 Type::TEXT,
             )
             .add_parameter(
@@ -57,15 +57,15 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                 Type::TEXT,
             )
             .add_parameter(
-                &insert_3.application_user_authorization_token_wrong_enter_tries_quantity,
+                &insert_1.application_user_authorization_token_wrong_enter_tries_quantity,
                 Type::INT2,
             )
             .add_parameter(
-                &insert_3.application_user_authorization_token_expires_at,
+                &insert_1.application_user_authorization_token_expires_at,
                 Type::INT8,
             )
             .add_parameter(
-                &insert_3.application_user_authorization_token_can_be_resent_from,
+                &insert_1.application_user_authorization_token_can_be_resent_from,
                 Type::INT8,
             );
 
@@ -87,12 +87,12 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
 
         return Ok(
             ApplicationUserAuthorizationToken::new(
-                insert_3.application_user_id,
-                Cow::Borrowed(insert_3.application_user_device_id),
-                insert_3.application_user_authorization_token_value,
-                insert_3.application_user_authorization_token_wrong_enter_tries_quantity,
-                insert_3.application_user_authorization_token_expires_at,
-                insert_3.application_user_authorization_token_can_be_resent_from,
+                insert_1.application_user_id,
+                Cow::Borrowed(insert_1.application_user_device_id),
+                insert_1.application_user_authorization_token_value,
+                insert_1.application_user_authorization_token_wrong_enter_tries_quantity,
+                insert_1.application_user_authorization_token_expires_at,
+                insert_1.application_user_authorization_token_can_be_resent_from,
             ),
         );
     }
@@ -530,7 +530,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
     }
 }
 
-pub struct Insert3<'a> {
+pub struct Insert1<'a> {
     pub application_user_id: i64,
     pub application_user_device_id: &'a str,
     pub application_user_authorization_token_value: String,
