@@ -86,7 +86,6 @@ pub mod action_processor;
 use entity::channel_outer_link::ChannelOuterLink_Address;
 use entity::channel_outer_link::ChannelOuterLink_Alias;
 use entity::channel::Channel_BackgroundImagePath;
-use entity::channel::Channel_CoverImagePath;
 use entity::channel::Channel_MarksQuantity;
 use entity::channel::Channel_SubscribersQuantity;
 use entity::channel::Channel_ViewingQuantity;
@@ -106,7 +105,7 @@ pub struct Channel1 {
     pub channel_linked_name: String,
     pub channel_access_modifier: i16,
     pub channel_visability_modifier: i16,
-    pub channel_cover_image_path: Option<Channel_CoverImagePath>,
+    pub channel_cover_image_path: Option<String>,
     pub channel_background_image_path: Option<Channel_BackgroundImagePath>,
 }
 
@@ -119,7 +118,7 @@ pub struct Channel2 {
     pub channel_access_modifier: i16,
     pub channel_visability_modifier: i16,
     pub channel_orientation: Vec<i16>,
-    pub channel_cover_image_path: Option<Channel_CoverImagePath>,
+    pub channel_cover_image_path: Option<String>,
     pub channel_background_image_path: Option<Channel_BackgroundImagePath>,
     pub channel_subscribers_quantity: Channel_SubscribersQuantity,
     pub channel_marks_quantity: Channel_MarksQuantity,

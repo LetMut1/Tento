@@ -44,7 +44,9 @@ pub struct Channel<'a> {
     pub orientation: Vec<i16>,
     _orientation: PhantomData<Orientation>,
 
-    pub cover_image_path: Option<CoverImagePath>,
+    pub cover_image_path: Option<String>,
+    _cover_image_path: PhantomData<CoverImagePath>,
+
     pub background_image_path: Option<BackgroundImagePath>,
     pub subscribers_quantity: SubscribersQuantity,
     pub marks_quantity: MarksQuantity,
@@ -62,7 +64,7 @@ impl<'a> Channel<'a> {
         access_modifier: i16,
         visability_modifier: i16,
         orientation: Vec<i16>,
-        cover_image_path: Option<CoverImagePath>,
+        cover_image_path: Option<String>,
         background_image_path: Option<BackgroundImagePath>,
         subscribers_quantity: SubscribersQuantity,
         marks_quantity: MarksQuantity,
@@ -87,6 +89,7 @@ impl<'a> Channel<'a> {
             orientation,
             _orientation: PhantomData,
             cover_image_path,
+            _cover_image_path: PhantomData,
             background_image_path,
             subscribers_quantity,
             marks_quantity,
@@ -146,8 +149,7 @@ pub enum VisabilityModifier_ {
 pub struct Orientation;
 
 #[derive(Serialize, Deserialize)]
-#[serde(transparent)]
-pub struct CoverImagePath(pub String);
+pub struct CoverImagePath;
 
 #[derive(Serialize, Deserialize)]
 #[serde(transparent)]

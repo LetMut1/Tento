@@ -4,7 +4,6 @@ use super::insert::Insert7;
 use super::PostgresqlRepository;
 use crate::domain_layer::data::entity::channel::Channel;
 use crate::domain_layer::data::entity::channel::Channel_BackgroundImagePath;
-use crate::domain_layer::data::entity::channel::Channel_CoverImagePath;
 use crate::domain_layer::data::entity::channel::Channel_CreatedAt;
 use crate::domain_layer::data::entity::channel::Channel_MarksQuantity;
 use crate::domain_layer::data::entity::channel::Channel_SubscribersQuantity;
@@ -36,7 +35,7 @@ impl PostgresqlRepository<Channel<'_>> {
         let channel_orientation = insert_7.channel_orientation.as_slice();
 
         let channel_cover_image_path = match insert_7.channel_cover_image_path {
-            Some(ref channel_cover_image_path_) => Some(channel_cover_image_path_.0.as_str()),
+            Some(ref channel_cover_image_path_) => Some(channel_cover_image_path_.as_str()),
             None => None,
         };
 
@@ -218,11 +217,6 @@ impl PostgresqlRepository<Channel<'_>> {
             return Ok(None);
         }
 
-        let channel_cover_image_path = match row_registry[0].try_get::<'_, usize, Option<String>>(7).convert(Backtrace::new(line!(), file!()))? {
-            Some(channel_cover_image_path_) => Some(Channel_CoverImagePath(channel_cover_image_path_)),
-            None => None,
-        };
-
         let channel_background_image_path = match row_registry[0].try_get::<'_, usize, Option<String>>(8).convert(Backtrace::new(line!(), file!()))? {
             Some(channel_background_image_path_) => Some(Channel_BackgroundImagePath(channel_background_image_path_)),
             None => None,
@@ -239,7 +233,7 @@ impl PostgresqlRepository<Channel<'_>> {
                     row_registry[0].try_get::<'_, usize, i16>(4).convert(Backtrace::new(line!(), file!()))?,
                     row_registry[0].try_get::<'_, usize, i16>(5).convert(Backtrace::new(line!(), file!()))?,
                     row_registry[0].try_get::<'_, usize, Vec<i16>>(6).convert(Backtrace::new(line!(), file!()))?,
-                    channel_cover_image_path,
+                    row_registry[0].try_get::<'_, usize, Option<String>>(7).convert(Backtrace::new(line!(), file!()))?,
                     channel_background_image_path,
                     Channel_SubscribersQuantity(row_registry[0].try_get::<'_, usize, i64>(9).convert(Backtrace::new(line!(), file!()))?),
                     Channel_MarksQuantity(row_registry[0].try_get::<'_, usize, i64>(10).convert(Backtrace::new(line!(), file!()))?),
@@ -299,11 +293,6 @@ impl PostgresqlRepository<Channel<'_>> {
             return Ok(None);
         }
 
-        let channel_cover_image_path = match row_registry[0].try_get::<'_, usize, Option<String>>(7).convert(Backtrace::new(line!(), file!()))? {
-            Some(channel_cover_image_path_) => Some(Channel_CoverImagePath(channel_cover_image_path_)),
-            None => None,
-        };
-
         let channel_background_image_path = match row_registry[0].try_get::<'_, usize, Option<String>>(8).convert(Backtrace::new(line!(), file!()))? {
             Some(channel_background_image_path_) => Some(Channel_BackgroundImagePath(channel_background_image_path_)),
             None => None,
@@ -320,7 +309,7 @@ impl PostgresqlRepository<Channel<'_>> {
                     row_registry[0].try_get::<'_, usize, i16>(4).convert(Backtrace::new(line!(), file!()))?,
                     row_registry[0].try_get::<'_, usize, i16>(5).convert(Backtrace::new(line!(), file!()))?,
                     row_registry[0].try_get::<'_, usize, Vec<i16>>(6).convert(Backtrace::new(line!(), file!()))?,
-                    channel_cover_image_path,
+                    row_registry[0].try_get::<'_, usize, Option<String>>(7).convert(Backtrace::new(line!(), file!()))?,
                     channel_background_image_path,
                     Channel_SubscribersQuantity(row_registry[0].try_get::<'_, usize, i64>(9).convert(Backtrace::new(line!(), file!()))?),
                     Channel_MarksQuantity(row_registry[0].try_get::<'_, usize, i64>(10).convert(Backtrace::new(line!(), file!()))?),
