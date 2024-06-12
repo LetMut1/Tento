@@ -28,7 +28,7 @@ use crate::infrastructure_layer::functionality::repository::postgresql::by::By3;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By4;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_access_refresh_token::Insert1 as ApplicationUserAccessRefreshTokenInsert1;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_device::Insert1 as ApplicationUserDeviceInsert1;
-use crate::infrastructure_layer::functionality::repository::postgresql::update::Update2;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user_access_refresh_token::Update2 as ApplicationUserAccessRefreshTokenUpdate1;
 use crate::infrastructure_layer::functionality::repository::postgresql::update::Update6;
 use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
@@ -219,7 +219,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
 
                 PostgresqlRepository::<ApplicationUserAccessRefreshToken>::update_1(
                     database_2_postgresql_connection,
-                    &Update2 {
+                    &ApplicationUserAccessRefreshTokenUpdate1 {
                         application_user_access_token_id: application_user_access_refresh_token_.application_user_access_token_id.as_ref(),
                         application_user_access_refresh_token_obfuscation_value: application_user_access_refresh_token_.obfuscation_value.as_str(),
                         application_user_access_refresh_token_expires_at: application_user_access_refresh_token_.expires_at,

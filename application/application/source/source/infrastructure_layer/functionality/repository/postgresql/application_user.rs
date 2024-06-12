@@ -1,7 +1,6 @@
 use super::by::By1;
 use super::by::By2;
 use super::by::By3;
-use super::update::Update1;
 use super::PostgresqlRepository;
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::data::entity::application_user::derivative::ApplicationUser1;
@@ -569,4 +568,8 @@ pub struct Insert1 {
     pub application_user_email: String,
     pub application_user_nickname: String,
     pub application_user_password_hash: String,
+}
+
+pub struct Update1<'a> {
+    pub application_user_password_hash: &'a str,
 }

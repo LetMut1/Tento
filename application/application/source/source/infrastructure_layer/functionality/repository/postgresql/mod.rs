@@ -80,16 +80,6 @@ pub mod by {
 }
 
 pub mod update {
-    pub struct Update1<'a> {
-        pub application_user_password_hash: &'a str,
-    }
-
-    pub struct Update2<'a> {
-        pub application_user_access_token_id: &'a str,
-        pub application_user_access_refresh_token_obfuscation_value: &'a str,
-        pub application_user_access_refresh_token_expires_at: i64,
-        pub application_user_access_refresh_token_updated_at: i64,
-    }
 
     pub struct Update3<'a> {
         pub application_user_authorization_token_value: &'a str,

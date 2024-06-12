@@ -1,6 +1,5 @@
 use super::by::By3;
 use super::by::By4;
-use super::update::Update2;
 use super::PostgresqlRepository;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
 use crate::infrastructure_layer::data::auditor::Backtrace;
@@ -296,6 +295,13 @@ pub struct Insert1<'a> {
     pub application_user_device_id: &'a str,
     pub application_user_access_token_id: &'a str,
     pub application_user_access_refresh_token_obfuscation_value: String,
+    pub application_user_access_refresh_token_expires_at: i64,
+    pub application_user_access_refresh_token_updated_at: i64,
+}
+
+pub struct Update2<'a> {
+    pub application_user_access_token_id: &'a str,
+    pub application_user_access_refresh_token_obfuscation_value: &'a str,
     pub application_user_access_refresh_token_expires_at: i64,
     pub application_user_access_refresh_token_updated_at: i64,
 }
