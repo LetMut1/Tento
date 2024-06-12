@@ -14,8 +14,8 @@ use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::data::auditor::OptionConverter;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By4;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user_reset_password_token::Update15;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user_reset_password_token::Update16;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user_reset_password_token::Update4;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user_reset_password_token::Update5;
 use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::unix_time::UnixTime;
@@ -133,7 +133,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordBySecondStep>
             if application_user_reset_password_token.wrong_enter_tries_quantity < ApplicationUserResetPasswordToken_WrongEnterTriesQuantity::LIMIT {
                 PostgresqlRepository::<ApplicationUserResetPasswordToken>::update_4(
                     database_2_postgresql_connection,
-                    &Update15 {
+                    &Update4 {
                         application_user_reset_password_token_wrong_enter_tries_quantity: application_user_reset_password_token.wrong_enter_tries_quantity,
                     },
                     &by_4,
@@ -162,7 +162,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordBySecondStep>
 
         PostgresqlRepository::<ApplicationUserResetPasswordToken>::update_5(
             database_2_postgresql_connection,
-            &Update16 {
+            &Update5 {
                 application_user_reset_password_token_is_approved: application_user_reset_password_token.is_approved,
             },
             &by_4,

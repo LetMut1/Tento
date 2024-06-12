@@ -141,7 +141,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
 
     pub async fn update_1<'a>(
         database_2_connection: &'a Connection,
-        update_12: &'a Update12<'_>,
+        update_1: &'a Update1<'_>,
         by_4: &'a By4<'_>,
     ) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -165,23 +165,23 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &update_12.application_user_reset_password_token_value,
+                &update_1.application_user_reset_password_token_value,
                 Type::TEXT,
             )
             .add_parameter(
-                &update_12.application_user_reset_password_token_wrong_enter_tries_quantity,
+                &update_1.application_user_reset_password_token_wrong_enter_tries_quantity,
                 Type::INT2,
             )
             .add_parameter(
-                &update_12.application_user_reset_password_token_is_approved,
+                &update_1.application_user_reset_password_token_is_approved,
                 Type::BOOL,
             )
             .add_parameter(
-                &update_12.application_user_reset_password_token_expires_at,
+                &update_1.application_user_reset_password_token_expires_at,
                 Type::INT8,
             )
             .add_parameter(
-                &update_12.application_user_reset_password_token_can_be_resent_from,
+                &update_1.application_user_reset_password_token_can_be_resent_from,
                 Type::INT8,
             )
             .add_parameter(
@@ -214,7 +214,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
 
     pub async fn update_2<'a>(
         database_2_connection: &'a Connection,
-        update_13: &'a Update13,
+        update_2: &'a Update2,
         by_4: &'a By4<'_>,
     ) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -230,7 +230,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &update_13.application_user_reset_password_token_can_be_resent_from,
+                &update_2.application_user_reset_password_token_can_be_resent_from,
                 Type::INT8,
             )
             .add_parameter(
@@ -263,7 +263,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
 
     pub async fn update_3<'a>(
         database_2_connection: &'a Connection,
-        update_14: &'a Update14<'_>,
+        update_3: &'a Update3<'_>,
         by_4: &'a By4<'_>,
     ) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -285,19 +285,19 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &update_14.application_user_reset_password_token_value,
+                &update_3.application_user_reset_password_token_value,
                 Type::TEXT,
             )
             .add_parameter(
-                &update_14.application_user_reset_password_token_wrong_enter_tries_quantity,
+                &update_3.application_user_reset_password_token_wrong_enter_tries_quantity,
                 Type::INT2,
             )
             .add_parameter(
-                &update_14.application_user_reset_password_token_is_approved,
+                &update_3.application_user_reset_password_token_is_approved,
                 Type::BOOL,
             )
             .add_parameter(
-                &update_14.application_user_reset_password_token_expires_at,
+                &update_3.application_user_reset_password_token_expires_at,
                 Type::INT8,
             )
             .add_parameter(
@@ -330,7 +330,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
 
     pub async fn update_4<'a>(
         database_2_connection: &'a Connection,
-        update_15: &'a Update15,
+        update_4: &'a Update4,
         by_4: &'a By4<'_>,
     ) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -346,7 +346,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &update_15.application_user_reset_password_token_wrong_enter_tries_quantity,
+                &update_4.application_user_reset_password_token_wrong_enter_tries_quantity,
                 Type::INT2,
             )
             .add_parameter(
@@ -379,7 +379,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
 
     pub async fn update_5<'a>(
         database_2_connection: &'a Connection,
-        update_16: &'a Update16,
+        update_5: &'a Update5,
         by_4: &'a By4<'_>,
     ) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -395,7 +395,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &update_16.application_user_reset_password_token_is_approved,
+                &update_5.application_user_reset_password_token_is_approved,
                 Type::BOOL,
             )
             .add_parameter(
@@ -610,7 +610,7 @@ pub struct Insert1<'a> {
     pub application_user_reset_password_token_can_be_resent_from: i64,
 }
 
-pub struct Update12<'a> {
+pub struct Update1<'a> {
     pub application_user_reset_password_token_value: &'a str,
     pub application_user_reset_password_token_wrong_enter_tries_quantity: i16,
     pub application_user_reset_password_token_is_approved: bool,
@@ -618,21 +618,21 @@ pub struct Update12<'a> {
     pub application_user_reset_password_token_can_be_resent_from: i64,
 }
 
-pub struct Update13 {
+pub struct Update2 {
     pub application_user_reset_password_token_can_be_resent_from: i64,
 }
 
-pub struct Update14<'a> {
+pub struct Update3<'a> {
     pub application_user_reset_password_token_value: &'a str,
     pub application_user_reset_password_token_wrong_enter_tries_quantity: i16,
     pub application_user_reset_password_token_is_approved: bool,
     pub application_user_reset_password_token_expires_at: i64,
 }
 
-pub struct Update15 {
+pub struct Update4 {
     pub application_user_reset_password_token_wrong_enter_tries_quantity: i16,
 }
 
-pub struct Update16 {
+pub struct Update5 {
     pub application_user_reset_password_token_is_approved: bool,
 }

@@ -19,9 +19,9 @@ use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By2;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By4;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_reset_password_token::Insert1;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user_reset_password_token::Update12;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user_reset_password_token::Update13;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user_reset_password_token::Update14;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user_reset_password_token::Update1;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user_reset_password_token::Update2;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user_reset_password_token::Update3;
 use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::unix_time::UnixTime;
@@ -146,7 +146,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByFirstStep> 
                 if need_to_update_1 && need_to_update_2 {
                     PostgresqlRepository::<ApplicationUserResetPasswordToken>::update_1(
                         database_2_postgresql_connection,
-                        &Update12 {
+                        &Update1 {
                             application_user_reset_password_token_value: application_user_reset_password_token.value.as_str(),
                             application_user_reset_password_token_wrong_enter_tries_quantity: application_user_reset_password_token.wrong_enter_tries_quantity,
                             application_user_reset_password_token_is_approved: application_user_reset_password_token.is_approved,
@@ -160,7 +160,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByFirstStep> 
                     if need_to_update_1 {
                         PostgresqlRepository::<ApplicationUserResetPasswordToken>::update_2(
                             database_2_postgresql_connection,
-                            &Update13 {
+                            &Update2 {
                                 application_user_reset_password_token_can_be_resent_from: application_user_reset_password_token.can_be_resent_from,
                             },
                             &by_4,
@@ -171,7 +171,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByFirstStep> 
                     if need_to_update_2 {
                         PostgresqlRepository::<ApplicationUserResetPasswordToken>::update_3(
                             database_2_postgresql_connection,
-                            &Update14 {
+                            &Update3 {
                                 application_user_reset_password_token_value: application_user_reset_password_token.value.as_str(),
                                 application_user_reset_password_token_wrong_enter_tries_quantity: application_user_reset_password_token.wrong_enter_tries_quantity,
                                 application_user_reset_password_token_is_approved: application_user_reset_password_token.is_approved,

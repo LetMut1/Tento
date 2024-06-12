@@ -16,7 +16,7 @@ use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By3;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By4;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user_reset_password_token::Update13;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user_reset_password_token::Update2;
 use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::unix_time::UnixTime;
@@ -137,7 +137,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForResetPassword>
 
         PostgresqlRepository::<ApplicationUserResetPasswordToken>::update_2(
             database_2_postgresql_connection,
-            &Update13 {
+            &Update2 {
                 application_user_reset_password_token_can_be_resent_from: application_user_reset_password_token.can_be_resent_from,
             },
             &by_4,
