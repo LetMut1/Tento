@@ -13,8 +13,8 @@ use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By5;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user_registration_token::Update10;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user_registration_token::Update11;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user_registration_token::Update4;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user_registration_token::Update5;
 use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::unix_time::UnixTime;
@@ -133,7 +133,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
             if application_user_registration_token.wrong_enter_tries_quantity < ApplicationUserRegistrationToken_WrongEnterTriesQuantity::LIMIT {
                 PostgresqlRepository::<ApplicationUserRegistrationToken>::update_4(
                     database_2_postgresql_connection,
-                    &Update10 {
+                    &Update4 {
                         application_user_registration_token_wrong_enter_tries_quantity: application_user_registration_token.wrong_enter_tries_quantity,
                     },
                     &by_5,
@@ -162,7 +162,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
 
         PostgresqlRepository::<ApplicationUserRegistrationToken>::update_5(
             database_2_postgresql_connection,
-            &Update11 {
+            &Update5 {
                 application_user_registration_token_is_approved: application_user_registration_token.is_approved,
             },
             &by_5,

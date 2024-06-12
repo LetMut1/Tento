@@ -19,9 +19,9 @@ use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By2;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By5;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_registration_token::Insert1;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user_registration_token::Update7;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user_registration_token::Update8;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user_registration_token::Update9;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user_registration_token::Update1;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user_registration_token::Update2;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user_registration_token::Update3;
 use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::unix_time::UnixTime;
@@ -142,7 +142,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
                 if need_to_update_1 && need_to_update_2 {
                     PostgresqlRepository::<ApplicationUserRegistrationToken>::update_1(
                         database_2_postgresql_connection,
-                        &Update7 {
+                        &Update1 {
                             application_user_registration_token_value: application_user_registration_token.value.as_str(),
                             application_user_registration_token_wrong_enter_tries_quantity: application_user_registration_token.wrong_enter_tries_quantity,
                             application_user_registration_token_is_approved: application_user_registration_token.is_approved,
@@ -156,7 +156,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
                     if need_to_update_1 {
                         PostgresqlRepository::<ApplicationUserRegistrationToken>::update_2(
                             database_2_postgresql_connection,
-                            &Update8 {
+                            &Update2 {
                                 application_user_registration_token_can_be_resent_from: application_user_registration_token.can_be_resent_from,
                             },
                             &by_5,
@@ -167,7 +167,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
                     if need_to_update_2 {
                         PostgresqlRepository::<ApplicationUserRegistrationToken>::update_3(
                             database_2_postgresql_connection,
-                            &Update9 {
+                            &Update3 {
                                 application_user_registration_token_value: application_user_registration_token.value.as_str(),
                                 application_user_registration_token_wrong_enter_tries_quantity: application_user_registration_token.wrong_enter_tries_quantity,
                                 application_user_registration_token_is_approved: application_user_registration_token.is_approved,

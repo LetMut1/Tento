@@ -35,7 +35,7 @@ use crate::infrastructure_layer::functionality::repository::postgresql::by::By5;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user::Insert1 as ApplicationUserInsert1;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_access_refresh_token::Insert1 as ApplicationUserAccessRefreshTokenInsert1;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_device::Insert1;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user_registration_token::Update10;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user_registration_token::Update4;
 use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::unix_time::UnixTime;
@@ -213,7 +213,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
             if application_user_registration_token.wrong_enter_tries_quantity < ApplicationUserRegistrationToken_WrongEnterTriesQuantity::LIMIT {
                 PostgresqlRepository::<ApplicationUserRegistrationToken>::update_4(
                     database_2_postgresql_connection,
-                    &Update10 {
+                    &Update4 {
                         application_user_registration_token_wrong_enter_tries_quantity: application_user_registration_token.wrong_enter_tries_quantity,
                     },
                     &by_5,

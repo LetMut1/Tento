@@ -141,7 +141,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
 
     pub async fn update_1<'a>(
         database_2_connection: &'a Connection,
-        update_7: &'a Update7<'_>,
+        update_1: &'a Update1<'_>,
         by_5: &'a By5<'_>,
     ) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -165,23 +165,23 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &update_7.application_user_registration_token_value,
+                &update_1.application_user_registration_token_value,
                 Type::TEXT,
             )
             .add_parameter(
-                &update_7.application_user_registration_token_wrong_enter_tries_quantity,
+                &update_1.application_user_registration_token_wrong_enter_tries_quantity,
                 Type::INT2,
             )
             .add_parameter(
-                &update_7.application_user_registration_token_is_approved,
+                &update_1.application_user_registration_token_is_approved,
                 Type::BOOL,
             )
             .add_parameter(
-                &update_7.application_user_registration_token_expires_at,
+                &update_1.application_user_registration_token_expires_at,
                 Type::INT8,
             )
             .add_parameter(
-                &update_7.application_user_registration_token_can_be_resent_from,
+                &update_1.application_user_registration_token_can_be_resent_from,
                 Type::INT8,
             )
             .add_parameter(
@@ -214,7 +214,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
 
     pub async fn update_2<'a>(
         database_2_connection: &'a Connection,
-        update_8: &'a Update8,
+        update_2: &'a Update2,
         by_5: &'a By5<'_>,
     ) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -230,7 +230,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &update_8.application_user_registration_token_can_be_resent_from,
+                &update_2.application_user_registration_token_can_be_resent_from,
                 Type::INT8,
             )
             .add_parameter(
@@ -263,7 +263,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
 
     pub async fn update_3<'a>(
         database_2_connection: &'a Connection,
-        update_9: &'a Update9<'_>,
+        update_3: &'a Update3<'_>,
         by_5: &'a By5<'_>,
     ) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -285,19 +285,19 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &update_9.application_user_registration_token_value,
+                &update_3.application_user_registration_token_value,
                 Type::TEXT,
             )
             .add_parameter(
-                &update_9.application_user_registration_token_wrong_enter_tries_quantity,
+                &update_3.application_user_registration_token_wrong_enter_tries_quantity,
                 Type::INT2,
             )
             .add_parameter(
-                &update_9.application_user_registration_token_is_approved,
+                &update_3.application_user_registration_token_is_approved,
                 Type::BOOL,
             )
             .add_parameter(
-                &update_9.application_user_registration_token_expires_at,
+                &update_3.application_user_registration_token_expires_at,
                 Type::INT8,
             )
             .add_parameter(
@@ -330,7 +330,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
 
     pub async fn update_4<'a>(
         database_2_connection: &'a Connection,
-        update_10: &'a Update10,
+        update_4: &'a Update4,
         by_5: &'a By5<'_>,
     ) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -346,7 +346,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &update_10.application_user_registration_token_wrong_enter_tries_quantity,
+                &update_4.application_user_registration_token_wrong_enter_tries_quantity,
                 Type::INT2,
             )
             .add_parameter(
@@ -379,7 +379,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
 
     pub async fn update_5<'a>(
         database_2_connection: &'a Connection,
-        update_11: &'a Update11,
+        update_5: &'a Update5,
         by_5: &'a By5<'_>,
     ) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -395,7 +395,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &update_11.application_user_registration_token_is_approved,
+                &update_5.application_user_registration_token_is_approved,
                 Type::BOOL,
             )
             .add_parameter(
@@ -610,7 +610,7 @@ pub struct Insert1<'a> {
     pub application_user_registration_token_can_be_resent_from: i64,
 }
 
-pub struct Update7<'a> {
+pub struct Update1<'a> {
     pub application_user_registration_token_value: &'a str,
     pub application_user_registration_token_wrong_enter_tries_quantity: i16,
     pub application_user_registration_token_is_approved: bool,
@@ -618,21 +618,21 @@ pub struct Update7<'a> {
     pub application_user_registration_token_can_be_resent_from: i64,
 }
 
-pub struct Update8 {
+pub struct Update2 {
     pub application_user_registration_token_can_be_resent_from: i64,
 }
 
-pub struct Update9<'a> {
+pub struct Update3<'a> {
     pub application_user_registration_token_value: &'a str,
     pub application_user_registration_token_wrong_enter_tries_quantity: i16,
     pub application_user_registration_token_is_approved: bool,
     pub application_user_registration_token_expires_at: i64,
 }
 
-pub struct Update10 {
+pub struct Update4 {
     pub application_user_registration_token_wrong_enter_tries_quantity: i16,
 }
 
-pub struct Update11 {
+pub struct Update5 {
     pub application_user_registration_token_is_approved: bool,
 }
