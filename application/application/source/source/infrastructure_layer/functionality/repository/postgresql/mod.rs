@@ -18,10 +18,6 @@ pub struct PostgresqlRepository<E> {
 
 pub mod by {
 
-    pub struct By3 {
-        pub application_user_id: i64,
-    }
-
     pub struct By4<'a> {
         pub application_user_id: i64,
         pub application_user_device_id: &'a str,

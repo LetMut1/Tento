@@ -1,4 +1,3 @@
-use super::by::By3;
 use super::PostgresqlRepository;
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::data::entity::application_user::derivative::ApplicationUser1;
@@ -578,4 +577,8 @@ pub struct By1<'a> {
 
 pub struct By2<'a> {
     pub application_user_email: &'a str,
+}
+
+pub struct By3 {
+    pub application_user_id: i64,
 }

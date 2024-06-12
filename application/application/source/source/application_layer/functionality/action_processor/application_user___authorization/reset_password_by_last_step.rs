@@ -19,7 +19,8 @@ use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::data::control_type::TokioBlockingTask;
 use crate::infrastructure_layer::functionality::service::spawner::Spawner;
 use crate::infrastructure_layer::data::void::Void;
-use crate::infrastructure_layer::functionality::repository::postgresql::by::By3;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user::By3 as ApplicationUserBy3;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user_access_refresh_token::By3 as ApplicationUserAccessRefreshTokenBy3;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By4;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user::Update1;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_reset_password_token::Update4;
@@ -174,7 +175,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
             return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_WrongValue)));
         }
 
-        let by_3 = By3 {
+        let application_user_by_3 = ApplicationUserBy3 {
             application_user_id: incoming_.application_user_id,
         };
 
@@ -184,7 +185,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
 
         let mut application_user = match PostgresqlRepository::<ApplicationUser>::find_5(
             database_1_postgresql_connection,
-            &by_3,
+            &application_user_by_3,
         )
         .await?
         {
@@ -225,13 +226,15 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
             &Update1 {
                 application_user_password_hash: application_user.password_hash.as_str(),
             },
-            &by_3,
+            &application_user_by_3,
         )
         .await?;
 
         PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::delete_2(
             &*database_2_postgresql_pooled_connection,
-            &by_3,
+            &ApplicationUserAccessRefreshTokenBy3 {
+                application_user_id: incoming_.application_user_id,
+            },
         )
         .await?;
 

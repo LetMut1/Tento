@@ -1,4 +1,3 @@
-use super::by::By3;
 use super::by::By4;
 use super::PostgresqlRepository;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
@@ -304,4 +303,8 @@ pub struct Update1<'a> {
     pub application_user_access_refresh_token_obfuscation_value: &'a str,
     pub application_user_access_refresh_token_expires_at: i64,
     pub application_user_access_refresh_token_updated_at: i64,
+}
+
+pub struct By3 {
+    pub application_user_id: i64,
 }

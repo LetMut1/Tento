@@ -14,7 +14,7 @@ use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::data::auditor::OptionConverter;
 use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
-use crate::infrastructure_layer::functionality::repository::postgresql::by::By3;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user::By3;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By4;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_authorization_token::Update3;
 use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
