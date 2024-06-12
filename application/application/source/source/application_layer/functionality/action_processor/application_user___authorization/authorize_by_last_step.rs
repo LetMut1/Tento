@@ -29,7 +29,7 @@ use crate::infrastructure_layer::functionality::repository::postgresql::by::By4;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_access_refresh_token::Insert1 as ApplicationUserAccessRefreshTokenInsert1;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_device::Insert1 as ApplicationUserDeviceInsert1;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_access_refresh_token::Update1;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user_authorization_token::Update6;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user_authorization_token::Update4;
 use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::unix_time::UnixTime;
@@ -147,7 +147,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
             if application_user_authorization_token_.wrong_enter_tries_quantity < ApplicationUserAuthorizationToken_WrongEnterTriesQuantity::LIMIT {
                 PostgresqlRepository::<ApplicationUserAuthorizationToken>::update_4(
                     database_2_postgresql_connection,
-                    &Update6 {
+                    &Update4 {
                         application_user_authorization_token_wrong_enter_tries_quantity: application_user_authorization_token_.wrong_enter_tries_quantity,
                     },
                     &by_4,

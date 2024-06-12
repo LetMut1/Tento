@@ -26,9 +26,9 @@ use crate::infrastructure_layer::functionality::repository::postgresql::by::By1;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By2;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By4;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_authorization_token::Insert1;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user_authorization_token::Update1;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user_authorization_token::Update2;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_authorization_token::Update3;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user_authorization_token::Update4;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user_authorization_token::Update5;
 use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::unix_time::UnixTime;
@@ -230,7 +230,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                 if need_to_update_1 && need_to_update_2 {
                     PostgresqlRepository::<ApplicationUserAuthorizationToken>::update_1(
                         database_2_postgresql_connection,
-                        &Update3 {
+                        &Update1 {
                             application_user_authorization_token_value: application_user_authorization_token.value.as_str(),
                             application_user_authorization_token_wrong_enter_tries_quantity: application_user_authorization_token.wrong_enter_tries_quantity,
                             application_user_authorization_token_expires_at: application_user_authorization_token.expires_at,
@@ -243,7 +243,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                     if need_to_update_1 {
                         PostgresqlRepository::<ApplicationUserAuthorizationToken>::update_3(
                             database_2_postgresql_connection,
-                            &Update5 {
+                            &Update3 {
                                 application_user_authorization_token_can_be_resent_from: application_user_authorization_token.can_be_resent_from,
                             },
                             &by_4,
@@ -254,7 +254,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                     if need_to_update_2 {
                         PostgresqlRepository::<ApplicationUserAuthorizationToken>::update_2(
                             database_2_postgresql_connection,
-                            &Update4 {
+                            &Update2 {
                                 application_user_authorization_token_value: application_user_authorization_token.value.as_str(),
                                 application_user_authorization_token_wrong_enter_tries_quantity: application_user_authorization_token.wrong_enter_tries_quantity,
                                 application_user_authorization_token_expires_at: application_user_authorization_token.expires_at,

@@ -134,7 +134,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
 
     pub async fn update_1<'a>(
         database_2_connection: &'a Connection,
-        update_3: &'a Update3<'_>,
+        update_1: &'a Update1<'_>,
         by_4: &'a By4<'_>,
     ) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -156,19 +156,19 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &update_3.application_user_authorization_token_value,
+                &update_1.application_user_authorization_token_value,
                 Type::TEXT,
             )
             .add_parameter(
-                &update_3.application_user_authorization_token_wrong_enter_tries_quantity,
+                &update_1.application_user_authorization_token_wrong_enter_tries_quantity,
                 Type::INT2,
             )
             .add_parameter(
-                &update_3.application_user_authorization_token_expires_at,
+                &update_1.application_user_authorization_token_expires_at,
                 Type::INT8,
             )
             .add_parameter(
-                &update_3.application_user_authorization_token_can_be_resent_from,
+                &update_1.application_user_authorization_token_can_be_resent_from,
                 Type::INT8,
             )
             .add_parameter(
@@ -201,7 +201,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
 
     pub async fn update_2<'a>(
         database_2_connection: &'a Connection,
-        update_4: &'a Update4<'_>,
+        update_2: &'a Update2<'_>,
         by_4: &'a By4<'_>,
     ) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -221,15 +221,15 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &update_4.application_user_authorization_token_value,
+                &update_2.application_user_authorization_token_value,
                 Type::TEXT,
             )
             .add_parameter(
-                &update_4.application_user_authorization_token_wrong_enter_tries_quantity,
+                &update_2.application_user_authorization_token_wrong_enter_tries_quantity,
                 Type::INT2,
             )
             .add_parameter(
-                &update_4.application_user_authorization_token_expires_at,
+                &update_2.application_user_authorization_token_expires_at,
                 Type::INT8,
             )
             .add_parameter(
@@ -262,7 +262,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
 
     pub async fn update_3<'a>(
         database_2_connection: &'a Connection,
-        update_5: &'a Update5,
+        update_3: &'a Update3,
         by_4: &'a By4<'_>,
     ) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -278,7 +278,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &update_5.application_user_authorization_token_can_be_resent_from,
+                &update_3.application_user_authorization_token_can_be_resent_from,
                 Type::INT8,
             )
             .add_parameter(
@@ -311,7 +311,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
 
     pub async fn update_4<'a>(
         database_2_connection: &'a Connection,
-        update_6: &'a Update6,
+        update_4: &'a Update4,
         by_4: &'a By4<'_>,
     ) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -327,7 +327,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &update_6.application_user_authorization_token_wrong_enter_tries_quantity,
+                &update_4.application_user_authorization_token_wrong_enter_tries_quantity,
                 Type::INT2,
             )
             .add_parameter(
@@ -535,23 +535,23 @@ pub struct Insert1<'a> {
     pub application_user_authorization_token_can_be_resent_from: i64,
 }
 
-pub struct Update3<'a> {
+pub struct Update1<'a> {
     pub application_user_authorization_token_value: &'a str,
     pub application_user_authorization_token_wrong_enter_tries_quantity: i16,
     pub application_user_authorization_token_expires_at: i64,
     pub application_user_authorization_token_can_be_resent_from: i64,
 }
 
-pub struct Update4<'a> {
+pub struct Update2<'a> {
     pub application_user_authorization_token_value: &'a str,
     pub application_user_authorization_token_wrong_enter_tries_quantity: i16,
     pub application_user_authorization_token_expires_at: i64,
 }
 
-pub struct Update5 {
+pub struct Update3 {
     pub application_user_authorization_token_can_be_resent_from: i64,
 }
 
-pub struct Update6 {
+pub struct Update4 {
     pub application_user_authorization_token_wrong_enter_tries_quantity: i16,
 }
