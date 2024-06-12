@@ -1,8 +1,4 @@
 use super::by::By4;
-use super::update::Update3;
-use super::update::Update4;
-use super::update::Update5;
-use super::update::Update6;
 use super::PostgresqlRepository;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken;
 use crate::domain_layer::data::entity::application_user_authorization_token::derivative::ApplicationUserAuthorizationToken1;
@@ -537,4 +533,25 @@ pub struct Insert1<'a> {
     pub application_user_authorization_token_wrong_enter_tries_quantity: i16,
     pub application_user_authorization_token_expires_at: i64,
     pub application_user_authorization_token_can_be_resent_from: i64,
+}
+
+pub struct Update3<'a> {
+    pub application_user_authorization_token_value: &'a str,
+    pub application_user_authorization_token_wrong_enter_tries_quantity: i16,
+    pub application_user_authorization_token_expires_at: i64,
+    pub application_user_authorization_token_can_be_resent_from: i64,
+}
+
+pub struct Update4<'a> {
+    pub application_user_authorization_token_value: &'a str,
+    pub application_user_authorization_token_wrong_enter_tries_quantity: i16,
+    pub application_user_authorization_token_expires_at: i64,
+}
+
+pub struct Update5 {
+    pub application_user_authorization_token_can_be_resent_from: i64,
+}
+
+pub struct Update6 {
+    pub application_user_authorization_token_wrong_enter_tries_quantity: i16,
 }

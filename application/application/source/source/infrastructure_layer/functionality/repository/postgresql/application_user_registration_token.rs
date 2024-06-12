@@ -1,9 +1,4 @@
 use super::by::By5;
-use super::update::Update10;
-use super::update::Update11;
-use super::update::Update7;
-use super::update::Update8;
-use super::update::Update9;
 use super::PostgresqlRepository;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken;
 use crate::domain_layer::data::entity::application_user_registration_token::derivative::ApplicationUserRegistrationToken1;
@@ -613,4 +608,31 @@ pub struct Insert1<'a> {
     pub application_user_registration_token_is_approved: bool,
     pub application_user_registration_token_expires_at: i64,
     pub application_user_registration_token_can_be_resent_from: i64,
+}
+
+pub struct Update7<'a> {
+    pub application_user_registration_token_value: &'a str,
+    pub application_user_registration_token_wrong_enter_tries_quantity: i16,
+    pub application_user_registration_token_is_approved: bool,
+    pub application_user_registration_token_expires_at: i64,
+    pub application_user_registration_token_can_be_resent_from: i64,
+}
+
+pub struct Update8 {
+    pub application_user_registration_token_can_be_resent_from: i64,
+}
+
+pub struct Update9<'a> {
+    pub application_user_registration_token_value: &'a str,
+    pub application_user_registration_token_wrong_enter_tries_quantity: i16,
+    pub application_user_registration_token_is_approved: bool,
+    pub application_user_registration_token_expires_at: i64,
+}
+
+pub struct Update10 {
+    pub application_user_registration_token_wrong_enter_tries_quantity: i16,
+}
+
+pub struct Update11 {
+    pub application_user_registration_token_is_approved: bool,
 }

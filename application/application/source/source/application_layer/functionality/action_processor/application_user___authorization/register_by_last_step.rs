@@ -35,7 +35,7 @@ use crate::infrastructure_layer::functionality::repository::postgresql::by::By5;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user::Insert1 as ApplicationUserInsert1;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_access_refresh_token::Insert1 as ApplicationUserAccessRefreshTokenInsert1;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_device::Insert1;
-use crate::infrastructure_layer::functionality::repository::postgresql::update::Update10;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user_registration_token::Update10;
 use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::unix_time::UnixTime;
