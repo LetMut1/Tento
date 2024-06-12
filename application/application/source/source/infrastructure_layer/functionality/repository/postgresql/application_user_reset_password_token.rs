@@ -1,9 +1,4 @@
 use super::by::By4;
-use super::update::Update12;
-use super::update::Update13;
-use super::update::Update14;
-use super::update::Update15;
-use super::update::Update16;
 use super::PostgresqlRepository;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
 use crate::domain_layer::data::entity::application_user_reset_password_token::derivative::ApplicationUserResetPasswordToken1;
@@ -613,4 +608,31 @@ pub struct Insert1<'a> {
     pub application_user_reset_password_token_is_approved: bool,
     pub application_user_reset_password_token_expires_at: i64,
     pub application_user_reset_password_token_can_be_resent_from: i64,
+}
+
+pub struct Update12<'a> {
+    pub application_user_reset_password_token_value: &'a str,
+    pub application_user_reset_password_token_wrong_enter_tries_quantity: i16,
+    pub application_user_reset_password_token_is_approved: bool,
+    pub application_user_reset_password_token_expires_at: i64,
+    pub application_user_reset_password_token_can_be_resent_from: i64,
+}
+
+pub struct Update13 {
+    pub application_user_reset_password_token_can_be_resent_from: i64,
+}
+
+pub struct Update14<'a> {
+    pub application_user_reset_password_token_value: &'a str,
+    pub application_user_reset_password_token_wrong_enter_tries_quantity: i16,
+    pub application_user_reset_password_token_is_approved: bool,
+    pub application_user_reset_password_token_expires_at: i64,
+}
+
+pub struct Update15 {
+    pub application_user_reset_password_token_wrong_enter_tries_quantity: i16,
+}
+
+pub struct Update16 {
+    pub application_user_reset_password_token_is_approved: bool,
 }

@@ -21,8 +21,8 @@ use crate::infrastructure_layer::functionality::service::spawner::Spawner;
 use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By3;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By4;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user::Update1 as ApplicationUserUpdate1;
-use crate::infrastructure_layer::functionality::repository::postgresql::update::Update15;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user::Update1;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user_reset_password_token::Update15;
 use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::unix_time::UnixTime;
@@ -222,7 +222,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
 
         PostgresqlRepository::<ApplicationUser>::update_1(
             database_1_postgresql_connection,
-            &ApplicationUserUpdate1 {
+            &Update1 {
                 application_user_password_hash: application_user.password_hash.as_str(),
             },
             &by_3,
