@@ -1,4 +1,3 @@
-use super::by::By4;
 use super::PostgresqlRepository;
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
 use crate::domain_layer::data::entity::application_user_reset_password_token::derivative::ApplicationUserResetPasswordToken1;
@@ -635,4 +634,9 @@ pub struct Update4 {
 
 pub struct Update5 {
     pub application_user_reset_password_token_is_approved: bool,
+}
+
+pub struct By4<'a> {
+    pub application_user_id: i64,
+    pub application_user_device_id: &'a str,
 }

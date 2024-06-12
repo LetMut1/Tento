@@ -1,4 +1,3 @@
-use super::by::By4;
 use super::PostgresqlRepository;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken;
 use crate::domain_layer::data::entity::application_user_authorization_token::derivative::ApplicationUserAuthorizationToken1;
@@ -554,4 +553,9 @@ pub struct Update3 {
 
 pub struct Update4 {
     pub application_user_authorization_token_wrong_enter_tries_quantity: i16,
+}
+
+pub struct By4<'a> {
+    pub application_user_id: i64,
+    pub application_user_device_id: &'a str,
 }

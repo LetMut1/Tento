@@ -1,4 +1,3 @@
-use super::by::By4;
 use super::PostgresqlRepository;
 use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
 use crate::infrastructure_layer::data::auditor::Backtrace;
@@ -307,4 +306,9 @@ pub struct Update1<'a> {
 
 pub struct By3 {
     pub application_user_id: i64,
+}
+
+pub struct By4<'a> {
+    pub application_user_id: i64,
+    pub application_user_device_id: &'a str,
 }

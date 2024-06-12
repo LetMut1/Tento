@@ -13,7 +13,7 @@ use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::data::auditor::OptionConverter;
-use crate::infrastructure_layer::functionality::repository::postgresql::by::By4;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user_reset_password_token::By4;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_reset_password_token::Update4;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_reset_password_token::Update5;
 use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;

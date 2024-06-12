@@ -25,7 +25,8 @@ use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::functionality::service::spawner::Spawner;
 use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user::By3;
-use crate::infrastructure_layer::functionality::repository::postgresql::by::By4;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user_authorization_token::By4 as ApplicationUserAuthorizationTokenBy4;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user_access_refresh_token::By4 as ApplicationUserAccessRefreshTokenBy4;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_access_refresh_token::Insert1 as ApplicationUserAccessRefreshTokenInsert1;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_device::Insert1 as ApplicationUserDeviceInsert1;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_access_refresh_token::Update1;
@@ -107,7 +108,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
             );
         }
 
-        let by_4 = By4 {
+        let application_user_authorization_token_by_4 = ApplicationUserAuthorizationTokenBy4 {
             application_user_id: incoming_.application_user_id,
             application_user_device_id: incoming_.application_user_device_id.as_str(),
         };
@@ -118,7 +119,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
 
         let application_user_authorization_token = PostgresqlRepository::<ApplicationUserAuthorizationToken>::find_2(
             database_2_postgresql_connection,
-            &by_4,
+            &application_user_authorization_token_by_4,
         )
         .await?;
 
@@ -132,7 +133,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
         if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token_.expires_at) {
             PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::delete_1(
                 database_2_postgresql_connection,
-                &by_4,
+                &application_user_authorization_token_by_4,
             )
             .await?;
 
@@ -150,13 +151,13 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
                     &Update4 {
                         application_user_authorization_token_wrong_enter_tries_quantity: application_user_authorization_token_.wrong_enter_tries_quantity,
                     },
-                    &by_4,
+                    &application_user_authorization_token_by_4,
                 )
                 .await?;
             } else {
                 PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::delete_1(
                     database_2_postgresql_connection,
-                    &by_4,
+                    &application_user_authorization_token_by_4,
                 )
                 .await?;
             }
@@ -201,10 +202,15 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
         let application_user_access_refresh_token_expires_at = Generator::<ApplicationUserAccessRefreshToken_ExpiresAt>::generate()?;
 
         let application_user_access_refresh_token_updated_at = Generator::<ApplicationUserAccessRefreshToken_UpdatedAt>::generate();
+
+        let application_user_access_refresh_token = ApplicationUserAccessRefreshTokenBy4 {
+            application_user_id: incoming_.application_user_id,
+            application_user_device_id: incoming_.application_user_device_id.as_str(),
+        };
         // TODO  TRANZACTION
         let application_user_access_refresh_token = match PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::find_1(
             database_2_postgresql_connection,
-            &by_4,
+            &application_user_access_refresh_token,
         )
         .await?
         {
@@ -225,7 +231,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
                         application_user_access_refresh_token_expires_at: application_user_access_refresh_token_.expires_at,
                         application_user_access_refresh_token_updated_at: application_user_access_refresh_token_.updated_at,
                     },
-                    &by_4,
+                    &application_user_access_refresh_token,
                 )
                 .await?;
 
@@ -275,7 +281,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
 
                 PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::delete_1(
                     &*database_2_postgresql_pooled_connection_,
-                    &By4 {
+                    &ApplicationUserAuthorizationTokenBy4 {
                         application_user_id: application_user_device.application_user_id,
                         application_user_device_id: application_user_device.id.as_str(),
                     },
