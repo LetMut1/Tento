@@ -17,9 +17,6 @@ pub struct PostgresqlRepository<E> {
 }
 
 pub mod by {
-    pub struct By1<'a> {
-        pub application_user_nickname: &'a str,
-    }
 
     pub struct By2<'a> {
         pub application_user_email: &'a str,

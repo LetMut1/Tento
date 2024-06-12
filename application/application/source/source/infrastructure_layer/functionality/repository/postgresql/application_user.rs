@@ -1,4 +1,3 @@
-use super::by::By1;
 use super::by::By2;
 use super::by::By3;
 use super::PostgresqlRepository;
@@ -572,4 +571,8 @@ pub struct Insert1 {
 
 pub struct Update1<'a> {
     pub application_user_password_hash: &'a str,
+}
+
+pub struct By1<'a> {
+    pub application_user_nickname: &'a str,
 }
