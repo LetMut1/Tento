@@ -93,7 +93,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
 
     pub async fn update_1<'a>(
         database_2_connection: &'a Connection,
-        update_2: &'a Update2<'_>,
+        update_2: &'a Update1<'_>,
         by_4: &'a By4<'_>,
     ) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -299,7 +299,7 @@ pub struct Insert1<'a> {
     pub application_user_access_refresh_token_updated_at: i64,
 }
 
-pub struct Update2<'a> {
+pub struct Update1<'a> {
     pub application_user_access_token_id: &'a str,
     pub application_user_access_refresh_token_obfuscation_value: &'a str,
     pub application_user_access_refresh_token_expires_at: i64,

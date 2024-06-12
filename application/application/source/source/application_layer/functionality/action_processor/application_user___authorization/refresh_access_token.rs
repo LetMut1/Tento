@@ -16,7 +16,7 @@ use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::functionality::repository::postgresql::by::By4;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user_access_refresh_token::Update2;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user_access_refresh_token::Update1;
 use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::unix_time::UnixTime;
@@ -126,7 +126,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
 
         PostgresqlRepository::<ApplicationUserAccessRefreshToken>::update_1(
             database_2_postgresql_connection,
-            &Update2 {
+            &Update1 {
                 application_user_access_token_id: application_user_access_refresh_token.application_user_access_token_id.as_ref(),
                 application_user_access_refresh_token_obfuscation_value: application_user_access_refresh_token.obfuscation_value.as_str(),
                 application_user_access_refresh_token_expires_at: application_user_access_refresh_token.expires_at,
