@@ -16,10 +16,10 @@ use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::OptionConverter;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
-use crate::infrastructure_layer::functionality::repository::postgresql::channel_subscription::By10;
+use crate::infrastructure_layer::functionality::repository::postgresql::channel_subscription::By1;
 use crate::infrastructure_layer::functionality::repository::postgresql::channel::By6;
-use crate::infrastructure_layer::functionality::repository::postgresql::channel_inner_link::By8;
-use crate::infrastructure_layer::functionality::repository::postgresql::channel_outer_link::By9;
+use crate::infrastructure_layer::functionality::repository::postgresql::channel_inner_link::By1 as By1__;
+use crate::infrastructure_layer::functionality::repository::postgresql::channel_outer_link::By1 as By1_;
 use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
@@ -106,7 +106,7 @@ impl ActionProcessor<Channel__Base___GetOneById> {
         if let Channel_AccessModifier::Close = Channel_AccessModifier::to_representation(channel.access_modifier) {
             let is_exist = PostgresqlRepository::<ChannelSubscription>::is_exist_1(
                 &*database_1_postgresql_pooled_connection,
-                &By10 {
+                By1 {
                     application_user_id: application_user_access_token.application_user_id,
                     channel_id: channel.id,
                 },
@@ -120,7 +120,7 @@ impl ActionProcessor<Channel__Base___GetOneById> {
 
         let channel_inner_link_registry = PostgresqlRepository::<ChannelInnerLink>::find_1(
             &*database_1_postgresql_pooled_connection,
-            &By8 {
+            By1__ {
                 channel_inner_link_from: channel.id,
             },
             ChannelInnerLink::MAXIMUM_QUANTITY,
@@ -129,7 +129,7 @@ impl ActionProcessor<Channel__Base___GetOneById> {
 
         let channel_outer_link_registry = PostgresqlRepository::<ChannelOuterLink>::find_1(
             &*database_1_postgresql_pooled_connection,
-            &By9 {
+            By1_ {
                 channel_outer_link_from: channel.id,
             },
             ChannelOuterLink::MAXIMUM_QUANTITY,

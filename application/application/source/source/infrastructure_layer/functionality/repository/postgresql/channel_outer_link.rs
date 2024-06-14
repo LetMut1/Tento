@@ -77,7 +77,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
 
     pub async fn find_1<'a>(
         database_1_connection: &'a Connection,
-        by_9: &'a By9,
+        by_1: By1,
         limit: i16,
     ) -> Result<Vec<ChannelOuterLink1>, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -92,7 +92,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &by_9.channel_outer_link_from,
+                &by_1.channel_outer_link_from,
                 Type::INT8,
             )
             .add_parameter(
@@ -141,6 +141,6 @@ pub struct Insert1 {
     pub channel_outer_link_address: String,
 }
 
-pub struct By9 {
+pub struct By1 {
     pub channel_outer_link_from: i64,
 }

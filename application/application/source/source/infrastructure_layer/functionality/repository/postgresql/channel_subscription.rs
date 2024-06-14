@@ -65,7 +65,7 @@ impl PostgresqlRepository<ChannelSubscription> {
 
     pub async fn is_exist_1<'a>(
         database_1_connection: &'a Connection,
-        by_10: &'a By10,
+        by_1: By1,
     ) -> Result<bool, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -77,11 +77,11 @@ impl PostgresqlRepository<ChannelSubscription> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &by_10.application_user_id,
+                &by_1.application_user_id,
                 Type::INT8,
             )
             .add_parameter(
-                &by_10.channel_id,
+                &by_1.channel_id,
                 Type::INT8,
             );
 
@@ -114,7 +114,7 @@ pub struct Insert1 {
     pub channel_id: i64,
 }
 
-pub struct By10 {
+pub struct By1 {
     pub application_user_id: i64,
     pub channel_id: i64,
 }
