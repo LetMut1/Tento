@@ -21,7 +21,7 @@ use crate::infrastructure_layer::functionality::service::spawner::Spawner;
 use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user::By3 as ApplicationUserBy3;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_access_refresh_token::By1;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user_reset_password_token::By4;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user_reset_password_token::By1 as By1_;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user::Update1;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_reset_password_token::Update4;
 use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
@@ -115,18 +115,16 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
             );
         }
 
-        let by_4 = By4 {
-            application_user_id: incoming_.application_user_id,
-            application_user_device_id: incoming_.application_user_device_id.as_str(),
-        };
-
         let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
         let mut application_user_reset_password_token = match PostgresqlRepository::<ApplicationUserResetPasswordToken>::find_2(
             database_2_postgresql_connection,
-            &by_4,
+            By1_ {
+                application_user_id: incoming_.application_user_id,
+                application_user_device_id: incoming_.application_user_device_id.as_str(),
+            },
         )
         .await?
         {
@@ -139,7 +137,10 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
         if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_reset_password_token.expires_at) {
             PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete_2(
                 database_2_postgresql_connection,
-                &by_4,
+                By1_ {
+                    application_user_id: incoming_.application_user_id,
+                    application_user_device_id: incoming_.application_user_device_id.as_str(),
+                },
             )
             .await?;
 
@@ -161,13 +162,19 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
                     &Update4 {
                         application_user_reset_password_token_wrong_enter_tries_quantity: application_user_reset_password_token.wrong_enter_tries_quantity,
                     },
-                    &by_4,
+                    By1_ {
+                        application_user_id: incoming_.application_user_id,
+                        application_user_device_id: incoming_.application_user_device_id.as_str(),
+                    },
                 )
                 .await?;
             } else {
                 PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete_2(
                     database_2_postgresql_connection,
-                    &by_4,
+                    By1_ {
+                        application_user_id: incoming_.application_user_id,
+                        application_user_device_id: incoming_.application_user_device_id.as_str(),
+                    },
                 )
                 .await?;
             }
@@ -248,7 +255,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
 
                 PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete_2(
                     &*database_2_postgresql_pooled_connection_,
-                    &By4 {
+                    By1_ {
                         application_user_id: incoming_.application_user_id,
                         application_user_device_id: incoming_.application_user_device_id.as_str(),
                     },

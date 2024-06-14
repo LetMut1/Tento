@@ -15,7 +15,7 @@ use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user::By3;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user_reset_password_token::By4;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user_reset_password_token::By1;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_reset_password_token::Update2;
 use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
@@ -94,18 +94,16 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForResetPassword>
             }
         };
 
-        let by_4 = By4 {
-            application_user_id: incoming_.application_user_id,
-            application_user_device_id: incoming_.application_user_device_id.as_str(),
-        };
-
         let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
         let mut application_user_reset_password_token = match PostgresqlRepository::<ApplicationUserResetPasswordToken>::find_3(
             database_2_postgresql_connection,
-            &by_4,
+            By1 {
+                application_user_id: incoming_.application_user_id,
+                application_user_device_id: incoming_.application_user_device_id.as_str(),
+            },
         )
         .await?
         {
@@ -118,7 +116,10 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForResetPassword>
         if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_reset_password_token.expires_at) {
             PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete_2(
                 database_2_postgresql_connection,
-                &by_4,
+                By1 {
+                    application_user_id: incoming_.application_user_id,
+                    application_user_device_id: incoming_.application_user_device_id.as_str(),
+                },
             )
             .await?;
 
@@ -140,7 +141,10 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForResetPassword>
             &Update2 {
                 application_user_reset_password_token_can_be_resent_from: application_user_reset_password_token.can_be_resent_from,
             },
-            &by_4,
+            By1 {
+                application_user_id: incoming_.application_user_id,
+                application_user_device_id: incoming_.application_user_device_id.as_str(),
+            },
         )
         .await?;
 
