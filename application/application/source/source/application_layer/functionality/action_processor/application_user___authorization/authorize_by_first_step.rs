@@ -24,7 +24,7 @@ use crate::infrastructure_layer::data::auditor::OptionConverter;
 use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user::By1;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user::By2;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user_authorization_token::By4;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user_authorization_token::By1 as By1_;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_authorization_token::Insert1;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_authorization_token::Update1;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_authorization_token::Update2;
@@ -187,18 +187,16 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
             return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUser_WrongEmailOrNicknameOrPassword)));
         }
 
-        let by_4 = By4 {
-            application_user_id,
-            application_user_device_id: incoming_.application_user_device_id.as_str(),
-        };
-
         let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
         let (application_user_authorization_token_value, application_user_authorization_token_can_be_resent_from, application_user_authorization_token_wrong_enter_tries_quantity, can_send) = match PostgresqlRepository::<ApplicationUserAuthorizationToken>::find_1(
             database_2_postgresql_connection,
-            &by_4,
+            By1_ {
+                application_user_id,
+                application_user_device_id: incoming_.application_user_device_id.as_str(),
+            },
         )
         .await?
         {
@@ -236,7 +234,10 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                             application_user_authorization_token_expires_at: application_user_authorization_token.expires_at,
                             application_user_authorization_token_can_be_resent_from: application_user_authorization_token.can_be_resent_from,
                         },
-                        &by_4,
+                        By1_ {
+                            application_user_id,
+                            application_user_device_id: incoming_.application_user_device_id.as_str(),
+                        },
                     )
                     .await?;
                 } else {
@@ -246,7 +247,10 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                             &Update3 {
                                 application_user_authorization_token_can_be_resent_from: application_user_authorization_token.can_be_resent_from,
                             },
-                            &by_4,
+                            By1_ {
+                                application_user_id,
+                                application_user_device_id: incoming_.application_user_device_id.as_str(),
+                            },
                         )
                         .await?;
                     }
@@ -259,7 +263,10 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                                 application_user_authorization_token_wrong_enter_tries_quantity: application_user_authorization_token.wrong_enter_tries_quantity,
                                 application_user_authorization_token_expires_at: application_user_authorization_token.expires_at,
                             },
-                            &by_4,
+                            By1_ {
+                                application_user_id,
+                                application_user_device_id: incoming_.application_user_device_id.as_str(),
+                            },
                         )
                         .await?;
                     }
