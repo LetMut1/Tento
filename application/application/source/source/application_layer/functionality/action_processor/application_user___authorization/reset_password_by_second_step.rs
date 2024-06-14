@@ -134,7 +134,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordBySecondStep>
             if application_user_reset_password_token.wrong_enter_tries_quantity < ApplicationUserResetPasswordToken_WrongEnterTriesQuantity::LIMIT {
                 PostgresqlRepository::<ApplicationUserResetPasswordToken>::update_4(
                     database_2_postgresql_connection,
-                    &Update4 {
+                    Update4 {
                         application_user_reset_password_token_wrong_enter_tries_quantity: application_user_reset_password_token.wrong_enter_tries_quantity,
                     },
                     By1 {
@@ -169,7 +169,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordBySecondStep>
 
         PostgresqlRepository::<ApplicationUserResetPasswordToken>::update_5(
             database_2_postgresql_connection,
-            &Update5 {
+            Update5 {
                 application_user_reset_password_token_is_approved: application_user_reset_password_token.is_approved,
             },
             By1 {

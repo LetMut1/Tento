@@ -140,7 +140,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
                 if need_to_update_1 && need_to_update_2 {
                     PostgresqlRepository::<ApplicationUserRegistrationToken>::update_1(
                         database_2_postgresql_connection,
-                        &Update1 {
+                        Update1 {
                             application_user_registration_token_value: application_user_registration_token.value.as_str(),
                             application_user_registration_token_wrong_enter_tries_quantity: application_user_registration_token.wrong_enter_tries_quantity,
                             application_user_registration_token_is_approved: application_user_registration_token.is_approved,
@@ -157,7 +157,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
                     if need_to_update_1 {
                         PostgresqlRepository::<ApplicationUserRegistrationToken>::update_2(
                             database_2_postgresql_connection,
-                            &Update2 {
+                            Update2 {
                                 application_user_registration_token_can_be_resent_from: application_user_registration_token.can_be_resent_from,
                             },
                             By1 {
@@ -171,7 +171,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
                     if need_to_update_2 {
                         PostgresqlRepository::<ApplicationUserRegistrationToken>::update_3(
                             database_2_postgresql_connection,
-                            &Update3 {
+                            Update3 {
                                 application_user_registration_token_value: application_user_registration_token.value.as_str(),
                                 application_user_registration_token_wrong_enter_tries_quantity: application_user_registration_token.wrong_enter_tries_quantity,
                                 application_user_registration_token_is_approved: application_user_registration_token.is_approved,

@@ -120,7 +120,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForRegister> {
 
         PostgresqlRepository::<ApplicationUserRegistrationToken>::update_2(
             database_2_postgresql_connection,
-            &Update2 {
+            Update2 {
                 application_user_registration_token_can_be_resent_from: application_user_registration_token.can_be_resent_from,
             },
             By1 {

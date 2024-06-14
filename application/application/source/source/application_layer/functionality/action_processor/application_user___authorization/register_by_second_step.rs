@@ -134,7 +134,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
             if application_user_registration_token.wrong_enter_tries_quantity < ApplicationUserRegistrationToken_WrongEnterTriesQuantity::LIMIT {
                 PostgresqlRepository::<ApplicationUserRegistrationToken>::update_4(
                     database_2_postgresql_connection,
-                    &Update4 {
+                    Update4 {
                         application_user_registration_token_wrong_enter_tries_quantity: application_user_registration_token.wrong_enter_tries_quantity,
                     },
                     By1 {
@@ -169,7 +169,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
 
         PostgresqlRepository::<ApplicationUserRegistrationToken>::update_5(
             database_2_postgresql_connection,
-            &Update5 {
+            Update5 {
                 application_user_registration_token_is_approved: application_user_registration_token.is_approved,
             },
             By1 {

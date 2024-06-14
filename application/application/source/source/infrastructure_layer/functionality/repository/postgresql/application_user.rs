@@ -88,7 +88,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
 
     pub async fn update_1<'a>(
         database_1_connection: &'a Connection,
-        update_1: &'a Update1<'_>,
+        update_1: Update1<'_>,
         by_3: By3,
     ) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();

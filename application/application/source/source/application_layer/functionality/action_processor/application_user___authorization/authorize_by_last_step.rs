@@ -149,7 +149,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
             if application_user_authorization_token_.wrong_enter_tries_quantity < ApplicationUserAuthorizationToken_WrongEnterTriesQuantity::LIMIT {
                 PostgresqlRepository::<ApplicationUserAuthorizationToken>::update_4(
                     database_2_postgresql_connection,
-                    &Update4 {
+                    Update4 {
                         application_user_authorization_token_wrong_enter_tries_quantity: application_user_authorization_token_.wrong_enter_tries_quantity,
                     },
                     By1 {
@@ -231,7 +231,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
 
                 PostgresqlRepository::<ApplicationUserAccessRefreshToken>::update_1(
                     database_2_postgresql_connection,
-                    &Update1 {
+                    Update1 {
                         application_user_access_token_id: application_user_access_refresh_token_.application_user_access_token_id.as_ref(),
                         application_user_access_refresh_token_obfuscation_value: application_user_access_refresh_token_.obfuscation_value.as_str(),
                         application_user_access_refresh_token_expires_at: application_user_access_refresh_token_.expires_at,

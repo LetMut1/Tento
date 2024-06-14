@@ -214,7 +214,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
             if application_user_registration_token.wrong_enter_tries_quantity < ApplicationUserRegistrationToken_WrongEnterTriesQuantity::LIMIT {
                 PostgresqlRepository::<ApplicationUserRegistrationToken>::update_4(
                     database_2_postgresql_connection,
-                    &Update4 {
+                    Update4 {
                         application_user_registration_token_wrong_enter_tries_quantity: application_user_registration_token.wrong_enter_tries_quantity,
                     },
                     By1_ {

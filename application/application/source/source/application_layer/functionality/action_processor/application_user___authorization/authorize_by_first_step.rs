@@ -228,7 +228,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                 if need_to_update_1 && need_to_update_2 {
                     PostgresqlRepository::<ApplicationUserAuthorizationToken>::update_1(
                         database_2_postgresql_connection,
-                        &Update1 {
+                        Update1 {
                             application_user_authorization_token_value: application_user_authorization_token.value.as_str(),
                             application_user_authorization_token_wrong_enter_tries_quantity: application_user_authorization_token.wrong_enter_tries_quantity,
                             application_user_authorization_token_expires_at: application_user_authorization_token.expires_at,
@@ -244,7 +244,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                     if need_to_update_1 {
                         PostgresqlRepository::<ApplicationUserAuthorizationToken>::update_3(
                             database_2_postgresql_connection,
-                            &Update3 {
+                            Update3 {
                                 application_user_authorization_token_can_be_resent_from: application_user_authorization_token.can_be_resent_from,
                             },
                             By1_ {
@@ -258,7 +258,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                     if need_to_update_2 {
                         PostgresqlRepository::<ApplicationUserAuthorizationToken>::update_2(
                             database_2_postgresql_connection,
-                            &Update2 {
+                            Update2 {
                                 application_user_authorization_token_value: application_user_authorization_token.value.as_str(),
                                 application_user_authorization_token_wrong_enter_tries_quantity: application_user_authorization_token.wrong_enter_tries_quantity,
                                 application_user_authorization_token_expires_at: application_user_authorization_token.expires_at,

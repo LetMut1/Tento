@@ -138,7 +138,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForResetPassword>
 
         PostgresqlRepository::<ApplicationUserResetPasswordToken>::update_2(
             database_2_postgresql_connection,
-            &Update2 {
+            Update2 {
                 application_user_reset_password_token_can_be_resent_from: application_user_reset_password_token.can_be_resent_from,
             },
             By1 {

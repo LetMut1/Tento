@@ -140,7 +140,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
 
     pub async fn update_1<'a>(
         database_2_connection: &'a Connection,
-        update_1: &'a Update1<'_>,
+        update_1: Update1<'_>,
         by_1: By1<'_>,
     ) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -213,7 +213,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
 
     pub async fn update_2<'a>(
         database_2_connection: &'a Connection,
-        update_2: &'a Update2,
+        update_2: Update2,
         by_1: By1<'_>,
     ) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -262,7 +262,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
 
     pub async fn update_3<'a>(
         database_2_connection: &'a Connection,
-        update_3: &'a Update3<'_>,
+        update_3: Update3<'_>,
         by_1: By1<'_>,
     ) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -329,7 +329,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
 
     pub async fn update_4<'a>(
         database_2_connection: &'a Connection,
-        update_4: &'a Update4,
+        update_4: Update4,
         by_1: By1<'_>,
     ) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -378,7 +378,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
 
     pub async fn update_5<'a>(
         database_2_connection: &'a Connection,
-        update_5: &'a Update5,
+        update_5: Update5,
         by_1: By1<'_>,
     ) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();

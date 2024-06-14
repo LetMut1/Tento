@@ -134,7 +134,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
 
         PostgresqlRepository::<ApplicationUserAuthorizationToken>::update_3(
             database_2_postgresql_connection,
-            &Update3 {
+            Update3 {
                 application_user_authorization_token_can_be_resent_from: application_user_authorization_token.can_be_resent_from,
             },
             By1 {

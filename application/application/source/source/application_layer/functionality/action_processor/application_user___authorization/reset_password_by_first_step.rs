@@ -144,7 +144,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByFirstStep> 
                 if need_to_update_1 && need_to_update_2 {
                     PostgresqlRepository::<ApplicationUserResetPasswordToken>::update_1(
                         database_2_postgresql_connection,
-                        &Update1 {
+                        Update1 {
                             application_user_reset_password_token_value: application_user_reset_password_token.value.as_str(),
                             application_user_reset_password_token_wrong_enter_tries_quantity: application_user_reset_password_token.wrong_enter_tries_quantity,
                             application_user_reset_password_token_is_approved: application_user_reset_password_token.is_approved,
@@ -161,7 +161,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByFirstStep> 
                     if need_to_update_1 {
                         PostgresqlRepository::<ApplicationUserResetPasswordToken>::update_2(
                             database_2_postgresql_connection,
-                            &Update2 {
+                            Update2 {
                                 application_user_reset_password_token_can_be_resent_from: application_user_reset_password_token.can_be_resent_from,
                             },
                             By1 {
@@ -175,7 +175,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByFirstStep> 
                     if need_to_update_2 {
                         PostgresqlRepository::<ApplicationUserResetPasswordToken>::update_3(
                             database_2_postgresql_connection,
-                            &Update3 {
+                            Update3 {
                                 application_user_reset_password_token_value: application_user_reset_password_token.value.as_str(),
                                 application_user_reset_password_token_wrong_enter_tries_quantity: application_user_reset_password_token.wrong_enter_tries_quantity,
                                 application_user_reset_password_token_is_approved: application_user_reset_password_token.is_approved,
