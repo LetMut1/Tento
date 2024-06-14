@@ -58,7 +58,7 @@ impl Error {
     pub fn new_runtime_(error: Box<dyn StdError + Send + Sync + 'static>) -> Self {
         return Self::Runtime {
             runtime: Runtime {
-                error: error,
+                error,
             },
         };
     }
