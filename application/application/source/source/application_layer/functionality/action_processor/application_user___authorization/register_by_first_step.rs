@@ -17,7 +17,7 @@ use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user::By2;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user_registration_token::By5;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user_registration_token::By1;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_registration_token::Insert1;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_registration_token::Update1;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_registration_token::Update2;
@@ -97,18 +97,16 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
             return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUser_EmailAlreadyExist)));
         }
 
-        let by_5 = By5 {
-            application_user_email: incoming_.application_user_email.as_str(),
-            application_user_device_id: incoming_.application_user_device_id.as_str(),
-        };
-
         let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
         let (application_user_registration_token_value, application_user_registration_token_can_be_resent_from, application_user_registration_token_wrong_enter_tries_quantity, can_send) = match PostgresqlRepository::<ApplicationUserRegistrationToken>::find_1(
             database_2_postgresql_connection,
-            &by_5,
+            By1 {
+                application_user_email: incoming_.application_user_email.as_str(),
+                application_user_device_id: incoming_.application_user_device_id.as_str(),
+            },
         )
         .await?
         {
@@ -149,7 +147,10 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
                             application_user_registration_token_expires_at: application_user_registration_token.expires_at,
                             application_user_registration_token_can_be_resent_from: application_user_registration_token.can_be_resent_from,
                         },
-                        &by_5,
+                        By1 {
+                            application_user_email: incoming_.application_user_email.as_str(),
+                            application_user_device_id: incoming_.application_user_device_id.as_str(),
+                        },
                     )
                     .await?;
                 } else {
@@ -159,7 +160,10 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
                             &Update2 {
                                 application_user_registration_token_can_be_resent_from: application_user_registration_token.can_be_resent_from,
                             },
-                            &by_5,
+                            By1 {
+                                application_user_email: incoming_.application_user_email.as_str(),
+                                application_user_device_id: incoming_.application_user_device_id.as_str(),
+                            },
                         )
                         .await?;
                     }
@@ -173,7 +177,10 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
                                 application_user_registration_token_is_approved: application_user_registration_token.is_approved,
                                 application_user_registration_token_expires_at: application_user_registration_token.expires_at,
                             },
-                            &by_5,
+                            By1 {
+                                application_user_email: incoming_.application_user_email.as_str(),
+                                application_user_device_id: incoming_.application_user_device_id.as_str(),
+                            },
                         )
                         .await?;
                     }

@@ -101,7 +101,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
 
     pub async fn delete_2<'a>(
         database_2_connection: &'a Connection,
-        by_5: &'a By5<'_>,
+        by_1: By1<'_>,
     ) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -111,11 +111,11 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &by_5.application_user_email,
+                &by_1.application_user_email,
                 Type::TEXT,
             )
             .add_parameter(
-                &by_5.application_user_device_id,
+                &by_1.application_user_device_id,
                 Type::TEXT,
             );
 
@@ -141,7 +141,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
     pub async fn update_1<'a>(
         database_2_connection: &'a Connection,
         update_1: &'a Update1<'_>,
-        by_5: &'a By5<'_>,
+        by_1: By1<'_>,
     ) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -184,11 +184,11 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
                 Type::INT8,
             )
             .add_parameter(
-                &by_5.application_user_email,
+                &by_1.application_user_email,
                 Type::TEXT,
             )
             .add_parameter(
-                &by_5.application_user_device_id,
+                &by_1.application_user_device_id,
                 Type::TEXT,
             );
 
@@ -214,7 +214,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
     pub async fn update_2<'a>(
         database_2_connection: &'a Connection,
         update_2: &'a Update2,
-        by_5: &'a By5<'_>,
+        by_1: By1<'_>,
     ) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -233,11 +233,11 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
                 Type::INT8,
             )
             .add_parameter(
-                &by_5.application_user_email,
+                &by_1.application_user_email,
                 Type::TEXT,
             )
             .add_parameter(
-                &by_5.application_user_device_id,
+                &by_1.application_user_device_id,
                 Type::TEXT,
             );
 
@@ -263,7 +263,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
     pub async fn update_3<'a>(
         database_2_connection: &'a Connection,
         update_3: &'a Update3<'_>,
-        by_5: &'a By5<'_>,
+        by_1: By1<'_>,
     ) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -300,11 +300,11 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
                 Type::INT8,
             )
             .add_parameter(
-                &by_5.application_user_email,
+                &by_1.application_user_email,
                 Type::TEXT,
             )
             .add_parameter(
-                &by_5.application_user_device_id,
+                &by_1.application_user_device_id,
                 Type::TEXT,
             );
 
@@ -330,7 +330,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
     pub async fn update_4<'a>(
         database_2_connection: &'a Connection,
         update_4: &'a Update4,
-        by_5: &'a By5<'_>,
+        by_1: By1<'_>,
     ) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -349,11 +349,11 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
                 Type::INT2,
             )
             .add_parameter(
-                &by_5.application_user_email,
+                &by_1.application_user_email,
                 Type::TEXT,
             )
             .add_parameter(
-                &by_5.application_user_device_id,
+                &by_1.application_user_device_id,
                 Type::TEXT,
             );
 
@@ -379,7 +379,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
     pub async fn update_5<'a>(
         database_2_connection: &'a Connection,
         update_5: &'a Update5,
-        by_5: &'a By5<'_>,
+        by_1: By1<'_>,
     ) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -398,11 +398,11 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
                 Type::BOOL,
             )
             .add_parameter(
-                &by_5.application_user_email,
+                &by_1.application_user_email,
                 Type::TEXT,
             )
             .add_parameter(
-                &by_5.application_user_device_id,
+                &by_1.application_user_device_id,
                 Type::TEXT,
             );
 
@@ -427,7 +427,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
 
     pub async fn find_1<'a>(
         database_2_connection: &'a Connection,
-        by_5: &'a By5<'_>,
+        by_1: By1<'_>,
     ) -> Result<Option<ApplicationUserRegistrationToken1>, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -443,11 +443,11 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &by_5.application_user_email,
+                &by_1.application_user_email,
                 Type::TEXT,
             )
             .add_parameter(
-                &by_5.application_user_device_id,
+                &by_1.application_user_device_id,
                 Type::TEXT,
             );
 
@@ -486,7 +486,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
 
     pub async fn find_2<'a>(
         database_2_connection: &'a Connection,
-        by_5: &'a By5<'_>,
+        by_1: By1<'_>,
     ) -> Result<Option<ApplicationUserRegistrationToken2>, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -501,11 +501,11 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &by_5.application_user_email,
+                &by_1.application_user_email,
                 Type::TEXT,
             )
             .add_parameter(
-                &by_5.application_user_device_id,
+                &by_1.application_user_device_id,
                 Type::TEXT,
             );
 
@@ -543,7 +543,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
 
     pub async fn find_3<'a>(
         database_2_connection: &'a Connection,
-        by_5: &'a By5<'_>,
+        by_1: By1<'_>,
     ) -> Result<Option<ApplicationUserRegistrationToken3>, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -558,11 +558,11 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &by_5.application_user_email,
+                &by_1.application_user_email,
                 Type::TEXT,
             )
             .add_parameter(
-                &by_5.application_user_device_id,
+                &by_1.application_user_device_id,
                 Type::TEXT,
             );
 
@@ -636,7 +636,7 @@ pub struct Update5 {
     pub application_user_registration_token_is_approved: bool,
 }
 
-pub struct By5<'a> {
+pub struct By1<'a> {
     pub application_user_email: &'a str,
     pub application_user_device_id: &'a str,
 }

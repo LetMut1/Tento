@@ -12,7 +12,7 @@ use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user_registration_token::By5;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user_registration_token::By1;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_registration_token::Update2;
 use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
@@ -76,18 +76,16 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForRegister> {
             );
         }
 
-        let by_5 = By5 {
-            application_user_email: incoming_.application_user_email.as_str(),
-            application_user_device_id: incoming_.application_user_device_id.as_str(),
-        };
-
         let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
         let mut application_user_registration_token = match PostgresqlRepository::<ApplicationUserRegistrationToken>::find_3(
             database_2_postgresql_connection,
-            &by_5,
+            By1 {
+                application_user_email: incoming_.application_user_email.as_str(),
+                application_user_device_id: incoming_.application_user_device_id.as_str(),
+            },
         )
         .await?
         {
@@ -100,7 +98,10 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForRegister> {
         if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token.expires_at) {
             PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete_2(
                 database_2_postgresql_connection,
-                &by_5,
+                By1 {
+                    application_user_email: incoming_.application_user_email.as_str(),
+                    application_user_device_id: incoming_.application_user_device_id.as_str(),
+                },
             )
             .await?;
 
@@ -122,7 +123,10 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForRegister> {
             &Update2 {
                 application_user_registration_token_can_be_resent_from: application_user_registration_token.can_be_resent_from,
             },
-            &by_5,
+            By1 {
+                application_user_email: incoming_.application_user_email.as_str(),
+                application_user_device_id: incoming_.application_user_device_id.as_str(),
+            },
         )
         .await?;
 

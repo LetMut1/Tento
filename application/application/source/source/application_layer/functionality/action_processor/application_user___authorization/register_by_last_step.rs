@@ -31,7 +31,7 @@ use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user::By1;
 use crate::infrastructure_layer::data::control_type::TokioBlockingTask;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user::By2;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user_registration_token::By5;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user_registration_token::By1 as By1_;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user::Insert1 as ApplicationUserInsert1;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_access_refresh_token::Insert1 as ApplicationUserAccessRefreshTokenInsert1;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_device::Insert1;
@@ -170,18 +170,16 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
             return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUser_EmailAlreadyExist)));
         }
 
-        let by_5 = By5 {
-            application_user_email: incoming_.application_user_email.as_str(),
-            application_user_device_id: incoming_.application_user_device_id.as_str(),
-        };
-
         let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
         let mut application_user_registration_token = match PostgresqlRepository::<ApplicationUserRegistrationToken>::find_2(
             database_2_postgresql_connection,
-            &by_5,
+            By1_ {
+                application_user_email: incoming_.application_user_email.as_str(),
+                application_user_device_id: incoming_.application_user_device_id.as_str(),
+            },
         )
         .await?
         {
@@ -194,7 +192,10 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
         if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token.expires_at) {
             PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete_2(
                 database_2_postgresql_connection,
-                &by_5,
+                By1_ {
+                    application_user_email: incoming_.application_user_email.as_str(),
+                    application_user_device_id: incoming_.application_user_device_id.as_str(),
+                },
             )
             .await?;
 
@@ -216,13 +217,19 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
                     &Update4 {
                         application_user_registration_token_wrong_enter_tries_quantity: application_user_registration_token.wrong_enter_tries_quantity,
                     },
-                    &by_5,
+                    By1_ {
+                        application_user_email: incoming_.application_user_email.as_str(),
+                        application_user_device_id: incoming_.application_user_device_id.as_str(),
+                    },
                 )
                 .await?;
             } else {
                 PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete_2(
                     database_2_postgresql_connection,
-                    &by_5,
+                    By1_ {
+                        application_user_email: incoming_.application_user_email.as_str(),
+                        application_user_device_id: incoming_.application_user_device_id.as_str(),
+                    },
                 )
                 .await?;
             }
@@ -292,10 +299,10 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
 
                 PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete_2(
                     &*database_2_postgresql_pooled_connection_,
-                    &By5 {
+                    By1_ {
                         application_user_email: application_user.email.as_str(),
                         application_user_device_id: application_user_device.id.as_str(),
-                    },
+                    }
                 )
                 .await?;
 
