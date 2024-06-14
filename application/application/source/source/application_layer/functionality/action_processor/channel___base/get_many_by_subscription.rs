@@ -12,7 +12,7 @@ use crate::infrastructure_layer::data::auditor::OptionConverter;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::functionality::repository::postgresql::common::Common1;
-use crate::infrastructure_layer::functionality::repository::postgresql::common::By13;
+use crate::infrastructure_layer::functionality::repository::postgresql::common::By3;
 use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
@@ -101,7 +101,7 @@ impl ActionProcessor<Channel__Base___GetManyBySubscription> {
 
         let common_registry = PostgresqlRepository::<Common1>::find_3(
             &*database_1_postgresql_pooled_connection,
-            &By13 {
+            By3 {
                 application_user_id: application_user_access_token.application_user_id,
                 requery_channel_id: incoming_.requery_channel_id,
             },

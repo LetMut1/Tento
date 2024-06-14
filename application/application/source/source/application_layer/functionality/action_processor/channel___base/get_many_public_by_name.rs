@@ -12,7 +12,7 @@ use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::functionality::repository::postgresql::common::Common1;
-use crate::infrastructure_layer::functionality::repository::postgresql::common::By11;
+use crate::infrastructure_layer::functionality::repository::postgresql::common::By1;
 use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
@@ -116,7 +116,7 @@ impl ActionProcessor<Channel__Base___GetManyPublicByName> {
 
         let common_registry = PostgresqlRepository::<Common1>::find_1(
             &*database_1_postgresql_pooled_connection,
-            &By11 {
+            By1 {
                 application_user_id: application_user_access_token.application_user_id,
                 channel_name: incoming_.channel_name.as_str(),
                 requery_channel_name: incoming_.requery_channel_name.as_deref(),

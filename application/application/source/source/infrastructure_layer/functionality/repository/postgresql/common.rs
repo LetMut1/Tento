@@ -13,7 +13,7 @@ use tokio_postgres::Client as Connection;
 impl PostgresqlRepository<Common1> {
     pub async fn find_1<'a>(
         database_1_connection: &'a Connection,
-        by_11: &'a By11<'_>,
+        by_1: By1<'_>,
         limit: i16,
     ) -> Result<Vec<Common1>, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -39,16 +39,16 @@ impl PostgresqlRepository<Common1> {
 
         let wildcard = format!(
             "{}%",
-            by_11.channel_name,
+            by_1.channel_name,
         );
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &by_11.application_user_id,
+                &by_1.application_user_id,
                 Type::INT8,
             )
             .add_parameter(
-                &by_11.channel_visability_modifier,
+                &by_1.channel_visability_modifier,
                 Type::INT2,
             )
             .add_parameter(
@@ -56,7 +56,7 @@ impl PostgresqlRepository<Common1> {
                 Type::TEXT,
             );
 
-        if let Some(ref requery_channel_name) = by_11.requery_channel_name {
+        if let Some(ref requery_channel_name) = by_1.requery_channel_name {
             query = format!(
                 "{} AND c.name > ${}",
                 query.as_str(),
@@ -110,7 +110,7 @@ impl PostgresqlRepository<Common1> {
                 channel_name: row.try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
                 channel_linked_name: row.try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?,
                 channel_access_modifier: row.try_get::<'_, usize, i16>(3).convert(Backtrace::new(line!(), file!()))?,
-                channel_visability_modifier: by_11.channel_visability_modifier,
+                channel_visability_modifier: by_1.channel_visability_modifier,
                 channel_cover_image_path: row.try_get::<'_, usize, Option<String>>(4).convert(Backtrace::new(line!(), file!()))?,
                 channel_background_image_path: row.try_get::<'_, usize, Option<String>>(5).convert(Backtrace::new(line!(), file!()))?,
             };
@@ -133,7 +133,7 @@ impl PostgresqlRepository<Common1> {
 
     pub async fn find_2<'a>(
         database_1_connection: &'a Connection,
-        by_12: &'a By12<'_>,
+        by_2: By2<'_>,
         limit: i16,
     ) -> Result<Vec<Common1>, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -158,12 +158,12 @@ impl PostgresqlRepository<Common1> {
 
         let wildcard = format!(
             "{}%",
-            by_12.channel_name,
+            by_2.channel_name,
         );
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &by_12.application_user_id,
+                &by_2.application_user_id,
                 Type::INT8,
             )
             .add_parameter(
@@ -171,7 +171,7 @@ impl PostgresqlRepository<Common1> {
                 Type::TEXT,
             );
 
-        if let Some(ref requery_channel_name) = by_12.requery_channel_name {
+        if let Some(ref requery_channel_name) = by_2.requery_channel_name {
             query = format!(
                 "{} AND c.name > ${}",
                 query.as_str(),
@@ -243,7 +243,7 @@ impl PostgresqlRepository<Common1> {
 
     pub async fn find_3<'a>(
         database_1_connection: &'a Connection,
-        by_13: &'a By13,
+        by_3: By3,
         limit: i16,
     ) -> Result<Vec<Common1>, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -265,13 +265,13 @@ impl PostgresqlRepository<Common1> {
         );
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(
-            &by_13.application_user_id,
+            &by_3.application_user_id,
             Type::INT8,
         );
 
         let requery_channel_id: i64;
 
-        if let Some(requery_channel_id_) = by_13.requery_channel_id {
+        if let Some(requery_channel_id_) = by_3.requery_channel_id {
             requery_channel_id = requery_channel_id_;
 
             query = format!(
@@ -345,20 +345,20 @@ impl PostgresqlRepository<Common1> {
     }
 }
 
-pub struct By11<'a> {
+pub struct By1<'a> {
     pub application_user_id: i64,
     pub channel_name: &'a str,
     pub requery_channel_name: Option<&'a str>,
     pub channel_visability_modifier: i16,
 }
 
-pub struct By12<'a> {
+pub struct By2<'a> {
     pub application_user_id: i64,
     pub channel_name: &'a str,
     pub requery_channel_name: Option<&'a str>,
 }
 
-pub struct By13 {
+pub struct By3 {
     pub application_user_id: i64,
     pub requery_channel_id: Option<i64>,
 }
