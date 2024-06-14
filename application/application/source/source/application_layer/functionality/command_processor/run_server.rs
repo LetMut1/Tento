@@ -7,6 +7,7 @@ use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::service::creator::Creator;
 use crate::infrastructure_layer::functionality::service::creator::postgresql_connection_pool::PostgresqlConnectionPoolNoTls;
+use crate::infrastructure_layer::functionality::service::logger::Logger;
 use crate::presentation_layer::data::action_route::ActionRoute_;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use bb8::Pool;
@@ -71,6 +72,8 @@ pub use crate::infrastructure_layer::data::control_type::RunServer;
 static ENVIRONMENT_CONFIGURATION: OnceLock<EnvironmentConfiguration> = OnceLock::new();
 
 impl CommandProcessor<RunServer> {
+    const QUANTITY_OF_SECONDS_FOR_RERUN_SERVING: u64 = 1;
+
     pub fn process() -> Result<(), Auditor<Error>> {
         let environment_configuration = Self:: initialize_environment()?;
 
@@ -175,12 +178,28 @@ impl CommandProcessor<RunServer> {
             .enable_all()
             .build()
             .convert(Backtrace::new(line!(), file!()))?
-            .block_on(Self::run_server(environment_configuration))?;
+            .block_on(Self::serve_1(environment_configuration))?;
 
         return Ok(());
     }
 
-    async fn run_server(environment_configuration: &'static EnvironmentConfiguration) -> Result<(), Auditor<Error>> {
+    async fn serve_1(environment_configuration: &'static EnvironmentConfiguration) -> Result<(), Auditor<Error>> {
+        'a: loop {
+            if let Err(error_auditor) = Self::serve_2(environment_configuration).await {
+                Logger::<Auditor<Error>>::log(&error_auditor);
+
+                tokio::time::sleep(Duration::from_secs(Self::QUANTITY_OF_SECONDS_FOR_RERUN_SERVING)).await;
+
+                continue 'a;
+            }
+
+            break 'a;
+        }
+
+        return Ok(());
+    }
+
+    async fn serve_2(environment_configuration: &'static EnvironmentConfiguration) -> Result<(), Auditor<Error>> {
         #[derive(Clone)]
         enum PostgresqlConnectionPoolAggregator {
             LocalDevelopment {
@@ -347,7 +366,11 @@ impl CommandProcessor<RunServer> {
             }
         };
 
-        server_builder.serve(service).with_graceful_shutdown(graceful_shutdown_signal_future).await.convert(Backtrace::new(line!(), file!()))?;
+        server_builder
+            .serve(service)
+            .with_graceful_shutdown(graceful_shutdown_signal_future)
+            .await
+            .convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(());
     }
