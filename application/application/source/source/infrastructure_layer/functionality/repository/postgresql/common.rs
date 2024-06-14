@@ -1,6 +1,3 @@
-use super::by::By11;
-use super::by::By12;
-use super::by::By13;
 use super::PostgresqlRepository;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
@@ -346,4 +343,22 @@ impl PostgresqlRepository<Common1> {
 
         return Ok(common_registry);
     }
+}
+
+pub struct By11<'a> {
+    pub application_user_id: i64,
+    pub channel_name: &'a str,
+    pub requery_channel_name: Option<&'a str>,
+    pub channel_visability_modifier: i16,
+}
+
+pub struct By12<'a> {
+    pub application_user_id: i64,
+    pub channel_name: &'a str,
+    pub requery_channel_name: Option<&'a str>,
+}
+
+pub struct By13 {
+    pub application_user_id: i64,
+    pub requery_channel_id: Option<i64>,
 }

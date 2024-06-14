@@ -1,4 +1,3 @@
-use super::by::By9;
 use super::PostgresqlRepository;
 use crate::domain_layer::data::entity::channel_outer_link::ChannelOuterLink;
 use crate::infrastructure_layer::data::auditor::Backtrace;
@@ -140,4 +139,8 @@ pub struct Insert1 {
     pub channel_outer_link_from: i64,
     pub channel_outer_link_alias: String,
     pub channel_outer_link_address: String,
+}
+
+pub struct By9 {
+    pub channel_outer_link_from: i64,
 }

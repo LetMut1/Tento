@@ -1,4 +1,3 @@
-use super::by::By7;
 use super::PostgresqlRepository;
 use crate::domain_layer::data::entity::channel::Channel;
 use crate::infrastructure_layer::data::auditor::Backtrace;
@@ -321,4 +320,8 @@ pub struct Insert1 {
 
 pub struct By6 {
     pub channel_id: i64,
+}
+
+pub struct By7<'a> {
+    pub channel_name: &'a str,
 }

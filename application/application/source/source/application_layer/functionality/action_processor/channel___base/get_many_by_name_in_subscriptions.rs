@@ -12,7 +12,7 @@ use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::data::auditor::OptionConverter;
 use crate::infrastructure_layer::functionality::repository::postgresql::common::Common1;
-use crate::infrastructure_layer::functionality::repository::postgresql::by::By12;
+use crate::infrastructure_layer::functionality::repository::postgresql::common::By12;
 use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;

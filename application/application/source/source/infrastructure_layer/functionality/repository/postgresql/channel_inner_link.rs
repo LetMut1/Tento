@@ -1,4 +1,3 @@
-use super::by::By8;
 use super::PostgresqlRepository;
 use crate::domain_layer::data::entity::channel_inner_link::ChannelInnerLink;
 use crate::infrastructure_layer::data::auditor::Backtrace;
@@ -126,4 +125,8 @@ impl PostgresqlRepository<ChannelInnerLink> {
 pub struct Insert1 {
     pub channel_inner_link_from: i64,
     pub channel_inner_link_to: i64,
+}
+
+pub struct By8 {
+    pub channel_inner_link_from: i64,
 }

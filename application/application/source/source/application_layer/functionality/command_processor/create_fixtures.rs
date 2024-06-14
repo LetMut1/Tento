@@ -20,7 +20,7 @@ use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user::By1;
-use crate::infrastructure_layer::functionality::repository::postgresql::by::By7;
+use crate::infrastructure_layer::functionality::repository::postgresql::channel::By7;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user::Insert1 as ApplicationUserInsert1;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_device::Insert1 as ApplicationUserDeviceInsert1;
 use crate::infrastructure_layer::functionality::repository::postgresql::channel::Insert1 as ChannelInsert1;
