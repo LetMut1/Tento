@@ -26,7 +26,7 @@ use crate::infrastructure_layer::functionality::service::spawner::Spawner;
 use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user::By3;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_authorization_token::By4 as ApplicationUserAuthorizationTokenBy4;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user_access_refresh_token::By4 as ApplicationUserAccessRefreshTokenBy4;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user_access_refresh_token::By2;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_access_refresh_token::Insert1 as ApplicationUserAccessRefreshTokenInsert1;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_device::Insert1 as ApplicationUserDeviceInsert1;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_access_refresh_token::Update1;
@@ -203,14 +203,13 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
 
         let application_user_access_refresh_token_updated_at = Generator::<ApplicationUserAccessRefreshToken_UpdatedAt>::generate();
 
-        let application_user_access_refresh_token = ApplicationUserAccessRefreshTokenBy4 {
-            application_user_id: incoming_.application_user_id,
-            application_user_device_id: incoming_.application_user_device_id.as_str(),
-        };
         // TODO  TRANZACTION
         let application_user_access_refresh_token = match PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::find_1(
             database_2_postgresql_connection,
-            &application_user_access_refresh_token,
+            By2 {
+                application_user_id: incoming_.application_user_id,
+                application_user_device_id: incoming_.application_user_device_id.as_str(),
+            },
         )
         .await?
         {
@@ -231,7 +230,10 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
                         application_user_access_refresh_token_expires_at: application_user_access_refresh_token_.expires_at,
                         application_user_access_refresh_token_updated_at: application_user_access_refresh_token_.updated_at,
                     },
-                    &application_user_access_refresh_token,
+                    By2 {
+                        application_user_id: incoming_.application_user_id,
+                        application_user_device_id: incoming_.application_user_device_id.as_str(),
+                    },
                 )
                 .await?;
 

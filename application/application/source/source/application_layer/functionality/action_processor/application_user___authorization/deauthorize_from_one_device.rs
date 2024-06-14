@@ -11,7 +11,7 @@ use crate::infrastructure_layer::data::auditor::OptionConverter;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::data::void::Void;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user_access_refresh_token::By4;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user_access_refresh_token::By2;
 use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
@@ -68,7 +68,7 @@ impl ActionProcessor<ApplicationUser__Authorization___DeauthorizeFromOneDevice> 
 
         PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::delete_1(
             &*database_2_postgresql_pooled_connection,
-            &By4 {
+            By2 {
                 application_user_id: application_user_access_token.application_user_id,
                 application_user_device_id: application_user_access_token.application_user_device_id.as_ref(),
             },

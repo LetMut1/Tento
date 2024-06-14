@@ -92,7 +92,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
     pub async fn update_1<'a>(
         database_2_connection: &'a Connection,
         update_1: &'a Update1<'_>,
-        by_4: &'a By4<'_>,
+        by_2: By2<'_>,
     ) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -129,11 +129,11 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 Type::INT8,
             )
             .add_parameter(
-                &by_4.application_user_id,
+                &by_2.application_user_id,
                 Type::INT8,
             )
             .add_parameter(
-                &by_4.application_user_device_id,
+                &by_2.application_user_device_id,
                 Type::TEXT,
             );
 
@@ -158,7 +158,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
 
     pub async fn delete_1<'a>(
         database_2_connection: &'a Connection,
-        by_4: &'a By4<'_>,
+        by_2: By2<'_>,
     ) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -167,11 +167,11 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &by_4.application_user_id,
+                &by_2.application_user_id,
                 Type::INT8,
             )
             .add_parameter(
-                &by_4.application_user_device_id,
+                &by_2.application_user_device_id,
                 Type::TEXT,
             );
 
@@ -230,7 +230,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
 
     pub async fn find_1<'a, 'b>(
         database_2_connection: &'a Connection,
-        by_4: &'a By4<'b>,
+        by_2: By2<'b>,
     ) -> Result<Option<ApplicationUserAccessRefreshToken<'b>>, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -245,11 +245,11 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
 
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
-                &by_4.application_user_id,
+                &by_2.application_user_id,
                 Type::INT8,
             )
             .add_parameter(
-                &by_4.application_user_device_id,
+                &by_2.application_user_device_id,
                 Type::TEXT,
             );
 
@@ -276,8 +276,8 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
         return Ok(
             Some(
                 ApplicationUserAccessRefreshToken::new(
-                    by_4.application_user_id,
-                    Cow::Borrowed(by_4.application_user_device_id),
+                    by_2.application_user_id,
+                    Cow::Borrowed(by_2.application_user_device_id),
                     Cow::Owned(row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?),
                     row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
                     row_registry[0].try_get::<'_, usize, i64>(2).convert(Backtrace::new(line!(), file!()))?,
@@ -308,7 +308,7 @@ pub struct By1 {
     pub application_user_id: i64,
 }
 
-pub struct By4<'a> {
+pub struct By2<'a> {
     pub application_user_id: i64,
     pub application_user_device_id: &'a str,
 }

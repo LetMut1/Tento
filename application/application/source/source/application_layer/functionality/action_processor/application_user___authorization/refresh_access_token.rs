@@ -15,7 +15,7 @@ use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user_access_refresh_token::By4;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user_access_refresh_token::By2;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_access_refresh_token::Update1;
 use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
@@ -58,18 +58,16 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
             }
         };
 
-        let by_4 = By4 {
-            application_user_id: application_user_access_token.application_user_id,
-            application_user_device_id: application_user_access_token.application_user_device_id.as_ref(),
-        };
-
         let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
         let mut application_user_access_refresh_token = match PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::find_1(
             database_2_postgresql_connection,
-            &by_4,
+            By2 {
+                application_user_id: application_user_access_token.application_user_id,
+                application_user_device_id: application_user_access_token.application_user_device_id.as_ref(),
+            },
         )
         .await?
         {
@@ -102,7 +100,10 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
         if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_access_refresh_token.expires_at) {
             PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::delete_1(
                 database_2_postgresql_connection,
-                &by_4,
+                By2 {
+                    application_user_id: application_user_access_token.application_user_id,
+                    application_user_device_id: application_user_access_token.application_user_device_id.as_ref(),
+                },
             )
             .await?;
 
@@ -132,7 +133,10 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
                 application_user_access_refresh_token_expires_at: application_user_access_refresh_token.expires_at,
                 application_user_access_refresh_token_updated_at: application_user_access_refresh_token.updated_at,
             },
-            &by_4,
+            By2 {
+                application_user_id: application_user_access_token.application_user_id,
+                application_user_device_id: application_user_access_token.application_user_device_id.as_ref(),
+            },
         )
         .await?;
 
