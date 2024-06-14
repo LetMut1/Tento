@@ -31,7 +31,7 @@ use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user::By1;
 use crate::infrastructure_layer::data::control_type::TokioBlockingTask;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user::By2;
-use crate::infrastructure_layer::functionality::repository::postgresql::by::By5;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user_registration_token::By5;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user::Insert1 as ApplicationUserInsert1;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_access_refresh_token::Insert1 as ApplicationUserAccessRefreshTokenInsert1;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_device::Insert1;

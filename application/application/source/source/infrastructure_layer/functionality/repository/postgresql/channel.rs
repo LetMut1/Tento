@@ -1,4 +1,3 @@
-use super::by::By6;
 use super::by::By7;
 use super::PostgresqlRepository;
 use crate::domain_layer::data::entity::channel::Channel;
@@ -318,4 +317,8 @@ pub struct Insert1 {
     pub channel_subscribers_quantity: i64,
     pub channel_marks_quantity: i64,
     pub channel_viewing_quantity: i64,
+}
+
+pub struct By6 {
+    pub channel_id: i64,
 }

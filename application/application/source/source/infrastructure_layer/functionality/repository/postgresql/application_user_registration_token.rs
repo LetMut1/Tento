@@ -1,4 +1,3 @@
-use super::by::By5;
 use super::PostgresqlRepository;
 use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken;
 use crate::domain_layer::data::entity::application_user_registration_token::derivative::ApplicationUserRegistrationToken1;
@@ -635,4 +634,9 @@ pub struct Update4 {
 
 pub struct Update5 {
     pub application_user_registration_token_is_approved: bool,
+}
+
+pub struct By5<'a> {
+    pub application_user_email: &'a str,
+    pub application_user_device_id: &'a str,
 }

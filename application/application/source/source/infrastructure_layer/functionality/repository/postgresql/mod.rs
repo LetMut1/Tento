@@ -19,15 +19,6 @@ pub struct PostgresqlRepository<E> {
 pub mod by {
 
 
-    pub struct By5<'a> {
-        pub application_user_email: &'a str,
-        pub application_user_device_id: &'a str,
-    }
-
-    pub struct By6 {
-        pub channel_id: i64,
-    }
-
     pub struct By7<'a> {
         pub channel_name: &'a str,
     }
