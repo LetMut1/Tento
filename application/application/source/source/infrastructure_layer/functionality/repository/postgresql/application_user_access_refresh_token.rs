@@ -196,7 +196,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
 
     pub async fn delete_2<'a>(
         database_2_connection: &'a Connection,
-        by_3: &'a By3,
+        by_1: By1,
     ) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -205,7 +205,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
             WHERE auart.application_user_id = $1;";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(
-            &by_3.application_user_id,
+            &by_1.application_user_id,
             Type::INT8,
         );
 
@@ -304,7 +304,7 @@ pub struct Update1<'a> {
     pub application_user_access_refresh_token_updated_at: i64,
 }
 
-pub struct By3 {
+pub struct By1 {
     pub application_user_id: i64,
 }
 

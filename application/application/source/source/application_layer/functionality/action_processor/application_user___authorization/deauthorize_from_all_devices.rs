@@ -10,7 +10,7 @@ use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::data::void::Void;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user_access_refresh_token::By3;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user_access_refresh_token::By1;
 use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::resolver::cloud_message::CloudMessage;
 use crate::infrastructure_layer::functionality::service::resolver::Resolver;
@@ -70,7 +70,7 @@ impl ActionProcessor<ApplicationUser__Authorization___DeauthorizeFromAllDevices>
 
         PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::delete_2(
             &*database_2_postgresql_pooled_connection,
-            &By3 {
+            By1 {
                 application_user_id: application_user_access_token.application_user_id,
             },
         )

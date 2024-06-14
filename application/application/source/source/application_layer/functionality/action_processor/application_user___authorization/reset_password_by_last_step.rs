@@ -20,7 +20,7 @@ use crate::infrastructure_layer::data::control_type::TokioBlockingTask;
 use crate::infrastructure_layer::functionality::service::spawner::Spawner;
 use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user::By3 as ApplicationUserBy3;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user_access_refresh_token::By3 as ApplicationUserAccessRefreshTokenBy3;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user_access_refresh_token::By1;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_reset_password_token::By4;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user::Update1;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_reset_password_token::Update4;
@@ -232,7 +232,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
 
         PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::delete_2(
             &*database_2_postgresql_pooled_connection,
-            &ApplicationUserAccessRefreshTokenBy3 {
+            By1 {
                 application_user_id: incoming_.application_user_id,
             },
         )
