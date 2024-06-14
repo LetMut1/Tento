@@ -162,7 +162,7 @@ impl PostgresqlRepository<Channel<'_>> {
 
     pub async fn find_1<'a>(
         database_1_connection: &'a Connection,
-        by_6: &'a By6,
+        by_1: By1,
     ) -> Result<Option<Channel<'static>>, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -185,7 +185,7 @@ impl PostgresqlRepository<Channel<'_>> {
             WHERE c.id = $1;";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(
-            &by_6.channel_id,
+            &by_1.channel_id,
             Type::INT8,
         );
 
@@ -212,7 +212,7 @@ impl PostgresqlRepository<Channel<'_>> {
         return Ok(
             Some(
                 Channel::new(
-                    by_6.channel_id,
+                    by_1.channel_id,
                     row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
                     Cow::Owned(row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?),
                     row_registry[0].try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?,
@@ -233,7 +233,7 @@ impl PostgresqlRepository<Channel<'_>> {
 
     pub async fn find_2<'a, 'b>(
         database_1_connection: &'a Connection,
-        by_7: &'a By7<'b>,
+        by_2: By2<'b>,
     ) -> Result<Option<Channel<'b>>, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
 
@@ -256,7 +256,7 @@ impl PostgresqlRepository<Channel<'_>> {
             WHERE c.name = $1;";
 
         prepared_statemant_parameter_convertation_resolver.add_parameter(
-            &by_7.channel_name,
+            &by_2.channel_name,
             Type::TEXT,
         );
 
@@ -285,7 +285,7 @@ impl PostgresqlRepository<Channel<'_>> {
                 Channel::new(
                     row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
                     row_registry[0].try_get::<'_, usize, i64>(1).convert(Backtrace::new(line!(), file!()))?,
-                    Cow::Borrowed(by_7.channel_name),
+                    Cow::Borrowed(by_2.channel_name),
                     row_registry[0].try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?,
                     row_registry[0].try_get::<'_, usize, Option<String>>(3).convert(Backtrace::new(line!(), file!()))?,
                     row_registry[0].try_get::<'_, usize, i16>(4).convert(Backtrace::new(line!(), file!()))?,
@@ -318,10 +318,10 @@ pub struct Insert1 {
     pub channel_viewing_quantity: i64,
 }
 
-pub struct By6 {
+pub struct By1 {
     pub channel_id: i64,
 }
 
-pub struct By7<'a> {
+pub struct By2<'a> {
     pub channel_name: &'a str,
 }

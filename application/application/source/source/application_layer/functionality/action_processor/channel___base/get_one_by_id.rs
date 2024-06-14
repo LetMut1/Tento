@@ -17,7 +17,7 @@ use crate::infrastructure_layer::data::auditor::OptionConverter;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::functionality::repository::postgresql::channel_subscription::By1;
-use crate::infrastructure_layer::functionality::repository::postgresql::channel::By6;
+use crate::infrastructure_layer::functionality::repository::postgresql::channel::By1 as By1___;
 use crate::infrastructure_layer::functionality::repository::postgresql::channel_inner_link::By1 as By1__;
 use crate::infrastructure_layer::functionality::repository::postgresql::channel_outer_link::By1 as By1_;
 use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
@@ -91,7 +91,7 @@ impl ActionProcessor<Channel__Base___GetOneById> {
 
         let channel = match PostgresqlRepository::<EntityChannel<'_>>::find_1(
             &*database_1_postgresql_pooled_connection,
-            &By6 {
+            By1___ {
                 channel_id: incoming_.channel_id,
             },
         )

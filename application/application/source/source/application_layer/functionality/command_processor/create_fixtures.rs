@@ -20,7 +20,7 @@ use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user::By1;
-use crate::infrastructure_layer::functionality::repository::postgresql::channel::By7;
+use crate::infrastructure_layer::functionality::repository::postgresql::channel::By2;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user::Insert1 as ApplicationUserInsert1;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_device::Insert1 as ApplicationUserDeviceInsert1;
 use crate::infrastructure_layer::functionality::repository::postgresql::channel::Insert1 as ChannelInsert1;
@@ -308,7 +308,7 @@ impl CommandProcessor<CreateFixtures> {
 
                 let channel = PostgresqlRepository::<Channel<'_>>::find_2(
                     database_1_postgresql_connection,
-                    &By7 {
+                    By2 {
                         channel_name: channel_name.as_str(),
                     },
                 )

@@ -14,7 +14,7 @@ use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::data::void::Void;
-use crate::infrastructure_layer::functionality::repository::postgresql::channel::By6;
+use crate::infrastructure_layer::functionality::repository::postgresql::channel::By1;
 use crate::infrastructure_layer::functionality::repository::postgresql::channel_subscription::Insert1;
 use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
 use bb8::Pool;
@@ -88,7 +88,7 @@ impl ActionProcessor<ChannelSubscription__Base___Create> {
 
         let channel = match PostgresqlRepository::<Channel<'_>>::find_1(
             database_1_postgresql_connection,
-            &By6 {
+            By1 {
                 channel_id: incoming_.channel_id,
             },
         )
