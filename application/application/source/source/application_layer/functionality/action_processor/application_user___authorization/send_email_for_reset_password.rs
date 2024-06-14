@@ -82,7 +82,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForResetPassword>
 
         let application_user = match PostgresqlRepository::<ApplicationUser>::find_6(
             &*database_1_postgresql_pooled_connection,
-            &By3 {
+            By3 {
                 application_user_id: incoming_.application_user_id,
             },
         )

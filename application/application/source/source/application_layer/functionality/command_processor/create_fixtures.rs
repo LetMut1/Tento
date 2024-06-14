@@ -164,13 +164,11 @@ impl CommandProcessor<CreateFixtures> {
                 );
             }
 
-            let by_1 = By1 {
-                application_user_nickname: application_user_nickname.as_str(),
-            };
-
             let application_user = match PostgresqlRepository::<ApplicationUser<'_>>::find_1(
                 database_1_postgresql_connection,
-                &by_1,
+                By1 {
+                    application_user_nickname: application_user_nickname.as_str(),
+                },
             )
             .await?
             {

@@ -186,7 +186,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
 
         if !PostgresqlRepository::<ApplicationUser<'_>>::is_exist_3(
             database_1_postgresql_connection,
-            &By3 {
+            By3 {
                 application_user_id: incoming_.application_user_id,
             },
         )

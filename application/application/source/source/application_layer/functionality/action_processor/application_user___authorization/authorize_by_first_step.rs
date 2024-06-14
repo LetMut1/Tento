@@ -99,7 +99,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
         if Validator::<ApplicationUser_Email>::is_valid(incoming_.application_user_email_or_application_user_nickname.as_str())? {
             let application_user_ = PostgresqlRepository::<ApplicationUser>::find_3(
                 database_1_postgresql_connection,
-                &By2 {
+                By2 {
                     application_user_email: incoming_.application_user_email_or_application_user_nickname.as_str(),
                 },
             )
@@ -122,7 +122,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
             if Validator::<ApplicationUser_Nickname>::is_valid(incoming_.application_user_email_or_application_user_nickname.as_str()) {
                 let application_user_ = PostgresqlRepository::<ApplicationUser>::find_2(
                     database_1_postgresql_connection,
-                    &By1 {
+                    By1 {
                         application_user_nickname: incoming_.application_user_email_or_application_user_nickname.as_str(),
                     },
                 )

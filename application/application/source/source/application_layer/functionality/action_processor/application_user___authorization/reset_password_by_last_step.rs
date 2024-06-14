@@ -19,7 +19,7 @@ use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::data::control_type::TokioBlockingTask;
 use crate::infrastructure_layer::functionality::service::spawner::Spawner;
 use crate::infrastructure_layer::data::void::Void;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user::By3 as ApplicationUserBy3;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user::By3;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_access_refresh_token::By1;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_reset_password_token::By1 as By1_;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user::Update1;
@@ -182,17 +182,15 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
             return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_WrongValue)));
         }
 
-        let application_user_by_3 = ApplicationUserBy3 {
-            application_user_id: incoming_.application_user_id,
-        };
-
         let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
 
         let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
 
         let mut application_user = match PostgresqlRepository::<ApplicationUser>::find_5(
             database_1_postgresql_connection,
-            &application_user_by_3,
+            By3 {
+                application_user_id: incoming_.application_user_id,
+            },
         )
         .await?
         {
@@ -233,7 +231,9 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
             &Update1 {
                 application_user_password_hash: application_user.password_hash.as_str(),
             },
-            &application_user_by_3,
+            By3 {
+                application_user_id: incoming_.application_user_id,
+            },
         )
         .await?;
 

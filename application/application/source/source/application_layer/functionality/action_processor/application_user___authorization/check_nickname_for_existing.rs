@@ -59,7 +59,7 @@ impl ActionProcessor<ApplicationUser__Authorization___CheckNicknameForExisting> 
 
         let is_exist = PostgresqlRepository::<ApplicationUser<'_>>::is_exist_1(
             &*database_1_postgresql_pooled_connection,
-            &By1 {
+            By1 {
                 application_user_nickname: incoming_.application_user_nickname.as_str(),
             },
         )

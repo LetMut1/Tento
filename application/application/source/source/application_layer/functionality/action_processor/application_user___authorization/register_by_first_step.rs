@@ -88,7 +88,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
 
         if PostgresqlRepository::<ApplicationUser<'_>>::is_exist_2(
             &*database_1_postgresql_pooled_connection,
-            &By2 {
+            By2 {
                 application_user_email: incoming_.application_user_email.as_str(),
             },
         )
