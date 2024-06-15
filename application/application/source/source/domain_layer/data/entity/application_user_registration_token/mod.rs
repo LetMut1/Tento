@@ -2,8 +2,8 @@ pub mod derivative;
 
 use super::application_user::ApplicationUser_Email;
 use super::application_user_device::ApplicationUserDevice_Id;
-use std::marker::PhantomData;
 use std::borrow::Cow;
+use std::marker::PhantomData;
 
 pub use self::CanBeResentFrom as ApplicationUserRegistrationToken_CanBeResentFrom;
 pub use self::ExpiresAt as ApplicationUserRegistrationToken_ExpiresAt;
@@ -30,7 +30,7 @@ pub struct ApplicationUserRegistrationToken<'a> {
     _expires_at: PhantomData<ExpiresAt>,
 
     pub can_be_resent_from: i64,
-    _can_be_resent_from: PhantomData<CanBeResentFrom>
+    _can_be_resent_from: PhantomData<CanBeResentFrom>,
 }
 
 impl<'a> ApplicationUserRegistrationToken<'a> {

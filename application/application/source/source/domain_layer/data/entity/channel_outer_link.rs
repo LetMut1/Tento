@@ -33,7 +33,7 @@ impl ChannelOuterLink {
             _address: PhantomData,
             created_at,
             _created_at: PhantomData,
-        }
+        };
     }
 }
 

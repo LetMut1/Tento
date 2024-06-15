@@ -1,13 +1,15 @@
 array_width = 0
 attr_fn_like_width = 0
-chain_width = 240
+chain_width = 180
 fn_params_layout = "Vertical"
-fn_call_width = 0
-max_width = 300
+fn_call_width = 60
+max_width = 180
 merge_derives = true
 single_line_if_else_max_width = 0
 struct_lit_width = 0
 struct_variant_width = 0
+blank_lines_upper_bound = 0
+blank_lines_lower_bound = 0
 
 
 #  TODO дописать конфигурации

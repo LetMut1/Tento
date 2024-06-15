@@ -18,7 +18,9 @@ impl Validator<ApplicationUser_Password> {
     pub fn is_valid_part_1<'a>(application_user_password: &'a str) -> bool {
         let password_chars_count = application_user_password.chars().count();
 
-        return password_chars_count >= ApplicationUser_Password::MINIMUM_LENGTH && password_chars_count <= ApplicationUser_Password::MAXIMUM_LENGTH && !application_user_password.contains(' ');
+        return password_chars_count >= ApplicationUser_Password::MINIMUM_LENGTH
+            && password_chars_count <= ApplicationUser_Password::MAXIMUM_LENGTH
+            && !application_user_password.contains(' ');
     }
 
     pub fn is_valid_part_2<'a>(

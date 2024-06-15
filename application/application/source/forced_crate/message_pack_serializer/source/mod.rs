@@ -83,10 +83,10 @@
 
 use auditor::Auditor;
 use auditor::Backtrace;
+use auditor::ErrorConverter;
 use error::Error;
 use serde::Deserialize;
 use serde::Serialize as SerdeSerialize;
-use auditor::ErrorConverter;
 
 pub struct Serializer;
 

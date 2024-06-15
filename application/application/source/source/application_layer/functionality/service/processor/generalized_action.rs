@@ -1,30 +1,30 @@
+use super::Processor;
 use crate::application_layer::data::unified_report::UnifiedReport;
 use crate::infrastructure_layer::data::auditor::Auditor;
+use crate::infrastructure_layer::data::auditor::Backtrace;
+use crate::infrastructure_layer::data::control_type::ActionRound;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
+use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
-use crate::infrastructure_layer::functionality::service::creator::Creator;
 use crate::infrastructure_layer::functionality::service::creator::response::Response;
+use crate::infrastructure_layer::functionality::service::creator::Creator;
+use crate::infrastructure_layer::functionality::service::logger::Logger;
 use crate::infrastructure_layer::functionality::service::serializer::Serialize;
 use crate::infrastructure_layer::functionality::service::serializer::Serializer;
 use crate::infrastructure_layer::functionality::service::validator::Validator;
-use crate::infrastructure_layer::data::control_type::ActionRound;
 use bb8::Pool;
-use crate::infrastructure_layer::data::auditor::Backtrace;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
+use http::request::Parts;
+use hyper::Body;
+use matchit::Params;
 use serde::Serialize as SerdeSerialize;
 use std::clone::Clone;
 use std::future::Future;
-use crate::infrastructure_layer::functionality::service::logger::Logger;
 use std::marker::Send;
 use std::marker::Sync;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
-use http::request::Parts;
-use crate::infrastructure_layer::data::error::Error;
-use hyper::Body;
-use super::Processor;
-use matchit::Params;
 
 pub use crate::infrastructure_layer::data::control_type::GeneralizedAction;
 
@@ -58,25 +58,13 @@ impl Processor<GeneralizedAction> {
             Logger::<(ActionRound, Auditor<InvalidArgument>)>::log(
                 parts,
                 &response,
-                Auditor::<InvalidArgument>::new(
-                    InvalidArgument,
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
+                Auditor::<InvalidArgument>::new(InvalidArgument, Backtrace::new(line!(), file!())),
             );
 
             return response;
         }
 
-        let incoming = match data_extractor(
-            body,
-            parts,
-            route_parameters,
-        )
-        .await
-        {
+        let incoming = match data_extractor(body, parts, route_parameters).await {
             Ok(incoming_) => incoming_,
             Err(error_auditor) => {
                 let response = Creator::<Response>::create_internal_server_error();
@@ -117,8 +105,8 @@ impl Processor<GeneralizedAction> {
         };
 
         let unified_report_ = match unified_report {
-            Ok(unified_report__)=> unified_report__,
-            Err(invalid_argument_auditor)=> {
+            Ok(unified_report__) => unified_report__,
+            Err(invalid_argument_auditor) => {
                 let response = Creator::<Response>::create_bad_request();
 
                 Logger::<(ActionRound, Auditor<InvalidArgument>)>::log(parts, &response, invalid_argument_auditor);

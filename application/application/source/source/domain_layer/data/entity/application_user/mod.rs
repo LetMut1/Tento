@@ -43,7 +43,7 @@ impl<'a> ApplicationUser<'a> {
             password_hash,
             _password_hash: PhantomData,
             created_at,
-            _created_at: PhantomData
+            _created_at: PhantomData,
         };
     }
 }

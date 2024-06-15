@@ -1,6 +1,6 @@
 use super::Formatter;
-use crate::infrastructure_layer::data::control_type::Response;
 use crate::infrastructure_layer::data::control_type::ActionRound;
+use crate::infrastructure_layer::data::control_type::Response;
 
 impl Formatter<(ActionRound, Response)> {
     pub fn format<'a>(
@@ -10,9 +10,7 @@ impl Formatter<(ActionRound, Response)> {
     ) -> String {
         return format!(
             "\'{} {} {}\'",
-            response_status_code,
-            request_method,
-            request_uri,
+            response_status_code, request_method, request_uri,
         );
     }
 }

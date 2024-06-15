@@ -1,10 +1,11 @@
+use super::Loader;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
+use crate::infrastructure_layer::data::environment_configuration::environment_configuration_file::EnvironmentConfigurationFile;
 use crate::infrastructure_layer::data::environment_configuration::ApplicationServer;
 use crate::infrastructure_layer::data::environment_configuration::EmailServer;
 use crate::infrastructure_layer::data::environment_configuration::Encryption;
-use crate::infrastructure_layer::data::environment_configuration::environment_configuration_file::EnvironmentConfigurationFile;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::environment_configuration::Http;
 use crate::infrastructure_layer::data::environment_configuration::HttpKeepalive;
@@ -19,7 +20,6 @@ use crate::infrastructure_layer::data::environment_configuration::Tls;
 use crate::infrastructure_layer::data::environment_configuration::TokioRuntime;
 use crate::infrastructure_layer::data::error::Error;
 use std::path::Path;
-use super::Loader;
 
 impl Loader<EnvironmentConfiguration> {
     const ENVIRONMENT_FILE_NAME: &'static str = "environment.toml";
@@ -36,15 +36,10 @@ impl Loader<EnvironmentConfiguration> {
         let environment_file_data = if environment_file_path_.try_exists().convert(Backtrace::new(line!(), file!()))? {
             std::fs::read_to_string(environment_file_path_).convert(Backtrace::new(line!(), file!()))?
         } else {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::new_logic("The environment.toml file does not exist."),
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
+            return Err(Auditor::<Error>::new(
+                Error::new_logic("The environment.toml file does not exist."),
+                Backtrace::new(line!(), file!()),
+            ));
         };
 
         let environment_configuration_file = toml::from_str::<EnvironmentConfigurationFile>(environment_file_data.as_str()).convert(Backtrace::new(line!(), file!()))?;
@@ -87,23 +82,19 @@ impl Loader<EnvironmentConfiguration> {
 
             let http = {
                 let keepalive = if environment_configuration_file.application_server.http.keepalive.is_exist {
-                    Some(
-                        HttpKeepalive {
-                            interval_duration: environment_configuration_file.application_server.http.keepalive.interval_duration.value,
-                            timeout_duration: environment_configuration_file.application_server.http.keepalive.timeout_duration.value,
-                        },
-                    )
+                    Some(HttpKeepalive {
+                        interval_duration: environment_configuration_file.application_server.http.keepalive.interval_duration.value,
+                        timeout_duration: environment_configuration_file.application_server.http.keepalive.timeout_duration.value,
+                    })
                 } else {
                     None
                 };
 
                 let tls = if environment_configuration_file.application_server.http.tls.is_exist {
-                    Some(
-                        Tls {
-                            certificate_crt_file_path: environment_configuration_file.application_server.http.tls.certificate_crt_file_path.value,
-                            certificate_key_file_path: environment_configuration_file.application_server.http.tls.certificate_key_file_path.value,
-                        },
-                    )
+                    Some(Tls {
+                        certificate_crt_file_path: environment_configuration_file.application_server.http.tls.certificate_crt_file_path.value,
+                        certificate_key_file_path: environment_configuration_file.application_server.http.tls.certificate_key_file_path.value,
+                    })
                 } else {
                     None
                 };
@@ -162,7 +153,7 @@ impl Loader<EnvironmentConfiguration> {
                     application_user_access_token: environment_configuration_file.encryption.private_key.application_user_access_token.value,
                     application_user_access_refresh_token: environment_configuration_file.encryption.private_key.application_user_access_refresh_token.value,
                 },
-            }
+            },
         };
 
         return Ok(environment_configuration);

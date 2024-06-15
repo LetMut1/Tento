@@ -9,7 +9,7 @@ pub struct ChannelInnerLink {
     _to: PhantomData<Channel_Id>,
 
     pub created_at: String,
-    _created_at: PhantomData<CreatedAt>
+    _created_at: PhantomData<CreatedAt>,
 }
 
 impl ChannelInnerLink {

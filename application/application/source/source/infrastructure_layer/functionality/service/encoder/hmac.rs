@@ -1,11 +1,11 @@
 use super::Encoder;
+use crate::infrastructure_layer::data::auditor::Auditor;
+use crate::infrastructure_layer::data::auditor::Backtrace;
+use crate::infrastructure_layer::data::auditor::ErrorConverter;
+use crate::infrastructure_layer::data::error::Error;
+use hmac::digest::CtOutput;
 use hmac::Hmac;
 use hmac::Mac;
-use hmac::digest::CtOutput;
-use crate::infrastructure_layer::data::auditor::Backtrace;
-use crate::infrastructure_layer::data::error::Error;
-use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use sha3::Sha512;
 
 pub type HmacSha3_512 = Hmac<Sha512>;

@@ -1,12 +1,12 @@
-use std::sync::OnceLock;
 use super::Validator;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
-use crate::infrastructure_layer::data::auditor::Backtrace;
-use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
+use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::data::auditor::OptionConverter;
+use crate::infrastructure_layer::data::error::Error;
 use regex::Regex;
+use std::sync::OnceLock;
 
 static REGULAR_EXPRESSION: OnceLock<Regex> = OnceLock::new();
 
@@ -16,18 +16,13 @@ impl Validator<ApplicationUser_Email> {
             Some(regular_expression_) => regular_expression_,
             None => {
                 if let Err(_) = REGULAR_EXPRESSION.set(Regex::new(ApplicationUser_Email::REGULAR_EXPRESSION).convert(Backtrace::new(line!(), file!()))?) {
-                    return Err(
-                        Auditor::<Error>::new(
-                            Error::new_logic_value_already_exist(),
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        ),
-                    );
+                    return Err(Auditor::<Error>::new(
+                        Error::new_logic_value_already_exist(),
+                        Backtrace::new(line!(), file!()),
+                    ));
                 }
 
-                REGULAR_EXPRESSION.get().convert_value_does_not_exist(Backtrace::new(line!(),file!()))?
+                REGULAR_EXPRESSION.get().convert_value_does_not_exist(Backtrace::new(line!(), file!()))?
             }
         };
 

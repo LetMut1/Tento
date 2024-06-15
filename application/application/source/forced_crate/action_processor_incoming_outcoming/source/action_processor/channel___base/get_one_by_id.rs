@@ -1,6 +1,6 @@
-use common_precedent::CommonPrecedent;
 use crate::ChannelInnerLink1;
 use crate::ChannelOuterLink1;
+use common_precedent::CommonPrecedent;
 use macro_rules::r#enum;
 use serde::Deserialize;
 use serde::Serialize;

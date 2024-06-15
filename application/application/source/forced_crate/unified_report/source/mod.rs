@@ -81,8 +81,8 @@
     clippy::zero_sized_map_values
 )]
 
-use serde::Serialize;
 use serde::Deserialize;
+use serde::Serialize;
 
 #[derive(Serialize, Deserialize)]
 pub enum UnifiedReport<T, P> {

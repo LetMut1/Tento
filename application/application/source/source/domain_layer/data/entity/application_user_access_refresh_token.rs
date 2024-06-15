@@ -3,8 +3,8 @@ use super::application_user_access_token::ApplicationUserAccessToken_Id;
 use super::application_user_device::ApplicationUserDevice_Id;
 use serde::Deserialize;
 use serde::Serialize;
-use std::marker::PhantomData;
 use std::borrow::Cow;
+use std::marker::PhantomData;
 
 pub use self::ExpiresAt as ApplicationUserAccessRefreshToken_ExpiresAt;
 pub use self::ObfuscationValue as ApplicationUserAccessRefreshToken_ObfuscationValue;

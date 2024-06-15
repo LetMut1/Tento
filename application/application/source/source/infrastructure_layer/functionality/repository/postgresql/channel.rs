@@ -1,12 +1,12 @@
 use super::PostgresqlRepository;
 use crate::domain_layer::data::entity::channel::Channel;
-use crate::infrastructure_layer::data::auditor::Backtrace;
-use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
+use crate::infrastructure_layer::data::auditor::Backtrace;
+use crate::infrastructure_layer::data::auditor::ErrorConverter;
+use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 pub use action_processor_incoming_outcoming::Channel1;
 use std::borrow::Cow;
-use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use tokio_postgres::types::Type;
 use tokio_postgres::Client as Connection;
 
@@ -75,54 +75,18 @@ impl PostgresqlRepository<Channel<'_>> {
                 c.created_at::TEXT AS ca;";
 
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(
-                &insert_1.channel_owner,
-                Type::INT8,
-            )
-            .add_parameter(
-                &channel_name,
-                Type::TEXT,
-            )
-            .add_parameter(
-                &channel_linked_name,
-                Type::TEXT,
-            )
-            .add_parameter(
-                &channel_description,
-                Type::TEXT,
-            )
-            .add_parameter(
-                &insert_1.channel_access_modifier,
-                Type::INT2,
-            )
-            .add_parameter(
-                &insert_1.channel_visability_modifier,
-                Type::INT2,
-            )
-            .add_parameter(
-                &channel_orientation,
-                Type::INT2_ARRAY,
-            )
-            .add_parameter(
-                &channel_cover_image_path,
-                Type::TEXT,
-            )
-            .add_parameter(
-                &channel_background_image_path,
-                Type::TEXT,
-            )
-            .add_parameter(
-                &insert_1.channel_subscribers_quantity,
-                Type::INT8,
-            )
-            .add_parameter(
-                &insert_1.channel_marks_quantity,
-                Type::INT8,
-            )
-            .add_parameter(
-                &insert_1.channel_viewing_quantity,
-                Type::INT8,
-            );
+            .add_parameter(&insert_1.channel_owner, Type::INT8)
+            .add_parameter(&channel_name, Type::TEXT)
+            .add_parameter(&channel_linked_name, Type::TEXT)
+            .add_parameter(&channel_description, Type::TEXT)
+            .add_parameter(&insert_1.channel_access_modifier, Type::INT2)
+            .add_parameter(&insert_1.channel_visability_modifier, Type::INT2)
+            .add_parameter(&channel_orientation, Type::INT2_ARRAY)
+            .add_parameter(&channel_cover_image_path, Type::TEXT)
+            .add_parameter(&channel_background_image_path, Type::TEXT)
+            .add_parameter(&insert_1.channel_subscribers_quantity, Type::INT8)
+            .add_parameter(&insert_1.channel_marks_quantity, Type::INT8)
+            .add_parameter(&insert_1.channel_viewing_quantity, Type::INT8);
 
         let statement = database_1_connection
             .prepare_typed(
@@ -130,7 +94,7 @@ impl PostgresqlRepository<Channel<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        .convert(Backtrace::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         let row_registry = database_1_connection
             .query(
@@ -138,26 +102,24 @@ impl PostgresqlRepository<Channel<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-.convert(Backtrace::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
-        return Ok(
-            Channel::new(
-                row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
-                insert_1.channel_owner,
-                Cow::Owned(insert_1.channel_name),
-                insert_1.channel_linked_name,
-                insert_1.channel_description,
-                insert_1.channel_access_modifier,
-                insert_1.channel_visability_modifier,
-                insert_1.channel_orientation,
-                insert_1.channel_cover_image_path,
-                insert_1.channel_background_image_path,
-                insert_1.channel_subscribers_quantity,
-                insert_1.channel_marks_quantity,
-                insert_1.channel_viewing_quantity,
-                row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
-            ),
-        );
+        return Ok(Channel::new(
+            row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
+            insert_1.channel_owner,
+            Cow::Owned(insert_1.channel_name),
+            insert_1.channel_linked_name,
+            insert_1.channel_description,
+            insert_1.channel_access_modifier,
+            insert_1.channel_visability_modifier,
+            insert_1.channel_orientation,
+            insert_1.channel_cover_image_path,
+            insert_1.channel_background_image_path,
+            insert_1.channel_subscribers_quantity,
+            insert_1.channel_marks_quantity,
+            insert_1.channel_viewing_quantity,
+            row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
+        ));
     }
 
     pub async fn find_1<'a>(
@@ -184,10 +146,7 @@ impl PostgresqlRepository<Channel<'_>> {
             FROM public.channel c \
             WHERE c.id = $1;";
 
-        prepared_statemant_parameter_convertation_resolver.add_parameter(
-            &by_1.channel_id,
-            Type::INT8,
-        );
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&by_1.channel_id, Type::INT8);
 
         let statement = database_1_connection
             .prepare_typed(
@@ -195,7 +154,7 @@ impl PostgresqlRepository<Channel<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        .convert(Backtrace::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         let row_registry = database_1_connection
             .query(
@@ -203,32 +162,28 @@ impl PostgresqlRepository<Channel<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-.convert(Backtrace::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         if row_registry.is_empty() {
             return Ok(None);
         }
 
-        return Ok(
-            Some(
-                Channel::new(
-                    by_1.channel_id,
-                    row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
-                    Cow::Owned(row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?),
-                    row_registry[0].try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?,
-                    row_registry[0].try_get::<'_, usize, Option<String>>(3).convert(Backtrace::new(line!(), file!()))?,
-                    row_registry[0].try_get::<'_, usize, i16>(4).convert(Backtrace::new(line!(), file!()))?,
-                    row_registry[0].try_get::<'_, usize, i16>(5).convert(Backtrace::new(line!(), file!()))?,
-                    row_registry[0].try_get::<'_, usize, Vec<i16>>(6).convert(Backtrace::new(line!(), file!()))?,
-                    row_registry[0].try_get::<'_, usize, Option<String>>(7).convert(Backtrace::new(line!(), file!()))?,
-                    row_registry[0].try_get::<'_, usize, Option<String>>(8).convert(Backtrace::new(line!(), file!()))?,
-                    row_registry[0].try_get::<'_, usize, i64>(9).convert(Backtrace::new(line!(), file!()))?,
-                    row_registry[0].try_get::<'_, usize, i64>(10).convert(Backtrace::new(line!(), file!()))?,
-                    row_registry[0].try_get::<'_, usize, i64>(11).convert(Backtrace::new(line!(), file!()))?,
-                    row_registry[0].try_get::<'_, usize, String>(12).convert(Backtrace::new(line!(), file!()))?,
-                ),
-            ),
-        );
+        return Ok(Some(Channel::new(
+            by_1.channel_id,
+            row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
+            Cow::Owned(row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?),
+            row_registry[0].try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, Option<String>>(3).convert(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, i16>(4).convert(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, i16>(5).convert(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, Vec<i16>>(6).convert(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, Option<String>>(7).convert(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, Option<String>>(8).convert(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, i64>(9).convert(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, i64>(10).convert(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, i64>(11).convert(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, String>(12).convert(Backtrace::new(line!(), file!()))?,
+        )));
     }
 
     pub async fn find_2<'a, 'b>(
@@ -255,10 +210,7 @@ impl PostgresqlRepository<Channel<'_>> {
             FROM public.channel c \
             WHERE c.name = $1;";
 
-        prepared_statemant_parameter_convertation_resolver.add_parameter(
-            &by_2.channel_name,
-            Type::TEXT,
-        );
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&by_2.channel_name, Type::TEXT);
 
         let statement = database_1_connection
             .prepare_typed(
@@ -266,7 +218,7 @@ impl PostgresqlRepository<Channel<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        .convert(Backtrace::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         let row_registry = database_1_connection
             .query(
@@ -274,32 +226,28 @@ impl PostgresqlRepository<Channel<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-.convert(Backtrace::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         if row_registry.is_empty() {
             return Ok(None);
         }
 
-        return Ok(
-            Some(
-                Channel::new(
-                    row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
-                    row_registry[0].try_get::<'_, usize, i64>(1).convert(Backtrace::new(line!(), file!()))?,
-                    Cow::Borrowed(by_2.channel_name),
-                    row_registry[0].try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?,
-                    row_registry[0].try_get::<'_, usize, Option<String>>(3).convert(Backtrace::new(line!(), file!()))?,
-                    row_registry[0].try_get::<'_, usize, i16>(4).convert(Backtrace::new(line!(), file!()))?,
-                    row_registry[0].try_get::<'_, usize, i16>(5).convert(Backtrace::new(line!(), file!()))?,
-                    row_registry[0].try_get::<'_, usize, Vec<i16>>(6).convert(Backtrace::new(line!(), file!()))?,
-                    row_registry[0].try_get::<'_, usize, Option<String>>(7).convert(Backtrace::new(line!(), file!()))?,
-                    row_registry[0].try_get::<'_, usize, Option<String>>(8).convert(Backtrace::new(line!(), file!()))?,
-                    row_registry[0].try_get::<'_, usize, i64>(9).convert(Backtrace::new(line!(), file!()))?,
-                    row_registry[0].try_get::<'_, usize, i64>(10).convert(Backtrace::new(line!(), file!()))?,
-                    row_registry[0].try_get::<'_, usize, i64>(11).convert(Backtrace::new(line!(), file!()))?,
-                    row_registry[0].try_get::<'_, usize, String>(12).convert(Backtrace::new(line!(), file!()))?,
-                ),
-            ),
-        );
+        return Ok(Some(Channel::new(
+            row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, i64>(1).convert(Backtrace::new(line!(), file!()))?,
+            Cow::Borrowed(by_2.channel_name),
+            row_registry[0].try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, Option<String>>(3).convert(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, i16>(4).convert(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, i16>(5).convert(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, Vec<i16>>(6).convert(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, Option<String>>(7).convert(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, Option<String>>(8).convert(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, i64>(9).convert(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, i64>(10).convert(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, i64>(11).convert(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, String>(12).convert(Backtrace::new(line!(), file!()))?,
+        )));
     }
 }
 

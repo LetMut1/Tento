@@ -1,13 +1,13 @@
-use super::PostgresqlRepository;
-use crate::infrastructure_layer::data::auditor::Backtrace;
-use crate::infrastructure_layer::data::error::Error;
-use crate::infrastructure_layer::data::auditor::Auditor;
 use super::channel::Channel1;
+use super::PostgresqlRepository;
+use crate::infrastructure_layer::data::auditor::Auditor;
+use crate::infrastructure_layer::data::auditor::Backtrace;
+use crate::infrastructure_layer::data::auditor::ErrorConverter;
+use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::functionality::service::counter::Counter;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 pub use action_processor_incoming_outcoming::Common1;
 use tokio_postgres::types::Type;
-use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use tokio_postgres::Client as Connection;
 
 impl PostgresqlRepository<Common1> {
@@ -37,24 +37,12 @@ impl PostgresqlRepository<Common1> {
             counter.get_next_value()?,
         );
 
-        let wildcard = format!(
-            "{}%",
-            by_1.channel_name,
-        );
+        let wildcard = format!("{}%", by_1.channel_name,);
 
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(
-                &by_1.application_user_id,
-                Type::INT8,
-            )
-            .add_parameter(
-                &by_1.channel_visability_modifier,
-                Type::INT2,
-            )
-            .add_parameter(
-                &wildcard,
-                Type::TEXT,
-            );
+            .add_parameter(&by_1.application_user_id, Type::INT8)
+            .add_parameter(&by_1.channel_visability_modifier, Type::INT2)
+            .add_parameter(&wildcard, Type::TEXT);
 
         if let Some(ref requery_channel_name) = by_1.requery_channel_name {
             query = format!(
@@ -63,10 +51,7 @@ impl PostgresqlRepository<Common1> {
                 counter.get_next_value()?,
             );
 
-            prepared_statemant_parameter_convertation_resolver.add_parameter(
-                requery_channel_name,
-                Type::TEXT,
-            );
+            prepared_statemant_parameter_convertation_resolver.add_parameter(requery_channel_name, Type::TEXT);
         }
 
         query = format!(
@@ -77,10 +62,7 @@ impl PostgresqlRepository<Common1> {
             counter.get_next_value()?
         );
 
-        prepared_statemant_parameter_convertation_resolver.add_parameter(
-            &limit,
-            Type::INT2,
-        );
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&limit, Type::INT2);
 
         let statement = database_1_connection
             .prepare_typed(
@@ -88,7 +70,7 @@ impl PostgresqlRepository<Common1> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        .convert(Backtrace::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         let row_registry = database_1_connection
             .query(
@@ -96,7 +78,7 @@ impl PostgresqlRepository<Common1> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-.convert(Backtrace::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         let mut common_registry: Vec<Common1> = vec![];
 
@@ -156,20 +138,9 @@ impl PostgresqlRepository<Common1> {
             counter.get_next_value()?,
         );
 
-        let wildcard = format!(
-            "{}%",
-            by_2.channel_name,
-        );
+        let wildcard = format!("{}%", by_2.channel_name,);
 
-        prepared_statemant_parameter_convertation_resolver
-            .add_parameter(
-                &by_2.application_user_id,
-                Type::INT8,
-            )
-            .add_parameter(
-                &wildcard,
-                Type::TEXT,
-            );
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&by_2.application_user_id, Type::INT8).add_parameter(&wildcard, Type::TEXT);
 
         if let Some(ref requery_channel_name) = by_2.requery_channel_name {
             query = format!(
@@ -178,10 +149,7 @@ impl PostgresqlRepository<Common1> {
                 counter.get_next_value()?,
             );
 
-            prepared_statemant_parameter_convertation_resolver.add_parameter(
-                requery_channel_name,
-                Type::TEXT,
-            );
+            prepared_statemant_parameter_convertation_resolver.add_parameter(requery_channel_name, Type::TEXT);
         }
 
         query = format!(
@@ -192,10 +160,7 @@ impl PostgresqlRepository<Common1> {
             counter.get_next_value()?,
         );
 
-        prepared_statemant_parameter_convertation_resolver.add_parameter(
-            &limit,
-            Type::INT2,
-        );
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&limit, Type::INT2);
 
         let statement = database_1_connection
             .prepare_typed(
@@ -203,7 +168,7 @@ impl PostgresqlRepository<Common1> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        .convert(Backtrace::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         let row_registry = database_1_connection
             .query(
@@ -211,7 +176,7 @@ impl PostgresqlRepository<Common1> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-.convert(Backtrace::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         let mut common_registry: Vec<Common1> = vec![];
 
@@ -264,10 +229,7 @@ impl PostgresqlRepository<Common1> {
             counter.get_next_value()?,
         );
 
-        prepared_statemant_parameter_convertation_resolver.add_parameter(
-            &by_3.application_user_id,
-            Type::INT8,
-        );
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&by_3.application_user_id, Type::INT8);
 
         let requery_channel_id: i64;
 
@@ -281,10 +243,7 @@ impl PostgresqlRepository<Common1> {
                 counter.get_next_value()?,
             );
 
-            prepared_statemant_parameter_convertation_resolver.add_parameter(
-                &requery_channel_id,
-                Type::INT8,
-            );
+            prepared_statemant_parameter_convertation_resolver.add_parameter(&requery_channel_id, Type::INT8);
         }
 
         query = format!(
@@ -295,10 +254,7 @@ impl PostgresqlRepository<Common1> {
             counter.get_next_value()?,
         );
 
-        prepared_statemant_parameter_convertation_resolver.add_parameter(
-            &limit,
-            Type::INT2,
-        );
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&limit, Type::INT2);
 
         let statement = database_1_connection
             .prepare_typed(
@@ -306,7 +262,7 @@ impl PostgresqlRepository<Common1> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        .convert(Backtrace::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         let row_registry = database_1_connection
             .query(
@@ -314,7 +270,7 @@ impl PostgresqlRepository<Common1> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-.convert(Backtrace::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         let mut common_registry: Vec<Common1> = vec![];
 

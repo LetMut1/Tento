@@ -1,3 +1,4 @@
+use super::CommandProcessor;
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Nickname;
@@ -13,24 +14,23 @@ use crate::domain_layer::data::entity::channel::Channel_Orientation;
 use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier;
 use crate::domain_layer::functionality::service::encoder::Encoder;
 use crate::domain_layer::functionality::service::validator::Validator;
+use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::Backtrace;
+use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error::Error;
-use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user::By1;
-use crate::infrastructure_layer::functionality::repository::postgresql::channel::By2;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user::Insert1 as ApplicationUserInsert1;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_device::Insert1 as ApplicationUserDeviceInsert1;
+use crate::infrastructure_layer::functionality::repository::postgresql::channel::By2;
 use crate::infrastructure_layer::functionality::repository::postgresql::channel::Insert1 as ChannelInsert1;
 use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
-use crate::infrastructure_layer::functionality::service::creator::Creator;
 use crate::infrastructure_layer::functionality::service::creator::postgresql_connection_pool::PostgresqlConnectionPoolNoTls;
+use crate::infrastructure_layer::functionality::service::creator::Creator;
+use crate::infrastructure_layer::functionality::service::loader::Loader;
 use rand::thread_rng;
 use rand::Rng;
-use crate::infrastructure_layer::functionality::service::loader::Loader;
 use tokio::runtime::Builder;
-use super::CommandProcessor;
 
 pub use crate::infrastructure_layer::data::control_type::CreateFixtures;
 
@@ -58,24 +58,19 @@ impl CommandProcessor<CreateFixtures> {
             std::env::var("CARGO_MANIFEST_DIR").convert(Backtrace::new(line!(), file!()))?.as_str(),
         );
 
-        return Ok(Loader::<EnvironmentConfiguration>::load_from_file(environment_configuration_file_path.as_str())?);
+        return Ok(Loader::<EnvironmentConfiguration>::load_from_file(
+            environment_configuration_file_path.as_str(),
+        )?);
     }
 
     fn run_runtime<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<(), Auditor<Error>> {
-        Builder::new_current_thread()
-            .enable_all()
-            .build()
-            .convert(Backtrace::new(line!(), file!()))?
-            .block_on(Self::create_fixtures(environment_configuration))?;
+        Builder::new_current_thread().enable_all().build().convert(Backtrace::new(line!(), file!()))?.block_on(Self::create_fixtures(environment_configuration))?;
 
         return Ok(());
     }
 
     async fn create_fixtures<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<(), Auditor<Error>> {
-        let database_1_postgresql_connection_pool = Creator::<PostgresqlConnectionPoolNoTls>::create_database_1(
-            environment_configuration,
-        )
-        .await?;
+        let database_1_postgresql_connection_pool = Creator::<PostgresqlConnectionPoolNoTls>::create_database_1(environment_configuration).await?;
 
         let application_user_password = Self::APPLICATION_USER__PASSWORD.to_string();
 
@@ -91,44 +86,27 @@ impl CommandProcessor<CreateFixtures> {
             '_b: for _ in 1..=thread_rng().gen_range::<usize, _>(1..=ApplicationUser_Nickname::MAXIMUM_LENGTH) {
                 let character = Self::ASCII_CHARACTER_REGISTRY[thread_rng().gen_range::<usize, _>(0..Self::ASCII_CHARACTER_REGISTRY.len())];
 
-                application_user_nickname = format!(
-                    "{}{}",
-                    application_user_nickname.as_str(),
-                    character
-                );
+                application_user_nickname = format!("{}{}", application_user_nickname.as_str(), character);
             }
 
             if !Validator::<ApplicationUser_Nickname>::is_valid(application_user_nickname.as_str()) {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Logic {
-                            message: "Application_user nickname should be valid.",
-                        },
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
+                return Err(Auditor::<Error>::new(
+                    Error::Logic {
+                        message: "Application_user nickname should be valid.",
+                    },
+                    Backtrace::new(line!(), file!()),
+                ));
             }
 
-            let application_user_email = format!(
-                "{}@fixture.com",
-                application_user_nickname.as_str()
-            );
+            let application_user_email = format!("{}@fixture.com", application_user_nickname.as_str());
 
             if !Validator::<ApplicationUser_Email>::is_valid(application_user_email.as_str())? {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Logic {
-                            message: "Application_user email should be valid.",
-                        },
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
+                return Err(Auditor::<Error>::new(
+                    Error::Logic {
+                        message: "Application_user email should be valid.",
+                    },
+                    Backtrace::new(line!(), file!()),
+                ));
             }
 
             if !Validator::<ApplicationUser_Password>::is_valid(
@@ -136,17 +114,12 @@ impl CommandProcessor<CreateFixtures> {
                 application_user_email.as_str(),
                 application_user_nickname.as_str(),
             ) {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Logic {
-                            message: "Application_user_password should be valid.",
-                        },
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
+                return Err(Auditor::<Error>::new(
+                    Error::Logic {
+                        message: "Application_user_password should be valid.",
+                    },
+                    Backtrace::new(line!(), file!()),
+                ));
             }
 
             let application_user = match PostgresqlRepository::<ApplicationUser<'_>>::find_1(
@@ -178,17 +151,12 @@ impl CommandProcessor<CreateFixtures> {
             );
 
             if !Validator::<ApplicationUserDevice_Id>::is_valid(&application_user_device_id) {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Logic {
-                            message: "Application_user_device id should be valid.",
-                        },
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
+                return Err(Auditor::<Error>::new(
+                    Error::Logic {
+                        message: "Application_user_device id should be valid.",
+                    },
+                    Backtrace::new(line!(), file!()),
+                ));
             }
 
             PostgresqlRepository::<ApplicationUserDevice>::create_1(
@@ -206,41 +174,27 @@ impl CommandProcessor<CreateFixtures> {
                 '_c: for _ in 1..=thread_rng().gen_range::<usize, _>(1..=Channel_Name::MAXIMUM_LENGTH) {
                     let character = Self::ASCII_CHARACTER_REGISTRY[thread_rng().gen_range::<usize, _>(0..Self::ASCII_CHARACTER_REGISTRY.len())];
 
-                    channel_name = format!(
-                        "{}{}",
-                        channel_name.as_str(),
-                        character,
-                    );
+                    channel_name = format!("{}{}", channel_name.as_str(), character,);
                 }
 
                 if !Validator::<Channel_Name>::is_valid(channel_name.as_str()) {
-                    return Err(
-                        Auditor::<Error>::new(
-                            Error::Logic {
-                                message: "Channel name should be valid.",
-                            },
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        ),
-                    );
+                    return Err(Auditor::<Error>::new(
+                        Error::Logic {
+                            message: "Channel name should be valid.",
+                        },
+                        Backtrace::new(line!(), file!()),
+                    ));
                 }
 
                 let channel_linked_name = channel_name.clone();
 
                 if !Validator::<Channel_LinkedName>::is_valid(channel_linked_name.as_str()) {
-                    return Err(
-                        Auditor::<Error>::new(
-                            Error::Logic {
-                                message: "Channel linked name should be valid.",
-                            },
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        ),
-                    );
+                    return Err(Auditor::<Error>::new(
+                        Error::Logic {
+                            message: "Channel linked name should be valid.",
+                        },
+                        Backtrace::new(line!(), file!()),
+                    ));
                 }
 
                 let channel_description = if thread_rng().gen_range::<i8, _>(0..=1) == 1 {
@@ -249,25 +203,16 @@ impl CommandProcessor<CreateFixtures> {
                     '_c: for _ in 1..=thread_rng().gen_range::<usize, _>(1..=Channel_Description::MAXIMUM_LENGTH) {
                         let character = Self::ASCII_CHARACTER_REGISTRY[thread_rng().gen_range::<usize, _>(0..Self::ASCII_CHARACTER_REGISTRY.len())];
 
-                        channel_description_ = format!(
-                            "{}{}",
-                            channel_description_.as_str(),
-                            character,
-                        );
+                        channel_description_ = format!("{}{}", channel_description_.as_str(), character,);
                     }
 
                     if !Validator::<Channel_Description>::is_valid(channel_description_.as_str()) {
-                        return Err(
-                            Auditor::<Error>::new(
-                                Error::Logic {
-                                    message: "Channel description should be valid.",
-                                },
-                                Backtrace::new(
-                                    line!(),
-                                    file!(),
-                                ),
-                            ),
-                        );
+                        return Err(Auditor::<Error>::new(
+                            Error::Logic {
+                                message: "Channel description should be valid.",
+                            },
+                            Backtrace::new(line!(), file!()),
+                        ));
                     }
 
                     Some(channel_description_)
@@ -275,20 +220,17 @@ impl CommandProcessor<CreateFixtures> {
                     None
                 };
 
-                let channel_orientation: Vec<i16> = vec![0, 1, 2,];
+                let channel_orientation: Vec<i16> = vec![
+                    0, 1, 2,
+                ];
 
                 if !Validator::<Channel_Orientation>::is_valid(channel_orientation.as_slice()) {
-                    return Err(
-                        Auditor::<Error>::new(
-                            Error::Logic {
-                                message: "Channel orientation email should be valid.",
-                            },
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        ),
-                    );
+                    return Err(Auditor::<Error>::new(
+                        Error::Logic {
+                            message: "Channel orientation email should be valid.",
+                        },
+                        Backtrace::new(line!(), file!()),
+                    ));
                 }
 
                 let channel = PostgresqlRepository::<Channel<'_>>::find_2(

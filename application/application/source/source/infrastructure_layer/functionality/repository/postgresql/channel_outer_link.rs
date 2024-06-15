@@ -1,13 +1,13 @@
 use super::PostgresqlRepository;
 use crate::domain_layer::data::entity::channel_outer_link::ChannelOuterLink;
-use crate::infrastructure_layer::data::auditor::Backtrace;
-use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
+use crate::infrastructure_layer::data::auditor::Backtrace;
+use crate::infrastructure_layer::data::auditor::ErrorConverter;
+use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
+pub use action_processor_incoming_outcoming::ChannelOuterLink1;
 use tokio_postgres::types::Type;
 use tokio_postgres::Client as Connection;
-use crate::infrastructure_layer::data::auditor::ErrorConverter;
-pub use action_processor_incoming_outcoming::ChannelOuterLink1;
 
 impl PostgresqlRepository<ChannelOuterLink> {
     pub async fn create_1<'a>(
@@ -36,18 +36,9 @@ impl PostgresqlRepository<ChannelOuterLink> {
                 cs.created_at::TEXT AS ca;";
 
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(
-                &insert_1.channel_outer_link_from,
-                Type::INT8,
-            )
-            .add_parameter(
-                &channel_outer_link_alias,
-                Type::TEXT,
-            )
-            .add_parameter(
-                &channel_outer_link_address,
-                Type::TEXT,
-            );
+            .add_parameter(&insert_1.channel_outer_link_from, Type::INT8)
+            .add_parameter(&channel_outer_link_alias, Type::TEXT)
+            .add_parameter(&channel_outer_link_address, Type::TEXT);
 
         let statement = database_1_connection
             .prepare_typed(
@@ -55,7 +46,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        .convert(Backtrace::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         let row_registry = database_1_connection
             .query(
@@ -63,7 +54,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-.convert(Backtrace::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         let channel_outer_link = ChannelOuterLink::new(
             insert_1.channel_outer_link_from,
@@ -90,15 +81,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
             WHERE col.from_ = $1 \
             LIMIT $2";
 
-        prepared_statemant_parameter_convertation_resolver
-            .add_parameter(
-                &by_1.channel_outer_link_from,
-                Type::INT8,
-            )
-            .add_parameter(
-                &limit,
-                Type::INT2,
-            );
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&by_1.channel_outer_link_from, Type::INT8).add_parameter(&limit, Type::INT2);
 
         let statement = database_1_connection
             .prepare_typed(
@@ -106,7 +89,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-        .convert(Backtrace::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         let row_registry = database_1_connection
             .query(
@@ -114,7 +97,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-.convert(Backtrace::new(line!(), file!()))?;
+            .convert(Backtrace::new(line!(), file!()))?;
 
         let mut channel_outer_link_registry: Vec<ChannelOuterLink1> = vec![];
 

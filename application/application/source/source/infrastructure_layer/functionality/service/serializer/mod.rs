@@ -4,10 +4,10 @@ pub mod message_pack;
 pub mod json;
 
 use crate::infrastructure_layer::data::auditor::Auditor;
+use crate::infrastructure_layer::data::error::Error;
 use serde::Deserialize;
 use serde::Serialize as SerdeSerialize;
 use std::marker::PhantomData;
-use crate::infrastructure_layer::data::error::Error;
 
 pub struct Serializer<T> {
     _format: PhantomData<T>,

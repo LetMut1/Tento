@@ -2,9 +2,9 @@ use super::EmailSender;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
+use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::functionality::service::sender::email::Email;
 use crate::infrastructure_layer::functionality::service::sender::Sender;
-use crate::infrastructure_layer::data::error::Error;
 
 impl EmailSender<ApplicationUserAuthorizationToken<'_>> {
     pub fn send<'a>(
@@ -15,8 +15,7 @@ impl EmailSender<ApplicationUserAuthorizationToken<'_>> {
     ) -> Result<(), Auditor<Error>> {
         let message_body = format!(
             "Your code {} for device {}.",
-            application_user_authorization_token_value,
-            application_user_device_id,
+            application_user_authorization_token_value, application_user_device_id,
         );
 
         Sender::<Email>::send(

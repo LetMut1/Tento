@@ -1,4 +1,5 @@
 use crate::application_layer::data::unified_report::UnifiedReport;
+use crate::application_layer::functionality::action_processor::ActionProcessor;
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Id;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Password;
@@ -9,40 +10,39 @@ use crate::domain_layer::data::entity::application_user_reset_password_token::Ap
 use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_WrongEnterTriesQuantity;
 use crate::domain_layer::functionality::service::encoder::Encoder;
 use crate::domain_layer::functionality::service::validator::Validator;
-use crate::infrastructure_layer::data::auditor::OptionConverter;
+use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::Backtrace;
+use crate::infrastructure_layer::data::auditor::ErrorConverter;
+use crate::infrastructure_layer::data::auditor::OptionConverter;
+use crate::infrastructure_layer::data::control_type::TokioBlockingTask;
+use crate::infrastructure_layer::data::control_type::TokioNonBlockingTask;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error::Error;
-use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
-use crate::infrastructure_layer::data::control_type::TokioBlockingTask;
-use crate::infrastructure_layer::functionality::service::spawner::Spawner;
 use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user::By3;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user::Update1;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_access_refresh_token::By1;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_reset_password_token::By1 as By1_;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user::Update1;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_reset_password_token::Update4;
 use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
-use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::unix_time::UnixTime;
+use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
 use crate::infrastructure_layer::functionality::service::resolver::cloud_message::CloudMessage;
 use crate::infrastructure_layer::functionality::service::resolver::Resolver;
+use crate::infrastructure_layer::functionality::service::spawner::Spawner;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
-use crate::infrastructure_layer::data::control_type::TokioNonBlockingTask;
 use std::clone::Clone;
 use std::marker::Send;
 use std::marker::Sync;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
-use crate::application_layer::functionality::action_processor::ActionProcessor;
 
+pub use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___ResetPasswordByLastStep;
 pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::reset_password_by_last_step::Incoming;
 pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::reset_password_by_last_step::Precedent;
-pub use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___ResetPasswordByLastStep;
 
 impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
     pub async fn process<'a, T>(
@@ -60,59 +60,31 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
         let incoming_ = incoming.convert_value_does_not_exist(Backtrace::new(line!(), file!()))?;
 
         if !Validator::<ApplicationUserResetPasswordToken_Value>::is_valid(incoming_.application_user_reset_password_token_value.as_str())? {
-            return Ok(
-                Err(
-                    Auditor::<InvalidArgument>::new(
-                        InvalidArgument,
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                ),
-            );
+            return Ok(Err(Auditor::<InvalidArgument>::new(
+                InvalidArgument,
+                Backtrace::new(line!(), file!()),
+            )));
         }
 
         if !Validator::<ApplicationUser_Id>::is_valid(incoming_.application_user_id) {
-            return Ok(
-                Err(
-                    Auditor::<InvalidArgument>::new(
-                        InvalidArgument,
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                ),
-            );
+            return Ok(Err(Auditor::<InvalidArgument>::new(
+                InvalidArgument,
+                Backtrace::new(line!(), file!()),
+            )));
         }
 
         if !Validator::<ApplicationUser_Password>::is_valid_part_1(incoming_.application_user_password.as_str()) {
-            return Ok(
-                Err(
-                    Auditor::<InvalidArgument>::new(
-                        InvalidArgument,
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                ),
-            );
+            return Ok(Err(Auditor::<InvalidArgument>::new(
+                InvalidArgument,
+                Backtrace::new(line!(), file!()),
+            )));
         }
 
         if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming_.application_user_device_id.as_str()) {
-            return Ok(
-                Err(
-                    Auditor::<InvalidArgument>::new(
-                        InvalidArgument,
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                ),
-            );
+            return Ok(Err(Auditor::<InvalidArgument>::new(
+                InvalidArgument,
+                Backtrace::new(line!(), file!()),
+            )));
         }
 
         let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
@@ -130,7 +102,9 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
         {
             Some(application_user_reset_password_token_) => application_user_reset_password_token_,
             None => {
-                return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_NotFound)));
+                return Ok(Ok(UnifiedReport::precedent(
+                    Precedent::ApplicationUserResetPasswordToken_NotFound,
+                )));
             }
         };
 
@@ -144,17 +118,20 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
             )
             .await?;
 
-            return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_AlreadyExpired)));
+            return Ok(Ok(UnifiedReport::precedent(
+                Precedent::ApplicationUserResetPasswordToken_AlreadyExpired,
+            )));
         }
 
         if !application_user_reset_password_token.is_approved {
-            return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_IsNotApproved)));
+            return Ok(Ok(UnifiedReport::precedent(
+                Precedent::ApplicationUserResetPasswordToken_IsNotApproved,
+            )));
         }
 
         if application_user_reset_password_token.value != incoming_.application_user_reset_password_token_value {
-            application_user_reset_password_token.wrong_enter_tries_quantity = application_user_reset_password_token.wrong_enter_tries_quantity
-                .checked_add(1)
-                .convert_out_of_range(Backtrace::new(line!(), file!()))?;
+            application_user_reset_password_token.wrong_enter_tries_quantity =
+                application_user_reset_password_token.wrong_enter_tries_quantity.checked_add(1).convert_out_of_range(Backtrace::new(line!(), file!()))?;
 
             if application_user_reset_password_token.wrong_enter_tries_quantity < ApplicationUserResetPasswordToken_WrongEnterTriesQuantity::LIMIT {
                 PostgresqlRepository::<ApplicationUserResetPasswordToken>::update_4(
@@ -179,7 +156,9 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
                 .await?;
             }
 
-            return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_WrongValue)));
+            return Ok(Ok(UnifiedReport::precedent(
+                Precedent::ApplicationUserResetPasswordToken_WrongValue,
+            )));
         }
 
         let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
@@ -196,7 +175,9 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
         {
             Some(application_user_) => application_user_,
             None => {
-                return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUser_NotFound)));
+                return Ok(Ok(UnifiedReport::precedent(
+                    Precedent::ApplicationUser_NotFound,
+                )));
             }
         };
 
@@ -205,24 +186,15 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
             application_user.email.as_str(),
             application_user.nickname.as_str(),
         ) {
-            return Ok(
-                Err(
-                    Auditor::<InvalidArgument>::new(
-                        InvalidArgument,
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                ),
-            );
+            return Ok(Err(Auditor::<InvalidArgument>::new(
+                InvalidArgument,
+                Backtrace::new(line!(), file!()),
+            )));
         }
 
-        let join_handle = Spawner::<TokioBlockingTask>::spawn_processed(
-            move || -> _ {
-                return Encoder::<ApplicationUser_Password>::encode(incoming_.application_user_password.as_str());
-            }
-        );
+        let join_handle = Spawner::<TokioBlockingTask>::spawn_processed(move || -> _ {
+            return Encoder::<ApplicationUser_Password>::encode(incoming_.application_user_password.as_str());
+        });
 
         application_user.password_hash = join_handle.await.convert(Backtrace::new(line!(), file!()))??;
 
@@ -249,22 +221,20 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
 
         let database_2_postgresql_connection_pool_ = database_2_postgresql_connection_pool.clone();
 
-        Spawner::<TokioNonBlockingTask>::spawn_into_background(
-            async move {
-                let database_2_postgresql_pooled_connection_ = database_2_postgresql_connection_pool_.get().await.convert(Backtrace::new(line!(), file!()))?;
+        Spawner::<TokioNonBlockingTask>::spawn_into_background(async move {
+            let database_2_postgresql_pooled_connection_ = database_2_postgresql_connection_pool_.get().await.convert(Backtrace::new(line!(), file!()))?;
 
-                PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete_2(
-                    &*database_2_postgresql_pooled_connection_,
-                    By1_ {
-                        application_user_id: incoming_.application_user_id,
-                        application_user_device_id: incoming_.application_user_device_id.as_str(),
-                    },
-                )
-                .await?;
+            PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete_2(
+                &*database_2_postgresql_pooled_connection_,
+                By1_ {
+                    application_user_id: incoming_.application_user_id,
+                    application_user_device_id: incoming_.application_user_device_id.as_str(),
+                },
+            )
+            .await?;
 
-                return Ok(());
-            }
-        );
+            return Ok(());
+        });
 
         return Ok(Ok(UnifiedReport::target_empty()));
     }

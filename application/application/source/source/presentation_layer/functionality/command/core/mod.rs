@@ -71,17 +71,17 @@
     clippy::zero_sized_map_values
 )]
 
-use std::error::Error as StdError;
-use application::application_layer::functionality::command_processor::CommandProcessor;
-use application::application_layer::functionality::command_processor::run_server::RunServer;
-use application::infrastructure_layer::data::auditor::Backtrace;
-use application::infrastructure_layer::functionality::service::formatter::Formatter;
 use application::application_layer::functionality::command_processor::create_fixtures::CreateFixtures;
 use application::application_layer::functionality::command_processor::remove_incomplite_state::RemoveIncompliteState;
-use application::infrastructure_layer::data::error::Error;
+use application::application_layer::functionality::command_processor::run_server::RunServer;
+use application::application_layer::functionality::command_processor::CommandProcessor;
 use application::infrastructure_layer::data::auditor::Auditor;
+use application::infrastructure_layer::data::auditor::Backtrace;
+use application::infrastructure_layer::data::error::Error;
+use application::infrastructure_layer::functionality::service::formatter::Formatter;
 use clap::command;
 use clap::Command;
+use std::error::Error as StdError;
 
 const RUN_SERVER: &'static str = "run_server";
 const CREATE_FIXTURES: &'static str = "create_fixtures";
@@ -98,12 +98,8 @@ fn main() -> Result<(), Box<dyn StdError + 'static>> {
 }
 
 fn process() -> Result<(), Box<dyn StdError + 'static>> {
-    let arg_matches = command!()
-        .arg_required_else_help(true)
-        .subcommand_required(true)
-        .subcommand(Command::new(RUN_SERVER))
-        .subcommand(Command::new(CREATE_FIXTURES))
-        .get_matches();
+    let arg_matches =
+        command!().arg_required_else_help(true).subcommand_required(true).subcommand(Command::new(RUN_SERVER)).subcommand(Command::new(CREATE_FIXTURES)).get_matches();
 
     let subcommand_arg_matches = match arg_matches.subcommand() {
         Some(subcommand_arg_matches_) => subcommand_arg_matches_,
@@ -116,7 +112,7 @@ fn process() -> Result<(), Box<dyn StdError + 'static>> {
         (RUN_SERVER, _) => {
             let error_auditor_ = match CommandProcessor::<RunServer>::process() {
                 Ok(_) => None,
-                Err(error_auditor__) => Some(error_auditor__)
+                Err(error_auditor__) => Some(error_auditor__),
             };
 
             error_auditor_
@@ -124,7 +120,7 @@ fn process() -> Result<(), Box<dyn StdError + 'static>> {
         (CREATE_FIXTURES, _) => {
             let error_auditor_ = match CommandProcessor::<CreateFixtures>::process() {
                 Ok(_) => None,
-                Err(error_auditor__) => Some(error_auditor__)
+                Err(error_auditor__) => Some(error_auditor__),
             };
 
             error_auditor_
@@ -132,22 +128,15 @@ fn process() -> Result<(), Box<dyn StdError + 'static>> {
         (REMOVE_INCOMPLITE_STATE, _) => {
             let error_auditor_ = match CommandProcessor::<RemoveIncompliteState>::process() {
                 Ok(_) => None,
-                Err(error_auditor__) => Some(error_auditor__)
+                Err(error_auditor__) => Some(error_auditor__),
             };
 
             error_auditor_
         }
-        _ => {
-            Some(
-                Auditor::<Error>::new(
-                    Error::new_runtime_("Unexpexted subcommand.".into()),
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            )
-        }
+        _ => Some(Auditor::<Error>::new(
+            Error::new_runtime_("Unexpexted subcommand.".into()),
+            Backtrace::new(line!(), file!()),
+        )),
     };
 
     match error_auditor {
@@ -276,19 +265,11 @@ fn process() -> Result<(), Box<dyn StdError + 'static>> {
 
 // Убрать Редис.
 
-
 // !!! Количество просмотров (человек посмотрел публикацию) хранить временно, чтобы через неделю моожно было бы еще раз засчитаь за просмотр.
 // Лайки к публикации постоянны.
 
-
 // СДелал оптимизацию запросов для:
 // - application_user_authorization. // ToDo ДОделать остальные. и сделать репозиторий по новым правилам.
-
-
-
-
-
-
 
 // ПОсылка писем через async клиент в бэкграунд таске
 // Auditor<InvalidArgument>

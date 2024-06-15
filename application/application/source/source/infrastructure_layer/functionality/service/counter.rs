@@ -1,7 +1,7 @@
-use crate::infrastructure_layer::data::auditor::Backtrace;
-use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
+use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::auditor::OptionConverter;
+use crate::infrastructure_layer::data::error::Error;
 
 pub struct Counter<T> {
     value: T,

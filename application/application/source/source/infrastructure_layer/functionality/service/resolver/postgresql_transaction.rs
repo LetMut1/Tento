@@ -1,9 +1,9 @@
 use super::Resolver;
-use crate::infrastructure_layer::data::auditor::Backtrace;
-use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
-use tokio_postgres::Client as Connection;
+use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
+use crate::infrastructure_layer::data::error::Error;
+use tokio_postgres::Client as Connection;
 
 pub use crate::infrastructure_layer::data::control_type::PostgresqlTransaction;
 
@@ -39,13 +39,7 @@ impl Resolver<PostgresqlTransaction> {
             }
         }
 
-        connection
-            .execute(
-                query.as_str(),
-                &[],
-            )
-            .await
-            .convert(Backtrace::new(line!(), file!()))?;
+        connection.execute(query.as_str(), &[]).await.convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(Self::new());
     }
@@ -56,13 +50,7 @@ impl Resolver<PostgresqlTransaction> {
     ) -> Result<(), Auditor<Error>> {
         let query = "COMMIT;";
 
-        connection
-            .execute(
-                query,
-                &[],
-            )
-            .await
-            .convert(Backtrace::new(line!(), file!()))?;
+        connection.execute(query, &[]).await.convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(());
     }
@@ -73,13 +61,7 @@ impl Resolver<PostgresqlTransaction> {
     ) -> Result<(), Auditor<Error>> {
         let query = "ROLLBACK;";
 
-        connection
-            .execute(
-                query,
-                &[],
-            )
-            .await
-            .convert(Backtrace::new(line!(), file!()))?;
+        connection.execute(query, &[]).await.convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(());
     }

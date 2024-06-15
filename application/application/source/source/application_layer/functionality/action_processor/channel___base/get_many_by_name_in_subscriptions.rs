@@ -1,18 +1,19 @@
 use crate::application_layer::data::unified_report::UnifiedReport;
+use crate::application_layer::functionality::action_processor::ActionProcessor;
 use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
 use crate::domain_layer::data::entity::channel::Channel_Name;
 use crate::domain_layer::functionality::service::extractor::application_user_access_token::ExtractorResult;
 use crate::domain_layer::functionality::service::extractor::Extractor;
 use crate::domain_layer::functionality::service::validator::Validator;
+use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::Backtrace;
+use crate::infrastructure_layer::data::auditor::ErrorConverter;
+use crate::infrastructure_layer::data::auditor::OptionConverter;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error::Error;
-use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
-use crate::infrastructure_layer::data::auditor::OptionConverter;
-use crate::infrastructure_layer::functionality::repository::postgresql::common::Common1;
 use crate::infrastructure_layer::functionality::repository::postgresql::common::By2;
+use crate::infrastructure_layer::functionality::repository::postgresql::common::Common1;
 use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
@@ -22,12 +23,11 @@ use std::marker::Sync;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
-use crate::application_layer::functionality::action_processor::ActionProcessor;
 
+pub use crate::infrastructure_layer::data::control_type::Channel__Base___GetManyByNameInSubscriptions;
 pub use action_processor_incoming_outcoming::action_processor::channel___base::get_many_by_name_in_subscriptions::Incoming;
 pub use action_processor_incoming_outcoming::action_processor::channel___base::get_many_by_name_in_subscriptions::Outcoming;
 pub use action_processor_incoming_outcoming::action_processor::channel___base::get_many_by_name_in_subscriptions::Precedent;
-pub use crate::infrastructure_layer::data::control_type::Channel__Base___GetManyByNameInSubscriptions;
 
 impl ActionProcessor<Channel__Base___GetManyByNameInSubscriptions> {
     const LIMIT: i16 = 100;
@@ -46,17 +46,26 @@ impl ActionProcessor<Channel__Base___GetManyByNameInSubscriptions> {
     {
         let incoming_ = incoming.convert_value_does_not_exist(Backtrace::new(line!(), file!()))?;
 
-        let application_user_access_token = match Extractor::<ApplicationUserAccessToken<'_>>::extract(environment_configuration, incoming_.application_user_access_token_encrypted.as_str()).await? {
+        let application_user_access_token = match Extractor::<ApplicationUserAccessToken<'_>>::extract(
+            environment_configuration,
+            incoming_.application_user_access_token_encrypted.as_str(),
+        )
+        .await?
+        {
             Ok(extractor_result) => {
                 let application_user_access_token_ = match extractor_result {
                     ExtractorResult::ApplicationUserAccessToken {
                         application_user_access_token: application_user_access_token__,
                     } => application_user_access_token__,
                     ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
-                        return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_AlreadyExpired)));
+                        return Ok(Ok(UnifiedReport::precedent(
+                            Precedent::ApplicationUserAccessToken_AlreadyExpired,
+                        )));
                     }
                     ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
-                        return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList)));
+                        return Ok(Ok(UnifiedReport::precedent(
+                            Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList,
+                        )));
                     }
                 };
 
@@ -68,46 +77,25 @@ impl ActionProcessor<Channel__Base___GetManyByNameInSubscriptions> {
         };
 
         if incoming_.limit <= 0 || incoming_.limit > Self::LIMIT {
-            return Ok(
-                Err(
-                    Auditor::<InvalidArgument>::new(
-                        InvalidArgument,
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                ),
-            );
+            return Ok(Err(Auditor::<InvalidArgument>::new(
+                InvalidArgument,
+                Backtrace::new(line!(), file!()),
+            )));
         }
 
         if !Validator::<Channel_Name>::is_valid(incoming_.channel_name.as_str()) {
-            return Ok(
-                Err(
-                    Auditor::<InvalidArgument>::new(
-                        InvalidArgument,
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                ),
-            );
+            return Ok(Err(Auditor::<InvalidArgument>::new(
+                InvalidArgument,
+                Backtrace::new(line!(), file!()),
+            )));
         }
 
         if let Some(ref requery_channel_name_) = incoming_.requery_channel_name {
             if !Validator::<Channel_Name>::is_valid(requery_channel_name_.as_str()) {
-                return Ok(
-                    Err(
-                        Auditor::<InvalidArgument>::new(
-                            InvalidArgument,
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        ),
-                    ),
-                );
+                return Ok(Err(Auditor::<InvalidArgument>::new(
+                    InvalidArgument,
+                    Backtrace::new(line!(), file!()),
+                )));
             }
         }
 

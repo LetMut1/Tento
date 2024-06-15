@@ -16,8 +16,7 @@ impl EmailSender<ApplicationUserResetPasswordToken<'_>> {
     ) -> Result<(), Auditor<Error>> {
         let message_body = format!(
             "Your code: {} for device {}.",
-            application_user_reset_password_token_value,
-            application_user_device_id,
+            application_user_reset_password_token_value, application_user_device_id,
         );
 
         Sender::<Email>::send(

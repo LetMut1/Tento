@@ -1,9 +1,9 @@
+use serde::Deserialize;
 use serde::Serialize;
 use std::error::Error;
 use std::fmt::Display;
 use std::fmt::Error as FmtError;
 use std::fmt::Formatter;
-use serde::Deserialize;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub enum Void {}

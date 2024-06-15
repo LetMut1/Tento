@@ -1,8 +1,8 @@
 use crate::Common1;
+use common_precedent::CommonPrecedent;
+use macro_rules::r#enum;
 use serde::Deserialize;
 use serde::Serialize;
-use macro_rules::r#enum;
-use common_precedent::CommonPrecedent;
 
 #[derive(Serialize, Deserialize)]
 pub struct Incoming {

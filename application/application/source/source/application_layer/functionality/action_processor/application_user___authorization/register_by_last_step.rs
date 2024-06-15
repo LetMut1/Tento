@@ -1,4 +1,5 @@
 use crate::application_layer::data::unified_report::UnifiedReport;
+use crate::application_layer::functionality::action_processor::ActionProcessor;
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Nickname;
@@ -19,26 +20,26 @@ use crate::domain_layer::functionality::service::encoder::Encoder;
 use crate::domain_layer::functionality::service::form_resolver::FormResolver;
 use crate::domain_layer::functionality::service::generator::Generator;
 use crate::domain_layer::functionality::service::validator::Validator;
+use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::Backtrace;
+use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::data::auditor::OptionConverter;
+use crate::infrastructure_layer::data::control_type::TokioBlockingTask;
+use crate::infrastructure_layer::data::control_type::TokioNonBlockingTask;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error::Error;
-use crate::infrastructure_layer::data::control_type::TokioNonBlockingTask;
-use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::auditor::ErrorConverter;
-use crate::infrastructure_layer::functionality::service::spawner::Spawner;
 use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user::By1;
-use crate::infrastructure_layer::data::control_type::TokioBlockingTask;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user::By2;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user_registration_token::By1 as By1_;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user::Insert1 as ApplicationUserInsert1;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_access_refresh_token::Insert1 as ApplicationUserAccessRefreshTokenInsert1;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_device::Insert1;
+use crate::infrastructure_layer::functionality::repository::postgresql::application_user_registration_token::By1 as By1_;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_registration_token::Update4;
 use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
-use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::unix_time::UnixTime;
+use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
+use crate::infrastructure_layer::functionality::service::spawner::Spawner;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use std::borrow::Cow;
@@ -48,12 +49,11 @@ use std::marker::Sync;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
-use crate::application_layer::functionality::action_processor::ActionProcessor;
 
+pub use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___RegisterByLastStep;
 pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::register_by_last_step::Incoming;
 pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::register_by_last_step::Outcoming;
 pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::register_by_last_step::Precedent;
-pub use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___RegisterByLastStep;
 
 impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
     pub async fn process<'a, T>(
@@ -75,73 +75,38 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
             incoming_.application_user_email.as_str(),
             incoming_.application_user_nickname.as_str(),
         ) {
-            return Ok(
-                Err(
-                    Auditor::<InvalidArgument>::new(
-                        InvalidArgument,
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                ),
-            );
+            return Ok(Err(Auditor::<InvalidArgument>::new(
+                InvalidArgument,
+                Backtrace::new(line!(), file!()),
+            )));
         }
 
         if !Validator::<ApplicationUser_Nickname>::is_valid(incoming_.application_user_nickname.as_str()) {
-            return Ok(
-                Err(
-                    Auditor::<InvalidArgument>::new(
-                        InvalidArgument,
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                ),
-            );
+            return Ok(Err(Auditor::<InvalidArgument>::new(
+                InvalidArgument,
+                Backtrace::new(line!(), file!()),
+            )));
         }
 
         if !Validator::<ApplicationUser_Email>::is_valid(incoming_.application_user_email.as_str())? {
-            return Ok(
-                Err(
-                    Auditor::<InvalidArgument>::new(
-                        InvalidArgument,
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                ),
-            );
+            return Ok(Err(Auditor::<InvalidArgument>::new(
+                InvalidArgument,
+                Backtrace::new(line!(), file!()),
+            )));
         }
 
         if !Validator::<ApplicationUserRegistrationToken_Value>::is_valid(incoming_.application_user_registration_token_value.as_str())? {
-            return Ok(
-                Err(
-                    Auditor::<InvalidArgument>::new(
-                        InvalidArgument,
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                ),
-            );
+            return Ok(Err(Auditor::<InvalidArgument>::new(
+                InvalidArgument,
+                Backtrace::new(line!(), file!()),
+            )));
         }
 
         if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming_.application_user_device_id.as_str()) {
-            return Ok(
-                Err(
-                    Auditor::<InvalidArgument>::new(
-                        InvalidArgument,
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                ),
-            );
+            return Ok(Err(Auditor::<InvalidArgument>::new(
+                InvalidArgument,
+                Backtrace::new(line!(), file!()),
+            )));
         }
 
         let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
@@ -156,7 +121,9 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
         )
         .await?
         {
-            return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUser_NicknameAlreadyExist)));
+            return Ok(Ok(UnifiedReport::precedent(
+                Precedent::ApplicationUser_NicknameAlreadyExist,
+            )));
         }
 
         if PostgresqlRepository::<ApplicationUser<'_>>::is_exist_2(
@@ -167,7 +134,9 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
         )
         .await?
         {
-            return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUser_EmailAlreadyExist)));
+            return Ok(Ok(UnifiedReport::precedent(
+                Precedent::ApplicationUser_EmailAlreadyExist,
+            )));
         }
 
         let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
@@ -185,7 +154,9 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
         {
             Some(application_user_registration_token_) => application_user_registration_token_,
             None => {
-                return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_NotFound)));
+                return Ok(Ok(UnifiedReport::precedent(
+                    Precedent::ApplicationUserRegistrationToken_NotFound,
+                )));
             }
         };
 
@@ -199,17 +170,20 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
             )
             .await?;
 
-            return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_AlreadyExpired)));
+            return Ok(Ok(UnifiedReport::precedent(
+                Precedent::ApplicationUserRegistrationToken_AlreadyExpired,
+            )));
         }
 
         if !application_user_registration_token.is_approved {
-            return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_IsNotApproved)));
+            return Ok(Ok(UnifiedReport::precedent(
+                Precedent::ApplicationUserRegistrationToken_IsNotApproved,
+            )));
         }
 
         if application_user_registration_token.value != incoming_.application_user_registration_token_value {
-            application_user_registration_token.wrong_enter_tries_quantity = application_user_registration_token.wrong_enter_tries_quantity
-            .checked_add(1)
-            .convert_out_of_range(Backtrace::new(line!(), file!()))?;
+            application_user_registration_token.wrong_enter_tries_quantity =
+                application_user_registration_token.wrong_enter_tries_quantity.checked_add(1).convert_out_of_range(Backtrace::new(line!(), file!()))?;
 
             if application_user_registration_token.wrong_enter_tries_quantity < ApplicationUserRegistrationToken_WrongEnterTriesQuantity::LIMIT {
                 PostgresqlRepository::<ApplicationUserRegistrationToken>::update_4(
@@ -234,14 +208,14 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
                 .await?;
             }
 
-            return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_WrongValue)));
+            return Ok(Ok(UnifiedReport::precedent(
+                Precedent::ApplicationUserRegistrationToken_WrongValue,
+            )));
         }
 
-        let join_handle = Spawner::<TokioBlockingTask>::spawn_processed(
-            move || -> _ {
-                return Encoder::<ApplicationUser_Password>::encode(incoming_.application_user_password.as_str());
-            }
-        );
+        let join_handle = Spawner::<TokioBlockingTask>::spawn_processed(move || -> _ {
+            return Encoder::<ApplicationUser_Password>::encode(incoming_.application_user_password.as_str());
+        });
 
         let application_user = PostgresqlRepository::<ApplicationUser<'_>>::create_1(
             database_1_postgresql_connection,
@@ -260,7 +234,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
             Generator::<ApplicationUserAccessToken_ExpiresAt>::generate()?,
         );
 
-// TODO  TRANZACTION посмотреть, необходимо ли здесь сделать транзакцию
+        // TODO  TRANZACTION посмотреть, необходимо ли здесь сделать транзакцию
         let application_user_access_refresh_token = PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::create_1(
             database_2_postgresql_connection,
             ApplicationUserAccessRefreshTokenInsert1 {
@@ -276,39 +250,40 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
 
         let application_user_access_token_encrypted = FormResolver::<ApplicationUserAccessToken<'_>>::to_encrypted(environment_configuration, &application_user_access_token)?;
 
-        let application_user_access_refresh_token_encrypted = FormResolver::<ApplicationUserAccessRefreshToken<'_>>::to_encrypted(environment_configuration, &application_user_access_refresh_token)?;
+        let application_user_access_refresh_token_encrypted = FormResolver::<ApplicationUserAccessRefreshToken<'_>>::to_encrypted(
+            environment_configuration,
+            &application_user_access_refresh_token,
+        )?;
 
         let database_1_postgresql_connection_pool_ = database_1_postgresql_connection_pool.clone();
 
         let database_2_postgresql_connection_pool_ = database_2_postgresql_connection_pool.clone();
 
-        Spawner::<TokioNonBlockingTask>::spawn_into_background(
-            async move {
-                let database_1_postgresql_pooled_connection_ = database_1_postgresql_connection_pool_.get().await.convert(Backtrace::new(line!(), file!()))?;
+        Spawner::<TokioNonBlockingTask>::spawn_into_background(async move {
+            let database_1_postgresql_pooled_connection_ = database_1_postgresql_connection_pool_.get().await.convert(Backtrace::new(line!(), file!()))?;
 
-                let application_user_device = PostgresqlRepository::<ApplicationUserDevice>::create_1(
-                    &*database_1_postgresql_pooled_connection_,
-                    Insert1 {
-                        application_user_device_id: incoming_.application_user_device_id,
-                        application_user_id: application_user.id,
-                    },
-                )
-                .await?;
+            let application_user_device = PostgresqlRepository::<ApplicationUserDevice>::create_1(
+                &*database_1_postgresql_pooled_connection_,
+                Insert1 {
+                    application_user_device_id: incoming_.application_user_device_id,
+                    application_user_id: application_user.id,
+                },
+            )
+            .await?;
 
-                let database_2_postgresql_pooled_connection_ = database_2_postgresql_connection_pool_.get().await.convert(Backtrace::new(line!(), file!()))?;
+            let database_2_postgresql_pooled_connection_ = database_2_postgresql_connection_pool_.get().await.convert(Backtrace::new(line!(), file!()))?;
 
-                PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete_2(
-                    &*database_2_postgresql_pooled_connection_,
-                    By1_ {
-                        application_user_email: application_user.email.as_str(),
-                        application_user_device_id: application_user_device.id.as_str(),
-                    }
-                )
-                .await?;
+            PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete_2(
+                &*database_2_postgresql_pooled_connection_,
+                By1_ {
+                    application_user_email: application_user.email.as_str(),
+                    application_user_device_id: application_user_device.id.as_str(),
+                },
+            )
+            .await?;
 
-                return Ok(());
-            }
-        );
+            return Ok(());
+        });
 
         let outcoming = Outcoming {
             application_user_access_token_encrypted,

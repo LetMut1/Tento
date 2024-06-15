@@ -1,12 +1,12 @@
 use super::PostgresqlRepository;
-use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken;
 use crate::domain_layer::data::entity::application_user_authorization_token::derivative::ApplicationUserAuthorizationToken1;
 use crate::domain_layer::data::entity::application_user_authorization_token::derivative::ApplicationUserAuthorizationToken2;
 use crate::domain_layer::data::entity::application_user_authorization_token::derivative::ApplicationUserAuthorizationToken3;
-use crate::infrastructure_layer::data::auditor::Backtrace;
-use crate::infrastructure_layer::data::error::Error;
+use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken;
 use crate::infrastructure_layer::data::auditor::Auditor;
+use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
+use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 use std::borrow::Cow;
 use tokio_postgres::types::Type;
@@ -39,18 +39,9 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
             );";
 
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(
-                &insert_1.application_user_id,
-                Type::INT8,
-            )
-            .add_parameter(
-                &insert_1.application_user_device_id,
-                Type::TEXT,
-            )
-            .add_parameter(
-                &application_user_authorization_token_value,
-                Type::TEXT,
-            )
+            .add_parameter(&insert_1.application_user_id, Type::INT8)
+            .add_parameter(&insert_1.application_user_device_id, Type::TEXT)
+            .add_parameter(&application_user_authorization_token_value, Type::TEXT)
             .add_parameter(
                 &insert_1.application_user_authorization_token_wrong_enter_tries_quantity,
                 Type::INT2,
@@ -80,16 +71,14 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
             .await
             .convert(Backtrace::new(line!(), file!()))?;
 
-        return Ok(
-            ApplicationUserAuthorizationToken::new(
-                insert_1.application_user_id,
-                Cow::Borrowed(insert_1.application_user_device_id),
-                insert_1.application_user_authorization_token_value,
-                insert_1.application_user_authorization_token_wrong_enter_tries_quantity,
-                insert_1.application_user_authorization_token_expires_at,
-                insert_1.application_user_authorization_token_can_be_resent_from,
-            ),
-        );
+        return Ok(ApplicationUserAuthorizationToken::new(
+            insert_1.application_user_id,
+            Cow::Borrowed(insert_1.application_user_device_id),
+            insert_1.application_user_authorization_token_value,
+            insert_1.application_user_authorization_token_wrong_enter_tries_quantity,
+            insert_1.application_user_authorization_token_expires_at,
+            insert_1.application_user_authorization_token_can_be_resent_from,
+        ));
     }
 
     pub async fn delete_1<'a>(
@@ -102,15 +91,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
             DELETE FROM ONLY public.application_user_authorization_token AS auat \
             WHERE auat.application_user_id = $1 AND auat.application_user_device_id = $2;";
 
-        prepared_statemant_parameter_convertation_resolver
-            .add_parameter(
-                &by_1.application_user_id,
-                Type::INT8,
-            )
-            .add_parameter(
-                &by_1.application_user_device_id,
-                Type::TEXT,
-            );
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&by_1.application_user_id, Type::INT8).add_parameter(&by_1.application_user_device_id, Type::TEXT);
 
         let statement = database_2_connection
             .prepare_typed(
@@ -170,14 +151,8 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                 &update_1.application_user_authorization_token_can_be_resent_from,
                 Type::INT8,
             )
-            .add_parameter(
-                &by_1.application_user_id,
-                Type::INT8,
-            )
-            .add_parameter(
-                &by_1.application_user_device_id,
-                Type::TEXT,
-            );
+            .add_parameter(&by_1.application_user_id, Type::INT8)
+            .add_parameter(&by_1.application_user_device_id, Type::TEXT);
 
         let statement = database_2_connection
             .prepare_typed(
@@ -231,14 +206,8 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                 &update_2.application_user_authorization_token_expires_at,
                 Type::INT8,
             )
-            .add_parameter(
-                &by_1.application_user_id,
-                Type::INT8,
-            )
-            .add_parameter(
-                &by_1.application_user_device_id,
-                Type::TEXT,
-            );
+            .add_parameter(&by_1.application_user_id, Type::INT8)
+            .add_parameter(&by_1.application_user_device_id, Type::TEXT);
 
         let statement = database_2_connection
             .prepare_typed(
@@ -280,14 +249,8 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                 &update_3.application_user_authorization_token_can_be_resent_from,
                 Type::INT8,
             )
-            .add_parameter(
-                &by_1.application_user_id,
-                Type::INT8,
-            )
-            .add_parameter(
-                &by_1.application_user_device_id,
-                Type::TEXT,
-            );
+            .add_parameter(&by_1.application_user_id, Type::INT8)
+            .add_parameter(&by_1.application_user_device_id, Type::TEXT);
 
         let statement = database_2_connection
             .prepare_typed(
@@ -329,14 +292,8 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                 &update_4.application_user_authorization_token_wrong_enter_tries_quantity,
                 Type::INT2,
             )
-            .add_parameter(
-                &by_1.application_user_id,
-                Type::INT8,
-            )
-            .add_parameter(
-                &by_1.application_user_device_id,
-                Type::TEXT,
-            );
+            .add_parameter(&by_1.application_user_id, Type::INT8)
+            .add_parameter(&by_1.application_user_device_id, Type::TEXT);
 
         let statement = database_2_connection
             .prepare_typed(
@@ -372,15 +329,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
             FROM public.application_user_authorization_token auat \
             WHERE auat.application_user_id = $1 AND auat.application_user_device_id = $2;";
 
-        prepared_statemant_parameter_convertation_resolver
-            .add_parameter(
-                &by_1.application_user_id,
-                Type::INT8,
-            )
-            .add_parameter(
-                &by_1.application_user_device_id,
-                Type::TEXT,
-            );
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&by_1.application_user_id, Type::INT8).add_parameter(&by_1.application_user_device_id, Type::TEXT);
 
         let statement = database_2_connection
             .prepare_typed(
@@ -402,16 +351,12 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
             return Ok(None);
         }
 
-        return Ok(
-            Some(
-                ApplicationUserAuthorizationToken1 {
-                    value: row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
-                    wrong_enter_tries_quantity: row_registry[0].try_get::<'_, usize, i16>(1).convert(Backtrace::new(line!(), file!()))?,
-                    expires_at: row_registry[0].try_get::<'_, usize, i64>(2).convert(Backtrace::new(line!(), file!()))?,
-                    can_be_resent_from: row_registry[0].try_get::<'_, usize, i64>(3).convert(Backtrace::new(line!(), file!()))?,
-                },
-            ),
-        );
+        return Ok(Some(ApplicationUserAuthorizationToken1 {
+            value: row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
+            wrong_enter_tries_quantity: row_registry[0].try_get::<'_, usize, i16>(1).convert(Backtrace::new(line!(), file!()))?,
+            expires_at: row_registry[0].try_get::<'_, usize, i64>(2).convert(Backtrace::new(line!(), file!()))?,
+            can_be_resent_from: row_registry[0].try_get::<'_, usize, i64>(3).convert(Backtrace::new(line!(), file!()))?,
+        }));
     }
 
     pub async fn find_2<'a>(
@@ -428,15 +373,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
             FROM public.application_user_authorization_token auat \
             WHERE auat.application_user_id = $1 AND auat.application_user_device_id = $2;";
 
-        prepared_statemant_parameter_convertation_resolver
-            .add_parameter(
-                &by_1.application_user_id,
-                Type::INT8,
-            )
-            .add_parameter(
-                &by_1.application_user_device_id,
-                Type::TEXT,
-            );
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&by_1.application_user_id, Type::INT8).add_parameter(&by_1.application_user_device_id, Type::TEXT);
 
         let statement = database_2_connection
             .prepare_typed(
@@ -458,15 +395,11 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
             return Ok(None);
         }
 
-        return Ok(
-            Some(
-                ApplicationUserAuthorizationToken2 {
-                    value: row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
-                    wrong_enter_tries_quantity: row_registry[0].try_get::<'_, usize, i16>(1).convert(Backtrace::new(line!(), file!()))?,
-                    expires_at: row_registry[0].try_get::<'_, usize, i64>(2).convert(Backtrace::new(line!(), file!()))?,
-                },
-            ),
-        );
+        return Ok(Some(ApplicationUserAuthorizationToken2 {
+            value: row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
+            wrong_enter_tries_quantity: row_registry[0].try_get::<'_, usize, i16>(1).convert(Backtrace::new(line!(), file!()))?,
+            expires_at: row_registry[0].try_get::<'_, usize, i64>(2).convert(Backtrace::new(line!(), file!()))?,
+        }));
     }
 
     pub async fn find_3<'a>(
@@ -483,15 +416,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
             FROM public.application_user_authorization_token auat \
             WHERE auat.application_user_id = $1 AND auat.application_user_device_id = $2;";
 
-        prepared_statemant_parameter_convertation_resolver
-            .add_parameter(
-                &by_1.application_user_id,
-                Type::INT8,
-            )
-            .add_parameter(
-                &by_1.application_user_device_id,
-                Type::TEXT,
-            );
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&by_1.application_user_id, Type::INT8).add_parameter(&by_1.application_user_device_id, Type::TEXT);
 
         let statement = database_2_connection
             .prepare_typed(
@@ -513,15 +438,11 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
             return Ok(None);
         }
 
-        return Ok(
-            Some(
-                ApplicationUserAuthorizationToken3 {
-                    value: row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
-                    expires_at: row_registry[0].try_get::<'_, usize, i64>(1).convert(Backtrace::new(line!(), file!()))?,
-                    can_be_resent_from: row_registry[0].try_get::<'_, usize, i64>(2).convert(Backtrace::new(line!(), file!()))?,
-                },
-            ),
-        );
+        return Ok(Some(ApplicationUserAuthorizationToken3 {
+            value: row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
+            expires_at: row_registry[0].try_get::<'_, usize, i64>(1).convert(Backtrace::new(line!(), file!()))?,
+            can_be_resent_from: row_registry[0].try_get::<'_, usize, i64>(2).convert(Backtrace::new(line!(), file!()))?,
+        }));
     }
 }
 

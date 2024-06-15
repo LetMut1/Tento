@@ -1,4 +1,5 @@
 use crate::application_layer::data::unified_report::UnifiedReport;
+use crate::application_layer::functionality::action_processor::ActionProcessor;
 use crate::domain_layer::data::entity::application_user::ApplicationUser;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Nickname;
@@ -13,14 +14,13 @@ use crate::domain_layer::functionality::service::email_sender::EmailSender;
 use crate::domain_layer::functionality::service::encoder::Encoder;
 use crate::domain_layer::functionality::service::generator::Generator;
 use crate::domain_layer::functionality::service::validator::Validator;
-use crate::infrastructure_layer::data::auditor::Backtrace;
-use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
-use crate::infrastructure_layer::data::error::Error;
-use crate::infrastructure_layer::data::control_type::TokioBlockingTask;
-use crate::infrastructure_layer::functionality::service::spawner::Spawner;
 use crate::infrastructure_layer::data::auditor::Auditor;
+use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::data::auditor::OptionConverter;
+use crate::infrastructure_layer::data::control_type::TokioBlockingTask;
+use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
+use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user::By1;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user::By2;
@@ -30,8 +30,9 @@ use crate::infrastructure_layer::functionality::repository::postgresql::applicat
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_authorization_token::Update2;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_authorization_token::Update3;
 use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
-use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::unix_time::UnixTime;
+use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
+use crate::infrastructure_layer::functionality::service::spawner::Spawner;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use std::clone::Clone;
@@ -39,13 +40,12 @@ use std::marker::Send;
 use std::marker::Sync;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
-use crate::application_layer::functionality::action_processor::ActionProcessor;
 use tokio_postgres::Socket;
 
+pub use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___AuthorizeByFirstStep;
 pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::authorize_by_first_step::Incoming;
 pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::authorize_by_first_step::Outcoming;
 pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::authorize_by_first_step::Precedent;
-pub use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___AuthorizeByFirstStep;
 
 impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
     pub async fn process<'a, T>(
@@ -64,31 +64,17 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
         let incoming_ = incoming.convert_value_does_not_exist(Backtrace::new(line!(), file!()))?;
 
         if !Validator::<ApplicationUser_Password>::is_valid_part_1(incoming_.application_user_password.as_str()) {
-            return Ok(
-                Err(
-                    Auditor::<InvalidArgument>::new(
-                        InvalidArgument,
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                ),
-            );
+            return Ok(Err(Auditor::<InvalidArgument>::new(
+                InvalidArgument,
+                Backtrace::new(line!(), file!()),
+            )));
         }
 
         if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming_.application_user_device_id.as_str()) {
-            return Ok(
-                Err(
-                    Auditor::<InvalidArgument>::new(
-                        InvalidArgument,
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                ),
-            );
+            return Ok(Err(Auditor::<InvalidArgument>::new(
+                InvalidArgument,
+                Backtrace::new(line!(), file!()),
+            )));
         }
 
         let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
@@ -96,34 +82,11 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
         let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
 
         let (application_user_id, application_user_email, application_user_nickname, application_user_password_hash) =
-        if Validator::<ApplicationUser_Email>::is_valid(incoming_.application_user_email_or_application_user_nickname.as_str())? {
-            let application_user_ = PostgresqlRepository::<ApplicationUser>::find_3(
-                database_1_postgresql_connection,
-                By2 {
-                    application_user_email: incoming_.application_user_email_or_application_user_nickname.as_str(),
-                },
-            )
-            .await?;
-
-            let application_user__ = match application_user_ {
-                Some(application_user___) => application_user___,
-                None => {
-                    return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUser_WrongEmailOrNicknameOrPassword)));
-                }
-            };
-
-            (
-                application_user__.id,
-                incoming_.application_user_email_or_application_user_nickname,
-                application_user__.nickname,
-                application_user__.password_hash,
-            )
-        } else {
-            if Validator::<ApplicationUser_Nickname>::is_valid(incoming_.application_user_email_or_application_user_nickname.as_str()) {
-                let application_user_ = PostgresqlRepository::<ApplicationUser>::find_2(
+            if Validator::<ApplicationUser_Email>::is_valid(incoming_.application_user_email_or_application_user_nickname.as_str())? {
+                let application_user_ = PostgresqlRepository::<ApplicationUser>::find_3(
                     database_1_postgresql_connection,
-                    By1 {
-                        application_user_nickname: incoming_.application_user_email_or_application_user_nickname.as_str(),
+                    By2 {
+                        application_user_email: incoming_.application_user_email_or_application_user_nickname.as_str(),
                     },
                 )
                 .await?;
@@ -131,67 +94,85 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                 let application_user__ = match application_user_ {
                     Some(application_user___) => application_user___,
                     None => {
-                        return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUser_WrongEmailOrNicknameOrPassword)));
+                        return Ok(Ok(UnifiedReport::precedent(
+                            Precedent::ApplicationUser_WrongEmailOrNicknameOrPassword,
+                        )));
                     }
                 };
 
                 (
                     application_user__.id,
-                    application_user__.email,
                     incoming_.application_user_email_or_application_user_nickname,
+                    application_user__.nickname,
                     application_user__.password_hash,
                 )
             } else {
-                return Ok(
-                    Err(
-                        Auditor::<InvalidArgument>::new(
-                            InvalidArgument,
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        ),
-                    ),
-                );
-            }
-        };
+                if Validator::<ApplicationUser_Nickname>::is_valid(incoming_.application_user_email_or_application_user_nickname.as_str()) {
+                    let application_user_ = PostgresqlRepository::<ApplicationUser>::find_2(
+                        database_1_postgresql_connection,
+                        By1 {
+                            application_user_nickname: incoming_.application_user_email_or_application_user_nickname.as_str(),
+                        },
+                    )
+                    .await?;
+
+                    let application_user__ = match application_user_ {
+                        Some(application_user___) => application_user___,
+                        None => {
+                            return Ok(Ok(UnifiedReport::precedent(
+                                Precedent::ApplicationUser_WrongEmailOrNicknameOrPassword,
+                            )));
+                        }
+                    };
+
+                    (
+                        application_user__.id,
+                        application_user__.email,
+                        incoming_.application_user_email_or_application_user_nickname,
+                        application_user__.password_hash,
+                    )
+                } else {
+                    return Ok(Err(Auditor::<InvalidArgument>::new(
+                        InvalidArgument,
+                        Backtrace::new(line!(), file!()),
+                    )));
+                }
+            };
 
         if !Validator::<ApplicationUser_Password>::is_valid_part_2(
             incoming_.application_user_password.as_str(),
             application_user_email.as_str(),
             application_user_nickname.as_str(),
         ) {
-            return Ok(
-                Err(
-                    Auditor::<InvalidArgument>::new(
-                        InvalidArgument,
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                ),
-            );
+            return Ok(Err(Auditor::<InvalidArgument>::new(
+                InvalidArgument,
+                Backtrace::new(line!(), file!()),
+            )));
         }
 
-        let join_handle = Spawner::<TokioBlockingTask>::spawn_processed(
-            move || -> _ {
-                return Encoder::<ApplicationUser_Password>::is_valid(
-                    incoming_.application_user_password.as_str(),
-                    application_user_password_hash.as_str(),
-                );
-            }
-        );
+        let join_handle = Spawner::<TokioBlockingTask>::spawn_processed(move || -> _ {
+            return Encoder::<ApplicationUser_Password>::is_valid(
+                incoming_.application_user_password.as_str(),
+                application_user_password_hash.as_str(),
+            );
+        });
 
         if !join_handle.await.convert(Backtrace::new(line!(), file!()))?? {
-            return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUser_WrongEmailOrNicknameOrPassword)));
+            return Ok(Ok(UnifiedReport::precedent(
+                Precedent::ApplicationUser_WrongEmailOrNicknameOrPassword,
+            )));
         }
 
         let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
 
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
 
-        let (application_user_authorization_token_value, application_user_authorization_token_can_be_resent_from, application_user_authorization_token_wrong_enter_tries_quantity, can_send) = match PostgresqlRepository::<ApplicationUserAuthorizationToken>::find_1(
+        let (
+            application_user_authorization_token_value,
+            application_user_authorization_token_can_be_resent_from,
+            application_user_authorization_token_wrong_enter_tries_quantity,
+            can_send,
+        ) = match PostgresqlRepository::<ApplicationUserAuthorizationToken>::find_1(
             database_2_postgresql_connection,
             By1_ {
                 application_user_id,
@@ -204,13 +185,9 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                 let (can_send_, need_to_update_1) = if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token.can_be_resent_from) {
                     application_user_authorization_token.can_be_resent_from = Generator::<ApplicationUserAuthorizationToken_CanBeResentFrom>::generate()?;
 
-                    (
-                        true, true,
-                    )
+                    (true, true)
                 } else {
-                    (
-                        false, false,
-                    )
+                    (false, false)
                 };
 
                 let need_to_update_2 = if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token.expires_at) {

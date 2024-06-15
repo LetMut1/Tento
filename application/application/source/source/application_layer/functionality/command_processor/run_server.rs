@@ -1,16 +1,8 @@
-use crate::infrastructure_layer::data::control_type::Request;
-use crate::infrastructure_layer::data::control_type::Response;
-use crate::infrastructure_layer::data::auditor::Backtrace;
-use crate::infrastructure_layer::data::error::Error;
+use super::CommandProcessor;
 use crate::infrastructure_layer::data::auditor::Auditor;
+use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
-use crate::infrastructure_layer::data::void::Void;
-use crate::infrastructure_layer::functionality::service::creator::Creator;
-use crate::infrastructure_layer::functionality::service::creator::postgresql_connection_pool::PostgresqlConnectionPoolNoTls;
-use crate::infrastructure_layer::functionality::service::logger::Logger;
-use crate::presentation_layer::data::action_route::ActionRoute_;
-use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
-use bb8::Pool;
+use crate::infrastructure_layer::data::auditor::OptionConverter;
 use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___AuthorizeByFirstStep;
 use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___AuthorizeByLastStep;
 use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___CheckEmailForExisting;
@@ -27,16 +19,29 @@ use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorizat
 use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___SendEmailForAuthorize;
 use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___SendEmailForRegister;
 use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___SendEmailForResetPassword;
+use crate::infrastructure_layer::data::control_type::ChannelSubscription__Base___Create;
 use crate::infrastructure_layer::data::control_type::Channel__Base___GetManyByNameInSubscriptions;
 use crate::infrastructure_layer::data::control_type::Channel__Base___GetManyBySubscription;
 use crate::infrastructure_layer::data::control_type::Channel__Base___GetManyPublicByName;
 use crate::infrastructure_layer::data::control_type::Channel__Base___GetOneById;
-use crate::infrastructure_layer::data::control_type::ChannelSubscription__Base___Create;
+use crate::infrastructure_layer::data::control_type::Request;
+use crate::infrastructure_layer::data::control_type::Response;
 use crate::infrastructure_layer::data::control_type::RouteNotFound;
-use crate::presentation_layer::data::action_route::ACTION_ROUTE;
+use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
+use crate::infrastructure_layer::data::error::Error;
+use crate::infrastructure_layer::data::void::Void;
+use crate::infrastructure_layer::functionality::service::creator::postgresql_connection_pool::PostgresqlConnectionPoolNoTls;
+use crate::infrastructure_layer::functionality::service::creator::Creator;
+use crate::infrastructure_layer::functionality::service::loader::Loader;
+use crate::infrastructure_layer::functionality::service::logger::Logger;
+use crate::presentation_layer::data::action_route::ActionRoute_;
 use crate::presentation_layer::data::action_route::ApplicationUser__Authorization_;
-use crate::presentation_layer::data::action_route::Channel__Base_;
 use crate::presentation_layer::data::action_route::ChannelSubscription__Base_;
+use crate::presentation_layer::data::action_route::Channel__Base_;
+use crate::presentation_layer::data::action_route::ACTION_ROUTE;
+use crate::presentation_layer::functionality::action::Action;
+use bb8::Pool;
+use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use hyper::server::conn::AddrStream;
 use hyper::Method;
 use hyper::Server;
@@ -44,27 +49,22 @@ use matchit::Router;
 use std::clone::Clone;
 use std::future::Future;
 use std::marker::Send;
-use crate::presentation_layer::functionality::action::Action;
 use std::marker::Sync;
 use std::net::ToSocketAddrs;
 use std::sync::Arc;
+use std::sync::OnceLock;
 use std::time::Duration;
 use tokio::runtime::Builder;
 use tokio::signal::unix::SignalKind;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
-use super::CommandProcessor;
-use tracing_appender::rolling::Rotation;
-use tracing_appender::rolling::RollingFileAppender;
-use tracing_appender::non_blocking::NonBlockingBuilder;
-use tracing_subscriber::FmtSubscriber;
 use tracing::Level;
-use crate::infrastructure_layer::data::auditor::OptionConverter;
-use std::sync::OnceLock;
+use tracing_appender::non_blocking::NonBlockingBuilder;
 use tracing_appender::non_blocking::WorkerGuard;
-use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
-use crate::infrastructure_layer::functionality::service::loader::Loader;
+use tracing_appender::rolling::RollingFileAppender;
+use tracing_appender::rolling::Rotation;
+use tracing_subscriber::FmtSubscriber;
 
 #[cfg(not(feature = "file_log"))]
 use std::io::stdout;
@@ -77,7 +77,7 @@ impl CommandProcessor<RunServer> {
     const QUANTITY_OF_SECONDS_FOR_RERUN_SERVING: u64 = 1;
 
     pub fn process() -> Result<(), Auditor<Error>> {
-        let environment_configuration = Self:: initialize_environment()?;
+        let environment_configuration = Self::initialize_environment()?;
 
         let _worker_guard = Self::initialize_logger(environment_configuration)?;
 
@@ -96,32 +96,22 @@ impl CommandProcessor<RunServer> {
 
         match ENVIRONMENT_CONFIGURATION.get() {
             Some(_) => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::new_logic_value_already_exist(),
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
+                return Err(Auditor::<Error>::new(
+                    Error::new_logic_value_already_exist(),
+                    Backtrace::new(line!(), file!()),
+                ));
             }
             None => {
                 if let Err(_) = ENVIRONMENT_CONFIGURATION.set(environment_configuration) {
-                    return Err(
-                        Auditor::<Error>::new(
-                            Error::new_logic_value_already_exist(),
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        ),
-                    );
+                    return Err(Auditor::<Error>::new(
+                        Error::new_logic_value_already_exist(),
+                        Backtrace::new(line!(), file!()),
+                    ));
                 }
             }
         }
 
-        return Ok(ENVIRONMENT_CONFIGURATION.get().convert_value_does_not_exist(Backtrace::new(line!(),file!()))?);
+        return Ok(ENVIRONMENT_CONFIGURATION.get().convert_value_does_not_exist(Backtrace::new(line!(), file!()))?);
     }
 
     fn initialize_logger<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<WorkerGuard, Auditor<Error>> {
@@ -165,17 +155,12 @@ impl CommandProcessor<RunServer> {
             || environment_configuration.tokio_runtime.worker_threads_quantity == 0
             || environment_configuration.tokio_runtime.worker_thread_stack_size < (1024 * 1024)
         {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Logic {
-                        message: "Invalid Tokio runtime configuration.",
-                    },
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
+            return Err(Auditor::<Error>::new(
+                Error::Logic {
+                    message: "Invalid Tokio runtime configuration.",
+                },
+                Backtrace::new(line!(), file!()),
+            ));
         }
 
         Builder::new_multi_thread()
@@ -195,7 +180,10 @@ impl CommandProcessor<RunServer> {
             if let Err(error_auditor) = Self::serve_2(environment_configuration).await {
                 Logger::<Auditor<Error>>::log(&error_auditor);
 
-                tokio::time::sleep(Duration::from_secs(Self::QUANTITY_OF_SECONDS_FOR_RERUN_SERVING)).await;
+                tokio::time::sleep(Duration::from_secs(
+                    Self::QUANTITY_OF_SECONDS_FOR_RERUN_SERVING,
+                ))
+                .await;
 
                 continue 'a;
             }
@@ -210,22 +198,18 @@ impl CommandProcessor<RunServer> {
         let router = Self::create_router()?;
 
         // TODO TODO в Env
-        let mut application_http_socket_address_registry = environment_configuration.application_server.tcp.socket_address.to_socket_addrs().convert(Backtrace::new(line!(), file!()))?;
+        let mut application_http_socket_address_registry =
+            environment_configuration.application_server.tcp.socket_address.to_socket_addrs().convert(Backtrace::new(line!(), file!()))?;
 
         let application_http_socket_address = match application_http_socket_address_registry.next() {
             Some(application_http_socket_address_) => application_http_socket_address_,
             None => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Logic {
-                            message: "Invalid socket address.",
-                        },
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
+                return Err(Auditor::<Error>::new(
+                    Error::Logic {
+                        message: "Invalid socket address.",
+                    },
+                    Backtrace::new(line!(), file!()),
+                ));
             }
         };
 
@@ -250,10 +234,16 @@ impl CommandProcessor<RunServer> {
             .http2_only(true)
             .http2_max_header_list_size(environment_configuration.application_server.http.maximum_header_list_size)
             .http2_adaptive_window(environment_configuration.application_server.http.adaptive_window)
-            .http2_initial_connection_window_size(Some(environment_configuration.application_server.http.connection_window_size))
-            .http2_initial_stream_window_size(Some(environment_configuration.application_server.http.stream_window_size))
+            .http2_initial_connection_window_size(Some(
+                environment_configuration.application_server.http.connection_window_size,
+            ))
+            .http2_initial_stream_window_size(Some(
+                environment_configuration.application_server.http.stream_window_size,
+            ))
             .http2_max_concurrent_streams(u32::MAX)
-            .http2_max_frame_size(Some(environment_configuration.application_server.http.maximum_frame_size))
+            .http2_max_frame_size(Some(
+                environment_configuration.application_server.http.maximum_frame_size,
+            ))
             .http2_max_send_buf_size(environment_configuration.application_server.http.maximum_sending_buffer_size as usize);
 
         if environment_configuration.application_server.http.enable_connect_protocol {
@@ -261,7 +251,9 @@ impl CommandProcessor<RunServer> {
         };
 
         server_builder = match environment_configuration.application_server.http.keepalive {
-            Some(ref keepalive_) => server_builder.http2_keep_alive_interval(Some(Duration::from_secs(keepalive_.interval_duration))).http2_keep_alive_timeout(Duration::from_secs(keepalive_.timeout_duration)),
+            Some(ref keepalive_) => server_builder
+                .http2_keep_alive_interval(Some(Duration::from_secs(keepalive_.interval_duration)))
+                .http2_keep_alive_timeout(Duration::from_secs(keepalive_.timeout_duration)),
             None => server_builder.http2_keep_alive_interval(None),
         };
 
@@ -279,58 +271,48 @@ impl CommandProcessor<RunServer> {
             server_builder = server_builder.http2_only(false);
         }
 
-        let database_1_postgresql_connection_pool = Creator::<PostgresqlConnectionPoolNoTls>::create_database_1(
-            environment_configuration,
-        )
-        .await?;
+        let database_1_postgresql_connection_pool = Creator::<PostgresqlConnectionPoolNoTls>::create_database_1(environment_configuration).await?;
 
-        let database_2_postgresql_connection_pool = Creator::<PostgresqlConnectionPoolNoTls>::create_database_2(
-            environment_configuration,
-        )
-        .await?;
+        let database_2_postgresql_connection_pool = Creator::<PostgresqlConnectionPoolNoTls>::create_database_2(environment_configuration).await?;
 
         let router_ = Arc::new(router);
 
-        let service = hyper::service::make_service_fn(
-            move |_: &'_ AddrStream| -> _ {
-                let router__ = router_.clone();
+        let service = hyper::service::make_service_fn(move |_: &'_ AddrStream| -> _ {
+            let router__ = router_.clone();
 
-                let database_1_postgresql_connection_pool_ = database_1_postgresql_connection_pool.clone();
+            let database_1_postgresql_connection_pool_ = database_1_postgresql_connection_pool.clone();
 
-                let database_2_postgresql_connection_pool_ = database_2_postgresql_connection_pool.clone();
+            let database_2_postgresql_connection_pool_ = database_2_postgresql_connection_pool.clone();
 
-                let future = async move {
-                    let service_fn = hyper::service::service_fn(
-                        move |request: Request| -> _ {
-                            let router___ = router__.clone();
+            let future = async move {
+                let service_fn = hyper::service::service_fn(move |request: Request| -> _ {
+                    let router___ = router__.clone();
 
-                            let database_1_postgresql_connection_pool__ = database_1_postgresql_connection_pool_.clone();
+                    let database_1_postgresql_connection_pool__ = database_1_postgresql_connection_pool_.clone();
 
-                            let database_2_postgresql_connection_pool__ = database_2_postgresql_connection_pool_.clone();
+                    let database_2_postgresql_connection_pool__ = database_2_postgresql_connection_pool_.clone();
 
-                            let future_ = async move {
-                                let response = Self::resolve(
-                                    environment_configuration,
-                                    router___,
-                                    request,
-                                    &database_1_postgresql_connection_pool__,
-                                    &database_2_postgresql_connection_pool__,
-                                )
-                                .await;
+                    let future_ = async move {
+                        let response = Self::resolve(
+                            environment_configuration,
+                            router___,
+                            request,
+                            &database_1_postgresql_connection_pool__,
+                            &database_2_postgresql_connection_pool__,
+                        )
+                        .await;
 
-                                Ok::<_, Void>(response)
-                            };
+                        Ok::<_, Void>(response)
+                    };
 
-                            return future_;
-                        },
-                    );
+                    return future_;
+                });
 
-                    Ok::<_, Void>(service_fn)
-                };
+                Ok::<_, Void>(service_fn)
+            };
 
-                return future;
-            },
-        );
+            return future;
+        });
 
         let signal_interrupt_future = Self::create_signal(SignalKind::interrupt())?;
 
@@ -347,11 +329,7 @@ impl CommandProcessor<RunServer> {
             }
         };
 
-        server_builder
-            .serve(service)
-            .with_graceful_shutdown(graceful_shutdown_signal_future)
-            .await
-            .convert(Backtrace::new(line!(), file!()))?;
+        server_builder.serve(service).with_graceful_shutdown(graceful_shutdown_signal_future).await.convert(Backtrace::new(line!(), file!()))?;
 
         return Ok(());
     }
@@ -359,343 +337,385 @@ impl CommandProcessor<RunServer> {
     fn create_router() -> Result<Router<ActionRoute_>, Auditor<Error>> {
         let mut router = Router::new();
 
-        router.insert(
-            ACTION_ROUTE.application_user___authorization.check_nickname_for_existing,
-            ActionRoute_::ApplicationUser__Authorization {
-                application_user___authorization: ApplicationUser__Authorization_::CheckNicknameForExisting,
-            },
-        )
-        .convert(Backtrace::new(line!(), file!()))?;
+        router
+            .insert(
+                ACTION_ROUTE.application_user___authorization.check_nickname_for_existing,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::CheckNicknameForExisting,
+                },
+            )
+            .convert(Backtrace::new(line!(), file!()))?;
 
-        router.insert(
-            ACTION_ROUTE.application_user___authorization.check_email_for_existing,
-            ActionRoute_::ApplicationUser__Authorization {
-                application_user___authorization: ApplicationUser__Authorization_::CheckEmailForExisting,
-            },
-        )
-        .convert(Backtrace::new(line!(), file!()))?;
+        router
+            .insert(
+                ACTION_ROUTE.application_user___authorization.check_email_for_existing,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::CheckEmailForExisting,
+                },
+            )
+            .convert(Backtrace::new(line!(), file!()))?;
 
-        router.insert(
-            ACTION_ROUTE.application_user___authorization.regisgter_by_first_step,
-            ActionRoute_::ApplicationUser__Authorization {
-                application_user___authorization: ApplicationUser__Authorization_::RegisterByFirstStep,
-            },
-        )
-        .convert(Backtrace::new(line!(), file!()))?;
+        router
+            .insert(
+                ACTION_ROUTE.application_user___authorization.regisgter_by_first_step,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::RegisterByFirstStep,
+                },
+            )
+            .convert(Backtrace::new(line!(), file!()))?;
 
-        router.insert(
-            ACTION_ROUTE.application_user___authorization.regisgter_by_second_step,
-            ActionRoute_::ApplicationUser__Authorization {
-                application_user___authorization: ApplicationUser__Authorization_::RegisterBySecondStep,
-            },
-        )
-        .convert(Backtrace::new(line!(), file!()))?;
+        router
+            .insert(
+                ACTION_ROUTE.application_user___authorization.regisgter_by_second_step,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::RegisterBySecondStep,
+                },
+            )
+            .convert(Backtrace::new(line!(), file!()))?;
 
-        router.insert(
-            ACTION_ROUTE.application_user___authorization.regisgter_by_last_step,
-            ActionRoute_::ApplicationUser__Authorization {
-                application_user___authorization: ApplicationUser__Authorization_::RegisterByLastStep,
-            },
-        )
-        .convert(Backtrace::new(line!(), file!()))?;
+        router
+            .insert(
+                ACTION_ROUTE.application_user___authorization.regisgter_by_last_step,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::RegisterByLastStep,
+                },
+            )
+            .convert(Backtrace::new(line!(), file!()))?;
 
-        router.insert(
-            ACTION_ROUTE.application_user___authorization.send_email_for_register,
-            ActionRoute_::ApplicationUser__Authorization {
-                application_user___authorization: ApplicationUser__Authorization_::SendEmailForRegister,
-            },
-        )
-        .convert(Backtrace::new(line!(), file!()))?;
+        router
+            .insert(
+                ACTION_ROUTE.application_user___authorization.send_email_for_register,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::SendEmailForRegister,
+                },
+            )
+            .convert(Backtrace::new(line!(), file!()))?;
 
-        router.insert(
-            ACTION_ROUTE.application_user___authorization.authorize_by_first_step,
-            ActionRoute_::ApplicationUser__Authorization {
-                application_user___authorization: ApplicationUser__Authorization_::AuthorizeByFirstStep,
-            },
-        )
-        .convert(Backtrace::new(line!(), file!()))?;
+        router
+            .insert(
+                ACTION_ROUTE.application_user___authorization.authorize_by_first_step,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::AuthorizeByFirstStep,
+                },
+            )
+            .convert(Backtrace::new(line!(), file!()))?;
 
-        router.insert(
-            ACTION_ROUTE.application_user___authorization.authorize_by_last_step,
-            ActionRoute_::ApplicationUser__Authorization {
-                application_user___authorization: ApplicationUser__Authorization_::AuthorizeByLastStep,
-            },
-        )
-        .convert(Backtrace::new(line!(), file!()))?;
+        router
+            .insert(
+                ACTION_ROUTE.application_user___authorization.authorize_by_last_step,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::AuthorizeByLastStep,
+                },
+            )
+            .convert(Backtrace::new(line!(), file!()))?;
 
-        router.insert(
-            ACTION_ROUTE.application_user___authorization.send_email_for_authorize,
-            ActionRoute_::ApplicationUser__Authorization {
-                application_user___authorization: ApplicationUser__Authorization_::SendEmailForAuthorize,
-            },
-        )
-        .convert(Backtrace::new(line!(), file!()))?;
+        router
+            .insert(
+                ACTION_ROUTE.application_user___authorization.send_email_for_authorize,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::SendEmailForAuthorize,
+                },
+            )
+            .convert(Backtrace::new(line!(), file!()))?;
 
-        router.insert(
-            ACTION_ROUTE.application_user___authorization.reset_password_by_first_step,
-            ActionRoute_::ApplicationUser__Authorization {
-                application_user___authorization: ApplicationUser__Authorization_::ResetPasswordByFirstStep,
-            },
-        )
-        .convert(Backtrace::new(line!(), file!()))?;
+        router
+            .insert(
+                ACTION_ROUTE.application_user___authorization.reset_password_by_first_step,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::ResetPasswordByFirstStep,
+                },
+            )
+            .convert(Backtrace::new(line!(), file!()))?;
 
-        router.insert(
-            ACTION_ROUTE.application_user___authorization.reset_password_by_second_step,
-            ActionRoute_::ApplicationUser__Authorization {
-                application_user___authorization: ApplicationUser__Authorization_::ResetPasswordBySecondStep,
-            },
-        )
-        .convert(Backtrace::new(line!(), file!()))?;
+        router
+            .insert(
+                ACTION_ROUTE.application_user___authorization.reset_password_by_second_step,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::ResetPasswordBySecondStep,
+                },
+            )
+            .convert(Backtrace::new(line!(), file!()))?;
 
-        router.insert(
-            ACTION_ROUTE.application_user___authorization.reset_password_by_last_step,
-            ActionRoute_::ApplicationUser__Authorization {
-                application_user___authorization: ApplicationUser__Authorization_::ResetPasswordByLastStep,
-            },
-        )
-        .convert(Backtrace::new(line!(), file!()))?;
+        router
+            .insert(
+                ACTION_ROUTE.application_user___authorization.reset_password_by_last_step,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::ResetPasswordByLastStep,
+                },
+            )
+            .convert(Backtrace::new(line!(), file!()))?;
 
-        router.insert(
-            ACTION_ROUTE.application_user___authorization.send_email_for_reset_password,
-            ActionRoute_::ApplicationUser__Authorization {
-                application_user___authorization: ApplicationUser__Authorization_::SendEmailForResetPassword,
-            },
-        )
-        .convert(Backtrace::new(line!(), file!()))?;
+        router
+            .insert(
+                ACTION_ROUTE.application_user___authorization.send_email_for_reset_password,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::SendEmailForResetPassword,
+                },
+            )
+            .convert(Backtrace::new(line!(), file!()))?;
 
-        router.insert(
-            ACTION_ROUTE.application_user___authorization.refresh_access_token,
-            ActionRoute_::ApplicationUser__Authorization {
-                application_user___authorization: ApplicationUser__Authorization_::RefreshAccessToken,
-            },
-        )
-        .convert(Backtrace::new(line!(), file!()))?;
+        router
+            .insert(
+                ACTION_ROUTE.application_user___authorization.refresh_access_token,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::RefreshAccessToken,
+                },
+            )
+            .convert(Backtrace::new(line!(), file!()))?;
 
-        router.insert(
-            ACTION_ROUTE.application_user___authorization.deauthorize_from_one_device,
-            ActionRoute_::ApplicationUser__Authorization {
-                application_user___authorization: ApplicationUser__Authorization_::DeauthorizeFromOneDevice,
-            },
-        )
-        .convert(Backtrace::new(line!(), file!()))?;
+        router
+            .insert(
+                ACTION_ROUTE.application_user___authorization.deauthorize_from_one_device,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::DeauthorizeFromOneDevice,
+                },
+            )
+            .convert(Backtrace::new(line!(), file!()))?;
 
-        router.insert(
-            ACTION_ROUTE.application_user___authorization.deauthorize_from_all_devices,
-            ActionRoute_::ApplicationUser__Authorization {
-                application_user___authorization: ApplicationUser__Authorization_::DeauthorizeFromAllDevices,
-            },
-        )
-        .convert(Backtrace::new(line!(), file!()))?;
+        router
+            .insert(
+                ACTION_ROUTE.application_user___authorization.deauthorize_from_all_devices,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::DeauthorizeFromAllDevices,
+                },
+            )
+            .convert(Backtrace::new(line!(), file!()))?;
 
-        router.insert(
-            ACTION_ROUTE.channel___base.get_one_by_id,
-            ActionRoute_::Channel__Base {
-                channel___base: Channel__Base_::GetOneById,
-            },
-        )
-        .convert(Backtrace::new(line!(), file!()))?;
+        router
+            .insert(
+                ACTION_ROUTE.channel___base.get_one_by_id,
+                ActionRoute_::Channel__Base {
+                    channel___base: Channel__Base_::GetOneById,
+                },
+            )
+            .convert(Backtrace::new(line!(), file!()))?;
 
-        router.insert(
-            ACTION_ROUTE.channel___base.get_many_by_name_in_subscription,
-            ActionRoute_::Channel__Base {
-                channel___base: Channel__Base_::GetManyByNameInSubscriptions,
-            },
-        )
-        .convert(Backtrace::new(line!(), file!()))?;
+        router
+            .insert(
+                ACTION_ROUTE.channel___base.get_many_by_name_in_subscription,
+                ActionRoute_::Channel__Base {
+                    channel___base: Channel__Base_::GetManyByNameInSubscriptions,
+                },
+            )
+            .convert(Backtrace::new(line!(), file!()))?;
 
-        router.insert(
-            ACTION_ROUTE.channel___base.get_many_by_subscription,
-            ActionRoute_::Channel__Base {
-                channel___base: Channel__Base_::GetManyBySubscription,
-            },
-        )
-        .convert(Backtrace::new(line!(), file!()))?;
+        router
+            .insert(
+                ACTION_ROUTE.channel___base.get_many_by_subscription,
+                ActionRoute_::Channel__Base {
+                    channel___base: Channel__Base_::GetManyBySubscription,
+                },
+            )
+            .convert(Backtrace::new(line!(), file!()))?;
 
-        router.insert(
-            ACTION_ROUTE.channel___base.get_many_piblic_by_name,
-            ActionRoute_::Channel__Base {
-                channel___base: Channel__Base_::GetManyPublicByName,
-            },
-        )
-        .convert(Backtrace::new(line!(), file!()))?;
+        router
+            .insert(
+                ACTION_ROUTE.channel___base.get_many_piblic_by_name,
+                ActionRoute_::Channel__Base {
+                    channel___base: Channel__Base_::GetManyPublicByName,
+                },
+            )
+            .convert(Backtrace::new(line!(), file!()))?;
 
-        router.insert(
-            ACTION_ROUTE.channel_subscription___base.create,
-            ActionRoute_::ChannelSubscription__Base {
-                channel_subscription___base: ChannelSubscription__Base_::Create,
-            },
-        )
-        .convert(Backtrace::new(line!(), file!()))?;
+        router
+            .insert(
+                ACTION_ROUTE.channel_subscription___base.create,
+                ActionRoute_::ChannelSubscription__Base {
+                    channel_subscription___base: ChannelSubscription__Base_::Create,
+                },
+            )
+            .convert(Backtrace::new(line!(), file!()))?;
 
         #[cfg(feature = "manual_testing")]
         {
-             router.insert(
-                ACTION_ROUTE.application_user___authorization.check_nickname_for_existing_,
-                ActionRoute_::ApplicationUser__Authorization {
-                    application_user___authorization: ApplicationUser__Authorization_::CheckNicknameForExisting_,
-                },
-            )
-.convert(Backtrace::new(line!(), file!()))?;
+            router
+                .insert(
+                    ACTION_ROUTE.application_user___authorization.check_nickname_for_existing_,
+                    ActionRoute_::ApplicationUser__Authorization {
+                        application_user___authorization: ApplicationUser__Authorization_::CheckNicknameForExisting_,
+                    },
+                )
+                .convert(Backtrace::new(line!(), file!()))?;
 
-             router.insert(
-                ACTION_ROUTE.application_user___authorization.check_email_for_existing_,
-                ActionRoute_::ApplicationUser__Authorization {
-                    application_user___authorization: ApplicationUser__Authorization_::CheckEmailForExisting_,
-                },
-            )
-.convert(Backtrace::new(line!(), file!()))?;
+            router
+                .insert(
+                    ACTION_ROUTE.application_user___authorization.check_email_for_existing_,
+                    ActionRoute_::ApplicationUser__Authorization {
+                        application_user___authorization: ApplicationUser__Authorization_::CheckEmailForExisting_,
+                    },
+                )
+                .convert(Backtrace::new(line!(), file!()))?;
 
-             router.insert(
-                ACTION_ROUTE.application_user___authorization.regisgter_by_first_step_,
-                ActionRoute_::ApplicationUser__Authorization {
-                    application_user___authorization: ApplicationUser__Authorization_::RegisterByFirstStep_,
-                },
-            )
-.convert(Backtrace::new(line!(), file!()))?;
+            router
+                .insert(
+                    ACTION_ROUTE.application_user___authorization.regisgter_by_first_step_,
+                    ActionRoute_::ApplicationUser__Authorization {
+                        application_user___authorization: ApplicationUser__Authorization_::RegisterByFirstStep_,
+                    },
+                )
+                .convert(Backtrace::new(line!(), file!()))?;
 
-             router.insert(
-                ACTION_ROUTE.application_user___authorization.regisgter_by_second_step_,
-                ActionRoute_::ApplicationUser__Authorization {
-                    application_user___authorization: ApplicationUser__Authorization_::RegisterBySecondStep_,
-                },
-            )
-.convert(Backtrace::new(line!(), file!()))?;
+            router
+                .insert(
+                    ACTION_ROUTE.application_user___authorization.regisgter_by_second_step_,
+                    ActionRoute_::ApplicationUser__Authorization {
+                        application_user___authorization: ApplicationUser__Authorization_::RegisterBySecondStep_,
+                    },
+                )
+                .convert(Backtrace::new(line!(), file!()))?;
 
-             router.insert(
-                ACTION_ROUTE.application_user___authorization.regisgter_by_last_step_,
-                ActionRoute_::ApplicationUser__Authorization {
-                    application_user___authorization: ApplicationUser__Authorization_::RegisterByLastStep_,
-                },
-            )
-.convert(Backtrace::new(line!(), file!()))?;
+            router
+                .insert(
+                    ACTION_ROUTE.application_user___authorization.regisgter_by_last_step_,
+                    ActionRoute_::ApplicationUser__Authorization {
+                        application_user___authorization: ApplicationUser__Authorization_::RegisterByLastStep_,
+                    },
+                )
+                .convert(Backtrace::new(line!(), file!()))?;
 
-             router.insert(
-                ACTION_ROUTE.application_user___authorization.send_email_for_register_,
-                ActionRoute_::ApplicationUser__Authorization {
-                    application_user___authorization: ApplicationUser__Authorization_::SendEmailForRegister_,
-                },
-            )
-.convert(Backtrace::new(line!(), file!()))?;
+            router
+                .insert(
+                    ACTION_ROUTE.application_user___authorization.send_email_for_register_,
+                    ActionRoute_::ApplicationUser__Authorization {
+                        application_user___authorization: ApplicationUser__Authorization_::SendEmailForRegister_,
+                    },
+                )
+                .convert(Backtrace::new(line!(), file!()))?;
 
-             router.insert(
-                ACTION_ROUTE.application_user___authorization.authorize_by_first_step_,
-                ActionRoute_::ApplicationUser__Authorization {
-                    application_user___authorization: ApplicationUser__Authorization_::AuthorizeByFirstStep_,
-                },
-            )
-.convert(Backtrace::new(line!(), file!()))?;
+            router
+                .insert(
+                    ACTION_ROUTE.application_user___authorization.authorize_by_first_step_,
+                    ActionRoute_::ApplicationUser__Authorization {
+                        application_user___authorization: ApplicationUser__Authorization_::AuthorizeByFirstStep_,
+                    },
+                )
+                .convert(Backtrace::new(line!(), file!()))?;
 
-             router.insert(
-                ACTION_ROUTE.application_user___authorization.authorize_by_last_step_,
-                ActionRoute_::ApplicationUser__Authorization {
-                    application_user___authorization: ApplicationUser__Authorization_::AuthorizeByLastStep_,
-                },
-            )
-.convert(Backtrace::new(line!(), file!()))?;
+            router
+                .insert(
+                    ACTION_ROUTE.application_user___authorization.authorize_by_last_step_,
+                    ActionRoute_::ApplicationUser__Authorization {
+                        application_user___authorization: ApplicationUser__Authorization_::AuthorizeByLastStep_,
+                    },
+                )
+                .convert(Backtrace::new(line!(), file!()))?;
 
-             router.insert(
-                ACTION_ROUTE.application_user___authorization.send_email_for_authorize_,
-                ActionRoute_::ApplicationUser__Authorization {
-                    application_user___authorization: ApplicationUser__Authorization_::SendEmailForAuthorize_,
-                },
-            )
-.convert(Backtrace::new(line!(), file!()))?;
+            router
+                .insert(
+                    ACTION_ROUTE.application_user___authorization.send_email_for_authorize_,
+                    ActionRoute_::ApplicationUser__Authorization {
+                        application_user___authorization: ApplicationUser__Authorization_::SendEmailForAuthorize_,
+                    },
+                )
+                .convert(Backtrace::new(line!(), file!()))?;
 
-             router.insert(
-                ACTION_ROUTE.application_user___authorization.reset_password_by_first_step_,
-                ActionRoute_::ApplicationUser__Authorization {
-                    application_user___authorization: ApplicationUser__Authorization_::ResetPasswordByFirstStep_,
-                },
-            )
-.convert(Backtrace::new(line!(), file!()))?;
+            router
+                .insert(
+                    ACTION_ROUTE.application_user___authorization.reset_password_by_first_step_,
+                    ActionRoute_::ApplicationUser__Authorization {
+                        application_user___authorization: ApplicationUser__Authorization_::ResetPasswordByFirstStep_,
+                    },
+                )
+                .convert(Backtrace::new(line!(), file!()))?;
 
-             router.insert(
-                ACTION_ROUTE.application_user___authorization.reset_password_by_second_step_,
-                ActionRoute_::ApplicationUser__Authorization {
-                    application_user___authorization: ApplicationUser__Authorization_::ResetPasswordBySecondStep_,
-                },
-            )
-.convert(Backtrace::new(line!(), file!()))?;
+            router
+                .insert(
+                    ACTION_ROUTE.application_user___authorization.reset_password_by_second_step_,
+                    ActionRoute_::ApplicationUser__Authorization {
+                        application_user___authorization: ApplicationUser__Authorization_::ResetPasswordBySecondStep_,
+                    },
+                )
+                .convert(Backtrace::new(line!(), file!()))?;
 
-             router.insert(
-                ACTION_ROUTE.application_user___authorization.reset_password_by_last_step_,
-                ActionRoute_::ApplicationUser__Authorization {
-                    application_user___authorization: ApplicationUser__Authorization_::ResetPasswordByLastStep_,
-                },
-            )
-.convert(Backtrace::new(line!(), file!()))?;
+            router
+                .insert(
+                    ACTION_ROUTE.application_user___authorization.reset_password_by_last_step_,
+                    ActionRoute_::ApplicationUser__Authorization {
+                        application_user___authorization: ApplicationUser__Authorization_::ResetPasswordByLastStep_,
+                    },
+                )
+                .convert(Backtrace::new(line!(), file!()))?;
 
-             router.insert(
-                ACTION_ROUTE.application_user___authorization.send_email_for_reset_password_,
-                ActionRoute_::ApplicationUser__Authorization {
-                    application_user___authorization: ApplicationUser__Authorization_::SendEmailForResetPassword_,
-                },
-            )
-.convert(Backtrace::new(line!(), file!()))?;
+            router
+                .insert(
+                    ACTION_ROUTE.application_user___authorization.send_email_for_reset_password_,
+                    ActionRoute_::ApplicationUser__Authorization {
+                        application_user___authorization: ApplicationUser__Authorization_::SendEmailForResetPassword_,
+                    },
+                )
+                .convert(Backtrace::new(line!(), file!()))?;
 
-             router.insert(
-                ACTION_ROUTE.application_user___authorization.refresh_access_token_,
-                ActionRoute_::ApplicationUser__Authorization {
-                    application_user___authorization: ApplicationUser__Authorization_::RefreshAccessToken_,
-                },
-            )
-.convert(Backtrace::new(line!(), file!()))?;
+            router
+                .insert(
+                    ACTION_ROUTE.application_user___authorization.refresh_access_token_,
+                    ActionRoute_::ApplicationUser__Authorization {
+                        application_user___authorization: ApplicationUser__Authorization_::RefreshAccessToken_,
+                    },
+                )
+                .convert(Backtrace::new(line!(), file!()))?;
 
-             router.insert(
-                ACTION_ROUTE.application_user___authorization.deauthorize_from_one_device_,
-                ActionRoute_::ApplicationUser__Authorization {
-                    application_user___authorization: ApplicationUser__Authorization_::DeauthorizeFromOneDevice_,
-                },
-            )
-.convert(Backtrace::new(line!(), file!()))?;
+            router
+                .insert(
+                    ACTION_ROUTE.application_user___authorization.deauthorize_from_one_device_,
+                    ActionRoute_::ApplicationUser__Authorization {
+                        application_user___authorization: ApplicationUser__Authorization_::DeauthorizeFromOneDevice_,
+                    },
+                )
+                .convert(Backtrace::new(line!(), file!()))?;
 
-             router.insert(
-                ACTION_ROUTE.application_user___authorization.deauthorize_from_all_devices_,
-                ActionRoute_::ApplicationUser__Authorization {
-                    application_user___authorization: ApplicationUser__Authorization_::DeauthorizeFromAllDevices_,
-                },
-            )
-.convert(Backtrace::new(line!(), file!()))?;
+            router
+                .insert(
+                    ACTION_ROUTE.application_user___authorization.deauthorize_from_all_devices_,
+                    ActionRoute_::ApplicationUser__Authorization {
+                        application_user___authorization: ApplicationUser__Authorization_::DeauthorizeFromAllDevices_,
+                    },
+                )
+                .convert(Backtrace::new(line!(), file!()))?;
 
-             router.insert(
-                ACTION_ROUTE.channel___base.get_one_by_id_,
-                ActionRoute_::Channel__Base {
-                    channel___base: Channel__Base_::GetOneById_,
-                },
-            )
-.convert(Backtrace::new(line!(), file!()))?;
+            router
+                .insert(
+                    ACTION_ROUTE.channel___base.get_one_by_id_,
+                    ActionRoute_::Channel__Base {
+                        channel___base: Channel__Base_::GetOneById_,
+                    },
+                )
+                .convert(Backtrace::new(line!(), file!()))?;
 
-             router.insert(
-                ACTION_ROUTE.channel___base.get_many_by_name_in_subscription_,
-                ActionRoute_::Channel__Base {
-                    channel___base: Channel__Base_::GetManyByNameInSubscriptions_,
-                },
-            )
-.convert(Backtrace::new(line!(), file!()))?;
+            router
+                .insert(
+                    ACTION_ROUTE.channel___base.get_many_by_name_in_subscription_,
+                    ActionRoute_::Channel__Base {
+                        channel___base: Channel__Base_::GetManyByNameInSubscriptions_,
+                    },
+                )
+                .convert(Backtrace::new(line!(), file!()))?;
 
-             router.insert(
-                ACTION_ROUTE.channel___base.get_many_by_subscription_,
-                ActionRoute_::Channel__Base {
-                    channel___base: Channel__Base_::GetManyBySubscription_,
-                },
-            )
-.convert(Backtrace::new(line!(), file!()))?;
+            router
+                .insert(
+                    ACTION_ROUTE.channel___base.get_many_by_subscription_,
+                    ActionRoute_::Channel__Base {
+                        channel___base: Channel__Base_::GetManyBySubscription_,
+                    },
+                )
+                .convert(Backtrace::new(line!(), file!()))?;
 
-             router.insert(
-                ACTION_ROUTE.channel___base.get_many_piblic_by_name_,
-                ActionRoute_::Channel__Base {
-                    channel___base: Channel__Base_::GetManyPublicByName_,
-                },
-            )
-.convert(Backtrace::new(line!(), file!()))?;
+            router
+                .insert(
+                    ACTION_ROUTE.channel___base.get_many_piblic_by_name_,
+                    ActionRoute_::Channel__Base {
+                        channel___base: Channel__Base_::GetManyPublicByName_,
+                    },
+                )
+                .convert(Backtrace::new(line!(), file!()))?;
 
-             router.insert(
-                ACTION_ROUTE.channel_subscription___base.create_,
-                ActionRoute_::ChannelSubscription__Base {
-                    channel_subscription___base: ChannelSubscription__Base_::Create_,
-                },
-            )
-.convert(Backtrace::new(line!(), file!()))?;
+            router
+                .insert(
+                    ACTION_ROUTE.channel_subscription___base.create_,
+                    ActionRoute_::ChannelSubscription__Base {
+                        channel_subscription___base: ChannelSubscription__Base_::Create_,
+                    },
+                )
+                .convert(Backtrace::new(line!(), file!()))?;
         }
 
         return Ok(router);
@@ -727,10 +747,7 @@ impl CommandProcessor<RunServer> {
             &ActionRoute_::ApplicationUser__Authorization {
                 ref application_user___authorization,
             } => {
-                match (
-                    application_user___authorization,
-                    &parts.method,
-                ) {
+                match (application_user___authorization, &parts.method) {
                     // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                     (&ApplicationUser__Authorization_::CheckNicknameForExisting, &Method::POST) => {
                         return Action::<ApplicationUser__Authorization___CheckNicknameForExisting>::run(
@@ -912,10 +929,7 @@ impl CommandProcessor<RunServer> {
                     _ => {
                         #[cfg(feature = "manual_testing")]
                         {
-                            match (
-                                application_user___authorization,
-                                &parts.method,
-                            ) {
+                            match (application_user___authorization, &parts.method) {
                                 // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                                 (&ApplicationUser__Authorization_::CheckNicknameForExisting_, &Method::POST) => {
                                     return Action::<ApplicationUser__Authorization___CheckNicknameForExisting>::run_(
@@ -1103,10 +1117,7 @@ impl CommandProcessor<RunServer> {
             &ActionRoute_::Channel__Base {
                 ref channel___base,
             } => {
-                match (
-                    channel___base,
-                    &parts.method,
-                ) {
+                match (channel___base, &parts.method) {
                     // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                     (&Channel__Base_::GetOneById, &Method::POST) => {
                         return Action::<Channel__Base___GetOneById>::run(
@@ -1158,10 +1169,7 @@ impl CommandProcessor<RunServer> {
                     _ => {
                         #[cfg(feature = "manual_testing")]
                         {
-                            match (
-                                channel___base,
-                                &parts.method,
-                            ) {
+                            match (channel___base, &parts.method) {
                                 // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                                 (&Channel__Base_::GetOneById_, &Method::POST) => {
                                     return Action::<Channel__Base___GetOneById>::run_(
@@ -1218,46 +1226,38 @@ impl CommandProcessor<RunServer> {
             }
             &ActionRoute_::ChannelSubscription__Base {
                 ref channel_subscription___base,
-            } => {
-                match (
-                    channel_subscription___base,
-                    &parts.method,
-                ) {
-                    (&ChannelSubscription__Base_::Create, &Method::POST) => {
-                        return Action::<ChannelSubscription__Base___Create>::run(
-                            environment_configuration,
-                            &mut body,
-                            &parts,
-                            &r#match.params,
-                            database_1_postgresql_connection_pool,
-                            database_2_postgresql_connection_pool,
-                        )
-                        .await;
-                    }
-                    _ => {
-                        #[cfg(feature = "manual_testing")]
-                        {
-                            match (
-                                channel_subscription___base,
-                                &parts.method,
-                            ) {
-                                (&ChannelSubscription__Base_::Create_, &Method::POST) => {
-                                    return Action::<ChannelSubscription__Base___Create>::run_(
-                                        environment_configuration,
-                                        &mut body,
-                                        &parts,
-                                        &r#match.params,
-                                        database_1_postgresql_connection_pool,
-                                        database_2_postgresql_connection_pool,
-                                    )
-                                    .await;
-                                }
-                                _ => {}
+            } => match (channel_subscription___base, &parts.method) {
+                (&ChannelSubscription__Base_::Create, &Method::POST) => {
+                    return Action::<ChannelSubscription__Base___Create>::run(
+                        environment_configuration,
+                        &mut body,
+                        &parts,
+                        &r#match.params,
+                        database_1_postgresql_connection_pool,
+                        database_2_postgresql_connection_pool,
+                    )
+                    .await;
+                }
+                _ => {
+                    #[cfg(feature = "manual_testing")]
+                    {
+                        match (channel_subscription___base, &parts.method) {
+                            (&ChannelSubscription__Base_::Create_, &Method::POST) => {
+                                return Action::<ChannelSubscription__Base___Create>::run_(
+                                    environment_configuration,
+                                    &mut body,
+                                    &parts,
+                                    &r#match.params,
+                                    database_1_postgresql_connection_pool,
+                                    database_2_postgresql_connection_pool,
+                                )
+                                .await;
                             }
+                            _ => {}
                         }
                     }
                 }
-            }
+            },
         }
 
         return Action::<RouteNotFound>::run(&parts);

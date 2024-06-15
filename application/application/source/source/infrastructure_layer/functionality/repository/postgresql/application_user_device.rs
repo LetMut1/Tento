@@ -1,11 +1,11 @@
 use super::PostgresqlRepository;
 use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice;
-use crate::infrastructure_layer::data::auditor::Backtrace;
-use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
+use crate::infrastructure_layer::data::auditor::Backtrace;
+use crate::infrastructure_layer::data::auditor::ErrorConverter;
+use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 use tokio_postgres::types::Type;
-use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use tokio_postgres::Client as Connection;
 
 impl PostgresqlRepository<ApplicationUserDevice> {
@@ -27,15 +27,7 @@ impl PostgresqlRepository<ApplicationUserDevice> {
             ) \
             ON CONFLICT ON CONSTRAINT application_user_device2 DO NOTHING;";
 
-        prepared_statemant_parameter_convertation_resolver
-            .add_parameter(
-                &application_user_device_id,
-                Type::TEXT,
-            )
-            .add_parameter(
-                &insert_1.application_user_id,
-                Type::INT8,
-            );
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_device_id, Type::TEXT).add_parameter(&insert_1.application_user_id, Type::INT8);
 
         let statement = database_1_connection
             .prepare_typed(
@@ -53,12 +45,10 @@ impl PostgresqlRepository<ApplicationUserDevice> {
             .await
             .convert(Backtrace::new(line!(), file!()))?;
 
-        return Ok(
-            ApplicationUserDevice::new(
-                insert_1.application_user_device_id,
-                insert_1.application_user_id,
-            ),
-        );
+        return Ok(ApplicationUserDevice::new(
+            insert_1.application_user_device_id,
+            insert_1.application_user_id,
+        ));
     }
 }
 

@@ -1,6 +1,3 @@
-use super::application_user::ApplicationUser_Id;
-use std::borrow::Cow;
-use std::marker::PhantomData;
 pub use self::AccessModifier as Channel_AccessModifier;
 pub use self::Description as Channel_Description;
 pub use self::Id as Channel_Id;
@@ -8,6 +5,9 @@ pub use self::LinkedName as Channel_LinkedName;
 pub use self::Name as Channel_Name;
 pub use self::Orientation as Channel_Orientation;
 pub use self::VisabilityModifier as Channel_VisabilityModifier;
+use super::application_user::ApplicationUser_Id;
+use std::borrow::Cow;
+use std::marker::PhantomData;
 
 pub struct Channel<'a> {
     pub id: i64,
@@ -50,7 +50,7 @@ pub struct Channel<'a> {
     _viewing_quantity: PhantomData<ViewingQuantity>,
 
     pub created_at: String,
-    _created_at: PhantomData<CreatedAt>
+    _created_at: PhantomData<CreatedAt>,
 }
 
 impl<'a> Channel<'a> {

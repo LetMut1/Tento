@@ -1,8 +1,8 @@
+use super::context_report;
 use super::Formatter;
 use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
-use super::context_report;
 use crate::infrastructure_layer::data::control_type::ActionRound;
+use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 
 impl Formatter<(ActionRound, Auditor<InvalidArgument>)> {
     pub fn format<'a>(

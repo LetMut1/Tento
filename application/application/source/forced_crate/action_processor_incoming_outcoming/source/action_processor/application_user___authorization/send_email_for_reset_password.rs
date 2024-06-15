@@ -1,6 +1,6 @@
-use serde::Deserialize;
-use macro_rules::r#enum;
 use common_precedent::CommonPrecedent;
+use macro_rules::r#enum;
+use serde::Deserialize;
 use serde::Serialize;
 
 #[derive(Serialize, Deserialize)]

@@ -2,8 +2,8 @@ pub mod derivative;
 
 use super::application_user::ApplicationUser_Id;
 use super::application_user_device::ApplicationUserDevice_Id;
-use std::marker::PhantomData;
 use std::borrow::Cow;
+use std::marker::PhantomData;
 
 pub use self::CanBeResentFrom as ApplicationUserAuthorizationToken_CanBeResentFrom;
 pub use self::ExpiresAt as ApplicationUserAuthorizationToken_ExpiresAt;
@@ -34,7 +34,7 @@ impl<'a> ApplicationUserAuthorizationToken<'a> {
     pub fn new(
         application_user_id: i64,
         application_user_device_id: Cow<'a, str>,
-        value:String,
+        value: String,
         wrong_enter_tries_quantity: i16,
         expires_at: i64,
         can_be_resent_from: i64,

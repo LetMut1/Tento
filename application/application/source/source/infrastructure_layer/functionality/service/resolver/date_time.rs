@@ -1,9 +1,9 @@
 use super::Resolver;
-use crate::infrastructure_layer::data::auditor::Backtrace;
-use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
-use chrono::DateTime as ChronoDateTime;
+use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::auditor::OptionConverter;
+use crate::infrastructure_layer::data::error::Error;
+use chrono::DateTime as ChronoDateTime;
 use chrono::Utc;
 
 pub use crate::infrastructure_layer::data::control_type::DateTime;
@@ -31,10 +31,7 @@ impl Resolver<DateTime> {
     }
 
     pub fn timestamp_is_valid_timestamp<'a>(date_time: &'a str) -> bool {
-        if let Ok(_) = ChronoDateTime::parse_from_str(
-            date_time,
-            Self::TIMESTAMP_FORMAT_TO_PARSE,
-        ) {
+        if let Ok(_) = ChronoDateTime::parse_from_str(date_time, Self::TIMESTAMP_FORMAT_TO_PARSE) {
             return true;
         }
 
