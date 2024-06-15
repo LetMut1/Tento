@@ -23,68 +23,32 @@ use std::path::Path;
 use super::Loader;
 
 impl Loader<EnvironmentConfiguration> {
-    const PRODUCTION_ENVIRONMENT_DIRECTORY_NAME: &'static str = "production";
-    const DEVELOPMENT_ENVIRONMENT_DIRECTORY_NAME: &'static str = "development";
-    const LOCAL_DEVELOPMENT_ENVIRONMENT_DIRECTORY_NAME: &'static str = "local_development";
     const ENVIRONMENT_FILE_NAME: &'static str = "environment.toml";
 
     pub fn load_from_file<'a>(environment_configuration_directory_path: &'a str) -> Result<EnvironmentConfiguration, Auditor<Error>> {
-        let production_environment_file_path = format!(
-            "{}/{}/{}",
+        let environment_file_path = format!(
+            "{}/{}",
             environment_configuration_directory_path,
-            Self::PRODUCTION_ENVIRONMENT_DIRECTORY_NAME,
             Self::ENVIRONMENT_FILE_NAME,
         );
 
-        let production_environment_file_path_ = Path::new(production_environment_file_path.as_str());
+        let environment_file_path_ = Path::new(environment_file_path.as_str());
 
-        let (environment, environment_file_data) = if production_environment_file_path_.try_exists().convert(Backtrace::new(line!(), file!()))? {
+        let (environment, environment_file_data) = if environment_file_path_.try_exists().convert(Backtrace::new(line!(), file!()))? {
             (
                 Environment::Production,
-                std::fs::read_to_string(production_environment_file_path_).convert(Backtrace::new(line!(), file!()))?,
+                std::fs::read_to_string(environment_file_path_).convert(Backtrace::new(line!(), file!()))?,
             )
         } else {
-            let local_development_environment_file_path = format!(
-                "{}/{}/{}",
-                environment_configuration_directory_path,
-                Self::LOCAL_DEVELOPMENT_ENVIRONMENT_DIRECTORY_NAME,
-                Self::ENVIRONMENT_FILE_NAME,
+            return Err(
+                Auditor::<Error>::new(
+                    Error::new_logic("The environment.toml file does not exist."),
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                ),
             );
-
-            let local_development_environment_file_path_ = Path::new(local_development_environment_file_path.as_str());
-
-            if local_development_environment_file_path_.try_exists().convert(Backtrace::new(line!(), file!()))? {
-                (
-                    Environment::LocalDevelopment,
-                    std::fs::read_to_string(local_development_environment_file_path_).convert(Backtrace::new(line!(), file!()))?,
-                )
-            } else {
-                let development_environment_file_path = format!(
-                    "{}/{}/{}",
-                    environment_configuration_directory_path,
-                    Self::DEVELOPMENT_ENVIRONMENT_DIRECTORY_NAME,
-                    Self::ENVIRONMENT_FILE_NAME,
-                );
-
-                let development_environment_file_path_ = Path::new(development_environment_file_path.as_str());
-
-                if development_environment_file_path_.try_exists().convert(Backtrace::new(line!(), file!()))? {
-                    (
-                        Environment::Development,
-                        std::fs::read_to_string(development_environment_file_path_).convert(Backtrace::new(line!(), file!()))?,
-                    )
-                } else {
-                    return Err(
-                        Auditor::<Error>::new(
-                            Error::new_logic("The environment.toml file does not exist."),
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        ),
-                    );
-                }
-            }
         };
 
         let environment_configuration_file = toml::from_str::<EnvironmentConfigurationFile>(environment_file_data.as_str()).convert(Backtrace::new(line!(), file!()))?;
