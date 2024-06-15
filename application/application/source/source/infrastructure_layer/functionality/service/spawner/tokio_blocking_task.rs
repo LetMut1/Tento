@@ -14,7 +14,7 @@ impl Spawner<TokioBlockingTask> {
         T: Send + 'static,
     {
         tokio::task::spawn_blocking(
-            || -> _ {
+            || -> () {
                 if let Err(error_auditor) = closure() {
                     Logger::<Auditor<Error>>::log(&error_auditor);
                 }
