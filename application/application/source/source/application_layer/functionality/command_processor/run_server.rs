@@ -63,7 +63,6 @@ use tracing::Level;
 use crate::infrastructure_layer::data::auditor::OptionConverter;
 use std::sync::OnceLock;
 use tracing_appender::non_blocking::WorkerGuard;
-use crate::infrastructure_layer::data::environment_configuration::Environment;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::functionality::service::loader::Loader;
 
@@ -200,14 +199,6 @@ impl CommandProcessor<RunServer> {
     }
 
     async fn serve_2(environment_configuration: &'static EnvironmentConfiguration) -> Result<(), Auditor<Error>> {
-        #[derive(Clone)]
-        enum PostgresqlConnectionPoolAggregator {
-            LocalDevelopment {
-                database_1_postgresql_connection_pool: PostgresqlConnectionPoolNoTls,
-                database_2_postgresql_connection_pool: PostgresqlConnectionPoolNoTls,
-            },
-        }
-
         let router = Self::create_router()?;
 
         // TODO TODO в Env
@@ -280,27 +271,15 @@ impl CommandProcessor<RunServer> {
             server_builder = server_builder.http2_only(false);
         }
 
-        let postgresql_connection_pool_aggregator = match environment_configuration.environment {
-            Environment::Production => {
-                todo!("TODO TODO TODO TODO TODO create Pool with builder in preProd state. НАСТРОИТТЬ ПУУЛ");
-            }
-            Environment::Development | Environment::LocalDevelopment => {
-                let database_1_postgresql_connection_pool = Creator::<PostgresqlConnectionPoolNoTls>::create_database_1(
-                    environment_configuration,
-                )
-                .await?;
+        let database_1_postgresql_connection_pool = Creator::<PostgresqlConnectionPoolNoTls>::create_database_1(
+            environment_configuration,
+        )
+        .await?;
 
-                let database_2_postgresql_connection_pool = Creator::<PostgresqlConnectionPoolNoTls>::create_database_2(
-                    environment_configuration,
-                )
-                .await?;
-
-                PostgresqlConnectionPoolAggregator::LocalDevelopment {
-                    database_1_postgresql_connection_pool,
-                    database_2_postgresql_connection_pool,
-                }
-            }
-        };
+        let database_2_postgresql_connection_pool = Creator::<PostgresqlConnectionPoolNoTls>::create_database_2(
+            environment_configuration,
+        )
+        .await?;
 
         let router_ = Arc::new(router);
 
@@ -308,32 +287,26 @@ impl CommandProcessor<RunServer> {
             move |_: &'_ AddrStream| -> _ {
                 let router__ = router_.clone();
 
-                let postgresql_connection_pool_aggregator_ = postgresql_connection_pool_aggregator.clone();
+                let database_1_postgresql_connection_pool_ = database_1_postgresql_connection_pool.clone();
+
+                let database_2_postgresql_connection_pool_ = database_2_postgresql_connection_pool.clone();
 
                 let future = async move {
                     let service_fn = hyper::service::service_fn(
                         move |request: Request| -> _ {
                             let router___ = router__.clone();
 
-                            let postgresql_connection_pool_aggregator__ = postgresql_connection_pool_aggregator_.clone();
+                            let database_1_postgresql_connection_pool__ = database_1_postgresql_connection_pool_.clone();
 
-                            let (database_1_postgresql_connection_pool_, database_2_postgresql_connection_pool_) = match postgresql_connection_pool_aggregator__ {
-                                PostgresqlConnectionPoolAggregator::LocalDevelopment {
-                                    database_1_postgresql_connection_pool,
-                                    database_2_postgresql_connection_pool,
-                                } => (
-                                    database_1_postgresql_connection_pool,
-                                    database_2_postgresql_connection_pool,
-                                ),
-                            };
+                            let database_2_postgresql_connection_pool__ = database_2_postgresql_connection_pool_.clone();
 
                             let future_ = async move {
                                 let response = Self::resolve(
                                     environment_configuration,
                                     router___,
                                     request,
-                                    &database_1_postgresql_connection_pool_,
-                                    &database_2_postgresql_connection_pool_,
+                                    &database_1_postgresql_connection_pool__,
+                                    &database_2_postgresql_connection_pool__,
                                 )
                                 .await;
 

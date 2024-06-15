@@ -1,6 +1,5 @@
 use super::Sender;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
-use crate::infrastructure_layer::data::environment_configuration::Environment;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::auditor::Auditor;
@@ -50,18 +49,11 @@ impl Sender<Email> {
             }
         };
 
-        let smtp_client = match environment_configuration.environment {
-            Environment::Production => {
-                todo!();
-            }
-            Environment::Development | Environment::LocalDevelopment => {
-                SmtpClient::new(
-                    &email_server_socket_address,
-                    ClientSecurity::None,
-                )
-                .convert(Backtrace::new(line!(), file!()))?
-            }
-        };
+        let smtp_client = SmtpClient::new(
+            &email_server_socket_address,
+            ClientSecurity::None,
+        )
+        .convert(Backtrace::new(line!(), file!()))?;
 
         smtp_client.transport().send(email.into()).convert(Backtrace::new(line!(), file!()))?;
 

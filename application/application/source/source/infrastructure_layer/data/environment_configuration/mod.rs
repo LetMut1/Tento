@@ -1,13 +1,6 @@
 pub mod environment_configuration_file;
 
-pub enum Environment {
-    Production,
-    Development,
-    LocalDevelopment,
-}
-
 pub struct EnvironmentConfiguration {
-    pub environment: Environment,
     pub tokio_runtime: TokioRuntime,
     pub application_server: ApplicationServer,
     pub logging: Logging,

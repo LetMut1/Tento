@@ -1,5 +1,4 @@
 use super::Creator;
-use crate::infrastructure_layer::data::environment_configuration::Environment;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error::Error;
@@ -20,7 +19,6 @@ impl Creator<PostgresqlConnectionPoolNoTls> {
     ) -> Result<Pool<PostgresqlConnectionManager<NoTls>>, Auditor<Error>> {
         return Ok(
             Self::create(
-                &environment_configuration.environment,
                 &Config::from_str(environment_configuration.resource.postgresql.database_1_url.as_str()).convert(Backtrace::new(line!(), file!()))?
             ).await?
         );
@@ -31,43 +29,24 @@ impl Creator<PostgresqlConnectionPoolNoTls> {
     ) -> Result<Pool<PostgresqlConnectionManager<NoTls>>, Auditor<Error>> {
         return Ok(
             Self::create(
-                &environment_configuration.environment,
                 &Config::from_str(environment_configuration.resource.postgresql.database_2_url.as_str()).convert(Backtrace::new(line!(), file!()))?
             ).await?
         );
     }
 
     async fn create<'a>(
-        environment: &'a Environment,
         configuration: &'a Config,
     ) -> Result<Pool<PostgresqlConnectionManager<NoTls>>, Auditor<Error>> {
-        let postgresql_connection_pool = match *environment {
-            Environment::Production => {
-                return Err(
-                    Auditor::<Error>::new(
-                        Error::Logic {
-                            message: "NoTls should be only not in production environment.",
-                        },
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-            Environment::Development | Environment::LocalDevelopment => {
-                Pool::builder()
-                    .build(
-                        PostgresqlConnectionManager::new(
-                            configuration.clone(),
-                            NoTls,
-                        ),
-                    )
-                    .await
-                    .convert(Backtrace::new(line!(), file!()))?
-            }
-        };
-
-        return Ok(postgresql_connection_pool);
+        return Ok(
+            Pool::builder()
+            .build(
+                PostgresqlConnectionManager::new(
+                    configuration.clone(),
+                    NoTls,
+                ),
+            )
+            .await
+            .convert(Backtrace::new(line!(), file!()))?
+        );
     }
 }

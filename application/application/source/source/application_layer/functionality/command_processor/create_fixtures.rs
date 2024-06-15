@@ -13,7 +13,6 @@ use crate::domain_layer::data::entity::channel::Channel_Orientation;
 use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier;
 use crate::domain_layer::functionality::service::encoder::Encoder;
 use crate::domain_layer::functionality::service::validator::Validator;
-use crate::infrastructure_layer::data::environment_configuration::Environment;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error::Error;
@@ -47,20 +46,6 @@ impl CommandProcessor<CreateFixtures> {
 
     pub fn process() -> Result<(), Auditor<Error>> {
         let environment_configuration = Self::initialize_environment()?;
-
-        if let Environment::Production = environment_configuration.environment {
-            return Err(
-                Auditor::<Error>::new(
-                    Error::Logic {
-                        message: "Should process only not in production environment.",
-                    },
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        }
 
         Self::run_runtime(&environment_configuration)?;
 

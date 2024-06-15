@@ -5,7 +5,6 @@ use crate::infrastructure_layer::data::environment_configuration::ApplicationSer
 use crate::infrastructure_layer::data::environment_configuration::EmailServer;
 use crate::infrastructure_layer::data::environment_configuration::Encryption;
 use crate::infrastructure_layer::data::environment_configuration::environment_configuration_file::EnvironmentConfigurationFile;
-use crate::infrastructure_layer::data::environment_configuration::Environment;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::environment_configuration::Http;
 use crate::infrastructure_layer::data::environment_configuration::HttpKeepalive;
@@ -34,11 +33,8 @@ impl Loader<EnvironmentConfiguration> {
 
         let environment_file_path_ = Path::new(environment_file_path.as_str());
 
-        let (environment, environment_file_data) = if environment_file_path_.try_exists().convert(Backtrace::new(line!(), file!()))? {
-            (
-                Environment::Production,
-                std::fs::read_to_string(environment_file_path_).convert(Backtrace::new(line!(), file!()))?,
-            )
+        let environment_file_data = if environment_file_path_.try_exists().convert(Backtrace::new(line!(), file!()))? {
+            std::fs::read_to_string(environment_file_path_).convert(Backtrace::new(line!(), file!()))?
         } else {
             return Err(
                 Auditor::<Error>::new(
@@ -139,7 +135,6 @@ impl Loader<EnvironmentConfiguration> {
         };
 
         let environment_configuration = EnvironmentConfiguration {
-            environment,
             tokio_runtime: TokioRuntime {
                 maximum_blocking_threads_quantity: environment_configuration_file.tokio_runtime.maximum_blocking_threads_quantity.value,
                 worker_threads_quantity: environment_configuration_file.tokio_runtime.worker_threads_quantity.value,
