@@ -130,15 +130,8 @@ impl CommandProcessor<RunServer> {
 
         let (non_blocking, worker_guard) = NonBlockingBuilder::default().finish(rolling_file_appender);
 
-        let mut logger_level = Level::INFO;
-
-        #[cfg(feature = "logger_level_trace")]
-        {
-            logger_level = Level::TRACE;
-        }
-
         let fmt_subscriber = FmtSubscriber::builder()
-            .with_max_level(logger_level)
+            .with_max_level(Level::INFO)
             .with_writer(non_blocking)
             .with_file(false)
             .with_target(false)
