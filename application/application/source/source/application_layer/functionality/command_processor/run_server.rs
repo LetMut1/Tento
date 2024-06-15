@@ -66,6 +66,9 @@ use tracing_appender::non_blocking::WorkerGuard;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::functionality::service::loader::Loader;
 
+#[cfg(not(feature = "file_log"))]
+use std::io::stdout;
+
 pub use crate::infrastructure_layer::data::control_type::RunServer;
 
 static ENVIRONMENT_CONFIGURATION: OnceLock<EnvironmentConfiguration> = OnceLock::new();
@@ -122,13 +125,34 @@ impl CommandProcessor<RunServer> {
     }
 
     fn initialize_logger<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<WorkerGuard, Auditor<Error>> {
-        let rolling_file_appender = RollingFileAppender::new(
-            Rotation::DAILY,
-            environment_configuration.logging.directory_path.as_str(),
-            environment_configuration.logging.file_name_prefix.as_str(),
-        );
+        let non_blocking;
 
-        let (non_blocking, worker_guard) = NonBlockingBuilder::default().finish(rolling_file_appender);
+        let worker_guard;
+
+        let logger_level;
+
+        #[cfg(feature = "file_log")]
+        {
+            let rolling_file_appender = RollingFileAppender::new(
+                Rotation::DAILY,
+                environment_configuration.logging.directory_path.as_str(),
+                environment_configuration.logging.file_name_prefix.as_str(),
+            );
+
+            (non_blocking, worker_guard) = NonBlockingBuilder::default().finish(rolling_file_appender);
+        }
+
+        #[cfg(not(feature = "file_log"))]
+        {
+            (non_blocking, worker_guard) = NonBlockingBuilder::default().finish(stdout());
+        }
+
+
+
+
+
+
+
 
         let fmt_subscriber = FmtSubscriber::builder()
             .with_max_level(Level::INFO)

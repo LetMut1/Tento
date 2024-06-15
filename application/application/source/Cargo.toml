@@ -59,6 +59,7 @@ uuid = { package = "uuid", version = "0.8.2", default-features = true, features 
 
 [features]
 default = []
+file_log  = []
 manual_testing = [
     "const_format",
     "serde_json",
