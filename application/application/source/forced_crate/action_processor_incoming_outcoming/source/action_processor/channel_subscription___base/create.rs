@@ -2,13 +2,11 @@ use common_precedent::CommonPrecedent;
 use macro_rules::r#enum;
 use serde::Deserialize;
 use serde::Serialize;
-
 #[derive(Serialize, Deserialize)]
 pub struct Incoming {
     pub application_user_access_token_encrypted: String,
     pub channel_id: i64,
 }
-
 r#enum!(
     pub enum Precedent {
         CommonPrecedent::ApplicationUserAccessToken_AlreadyExpired,

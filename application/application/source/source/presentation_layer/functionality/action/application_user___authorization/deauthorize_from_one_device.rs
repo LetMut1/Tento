@@ -1,8 +1,11 @@
+pub use crate::application_layer::functionality::action_processor::application_user___authorization::deauthorize_from_one_device::ApplicationUser__Authorization___DeauthorizeFromOneDevice;
 use crate::application_layer::functionality::action_processor::ActionProcessor;
 use crate::application_layer::functionality::service::processor::generalized_action::GeneralizedAction;
 use crate::application_layer::functionality::service::processor::Processor;
 use crate::infrastructure_layer::data::control_type::Response;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
+#[cfg(feature = "manual_testing")]
+use crate::infrastructure_layer::functionality::service::serializer::json::Json;
 use crate::infrastructure_layer::functionality::service::serializer::message_pack::MessagePack;
 use crate::presentation_layer::functionality::action::Action;
 use crate::presentation_layer::functionality::service::extractor::http_body_data::HttpBodyData;
@@ -18,12 +21,6 @@ use std::marker::Sync;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
-
-pub use crate::application_layer::functionality::action_processor::application_user___authorization::deauthorize_from_one_device::ApplicationUser__Authorization___DeauthorizeFromOneDevice;
-
-#[cfg(feature = "manual_testing")]
-use crate::infrastructure_layer::functionality::service::serializer::json::Json;
-
 impl Action<ApplicationUser__Authorization___DeauthorizeFromOneDevice> {
     pub async fn run<'a, T>(
         environment_configuration: &'a EnvironmentConfiguration,
@@ -52,7 +49,6 @@ impl Action<ApplicationUser__Authorization___DeauthorizeFromOneDevice> {
         .await;
     }
 }
-
 #[cfg(feature = "manual_testing")]
 impl Action<ApplicationUser__Authorization___DeauthorizeFromOneDevice> {
     pub async fn run_<'a, T>(

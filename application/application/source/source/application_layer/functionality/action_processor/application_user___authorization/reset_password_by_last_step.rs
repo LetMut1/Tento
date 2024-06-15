@@ -14,6 +14,7 @@ use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::data::auditor::OptionConverter;
+pub use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___ResetPasswordByLastStep;
 use crate::infrastructure_layer::data::control_type::TokioBlockingTask;
 use crate::infrastructure_layer::data::control_type::TokioNonBlockingTask;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
@@ -31,6 +32,8 @@ use crate::infrastructure_layer::functionality::service::expiration_time_checker
 use crate::infrastructure_layer::functionality::service::resolver::cloud_message::CloudMessage;
 use crate::infrastructure_layer::functionality::service::resolver::Resolver;
 use crate::infrastructure_layer::functionality::service::spawner::Spawner;
+pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::reset_password_by_last_step::Incoming;
+pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::reset_password_by_last_step::Precedent;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use std::clone::Clone;
@@ -39,11 +42,6 @@ use std::marker::Sync;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
-
-pub use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___ResetPasswordByLastStep;
-pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::reset_password_by_last_step::Incoming;
-pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::reset_password_by_last_step::Precedent;
-
 impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
     pub async fn process<'a, T>(
         _environment_configuration: &'a EnvironmentConfiguration,
@@ -58,39 +56,32 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
         let incoming_ = incoming.convert_value_does_not_exist(Backtrace::new(line!(), file!()))?;
-
         if !Validator::<ApplicationUserResetPasswordToken_Value>::is_valid(incoming_.application_user_reset_password_token_value.as_str())? {
             return Ok(Err(Auditor::<InvalidArgument>::new(
                 InvalidArgument,
                 Backtrace::new(line!(), file!()),
             )));
         }
-
         if !Validator::<ApplicationUser_Id>::is_valid(incoming_.application_user_id) {
             return Ok(Err(Auditor::<InvalidArgument>::new(
                 InvalidArgument,
                 Backtrace::new(line!(), file!()),
             )));
         }
-
         if !Validator::<ApplicationUser_Password>::is_valid_part_1(incoming_.application_user_password.as_str()) {
             return Ok(Err(Auditor::<InvalidArgument>::new(
                 InvalidArgument,
                 Backtrace::new(line!(), file!()),
             )));
         }
-
         if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming_.application_user_device_id.as_str()) {
             return Ok(Err(Auditor::<InvalidArgument>::new(
                 InvalidArgument,
                 Backtrace::new(line!(), file!()),
             )));
         }
-
         let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
-
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
-
         let mut application_user_reset_password_token = match PostgresqlRepository::<ApplicationUserResetPasswordToken>::find_2(
             database_2_postgresql_connection,
             By1_ {
@@ -107,7 +98,6 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
                 )));
             }
         };
-
         if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_reset_password_token.expires_at) {
             PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete_2(
                 database_2_postgresql_connection,
@@ -117,22 +107,18 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
                 },
             )
             .await?;
-
             return Ok(Ok(UnifiedReport::precedent(
                 Precedent::ApplicationUserResetPasswordToken_AlreadyExpired,
             )));
         }
-
         if !application_user_reset_password_token.is_approved {
             return Ok(Ok(UnifiedReport::precedent(
                 Precedent::ApplicationUserResetPasswordToken_IsNotApproved,
             )));
         }
-
         if application_user_reset_password_token.value != incoming_.application_user_reset_password_token_value {
             application_user_reset_password_token.wrong_enter_tries_quantity =
                 application_user_reset_password_token.wrong_enter_tries_quantity.checked_add(1).convert_out_of_range(Backtrace::new(line!(), file!()))?;
-
             if application_user_reset_password_token.wrong_enter_tries_quantity < ApplicationUserResetPasswordToken_WrongEnterTriesQuantity::LIMIT {
                 PostgresqlRepository::<ApplicationUserResetPasswordToken>::update_4(
                     database_2_postgresql_connection,
@@ -155,16 +141,12 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
                 )
                 .await?;
             }
-
             return Ok(Ok(UnifiedReport::precedent(
                 Precedent::ApplicationUserResetPasswordToken_WrongValue,
             )));
         }
-
         let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
-
         let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
-
         let mut application_user = match PostgresqlRepository::<ApplicationUser>::find_5(
             database_1_postgresql_connection,
             By3 {
@@ -180,7 +162,6 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
                 )));
             }
         };
-
         if !Validator::<ApplicationUser_Password>::is_valid_part_2(
             incoming_.application_user_password.as_str(),
             application_user.email.as_str(),
@@ -191,13 +172,10 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
                 Backtrace::new(line!(), file!()),
             )));
         }
-
         let join_handle = Spawner::<TokioBlockingTask>::spawn_processed(move || -> _ {
             return Encoder::<ApplicationUser_Password>::encode(incoming_.application_user_password.as_str());
         });
-
         application_user.password_hash = join_handle.await.convert(Backtrace::new(line!(), file!()))??;
-
         PostgresqlRepository::<ApplicationUser>::update_1(
             database_1_postgresql_connection,
             Update1 {
@@ -208,7 +186,6 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
             },
         )
         .await?;
-
         PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::delete_2(
             &*database_2_postgresql_pooled_connection,
             By1 {
@@ -216,14 +193,10 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
             },
         )
         .await?;
-
         Resolver::<CloudMessage>::deauthorize_application_user_from_all_devices();
-
         let database_2_postgresql_connection_pool_ = database_2_postgresql_connection_pool.clone();
-
         Spawner::<TokioNonBlockingTask>::spawn_into_background(async move {
             let database_2_postgresql_pooled_connection_ = database_2_postgresql_connection_pool_.get().await.convert(Backtrace::new(line!(), file!()))?;
-
             PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete_2(
                 &*database_2_postgresql_pooled_connection_,
                 By1_ {
@@ -232,10 +205,8 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
                 },
             )
             .await?;
-
             return Ok(());
         });
-
         return Ok(Ok(UnifiedReport::target_empty()));
     }
 }

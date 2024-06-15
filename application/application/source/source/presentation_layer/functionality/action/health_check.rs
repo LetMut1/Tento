@@ -1,3 +1,4 @@
+pub use crate::application_layer::functionality::action_processor::health_check::HealthCheck;
 use crate::application_layer::functionality::action_processor::ActionProcessor;
 use crate::application_layer::functionality::service::processor::generalized_action::GeneralizedAction;
 use crate::application_layer::functionality::service::processor::Processor;
@@ -18,9 +19,6 @@ use std::marker::Sync;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
-
-pub use crate::application_layer::functionality::action_processor::health_check::HealthCheck;
-
 impl Action<HealthCheck> {
     pub async fn run<'a, T>(
         environment_configuration: &'a EnvironmentConfiguration,

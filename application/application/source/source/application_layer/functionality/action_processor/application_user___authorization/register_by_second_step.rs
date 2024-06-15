@@ -10,6 +10,7 @@ use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::data::auditor::OptionConverter;
+pub use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___RegisterBySecondStep;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
@@ -20,6 +21,8 @@ use crate::infrastructure_layer::functionality::repository::postgresql::applicat
 use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::unix_time::UnixTime;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
+pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::register_by_second_step::Incoming;
+pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::register_by_second_step::Precedent;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use std::clone::Clone;
@@ -28,11 +31,6 @@ use std::marker::Sync;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
-
-pub use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___RegisterBySecondStep;
-pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::register_by_second_step::Incoming;
-pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::register_by_second_step::Precedent;
-
 impl ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
     pub async fn process<'a, T>(
         _environment_configuration: &'a EnvironmentConfiguration,
@@ -47,32 +45,26 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
         let incoming_ = incoming.convert_value_does_not_exist(Backtrace::new(line!(), file!()))?;
-
         if !Validator::<ApplicationUser_Email>::is_valid(incoming_.application_user_email.as_str())? {
             return Ok(Err(Auditor::<InvalidArgument>::new(
                 InvalidArgument,
                 Backtrace::new(line!(), file!()),
             )));
         }
-
         if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming_.application_user_device_id.as_str()) {
             return Ok(Err(Auditor::<InvalidArgument>::new(
                 InvalidArgument,
                 Backtrace::new(line!(), file!()),
             )));
         }
-
         if !Validator::<ApplicationUserRegistrationToken_Value>::is_valid(incoming_.application_user_registration_token_value.as_str())? {
             return Ok(Err(Auditor::<InvalidArgument>::new(
                 InvalidArgument,
                 Backtrace::new(line!(), file!()),
             )));
         }
-
         let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
-
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
-
         let mut application_user_registration_token = match PostgresqlRepository::<ApplicationUserRegistrationToken>::find_2(
             database_2_postgresql_connection,
             By1 {
@@ -89,7 +81,6 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
                 )));
             }
         };
-
         if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token.expires_at) {
             PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete_2(
                 database_2_postgresql_connection,
@@ -99,22 +90,18 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
                 },
             )
             .await?;
-
             return Ok(Ok(UnifiedReport::precedent(
                 Precedent::ApplicationUserRegistrationToken_AlreadyExpired,
             )));
         }
-
         if application_user_registration_token.is_approved {
             return Ok(Ok(UnifiedReport::precedent(
                 Precedent::ApplicationUserRegistrationToken_AlreadyApproved,
             )));
         }
-
         if application_user_registration_token.value != incoming_.application_user_registration_token_value {
             application_user_registration_token.wrong_enter_tries_quantity =
                 application_user_registration_token.wrong_enter_tries_quantity.checked_add(1).convert_out_of_range(Backtrace::new(line!(), file!()))?;
-
             if application_user_registration_token.wrong_enter_tries_quantity < ApplicationUserRegistrationToken_WrongEnterTriesQuantity::LIMIT {
                 PostgresqlRepository::<ApplicationUserRegistrationToken>::update_4(
                     database_2_postgresql_connection,
@@ -137,16 +124,13 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
                 )
                 .await?;
             }
-
             return Ok(Ok(UnifiedReport::precedent(
                 Precedent::ApplicationUserRegistrationToken_WrongValue {
                     application_user_registration_token_wrong_enter_tries_quantity: application_user_registration_token.wrong_enter_tries_quantity,
                 },
             )));
         }
-
         application_user_registration_token.is_approved = true;
-
         PostgresqlRepository::<ApplicationUserRegistrationToken>::update_5(
             database_2_postgresql_connection,
             Update5 {
@@ -158,7 +142,6 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
             },
         )
         .await?;
-
         return Ok(Ok(UnifiedReport::target_empty()));
     }
 }

@@ -1,8 +1,6 @@
+pub use self::Id as ApplicationUserDevice_Id;
 use super::application_user::ApplicationUser_Id;
 use std::marker::PhantomData;
-
-pub use self::Id as ApplicationUserDevice_Id;
-
 pub struct ApplicationUserDevice {
     pub id: String,
     _id: PhantomData<Id>,
@@ -10,7 +8,6 @@ pub struct ApplicationUserDevice {
     pub application_user_id: i64,
     _application_user_id: PhantomData<ApplicationUser_Id>,
 }
-
 impl ApplicationUserDevice {
     pub fn new(
         id: String,
@@ -24,5 +21,4 @@ impl ApplicationUserDevice {
         };
     }
 }
-
 pub struct Id;

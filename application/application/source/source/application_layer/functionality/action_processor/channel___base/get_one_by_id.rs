@@ -14,6 +14,7 @@ use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::data::auditor::OptionConverter;
+pub use crate::infrastructure_layer::data::control_type::Channel__Base___GetOneById;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
@@ -22,6 +23,10 @@ use crate::infrastructure_layer::functionality::repository::postgresql::channel_
 use crate::infrastructure_layer::functionality::repository::postgresql::channel_outer_link::By1 as By1_;
 use crate::infrastructure_layer::functionality::repository::postgresql::channel_subscription::By1;
 use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
+pub use action_processor_incoming_outcoming::action_processor::channel___base::get_one_by_id::Channel2;
+pub use action_processor_incoming_outcoming::action_processor::channel___base::get_one_by_id::Incoming;
+pub use action_processor_incoming_outcoming::action_processor::channel___base::get_one_by_id::Outcoming;
+pub use action_processor_incoming_outcoming::action_processor::channel___base::get_one_by_id::Precedent;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use std::clone::Clone;
@@ -30,13 +35,6 @@ use std::marker::Sync;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
-
-pub use crate::infrastructure_layer::data::control_type::Channel__Base___GetOneById;
-pub use action_processor_incoming_outcoming::action_processor::channel___base::get_one_by_id::Channel2;
-pub use action_processor_incoming_outcoming::action_processor::channel___base::get_one_by_id::Incoming;
-pub use action_processor_incoming_outcoming::action_processor::channel___base::get_one_by_id::Outcoming;
-pub use action_processor_incoming_outcoming::action_processor::channel___base::get_one_by_id::Precedent;
-
 impl ActionProcessor<Channel__Base___GetOneById> {
     pub async fn process<'a, T>(
         environment_configuration: &'a EnvironmentConfiguration,
@@ -51,7 +49,6 @@ impl ActionProcessor<Channel__Base___GetOneById> {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
         let incoming_ = incoming.convert_value_does_not_exist(Backtrace::new(line!(), file!()))?;
-
         let application_user_access_token = match Extractor::<ApplicationUserAccessToken<'_>>::extract(
             environment_configuration,
             incoming_.application_user_access_token_encrypted.as_str(),
@@ -74,23 +71,19 @@ impl ActionProcessor<Channel__Base___GetOneById> {
                         )));
                     }
                 };
-
                 application_user_access_token_
             }
             Err(invalid_argument_auditor) => {
                 return Ok(Err(invalid_argument_auditor));
             }
         };
-
         if !Validator::<Channel_Id>::is_valid(incoming_.channel_id) {
             return Ok(Err(Auditor::<InvalidArgument>::new(
                 InvalidArgument,
                 Backtrace::new(line!(), file!()),
             )));
         }
-
         let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
-
         let channel = match PostgresqlRepository::<EntityChannel<'_>>::find_1(
             &*database_1_postgresql_pooled_connection,
             By1___ {
@@ -104,7 +97,6 @@ impl ActionProcessor<Channel__Base___GetOneById> {
                 return Ok(Ok(UnifiedReport::precedent(Precedent::Channel_NotFound)));
             }
         };
-
         if let Channel_AccessModifier::Close = Channel_AccessModifier::to_representation(channel.access_modifier) {
             let is_exist = PostgresqlRepository::<ChannelSubscription>::is_exist_1(
                 &*database_1_postgresql_pooled_connection,
@@ -114,12 +106,10 @@ impl ActionProcessor<Channel__Base___GetOneById> {
                 },
             )
             .await?;
-
             if !is_exist && application_user_access_token.application_user_id != channel.owner {
                 return Ok(Ok(UnifiedReport::precedent(Precedent::Channel_IsClose)));
             }
         }
-
         let channel_inner_link_registry = PostgresqlRepository::<ChannelInnerLink>::find_1(
             &*database_1_postgresql_pooled_connection,
             By1__ {
@@ -128,7 +118,6 @@ impl ActionProcessor<Channel__Base___GetOneById> {
             ChannelInnerLink::MAXIMUM_QUANTITY,
         )
         .await?;
-
         let channel_outer_link_registry = PostgresqlRepository::<ChannelOuterLink>::find_1(
             &*database_1_postgresql_pooled_connection,
             By1_ {
@@ -137,7 +126,6 @@ impl ActionProcessor<Channel__Base___GetOneById> {
             ChannelOuterLink::MAXIMUM_QUANTITY,
         )
         .await?;
-
         let channel_2 = Channel2 {
             channel_owner: channel.owner,
             channel_name: channel.name.into_owned(),
@@ -152,13 +140,11 @@ impl ActionProcessor<Channel__Base___GetOneById> {
             channel_marks_quantity: channel.marks_quantity,
             channel_viewing_quantity: channel.viewing_quantity,
         };
-
         let outcoming = Outcoming {
             channel: channel_2,
             channel_inner_link_registry,
             channel_outer_link_registry,
         };
-
         return Ok(Ok(UnifiedReport::target_filled(outcoming)));
     }
 }

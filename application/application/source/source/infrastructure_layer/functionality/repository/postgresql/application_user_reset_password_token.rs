@@ -11,16 +11,13 @@ use crate::infrastructure_layer::functionality::service::prepared_statemant_para
 use std::borrow::Cow;
 use tokio_postgres::types::Type;
 use tokio_postgres::Client as Connection;
-
 impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
     pub async fn create_1<'a>(
         database_2_connection: &'a Connection,
         insert_1: Insert1<'a>,
     ) -> Result<ApplicationUserResetPasswordToken<'a>, Auditor<Error>> {
         let application_user_reset_password_token_value = insert_1.application_user_reset_password_token_value.as_str();
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-
         let query = "\
             INSERT INTO public.application_user_reset_password_token AS aurpt ( \
                 application_user_id, \
@@ -39,7 +36,6 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
                 $6, \
                 $7 \
             );";
-
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(&insert_1.application_user_id, Type::INT8)
             .add_parameter(&insert_1.application_user_device_id, Type::TEXT)
@@ -60,7 +56,6 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
                 &insert_1.application_user_reset_password_token_can_be_resent_from,
                 Type::INT8,
             );
-
         let statement = database_2_connection
             .prepare_typed(
                 query,
@@ -68,7 +63,6 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
             )
             .await
             .convert(Backtrace::new(line!(), file!()))?;
-
         database_2_connection
             .query(
                 &statement,
@@ -76,7 +70,6 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
             )
             .await
             .convert(Backtrace::new(line!(), file!()))?;
-
         return Ok(ApplicationUserResetPasswordToken::new(
             insert_1.application_user_id,
             Cow::Borrowed(insert_1.application_user_device_id),
@@ -87,19 +80,17 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
             insert_1.application_user_reset_password_token_can_be_resent_from,
         ));
     }
-
     pub async fn delete_2<'a>(
         database_2_connection: &'a Connection,
         by_1: By1<'_>,
     ) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-
         let query = "\
             DELETE FROM ONLY public.application_user_reset_password_token AS aurpt \
             WHERE aurpt.application_user_id = $1 AND aurpt.application_user_device_id = $2;";
-
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&by_1.application_user_id, Type::INT8).add_parameter(&by_1.application_user_device_id, Type::TEXT);
-
+        prepared_statemant_parameter_convertation_resolver
+            .add_parameter(&by_1.application_user_id, Type::INT8)
+            .add_parameter(&by_1.application_user_device_id, Type::TEXT);
         let statement = database_2_connection
             .prepare_typed(
                 query,
@@ -107,7 +98,6 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
             )
             .await
             .convert(Backtrace::new(line!(), file!()))?;
-
         database_2_connection
             .query(
                 &statement,
@@ -115,17 +105,14 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
             )
             .await
             .convert(Backtrace::new(line!(), file!()))?;
-
         return Ok(());
     }
-
     pub async fn update_1<'a>(
         database_2_connection: &'a Connection,
         update_1: Update1<'_>,
         by_1: By1<'_>,
     ) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-
         let query = "\
             UPDATE ONLY public.application_user_reset_password_token AS aurpt
             SET ( \
@@ -142,7 +129,6 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
                 $5 \
             ) \
             WHERE aurpt.application_user_id = $6 AND aurpt.application_user_device_id = $7;";
-
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
                 &update_1.application_user_reset_password_token_value,
@@ -166,7 +152,6 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
             )
             .add_parameter(&by_1.application_user_id, Type::INT8)
             .add_parameter(&by_1.application_user_device_id, Type::TEXT);
-
         let statement = database_2_connection
             .prepare_typed(
                 query,
@@ -174,7 +159,6 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
             )
             .await
             .convert(Backtrace::new(line!(), file!()))?;
-
         database_2_connection
             .query(
                 &statement,
@@ -182,17 +166,14 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
             )
             .await
             .convert(Backtrace::new(line!(), file!()))?;
-
         return Ok(());
     }
-
     pub async fn update_2<'a>(
         database_2_connection: &'a Connection,
         update_2: Update2,
         by_1: By1<'_>,
     ) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-
         let query = "\
             UPDATE ONLY public.application_user_reset_password_token AS aurpt
             SET ( \
@@ -201,7 +182,6 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
                 $1 \
             ) \
             WHERE aurpt.application_user_id = $2 AND aurpt.application_user_device_id = $3;";
-
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
                 &update_2.application_user_reset_password_token_can_be_resent_from,
@@ -209,7 +189,6 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
             )
             .add_parameter(&by_1.application_user_id, Type::INT8)
             .add_parameter(&by_1.application_user_device_id, Type::TEXT);
-
         let statement = database_2_connection
             .prepare_typed(
                 query,
@@ -217,7 +196,6 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
             )
             .await
             .convert(Backtrace::new(line!(), file!()))?;
-
         database_2_connection
             .query(
                 &statement,
@@ -225,17 +203,14 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
             )
             .await
             .convert(Backtrace::new(line!(), file!()))?;
-
         return Ok(());
     }
-
     pub async fn update_3<'a>(
         database_2_connection: &'a Connection,
         update_3: Update3<'_>,
         by_1: By1<'_>,
     ) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-
         let query = "\
             UPDATE ONLY public.application_user_reset_password_token AS aurpt
             SET ( \
@@ -250,7 +225,6 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
                 $4 \
             ) \
             WHERE aurpt.application_user_id = $5 AND aurpt.application_user_device_id = $6;";
-
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
                 &update_3.application_user_reset_password_token_value,
@@ -270,7 +244,6 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
             )
             .add_parameter(&by_1.application_user_id, Type::INT8)
             .add_parameter(&by_1.application_user_device_id, Type::TEXT);
-
         let statement = database_2_connection
             .prepare_typed(
                 query,
@@ -278,7 +251,6 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
             )
             .await
             .convert(Backtrace::new(line!(), file!()))?;
-
         database_2_connection
             .query(
                 &statement,
@@ -286,17 +258,14 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
             )
             .await
             .convert(Backtrace::new(line!(), file!()))?;
-
         return Ok(());
     }
-
     pub async fn update_4<'a>(
         database_2_connection: &'a Connection,
         update_4: Update4,
         by_1: By1<'_>,
     ) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-
         let query = "\
             UPDATE ONLY public.application_user_reset_password_token AS aurpt
             SET ( \
@@ -305,7 +274,6 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
                 $1 \
             ) \
             WHERE aurpt.application_user_id = $2 AND aurpt.application_user_device_id = $3;";
-
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
                 &update_4.application_user_reset_password_token_wrong_enter_tries_quantity,
@@ -313,7 +281,6 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
             )
             .add_parameter(&by_1.application_user_id, Type::INT8)
             .add_parameter(&by_1.application_user_device_id, Type::TEXT);
-
         let statement = database_2_connection
             .prepare_typed(
                 query,
@@ -321,7 +288,6 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
             )
             .await
             .convert(Backtrace::new(line!(), file!()))?;
-
         database_2_connection
             .query(
                 &statement,
@@ -329,17 +295,14 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
             )
             .await
             .convert(Backtrace::new(line!(), file!()))?;
-
         return Ok(());
     }
-
     pub async fn update_5<'a>(
         database_2_connection: &'a Connection,
         update_5: Update5,
         by_1: By1<'_>,
     ) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-
         let query = "\
             UPDATE ONLY public.application_user_reset_password_token AS aurpt
             SET ( \
@@ -348,7 +311,6 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
                 $1 \
             ) \
             WHERE aurpt.application_user_id = $2 AND aurpt.application_user_device_id = $3;";
-
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
                 &update_5.application_user_reset_password_token_is_approved,
@@ -356,7 +318,6 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
             )
             .add_parameter(&by_1.application_user_id, Type::INT8)
             .add_parameter(&by_1.application_user_device_id, Type::TEXT);
-
         let statement = database_2_connection
             .prepare_typed(
                 query,
@@ -364,7 +325,6 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
             )
             .await
             .convert(Backtrace::new(line!(), file!()))?;
-
         database_2_connection
             .query(
                 &statement,
@@ -372,16 +332,13 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
             )
             .await
             .convert(Backtrace::new(line!(), file!()))?;
-
         return Ok(());
     }
-
     pub async fn find_1<'a>(
         database_2_connection: &'a Connection,
         by_1: By1<'_>,
     ) -> Result<Option<ApplicationUserResetPasswordToken1>, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-
         let query = "\
             SELECT \
                 aurpt.value AS v, \
@@ -391,9 +348,9 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
                 aurpt.can_be_resent_from AS cbrf \
             FROM public.application_user_reset_password_token aurpt \
             WHERE aurpt.application_user_id = $1 AND aurpt.application_user_device_id = $2;";
-
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&by_1.application_user_id, Type::INT8).add_parameter(&by_1.application_user_device_id, Type::TEXT);
-
+        prepared_statemant_parameter_convertation_resolver
+            .add_parameter(&by_1.application_user_id, Type::INT8)
+            .add_parameter(&by_1.application_user_device_id, Type::TEXT);
         let statement = database_2_connection
             .prepare_typed(
                 query,
@@ -401,7 +358,6 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
             )
             .await
             .convert(Backtrace::new(line!(), file!()))?;
-
         let row_registry = database_2_connection
             .query(
                 &statement,
@@ -409,11 +365,9 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
             )
             .await
             .convert(Backtrace::new(line!(), file!()))?;
-
         if row_registry.is_empty() {
             return Ok(None);
         }
-
         return Ok(Some(ApplicationUserResetPasswordToken1 {
             value: row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
             wrong_enter_tries_quantity: row_registry[0].try_get::<'_, usize, i16>(1).convert(Backtrace::new(line!(), file!()))?,
@@ -422,13 +376,11 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
             can_be_resent_from: row_registry[0].try_get::<'_, usize, i64>(4).convert(Backtrace::new(line!(), file!()))?,
         }));
     }
-
     pub async fn find_2<'a>(
         database_2_connection: &'a Connection,
         by_1: By1<'_>,
     ) -> Result<Option<ApplicationUserResetPasswordToken2>, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-
         let query = "\
             SELECT \
                 aurpt.value AS v, \
@@ -437,9 +389,9 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
                 aurpt.expires_at AS ea \
             FROM public.application_user_reset_password_token aurpt \
             WHERE aurpt.application_user_id = $1 AND aurpt.application_user_device_id = $2;";
-
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&by_1.application_user_id, Type::INT8).add_parameter(&by_1.application_user_device_id, Type::TEXT);
-
+        prepared_statemant_parameter_convertation_resolver
+            .add_parameter(&by_1.application_user_id, Type::INT8)
+            .add_parameter(&by_1.application_user_device_id, Type::TEXT);
         let statement = database_2_connection
             .prepare_typed(
                 query,
@@ -447,7 +399,6 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
             )
             .await
             .convert(Backtrace::new(line!(), file!()))?;
-
         let row_registry = database_2_connection
             .query(
                 &statement,
@@ -455,11 +406,9 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
             )
             .await
             .convert(Backtrace::new(line!(), file!()))?;
-
         if row_registry.is_empty() {
             return Ok(None);
         }
-
         return Ok(Some(ApplicationUserResetPasswordToken2 {
             value: row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
             wrong_enter_tries_quantity: row_registry[0].try_get::<'_, usize, i16>(1).convert(Backtrace::new(line!(), file!()))?,
@@ -467,13 +416,11 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
             expires_at: row_registry[0].try_get::<'_, usize, i64>(3).convert(Backtrace::new(line!(), file!()))?,
         }));
     }
-
     pub async fn find_3<'a>(
         database_2_connection: &'a Connection,
         by_1: By1<'_>,
     ) -> Result<Option<ApplicationUserResetPasswordToken3>, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-
         let query = "\
             SELECT \
                 aurpt.value AS v, \
@@ -482,9 +429,9 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
                 aurpt.can_be_resent_from AS cbrf \
             FROM public.application_user_reset_password_token aurpt \
             WHERE aurpt.application_user_id = $1 AND aurpt.application_user_device_id = $2;";
-
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&by_1.application_user_id, Type::INT8).add_parameter(&by_1.application_user_device_id, Type::TEXT);
-
+        prepared_statemant_parameter_convertation_resolver
+            .add_parameter(&by_1.application_user_id, Type::INT8)
+            .add_parameter(&by_1.application_user_device_id, Type::TEXT);
         let statement = database_2_connection
             .prepare_typed(
                 query,
@@ -492,7 +439,6 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
             )
             .await
             .convert(Backtrace::new(line!(), file!()))?;
-
         let row_registry = database_2_connection
             .query(
                 &statement,
@@ -500,11 +446,9 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
             )
             .await
             .convert(Backtrace::new(line!(), file!()))?;
-
         if row_registry.is_empty() {
             return Ok(None);
         }
-
         return Ok(Some(ApplicationUserResetPasswordToken3 {
             value: row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
             is_approved: row_registry[0].try_get::<'_, usize, bool>(1).convert(Backtrace::new(line!(), file!()))?,
@@ -513,7 +457,6 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
         }));
     }
 }
-
 pub struct Insert1<'a> {
     pub application_user_id: i64,
     pub application_user_device_id: &'a str,
@@ -523,7 +466,6 @@ pub struct Insert1<'a> {
     pub application_user_reset_password_token_expires_at: i64,
     pub application_user_reset_password_token_can_be_resent_from: i64,
 }
-
 pub struct Update1<'a> {
     pub application_user_reset_password_token_value: &'a str,
     pub application_user_reset_password_token_wrong_enter_tries_quantity: i16,
@@ -531,26 +473,21 @@ pub struct Update1<'a> {
     pub application_user_reset_password_token_expires_at: i64,
     pub application_user_reset_password_token_can_be_resent_from: i64,
 }
-
 pub struct Update2 {
     pub application_user_reset_password_token_can_be_resent_from: i64,
 }
-
 pub struct Update3<'a> {
     pub application_user_reset_password_token_value: &'a str,
     pub application_user_reset_password_token_wrong_enter_tries_quantity: i16,
     pub application_user_reset_password_token_is_approved: bool,
     pub application_user_reset_password_token_expires_at: i64,
 }
-
 pub struct Update4 {
     pub application_user_reset_password_token_wrong_enter_tries_quantity: i16,
 }
-
 pub struct Update5 {
     pub application_user_reset_password_token_is_approved: bool,
 }
-
 pub struct By1<'a> {
     pub application_user_id: i64,
     pub application_user_device_id: &'a str,

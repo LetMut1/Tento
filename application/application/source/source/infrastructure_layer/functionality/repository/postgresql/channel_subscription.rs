@@ -7,14 +7,12 @@ use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
 use tokio_postgres::types::Type;
 use tokio_postgres::Client as Connection;
-
 impl PostgresqlRepository<ChannelSubscription> {
     pub async fn create_1<'a>(
         database_1_connection: &'a Connection,
         insert_1: Insert1,
     ) -> Result<ChannelSubscription, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-
         let query = "\
             INSERT INTO public.channel_subscription AS cs ( \
                 application_user_id, \
@@ -27,9 +25,9 @@ impl PostgresqlRepository<ChannelSubscription> {
             ) \
             RETURNING \
                 cs.created_at::TEXT AS ca;";
-
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&insert_1.application_user_id, Type::INT8).add_parameter(&insert_1.channel_id, Type::INT8);
-
+        prepared_statemant_parameter_convertation_resolver
+            .add_parameter(&insert_1.application_user_id, Type::INT8)
+            .add_parameter(&insert_1.channel_id, Type::INT8);
         let statement = database_1_connection
             .prepare_typed(
                 query,
@@ -37,7 +35,6 @@ impl PostgresqlRepository<ChannelSubscription> {
             )
             .await
             .convert(Backtrace::new(line!(), file!()))?;
-
         let row_registry = database_1_connection
             .query(
                 &statement,
@@ -45,30 +42,24 @@ impl PostgresqlRepository<ChannelSubscription> {
             )
             .await
             .convert(Backtrace::new(line!(), file!()))?;
-
         let channel_subscription = ChannelSubscription::new(
             insert_1.application_user_id,
             insert_1.channel_id,
             row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
         );
-
         return Ok(channel_subscription);
     }
-
     pub async fn is_exist_1<'a>(
         database_1_connection: &'a Connection,
         by_1: By1,
     ) -> Result<bool, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-
         let query = "\
             SELECT \
                 cs.application_user_id AS aui \
             FROM public.channel_subscription cs \
             WHERE cs.application_user_id = $1 AND cs.channel_id = $2;";
-
         prepared_statemant_parameter_convertation_resolver.add_parameter(&by_1.application_user_id, Type::INT8).add_parameter(&by_1.channel_id, Type::INT8);
-
         let statement = database_1_connection
             .prepare_typed(
                 query,
@@ -76,7 +67,6 @@ impl PostgresqlRepository<ChannelSubscription> {
             )
             .await
             .convert(Backtrace::new(line!(), file!()))?;
-
         let row_registry = database_1_connection
             .query(
                 &statement,
@@ -84,20 +74,16 @@ impl PostgresqlRepository<ChannelSubscription> {
             )
             .await
             .convert(Backtrace::new(line!(), file!()))?;
-
         if row_registry.is_empty() {
             return Ok(false);
         }
-
         return Ok(true);
     }
 }
-
 pub struct Insert1 {
     pub application_user_id: i64,
     pub channel_id: i64,
 }
-
 pub struct By1 {
     pub application_user_id: i64,
     pub channel_id: i64,

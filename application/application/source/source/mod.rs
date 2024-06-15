@@ -80,7 +80,6 @@
     clippy::verbose_file_reads,
     clippy::zero_sized_map_values
 )]
-
 pub mod application_layer;
 pub(crate) mod domain_layer;
 pub mod infrastructure_layer;

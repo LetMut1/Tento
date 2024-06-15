@@ -9,35 +9,27 @@ pub use action_processor_incoming_outcoming::Channel1;
 use std::borrow::Cow;
 use tokio_postgres::types::Type;
 use tokio_postgres::Client as Connection;
-
 impl PostgresqlRepository<Channel<'_>> {
     pub async fn create_1<'a>(
         database_1_connection: &'a Connection,
         insert_1: Insert1,
     ) -> Result<Channel<'static>, Auditor<Error>> {
         let channel_name = insert_1.channel_name.as_str();
-
         let channel_linked_name = insert_1.channel_linked_name.as_str();
-
         let channel_description = match insert_1.channel_description {
             Some(ref channel_description_) => Some(channel_description_.as_str()),
             None => None,
         };
-
         let channel_orientation = insert_1.channel_orientation.as_slice();
-
         let channel_cover_image_path = match insert_1.channel_cover_image_path {
             Some(ref channel_cover_image_path_) => Some(channel_cover_image_path_.as_str()),
             None => None,
         };
-
         let channel_background_image_path = match insert_1.channel_background_image_path {
             Some(ref channel_background_image_path_) => Some(channel_background_image_path_.as_str()),
             None => None,
         };
-
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-
         let query = "\
             INSERT INTO public.channel AS c ( \
                 id, \
@@ -73,7 +65,6 @@ impl PostgresqlRepository<Channel<'_>> {
             RETURNING \
                 c.id AS i,
                 c.created_at::TEXT AS ca;";
-
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(&insert_1.channel_owner, Type::INT8)
             .add_parameter(&channel_name, Type::TEXT)
@@ -87,7 +78,6 @@ impl PostgresqlRepository<Channel<'_>> {
             .add_parameter(&insert_1.channel_subscribers_quantity, Type::INT8)
             .add_parameter(&insert_1.channel_marks_quantity, Type::INT8)
             .add_parameter(&insert_1.channel_viewing_quantity, Type::INT8);
-
         let statement = database_1_connection
             .prepare_typed(
                 query,
@@ -95,7 +85,6 @@ impl PostgresqlRepository<Channel<'_>> {
             )
             .await
             .convert(Backtrace::new(line!(), file!()))?;
-
         let row_registry = database_1_connection
             .query(
                 &statement,
@@ -103,7 +92,6 @@ impl PostgresqlRepository<Channel<'_>> {
             )
             .await
             .convert(Backtrace::new(line!(), file!()))?;
-
         return Ok(Channel::new(
             row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
             insert_1.channel_owner,
@@ -121,13 +109,11 @@ impl PostgresqlRepository<Channel<'_>> {
             row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
         ));
     }
-
     pub async fn find_1<'a>(
         database_1_connection: &'a Connection,
         by_1: By1,
     ) -> Result<Option<Channel<'static>>, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-
         let query = "\
             SELECT \
                 c.owner AS ow, \
@@ -145,9 +131,7 @@ impl PostgresqlRepository<Channel<'_>> {
                 c.created_at::TEXT AS ca \
             FROM public.channel c \
             WHERE c.id = $1;";
-
         prepared_statemant_parameter_convertation_resolver.add_parameter(&by_1.channel_id, Type::INT8);
-
         let statement = database_1_connection
             .prepare_typed(
                 query,
@@ -155,7 +139,6 @@ impl PostgresqlRepository<Channel<'_>> {
             )
             .await
             .convert(Backtrace::new(line!(), file!()))?;
-
         let row_registry = database_1_connection
             .query(
                 &statement,
@@ -163,11 +146,9 @@ impl PostgresqlRepository<Channel<'_>> {
             )
             .await
             .convert(Backtrace::new(line!(), file!()))?;
-
         if row_registry.is_empty() {
             return Ok(None);
         }
-
         return Ok(Some(Channel::new(
             by_1.channel_id,
             row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
@@ -185,13 +166,11 @@ impl PostgresqlRepository<Channel<'_>> {
             row_registry[0].try_get::<'_, usize, String>(12).convert(Backtrace::new(line!(), file!()))?,
         )));
     }
-
     pub async fn find_2<'a, 'b>(
         database_1_connection: &'a Connection,
         by_2: By2<'b>,
     ) -> Result<Option<Channel<'b>>, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-
         let query = "\
             SELECT \
                 c.id AS i, \
@@ -209,9 +188,7 @@ impl PostgresqlRepository<Channel<'_>> {
                 c.created_at::TEXT AS ca \
             FROM public.channel c \
             WHERE c.name = $1;";
-
         prepared_statemant_parameter_convertation_resolver.add_parameter(&by_2.channel_name, Type::TEXT);
-
         let statement = database_1_connection
             .prepare_typed(
                 query,
@@ -219,7 +196,6 @@ impl PostgresqlRepository<Channel<'_>> {
             )
             .await
             .convert(Backtrace::new(line!(), file!()))?;
-
         let row_registry = database_1_connection
             .query(
                 &statement,
@@ -227,11 +203,9 @@ impl PostgresqlRepository<Channel<'_>> {
             )
             .await
             .convert(Backtrace::new(line!(), file!()))?;
-
         if row_registry.is_empty() {
             return Ok(None);
         }
-
         return Ok(Some(Channel::new(
             row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
             row_registry[0].try_get::<'_, usize, i64>(1).convert(Backtrace::new(line!(), file!()))?,
@@ -250,7 +224,6 @@ impl PostgresqlRepository<Channel<'_>> {
         )));
     }
 }
-
 pub struct Insert1 {
     pub channel_owner: i64,
     pub channel_name: String,
@@ -265,11 +238,9 @@ pub struct Insert1 {
     pub channel_marks_quantity: i64,
     pub channel_viewing_quantity: i64,
 }
-
 pub struct By1 {
     pub channel_id: i64,
 }
-
 pub struct By2<'a> {
     pub channel_name: &'a str,
 }

@@ -1,12 +1,10 @@
 use error::Error;
 use std::boxed::Box;
 use std::error::Error as StdError;
-
 pub struct Auditor<T> {
     pub subject: T,
     pub backtrace: Backtrace,
 }
-
 impl<T> Auditor<T> {
     pub fn new(
         subject: T,
@@ -18,12 +16,10 @@ impl<T> Auditor<T> {
         };
     }
 }
-
 pub struct Backtrace {
     pub line_number: u32,
     pub file_path: &'static str,
 }
-
 impl Backtrace {
     pub fn new(
         line_number: u32,
@@ -35,14 +31,12 @@ impl Backtrace {
         };
     }
 }
-
 pub trait ErrorConverter<T> {
     fn convert(
         self,
         backtrace_part: Backtrace,
     ) -> Result<T, Auditor<Error>>;
 }
-
 impl<E, T> ErrorConverter<T> for Result<T, E>
 where
     E: StdError + Send + Sync + 'static,
@@ -58,18 +52,15 @@ where
                 backtrace_part,
             )),
         };
-
         return result;
     }
 }
-
 pub trait ErrorConverter_<T> {
     fn convert(
         self,
         backtrace_part: Backtrace,
     ) -> Result<T, Auditor<Error>>;
 }
-
 impl<T> ErrorConverter_<T> for Result<T, Box<dyn StdError + Sync + Send + 'static>> {
     fn convert(
         self,
@@ -82,28 +73,23 @@ impl<T> ErrorConverter_<T> for Result<T, Box<dyn StdError + Sync + Send + 'stati
                 backtrace_part,
             )),
         };
-
         return result;
     }
 }
-
 pub trait OptionConverter<T> {
     fn convert_unreachable_state(
         self,
         backtrace_part: Backtrace,
     ) -> Result<T, Auditor<Error>>;
-
     fn convert_out_of_range(
         self,
         backtrace_part: Backtrace,
     ) -> Result<T, Auditor<Error>>;
-
     fn convert_value_does_not_exist(
         self,
         backtrace_part: Backtrace,
     ) -> Result<T, Auditor<Error>>;
 }
-
 impl<T> OptionConverter<T> for Option<T> {
     fn convert_unreachable_state(
         self,
@@ -118,10 +104,8 @@ impl<T> OptionConverter<T> for Option<T> {
                 ));
             }
         };
-
         return result;
     }
-
     fn convert_out_of_range(
         self,
         backtrace_part: Backtrace,
@@ -135,10 +119,8 @@ impl<T> OptionConverter<T> for Option<T> {
                 ));
             }
         };
-
         return result;
     }
-
     fn convert_value_does_not_exist(
         self,
         backtrace_part: Backtrace,
@@ -152,7 +134,6 @@ impl<T> OptionConverter<T> for Option<T> {
                 ));
             }
         };
-
         return result;
     }
 }

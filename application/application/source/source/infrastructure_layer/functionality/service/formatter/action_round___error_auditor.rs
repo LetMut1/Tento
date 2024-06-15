@@ -3,7 +3,6 @@ use super::Formatter;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::control_type::ActionRound;
 use crate::infrastructure_layer::data::error::Error;
-
 impl Formatter<(ActionRound, Auditor<Error>)> {
     pub fn format<'a>(
         request_uri: &'a str,

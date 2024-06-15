@@ -7,7 +7,6 @@ use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::unix_time::UnixTime;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
-
 impl Extractor<ApplicationUserAccessToken<'_>> {
     pub async fn extract<'a>(
         environment_configuration: &'a EnvironmentConfiguration,
@@ -22,19 +21,16 @@ impl Extractor<ApplicationUserAccessToken<'_>> {
                 return Ok(Err(invalid_argument_auditor));
             }
         };
-
         if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_access_token.expires_at) {
             return Ok(Ok(
                 ExtractorResult::ApplicationUserAccessTokenAlreadyExpired,
             ));
         }
-
         return Ok(Ok(ExtractorResult::ApplicationUserAccessToken {
             application_user_access_token,
         }));
     }
 }
-
 pub enum ExtractorResult {
     ApplicationUserAccessToken {
         application_user_access_token: ApplicationUserAccessToken<'static>,

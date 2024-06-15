@@ -1,3 +1,6 @@
+pub use self::ExpiresAt as ApplicationUserAccessRefreshToken_ExpiresAt;
+pub use self::ObfuscationValue as ApplicationUserAccessRefreshToken_ObfuscationValue;
+pub use self::UpdatedAt as ApplicationUserAccessRefreshToken_UpdatedAt;
 use super::application_user::ApplicationUser_Id;
 use super::application_user_access_token::ApplicationUserAccessToken_Id;
 use super::application_user_device::ApplicationUserDevice_Id;
@@ -5,11 +8,6 @@ use serde::Deserialize;
 use serde::Serialize;
 use std::borrow::Cow;
 use std::marker::PhantomData;
-
-pub use self::ExpiresAt as ApplicationUserAccessRefreshToken_ExpiresAt;
-pub use self::ObfuscationValue as ApplicationUserAccessRefreshToken_ObfuscationValue;
-pub use self::UpdatedAt as ApplicationUserAccessRefreshToken_UpdatedAt;
-
 #[derive(Serialize, Deserialize)]
 pub struct ApplicationUserAccessRefreshToken<'a> {
     pub application_user_id: i64,
@@ -30,7 +28,6 @@ pub struct ApplicationUserAccessRefreshToken<'a> {
     pub updated_at: i64,
     _updated_at: PhantomData<UpdatedAt>,
 }
-
 impl<'a> ApplicationUserAccessRefreshToken<'a> {
     pub fn new(
         application_user_id: i64,
@@ -56,13 +53,9 @@ impl<'a> ApplicationUserAccessRefreshToken<'a> {
         };
     }
 }
-
 pub struct ObfuscationValue;
-
 pub struct ExpiresAt;
-
 impl ExpiresAt {
     pub const QUANTITY_OF_MINUTES_FOR_EXPIRATION: i64 = 60 * 24 * 30 * 3;
 }
-
 pub struct UpdatedAt;

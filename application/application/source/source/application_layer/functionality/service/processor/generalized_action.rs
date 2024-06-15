@@ -3,6 +3,7 @@ use crate::application_layer::data::unified_report::UnifiedReport;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::control_type::ActionRound;
+pub use crate::infrastructure_layer::data::control_type::GeneralizedAction;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
@@ -25,9 +26,6 @@ use std::marker::Sync;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
-
-pub use crate::infrastructure_layer::data::control_type::GeneralizedAction;
-
 impl Processor<GeneralizedAction> {
     pub async fn process<'a, 'b, 'c, T, DE, F1, AP, F2, I, O, P, SF>(
         environment_configuration: &'a EnvironmentConfiguration,
@@ -54,38 +52,29 @@ impl Processor<GeneralizedAction> {
     {
         if !Validator::<Parts>::is_valid(parts) {
             let response = Creator::<Response>::create_bad_request();
-
             Logger::<(ActionRound, Auditor<InvalidArgument>)>::log(
                 parts,
                 &response,
                 Auditor::<InvalidArgument>::new(InvalidArgument, Backtrace::new(line!(), file!())),
             );
-
             return response;
         }
-
         let incoming = match data_extractor(body, parts, route_parameters).await {
             Ok(incoming_) => incoming_,
             Err(error_auditor) => {
                 let response = Creator::<Response>::create_internal_server_error();
-
                 Logger::<(ActionRound, Auditor<Error>)>::log(parts, &response, error_auditor);
-
                 return response;
             }
         };
-
         let incoming_ = match incoming {
             Ok(incoming__) => incoming__,
             Err(invalid_argument_auditor) => {
                 let response = Creator::<Response>::create_bad_request();
-
                 Logger::<(ActionRound, Auditor<InvalidArgument>)>::log(parts, &response, invalid_argument_auditor);
-
                 return response;
             }
         };
-
         let unified_report = match action_processor(
             environment_configuration,
             database_1_postgresql_connection_pool,
@@ -97,39 +86,28 @@ impl Processor<GeneralizedAction> {
             Ok(unified_report_) => unified_report_,
             Err(error_auditor) => {
                 let response = Creator::<Response>::create_internal_server_error();
-
                 Logger::<(ActionRound, Auditor<Error>)>::log(parts, &response, error_auditor);
-
                 return response;
             }
         };
-
         let unified_report_ = match unified_report {
             Ok(unified_report__) => unified_report__,
             Err(invalid_argument_auditor) => {
                 let response = Creator::<Response>::create_bad_request();
-
                 Logger::<(ActionRound, Auditor<InvalidArgument>)>::log(parts, &response, invalid_argument_auditor);
-
                 return response;
             }
         };
-
         let data = match Serializer::<SF>::serialize(&unified_report_) {
             Ok(data_) => data_,
             Err(error_auditor) => {
                 let response = Creator::<Response>::create_internal_server_error();
-
                 Logger::<(ActionRound, Auditor<Error>)>::log(parts, &response, error_auditor);
-
                 return response;
             }
         };
-
         let response = Creator::<Response>::create_ok(data);
-
         Logger::<(ActionRound, Response)>::log(parts, &response);
-
         return response;
     }
 }

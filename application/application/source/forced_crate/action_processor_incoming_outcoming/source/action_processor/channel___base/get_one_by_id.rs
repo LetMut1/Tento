@@ -1,25 +1,21 @@
+pub use crate::Channel2;
 use crate::ChannelInnerLink1;
 use crate::ChannelOuterLink1;
 use common_precedent::CommonPrecedent;
 use macro_rules::r#enum;
 use serde::Deserialize;
 use serde::Serialize;
-
-pub use crate::Channel2;
-
 #[derive(Serialize, Deserialize)]
 pub struct Incoming {
     pub application_user_access_token_encrypted: String,
     pub channel_id: i64,
 }
-
 #[derive(Serialize, Deserialize)]
 pub struct Outcoming {
     pub channel: Channel2,
     pub channel_inner_link_registry: Vec<ChannelInnerLink1>,
     pub channel_outer_link_registry: Vec<ChannelOuterLink1>,
 }
-
 r#enum!(
     pub enum Precedent {
         CommonPrecedent::ApplicationUserAccessToken_AlreadyExpired,

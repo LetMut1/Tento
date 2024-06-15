@@ -2,6 +2,7 @@ use super::Sender;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
+pub use crate::infrastructure_layer::data::control_type::Email;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error::Error;
 use lettre::smtp::SmtpClient;
@@ -10,9 +11,6 @@ use lettre::Transport;
 use lettre_email::EmailBuilder;
 use std::convert::Into;
 use std::net::ToSocketAddrs;
-
-pub use crate::infrastructure_layer::data::control_type::Email;
-
 impl Sender<Email> {
     // TODO Возможно, сразу можно положить объект в константу.  // TODO В предпродакшене, когда будет smtp-ссервер, настройить все через константы и енв
     pub fn send<'a>(
@@ -28,11 +26,9 @@ impl Sender<Email> {
             .to(to)
             .build()
             .convert(Backtrace::new(line!(), file!()))?;
-
         // TODO В static OnceLock
         let mut email_server_socket_address_registry =
             environment_configuration.resource.email_server.socket_address.to_socket_addrs().convert(Backtrace::new(line!(), file!()))?;
-
         let email_server_socket_address = match email_server_socket_address_registry.next() {
             Some(email_server_socket_address_) => email_server_socket_address_,
             None => {
@@ -44,11 +40,8 @@ impl Sender<Email> {
                 ));
             }
         };
-
         let smtp_client = SmtpClient::new(&email_server_socket_address, ClientSecurity::None).convert(Backtrace::new(line!(), file!()))?;
-
         smtp_client.transport().send(email.into()).convert(Backtrace::new(line!(), file!()))?;
-
         return Ok(());
     }
 }

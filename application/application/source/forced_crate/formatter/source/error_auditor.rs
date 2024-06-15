@@ -2,7 +2,6 @@ use super::Formatter;
 use auditor::Auditor;
 use auditor::Backtrace;
 use error::Error;
-
 impl Formatter<Auditor<Error>> {
     pub fn format<'a>(error_auditor: &'a Auditor<Error>) -> String {
         let error_message = match error_auditor.subject {
@@ -13,7 +12,6 @@ impl Formatter<Auditor<Error>> {
                 ref runtime,
             } => format!("Runtime: {}.", runtime.get(),),
         };
-
         return format!(
             "{}:\n{}",
             error_message.as_str(),

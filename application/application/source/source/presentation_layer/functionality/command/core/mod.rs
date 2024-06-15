@@ -70,7 +70,6 @@
     clippy::verbose_file_reads,
     clippy::zero_sized_map_values
 )]
-
 use application::application_layer::functionality::command_processor::create_fixtures::CreateFixtures;
 use application::application_layer::functionality::command_processor::remove_incomplite_state::RemoveIncompliteState;
 use application::application_layer::functionality::command_processor::run_server::RunServer;
@@ -82,39 +81,35 @@ use application::infrastructure_layer::functionality::service::formatter::Format
 use clap::command;
 use clap::Command;
 use std::error::Error as StdError;
-
 const RUN_SERVER: &'static str = "run_server";
 const CREATE_FIXTURES: &'static str = "create_fixtures";
 const REMOVE_INCOMPLITE_STATE: &'static str = "remove_incomplite_state";
-
 fn main() -> Result<(), Box<dyn StdError + 'static>> {
     if let Err(error) = process() {
         println!("{}", &error);
-
         return Err(error);
     }
-
     return Ok(());
 }
-
 fn process() -> Result<(), Box<dyn StdError + 'static>> {
-    let arg_matches =
-        command!().arg_required_else_help(true).subcommand_required(true).subcommand(Command::new(RUN_SERVER)).subcommand(Command::new(CREATE_FIXTURES)).get_matches();
-
+    let arg_matches = command!()
+        .arg_required_else_help(true)
+        .subcommand_required(true)
+        .subcommand(Command::new(RUN_SERVER))
+        .subcommand(Command::new(CREATE_FIXTURES))
+        .get_matches();
     let subcommand_arg_matches = match arg_matches.subcommand() {
         Some(subcommand_arg_matches_) => subcommand_arg_matches_,
         None => {
             return Err("Exhausted list of subcommands and subcommand_required prevents `None`.".into());
         }
     };
-
     let error_auditor = match subcommand_arg_matches {
         (RUN_SERVER, _) => {
             let error_auditor_ = match CommandProcessor::<RunServer>::process() {
                 Ok(_) => None,
                 Err(error_auditor__) => Some(error_auditor__),
             };
-
             error_auditor_
         }
         (CREATE_FIXTURES, _) => {
@@ -122,7 +117,6 @@ fn process() -> Result<(), Box<dyn StdError + 'static>> {
                 Ok(_) => None,
                 Err(error_auditor__) => Some(error_auditor__),
             };
-
             error_auditor_
         }
         (REMOVE_INCOMPLITE_STATE, _) => {
@@ -130,7 +124,6 @@ fn process() -> Result<(), Box<dyn StdError + 'static>> {
                 Ok(_) => None,
                 Err(error_auditor__) => Some(error_auditor__),
             };
-
             error_auditor_
         }
         _ => Some(Auditor::<Error>::new(
@@ -138,7 +131,6 @@ fn process() -> Result<(), Box<dyn StdError + 'static>> {
             Backtrace::new(line!(), file!()),
         )),
     };
-
     match error_auditor {
         Some(error_auditor_) => {
             return Err(Formatter::<Auditor<Error>>::format(&error_auditor_).into());
@@ -148,9 +140,7 @@ fn process() -> Result<(), Box<dyn StdError + 'static>> {
         }
     }
 }
-
 // Основной TODO лист, помимо TODO, проставленных в коде:
-
 // - Cейчас нет возможности использовать async trait или реализовать подобное в stable verson without allocation Futures object in heap. Единственный путь для трейтов - написать свой объект фьючера,
 // поэтому для архитектуры сейчас используется не имплементация трейтов, а методы, которые принимают функции, отдающие Future.
 // Как только в Стэйбл версии появится возможность использовать async trait без потерь, нужно переписать код.
@@ -209,68 +199,38 @@ fn process() -> Result<(), Box<dyn StdError + 'static>> {
 // Сейчас есть баг https://github.com/rust-lang/rust/issues/102211#issuecomment-1513931928 , но, скорее всего, его уже скоро закроют.
 // - Везде ли UTC таймзона?
 // - ! Для Кэша использовать https://crates.io/crates/lru .
-
 // Возможно ли не хранить Рефреш токен в Бд? Завязать его на Аксессе?  но как тогда делать разлогин на сервере принудительный?
 // Или идти от обратного??? В Бд хранить только те токены, котоыре разлогинились принудительно, потому что принудительный разлогин делают намного меньше людей.
-
 // email_sender должен быть async.
-
 // cs.application_user_id = ${}   это можно написать в условие On Для JOIN, но можно и написать в условие WHERE. ПОнять, где его нужно написать, чтобы с самого начала в выборке для джоина было меньше строк.
-
 // Регистрация, создание каналов ( и подобное) должно быть сделано через криптограыию ( нужно, чтобы была уверенность  в том, что запрос происходит не ботом, а через приложение с устройства).
-
 // Убрать RETURNING из репозитория там, где не нужно ничего возаращать.
-
 // УБрать препэред стейтмент в репозитории там, где все параметры - это числа.
-
 // !!!!!!!!!!!! лайки, просмотры класть в другую бд, (Скорее всего Кликхаус) чтобы перезаписывалось меньше информации. Сейчас вся информация о канале будет перезаписываться в строку при изменении ожного лайкаю.
-
 // Пройтись по всем сущностяи и сделать генерацию времени из кода, если это время по логике не нужно генерировать внутри бд. То есть, CreatedAt и подобных
-
 // !!!!!!! reset_password_last_step добавить емейл (посмотреть, подобные кейсы), чтобы проверять соотетсвие емейла и айдишника???????????
-
 // channel_subscription create обработать ALready_subscribed
-
 // data.len() as u64  это безопасно, но лучше сделать через конвертер.
-
 // TODO  TODO  TODO  TODO  TODO  Имена PreparedStatement, их отмена - нужно ли это все?  Если извне оборачивать в транзакцию, что будет с декларирование подготовленного запроса? То есть: Бегин- создать препэрэд стэйстмент - иполнить пр ст- коммит/роллбэу
-
 // impl<S> UnifiedReport<S> -> сделать через трейт,
-
 // В Ресендах_емейла проверять на ВронгЕнтертраесКвантити на всякий случай.
-
 // 2 импл трейта под Writer реализовать в самом трейте.
-
 // impl Resolver<DateTime> {  -> как-то еще через UnixTime тип инфраструктуры.
-
 // Возможно RequestValidator/ ResponseCreator должен быть в слое презентации?
-
 // cargo.toml сделать через класический синтексес, как в крейтах.
-
 // удалить env файлы?
-
 // - Разбить код на микросервисы. Использовать Features, чтобы можно было, например, скомпилировать только работу с каналами, но не с токенами.
-
 // Написать сервис для интеграции с мобильными устройствами.
-
 // Так как есть много публичных дто, пройти и посмотреть, где их можно сделать opaque struct.
-
 // !!!!!!!!!!!!!!! Проверять валидность байт в типе Стринг с клиента. Возможно, встроить в модуль.
-
 // to_socket_address - долгая операция. Нужно, чтобы в Экшене ее не было.
-
 // Postgres индексы ставить на ловеркейс там, где надо.
-
 // Коннекшн в методы репозитериев как конкретный зерокост-тип, относящийся к БД.
-
 // Убрать Редис.
-
 // !!! Количество просмотров (человек посмотрел публикацию) хранить временно, чтобы через неделю моожно было бы еще раз засчитаь за просмотр.
 // Лайки к публикации постоянны.
-
 // СДелал оптимизацию запросов для:
 // - application_user_authorization. // ToDo ДОделать остальные. и сделать репозиторий по новым правилам.
-
 // ПОсылка писем через async клиент в бэкграунд таске
 // Auditor<InvalidArgument>
 // логгер в stdout
@@ -281,5 +241,4 @@ fn process() -> Result<(), Box<dyn StdError + 'static>> {
 // убрать реактор
 // новая версия языка.
 // Entity_X -> submodule
-
 // после того, как уйду от NewType паттерна, понять, нужно ли держать ентити  в отдельном модуле. Скорее всего, нет.

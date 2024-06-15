@@ -80,7 +80,6 @@
     clippy::verbose_file_reads,
     clippy::zero_sized_map_values
 )]
-
 pub enum CommonPrecedent {
     ApplicationUser_EmailAlreadyExist,
     ApplicationUser_IsChannelOwner,

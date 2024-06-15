@@ -8,6 +8,7 @@ use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::data::auditor::OptionConverter;
+pub use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___DeauthorizeFromAllDevices;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
@@ -16,6 +17,8 @@ use crate::infrastructure_layer::functionality::repository::postgresql::applicat
 use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::resolver::cloud_message::CloudMessage;
 use crate::infrastructure_layer::functionality::service::resolver::Resolver;
+pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::deauthorize_from_all_devices::Incoming;
+pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::deauthorize_from_all_devices::Precedent;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use std::clone::Clone;
@@ -24,11 +27,6 @@ use std::marker::Sync;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
-
-pub use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___DeauthorizeFromAllDevices;
-pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::deauthorize_from_all_devices::Incoming;
-pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::deauthorize_from_all_devices::Precedent;
-
 impl ActionProcessor<ApplicationUser__Authorization___DeauthorizeFromAllDevices> {
     pub async fn process<'a, T>(
         environment_configuration: &'a EnvironmentConfiguration,
@@ -44,7 +42,6 @@ impl ActionProcessor<ApplicationUser__Authorization___DeauthorizeFromAllDevices>
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
         let incoming_ = incoming.convert_value_does_not_exist(Backtrace::new(line!(), file!()))?;
-
         let application_user_access_token = match Extractor::<ApplicationUserAccessToken<'_>>::extract(
             environment_configuration,
             incoming_.application_user_access_token_encrypted.as_str(),
@@ -67,16 +64,13 @@ impl ActionProcessor<ApplicationUser__Authorization___DeauthorizeFromAllDevices>
                         )));
                     }
                 };
-
                 application_user_access_token_
             }
             Err(invalid_argument_auditor) => {
                 return Ok(Err(invalid_argument_auditor));
             }
         };
-
         let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
-
         PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::delete_2(
             &*database_2_postgresql_pooled_connection,
             By1 {
@@ -84,9 +78,7 @@ impl ActionProcessor<ApplicationUser__Authorization___DeauthorizeFromAllDevices>
             },
         )
         .await?;
-
         Resolver::<CloudMessage>::deauthorize_application_user_from_all_devices();
-
         return Ok(Ok(UnifiedReport::target_empty()));
     }
 }

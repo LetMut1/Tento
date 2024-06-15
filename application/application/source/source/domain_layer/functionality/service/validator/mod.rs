@@ -11,9 +11,7 @@ pub mod channel__id;
 pub mod channel__linked_name;
 pub mod channel__name;
 pub mod channel__orientation;
-
 use std::marker::PhantomData;
-
 pub struct Validator<S> {
     _subject: PhantomData<S>,
 }

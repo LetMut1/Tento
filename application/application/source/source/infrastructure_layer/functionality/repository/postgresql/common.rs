@@ -9,7 +9,6 @@ use crate::infrastructure_layer::functionality::service::prepared_statemant_para
 pub use action_processor_incoming_outcoming::Common1;
 use tokio_postgres::types::Type;
 use tokio_postgres::Client as Connection;
-
 impl PostgresqlRepository<Common1> {
     pub async fn find_1<'a>(
         database_1_connection: &'a Connection,
@@ -17,9 +16,7 @@ impl PostgresqlRepository<Common1> {
         limit: i16,
     ) -> Result<Vec<Common1>, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-
         let mut counter = Counter::<i16>::new_classic();
-
         let mut query = format!(
             "SELECT \
                 c.id AS i, \
@@ -36,24 +33,19 @@ impl PostgresqlRepository<Common1> {
             counter.get_next_value()?,
             counter.get_next_value()?,
         );
-
         let wildcard = format!("{}%", by_1.channel_name,);
-
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(&by_1.application_user_id, Type::INT8)
             .add_parameter(&by_1.channel_visability_modifier, Type::INT2)
             .add_parameter(&wildcard, Type::TEXT);
-
         if let Some(ref requery_channel_name) = by_1.requery_channel_name {
             query = format!(
                 "{} AND c.name > ${}",
                 query.as_str(),
                 counter.get_next_value()?,
             );
-
             prepared_statemant_parameter_convertation_resolver.add_parameter(requery_channel_name, Type::TEXT);
         }
-
         query = format!(
             "{} \
             ORDER BY c.name ASC \
@@ -61,9 +53,7 @@ impl PostgresqlRepository<Common1> {
             query.as_str(),
             counter.get_next_value()?
         );
-
         prepared_statemant_parameter_convertation_resolver.add_parameter(&limit, Type::INT2);
-
         let statement = database_1_connection
             .prepare_typed(
                 query.as_str(),
@@ -71,7 +61,6 @@ impl PostgresqlRepository<Common1> {
             )
             .await
             .convert(Backtrace::new(line!(), file!()))?;
-
         let row_registry = database_1_connection
             .query(
                 &statement,
@@ -79,13 +68,10 @@ impl PostgresqlRepository<Common1> {
             )
             .await
             .convert(Backtrace::new(line!(), file!()))?;
-
         let mut common_registry: Vec<Common1> = vec![];
-
         if row_registry.is_empty() {
             return Ok(common_registry);
         }
-
         '_a: for row in row_registry.iter() {
             let channel = Channel1 {
                 channel_id: row.try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
@@ -96,32 +82,25 @@ impl PostgresqlRepository<Common1> {
                 channel_cover_image_path: row.try_get::<'_, usize, Option<String>>(4).convert(Backtrace::new(line!(), file!()))?,
                 channel_background_image_path: row.try_get::<'_, usize, Option<String>>(5).convert(Backtrace::new(line!(), file!()))?,
             };
-
             let is_application_user_subscribed = match row.try_get::<'_, usize, Option<i64>>(6).convert(Backtrace::new(line!(), file!()))? {
                 Some(_) => true,
                 None => false,
             };
-
             let common = Common1 {
                 channel,
                 is_application_user_subscribed,
             };
-
             common_registry.push(common);
         }
-
         return Ok(common_registry);
     }
-
     pub async fn find_2<'a>(
         database_1_connection: &'a Connection,
         by_2: By2<'_>,
         limit: i16,
     ) -> Result<Vec<Common1>, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-
         let mut counter = Counter::<i16>::new_classic();
-
         let mut query = format!(
             "SELECT \
                 c.id AS i, \
@@ -137,21 +116,16 @@ impl PostgresqlRepository<Common1> {
             counter.get_next_value()?,
             counter.get_next_value()?,
         );
-
         let wildcard = format!("{}%", by_2.channel_name,);
-
         prepared_statemant_parameter_convertation_resolver.add_parameter(&by_2.application_user_id, Type::INT8).add_parameter(&wildcard, Type::TEXT);
-
         if let Some(ref requery_channel_name) = by_2.requery_channel_name {
             query = format!(
                 "{} AND c.name > ${}",
                 query.as_str(),
                 counter.get_next_value()?,
             );
-
             prepared_statemant_parameter_convertation_resolver.add_parameter(requery_channel_name, Type::TEXT);
         }
-
         query = format!(
             "{} \
             ORDER BY c.name ASC \
@@ -159,9 +133,7 @@ impl PostgresqlRepository<Common1> {
             query.as_str(),
             counter.get_next_value()?,
         );
-
         prepared_statemant_parameter_convertation_resolver.add_parameter(&limit, Type::INT2);
-
         let statement = database_1_connection
             .prepare_typed(
                 query.as_str(),
@@ -169,7 +141,6 @@ impl PostgresqlRepository<Common1> {
             )
             .await
             .convert(Backtrace::new(line!(), file!()))?;
-
         let row_registry = database_1_connection
             .query(
                 &statement,
@@ -177,13 +148,10 @@ impl PostgresqlRepository<Common1> {
             )
             .await
             .convert(Backtrace::new(line!(), file!()))?;
-
         let mut common_registry: Vec<Common1> = vec![];
-
         if row_registry.is_empty() {
             return Ok(common_registry);
         }
-
         '_a: for row in row_registry.iter() {
             let channel = Channel1 {
                 channel_id: row.try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
@@ -194,27 +162,21 @@ impl PostgresqlRepository<Common1> {
                 channel_cover_image_path: row.try_get::<'_, usize, Option<String>>(5).convert(Backtrace::new(line!(), file!()))?,
                 channel_background_image_path: row.try_get::<'_, usize, Option<String>>(6).convert(Backtrace::new(line!(), file!()))?,
             };
-
             let common = Common1 {
                 channel,
                 is_application_user_subscribed: true,
             };
-
             common_registry.push(common);
         }
-
         return Ok(common_registry);
     }
-
     pub async fn find_3<'a>(
         database_1_connection: &'a Connection,
         by_3: By3,
         limit: i16,
     ) -> Result<Vec<Common1>, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-
         let mut counter = Counter::<i16>::new_classic();
-
         let mut query = format!(
             "SELECT \
                 c.id AS i, \
@@ -228,24 +190,18 @@ impl PostgresqlRepository<Common1> {
             ON cs.application_user_id = ${} AND c.id = cs.channel_id",
             counter.get_next_value()?,
         );
-
         prepared_statemant_parameter_convertation_resolver.add_parameter(&by_3.application_user_id, Type::INT8);
-
         let requery_channel_id: i64;
-
         if let Some(requery_channel_id_) = by_3.requery_channel_id {
             requery_channel_id = requery_channel_id_;
-
             query = format!(
                 "{} \
                 WHERE cs.channel_id > ${}",
                 query.as_str(),
                 counter.get_next_value()?,
             );
-
             prepared_statemant_parameter_convertation_resolver.add_parameter(&requery_channel_id, Type::INT8);
         }
-
         query = format!(
             "{} \
             ORDER BY cs.channel_id ASC \
@@ -253,9 +209,7 @@ impl PostgresqlRepository<Common1> {
             query.as_str(),
             counter.get_next_value()?,
         );
-
         prepared_statemant_parameter_convertation_resolver.add_parameter(&limit, Type::INT2);
-
         let statement = database_1_connection
             .prepare_typed(
                 query.as_str(),
@@ -263,7 +217,6 @@ impl PostgresqlRepository<Common1> {
             )
             .await
             .convert(Backtrace::new(line!(), file!()))?;
-
         let row_registry = database_1_connection
             .query(
                 &statement,
@@ -271,13 +224,10 @@ impl PostgresqlRepository<Common1> {
             )
             .await
             .convert(Backtrace::new(line!(), file!()))?;
-
         let mut common_registry: Vec<Common1> = vec![];
-
         if row_registry.is_empty() {
             return Ok(common_registry);
         }
-
         '_a: for row in row_registry.iter() {
             let channel = Channel1 {
                 channel_id: row.try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
@@ -288,32 +238,26 @@ impl PostgresqlRepository<Common1> {
                 channel_cover_image_path: row.try_get::<'_, usize, Option<String>>(5).convert(Backtrace::new(line!(), file!()))?,
                 channel_background_image_path: row.try_get::<'_, usize, Option<String>>(6).convert(Backtrace::new(line!(), file!()))?,
             };
-
             let common = Common1 {
                 channel,
                 is_application_user_subscribed: true,
             };
-
             common_registry.push(common);
         }
-
         return Ok(common_registry);
     }
 }
-
 pub struct By1<'a> {
     pub application_user_id: i64,
     pub channel_name: &'a str,
     pub requery_channel_name: Option<&'a str>,
     pub channel_visability_modifier: i16,
 }
-
 pub struct By2<'a> {
     pub application_user_id: i64,
     pub channel_name: &'a str,
     pub requery_channel_name: Option<&'a str>,
 }
-
 pub struct By3 {
     pub application_user_id: i64,
     pub requery_channel_id: Option<i64>,

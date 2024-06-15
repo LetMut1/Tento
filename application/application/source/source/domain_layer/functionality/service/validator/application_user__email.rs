@@ -7,9 +7,7 @@ use crate::infrastructure_layer::data::auditor::OptionConverter;
 use crate::infrastructure_layer::data::error::Error;
 use regex::Regex;
 use std::sync::OnceLock;
-
 static REGULAR_EXPRESSION: OnceLock<Regex> = OnceLock::new();
-
 impl Validator<ApplicationUser_Email> {
     pub fn is_valid<'a>(application_user_email: &'a str) -> Result<bool, Auditor<Error>> {
         let regular_expression = match REGULAR_EXPRESSION.get() {
@@ -21,11 +19,9 @@ impl Validator<ApplicationUser_Email> {
                         Backtrace::new(line!(), file!()),
                     ));
                 }
-
                 REGULAR_EXPRESSION.get().convert_value_does_not_exist(Backtrace::new(line!(), file!()))?
             }
         };
-
         return Ok(regular_expression.is_match(application_user_email) && application_user_email.chars().count() <= ApplicationUser_Email::MAXIMUM_LENGTH);
     }
 }

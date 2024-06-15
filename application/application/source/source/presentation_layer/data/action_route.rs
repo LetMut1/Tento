@@ -1,6 +1,5 @@
 #[cfg(feature = "manual_testing")]
 use const_format::concatcp;
-
 pub const ACTION_ROUTE: ActionRoute = ActionRoute {
     application_user___authorization: ApplicationUser__Authorization {
         check_nickname_for_existing: ApplicationUser__Authorization::CHECK_NICKNAME_FOR_EXISTING,
@@ -72,18 +71,15 @@ pub const ACTION_ROUTE: ActionRoute = ActionRoute {
         create_: ChannelSubscription__Base::CREATE_,
     },
 };
-
 pub struct ActionRoute {
     pub application_user___authorization: ApplicationUser__Authorization,
     pub channel___base: Channel__Base,
     pub channel_subscription___base: ChannelSubscription__Base,
 }
-
 #[cfg(feature = "manual_testing")]
 impl ActionRoute {
     const CONCATENATING_PART: &'static str = "_";
 }
-
 pub struct ApplicationUser__Authorization {
     pub check_nickname_for_existing: &'static str,
     pub check_email_for_existing: &'static str,
@@ -134,7 +130,6 @@ pub struct ApplicationUser__Authorization {
     #[cfg(feature = "manual_testing")]
     pub deauthorize_from_all_devices_: &'static str,
 }
-
 impl ApplicationUser__Authorization {
     const CHECK_NICKNAME_FOR_EXISTING: &'static str = "/1/1";
     const CHECK_EMAIL_FOR_EXISTING: &'static str = "/1/2";
@@ -153,7 +148,6 @@ impl ApplicationUser__Authorization {
     const DEAUTHORIZE_FROM_ONE_DEVICE: &'static str = "/1/15";
     const DEAUTHORIZE_FROM_ALL_DEVICES: &'static str = "/1/16";
 }
-
 #[cfg(feature = "manual_testing")]
 impl ApplicationUser__Authorization {
     const CHECK_NICKNAME_FOR_EXISTING_: &'static str = concatcp!(
@@ -221,7 +215,6 @@ impl ApplicationUser__Authorization {
         ActionRoute::CONCATENATING_PART
     );
 }
-
 pub struct Channel__Base {
     pub get_one_by_id: &'static str,
     pub get_many_by_name_in_subscription: &'static str,
@@ -236,14 +229,12 @@ pub struct Channel__Base {
     #[cfg(feature = "manual_testing")]
     pub get_many_piblic_by_name_: &'static str,
 }
-
 impl Channel__Base {
     const GET_ONE_BY_ID: &'static str = "/1/17";
     const GET_MANY_BY_NAME_IN_SUBSCRIPTIONS: &'static str = "/1/18";
     const GET_MANY_BY_SUBSCRIPTION: &'static str = "/1/19";
     const GET_MANY_PUBLIC_BY_NAME: &'static str = "/1/20";
 }
-
 #[cfg(feature = "manual_testing")]
 impl Channel__Base {
     const GET_ONE_BY_ID_: &'static str = concatcp!(
@@ -263,17 +254,14 @@ impl Channel__Base {
         ActionRoute::CONCATENATING_PART
     );
 }
-
 pub struct ChannelSubscription__Base {
     pub create: &'static str,
     #[cfg(feature = "manual_testing")]
     pub create_: &'static str,
 }
-
 impl ChannelSubscription__Base {
     const CREATE: &'static str = "/1/21";
 }
-
 #[cfg(feature = "manual_testing")]
 impl ChannelSubscription__Base {
     const CREATE_: &'static str = concatcp!(
@@ -281,7 +269,6 @@ impl ChannelSubscription__Base {
         ActionRoute::CONCATENATING_PART
     );
 }
-
 pub enum ActionRoute_ {
     ApplicationUser__Authorization {
         application_user___authorization: ApplicationUser__Authorization_,
@@ -293,7 +280,6 @@ pub enum ActionRoute_ {
         channel_subscription___base: ChannelSubscription__Base_,
     },
 }
-
 pub enum ApplicationUser__Authorization_ {
     CheckNicknameForExisting,
     CheckEmailForExisting,
@@ -344,7 +330,6 @@ pub enum ApplicationUser__Authorization_ {
     #[cfg(feature = "manual_testing")]
     DeauthorizeFromAllDevices_,
 }
-
 pub enum Channel__Base_ {
     GetOneById,
     GetManyByNameInSubscriptions,
@@ -359,7 +344,6 @@ pub enum Channel__Base_ {
     #[cfg(feature = "manual_testing")]
     GetManyPublicByName_,
 }
-
 pub enum ChannelSubscription__Base_ {
     Create,
     #[cfg(feature = "manual_testing")]

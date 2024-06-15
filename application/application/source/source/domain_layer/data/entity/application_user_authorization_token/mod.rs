@@ -1,15 +1,12 @@
 pub mod derivative;
-
-use super::application_user::ApplicationUser_Id;
-use super::application_user_device::ApplicationUserDevice_Id;
-use std::borrow::Cow;
-use std::marker::PhantomData;
-
 pub use self::CanBeResentFrom as ApplicationUserAuthorizationToken_CanBeResentFrom;
 pub use self::ExpiresAt as ApplicationUserAuthorizationToken_ExpiresAt;
 pub use self::Value as ApplicationUserAuthorizationToken_Value;
 pub use self::WrongEnterTriesQuantity as ApplicationUserAuthorizationToken_WrongEnterTriesQuantity;
-
+use super::application_user::ApplicationUser_Id;
+use super::application_user_device::ApplicationUserDevice_Id;
+use std::borrow::Cow;
+use std::marker::PhantomData;
 pub struct ApplicationUserAuthorizationToken<'a> {
     pub application_user_id: i64,
     _application_user_id: PhantomData<ApplicationUser_Id>,
@@ -29,7 +26,6 @@ pub struct ApplicationUserAuthorizationToken<'a> {
     pub can_be_resent_from: i64,
     _can_be_resent_from: PhantomData<CanBeResentFrom>,
 }
-
 impl<'a> ApplicationUserAuthorizationToken<'a> {
     pub fn new(
         application_user_id: i64,
@@ -55,27 +51,19 @@ impl<'a> ApplicationUserAuthorizationToken<'a> {
         };
     }
 }
-
 pub struct Value;
-
 impl Value {
     pub const REGULAR_EXPRESSION: &'static str = r#"^[0-9]{6}$"#;
 }
-
 pub struct WrongEnterTriesQuantity;
-
 impl WrongEnterTriesQuantity {
     pub const LIMIT: i16 = 5;
 }
-
 pub struct ExpiresAt;
-
 impl ExpiresAt {
     pub const QUANTITY_OF_MINUTES_FOR_EXPIRATION: i64 = 10;
 }
-
 pub struct CanBeResentFrom;
-
 impl CanBeResentFrom {
     pub const QUANTITY_OF_MINUTES_BEFORE_RESENDING: i64 = 1;
 }

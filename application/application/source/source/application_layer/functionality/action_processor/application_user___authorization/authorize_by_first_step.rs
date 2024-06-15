@@ -18,6 +18,7 @@ use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::data::auditor::OptionConverter;
+pub use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___AuthorizeByFirstStep;
 use crate::infrastructure_layer::data::control_type::TokioBlockingTask;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error::Error;
@@ -33,6 +34,9 @@ use crate::infrastructure_layer::functionality::repository::postgresql::Postgres
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::unix_time::UnixTime;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
 use crate::infrastructure_layer::functionality::service::spawner::Spawner;
+pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::authorize_by_first_step::Incoming;
+pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::authorize_by_first_step::Outcoming;
+pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::authorize_by_first_step::Precedent;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use std::clone::Clone;
@@ -41,12 +45,6 @@ use std::marker::Sync;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
-
-pub use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___AuthorizeByFirstStep;
-pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::authorize_by_first_step::Incoming;
-pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::authorize_by_first_step::Outcoming;
-pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::authorize_by_first_step::Precedent;
-
 impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
     pub async fn process<'a, T>(
         environment_configuration: &'a EnvironmentConfiguration,
@@ -62,25 +60,20 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
         let incoming_ = incoming.convert_value_does_not_exist(Backtrace::new(line!(), file!()))?;
-
         if !Validator::<ApplicationUser_Password>::is_valid_part_1(incoming_.application_user_password.as_str()) {
             return Ok(Err(Auditor::<InvalidArgument>::new(
                 InvalidArgument,
                 Backtrace::new(line!(), file!()),
             )));
         }
-
         if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming_.application_user_device_id.as_str()) {
             return Ok(Err(Auditor::<InvalidArgument>::new(
                 InvalidArgument,
                 Backtrace::new(line!(), file!()),
             )));
         }
-
         let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
-
         let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
-
         let (application_user_id, application_user_email, application_user_nickname, application_user_password_hash) =
             if Validator::<ApplicationUser_Email>::is_valid(incoming_.application_user_email_or_application_user_nickname.as_str())? {
                 let application_user_ = PostgresqlRepository::<ApplicationUser>::find_3(
@@ -90,7 +83,6 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                     },
                 )
                 .await?;
-
                 let application_user__ = match application_user_ {
                     Some(application_user___) => application_user___,
                     None => {
@@ -99,7 +91,6 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                         )));
                     }
                 };
-
                 (
                     application_user__.id,
                     incoming_.application_user_email_or_application_user_nickname,
@@ -115,7 +106,6 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                         },
                     )
                     .await?;
-
                     let application_user__ = match application_user_ {
                         Some(application_user___) => application_user___,
                         None => {
@@ -124,7 +114,6 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                             )));
                         }
                     };
-
                     (
                         application_user__.id,
                         application_user__.email,
@@ -138,7 +127,6 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                     )));
                 }
             };
-
         if !Validator::<ApplicationUser_Password>::is_valid_part_2(
             incoming_.application_user_password.as_str(),
             application_user_email.as_str(),
@@ -149,24 +137,19 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                 Backtrace::new(line!(), file!()),
             )));
         }
-
         let join_handle = Spawner::<TokioBlockingTask>::spawn_processed(move || -> _ {
             return Encoder::<ApplicationUser_Password>::is_valid(
                 incoming_.application_user_password.as_str(),
                 application_user_password_hash.as_str(),
             );
         });
-
         if !join_handle.await.convert(Backtrace::new(line!(), file!()))?? {
             return Ok(Ok(UnifiedReport::precedent(
                 Precedent::ApplicationUser_WrongEmailOrNicknameOrPassword,
             )));
         }
-
         let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
-
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
-
         let (
             application_user_authorization_token_value,
             application_user_authorization_token_can_be_resent_from,
@@ -184,24 +167,18 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
             Some(mut application_user_authorization_token) => {
                 let (can_send_, need_to_update_1) = if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token.can_be_resent_from) {
                     application_user_authorization_token.can_be_resent_from = Generator::<ApplicationUserAuthorizationToken_CanBeResentFrom>::generate()?;
-
                     (true, true)
                 } else {
                     (false, false)
                 };
-
                 let need_to_update_2 = if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token.expires_at) {
                     application_user_authorization_token.value = Generator::<ApplicationUserAuthorizationToken_Value>::generate();
-
                     application_user_authorization_token.wrong_enter_tries_quantity = 0;
-
                     application_user_authorization_token.expires_at = Generator::<ApplicationUserAuthorizationToken_ExpiresAt>::generate()?;
-
                     true
                 } else {
                     false
                 };
-
                 if need_to_update_1 && need_to_update_2 {
                     PostgresqlRepository::<ApplicationUserAuthorizationToken>::update_1(
                         database_2_postgresql_connection,
@@ -231,7 +208,6 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                         )
                         .await?;
                     }
-
                     if need_to_update_2 {
                         PostgresqlRepository::<ApplicationUserAuthorizationToken>::update_2(
                             database_2_postgresql_connection,
@@ -248,7 +224,6 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                         .await?;
                     }
                 }
-
                 (
                     application_user_authorization_token.value,
                     application_user_authorization_token.can_be_resent_from,
@@ -269,7 +244,6 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                     },
                 )
                 .await?;
-
                 (
                     application_user_authorization_token.value,
                     application_user_authorization_token.can_be_resent_from,
@@ -278,7 +252,6 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                 )
             }
         };
-
         if can_send {
             EmailSender::<ApplicationUserAuthorizationToken<'_>>::send(
                 environment_configuration,
@@ -287,7 +260,6 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                 incoming_.application_user_device_id.as_str(),
             )?;
         }
-
         let outcoming = Outcoming {
             application_user_id,
             verification_message_sent: can_send,
@@ -295,7 +267,6 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
             application_user_authorization_token_wrong_enter_tries_quantity,
             application_user_authorization_token_wrong_enter_tries_quantity_limit: ApplicationUserAuthorizationToken_WrongEnterTriesQuantity::LIMIT,
         };
-
         return Ok(Ok(UnifiedReport::target_filled(outcoming)));
     }
 }

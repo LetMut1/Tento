@@ -4,7 +4,6 @@ use hyper::Body;
 use hyper::Request as HyperRequest;
 use hyper::Response as HyperResponse;
 use tokio_postgres::NoTls;
-
 pub struct ActionRound;
 pub struct ApplicationUser__Authorization___AuthorizeByFirstStep;
 pub struct ApplicationUser__Authorization___AuthorizeByLastStep;
@@ -48,6 +47,5 @@ pub struct UnixTime;
 pub type PostgresqlConnectionPoolNoTls = Pool<PostgresqlConnectionManager<NoTls>>;
 pub type Request = HyperRequest<Body>;
 pub type Response = HyperResponse<Body>;
-
 #[cfg(feature = "manual_testing")]
 pub struct Json;

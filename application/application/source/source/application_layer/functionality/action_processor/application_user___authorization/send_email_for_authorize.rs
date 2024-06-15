@@ -12,6 +12,7 @@ use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::data::auditor::OptionConverter;
+pub use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___SendEmailForAuthorize;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
@@ -21,6 +22,9 @@ use crate::infrastructure_layer::functionality::repository::postgresql::applicat
 use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::unix_time::UnixTime;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
+pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::send_email_for_authorize::Incoming;
+pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::send_email_for_authorize::Outcoming;
+pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::send_email_for_authorize::Precedent;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use std::clone::Clone;
@@ -29,12 +33,6 @@ use std::marker::Sync;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
-
-pub use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___SendEmailForAuthorize;
-pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::send_email_for_authorize::Incoming;
-pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::send_email_for_authorize::Outcoming;
-pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::send_email_for_authorize::Precedent;
-
 impl ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
     pub async fn process<'a, T>(
         environment_configuration: &'a EnvironmentConfiguration,
@@ -49,23 +47,19 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
         let incoming_ = incoming.convert_value_does_not_exist(Backtrace::new(line!(), file!()))?;
-
         if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming_.application_user_device_id.as_str()) {
             return Ok(Err(Auditor::<InvalidArgument>::new(
                 InvalidArgument,
                 Backtrace::new(line!(), file!()),
             )));
         }
-
         if !Validator::<ApplicationUser_Id>::is_valid(incoming_.application_user_id) {
             return Ok(Err(Auditor::<InvalidArgument>::new(
                 InvalidArgument,
                 Backtrace::new(line!(), file!()),
             )));
         }
-
         let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
-
         let application_user = match PostgresqlRepository::<ApplicationUser>::find_6(
             &*database_1_postgresql_pooled_connection,
             By3 {
@@ -81,11 +75,8 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
                 )));
             }
         };
-
         let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
-
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
-
         let mut application_user_authorization_token = match PostgresqlRepository::<ApplicationUserAuthorizationToken>::find_3(
             database_2_postgresql_connection,
             By1 {
@@ -102,7 +93,6 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
                 )));
             }
         };
-
         if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token.expires_at) {
             PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::delete_1(
                 database_2_postgresql_connection,
@@ -112,20 +102,16 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
                 },
             )
             .await?;
-
             return Ok(Ok(UnifiedReport::precedent(
                 Precedent::ApplicationUserAuthorizationToken_AlreadyExpired,
             )));
         }
-
         if !ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token.can_be_resent_from) {
             return Ok(Ok(UnifiedReport::precedent(
                 Precedent::ApplicationUserAuthorizationToken_TimeToResendHasNotCome,
             )));
         }
-
         application_user_authorization_token.can_be_resent_from = Generator::<ApplicationUserAuthorizationToken_CanBeResentFrom>::generate()?;
-
         PostgresqlRepository::<ApplicationUserAuthorizationToken>::update_3(
             database_2_postgresql_connection,
             Update3 {
@@ -137,18 +123,15 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
             },
         )
         .await?;
-
         EmailSender::<ApplicationUserAuthorizationToken<'_>>::send(
             environment_configuration,
             application_user_authorization_token.value.as_str(),
             application_user.email.as_str(),
             incoming_.application_user_device_id.as_str(),
         )?;
-
         let outcoming = Outcoming {
             application_user_authorization_token_can_be_resent_from: application_user_authorization_token.can_be_resent_from,
         };
-
         return Ok(Ok(UnifiedReport::target_filled(outcoming)));
     }
 }

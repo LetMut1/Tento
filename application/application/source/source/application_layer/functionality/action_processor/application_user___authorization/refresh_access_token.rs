@@ -13,6 +13,7 @@ use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::data::auditor::OptionConverter;
+pub use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___RefreshAccessToken;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
@@ -21,6 +22,9 @@ use crate::infrastructure_layer::functionality::repository::postgresql::applicat
 use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::unix_time::UnixTime;
 use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
+pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::refresh_access_token::Incoming;
+pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::refresh_access_token::Outcoming;
+pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::refresh_access_token::Precedent;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use std::borrow::Cow;
@@ -30,12 +34,6 @@ use std::marker::Sync;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
-
-pub use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___RefreshAccessToken;
-pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::refresh_access_token::Incoming;
-pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::refresh_access_token::Outcoming;
-pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::refresh_access_token::Precedent;
-
 impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
     pub async fn process<'a, T>(
         environment_configuration: &'a EnvironmentConfiguration,
@@ -50,7 +48,6 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
         let incoming_ = incoming.convert_value_does_not_exist(Backtrace::new(line!(), file!()))?;
-
         let application_user_access_token = match FormResolver::<ApplicationUserAccessToken<'_>>::from_encrypted(
             environment_configuration,
             incoming_.application_user_access_token_encrypted.as_str(),
@@ -60,11 +57,8 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
                 return Ok(Err(invalid_argument_auditor));
             }
         };
-
         let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
-
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
-
         let mut application_user_access_refresh_token = match PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::find_1(
             database_2_postgresql_connection,
             By2 {
@@ -81,20 +75,17 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
                 )));
             }
         };
-
         let is_valid = FormResolver::<ApplicationUserAccessRefreshToken<'_>>::is_valid(
             environment_configuration,
             &application_user_access_refresh_token,
             incoming_.application_user_access_refresh_token_encrypted.as_str(),
         )?;
-
         if !is_valid || application_user_access_token.id != application_user_access_refresh_token.application_user_access_token_id.as_ref() {
             return Ok(Err(Auditor::<InvalidArgument>::new(
                 InvalidArgument,
                 Backtrace::new(line!(), file!()),
             )));
         }
-
         if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_access_refresh_token.expires_at) {
             PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::delete_1(
                 database_2_postgresql_connection,
@@ -104,27 +95,20 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
                 },
             )
             .await?;
-
             return Ok(Ok(UnifiedReport::precedent(
                 Precedent::ApplicationUserAccessRefreshToken_AlreadyExpired,
             )));
         }
-
         let application_user_access_token_new = ApplicationUserAccessToken::new(
             Generator::<ApplicationUserAccessToken_Id>::generate(),
             application_user_access_token.application_user_id,
             Cow::Borrowed(application_user_access_token.application_user_device_id.as_ref()),
             Generator::<ApplicationUserAccessToken_ExpiresAt>::generate()?,
         );
-
         application_user_access_refresh_token.application_user_access_token_id = Cow::Borrowed(application_user_access_token_new.id.as_str());
-
         application_user_access_refresh_token.obfuscation_value = Generator::<ApplicationUserAccessRefreshToken_ObfuscationValue>::generate();
-
         application_user_access_refresh_token.expires_at = Generator::<ApplicationUserAccessRefreshToken_ExpiresAt>::generate()?;
-
         application_user_access_refresh_token.updated_at = Generator::<ApplicationUserAccessRefreshToken_UpdatedAt>::generate();
-
         PostgresqlRepository::<ApplicationUserAccessRefreshToken>::update_1(
             database_2_postgresql_connection,
             Update1 {
@@ -139,7 +123,6 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
             },
         )
         .await?;
-
         let outcoming = Outcoming {
             application_user_access_token_encrypted: FormResolver::<ApplicationUserAccessToken<'_>>::to_encrypted(
                 environment_configuration,
@@ -150,7 +133,6 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
                 &application_user_access_refresh_token,
             )?,
         };
-
         return Ok(Ok(UnifiedReport::target_filled(outcoming)));
     }
 }

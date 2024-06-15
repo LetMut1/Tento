@@ -1,6 +1,5 @@
 use super::Validator;
 use crate::domain_layer::data::entity::application_user::ApplicationUser_Nickname;
-
 impl Validator<ApplicationUser_Nickname> {
     pub fn is_valid<'a>(application_user_nickname: &'a str) -> bool {
         return application_user_nickname.chars().count() <= ApplicationUser_Nickname::MAXIMUM_LENGTH

@@ -1,5 +1,3 @@
-use std::sync::OnceLock;
-
 use super::Validator;
 use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_Value;
 use crate::infrastructure_layer::data::auditor::Auditor;
@@ -8,9 +6,8 @@ use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::data::auditor::OptionConverter;
 use crate::infrastructure_layer::data::error::Error;
 use regex::Regex;
-
+use std::sync::OnceLock;
 static REGULAR_EXPRESSION: OnceLock<Regex> = OnceLock::new();
-
 impl Validator<ApplicationUserAuthorizationToken_Value> {
     pub fn is_valid<'a>(application_user_authorization_token_value: &'a str) -> Result<bool, Auditor<Error>> {
         let regular_expression = match REGULAR_EXPRESSION.get() {
@@ -22,11 +19,9 @@ impl Validator<ApplicationUserAuthorizationToken_Value> {
                         Backtrace::new(line!(), file!()),
                     ));
                 }
-
                 REGULAR_EXPRESSION.get().convert_value_does_not_exist(Backtrace::new(line!(), file!()))?
             }
         };
-
         return Ok(regular_expression.is_match(application_user_authorization_token_value));
     }
 }

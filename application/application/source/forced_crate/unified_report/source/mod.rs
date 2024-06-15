@@ -80,10 +80,8 @@
     clippy::verbose_file_reads,
     clippy::zero_sized_map_values
 )]
-
 use serde::Deserialize;
 use serde::Serialize;
-
 #[derive(Serialize, Deserialize)]
 pub enum UnifiedReport<T, P> {
     Target {
@@ -93,7 +91,6 @@ pub enum UnifiedReport<T, P> {
         precedent: P,
     },
 }
-
 impl<T, P> UnifiedReport<T, P>
 where
     T: Serialize + for<'de> Deserialize<'de>,
@@ -104,7 +101,6 @@ where
             data: Data::Empty,
         };
     }
-
     pub fn target_filled(data: T) -> Self {
         return Self::Target {
             data: Data::Filled {
@@ -112,14 +108,12 @@ where
             },
         };
     }
-
     pub fn precedent(precedent: P) -> Self {
         return Self::Precedent {
             precedent,
         };
     }
 }
-
 #[derive(Serialize, Deserialize)]
 pub enum Data<D> {
     Empty,

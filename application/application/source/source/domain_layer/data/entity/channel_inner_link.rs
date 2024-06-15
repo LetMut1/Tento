@@ -1,6 +1,5 @@
 use super::channel::Channel_Id;
 use std::marker::PhantomData;
-
 pub struct ChannelInnerLink {
     pub from: i64,
     _from: PhantomData<Channel_Id>,
@@ -11,10 +10,8 @@ pub struct ChannelInnerLink {
     pub created_at: String,
     _created_at: PhantomData<CreatedAt>,
 }
-
 impl ChannelInnerLink {
     pub const MAXIMUM_QUANTITY: i16 = 10;
-
     pub fn new(
         from: i64,
         to: i64,
@@ -30,5 +27,4 @@ impl ChannelInnerLink {
         };
     }
 }
-
 pub struct CreatedAt;

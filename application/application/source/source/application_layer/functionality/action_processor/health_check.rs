@@ -1,6 +1,7 @@
 use crate::application_layer::data::unified_report::UnifiedReport;
 use crate::application_layer::functionality::action_processor::ActionProcessor;
 use crate::infrastructure_layer::data::auditor::Auditor;
+pub use crate::infrastructure_layer::data::control_type::HealthCheck;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
@@ -13,9 +14,6 @@ use std::marker::Sync;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
-
-pub use crate::infrastructure_layer::data::control_type::HealthCheck;
-
 impl ActionProcessor<HealthCheck> {
     pub async fn process<'a, T>(
         _environment_configuration: &'a EnvironmentConfiguration,

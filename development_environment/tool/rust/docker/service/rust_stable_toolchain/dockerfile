@@ -3,10 +3,12 @@ FROM rust:1.70.0
 RUN \
 mkdir -p /_tento && \
 rustup default stable && \
-rustup component add \
+rustup toolchain install nightly && \
+rustup component add --toolchain=stable \
     clippy \
-    rustfmt \
     rust-src && \
+rustup component add --toolchain=nightly-x86_64-unknown-linux-gnu \
+    rustfmt && \
 rustup target add --toolchain=stable \
     aarch64-apple-ios \
     aarch64-apple-ios-sim \

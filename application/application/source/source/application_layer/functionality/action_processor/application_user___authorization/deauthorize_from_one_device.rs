@@ -8,12 +8,15 @@ use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::auditor::Backtrace;
 use crate::infrastructure_layer::data::auditor::ErrorConverter;
 use crate::infrastructure_layer::data::auditor::OptionConverter;
+pub use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___DeauthorizeFromOneDevice;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::data::void::Void;
 use crate::infrastructure_layer::functionality::repository::postgresql::application_user_access_refresh_token::By2;
 use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
+pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::deauthorize_from_one_device::Incoming;
+pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::deauthorize_from_one_device::Precedent;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use std::clone::Clone;
@@ -22,11 +25,6 @@ use std::marker::Sync;
 use tokio_postgres::tls::MakeTlsConnect;
 use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
-
-pub use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___DeauthorizeFromOneDevice;
-pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::deauthorize_from_one_device::Incoming;
-pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::deauthorize_from_one_device::Precedent;
-
 impl ActionProcessor<ApplicationUser__Authorization___DeauthorizeFromOneDevice> {
     pub async fn process<'a, T>(
         environment_configuration: &'a EnvironmentConfiguration,
@@ -41,7 +39,6 @@ impl ActionProcessor<ApplicationUser__Authorization___DeauthorizeFromOneDevice> 
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
         let incoming_ = incoming.convert_value_does_not_exist(Backtrace::new(line!(), file!()))?;
-
         let application_user_access_token = match Extractor::<ApplicationUserAccessToken<'_>>::extract(
             environment_configuration,
             incoming_.application_user_access_token_encrypted.as_str(),
@@ -64,16 +61,13 @@ impl ActionProcessor<ApplicationUser__Authorization___DeauthorizeFromOneDevice> 
                         )));
                     }
                 };
-
                 application_user_access_token_
             }
             Err(invalid_argument_auditor) => {
                 return Ok(Err(invalid_argument_auditor));
             }
         };
-
         let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
-
         PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::delete_1(
             &*database_2_postgresql_pooled_connection,
             By2 {
@@ -82,7 +76,6 @@ impl ActionProcessor<ApplicationUser__Authorization___DeauthorizeFromOneDevice> 
             },
         )
         .await?;
-
         return Ok(Ok(UnifiedReport::target_empty()));
     }
 }

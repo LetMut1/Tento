@@ -1,5 +1,4 @@
 pub mod environment_configuration_file;
-
 pub struct EnvironmentConfiguration {
     pub tokio_runtime: TokioRuntime,
     pub application_server: ApplicationServer,
@@ -7,31 +6,26 @@ pub struct EnvironmentConfiguration {
     pub resource: Resource,
     pub encryption: Encryption,
 }
-
 pub struct TokioRuntime {
     pub maximum_blocking_threads_quantity: usize,
     pub worker_threads_quantity: usize,
     pub worker_thread_stack_size: usize,
 }
-
 pub struct ApplicationServer {
     pub tcp: Tcp,
     pub http: Http,
 }
-
 pub struct Tcp {
     pub socket_address: String,
     pub nodelay: bool,
     pub sleep_on_accept_errors: bool,
     pub keepalive: TcpKeepalive,
 }
-
 pub struct TcpKeepalive {
     pub duration: Option<u64>,
     pub interval_duration: Option<u64>,
     pub retries_quantity: Option<u32>,
 }
-
 pub struct Http {
     pub adaptive_window: bool,
     pub connection_window_size: u32,
@@ -44,45 +38,36 @@ pub struct Http {
     pub keepalive: Option<HttpKeepalive>,
     pub tls: Option<Tls>,
 }
-
 pub struct HttpKeepalive {
     pub interval_duration: u64,
     pub timeout_duration: u64,
 }
-
 pub struct Tls {
     pub certificate_crt_file_path: String,
     pub certificate_key_file_path: String,
 }
-
 pub struct Logging {
     pub directory_path: String,
     pub file_name_prefix: String,
 }
-
 pub struct Resource {
     pub postgresql: Postgresql,
     pub redis: Redis,
     pub email_server: EmailServer,
 }
-
 pub struct Postgresql {
     pub database_1_url: String,
     pub database_2_url: String,
 }
-
 pub struct Redis {
     pub database_1_url: String,
 }
-
 pub struct EmailServer {
     pub socket_address: String,
 }
-
 pub struct Encryption {
     pub private_key: PrivateKey,
 }
-
 pub struct PrivateKey {
     pub application_user_access_token: String,
     pub application_user_access_refresh_token: String,

@@ -1,13 +1,11 @@
 use super::Spawner;
 use crate::infrastructure_layer::data::auditor::Auditor;
+pub use crate::infrastructure_layer::data::control_type::TokioNonBlockingTask;
 use crate::infrastructure_layer::data::error::Error;
 use crate::infrastructure_layer::functionality::service::logger::Logger;
 use std::future::Future;
 use std::marker::Send;
 use tokio::task::JoinHandle;
-
-pub use crate::infrastructure_layer::data::control_type::TokioNonBlockingTask;
-
 impl Spawner<TokioNonBlockingTask> {
     pub fn spawn_into_background<F, T>(future: F) -> ()
     where
@@ -17,11 +15,9 @@ impl Spawner<TokioNonBlockingTask> {
             if let Err(error_auditor) = future.await {
                 Logger::<Auditor<Error>>::log(&error_auditor);
             }
-
             return ();
         });
     }
-
     pub fn spawn_processed<F>(future: F) -> JoinHandle<<F as Future>::Output>
     where
         F: Future + Send + 'static,

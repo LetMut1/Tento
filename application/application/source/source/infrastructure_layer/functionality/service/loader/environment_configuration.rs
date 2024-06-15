@@ -20,19 +20,15 @@ use crate::infrastructure_layer::data::environment_configuration::Tls;
 use crate::infrastructure_layer::data::environment_configuration::TokioRuntime;
 use crate::infrastructure_layer::data::error::Error;
 use std::path::Path;
-
 impl Loader<EnvironmentConfiguration> {
     const ENVIRONMENT_FILE_NAME: &'static str = "environment.toml";
-
     pub fn load_from_file<'a>(environment_configuration_directory_path: &'a str) -> Result<EnvironmentConfiguration, Auditor<Error>> {
         let environment_file_path = format!(
             "{}/{}",
             environment_configuration_directory_path,
             Self::ENVIRONMENT_FILE_NAME,
         );
-
         let environment_file_path_ = Path::new(environment_file_path.as_str());
-
         let environment_file_data = if environment_file_path_.try_exists().convert(Backtrace::new(line!(), file!()))? {
             std::fs::read_to_string(environment_file_path_).convert(Backtrace::new(line!(), file!()))?
         } else {
@@ -41,9 +37,7 @@ impl Loader<EnvironmentConfiguration> {
                 Backtrace::new(line!(), file!()),
             ));
         };
-
         let environment_configuration_file = toml::from_str::<EnvironmentConfigurationFile>(environment_file_data.as_str()).convert(Backtrace::new(line!(), file!()))?;
-
         let application_server = {
             let tcp = {
                 let keepalive = {
@@ -52,26 +46,22 @@ impl Loader<EnvironmentConfiguration> {
                     } else {
                         None
                     };
-
                     let interval_duration = if environment_configuration_file.application_server.tcp.keepalive.interval_duration.is_exist {
                         Some(environment_configuration_file.application_server.tcp.keepalive.interval_duration.value)
                     } else {
                         None
                     };
-
                     let retries_quantity = if environment_configuration_file.application_server.tcp.keepalive.retries_quantity.is_exist {
                         Some(environment_configuration_file.application_server.tcp.keepalive.retries_quantity.value)
                     } else {
                         None
                     };
-
                     TcpKeepalive {
                         duration,
                         interval_duration,
                         retries_quantity,
                     }
                 };
-
                 Tcp {
                     socket_address: environment_configuration_file.application_server.tcp.socket_address.value,
                     nodelay: environment_configuration_file.application_server.tcp.nodelay.value,
@@ -79,7 +69,6 @@ impl Loader<EnvironmentConfiguration> {
                     keepalive,
                 }
             };
-
             let http = {
                 let keepalive = if environment_configuration_file.application_server.http.keepalive.is_exist {
                     Some(HttpKeepalive {
@@ -89,7 +78,6 @@ impl Loader<EnvironmentConfiguration> {
                 } else {
                     None
                 };
-
                 let tls = if environment_configuration_file.application_server.http.tls.is_exist {
                     Some(Tls {
                         certificate_crt_file_path: environment_configuration_file.application_server.http.tls.certificate_crt_file_path.value,
@@ -98,13 +86,11 @@ impl Loader<EnvironmentConfiguration> {
                 } else {
                     None
                 };
-
                 let maximum_pending_accept_reset_streams = if environment_configuration_file.application_server.http.maximum_pending_accept_reset_streams.is_exist {
                     Some(environment_configuration_file.application_server.http.maximum_pending_accept_reset_streams.value)
                 } else {
                     None
                 };
-
                 Http {
                     adaptive_window: environment_configuration_file.application_server.http.adaptive_window.value,
                     connection_window_size: environment_configuration_file.application_server.http.connection_window_size.value,
@@ -118,13 +104,11 @@ impl Loader<EnvironmentConfiguration> {
                     tls,
                 }
             };
-
             ApplicationServer {
                 tcp,
                 http,
             }
         };
-
         let environment_configuration = EnvironmentConfiguration {
             tokio_runtime: TokioRuntime {
                 maximum_blocking_threads_quantity: environment_configuration_file.tokio_runtime.maximum_blocking_threads_quantity.value,
@@ -155,7 +139,6 @@ impl Loader<EnvironmentConfiguration> {
                 },
             },
         };
-
         return Ok(environment_configuration);
     }
 }

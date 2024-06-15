@@ -2,20 +2,17 @@ use common_precedent::CommonPrecedent;
 use macro_rules::r#enum;
 use serde::Deserialize;
 use serde::Serialize;
-
 #[derive(Serialize, Deserialize)]
 pub struct Incoming {
     pub application_user_id: i64,
     pub application_user_device_id: String,
     pub application_user_authorization_token_value: String,
 }
-
 #[derive(Serialize, Deserialize)]
 pub struct Outcoming {
     pub application_user_access_token_encrypted: String,
     pub application_user_access_refresh_token_encrypted: String,
 }
-
 r#enum!(
     pub enum Precedent {
         CommonPrecedent::ApplicationUserAuthorizationToken_NotFound,

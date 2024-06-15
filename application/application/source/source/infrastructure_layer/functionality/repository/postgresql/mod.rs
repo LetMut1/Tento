@@ -9,9 +9,7 @@ pub mod channel_inner_link;
 pub mod channel_outer_link;
 pub mod channel_subscription;
 pub mod common;
-
 use std::marker::PhantomData;
-
 pub struct PostgresqlRepository<E> {
     _entity: PhantomData<E>,
 }

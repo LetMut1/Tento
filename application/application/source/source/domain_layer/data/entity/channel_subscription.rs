@@ -1,7 +1,6 @@
 use super::application_user::ApplicationUser_Id;
 use super::channel::Channel_Id;
 use std::marker::PhantomData;
-
 pub struct ChannelSubscription {
     pub application_user_id: i64,
     _application_user_id: PhantomData<ApplicationUser_Id>,
@@ -12,7 +11,6 @@ pub struct ChannelSubscription {
     pub created_at: String,
     _created_at: PhantomData<CreatedAt>,
 }
-
 impl ChannelSubscription {
     pub fn new(
         application_user_id: i64,
@@ -29,5 +27,4 @@ impl ChannelSubscription {
         };
     }
 }
-
 pub struct CreatedAt;

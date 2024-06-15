@@ -1,23 +1,18 @@
-pub mod message_pack;
-
 #[cfg(feature = "manual_testing")]
 pub mod json;
-
+pub mod message_pack;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::error::Error;
 use serde::Deserialize;
 use serde::Serialize as SerdeSerialize;
 use std::marker::PhantomData;
-
 pub struct Serializer<T> {
     _format: PhantomData<T>,
 }
-
 pub trait Serialize {
     fn serialize<'a, T>(subject: &'a T) -> Result<Vec<u8>, Auditor<Error>>
     where
         T: SerdeSerialize;
-
     fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, Auditor<Error>>
     where
         T: Deserialize<'a>;

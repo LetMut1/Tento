@@ -1,7 +1,6 @@
 use super::Formatter;
 use crate::infrastructure_layer::data::control_type::ActionRound;
 use crate::infrastructure_layer::data::control_type::Response;
-
 impl Formatter<(ActionRound, Response)> {
     pub fn format<'a>(
         request_uri: &'a str,
