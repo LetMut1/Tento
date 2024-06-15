@@ -129,8 +129,6 @@ impl CommandProcessor<RunServer> {
 
         let worker_guard;
 
-        let logger_level;
-
         #[cfg(feature = "file_log")]
         {
             let rolling_file_appender = RollingFileAppender::new(
