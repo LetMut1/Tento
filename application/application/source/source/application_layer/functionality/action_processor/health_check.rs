@@ -1,5 +1,5 @@
 use crate::application_layer::data::unified_report::UnifiedReport;
-use crate::application_layer::functionality::service::reactor::action_round___invalid_argument::InvalidArgument;
+use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
 use crate::infrastructure_layer::data::auditor::Auditor;
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
 use crate::infrastructure_layer::data::error::Error;

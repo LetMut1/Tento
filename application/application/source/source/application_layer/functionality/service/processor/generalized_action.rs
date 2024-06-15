@@ -14,7 +14,7 @@ use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use serde::Serialize as SerdeSerialize;
 use std::clone::Clone;
 use std::future::Future;
-use crate::application_layer::functionality::service::reactor::Reactor;
+use crate::infrastructure_layer::functionality::service::logger::Logger;
 use std::marker::Send;
 use std::marker::Sync;
 use tokio_postgres::tls::MakeTlsConnect;
@@ -55,7 +55,7 @@ impl Processor<GeneralizedAction> {
         if !Validator::<Parts>::is_valid(parts) {
             let response = Creator::<Response>::create_bad_request();
 
-            Reactor::<(ActionRound, Auditor<InvalidArgument>)>::react(
+            Logger::<(ActionRound, Auditor<InvalidArgument>)>::log(
                 parts,
                 &response,
                 Auditor::<InvalidArgument>::new(
@@ -81,7 +81,7 @@ impl Processor<GeneralizedAction> {
             Err(error_auditor) => {
                 let response = Creator::<Response>::create_internal_server_error();
 
-                Reactor::<(ActionRound, Auditor<Error>)>::react(parts, &response, error_auditor);
+                Logger::<(ActionRound, Auditor<Error>)>::log(parts, &response, error_auditor);
 
                 return response;
             }
@@ -92,7 +92,7 @@ impl Processor<GeneralizedAction> {
             Err(invalid_argument_auditor) => {
                 let response = Creator::<Response>::create_bad_request();
 
-                Reactor::<(ActionRound, Auditor<InvalidArgument>)>::react(parts, &response, invalid_argument_auditor);
+                Logger::<(ActionRound, Auditor<InvalidArgument>)>::log(parts, &response, invalid_argument_auditor);
 
                 return response;
             }
@@ -110,7 +110,7 @@ impl Processor<GeneralizedAction> {
             Err(error_auditor) => {
                 let response = Creator::<Response>::create_internal_server_error();
 
-                Reactor::<(ActionRound, Auditor<Error>)>::react(parts, &response, error_auditor);
+                Logger::<(ActionRound, Auditor<Error>)>::log(parts, &response, error_auditor);
 
                 return response;
             }
@@ -121,7 +121,7 @@ impl Processor<GeneralizedAction> {
             Err(invalid_argument_auditor)=> {
                 let response = Creator::<Response>::create_bad_request();
 
-                Reactor::<(ActionRound, Auditor<InvalidArgument>)>::react(parts, &response, invalid_argument_auditor);
+                Logger::<(ActionRound, Auditor<InvalidArgument>)>::log(parts, &response, invalid_argument_auditor);
 
                 return response;
             }
@@ -132,7 +132,7 @@ impl Processor<GeneralizedAction> {
             Err(error_auditor) => {
                 let response = Creator::<Response>::create_internal_server_error();
 
-                Reactor::<(ActionRound, Auditor<Error>)>::react(parts, &response, error_auditor);
+                Logger::<(ActionRound, Auditor<Error>)>::log(parts, &response, error_auditor);
 
                 return response;
             }
@@ -140,35 +140,8 @@ impl Processor<GeneralizedAction> {
 
         let response = Creator::<Response>::create_ok(data);
 
-        Reactor::<(ActionRound, Response)>::react(parts, &response);
+        Logger::<(ActionRound, Response)>::log(parts, &response);
 
         return response;
     }
-
-    // fn react<'a>(
-    //     request_parts: &'a Parts,
-    //     response: &'a Response,
-    //     error_auditor: Auditor<Error>
-    // ) -> () {
-    //     let request_uri = request_parts.uri.path().to_string();
-
-    //     let request_method = request_parts.method.to_string();
-
-    //     let response_status_code = response.status().as_u16();
-
-    //     Spawner::<TokioNonBlockingTask>::spawn_into_background(
-    //         async move {
-    //             Logger::<(ActionRound, Auditor<Error>)>::log(
-    //                 request_uri.as_str(),
-    //                 request_method.as_str(),
-    //                 response_status_code,
-    //                 &error_auditor,
-    //             );
-
-    //             return Ok(());
-    //         }
-    //     );
-
-    //     return ();
-    // }
 }
