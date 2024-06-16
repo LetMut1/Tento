@@ -33,19 +33,46 @@ use rand::thread_rng;
 use rand::Rng;
 use tokio::runtime::Builder;
 impl CommandProcessor<CreateFixtures> {
-    const STUB: &'static str = "s_t_u_b";
+    const APPLICATION_USER_DEVICE__ID_PART: &'static str = "device";
+    const APPLICATION_USER__PASSWORD: &'static str = "passworD1";
+    const ASCII_CHARACTER_REGISTRY: [char; 26] = [
+        'a',
+        'b',
+        'c',
+        'd',
+        'e',
+        'f',
+        'g',
+        'h',
+        'i',
+        'j',
+        'k',
+        'l',
+        'm',
+        'n',
+        'o',
+        'p',
+        'q',
+        'r',
+        's',
+        't',
+        'u',
+        'v',
+        'w',
+        'x',
+        'y',
+        'z',
+    ];
     const QUANTITY_OF_APPLICATION_USERS: u16 = 10_000;
     const QUANTITY_OF_CHANNELS: u8 = 5;
-    const APPLICATION_USER__PASSWORD: &'static str = "passworD1";
-    const APPLICATION_USER_DEVICE__ID_PART: &'static str = "device";
-    const ASCII_CHARACTER_REGISTRY: [char; 26] = [
-        'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-    ];
+    const STUB: &'static str = "s_t_u_b";
+
     pub fn process() -> Result<(), Auditor<Error>> {
         let environment_configuration = Self::initialize_environment()?;
         Self::run_runtime(&environment_configuration)?;
         return Ok(());
     }
+
     fn initialize_environment() -> Result<EnvironmentConfiguration, Auditor<Error>> {
         let environment_configuration_file_path = format!(
             "{}/environment_configuration",
@@ -55,6 +82,7 @@ impl CommandProcessor<CreateFixtures> {
             environment_configuration_file_path.as_str(),
         )?);
     }
+
     fn run_runtime<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<(), Auditor<Error>> {
         Builder::new_current_thread()
             .enable_all()
@@ -63,6 +91,7 @@ impl CommandProcessor<CreateFixtures> {
             .block_on(Self::create_fixtures(environment_configuration))?;
         return Ok(());
     }
+
     async fn create_fixtures<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<(), Auditor<Error>> {
         let database_1_postgresql_connection_pool = Creator::<PostgresqlConnectionPoolNoTls>::create_database_1(environment_configuration).await?;
         let application_user_password = Self::APPLICATION_USER__PASSWORD.to_string();

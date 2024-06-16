@@ -131,49 +131,25 @@ pub struct ApplicationUser__Authorization {
     pub deauthorize_from_all_devices_: &'static str,
 }
 impl ApplicationUser__Authorization {
-    const CHECK_NICKNAME_FOR_EXISTING: &'static str = "/1/1";
-    const CHECK_EMAIL_FOR_EXISTING: &'static str = "/1/2";
-    const REGISTER_BY_FIRST_STEP: &'static str = "/1/3";
-    const REGISTER_BY_SECOND_STEP: &'static str = "/1/4";
-    const REGISTER_BY_LAST_STEP: &'static str = "/1/5";
-    const SEND_EMAIL_FOR_REGISTER: &'static str = "/1/6";
     const AUTHORIZE_BY_FIRST_STEP: &'static str = "/1/7";
     const AUTHORIZE_BY_LAST_STEP: &'static str = "/1/8";
-    const SEND_EMAIL_FOR_AUTHORIZE: &'static str = "/1/9";
-    const RESET_PASSWORD_BY_FIRST_STEP: &'static str = "/1/10";
-    const RESET_PASSWORD_BY_SECOND_STEP: &'static str = "/1/11";
-    const RESET_PASSWORD_BY_LAST_STEP: &'static str = "/1/12";
-    const SEND_EMAIL_FOR_RESET_PASSWORD: &'static str = "/1/13";
-    const REFRESH_ACCESS_TOKEN: &'static str = "/1/14";
-    const DEAUTHORIZE_FROM_ONE_DEVICE: &'static str = "/1/15";
+    const CHECK_EMAIL_FOR_EXISTING: &'static str = "/1/2";
+    const CHECK_NICKNAME_FOR_EXISTING: &'static str = "/1/1";
     const DEAUTHORIZE_FROM_ALL_DEVICES: &'static str = "/1/16";
+    const DEAUTHORIZE_FROM_ONE_DEVICE: &'static str = "/1/15";
+    const REFRESH_ACCESS_TOKEN: &'static str = "/1/14";
+    const REGISTER_BY_FIRST_STEP: &'static str = "/1/3";
+    const REGISTER_BY_LAST_STEP: &'static str = "/1/5";
+    const REGISTER_BY_SECOND_STEP: &'static str = "/1/4";
+    const RESET_PASSWORD_BY_FIRST_STEP: &'static str = "/1/10";
+    const RESET_PASSWORD_BY_LAST_STEP: &'static str = "/1/12";
+    const RESET_PASSWORD_BY_SECOND_STEP: &'static str = "/1/11";
+    const SEND_EMAIL_FOR_AUTHORIZE: &'static str = "/1/9";
+    const SEND_EMAIL_FOR_REGISTER: &'static str = "/1/6";
+    const SEND_EMAIL_FOR_RESET_PASSWORD: &'static str = "/1/13";
 }
 #[cfg(feature = "manual_testing")]
 impl ApplicationUser__Authorization {
-    const CHECK_NICKNAME_FOR_EXISTING_: &'static str = concatcp!(
-        ApplicationUser__Authorization::CHECK_NICKNAME_FOR_EXISTING,
-        ActionRoute::CONCATENATING_PART
-    );
-    const CHECK_EMAIL_FOR_EXISTING_: &'static str = concatcp!(
-        ApplicationUser__Authorization::CHECK_EMAIL_FOR_EXISTING,
-        ActionRoute::CONCATENATING_PART
-    );
-    const REGISTER_BY_FIRST_STEP_: &'static str = concatcp!(
-        ApplicationUser__Authorization::REGISTER_BY_FIRST_STEP,
-        ActionRoute::CONCATENATING_PART
-    );
-    const REGISTER_BY_SECOND_STEP_: &'static str = concatcp!(
-        ApplicationUser__Authorization::REGISTER_BY_SECOND_STEP,
-        ActionRoute::CONCATENATING_PART
-    );
-    const REGISTER_BY_LAST_STEP_: &'static str = concatcp!(
-        ApplicationUser__Authorization::REGISTER_BY_LAST_STEP,
-        ActionRoute::CONCATENATING_PART
-    );
-    const SEND_EMAIL_FOR_REGISTER_: &'static str = concatcp!(
-        ApplicationUser__Authorization::SEND_EMAIL_FOR_REGISTER,
-        ActionRoute::CONCATENATING_PART
-    );
     const AUTHORIZE_BY_FIRST_STEP_: &'static str = concatcp!(
         ApplicationUser__Authorization::AUTHORIZE_BY_FIRST_STEP,
         ActionRoute::CONCATENATING_PART
@@ -182,36 +158,60 @@ impl ApplicationUser__Authorization {
         ApplicationUser__Authorization::AUTHORIZE_BY_LAST_STEP,
         ActionRoute::CONCATENATING_PART
     );
-    const SEND_EMAIL_FOR_AUTHORIZE_: &'static str = concatcp!(
-        ApplicationUser__Authorization::SEND_EMAIL_FOR_AUTHORIZE,
+    const CHECK_EMAIL_FOR_EXISTING_: &'static str = concatcp!(
+        ApplicationUser__Authorization::CHECK_EMAIL_FOR_EXISTING,
         ActionRoute::CONCATENATING_PART
     );
-    const RESET_PASSWORD_BY_FIRST_STEP_: &'static str = concatcp!(
-        ApplicationUser__Authorization::RESET_PASSWORD_BY_FIRST_STEP,
+    const CHECK_NICKNAME_FOR_EXISTING_: &'static str = concatcp!(
+        ApplicationUser__Authorization::CHECK_NICKNAME_FOR_EXISTING,
         ActionRoute::CONCATENATING_PART
     );
-    const RESET_PASSWORD_BY_SECOND_STEP_: &'static str = concatcp!(
-        ApplicationUser__Authorization::RESET_PASSWORD_BY_SECOND_STEP,
-        ActionRoute::CONCATENATING_PART
-    );
-    const RESET_PASSWORD_BY_LAST_STEP_: &'static str = concatcp!(
-        ApplicationUser__Authorization::RESET_PASSWORD_BY_LAST_STEP,
-        ActionRoute::CONCATENATING_PART
-    );
-    const SEND_EMAIL_FOR_RESET_PASSWORD_: &'static str = concatcp!(
-        ApplicationUser__Authorization::SEND_EMAIL_FOR_RESET_PASSWORD,
-        ActionRoute::CONCATENATING_PART
-    );
-    const REFRESH_ACCESS_TOKEN_: &'static str = concatcp!(
-        ApplicationUser__Authorization::REFRESH_ACCESS_TOKEN,
+    const DEAUTHORIZE_FROM_ALL_DEVICES_: &'static str = concatcp!(
+        ApplicationUser__Authorization::DEAUTHORIZE_FROM_ALL_DEVICES,
         ActionRoute::CONCATENATING_PART
     );
     const DEAUTHORIZE_FROM_ONE_DEVICE_: &'static str = concatcp!(
         ApplicationUser__Authorization::DEAUTHORIZE_FROM_ONE_DEVICE,
         ActionRoute::CONCATENATING_PART
     );
-    const DEAUTHORIZE_FROM_ALL_DEVICES_: &'static str = concatcp!(
-        ApplicationUser__Authorization::DEAUTHORIZE_FROM_ALL_DEVICES,
+    const REFRESH_ACCESS_TOKEN_: &'static str = concatcp!(
+        ApplicationUser__Authorization::REFRESH_ACCESS_TOKEN,
+        ActionRoute::CONCATENATING_PART
+    );
+    const REGISTER_BY_FIRST_STEP_: &'static str = concatcp!(
+        ApplicationUser__Authorization::REGISTER_BY_FIRST_STEP,
+        ActionRoute::CONCATENATING_PART
+    );
+    const REGISTER_BY_LAST_STEP_: &'static str = concatcp!(
+        ApplicationUser__Authorization::REGISTER_BY_LAST_STEP,
+        ActionRoute::CONCATENATING_PART
+    );
+    const REGISTER_BY_SECOND_STEP_: &'static str = concatcp!(
+        ApplicationUser__Authorization::REGISTER_BY_SECOND_STEP,
+        ActionRoute::CONCATENATING_PART
+    );
+    const RESET_PASSWORD_BY_FIRST_STEP_: &'static str = concatcp!(
+        ApplicationUser__Authorization::RESET_PASSWORD_BY_FIRST_STEP,
+        ActionRoute::CONCATENATING_PART
+    );
+    const RESET_PASSWORD_BY_LAST_STEP_: &'static str = concatcp!(
+        ApplicationUser__Authorization::RESET_PASSWORD_BY_LAST_STEP,
+        ActionRoute::CONCATENATING_PART
+    );
+    const RESET_PASSWORD_BY_SECOND_STEP_: &'static str = concatcp!(
+        ApplicationUser__Authorization::RESET_PASSWORD_BY_SECOND_STEP,
+        ActionRoute::CONCATENATING_PART
+    );
+    const SEND_EMAIL_FOR_AUTHORIZE_: &'static str = concatcp!(
+        ApplicationUser__Authorization::SEND_EMAIL_FOR_AUTHORIZE,
+        ActionRoute::CONCATENATING_PART
+    );
+    const SEND_EMAIL_FOR_REGISTER_: &'static str = concatcp!(
+        ApplicationUser__Authorization::SEND_EMAIL_FOR_REGISTER,
+        ActionRoute::CONCATENATING_PART
+    );
+    const SEND_EMAIL_FOR_RESET_PASSWORD_: &'static str = concatcp!(
+        ApplicationUser__Authorization::SEND_EMAIL_FOR_RESET_PASSWORD,
         ActionRoute::CONCATENATING_PART
     );
 }
@@ -230,17 +230,13 @@ pub struct Channel__Base {
     pub get_many_piblic_by_name_: &'static str,
 }
 impl Channel__Base {
-    const GET_ONE_BY_ID: &'static str = "/1/17";
     const GET_MANY_BY_NAME_IN_SUBSCRIPTIONS: &'static str = "/1/18";
     const GET_MANY_BY_SUBSCRIPTION: &'static str = "/1/19";
     const GET_MANY_PUBLIC_BY_NAME: &'static str = "/1/20";
+    const GET_ONE_BY_ID: &'static str = "/1/17";
 }
 #[cfg(feature = "manual_testing")]
 impl Channel__Base {
-    const GET_ONE_BY_ID_: &'static str = concatcp!(
-        Channel__Base::GET_ONE_BY_ID,
-        ActionRoute::CONCATENATING_PART
-    );
     const GET_MANY_BY_NAME_IN_SUBSCRIPTIONS_: &'static str = concatcp!(
         Channel__Base::GET_MANY_BY_NAME_IN_SUBSCRIPTIONS,
         ActionRoute::CONCATENATING_PART
@@ -251,6 +247,10 @@ impl Channel__Base {
     );
     const GET_MANY_PUBLIC_BY_NAME_: &'static str = concatcp!(
         Channel__Base::GET_MANY_PUBLIC_BY_NAME,
+        ActionRoute::CONCATENATING_PART
+    );
+    const GET_ONE_BY_ID_: &'static str = concatcp!(
+        Channel__Base::GET_ONE_BY_ID,
         ActionRoute::CONCATENATING_PART
     );
 }

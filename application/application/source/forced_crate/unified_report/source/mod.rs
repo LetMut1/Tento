@@ -101,6 +101,7 @@ where
             data: Data::Empty,
         };
     }
+
     pub fn target_filled(data: T) -> Self {
         return Self::Target {
             data: Data::Filled {
@@ -108,6 +109,7 @@ where
             },
         };
     }
+
     pub fn precedent(precedent: P) -> Self {
         return Self::Precedent {
             precedent,

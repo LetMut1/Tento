@@ -10,10 +10,8 @@ impl Encoder<ApplicationUser_Password> {
             application_user_password.as_bytes(),
         )?);
     }
-    pub fn is_valid<'a>(
-        application_user_password: &'a str,
-        application_user_password_hash: &'a str,
-    ) -> Result<bool, Auditor<Error>> {
+
+    pub fn is_valid<'a>(application_user_password: &'a str, application_user_password_hash: &'a str) -> Result<bool, Auditor<Error>> {
         return Ok(Encoder_::<Argon2Id>::is_valid(
             application_user_password.as_bytes(),
             application_user_password_hash,

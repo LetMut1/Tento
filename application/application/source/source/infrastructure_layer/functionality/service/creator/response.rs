@@ -11,12 +11,12 @@ use hyper::Response as HyperResponse;
 use hyper::StatusCode;
 use std::convert::From;
 impl Creator<Response> {
-    pub const HEADER_VALUE_CONTENT_TYPE: &'static str = "application/octet-stream"; // TODO В файл с константами
-    pub const HEADER_VALUE_X_CONTENT_TYPE_OPTIONS: &'static str = "nosniff"; // TODO В файл с константами
-    fn create(
-        status_code: StatusCode,
-        data: Option<Vec<u8>>,
-    ) -> Response {
+    pub const HEADER_VALUE_CONTENT_TYPE: &'static str = "application/octet-stream";
+    // TODO В файл с константами
+    pub const HEADER_VALUE_X_CONTENT_TYPE_OPTIONS: &'static str = "nosniff";
+
+    // TODO В файл с константами
+    fn create(status_code: StatusCode, data: Option<Vec<u8>>) -> Response {
         // TODO Посмотреть, что за дефолтные ответ. НАстроить необходимое
         let mut header_map = HeaderMap::new();
         header_map.append(
@@ -37,31 +37,34 @@ impl Creator<Response> {
         };
         return Response::from_parts(parts, body);
     }
+
     pub fn create_bad_request() -> Response {
         return Self::create(StatusCode::BAD_REQUEST, None);
     }
+
     pub fn create_unauthorized() -> Response {
         return Self::create(StatusCode::UNAUTHORIZED, None);
     }
+
     pub fn create_not_found() -> Response {
         return Self::create(StatusCode::NOT_FOUND, None);
     }
+
     pub fn create_internal_server_error() -> Response {
         return Self::create(StatusCode::INTERNAL_SERVER_ERROR, None);
     }
+
     pub fn create_not_extended() -> Response {
         return Self::create(StatusCode::NOT_EXTENDED, None);
     }
+
     pub fn create_ok(data: Vec<u8>) -> Response {
         return Self::create(StatusCode::OK, Some(data));
     }
 }
 #[cfg(feature = "manual_testing")]
 impl Creator<Response> {
-    pub fn create_from_response_parts(
-        response_parts: Parts,
-        data: Option<Vec<u8>>,
-    ) -> Response {
+    pub fn create_from_response_parts(response_parts: Parts, data: Option<Vec<u8>>) -> Response {
         match data {
             Some(data_) => {
                 return Response::from_parts(response_parts, Body::from(data_));

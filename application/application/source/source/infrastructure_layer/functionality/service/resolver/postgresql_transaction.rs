@@ -6,10 +6,7 @@ pub use crate::infrastructure_layer::data::control_type::PostgresqlTransaction;
 use crate::infrastructure_layer::data::error::Error;
 use tokio_postgres::Client as Connection;
 impl Resolver<PostgresqlTransaction> {
-    pub async fn start<'a>(
-        connection: &'a Connection,
-        transaction_isolation_level: TransactionIsolationLevel,
-    ) -> Result<Self, Auditor<Error>> {
+    pub async fn start<'a>(connection: &'a Connection, transaction_isolation_level: TransactionIsolationLevel) -> Result<Self, Auditor<Error>> {
         let mut query = "START TRANSACTION ISOLATION LEVEL".to_string();
         match transaction_isolation_level {
             TransactionIsolationLevel::ReadCommitted => {
@@ -38,18 +35,14 @@ impl Resolver<PostgresqlTransaction> {
         connection.execute(query.as_str(), &[]).await.convert(Backtrace::new(line!(), file!()))?;
         return Ok(Self::new());
     }
-    pub async fn commit<'a>(
-        self,
-        connection: &'a Connection,
-    ) -> Result<(), Auditor<Error>> {
+
+    pub async fn commit<'a>(self, connection: &'a Connection) -> Result<(), Auditor<Error>> {
         let query = "COMMIT;";
         connection.execute(query, &[]).await.convert(Backtrace::new(line!(), file!()))?;
         return Ok(());
     }
-    pub async fn rollback<'a>(
-        self,
-        connection: &'a Connection,
-    ) -> Result<(), Auditor<Error>> {
+
+    pub async fn rollback<'a>(self, connection: &'a Connection) -> Result<(), Auditor<Error>> {
         let query = "ROLLBACK;";
         connection.execute(query, &[]).await.convert(Backtrace::new(line!(), file!()))?;
         return Ok(());

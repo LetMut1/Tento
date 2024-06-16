@@ -6,10 +6,7 @@ use crate::infrastructure_layer::functionality::service::formatter::Formatter;
 use crate::infrastructure_layer::functionality::service::spawner::Spawner;
 use http::request::Parts;
 impl Logger<(ActionRound, Response)> {
-    pub fn log<'a>(
-        request_parts: &'a Parts,
-        response: &'a Response,
-    ) -> () {
+    pub fn log<'a>(request_parts: &'a Parts, response: &'a Response) -> () {
         let request_uri = request_parts.uri.path().to_string();
         let request_method = request_parts.method.to_string();
         let response_status_code = response.status().as_u16();

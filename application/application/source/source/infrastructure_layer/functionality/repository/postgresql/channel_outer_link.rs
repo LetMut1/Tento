@@ -9,10 +9,7 @@ pub use action_processor_incoming_outcoming::ChannelOuterLink1;
 use tokio_postgres::types::Type;
 use tokio_postgres::Client as Connection;
 impl PostgresqlRepository<ChannelOuterLink> {
-    pub async fn create_1<'a>(
-        database_1_connection: &'a Connection,
-        insert_1: Insert1,
-    ) -> Result<ChannelOuterLink, Auditor<Error>> {
+    pub async fn create_1<'a>(database_1_connection: &'a Connection, insert_1: Insert1) -> Result<ChannelOuterLink, Auditor<Error>> {
         let channel_outer_link_alias = insert_1.channel_outer_link_alias.as_str();
         let channel_outer_link_address = insert_1.channel_outer_link_address.as_str();
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -56,11 +53,8 @@ impl PostgresqlRepository<ChannelOuterLink> {
         );
         return Ok(channel_outer_link);
     }
-    pub async fn find_1<'a>(
-        database_1_connection: &'a Connection,
-        by_1: By1,
-        limit: i16,
-    ) -> Result<Vec<ChannelOuterLink1>, Auditor<Error>> {
+
+    pub async fn find_1<'a>(database_1_connection: &'a Connection, by_1: By1, limit: i16) -> Result<Vec<ChannelOuterLink1>, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             SELECT \

@@ -92,6 +92,7 @@ impl Processor {
         Self::create_rerun_instruction()?;
         return Ok(());
     }
+
     // It is necessary that the build-script be run on each compilation command,
     // so we specify in the instructions that the Cargo watch for a non-existent
     // file with `cargo:rerun-if-changed=non_existent_file` command.

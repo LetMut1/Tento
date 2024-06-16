@@ -18,5 +18,5 @@ macro_rules! r#enum {
         $visability enum $enum_name {
             $($enum_variant $({ $($enum_variant_field: $enum_variant_field_type,)* })?,)*
         }
-    }
+    };
 }

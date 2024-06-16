@@ -17,6 +17,7 @@ impl Serialize for Serializer<Json> {
     {
         return Ok(serde_json::to_vec(subject).convert(Backtrace::new(line!(), file!()))?);
     }
+
     fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, Auditor<Error>>
     where
         T: Deserialize<'a>,

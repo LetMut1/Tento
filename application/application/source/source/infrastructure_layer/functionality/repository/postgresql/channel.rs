@@ -10,10 +10,7 @@ use std::borrow::Cow;
 use tokio_postgres::types::Type;
 use tokio_postgres::Client as Connection;
 impl PostgresqlRepository<Channel<'_>> {
-    pub async fn create_1<'a>(
-        database_1_connection: &'a Connection,
-        insert_1: Insert1,
-    ) -> Result<Channel<'static>, Auditor<Error>> {
+    pub async fn create_1<'a>(database_1_connection: &'a Connection, insert_1: Insert1) -> Result<Channel<'static>, Auditor<Error>> {
         let channel_name = insert_1.channel_name.as_str();
         let channel_linked_name = insert_1.channel_linked_name.as_str();
         let channel_description = match insert_1.channel_description {
@@ -109,10 +106,8 @@ impl PostgresqlRepository<Channel<'_>> {
             row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
         ));
     }
-    pub async fn find_1<'a>(
-        database_1_connection: &'a Connection,
-        by_1: By1,
-    ) -> Result<Option<Channel<'static>>, Auditor<Error>> {
+
+    pub async fn find_1<'a>(database_1_connection: &'a Connection, by_1: By1) -> Result<Option<Channel<'static>>, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             SELECT \
@@ -166,10 +161,8 @@ impl PostgresqlRepository<Channel<'_>> {
             row_registry[0].try_get::<'_, usize, String>(12).convert(Backtrace::new(line!(), file!()))?,
         )));
     }
-    pub async fn find_2<'a, 'b>(
-        database_1_connection: &'a Connection,
-        by_2: By2<'b>,
-    ) -> Result<Option<Channel<'b>>, Auditor<Error>> {
+
+    pub async fn find_2<'a, 'b>(database_1_connection: &'a Connection, by_2: By2<'b>) -> Result<Option<Channel<'b>>, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             SELECT \

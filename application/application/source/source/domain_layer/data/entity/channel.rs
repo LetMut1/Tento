@@ -115,14 +115,16 @@ pub enum AccessModifier {
     Close,
 }
 impl AccessModifier {
-    pub const OPEN: i16 = 0;
     pub const CLOSE: i16 = 1;
+    pub const OPEN: i16 = 0;
+
     pub fn from_representation(access_modifier: AccessModifier) -> i16 {
         return match access_modifier {
             Self::Open => Self::OPEN,
             Self::Close => Self::CLOSE,
         };
     }
+
     pub fn to_representation(access_modifier: i16) -> AccessModifier {
         return if access_modifier == Self::OPEN {
             Self::Open
@@ -136,14 +138,16 @@ pub enum VisabilityModifier {
     Private,
 }
 impl VisabilityModifier {
-    pub const PUBLIC: i16 = 0;
     pub const PRIVATE: i16 = 1;
+    pub const PUBLIC: i16 = 0;
+
     pub fn from_representation(visability_modifier: VisabilityModifier) -> i16 {
         return match visability_modifier {
             Self::Public => Self::PUBLIC,
             Self::Private => Self::PRIVATE,
         };
     }
+
     pub fn to_representation(visability_modifier: i16) -> VisabilityModifier {
         return if visability_modifier == Self::PUBLIC {
             Self::Public

@@ -14,10 +14,7 @@ use std::borrow::Cow;
 use tokio_postgres::types::Type;
 use tokio_postgres::Client as Connection;
 impl PostgresqlRepository<ApplicationUser<'_>> {
-    pub async fn create_1<'a>(
-        database_1_connection: &'a Connection,
-        insert_1: Insert1,
-    ) -> Result<ApplicationUser<'static>, Auditor<Error>> {
+    pub async fn create_1<'a>(database_1_connection: &'a Connection, insert_1: Insert1) -> Result<ApplicationUser<'static>, Auditor<Error>> {
         let application_user_email = insert_1.application_user_email.as_str();
         let application_user_nickname = insert_1.application_user_nickname.as_str();
         let application_user_password_hash = insert_1.application_user_password_hash.as_str();
@@ -65,11 +62,8 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
         ));
     }
-    pub async fn update_1<'a>(
-        database_1_connection: &'a Connection,
-        update_1: Update1<'_>,
-        by_3: By3,
-    ) -> Result<(), Auditor<Error>> {
+
+    pub async fn update_1<'a>(database_1_connection: &'a Connection, update_1: Update1<'_>, by_3: By3) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             UPDATE ONLY public.application_user AS au \
@@ -100,10 +94,8 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             .convert(Backtrace::new(line!(), file!()))?;
         return Ok(());
     }
-    pub async fn is_exist_1<'a>(
-        database_1_connection: &'a Connection,
-        by_1: By1<'_>,
-    ) -> Result<bool, Auditor<Error>> {
+
+    pub async fn is_exist_1<'a>(database_1_connection: &'a Connection, by_1: By1<'_>) -> Result<bool, Auditor<Error>> {
         let application_user_nickname = by_1.application_user_nickname;
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
@@ -131,10 +123,8 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         }
         return Ok(true);
     }
-    pub async fn is_exist_2<'a>(
-        database_1_connection: &'a Connection,
-        by_2: By2<'_>,
-    ) -> Result<bool, Auditor<Error>> {
+
+    pub async fn is_exist_2<'a>(database_1_connection: &'a Connection, by_2: By2<'_>) -> Result<bool, Auditor<Error>> {
         let application_user_email = by_2.application_user_email;
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
@@ -162,10 +152,8 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         }
         return Ok(true);
     }
-    pub async fn is_exist_3<'a>(
-        database_1_connection: &'a Connection,
-        by_3: By3,
-    ) -> Result<bool, Auditor<Error>> {
+
+    pub async fn is_exist_3<'a>(database_1_connection: &'a Connection, by_3: By3) -> Result<bool, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             SELECT \
@@ -192,10 +180,8 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         }
         return Ok(true);
     }
-    pub async fn find_1<'a, 'b>(
-        database_1_connection: &'a Connection,
-        by_1: By1<'b>,
-    ) -> Result<Option<ApplicationUser<'b>>, Auditor<Error>> {
+
+    pub async fn find_1<'a, 'b>(database_1_connection: &'a Connection, by_1: By1<'b>) -> Result<Option<ApplicationUser<'b>>, Auditor<Error>> {
         let application_user_nickname = by_1.application_user_nickname;
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
@@ -232,10 +218,8 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             row_registry[0].try_get::<'_, usize, String>(3).convert(Backtrace::new(line!(), file!()))?,
         )));
     }
-    pub async fn find_2<'a>(
-        database_1_connection: &'a Connection,
-        by_1: By1<'_>,
-    ) -> Result<Option<ApplicationUser1>, Auditor<Error>> {
+
+    pub async fn find_2<'a>(database_1_connection: &'a Connection, by_1: By1<'_>) -> Result<Option<ApplicationUser1>, Auditor<Error>> {
         let application_user_nickname = by_1.application_user_nickname;
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
@@ -269,10 +253,8 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             password_hash: row_registry[0].try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?,
         }));
     }
-    pub async fn find_3<'a>(
-        database_1_connection: &'a Connection,
-        by_2: By2<'_>,
-    ) -> Result<Option<ApplicationUser2>, Auditor<Error>> {
+
+    pub async fn find_3<'a>(database_1_connection: &'a Connection, by_2: By2<'_>) -> Result<Option<ApplicationUser2>, Auditor<Error>> {
         let application_user_email = by_2.application_user_email;
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
@@ -306,10 +288,8 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             password_hash: row_registry[0].try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?,
         }));
     }
-    pub async fn find_4<'a>(
-        database_1_connection: &'a Connection,
-        by_2: By2<'_>,
-    ) -> Result<Option<ApplicationUser3>, Auditor<Error>> {
+
+    pub async fn find_4<'a>(database_1_connection: &'a Connection, by_2: By2<'_>) -> Result<Option<ApplicationUser3>, Auditor<Error>> {
         let application_user_email = by_2.application_user_email;
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
@@ -339,10 +319,8 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             id: row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
         }));
     }
-    pub async fn find_5<'a>(
-        database_1_connection: &'a Connection,
-        by_3: By3,
-    ) -> Result<Option<ApplicationUser4>, Auditor<Error>> {
+
+    pub async fn find_5<'a>(database_1_connection: &'a Connection, by_3: By3) -> Result<Option<ApplicationUser4>, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             SELECT \
@@ -375,10 +353,8 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             password_hash: row_registry[0].try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?,
         }));
     }
-    pub async fn find_6<'a>(
-        database_1_connection: &'a Connection,
-        by_3: By3,
-    ) -> Result<Option<ApplicationUser5>, Auditor<Error>> {
+
+    pub async fn find_6<'a>(database_1_connection: &'a Connection, by_3: By3) -> Result<Option<ApplicationUser5>, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             SELECT \

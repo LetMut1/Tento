@@ -21,12 +21,7 @@ pub struct ApplicationUserAccessToken<'a> {
     _expires_at: PhantomData<ExpiresAt>,
 }
 impl<'a> ApplicationUserAccessToken<'a> {
-    pub fn new(
-        id: String,
-        application_user_id: i64,
-        application_user_device_id: Cow<'a, str>,
-        expires_at: i64,
-    ) -> Self {
+    pub fn new(id: String, application_user_id: i64, application_user_device_id: Cow<'a, str>, expires_at: i64) -> Self {
         return Self {
             id,
             _id: PhantomData,

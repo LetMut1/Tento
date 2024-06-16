@@ -9,10 +9,7 @@ use std::borrow::Cow;
 use tokio_postgres::types::Type;
 use tokio_postgres::Client as Connection;
 impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
-    pub async fn create_1<'a>(
-        database_2_connection: &'a Connection,
-        insert_1: Insert1<'a>,
-    ) -> Result<ApplicationUserAccessRefreshToken<'a>, Auditor<Error>> {
+    pub async fn create_1<'a>(database_2_connection: &'a Connection, insert_1: Insert1<'a>) -> Result<ApplicationUserAccessRefreshToken<'a>, Auditor<Error>> {
         let application_user_access_refresh_token_obfuscation_value = insert_1.application_user_access_refresh_token_obfuscation_value.as_str();
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
@@ -70,11 +67,8 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
             insert_1.application_user_access_refresh_token_updated_at,
         ));
     }
-    pub async fn update_1<'a>(
-        database_2_connection: &'a Connection,
-        update_1: Update1<'_>,
-        by_2: By2<'_>,
-    ) -> Result<(), Auditor<Error>> {
+
+    pub async fn update_1<'a>(database_2_connection: &'a Connection, update_1: Update1<'_>, by_2: By2<'_>) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             UPDATE ONLY public.application_user_access_refresh_token AS auart \
@@ -122,10 +116,8 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
             .convert(Backtrace::new(line!(), file!()))?;
         return Ok(());
     }
-    pub async fn delete_1<'a>(
-        database_2_connection: &'a Connection,
-        by_2: By2<'_>,
-    ) -> Result<(), Auditor<Error>> {
+
+    pub async fn delete_1<'a>(database_2_connection: &'a Connection, by_2: By2<'_>) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "DELETE FROM ONLY public.application_user_access_refresh_token AS auart  \
             WHERE auart.application_user_id = $1 AND auart.application_user_device_id = $2;";
@@ -148,10 +140,8 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
             .convert(Backtrace::new(line!(), file!()))?;
         return Ok(());
     }
-    pub async fn delete_2<'a>(
-        database_2_connection: &'a Connection,
-        by_1: By1,
-    ) -> Result<(), Auditor<Error>> {
+
+    pub async fn delete_2<'a>(database_2_connection: &'a Connection, by_1: By1) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             DELETE FROM ONLY public.application_user_access_refresh_token AS auart  \
@@ -173,10 +163,8 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
             .convert(Backtrace::new(line!(), file!()))?;
         return Ok(());
     }
-    pub async fn find_1<'a, 'b>(
-        database_2_connection: &'a Connection,
-        by_2: By2<'b>,
-    ) -> Result<Option<ApplicationUserAccessRefreshToken<'b>>, Auditor<Error>> {
+
+    pub async fn find_1<'a, 'b>(database_2_connection: &'a Connection, by_2: By2<'b>) -> Result<Option<ApplicationUserAccessRefreshToken<'b>>, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             SELECT \

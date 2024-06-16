@@ -14,10 +14,8 @@ impl Encoder<Argon2Id> {
         let value = argon2::hash_encoded(data, salt.as_bytes().as_slice(), &config).convert(Backtrace::new(line!(), file!()))?;
         return Ok(value);
     }
-    pub fn is_valid<'a>(
-        data: &'a [u8],
-        encoded_data: &'a str,
-    ) -> Result<bool, Auditor<Error>> {
+
+    pub fn is_valid<'a>(data: &'a [u8], encoded_data: &'a str) -> Result<bool, Auditor<Error>> {
         let value = argon2::verify_encoded(encoded_data, data).convert(Backtrace::new(line!(), file!()))?;
         return Ok(value);
     }

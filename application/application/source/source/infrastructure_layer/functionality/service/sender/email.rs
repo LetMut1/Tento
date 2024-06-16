@@ -13,12 +13,7 @@ use std::convert::Into;
 use std::net::ToSocketAddrs;
 impl Sender<Email> {
     // TODO Возможно, сразу можно положить объект в константу.  // TODO В предпродакшене, когда будет smtp-ссервер, настройить все через константы и енв
-    pub fn send<'a>(
-        environment_configuration: &'a EnvironmentConfiguration,
-        subject: &'a str,
-        body: String,
-        to: &'a str,
-    ) -> Result<(), Auditor<Error>> {
+    pub fn send<'a>(environment_configuration: &'a EnvironmentConfiguration, subject: &'a str, body: String, to: &'a str) -> Result<(), Auditor<Error>> {
         let email = EmailBuilder::new() //TODO
             .subject(subject)
             .text(body)

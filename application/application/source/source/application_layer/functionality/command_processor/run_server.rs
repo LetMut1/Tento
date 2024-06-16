@@ -71,12 +71,14 @@ use tracing_subscriber::FmtSubscriber;
 static ENVIRONMENT_CONFIGURATION: OnceLock<EnvironmentConfiguration> = OnceLock::new();
 impl CommandProcessor<RunServer> {
     const QUANTITY_OF_SECONDS_FOR_RERUN_SERVING: u64 = 1;
+
     pub fn process() -> Result<(), Auditor<Error>> {
         let environment_configuration = Self::initialize_environment()?;
         let _worker_guard = Self::initialize_logger(environment_configuration)?;
         Self::run_runtime(environment_configuration)?;
         return Ok(());
     }
+
     fn initialize_environment() -> Result<&'static EnvironmentConfiguration, Auditor<Error>> {
         let environment_configuration_file_path = format!(
             "{}/environment_configuration",
@@ -101,6 +103,7 @@ impl CommandProcessor<RunServer> {
         }
         return Ok(ENVIRONMENT_CONFIGURATION.get().convert_value_does_not_exist(Backtrace::new(line!(), file!()))?);
     }
+
     fn initialize_logger<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<WorkerGuard, Auditor<Error>> {
         let non_blocking;
         let worker_guard;
@@ -129,6 +132,7 @@ impl CommandProcessor<RunServer> {
         tracing::subscriber::set_global_default(fmt_subscriber).convert(Backtrace::new(line!(), file!()))?;
         return Ok(worker_guard);
     }
+
     fn run_runtime(environment_configuration: &'static EnvironmentConfiguration) -> Result<(), Auditor<Error>> {
         if environment_configuration.tokio_runtime.maximum_blocking_threads_quantity == 0
             || environment_configuration.tokio_runtime.worker_threads_quantity == 0
@@ -151,6 +155,7 @@ impl CommandProcessor<RunServer> {
             .block_on(Self::serve_1(environment_configuration))?;
         return Ok(());
     }
+
     async fn serve_1(environment_configuration: &'static EnvironmentConfiguration) -> Result<(), Auditor<Error>> {
         'a: loop {
             if let Err(error_auditor) = Self::serve_2(environment_configuration).await {
@@ -165,6 +170,7 @@ impl CommandProcessor<RunServer> {
         }
         return Ok(());
     }
+
     async fn serve_2(environment_configuration: &'static EnvironmentConfiguration) -> Result<(), Auditor<Error>> {
         let router = Self::create_router()?;
         // TODO TODO в Env
@@ -213,9 +219,11 @@ impl CommandProcessor<RunServer> {
             server_builder = server_builder.http2_enable_connect_protocol();
         };
         server_builder = match environment_configuration.application_server.http.keepalive {
-            Some(ref keepalive_) => server_builder
-                .http2_keep_alive_interval(Some(Duration::from_secs(keepalive_.interval_duration)))
-                .http2_keep_alive_timeout(Duration::from_secs(keepalive_.timeout_duration)),
+            Some(ref keepalive_) => {
+                server_builder
+                    .http2_keep_alive_interval(Some(Duration::from_secs(keepalive_.interval_duration)))
+                    .http2_keep_alive_timeout(Duration::from_secs(keepalive_.timeout_duration))
+            }
             None => server_builder.http2_keep_alive_interval(None),
         };
         server_builder = match environment_configuration.application_server.http.maximum_pending_accept_reset_streams {
@@ -273,6 +281,7 @@ impl CommandProcessor<RunServer> {
         server_builder.serve(service).with_graceful_shutdown(graceful_shutdown_signal_future).await.convert(Backtrace::new(line!(), file!()))?;
         return Ok(());
     }
+
     fn create_router() -> Result<Router<ActionRoute_>, Auditor<Error>> {
         let mut router = Router::new();
         router
@@ -616,6 +625,7 @@ impl CommandProcessor<RunServer> {
         }
         return Ok(router);
     }
+
     async fn resolve<'a, T>(
         environment_configuration: &'a EnvironmentConfiguration,
         router: Arc<Router<ActionRoute_>>,
@@ -1119,41 +1129,44 @@ impl CommandProcessor<RunServer> {
             }
             &ActionRoute_::ChannelSubscription__Base {
                 ref channel_subscription___base,
-            } => match (channel_subscription___base, &parts.method) {
-                (&ChannelSubscription__Base_::Create, &Method::POST) => {
-                    return Action::<ChannelSubscription__Base___Create>::run(
-                        environment_configuration,
-                        &mut body,
-                        &parts,
-                        &r#match.params,
-                        database_1_postgresql_connection_pool,
-                        database_2_postgresql_connection_pool,
-                    )
-                    .await;
-                }
-                _ => {
-                    #[cfg(feature = "manual_testing")]
-                    {
-                        match (channel_subscription___base, &parts.method) {
-                            (&ChannelSubscription__Base_::Create_, &Method::POST) => {
-                                return Action::<ChannelSubscription__Base___Create>::run_(
-                                    environment_configuration,
-                                    &mut body,
-                                    &parts,
-                                    &r#match.params,
-                                    database_1_postgresql_connection_pool,
-                                    database_2_postgresql_connection_pool,
-                                )
-                                .await;
+            } => {
+                match (channel_subscription___base, &parts.method) {
+                    (&ChannelSubscription__Base_::Create, &Method::POST) => {
+                        return Action::<ChannelSubscription__Base___Create>::run(
+                            environment_configuration,
+                            &mut body,
+                            &parts,
+                            &r#match.params,
+                            database_1_postgresql_connection_pool,
+                            database_2_postgresql_connection_pool,
+                        )
+                        .await;
+                    }
+                    _ => {
+                        #[cfg(feature = "manual_testing")]
+                        {
+                            match (channel_subscription___base, &parts.method) {
+                                (&ChannelSubscription__Base_::Create_, &Method::POST) => {
+                                    return Action::<ChannelSubscription__Base___Create>::run_(
+                                        environment_configuration,
+                                        &mut body,
+                                        &parts,
+                                        &r#match.params,
+                                        database_1_postgresql_connection_pool,
+                                        database_2_postgresql_connection_pool,
+                                    )
+                                    .await;
+                                }
+                                _ => {}
                             }
-                            _ => {}
                         }
                     }
                 }
-            },
+            }
         }
         return Action::<RouteNotFound>::run(&parts);
     }
+
     fn create_signal(signal_kind: SignalKind) -> Result<impl Future<Output = ()>, Auditor<Error>> {
         let mut signal = tokio::signal::unix::signal(signal_kind).convert(Backtrace::new(line!(), file!()))?;
         let signal_ = async move {
