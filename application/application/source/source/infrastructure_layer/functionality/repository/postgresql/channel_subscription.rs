@@ -22,7 +22,7 @@ impl PostgresqlRepository<ChannelSubscription> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             INSERT INTO public.channel_subscription AS cs ( \
-                application_user_id, \
+                application_user__id, \
                 channel_id, \
                 created_at \
             ) VALUES ( \
@@ -33,7 +33,7 @@ impl PostgresqlRepository<ChannelSubscription> {
             RETURNING \
                 cs.created_at::TEXT AS ca;";
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&insert_1.application_user_id, Type::INT8)
+            .add_parameter(&insert_1.application_user__id, Type::INT8)
             .add_parameter(&insert_1.channel_id, Type::INT8);
         let statement = database_1_connection
             .prepare_typed(
@@ -50,7 +50,7 @@ impl PostgresqlRepository<ChannelSubscription> {
             .await
             .convert(Backtrace::new(line!(), file!()))?;
         let channel_subscription = ChannelSubscription::new(
-            insert_1.application_user_id,
+            insert_1.application_user__id,
             insert_1.channel_id,
             row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
         );
@@ -60,10 +60,10 @@ impl PostgresqlRepository<ChannelSubscription> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             SELECT \
-                cs.application_user_id AS aui \
+                cs.application_user__id AS aui \
             FROM public.channel_subscription cs \
-            WHERE cs.application_user_id = $1 AND cs.channel_id = $2;";
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&by_1.application_user_id, Type::INT8).add_parameter(&by_1.channel_id, Type::INT8);
+            WHERE cs.application_user__id = $1 AND cs.channel_id = $2;";
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&by_1.application_user__id, Type::INT8).add_parameter(&by_1.channel_id, Type::INT8);
         let statement = database_1_connection
             .prepare_typed(
                 query,
@@ -85,10 +85,10 @@ impl PostgresqlRepository<ChannelSubscription> {
     }
 }
 pub struct Insert1 {
-    pub application_user_id: i64,
+    pub application_user__id: i64,
     pub channel_id: i64,
 }
 pub struct By1 {
-    pub application_user_id: i64,
+    pub application_user__id: i64,
     pub channel_id: i64,
 }

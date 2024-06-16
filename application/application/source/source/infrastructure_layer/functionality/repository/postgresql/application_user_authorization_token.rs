@@ -31,7 +31,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             INSERT INTO public.application_user_authorization_token AS auat ( \
-                application_user_id, \
+                application_user__id, \
                 application_user_device_id, \
                 value, \
                 wrong_enter_tries_quantity, \
@@ -46,7 +46,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                 $6 \
             );";
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&insert_1.application_user_id, Type::INT8)
+            .add_parameter(&insert_1.application_user__id, Type::INT8)
             .add_parameter(&insert_1.application_user_device_id, Type::TEXT)
             .add_parameter(&application_user_authorization_token_value, Type::TEXT)
             .add_parameter(
@@ -76,7 +76,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
             .await
             .convert(Backtrace::new(line!(), file!()))?;
         return Ok(ApplicationUserAuthorizationToken::new(
-            insert_1.application_user_id,
+            insert_1.application_user__id,
             Cow::Borrowed(insert_1.application_user_device_id),
             insert_1.application_user_authorization_token_value,
             insert_1.application_user_authorization_token_wrong_enter_tries_quantity,
@@ -88,9 +88,9 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             DELETE FROM ONLY public.application_user_authorization_token AS auat \
-            WHERE auat.application_user_id = $1 AND auat.application_user_device_id = $2;";
+            WHERE auat.application_user__id = $1 AND auat.application_user_device_id = $2;";
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&by_1.application_user_id, Type::INT8)
+            .add_parameter(&by_1.application_user__id, Type::INT8)
             .add_parameter(&by_1.application_user_device_id, Type::TEXT);
         let statement = database_2_connection
             .prepare_typed(
@@ -123,7 +123,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                 $3, \
                 $4 \
             ) \
-            WHERE auat.application_user_id = $5 AND auat.application_user_device_id = $6;";
+            WHERE auat.application_user__id = $5 AND auat.application_user_device_id = $6;";
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
                 &update_1.application_user_authorization_token_value,
@@ -141,7 +141,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                 &update_1.application_user_authorization_token_can_be_resent_from,
                 Type::INT8,
             )
-            .add_parameter(&by_1.application_user_id, Type::INT8)
+            .add_parameter(&by_1.application_user__id, Type::INT8)
             .add_parameter(&by_1.application_user_device_id, Type::TEXT);
         let statement = database_2_connection
             .prepare_typed(
@@ -172,7 +172,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                 $2, \
                 $3 \
             ) \
-            WHERE auat.application_user_id = $4 AND auat.application_user_device_id = $5;";
+            WHERE auat.application_user__id = $4 AND auat.application_user_device_id = $5;";
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
                 &update_2.application_user_authorization_token_value,
@@ -186,7 +186,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                 &update_2.application_user_authorization_token_expires_at,
                 Type::INT8,
             )
-            .add_parameter(&by_1.application_user_id, Type::INT8)
+            .add_parameter(&by_1.application_user__id, Type::INT8)
             .add_parameter(&by_1.application_user_device_id, Type::TEXT);
         let statement = database_2_connection
             .prepare_typed(
@@ -213,13 +213,13 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
             ) = ROW( \
                 $1 \
             ) \
-            WHERE auat.application_user_id = $2 AND auat.application_user_device_id = $3;";
+            WHERE auat.application_user__id = $2 AND auat.application_user_device_id = $3;";
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
                 &update_3.application_user_authorization_token_can_be_resent_from,
                 Type::INT8,
             )
-            .add_parameter(&by_1.application_user_id, Type::INT8)
+            .add_parameter(&by_1.application_user__id, Type::INT8)
             .add_parameter(&by_1.application_user_device_id, Type::TEXT);
         let statement = database_2_connection
             .prepare_typed(
@@ -246,13 +246,13 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
             ) = ROW( \
                 $1 \
             ) \
-            WHERE auat.application_user_id = $2 AND auat.application_user_device_id = $3;";
+            WHERE auat.application_user__id = $2 AND auat.application_user_device_id = $3;";
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
                 &update_4.application_user_authorization_token_wrong_enter_tries_quantity,
                 Type::INT2,
             )
-            .add_parameter(&by_1.application_user_id, Type::INT8)
+            .add_parameter(&by_1.application_user__id, Type::INT8)
             .add_parameter(&by_1.application_user_device_id, Type::TEXT);
         let statement = database_2_connection
             .prepare_typed(
@@ -279,9 +279,9 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                 auat.expires_at AS ea, \
                 auat.can_be_resent_from AS cbrf \
             FROM public.application_user_authorization_token auat \
-            WHERE auat.application_user_id = $1 AND auat.application_user_device_id = $2;";
+            WHERE auat.application_user__id = $1 AND auat.application_user_device_id = $2;";
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&by_1.application_user_id, Type::INT8)
+            .add_parameter(&by_1.application_user__id, Type::INT8)
             .add_parameter(&by_1.application_user_device_id, Type::TEXT);
         let statement = database_2_connection
             .prepare_typed(
@@ -315,9 +315,9 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                 auat.wrong_enter_tries_quantity AS wetq, \
                 auat.expires_at AS ea \
             FROM public.application_user_authorization_token auat \
-            WHERE auat.application_user_id = $1 AND auat.application_user_device_id = $2;";
+            WHERE auat.application_user__id = $1 AND auat.application_user_device_id = $2;";
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&by_1.application_user_id, Type::INT8)
+            .add_parameter(&by_1.application_user__id, Type::INT8)
             .add_parameter(&by_1.application_user_device_id, Type::TEXT);
         let statement = database_2_connection
             .prepare_typed(
@@ -350,9 +350,9 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                 auat.expires_at AS ea, \
                 auat.can_be_resent_from AS cbrf \
             FROM public.application_user_authorization_token auat \
-            WHERE auat.application_user_id = $1 AND auat.application_user_device_id = $2;";
+            WHERE auat.application_user__id = $1 AND auat.application_user_device_id = $2;";
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&by_1.application_user_id, Type::INT8)
+            .add_parameter(&by_1.application_user__id, Type::INT8)
             .add_parameter(&by_1.application_user_device_id, Type::TEXT);
         let statement = database_2_connection
             .prepare_typed(
@@ -379,7 +379,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
     }
 }
 pub struct Insert1<'a> {
-    pub application_user_id: i64,
+    pub application_user__id: i64,
     pub application_user_device_id: &'a str,
     pub application_user_authorization_token_value: String,
     pub application_user_authorization_token_wrong_enter_tries_quantity: i16,
@@ -404,6 +404,6 @@ pub struct Update4 {
     pub application_user_authorization_token_wrong_enter_tries_quantity: i16,
 }
 pub struct By1<'a> {
-    pub application_user_id: i64,
+    pub application_user__id: i64,
     pub application_user_device_id: &'a str,
 }

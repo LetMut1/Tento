@@ -91,7 +91,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
                 Backtrace::new(line!(), file!()),
             )));
         }
-        if !Validator::<ApplicationUser_Id>::is_valid(incoming_.application_user_id) {
+        if !Validator::<ApplicationUser_Id>::is_valid(incoming_.application_user__id) {
             return Ok(Err(Auditor::<InvalidArgument>::new(
                 InvalidArgument,
                 Backtrace::new(line!(), file!()),
@@ -101,7 +101,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
         let application_user = match PostgresqlRepository::<ApplicationUser>::find_6(
             &*database_1_postgresql_pooled_connection,
             By3 {
-                application_user_id: incoming_.application_user_id,
+                application_user__id: incoming_.application_user__id,
             },
         )
         .await?
@@ -118,7 +118,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
         let mut application_user_authorization_token = match PostgresqlRepository::<ApplicationUserAuthorizationToken>::find_3(
             database_2_postgresql_connection,
             By1 {
-                application_user_id: incoming_.application_user_id,
+                application_user__id: incoming_.application_user__id,
                 application_user_device_id: incoming_.application_user_device_id.as_str(),
             },
         )
@@ -135,7 +135,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
             PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::delete_1(
                 database_2_postgresql_connection,
                 By1 {
-                    application_user_id: incoming_.application_user_id,
+                    application_user__id: incoming_.application_user__id,
                     application_user_device_id: incoming_.application_user_device_id.as_str(),
                 },
             )
@@ -156,7 +156,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
                 application_user_authorization_token_can_be_resent_from: application_user_authorization_token.can_be_resent_from,
             },
             By1 {
-                application_user_id: incoming_.application_user_id,
+                application_user__id: incoming_.application_user__id,
                 application_user_device_id: incoming_.application_user_device_id.as_str(),
             },
         )

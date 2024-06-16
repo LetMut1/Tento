@@ -24,7 +24,7 @@ impl PostgresqlRepository<ApplicationUserDevice> {
         let query = "\
             INSERT INTO public.application_user_device AS aud ( \
                 id, \
-                application_user_id \
+                application_user__id \
             ) VALUES ( \
                 $1, \
                 $2 \
@@ -32,7 +32,7 @@ impl PostgresqlRepository<ApplicationUserDevice> {
             ON CONFLICT ON CONSTRAINT application_user_device2 DO NOTHING;";
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(&application_user_device_id, Type::TEXT)
-            .add_parameter(&insert_1.application_user_id, Type::INT8);
+            .add_parameter(&insert_1.application_user__id, Type::INT8);
         let statement = database_1_connection
             .prepare_typed(
                 query,
@@ -49,11 +49,11 @@ impl PostgresqlRepository<ApplicationUserDevice> {
             .convert(Backtrace::new(line!(), file!()))?;
         return Ok(ApplicationUserDevice::new(
             insert_1.application_user_device_id,
-            insert_1.application_user_id,
+            insert_1.application_user__id,
         ));
     }
 }
 pub struct Insert1 {
     pub application_user_device_id: String,
-    pub application_user_id: i64,
+    pub application_user__id: i64,
 }

@@ -6,12 +6,12 @@
 CREATE TABLE IF NOT EXISTS tento.channel_publication_mark
 (
     channel_id Int64 CODEC(LZ4),
-    application_user_id Int64 CODEC(LZ4),
+    application_user__id Int64 CODEC(LZ4),
     channel_publication_id Int64 CODEC(LZ4),
     created_at DateTime('UTC') CODEC(LZ4)
 ) ENGINE = ReplacingMergeTree()
-ORDER BY (channel_id, application_user_id, channel_publication_id)
-PRIMARY KEY (channel_id, application_user_id, channel_publication_id)
+ORDER BY (channel_id, application_user__id, channel_publication_id)
+PRIMARY KEY (channel_id, application_user__id, channel_publication_id)
 SETTINGS
     index_granularity = 1024,
     enable_mixed_granularity_parts = false;

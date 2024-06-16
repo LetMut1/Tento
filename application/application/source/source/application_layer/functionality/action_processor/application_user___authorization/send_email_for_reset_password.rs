@@ -85,7 +85,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForResetPassword>
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
         let incoming_ = incoming.convert_value_does_not_exist(Backtrace::new(line!(), file!()))?;
-        if !Validator::<ApplicationUser_Id>::is_valid(incoming_.application_user_id) {
+        if !Validator::<ApplicationUser_Id>::is_valid(incoming_.application_user__id) {
             return Ok(Err(Auditor::<InvalidArgument>::new(
                 InvalidArgument,
                 Backtrace::new(line!(), file!()),
@@ -101,7 +101,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForResetPassword>
         let application_user = match PostgresqlRepository::<ApplicationUser>::find_6(
             &*database_1_postgresql_pooled_connection,
             By3 {
-                application_user_id: incoming_.application_user_id,
+                application_user__id: incoming_.application_user__id,
             },
         )
         .await?
@@ -118,7 +118,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForResetPassword>
         let mut application_user_reset_password_token = match PostgresqlRepository::<ApplicationUserResetPasswordToken>::find_3(
             database_2_postgresql_connection,
             By1 {
-                application_user_id: incoming_.application_user_id,
+                application_user__id: incoming_.application_user__id,
                 application_user_device_id: incoming_.application_user_device_id.as_str(),
             },
         )
@@ -135,7 +135,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForResetPassword>
             PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete_2(
                 database_2_postgresql_connection,
                 By1 {
-                    application_user_id: incoming_.application_user_id,
+                    application_user__id: incoming_.application_user__id,
                     application_user_device_id: incoming_.application_user_device_id.as_str(),
                 },
             )
@@ -161,7 +161,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForResetPassword>
                 application_user_reset_password_token_can_be_resent_from: application_user_reset_password_token.can_be_resent_from,
             },
             By1 {
-                application_user_id: incoming_.application_user_id,
+                application_user__id: incoming_.application_user__id,
                 application_user_device_id: incoming_.application_user_device_id.as_str(),
             },
         )

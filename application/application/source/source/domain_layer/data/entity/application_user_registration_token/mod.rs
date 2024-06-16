@@ -14,8 +14,8 @@ use std::{
     marker::PhantomData,
 };
 pub struct ApplicationUserRegistrationToken<'a> {
-    pub application_user_email: Cow<'a, str>,
-    _application_user_email: PhantomData<ApplicationUser_Email>,
+    pub application_user__email: Cow<'a, str>,
+    _application_user__email: PhantomData<ApplicationUser_Email>,
 
     pub application_user_device_id: Cow<'a, str>,
     _application_user_device_id: PhantomData<ApplicationUserDevice_Id>,
@@ -37,7 +37,7 @@ pub struct ApplicationUserRegistrationToken<'a> {
 }
 impl<'a> ApplicationUserRegistrationToken<'a> {
     pub fn new(
-        application_user_email: Cow<'a, str>,
+        application_user__email: Cow<'a, str>,
         application_user_device_id: Cow<'a, str>,
         value: String,
         wrong_enter_tries_quantity: i16,
@@ -46,8 +46,8 @@ impl<'a> ApplicationUserRegistrationToken<'a> {
         can_be_resent_from: i64,
     ) -> Self {
         return Self {
-            application_user_email,
-            _application_user_email: PhantomData,
+            application_user__email,
+            _application_user__email: PhantomData,
             application_user_device_id,
             _application_user_device_id: PhantomData,
             value,

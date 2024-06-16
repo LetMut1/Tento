@@ -85,7 +85,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordBySecondStep>
                 Backtrace::new(line!(), file!()),
             )));
         }
-        if !Validator::<ApplicationUser_Id>::is_valid(incoming_.application_user_id) {
+        if !Validator::<ApplicationUser_Id>::is_valid(incoming_.application_user__id) {
             return Ok(Err(Auditor::<InvalidArgument>::new(
                 InvalidArgument,
                 Backtrace::new(line!(), file!()),
@@ -102,7 +102,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordBySecondStep>
         let mut application_user_reset_password_token = match PostgresqlRepository::<ApplicationUserResetPasswordToken>::find_2(
             database_2_postgresql_connection,
             By1 {
-                application_user_id: incoming_.application_user_id,
+                application_user__id: incoming_.application_user__id,
                 application_user_device_id: incoming_.application_user_device_id.as_str(),
             },
         )
@@ -119,7 +119,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordBySecondStep>
             PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete_2(
                 database_2_postgresql_connection,
                 By1 {
-                    application_user_id: incoming_.application_user_id,
+                    application_user__id: incoming_.application_user__id,
                     application_user_device_id: incoming_.application_user_device_id.as_str(),
                 },
             )
@@ -143,7 +143,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordBySecondStep>
                         application_user_reset_password_token_wrong_enter_tries_quantity: application_user_reset_password_token.wrong_enter_tries_quantity,
                     },
                     By1 {
-                        application_user_id: incoming_.application_user_id,
+                        application_user__id: incoming_.application_user__id,
                         application_user_device_id: incoming_.application_user_device_id.as_str(),
                     },
                 )
@@ -152,7 +152,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordBySecondStep>
                 PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete_2(
                     database_2_postgresql_connection,
                     By1 {
-                        application_user_id: incoming_.application_user_id,
+                        application_user__id: incoming_.application_user__id,
                         application_user_device_id: incoming_.application_user_device_id.as_str(),
                     },
                 )
@@ -171,7 +171,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordBySecondStep>
                 application_user_reset_password_token_is_approved: application_user_reset_password_token.is_approved,
             },
             By1 {
-                application_user_id: incoming_.application_user_id,
+                application_user__id: incoming_.application_user__id,
                 application_user_device_id: incoming_.application_user_device_id.as_str(),
             },
         )

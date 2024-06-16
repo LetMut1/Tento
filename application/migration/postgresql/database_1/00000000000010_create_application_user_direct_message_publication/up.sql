@@ -3,7 +3,7 @@ SELECT 'This is a stub.';
 -- CREATE TABLE public.application_user_direct_message_publication (
 --     id BIGINT,
 --     application_user_direct_message_id BIGINT,
---     application_user_id BIGINT,
+--     application_user__id BIGINT,
 --     channel_feed_publication_id BIGINT,
 --     channel_feed_publication_reaction_id BIGINT,
 --     created_at TIMESTAMP(6) WITH TIME ZONE
@@ -21,12 +21,12 @@ SELECT 'This is a stub.';
 -- ALTER TABLE ONLY public.application_user_direct_message_publication
 -- ALTER COLUMN id SET NOT NULL,
 -- ALTER COLUMN application_user_direct_message_id SET NOT NULL,
--- ALTER COLUMN application_user_id SET NOT NULL,
+-- ALTER COLUMN application_user__id SET NOT NULL,
 -- ALTER COLUMN created_at SET NOT NULL,
 -- ADD CONSTRAINT application_user_direct_message_publication4 PRIMARY KEY USING INDEX application_user_direct_message_publication2,
 -- ADD CONSTRAINT application_user_direct_message_publication5 FOREIGN KEY (application_user_direct_message_id)
 -- REFERENCES public.application_user_direct_message (id) ON DELETE CASCADE,
--- ADD CONSTRAINT application_user_direct_message_publication6 FOREIGN KEY (application_user_id)
+-- ADD CONSTRAINT application_user_direct_message_publication6 FOREIGN KEY (application_user__id)
 -- REFERENCES public.application_user (id) ON DELETE CASCADE,
 -- ADD CONSTRAINT application_user_direct_message_publication7 FOREIGN KEY (channel_feed_publication_id)
 -- REFERENCES public.channel_feed_publication (id) ON DELETE CASCADE,

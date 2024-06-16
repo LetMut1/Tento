@@ -3,7 +3,7 @@ SELECT 'This is a stub.';
 -- CREATE TABLE public.channel_feed_publication (
 --     id BIGINT,
 --     channel_id BIGINT,
---     application_user_id BIGINT,
+--     application_user__id BIGINT,
 --     content_type SMALLINT,
 --     content_type_component TEXT,  -- // TODO small_description large_description путь до картинки, путь до музыки
 --     content_type_component_preview TEXT,  -- // TODO Превью для обширных типов, чтобы первично передавать меньше информации. Если обычный мем с музыкой, то Нулл. В запросе делать условие на тип.
@@ -33,7 +33,7 @@ SELECT 'This is a stub.';
 -- ALTER TABLE ONLY public.channel_feed_publication
 -- ALTER COLUMN id SET NOT NULL,
 -- ALTER COLUMN channel_id SET NOT NULL,
--- ALTER COLUMN application_user_id SET NOT NULL,
+-- ALTER COLUMN application_user__id SET NOT NULL,
 -- ALTER COLUMN content_type SET NOT NULL,
 -- ALTER COLUMN content_type_component SET NOT NULL,
 -- ALTER COLUMN public_marks_quantity SET NOT NULL,
@@ -46,7 +46,7 @@ SELECT 'This is a stub.';
 -- ADD CONSTRAINT channel_feed_publication5 PRIMARY KEY USING INDEX channel_feed_publication2,
 -- ADD CONSTRAINT channel_feed_publication6 FOREIGN KEY (channel_id)
 -- REFERENCES public.channel (id) ON DELETE RESTRICT,
--- ADD CONSTRAINT channel_feed_publication7 FOREIGN KEY (application_user_id)
+-- ADD CONSTRAINT channel_feed_publication7 FOREIGN KEY (application_user__id)
 -- REFERENCES public.application_user (id) ON DELETE RESTRICT;
 -- -- ADD CONSTRAINT channel_feed_publication8 UNIQUE USING INDEX channel_feed_publication3;
 

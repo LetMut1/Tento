@@ -116,12 +116,12 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
         }
         let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
         let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
-        let (application_user_id, application_user_email, application_user_nickname, application_user_password_hash) =
-            if Validator::<ApplicationUser_Email>::is_valid(incoming_.application_user_email_or_application_user_nickname.as_str())? {
+        let (application_user__id, application_user__email, application_user__nickname, application_user__password_hash) =
+            if Validator::<ApplicationUser_Email>::is_valid(incoming_.application_user__email_or_application_user__nickname.as_str())? {
                 let application_user_ = PostgresqlRepository::<ApplicationUser>::find_3(
                     database_1_postgresql_connection,
                     By2 {
-                        application_user_email: incoming_.application_user_email_or_application_user_nickname.as_str(),
+                        application_user__email: incoming_.application_user__email_or_application_user__nickname.as_str(),
                     },
                 )
                 .await?;
@@ -135,16 +135,16 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                 };
                 (
                     application_user__.id,
-                    incoming_.application_user_email_or_application_user_nickname,
+                    incoming_.application_user__email_or_application_user__nickname,
                     application_user__.nickname,
                     application_user__.password_hash,
                 )
             } else {
-                if Validator::<ApplicationUser_Nickname>::is_valid(incoming_.application_user_email_or_application_user_nickname.as_str()) {
+                if Validator::<ApplicationUser_Nickname>::is_valid(incoming_.application_user__email_or_application_user__nickname.as_str()) {
                     let application_user_ = PostgresqlRepository::<ApplicationUser>::find_2(
                         database_1_postgresql_connection,
                         By1 {
-                            application_user_nickname: incoming_.application_user_email_or_application_user_nickname.as_str(),
+                            application_user__nickname: incoming_.application_user__email_or_application_user__nickname.as_str(),
                         },
                     )
                     .await?;
@@ -159,7 +159,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                     (
                         application_user__.id,
                         application_user__.email,
-                        incoming_.application_user_email_or_application_user_nickname,
+                        incoming_.application_user__email_or_application_user__nickname,
                         application_user__.password_hash,
                     )
                 } else {
@@ -171,8 +171,8 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
             };
         if !Validator::<ApplicationUser_Password>::is_valid_part_2(
             incoming_.application_user_password.as_str(),
-            application_user_email.as_str(),
-            application_user_nickname.as_str(),
+            application_user__email.as_str(),
+            application_user__nickname.as_str(),
         ) {
             return Ok(Err(Auditor::<InvalidArgument>::new(
                 InvalidArgument,
@@ -182,7 +182,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
         let closure = move || -> _ {
             return Encoder::<ApplicationUser_Password>::is_valid(
                 incoming_.application_user_password.as_str(),
-                application_user_password_hash.as_str(),
+                application_user__password_hash.as_str(),
             );
         };
         let join_handle = Spawner::<TokioBlockingTask>::spawn_processed(closure);
@@ -201,7 +201,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
         ) = match PostgresqlRepository::<ApplicationUserAuthorizationToken>::find_1(
             database_2_postgresql_connection,
             By1_ {
-                application_user_id,
+                application_user__id,
                 application_user_device_id: incoming_.application_user_device_id.as_str(),
             },
         )
@@ -232,7 +232,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                             application_user_authorization_token_can_be_resent_from: application_user_authorization_token.can_be_resent_from,
                         },
                         By1_ {
-                            application_user_id,
+                            application_user__id,
                             application_user_device_id: incoming_.application_user_device_id.as_str(),
                         },
                     )
@@ -245,7 +245,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                                 application_user_authorization_token_can_be_resent_from: application_user_authorization_token.can_be_resent_from,
                             },
                             By1_ {
-                                application_user_id,
+                                application_user__id,
                                 application_user_device_id: incoming_.application_user_device_id.as_str(),
                             },
                         )
@@ -260,7 +260,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                                 application_user_authorization_token_expires_at: application_user_authorization_token.expires_at,
                             },
                             By1_ {
-                                application_user_id,
+                                application_user__id,
                                 application_user_device_id: incoming_.application_user_device_id.as_str(),
                             },
                         )
@@ -278,7 +278,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                 let application_user_authorization_token = PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::create_1(
                     database_2_postgresql_connection,
                     Insert1 {
-                        application_user_id,
+                        application_user__id,
                         application_user_device_id: incoming_.application_user_device_id.as_str(),
                         application_user_authorization_token_value: Generator::<ApplicationUserAuthorizationToken_Value>::generate(),
                         application_user_authorization_token_wrong_enter_tries_quantity: 0,
@@ -299,12 +299,12 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
             EmailSender::<ApplicationUserAuthorizationToken<'_>>::send(
                 environment_configuration,
                 application_user_authorization_token_value.as_str(),
-                application_user_email.as_str(),
+                application_user__email.as_str(),
                 incoming_.application_user_device_id.as_str(),
             )?;
         }
         let outcoming = Outcoming {
-            application_user_id,
+            application_user__id,
             verification_message_sent: can_send,
             application_user_authorization_token_can_be_resent_from,
             application_user_authorization_token_wrong_enter_tries_quantity,

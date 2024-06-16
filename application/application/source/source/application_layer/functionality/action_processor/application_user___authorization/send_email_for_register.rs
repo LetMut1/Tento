@@ -81,7 +81,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForRegister> {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
         let incoming_ = incoming.convert_value_does_not_exist(Backtrace::new(line!(), file!()))?;
-        if !Validator::<ApplicationUser_Email>::is_valid(incoming_.application_user_email.as_str())? {
+        if !Validator::<ApplicationUser_Email>::is_valid(incoming_.application_user__email.as_str())? {
             return Ok(Err(Auditor::<InvalidArgument>::new(
                 InvalidArgument,
                 Backtrace::new(line!(), file!()),
@@ -98,7 +98,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForRegister> {
         let mut application_user_registration_token = match PostgresqlRepository::<ApplicationUserRegistrationToken>::find_3(
             database_2_postgresql_connection,
             By1 {
-                application_user_email: incoming_.application_user_email.as_str(),
+                application_user__email: incoming_.application_user__email.as_str(),
                 application_user_device_id: incoming_.application_user_device_id.as_str(),
             },
         )
@@ -115,7 +115,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForRegister> {
             PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete_2(
                 database_2_postgresql_connection,
                 By1 {
-                    application_user_email: incoming_.application_user_email.as_str(),
+                    application_user__email: incoming_.application_user__email.as_str(),
                     application_user_device_id: incoming_.application_user_device_id.as_str(),
                 },
             )
@@ -141,7 +141,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForRegister> {
                 application_user_registration_token_can_be_resent_from: application_user_registration_token.can_be_resent_from,
             },
             By1 {
-                application_user_email: incoming_.application_user_email.as_str(),
+                application_user__email: incoming_.application_user__email.as_str(),
                 application_user_device_id: incoming_.application_user_device_id.as_str(),
             },
         )
@@ -149,7 +149,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForRegister> {
         EmailSender::<ApplicationUserRegistrationToken<'_>>::send(
             environment_configuration,
             application_user_registration_token.value.as_str(),
-            incoming_.application_user_email.as_str(),
+            incoming_.application_user__email.as_str(),
             incoming_.application_user_device_id.as_str(),
         )?;
         let outcoming = Outcoming {

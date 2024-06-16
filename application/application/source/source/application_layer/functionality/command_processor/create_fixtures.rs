@@ -123,16 +123,16 @@ impl CommandProcessor<CreateFixtures> {
     async fn create_fixtures<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<(), Auditor<Error>> {
         let database_1_postgresql_connection_pool = Creator::<PostgresqlConnectionPoolNoTls>::create_database_1(environment_configuration).await?;
         let application_user_password = Self::APPLICATION_USER__PASSWORD.to_string();
-        let application_user_password_hash = Encoder::<ApplicationUser_Password>::encode(application_user_password.as_str())?;
+        let application_user__password_hash = Encoder::<ApplicationUser_Password>::encode(application_user_password.as_str())?;
         let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
         let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
         '_a: for _ in 1..=Self::QUANTITY_OF_APPLICATION_USERS {
-            let mut application_user_nickname = String::new();
+            let mut application_user__nickname = String::new();
             '_b: for _ in 1..=thread_rng().gen_range::<usize, _>(1..=ApplicationUser_Nickname::MAXIMUM_LENGTH) {
                 let character = Self::ASCII_CHARACTER_REGISTRY[thread_rng().gen_range::<usize, _>(0..Self::ASCII_CHARACTER_REGISTRY.len())];
-                application_user_nickname = format!("{}{}", application_user_nickname.as_str(), character);
+                application_user__nickname = format!("{}{}", application_user__nickname.as_str(), character);
             }
-            if !Validator::<ApplicationUser_Nickname>::is_valid(application_user_nickname.as_str()) {
+            if !Validator::<ApplicationUser_Nickname>::is_valid(application_user__nickname.as_str()) {
                 return Err(Auditor::<Error>::new(
                     Error::Logic {
                         message: "Application_user nickname should be valid.",
@@ -140,8 +140,8 @@ impl CommandProcessor<CreateFixtures> {
                     Backtrace::new(line!(), file!()),
                 ));
             }
-            let application_user_email = format!("{}@fixture.com", application_user_nickname.as_str());
-            if !Validator::<ApplicationUser_Email>::is_valid(application_user_email.as_str())? {
+            let application_user__email = format!("{}@fixture.com", application_user__nickname.as_str());
+            if !Validator::<ApplicationUser_Email>::is_valid(application_user__email.as_str())? {
                 return Err(Auditor::<Error>::new(
                     Error::Logic {
                         message: "Application_user email should be valid.",
@@ -151,8 +151,8 @@ impl CommandProcessor<CreateFixtures> {
             }
             if !Validator::<ApplicationUser_Password>::is_valid(
                 application_user_password.as_str(),
-                application_user_email.as_str(),
-                application_user_nickname.as_str(),
+                application_user__email.as_str(),
+                application_user__nickname.as_str(),
             ) {
                 return Err(Auditor::<Error>::new(
                     Error::Logic {
@@ -164,7 +164,7 @@ impl CommandProcessor<CreateFixtures> {
             let application_user = match PostgresqlRepository::<ApplicationUser<'_>>::find_1(
                 database_1_postgresql_connection,
                 By1 {
-                    application_user_nickname: application_user_nickname.as_str(),
+                    application_user__nickname: application_user__nickname.as_str(),
                 },
             )
             .await?
@@ -174,9 +174,9 @@ impl CommandProcessor<CreateFixtures> {
                     PostgresqlRepository::<ApplicationUser<'_>>::create_1(
                         database_1_postgresql_connection,
                         ApplicationUserInsert1 {
-                            application_user_email,
-                            application_user_nickname,
-                            application_user_password_hash: application_user_password_hash.clone(),
+                            application_user__email,
+                            application_user__nickname,
+                            application_user__password_hash: application_user__password_hash.clone(),
                         },
                     )
                     .await?
@@ -199,7 +199,7 @@ impl CommandProcessor<CreateFixtures> {
                 database_1_postgresql_connection,
                 ApplicationUserDeviceInsert1 {
                     application_user_device_id,
-                    application_user_id: application_user.id,
+                    application_user__id: application_user.id,
                 },
             )
             .await?;

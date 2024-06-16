@@ -1,7 +1,7 @@
 pub struct ChannelFeedPublication {
     id: i64,
     channel_id: i64,
-    application_user_id: i64,
+    application_user__id: i64,
     content_type: u8,
     content_type_component: String,
     content_type_component_preview: String,

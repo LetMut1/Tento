@@ -4,8 +4,8 @@ use super::{
 };
 use std::marker::PhantomData;
 pub struct ChannelSubscription {
-    pub application_user_id: i64,
-    _application_user_id: PhantomData<ApplicationUser_Id>,
+    pub application_user__id: i64,
+    _application_user__id: PhantomData<ApplicationUser_Id>,
 
     pub channel_id: i64,
     _channel_id: PhantomData<Channel_Id>,
@@ -14,10 +14,10 @@ pub struct ChannelSubscription {
     _created_at: PhantomData<CreatedAt>,
 }
 impl ChannelSubscription {
-    pub fn new(application_user_id: i64, channel_id: i64, created_at: String) -> Self {
+    pub fn new(application_user__id: i64, channel_id: i64, created_at: String) -> Self {
         return Self {
-            application_user_id,
-            _application_user_id: PhantomData,
+            application_user__id,
+            _application_user__id: PhantomData,
             channel_id,
             _channel_id: PhantomData,
             created_at,

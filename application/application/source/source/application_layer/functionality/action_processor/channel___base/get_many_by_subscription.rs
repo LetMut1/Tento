@@ -120,7 +120,7 @@ impl ActionProcessor<Channel__Base___GetManyBySubscription> {
         let common_registry = PostgresqlRepository::<Common1>::find_3(
             &*database_1_postgresql_pooled_connection,
             By3 {
-                application_user_id: application_user_access_token.application_user_id,
+                application_user__id: application_user_access_token.application_user__id,
                 requery_channel_id: incoming_.requery_channel_id,
             },
             incoming_.limit,

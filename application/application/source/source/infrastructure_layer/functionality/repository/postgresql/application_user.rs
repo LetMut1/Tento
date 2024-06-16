@@ -29,9 +29,9 @@ use tokio_postgres::{
 };
 impl PostgresqlRepository<ApplicationUser<'_>> {
     pub async fn create_1<'a>(database_1_connection: &'a Connection, insert_1: Insert1) -> Result<ApplicationUser<'static>, Auditor<Error>> {
-        let application_user_email = insert_1.application_user_email.as_str();
-        let application_user_nickname = insert_1.application_user_nickname.as_str();
-        let application_user_password_hash = insert_1.application_user_password_hash.as_str();
+        let application_user__email = insert_1.application_user__email.as_str();
+        let application_user__nickname = insert_1.application_user__nickname.as_str();
+        let application_user__password_hash = insert_1.application_user__password_hash.as_str();
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             INSERT INTO public.application_user AS au ( \
@@ -51,9 +51,9 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 au.id AS i,
                 au.created_at::TEXT AS ca;";
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&application_user_email, Type::TEXT)
-            .add_parameter(&application_user_nickname, Type::TEXT)
-            .add_parameter(&application_user_password_hash, Type::TEXT);
+            .add_parameter(&application_user__email, Type::TEXT)
+            .add_parameter(&application_user__nickname, Type::TEXT)
+            .add_parameter(&application_user__password_hash, Type::TEXT);
         let statement = database_1_connection
             .prepare_typed(
                 query,
@@ -70,9 +70,9 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             .convert(Backtrace::new(line!(), file!()))?;
         return Ok(ApplicationUser::new(
             row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
-            insert_1.application_user_email,
-            Cow::Owned(insert_1.application_user_nickname),
-            insert_1.application_user_password_hash,
+            insert_1.application_user__email,
+            Cow::Owned(insert_1.application_user__nickname),
+            insert_1.application_user__password_hash,
             row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
         ));
     }
@@ -89,8 +89,8 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             RETURNING \
                 au.id AS i;";
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&update_1.application_user_password_hash, Type::TEXT)
-            .add_parameter(&by_3.application_user_id, Type::INT8);
+            .add_parameter(&update_1.application_user__password_hash, Type::TEXT)
+            .add_parameter(&by_3.application_user__id, Type::INT8);
         let statement = database_1_connection
             .prepare_typed(
                 query,
@@ -108,14 +108,14 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         return Ok(());
     }
     pub async fn is_exist_1<'a>(database_1_connection: &'a Connection, by_1: By1<'_>) -> Result<bool, Auditor<Error>> {
-        let application_user_nickname = by_1.application_user_nickname;
+        let application_user__nickname = by_1.application_user__nickname;
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             SELECT \
                 au.id AS i \
             FROM public.application_user au \
             WHERE au.nickname = $1;";
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_nickname, Type::TEXT);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user__nickname, Type::TEXT);
         let statement = database_1_connection
             .prepare_typed(
                 query,
@@ -136,14 +136,14 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         return Ok(true);
     }
     pub async fn is_exist_2<'a>(database_1_connection: &'a Connection, by_2: By2<'_>) -> Result<bool, Auditor<Error>> {
-        let application_user_email = by_2.application_user_email;
+        let application_user__email = by_2.application_user__email;
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             SELECT \
                 au.id AS i \
             FROM public.application_user au \
             WHERE au.email = $1;";
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_email, Type::TEXT);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user__email, Type::TEXT);
         let statement = database_1_connection
             .prepare_typed(
                 query,
@@ -170,7 +170,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 au.id AS i \
             FROM public.application_user au \
             WHERE au.id = $1;";
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&by_3.application_user_id, Type::INT8);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&by_3.application_user__id, Type::INT8);
         let statement = database_1_connection
             .prepare_typed(
                 query,
@@ -191,7 +191,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         return Ok(true);
     }
     pub async fn find_1<'a, 'b>(database_1_connection: &'a Connection, by_1: By1<'b>) -> Result<Option<ApplicationUser<'b>>, Auditor<Error>> {
-        let application_user_nickname = by_1.application_user_nickname;
+        let application_user__nickname = by_1.application_user__nickname;
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             SELECT \
@@ -201,7 +201,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 au.created_at::TEXT AS ca \
             FROM public.application_user au \
             WHERE au.nickname = $1;";
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_nickname, Type::TEXT);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user__nickname, Type::TEXT);
         let statement = database_1_connection
             .prepare_typed(
                 query,
@@ -222,13 +222,13 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         return Ok(Some(ApplicationUser::new(
             row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
             row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
-            Cow::Borrowed(by_1.application_user_nickname),
+            Cow::Borrowed(by_1.application_user__nickname),
             row_registry[0].try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?,
             row_registry[0].try_get::<'_, usize, String>(3).convert(Backtrace::new(line!(), file!()))?,
         )));
     }
     pub async fn find_2<'a>(database_1_connection: &'a Connection, by_1: By1<'_>) -> Result<Option<ApplicationUser1>, Auditor<Error>> {
-        let application_user_nickname = by_1.application_user_nickname;
+        let application_user__nickname = by_1.application_user__nickname;
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             SELECT \
@@ -237,7 +237,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 au.password_hash AS ph \
             FROM public.application_user au \
             WHERE au.nickname = $1;";
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_nickname, Type::TEXT);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user__nickname, Type::TEXT);
         let statement = database_1_connection
             .prepare_typed(
                 query,
@@ -262,7 +262,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         }));
     }
     pub async fn find_3<'a>(database_1_connection: &'a Connection, by_2: By2<'_>) -> Result<Option<ApplicationUser2>, Auditor<Error>> {
-        let application_user_email = by_2.application_user_email;
+        let application_user__email = by_2.application_user__email;
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             SELECT \
@@ -271,7 +271,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 au.password_hash AS ph \
             FROM public.application_user au \
             WHERE au.email = $1;";
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_email, Type::TEXT);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user__email, Type::TEXT);
         let statement = database_1_connection
             .prepare_typed(
                 query,
@@ -296,14 +296,14 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         }));
     }
     pub async fn find_4<'a>(database_1_connection: &'a Connection, by_2: By2<'_>) -> Result<Option<ApplicationUser3>, Auditor<Error>> {
-        let application_user_email = by_2.application_user_email;
+        let application_user__email = by_2.application_user__email;
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             SELECT \
                 au.id AS i \
             FROM public.application_user au \
             WHERE au.email = $1;";
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user_email, Type::TEXT);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&application_user__email, Type::TEXT);
         let statement = database_1_connection
             .prepare_typed(
                 query,
@@ -334,7 +334,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 au.password_hash AS ph \
             FROM public.application_user au \
             WHERE au.id = $1;";
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&by_3.application_user_id, Type::INT8);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&by_3.application_user__id, Type::INT8);
         let statement = database_1_connection
             .prepare_typed(
                 query,
@@ -365,7 +365,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 au.email AS e \
             FROM public.application_user au \
             WHERE au.id = $1;";
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&by_3.application_user_id, Type::INT8);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&by_3.application_user__id, Type::INT8);
         let statement = database_1_connection
             .prepare_typed(
                 query,
@@ -389,19 +389,19 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
     }
 }
 pub struct Insert1 {
-    pub application_user_email: String,
-    pub application_user_nickname: String,
-    pub application_user_password_hash: String,
+    pub application_user__email: String,
+    pub application_user__nickname: String,
+    pub application_user__password_hash: String,
 }
 pub struct Update1<'a> {
-    pub application_user_password_hash: &'a str,
+    pub application_user__password_hash: &'a str,
 }
 pub struct By1<'a> {
-    pub application_user_nickname: &'a str,
+    pub application_user__nickname: &'a str,
 }
 pub struct By2<'a> {
-    pub application_user_email: &'a str,
+    pub application_user__email: &'a str,
 }
 pub struct By3 {
-    pub application_user_id: i64,
+    pub application_user__id: i64,
 }

@@ -15,7 +15,7 @@ impl EmailSender<ApplicationUserAuthorizationToken<'_>> {
     pub fn send<'a>(
         environment_configuration: &'a EnvironmentConfiguration,
         application_user_authorization_token_value: &'a str,
-        application_user_email: &'a str,
+        application_user__email: &'a str,
         application_user_device_id: &'a str,
     ) -> Result<(), Auditor<Error>> {
         let message_body = format!(
@@ -26,7 +26,7 @@ impl EmailSender<ApplicationUserAuthorizationToken<'_>> {
             environment_configuration,
             "Authorization confirmation",
             message_body,
-            application_user_email,
+            application_user__email,
         )?;
         return Ok(());
     }

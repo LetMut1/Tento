@@ -129,7 +129,7 @@ impl ActionProcessor<Channel__Base___GetManyPublicByName> {
         let common_registry = PostgresqlRepository::<Common1>::find_1(
             &*database_1_postgresql_pooled_connection,
             By1 {
-                application_user_id: application_user_access_token.application_user_id,
+                application_user__id: application_user_access_token.application_user__id,
                 channel_name: incoming_.channel_name.as_str(),
                 requery_channel_name: incoming_.requery_channel_name.as_deref(),
                 channel_visability_modifier: Channel_VisabilityModifier::from_representation(Channel_VisabilityModifier::Public),

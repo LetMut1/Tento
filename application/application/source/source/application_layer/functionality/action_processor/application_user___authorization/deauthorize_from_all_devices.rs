@@ -106,7 +106,7 @@ impl ActionProcessor<ApplicationUser__Authorization___DeauthorizeFromAllDevices>
         PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::delete_2(
             &*database_2_postgresql_pooled_connection,
             By1 {
-                application_user_id: application_user_access_token.application_user_id,
+                application_user__id: application_user_access_token.application_user__id,
             },
         )
         .await?;

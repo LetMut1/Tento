@@ -24,7 +24,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             INSERT INTO public.application_user_access_refresh_token AS auart ( \
-                application_user_id, \
+                application_user__id, \
                 application_user_device_id, \
                 application_user_access_token_id, \
                 obfuscation_value, \
@@ -39,7 +39,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 $6 \
             );";
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&insert_1.application_user_id, Type::INT8)
+            .add_parameter(&insert_1.application_user__id, Type::INT8)
             .add_parameter(&insert_1.application_user_device_id, Type::TEXT)
             .add_parameter(&insert_1.application_user_access_token_id, Type::TEXT)
             .add_parameter(
@@ -69,7 +69,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
             .await
             .convert(Backtrace::new(line!(), file!()))?;
         return Ok(ApplicationUserAccessRefreshToken::new(
-            insert_1.application_user_id,
+            insert_1.application_user__id,
             Cow::Borrowed(insert_1.application_user_device_id),
             Cow::Borrowed(insert_1.application_user_access_token_id),
             insert_1.application_user_access_refresh_token_obfuscation_value,
@@ -92,7 +92,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 $3, \
                 $4 \
             ) \
-            WHERE auart.application_user_id = $5 AND auart.application_user_device_id = $6;";
+            WHERE auart.application_user__id = $5 AND auart.application_user_device_id = $6;";
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(&update_1.application_user_access_token_id, Type::TEXT)
             .add_parameter(
@@ -107,7 +107,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 &update_1.application_user_access_refresh_token_updated_at,
                 Type::INT8,
             )
-            .add_parameter(&by_2.application_user_id, Type::INT8)
+            .add_parameter(&by_2.application_user__id, Type::INT8)
             .add_parameter(&by_2.application_user_device_id, Type::TEXT);
         let statement = database_2_connection
             .prepare_typed(
@@ -128,9 +128,9 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
     pub async fn delete_1<'a>(database_2_connection: &'a Connection, by_2: By2<'_>) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "DELETE FROM ONLY public.application_user_access_refresh_token AS auart  \
-            WHERE auart.application_user_id = $1 AND auart.application_user_device_id = $2;";
+            WHERE auart.application_user__id = $1 AND auart.application_user_device_id = $2;";
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&by_2.application_user_id, Type::INT8)
+            .add_parameter(&by_2.application_user__id, Type::INT8)
             .add_parameter(&by_2.application_user_device_id, Type::TEXT);
         let statement = database_2_connection
             .prepare_typed(
@@ -152,8 +152,8 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             DELETE FROM ONLY public.application_user_access_refresh_token AS auart  \
-            WHERE auart.application_user_id = $1;";
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&by_1.application_user_id, Type::INT8);
+            WHERE auart.application_user__id = $1;";
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&by_1.application_user__id, Type::INT8);
         let statement = database_2_connection
             .prepare_typed(
                 query,
@@ -179,9 +179,9 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 auart.expires_at AS ea, \
                 auart.updated_at AS ua \
             FROM public.application_user_access_refresh_token auart \
-            WHERE auart.application_user_id = $1 AND auart.application_user_device_id = $2;";
+            WHERE auart.application_user__id = $1 AND auart.application_user_device_id = $2;";
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&by_2.application_user_id, Type::INT8)
+            .add_parameter(&by_2.application_user__id, Type::INT8)
             .add_parameter(&by_2.application_user_device_id, Type::TEXT);
         let statement = database_2_connection
             .prepare_typed(
@@ -201,7 +201,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
             return Ok(None);
         }
         return Ok(Some(ApplicationUserAccessRefreshToken::new(
-            by_2.application_user_id,
+            by_2.application_user__id,
             Cow::Borrowed(by_2.application_user_device_id),
             Cow::Owned(row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?),
             row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
@@ -211,7 +211,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
     }
 }
 pub struct Insert1<'a> {
-    pub application_user_id: i64,
+    pub application_user__id: i64,
     pub application_user_device_id: &'a str,
     pub application_user_access_token_id: &'a str,
     pub application_user_access_refresh_token_obfuscation_value: String,
@@ -225,9 +225,9 @@ pub struct Update1<'a> {
     pub application_user_access_refresh_token_updated_at: i64,
 }
 pub struct By1 {
-    pub application_user_id: i64,
+    pub application_user__id: i64,
 }
 pub struct By2<'a> {
-    pub application_user_id: i64,
+    pub application_user__id: i64,
     pub application_user_device_id: &'a str,
 }

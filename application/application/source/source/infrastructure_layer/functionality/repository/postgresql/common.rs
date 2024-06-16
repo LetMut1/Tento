@@ -35,7 +35,7 @@ impl PostgresqlRepository<Common1> {
                 c.background_image_path AS bip, \
                 cs.channel_id AS ca \
             FROM public.channel c LEFT OUTER JOIN public.channel_subscription cs \
-            ON cs.application_user_id = ${} AND c.id = cs.channel_id \
+            ON cs.application_user__id = ${} AND c.id = cs.channel_id \
             WHERE c.visability_modifier = ${} AND c.name LIKE ${}",
             counter.get_next_value()?,
             counter.get_next_value()?,
@@ -43,7 +43,7 @@ impl PostgresqlRepository<Common1> {
         );
         let wildcard = format!("{}%", by_1.channel_name,);
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&by_1.application_user_id, Type::INT8)
+            .add_parameter(&by_1.application_user__id, Type::INT8)
             .add_parameter(&by_1.channel_visability_modifier, Type::INT2)
             .add_parameter(&wildcard, Type::TEXT);
         if let Some(ref requery_channel_name) = by_1.requery_channel_name {
@@ -115,13 +115,13 @@ impl PostgresqlRepository<Common1> {
                 c.cover_image_path AS cip, \
                 c.background_image_path AS bip \
             FROM public.channel c INNER JOIN public.channel_subscription cs \
-            ON cs.application_user_id = ${} AND c.id = cs.channel_id \
+            ON cs.application_user__id = ${} AND c.id = cs.channel_id \
             WHERE c.name LIKE ${}",
             counter.get_next_value()?,
             counter.get_next_value()?,
         );
         let wildcard = format!("{}%", by_2.channel_name,);
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&by_2.application_user_id, Type::INT8).add_parameter(&wildcard, Type::TEXT);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&by_2.application_user__id, Type::INT8).add_parameter(&wildcard, Type::TEXT);
         if let Some(ref requery_channel_name) = by_2.requery_channel_name {
             query = format!(
                 "{} AND c.name > ${}",
@@ -187,10 +187,10 @@ impl PostgresqlRepository<Common1> {
                 c.cover_image_path AS cip, \
                 c.background_image_path AS bip \
             FROM public.channel c INNER JOIN public.channel_subscription cs \
-            ON cs.application_user_id = ${} AND c.id = cs.channel_id",
+            ON cs.application_user__id = ${} AND c.id = cs.channel_id",
             counter.get_next_value()?,
         );
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&by_3.application_user_id, Type::INT8);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&by_3.application_user__id, Type::INT8);
         let requery_channel_id: i64;
         if let Some(requery_channel_id_) = by_3.requery_channel_id {
             requery_channel_id = requery_channel_id_;
@@ -248,17 +248,17 @@ impl PostgresqlRepository<Common1> {
     }
 }
 pub struct By1<'a> {
-    pub application_user_id: i64,
+    pub application_user__id: i64,
     pub channel_name: &'a str,
     pub requery_channel_name: Option<&'a str>,
     pub channel_visability_modifier: i16,
 }
 pub struct By2<'a> {
-    pub application_user_id: i64,
+    pub application_user__id: i64,
     pub channel_name: &'a str,
     pub requery_channel_name: Option<&'a str>,
 }
 pub struct By3 {
-    pub application_user_id: i64,
+    pub application_user__id: i64,
     pub requery_channel_id: Option<i64>,
 }

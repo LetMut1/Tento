@@ -100,7 +100,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
         let mut application_user_access_refresh_token = match PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::find_1(
             database_2_postgresql_connection,
             By2 {
-                application_user_id: application_user_access_token.application_user_id,
+                application_user__id: application_user_access_token.application_user__id,
                 application_user_device_id: application_user_access_token.application_user_device_id.as_ref(),
             },
         )
@@ -128,7 +128,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
             PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::delete_1(
                 database_2_postgresql_connection,
                 By2 {
-                    application_user_id: application_user_access_token.application_user_id,
+                    application_user__id: application_user_access_token.application_user__id,
                     application_user_device_id: application_user_access_token.application_user_device_id.as_ref(),
                 },
             )
@@ -139,7 +139,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
         }
         let application_user_access_token_new = ApplicationUserAccessToken::new(
             Generator::<ApplicationUserAccessToken_Id>::generate(),
-            application_user_access_token.application_user_id,
+            application_user_access_token.application_user__id,
             Cow::Borrowed(application_user_access_token.application_user_device_id.as_ref()),
             Generator::<ApplicationUserAccessToken_ExpiresAt>::generate()?,
         );
@@ -156,7 +156,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
                 application_user_access_refresh_token_updated_at: application_user_access_refresh_token.updated_at,
             },
             By2 {
-                application_user_id: application_user_access_token.application_user_id,
+                application_user__id: application_user_access_token.application_user__id,
                 application_user_device_id: application_user_access_token.application_user_device_id.as_ref(),
             },
         )

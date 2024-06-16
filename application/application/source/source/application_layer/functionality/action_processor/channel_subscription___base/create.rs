@@ -125,7 +125,7 @@ impl ActionProcessor<ChannelSubscription__Base___Create> {
                 return Ok(Ok(UnifiedReport::precedent(Precedent::Channel_NotFound)));
             }
         };
-        if channel.owner == application_user_access_token.application_user_id {
+        if channel.owner == application_user_access_token.application_user__id {
             return Ok(Ok(UnifiedReport::precedent(
                 Precedent::ApplicationUser_IsChannelOwner,
             )));
@@ -136,7 +136,7 @@ impl ActionProcessor<ChannelSubscription__Base___Create> {
         PostgresqlRepository::<ChannelSubscription>::create_1(
             database_1_postgresql_connection,
             Insert1 {
-                application_user_id: application_user_access_token.application_user_id,
+                application_user__id: application_user_access_token.application_user__id,
                 channel_id: channel.id,
             },
         )

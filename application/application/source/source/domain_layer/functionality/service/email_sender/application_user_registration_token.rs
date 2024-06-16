@@ -15,7 +15,7 @@ impl EmailSender<ApplicationUserRegistrationToken<'_>> {
     pub fn send<'a>(
         environment_configuration: &'a EnvironmentConfiguration,
         application_user_registration_token_value: &'a str,
-        application_user_email: &'a str,
+        application_user__email: &'a str,
         application_user_device_id: &'a str,
     ) -> Result<(), Auditor<Error>> {
         let message_body = format!(
@@ -26,7 +26,7 @@ impl EmailSender<ApplicationUserRegistrationToken<'_>> {
             environment_configuration,
             "Registration confirmation",
             message_body,
-            application_user_email,
+            application_user__email,
         )?;
         return Ok(());
     }

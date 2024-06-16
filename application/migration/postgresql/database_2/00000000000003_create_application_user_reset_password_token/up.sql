@@ -1,5 +1,5 @@
 CREATE TABLE public.application_user_reset_password_token (
-    application_user_id BIGINT,
+    application_user__id BIGINT,
     application_user_device_id TEXT,
     value TEXT,
     wrong_enter_tries_quantity SMALLINT,
@@ -9,12 +9,12 @@ CREATE TABLE public.application_user_reset_password_token (
 ) WITH (oids = false, fillfactor = 85, autovacuum_enabled = true);
 
 CREATE UNIQUE INDEX application_user_reset_password_token1 ON public.application_user_reset_password_token
-USING btree (application_user_id, application_user_device_id ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
+USING btree (application_user__id, application_user_device_id ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
 
 -- The index is not put on the field `expires_at` on purpose, because otherwise there will be a high load.
 
 ALTER TABLE ONLY public.application_user_reset_password_token
-ALTER COLUMN application_user_id SET NOT NULL,
+ALTER COLUMN application_user__id SET NOT NULL,
 ALTER COLUMN application_user_device_id SET NOT NULL,
 ALTER COLUMN value SET NOT NULL,
 ALTER COLUMN wrong_enter_tries_quantity SET NOT NULL,

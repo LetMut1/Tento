@@ -6,7 +6,7 @@ use serde::{
 };
 #[derive(Serialize, Deserialize)]
 pub struct Incoming {
-    pub application_user_email: String,
+    pub application_user__email: String,
     pub application_user_device_id: String,
 }
 #[derive(Serialize, Deserialize)]

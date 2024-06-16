@@ -133,12 +133,12 @@ impl ActionProcessor<Channel__Base___GetOneById> {
             let is_exist = PostgresqlRepository::<ChannelSubscription>::is_exist_1(
                 &*database_1_postgresql_pooled_connection,
                 By1 {
-                    application_user_id: application_user_access_token.application_user_id,
+                    application_user__id: application_user_access_token.application_user__id,
                     channel_id: channel.id,
                 },
             )
             .await?;
-            if !is_exist && application_user_access_token.application_user_id != channel.owner {
+            if !is_exist && application_user_access_token.application_user__id != channel.owner {
                 return Ok(Ok(UnifiedReport::precedent(Precedent::Channel_IsClose)));
             }
         }
