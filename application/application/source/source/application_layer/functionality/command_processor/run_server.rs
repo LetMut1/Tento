@@ -298,7 +298,7 @@ impl CommandProcessor<RunServer> {
         });
         let signal_interrupt_future = Self::create_signal(SignalKind::interrupt())?;
         let signal_terminate_future = Self::create_signal(SignalKind::terminate())?;
-        let graceful_shutdown_signal_future = async {
+        let graceful_shutdown_signal_future = async move {
             tokio::select! {
                 _ = signal_interrupt_future => {
                     ()
