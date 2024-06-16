@@ -217,6 +217,18 @@ impl CommandProcessor<RunServer> {
                 ));
             }
         };
+        let signal_interrupt_future = Self::create_signal(SignalKind::interrupt())?;
+        let signal_terminate_future = Self::create_signal(SignalKind::terminate())?;
+        let graceful_shutdown_signal_future = async move {
+            tokio::select! {
+                _ = signal_interrupt_future => {
+                    ()
+                },
+                _ = signal_terminate_future => {
+                    ()
+                },
+            }
+        };
         let mut server_builder = Server::try_bind(&application_http_socket_address).convert(Backtrace::new(line!(), file!()))?;
         server_builder = server_builder
             .tcp_nodelay(environment_configuration.application_server.tcp.nodelay)
@@ -275,7 +287,7 @@ impl CommandProcessor<RunServer> {
             let database_1_postgresql_connection_pool_ = database_1_postgresql_connection_pool.clone();
             let database_2_postgresql_connection_pool_ = database_2_postgresql_connection_pool.clone();
             let future = async move {
-                let service_fn = hyper::service::service_fn(move |request: Request| -> _ {
+                let closure = move |request: Request| -> _ {
                     let router___ = router__.clone();
                     let database_1_postgresql_connection_pool__ = database_1_postgresql_connection_pool_.clone();
                     let database_2_postgresql_connection_pool__ = database_2_postgresql_connection_pool_.clone();
@@ -291,25 +303,18 @@ impl CommandProcessor<RunServer> {
                         Ok::<_, Void>(response)
                     };
                     return future_;
-                });
-                Ok::<_, Void>(service_fn)
+                };
+                Ok::<_, Void>(hyper::service::service_fn(closure))
             };
             return future;
         };
-        let service = hyper::service::make_service_fn(closure);
-        let signal_interrupt_future = Self::create_signal(SignalKind::interrupt())?;
-        let signal_terminate_future = Self::create_signal(SignalKind::terminate())?;
-        let graceful_shutdown_signal_future = async move {
-            tokio::select! {
-                _ = signal_interrupt_future => {
-                    ()
-                },
-                _ = signal_terminate_future => {
-                    ()
-                },
-            }
-        };
-        server_builder.serve(service).with_graceful_shutdown(graceful_shutdown_signal_future).await.convert(Backtrace::new(line!(), file!()))?;
+        server_builder
+            .serve(
+                hyper::service::make_service_fn(closure)
+            )
+            .with_graceful_shutdown(graceful_shutdown_signal_future)
+            .await
+            .convert(Backtrace::new(line!(), file!()))?;
         return Ok(());
     }
     fn create_router() -> Result<Router<ActionRoute_>, Auditor<Error>> {

@@ -17,12 +17,13 @@ impl Spawner<TokioNonBlockingTask> {
     where
         F: Future<Output = Result<T, Auditor<Error>>> + Send + 'static,
     {
-        tokio::spawn(async move {
+        let future = async move {
             if let Err(error_auditor) = future.await {
                 Logger::<Auditor<Error>>::log(&error_auditor);
             }
             return ();
-        });
+        };
+        tokio::spawn(future);
     }
     pub fn spawn_processed<F>(future: F) -> JoinHandle<<F as Future>::Output>
     where

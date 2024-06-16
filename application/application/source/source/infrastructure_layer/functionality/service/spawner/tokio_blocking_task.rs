@@ -15,12 +15,14 @@ impl Spawner<TokioBlockingTask> {
         F: FnOnce() -> Result<T, Auditor<Error>> + Send + 'static,
         T: Send + 'static,
     {
-        tokio::task::spawn_blocking(|| -> () {
+        let closure = move || -> () {
             if let Err(error_auditor) = closure() {
                 Logger::<Auditor<Error>>::log(&error_auditor);
             }
             return ();
-        });
+        };
+
+        tokio::task::spawn_blocking(closure);
     }
     pub fn spawn_processed<F, R>(closure: F) -> JoinHandle<R>
     where
