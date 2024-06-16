@@ -45,19 +45,6 @@ services:
         ports:
         - 8082:8080
         restart: always
-    database_1_clickhouse:
-        container_name: tento_database_1_clickhouse
-        build:
-            context: ./service/clickhouse
-            dockerfile: dockerfile
-        environment:
-            CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: '1'
-            CLICKHOUSE_USER: 'root'
-            CLICKHOUSE_PASSWORD: 'password'
-            CLICKHOUSE_DB: 'tento'
-        volumes:
-            - database_1_clickhouse_data:/var/lib/clickhouse/
-        restart: always
     dbmate:
         container_name: tento_dbmate
         build:
@@ -68,20 +55,6 @@ services:
         restart: always
         tty: true
         init: true
-    redis:
-        container_name: tento_redis
-        build:
-            context: ./service/redis
-            dockerfile: dockerfile
-        restart: always
-    redis_client:
-        container_name: tento_redis_client
-        build:
-            context: ./service/redis_client
-            dockerfile: dockerfile
-        ports:
-        - 5001:5001
-        restart: always
     mailhog:
         container_name: tento_mailhog
         build:
@@ -95,8 +68,6 @@ volumes:
     database_1_postgresql_data:
         driver: local
     database_2_postgresql_data:
-        driver: local
-    database_1_clickhouse_data:
         driver: local
 
 networks:
