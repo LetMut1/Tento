@@ -1,4 +1,4 @@
-pub use crate::infrastructure_layer::data::control_type::Channel__Base___GetManyPublicByName;
+use crate::infrastructure_layer::data::control_type::Channel__Base___GetManyPublicByName;
 use crate::{
     application_layer::{
         data::unified_report::UnifiedReport,
@@ -41,7 +41,7 @@ use crate::{
         },
     },
 };
-pub use action_processor_incoming_outcoming::action_processor::channel___base::get_many_public_by_name::{
+use action_processor_incoming_outcoming::action_processor::channel___base::get_many_public_by_name::{
     Incoming,
     Outcoming,
     Precedent,

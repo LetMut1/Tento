@@ -1,4 +1,4 @@
-pub use crate::application_layer::functionality::action_processor::application_user___authorization::deauthorize_from_all_devices::ApplicationUser__Authorization___DeauthorizeFromAllDevices;
+use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___DeauthorizeFromAllDevices;
 #[cfg(feature = "manual_testing")]
 use crate::infrastructure_layer::functionality::service::serializer::json::Json;
 use crate::{

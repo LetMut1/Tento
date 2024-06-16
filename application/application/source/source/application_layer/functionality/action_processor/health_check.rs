@@ -1,4 +1,4 @@
-pub use crate::infrastructure_layer::data::control_type::HealthCheck;
+use crate::infrastructure_layer::data::control_type::HealthCheck;
 use crate::{
     application_layer::{
         data::unified_report::UnifiedReport,

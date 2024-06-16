@@ -1,4 +1,4 @@
-pub use crate::application_layer::functionality::action_processor::application_user___authorization::send_email_for_register::ApplicationUser__Authorization___SendEmailForRegister;
+use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___SendEmailForRegister;
 #[cfg(feature = "manual_testing")]
 use crate::infrastructure_layer::functionality::service::serializer::json::Json;
 use crate::{

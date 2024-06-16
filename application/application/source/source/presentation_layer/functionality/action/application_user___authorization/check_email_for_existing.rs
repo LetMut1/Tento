@@ -1,4 +1,4 @@
-pub use crate::application_layer::functionality::action_processor::application_user___authorization::check_email_for_existing::ApplicationUser__Authorization___CheckEmailForExisting;
+use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___CheckEmailForExisting;
 #[cfg(feature = "manual_testing")]
 use crate::infrastructure_layer::functionality::service::serializer::json::Json;
 use crate::{

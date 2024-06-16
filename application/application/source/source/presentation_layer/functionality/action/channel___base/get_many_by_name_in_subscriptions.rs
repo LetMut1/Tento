@@ -1,4 +1,4 @@
-pub use crate::application_layer::functionality::action_processor::channel___base::get_many_by_name_in_subscriptions::Channel__Base___GetManyByNameInSubscriptions;
+use crate::infrastructure_layer::data::control_type::Channel__Base___GetManyByNameInSubscriptions;
 #[cfg(feature = "manual_testing")]
 use crate::infrastructure_layer::functionality::service::serializer::json::Json;
 use crate::{

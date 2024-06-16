@@ -1,4 +1,4 @@
-pub use crate::application_layer::functionality::action_processor::application_user___authorization::refresh_access_token::ApplicationUser__Authorization___RefreshAccessToken;
+use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___RefreshAccessToken;
 #[cfg(feature = "manual_testing")]
 use crate::infrastructure_layer::functionality::service::serializer::json::Json;
 use crate::{

@@ -1,4 +1,4 @@
-pub use crate::application_layer::functionality::action_processor::health_check::HealthCheck;
+use crate::infrastructure_layer::data::control_type::HealthCheck;
 use crate::{
     application_layer::functionality::{
         action_processor::ActionProcessor,

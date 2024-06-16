@@ -1,4 +1,4 @@
-pub use crate::application_layer::functionality::action_processor::channel_subscription___base::create::ChannelSubscription__Base___Create;
+use crate::infrastructure_layer::data::control_type::ChannelSubscription__Base___Create;
 #[cfg(feature = "manual_testing")]
 use crate::infrastructure_layer::functionality::service::serializer::json::Json;
 use crate::{

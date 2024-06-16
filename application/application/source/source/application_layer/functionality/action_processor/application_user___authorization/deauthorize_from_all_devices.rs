@@ -1,4 +1,4 @@
-pub use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___DeauthorizeFromAllDevices;
+use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___DeauthorizeFromAllDevices;
 use crate::{
     application_layer::{
         data::unified_report::UnifiedReport,
@@ -39,7 +39,7 @@ use crate::{
         },
     },
 };
-pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::deauthorize_from_all_devices::{
+use action_processor_incoming_outcoming::action_processor::application_user___authorization::deauthorize_from_all_devices::{
     Incoming,
     Precedent,
 };
