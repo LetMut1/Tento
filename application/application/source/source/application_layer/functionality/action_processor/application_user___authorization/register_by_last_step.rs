@@ -240,9 +240,10 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
                 Precedent::ApplicationUserRegistrationToken_WrongValue,
             )));
         }
-        let join_handle = Spawner::<TokioBlockingTask>::spawn_processed(move || -> _ {
+        let closure = move || -> _ {
             return Encoder::<ApplicationUser_Password>::encode(incoming_.application_user_password.as_str());
-        });
+        };
+        let join_handle = Spawner::<TokioBlockingTask>::spawn_processed(closure);
         let application_user = PostgresqlRepository::<ApplicationUser<'_>>::create_1(
             database_1_postgresql_connection,
             ApplicationUserInsert1 {
@@ -278,7 +279,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
         )?;
         let database_1_postgresql_connection_pool_ = database_1_postgresql_connection_pool.clone();
         let database_2_postgresql_connection_pool_ = database_2_postgresql_connection_pool.clone();
-        Spawner::<TokioNonBlockingTask>::spawn_into_background(async move {
+        let future = async move {
             let database_1_postgresql_pooled_connection_ = database_1_postgresql_connection_pool_.get().await.convert(Backtrace::new(line!(), file!()))?;
             let application_user_device = PostgresqlRepository::<ApplicationUserDevice>::create_1(
                 &*database_1_postgresql_pooled_connection_,
@@ -298,7 +299,8 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
             )
             .await?;
             return Ok(());
-        });
+        };
+        Spawner::<TokioNonBlockingTask>::spawn_into_background(future);
         let outcoming = Outcoming {
             application_user_access_token_encrypted,
             application_user_access_refresh_token_encrypted,

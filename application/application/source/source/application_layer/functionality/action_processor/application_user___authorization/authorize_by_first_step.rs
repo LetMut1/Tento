@@ -179,12 +179,13 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                 Backtrace::new(line!(), file!()),
             )));
         }
-        let join_handle = Spawner::<TokioBlockingTask>::spawn_processed(move || -> _ {
+        let closure = move || -> _ {
             return Encoder::<ApplicationUser_Password>::is_valid(
                 incoming_.application_user_password.as_str(),
                 application_user_password_hash.as_str(),
             );
-        });
+        };
+        let join_handle = Spawner::<TokioBlockingTask>::spawn_processed(closure);
         if !join_handle.await.convert(Backtrace::new(line!(), file!()))?? {
             return Ok(Ok(UnifiedReport::precedent(
                 Precedent::ApplicationUser_WrongEmailOrNicknameOrPassword,

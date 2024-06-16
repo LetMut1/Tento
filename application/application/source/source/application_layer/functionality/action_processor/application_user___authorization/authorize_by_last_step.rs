@@ -270,7 +270,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
         )?;
         let database_1_postgresql_connection_pool_ = database_1_postgresql_connection_pool.clone();
         let database_2_postgresql_connection_pool_ = database_2_postgresql_connection_pool.clone();
-        Spawner::<TokioNonBlockingTask>::spawn_into_background(async move {
+        let future = async move {
             let database_1_postgresql_pooled_connection_ = database_1_postgresql_connection_pool_.get().await.convert(Backtrace::new(line!(), file!()))?;
             let application_user_device = PostgresqlRepository::<ApplicationUserDevice>::create_1(
                 &*database_1_postgresql_pooled_connection_,
@@ -290,7 +290,8 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
             )
             .await?;
             return Ok(());
-        });
+        };
+        Spawner::<TokioNonBlockingTask>::spawn_into_background(future);
         let outcoming = Outcoming {
             application_user_access_token_encrypted,
             application_user_access_refresh_token_encrypted,

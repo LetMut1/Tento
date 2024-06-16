@@ -16,7 +16,7 @@ impl Logger<(ActionRound, Response)> {
         let request_uri = request_parts.uri.path().to_string();
         let request_method = request_parts.method.to_string();
         let response_status_code = response.status().as_u16();
-        Spawner::<TokioNonBlockingTask>::spawn_into_background(async move {
+        let future = async move {
             tracing::info!(
                 "{}",
                 Formatter::<(ActionRound, Response)>::format(
@@ -27,7 +27,8 @@ impl Logger<(ActionRound, Response)> {
                 .as_str()
             );
             return Ok(());
-        });
+        };
+        Spawner::<TokioNonBlockingTask>::spawn_into_background(future);
         return ();
     }
 }

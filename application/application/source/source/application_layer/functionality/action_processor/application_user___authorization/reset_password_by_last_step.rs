@@ -214,9 +214,10 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
                 Backtrace::new(line!(), file!()),
             )));
         }
-        let join_handle = Spawner::<TokioBlockingTask>::spawn_processed(move || -> _ {
+        let closure = move || -> _ {
             return Encoder::<ApplicationUser_Password>::encode(incoming_.application_user_password.as_str());
-        });
+        };
+        let join_handle = Spawner::<TokioBlockingTask>::spawn_processed(closure);
         application_user.password_hash = join_handle.await.convert(Backtrace::new(line!(), file!()))??;
         PostgresqlRepository::<ApplicationUser>::update_1(
             database_1_postgresql_connection,
@@ -237,7 +238,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
         .await?;
         Resolver::<CloudMessage>::deauthorize_application_user_from_all_devices();
         let database_2_postgresql_connection_pool_ = database_2_postgresql_connection_pool.clone();
-        Spawner::<TokioNonBlockingTask>::spawn_into_background(async move {
+        let future = async move {
             let database_2_postgresql_pooled_connection_ = database_2_postgresql_connection_pool_.get().await.convert(Backtrace::new(line!(), file!()))?;
             PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete_2(
                 &*database_2_postgresql_pooled_connection_,
@@ -248,7 +249,8 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
             )
             .await?;
             return Ok(());
-        });
+        };
+        Spawner::<TokioNonBlockingTask>::spawn_into_background(future);
         return Ok(Ok(UnifiedReport::target_empty()));
     }
 }
