@@ -143,7 +143,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
                 Backtrace::new(line!(), file!()),
             )));
         }
-        if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming_.application_user_device_id.as_str()) {
+        if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming_.application_user_device__id.as_str()) {
             return Ok(Err(Auditor::<InvalidArgument>::new(
                 InvalidArgument,
                 Backtrace::new(line!(), file!()),
@@ -181,7 +181,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
             database_2_postgresql_connection,
             By1_ {
                 application_user__email: incoming_.application_user__email.as_str(),
-                application_user_device_id: incoming_.application_user_device_id.as_str(),
+                application_user_device__id: incoming_.application_user_device__id.as_str(),
             },
         )
         .await?
@@ -198,7 +198,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
                 database_2_postgresql_connection,
                 By1_ {
                     application_user__email: incoming_.application_user__email.as_str(),
-                    application_user_device_id: incoming_.application_user_device_id.as_str(),
+                    application_user_device__id: incoming_.application_user_device__id.as_str(),
                 },
             )
             .await?;
@@ -222,7 +222,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
                     },
                     By1_ {
                         application_user__email: incoming_.application_user__email.as_str(),
-                        application_user_device_id: incoming_.application_user_device_id.as_str(),
+                        application_user_device__id: incoming_.application_user_device__id.as_str(),
                     },
                 )
                 .await?;
@@ -231,7 +231,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
                     database_2_postgresql_connection,
                     By1_ {
                         application_user__email: incoming_.application_user__email.as_str(),
-                        application_user_device_id: incoming_.application_user_device_id.as_str(),
+                        application_user_device__id: incoming_.application_user_device__id.as_str(),
                     },
                 )
                 .await?;
@@ -256,7 +256,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
         let application_user_access_token = ApplicationUserAccessToken::new(
             Generator::<ApplicationUserAccessToken_Id>::generate(),
             application_user.id,
-            Cow::Borrowed(incoming_.application_user_device_id.as_str()),
+            Cow::Borrowed(incoming_.application_user_device__id.as_str()),
             Generator::<ApplicationUserAccessToken_ExpiresAt>::generate()?,
         );
         // TODO  TRANZACTION посмотреть, необходимо ли здесь сделать транзакцию
@@ -264,11 +264,11 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
             database_2_postgresql_connection,
             ApplicationUserAccessRefreshTokenInsert1 {
                 application_user__id: application_user.id,
-                application_user_device_id: incoming_.application_user_device_id.as_str(),
-                application_user_access_token_id: application_user_access_token.id.as_str(),
-                application_user_access_refresh_token_obfuscation_value: Generator::<ApplicationUserAccessRefreshToken_ObfuscationValue>::generate(),
-                application_user_access_refresh_token_expires_at: Generator::<ApplicationUserAccessRefreshToken_ExpiresAt>::generate()?,
-                application_user_access_refresh_token_updated_at: Generator::<ApplicationUserAccessRefreshToken_UpdatedAt>::generate(),
+                application_user_device__id: incoming_.application_user_device__id.as_str(),
+                application_user_access_token__id: application_user_access_token.id.as_str(),
+                application_user_access_refresh_token__obfuscation_value: Generator::<ApplicationUserAccessRefreshToken_ObfuscationValue>::generate(),
+                application_user_access_refresh_token__expires_at: Generator::<ApplicationUserAccessRefreshToken_ExpiresAt>::generate()?,
+                application_user_access_refresh_token__updated_at: Generator::<ApplicationUserAccessRefreshToken_UpdatedAt>::generate(),
             },
         )
         .await?;
@@ -284,7 +284,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
             let application_user_device = PostgresqlRepository::<ApplicationUserDevice>::create_1(
                 &*database_1_postgresql_pooled_connection_,
                 Insert1 {
-                    application_user_device_id: incoming_.application_user_device_id,
+                    application_user_device__id: incoming_.application_user_device__id,
                     application_user__id: application_user.id,
                 },
             )
@@ -294,7 +294,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
                 &*database_2_postgresql_pooled_connection_,
                 By1_ {
                     application_user__email: application_user.email.as_str(),
-                    application_user_device_id: application_user_device.id.as_str(),
+                    application_user_device__id: application_user_device.id.as_str(),
                 },
             )
             .await?;

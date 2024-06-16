@@ -101,7 +101,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
             database_2_postgresql_connection,
             By2 {
                 application_user__id: application_user_access_token.application_user__id,
-                application_user_device_id: application_user_access_token.application_user_device_id.as_ref(),
+                application_user_device__id: application_user_access_token.application_user_device__id.as_ref(),
             },
         )
         .await?
@@ -118,7 +118,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
             &application_user_access_refresh_token,
             incoming_.application_user_access_refresh_token_encrypted.as_str(),
         )?;
-        if !is_valid || application_user_access_token.id != application_user_access_refresh_token.application_user_access_token_id.as_ref() {
+        if !is_valid || application_user_access_token.id != application_user_access_refresh_token.application_user_access_token__id.as_ref() {
             return Ok(Err(Auditor::<InvalidArgument>::new(
                 InvalidArgument,
                 Backtrace::new(line!(), file!()),
@@ -129,7 +129,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
                 database_2_postgresql_connection,
                 By2 {
                     application_user__id: application_user_access_token.application_user__id,
-                    application_user_device_id: application_user_access_token.application_user_device_id.as_ref(),
+                    application_user_device__id: application_user_access_token.application_user_device__id.as_ref(),
                 },
             )
             .await?;
@@ -140,24 +140,24 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
         let application_user_access_token_new = ApplicationUserAccessToken::new(
             Generator::<ApplicationUserAccessToken_Id>::generate(),
             application_user_access_token.application_user__id,
-            Cow::Borrowed(application_user_access_token.application_user_device_id.as_ref()),
+            Cow::Borrowed(application_user_access_token.application_user_device__id.as_ref()),
             Generator::<ApplicationUserAccessToken_ExpiresAt>::generate()?,
         );
-        application_user_access_refresh_token.application_user_access_token_id = Cow::Borrowed(application_user_access_token_new.id.as_str());
+        application_user_access_refresh_token.application_user_access_token__id = Cow::Borrowed(application_user_access_token_new.id.as_str());
         application_user_access_refresh_token.obfuscation_value = Generator::<ApplicationUserAccessRefreshToken_ObfuscationValue>::generate();
         application_user_access_refresh_token.expires_at = Generator::<ApplicationUserAccessRefreshToken_ExpiresAt>::generate()?;
         application_user_access_refresh_token.updated_at = Generator::<ApplicationUserAccessRefreshToken_UpdatedAt>::generate();
         PostgresqlRepository::<ApplicationUserAccessRefreshToken>::update_1(
             database_2_postgresql_connection,
             Update1 {
-                application_user_access_token_id: application_user_access_refresh_token.application_user_access_token_id.as_ref(),
-                application_user_access_refresh_token_obfuscation_value: application_user_access_refresh_token.obfuscation_value.as_str(),
-                application_user_access_refresh_token_expires_at: application_user_access_refresh_token.expires_at,
-                application_user_access_refresh_token_updated_at: application_user_access_refresh_token.updated_at,
+                application_user_access_token__id: application_user_access_refresh_token.application_user_access_token__id.as_ref(),
+                application_user_access_refresh_token__obfuscation_value: application_user_access_refresh_token.obfuscation_value.as_str(),
+                application_user_access_refresh_token__expires_at: application_user_access_refresh_token.expires_at,
+                application_user_access_refresh_token__updated_at: application_user_access_refresh_token.updated_at,
             },
             By2 {
                 application_user__id: application_user_access_token.application_user__id,
-                application_user_device_id: application_user_access_token.application_user_device_id.as_ref(),
+                application_user_device__id: application_user_access_token.application_user_device__id.as_ref(),
             },
         )
         .await?;

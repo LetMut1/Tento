@@ -18,7 +18,7 @@ typedef struct C_String {
 } C_String;
 
 typedef struct ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming {
-  struct C_String application_user_device_id;
+  struct C_String application_user_device__id;
   struct C_String application_user__email___or___application_user__nickname;
   struct C_String application_user_password;
 } ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming;
@@ -55,7 +55,7 @@ typedef struct C_Result_C_UnifiedReport_ApplicationUser__Authorization___Authori
 
 typedef struct ApplicationUser__Authorization___AuthorizeByLastStep___Incoming {
   long application_user__id;
-  struct C_String application_user_device_id;
+  struct C_String application_user_device__id;
   struct C_String application_user_authorization_token__value;
 } ApplicationUser__Authorization___AuthorizeByLastStep___Incoming;
 
@@ -234,7 +234,7 @@ typedef struct C_Result_C_UnifiedReport_ApplicationUser__Authorization___Refresh
 
 typedef struct ApplicationUser__Authorization___RegisterByFirstStep___Incoming {
   struct C_String application_user__email;
-  struct C_String application_user_device_id;
+  struct C_String application_user_device__id;
 } ApplicationUser__Authorization___RegisterByFirstStep___Incoming;
 
 typedef struct ApplicationUser__Authorization___RegisterByFirstStep___Outcoming {
@@ -268,7 +268,7 @@ typedef struct C_Result_C_UnifiedReport_ApplicationUser__Authorization___Registe
 
 typedef struct ApplicationUser__Authorization___RegisterBySecondStep___Incoming {
   struct C_String application_user__email;
-  struct C_String application_user_device_id;
+  struct C_String application_user_device__id;
   struct C_String application_user_registration_token__value;
 } ApplicationUser__Authorization___RegisterBySecondStep___Incoming;
 
@@ -298,7 +298,7 @@ typedef struct C_Result_C_UnifiedReport_C_Void__ApplicationUser__Authorization__
 typedef struct C_Result_C_UnifiedReport_C_Void__ApplicationUser__Authorization___RegisterBySecondStep___Precedent ApplicationUser__Authorization___RegisterBySecondStep___C_Result;
 
 typedef struct ApplicationUser__Authorization___RegisterByLastStep___Incoming {
-  struct C_String application_user_device_id;
+  struct C_String application_user_device__id;
   struct C_String application_user__nickname;
   struct C_String application_user_password;
   struct C_String application_user__email;
@@ -339,7 +339,7 @@ typedef struct C_Result_C_UnifiedReport_ApplicationUser__Authorization___Registe
 
 typedef struct ApplicationUser__Authorization___ResetPasswordByFirstStep___Incoming {
   struct C_String application_user__email;
-  struct C_String application_user_device_id;
+  struct C_String application_user_device__id;
 } ApplicationUser__Authorization___ResetPasswordByFirstStep___Incoming;
 
 typedef struct ApplicationUser__Authorization___ResetPasswordByFirstStep___Outcoming {
@@ -374,7 +374,7 @@ typedef struct C_Result_C_UnifiedReport_ApplicationUser__Authorization___ResetPa
 
 typedef struct ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming {
   long application_user__id;
-  struct C_String application_user_device_id;
+  struct C_String application_user_device__id;
   struct C_String application_user_reset_password_token__value;
 } ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming;
 
@@ -405,7 +405,7 @@ typedef struct C_Result_C_UnifiedReport_C_Void__ApplicationUser__Authorization__
 
 typedef struct ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming {
   long application_user__id;
-  struct C_String application_user_device_id;
+  struct C_String application_user_device__id;
   struct C_String application_user_password;
   struct C_String application_user_reset_password_token__value;
 } ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming;
@@ -433,7 +433,7 @@ typedef struct C_Result_C_UnifiedReport_C_Void__ApplicationUser__Authorization__
 
 typedef struct ApplicationUser__Authorization___SendEmailForRegister___Incoming {
   struct C_String application_user__email;
-  struct C_String application_user_device_id;
+  struct C_String application_user_device__id;
 } ApplicationUser__Authorization___SendEmailForRegister___Incoming;
 
 typedef struct ApplicationUser__Authorization___SendEmailForRegister___Outcoming {
@@ -466,7 +466,7 @@ typedef struct C_Result_C_UnifiedReport_ApplicationUser__Authorization___SendEma
 typedef struct C_Result_C_UnifiedReport_ApplicationUser__Authorization___SendEmailForRegister___Outcoming__ApplicationUser__Authorization___SendEmailForRegister___Precedent ApplicationUser__Authorization___SendEmailForRegister___C_Result;
 
 typedef struct ApplicationUser__Authorization___SendEmailForAuthorize___Incoming {
-  struct C_String application_user_device_id;
+  struct C_String application_user_device__id;
   long application_user__id;
 } ApplicationUser__Authorization___SendEmailForAuthorize___Incoming;
 
@@ -501,7 +501,7 @@ typedef struct C_Result_C_UnifiedReport_ApplicationUser__Authorization___SendEma
 
 typedef struct ApplicationUser__Authorization___SendEmailForResetPassword___Incoming {
   long application_user__id;
-  struct C_String application_user_device_id;
+  struct C_String application_user_device__id;
 } ApplicationUser__Authorization___SendEmailForResetPassword___Incoming;
 
 typedef struct ApplicationUser__Authorization___SendEmailForResetPassword___Outcoming {

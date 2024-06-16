@@ -182,12 +182,12 @@ impl CommandProcessor<CreateFixtures> {
                     .await?
                 }
             };
-            let application_user_device_id = format!(
+            let application_user_device__id = format!(
                 "{}_{}",
                 application_user.nickname.as_ref(),
                 Self::APPLICATION_USER_DEVICE__ID_PART
             );
-            if !Validator::<ApplicationUserDevice_Id>::is_valid(&application_user_device_id) {
+            if !Validator::<ApplicationUserDevice_Id>::is_valid(&application_user_device__id) {
                 return Err(Auditor::<Error>::new(
                     Error::Logic {
                         message: "Application_user_device id should be valid.",
@@ -198,7 +198,7 @@ impl CommandProcessor<CreateFixtures> {
             PostgresqlRepository::<ApplicationUserDevice>::create_1(
                 database_1_postgresql_connection,
                 ApplicationUserDeviceInsert1 {
-                    application_user_device_id,
+                    application_user_device__id,
                     application_user__id: application_user.id,
                 },
             )

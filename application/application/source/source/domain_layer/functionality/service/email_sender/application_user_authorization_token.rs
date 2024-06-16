@@ -16,11 +16,11 @@ impl EmailSender<ApplicationUserAuthorizationToken<'_>> {
         environment_configuration: &'a EnvironmentConfiguration,
         application_user_authorization_token__value: &'a str,
         application_user__email: &'a str,
-        application_user_device_id: &'a str,
+        application_user_device__id: &'a str,
     ) -> Result<(), Auditor<Error>> {
         let message_body = format!(
             "Your code {} for device {}.",
-            application_user_authorization_token__value, application_user_device_id,
+            application_user_authorization_token__value, application_user_device__id,
         );
         Sender::<Email>::send(
             environment_configuration,

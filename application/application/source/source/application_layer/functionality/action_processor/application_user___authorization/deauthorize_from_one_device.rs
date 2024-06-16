@@ -100,7 +100,7 @@ impl ActionProcessor<ApplicationUser__Authorization___DeauthorizeFromOneDevice> 
             &*database_2_postgresql_pooled_connection,
             By2 {
                 application_user__id: application_user_access_token.application_user__id,
-                application_user_device_id: application_user_access_token.application_user_device_id.as_ref(),
+                application_user_device__id: application_user_access_token.application_user_device__id.as_ref(),
             },
         )
         .await?;

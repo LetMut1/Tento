@@ -87,7 +87,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForRegister> {
                 Backtrace::new(line!(), file!()),
             )));
         }
-        if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming_.application_user_device_id.as_str()) {
+        if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming_.application_user_device__id.as_str()) {
             return Ok(Err(Auditor::<InvalidArgument>::new(
                 InvalidArgument,
                 Backtrace::new(line!(), file!()),
@@ -99,7 +99,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForRegister> {
             database_2_postgresql_connection,
             By1 {
                 application_user__email: incoming_.application_user__email.as_str(),
-                application_user_device_id: incoming_.application_user_device_id.as_str(),
+                application_user_device__id: incoming_.application_user_device__id.as_str(),
             },
         )
         .await?
@@ -116,7 +116,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForRegister> {
                 database_2_postgresql_connection,
                 By1 {
                     application_user__email: incoming_.application_user__email.as_str(),
-                    application_user_device_id: incoming_.application_user_device_id.as_str(),
+                    application_user_device__id: incoming_.application_user_device__id.as_str(),
                 },
             )
             .await?;
@@ -142,7 +142,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForRegister> {
             },
             By1 {
                 application_user__email: incoming_.application_user__email.as_str(),
-                application_user_device_id: incoming_.application_user_device_id.as_str(),
+                application_user_device__id: incoming_.application_user_device__id.as_str(),
             },
         )
         .await?;
@@ -150,7 +150,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForRegister> {
             environment_configuration,
             application_user_registration_token.value.as_str(),
             incoming_.application_user__email.as_str(),
-            incoming_.application_user_device_id.as_str(),
+            incoming_.application_user_device__id.as_str(),
         )?;
         let outcoming = Outcoming {
             application_user_registration_token__can_be_resent_from: application_user_registration_token.can_be_resent_from,

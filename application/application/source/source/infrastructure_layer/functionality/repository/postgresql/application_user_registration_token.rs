@@ -32,7 +32,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
         let query = "\
             INSERT INTO public.application_user_registration_token AS aurt ( \
                 application_user__email, \
-                application_user_device_id, \
+                application_user_device__id, \
                 value, \
                 wrong_enter_tries_quantity, \
                 is_approved, \
@@ -49,7 +49,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
             );";
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(&insert_1.application_user__email, Type::TEXT)
-            .add_parameter(&insert_1.application_user_device_id, Type::TEXT)
+            .add_parameter(&insert_1.application_user_device__id, Type::TEXT)
             .add_parameter(&application_user_registration_token__value, Type::TEXT)
             .add_parameter(
                 &insert_1.application_user_registration_token__wrong_enter_tries_quantity,
@@ -83,7 +83,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
             .convert(Backtrace::new(line!(), file!()))?;
         return Ok(ApplicationUserRegistrationToken::new(
             Cow::Borrowed(insert_1.application_user__email),
-            Cow::Borrowed(insert_1.application_user_device_id),
+            Cow::Borrowed(insert_1.application_user_device__id),
             insert_1.application_user_registration_token__value,
             insert_1.application_user_registration_token__wrong_enter_tries_quantity,
             insert_1.application_user_registration_token__is_approved,
@@ -95,10 +95,10 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             DELETE FROM ONLY public.application_user_registration_token AS aurt \
-            WHERE aurt.application_user__email = $1 AND aurt.application_user_device_id = $2;";
+            WHERE aurt.application_user__email = $1 AND aurt.application_user_device__id = $2;";
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(&by_1.application_user__email, Type::TEXT)
-            .add_parameter(&by_1.application_user_device_id, Type::TEXT);
+            .add_parameter(&by_1.application_user_device__id, Type::TEXT);
         let statement = database_2_connection
             .prepare_typed(
                 query,
@@ -132,7 +132,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
                 $4, \
                 $5 \
             ) \
-            WHERE aurt.application_user__email = $6 AND aurt.application_user_device_id = $7;";
+            WHERE aurt.application_user__email = $6 AND aurt.application_user_device__id = $7;";
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
                 &update_1.application_user_registration_token__value,
@@ -155,7 +155,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
                 Type::INT8,
             )
             .add_parameter(&by_1.application_user__email, Type::TEXT)
-            .add_parameter(&by_1.application_user_device_id, Type::TEXT);
+            .add_parameter(&by_1.application_user_device__id, Type::TEXT);
         let statement = database_2_connection
             .prepare_typed(
                 query,
@@ -181,14 +181,14 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
             ) = ROW( \
                 $1 \
             ) \
-            WHERE aurt.application_user__email = $2 AND aurt.application_user_device_id = $3;";
+            WHERE aurt.application_user__email = $2 AND aurt.application_user_device__id = $3;";
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
                 &update_2.application_user_registration_token__can_be_resent_from,
                 Type::INT8,
             )
             .add_parameter(&by_1.application_user__email, Type::TEXT)
-            .add_parameter(&by_1.application_user_device_id, Type::TEXT);
+            .add_parameter(&by_1.application_user_device__id, Type::TEXT);
         let statement = database_2_connection
             .prepare_typed(
                 query,
@@ -220,7 +220,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
                 $3, \
                 $4 \
             ) \
-            WHERE aurt.application_user__email = $5 AND aurt.application_user_device_id = $6;";
+            WHERE aurt.application_user__email = $5 AND aurt.application_user_device__id = $6;";
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
                 &update_3.application_user_registration_token__value,
@@ -239,7 +239,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
                 Type::INT8,
             )
             .add_parameter(&by_1.application_user__email, Type::TEXT)
-            .add_parameter(&by_1.application_user_device_id, Type::TEXT);
+            .add_parameter(&by_1.application_user_device__id, Type::TEXT);
         let statement = database_2_connection
             .prepare_typed(
                 query,
@@ -265,14 +265,14 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
             ) = ROW( \
                 $1 \
             ) \
-            WHERE aurt.application_user__email = $2 AND aurt.application_user_device_id = $3;";
+            WHERE aurt.application_user__email = $2 AND aurt.application_user_device__id = $3;";
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
                 &update_4.application_user_registration_token__wrong_enter_tries_quantity,
                 Type::INT2,
             )
             .add_parameter(&by_1.application_user__email, Type::TEXT)
-            .add_parameter(&by_1.application_user_device_id, Type::TEXT);
+            .add_parameter(&by_1.application_user_device__id, Type::TEXT);
         let statement = database_2_connection
             .prepare_typed(
                 query,
@@ -298,14 +298,14 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
             ) = ROW( \
                 $1 \
             ) \
-            WHERE aurt.application_user__email = $2 AND aurt.application_user_device_id = $3;";
+            WHERE aurt.application_user__email = $2 AND aurt.application_user_device__id = $3;";
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(
                 &update_5.application_user_registration_token__is_approved,
                 Type::BOOL,
             )
             .add_parameter(&by_1.application_user__email, Type::TEXT)
-            .add_parameter(&by_1.application_user_device_id, Type::TEXT);
+            .add_parameter(&by_1.application_user_device__id, Type::TEXT);
         let statement = database_2_connection
             .prepare_typed(
                 query,
@@ -332,10 +332,10 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
                 aurt.expires_at AS ea, \
                 aurt.can_be_resent_from as cbrf \
             FROM public.application_user_registration_token aurt \
-            WHERE aurt.application_user__email = $1 AND aurt.application_user_device_id = $2;";
+            WHERE aurt.application_user__email = $1 AND aurt.application_user_device__id = $2;";
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(&by_1.application_user__email, Type::TEXT)
-            .add_parameter(&by_1.application_user_device_id, Type::TEXT);
+            .add_parameter(&by_1.application_user_device__id, Type::TEXT);
         let statement = database_2_connection
             .prepare_typed(
                 query,
@@ -370,10 +370,10 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
                 aurt.is_approved AS ia, \
                 aurt.expires_at AS ea \
             FROM public.application_user_registration_token aurt \
-            WHERE aurt.application_user__email = $1 AND aurt.application_user_device_id = $2;";
+            WHERE aurt.application_user__email = $1 AND aurt.application_user_device__id = $2;";
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(&by_1.application_user__email, Type::TEXT)
-            .add_parameter(&by_1.application_user_device_id, Type::TEXT);
+            .add_parameter(&by_1.application_user_device__id, Type::TEXT);
         let statement = database_2_connection
             .prepare_typed(
                 query,
@@ -407,10 +407,10 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
                 aurt.expires_at AS ea, \
                 aurt.can_be_resent_from as cbrf \
             FROM public.application_user_registration_token aurt \
-            WHERE aurt.application_user__email = $1 AND aurt.application_user_device_id = $2;";
+            WHERE aurt.application_user__email = $1 AND aurt.application_user_device__id = $2;";
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(&by_1.application_user__email, Type::TEXT)
-            .add_parameter(&by_1.application_user_device_id, Type::TEXT);
+            .add_parameter(&by_1.application_user_device__id, Type::TEXT);
         let statement = database_2_connection
             .prepare_typed(
                 query,
@@ -438,7 +438,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
 }
 pub struct Insert1<'a> {
     pub application_user__email: &'a str,
-    pub application_user_device_id: &'a str,
+    pub application_user_device__id: &'a str,
     pub application_user_registration_token__value: String,
     pub application_user_registration_token__wrong_enter_tries_quantity: i16,
     pub application_user_registration_token__is_approved: bool,
@@ -469,5 +469,5 @@ pub struct Update5 {
 }
 pub struct By1<'a> {
     pub application_user__email: &'a str,
-    pub application_user_device_id: &'a str,
+    pub application_user_device__id: &'a str,
 }

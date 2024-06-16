@@ -17,8 +17,8 @@ pub struct ApplicationUserRegistrationToken<'a> {
     pub application_user__email: Cow<'a, str>,
     _application_user__email: PhantomData<ApplicationUser_Email>,
 
-    pub application_user_device_id: Cow<'a, str>,
-    _application_user_device_id: PhantomData<ApplicationUserDevice_Id>,
+    pub application_user_device__id: Cow<'a, str>,
+    _application_user_device__id: PhantomData<ApplicationUserDevice_Id>,
 
     pub value: String,
     _value: PhantomData<Value>,
@@ -38,7 +38,7 @@ pub struct ApplicationUserRegistrationToken<'a> {
 impl<'a> ApplicationUserRegistrationToken<'a> {
     pub fn new(
         application_user__email: Cow<'a, str>,
-        application_user_device_id: Cow<'a, str>,
+        application_user_device__id: Cow<'a, str>,
         value: String,
         wrong_enter_tries_quantity: i16,
         is_approved: bool,
@@ -48,8 +48,8 @@ impl<'a> ApplicationUserRegistrationToken<'a> {
         return Self {
             application_user__email,
             _application_user__email: PhantomData,
-            application_user_device_id,
-            _application_user_device_id: PhantomData,
+            application_user_device__id,
+            _application_user_device__id: PhantomData,
             value,
             _value: PhantomData,
             wrong_enter_tries_quantity,

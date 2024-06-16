@@ -19,7 +19,7 @@ use tokio_postgres::{
 };
 impl PostgresqlRepository<ApplicationUserDevice> {
     pub async fn create_1<'a>(database_1_connection: &'a Connection, insert_1: Insert1) -> Result<ApplicationUserDevice, Auditor<Error>> {
-        let application_user_device_id = insert_1.application_user_device_id.as_str();
+        let application_user_device__id = insert_1.application_user_device__id.as_str();
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             INSERT INTO public.application_user_device AS aud ( \
@@ -31,7 +31,7 @@ impl PostgresqlRepository<ApplicationUserDevice> {
             ) \
             ON CONFLICT ON CONSTRAINT application_user_device2 DO NOTHING;";
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&application_user_device_id, Type::TEXT)
+            .add_parameter(&application_user_device__id, Type::TEXT)
             .add_parameter(&insert_1.application_user__id, Type::INT8);
         let statement = database_1_connection
             .prepare_typed(
@@ -48,12 +48,12 @@ impl PostgresqlRepository<ApplicationUserDevice> {
             .await
             .convert(Backtrace::new(line!(), file!()))?;
         return Ok(ApplicationUserDevice::new(
-            insert_1.application_user_device_id,
+            insert_1.application_user_device__id,
             insert_1.application_user__id,
         ));
     }
 }
 pub struct Insert1 {
-    pub application_user_device_id: String,
+    pub application_user_device__id: String,
     pub application_user__id: i64,
 }

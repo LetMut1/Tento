@@ -7,7 +7,7 @@ use serde::{
 #[derive(Serialize, Deserialize)]
 pub struct Incoming {
     pub application_user__id: i64,
-    pub application_user_device_id: String,
+    pub application_user_device__id: String,
     pub application_user_authorization_token__value: String,
 }
 #[derive(Serialize, Deserialize)]

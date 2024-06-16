@@ -97,7 +97,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByFirstStep> 
                 Backtrace::new(line!(), file!()),
             )));
         }
-        if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming_.application_user_device_id.as_str()) {
+        if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming_.application_user_device__id.as_str()) {
             return Ok(Err(Auditor::<InvalidArgument>::new(
                 InvalidArgument,
                 Backtrace::new(line!(), file!()),
@@ -130,7 +130,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByFirstStep> 
             database_2_postgresql_connection,
             By1 {
                 application_user__id: application_user_.id,
-                application_user_device_id: incoming_.application_user_device_id.as_str(),
+                application_user_device__id: incoming_.application_user_device__id.as_str(),
             },
         )
         .await?
@@ -164,7 +164,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByFirstStep> 
                         },
                         By1 {
                             application_user__id: application_user_.id,
-                            application_user_device_id: incoming_.application_user_device_id.as_str(),
+                            application_user_device__id: incoming_.application_user_device__id.as_str(),
                         },
                     )
                     .await?;
@@ -177,7 +177,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByFirstStep> 
                             },
                             By1 {
                                 application_user__id: application_user_.id,
-                                application_user_device_id: incoming_.application_user_device_id.as_str(),
+                                application_user_device__id: incoming_.application_user_device__id.as_str(),
                             },
                         )
                         .await?;
@@ -193,7 +193,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByFirstStep> 
                             },
                             By1 {
                                 application_user__id: application_user_.id,
-                                application_user_device_id: incoming_.application_user_device_id.as_str(),
+                                application_user_device__id: incoming_.application_user_device__id.as_str(),
                             },
                         )
                         .await?;
@@ -211,7 +211,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByFirstStep> 
                     database_2_postgresql_connection,
                     Insert1 {
                         application_user__id: application_user_.id,
-                        application_user_device_id: incoming_.application_user_device_id.as_str(),
+                        application_user_device__id: incoming_.application_user_device__id.as_str(),
                         application_user_reset_password_token__value: Generator::<ApplicationUserResetPasswordToken_Value>::generate(),
                         application_user_reset_password_token__wrong_enter_tries_quantity: 0,
                         application_user_reset_password_token__is_approved: false,
@@ -233,7 +233,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByFirstStep> 
                 environment_configuration,
                 application_user_reset_password_token__value.as_str(),
                 incoming_.application_user__email.as_str(),
-                incoming_.application_user_device_id.as_str(),
+                incoming_.application_user_device__id.as_str(),
             )?;
         }
         let outcoming = Outcoming {

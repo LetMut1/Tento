@@ -116,7 +116,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
                 Backtrace::new(line!(), file!()),
             )));
         }
-        if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming_.application_user_device_id.as_str()) {
+        if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming_.application_user_device__id.as_str()) {
             return Ok(Err(Auditor::<InvalidArgument>::new(
                 InvalidArgument,
                 Backtrace::new(line!(), file!()),
@@ -128,7 +128,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
             database_2_postgresql_connection,
             By1_ {
                 application_user__id: incoming_.application_user__id,
-                application_user_device_id: incoming_.application_user_device_id.as_str(),
+                application_user_device__id: incoming_.application_user_device__id.as_str(),
             },
         )
         .await?
@@ -145,7 +145,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
                 database_2_postgresql_connection,
                 By1_ {
                     application_user__id: incoming_.application_user__id,
-                    application_user_device_id: incoming_.application_user_device_id.as_str(),
+                    application_user_device__id: incoming_.application_user_device__id.as_str(),
                 },
             )
             .await?;
@@ -169,7 +169,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
                     },
                     By1_ {
                         application_user__id: incoming_.application_user__id,
-                        application_user_device_id: incoming_.application_user_device_id.as_str(),
+                        application_user_device__id: incoming_.application_user_device__id.as_str(),
                     },
                 )
                 .await?;
@@ -178,7 +178,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
                     database_2_postgresql_connection,
                     By1_ {
                         application_user__id: incoming_.application_user__id,
-                        application_user_device_id: incoming_.application_user_device_id.as_str(),
+                        application_user_device__id: incoming_.application_user_device__id.as_str(),
                     },
                 )
                 .await?;
@@ -244,7 +244,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
                 &*database_2_postgresql_pooled_connection_,
                 By1_ {
                     application_user__id: incoming_.application_user__id,
-                    application_user_device_id: incoming_.application_user_device_id.as_str(),
+                    application_user_device__id: incoming_.application_user_device__id.as_str(),
                 },
             )
             .await?;

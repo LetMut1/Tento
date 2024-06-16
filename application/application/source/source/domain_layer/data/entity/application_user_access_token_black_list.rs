@@ -9,6 +9,6 @@ use std::marker::PhantomData;
 /// Wherever the validity of a token is checked, you need to check if this token is in this
 /// entity, and block the action if it is.
 pub struct ApplicationUserAccessTokenBlackList {
-    _application_user_access_token_id: String,
-    __application_user_access_token_id: PhantomData<ApplicationUserAccessToken_Id>,
+    _application_user_access_token__id: String,
+    __application_user_access_token__id: PhantomData<ApplicationUserAccessToken_Id>,
 }

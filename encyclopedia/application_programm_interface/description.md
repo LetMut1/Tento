@@ -351,7 +351,7 @@ Registers application user for the first step and sends email to user.
 Request data:
 struct Incoming {
     application_user__email: String,
-    application_user_device_id: String
+    application_user_device__id: String
 }
 ```
 ```
@@ -379,7 +379,7 @@ Registers application user for the second step through token value approving.
 Request data:
 struct Incoming {
     application_user__email: String,
-    application_user_device_id: String,
+    application_user_device__id: String,
     application_user_registration_token__value: String
 }
 ```
@@ -401,7 +401,7 @@ Registers application user for the last step.
 ```
 Request data:
 struct Incoming {
-    application_user_device_id: String,
+    application_user_device__id: String,
     application_user__nickname: String,
     application_user_password: String,
     application_user__email: String,
@@ -432,7 +432,7 @@ Sends email for register. (Should be used only if the user does not receive an e
 Request data:
 struct Incoming {
     application_user__email: String,
-    application_user_device_id: String
+    application_user_device__id: String
 }
 ```
 ```
@@ -458,7 +458,7 @@ Authorizes application user for the firs step and send email to user.
 ```
 Request data:
 struct Incoming {
-    application_user_device_id: String,
+    application_user_device__id: String,
     application_user__email___or___application_user__nickname: String,
     application_user_password: String
 }
@@ -485,7 +485,7 @@ Authorizes application user for the last step.
 Request data:
 struct Incoming {
     application_user__id: i64,
-    application_user_device_id: String,
+    application_user_device__id: String,
     application_user_authorization_token__value: String
 }
 ```
@@ -510,7 +510,7 @@ Sends email for authorization. (Should be used only if the user does not receive
 ```
 Request data:
 struct Incoming {
-    application_user_device_id: String,
+    application_user_device__id: String,
     application_user__id: i64
 }
 ```
@@ -535,7 +535,7 @@ Resets application user password for the first step and send email to user.
 Request data:
 struct Incoming {
     application_user__email: String,
-    application_user_device_id: String
+    application_user_device__id: String
 }
 ```
 ```
@@ -558,7 +558,7 @@ Resets application user password for the second step through token value approvi
 Request data:
 struct Incoming {
     application_user__id: i64,
-    application_user_device_id: String,
+    application_user_device__id: String,
     application_user_reset_password_token__value: String
 }
 ```
@@ -579,7 +579,7 @@ Resets application user password for the last step.
 ```
 Request data:
 struct Incoming {
-    application_user_device_id: String,
+    application_user_device__id: String,
     application_user__id: i64,
     application_user_password: String,
     application_user_reset_password_token__value: String
@@ -604,7 +604,7 @@ Sends email for reset password.  (Should be used only if the user does not recei
 Request data:
 struct Incoming {
     application_user__id: i64,
-    application_user_device_id: String,
+    application_user_device__id: String,
 }
 ```
 ```
