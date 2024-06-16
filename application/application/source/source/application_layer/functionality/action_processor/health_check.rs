@@ -1,4 +1,3 @@
-use crate::infrastructure_layer::data::control_type::HealthCheck;
 use crate::{
     application_layer::{
         data::unified_report::UnifiedReport,
@@ -6,6 +5,7 @@ use crate::{
     },
     infrastructure_layer::data::{
         auditor::Auditor,
+        control_type::HealthCheck,
         environment_configuration::EnvironmentConfiguration,
         error::Error,
         invalid_argument::InvalidArgument,

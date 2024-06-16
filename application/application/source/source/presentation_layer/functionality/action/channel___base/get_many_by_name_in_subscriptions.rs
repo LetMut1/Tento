@@ -1,4 +1,3 @@
-use crate::infrastructure_layer::data::control_type::Channel__Base___GetManyByNameInSubscriptions;
 #[cfg(feature = "manual_testing")]
 use crate::infrastructure_layer::functionality::service::serializer::json::Json;
 use crate::{
@@ -11,7 +10,10 @@ use crate::{
     },
     infrastructure_layer::{
         data::{
-            control_type::Response,
+            control_type::{
+                Channel__Base___GetManyByNameInSubscriptions,
+                Response,
+            },
             environment_configuration::EnvironmentConfiguration,
         },
         functionality::service::serializer::message_pack::MessagePack,

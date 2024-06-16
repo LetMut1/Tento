@@ -1,4 +1,3 @@
-use crate::infrastructure_layer::data::control_type::ChannelSubscription__Base___Create;
 use crate::{
     application_layer::{
         data::unified_report::UnifiedReport,
@@ -30,6 +29,7 @@ use crate::{
                 ErrorConverter,
                 OptionConverter,
             },
+            control_type::ChannelSubscription__Base___Create,
             environment_configuration::EnvironmentConfiguration,
             error::Error,
             invalid_argument::InvalidArgument,

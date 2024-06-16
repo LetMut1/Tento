@@ -1,4 +1,3 @@
-use crate::infrastructure_layer::data::control_type::Channel__Base___GetManyPublicByName;
 use crate::{
     application_layer::{
         data::unified_report::UnifiedReport,
@@ -28,6 +27,7 @@ use crate::{
                 ErrorConverter,
                 OptionConverter,
             },
+            control_type::Channel__Base___GetManyPublicByName,
             environment_configuration::EnvironmentConfiguration,
             error::Error,
             invalid_argument::InvalidArgument,

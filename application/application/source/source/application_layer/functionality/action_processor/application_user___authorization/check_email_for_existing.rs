@@ -1,4 +1,3 @@
-use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___CheckEmailForExisting;
 use crate::{
     application_layer::{
         data::unified_report::UnifiedReport,
@@ -19,6 +18,7 @@ use crate::{
                 ErrorConverter,
                 OptionConverter,
             },
+            control_type::ApplicationUser__Authorization___CheckEmailForExisting,
             environment_configuration::EnvironmentConfiguration,
             error::Error,
             invalid_argument::InvalidArgument,

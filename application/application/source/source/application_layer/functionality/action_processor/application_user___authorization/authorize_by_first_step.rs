@@ -1,4 +1,3 @@
-use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___AuthorizeByFirstStep;
 use crate::{
     application_layer::{
         data::unified_report::UnifiedReport,
@@ -36,7 +35,10 @@ use crate::{
                 ErrorConverter,
                 OptionConverter,
             },
-            control_type::TokioBlockingTask,
+            control_type::{
+                ApplicationUser__Authorization___AuthorizeByFirstStep,
+                TokioBlockingTask,
+            },
             environment_configuration::EnvironmentConfiguration,
             error::Error,
             invalid_argument::InvalidArgument,

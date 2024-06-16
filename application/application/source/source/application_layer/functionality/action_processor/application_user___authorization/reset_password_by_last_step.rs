@@ -1,4 +1,3 @@
-use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___ResetPasswordByLastStep;
 use crate::{
     application_layer::{
         data::unified_report::UnifiedReport,
@@ -33,6 +32,7 @@ use crate::{
                 OptionConverter,
             },
             control_type::{
+                ApplicationUser__Authorization___ResetPasswordByLastStep,
                 TokioBlockingTask,
                 TokioNonBlockingTask,
             },

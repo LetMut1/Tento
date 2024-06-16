@@ -1,4 +1,3 @@
-use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___SendEmailForAuthorize;
 use crate::{
     application_layer::{
         data::unified_report::UnifiedReport,
@@ -30,6 +29,7 @@ use crate::{
                 ErrorConverter,
                 OptionConverter,
             },
+            control_type::ApplicationUser__Authorization___SendEmailForAuthorize,
             environment_configuration::EnvironmentConfiguration,
             error::Error,
             invalid_argument::InvalidArgument,

@@ -1,4 +1,3 @@
-use crate::infrastructure_layer::data::control_type::HealthCheck;
 use crate::{
     application_layer::functionality::{
         action_processor::ActionProcessor,
@@ -9,7 +8,10 @@ use crate::{
     },
     infrastructure_layer::{
         data::{
-            control_type::Response,
+            control_type::{
+                HealthCheck,
+                Response,
+            },
             environment_configuration::EnvironmentConfiguration,
             void::Void,
         },
