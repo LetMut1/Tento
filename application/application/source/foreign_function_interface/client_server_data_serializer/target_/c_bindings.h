@@ -26,9 +26,9 @@ typedef struct ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming 
 typedef struct ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming {
   long application_user__id;
   bool verification_message_sent;
-  long application_user_authorization_token_can_be_resent_from;
-  short application_user_authorization_token_wrong_enter_tries_quantity;
-  short application_user_authorization_token_wrong_enter_tries_quantity_limit;
+  long application_user_authorization_token__can_be_resent_from;
+  short application_user_authorization_token__wrong_enter_tries_quantity;
+  short application_user_authorization_token__wrong_enter_tries_quantity_limit;
 } ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming;
 
 typedef struct C_Data_ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming {
@@ -56,7 +56,7 @@ typedef struct C_Result_C_UnifiedReport_ApplicationUser__Authorization___Authori
 typedef struct ApplicationUser__Authorization___AuthorizeByLastStep___Incoming {
   long application_user__id;
   struct C_String application_user_device_id;
-  struct C_String application_user_authorization_token_value;
+  struct C_String application_user_authorization_token__value;
 } ApplicationUser__Authorization___AuthorizeByLastStep___Incoming;
 
 typedef struct ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming {
@@ -71,7 +71,7 @@ typedef struct C_Data_ApplicationUser__Authorization___AuthorizeByLastStep___Out
 
 typedef struct ApplicationUserAuthorizationToken_WrongValue {
   bool is_exist;
-  short application_user_authorization_token_wrong_enter_tries_quantity;
+  short application_user_authorization_token__wrong_enter_tries_quantity;
 } ApplicationUserAuthorizationToken_WrongValue;
 
 typedef struct ApplicationUser__Authorization___AuthorizeByLastStep___Precedent {
@@ -471,7 +471,7 @@ typedef struct ApplicationUser__Authorization___SendEmailForAuthorize___Incoming
 } ApplicationUser__Authorization___SendEmailForAuthorize___Incoming;
 
 typedef struct ApplicationUser__Authorization___SendEmailForAuthorize___Outcoming {
-  long application_user_authorization_token_can_be_resent_from;
+  long application_user_authorization_token__can_be_resent_from;
 } ApplicationUser__Authorization___SendEmailForAuthorize___Outcoming;
 
 typedef struct C_Data_ApplicationUser__Authorization___SendEmailForAuthorize___Outcoming {

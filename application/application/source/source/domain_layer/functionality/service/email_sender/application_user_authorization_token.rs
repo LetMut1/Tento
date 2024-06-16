@@ -14,13 +14,13 @@ use crate::{
 impl EmailSender<ApplicationUserAuthorizationToken<'_>> {
     pub fn send<'a>(
         environment_configuration: &'a EnvironmentConfiguration,
-        application_user_authorization_token_value: &'a str,
+        application_user_authorization_token__value: &'a str,
         application_user__email: &'a str,
         application_user_device_id: &'a str,
     ) -> Result<(), Auditor<Error>> {
         let message_body = format!(
             "Your code {} for device {}.",
-            application_user_authorization_token_value, application_user_device_id,
+            application_user_authorization_token__value, application_user_device_id,
         );
         Sender::<Email>::send(
             environment_configuration,

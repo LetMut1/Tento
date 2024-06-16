@@ -641,9 +641,9 @@ type ApplicationUser__Authorization___AuthorizeByFirstStep___C_Result = C_Result
 pub struct ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming {
     pub application_user__id: c_long,
     pub verification_message_sent: bool,
-    pub application_user_authorization_token_can_be_resent_from: c_long,
-    pub application_user_authorization_token_wrong_enter_tries_quantity: c_short,
-    pub application_user_authorization_token_wrong_enter_tries_quantity_limit: c_short,
+    pub application_user_authorization_token__can_be_resent_from: c_long,
+    pub application_user_authorization_token__wrong_enter_tries_quantity: c_short,
+    pub application_user_authorization_token__wrong_enter_tries_quantity_limit: c_short,
 }
 
 #[repr(C)]
@@ -668,9 +668,9 @@ pub extern "C" fn application_user___authorization____authorize_by_first_step___
                         let outcoming = ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming {
                             application_user__id: data__.application_user__id,
                             verification_message_sent: data__.verification_message_sent,
-                            application_user_authorization_token_can_be_resent_from: data__.application_user_authorization_token_can_be_resent_from,
-                            application_user_authorization_token_wrong_enter_tries_quantity: data__.application_user_authorization_token_wrong_enter_tries_quantity,
-                            application_user_authorization_token_wrong_enter_tries_quantity_limit: data__.application_user_authorization_token_wrong_enter_tries_quantity_limit,
+                            application_user_authorization_token__can_be_resent_from: data__.application_user_authorization_token__can_be_resent_from,
+                            application_user_authorization_token__wrong_enter_tries_quantity: data__.application_user_authorization_token__wrong_enter_tries_quantity,
+                            application_user_authorization_token__wrong_enter_tries_quantity_limit: data__.application_user_authorization_token__wrong_enter_tries_quantity_limit,
                         };
 
                         C_Data::filled(outcoming)
@@ -718,7 +718,7 @@ pub extern "C" fn application_user___authorization____authorize_by_first_step___
 pub struct ApplicationUser__Authorization___AuthorizeByLastStep___Incoming {
     pub application_user__id: c_long,
     pub application_user_device_id: C_String,
-    pub application_user_authorization_token_value: C_String,
+    pub application_user_authorization_token__value: C_String,
 }
 
 #[no_mangle]
@@ -729,7 +729,7 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
         let incoming_ = ApplicationUser__Authorization___AuthorizeByLastStep___Incoming_ {
             application_user__id: incoming.application_user__id,
             application_user_device_id: incoming.application_user_device_id.to_string()?,
-            application_user_authorization_token_value: incoming.application_user_authorization_token_value.to_string()?,
+            application_user_authorization_token__value: incoming.application_user_authorization_token__value.to_string()?,
         };
 
         return Ok(incoming_);
@@ -769,7 +769,7 @@ pub struct ApplicationUser__Authorization___AuthorizeByLastStep___Precedent {
 #[derive(Default, Clone, Copy)]
 pub struct ApplicationUserAuthorizationToken_WrongValue {
     pub is_exist: bool,
-    pub application_user_authorization_token_wrong_enter_tries_quantity: c_short,
+    pub application_user_authorization_token__wrong_enter_tries_quantity: c_short,
 }
 
 #[no_mangle]
@@ -809,11 +809,11 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_::ApplicationUserAuthorizationToken_WrongValue { application_user_authorization_token_wrong_enter_tries_quantity } => {
+                    ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_::ApplicationUserAuthorizationToken_WrongValue { application_user_authorization_token__wrong_enter_tries_quantity } => {
                         ApplicationUser__Authorization___AuthorizeByLastStep___Precedent {
                             application_user_authorization_token__wrong_value: ApplicationUserAuthorizationToken_WrongValue {
                                 is_exist: true,
-                                application_user_authorization_token_wrong_enter_tries_quantity,
+                                application_user_authorization_token__wrong_enter_tries_quantity,
                             },
                             ..Default::default()
                         }
@@ -2263,7 +2263,7 @@ type ApplicationUser__Authorization___SendEmailForAuthorize___C_Result = C_Resul
 #[repr(C)]
 #[derive(Default, Clone, Copy)]
 pub struct ApplicationUser__Authorization___SendEmailForAuthorize___Outcoming {
-    pub application_user_authorization_token_can_be_resent_from: c_long,
+    pub application_user_authorization_token__can_be_resent_from: c_long,
 }
 
 #[repr(C)]
@@ -2288,7 +2288,7 @@ pub extern "C" fn application_user___authorization____send_email_for_authorize__
                     }
                     Data::Filled { data: data__ } => {
                         let outcoming = ApplicationUser__Authorization___SendEmailForAuthorize___Outcoming {
-                            application_user_authorization_token_can_be_resent_from: data__.application_user_authorization_token_can_be_resent_from,
+                            application_user_authorization_token__can_be_resent_from: data__.application_user_authorization_token__can_be_resent_from,
                         };
 
                         C_Data::filled(outcoming)
@@ -3438,9 +3438,9 @@ mod test {
                     let outcoming = ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming_ {
                         application_user__id: 0,
                         verification_message_sent: false,
-                        application_user_authorization_token_can_be_resent_from: 0,
-                        application_user_authorization_token_wrong_enter_tries_quantity: 0,
-                        application_user_authorization_token_wrong_enter_tries_quantity_limit: 0,
+                        application_user_authorization_token__can_be_resent_from: 0,
+                        application_user_authorization_token__wrong_enter_tries_quantity: 0,
+                        application_user_authorization_token__wrong_enter_tries_quantity_limit: 0,
                     };
 
                     let unified_report = UnifiedReport::<ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming_, ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent_>::target_filled(outcoming);
@@ -3562,7 +3562,7 @@ mod test {
 
                     precedent_registry.push(
                         ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_::ApplicationUserAuthorizationToken_WrongValue {
-                            application_user_authorization_token_wrong_enter_tries_quantity: 0,
+                            application_user_authorization_token__wrong_enter_tries_quantity: 0,
                         }
                     );
 
@@ -4430,7 +4430,7 @@ mod test {
                 #[test]
                 fn target_filled____application_user___authorization____send_email_for_authorize() -> Result<(), Box<dyn StdError + 'static>> {
                     let outcoming = ApplicationUser__Authorization___SendEmailForAuthorize___Outcoming_ {
-                        application_user_authorization_token_can_be_resent_from: 0,
+                        application_user_authorization_token__can_be_resent_from: 0,
                     };
 
                     let unified_report = UnifiedReport::<ApplicationUser__Authorization___SendEmailForAuthorize___Outcoming_, ApplicationUser__Authorization___SendEmailForAuthorize___Precedent_>::target_filled(outcoming);
@@ -5142,7 +5142,7 @@ mod test {
                 let incoming = ApplicationUser__Authorization___AuthorizeByLastStep___Incoming {
                     application_user__id: 0,
                     application_user_device_id: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
-                    application_user_authorization_token_value: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    application_user_authorization_token__value: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
                 };
 
                 let allocator = move |incoming: *mut ApplicationUser__Authorization___AuthorizeByLastStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
@@ -5163,7 +5163,7 @@ mod test {
 
                 Allocator::<C_String>::deallocate(incoming.application_user_device_id);
 
-                Allocator::<C_String>::deallocate(incoming.application_user_authorization_token_value);
+                Allocator::<C_String>::deallocate(incoming.application_user_authorization_token__value);
 
                 return Ok(());
             }

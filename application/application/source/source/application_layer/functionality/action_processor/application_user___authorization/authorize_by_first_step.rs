@@ -194,9 +194,9 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
         let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
         let (
-            application_user_authorization_token_value,
-            application_user_authorization_token_can_be_resent_from,
-            application_user_authorization_token_wrong_enter_tries_quantity,
+            application_user_authorization_token__value,
+            application_user_authorization_token__can_be_resent_from,
+            application_user_authorization_token__wrong_enter_tries_quantity,
             can_send,
         ) = match PostgresqlRepository::<ApplicationUserAuthorizationToken>::find_1(
             database_2_postgresql_connection,
@@ -226,10 +226,10 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                     PostgresqlRepository::<ApplicationUserAuthorizationToken>::update_1(
                         database_2_postgresql_connection,
                         Update1 {
-                            application_user_authorization_token_value: application_user_authorization_token.value.as_str(),
-                            application_user_authorization_token_wrong_enter_tries_quantity: application_user_authorization_token.wrong_enter_tries_quantity,
-                            application_user_authorization_token_expires_at: application_user_authorization_token.expires_at,
-                            application_user_authorization_token_can_be_resent_from: application_user_authorization_token.can_be_resent_from,
+                            application_user_authorization_token__value: application_user_authorization_token.value.as_str(),
+                            application_user_authorization_token__wrong_enter_tries_quantity: application_user_authorization_token.wrong_enter_tries_quantity,
+                            application_user_authorization_token__expires_at: application_user_authorization_token.expires_at,
+                            application_user_authorization_token__can_be_resent_from: application_user_authorization_token.can_be_resent_from,
                         },
                         By1_ {
                             application_user__id,
@@ -242,7 +242,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                         PostgresqlRepository::<ApplicationUserAuthorizationToken>::update_3(
                             database_2_postgresql_connection,
                             Update3 {
-                                application_user_authorization_token_can_be_resent_from: application_user_authorization_token.can_be_resent_from,
+                                application_user_authorization_token__can_be_resent_from: application_user_authorization_token.can_be_resent_from,
                             },
                             By1_ {
                                 application_user__id,
@@ -255,9 +255,9 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                         PostgresqlRepository::<ApplicationUserAuthorizationToken>::update_2(
                             database_2_postgresql_connection,
                             Update2 {
-                                application_user_authorization_token_value: application_user_authorization_token.value.as_str(),
-                                application_user_authorization_token_wrong_enter_tries_quantity: application_user_authorization_token.wrong_enter_tries_quantity,
-                                application_user_authorization_token_expires_at: application_user_authorization_token.expires_at,
+                                application_user_authorization_token__value: application_user_authorization_token.value.as_str(),
+                                application_user_authorization_token__wrong_enter_tries_quantity: application_user_authorization_token.wrong_enter_tries_quantity,
+                                application_user_authorization_token__expires_at: application_user_authorization_token.expires_at,
                             },
                             By1_ {
                                 application_user__id,
@@ -280,10 +280,10 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                     Insert1 {
                         application_user__id,
                         application_user_device_id: incoming_.application_user_device_id.as_str(),
-                        application_user_authorization_token_value: Generator::<ApplicationUserAuthorizationToken_Value>::generate(),
-                        application_user_authorization_token_wrong_enter_tries_quantity: 0,
-                        application_user_authorization_token_expires_at: Generator::<ApplicationUserAuthorizationToken_ExpiresAt>::generate()?,
-                        application_user_authorization_token_can_be_resent_from: Generator::<ApplicationUserAuthorizationToken_CanBeResentFrom>::generate()?,
+                        application_user_authorization_token__value: Generator::<ApplicationUserAuthorizationToken_Value>::generate(),
+                        application_user_authorization_token__wrong_enter_tries_quantity: 0,
+                        application_user_authorization_token__expires_at: Generator::<ApplicationUserAuthorizationToken_ExpiresAt>::generate()?,
+                        application_user_authorization_token__can_be_resent_from: Generator::<ApplicationUserAuthorizationToken_CanBeResentFrom>::generate()?,
                     },
                 )
                 .await?;
@@ -298,7 +298,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
         if can_send {
             EmailSender::<ApplicationUserAuthorizationToken<'_>>::send(
                 environment_configuration,
-                application_user_authorization_token_value.as_str(),
+                application_user_authorization_token__value.as_str(),
                 application_user__email.as_str(),
                 incoming_.application_user_device_id.as_str(),
             )?;
@@ -306,9 +306,9 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
         let outcoming = Outcoming {
             application_user__id,
             verification_message_sent: can_send,
-            application_user_authorization_token_can_be_resent_from,
-            application_user_authorization_token_wrong_enter_tries_quantity,
-            application_user_authorization_token_wrong_enter_tries_quantity_limit: ApplicationUserAuthorizationToken_WrongEnterTriesQuantity::LIMIT,
+            application_user_authorization_token__can_be_resent_from,
+            application_user_authorization_token__wrong_enter_tries_quantity,
+            application_user_authorization_token__wrong_enter_tries_quantity_limit: ApplicationUserAuthorizationToken_WrongEnterTriesQuantity::LIMIT,
         };
         return Ok(Ok(UnifiedReport::target_filled(outcoming)));
     }

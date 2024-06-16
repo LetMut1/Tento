@@ -117,7 +117,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
                 Backtrace::new(line!(), file!()),
             )));
         }
-        if !Validator::<ApplicationUserAuthorizationToken_Value>::is_valid(incoming_.application_user_authorization_token_value.as_str())? {
+        if !Validator::<ApplicationUserAuthorizationToken_Value>::is_valid(incoming_.application_user_authorization_token__value.as_str())? {
             return Ok(Err(Auditor::<InvalidArgument>::new(
                 InvalidArgument,
                 Backtrace::new(line!(), file!()),
@@ -160,14 +160,14 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
                 Precedent::ApplicationUserAuthorizationToken_AlreadyExpired,
             )));
         }
-        if application_user_authorization_token_.value != incoming_.application_user_authorization_token_value {
+        if application_user_authorization_token_.value != incoming_.application_user_authorization_token__value {
             application_user_authorization_token_.wrong_enter_tries_quantity =
                 application_user_authorization_token_.wrong_enter_tries_quantity.checked_add(1).convert_out_of_range(Backtrace::new(line!(), file!()))?;
             if application_user_authorization_token_.wrong_enter_tries_quantity < ApplicationUserAuthorizationToken_WrongEnterTriesQuantity::LIMIT {
                 PostgresqlRepository::<ApplicationUserAuthorizationToken>::update_4(
                     database_2_postgresql_connection,
                     Update4 {
-                        application_user_authorization_token_wrong_enter_tries_quantity: application_user_authorization_token_.wrong_enter_tries_quantity,
+                        application_user_authorization_token__wrong_enter_tries_quantity: application_user_authorization_token_.wrong_enter_tries_quantity,
                     },
                     By1 {
                         application_user__id: incoming_.application_user__id,
@@ -187,7 +187,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
             }
             return Ok(Ok(UnifiedReport::precedent(
                 Precedent::ApplicationUserAuthorizationToken_WrongValue {
-                    application_user_authorization_token_wrong_enter_tries_quantity: application_user_authorization_token_.wrong_enter_tries_quantity,
+                    application_user_authorization_token__wrong_enter_tries_quantity: application_user_authorization_token_.wrong_enter_tries_quantity,
                 },
             )));
         }

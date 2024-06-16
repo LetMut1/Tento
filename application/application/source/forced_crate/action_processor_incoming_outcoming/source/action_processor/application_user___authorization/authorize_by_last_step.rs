@@ -8,7 +8,7 @@ use serde::{
 pub struct Incoming {
     pub application_user__id: i64,
     pub application_user_device_id: String,
-    pub application_user_authorization_token_value: String,
+    pub application_user_authorization_token__value: String,
 }
 #[derive(Serialize, Deserialize)]
 pub struct Outcoming {
@@ -20,7 +20,7 @@ r#enum!(
         CommonPrecedent::ApplicationUserAuthorizationToken_NotFound,
         CommonPrecedent::ApplicationUserAuthorizationToken_AlreadyExpired,
         CommonPrecedent::ApplicationUserAuthorizationToken_WrongValue {
-            application_user_authorization_token_wrong_enter_tries_quantity: i16,
+            application_user_authorization_token__wrong_enter_tries_quantity: i16,
         },
         CommonPrecedent::ApplicationUser_NotFound,
     }

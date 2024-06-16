@@ -468,10 +468,10 @@ Result data:
 struct Outcoming {
     application_user__id: i64,
     verification_message_sent: bool,
-    application_user_authorization_token_can_be_resent_from: i64
+    application_user_authorization_token__can_be_resent_from: i64
 }
 
-application_user_authorization_token_can_be_resent_from - unixtime after wich it will be allowed to resend the verification message.
+application_user_authorization_token__can_be_resent_from - unixtime after wich it will be allowed to resend the verification message.
 ```
 ```
 Communication codes:
@@ -486,7 +486,7 @@ Request data:
 struct Incoming {
     application_user__id: i64,
     application_user_device_id: String,
-    application_user_authorization_token_value: String
+    application_user_authorization_token__value: String
 }
 ```
 ```
@@ -517,7 +517,7 @@ struct Incoming {
 ```
 Result data:
 struct Outcoming {
-    application_user_authorization_token_can_be_resent_from: i64
+    application_user_authorization_token__can_be_resent_from: i64
 }
 ```
 ```
@@ -653,7 +653,7 @@ Communication codes:
 ```
 ^[0-9]{6}$ - regular expression.
 ```
- - ## application_user_authorization_token_value
+ - ## application_user_authorization_token__value
 ```
 ^[0-9]{6}$ - regular expression.
 ```

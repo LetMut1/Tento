@@ -153,7 +153,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
         PostgresqlRepository::<ApplicationUserAuthorizationToken>::update_3(
             database_2_postgresql_connection,
             Update3 {
-                application_user_authorization_token_can_be_resent_from: application_user_authorization_token.can_be_resent_from,
+                application_user_authorization_token__can_be_resent_from: application_user_authorization_token.can_be_resent_from,
             },
             By1 {
                 application_user__id: incoming_.application_user__id,
@@ -168,7 +168,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
             incoming_.application_user_device_id.as_str(),
         )?;
         let outcoming = Outcoming {
-            application_user_authorization_token_can_be_resent_from: application_user_authorization_token.can_be_resent_from,
+            application_user_authorization_token__can_be_resent_from: application_user_authorization_token.can_be_resent_from,
         };
         return Ok(Ok(UnifiedReport::target_filled(outcoming)));
     }

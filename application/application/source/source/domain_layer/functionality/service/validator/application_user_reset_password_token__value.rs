@@ -15,7 +15,7 @@ use regex::Regex;
 use std::sync::OnceLock;
 static REGULAR_EXPRESSION: OnceLock<Regex> = OnceLock::new();
 impl Validator<ApplicationUserResetPasswordToken_Value> {
-    pub fn is_valid<'a>(application_user_authorization_token_value: &'a str) -> Result<bool, Auditor<Error>> {
+    pub fn is_valid<'a>(application_user_authorization_token__value: &'a str) -> Result<bool, Auditor<Error>> {
         let regular_expression = match REGULAR_EXPRESSION.get() {
             Some(regular_expression_) => regular_expression_,
             None => {
@@ -28,6 +28,6 @@ impl Validator<ApplicationUserResetPasswordToken_Value> {
                 REGULAR_EXPRESSION.get().convert_value_does_not_exist(Backtrace::new(line!(), file!()))?
             }
         };
-        return Ok(regular_expression.is_match(application_user_authorization_token_value));
+        return Ok(regular_expression.is_match(application_user_authorization_token__value));
     }
 }
