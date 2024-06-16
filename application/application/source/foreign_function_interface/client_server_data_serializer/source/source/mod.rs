@@ -1389,9 +1389,9 @@ type ApplicationUser__Authorization___RegisterByFirstStep___C_Result = C_Result<
 #[derive(Default, Clone, Copy)]
 pub struct ApplicationUser__Authorization___RegisterByFirstStep___Outcoming {
     pub verification_message_sent: bool,
-    pub application_user_registration_token_can_be_resent_from: c_long,
-    pub application_user_registration_token_wrong_enter_tries_quantity: c_short,
-    pub application_user_registration_token_wrong_enter_tries_quantity_limit: c_short,
+    pub application_user_registration_token__can_be_resent_from: c_long,
+    pub application_user_registration_token__wrong_enter_tries_quantity: c_short,
+    pub application_user_registration_token__wrong_enter_tries_quantity_limit: c_short,
 }
 
 #[repr(C)]
@@ -1414,9 +1414,9 @@ pub extern "C" fn application_user___authorization____register_by_first_step____
                     Data::Filled { data: data__ } => {
                         let outcoming = ApplicationUser__Authorization___RegisterByFirstStep___Outcoming {
                             verification_message_sent: data__.verification_message_sent,
-                            application_user_registration_token_can_be_resent_from: data__.application_user_registration_token_can_be_resent_from,
-                            application_user_registration_token_wrong_enter_tries_quantity: data__.application_user_registration_token_wrong_enter_tries_quantity,
-                            application_user_registration_token_wrong_enter_tries_quantity_limit: data__.application_user_registration_token_wrong_enter_tries_quantity_limit,
+                            application_user_registration_token__can_be_resent_from: data__.application_user_registration_token__can_be_resent_from,
+                            application_user_registration_token__wrong_enter_tries_quantity: data__.application_user_registration_token__wrong_enter_tries_quantity,
+                            application_user_registration_token__wrong_enter_tries_quantity_limit: data__.application_user_registration_token__wrong_enter_tries_quantity_limit,
                         };
 
                         C_Data::filled(outcoming)
@@ -1464,7 +1464,7 @@ pub extern "C" fn application_user___authorization____register_by_first_step____
 pub struct ApplicationUser__Authorization___RegisterBySecondStep___Incoming {
     pub application_user__email: C_String,
     pub application_user_device_id: C_String,
-    pub application_user_registration_token_value: C_String,
+    pub application_user_registration_token__value: C_String,
 }
 
 #[no_mangle]
@@ -1475,7 +1475,7 @@ pub extern "C" fn application_user___authorization____register_by_second_step___
         let incoming_ = ApplicationUser__Authorization___RegisterBySecondStep___Incoming_ {
             application_user__email: incoming.application_user__email.to_string()?,
             application_user_device_id: incoming.application_user_device_id.to_string()?,
-            application_user_registration_token_value: incoming.application_user_registration_token_value.to_string()?,
+            application_user_registration_token__value: incoming.application_user_registration_token__value.to_string()?,
         };
 
         return Ok(incoming_);
@@ -1508,7 +1508,7 @@ pub struct ApplicationUser__Authorization___RegisterBySecondStep___Precedent {
 #[derive(Default, Clone, Copy)]
 pub struct ApplicationUserRegistrationToken_WrongValue {
     pub is_exist: bool,
-    pub application_user_registration_token_wrong_enter_tries_quantity: c_short,
+    pub application_user_registration_token__wrong_enter_tries_quantity: c_short,
 }
 
 #[no_mangle]
@@ -1549,11 +1549,11 @@ pub extern "C" fn application_user___authorization____register_by_second_step___
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___RegisterBySecondStep___Precedent_::ApplicationUserRegistrationToken_WrongValue { application_user_registration_token_wrong_enter_tries_quantity } => {
+                    ApplicationUser__Authorization___RegisterBySecondStep___Precedent_::ApplicationUserRegistrationToken_WrongValue { application_user_registration_token__wrong_enter_tries_quantity } => {
                         ApplicationUser__Authorization___RegisterBySecondStep___Precedent {
                             application_user_registration_token__wrong_value: ApplicationUserRegistrationToken_WrongValue {
                                 is_exist: true,
-                                application_user_registration_token_wrong_enter_tries_quantity: application_user_registration_token_wrong_enter_tries_quantity,
+                                application_user_registration_token__wrong_enter_tries_quantity: application_user_registration_token__wrong_enter_tries_quantity,
                             },
                             ..Default::default()
                         }
@@ -1592,7 +1592,7 @@ pub struct ApplicationUser__Authorization___RegisterByLastStep___Incoming {
     pub application_user__nickname: C_String,
     pub application_user_password: C_String,
     pub application_user__email: C_String,
-    pub application_user_registration_token_value: C_String,
+    pub application_user_registration_token__value: C_String,
 }
 
 #[no_mangle]
@@ -1605,7 +1605,7 @@ pub extern "C" fn application_user___authorization____register_by_last_step____s
             application_user__email: incoming.application_user__email.to_string()?,
             application_user__nickname: incoming.application_user__nickname.to_string()?,
             application_user_password: incoming.application_user_password.to_string()?,
-            application_user_registration_token_value: incoming.application_user_registration_token_value.to_string()?,
+            application_user_registration_token__value: incoming.application_user_registration_token__value.to_string()?,
         };
 
         return Ok(incoming_);
@@ -2139,7 +2139,7 @@ type ApplicationUser__Authorization___SendEmailForRegister___C_Result = C_Result
 #[repr(C)]
 #[derive(Default, Clone, Copy)]
 pub struct ApplicationUser__Authorization___SendEmailForRegister___Outcoming {
-    pub application_user_registration_token_can_be_resent_from: c_long,
+    pub application_user_registration_token__can_be_resent_from: c_long,
 }
 
 #[repr(C)]
@@ -2164,7 +2164,7 @@ pub extern "C" fn application_user___authorization____send_email_for_register___
                     }
                     Data::Filled { data: data__ } => {
                         let outcoming = ApplicationUser__Authorization___SendEmailForRegister___Outcoming {
-                            application_user_registration_token_can_be_resent_from: data__.application_user_registration_token_can_be_resent_from,
+                            application_user_registration_token__can_be_resent_from: data__.application_user_registration_token__can_be_resent_from,
                         };
 
                         C_Data::filled(outcoming)
@@ -3906,9 +3906,9 @@ mod test {
                 fn target_filled____application_user___authorization____register_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
                     let outcoming = ApplicationUser__Authorization___RegisterByFirstStep___Outcoming_ {
                         verification_message_sent: false,
-                        application_user_registration_token_can_be_resent_from: 0,
-                        application_user_registration_token_wrong_enter_tries_quantity: 0,
-                        application_user_registration_token_wrong_enter_tries_quantity_limit: 0,
+                        application_user_registration_token__can_be_resent_from: 0,
+                        application_user_registration_token__wrong_enter_tries_quantity: 0,
+                        application_user_registration_token__wrong_enter_tries_quantity_limit: 0,
                     };
 
                     let unified_report = UnifiedReport::<ApplicationUser__Authorization___RegisterByFirstStep___Outcoming_, ApplicationUser__Authorization___RegisterByFirstStep___Precedent_>::target_filled(outcoming);
@@ -4011,7 +4011,7 @@ mod test {
 
                     precedent_registry.push(
                         ApplicationUser__Authorization___RegisterBySecondStep___Precedent_::ApplicationUserRegistrationToken_WrongValue {
-                            application_user_registration_token_wrong_enter_tries_quantity: 0,
+                            application_user_registration_token__wrong_enter_tries_quantity: 0,
                         }
                     );
 
@@ -4345,7 +4345,7 @@ mod test {
                 #[test]
                 fn target_filled____application_user___authorization____send_email_for_register() -> Result<(), Box<dyn StdError + 'static>> {
                     let outcoming = ApplicationUser__Authorization___SendEmailForRegister___Outcoming_ {
-                        application_user_registration_token_can_be_resent_from: 0,
+                        application_user_registration_token__can_be_resent_from: 0,
                     };
 
                     let unified_report = UnifiedReport::<ApplicationUser__Authorization___SendEmailForRegister___Outcoming_, ApplicationUser__Authorization___SendEmailForRegister___Precedent_>::target_filled(outcoming);
@@ -5341,7 +5341,7 @@ mod test {
                 let incoming = ApplicationUser__Authorization___RegisterBySecondStep___Incoming {
                     application_user__email: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
                     application_user_device_id: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
-                    application_user_registration_token_value: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    application_user_registration_token__value: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
                 };
 
                 let allocator = move |incoming: *mut ApplicationUser__Authorization___RegisterBySecondStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
@@ -5364,7 +5364,7 @@ mod test {
 
                 Allocator::<C_String>::deallocate(incoming.application_user_device_id);
 
-                Allocator::<C_String>::deallocate(incoming.application_user_registration_token_value);
+                Allocator::<C_String>::deallocate(incoming.application_user_registration_token__value);
 
                 return Ok(());
             }
@@ -5376,7 +5376,7 @@ mod test {
                     application_user__nickname: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
                     application_user_password: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
                     application_user__email: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
-                    application_user_registration_token_value: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    application_user_registration_token__value: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
                 };
 
                 let allocator = move |incoming: *mut ApplicationUser__Authorization___RegisterByLastStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
@@ -5403,7 +5403,7 @@ mod test {
 
                 Allocator::<C_String>::deallocate(incoming.application_user__email);
 
-                Allocator::<C_String>::deallocate(incoming.application_user_registration_token_value);
+                Allocator::<C_String>::deallocate(incoming.application_user_registration_token__value);
 
                 return Ok(());
             }

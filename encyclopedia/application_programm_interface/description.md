@@ -358,14 +358,14 @@ struct Incoming {
 Result data:
 struct Outcoming {
     verification_message_sent: bool,
-    application_user_registration_token_can_be_resent_from: i64
+    application_user_registration_token__can_be_resent_from: i64
 }
 
 
 verification_message_sent - determines if a verification message has been sent. The value will be false only if the request was retried
 with unchanged parameters without waiting a certain amount of time.
 
-application_user_registration_token_can_be_resent_from - unixtime after wich it will be allowed to resend the verification message.
+application_user_registration_token__can_be_resent_from - unixtime after wich it will be allowed to resend the verification message.
 ```
 ```
 Communication codes:
@@ -380,7 +380,7 @@ Request data:
 struct Incoming {
     application_user__email: String,
     application_user_device_id: String,
-    application_user_registration_token_value: String
+    application_user_registration_token__value: String
 }
 ```
 ```
@@ -405,7 +405,7 @@ struct Incoming {
     application_user__nickname: String,
     application_user_password: String,
     application_user__email: String,
-    application_user_registration_token_value: String
+    application_user_registration_token__value: String
 }
 ```
 ```
@@ -438,11 +438,11 @@ struct Incoming {
 ```
 Result data:
 struct Outcoming {
-    application_user_registration_token_can_be_resent_from: i64
+    application_user_registration_token__can_be_resent_from: i64
 }
 
 
-application_user_registration_token_can_be_resent_from - unixtime after wich it will be allowed to resend the verification message.
+application_user_registration_token__can_be_resent_from - unixtime after wich it will be allowed to resend the verification message.
 ```
 ```
 Communication codes:
@@ -610,7 +610,7 @@ struct Incoming {
 ```
 Result data:
 struct Outcoming {
-    application_user_registration_token_can_be_resent_from: i64
+    application_user_registration_token__can_be_resent_from: i64
 }
 ```
 ```
@@ -645,7 +645,7 @@ Communication codes:
 - APPLICATION_USER_ACCESS_REFRESH_TOKEN__NOT_FOUND
 ```
 # Incoming parameters validation rule.
- - ## application_user_registration_token_value
+ - ## application_user_registration_token__value
 ```
 ^[0-9]{6}$ - regular expression.
 ```

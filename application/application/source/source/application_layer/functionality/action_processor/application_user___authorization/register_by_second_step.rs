@@ -91,7 +91,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
                 Backtrace::new(line!(), file!()),
             )));
         }
-        if !Validator::<ApplicationUserRegistrationToken_Value>::is_valid(incoming_.application_user_registration_token_value.as_str())? {
+        if !Validator::<ApplicationUserRegistrationToken_Value>::is_valid(incoming_.application_user_registration_token__value.as_str())? {
             return Ok(Err(Auditor::<InvalidArgument>::new(
                 InvalidArgument,
                 Backtrace::new(line!(), file!()),
@@ -133,14 +133,14 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
                 Precedent::ApplicationUserRegistrationToken_AlreadyApproved,
             )));
         }
-        if application_user_registration_token.value != incoming_.application_user_registration_token_value {
+        if application_user_registration_token.value != incoming_.application_user_registration_token__value {
             application_user_registration_token.wrong_enter_tries_quantity =
                 application_user_registration_token.wrong_enter_tries_quantity.checked_add(1).convert_out_of_range(Backtrace::new(line!(), file!()))?;
             if application_user_registration_token.wrong_enter_tries_quantity < ApplicationUserRegistrationToken_WrongEnterTriesQuantity::LIMIT {
                 PostgresqlRepository::<ApplicationUserRegistrationToken>::update_4(
                     database_2_postgresql_connection,
                     Update4 {
-                        application_user_registration_token_wrong_enter_tries_quantity: application_user_registration_token.wrong_enter_tries_quantity,
+                        application_user_registration_token__wrong_enter_tries_quantity: application_user_registration_token.wrong_enter_tries_quantity,
                     },
                     By1 {
                         application_user__email: incoming_.application_user__email.as_str(),
@@ -160,7 +160,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
             }
             return Ok(Ok(UnifiedReport::precedent(
                 Precedent::ApplicationUserRegistrationToken_WrongValue {
-                    application_user_registration_token_wrong_enter_tries_quantity: application_user_registration_token.wrong_enter_tries_quantity,
+                    application_user_registration_token__wrong_enter_tries_quantity: application_user_registration_token.wrong_enter_tries_quantity,
                 },
             )));
         }
@@ -168,7 +168,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
         PostgresqlRepository::<ApplicationUserRegistrationToken>::update_5(
             database_2_postgresql_connection,
             Update5 {
-                application_user_registration_token_is_approved: application_user_registration_token.is_approved,
+                application_user_registration_token__is_approved: application_user_registration_token.is_approved,
             },
             By1 {
                 application_user__email: incoming_.application_user__email.as_str(),

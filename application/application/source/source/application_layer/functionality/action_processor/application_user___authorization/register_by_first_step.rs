@@ -119,9 +119,9 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
         let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
         let (
-            application_user_registration_token_value,
-            application_user_registration_token_can_be_resent_from,
-            application_user_registration_token_wrong_enter_tries_quantity,
+            application_user_registration_token__value,
+            application_user_registration_token__can_be_resent_from,
+            application_user_registration_token__wrong_enter_tries_quantity,
             can_send,
         ) = match PostgresqlRepository::<ApplicationUserRegistrationToken>::find_1(
             database_2_postgresql_connection,
@@ -153,11 +153,11 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
                     PostgresqlRepository::<ApplicationUserRegistrationToken>::update_1(
                         database_2_postgresql_connection,
                         Update1 {
-                            application_user_registration_token_value: application_user_registration_token.value.as_str(),
-                            application_user_registration_token_wrong_enter_tries_quantity: application_user_registration_token.wrong_enter_tries_quantity,
-                            application_user_registration_token_is_approved: application_user_registration_token.is_approved,
-                            application_user_registration_token_expires_at: application_user_registration_token.expires_at,
-                            application_user_registration_token_can_be_resent_from: application_user_registration_token.can_be_resent_from,
+                            application_user_registration_token__value: application_user_registration_token.value.as_str(),
+                            application_user_registration_token__wrong_enter_tries_quantity: application_user_registration_token.wrong_enter_tries_quantity,
+                            application_user_registration_token__is_approved: application_user_registration_token.is_approved,
+                            application_user_registration_token__expires_at: application_user_registration_token.expires_at,
+                            application_user_registration_token__can_be_resent_from: application_user_registration_token.can_be_resent_from,
                         },
                         By1 {
                             application_user__email: incoming_.application_user__email.as_str(),
@@ -170,7 +170,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
                         PostgresqlRepository::<ApplicationUserRegistrationToken>::update_2(
                             database_2_postgresql_connection,
                             Update2 {
-                                application_user_registration_token_can_be_resent_from: application_user_registration_token.can_be_resent_from,
+                                application_user_registration_token__can_be_resent_from: application_user_registration_token.can_be_resent_from,
                             },
                             By1 {
                                 application_user__email: incoming_.application_user__email.as_str(),
@@ -183,10 +183,10 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
                         PostgresqlRepository::<ApplicationUserRegistrationToken>::update_3(
                             database_2_postgresql_connection,
                             Update3 {
-                                application_user_registration_token_value: application_user_registration_token.value.as_str(),
-                                application_user_registration_token_wrong_enter_tries_quantity: application_user_registration_token.wrong_enter_tries_quantity,
-                                application_user_registration_token_is_approved: application_user_registration_token.is_approved,
-                                application_user_registration_token_expires_at: application_user_registration_token.expires_at,
+                                application_user_registration_token__value: application_user_registration_token.value.as_str(),
+                                application_user_registration_token__wrong_enter_tries_quantity: application_user_registration_token.wrong_enter_tries_quantity,
+                                application_user_registration_token__is_approved: application_user_registration_token.is_approved,
+                                application_user_registration_token__expires_at: application_user_registration_token.expires_at,
                             },
                             By1 {
                                 application_user__email: incoming_.application_user__email.as_str(),
@@ -209,11 +209,11 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
                     Insert1 {
                         application_user__email: incoming_.application_user__email.as_str(),
                         application_user_device_id: incoming_.application_user_device_id.as_str(),
-                        application_user_registration_token_value: Generator::<ApplicationUserRegistrationToken_Value>::generate(),
-                        application_user_registration_token_wrong_enter_tries_quantity: 0,
-                        application_user_registration_token_is_approved: false,
-                        application_user_registration_token_expires_at: Generator::<ApplicationUserRegistrationToken_ExpiresAt>::generate()?,
-                        application_user_registration_token_can_be_resent_from: Generator::<ApplicationUserRegistrationToken_CanBeResentFrom>::generate()?,
+                        application_user_registration_token__value: Generator::<ApplicationUserRegistrationToken_Value>::generate(),
+                        application_user_registration_token__wrong_enter_tries_quantity: 0,
+                        application_user_registration_token__is_approved: false,
+                        application_user_registration_token__expires_at: Generator::<ApplicationUserRegistrationToken_ExpiresAt>::generate()?,
+                        application_user_registration_token__can_be_resent_from: Generator::<ApplicationUserRegistrationToken_CanBeResentFrom>::generate()?,
                     },
                 )
                 .await?;
@@ -228,16 +228,16 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
         if can_send {
             EmailSender::<ApplicationUserRegistrationToken<'_>>::send(
                 environment_configuration,
-                application_user_registration_token_value.as_str(),
+                application_user_registration_token__value.as_str(),
                 incoming_.application_user__email.as_str(),
                 incoming_.application_user_device_id.as_str(),
             )?;
         }
         let outcoming = Outcoming {
             verification_message_sent: can_send,
-            application_user_registration_token_can_be_resent_from,
-            application_user_registration_token_wrong_enter_tries_quantity,
-            application_user_registration_token_wrong_enter_tries_quantity_limit: ApplicationUserRegistrationToken_WrongEnterTriesQuantity::LIMIT,
+            application_user_registration_token__can_be_resent_from,
+            application_user_registration_token__wrong_enter_tries_quantity,
+            application_user_registration_token__wrong_enter_tries_quantity_limit: ApplicationUserRegistrationToken_WrongEnterTriesQuantity::LIMIT,
         };
         return Ok(Ok(UnifiedReport::target_filled(outcoming)));
     }

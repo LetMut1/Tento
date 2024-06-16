@@ -239,9 +239,9 @@ typedef struct ApplicationUser__Authorization___RegisterByFirstStep___Incoming {
 
 typedef struct ApplicationUser__Authorization___RegisterByFirstStep___Outcoming {
   bool verification_message_sent;
-  long application_user_registration_token_can_be_resent_from;
-  short application_user_registration_token_wrong_enter_tries_quantity;
-  short application_user_registration_token_wrong_enter_tries_quantity_limit;
+  long application_user_registration_token__can_be_resent_from;
+  short application_user_registration_token__wrong_enter_tries_quantity;
+  short application_user_registration_token__wrong_enter_tries_quantity_limit;
 } ApplicationUser__Authorization___RegisterByFirstStep___Outcoming;
 
 typedef struct C_Data_ApplicationUser__Authorization___RegisterByFirstStep___Outcoming {
@@ -269,12 +269,12 @@ typedef struct C_Result_C_UnifiedReport_ApplicationUser__Authorization___Registe
 typedef struct ApplicationUser__Authorization___RegisterBySecondStep___Incoming {
   struct C_String application_user__email;
   struct C_String application_user_device_id;
-  struct C_String application_user_registration_token_value;
+  struct C_String application_user_registration_token__value;
 } ApplicationUser__Authorization___RegisterBySecondStep___Incoming;
 
 typedef struct ApplicationUserRegistrationToken_WrongValue {
   bool is_exist;
-  short application_user_registration_token_wrong_enter_tries_quantity;
+  short application_user_registration_token__wrong_enter_tries_quantity;
 } ApplicationUserRegistrationToken_WrongValue;
 
 typedef struct ApplicationUser__Authorization___RegisterBySecondStep___Precedent {
@@ -302,7 +302,7 @@ typedef struct ApplicationUser__Authorization___RegisterByLastStep___Incoming {
   struct C_String application_user__nickname;
   struct C_String application_user_password;
   struct C_String application_user__email;
-  struct C_String application_user_registration_token_value;
+  struct C_String application_user_registration_token__value;
 } ApplicationUser__Authorization___RegisterByLastStep___Incoming;
 
 typedef struct ApplicationUser__Authorization___RegisterByLastStep___Outcoming {
@@ -437,7 +437,7 @@ typedef struct ApplicationUser__Authorization___SendEmailForRegister___Incoming 
 } ApplicationUser__Authorization___SendEmailForRegister___Incoming;
 
 typedef struct ApplicationUser__Authorization___SendEmailForRegister___Outcoming {
-  long application_user_registration_token_can_be_resent_from;
+  long application_user_registration_token__can_be_resent_from;
 } ApplicationUser__Authorization___SendEmailForRegister___Outcoming;
 
 typedef struct C_Data_ApplicationUser__Authorization___SendEmailForRegister___Outcoming {
