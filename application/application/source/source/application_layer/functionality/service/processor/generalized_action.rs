@@ -1,5 +1,4 @@
 use super::Processor;
-pub use crate::infrastructure_layer::data::control_type::GeneralizedAction;
 use crate::{
     application_layer::data::unified_report::UnifiedReport,
     infrastructure_layer::{
@@ -8,7 +7,10 @@ use crate::{
                 Auditor,
                 Backtrace,
             },
-            control_type::ActionRound,
+            control_type::{
+                ActionRound,
+                GeneralizedAction,
+            },
             environment_configuration::EnvironmentConfiguration,
             error::Error,
             invalid_argument::InvalidArgument,

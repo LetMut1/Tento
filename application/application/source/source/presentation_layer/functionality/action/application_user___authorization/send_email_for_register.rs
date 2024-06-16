@@ -3,15 +3,13 @@ use crate::infrastructure_layer::functionality::service::serializer::json::Json;
 use crate::{
     application_layer::functionality::{
         action_processor::ActionProcessor,
-        service::processor::{
-            generalized_action::GeneralizedAction,
-            Processor,
-        },
+        service::processor::Processor,
     },
     infrastructure_layer::{
         data::{
             control_type::{
                 ApplicationUser__Authorization___SendEmailForRegister,
+                GeneralizedAction,
                 Response,
             },
             environment_configuration::EnvironmentConfiguration,

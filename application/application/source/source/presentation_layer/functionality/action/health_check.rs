@@ -1,14 +1,12 @@
 use crate::{
     application_layer::functionality::{
         action_processor::ActionProcessor,
-        service::processor::{
-            generalized_action::GeneralizedAction,
-            Processor,
-        },
+        service::processor::Processor,
     },
     infrastructure_layer::{
         data::{
             control_type::{
+                GeneralizedAction,
                 HealthCheck,
                 Response,
             },
