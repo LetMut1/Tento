@@ -77,8 +77,10 @@
     clippy::zero_sized_map_values
 )]
 use cargo_emit::rerun_if_changed;
-use std::env::var;
-use std::error::Error;
+use std::{
+    env::var,
+    error::Error,
+};
 use uuid::Uuid;
 fn main() -> () {
     if let Err(error) = Processor::process() {

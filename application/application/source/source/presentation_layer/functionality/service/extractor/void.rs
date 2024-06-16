@@ -1,8 +1,10 @@
 use super::Extractor;
-use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::error::Error;
-use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
-use crate::infrastructure_layer::data::void::Void;
+use crate::infrastructure_layer::data::{
+    auditor::Auditor,
+    error::Error,
+    invalid_argument::InvalidArgument,
+    void::Void,
+};
 use http::request::Parts;
 use hyper::Body;
 use matchit::Params;

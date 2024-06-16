@@ -80,8 +80,10 @@
     clippy::verbose_file_reads,
     clippy::zero_sized_map_values
 )]
-use serde::Deserialize;
-use serde::Serialize;
+use serde::{
+    Deserialize,
+    Serialize,
+};
 #[derive(Serialize, Deserialize)]
 pub enum UnifiedReport<T, P> {
     Target {

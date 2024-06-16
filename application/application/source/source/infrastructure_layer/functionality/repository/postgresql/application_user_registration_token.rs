@@ -1,16 +1,30 @@
 use super::PostgresqlRepository;
-use crate::domain_layer::data::entity::application_user_registration_token::derivative::ApplicationUserRegistrationToken1;
-use crate::domain_layer::data::entity::application_user_registration_token::derivative::ApplicationUserRegistrationToken2;
-use crate::domain_layer::data::entity::application_user_registration_token::derivative::ApplicationUserRegistrationToken3;
-use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken;
-use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::auditor::Backtrace;
-use crate::infrastructure_layer::data::auditor::ErrorConverter;
-use crate::infrastructure_layer::data::error::Error;
-use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
+use crate::{
+    domain_layer::data::entity::application_user_registration_token::{
+        derivative::{
+            ApplicationUserRegistrationToken1,
+            ApplicationUserRegistrationToken2,
+            ApplicationUserRegistrationToken3,
+        },
+        ApplicationUserRegistrationToken,
+    },
+    infrastructure_layer::{
+        data::{
+            auditor::{
+                Auditor,
+                Backtrace,
+                ErrorConverter,
+            },
+            error::Error,
+        },
+        functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver,
+    },
+};
 use std::borrow::Cow;
-use tokio_postgres::types::Type;
-use tokio_postgres::Client as Connection;
+use tokio_postgres::{
+    types::Type,
+    Client as Connection,
+};
 impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
     pub async fn create_1<'a>(database_2_connection: &'a Connection, insert_1: Insert1<'a>) -> Result<ApplicationUserRegistrationToken<'a>, Auditor<Error>> {
         let application_user_registration_token_value = insert_1.application_user_registration_token_value.as_str();

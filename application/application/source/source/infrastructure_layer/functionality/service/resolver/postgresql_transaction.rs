@@ -1,9 +1,13 @@
 use super::Resolver;
-use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::auditor::Backtrace;
-use crate::infrastructure_layer::data::auditor::ErrorConverter;
 pub use crate::infrastructure_layer::data::control_type::PostgresqlTransaction;
-use crate::infrastructure_layer::data::error::Error;
+use crate::infrastructure_layer::data::{
+    auditor::{
+        Auditor,
+        Backtrace,
+        ErrorConverter,
+    },
+    error::Error,
+};
 use tokio_postgres::Client as Connection;
 impl Resolver<PostgresqlTransaction> {
     pub async fn start<'a>(connection: &'a Connection, transaction_isolation_level: TransactionIsolationLevel) -> Result<Self, Auditor<Error>> {

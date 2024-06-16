@@ -1,8 +1,12 @@
-use std::error::Error as StdError;
-use std::fmt::Debug;
-use std::fmt::Display;
-use std::fmt::Error as FmtError;
-use std::fmt::Formatter;
+use std::{
+    error::Error as StdError,
+    fmt::{
+        Debug,
+        Display,
+        Error as FmtError,
+        Formatter,
+    },
+};
 pub enum Error {
     Logic {
         message: &'static str,

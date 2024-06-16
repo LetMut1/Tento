@@ -1,7 +1,9 @@
 use common_precedent::CommonPrecedent;
 use macro_rules::r#enum;
-use serde::Deserialize;
-use serde::Serialize;
+use serde::{
+    Deserialize,
+    Serialize,
+};
 #[derive(Serialize, Deserialize)]
 pub struct Incoming {
     pub application_user_access_token_encrypted: String,

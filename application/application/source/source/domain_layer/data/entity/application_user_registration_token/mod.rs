@@ -1,12 +1,18 @@
 pub mod derivative;
-pub use self::CanBeResentFrom as ApplicationUserRegistrationToken_CanBeResentFrom;
-pub use self::ExpiresAt as ApplicationUserRegistrationToken_ExpiresAt;
-pub use self::Value as ApplicationUserRegistrationToken_Value;
-pub use self::WrongEnterTriesQuantity as ApplicationUserRegistrationToken_WrongEnterTriesQuantity;
-use super::application_user::ApplicationUser_Email;
-use super::application_user_device::ApplicationUserDevice_Id;
-use std::borrow::Cow;
-use std::marker::PhantomData;
+pub use self::{
+    CanBeResentFrom as ApplicationUserRegistrationToken_CanBeResentFrom,
+    ExpiresAt as ApplicationUserRegistrationToken_ExpiresAt,
+    Value as ApplicationUserRegistrationToken_Value,
+    WrongEnterTriesQuantity as ApplicationUserRegistrationToken_WrongEnterTriesQuantity,
+};
+use super::{
+    application_user::ApplicationUser_Email,
+    application_user_device::ApplicationUserDevice_Id,
+};
+use std::{
+    borrow::Cow,
+    marker::PhantomData,
+};
 pub struct ApplicationUserRegistrationToken<'a> {
     pub application_user_email: Cow<'a, str>,
     _application_user_email: PhantomData<ApplicationUser_Email>,

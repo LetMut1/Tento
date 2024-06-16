@@ -1,12 +1,18 @@
 pub mod derivative;
-pub use self::CanBeResentFrom as ApplicationUserResetPasswordToken_CanBeResentFrom;
-pub use self::ExpiresAt as ApplicationUserResetPasswordToken_ExpiresAt;
-pub use self::Value as ApplicationUserResetPasswordToken_Value;
-pub use self::WrongEnterTriesQuantity as ApplicationUserResetPasswordToken_WrongEnterTriesQuantity;
-use super::application_user::ApplicationUser_Id;
-use super::application_user_device::ApplicationUserDevice_Id;
-use std::borrow::Cow;
-use std::marker::PhantomData;
+pub use self::{
+    CanBeResentFrom as ApplicationUserResetPasswordToken_CanBeResentFrom,
+    ExpiresAt as ApplicationUserResetPasswordToken_ExpiresAt,
+    Value as ApplicationUserResetPasswordToken_Value,
+    WrongEnterTriesQuantity as ApplicationUserResetPasswordToken_WrongEnterTriesQuantity,
+};
+use super::{
+    application_user::ApplicationUser_Id,
+    application_user_device::ApplicationUserDevice_Id,
+};
+use std::{
+    borrow::Cow,
+    marker::PhantomData,
+};
 pub struct ApplicationUserResetPasswordToken<'a> {
     pub application_user_id: i64,
     _application_user_id: PhantomData<ApplicationUser_Id>,

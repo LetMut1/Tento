@@ -1,8 +1,12 @@
 use super::Spawner;
-use crate::infrastructure_layer::data::auditor::Auditor;
 pub use crate::infrastructure_layer::data::control_type::TokioBlockingTask;
-use crate::infrastructure_layer::data::error::Error;
-use crate::infrastructure_layer::functionality::service::logger::Logger;
+use crate::infrastructure_layer::{
+    data::{
+        auditor::Auditor,
+        error::Error,
+    },
+    functionality::service::logger::Logger,
+};
 use std::marker::Send;
 use tokio::task::JoinHandle;
 impl Spawner<TokioBlockingTask> {

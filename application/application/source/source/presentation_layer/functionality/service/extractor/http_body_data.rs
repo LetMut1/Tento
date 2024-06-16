@@ -1,16 +1,26 @@
 use super::Extractor;
-use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::auditor::Backtrace;
-use crate::infrastructure_layer::data::auditor::ErrorConverter;
 pub use crate::infrastructure_layer::data::control_type::HttpBodyData;
-use crate::infrastructure_layer::data::error::Error;
-use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
-use crate::infrastructure_layer::functionality::service::serializer::Serialize;
-use crate::infrastructure_layer::functionality::service::serializer::Serializer;
+use crate::infrastructure_layer::{
+    data::{
+        auditor::{
+            Auditor,
+            Backtrace,
+            ErrorConverter,
+        },
+        error::Error,
+        invalid_argument::InvalidArgument,
+    },
+    functionality::service::serializer::{
+        Serialize,
+        Serializer,
+    },
+};
 use bytes::Buf;
 use http::request::Parts;
-use hyper::body::to_bytes;
-use hyper::Body;
+use hyper::{
+    body::to_bytes,
+    Body,
+};
 use matchit::Params;
 use serde::Deserialize;
 impl Extractor<HttpBodyData> {

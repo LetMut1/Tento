@@ -70,16 +70,28 @@
     clippy::verbose_file_reads,
     clippy::zero_sized_map_values
 )]
-use application::application_layer::functionality::command_processor::create_fixtures::CreateFixtures;
-use application::application_layer::functionality::command_processor::remove_incomplite_state::RemoveIncompliteState;
-use application::application_layer::functionality::command_processor::run_server::RunServer;
-use application::application_layer::functionality::command_processor::CommandProcessor;
-use application::infrastructure_layer::data::auditor::Auditor;
-use application::infrastructure_layer::data::auditor::Backtrace;
-use application::infrastructure_layer::data::error::Error;
-use application::infrastructure_layer::functionality::service::formatter::Formatter;
-use clap::command;
-use clap::Command;
+use application::{
+    application_layer::functionality::command_processor::{
+        create_fixtures::CreateFixtures,
+        remove_incomplite_state::RemoveIncompliteState,
+        run_server::RunServer,
+        CommandProcessor,
+    },
+    infrastructure_layer::{
+        data::{
+            auditor::{
+                Auditor,
+                Backtrace,
+            },
+            error::Error,
+        },
+        functionality::service::formatter::Formatter,
+    },
+};
+use clap::{
+    command,
+    Command,
+};
 use std::error::Error as StdError;
 const RUN_SERVER: &'static str = "run_server";
 const CREATE_FIXTURES: &'static str = "create_fixtures";

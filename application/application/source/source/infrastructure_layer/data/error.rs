@@ -1,2 +1,4 @@
-pub use error::Error;
-pub use error::Runtime;
+pub use error::{
+    Error,
+    Runtime,
+};

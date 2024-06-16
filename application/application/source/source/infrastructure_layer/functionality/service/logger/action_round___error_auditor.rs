@@ -1,11 +1,19 @@
 use super::Logger;
-use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::control_type::ActionRound;
-use crate::infrastructure_layer::data::control_type::Response;
-use crate::infrastructure_layer::data::control_type::TokioNonBlockingTask;
-use crate::infrastructure_layer::data::error::Error;
-use crate::infrastructure_layer::functionality::service::formatter::Formatter;
-use crate::infrastructure_layer::functionality::service::spawner::Spawner;
+use crate::infrastructure_layer::{
+    data::{
+        auditor::Auditor,
+        control_type::{
+            ActionRound,
+            Response,
+            TokioNonBlockingTask,
+        },
+        error::Error,
+    },
+    functionality::service::{
+        formatter::Formatter,
+        spawner::Spawner,
+    },
+};
 use http::request::Parts;
 impl Logger<(ActionRound, Auditor<Error>)> {
     pub fn log<'a>(request_parts: &'a Parts, response: &'a Response, error_auditor: Auditor<Error>) -> () {

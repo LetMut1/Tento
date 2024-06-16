@@ -1,13 +1,21 @@
-use super::Serialize;
-use super::Serializer;
-use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::auditor::Backtrace;
-use crate::infrastructure_layer::data::auditor::ErrorConverter;
+use super::{
+    Serialize,
+    Serializer,
+};
 #[cfg(feature = "manual_testing")]
 pub use crate::infrastructure_layer::data::control_type::Json;
-use crate::infrastructure_layer::data::error::Error;
-use serde::Deserialize;
-use serde::Serialize as SerdeSerialize;
+use crate::infrastructure_layer::data::{
+    auditor::{
+        Auditor,
+        Backtrace,
+        ErrorConverter,
+    },
+    error::Error,
+};
+use serde::{
+    Deserialize,
+    Serialize as SerdeSerialize,
+};
 use serde_json;
 #[cfg(feature = "manual_testing")]
 impl Serialize for Serializer<Json> {

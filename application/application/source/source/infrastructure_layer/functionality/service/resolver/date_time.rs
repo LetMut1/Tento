@@ -1,11 +1,17 @@
 use super::Resolver;
-use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::auditor::Backtrace;
-use crate::infrastructure_layer::data::auditor::OptionConverter;
 pub use crate::infrastructure_layer::data::control_type::DateTime;
-use crate::infrastructure_layer::data::error::Error;
-use chrono::DateTime as ChronoDateTime;
-use chrono::Utc;
+use crate::infrastructure_layer::data::{
+    auditor::{
+        Auditor,
+        Backtrace,
+        OptionConverter,
+    },
+    error::Error,
+};
+use chrono::{
+    DateTime as ChronoDateTime,
+    Utc,
+};
 impl Resolver<DateTime> {
     /// Rule for 2022-09-18 03:03:39.308889+0000
     const TIMESTAMP_FORMAT_TO_FORMAT: &'static str = "%Y-%m-%d %H:%M:%S%.6f%z";

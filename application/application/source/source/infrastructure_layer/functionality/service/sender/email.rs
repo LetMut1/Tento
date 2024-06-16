@@ -1,16 +1,24 @@
 use super::Sender;
-use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::auditor::Backtrace;
-use crate::infrastructure_layer::data::auditor::ErrorConverter;
 pub use crate::infrastructure_layer::data::control_type::Email;
-use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
-use crate::infrastructure_layer::data::error::Error;
-use lettre::smtp::SmtpClient;
-use lettre::ClientSecurity;
-use lettre::Transport;
+use crate::infrastructure_layer::data::{
+    auditor::{
+        Auditor,
+        Backtrace,
+        ErrorConverter,
+    },
+    environment_configuration::EnvironmentConfiguration,
+    error::Error,
+};
+use lettre::{
+    smtp::SmtpClient,
+    ClientSecurity,
+    Transport,
+};
 use lettre_email::EmailBuilder;
-use std::convert::Into;
-use std::net::ToSocketAddrs;
+use std::{
+    convert::Into,
+    net::ToSocketAddrs,
+};
 impl Sender<Email> {
     // TODO Возможно, сразу можно положить объект в константу.  // TODO В предпродакшене, когда будет smtp-ссервер, настройить все через константы и енв
     pub fn send<'a>(environment_configuration: &'a EnvironmentConfiguration, subject: &'a str, body: String, to: &'a str) -> Result<(), Auditor<Error>> {

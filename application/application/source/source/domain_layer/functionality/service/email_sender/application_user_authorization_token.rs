@@ -1,10 +1,18 @@
 use super::EmailSender;
-use crate::domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken;
-use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
-use crate::infrastructure_layer::data::error::Error;
-use crate::infrastructure_layer::functionality::service::sender::email::Email;
-use crate::infrastructure_layer::functionality::service::sender::Sender;
+use crate::{
+    domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken,
+    infrastructure_layer::{
+        data::{
+            auditor::Auditor,
+            environment_configuration::EnvironmentConfiguration,
+            error::Error,
+        },
+        functionality::service::sender::{
+            email::Email,
+            Sender,
+        },
+    },
+};
 impl EmailSender<ApplicationUserAuthorizationToken<'_>> {
     pub fn send<'a>(
         environment_configuration: &'a EnvironmentConfiguration,

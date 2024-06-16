@@ -1,7 +1,11 @@
 use super::Generator;
-use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_UpdatedAt;
-use crate::infrastructure_layer::functionality::service::resolver::date_time::DateTime;
-use crate::infrastructure_layer::functionality::service::resolver::Resolver;
+use crate::{
+    domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_UpdatedAt,
+    infrastructure_layer::functionality::service::resolver::{
+        date_time::DateTime,
+        Resolver,
+    },
+};
 impl Generator<ApplicationUserAccessRefreshToken_UpdatedAt> {
     pub fn generate() -> i64 {
         return Resolver::<DateTime>::unixtime_get_now();

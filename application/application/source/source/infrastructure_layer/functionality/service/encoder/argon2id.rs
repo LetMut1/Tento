@@ -1,9 +1,13 @@
 use super::Encoder;
-use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::auditor::Backtrace;
-use crate::infrastructure_layer::data::auditor::ErrorConverter;
 pub use crate::infrastructure_layer::data::control_type::Argon2Id;
-use crate::infrastructure_layer::data::error::Error;
+use crate::infrastructure_layer::data::{
+    auditor::{
+        Auditor,
+        Backtrace,
+        ErrorConverter,
+    },
+    error::Error,
+};
 use argon2::Config;
 use uuid::Uuid;
 impl Encoder<Argon2Id> {

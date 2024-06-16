@@ -1,31 +1,53 @@
 use super::Processor;
-use crate::application_layer::data::unified_report::UnifiedReport;
-use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::auditor::Backtrace;
-use crate::infrastructure_layer::data::control_type::ActionRound;
 pub use crate::infrastructure_layer::data::control_type::GeneralizedAction;
-use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
-use crate::infrastructure_layer::data::error::Error;
-use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
-use crate::infrastructure_layer::functionality::service::creator::response::Response;
-use crate::infrastructure_layer::functionality::service::creator::Creator;
-use crate::infrastructure_layer::functionality::service::logger::Logger;
-use crate::infrastructure_layer::functionality::service::serializer::Serialize;
-use crate::infrastructure_layer::functionality::service::serializer::Serializer;
-use crate::infrastructure_layer::functionality::service::validator::Validator;
+use crate::{
+    application_layer::data::unified_report::UnifiedReport,
+    infrastructure_layer::{
+        data::{
+            auditor::{
+                Auditor,
+                Backtrace,
+            },
+            control_type::ActionRound,
+            environment_configuration::EnvironmentConfiguration,
+            error::Error,
+            invalid_argument::InvalidArgument,
+        },
+        functionality::service::{
+            creator::{
+                response::Response,
+                Creator,
+            },
+            logger::Logger,
+            serializer::{
+                Serialize,
+                Serializer,
+            },
+            validator::Validator,
+        },
+    },
+};
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use http::request::Parts;
 use hyper::Body;
 use matchit::Params;
 use serde::Serialize as SerdeSerialize;
-use std::clone::Clone;
-use std::future::Future;
-use std::marker::Send;
-use std::marker::Sync;
-use tokio_postgres::tls::MakeTlsConnect;
-use tokio_postgres::tls::TlsConnect;
-use tokio_postgres::Socket;
+use std::{
+    clone::Clone,
+    future::Future,
+    marker::{
+        Send,
+        Sync,
+    },
+};
+use tokio_postgres::{
+    tls::{
+        MakeTlsConnect,
+        TlsConnect,
+    },
+    Socket,
+};
 impl Processor<GeneralizedAction> {
     pub async fn process<'a, 'b, 'c, T, DE, F1, AP, F2, I, O, P, SF>(
         environment_configuration: &'a EnvironmentConfiguration,

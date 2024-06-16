@@ -1,6 +1,8 @@
 use super::Formatter;
-use auditor::Auditor;
-use auditor::Backtrace;
+use auditor::{
+    Auditor,
+    Backtrace,
+};
 use error::Error;
 impl Formatter<Auditor<Error>> {
     pub fn format<'a>(error_auditor: &'a Auditor<Error>) -> String {

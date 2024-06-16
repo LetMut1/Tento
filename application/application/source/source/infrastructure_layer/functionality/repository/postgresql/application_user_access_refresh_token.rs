@@ -1,13 +1,23 @@
 use super::PostgresqlRepository;
-use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
-use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::auditor::Backtrace;
-use crate::infrastructure_layer::data::auditor::ErrorConverter;
-use crate::infrastructure_layer::data::error::Error;
-use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
+use crate::{
+    domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken,
+    infrastructure_layer::{
+        data::{
+            auditor::{
+                Auditor,
+                Backtrace,
+                ErrorConverter,
+            },
+            error::Error,
+        },
+        functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver,
+    },
+};
 use std::borrow::Cow;
-use tokio_postgres::types::Type;
-use tokio_postgres::Client as Connection;
+use tokio_postgres::{
+    types::Type,
+    Client as Connection,
+};
 impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
     pub async fn create_1<'a>(database_2_connection: &'a Connection, insert_1: Insert1<'a>) -> Result<ApplicationUserAccessRefreshToken<'a>, Auditor<Error>> {
         let application_user_access_refresh_token_obfuscation_value = insert_1.application_user_access_refresh_token_obfuscation_value.as_str();

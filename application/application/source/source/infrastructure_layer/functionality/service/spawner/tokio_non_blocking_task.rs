@@ -1,10 +1,16 @@
 use super::Spawner;
-use crate::infrastructure_layer::data::auditor::Auditor;
 pub use crate::infrastructure_layer::data::control_type::TokioNonBlockingTask;
-use crate::infrastructure_layer::data::error::Error;
-use crate::infrastructure_layer::functionality::service::logger::Logger;
-use std::future::Future;
-use std::marker::Send;
+use crate::infrastructure_layer::{
+    data::{
+        auditor::Auditor,
+        error::Error,
+    },
+    functionality::service::logger::Logger,
+};
+use std::{
+    future::Future,
+    marker::Send,
+};
 use tokio::task::JoinHandle;
 impl Spawner<TokioNonBlockingTask> {
     pub fn spawn_into_background<F, T>(future: F) -> ()

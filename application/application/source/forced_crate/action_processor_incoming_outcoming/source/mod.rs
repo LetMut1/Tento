@@ -81,8 +81,10 @@
     clippy::zero_sized_map_values
 )]
 pub mod action_processor;
-use serde::Deserialize;
-use serde::Serialize;
+use serde::{
+    Deserialize,
+    Serialize,
+};
 #[derive(Serialize, Deserialize)]
 pub struct Common1 {
     pub channel: Channel1,

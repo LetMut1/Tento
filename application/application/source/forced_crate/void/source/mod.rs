@@ -1,9 +1,15 @@
-use serde::Deserialize;
-use serde::Serialize;
-use std::error::Error;
-use std::fmt::Display;
-use std::fmt::Error as FmtError;
-use std::fmt::Formatter;
+use serde::{
+    Deserialize,
+    Serialize,
+};
+use std::{
+    error::Error,
+    fmt::{
+        Display,
+        Error as FmtError,
+        Formatter,
+    },
+};
 #[derive(Debug, Serialize, Deserialize)]
 pub enum Void {}
 impl Error for Void {}

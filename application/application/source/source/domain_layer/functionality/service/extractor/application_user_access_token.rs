@@ -1,12 +1,22 @@
 use super::Extractor;
-use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
-use crate::domain_layer::functionality::service::form_resolver::FormResolver;
-use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
-use crate::infrastructure_layer::data::error::Error;
-use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
-use crate::infrastructure_layer::functionality::service::expiration_time_checker::unix_time::UnixTime;
-use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
+use crate::{
+    domain_layer::{
+        data::entity::application_user_access_token::ApplicationUserAccessToken,
+        functionality::service::form_resolver::FormResolver,
+    },
+    infrastructure_layer::{
+        data::{
+            auditor::Auditor,
+            environment_configuration::EnvironmentConfiguration,
+            error::Error,
+            invalid_argument::InvalidArgument,
+        },
+        functionality::service::expiration_time_checker::{
+            unix_time::UnixTime,
+            ExpirationTimeChecker,
+        },
+    },
+};
 impl Extractor<ApplicationUserAccessToken<'_>> {
     pub async fn extract<'a>(
         environment_configuration: &'a EnvironmentConfiguration,

@@ -1,11 +1,19 @@
-pub use self::ExpiresAt as ApplicationUserAccessToken_ExpiresAt;
-pub use self::Id as ApplicationUserAccessToken_Id;
-use super::application_user::ApplicationUser_Id;
-use super::application_user_device::ApplicationUserDevice_Id;
-use serde::Deserialize;
-use serde::Serialize;
-use std::borrow::Cow;
-use std::marker::PhantomData;
+pub use self::{
+    ExpiresAt as ApplicationUserAccessToken_ExpiresAt,
+    Id as ApplicationUserAccessToken_Id,
+};
+use super::{
+    application_user::ApplicationUser_Id,
+    application_user_device::ApplicationUserDevice_Id,
+};
+use serde::{
+    Deserialize,
+    Serialize,
+};
+use std::{
+    borrow::Cow,
+    marker::PhantomData,
+};
 #[derive(Serialize, Deserialize)]
 pub struct ApplicationUserAccessToken<'a> {
     pub id: String,

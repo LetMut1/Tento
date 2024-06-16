@@ -1,14 +1,18 @@
 use super::Creator;
 pub use crate::infrastructure_layer::data::control_type::Response;
-use http::header;
 #[cfg(feature = "manual_testing")]
 use http::response::Parts;
-use http::HeaderMap;
-use http::HeaderValue;
-use http::Version;
-use hyper::Body;
-use hyper::Response as HyperResponse;
-use hyper::StatusCode;
+use http::{
+    header,
+    HeaderMap,
+    HeaderValue,
+    Version,
+};
+use hyper::{
+    Body,
+    Response as HyperResponse,
+    StatusCode,
+};
 use std::convert::From;
 impl Creator<Response> {
     pub const HEADER_VALUE_CONTENT_TYPE: &'static str = "application/octet-stream";

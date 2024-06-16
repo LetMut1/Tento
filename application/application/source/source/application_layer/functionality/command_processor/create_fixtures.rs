@@ -1,36 +1,70 @@
 use super::CommandProcessor;
-use crate::domain_layer::data::entity::application_user::ApplicationUser;
-use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
-use crate::domain_layer::data::entity::application_user::ApplicationUser_Nickname;
-use crate::domain_layer::data::entity::application_user::ApplicationUser_Password;
-use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice;
-use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
-use crate::domain_layer::data::entity::channel::Channel;
-use crate::domain_layer::data::entity::channel::Channel_AccessModifier;
-use crate::domain_layer::data::entity::channel::Channel_Description;
-use crate::domain_layer::data::entity::channel::Channel_LinkedName;
-use crate::domain_layer::data::entity::channel::Channel_Name;
-use crate::domain_layer::data::entity::channel::Channel_Orientation;
-use crate::domain_layer::data::entity::channel::Channel_VisabilityModifier;
-use crate::domain_layer::functionality::service::encoder::Encoder;
-use crate::domain_layer::functionality::service::validator::Validator;
-use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::auditor::Backtrace;
-use crate::infrastructure_layer::data::auditor::ErrorConverter;
 pub use crate::infrastructure_layer::data::control_type::CreateFixtures;
-use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
-use crate::infrastructure_layer::data::error::Error;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user::By1;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user::Insert1 as ApplicationUserInsert1;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user_device::Insert1 as ApplicationUserDeviceInsert1;
-use crate::infrastructure_layer::functionality::repository::postgresql::channel::By2;
-use crate::infrastructure_layer::functionality::repository::postgresql::channel::Insert1 as ChannelInsert1;
-use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
-use crate::infrastructure_layer::functionality::service::creator::postgresql_connection_pool::PostgresqlConnectionPoolNoTls;
-use crate::infrastructure_layer::functionality::service::creator::Creator;
-use crate::infrastructure_layer::functionality::service::loader::Loader;
-use rand::thread_rng;
-use rand::Rng;
+use crate::{
+    domain_layer::{
+        data::entity::{
+            application_user::{
+                ApplicationUser,
+                ApplicationUser_Email,
+                ApplicationUser_Nickname,
+                ApplicationUser_Password,
+            },
+            application_user_device::{
+                ApplicationUserDevice,
+                ApplicationUserDevice_Id,
+            },
+            channel::{
+                Channel,
+                Channel_AccessModifier,
+                Channel_Description,
+                Channel_LinkedName,
+                Channel_Name,
+                Channel_Orientation,
+                Channel_VisabilityModifier,
+            },
+        },
+        functionality::service::{
+            encoder::Encoder,
+            validator::Validator,
+        },
+    },
+    infrastructure_layer::{
+        data::{
+            auditor::{
+                Auditor,
+                Backtrace,
+                ErrorConverter,
+            },
+            environment_configuration::EnvironmentConfiguration,
+            error::Error,
+        },
+        functionality::{
+            repository::postgresql::{
+                application_user::{
+                    By1,
+                    Insert1 as ApplicationUserInsert1,
+                },
+                application_user_device::Insert1 as ApplicationUserDeviceInsert1,
+                channel::{
+                    By2,
+                    Insert1 as ChannelInsert1,
+                },
+                PostgresqlRepository,
+            },
+            service::{
+                creator::{
+                    postgresql_connection_pool::PostgresqlConnectionPoolNoTls,
+                    Creator,
+                },
+                loader::Loader,
+            },
+        },
+    },
+};
+use rand::{
+    thread_rng,
+    Rng,
+};
 use tokio::runtime::Builder;
 impl CommandProcessor<CreateFixtures> {
     const APPLICATION_USER_DEVICE__ID_PART: &'static str = "device";

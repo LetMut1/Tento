@@ -1,14 +1,24 @@
 use super::PostgresqlRepository;
-use crate::domain_layer::data::entity::channel::Channel;
-use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::auditor::Backtrace;
-use crate::infrastructure_layer::data::auditor::ErrorConverter;
-use crate::infrastructure_layer::data::error::Error;
-use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
+use crate::{
+    domain_layer::data::entity::channel::Channel,
+    infrastructure_layer::{
+        data::{
+            auditor::{
+                Auditor,
+                Backtrace,
+                ErrorConverter,
+            },
+            error::Error,
+        },
+        functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver,
+    },
+};
 pub use action_processor_incoming_outcoming::Channel1;
 use std::borrow::Cow;
-use tokio_postgres::types::Type;
-use tokio_postgres::Client as Connection;
+use tokio_postgres::{
+    types::Type,
+    Client as Connection,
+};
 impl PostgresqlRepository<Channel<'_>> {
     pub async fn create_1<'a>(database_1_connection: &'a Connection, insert_1: Insert1) -> Result<Channel<'static>, Auditor<Error>> {
         let channel_name = insert_1.channel_name.as_str();

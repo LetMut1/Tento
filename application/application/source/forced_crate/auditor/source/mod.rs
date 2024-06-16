@@ -1,6 +1,8 @@
 use error::Error;
-use std::boxed::Box;
-use std::error::Error as StdError;
+use std::{
+    boxed::Box,
+    error::Error as StdError,
+};
 pub struct Auditor<T> {
     pub subject: T,
     pub backtrace: Backtrace,

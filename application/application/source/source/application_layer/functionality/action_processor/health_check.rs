@@ -1,19 +1,33 @@
-use crate::application_layer::data::unified_report::UnifiedReport;
-use crate::application_layer::functionality::action_processor::ActionProcessor;
-use crate::infrastructure_layer::data::auditor::Auditor;
 pub use crate::infrastructure_layer::data::control_type::HealthCheck;
-use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
-use crate::infrastructure_layer::data::error::Error;
-use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
-use crate::infrastructure_layer::data::void::Void;
+use crate::{
+    application_layer::{
+        data::unified_report::UnifiedReport,
+        functionality::action_processor::ActionProcessor,
+    },
+    infrastructure_layer::data::{
+        auditor::Auditor,
+        environment_configuration::EnvironmentConfiguration,
+        error::Error,
+        invalid_argument::InvalidArgument,
+        void::Void,
+    },
+};
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
-use std::clone::Clone;
-use std::marker::Send;
-use std::marker::Sync;
-use tokio_postgres::tls::MakeTlsConnect;
-use tokio_postgres::tls::TlsConnect;
-use tokio_postgres::Socket;
+use std::{
+    clone::Clone,
+    marker::{
+        Send,
+        Sync,
+    },
+};
+use tokio_postgres::{
+    tls::{
+        MakeTlsConnect,
+        TlsConnect,
+    },
+    Socket,
+};
 impl ActionProcessor<HealthCheck> {
     pub async fn process<'a, T>(
         _environment_configuration: &'a EnvironmentConfiguration,

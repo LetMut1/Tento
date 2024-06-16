@@ -1,17 +1,33 @@
 use super::FormResolver;
-use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
-use crate::domain_layer::functionality::service::encoder::Encoder;
-use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::auditor::Backtrace;
-use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
-use crate::infrastructure_layer::data::error::Error;
-use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
-use crate::infrastructure_layer::functionality::service::encoder::base64::Base64;
-use crate::infrastructure_layer::functionality::service::encoder::hmac::HmacSha3_512;
-use crate::infrastructure_layer::functionality::service::encoder::Encoder as Encoder_;
-use crate::infrastructure_layer::functionality::service::serializer::message_pack::MessagePack;
-use crate::infrastructure_layer::functionality::service::serializer::Serialize;
-use crate::infrastructure_layer::functionality::service::serializer::Serializer;
+use crate::{
+    domain_layer::{
+        data::entity::application_user_access_token::ApplicationUserAccessToken,
+        functionality::service::encoder::Encoder,
+    },
+    infrastructure_layer::{
+        data::{
+            auditor::{
+                Auditor,
+                Backtrace,
+            },
+            environment_configuration::EnvironmentConfiguration,
+            error::Error,
+            invalid_argument::InvalidArgument,
+        },
+        functionality::service::{
+            encoder::{
+                base64::Base64,
+                hmac::HmacSha3_512,
+                Encoder as Encoder_,
+            },
+            serializer::{
+                message_pack::MessagePack,
+                Serialize,
+                Serializer,
+            },
+        },
+    },
+};
 impl FormResolver<ApplicationUserAccessToken<'_>> {
     const TOKEN_PARTS_SEPARATOR: &'static str = ".";
     pub fn to_encrypted<'a>(

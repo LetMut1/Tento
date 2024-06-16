@@ -1,44 +1,82 @@
-use crate::application_layer::data::unified_report::UnifiedReport;
-use crate::application_layer::functionality::action_processor::ActionProcessor;
-use crate::domain_layer::data::entity::application_user::ApplicationUser;
-use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
-use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
-use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken;
-use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_CanBeResentFrom;
-use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_ExpiresAt;
-use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_Value;
-use crate::domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_WrongEnterTriesQuantity;
-use crate::domain_layer::functionality::service::email_sender::EmailSender;
-use crate::domain_layer::functionality::service::generator::Generator;
-use crate::domain_layer::functionality::service::validator::Validator;
-use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::auditor::Backtrace;
-use crate::infrastructure_layer::data::auditor::ErrorConverter;
-use crate::infrastructure_layer::data::auditor::OptionConverter;
 pub use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___ResetPasswordByFirstStep;
-use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
-use crate::infrastructure_layer::data::error::Error;
-use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user::By2;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user_reset_password_token::By1;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user_reset_password_token::Insert1;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user_reset_password_token::Update1;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user_reset_password_token::Update2;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user_reset_password_token::Update3;
-use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
-use crate::infrastructure_layer::functionality::service::expiration_time_checker::unix_time::UnixTime;
-use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
-pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::reset_password_by_first_step::Incoming;
-pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::reset_password_by_first_step::Outcoming;
-pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::reset_password_by_first_step::Precedent;
+use crate::{
+    application_layer::{
+        data::unified_report::UnifiedReport,
+        functionality::action_processor::ActionProcessor,
+    },
+    domain_layer::{
+        data::entity::{
+            application_user::{
+                ApplicationUser,
+                ApplicationUser_Email,
+            },
+            application_user_device::ApplicationUserDevice_Id,
+            application_user_reset_password_token::{
+                ApplicationUserResetPasswordToken,
+                ApplicationUserResetPasswordToken_CanBeResentFrom,
+                ApplicationUserResetPasswordToken_ExpiresAt,
+                ApplicationUserResetPasswordToken_Value,
+                ApplicationUserResetPasswordToken_WrongEnterTriesQuantity,
+            },
+        },
+        functionality::service::{
+            email_sender::EmailSender,
+            generator::Generator,
+            validator::Validator,
+        },
+    },
+    infrastructure_layer::{
+        data::{
+            auditor::{
+                Auditor,
+                Backtrace,
+                ErrorConverter,
+                OptionConverter,
+            },
+            environment_configuration::EnvironmentConfiguration,
+            error::Error,
+            invalid_argument::InvalidArgument,
+        },
+        functionality::{
+            repository::postgresql::{
+                application_user::By2,
+                application_user_reset_password_token::{
+                    By1,
+                    Insert1,
+                    Update1,
+                    Update2,
+                    Update3,
+                },
+                PostgresqlRepository,
+            },
+            service::expiration_time_checker::{
+                unix_time::UnixTime,
+                ExpirationTimeChecker,
+            },
+        },
+    },
+};
+pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::reset_password_by_first_step::{
+    Incoming,
+    Outcoming,
+    Precedent,
+};
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
-use std::clone::Clone;
-use std::marker::Send;
-use std::marker::Sync;
-use tokio_postgres::tls::MakeTlsConnect;
-use tokio_postgres::tls::TlsConnect;
-use tokio_postgres::Socket;
+use std::{
+    clone::Clone,
+    marker::{
+        Send,
+        Sync,
+    },
+};
+use tokio_postgres::{
+    tls::{
+        MakeTlsConnect,
+        TlsConnect,
+    },
+    Socket,
+};
 impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByFirstStep> {
     pub async fn process<'a, T>(
         environment_configuration: &'a EnvironmentConfiguration,

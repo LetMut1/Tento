@@ -1,5 +1,7 @@
-use super::application_user::ApplicationUser_Id;
-use super::channel::Channel_Id;
+use super::{
+    application_user::ApplicationUser_Id,
+    channel::Channel_Id,
+};
 use std::marker::PhantomData;
 pub struct ChannelSubscription {
     pub application_user_id: i64,

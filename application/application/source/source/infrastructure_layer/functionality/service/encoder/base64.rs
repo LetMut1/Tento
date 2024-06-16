@@ -1,11 +1,17 @@
 pub use super::Encoder;
-use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::auditor::Backtrace;
-use crate::infrastructure_layer::data::auditor::ErrorConverter;
 pub use crate::infrastructure_layer::data::control_type::Base64;
-use crate::infrastructure_layer::data::error::Error;
-use base64::Config;
-use base64::STANDARD;
+use crate::infrastructure_layer::data::{
+    auditor::{
+        Auditor,
+        Backtrace,
+        ErrorConverter,
+    },
+    error::Error,
+};
+use base64::{
+    Config,
+    STANDARD,
+};
 impl Encoder<Base64> {
     const BASE64_STANDARD_CONFIGURATION: Config = STANDARD;
     // TODO подходит ли?  // TODO TODO TODO TODO TODO Можно ли здесь использовать Бэйс64 на байтф мессаджПака?

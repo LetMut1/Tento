@@ -1,32 +1,64 @@
-use crate::application_layer::data::unified_report::UnifiedReport;
-use crate::application_layer::functionality::action_processor::ActionProcessor;
-use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
-use crate::domain_layer::data::entity::channel::Channel_Name;
-use crate::domain_layer::functionality::service::extractor::application_user_access_token::ExtractorResult;
-use crate::domain_layer::functionality::service::extractor::Extractor;
-use crate::domain_layer::functionality::service::validator::Validator;
-use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::auditor::Backtrace;
-use crate::infrastructure_layer::data::auditor::ErrorConverter;
-use crate::infrastructure_layer::data::auditor::OptionConverter;
 pub use crate::infrastructure_layer::data::control_type::Channel__Base___GetManyByNameInSubscriptions;
-use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
-use crate::infrastructure_layer::data::error::Error;
-use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
-use crate::infrastructure_layer::functionality::repository::postgresql::common::By2;
-use crate::infrastructure_layer::functionality::repository::postgresql::common::Common1;
-use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
-pub use action_processor_incoming_outcoming::action_processor::channel___base::get_many_by_name_in_subscriptions::Incoming;
-pub use action_processor_incoming_outcoming::action_processor::channel___base::get_many_by_name_in_subscriptions::Outcoming;
-pub use action_processor_incoming_outcoming::action_processor::channel___base::get_many_by_name_in_subscriptions::Precedent;
+use crate::{
+    application_layer::{
+        data::unified_report::UnifiedReport,
+        functionality::action_processor::ActionProcessor,
+    },
+    domain_layer::{
+        data::entity::{
+            application_user_access_token::ApplicationUserAccessToken,
+            channel::Channel_Name,
+        },
+        functionality::service::{
+            extractor::{
+                application_user_access_token::ExtractorResult,
+                Extractor,
+            },
+            validator::Validator,
+        },
+    },
+    infrastructure_layer::{
+        data::{
+            auditor::{
+                Auditor,
+                Backtrace,
+                ErrorConverter,
+                OptionConverter,
+            },
+            environment_configuration::EnvironmentConfiguration,
+            error::Error,
+            invalid_argument::InvalidArgument,
+        },
+        functionality::repository::postgresql::{
+            common::{
+                By2,
+                Common1,
+            },
+            PostgresqlRepository,
+        },
+    },
+};
+pub use action_processor_incoming_outcoming::action_processor::channel___base::get_many_by_name_in_subscriptions::{
+    Incoming,
+    Outcoming,
+    Precedent,
+};
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
-use std::clone::Clone;
-use std::marker::Send;
-use std::marker::Sync;
-use tokio_postgres::tls::MakeTlsConnect;
-use tokio_postgres::tls::TlsConnect;
-use tokio_postgres::Socket;
+use std::{
+    clone::Clone,
+    marker::{
+        Send,
+        Sync,
+    },
+};
+use tokio_postgres::{
+    tls::{
+        MakeTlsConnect,
+        TlsConnect,
+    },
+    Socket,
+};
 impl ActionProcessor<Channel__Base___GetManyByNameInSubscriptions> {
     const LIMIT: i16 = 100;
     pub async fn process<'a, T>(

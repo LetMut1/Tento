@@ -1,58 +1,108 @@
-use crate::application_layer::data::unified_report::UnifiedReport;
-use crate::application_layer::functionality::action_processor::ActionProcessor;
-use crate::domain_layer::data::entity::application_user::ApplicationUser;
-use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
-use crate::domain_layer::data::entity::application_user::ApplicationUser_Nickname;
-use crate::domain_layer::data::entity::application_user::ApplicationUser_Password;
-use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken;
-use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ExpiresAt;
-use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_ObfuscationValue;
-use crate::domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken_UpdatedAt;
-use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken;
-use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken_ExpiresAt;
-use crate::domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken_Id;
-use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice;
-use crate::domain_layer::data::entity::application_user_device::ApplicationUserDevice_Id;
-use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken;
-use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_Value;
-use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_WrongEnterTriesQuantity;
-use crate::domain_layer::functionality::service::encoder::Encoder;
-use crate::domain_layer::functionality::service::form_resolver::FormResolver;
-use crate::domain_layer::functionality::service::generator::Generator;
-use crate::domain_layer::functionality::service::validator::Validator;
-use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::auditor::Backtrace;
-use crate::infrastructure_layer::data::auditor::ErrorConverter;
-use crate::infrastructure_layer::data::auditor::OptionConverter;
 pub use crate::infrastructure_layer::data::control_type::ApplicationUser__Authorization___RegisterByLastStep;
-use crate::infrastructure_layer::data::control_type::TokioBlockingTask;
-use crate::infrastructure_layer::data::control_type::TokioNonBlockingTask;
-use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
-use crate::infrastructure_layer::data::error::Error;
-use crate::infrastructure_layer::data::invalid_argument::InvalidArgument;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user::By1;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user::By2;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user::Insert1 as ApplicationUserInsert1;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user_access_refresh_token::Insert1 as ApplicationUserAccessRefreshTokenInsert1;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user_device::Insert1;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user_registration_token::By1 as By1_;
-use crate::infrastructure_layer::functionality::repository::postgresql::application_user_registration_token::Update4;
-use crate::infrastructure_layer::functionality::repository::postgresql::PostgresqlRepository;
-use crate::infrastructure_layer::functionality::service::expiration_time_checker::unix_time::UnixTime;
-use crate::infrastructure_layer::functionality::service::expiration_time_checker::ExpirationTimeChecker;
-use crate::infrastructure_layer::functionality::service::spawner::Spawner;
-pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::register_by_last_step::Incoming;
-pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::register_by_last_step::Outcoming;
-pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::register_by_last_step::Precedent;
+use crate::{
+    application_layer::{
+        data::unified_report::UnifiedReport,
+        functionality::action_processor::ActionProcessor,
+    },
+    domain_layer::{
+        data::entity::{
+            application_user::{
+                ApplicationUser,
+                ApplicationUser_Email,
+                ApplicationUser_Nickname,
+                ApplicationUser_Password,
+            },
+            application_user_access_refresh_token::{
+                ApplicationUserAccessRefreshToken,
+                ApplicationUserAccessRefreshToken_ExpiresAt,
+                ApplicationUserAccessRefreshToken_ObfuscationValue,
+                ApplicationUserAccessRefreshToken_UpdatedAt,
+            },
+            application_user_access_token::{
+                ApplicationUserAccessToken,
+                ApplicationUserAccessToken_ExpiresAt,
+                ApplicationUserAccessToken_Id,
+            },
+            application_user_device::{
+                ApplicationUserDevice,
+                ApplicationUserDevice_Id,
+            },
+            application_user_registration_token::{
+                ApplicationUserRegistrationToken,
+                ApplicationUserRegistrationToken_Value,
+                ApplicationUserRegistrationToken_WrongEnterTriesQuantity,
+            },
+        },
+        functionality::service::{
+            encoder::Encoder,
+            form_resolver::FormResolver,
+            generator::Generator,
+            validator::Validator,
+        },
+    },
+    infrastructure_layer::{
+        data::{
+            auditor::{
+                Auditor,
+                Backtrace,
+                ErrorConverter,
+                OptionConverter,
+            },
+            control_type::{
+                TokioBlockingTask,
+                TokioNonBlockingTask,
+            },
+            environment_configuration::EnvironmentConfiguration,
+            error::Error,
+            invalid_argument::InvalidArgument,
+        },
+        functionality::{
+            repository::postgresql::{
+                application_user::{
+                    By1,
+                    By2,
+                    Insert1 as ApplicationUserInsert1,
+                },
+                application_user_access_refresh_token::Insert1 as ApplicationUserAccessRefreshTokenInsert1,
+                application_user_device::Insert1,
+                application_user_registration_token::{
+                    By1 as By1_,
+                    Update4,
+                },
+                PostgresqlRepository,
+            },
+            service::{
+                expiration_time_checker::{
+                    unix_time::UnixTime,
+                    ExpirationTimeChecker,
+                },
+                spawner::Spawner,
+            },
+        },
+    },
+};
+pub use action_processor_incoming_outcoming::action_processor::application_user___authorization::register_by_last_step::{
+    Incoming,
+    Outcoming,
+    Precedent,
+};
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
-use std::borrow::Cow;
-use std::clone::Clone;
-use std::marker::Send;
-use std::marker::Sync;
-use tokio_postgres::tls::MakeTlsConnect;
-use tokio_postgres::tls::TlsConnect;
-use tokio_postgres::Socket;
+use std::{
+    borrow::Cow,
+    clone::Clone,
+    marker::{
+        Send,
+        Sync,
+    },
+};
+use tokio_postgres::{
+    tls::{
+        MakeTlsConnect,
+        TlsConnect,
+    },
+    Socket,
+};
 impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
     pub async fn process<'a, T>(
         environment_configuration: &'a EnvironmentConfiguration,

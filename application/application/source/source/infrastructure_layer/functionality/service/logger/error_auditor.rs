@@ -1,6 +1,8 @@
 use super::Logger;
-pub use crate::infrastructure_layer::data::auditor::Auditor;
-pub use crate::infrastructure_layer::data::error::Error;
+pub use crate::infrastructure_layer::data::{
+    auditor::Auditor,
+    error::Error,
+};
 use crate::infrastructure_layer::functionality::service::formatter::Formatter;
 impl Logger<Auditor<Error>> {
     pub fn log<'a>(error_auditor: &'a Auditor<Error>) -> () {

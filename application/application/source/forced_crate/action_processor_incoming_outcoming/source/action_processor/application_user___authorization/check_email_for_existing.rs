@@ -1,5 +1,7 @@
-use serde::Deserialize;
-use serde::Serialize;
+use serde::{
+    Deserialize,
+    Serialize,
+};
 #[derive(Serialize, Deserialize)]
 pub struct Incoming {
     pub application_user_email: String,

@@ -1,13 +1,17 @@
-pub use self::AccessModifier as Channel_AccessModifier;
-pub use self::Description as Channel_Description;
-pub use self::Id as Channel_Id;
-pub use self::LinkedName as Channel_LinkedName;
-pub use self::Name as Channel_Name;
-pub use self::Orientation as Channel_Orientation;
-pub use self::VisabilityModifier as Channel_VisabilityModifier;
+pub use self::{
+    AccessModifier as Channel_AccessModifier,
+    Description as Channel_Description,
+    Id as Channel_Id,
+    LinkedName as Channel_LinkedName,
+    Name as Channel_Name,
+    Orientation as Channel_Orientation,
+    VisabilityModifier as Channel_VisabilityModifier,
+};
 use super::application_user::ApplicationUser_Id;
-use std::borrow::Cow;
-use std::marker::PhantomData;
+use std::{
+    borrow::Cow,
+    marker::PhantomData,
+};
 pub struct Channel<'a> {
     pub id: i64,
     _id: PhantomData<Id>,

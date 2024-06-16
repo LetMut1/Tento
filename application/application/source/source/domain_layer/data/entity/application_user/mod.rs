@@ -1,10 +1,14 @@
 pub mod derivative;
-pub use self::Email as ApplicationUser_Email;
-pub use self::Id as ApplicationUser_Id;
-pub use self::Nickname as ApplicationUser_Nickname;
-pub use self::Password as ApplicationUser_Password;
-use std::borrow::Cow;
-use std::marker::PhantomData;
+pub use self::{
+    Email as ApplicationUser_Email,
+    Id as ApplicationUser_Id,
+    Nickname as ApplicationUser_Nickname,
+    Password as ApplicationUser_Password,
+};
+use std::{
+    borrow::Cow,
+    marker::PhantomData,
+};
 pub struct ApplicationUser<'a> {
     pub id: i64,
     _id: PhantomData<Id>,

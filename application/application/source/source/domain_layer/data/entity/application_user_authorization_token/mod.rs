@@ -1,12 +1,18 @@
 pub mod derivative;
-pub use self::CanBeResentFrom as ApplicationUserAuthorizationToken_CanBeResentFrom;
-pub use self::ExpiresAt as ApplicationUserAuthorizationToken_ExpiresAt;
-pub use self::Value as ApplicationUserAuthorizationToken_Value;
-pub use self::WrongEnterTriesQuantity as ApplicationUserAuthorizationToken_WrongEnterTriesQuantity;
-use super::application_user::ApplicationUser_Id;
-use super::application_user_device::ApplicationUserDevice_Id;
-use std::borrow::Cow;
-use std::marker::PhantomData;
+pub use self::{
+    CanBeResentFrom as ApplicationUserAuthorizationToken_CanBeResentFrom,
+    ExpiresAt as ApplicationUserAuthorizationToken_ExpiresAt,
+    Value as ApplicationUserAuthorizationToken_Value,
+    WrongEnterTriesQuantity as ApplicationUserAuthorizationToken_WrongEnterTriesQuantity,
+};
+use super::{
+    application_user::ApplicationUser_Id,
+    application_user_device::ApplicationUserDevice_Id,
+};
+use std::{
+    borrow::Cow,
+    marker::PhantomData,
+};
 pub struct ApplicationUserAuthorizationToken<'a> {
     pub application_user_id: i64,
     _application_user_id: PhantomData<ApplicationUser_Id>,

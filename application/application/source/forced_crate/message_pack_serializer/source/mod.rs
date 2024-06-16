@@ -80,12 +80,16 @@
     clippy::verbose_file_reads,
     clippy::zero_sized_map_values
 )]
-use auditor::Auditor;
-use auditor::Backtrace;
-use auditor::ErrorConverter;
+use auditor::{
+    Auditor,
+    Backtrace,
+    ErrorConverter,
+};
 use error::Error;
-use serde::Deserialize;
-use serde::Serialize as SerdeSerialize;
+use serde::{
+    Deserialize,
+    Serialize as SerdeSerialize,
+};
 pub struct Serializer;
 impl Serializer {
     pub fn serialize<'a, T>(subject: &'a T) -> Result<Vec<u8>, Auditor<Error>>

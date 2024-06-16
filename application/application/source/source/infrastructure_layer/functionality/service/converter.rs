@@ -1,7 +1,11 @@
-use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::auditor::Backtrace;
-use crate::infrastructure_layer::data::auditor::ErrorConverter as _;
-use crate::infrastructure_layer::data::error::Error;
+use crate::infrastructure_layer::data::{
+    auditor::{
+        Auditor,
+        Backtrace,
+        ErrorConverter as _,
+    },
+    error::Error,
+};
 use core::marker::Sized;
 use std::convert::TryFrom;
 pub struct Converter;

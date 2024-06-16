@@ -1,10 +1,16 @@
 use super::Validator;
-use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
-use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::auditor::Backtrace;
-use crate::infrastructure_layer::data::auditor::ErrorConverter;
-use crate::infrastructure_layer::data::auditor::OptionConverter;
-use crate::infrastructure_layer::data::error::Error;
+use crate::{
+    domain_layer::data::entity::application_user::ApplicationUser_Email,
+    infrastructure_layer::data::{
+        auditor::{
+            Auditor,
+            Backtrace,
+            ErrorConverter,
+            OptionConverter,
+        },
+        error::Error,
+    },
+};
 use regex::Regex;
 use std::sync::OnceLock;
 static REGULAR_EXPRESSION: OnceLock<Regex> = OnceLock::new();

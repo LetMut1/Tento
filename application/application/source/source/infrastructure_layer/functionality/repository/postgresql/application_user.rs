@@ -1,18 +1,32 @@
 use super::PostgresqlRepository;
-use crate::domain_layer::data::entity::application_user::derivative::ApplicationUser1;
-use crate::domain_layer::data::entity::application_user::derivative::ApplicationUser2;
-use crate::domain_layer::data::entity::application_user::derivative::ApplicationUser3;
-use crate::domain_layer::data::entity::application_user::derivative::ApplicationUser4;
-use crate::domain_layer::data::entity::application_user::derivative::ApplicationUser5;
-use crate::domain_layer::data::entity::application_user::ApplicationUser;
-use crate::infrastructure_layer::data::auditor::Auditor;
-use crate::infrastructure_layer::data::auditor::Backtrace;
-use crate::infrastructure_layer::data::auditor::ErrorConverter;
-use crate::infrastructure_layer::data::error::Error;
-use crate::infrastructure_layer::functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver;
+use crate::{
+    domain_layer::data::entity::application_user::{
+        derivative::{
+            ApplicationUser1,
+            ApplicationUser2,
+            ApplicationUser3,
+            ApplicationUser4,
+            ApplicationUser5,
+        },
+        ApplicationUser,
+    },
+    infrastructure_layer::{
+        data::{
+            auditor::{
+                Auditor,
+                Backtrace,
+                ErrorConverter,
+            },
+            error::Error,
+        },
+        functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver,
+    },
+};
 use std::borrow::Cow;
-use tokio_postgres::types::Type;
-use tokio_postgres::Client as Connection;
+use tokio_postgres::{
+    types::Type,
+    Client as Connection,
+};
 impl PostgresqlRepository<ApplicationUser<'_>> {
     pub async fn create_1<'a>(database_1_connection: &'a Connection, insert_1: Insert1) -> Result<ApplicationUser<'static>, Auditor<Error>> {
         let application_user_email = insert_1.application_user_email.as_str();
