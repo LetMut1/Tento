@@ -345,9 +345,9 @@ typedef struct ApplicationUser__Authorization___ResetPasswordByFirstStep___Incom
 typedef struct ApplicationUser__Authorization___ResetPasswordByFirstStep___Outcoming {
   long application_user__id;
   bool verification_message_sent;
-  long application_user_reset_password_token_can_be_resent_from;
-  short application_user_reset_password_token_wrong_enter_tries_quantity;
-  short application_user_reset_password_token_wrong_enter_tries_quantity_limit;
+  long application_user_reset_password_token__can_be_resent_from;
+  short application_user_reset_password_token__wrong_enter_tries_quantity;
+  short application_user_reset_password_token__wrong_enter_tries_quantity_limit;
 } ApplicationUser__Authorization___ResetPasswordByFirstStep___Outcoming;
 
 typedef struct C_Data_ApplicationUser__Authorization___ResetPasswordByFirstStep___Outcoming {
@@ -375,12 +375,12 @@ typedef struct C_Result_C_UnifiedReport_ApplicationUser__Authorization___ResetPa
 typedef struct ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming {
   long application_user__id;
   struct C_String application_user_device_id;
-  struct C_String application_user_reset_password_token_value;
+  struct C_String application_user_reset_password_token__value;
 } ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming;
 
 typedef struct ApplicationUserResetPasswordToken_WrongValue {
   bool is_exist;
-  short application_user_reset_password_token_wrong_enter_tries_quantity;
+  short application_user_reset_password_token__wrong_enter_tries_quantity;
 } ApplicationUserResetPasswordToken_WrongValue;
 
 typedef struct ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent {
@@ -407,7 +407,7 @@ typedef struct ApplicationUser__Authorization___ResetPasswordByLastStep___Incomi
   long application_user__id;
   struct C_String application_user_device_id;
   struct C_String application_user_password;
-  struct C_String application_user_reset_password_token_value;
+  struct C_String application_user_reset_password_token__value;
 } ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming;
 
 typedef struct ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent {

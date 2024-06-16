@@ -9,7 +9,7 @@ pub struct Incoming {
     pub application_user_device_id: String,
     pub application_user__id: i64,
     pub application_user_password: String,
-    pub application_user_reset_password_token_value: String,
+    pub application_user_reset_password_token__value: String,
 }
 r#enum!(
     pub enum Precedent {

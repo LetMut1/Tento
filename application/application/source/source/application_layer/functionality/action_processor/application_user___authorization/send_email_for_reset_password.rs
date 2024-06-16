@@ -158,7 +158,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForResetPassword>
         PostgresqlRepository::<ApplicationUserResetPasswordToken>::update_2(
             database_2_postgresql_connection,
             Update2 {
-                application_user_reset_password_token_can_be_resent_from: application_user_reset_password_token.can_be_resent_from,
+                application_user_reset_password_token__can_be_resent_from: application_user_reset_password_token.can_be_resent_from,
             },
             By1 {
                 application_user__id: incoming_.application_user__id,
@@ -173,7 +173,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForResetPassword>
             incoming_.application_user_device_id.as_str(),
         )?;
         let outcoming = Outcoming {
-            application_user_reset_password_token_can_be_resent_from: application_user_reset_password_token.can_be_resent_from,
+            application_user_reset_password_token__can_be_resent_from: application_user_reset_password_token.can_be_resent_from,
         };
         return Ok(Ok(UnifiedReport::target_filled(outcoming)));
     }

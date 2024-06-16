@@ -8,7 +8,7 @@ use serde::{
 pub struct Incoming {
     pub application_user__id: i64,
     pub application_user_device_id: String,
-    pub application_user_reset_password_token_value: String,
+    pub application_user_reset_password_token__value: String,
 }
 r#enum!(
     pub enum Precedent {
@@ -16,7 +16,7 @@ r#enum!(
         CommonPrecedent::ApplicationUserResetPasswordToken_AlreadyExpired,
         CommonPrecedent::ApplicationUserResetPasswordToken_AlreadyApproved,
         CommonPrecedent::ApplicationUserResetPasswordToken_WrongValue {
-            application_user_reset_password_token_wrong_enter_tries_quantity: i16,
+            application_user_reset_password_token__wrong_enter_tries_quantity: i16,
         },
     }
 );

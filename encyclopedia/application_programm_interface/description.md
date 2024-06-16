@@ -543,7 +543,7 @@ Result data:
 struct Outcoming {
     application_user__id: i64,
     verification_message_sent: bool,
-    application_user_reset_password_token_can_be_resent_from: i64
+    application_user_reset_password_token__can_be_resent_from: i64
 }
 ```
 ```
@@ -559,7 +559,7 @@ Request data:
 struct Incoming {
     application_user__id: i64,
     application_user_device_id: String,
-    application_user_reset_password_token_value: String
+    application_user_reset_password_token__value: String
 }
 ```
 ```
@@ -582,7 +582,7 @@ struct Incoming {
     application_user_device_id: String,
     application_user__id: i64,
     application_user_password: String,
-    application_user_reset_password_token_value: String
+    application_user_reset_password_token__value: String
 }
 ```
 ```
@@ -649,7 +649,7 @@ Communication codes:
 ```
 ^[0-9]{6}$ - regular expression.
 ```
- - ## application_user_reset_password_token_value
+ - ## application_user_reset_password_token__value
 ```
 ^[0-9]{6}$ - regular expression.
 ```

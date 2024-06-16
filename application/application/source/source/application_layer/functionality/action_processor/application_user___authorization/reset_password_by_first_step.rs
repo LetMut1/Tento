@@ -122,9 +122,9 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByFirstStep> 
         let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
         let (
-            application_user_reset_password_token_value,
-            application_user_reset_password_token_can_be_resent_from,
-            application_user_reset_password_token_wrong_enter_tries_quantity,
+            application_user_reset_password_token__value,
+            application_user_reset_password_token__can_be_resent_from,
+            application_user_reset_password_token__wrong_enter_tries_quantity,
             can_send,
         ) = match PostgresqlRepository::<ApplicationUserResetPasswordToken>::find_1(
             database_2_postgresql_connection,
@@ -156,11 +156,11 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByFirstStep> 
                     PostgresqlRepository::<ApplicationUserResetPasswordToken>::update_1(
                         database_2_postgresql_connection,
                         Update1 {
-                            application_user_reset_password_token_value: application_user_reset_password_token.value.as_str(),
-                            application_user_reset_password_token_wrong_enter_tries_quantity: application_user_reset_password_token.wrong_enter_tries_quantity,
-                            application_user_reset_password_token_is_approved: application_user_reset_password_token.is_approved,
-                            application_user_reset_password_token_expires_at: application_user_reset_password_token.expires_at,
-                            application_user_reset_password_token_can_be_resent_from: application_user_reset_password_token.can_be_resent_from,
+                            application_user_reset_password_token__value: application_user_reset_password_token.value.as_str(),
+                            application_user_reset_password_token__wrong_enter_tries_quantity: application_user_reset_password_token.wrong_enter_tries_quantity,
+                            application_user_reset_password_token__is_approved: application_user_reset_password_token.is_approved,
+                            application_user_reset_password_token__expires_at: application_user_reset_password_token.expires_at,
+                            application_user_reset_password_token__can_be_resent_from: application_user_reset_password_token.can_be_resent_from,
                         },
                         By1 {
                             application_user__id: application_user_.id,
@@ -173,7 +173,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByFirstStep> 
                         PostgresqlRepository::<ApplicationUserResetPasswordToken>::update_2(
                             database_2_postgresql_connection,
                             Update2 {
-                                application_user_reset_password_token_can_be_resent_from: application_user_reset_password_token.can_be_resent_from,
+                                application_user_reset_password_token__can_be_resent_from: application_user_reset_password_token.can_be_resent_from,
                             },
                             By1 {
                                 application_user__id: application_user_.id,
@@ -186,10 +186,10 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByFirstStep> 
                         PostgresqlRepository::<ApplicationUserResetPasswordToken>::update_3(
                             database_2_postgresql_connection,
                             Update3 {
-                                application_user_reset_password_token_value: application_user_reset_password_token.value.as_str(),
-                                application_user_reset_password_token_wrong_enter_tries_quantity: application_user_reset_password_token.wrong_enter_tries_quantity,
-                                application_user_reset_password_token_is_approved: application_user_reset_password_token.is_approved,
-                                application_user_reset_password_token_expires_at: application_user_reset_password_token.expires_at,
+                                application_user_reset_password_token__value: application_user_reset_password_token.value.as_str(),
+                                application_user_reset_password_token__wrong_enter_tries_quantity: application_user_reset_password_token.wrong_enter_tries_quantity,
+                                application_user_reset_password_token__is_approved: application_user_reset_password_token.is_approved,
+                                application_user_reset_password_token__expires_at: application_user_reset_password_token.expires_at,
                             },
                             By1 {
                                 application_user__id: application_user_.id,
@@ -212,11 +212,11 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByFirstStep> 
                     Insert1 {
                         application_user__id: application_user_.id,
                         application_user_device_id: incoming_.application_user_device_id.as_str(),
-                        application_user_reset_password_token_value: Generator::<ApplicationUserResetPasswordToken_Value>::generate(),
-                        application_user_reset_password_token_wrong_enter_tries_quantity: 0,
-                        application_user_reset_password_token_is_approved: false,
-                        application_user_reset_password_token_expires_at: Generator::<ApplicationUserResetPasswordToken_ExpiresAt>::generate()?,
-                        application_user_reset_password_token_can_be_resent_from: Generator::<ApplicationUserResetPasswordToken_CanBeResentFrom>::generate()?,
+                        application_user_reset_password_token__value: Generator::<ApplicationUserResetPasswordToken_Value>::generate(),
+                        application_user_reset_password_token__wrong_enter_tries_quantity: 0,
+                        application_user_reset_password_token__is_approved: false,
+                        application_user_reset_password_token__expires_at: Generator::<ApplicationUserResetPasswordToken_ExpiresAt>::generate()?,
+                        application_user_reset_password_token__can_be_resent_from: Generator::<ApplicationUserResetPasswordToken_CanBeResentFrom>::generate()?,
                     },
                 )
                 .await?;
@@ -231,7 +231,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByFirstStep> 
         if can_send {
             EmailSender::<ApplicationUserResetPasswordToken<'_>>::send(
                 environment_configuration,
-                application_user_reset_password_token_value.as_str(),
+                application_user_reset_password_token__value.as_str(),
                 incoming_.application_user__email.as_str(),
                 incoming_.application_user_device_id.as_str(),
             )?;
@@ -239,9 +239,9 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByFirstStep> 
         let outcoming = Outcoming {
             application_user__id: application_user_.id,
             verification_message_sent: can_send,
-            application_user_reset_password_token_can_be_resent_from,
-            application_user_reset_password_token_wrong_enter_tries_quantity,
-            application_user_reset_password_token_wrong_enter_tries_quantity_limit: ApplicationUserResetPasswordToken_WrongEnterTriesQuantity::LIMIT,
+            application_user_reset_password_token__can_be_resent_from,
+            application_user_reset_password_token__wrong_enter_tries_quantity,
+            application_user_reset_password_token__wrong_enter_tries_quantity_limit: ApplicationUserResetPasswordToken_WrongEnterTriesQuantity::LIMIT,
         };
         return Ok(Ok(UnifiedReport::target_filled(outcoming)));
     }

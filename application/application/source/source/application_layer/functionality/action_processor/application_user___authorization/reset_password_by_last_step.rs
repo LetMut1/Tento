@@ -98,7 +98,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
         let incoming_ = incoming.convert_value_does_not_exist(Backtrace::new(line!(), file!()))?;
-        if !Validator::<ApplicationUserResetPasswordToken_Value>::is_valid(incoming_.application_user_reset_password_token_value.as_str())? {
+        if !Validator::<ApplicationUserResetPasswordToken_Value>::is_valid(incoming_.application_user_reset_password_token__value.as_str())? {
             return Ok(Err(Auditor::<InvalidArgument>::new(
                 InvalidArgument,
                 Backtrace::new(line!(), file!()),
@@ -158,14 +158,14 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
                 Precedent::ApplicationUserResetPasswordToken_IsNotApproved,
             )));
         }
-        if application_user_reset_password_token.value != incoming_.application_user_reset_password_token_value {
+        if application_user_reset_password_token.value != incoming_.application_user_reset_password_token__value {
             application_user_reset_password_token.wrong_enter_tries_quantity =
                 application_user_reset_password_token.wrong_enter_tries_quantity.checked_add(1).convert_out_of_range(Backtrace::new(line!(), file!()))?;
             if application_user_reset_password_token.wrong_enter_tries_quantity < ApplicationUserResetPasswordToken_WrongEnterTriesQuantity::LIMIT {
                 PostgresqlRepository::<ApplicationUserResetPasswordToken>::update_4(
                     database_2_postgresql_connection,
                     Update4 {
-                        application_user_reset_password_token_wrong_enter_tries_quantity: application_user_reset_password_token.wrong_enter_tries_quantity,
+                        application_user_reset_password_token__wrong_enter_tries_quantity: application_user_reset_password_token.wrong_enter_tries_quantity,
                     },
                     By1_ {
                         application_user__id: incoming_.application_user__id,

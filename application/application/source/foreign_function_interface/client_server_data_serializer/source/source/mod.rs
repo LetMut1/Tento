@@ -1780,9 +1780,9 @@ type ApplicationUser__Authorization___ResetPasswordByFirstStep___C_Result = C_Re
 pub struct ApplicationUser__Authorization___ResetPasswordByFirstStep___Outcoming {
     pub application_user__id: c_long,
     pub verification_message_sent: bool,
-    pub application_user_reset_password_token_can_be_resent_from: c_long,
-    pub application_user_reset_password_token_wrong_enter_tries_quantity: c_short,
-    pub application_user_reset_password_token_wrong_enter_tries_quantity_limit: c_short,
+    pub application_user_reset_password_token__can_be_resent_from: c_long,
+    pub application_user_reset_password_token__wrong_enter_tries_quantity: c_short,
+    pub application_user_reset_password_token__wrong_enter_tries_quantity_limit: c_short,
 }
 
 #[repr(C)]
@@ -1806,9 +1806,9 @@ pub extern "C" fn application_user___authorization____reset_password_by_first_st
                         let outcoming = ApplicationUser__Authorization___ResetPasswordByFirstStep___Outcoming {
                             application_user__id: data__.application_user__id,
                             verification_message_sent: data__.verification_message_sent,
-                            application_user_reset_password_token_can_be_resent_from: data__.application_user_reset_password_token_can_be_resent_from,
-                            application_user_reset_password_token_wrong_enter_tries_quantity: data__.application_user_reset_password_token_wrong_enter_tries_quantity,
-                            application_user_reset_password_token_wrong_enter_tries_quantity_limit: data__.application_user_reset_password_token_wrong_enter_tries_quantity_limit,
+                            application_user_reset_password_token__can_be_resent_from: data__.application_user_reset_password_token__can_be_resent_from,
+                            application_user_reset_password_token__wrong_enter_tries_quantity: data__.application_user_reset_password_token__wrong_enter_tries_quantity,
+                            application_user_reset_password_token__wrong_enter_tries_quantity_limit: data__.application_user_reset_password_token__wrong_enter_tries_quantity_limit,
                         };
 
                         C_Data::filled(outcoming)
@@ -1856,7 +1856,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_first_st
 pub struct ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming {
     pub application_user__id: c_long,
     pub application_user_device_id: C_String,
-    pub application_user_reset_password_token_value: C_String,
+    pub application_user_reset_password_token__value: C_String,
 }
 
 #[no_mangle]
@@ -1867,7 +1867,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_second_s
         let incoming_ = ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming_ {
             application_user__id: incoming.application_user__id,
             application_user_device_id: incoming.application_user_device_id.to_string()?,
-            application_user_reset_password_token_value: incoming.application_user_reset_password_token_value.to_string()?,
+            application_user_reset_password_token__value: incoming.application_user_reset_password_token__value.to_string()?,
         };
 
         return Ok(incoming_);
@@ -1900,7 +1900,7 @@ pub struct ApplicationUser__Authorization___ResetPasswordBySecondStep___Preceden
 #[derive(Default, Clone, Copy)]
 pub struct ApplicationUserResetPasswordToken_WrongValue {
     pub is_exist: bool,
-    pub application_user_reset_password_token_wrong_enter_tries_quantity: c_short,
+    pub application_user_reset_password_token__wrong_enter_tries_quantity: c_short,
 }
 
 #[no_mangle]
@@ -1941,11 +1941,11 @@ pub extern "C" fn application_user___authorization____reset_password_by_second_s
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_::ApplicationUserResetPasswordToken_WrongValue { application_user_reset_password_token_wrong_enter_tries_quantity } => {
+                    ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_::ApplicationUserResetPasswordToken_WrongValue { application_user_reset_password_token__wrong_enter_tries_quantity } => {
                         ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent {
                             application_user_reset_password_token__wrong_value: ApplicationUserResetPasswordToken_WrongValue {
                                 is_exist: true,
-                                application_user_reset_password_token_wrong_enter_tries_quantity: application_user_reset_password_token_wrong_enter_tries_quantity,
+                                application_user_reset_password_token__wrong_enter_tries_quantity: application_user_reset_password_token__wrong_enter_tries_quantity,
                             },
                             ..Default::default()
                         }
@@ -1983,7 +1983,7 @@ pub struct ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming {
     pub application_user__id: c_long,
     pub application_user_device_id: C_String,
     pub application_user_password: C_String,
-    pub application_user_reset_password_token_value: C_String,
+    pub application_user_reset_password_token__value: C_String,
 }
 
 #[no_mangle]
@@ -1995,7 +1995,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_last_ste
             application_user__id: incoming.application_user__id,
             application_user_device_id: incoming.application_user_device_id.to_string()?,
             application_user_password: incoming.application_user_password.to_string()?,
-            application_user_reset_password_token_value: incoming.application_user_reset_password_token_value.to_string()?,
+            application_user_reset_password_token__value: incoming.application_user_reset_password_token__value.to_string()?,
         };
 
         return Ok(incoming_);
@@ -2413,7 +2413,7 @@ pub extern "C" fn application_user___authorization____send_email_for_reset_passw
                     }
                     Data::Filled { data: data__ } => {
                         let outcoming = ApplicationUser__Authorization___SendEmailForResetPassword___Outcoming {
-                            application_user_resep_password_token_can_be_resent_from: data__.application_user_reset_password_token_can_be_resent_from,
+                            application_user_resep_password_token_can_be_resent_from: data__.application_user_reset_password_token__can_be_resent_from,
                         };
 
                         C_Data::filled(outcoming)
@@ -4138,9 +4138,9 @@ mod test {
                     let outcoming = ApplicationUser__Authorization___ResetPasswordByFirstStep___Outcoming_ {
                         application_user__id: 0,
                         verification_message_sent: false,
-                        application_user_reset_password_token_can_be_resent_from: 0,
-                        application_user_reset_password_token_wrong_enter_tries_quantity: 0,
-                        application_user_reset_password_token_wrong_enter_tries_quantity_limit: 0,
+                        application_user_reset_password_token__can_be_resent_from: 0,
+                        application_user_reset_password_token__wrong_enter_tries_quantity: 0,
+                        application_user_reset_password_token__wrong_enter_tries_quantity_limit: 0,
                     };
 
                     let unified_report = UnifiedReport::<ApplicationUser__Authorization___ResetPasswordByFirstStep___Outcoming_, ApplicationUser__Authorization___ResetPasswordByFirstStep___Precedent_>::target_filled(outcoming);
@@ -4243,7 +4243,7 @@ mod test {
 
                     precedent_registry.push(
                         ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_::ApplicationUserResetPasswordToken_WrongValue {
-                            application_user_reset_password_token_wrong_enter_tries_quantity: 0,
+                            application_user_reset_password_token__wrong_enter_tries_quantity: 0,
                         }
                     );
 
@@ -4515,7 +4515,7 @@ mod test {
                 #[test]
                 fn target_filled____application_user___authorization____send_email_for_reset_password() -> Result<(), Box<dyn StdError + 'static>> {
                     let outcoming = ApplicationUser__Authorization___SendEmailForResetPassword___Outcoming_ {
-                        application_user_reset_password_token_can_be_resent_from: 0,
+                        application_user_reset_password_token__can_be_resent_from: 0,
                     };
 
                     let unified_report = UnifiedReport::<ApplicationUser__Authorization___SendEmailForResetPassword___Outcoming_, ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_>::target_filled(outcoming);
@@ -5443,7 +5443,7 @@ mod test {
                 let incoming = ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming {
                     application_user__id: 0,
                     application_user_device_id: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
-                    application_user_reset_password_token_value: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    application_user_reset_password_token__value: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
                 };
 
                 let allocator = move |incoming: *mut ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
@@ -5464,7 +5464,7 @@ mod test {
 
                 Allocator::<C_String>::deallocate(incoming.application_user_device_id);
 
-                Allocator::<C_String>::deallocate(incoming.application_user_reset_password_token_value);
+                Allocator::<C_String>::deallocate(incoming.application_user_reset_password_token__value);
 
                 return Ok(());
             }
@@ -5475,7 +5475,7 @@ mod test {
                     application_user__id: 0,
                     application_user_device_id: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
                     application_user_password: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
-                    application_user_reset_password_token_value: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    application_user_reset_password_token__value: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
                 };
 
                 let allocator = move |incoming: *mut ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
@@ -5498,7 +5498,7 @@ mod test {
 
                 Allocator::<C_String>::deallocate(incoming.application_user_password);
 
-                Allocator::<C_String>::deallocate(incoming.application_user_reset_password_token_value);
+                Allocator::<C_String>::deallocate(incoming.application_user_reset_password_token__value);
 
                 return Ok(());
             }
