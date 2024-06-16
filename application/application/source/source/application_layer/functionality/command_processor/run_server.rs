@@ -270,7 +270,7 @@ impl CommandProcessor<RunServer> {
         let database_1_postgresql_connection_pool = Creator::<PostgresqlConnectionPoolNoTls>::create_database_1(environment_configuration).await?;
         let database_2_postgresql_connection_pool = Creator::<PostgresqlConnectionPoolNoTls>::create_database_2(environment_configuration).await?;
         let router_ = Arc::new(router);
-        let service = hyper::service::make_service_fn(move |_: &'_ AddrStream| -> _ {
+        let closure = move |_: &'_ AddrStream| -> _ {
             let router__ = router_.clone();
             let database_1_postgresql_connection_pool_ = database_1_postgresql_connection_pool.clone();
             let database_2_postgresql_connection_pool_ = database_2_postgresql_connection_pool.clone();
@@ -295,7 +295,8 @@ impl CommandProcessor<RunServer> {
                 Ok::<_, Void>(service_fn)
             };
             return future;
-        });
+        };
+        let service = hyper::service::make_service_fn(closure);
         let signal_interrupt_future = Self::create_signal(SignalKind::interrupt())?;
         let signal_terminate_future = Self::create_signal(SignalKind::terminate())?;
         let graceful_shutdown_signal_future = async move {
