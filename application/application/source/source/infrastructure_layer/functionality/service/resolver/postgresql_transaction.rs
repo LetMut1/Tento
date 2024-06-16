@@ -35,13 +35,11 @@ impl Resolver<PostgresqlTransaction> {
         connection.execute(query.as_str(), &[]).await.convert(Backtrace::new(line!(), file!()))?;
         return Ok(Self::new());
     }
-
     pub async fn commit<'a>(self, connection: &'a Connection) -> Result<(), Auditor<Error>> {
         let query = "COMMIT;";
         connection.execute(query, &[]).await.convert(Backtrace::new(line!(), file!()))?;
         return Ok(());
     }
-
     pub async fn rollback<'a>(self, connection: &'a Connection) -> Result<(), Auditor<Error>> {
         let query = "ROLLBACK;";
         connection.execute(query, &[]).await.convert(Backtrace::new(line!(), file!()))?;

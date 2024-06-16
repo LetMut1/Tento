@@ -80,7 +80,6 @@ impl<T> OptionConverter<T> for Option<T> {
         };
         return result;
     }
-
     fn convert_out_of_range(self, backtrace_part: Backtrace) -> Result<T, Auditor<Error>> {
         let result = match self {
             Some(value) => Ok(value),
@@ -93,7 +92,6 @@ impl<T> OptionConverter<T> for Option<T> {
         };
         return result;
     }
-
     fn convert_value_does_not_exist(self, backtrace_part: Backtrace) -> Result<T, Auditor<Error>> {
         let result = match self {
             Some(value) => Ok(value),

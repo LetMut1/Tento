@@ -77,7 +77,6 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
             insert_1.application_user_registration_token_can_be_resent_from,
         ));
     }
-
     pub async fn delete_2<'a>(database_2_connection: &'a Connection, by_1: By1<'_>) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
@@ -102,7 +101,6 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
             .convert(Backtrace::new(line!(), file!()))?;
         return Ok(());
     }
-
     pub async fn update_1<'a>(database_2_connection: &'a Connection, update_1: Update1<'_>, by_1: By1<'_>) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
@@ -160,7 +158,6 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
             .convert(Backtrace::new(line!(), file!()))?;
         return Ok(());
     }
-
     pub async fn update_2<'a>(database_2_connection: &'a Connection, update_2: Update2, by_1: By1<'_>) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
@@ -194,7 +191,6 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
             .convert(Backtrace::new(line!(), file!()))?;
         return Ok(());
     }
-
     pub async fn update_3<'a>(database_2_connection: &'a Connection, update_3: Update3<'_>, by_1: By1<'_>) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
@@ -246,7 +242,6 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
             .convert(Backtrace::new(line!(), file!()))?;
         return Ok(());
     }
-
     pub async fn update_4<'a>(database_2_connection: &'a Connection, update_4: Update4, by_1: By1<'_>) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
@@ -280,7 +275,6 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
             .convert(Backtrace::new(line!(), file!()))?;
         return Ok(());
     }
-
     pub async fn update_5<'a>(database_2_connection: &'a Connection, update_5: Update5, by_1: By1<'_>) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
@@ -314,7 +308,6 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
             .convert(Backtrace::new(line!(), file!()))?;
         return Ok(());
     }
-
     pub async fn find_1<'a>(database_2_connection: &'a Connection, by_1: By1<'_>) -> Result<Option<ApplicationUserRegistrationToken1>, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
@@ -354,7 +347,6 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
             can_be_resent_from: row_registry[0].try_get::<'_, usize, i64>(4).convert(Backtrace::new(line!(), file!()))?,
         }));
     }
-
     pub async fn find_2<'a>(database_2_connection: &'a Connection, by_1: By1<'_>) -> Result<Option<ApplicationUserRegistrationToken2>, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
@@ -392,7 +384,6 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
             expires_at: row_registry[0].try_get::<'_, usize, i64>(3).convert(Backtrace::new(line!(), file!()))?,
         }));
     }
-
     pub async fn find_3<'a>(database_2_connection: &'a Connection, by_1: By1<'_>) -> Result<Option<ApplicationUserRegistrationToken3>, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\

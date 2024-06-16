@@ -94,7 +94,6 @@ impl Serializer {
     {
         return rmp_serde::to_vec(subject).convert(Backtrace::new(line!(), file!()));
     }
-
     pub fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, Auditor<Error>>
     where
         T: Deserialize<'a>,

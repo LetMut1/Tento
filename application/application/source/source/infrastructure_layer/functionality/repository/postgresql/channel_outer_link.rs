@@ -53,7 +53,6 @@ impl PostgresqlRepository<ChannelOuterLink> {
         );
         return Ok(channel_outer_link);
     }
-
     pub async fn find_1<'a>(database_1_connection: &'a Connection, by_1: By1, limit: i16) -> Result<Vec<ChannelOuterLink1>, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\

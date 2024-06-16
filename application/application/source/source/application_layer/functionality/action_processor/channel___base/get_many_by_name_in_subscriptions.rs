@@ -29,7 +29,6 @@ use tokio_postgres::tls::TlsConnect;
 use tokio_postgres::Socket;
 impl ActionProcessor<Channel__Base___GetManyByNameInSubscriptions> {
     const LIMIT: i16 = 100;
-
     pub async fn process<'a, T>(
         environment_configuration: &'a EnvironmentConfiguration,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,

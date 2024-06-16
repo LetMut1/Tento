@@ -22,7 +22,6 @@ impl FormResolver<ApplicationUserAccessRefreshToken<'_>> {
         let application_user_access_refresh_token_encrypted = Encoder::<Base64>::encode(encoded_data.into_bytes().as_slice());
         return Ok(application_user_access_refresh_token_encrypted);
     }
-
     pub fn is_valid<'a>(
         environment_configuration: &'a EnvironmentConfiguration,
         application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>,

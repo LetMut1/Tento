@@ -67,7 +67,6 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
             insert_1.application_user_access_refresh_token_updated_at,
         ));
     }
-
     pub async fn update_1<'a>(database_2_connection: &'a Connection, update_1: Update1<'_>, by_2: By2<'_>) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
@@ -116,7 +115,6 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
             .convert(Backtrace::new(line!(), file!()))?;
         return Ok(());
     }
-
     pub async fn delete_1<'a>(database_2_connection: &'a Connection, by_2: By2<'_>) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "DELETE FROM ONLY public.application_user_access_refresh_token AS auart  \
@@ -140,7 +138,6 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
             .convert(Backtrace::new(line!(), file!()))?;
         return Ok(());
     }
-
     pub async fn delete_2<'a>(database_2_connection: &'a Connection, by_1: By1) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
@@ -163,7 +160,6 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
             .convert(Backtrace::new(line!(), file!()))?;
         return Ok(());
     }
-
     pub async fn find_1<'a, 'b>(database_2_connection: &'a Connection, by_2: By2<'b>) -> Result<Option<ApplicationUserAccessRefreshToken<'b>>, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\

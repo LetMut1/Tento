@@ -15,7 +15,6 @@ pub struct ChannelOuterLink {
 }
 impl ChannelOuterLink {
     pub const MAXIMUM_QUANTITY: i16 = 5;
-
     pub fn new(from: i64, alias: String, address: String, created_at: String) -> Self {
         return Self {
             from,

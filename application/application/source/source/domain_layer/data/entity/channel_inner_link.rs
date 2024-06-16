@@ -12,7 +12,6 @@ pub struct ChannelInnerLink {
 }
 impl ChannelInnerLink {
     pub const MAXIMUM_QUANTITY: i16 = 10;
-
     pub fn new(from: i64, to: i64, created_at: String) -> Self {
         return Self {
             from,

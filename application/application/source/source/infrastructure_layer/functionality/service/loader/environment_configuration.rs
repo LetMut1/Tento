@@ -22,7 +22,6 @@ use crate::infrastructure_layer::data::error::Error;
 use std::path::Path;
 impl Loader<EnvironmentConfiguration> {
     const ENVIRONMENT_FILE_NAME: &'static str = "environment.toml";
-
     pub fn load_from_file<'a>(environment_configuration_directory_path: &'a str) -> Result<EnvironmentConfiguration, Auditor<Error>> {
         let environment_file_path = format!(
             "{}/{}",

@@ -18,7 +18,6 @@ impl Spawner<TokioNonBlockingTask> {
             return ();
         });
     }
-
     pub fn spawn_processed<F>(future: F) -> JoinHandle<<F as Future>::Output>
     where
         F: Future + Send + 'static,

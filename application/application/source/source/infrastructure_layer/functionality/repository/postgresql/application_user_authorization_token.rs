@@ -70,7 +70,6 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
             insert_1.application_user_authorization_token_can_be_resent_from,
         ));
     }
-
     pub async fn delete_1<'a>(database_2_connection: &'a Connection, by_1: By1<'_>) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
@@ -95,7 +94,6 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
             .convert(Backtrace::new(line!(), file!()))?;
         return Ok(());
     }
-
     pub async fn update_1<'a>(database_2_connection: &'a Connection, update_1: Update1<'_>, by_1: By1<'_>) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
@@ -147,7 +145,6 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
             .convert(Backtrace::new(line!(), file!()))?;
         return Ok(());
     }
-
     pub async fn update_2<'a>(database_2_connection: &'a Connection, update_2: Update2<'_>, by_1: By1<'_>) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
@@ -193,7 +190,6 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
             .convert(Backtrace::new(line!(), file!()))?;
         return Ok(());
     }
-
     pub async fn update_3<'a>(database_2_connection: &'a Connection, update_3: Update3, by_1: By1<'_>) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
@@ -227,7 +223,6 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
             .convert(Backtrace::new(line!(), file!()))?;
         return Ok(());
     }
-
     pub async fn update_4<'a>(database_2_connection: &'a Connection, update_4: Update4, by_1: By1<'_>) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
@@ -261,7 +256,6 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
             .convert(Backtrace::new(line!(), file!()))?;
         return Ok(());
     }
-
     pub async fn find_1<'a>(database_2_connection: &'a Connection, by_1: By1<'_>) -> Result<Option<ApplicationUserAuthorizationToken1>, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
@@ -299,7 +293,6 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
             can_be_resent_from: row_registry[0].try_get::<'_, usize, i64>(3).convert(Backtrace::new(line!(), file!()))?,
         }));
     }
-
     pub async fn find_2<'a>(database_2_connection: &'a Connection, by_1: By1<'_>) -> Result<Option<ApplicationUserAuthorizationToken2>, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
@@ -335,7 +328,6 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
             expires_at: row_registry[0].try_get::<'_, usize, i64>(2).convert(Backtrace::new(line!(), file!()))?,
         }));
     }
-
     pub async fn find_3<'a>(database_2_connection: &'a Connection, by_1: By1<'_>) -> Result<Option<ApplicationUserAuthorizationToken3>, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\

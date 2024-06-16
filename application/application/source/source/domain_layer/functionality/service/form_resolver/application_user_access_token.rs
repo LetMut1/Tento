@@ -14,7 +14,6 @@ use crate::infrastructure_layer::functionality::service::serializer::Serialize;
 use crate::infrastructure_layer::functionality::service::serializer::Serializer;
 impl FormResolver<ApplicationUserAccessToken<'_>> {
     const TOKEN_PARTS_SEPARATOR: &'static str = ".";
-
     pub fn to_encrypted<'a>(
         environment_configuration: &'a EnvironmentConfiguration,
         application_user_access_token: &'a ApplicationUserAccessToken<'_>,
@@ -33,7 +32,6 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
         );
         return Ok(application_user_access_token_encrypted);
     }
-
     pub fn from_encrypted<'a>(
         environment_configuration: &'a EnvironmentConfiguration,
         application_user_access_token_encrypted: &'a str,
@@ -98,7 +96,6 @@ impl Encoder<Signature> {
         let application_user_access_token_serialized_signature = Encoder_::<Base64>::encode(application_user_access_token_serialized_encoded.into_bytes().as_slice());
         return Ok(application_user_access_token_serialized_signature);
     }
-
     fn is_valid<'a>(
         environment_configuration: &'a EnvironmentConfiguration,
         application_user_access_token_serialized: &'a [u8],

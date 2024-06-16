@@ -46,7 +46,6 @@ impl PostgresqlRepository<ChannelSubscription> {
         );
         return Ok(channel_subscription);
     }
-
     pub async fn is_exist_1<'a>(database_1_connection: &'a Connection, by_1: By1) -> Result<bool, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\

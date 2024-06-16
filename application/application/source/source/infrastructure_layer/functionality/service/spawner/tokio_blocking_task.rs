@@ -18,7 +18,6 @@ impl Spawner<TokioBlockingTask> {
             return ();
         });
     }
-
     pub fn spawn_processed<F, R>(closure: F) -> JoinHandle<R>
     where
         F: FnOnce() -> R + Send + 'static,

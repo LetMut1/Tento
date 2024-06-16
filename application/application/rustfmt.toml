@@ -48,7 +48,7 @@ normalize_comments = false
 normalize_doc_attributes = false
 overflow_delimited_expr = false
 remove_nested_parens = false
-reorder_impl_items = true
+reorder_impl_items = false
 reorder_imports = true
 group_imports = "One"
 reorder_modules = true
@@ -75,6 +75,3 @@ use_try_shorthand = false
 version = "One"
 where_single_line = false
 wrap_comments = false
-
-
-#  TODO дописать конфигурации

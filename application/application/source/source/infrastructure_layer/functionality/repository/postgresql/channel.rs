@@ -106,7 +106,6 @@ impl PostgresqlRepository<Channel<'_>> {
             row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
         ));
     }
-
     pub async fn find_1<'a>(database_1_connection: &'a Connection, by_1: By1) -> Result<Option<Channel<'static>>, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
@@ -161,7 +160,6 @@ impl PostgresqlRepository<Channel<'_>> {
             row_registry[0].try_get::<'_, usize, String>(12).convert(Backtrace::new(line!(), file!()))?,
         )));
     }
-
     pub async fn find_2<'a, 'b>(database_1_connection: &'a Connection, by_2: By2<'b>) -> Result<Option<Channel<'b>>, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\

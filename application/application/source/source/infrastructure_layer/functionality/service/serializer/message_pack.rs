@@ -13,7 +13,6 @@ impl Serialize for Serializer<MessagePack> {
     {
         return Ok(Serializer_::serialize(subject)?);
     }
-
     fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, Auditor<Error>>
     where
         T: Deserialize<'a>,

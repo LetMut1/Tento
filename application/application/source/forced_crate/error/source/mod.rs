@@ -17,31 +17,26 @@ impl Error {
             message,
         };
     }
-
     pub fn new_logic_value_does_not_exist() -> Self {
         return Self::Logic {
             message: "Value does not exist.",
         };
     }
-
     pub fn new_logic_value_already_exist() -> Self {
         return Self::Logic {
             message: "Value already exist.",
         };
     }
-
     pub fn new_logic_unreachable_state() -> Self {
         return Self::Logic {
             message: "Unreachable state.",
         };
     }
-
     pub fn new_logic_out_of_range() -> Self {
         return Self::Logic {
             message: "Out of range.",
         };
     }
-
     pub fn new_runtime<E>(error: E) -> Self
     where
         E: StdError + Send + Sync + 'static,
@@ -52,7 +47,6 @@ impl Error {
             },
         };
     }
-
     pub fn new_runtime_(error: Box<dyn StdError + Send + Sync + 'static>) -> Self {
         return Self::Runtime {
             runtime: Runtime {
