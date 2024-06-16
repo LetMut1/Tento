@@ -21,19 +21,19 @@ use tokio_postgres::{
 };
 impl PostgresqlRepository<Channel<'_>> {
     pub async fn create_1<'a>(database_1_connection: &'a Connection, insert_1: Insert1) -> Result<Channel<'static>, Auditor<Error>> {
-        let channel_name = insert_1.channel_name.as_str();
-        let channel_linked_name = insert_1.channel_linked_name.as_str();
-        let channel_description = match insert_1.channel_description {
-            Some(ref channel_description_) => Some(channel_description_.as_str()),
+        let channel__name = insert_1.channel__name.as_str();
+        let channel__linked_name = insert_1.channel__linked_name.as_str();
+        let channel__description = match insert_1.channel__description {
+            Some(ref channel__description_) => Some(channel__description_.as_str()),
             None => None,
         };
-        let channel_orientation = insert_1.channel_orientation.as_slice();
-        let channel_cover_image_path = match insert_1.channel_cover_image_path {
-            Some(ref channel_cover_image_path_) => Some(channel_cover_image_path_.as_str()),
+        let channel__orientation = insert_1.channel__orientation.as_slice();
+        let channel__cover_image_path = match insert_1.channel__cover_image_path {
+            Some(ref channel__cover_image_path_) => Some(channel__cover_image_path_.as_str()),
             None => None,
         };
-        let channel_background_image_path = match insert_1.channel_background_image_path {
-            Some(ref channel_background_image_path_) => Some(channel_background_image_path_.as_str()),
+        let channel__background_image_path = match insert_1.channel__background_image_path {
+            Some(ref channel__background_image_path_) => Some(channel__background_image_path_.as_str()),
             None => None,
         };
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -73,18 +73,18 @@ impl PostgresqlRepository<Channel<'_>> {
                 c.id AS i,
                 c.created_at::TEXT AS ca;";
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&insert_1.channel_owner, Type::INT8)
-            .add_parameter(&channel_name, Type::TEXT)
-            .add_parameter(&channel_linked_name, Type::TEXT)
-            .add_parameter(&channel_description, Type::TEXT)
-            .add_parameter(&insert_1.channel_access_modifier, Type::INT2)
-            .add_parameter(&insert_1.channel_visability_modifier, Type::INT2)
-            .add_parameter(&channel_orientation, Type::INT2_ARRAY)
-            .add_parameter(&channel_cover_image_path, Type::TEXT)
-            .add_parameter(&channel_background_image_path, Type::TEXT)
-            .add_parameter(&insert_1.channel_subscribers_quantity, Type::INT8)
-            .add_parameter(&insert_1.channel_marks_quantity, Type::INT8)
-            .add_parameter(&insert_1.channel_viewing_quantity, Type::INT8);
+            .add_parameter(&insert_1.channel__owner, Type::INT8)
+            .add_parameter(&channel__name, Type::TEXT)
+            .add_parameter(&channel__linked_name, Type::TEXT)
+            .add_parameter(&channel__description, Type::TEXT)
+            .add_parameter(&insert_1.channel__access_modifier, Type::INT2)
+            .add_parameter(&insert_1.channel__visability_modifier, Type::INT2)
+            .add_parameter(&channel__orientation, Type::INT2_ARRAY)
+            .add_parameter(&channel__cover_image_path, Type::TEXT)
+            .add_parameter(&channel__background_image_path, Type::TEXT)
+            .add_parameter(&insert_1.channel__subscribers_quantity, Type::INT8)
+            .add_parameter(&insert_1.channel__marks_quantity, Type::INT8)
+            .add_parameter(&insert_1.channel__viewing_quantity, Type::INT8);
         let statement = database_1_connection
             .prepare_typed(
                 query,
@@ -101,18 +101,18 @@ impl PostgresqlRepository<Channel<'_>> {
             .convert(Backtrace::new(line!(), file!()))?;
         return Ok(Channel::new(
             row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
-            insert_1.channel_owner,
-            Cow::Owned(insert_1.channel_name),
-            insert_1.channel_linked_name,
-            insert_1.channel_description,
-            insert_1.channel_access_modifier,
-            insert_1.channel_visability_modifier,
-            insert_1.channel_orientation,
-            insert_1.channel_cover_image_path,
-            insert_1.channel_background_image_path,
-            insert_1.channel_subscribers_quantity,
-            insert_1.channel_marks_quantity,
-            insert_1.channel_viewing_quantity,
+            insert_1.channel__owner,
+            Cow::Owned(insert_1.channel__name),
+            insert_1.channel__linked_name,
+            insert_1.channel__description,
+            insert_1.channel__access_modifier,
+            insert_1.channel__visability_modifier,
+            insert_1.channel__orientation,
+            insert_1.channel__cover_image_path,
+            insert_1.channel__background_image_path,
+            insert_1.channel__subscribers_quantity,
+            insert_1.channel__marks_quantity,
+            insert_1.channel__viewing_quantity,
             row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
         ));
     }
@@ -135,7 +135,7 @@ impl PostgresqlRepository<Channel<'_>> {
                 c.created_at::TEXT AS ca \
             FROM public.channel c \
             WHERE c.id = $1;";
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&by_1.channel_id, Type::INT8);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&by_1.channel__id, Type::INT8);
         let statement = database_1_connection
             .prepare_typed(
                 query,
@@ -154,7 +154,7 @@ impl PostgresqlRepository<Channel<'_>> {
             return Ok(None);
         }
         return Ok(Some(Channel::new(
-            by_1.channel_id,
+            by_1.channel__id,
             row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
             Cow::Owned(row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?),
             row_registry[0].try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?,
@@ -189,7 +189,7 @@ impl PostgresqlRepository<Channel<'_>> {
                 c.created_at::TEXT AS ca \
             FROM public.channel c \
             WHERE c.name = $1;";
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&by_2.channel_name, Type::TEXT);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&by_2.channel__name, Type::TEXT);
         let statement = database_1_connection
             .prepare_typed(
                 query,
@@ -210,7 +210,7 @@ impl PostgresqlRepository<Channel<'_>> {
         return Ok(Some(Channel::new(
             row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
             row_registry[0].try_get::<'_, usize, i64>(1).convert(Backtrace::new(line!(), file!()))?,
-            Cow::Borrowed(by_2.channel_name),
+            Cow::Borrowed(by_2.channel__name),
             row_registry[0].try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?,
             row_registry[0].try_get::<'_, usize, Option<String>>(3).convert(Backtrace::new(line!(), file!()))?,
             row_registry[0].try_get::<'_, usize, i16>(4).convert(Backtrace::new(line!(), file!()))?,
@@ -226,22 +226,22 @@ impl PostgresqlRepository<Channel<'_>> {
     }
 }
 pub struct Insert1 {
-    pub channel_owner: i64,
-    pub channel_name: String,
-    pub channel_linked_name: String,
-    pub channel_description: Option<String>,
-    pub channel_access_modifier: i16,
-    pub channel_visability_modifier: i16,
-    pub channel_orientation: Vec<i16>,
-    pub channel_cover_image_path: Option<String>,
-    pub channel_background_image_path: Option<String>,
-    pub channel_subscribers_quantity: i64,
-    pub channel_marks_quantity: i64,
-    pub channel_viewing_quantity: i64,
+    pub channel__owner: i64,
+    pub channel__name: String,
+    pub channel__linked_name: String,
+    pub channel__description: Option<String>,
+    pub channel__access_modifier: i16,
+    pub channel__visability_modifier: i16,
+    pub channel__orientation: Vec<i16>,
+    pub channel__cover_image_path: Option<String>,
+    pub channel__background_image_path: Option<String>,
+    pub channel__subscribers_quantity: i64,
+    pub channel__marks_quantity: i64,
+    pub channel__viewing_quantity: i64,
 }
 pub struct By1 {
-    pub channel_id: i64,
+    pub channel__id: i64,
 }
 pub struct By2<'a> {
-    pub channel_name: &'a str,
+    pub channel__name: &'a str,
 }

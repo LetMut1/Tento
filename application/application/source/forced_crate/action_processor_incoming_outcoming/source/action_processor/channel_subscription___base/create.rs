@@ -7,7 +7,7 @@ use serde::{
 #[derive(Serialize, Deserialize)]
 pub struct Incoming {
     pub application_user_access_token_encrypted: String,
-    pub channel_id: i64,
+    pub channel__id: i64,
 }
 r#enum!(
     pub enum Precedent {

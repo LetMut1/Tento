@@ -34,8 +34,8 @@ impl PostgresqlRepository<ChannelInnerLink> {
             RETURNING \
                 cs.created_at::TEXT AS ca;";
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&insert_1.channel_inner_link_from, Type::INT8)
-            .add_parameter(&insert_1.channel_inner_link_to, Type::INT8);
+            .add_parameter(&insert_1.channel_inner_link__from, Type::INT8)
+            .add_parameter(&insert_1.channel_inner_link__to, Type::INT8);
         let statement = database_1_connection
             .prepare_typed(
                 query,
@@ -51,8 +51,8 @@ impl PostgresqlRepository<ChannelInnerLink> {
             .await
             .convert(Backtrace::new(line!(), file!()))?;
         return Ok(ChannelInnerLink::new(
-            insert_1.channel_inner_link_from,
-            insert_1.channel_inner_link_to,
+            insert_1.channel_inner_link__from,
+            insert_1.channel_inner_link__to,
             row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
         ));
     }
@@ -64,7 +64,7 @@ impl PostgresqlRepository<ChannelInnerLink> {
             FROM public.channel_inner_link cil \
             WHERE cil.from_ = $1 \
             LIMIT $2";
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&by_1.channel_inner_link_from, Type::INT8).add_parameter(&limit, Type::INT2);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&by_1.channel_inner_link__from, Type::INT8).add_parameter(&limit, Type::INT2);
         let statement = database_1_connection
             .prepare_typed(
                 query,
@@ -85,7 +85,7 @@ impl PostgresqlRepository<ChannelInnerLink> {
         }
         '_a: for row in row_registry.iter() {
             let channel_inner_link = ChannelInnerLink1 {
-                channel_inner_link_to: row.try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
+                channel_inner_link__to: row.try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
             };
             channel_inner_link_registry.push(channel_inner_link);
         }
@@ -93,9 +93,9 @@ impl PostgresqlRepository<ChannelInnerLink> {
     }
 }
 pub struct Insert1 {
-    pub channel_inner_link_from: i64,
-    pub channel_inner_link_to: i64,
+    pub channel_inner_link__from: i64,
+    pub channel_inner_link__to: i64,
 }
 pub struct By1 {
-    pub channel_inner_link_from: i64,
+    pub channel_inner_link__from: i64,
 }

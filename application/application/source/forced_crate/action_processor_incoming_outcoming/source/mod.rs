@@ -92,35 +92,35 @@ pub struct Common1 {
 }
 #[derive(Serialize, Deserialize)]
 pub struct Channel1 {
-    pub channel_id: i64,
-    pub channel_name: String,
-    pub channel_linked_name: String,
-    pub channel_access_modifier: i16,
-    pub channel_visability_modifier: i16,
-    pub channel_cover_image_path: Option<String>,
-    pub channel_background_image_path: Option<String>,
+    pub channel__id: i64,
+    pub channel__name: String,
+    pub channel__linked_name: String,
+    pub channel__access_modifier: i16,
+    pub channel__visability_modifier: i16,
+    pub channel__cover_image_path: Option<String>,
+    pub channel__background_image_path: Option<String>,
 }
 #[derive(Serialize, Deserialize)]
 pub struct Channel2 {
-    pub channel_owner: i64,
-    pub channel_name: String,
-    pub channel_linked_name: String,
-    pub channel_description: Option<String>,
-    pub channel_access_modifier: i16,
-    pub channel_visability_modifier: i16,
-    pub channel_orientation: Vec<i16>,
-    pub channel_cover_image_path: Option<String>,
-    pub channel_background_image_path: Option<String>,
-    pub channel_subscribers_quantity: i64,
-    pub channel_marks_quantity: i64,
-    pub channel_viewing_quantity: i64,
+    pub channel__owner: i64,
+    pub channel__name: String,
+    pub channel__linked_name: String,
+    pub channel__description: Option<String>,
+    pub channel__access_modifier: i16,
+    pub channel__visability_modifier: i16,
+    pub channel__orientation: Vec<i16>,
+    pub channel__cover_image_path: Option<String>,
+    pub channel__background_image_path: Option<String>,
+    pub channel__subscribers_quantity: i64,
+    pub channel__marks_quantity: i64,
+    pub channel__viewing_quantity: i64,
 }
 #[derive(Serialize, Deserialize)]
 pub struct ChannelInnerLink1 {
-    pub channel_inner_link_to: i64,
+    pub channel_inner_link__to: i64,
 }
 #[derive(Serialize, Deserialize)]
 pub struct ChannelOuterLink1 {
-    pub channel_outer_link_alias: String,
-    pub channel_outer_link_address: String,
+    pub channel_outer_link__alias: String,
+    pub channel_outer_link__address: String,
 }

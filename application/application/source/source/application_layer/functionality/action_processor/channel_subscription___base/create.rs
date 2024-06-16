@@ -104,7 +104,7 @@ impl ActionProcessor<ChannelSubscription__Base___Create> {
                 return Ok(Err(invalid_argument_auditor));
             }
         };
-        if !Validator::<Channel_Id>::is_valid(incoming_.channel_id) {
+        if !Validator::<Channel_Id>::is_valid(incoming_.channel__id) {
             return Ok(Err(Auditor::<InvalidArgument>::new(
                 InvalidArgument,
                 Backtrace::new(line!(), file!()),
@@ -115,7 +115,7 @@ impl ActionProcessor<ChannelSubscription__Base___Create> {
         let channel = match PostgresqlRepository::<Channel<'_>>::find_1(
             database_1_postgresql_connection,
             By1 {
-                channel_id: incoming_.channel_id,
+                channel__id: incoming_.channel__id,
             },
         )
         .await?
@@ -137,7 +137,7 @@ impl ActionProcessor<ChannelSubscription__Base___Create> {
             database_1_postgresql_connection,
             Insert1 {
                 application_user__id: application_user_access_token.application_user__id,
-                channel_id: channel.id,
+                channel__id: channel.id,
             },
         )
         .await?;

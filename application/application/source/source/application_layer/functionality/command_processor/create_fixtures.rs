@@ -204,12 +204,12 @@ impl CommandProcessor<CreateFixtures> {
             )
             .await?;
             'b: for _ in 1..=Self::QUANTITY_OF_CHANNELS {
-                let mut channel_name = String::new();
+                let mut channel__name = String::new();
                 '_c: for _ in 1..=thread_rng().gen_range::<usize, _>(1..=Channel_Name::MAXIMUM_LENGTH) {
                     let character = Self::ASCII_CHARACTER_REGISTRY[thread_rng().gen_range::<usize, _>(0..Self::ASCII_CHARACTER_REGISTRY.len())];
-                    channel_name = format!("{}{}", channel_name.as_str(), character,);
+                    channel__name = format!("{}{}", channel__name.as_str(), character,);
                 }
-                if !Validator::<Channel_Name>::is_valid(channel_name.as_str()) {
+                if !Validator::<Channel_Name>::is_valid(channel__name.as_str()) {
                     return Err(Auditor::<Error>::new(
                         Error::Logic {
                             message: "Channel name should be valid.",
@@ -217,8 +217,8 @@ impl CommandProcessor<CreateFixtures> {
                         Backtrace::new(line!(), file!()),
                     ));
                 }
-                let channel_linked_name = channel_name.clone();
-                if !Validator::<Channel_LinkedName>::is_valid(channel_linked_name.as_str()) {
+                let channel__linked_name = channel__name.clone();
+                if !Validator::<Channel_LinkedName>::is_valid(channel__linked_name.as_str()) {
                     return Err(Auditor::<Error>::new(
                         Error::Logic {
                             message: "Channel linked name should be valid.",
@@ -226,13 +226,13 @@ impl CommandProcessor<CreateFixtures> {
                         Backtrace::new(line!(), file!()),
                     ));
                 }
-                let channel_description = if thread_rng().gen_range::<i8, _>(0..=1) == 1 {
-                    let mut channel_description_ = String::new();
+                let channel__description = if thread_rng().gen_range::<i8, _>(0..=1) == 1 {
+                    let mut channel__description_ = String::new();
                     '_c: for _ in 1..=thread_rng().gen_range::<usize, _>(1..=Channel_Description::MAXIMUM_LENGTH) {
                         let character = Self::ASCII_CHARACTER_REGISTRY[thread_rng().gen_range::<usize, _>(0..Self::ASCII_CHARACTER_REGISTRY.len())];
-                        channel_description_ = format!("{}{}", channel_description_.as_str(), character,);
+                        channel__description_ = format!("{}{}", channel__description_.as_str(), character,);
                     }
-                    if !Validator::<Channel_Description>::is_valid(channel_description_.as_str()) {
+                    if !Validator::<Channel_Description>::is_valid(channel__description_.as_str()) {
                         return Err(Auditor::<Error>::new(
                             Error::Logic {
                                 message: "Channel description should be valid.",
@@ -240,14 +240,14 @@ impl CommandProcessor<CreateFixtures> {
                             Backtrace::new(line!(), file!()),
                         ));
                     }
-                    Some(channel_description_)
+                    Some(channel__description_)
                 } else {
                     None
                 };
-                let channel_orientation: Vec<i16> = vec![
+                let channel__orientation: Vec<i16> = vec![
                     0, 1, 2,
                 ];
-                if !Validator::<Channel_Orientation>::is_valid(channel_orientation.as_slice()) {
+                if !Validator::<Channel_Orientation>::is_valid(channel__orientation.as_slice()) {
                     return Err(Auditor::<Error>::new(
                         Error::Logic {
                             message: "Channel orientation email should be valid.",
@@ -258,7 +258,7 @@ impl CommandProcessor<CreateFixtures> {
                 let channel = PostgresqlRepository::<Channel<'_>>::find_2(
                     database_1_postgresql_connection,
                     By2 {
-                        channel_name: channel_name.as_str(),
+                        channel__name: channel__name.as_str(),
                     },
                 )
                 .await?;
@@ -270,18 +270,18 @@ impl CommandProcessor<CreateFixtures> {
                         PostgresqlRepository::<Channel<'_>>::create_1(
                             database_1_postgresql_connection,
                             ChannelInsert1 {
-                                channel_owner: application_user.id,
-                                channel_name,
-                                channel_linked_name,
-                                channel_description,
-                                channel_access_modifier: Channel_AccessModifier::from_representation(Channel_AccessModifier::Open),
-                                channel_visability_modifier: Channel_VisabilityModifier::from_representation(Channel_VisabilityModifier::Public),
-                                channel_orientation,
-                                channel_cover_image_path: Some(Self::STUB.to_string()),
-                                channel_background_image_path: Some(Self::STUB.to_string()),
-                                channel_subscribers_quantity: 0,
-                                channel_marks_quantity: 0,
-                                channel_viewing_quantity: 0,
+                                channel__owner: application_user.id,
+                                channel__name,
+                                channel__linked_name,
+                                channel__description,
+                                channel__access_modifier: Channel_AccessModifier::from_representation(Channel_AccessModifier::Open),
+                                channel__visability_modifier: Channel_VisabilityModifier::from_representation(Channel_VisabilityModifier::Public),
+                                channel__orientation,
+                                channel__cover_image_path: Some(Self::STUB.to_string()),
+                                channel__background_image_path: Some(Self::STUB.to_string()),
+                                channel__subscribers_quantity: 0,
+                                channel__marks_quantity: 0,
+                                channel__viewing_quantity: 0,
                             },
                         )
                         .await?;

@@ -94,7 +94,7 @@ Returns channel data by id.
 Request data:
 struct Incoming {
     application_user_access_token_encrypted: String
-    channel_id: i64
+    channel__id: i64
 }
 ```
 ```
@@ -107,27 +107,27 @@ struct Outcoming {
 }
 
 struct Channel {
-    channel_owner: i64,
-    channel_name: String,
-    channel_linked_name: String,
-    channel_description: Option<String>,
-    channel_access_modifier: i16,
-    channel_visability_modifier: i16,
-    channel_orientation: Vec<i16>,
-    channel_cover_image_path: Option<String>,
-    channel_background_image_path: Option<String>,
-    channel_subscribers_quantity: i64,
-    channel_marks_quantity: i64,
-    channel_viewing_quantity: i64
+    channel__owner: i64,
+    channel__name: String,
+    channel__linked_name: String,
+    channel__description: Option<String>,
+    channel__access_modifier: i16,
+    channel__visability_modifier: i16,
+    channel__orientation: Vec<i16>,
+    channel__cover_image_path: Option<String>,
+    channel__background_image_path: Option<String>,
+    channel__subscribers_quantity: i64,
+    channel__marks_quantity: i64,
+    channel__viewing_quantity: i64
 }
 
 struct ChannelInnerLink {
-    channel_inner_link_to: i64
+    channel_inner_link__to: i64
 }
 
 struct ChannelOuterLink {
-    channel_outer_link_alias: String,
-    channel_outer_link_address: String
+    channel_outer_link__alias: String,
+    channel_outer_link__address: String
 }
 ```
 ```
@@ -145,17 +145,17 @@ Returns channels the user is subscribed to by name.
 Request data:
 struct Incoming {
     application_user_access_token_encrypted: String
-    channel_name: String,
-    requery_channel_name: Option<String>,
+    channel__name: String,
+    requery___channel__name: Option<String>,
     limit: i16
 }
 
 
-requery_channel_name - an alternative for offset. Used only for requering with persistent channel_name. The value must be equal to the last channel_name of channel registry in received early response.
+requery___channel__name - an alternative for offset. Used only for requering with persistent channel__name. The value must be equal to the last channel__name of channel registry in received early response.
 
 Incoming parameters validation rule:
-- requery_channel_name:
-    -- same as channel_name.
+- requery___channel__name:
+    -- same as channel__name.
 - limit:
     -- [1, 100] values.
 ```
@@ -171,13 +171,13 @@ struct Common1 {
 }
 
 struct Channel1 {
-    channel_id: i64,
-    channel_name: String,
-    channel_linked_name: String,
-    channel_access_modifier: i16,
-    channel_visability_modifier: i16,
-    channel_cover_image_path: Option<String>,
-    channel_background_image_path: Option<String>
+    channel__id: i64,
+    channel__name: String,
+    channel__linked_name: String,
+    channel__access_modifier: i16,
+    channel__visability_modifier: i16,
+    channel__cover_image_path: Option<String>,
+    channel__background_image_path: Option<String>
 }
 ```
 ```
@@ -193,16 +193,16 @@ Returns channels the user is subscribed to.
 Request data:
 struct Incoming {
     application_user_access_token_encrypted: String
-    requery_channel_id: Option<i64>,
+    requery___channel__id: Option<i64>,
     limit: i16
 }
 
 
-requery_channel_id - an alternative for offset. The value must be equal to the last channel_id of channel registry in received early response.
+requery___channel__id - an alternative for offset. The value must be equal to the last channel__id of channel registry in received early response.
 
 Incoming parameters validation rule:
-- requery_channel_id:
-    -- same as channel_id.
+- requery___channel__id:
+    -- same as channel__id.
 - limit:
     -- [1, 100] values.
 ```
@@ -218,13 +218,13 @@ struct Common1 {
 }
 
 struct Channel1 {
-    channel_id: i64,
-    channel_name: String,
-    channel_linked_name: String,
-    channel_access_modifier: i16,
-    channel_visability_modifier: i16,
-    channel_cover_image_path: Option<String>,
-    channel_background_image_path: Option<String>
+    channel__id: i64,
+    channel__name: String,
+    channel__linked_name: String,
+    channel__access_modifier: i16,
+    channel__visability_modifier: i16,
+    channel__cover_image_path: Option<String>,
+    channel__background_image_path: Option<String>
 }
 ```
 ```
@@ -240,17 +240,17 @@ Returns public channels by name.
 Request data:
 struct Incoming {
     application_user_access_token_encrypted: String
-    channel_name: String,
-    requery_channel_name: Option<String>,
+    channel__name: String,
+    requery___channel__name: Option<String>,
     limit: i16
 }
 
 
-requery_channel_name - an alternative for offset. Used only for requering with persistent channel_name. The value must be equal to the last channel_name of channel registry in received early response.
+requery___channel__name - an alternative for offset. Used only for requering with persistent channel__name. The value must be equal to the last channel__name of channel registry in received early response.
 
 Incoming parameters validation rule:
-- requery_channel_name:
-    -- same as channel_name.
+- requery___channel__name:
+    -- same as channel__name.
 - limit:
     -- [1, 100] values.
 ```
@@ -266,13 +266,13 @@ struct Common1 {
 }
 
 struct Channel1 {
-    channel_id: i64,
-    channel_name: String,
-    channel_linked_name: String,
-    channel_access_modifier: i16,
-    channel_visability_modifier: i16,
-    channel_cover_image_path: Option<String>,
-    channel_background_image_path: Option<String>
+    channel__id: i64,
+    channel__name: String,
+    channel__linked_name: String,
+    channel__access_modifier: i16,
+    channel__visability_modifier: i16,
+    channel__cover_image_path: Option<String>,
+    channel__background_image_path: Option<String>
 }
 ```
 ```
@@ -288,7 +288,7 @@ Subscribes application user to channel.
 Request data:
 struct Incoming {
     application_user_access_token_encrypted: String
-    channel_id: i64
+    channel__id: i64
 }
 ```
 ```
@@ -691,11 +691,11 @@ Can not be equal to application_user__email.
 
 Can not be equal to application_user__nickname.
 ```
- - ## channel_id
+ - ## channel__id
 ```
 >= 0
 ```
- - ## channel_name
+ - ## channel__name
 ```
 75 - maximum number of characters.
 ```
@@ -710,7 +710,7 @@ Can not be equal to application_user__nickname.
 Returns Channel registry by Channel Created_at.
 ### Request Quey parameters:
 ```
-'cca': string; - 'channel_created_at', optional
+'cca': string; - 'channel__created_at', optional
 ```
 ```
 'o': integer; - 'order'.
@@ -728,16 +728,16 @@ Returns Channel registry by Channel Created_at.
 
 object_1:
 ```
-'ci': integer; - 'channel_id'.
+'ci': integer; - 'channel__id'.
 ```
 ```
-'cn': string; - 'channel_name'.
+'cn': string; - 'channel__name'.
 ```
 ```
 'cpip': string; - 'channel_personalization_image_path'.
 ```
 ```
-'csq': integer; - 'channel_subscribers_quantity'.
+'csq': integer; - 'channel__subscribers_quantity'.
 ```
 ```
 'cpmq': integer; - 'channel_public_marks_quantity'.
@@ -749,10 +749,10 @@ object_1:
 'crq': integer; - 'channel_reactions_quantity'.
 ```
 ```
-'cvq': integer; - 'channel_viewing_quantity'.
+'cvq': integer; - 'channel__viewing_quantity'.
 ```
 ```
-'cca': string; - 'channel_created_at'.
+'cca': string; - 'channel__created_at'.
 ```
 -ERROR_CODE-:
 ```

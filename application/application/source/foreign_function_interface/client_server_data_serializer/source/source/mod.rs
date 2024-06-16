@@ -561,43 +561,43 @@ pub struct Common1 {
 #[repr(C)]
 #[derive(Default, Clone, Copy)]
 pub struct Channel1 {
-    pub channel_id: c_long,
-    pub channel_name: C_String,
-    pub channel_linked_name: C_String,
-    pub channel_access_modifier: c_short,
-    pub channel_visability_modifier: c_short,
-    pub channel_cover_image_path: C_Option<C_String>,
-    pub channel_background_image_path: C_Option<C_String>,
+    pub channel__id: c_long,
+    pub channel__name: C_String,
+    pub channel__linked_name: C_String,
+    pub channel__access_modifier: c_short,
+    pub channel__visability_modifier: c_short,
+    pub channel__cover_image_path: C_Option<C_String>,
+    pub channel__background_image_path: C_Option<C_String>,
 }
 
 #[repr(C)]
 #[derive(Default, Clone, Copy)]
 pub struct Channel2 {
-    pub channel_owner: c_long,
-    pub channel_name: C_String,
-    pub channel_linked_name: C_String,
-    pub channel_description: C_Option<C_String>,
-    pub channel_access_modifier: c_short,
-    pub channel_visability_modifier: c_short,
-    pub channel_orientation: C_Vector<c_short>,
-    pub channel_cover_image_path: C_Option<C_String>,
-    pub channel_background_image_path: C_Option<C_String>,
-    pub channel_subscribers_quantity: c_long,
-    pub channel_marks_quantity: c_long,
-    pub channel_viewing_quantity: c_long,
+    pub channel__owner: c_long,
+    pub channel__name: C_String,
+    pub channel__linked_name: C_String,
+    pub channel__description: C_Option<C_String>,
+    pub channel__access_modifier: c_short,
+    pub channel__visability_modifier: c_short,
+    pub channel__orientation: C_Vector<c_short>,
+    pub channel__cover_image_path: C_Option<C_String>,
+    pub channel__background_image_path: C_Option<C_String>,
+    pub channel__subscribers_quantity: c_long,
+    pub channel__marks_quantity: c_long,
+    pub channel__viewing_quantity: c_long,
 }
 
 #[repr(C)]
 #[derive(Default, Clone, Copy)]
 pub struct ChannelInnerLink1 {
-    pub channel_inner_link_to: c_long,
+    pub channel_inner_link__to: c_long,
 }
 
 #[repr(C)]
 #[derive(Default, Clone, Copy)]
 pub struct ChannelOuterLink1 {
-    pub channel_outer_link_alias: C_String,
-    pub channel_outer_link_address: C_String,
+    pub channel_outer_link__alias: C_String,
+    pub channel_outer_link__address: C_String,
 }
 
 #[repr(C)]
@@ -2485,8 +2485,8 @@ pub extern "C" fn application_user___authorization____send_email_for_reset_passw
 #[derive(Clone, Copy)]
 pub struct Channel__Base___GetManyByNameInSubscriptions___Incoming {
     pub application_user_access_token_encrypted: C_String,
-    pub channel_name: C_String,
-    pub requery_channel_name: C_Option<C_String>,
+    pub channel__name: C_String,
+    pub requery___channel__name: C_Option<C_String>,
     pub limit: c_short,
 }
 
@@ -2495,16 +2495,16 @@ pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____seriali
     incoming: *mut Channel__Base___GetManyByNameInSubscriptions___Incoming
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: Channel__Base___GetManyByNameInSubscriptions___Incoming| -> Result<Channel__Base___GetManyByNameInSubscriptions___Incoming_, Box<dyn StdError + 'static>> {
-        let requery_channel_name = if incoming.requery_channel_name.is_data {
-            Some(incoming.requery_channel_name.data.to_string()?)
+        let requery___channel__name = if incoming.requery___channel__name.is_data {
+            Some(incoming.requery___channel__name.data.to_string()?)
         } else {
             None
         };
 
         let incoming_ = Channel__Base___GetManyByNameInSubscriptions___Incoming_ {
             application_user_access_token_encrypted: incoming.application_user_access_token_encrypted.to_string()?,
-            channel_name: incoming.channel_name.to_string()?,
-            requery_channel_name,
+            channel__name: incoming.channel__name.to_string()?,
+            requery___channel__name,
             limit: incoming.limit,
         };
 
@@ -2553,25 +2553,25 @@ pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____deseria
                         let mut common_registry: Vec<Common1> = vec![];
 
                         '_a: for common_1 in data__.common_registry {
-                            let channel_cover_image_path = match common_1.channel.channel_cover_image_path {
-                                Some(channel_cover_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel_cover_image_path_)),
+                            let channel__cover_image_path = match common_1.channel.channel__cover_image_path {
+                                Some(channel__cover_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel__cover_image_path_)),
                                 None => C_Option::none()
                             };
 
-                            let channel_background_image_path = match common_1.channel.channel_background_image_path {
-                                Some(channel_background_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel_background_image_path_)),
+                            let channel__background_image_path = match common_1.channel.channel__background_image_path {
+                                Some(channel__background_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel__background_image_path_)),
                                 None => C_Option::none()
                             };
 
                             let common_1_ = Common1 {
                                 channel: Channel1 {
-                                    channel_id: common_1.channel.channel_id,
-                                    channel_name: Allocator::<C_String>::allocate(common_1.channel.channel_name),
-                                    channel_linked_name: Allocator::<C_String>::allocate(common_1.channel.channel_linked_name),
-                                    channel_access_modifier: common_1.channel.channel_access_modifier,
-                                    channel_visability_modifier: common_1.channel.channel_visability_modifier,
-                                    channel_cover_image_path,
-                                    channel_background_image_path,
+                                    channel__id: common_1.channel.channel__id,
+                                    channel__name: Allocator::<C_String>::allocate(common_1.channel.channel__name),
+                                    channel__linked_name: Allocator::<C_String>::allocate(common_1.channel.channel__linked_name),
+                                    channel__access_modifier: common_1.channel.channel__access_modifier,
+                                    channel__visability_modifier: common_1.channel.channel__visability_modifier,
+                                    channel__cover_image_path,
+                                    channel__background_image_path,
                                 },
                                 is_application_user_subscribed: common_1.is_application_user_subscribed,
                             };
@@ -2635,16 +2635,16 @@ pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____deseria
                 };
 
                 for common in common_registry {
-                    Allocator::<C_String>::deallocate(common.channel.channel_name);
+                    Allocator::<C_String>::deallocate(common.channel.channel__name);
 
-                    Allocator::<C_String>::deallocate(common.channel.channel_linked_name);
+                    Allocator::<C_String>::deallocate(common.channel.channel__linked_name);
 
-                    if common.channel. channel_background_image_path.is_data {
-                        Allocator::<C_String>::deallocate(common.channel. channel_background_image_path.data);
+                    if common.channel. channel__background_image_path.is_data {
+                        Allocator::<C_String>::deallocate(common.channel. channel__background_image_path.data);
                     }
 
-                    if common.channel. channel_cover_image_path.is_data {
-                        Allocator::<C_String>::deallocate(common.channel. channel_cover_image_path.data);
+                    if common.channel. channel__cover_image_path.is_data {
+                        Allocator::<C_String>::deallocate(common.channel. channel__cover_image_path.data);
                     }
                 }
 
@@ -2660,7 +2660,7 @@ pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____deseria
 #[derive(Clone, Copy)]
 pub struct Channel__Base___GetManyBySubscription___Incoming {
     pub application_user_access_token_encrypted: C_String,
-    pub requery_channel_id: C_Option<c_long>,
+    pub requery___channel__id: C_Option<c_long>,
     pub limit: c_short,
 }
 
@@ -2669,15 +2669,15 @@ pub extern "C" fn channel___base____get_many_by_subscription____serialize(
     incoming: *mut Channel__Base___GetManyBySubscription___Incoming
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: Channel__Base___GetManyBySubscription___Incoming| -> Result<Channel__Base___GetManyBySubscription___Incoming_, Box<dyn StdError + 'static>> {
-        let requery_channel_id = if incoming.requery_channel_id.is_data {
-            Some(incoming.requery_channel_id.data)
+        let requery___channel__id = if incoming.requery___channel__id.is_data {
+            Some(incoming.requery___channel__id.data)
         } else {
             None
         };
 
         let incoming_ = Channel__Base___GetManyBySubscription___Incoming_ {
             application_user_access_token_encrypted: incoming.application_user_access_token_encrypted.to_string()?,
-            requery_channel_id,
+            requery___channel__id,
             limit: incoming.limit,
         };
 
@@ -2726,25 +2726,25 @@ pub extern "C" fn channel___base____get_many_by_subscription____deserialize(
                         let mut common_registry: Vec<Common1> = vec![];
 
                         '_a: for common_1 in data__.common_registry {
-                            let channel_cover_image_path = match common_1.channel.channel_cover_image_path {
-                                Some(channel_cover_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel_cover_image_path_)),
+                            let channel__cover_image_path = match common_1.channel.channel__cover_image_path {
+                                Some(channel__cover_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel__cover_image_path_)),
                                 None => C_Option::none()
                             };
 
-                            let channel_background_image_path = match common_1.channel.channel_background_image_path {
-                                Some(channel_background_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel_background_image_path_)),
+                            let channel__background_image_path = match common_1.channel.channel__background_image_path {
+                                Some(channel__background_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel__background_image_path_)),
                                 None => C_Option::none()
                             };
 
                             let common_1_ = Common1 {
                                 channel: Channel1 {
-                                    channel_id: common_1.channel.channel_id,
-                                    channel_name: Allocator::<C_String>::allocate(common_1.channel.channel_name),
-                                    channel_linked_name: Allocator::<C_String>::allocate(common_1.channel.channel_linked_name),
-                                    channel_access_modifier: common_1.channel.channel_access_modifier,
-                                    channel_visability_modifier: common_1.channel.channel_visability_modifier,
-                                    channel_cover_image_path,
-                                    channel_background_image_path,
+                                    channel__id: common_1.channel.channel__id,
+                                    channel__name: Allocator::<C_String>::allocate(common_1.channel.channel__name),
+                                    channel__linked_name: Allocator::<C_String>::allocate(common_1.channel.channel__linked_name),
+                                    channel__access_modifier: common_1.channel.channel__access_modifier,
+                                    channel__visability_modifier: common_1.channel.channel__visability_modifier,
+                                    channel__cover_image_path,
+                                    channel__background_image_path,
                                 },
                                 is_application_user_subscribed: common_1.is_application_user_subscribed,
                             };
@@ -2808,16 +2808,16 @@ pub extern "C" fn channel___base____get_many_by_subscription____deserialize____d
                 };
 
                 for common in common_registry {
-                    Allocator::<C_String>::deallocate(common.channel.channel_name);
+                    Allocator::<C_String>::deallocate(common.channel.channel__name);
 
-                    Allocator::<C_String>::deallocate(common.channel.channel_linked_name);
+                    Allocator::<C_String>::deallocate(common.channel.channel__linked_name);
 
-                    if common.channel. channel_background_image_path.is_data {
-                        Allocator::<C_String>::deallocate(common.channel. channel_background_image_path.data);
+                    if common.channel. channel__background_image_path.is_data {
+                        Allocator::<C_String>::deallocate(common.channel. channel__background_image_path.data);
                     }
 
-                    if common.channel. channel_cover_image_path.is_data {
-                        Allocator::<C_String>::deallocate(common.channel. channel_cover_image_path.data);
+                    if common.channel. channel__cover_image_path.is_data {
+                        Allocator::<C_String>::deallocate(common.channel. channel__cover_image_path.data);
                     }
                 }
 
@@ -2833,8 +2833,8 @@ pub extern "C" fn channel___base____get_many_by_subscription____deserialize____d
 #[derive(Clone, Copy)]
 pub struct Channel__Base___GetManyPublicByName___Incoming {
     pub application_user_access_token_encrypted: C_String,
-    pub channel_name: C_String,
-    pub requery_channel_name: C_Option<C_String>,
+    pub channel__name: C_String,
+    pub requery___channel__name: C_Option<C_String>,
     pub limit: c_short,
 }
 
@@ -2843,16 +2843,16 @@ pub extern "C" fn channel___base____get_many_public_by_name____serialize(
     incoming: *mut Channel__Base___GetManyPublicByName___Incoming
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: Channel__Base___GetManyPublicByName___Incoming| -> Result<Channel__Base___GetManyPublicByName___Incoming_, Box<dyn StdError + 'static>> {
-        let requery_channel_name = if incoming.requery_channel_name.is_data {
-            Some(incoming.requery_channel_name.data.to_string()?)
+        let requery___channel__name = if incoming.requery___channel__name.is_data {
+            Some(incoming.requery___channel__name.data.to_string()?)
         } else {
             None
         };
 
         let incoming_ = Channel__Base___GetManyPublicByName___Incoming_ {
             application_user_access_token_encrypted: incoming.application_user_access_token_encrypted.to_string()?,
-            channel_name: incoming.channel_name.to_string()?,
-            requery_channel_name,
+            channel__name: incoming.channel__name.to_string()?,
+            requery___channel__name,
             limit: incoming.limit,
         };
 
@@ -2901,25 +2901,25 @@ pub extern "C" fn channel___base____get_many_public_by_name____deserialize(
                         let mut common_registry: Vec<Common1> = vec![];
 
                         '_a: for common_1 in data__.common_registry {
-                            let channel_cover_image_path = match common_1.channel.channel_cover_image_path {
-                                Some(channel_cover_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel_cover_image_path_)),
+                            let channel__cover_image_path = match common_1.channel.channel__cover_image_path {
+                                Some(channel__cover_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel__cover_image_path_)),
                                 None => C_Option::none()
                             };
 
-                            let channel_background_image_path = match common_1.channel.channel_background_image_path {
-                                Some(channel_background_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel_background_image_path_)),
+                            let channel__background_image_path = match common_1.channel.channel__background_image_path {
+                                Some(channel__background_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel__background_image_path_)),
                                 None => C_Option::none()
                             };
 
                             let common_1_ = Common1 {
                                 channel: Channel1 {
-                                    channel_id: common_1.channel.channel_id,
-                                    channel_name: Allocator::<C_String>::allocate(common_1.channel.channel_name),
-                                    channel_linked_name: Allocator::<C_String>::allocate(common_1.channel.channel_linked_name),
-                                    channel_access_modifier: common_1.channel.channel_access_modifier,
-                                    channel_visability_modifier: common_1.channel.channel_visability_modifier,
-                                    channel_cover_image_path,
-                                    channel_background_image_path,
+                                    channel__id: common_1.channel.channel__id,
+                                    channel__name: Allocator::<C_String>::allocate(common_1.channel.channel__name),
+                                    channel__linked_name: Allocator::<C_String>::allocate(common_1.channel.channel__linked_name),
+                                    channel__access_modifier: common_1.channel.channel__access_modifier,
+                                    channel__visability_modifier: common_1.channel.channel__visability_modifier,
+                                    channel__cover_image_path,
+                                    channel__background_image_path,
                                 },
                                 is_application_user_subscribed: common_1.is_application_user_subscribed,
                             };
@@ -2983,16 +2983,16 @@ pub extern "C" fn channel___base____get_many_public_by_name____deserialize____de
                 };
 
                 for common_1 in common_registry {
-                    Allocator::<C_String>::deallocate(common_1.channel.channel_name);
+                    Allocator::<C_String>::deallocate(common_1.channel.channel__name);
 
-                    Allocator::<C_String>::deallocate(common_1.channel.channel_linked_name);
+                    Allocator::<C_String>::deallocate(common_1.channel.channel__linked_name);
 
-                    if common_1.channel. channel_background_image_path.is_data {
-                        Allocator::<C_String>::deallocate(common_1.channel. channel_background_image_path.data);
+                    if common_1.channel. channel__background_image_path.is_data {
+                        Allocator::<C_String>::deallocate(common_1.channel. channel__background_image_path.data);
                     }
 
-                    if common_1.channel. channel_cover_image_path.is_data {
-                        Allocator::<C_String>::deallocate(common_1.channel. channel_cover_image_path.data);
+                    if common_1.channel. channel__cover_image_path.is_data {
+                        Allocator::<C_String>::deallocate(common_1.channel. channel__cover_image_path.data);
                     }
                 }
 
@@ -3008,7 +3008,7 @@ pub extern "C" fn channel___base____get_many_public_by_name____deserialize____de
 #[derive(Clone, Copy)]
 pub struct Channel__Base___GetOneById___Incoming {
     pub application_user_access_token_encrypted: C_String,
-    pub channel_id: c_long,
+    pub channel__id: c_long,
 }
 
 #[no_mangle]
@@ -3018,7 +3018,7 @@ pub extern "C" fn channel___base____get_one_by_id____serialize(
     let converter = move |incoming: Channel__Base___GetOneById___Incoming| -> Result<Channel__Base___GetOneById___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = Channel__Base___GetOneById___Incoming_ {
             application_user_access_token_encrypted: incoming.application_user_access_token_encrypted.to_string()?,
-            channel_id: incoming.channel_id,
+            channel__id: incoming.channel__id,
         };
 
         return Ok(incoming_);
@@ -3067,41 +3067,41 @@ pub extern "C" fn channel___base____get_one_by_id____deserialize(
                         C_Data::empty()
                     }
                     Data::Filled { data: data__ } => {
-                        let channel_description = match data__.channel.channel_description {
-                            Some(channel_description_) => C_Option::data(Allocator::<C_String>::allocate(channel_description_)),
+                        let channel__description = match data__.channel.channel__description {
+                            Some(channel__description_) => C_Option::data(Allocator::<C_String>::allocate(channel__description_)),
                             None => C_Option::none()
                         };
 
-                        let channel_cover_image_path = match data__.channel.channel_cover_image_path {
-                            Some(channel_cover_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel_cover_image_path_)),
+                        let channel__cover_image_path = match data__.channel.channel__cover_image_path {
+                            Some(channel__cover_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel__cover_image_path_)),
                             None => C_Option::none()
                         };
 
-                        let channel_background_image_path = match data__.channel.channel_background_image_path {
-                            Some(channel_background_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel_background_image_path_)),
+                        let channel__background_image_path = match data__.channel.channel__background_image_path {
+                            Some(channel__background_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel__background_image_path_)),
                             None => C_Option::none()
                         };
 
                         let channel_2 = Channel2 {
-                            channel_owner: data__.channel.channel_owner,
-                            channel_name: Allocator::<C_String>::allocate(data__.channel.channel_name),
-                            channel_linked_name: Allocator::<C_String>::allocate(data__.channel.channel_linked_name),
-                            channel_description,
-                            channel_access_modifier: data__.channel.channel_access_modifier,
-                            channel_visability_modifier: data__.channel.channel_visability_modifier,
-                            channel_orientation: Allocator::<C_Vector<_>>::allocate(data__.channel.channel_orientation),
-                            channel_cover_image_path,
-                            channel_background_image_path,
-                            channel_subscribers_quantity: data__.channel.channel_subscribers_quantity,
-                            channel_marks_quantity: data__.channel.channel_marks_quantity,
-                            channel_viewing_quantity: data__.channel. channel_viewing_quantity,
+                            channel__owner: data__.channel.channel__owner,
+                            channel__name: Allocator::<C_String>::allocate(data__.channel.channel__name),
+                            channel__linked_name: Allocator::<C_String>::allocate(data__.channel.channel__linked_name),
+                            channel__description,
+                            channel__access_modifier: data__.channel.channel__access_modifier,
+                            channel__visability_modifier: data__.channel.channel__visability_modifier,
+                            channel__orientation: Allocator::<C_Vector<_>>::allocate(data__.channel.channel__orientation),
+                            channel__cover_image_path,
+                            channel__background_image_path,
+                            channel__subscribers_quantity: data__.channel.channel__subscribers_quantity,
+                            channel__marks_quantity: data__.channel.channel__marks_quantity,
+                            channel__viewing_quantity: data__.channel. channel__viewing_quantity,
                         };
 
                         let mut channel_inner_link_registry: Vec<ChannelInnerLink1> = vec![];
 
                         '_a: for channel_inner_link_1 in data__.channel_inner_link_registry {
                             let channel_inner_link_1_ = ChannelInnerLink1 {
-                                channel_inner_link_to: channel_inner_link_1.channel_inner_link_to
+                                channel_inner_link__to: channel_inner_link_1.channel_inner_link__to
                             };
 
                             channel_inner_link_registry.push(channel_inner_link_1_);
@@ -3111,8 +3111,8 @@ pub extern "C" fn channel___base____get_one_by_id____deserialize(
 
                         '_a: for channel_outer_link_1 in data__.channel_outer_link_registry {
                             let channel_outer_link_1_ = ChannelOuterLink1 {
-                                channel_outer_link_alias: Allocator::<C_String>::allocate(channel_outer_link_1.channel_outer_link_alias),
-                                channel_outer_link_address: Allocator::<C_String>::allocate(channel_outer_link_1.channel_outer_link_address)
+                                channel_outer_link__alias: Allocator::<C_String>::allocate(channel_outer_link_1.channel_outer_link__alias),
+                                channel_outer_link__address: Allocator::<C_String>::allocate(channel_outer_link_1.channel_outer_link__address)
                             };
 
                             channel_outer_link_registry.push(channel_outer_link_1_);
@@ -3183,23 +3183,23 @@ pub extern "C" fn channel___base____get_one_by_id____deserialize____deallocate(
     if result_.is_data {
         if result_.data.is_target {
             if result_.data.target.is_filled {
-                Allocator::<C_String>::deallocate(result_.data.target.filled.channel.channel_name);
+                Allocator::<C_String>::deallocate(result_.data.target.filled.channel.channel__name);
 
-                Allocator::<C_String>::deallocate(result_.data.target.filled.channel.channel_linked_name);
+                Allocator::<C_String>::deallocate(result_.data.target.filled.channel.channel__linked_name);
 
-                if result_.data.target.filled.channel.channel_description.is_data {
-                    Allocator::<C_String>::deallocate(result_.data.target.filled.channel.channel_description.data);
+                if result_.data.target.filled.channel.channel__description.is_data {
+                    Allocator::<C_String>::deallocate(result_.data.target.filled.channel.channel__description.data);
                 }
 
-                if result_.data.target.filled.channel.channel_background_image_path.is_data {
-                    Allocator::<C_String>::deallocate(result_.data.target.filled.channel.channel_background_image_path.data);
+                if result_.data.target.filled.channel.channel__background_image_path.is_data {
+                    Allocator::<C_String>::deallocate(result_.data.target.filled.channel.channel__background_image_path.data);
                 }
 
-                if result_.data.target.filled.channel.channel_cover_image_path.is_data {
-                    Allocator::<C_String>::deallocate(result_.data.target.filled.channel.channel_cover_image_path.data);
+                if result_.data.target.filled.channel.channel__cover_image_path.is_data {
+                    Allocator::<C_String>::deallocate(result_.data.target.filled.channel.channel__cover_image_path.data);
                 }
 
-                Allocator::<C_Vector<_>>::deallocate(result_.data.target.filled.channel.channel_orientation);
+                Allocator::<C_Vector<_>>::deallocate(result_.data.target.filled.channel.channel__orientation);
 
                 Allocator::<C_Vector<_>>::deallocate(result_.data.target.filled.channel_inner_link_registry);
 
@@ -3208,9 +3208,9 @@ pub extern "C" fn channel___base____get_one_by_id____deserialize____deallocate(
                 };
 
                 for channel_outer_link_1 in channel_outer_link_registry {
-                    Allocator::<C_String>::deallocate(channel_outer_link_1.channel_outer_link_alias);
+                    Allocator::<C_String>::deallocate(channel_outer_link_1.channel_outer_link__alias);
 
-                    Allocator::<C_String>::deallocate(channel_outer_link_1.channel_outer_link_address);
+                    Allocator::<C_String>::deallocate(channel_outer_link_1.channel_outer_link__address);
                 }
 
                 Allocator::<C_Vector<_>>::deallocate(result_.data.target.filled.channel_outer_link_registry);
@@ -3225,7 +3225,7 @@ pub extern "C" fn channel___base____get_one_by_id____deserialize____deallocate(
 #[derive(Clone, Copy)]
 pub struct ChannelSubscription__Base___Create___Incoming {
     pub application_user_access_token_encrypted: C_String,
-    pub channel_id: c_long,
+    pub channel__id: c_long,
 }
 
 #[no_mangle]
@@ -3235,7 +3235,7 @@ pub extern "C" fn channel_subscription___base____create____serialize(
     let converter = move |incoming: ChannelSubscription__Base___Create___Incoming| -> Result<ChannelSubscription__Base___Create___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ChannelSubscription__Base___Create___Incoming_ {
             application_user_access_token_encrypted: incoming.application_user_access_token_encrypted.to_string()?,
-            channel_id: incoming.channel_id,
+            channel__id: incoming.channel__id,
         };
 
         return Ok(incoming_);
@@ -3262,7 +3262,7 @@ pub struct ChannelSubscription__Base___Create___Precedent {
     pub application_user_access_token__in_application_user_access_token_black_list: bool,
     pub channel__not_found: bool,
     pub channel__is_close: bool,
-    pub application_user__is_channel_owner: bool,
+    pub application_user__is_channel__owner: bool,
 }
 
 #[no_mangle]
@@ -3311,7 +3311,7 @@ pub extern "C" fn channel_subscription___base____create____deserialize(
                     }
                     ChannelSubscription__Base___Create___Precedent_::ApplicationUser_IsChannelOwner => {
                         ChannelSubscription__Base___Create___Precedent {
-                            application_user__is_channel_owner: true,
+                            application_user__is_channel__owner: true,
                             ..Default::default()
                         }
                     }
@@ -4606,13 +4606,13 @@ mod test {
                     '_a: for _ in 1..=5 {
                         let common_1 = Common1_ {
                             channel: Channel1_ {
-                                channel_id: 0,
-                                channel_name: STRING_LITERAL.to_string(),
-                                channel_linked_name: STRING_LITERAL.to_string(),
-                                channel_access_modifier: 0,
-                                channel_visability_modifier: 0,
-                                channel_background_image_path: Some(STRING_LITERAL.to_string()),
-                                channel_cover_image_path: Some(STRING_LITERAL.to_string()),
+                                channel__id: 0,
+                                channel__name: STRING_LITERAL.to_string(),
+                                channel__linked_name: STRING_LITERAL.to_string(),
+                                channel__access_modifier: 0,
+                                channel__visability_modifier: 0,
+                                channel__background_image_path: Some(STRING_LITERAL.to_string()),
+                                channel__cover_image_path: Some(STRING_LITERAL.to_string()),
                             },
                             is_application_user_subscribed: false,
                         };
@@ -4706,13 +4706,13 @@ mod test {
                     '_a: for _ in 1..=2 {
                         let common_1 = Common1_ {
                             channel: Channel1_ {
-                                channel_id: 0,
-                                channel_name: STRING_LITERAL.to_string(),
-                                channel_linked_name: STRING_LITERAL.to_string(),
-                                channel_access_modifier: 0,
-                                channel_visability_modifier: 0,
-                                channel_background_image_path: Some(STRING_LITERAL.to_string()),
-                                channel_cover_image_path: Some(STRING_LITERAL.to_string()),
+                                channel__id: 0,
+                                channel__name: STRING_LITERAL.to_string(),
+                                channel__linked_name: STRING_LITERAL.to_string(),
+                                channel__access_modifier: 0,
+                                channel__visability_modifier: 0,
+                                channel__background_image_path: Some(STRING_LITERAL.to_string()),
+                                channel__cover_image_path: Some(STRING_LITERAL.to_string()),
                             },
                             is_application_user_subscribed: false,
                         };
@@ -4806,13 +4806,13 @@ mod test {
                     '_a: for _ in 1..=5 {
                         let common_1 = Common1_ {
                             channel: Channel1_ {
-                                channel_id: 0,
-                                channel_name: STRING_LITERAL.to_string(),
-                                channel_linked_name: STRING_LITERAL.to_string(),
-                                channel_access_modifier: 0,
-                                channel_visability_modifier: 0,
-                                channel_background_image_path: Some(STRING_LITERAL.to_string()),
-                                channel_cover_image_path: Some(STRING_LITERAL.to_string()),
+                                channel__id: 0,
+                                channel__name: STRING_LITERAL.to_string(),
+                                channel__linked_name: STRING_LITERAL.to_string(),
+                                channel__access_modifier: 0,
+                                channel__visability_modifier: 0,
+                                channel__background_image_path: Some(STRING_LITERAL.to_string()),
+                                channel__cover_image_path: Some(STRING_LITERAL.to_string()),
                             },
                             is_application_user_subscribed: false,
                         };
@@ -4905,7 +4905,7 @@ mod test {
 
                     '_a: for _ in 1..=5 {
                         let channel_inner_link_1 = ChannelInnerLink1_ {
-                            channel_inner_link_to: 0,
+                            channel_inner_link__to: 0,
                         };
 
                         channel_inner_link_registry.push(channel_inner_link_1);
@@ -4915,26 +4915,26 @@ mod test {
 
                     '_a: for _ in 1..=5 {
                         let channel_outer_link_1 = ChannelOuterLink1_ {
-                            channel_outer_link_alias: STRING_LITERAL.to_string(),
-                            channel_outer_link_address: STRING_LITERAL.to_string(),
+                            channel_outer_link__alias: STRING_LITERAL.to_string(),
+                            channel_outer_link__address: STRING_LITERAL.to_string(),
                         };
 
                         channel_outer_link_registry.push(channel_outer_link_1);
                     }
 
                     let channel_2 = Channel2_ {
-                        channel_owner: 0,
-                        channel_name: STRING_LITERAL.to_string(),
-                        channel_linked_name: STRING_LITERAL.to_string(),
-                        channel_description: Some(STRING_LITERAL.to_string()),
-                        channel_access_modifier: 0,
-                        channel_visability_modifier: 0,
-                        channel_orientation: vec![0, 0, 0],
-                        channel_background_image_path: Some(STRING_LITERAL.to_string()),
-                        channel_cover_image_path: Some(STRING_LITERAL.to_string()),
-                        channel_subscribers_quantity: 0,
-                        channel_marks_quantity: 0,
-                        channel_viewing_quantity: 0,
+                        channel__owner: 0,
+                        channel__name: STRING_LITERAL.to_string(),
+                        channel__linked_name: STRING_LITERAL.to_string(),
+                        channel__description: Some(STRING_LITERAL.to_string()),
+                        channel__access_modifier: 0,
+                        channel__visability_modifier: 0,
+                        channel__orientation: vec![0, 0, 0],
+                        channel__background_image_path: Some(STRING_LITERAL.to_string()),
+                        channel__cover_image_path: Some(STRING_LITERAL.to_string()),
+                        channel__subscribers_quantity: 0,
+                        channel__marks_quantity: 0,
+                        channel__viewing_quantity: 0,
                     };
 
                     let outcoming = Channel__Base___GetOneById___Outcoming_ {
@@ -5593,8 +5593,8 @@ mod test {
             fn channel___base____get_many_by_name_in_subscriptions() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = Channel__Base___GetManyByNameInSubscriptions___Incoming {
                     application_user_access_token_encrypted: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
-                    channel_name: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
-                    requery_channel_name: C_Option::data(
+                    channel__name: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    requery___channel__name: C_Option::data(
                         Allocator::<C_String>::allocate(STRING_LITERAL.to_string())
                     ),
                     limit: 0,
@@ -5618,9 +5618,9 @@ mod test {
 
                 Allocator::<C_String>::deallocate(incoming.application_user_access_token_encrypted);
 
-                Allocator::<C_String>::deallocate(incoming.channel_name);
+                Allocator::<C_String>::deallocate(incoming.channel__name);
 
-                Allocator::<C_String>::deallocate(incoming.requery_channel_name.data);
+                Allocator::<C_String>::deallocate(incoming.requery___channel__name.data);
 
                 return Ok(());
             }
@@ -5629,7 +5629,7 @@ mod test {
             fn channel___base____get_many_by_subscription() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = Channel__Base___GetManyBySubscription___Incoming {
                     application_user_access_token_encrypted: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
-                    requery_channel_id: C_Option::data(0),
+                    requery___channel__id: C_Option::data(0),
                     limit: 0,
                 };
 
@@ -5658,8 +5658,8 @@ mod test {
             fn channel___base____get_many_public_by_name() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = Channel__Base___GetManyPublicByName___Incoming {
                     application_user_access_token_encrypted: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
-                    channel_name: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
-                    requery_channel_name: C_Option::data(Allocator::<C_String>::allocate(STRING_LITERAL.to_string())),
+                    channel__name: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    requery___channel__name: C_Option::data(Allocator::<C_String>::allocate(STRING_LITERAL.to_string())),
                     limit: 0,
                 };
 
@@ -5681,9 +5681,9 @@ mod test {
 
                 Allocator::<C_String>::deallocate(incoming.application_user_access_token_encrypted);
 
-                Allocator::<C_String>::deallocate(incoming.channel_name);
+                Allocator::<C_String>::deallocate(incoming.channel__name);
 
-                Allocator::<C_String>::deallocate(incoming.requery_channel_name.data);
+                Allocator::<C_String>::deallocate(incoming.requery___channel__name.data);
 
                 return Ok(());
             }
@@ -5692,7 +5692,7 @@ mod test {
             fn channel___base____get_one_by_id() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = Channel__Base___GetOneById___Incoming {
                     application_user_access_token_encrypted: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
-                    channel_id: 0,
+                    channel__id: 0,
                 };
 
                 let allocator = move |incoming: *mut Channel__Base___GetOneById___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
@@ -5720,7 +5720,7 @@ mod test {
             fn channel_subscription___base____create() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = ChannelSubscription__Base___Create___Incoming {
                     application_user_access_token_encrypted: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
-                    channel_id: 0,
+                    channel__id: 0,
                 };
 
                 let allocator = move |incoming: *mut ChannelSubscription__Base___Create___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {

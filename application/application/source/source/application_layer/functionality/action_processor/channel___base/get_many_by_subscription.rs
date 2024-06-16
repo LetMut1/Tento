@@ -102,8 +102,8 @@ impl ActionProcessor<Channel__Base___GetManyBySubscription> {
                 return Ok(Err(invalid_argument_auditor));
             }
         };
-        if let Some(requery_channel_id_) = incoming_.requery_channel_id {
-            if !Validator::<Channel_Id>::is_valid(requery_channel_id_) {
+        if let Some(requery___channel__id_) = incoming_.requery___channel__id {
+            if !Validator::<Channel_Id>::is_valid(requery___channel__id_) {
                 return Ok(Err(Auditor::<InvalidArgument>::new(
                     InvalidArgument,
                     Backtrace::new(line!(), file!()),
@@ -121,7 +121,7 @@ impl ActionProcessor<Channel__Base___GetManyBySubscription> {
             &*database_1_postgresql_pooled_connection,
             By3 {
                 application_user__id: application_user_access_token.application_user__id,
-                requery_channel_id: incoming_.requery_channel_id,
+                requery___channel__id: incoming_.requery___channel__id,
             },
             incoming_.limit,
         )

@@ -111,14 +111,14 @@ impl ActionProcessor<Channel__Base___GetManyPublicByName> {
                 Backtrace::new(line!(), file!()),
             )));
         }
-        if !Validator::<Channel_Name>::is_valid(incoming_.channel_name.as_str()) {
+        if !Validator::<Channel_Name>::is_valid(incoming_.channel__name.as_str()) {
             return Ok(Err(Auditor::<InvalidArgument>::new(
                 InvalidArgument,
                 Backtrace::new(line!(), file!()),
             )));
         }
-        if let Some(ref requery_channel_name_) = incoming_.requery_channel_name {
-            if !Validator::<Channel_Name>::is_valid(requery_channel_name_.as_str()) {
+        if let Some(ref requery___channel__name_) = incoming_.requery___channel__name {
+            if !Validator::<Channel_Name>::is_valid(requery___channel__name_.as_str()) {
                 return Ok(Err(Auditor::<InvalidArgument>::new(
                     InvalidArgument,
                     Backtrace::new(line!(), file!()),
@@ -130,9 +130,9 @@ impl ActionProcessor<Channel__Base___GetManyPublicByName> {
             &*database_1_postgresql_pooled_connection,
             By1 {
                 application_user__id: application_user_access_token.application_user__id,
-                channel_name: incoming_.channel_name.as_str(),
-                requery_channel_name: incoming_.requery_channel_name.as_deref(),
-                channel_visability_modifier: Channel_VisabilityModifier::from_representation(Channel_VisabilityModifier::Public),
+                channel__name: incoming_.channel__name.as_str(),
+                requery___channel__name: incoming_.requery___channel__name.as_deref(),
+                channel__visability_modifier: Channel_VisabilityModifier::from_representation(Channel_VisabilityModifier::Public),
             },
             incoming_.limit,
         )

@@ -14,11 +14,11 @@
 
 CREATE TABLE IF NOT EXISTS tento.channel_summed_quantities
 (
-    channel_id Int64 CODEC(LZ4),
+    channel__id Int64 CODEC(LZ4),
     channel_publication_marks_quantity Int64 CODEC(LZ4)
 ) ENGINE = SummingMergeTree()
-ORDER BY (channel_id)
-PRIMARY KEY (channel_id)
+ORDER BY (channel__id)
+PRIMARY KEY (channel__id)
 SETTINGS
     index_granularity = 1,
     enable_mixed_granularity_parts = false;

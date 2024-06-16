@@ -109,7 +109,7 @@ impl ActionProcessor<Channel__Base___GetOneById> {
                 return Ok(Err(invalid_argument_auditor));
             }
         };
-        if !Validator::<Channel_Id>::is_valid(incoming_.channel_id) {
+        if !Validator::<Channel_Id>::is_valid(incoming_.channel__id) {
             return Ok(Err(Auditor::<InvalidArgument>::new(
                 InvalidArgument,
                 Backtrace::new(line!(), file!()),
@@ -119,7 +119,7 @@ impl ActionProcessor<Channel__Base___GetOneById> {
         let channel = match PostgresqlRepository::<EntityChannel<'_>>::find_1(
             &*database_1_postgresql_pooled_connection,
             By1___ {
-                channel_id: incoming_.channel_id,
+                channel__id: incoming_.channel__id,
             },
         )
         .await?
@@ -134,7 +134,7 @@ impl ActionProcessor<Channel__Base___GetOneById> {
                 &*database_1_postgresql_pooled_connection,
                 By1 {
                     application_user__id: application_user_access_token.application_user__id,
-                    channel_id: channel.id,
+                    channel__id: channel.id,
                 },
             )
             .await?;
@@ -145,7 +145,7 @@ impl ActionProcessor<Channel__Base___GetOneById> {
         let channel_inner_link_registry = PostgresqlRepository::<ChannelInnerLink>::find_1(
             &*database_1_postgresql_pooled_connection,
             By1__ {
-                channel_inner_link_from: channel.id,
+                channel_inner_link__from: channel.id,
             },
             ChannelInnerLink::MAXIMUM_QUANTITY,
         )
@@ -153,24 +153,24 @@ impl ActionProcessor<Channel__Base___GetOneById> {
         let channel_outer_link_registry = PostgresqlRepository::<ChannelOuterLink>::find_1(
             &*database_1_postgresql_pooled_connection,
             By1_ {
-                channel_outer_link_from: channel.id,
+                channel_outer_link__from: channel.id,
             },
             ChannelOuterLink::MAXIMUM_QUANTITY,
         )
         .await?;
         let channel_2 = Channel2 {
-            channel_owner: channel.owner,
-            channel_name: channel.name.into_owned(),
-            channel_linked_name: channel.linked_name,
-            channel_description: channel.description,
-            channel_access_modifier: channel.access_modifier,
-            channel_visability_modifier: channel.visability_modifier,
-            channel_orientation: channel.orientation,
-            channel_cover_image_path: channel.cover_image_path,
-            channel_background_image_path: channel.background_image_path,
-            channel_subscribers_quantity: channel.subscribers_quantity,
-            channel_marks_quantity: channel.marks_quantity,
-            channel_viewing_quantity: channel.viewing_quantity,
+            channel__owner: channel.owner,
+            channel__name: channel.name.into_owned(),
+            channel__linked_name: channel.linked_name,
+            channel__description: channel.description,
+            channel__access_modifier: channel.access_modifier,
+            channel__visability_modifier: channel.visability_modifier,
+            channel__orientation: channel.orientation,
+            channel__cover_image_path: channel.cover_image_path,
+            channel__background_image_path: channel.background_image_path,
+            channel__subscribers_quantity: channel.subscribers_quantity,
+            channel__marks_quantity: channel.marks_quantity,
+            channel__viewing_quantity: channel.viewing_quantity,
         };
         let outcoming = Outcoming {
             channel: channel_2,

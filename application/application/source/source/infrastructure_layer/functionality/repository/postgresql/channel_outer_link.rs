@@ -20,8 +20,8 @@ use tokio_postgres::{
 };
 impl PostgresqlRepository<ChannelOuterLink> {
     pub async fn create_1<'a>(database_1_connection: &'a Connection, insert_1: Insert1) -> Result<ChannelOuterLink, Auditor<Error>> {
-        let channel_outer_link_alias = insert_1.channel_outer_link_alias.as_str();
-        let channel_outer_link_address = insert_1.channel_outer_link_address.as_str();
+        let channel_outer_link__alias = insert_1.channel_outer_link__alias.as_str();
+        let channel_outer_link__address = insert_1.channel_outer_link__address.as_str();
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             INSERT INTO public.channel_inner_link AS cil ( \
@@ -38,9 +38,9 @@ impl PostgresqlRepository<ChannelOuterLink> {
             RETURNING \
                 cs.created_at::TEXT AS ca;";
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&insert_1.channel_outer_link_from, Type::INT8)
-            .add_parameter(&channel_outer_link_alias, Type::TEXT)
-            .add_parameter(&channel_outer_link_address, Type::TEXT);
+            .add_parameter(&insert_1.channel_outer_link__from, Type::INT8)
+            .add_parameter(&channel_outer_link__alias, Type::TEXT)
+            .add_parameter(&channel_outer_link__address, Type::TEXT);
         let statement = database_1_connection
             .prepare_typed(
                 query,
@@ -56,9 +56,9 @@ impl PostgresqlRepository<ChannelOuterLink> {
             .await
             .convert(Backtrace::new(line!(), file!()))?;
         let channel_outer_link = ChannelOuterLink::new(
-            insert_1.channel_outer_link_from,
-            insert_1.channel_outer_link_alias,
-            insert_1.channel_outer_link_address,
+            insert_1.channel_outer_link__from,
+            insert_1.channel_outer_link__alias,
+            insert_1.channel_outer_link__address,
             row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
         );
         return Ok(channel_outer_link);
@@ -72,7 +72,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
             FROM public.channel_outer_link col \
             WHERE col.from_ = $1 \
             LIMIT $2";
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&by_1.channel_outer_link_from, Type::INT8).add_parameter(&limit, Type::INT2);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(&by_1.channel_outer_link__from, Type::INT8).add_parameter(&limit, Type::INT2);
         let statement = database_1_connection
             .prepare_typed(
                 query,
@@ -93,8 +93,8 @@ impl PostgresqlRepository<ChannelOuterLink> {
         }
         '_a: for row in row_registry.iter() {
             let channel_outer_link = ChannelOuterLink1 {
-                channel_outer_link_alias: row.try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
-                channel_outer_link_address: row.try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
+                channel_outer_link__alias: row.try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
+                channel_outer_link__address: row.try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
             };
             channel_outer_link_registry.push(channel_outer_link);
         }
@@ -102,10 +102,10 @@ impl PostgresqlRepository<ChannelOuterLink> {
     }
 }
 pub struct Insert1 {
-    pub channel_outer_link_from: i64,
-    pub channel_outer_link_alias: String,
-    pub channel_outer_link_address: String,
+    pub channel_outer_link__from: i64,
+    pub channel_outer_link__alias: String,
+    pub channel_outer_link__address: String,
 }
 pub struct By1 {
-    pub channel_outer_link_from: i64,
+    pub channel_outer_link__from: i64,
 }

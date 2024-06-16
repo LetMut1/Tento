@@ -33,26 +33,26 @@ impl PostgresqlRepository<Common1> {
                 c.access_modifier AS am, \
                 c.cover_image_path AS cip, \
                 c.background_image_path AS bip, \
-                cs.channel_id AS ca \
+                cs.channel__id AS ca \
             FROM public.channel c LEFT OUTER JOIN public.channel_subscription cs \
-            ON cs.application_user__id = ${} AND c.id = cs.channel_id \
+            ON cs.application_user__id = ${} AND c.id = cs.channel__id \
             WHERE c.visability_modifier = ${} AND c.name LIKE ${}",
             counter.get_next_value()?,
             counter.get_next_value()?,
             counter.get_next_value()?,
         );
-        let wildcard = format!("{}%", by_1.channel_name,);
+        let wildcard = format!("{}%", by_1.channel__name,);
         prepared_statemant_parameter_convertation_resolver
             .add_parameter(&by_1.application_user__id, Type::INT8)
-            .add_parameter(&by_1.channel_visability_modifier, Type::INT2)
+            .add_parameter(&by_1.channel__visability_modifier, Type::INT2)
             .add_parameter(&wildcard, Type::TEXT);
-        if let Some(ref requery_channel_name) = by_1.requery_channel_name {
+        if let Some(ref requery___channel__name) = by_1.requery___channel__name {
             query = format!(
                 "{} AND c.name > ${}",
                 query.as_str(),
                 counter.get_next_value()?,
             );
-            prepared_statemant_parameter_convertation_resolver.add_parameter(requery_channel_name, Type::TEXT);
+            prepared_statemant_parameter_convertation_resolver.add_parameter(requery___channel__name, Type::TEXT);
         }
         query = format!(
             "{} \
@@ -82,13 +82,13 @@ impl PostgresqlRepository<Common1> {
         }
         '_a: for row in row_registry.iter() {
             let channel = Channel1 {
-                channel_id: row.try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
-                channel_name: row.try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
-                channel_linked_name: row.try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?,
-                channel_access_modifier: row.try_get::<'_, usize, i16>(3).convert(Backtrace::new(line!(), file!()))?,
-                channel_visability_modifier: by_1.channel_visability_modifier,
-                channel_cover_image_path: row.try_get::<'_, usize, Option<String>>(4).convert(Backtrace::new(line!(), file!()))?,
-                channel_background_image_path: row.try_get::<'_, usize, Option<String>>(5).convert(Backtrace::new(line!(), file!()))?,
+                channel__id: row.try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
+                channel__name: row.try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
+                channel__linked_name: row.try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?,
+                channel__access_modifier: row.try_get::<'_, usize, i16>(3).convert(Backtrace::new(line!(), file!()))?,
+                channel__visability_modifier: by_1.channel__visability_modifier,
+                channel__cover_image_path: row.try_get::<'_, usize, Option<String>>(4).convert(Backtrace::new(line!(), file!()))?,
+                channel__background_image_path: row.try_get::<'_, usize, Option<String>>(5).convert(Backtrace::new(line!(), file!()))?,
             };
             let is_application_user_subscribed = match row.try_get::<'_, usize, Option<i64>>(6).convert(Backtrace::new(line!(), file!()))? {
                 Some(_) => true,
@@ -115,20 +115,20 @@ impl PostgresqlRepository<Common1> {
                 c.cover_image_path AS cip, \
                 c.background_image_path AS bip \
             FROM public.channel c INNER JOIN public.channel_subscription cs \
-            ON cs.application_user__id = ${} AND c.id = cs.channel_id \
+            ON cs.application_user__id = ${} AND c.id = cs.channel__id \
             WHERE c.name LIKE ${}",
             counter.get_next_value()?,
             counter.get_next_value()?,
         );
-        let wildcard = format!("{}%", by_2.channel_name,);
+        let wildcard = format!("{}%", by_2.channel__name,);
         prepared_statemant_parameter_convertation_resolver.add_parameter(&by_2.application_user__id, Type::INT8).add_parameter(&wildcard, Type::TEXT);
-        if let Some(ref requery_channel_name) = by_2.requery_channel_name {
+        if let Some(ref requery___channel__name) = by_2.requery___channel__name {
             query = format!(
                 "{} AND c.name > ${}",
                 query.as_str(),
                 counter.get_next_value()?,
             );
-            prepared_statemant_parameter_convertation_resolver.add_parameter(requery_channel_name, Type::TEXT);
+            prepared_statemant_parameter_convertation_resolver.add_parameter(requery___channel__name, Type::TEXT);
         }
         query = format!(
             "{} \
@@ -158,13 +158,13 @@ impl PostgresqlRepository<Common1> {
         }
         '_a: for row in row_registry.iter() {
             let channel = Channel1 {
-                channel_id: row.try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
-                channel_name: row.try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
-                channel_linked_name: row.try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?,
-                channel_access_modifier: row.try_get::<'_, usize, i16>(3).convert(Backtrace::new(line!(), file!()))?,
-                channel_visability_modifier: row.try_get::<'_, usize, i16>(4).convert(Backtrace::new(line!(), file!()))?,
-                channel_cover_image_path: row.try_get::<'_, usize, Option<String>>(5).convert(Backtrace::new(line!(), file!()))?,
-                channel_background_image_path: row.try_get::<'_, usize, Option<String>>(6).convert(Backtrace::new(line!(), file!()))?,
+                channel__id: row.try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
+                channel__name: row.try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
+                channel__linked_name: row.try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?,
+                channel__access_modifier: row.try_get::<'_, usize, i16>(3).convert(Backtrace::new(line!(), file!()))?,
+                channel__visability_modifier: row.try_get::<'_, usize, i16>(4).convert(Backtrace::new(line!(), file!()))?,
+                channel__cover_image_path: row.try_get::<'_, usize, Option<String>>(5).convert(Backtrace::new(line!(), file!()))?,
+                channel__background_image_path: row.try_get::<'_, usize, Option<String>>(6).convert(Backtrace::new(line!(), file!()))?,
             };
             let common = Common1 {
                 channel,
@@ -187,24 +187,24 @@ impl PostgresqlRepository<Common1> {
                 c.cover_image_path AS cip, \
                 c.background_image_path AS bip \
             FROM public.channel c INNER JOIN public.channel_subscription cs \
-            ON cs.application_user__id = ${} AND c.id = cs.channel_id",
+            ON cs.application_user__id = ${} AND c.id = cs.channel__id",
             counter.get_next_value()?,
         );
         prepared_statemant_parameter_convertation_resolver.add_parameter(&by_3.application_user__id, Type::INT8);
-        let requery_channel_id: i64;
-        if let Some(requery_channel_id_) = by_3.requery_channel_id {
-            requery_channel_id = requery_channel_id_;
+        let requery___channel__id: i64;
+        if let Some(requery___channel__id_) = by_3.requery___channel__id {
+            requery___channel__id = requery___channel__id_;
             query = format!(
                 "{} \
-                WHERE cs.channel_id > ${}",
+                WHERE cs.channel__id > ${}",
                 query.as_str(),
                 counter.get_next_value()?,
             );
-            prepared_statemant_parameter_convertation_resolver.add_parameter(&requery_channel_id, Type::INT8);
+            prepared_statemant_parameter_convertation_resolver.add_parameter(&requery___channel__id, Type::INT8);
         }
         query = format!(
             "{} \
-            ORDER BY cs.channel_id ASC \
+            ORDER BY cs.channel__id ASC \
             LIMIT ${};",
             query.as_str(),
             counter.get_next_value()?,
@@ -230,13 +230,13 @@ impl PostgresqlRepository<Common1> {
         }
         '_a: for row in row_registry.iter() {
             let channel = Channel1 {
-                channel_id: row.try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
-                channel_name: row.try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
-                channel_linked_name: row.try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?,
-                channel_access_modifier: row.try_get::<'_, usize, i16>(3).convert(Backtrace::new(line!(), file!()))?,
-                channel_visability_modifier: row.try_get::<'_, usize, i16>(4).convert(Backtrace::new(line!(), file!()))?,
-                channel_cover_image_path: row.try_get::<'_, usize, Option<String>>(5).convert(Backtrace::new(line!(), file!()))?,
-                channel_background_image_path: row.try_get::<'_, usize, Option<String>>(6).convert(Backtrace::new(line!(), file!()))?,
+                channel__id: row.try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
+                channel__name: row.try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
+                channel__linked_name: row.try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?,
+                channel__access_modifier: row.try_get::<'_, usize, i16>(3).convert(Backtrace::new(line!(), file!()))?,
+                channel__visability_modifier: row.try_get::<'_, usize, i16>(4).convert(Backtrace::new(line!(), file!()))?,
+                channel__cover_image_path: row.try_get::<'_, usize, Option<String>>(5).convert(Backtrace::new(line!(), file!()))?,
+                channel__background_image_path: row.try_get::<'_, usize, Option<String>>(6).convert(Backtrace::new(line!(), file!()))?,
             };
             let common = Common1 {
                 channel,
@@ -249,16 +249,16 @@ impl PostgresqlRepository<Common1> {
 }
 pub struct By1<'a> {
     pub application_user__id: i64,
-    pub channel_name: &'a str,
-    pub requery_channel_name: Option<&'a str>,
-    pub channel_visability_modifier: i16,
+    pub channel__name: &'a str,
+    pub requery___channel__name: Option<&'a str>,
+    pub channel__visability_modifier: i16,
 }
 pub struct By2<'a> {
     pub application_user__id: i64,
-    pub channel_name: &'a str,
-    pub requery_channel_name: Option<&'a str>,
+    pub channel__name: &'a str,
+    pub requery___channel__name: Option<&'a str>,
 }
 pub struct By3 {
     pub application_user__id: i64,
-    pub requery_channel_id: Option<i64>,
+    pub requery___channel__id: Option<i64>,
 }

@@ -2,7 +2,7 @@ SELECT 'This is a stub.';
 
 -- CREATE TABLE public.channel_feed_publication (
 --     id BIGINT,
---     channel_id BIGINT,
+--     channel__id BIGINT,
 --     application_user__id BIGINT,
 --     content_type SMALLINT,
 --     content_type_component TEXT,  -- // TODO small_description large_description путь до картинки, путь до музыки
@@ -24,7 +24,7 @@ SELECT 'This is a stub.';
 -- USING btree (id ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on);
 
 -- -- CREATE UNIQUE INDEX channel_feed_publication3 ON public.channel_feed_publication
--- -- USING btree (channel_id, visible_from ASC NULLS LAST) WITH (fillfactor = 70);
+-- -- USING btree (channel__id, visible_from ASC NULLS LAST) WITH (fillfactor = 70);
 
 -- -- CREATE INDEX channel_feed_publication4 ON public.channel_feed_publication
 -- -- USING btree (delete_on ASC NULLS LAST) WITH (fillfactor = 90, deduplicate_items = on)
@@ -32,7 +32,7 @@ SELECT 'This is a stub.';
 
 -- ALTER TABLE ONLY public.channel_feed_publication
 -- ALTER COLUMN id SET NOT NULL,
--- ALTER COLUMN channel_id SET NOT NULL,
+-- ALTER COLUMN channel__id SET NOT NULL,
 -- ALTER COLUMN application_user__id SET NOT NULL,
 -- ALTER COLUMN content_type SET NOT NULL,
 -- ALTER COLUMN content_type_component SET NOT NULL,
@@ -44,7 +44,7 @@ SELECT 'This is a stub.';
 -- ALTER COLUMN visible_from SET NOT NULL,
 -- ALTER COLUMN created_at SET NOT NULL,
 -- ADD CONSTRAINT channel_feed_publication5 PRIMARY KEY USING INDEX channel_feed_publication2,
--- ADD CONSTRAINT channel_feed_publication6 FOREIGN KEY (channel_id)
+-- ADD CONSTRAINT channel_feed_publication6 FOREIGN KEY (channel__id)
 -- REFERENCES public.channel (id) ON DELETE RESTRICT,
 -- ADD CONSTRAINT channel_feed_publication7 FOREIGN KEY (application_user__id)
 -- REFERENCES public.application_user (id) ON DELETE RESTRICT;
@@ -60,6 +60,6 @@ SELECT 'This is a stub.';
 -- -- // TODO При Зпросе из приватных каналов, нужно проверять, подписан ли пользователь на этот канал. !!!!!!!!!!!!!!!!!
 -- -- нужны ли Open/close каналы (Закрытый - не видишь контент, пока не подпишешься)
 
--- -- // TODO TODO TODO !!!! (channel_id,visible_from)- уникальное. visible_from всегда кратно N минутам. То есть, за час можно выложить 60/N постов. ПРОВЕРЯТЬ ЭТО НА БЭке
+-- -- // TODO TODO TODO !!!! (channel__id,visible_from)- уникальное. visible_from всегда кратно N минутам. То есть, за час можно выложить 60/N постов. ПРОВЕРЯТЬ ЭТО НА БЭке
 -- --  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! (строчка выше). НА Фронте у админов можно отображать календарь.
--- -- // TODO Оффет делаем как (where channel_id = ... and visible_from < ... ORDER BY DESC) !! (Удалить данную запись, как только использую данный метод).
+-- -- // TODO Оффет делаем как (where channel__id = ... and visible_from < ... ORDER BY DESC) !! (Удалить данную запись, как только использую данный метод).

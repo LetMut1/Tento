@@ -541,19 +541,19 @@ typedef struct C_Option_C_String {
 
 typedef struct Channel__Base___GetManyByNameInSubscriptions___Incoming {
   struct C_String application_user_access_token_encrypted;
-  struct C_String channel_name;
-  struct C_Option_C_String requery_channel_name;
+  struct C_String channel__name;
+  struct C_Option_C_String requery___channel__name;
   short limit;
 } Channel__Base___GetManyByNameInSubscriptions___Incoming;
 
 typedef struct Channel1 {
-  long channel_id;
-  struct C_String channel_name;
-  struct C_String channel_linked_name;
-  short channel_access_modifier;
-  short channel_visability_modifier;
-  struct C_Option_C_String channel_cover_image_path;
-  struct C_Option_C_String channel_background_image_path;
+  long channel__id;
+  struct C_String channel__name;
+  struct C_String channel__linked_name;
+  short channel__access_modifier;
+  short channel__visability_modifier;
+  struct C_Option_C_String channel__cover_image_path;
+  struct C_Option_C_String channel__background_image_path;
 } Channel1;
 
 typedef struct Common1 {
@@ -600,7 +600,7 @@ typedef struct C_Option_c_long {
 
 typedef struct Channel__Base___GetManyBySubscription___Incoming {
   struct C_String application_user_access_token_encrypted;
-  struct C_Option_c_long requery_channel_id;
+  struct C_Option_c_long requery___channel__id;
   short limit;
 } Channel__Base___GetManyBySubscription___Incoming;
 
@@ -633,8 +633,8 @@ typedef struct C_Result_C_UnifiedReport_Channel__Base___GetManyBySubscription___
 
 typedef struct Channel__Base___GetManyPublicByName___Incoming {
   struct C_String application_user_access_token_encrypted;
-  struct C_String channel_name;
-  struct C_Option_C_String requery_channel_name;
+  struct C_String channel__name;
+  struct C_Option_C_String requery___channel__name;
   short limit;
 } Channel__Base___GetManyPublicByName___Incoming;
 
@@ -667,7 +667,7 @@ typedef struct C_Result_C_UnifiedReport_Channel__Base___GetManyPublicByName___Ou
 
 typedef struct Channel__Base___GetOneById___Incoming {
   struct C_String application_user_access_token_encrypted;
-  long channel_id;
+  long channel__id;
 } Channel__Base___GetOneById___Incoming;
 
 typedef struct C_Vector_c_short {
@@ -676,22 +676,22 @@ typedef struct C_Vector_c_short {
 } C_Vector_c_short;
 
 typedef struct Channel2 {
-  long channel_owner;
-  struct C_String channel_name;
-  struct C_String channel_linked_name;
-  struct C_Option_C_String channel_description;
-  short channel_access_modifier;
-  short channel_visability_modifier;
-  struct C_Vector_c_short channel_orientation;
-  struct C_Option_C_String channel_cover_image_path;
-  struct C_Option_C_String channel_background_image_path;
-  long channel_subscribers_quantity;
-  long channel_marks_quantity;
-  long channel_viewing_quantity;
+  long channel__owner;
+  struct C_String channel__name;
+  struct C_String channel__linked_name;
+  struct C_Option_C_String channel__description;
+  short channel__access_modifier;
+  short channel__visability_modifier;
+  struct C_Vector_c_short channel__orientation;
+  struct C_Option_C_String channel__cover_image_path;
+  struct C_Option_C_String channel__background_image_path;
+  long channel__subscribers_quantity;
+  long channel__marks_quantity;
+  long channel__viewing_quantity;
 } Channel2;
 
 typedef struct ChannelInnerLink1 {
-  long channel_inner_link_to;
+  long channel_inner_link__to;
 } ChannelInnerLink1;
 
 typedef struct C_Vector_ChannelInnerLink1 {
@@ -700,8 +700,8 @@ typedef struct C_Vector_ChannelInnerLink1 {
 } C_Vector_ChannelInnerLink1;
 
 typedef struct ChannelOuterLink1 {
-  struct C_String channel_outer_link_alias;
-  struct C_String channel_outer_link_address;
+  struct C_String channel_outer_link__alias;
+  struct C_String channel_outer_link__address;
 } ChannelOuterLink1;
 
 typedef struct C_Vector_ChannelOuterLink1 {
@@ -742,7 +742,7 @@ typedef struct C_Result_C_UnifiedReport_Channel__Base___GetOneById___Outcoming__
 
 typedef struct ChannelSubscription__Base___Create___Incoming {
   struct C_String application_user_access_token_encrypted;
-  long channel_id;
+  long channel__id;
 } ChannelSubscription__Base___Create___Incoming;
 
 typedef struct ChannelSubscription__Base___Create___Precedent {
@@ -750,7 +750,7 @@ typedef struct ChannelSubscription__Base___Create___Precedent {
   bool application_user_access_token__in_application_user_access_token_black_list;
   bool channel__not_found;
   bool channel__is_close;
-  bool application_user__is_channel_owner;
+  bool application_user__is_channel__owner;
 } ChannelSubscription__Base___Create___Precedent;
 
 typedef struct C_UnifiedReport_C_Void__ChannelSubscription__Base___Create___Precedent {

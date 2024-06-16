@@ -8,8 +8,8 @@ use serde::{
 #[derive(Serialize, Deserialize)]
 pub struct Incoming {
     pub application_user_access_token_encrypted: String,
-    pub channel_name: String,
-    pub requery_channel_name: Option<String>,
+    pub channel__name: String,
+    pub requery___channel__name: Option<String>,
     pub limit: i16,
 }
 #[derive(Serialize, Deserialize)]
