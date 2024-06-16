@@ -117,11 +117,11 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
         let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
         let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
         let (application_user__id, application_user__email, application_user__nickname, application_user__password_hash) =
-            if Validator::<ApplicationUser_Email>::is_valid(incoming_.application_user__email_or_application_user__nickname.as_str())? {
+            if Validator::<ApplicationUser_Email>::is_valid(incoming_.application_user__email___or___application_user__nickname.as_str())? {
                 let application_user_ = PostgresqlRepository::<ApplicationUser>::find_3(
                     database_1_postgresql_connection,
                     By2 {
-                        application_user__email: incoming_.application_user__email_or_application_user__nickname.as_str(),
+                        application_user__email: incoming_.application_user__email___or___application_user__nickname.as_str(),
                     },
                 )
                 .await?;
@@ -135,16 +135,16 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                 };
                 (
                     application_user__.id,
-                    incoming_.application_user__email_or_application_user__nickname,
+                    incoming_.application_user__email___or___application_user__nickname,
                     application_user__.nickname,
                     application_user__.password_hash,
                 )
             } else {
-                if Validator::<ApplicationUser_Nickname>::is_valid(incoming_.application_user__email_or_application_user__nickname.as_str()) {
+                if Validator::<ApplicationUser_Nickname>::is_valid(incoming_.application_user__email___or___application_user__nickname.as_str()) {
                     let application_user_ = PostgresqlRepository::<ApplicationUser>::find_2(
                         database_1_postgresql_connection,
                         By1 {
-                            application_user__nickname: incoming_.application_user__email_or_application_user__nickname.as_str(),
+                            application_user__nickname: incoming_.application_user__email___or___application_user__nickname.as_str(),
                         },
                     )
                     .await?;
@@ -159,7 +159,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                     (
                         application_user__.id,
                         application_user__.email,
-                        incoming_.application_user__email_or_application_user__nickname,
+                        incoming_.application_user__email___or___application_user__nickname,
                         application_user__.password_hash,
                     )
                 } else {

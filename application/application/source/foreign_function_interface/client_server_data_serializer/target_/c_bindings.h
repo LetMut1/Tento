@@ -19,7 +19,7 @@ typedef struct C_String {
 
 typedef struct ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming {
   struct C_String application_user_device_id;
-  struct C_String application_user__email_or_application_user__nickname;
+  struct C_String application_user__email___or___application_user__nickname;
   struct C_String application_user_password;
 } ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming;
 

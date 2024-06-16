@@ -459,7 +459,7 @@ Authorizes application user for the firs step and send email to user.
 Request data:
 struct Incoming {
     application_user_device_id: String,
-    application_user__email_or_application_user__nickname: String,
+    application_user__email___or___application_user__nickname: String,
     application_user_password: String
 }
 ```

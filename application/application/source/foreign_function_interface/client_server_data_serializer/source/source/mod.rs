@@ -604,7 +604,7 @@ pub struct ChannelOuterLink1 {
 #[derive(Clone, Copy)]
 pub struct ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming {
     pub application_user_device_id: C_String,
-    pub application_user__email_or_application_user__nickname: C_String,
+    pub application_user__email___or___application_user__nickname: C_String,
     pub application_user_password: C_String,
 }
 
@@ -615,7 +615,7 @@ pub extern "C" fn application_user___authorization____authorize_by_first_step___
     let converter = move |incoming: ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming| -> Result<ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming_ {
             application_user_device_id: incoming.application_user_device_id.to_string()?,
-            application_user__email_or_application_user__nickname: incoming.application_user__email_or_application_user__nickname.to_string()?,
+            application_user__email___or___application_user__nickname: incoming.application_user__email___or___application_user__nickname.to_string()?,
             application_user_password: incoming.application_user_password.to_string()?,
         };
 
@@ -5108,7 +5108,7 @@ mod test {
             fn application_user___authorization____authorize_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming {
                     application_user_device_id: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
-                    application_user__email_or_application_user__nickname: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    application_user__email___or___application_user__nickname: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
                     application_user_password: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
                 };
 
@@ -5130,7 +5130,7 @@ mod test {
 
                 Allocator::<C_String>::deallocate(incoming.application_user_device_id);
 
-                Allocator::<C_String>::deallocate(incoming.application_user__email_or_application_user__nickname);
+                Allocator::<C_String>::deallocate(incoming.application_user__email___or___application_user__nickname);
 
                 Allocator::<C_String>::deallocate(incoming.application_user_password);
 
