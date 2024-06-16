@@ -21,7 +21,10 @@ use crate::{
                 ErrorConverter,
                 OptionConverter,
             },
-            control_type::ApplicationUser__Authorization___DeauthorizeFromAllDevices,
+            control_type::{
+                ApplicationUser__Authorization___DeauthorizeFromAllDevices,
+                CloudMessage,
+            },
             environment_configuration::EnvironmentConfiguration,
             error::Error,
             invalid_argument::InvalidArgument,
@@ -32,10 +35,7 @@ use crate::{
                 application_user_access_refresh_token::By1,
                 PostgresqlRepository,
             },
-            service::resolver::{
-                cloud_message::CloudMessage,
-                Resolver,
-            },
+            service::resolver::Resolver,
         },
     },
 };

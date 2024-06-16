@@ -1,5 +1,4 @@
 use super::Extractor;
-pub use crate::infrastructure_layer::data::control_type::HttpBodyData;
 use crate::infrastructure_layer::{
     data::{
         auditor::{
@@ -7,6 +6,7 @@ use crate::infrastructure_layer::{
             Backtrace,
             ErrorConverter,
         },
+        control_type::HttpBodyData,
         error::Error,
         invalid_argument::InvalidArgument,
     },

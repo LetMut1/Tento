@@ -1,8 +1,8 @@
 use super::Spawner;
-pub use crate::infrastructure_layer::data::control_type::TokioNonBlockingTask;
 use crate::infrastructure_layer::{
     data::{
         auditor::Auditor,
+        control_type::TokioNonBlockingTask,
         error::Error,
     },
     functionality::service::logger::Logger,

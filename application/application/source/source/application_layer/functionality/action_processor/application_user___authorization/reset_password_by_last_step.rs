@@ -33,8 +33,10 @@ use crate::{
             },
             control_type::{
                 ApplicationUser__Authorization___ResetPasswordByLastStep,
+                CloudMessage,
                 TokioBlockingTask,
                 TokioNonBlockingTask,
+                UnixTime,
             },
             environment_configuration::EnvironmentConfiguration,
             error::Error,
@@ -55,14 +57,8 @@ use crate::{
                 PostgresqlRepository,
             },
             service::{
-                expiration_time_checker::{
-                    unix_time::UnixTime,
-                    ExpirationTimeChecker,
-                },
-                resolver::{
-                    cloud_message::CloudMessage,
-                    Resolver,
-                },
+                expiration_time_checker::ExpirationTimeChecker,
+                resolver::Resolver,
                 spawner::Spawner,
             },
         },

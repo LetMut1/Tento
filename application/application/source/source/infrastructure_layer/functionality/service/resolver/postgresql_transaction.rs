@@ -1,11 +1,11 @@
 use super::Resolver;
-pub use crate::infrastructure_layer::data::control_type::PostgresqlTransaction;
 use crate::infrastructure_layer::data::{
     auditor::{
         Auditor,
         Backtrace,
         ErrorConverter,
     },
+    control_type::PostgresqlTransaction,
     error::Error,
 };
 use tokio_postgres::Client as Connection;

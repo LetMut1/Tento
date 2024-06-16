@@ -31,6 +31,7 @@ use crate::{
                 Channel__Base___GetManyBySubscription,
                 Channel__Base___GetManyPublicByName,
                 Channel__Base___GetOneById,
+                PostgresqlConnectionPoolNoTls,
                 Request,
                 Response,
                 RouteNotFound,
@@ -40,10 +41,7 @@ use crate::{
             void::Void,
         },
         functionality::service::{
-            creator::{
-                postgresql_connection_pool::PostgresqlConnectionPoolNoTls,
-                Creator,
-            },
+            creator::Creator,
             loader::Loader,
             logger::Logger,
         },

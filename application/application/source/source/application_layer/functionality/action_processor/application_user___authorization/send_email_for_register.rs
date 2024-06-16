@@ -26,7 +26,10 @@ use crate::{
                 ErrorConverter,
                 OptionConverter,
             },
-            control_type::ApplicationUser__Authorization___SendEmailForRegister,
+            control_type::{
+                ApplicationUser__Authorization___SendEmailForRegister,
+                UnixTime,
+            },
             environment_configuration::EnvironmentConfiguration,
             error::Error,
             invalid_argument::InvalidArgument,
@@ -39,10 +42,7 @@ use crate::{
                 },
                 PostgresqlRepository,
             },
-            service::expiration_time_checker::{
-                unix_time::UnixTime,
-                ExpirationTimeChecker,
-            },
+            service::expiration_time_checker::ExpirationTimeChecker,
         },
     },
 };

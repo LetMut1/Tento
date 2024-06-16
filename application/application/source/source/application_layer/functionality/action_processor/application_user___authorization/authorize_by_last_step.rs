@@ -47,6 +47,7 @@ use crate::{
             control_type::{
                 ApplicationUser__Authorization___AuthorizeByLastStep,
                 TokioNonBlockingTask,
+                UnixTime,
             },
             environment_configuration::EnvironmentConfiguration,
             error::Error,
@@ -68,10 +69,7 @@ use crate::{
                 PostgresqlRepository,
             },
             service::{
-                expiration_time_checker::{
-                    unix_time::UnixTime,
-                    ExpirationTimeChecker,
-                },
+                expiration_time_checker::ExpirationTimeChecker,
                 spawner::Spawner,
             },
         },

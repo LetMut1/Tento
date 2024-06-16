@@ -4,13 +4,11 @@ use crate::{
     infrastructure_layer::{
         data::{
             auditor::Auditor,
+            control_type::Email,
             environment_configuration::EnvironmentConfiguration,
             error::Error,
         },
-        functionality::service::sender::{
-            email::Email,
-            Sender,
-        },
+        functionality::service::sender::Sender,
     },
 };
 impl EmailSender<ApplicationUserRegistrationToken<'_>> {

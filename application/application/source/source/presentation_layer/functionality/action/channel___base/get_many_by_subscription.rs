@@ -1,27 +1,23 @@
 #[cfg(feature = "manual_testing")]
-use crate::infrastructure_layer::functionality::service::serializer::json::Json;
+use crate::infrastructure_layer::data::control_type::Json;
 use crate::{
     application_layer::functionality::{
         action_processor::ActionProcessor,
         service::processor::Processor,
     },
-    infrastructure_layer::{
-        data::{
-            control_type::{
-                Channel__Base___GetManyBySubscription,
-                GeneralizedAction,
-                Response,
-            },
-            environment_configuration::EnvironmentConfiguration,
+    infrastructure_layer::data::{
+        control_type::{
+            Channel__Base___GetManyBySubscription,
+            GeneralizedAction,
+            HttpBodyData,
+            MessagePack,
+            Response,
         },
-        functionality::service::serializer::message_pack::MessagePack,
+        environment_configuration::EnvironmentConfiguration,
     },
     presentation_layer::functionality::{
         action::Action,
-        service::extractor::{
-            http_body_data::HttpBodyData,
-            Extractor,
-        },
+        service::extractor::Extractor,
     },
 };
 use bb8::Pool;

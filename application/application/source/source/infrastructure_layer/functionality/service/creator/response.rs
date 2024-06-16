@@ -1,5 +1,5 @@
 use super::Creator;
-pub use crate::infrastructure_layer::data::control_type::Response;
+use crate::infrastructure_layer::data::control_type::Response;
 #[cfg(feature = "manual_testing")]
 use http::response::Parts;
 use http::{

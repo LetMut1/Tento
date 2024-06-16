@@ -4,12 +4,10 @@ use crate::{
     infrastructure_layer::{
         data::{
             auditor::Auditor,
+            control_type::Argon2Id,
             error::Error,
         },
-        functionality::service::encoder::{
-            argon2id::Argon2Id,
-            Encoder as Encoder_,
-        },
+        functionality::service::encoder::Encoder as Encoder_,
     },
 };
 impl Encoder<ApplicationUser_Password> {

@@ -1,11 +1,11 @@
 use super::Creator;
-pub use crate::infrastructure_layer::data::control_type::PostgresqlConnectionPoolNoTls;
 use crate::infrastructure_layer::data::{
     auditor::{
         Auditor,
         Backtrace,
         ErrorConverter,
     },
+    control_type::PostgresqlConnectionPoolNoTls,
     environment_configuration::EnvironmentConfiguration,
     error::Error,
 };

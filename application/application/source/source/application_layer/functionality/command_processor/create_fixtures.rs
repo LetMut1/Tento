@@ -35,6 +35,7 @@ use crate::{
                 Backtrace,
                 ErrorConverter,
             },
+            control_type::PostgresqlConnectionPoolNoTls,
             environment_configuration::EnvironmentConfiguration,
             error::Error,
         },
@@ -52,10 +53,7 @@ use crate::{
                 PostgresqlRepository,
             },
             service::{
-                creator::{
-                    postgresql_connection_pool::PostgresqlConnectionPoolNoTls,
-                    Creator,
-                },
+                creator::Creator,
                 loader::Loader,
             },
         },

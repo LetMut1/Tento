@@ -4,12 +4,10 @@ use crate::{
     infrastructure_layer::{
         data::{
             auditor::Auditor,
+            control_type::DateTime,
             error::Error,
         },
-        functionality::service::resolver::{
-            date_time::DateTime,
-            Resolver,
-        },
+        functionality::service::resolver::Resolver,
     },
 };
 impl Generator<ApplicationUserResetPasswordToken_CanBeResentFrom> {

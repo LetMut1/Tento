@@ -1,11 +1,11 @@
 use super::Resolver;
-pub use crate::infrastructure_layer::data::control_type::DateTime;
 use crate::infrastructure_layer::data::{
     auditor::{
         Auditor,
         Backtrace,
         OptionConverter,
     },
+    control_type::DateTime,
     error::Error,
 };
 use chrono::{

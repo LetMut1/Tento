@@ -3,17 +3,15 @@ use crate::{
         action_processor::ActionProcessor,
         service::processor::Processor,
     },
-    infrastructure_layer::{
-        data::{
-            control_type::{
-                GeneralizedAction,
-                HealthCheck,
-                Response,
-            },
-            environment_configuration::EnvironmentConfiguration,
-            void::Void,
+    infrastructure_layer::data::{
+        control_type::{
+            GeneralizedAction,
+            HealthCheck,
+            MessagePack,
+            Response,
         },
-        functionality::service::serializer::message_pack::MessagePack,
+        environment_configuration::EnvironmentConfiguration,
+        void::Void,
     },
     presentation_layer::functionality::{
         action::Action,

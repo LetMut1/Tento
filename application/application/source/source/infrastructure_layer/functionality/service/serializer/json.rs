@@ -3,7 +3,7 @@ use super::{
     Serializer,
 };
 #[cfg(feature = "manual_testing")]
-pub use crate::infrastructure_layer::data::control_type::Json;
+use crate::infrastructure_layer::data::control_type::Json;
 use crate::infrastructure_layer::data::{
     auditor::{
         Auditor,

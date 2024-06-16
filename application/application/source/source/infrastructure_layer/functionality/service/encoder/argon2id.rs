@@ -1,11 +1,11 @@
 use super::Encoder;
-pub use crate::infrastructure_layer::data::control_type::Argon2Id;
 use crate::infrastructure_layer::data::{
     auditor::{
         Auditor,
         Backtrace,
         ErrorConverter,
     },
+    control_type::Argon2Id,
     error::Error,
 };
 use argon2::Config;

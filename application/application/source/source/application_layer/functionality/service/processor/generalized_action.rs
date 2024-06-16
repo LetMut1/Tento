@@ -10,16 +10,14 @@ use crate::{
             control_type::{
                 ActionRound,
                 GeneralizedAction,
+                Response,
             },
             environment_configuration::EnvironmentConfiguration,
             error::Error,
             invalid_argument::InvalidArgument,
         },
         functionality::service::{
-            creator::{
-                response::Response,
-                Creator,
-            },
+            creator::Creator,
             logger::Logger,
             serializer::{
                 Serialize,

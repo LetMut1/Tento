@@ -1,11 +1,11 @@
 use super::Sender;
-pub use crate::infrastructure_layer::data::control_type::Email;
 use crate::infrastructure_layer::data::{
     auditor::{
         Auditor,
         Backtrace,
         ErrorConverter,
     },
+    control_type::Email,
     environment_configuration::EnvironmentConfiguration,
     error::Error,
 };

@@ -7,14 +7,12 @@ use crate::{
     infrastructure_layer::{
         data::{
             auditor::Auditor,
+            control_type::UnixTime,
             environment_configuration::EnvironmentConfiguration,
             error::Error,
             invalid_argument::InvalidArgument,
         },
-        functionality::service::expiration_time_checker::{
-            unix_time::UnixTime,
-            ExpirationTimeChecker,
-        },
+        functionality::service::expiration_time_checker::ExpirationTimeChecker,
     },
 };
 impl Extractor<ApplicationUserAccessToken<'_>> {

@@ -1,8 +1,10 @@
 use super::ExpirationTimeChecker;
-pub use crate::infrastructure_layer::data::control_type::UnixTime;
-use crate::infrastructure_layer::functionality::service::resolver::{
-    date_time::DateTime,
-    Resolver,
+use crate::infrastructure_layer::{
+    data::control_type::{
+        DateTime,
+        UnixTime,
+    },
+    functionality::service::resolver::Resolver,
 };
 impl ExpirationTimeChecker<UnixTime> {
     pub fn is_expired(date_time: i64) -> bool {

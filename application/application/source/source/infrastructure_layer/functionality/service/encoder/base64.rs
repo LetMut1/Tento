@@ -1,11 +1,11 @@
-pub use super::Encoder;
-pub use crate::infrastructure_layer::data::control_type::Base64;
+use super::Encoder;
 use crate::infrastructure_layer::data::{
     auditor::{
         Auditor,
         Backtrace,
         ErrorConverter,
     },
+    control_type::Base64,
     error::Error,
 };
 use base64::{
