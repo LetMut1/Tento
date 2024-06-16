@@ -21,7 +21,6 @@ impl Spawner<TokioBlockingTask> {
             }
             return ();
         };
-
         tokio::task::spawn_blocking(closure);
     }
     pub fn spawn_processed<F, R>(closure: F) -> JoinHandle<R>

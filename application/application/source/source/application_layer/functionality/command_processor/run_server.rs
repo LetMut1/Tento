@@ -309,9 +309,7 @@ impl CommandProcessor<RunServer> {
             return future;
         };
         server_builder
-            .serve(
-                hyper::service::make_service_fn(closure)
-            )
+            .serve(hyper::service::make_service_fn(closure))
             .with_graceful_shutdown(graceful_shutdown_signal_future)
             .await
             .convert(Backtrace::new(line!(), file!()))?;
