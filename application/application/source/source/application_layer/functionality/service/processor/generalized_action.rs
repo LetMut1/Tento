@@ -74,18 +74,40 @@ impl Processor<GeneralizedAction> {
     {
         if !Validator::<Parts>::is_valid(parts) {
             let response = Creator::<Response>::create_bad_request();
-            Logger::<(ActionRound, Auditor<InvalidArgument>)>::log(
+            Logger::<(
+                ActionRound,
+                Auditor<InvalidArgument>,
+            )>::log(
                 parts,
                 &response,
-                Auditor::<InvalidArgument>::new(InvalidArgument, Backtrace::new(line!(), file!())),
+                Auditor::<InvalidArgument>::new(
+                    InvalidArgument,
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                ),
             );
             return response;
         }
-        let incoming = match data_extractor(body, parts, route_parameters).await {
+        let incoming = match data_extractor(
+            body,
+            parts,
+            route_parameters,
+        )
+        .await
+        {
             Ok(incoming_) => incoming_,
             Err(error_auditor) => {
                 let response = Creator::<Response>::create_internal_server_error();
-                Logger::<(ActionRound, Auditor<Error>)>::log(parts, &response, error_auditor);
+                Logger::<(
+                    ActionRound,
+                    Auditor<Error>,
+                )>::log(
+                    parts,
+                    &response,
+                    error_auditor,
+                );
                 return response;
             }
         };
@@ -93,7 +115,14 @@ impl Processor<GeneralizedAction> {
             Ok(incoming__) => incoming__,
             Err(invalid_argument_auditor) => {
                 let response = Creator::<Response>::create_bad_request();
-                Logger::<(ActionRound, Auditor<InvalidArgument>)>::log(parts, &response, invalid_argument_auditor);
+                Logger::<(
+                    ActionRound,
+                    Auditor<InvalidArgument>,
+                )>::log(
+                    parts,
+                    &response,
+                    invalid_argument_auditor,
+                );
                 return response;
             }
         };
@@ -108,7 +137,14 @@ impl Processor<GeneralizedAction> {
             Ok(unified_report_) => unified_report_,
             Err(error_auditor) => {
                 let response = Creator::<Response>::create_internal_server_error();
-                Logger::<(ActionRound, Auditor<Error>)>::log(parts, &response, error_auditor);
+                Logger::<(
+                    ActionRound,
+                    Auditor<Error>,
+                )>::log(
+                    parts,
+                    &response,
+                    error_auditor,
+                );
                 return response;
             }
         };
@@ -116,7 +152,14 @@ impl Processor<GeneralizedAction> {
             Ok(unified_report__) => unified_report__,
             Err(invalid_argument_auditor) => {
                 let response = Creator::<Response>::create_bad_request();
-                Logger::<(ActionRound, Auditor<InvalidArgument>)>::log(parts, &response, invalid_argument_auditor);
+                Logger::<(
+                    ActionRound,
+                    Auditor<InvalidArgument>,
+                )>::log(
+                    parts,
+                    &response,
+                    invalid_argument_auditor,
+                );
                 return response;
             }
         };
@@ -124,12 +167,25 @@ impl Processor<GeneralizedAction> {
             Ok(data_) => data_,
             Err(error_auditor) => {
                 let response = Creator::<Response>::create_internal_server_error();
-                Logger::<(ActionRound, Auditor<Error>)>::log(parts, &response, error_auditor);
+                Logger::<(
+                    ActionRound,
+                    Auditor<Error>,
+                )>::log(
+                    parts,
+                    &response,
+                    error_auditor,
+                );
                 return response;
             }
         };
         let response = Creator::<Response>::create_ok(data);
-        Logger::<(ActionRound, Response)>::log(parts, &response);
+        Logger::<(
+            ActionRound,
+            Response,
+        )>::log(
+            parts,
+            &response,
+        );
         return response;
     }
 }

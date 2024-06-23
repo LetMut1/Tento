@@ -7,7 +7,12 @@ use crate::infrastructure_layer::data::{
     control_type::ActionRound,
     error::Error,
 };
-impl Formatter<(ActionRound, Auditor<Error>)> {
+impl
+    Formatter<(
+        ActionRound,
+        Auditor<Error>,
+    )>
+{
     pub fn format<'a>(request_uri: &'a str, request_method: &'a str, response_status_code: u16, error_auditor: &'a Auditor<Error>) -> String {
         return format!(
             context_report!(),

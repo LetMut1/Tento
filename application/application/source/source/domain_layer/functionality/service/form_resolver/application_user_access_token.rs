@@ -54,23 +54,40 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
         environment_configuration: &'a EnvironmentConfiguration,
         application_user_access_token_encrypted: &'a str,
     ) -> Result<Result<ApplicationUserAccessToken<'static>, Auditor<InvalidArgument>>, Auditor<Error>> {
-        let mut token_part_registry = application_user_access_token_encrypted.splitn::<'_, &'_ str>(2, Self::TOKEN_PARTS_SEPARATOR);
+        let mut token_part_registry = application_user_access_token_encrypted.splitn::<'_, &'_ str>(
+            2,
+            Self::TOKEN_PARTS_SEPARATOR,
+        );
         let application_user_access_token_serialized = match token_part_registry.next() {
             Some(application_user_access_token_serialized_) => application_user_access_token_serialized_,
             None => {
-                return Ok(Err(Auditor::<InvalidArgument>::new(
-                    InvalidArgument,
-                    Backtrace::new(line!(), file!()),
-                )));
+                return Ok(
+                    Err(
+                        Auditor::<InvalidArgument>::new(
+                            InvalidArgument,
+                            Backtrace::new(
+                                line!(),
+                                file!(),
+                            ),
+                        ),
+                    ),
+                );
             }
         };
         let application_user_access_token_serialized_signature = match token_part_registry.next() {
             Some(application_user_access_token_serialized_signature_) => application_user_access_token_serialized_signature_,
             None => {
-                return Ok(Err(Auditor::<InvalidArgument>::new(
-                    InvalidArgument,
-                    Backtrace::new(line!(), file!()),
-                )));
+                return Ok(
+                    Err(
+                        Auditor::<InvalidArgument>::new(
+                            InvalidArgument,
+                            Backtrace::new(
+                                line!(),
+                                file!(),
+                            ),
+                        ),
+                    ),
+                );
             }
         };
         if !Encoder::<Signature>::is_valid(
@@ -78,27 +95,48 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
             application_user_access_token_serialized.as_bytes(),
             application_user_access_token_serialized_signature.as_bytes(),
         )? {
-            return Ok(Err(Auditor::<InvalidArgument>::new(
-                InvalidArgument,
-                Backtrace::new(line!(), file!()),
-            )));
+            return Ok(
+                Err(
+                    Auditor::<InvalidArgument>::new(
+                        InvalidArgument,
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                ),
+            );
         }
         let data = match Encoder_::<Base64>::decode(application_user_access_token_serialized.as_bytes()) {
             Ok(data_) => data_,
             Err(_) => {
-                return Ok(Err(Auditor::<InvalidArgument>::new(
-                    InvalidArgument,
-                    Backtrace::new(line!(), file!()),
-                )));
+                return Ok(
+                    Err(
+                        Auditor::<InvalidArgument>::new(
+                            InvalidArgument,
+                            Backtrace::new(
+                                line!(),
+                                file!(),
+                            ),
+                        ),
+                    ),
+                );
             }
         };
         let application_user_access_token = match Serializer::<MessagePack>::deserialize::<'_, ApplicationUserAccessToken<'static>>(data.as_slice()) {
             Ok(application_user_access_token_) => application_user_access_token_,
             Err(_) => {
-                return Ok(Err(Auditor::<InvalidArgument>::new(
-                    InvalidArgument,
-                    Backtrace::new(line!(), file!()),
-                )));
+                return Ok(
+                    Err(
+                        Auditor::<InvalidArgument>::new(
+                            InvalidArgument,
+                            Backtrace::new(
+                                line!(),
+                                file!(),
+                            ),
+                        ),
+                    ),
+                );
             }
         };
         return Ok(Ok(application_user_access_token));
@@ -120,10 +158,12 @@ impl Encoder<Signature> {
         application_user_access_token_serialized_signature: &'a [u8],
     ) -> Result<bool, Auditor<Error>> {
         let application_user_access_token_serialized_encoded = Encoder_::<Base64>::decode(application_user_access_token_serialized_signature)?;
-        return Ok(Encoder_::<HmacSha3_512>::is_valid(
-            environment_configuration.encryption.private_key.application_user_access_token.as_bytes(),
-            application_user_access_token_serialized,
-            application_user_access_token_serialized_encoded.as_slice(),
-        )?);
+        return Ok(
+            Encoder_::<HmacSha3_512>::is_valid(
+                environment_configuration.encryption.private_key.application_user_access_token.as_bytes(),
+                application_user_access_token_serialized,
+                application_user_access_token_serialized_encoded.as_slice(),
+            )?,
+        );
     }
 }

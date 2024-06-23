@@ -18,6 +18,13 @@ where
 }
 impl Convert<u16, i16> for Converter {
     fn convert(subject: u16) -> Result<i16, Auditor<Error>> {
-        return Ok(i16::try_from(subject).convert_into_error(Backtrace::new(line!(), file!()))?);
+        return Ok(
+            i16::try_from(subject).convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?,
+        );
     }
 }

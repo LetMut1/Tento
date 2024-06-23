@@ -3,7 +3,12 @@ use crate::infrastructure_layer::data::control_type::{
     ActionRound,
     Response,
 };
-impl Formatter<(ActionRound, Response)> {
+impl
+    Formatter<(
+        ActionRound,
+        Response,
+    )>
+{
     pub fn format<'a>(request_uri: &'a str, request_method: &'a str, response_status_code: u16) -> String {
         return format!(
             "\'{} {} {}\'",

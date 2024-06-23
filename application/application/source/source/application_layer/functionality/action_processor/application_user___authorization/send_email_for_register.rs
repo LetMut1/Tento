@@ -23,8 +23,8 @@ use crate::{
             auditor::{
                 Auditor,
                 Backtrace,
-                ResultConverter,
                 OptionConverter,
+                ResultConverter,
             },
             control_type::{
                 ApplicationUser__Authorization___SendEmailForRegister,
@@ -80,20 +80,44 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForRegister> {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let incoming_ = incoming.convert_value_does_not_exist(Backtrace::new(line!(), file!()))?;
+        let incoming_ = incoming.convert_value_does_not_exist(
+            Backtrace::new(
+                line!(),
+                file!(),
+            ),
+        )?;
         if !Validator::<ApplicationUser_Email>::is_valid(incoming_.application_user__email.as_str())? {
-            return Ok(Err(Auditor::<InvalidArgument>::new(
-                InvalidArgument,
-                Backtrace::new(line!(), file!()),
-            )));
+            return Ok(
+                Err(
+                    Auditor::<InvalidArgument>::new(
+                        InvalidArgument,
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                ),
+            );
         }
         if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming_.application_user_device__id.as_str()) {
-            return Ok(Err(Auditor::<InvalidArgument>::new(
-                InvalidArgument,
-                Backtrace::new(line!(), file!()),
-            )));
+            return Ok(
+                Err(
+                    Auditor::<InvalidArgument>::new(
+                        InvalidArgument,
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                ),
+            );
         }
-        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert_into_error(Backtrace::new(line!(), file!()))?;
+        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert_into_error(
+            Backtrace::new(
+                line!(),
+                file!(),
+            ),
+        )?;
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
         let mut application_user_registration_token = match PostgresqlRepository::<ApplicationUserRegistrationToken>::find_3(
             database_2_postgresql_connection,
@@ -106,9 +130,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForRegister> {
         {
             Some(application_user_registration_token_) => application_user_registration_token_,
             None => {
-                return Ok(Ok(UnifiedReport::precedent(
-                    Precedent::ApplicationUserRegistrationToken_NotFound,
-                )));
+                return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_NotFound)));
             }
         };
         if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token.expires_at) {
@@ -120,19 +142,13 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForRegister> {
                 },
             )
             .await?;
-            return Ok(Ok(UnifiedReport::precedent(
-                Precedent::ApplicationUserRegistrationToken_AlreadyExpired,
-            )));
+            return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_AlreadyExpired)));
         }
         if application_user_registration_token.is_approved {
-            return Ok(Ok(UnifiedReport::precedent(
-                Precedent::ApplicationUserRegistrationToken_AlreadyApproved,
-            )));
+            return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_AlreadyApproved)));
         }
         if !ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token.can_be_resent_from) {
-            return Ok(Ok(UnifiedReport::precedent(
-                Precedent::ApplicationUserRegistrationToken_TimeToResendHasNotCome,
-            )));
+            return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_TimeToResendHasNotCome)));
         }
         application_user_registration_token.can_be_resent_from = Generator::<ApplicationUserRegistrationToken_CanBeResentFrom>::generate()?;
         PostgresqlRepository::<ApplicationUserRegistrationToken>::update_2(

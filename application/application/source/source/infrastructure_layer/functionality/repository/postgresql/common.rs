@@ -43,16 +43,28 @@ impl PostgresqlRepository<Common1> {
         );
         let wildcard = format!("{}%", by_1.channel__name,);
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&by_1.application_user__id, Type::INT8)
-            .add_parameter(&by_1.channel__visability_modifier, Type::INT2)
-            .add_parameter(&wildcard, Type::TEXT);
+            .add_parameter(
+                &by_1.application_user__id,
+                Type::INT8,
+            )
+            .add_parameter(
+                &by_1.channel__visability_modifier,
+                Type::INT2,
+            )
+            .add_parameter(
+                &wildcard,
+                Type::TEXT,
+            );
         if let Some(ref requery___channel__name) = by_1.requery___channel__name {
             query = format!(
                 "{} AND c.name > ${}",
                 query.as_str(),
                 counter.get_next_value()?,
             );
-            prepared_statemant_parameter_convertation_resolver.add_parameter(requery___channel__name, Type::TEXT);
+            prepared_statemant_parameter_convertation_resolver.add_parameter(
+                requery___channel__name,
+                Type::TEXT,
+            );
         }
         query = format!(
             "{} \
@@ -61,36 +73,84 @@ impl PostgresqlRepository<Common1> {
             query.as_str(),
             counter.get_next_value()?
         );
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&limit, Type::INT2);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(
+            &limit,
+            Type::INT2,
+        );
         let statement = database_1_connection
             .prepare_typed(
                 query.as_str(),
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         let row_registry = database_1_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         let mut common_registry: Vec<Common1> = vec![];
         if row_registry.is_empty() {
             return Ok(common_registry);
         }
         '_a: for row in row_registry.iter() {
             let channel = Channel1 {
-                channel__id: row.try_get::<'_, usize, i64>(0).convert_into_error(Backtrace::new(line!(), file!()))?,
-                channel__name: row.try_get::<'_, usize, String>(1).convert_into_error(Backtrace::new(line!(), file!()))?,
-                channel__linked_name: row.try_get::<'_, usize, String>(2).convert_into_error(Backtrace::new(line!(), file!()))?,
-                channel__access_modifier: row.try_get::<'_, usize, i16>(3).convert_into_error(Backtrace::new(line!(), file!()))?,
+                channel__id: row.try_get::<'_, usize, i64>(0).convert_into_error(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?,
+                channel__name: row.try_get::<'_, usize, String>(1).convert_into_error(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?,
+                channel__linked_name: row.try_get::<'_, usize, String>(2).convert_into_error(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?,
+                channel__access_modifier: row.try_get::<'_, usize, i16>(3).convert_into_error(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?,
                 channel__visability_modifier: by_1.channel__visability_modifier,
-                channel__cover_image_path: row.try_get::<'_, usize, Option<String>>(4).convert_into_error(Backtrace::new(line!(), file!()))?,
-                channel__background_image_path: row.try_get::<'_, usize, Option<String>>(5).convert_into_error(Backtrace::new(line!(), file!()))?,
+                channel__cover_image_path: row.try_get::<'_, usize, Option<String>>(4).convert_into_error(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?,
+                channel__background_image_path: row.try_get::<'_, usize, Option<String>>(5).convert_into_error(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?,
             };
-            let is_application_user_subscribed = match row.try_get::<'_, usize, Option<i64>>(6).convert_into_error(Backtrace::new(line!(), file!()))? {
+            let is_application_user_subscribed = match row.try_get::<'_, usize, Option<i64>>(6).convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )? {
                 Some(_) => true,
                 None => false,
             };
@@ -121,14 +181,25 @@ impl PostgresqlRepository<Common1> {
             counter.get_next_value()?,
         );
         let wildcard = format!("{}%", by_2.channel__name,);
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&by_2.application_user__id, Type::INT8).add_parameter(&wildcard, Type::TEXT);
+        prepared_statemant_parameter_convertation_resolver
+            .add_parameter(
+                &by_2.application_user__id,
+                Type::INT8,
+            )
+            .add_parameter(
+                &wildcard,
+                Type::TEXT,
+            );
         if let Some(ref requery___channel__name) = by_2.requery___channel__name {
             query = format!(
                 "{} AND c.name > ${}",
                 query.as_str(),
                 counter.get_next_value()?,
             );
-            prepared_statemant_parameter_convertation_resolver.add_parameter(requery___channel__name, Type::TEXT);
+            prepared_statemant_parameter_convertation_resolver.add_parameter(
+                requery___channel__name,
+                Type::TEXT,
+            );
         }
         query = format!(
             "{} \
@@ -137,34 +208,82 @@ impl PostgresqlRepository<Common1> {
             query.as_str(),
             counter.get_next_value()?,
         );
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&limit, Type::INT2);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(
+            &limit,
+            Type::INT2,
+        );
         let statement = database_1_connection
             .prepare_typed(
                 query.as_str(),
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         let row_registry = database_1_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         let mut common_registry: Vec<Common1> = vec![];
         if row_registry.is_empty() {
             return Ok(common_registry);
         }
         '_a: for row in row_registry.iter() {
             let channel = Channel1 {
-                channel__id: row.try_get::<'_, usize, i64>(0).convert_into_error(Backtrace::new(line!(), file!()))?,
-                channel__name: row.try_get::<'_, usize, String>(1).convert_into_error(Backtrace::new(line!(), file!()))?,
-                channel__linked_name: row.try_get::<'_, usize, String>(2).convert_into_error(Backtrace::new(line!(), file!()))?,
-                channel__access_modifier: row.try_get::<'_, usize, i16>(3).convert_into_error(Backtrace::new(line!(), file!()))?,
-                channel__visability_modifier: row.try_get::<'_, usize, i16>(4).convert_into_error(Backtrace::new(line!(), file!()))?,
-                channel__cover_image_path: row.try_get::<'_, usize, Option<String>>(5).convert_into_error(Backtrace::new(line!(), file!()))?,
-                channel__background_image_path: row.try_get::<'_, usize, Option<String>>(6).convert_into_error(Backtrace::new(line!(), file!()))?,
+                channel__id: row.try_get::<'_, usize, i64>(0).convert_into_error(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?,
+                channel__name: row.try_get::<'_, usize, String>(1).convert_into_error(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?,
+                channel__linked_name: row.try_get::<'_, usize, String>(2).convert_into_error(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?,
+                channel__access_modifier: row.try_get::<'_, usize, i16>(3).convert_into_error(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?,
+                channel__visability_modifier: row.try_get::<'_, usize, i16>(4).convert_into_error(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?,
+                channel__cover_image_path: row.try_get::<'_, usize, Option<String>>(5).convert_into_error(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?,
+                channel__background_image_path: row.try_get::<'_, usize, Option<String>>(6).convert_into_error(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?,
             };
             let common = Common1 {
                 channel,
@@ -190,7 +309,10 @@ impl PostgresqlRepository<Common1> {
             ON cs.application_user__id = ${} AND c.id = cs.channel__id",
             counter.get_next_value()?,
         );
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&by_3.application_user__id, Type::INT8);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(
+            &by_3.application_user__id,
+            Type::INT8,
+        );
         let requery___channel__id: i64;
         if let Some(requery___channel__id_) = by_3.requery___channel__id {
             requery___channel__id = requery___channel__id_;
@@ -200,7 +322,10 @@ impl PostgresqlRepository<Common1> {
                 query.as_str(),
                 counter.get_next_value()?,
             );
-            prepared_statemant_parameter_convertation_resolver.add_parameter(&requery___channel__id, Type::INT8);
+            prepared_statemant_parameter_convertation_resolver.add_parameter(
+                &requery___channel__id,
+                Type::INT8,
+            );
         }
         query = format!(
             "{} \
@@ -209,34 +334,82 @@ impl PostgresqlRepository<Common1> {
             query.as_str(),
             counter.get_next_value()?,
         );
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&limit, Type::INT2);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(
+            &limit,
+            Type::INT2,
+        );
         let statement = database_1_connection
             .prepare_typed(
                 query.as_str(),
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         let row_registry = database_1_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         let mut common_registry: Vec<Common1> = vec![];
         if row_registry.is_empty() {
             return Ok(common_registry);
         }
         '_a: for row in row_registry.iter() {
             let channel = Channel1 {
-                channel__id: row.try_get::<'_, usize, i64>(0).convert_into_error(Backtrace::new(line!(), file!()))?,
-                channel__name: row.try_get::<'_, usize, String>(1).convert_into_error(Backtrace::new(line!(), file!()))?,
-                channel__linked_name: row.try_get::<'_, usize, String>(2).convert_into_error(Backtrace::new(line!(), file!()))?,
-                channel__access_modifier: row.try_get::<'_, usize, i16>(3).convert_into_error(Backtrace::new(line!(), file!()))?,
-                channel__visability_modifier: row.try_get::<'_, usize, i16>(4).convert_into_error(Backtrace::new(line!(), file!()))?,
-                channel__cover_image_path: row.try_get::<'_, usize, Option<String>>(5).convert_into_error(Backtrace::new(line!(), file!()))?,
-                channel__background_image_path: row.try_get::<'_, usize, Option<String>>(6).convert_into_error(Backtrace::new(line!(), file!()))?,
+                channel__id: row.try_get::<'_, usize, i64>(0).convert_into_error(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?,
+                channel__name: row.try_get::<'_, usize, String>(1).convert_into_error(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?,
+                channel__linked_name: row.try_get::<'_, usize, String>(2).convert_into_error(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?,
+                channel__access_modifier: row.try_get::<'_, usize, i16>(3).convert_into_error(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?,
+                channel__visability_modifier: row.try_get::<'_, usize, i16>(4).convert_into_error(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?,
+                channel__cover_image_path: row.try_get::<'_, usize, Option<String>>(5).convert_into_error(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?,
+                channel__background_image_path: row.try_get::<'_, usize, Option<String>>(6).convert_into_error(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?,
             };
             let common = Common1 {
                 channel,

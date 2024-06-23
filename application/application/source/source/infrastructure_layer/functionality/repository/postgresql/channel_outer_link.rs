@@ -38,28 +38,52 @@ impl PostgresqlRepository<ChannelOuterLink> {
             RETURNING \
                 cs.created_at::TEXT AS ca;";
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&insert_1.channel_outer_link__from, Type::INT8)
-            .add_parameter(&channel_outer_link__alias, Type::TEXT)
-            .add_parameter(&channel_outer_link__address, Type::TEXT);
+            .add_parameter(
+                &insert_1.channel_outer_link__from,
+                Type::INT8,
+            )
+            .add_parameter(
+                &channel_outer_link__alias,
+                Type::TEXT,
+            )
+            .add_parameter(
+                &channel_outer_link__address,
+                Type::TEXT,
+            );
         let statement = database_1_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         let row_registry = database_1_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         let channel_outer_link = ChannelOuterLink::new(
             insert_1.channel_outer_link__from,
             insert_1.channel_outer_link__alias,
             insert_1.channel_outer_link__address,
-            row_registry[0].try_get::<'_, usize, String>(0).convert_into_error(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, String>(0).convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?,
         );
         return Ok(channel_outer_link);
     }
@@ -72,29 +96,57 @@ impl PostgresqlRepository<ChannelOuterLink> {
             FROM public.channel_outer_link col \
             WHERE col.from_ = $1 \
             LIMIT $2";
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&by_1.channel_outer_link__from, Type::INT8).add_parameter(&limit, Type::INT2);
+        prepared_statemant_parameter_convertation_resolver
+            .add_parameter(
+                &by_1.channel_outer_link__from,
+                Type::INT8,
+            )
+            .add_parameter(
+                &limit,
+                Type::INT2,
+            );
         let statement = database_1_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         let row_registry = database_1_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         let mut channel_outer_link_registry: Vec<ChannelOuterLink1> = vec![];
         if row_registry.is_empty() {
             return Ok(channel_outer_link_registry);
         }
         '_a: for row in row_registry.iter() {
             let channel_outer_link = ChannelOuterLink1 {
-                channel_outer_link__alias: row.try_get::<'_, usize, String>(0).convert_into_error(Backtrace::new(line!(), file!()))?,
-                channel_outer_link__address: row.try_get::<'_, usize, String>(1).convert_into_error(Backtrace::new(line!(), file!()))?,
+                channel_outer_link__alias: row.try_get::<'_, usize, String>(0).convert_into_error(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?,
+                channel_outer_link__address: row.try_get::<'_, usize, String>(1).convert_into_error(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?,
             };
             channel_outer_link_registry.push(channel_outer_link);
         }

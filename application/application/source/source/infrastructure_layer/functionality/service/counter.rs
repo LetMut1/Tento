@@ -25,7 +25,12 @@ impl Counter<i16> {
         };
     }
     pub fn get_next_value<'a>(&'a mut self) -> Result<i16, Auditor<Error>> {
-        self.value = self.value.checked_add(self.step_size).convert_out_of_range(Backtrace::new(line!(), file!()))?;
+        self.value = self.value.checked_add(self.step_size).convert_out_of_range(
+            Backtrace::new(
+                line!(),
+                file!(),
+            ),
+        )?;
         return Ok(self.value);
     }
 }

@@ -48,9 +48,18 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
                 $7 \
             );";
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&insert_1.application_user__email, Type::TEXT)
-            .add_parameter(&insert_1.application_user_device__id, Type::TEXT)
-            .add_parameter(&application_user_registration_token__value, Type::TEXT)
+            .add_parameter(
+                &insert_1.application_user__email,
+                Type::TEXT,
+            )
+            .add_parameter(
+                &insert_1.application_user_device__id,
+                Type::TEXT,
+            )
+            .add_parameter(
+                &application_user_registration_token__value,
+                Type::TEXT,
+            )
             .add_parameter(
                 &insert_1.application_user_registration_token__wrong_enter_tries_quantity,
                 Type::INT2,
@@ -73,23 +82,35 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         database_2_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
-        return Ok(ApplicationUserRegistrationToken::new(
-            Cow::Borrowed(insert_1.application_user__email),
-            Cow::Borrowed(insert_1.application_user_device__id),
-            insert_1.application_user_registration_token__value,
-            insert_1.application_user_registration_token__wrong_enter_tries_quantity,
-            insert_1.application_user_registration_token__is_approved,
-            insert_1.application_user_registration_token__expires_at,
-            insert_1.application_user_registration_token__can_be_resent_from,
-        ));
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
+        return Ok(
+            ApplicationUserRegistrationToken::new(
+                Cow::Borrowed(insert_1.application_user__email),
+                Cow::Borrowed(insert_1.application_user_device__id),
+                insert_1.application_user_registration_token__value,
+                insert_1.application_user_registration_token__wrong_enter_tries_quantity,
+                insert_1.application_user_registration_token__is_approved,
+                insert_1.application_user_registration_token__expires_at,
+                insert_1.application_user_registration_token__can_be_resent_from,
+            ),
+        );
     }
     pub async fn delete_2<'a>(database_2_connection: &'a Connection, by_1: By1<'_>) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -97,22 +118,38 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
             DELETE FROM ONLY public.application_user_registration_token AS aurt \
             WHERE aurt.application_user__email = $1 AND aurt.application_user_device__id = $2;";
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&by_1.application_user__email, Type::TEXT)
-            .add_parameter(&by_1.application_user_device__id, Type::TEXT);
+            .add_parameter(
+                &by_1.application_user__email,
+                Type::TEXT,
+            )
+            .add_parameter(
+                &by_1.application_user_device__id,
+                Type::TEXT,
+            );
         let statement = database_2_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         database_2_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         return Ok(());
     }
     pub async fn update_1<'a>(database_2_connection: &'a Connection, update_1: Update1<'_>, by_1: By1<'_>) -> Result<(), Auditor<Error>> {
@@ -154,22 +191,38 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
                 &update_1.application_user_registration_token__can_be_resent_from,
                 Type::INT8,
             )
-            .add_parameter(&by_1.application_user__email, Type::TEXT)
-            .add_parameter(&by_1.application_user_device__id, Type::TEXT);
+            .add_parameter(
+                &by_1.application_user__email,
+                Type::TEXT,
+            )
+            .add_parameter(
+                &by_1.application_user_device__id,
+                Type::TEXT,
+            );
         let statement = database_2_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         database_2_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         return Ok(());
     }
     pub async fn update_2<'a>(database_2_connection: &'a Connection, update_2: Update2, by_1: By1<'_>) -> Result<(), Auditor<Error>> {
@@ -187,22 +240,38 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
                 &update_2.application_user_registration_token__can_be_resent_from,
                 Type::INT8,
             )
-            .add_parameter(&by_1.application_user__email, Type::TEXT)
-            .add_parameter(&by_1.application_user_device__id, Type::TEXT);
+            .add_parameter(
+                &by_1.application_user__email,
+                Type::TEXT,
+            )
+            .add_parameter(
+                &by_1.application_user_device__id,
+                Type::TEXT,
+            );
         let statement = database_2_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         database_2_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         return Ok(());
     }
     pub async fn update_3<'a>(database_2_connection: &'a Connection, update_3: Update3<'_>, by_1: By1<'_>) -> Result<(), Auditor<Error>> {
@@ -238,22 +307,38 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
                 &update_3.application_user_registration_token__expires_at,
                 Type::INT8,
             )
-            .add_parameter(&by_1.application_user__email, Type::TEXT)
-            .add_parameter(&by_1.application_user_device__id, Type::TEXT);
+            .add_parameter(
+                &by_1.application_user__email,
+                Type::TEXT,
+            )
+            .add_parameter(
+                &by_1.application_user_device__id,
+                Type::TEXT,
+            );
         let statement = database_2_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         database_2_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         return Ok(());
     }
     pub async fn update_4<'a>(database_2_connection: &'a Connection, update_4: Update4, by_1: By1<'_>) -> Result<(), Auditor<Error>> {
@@ -271,22 +356,38 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
                 &update_4.application_user_registration_token__wrong_enter_tries_quantity,
                 Type::INT2,
             )
-            .add_parameter(&by_1.application_user__email, Type::TEXT)
-            .add_parameter(&by_1.application_user_device__id, Type::TEXT);
+            .add_parameter(
+                &by_1.application_user__email,
+                Type::TEXT,
+            )
+            .add_parameter(
+                &by_1.application_user_device__id,
+                Type::TEXT,
+            );
         let statement = database_2_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         database_2_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         return Ok(());
     }
     pub async fn update_5<'a>(database_2_connection: &'a Connection, update_5: Update5, by_1: By1<'_>) -> Result<(), Auditor<Error>> {
@@ -304,22 +405,38 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
                 &update_5.application_user_registration_token__is_approved,
                 Type::BOOL,
             )
-            .add_parameter(&by_1.application_user__email, Type::TEXT)
-            .add_parameter(&by_1.application_user_device__id, Type::TEXT);
+            .add_parameter(
+                &by_1.application_user__email,
+                Type::TEXT,
+            )
+            .add_parameter(
+                &by_1.application_user_device__id,
+                Type::TEXT,
+            );
         let statement = database_2_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         database_2_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         return Ok(());
     }
     pub async fn find_1<'a>(database_2_connection: &'a Connection, by_1: By1<'_>) -> Result<Option<ApplicationUserRegistrationToken1>, Auditor<Error>> {
@@ -334,32 +451,77 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
             FROM public.application_user_registration_token aurt \
             WHERE aurt.application_user__email = $1 AND aurt.application_user_device__id = $2;";
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&by_1.application_user__email, Type::TEXT)
-            .add_parameter(&by_1.application_user_device__id, Type::TEXT);
+            .add_parameter(
+                &by_1.application_user__email,
+                Type::TEXT,
+            )
+            .add_parameter(
+                &by_1.application_user_device__id,
+                Type::TEXT,
+            );
         let statement = database_2_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         let row_registry = database_2_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         if row_registry.is_empty() {
             return Ok(None);
         }
-        return Ok(Some(ApplicationUserRegistrationToken1 {
-            value: row_registry[0].try_get::<'_, usize, String>(0).convert_into_error(Backtrace::new(line!(), file!()))?,
-            wrong_enter_tries_quantity: row_registry[0].try_get::<'_, usize, i16>(1).convert_into_error(Backtrace::new(line!(), file!()))?,
-            is_approved: row_registry[0].try_get::<'_, usize, bool>(2).convert_into_error(Backtrace::new(line!(), file!()))?,
-            expires_at: row_registry[0].try_get::<'_, usize, i64>(3).convert_into_error(Backtrace::new(line!(), file!()))?,
-            can_be_resent_from: row_registry[0].try_get::<'_, usize, i64>(4).convert_into_error(Backtrace::new(line!(), file!()))?,
-        }));
+        return Ok(
+            Some(
+                ApplicationUserRegistrationToken1 {
+                    value: row_registry[0].try_get::<'_, usize, String>(0).convert_into_error(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )?,
+                    wrong_enter_tries_quantity: row_registry[0].try_get::<'_, usize, i16>(1).convert_into_error(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )?,
+                    is_approved: row_registry[0].try_get::<'_, usize, bool>(2).convert_into_error(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )?,
+                    expires_at: row_registry[0].try_get::<'_, usize, i64>(3).convert_into_error(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )?,
+                    can_be_resent_from: row_registry[0].try_get::<'_, usize, i64>(4).convert_into_error(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )?,
+                },
+            ),
+        );
     }
     pub async fn find_2<'a>(database_2_connection: &'a Connection, by_1: By1<'_>) -> Result<Option<ApplicationUserRegistrationToken2>, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -372,31 +534,71 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
             FROM public.application_user_registration_token aurt \
             WHERE aurt.application_user__email = $1 AND aurt.application_user_device__id = $2;";
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&by_1.application_user__email, Type::TEXT)
-            .add_parameter(&by_1.application_user_device__id, Type::TEXT);
+            .add_parameter(
+                &by_1.application_user__email,
+                Type::TEXT,
+            )
+            .add_parameter(
+                &by_1.application_user_device__id,
+                Type::TEXT,
+            );
         let statement = database_2_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         let row_registry = database_2_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         if row_registry.is_empty() {
             return Ok(None);
         }
-        return Ok(Some(ApplicationUserRegistrationToken2 {
-            value: row_registry[0].try_get::<'_, usize, String>(0).convert_into_error(Backtrace::new(line!(), file!()))?,
-            wrong_enter_tries_quantity: row_registry[0].try_get::<'_, usize, i16>(1).convert_into_error(Backtrace::new(line!(), file!()))?,
-            is_approved: row_registry[0].try_get::<'_, usize, bool>(2).convert_into_error(Backtrace::new(line!(), file!()))?,
-            expires_at: row_registry[0].try_get::<'_, usize, i64>(3).convert_into_error(Backtrace::new(line!(), file!()))?,
-        }));
+        return Ok(
+            Some(
+                ApplicationUserRegistrationToken2 {
+                    value: row_registry[0].try_get::<'_, usize, String>(0).convert_into_error(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )?,
+                    wrong_enter_tries_quantity: row_registry[0].try_get::<'_, usize, i16>(1).convert_into_error(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )?,
+                    is_approved: row_registry[0].try_get::<'_, usize, bool>(2).convert_into_error(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )?,
+                    expires_at: row_registry[0].try_get::<'_, usize, i64>(3).convert_into_error(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )?,
+                },
+            ),
+        );
     }
     pub async fn find_3<'a>(database_2_connection: &'a Connection, by_1: By1<'_>) -> Result<Option<ApplicationUserRegistrationToken3>, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -409,31 +611,71 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
             FROM public.application_user_registration_token aurt \
             WHERE aurt.application_user__email = $1 AND aurt.application_user_device__id = $2;";
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&by_1.application_user__email, Type::TEXT)
-            .add_parameter(&by_1.application_user_device__id, Type::TEXT);
+            .add_parameter(
+                &by_1.application_user__email,
+                Type::TEXT,
+            )
+            .add_parameter(
+                &by_1.application_user_device__id,
+                Type::TEXT,
+            );
         let statement = database_2_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         let row_registry = database_2_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         if row_registry.is_empty() {
             return Ok(None);
         }
-        return Ok(Some(ApplicationUserRegistrationToken3 {
-            value: row_registry[0].try_get::<'_, usize, String>(0).convert_into_error(Backtrace::new(line!(), file!()))?,
-            is_approved: row_registry[0].try_get::<'_, usize, bool>(1).convert_into_error(Backtrace::new(line!(), file!()))?,
-            expires_at: row_registry[0].try_get::<'_, usize, i64>(2).convert_into_error(Backtrace::new(line!(), file!()))?,
-            can_be_resent_from: row_registry[0].try_get::<'_, usize, i64>(3).convert_into_error(Backtrace::new(line!(), file!()))?,
-        }));
+        return Ok(
+            Some(
+                ApplicationUserRegistrationToken3 {
+                    value: row_registry[0].try_get::<'_, usize, String>(0).convert_into_error(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )?,
+                    is_approved: row_registry[0].try_get::<'_, usize, bool>(1).convert_into_error(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )?,
+                    expires_at: row_registry[0].try_get::<'_, usize, i64>(2).convert_into_error(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )?,
+                    can_be_resent_from: row_registry[0].try_get::<'_, usize, i64>(3).convert_into_error(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )?,
+                },
+            ),
+        );
     }
 }
 pub struct Insert1<'a> {

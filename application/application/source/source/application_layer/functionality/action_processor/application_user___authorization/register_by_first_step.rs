@@ -29,8 +29,8 @@ use crate::{
             auditor::{
                 Auditor,
                 Backtrace,
-                ResultConverter,
                 OptionConverter,
+                ResultConverter,
             },
             control_type::{
                 ApplicationUser__Authorization___RegisterByFirstStep,
@@ -90,20 +90,44 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let incoming_ = incoming.convert_value_does_not_exist(Backtrace::new(line!(), file!()))?;
+        let incoming_ = incoming.convert_value_does_not_exist(
+            Backtrace::new(
+                line!(),
+                file!(),
+            ),
+        )?;
         if !Validator::<ApplicationUser_Email>::is_valid(incoming_.application_user__email.as_str())? {
-            return Ok(Err(Auditor::<InvalidArgument>::new(
-                InvalidArgument,
-                Backtrace::new(line!(), file!()),
-            )));
+            return Ok(
+                Err(
+                    Auditor::<InvalidArgument>::new(
+                        InvalidArgument,
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                ),
+            );
         }
         if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming_.application_user_device__id.as_str()) {
-            return Ok(Err(Auditor::<InvalidArgument>::new(
-                InvalidArgument,
-                Backtrace::new(line!(), file!()),
-            )));
+            return Ok(
+                Err(
+                    Auditor::<InvalidArgument>::new(
+                        InvalidArgument,
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                ),
+            );
         }
-        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert_into_error(Backtrace::new(line!(), file!()))?;
+        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert_into_error(
+            Backtrace::new(
+                line!(),
+                file!(),
+            ),
+        )?;
         if PostgresqlRepository::<ApplicationUser<'_>>::is_exist_2(
             &*database_1_postgresql_pooled_connection,
             By2 {
@@ -112,11 +136,14 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
         )
         .await?
         {
-            return Ok(Ok(UnifiedReport::precedent(
-                Precedent::ApplicationUser_EmailAlreadyExist,
-            )));
+            return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUser_EmailAlreadyExist)));
         }
-        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert_into_error(Backtrace::new(line!(), file!()))?;
+        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert_into_error(
+            Backtrace::new(
+                line!(),
+                file!(),
+            ),
+        )?;
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
         let (
             application_user_registration_token__value,
@@ -135,9 +162,15 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
             Some(mut application_user_registration_token) => {
                 let (can_send_, need_to_update_1) = if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token.can_be_resent_from) {
                     application_user_registration_token.can_be_resent_from = Generator::<ApplicationUserRegistrationToken_CanBeResentFrom>::generate()?;
-                    (true, true)
+                    (
+                        true,
+                        true,
+                    )
                 } else {
-                    (false, false)
+                    (
+                        false,
+                        false,
+                    )
                 };
                 let need_to_update_2 =
                     if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token.expires_at) || application_user_registration_token.is_approved {

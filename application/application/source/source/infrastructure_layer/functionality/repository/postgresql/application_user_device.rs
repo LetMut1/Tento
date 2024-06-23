@@ -31,26 +31,44 @@ impl PostgresqlRepository<ApplicationUserDevice> {
             ) \
             ON CONFLICT ON CONSTRAINT application_user_device2 DO NOTHING;";
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&application_user_device__id, Type::TEXT)
-            .add_parameter(&insert_1.application_user__id, Type::INT8);
+            .add_parameter(
+                &application_user_device__id,
+                Type::TEXT,
+            )
+            .add_parameter(
+                &insert_1.application_user__id,
+                Type::INT8,
+            );
         let statement = database_1_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         database_1_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
-        return Ok(ApplicationUserDevice::new(
-            insert_1.application_user_device__id,
-            insert_1.application_user__id,
-        ));
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
+        return Ok(
+            ApplicationUserDevice::new(
+                insert_1.application_user_device__id,
+                insert_1.application_user__id,
+            ),
+        );
     }
 }
 pub struct Insert1 {

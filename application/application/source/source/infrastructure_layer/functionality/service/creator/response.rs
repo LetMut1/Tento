@@ -38,25 +38,46 @@ impl Creator<Response> {
             Some(data_) => Body::from(data_),
             None => Body::empty(),
         };
-        return Response::from_parts(parts, body);
+        return Response::from_parts(
+            parts,
+            body,
+        );
     }
     pub fn create_bad_request() -> Response {
-        return Self::create(StatusCode::BAD_REQUEST, None);
+        return Self::create(
+            StatusCode::BAD_REQUEST,
+            None,
+        );
     }
     pub fn create_unauthorized() -> Response {
-        return Self::create(StatusCode::UNAUTHORIZED, None);
+        return Self::create(
+            StatusCode::UNAUTHORIZED,
+            None,
+        );
     }
     pub fn create_not_found() -> Response {
-        return Self::create(StatusCode::NOT_FOUND, None);
+        return Self::create(
+            StatusCode::NOT_FOUND,
+            None,
+        );
     }
     pub fn create_internal_server_error() -> Response {
-        return Self::create(StatusCode::INTERNAL_SERVER_ERROR, None);
+        return Self::create(
+            StatusCode::INTERNAL_SERVER_ERROR,
+            None,
+        );
     }
     pub fn create_not_extended() -> Response {
-        return Self::create(StatusCode::NOT_EXTENDED, None);
+        return Self::create(
+            StatusCode::NOT_EXTENDED,
+            None,
+        );
     }
     pub fn create_ok(data: Vec<u8>) -> Response {
-        return Self::create(StatusCode::OK, Some(data));
+        return Self::create(
+            StatusCode::OK,
+            Some(data),
+        );
     }
 }
 #[cfg(feature = "manual_testing")]
@@ -64,10 +85,16 @@ impl Creator<Response> {
     pub fn create_from_response_parts(response_parts: Parts, data: Option<Vec<u8>>) -> Response {
         match data {
             Some(data_) => {
-                return Response::from_parts(response_parts, Body::from(data_));
+                return Response::from_parts(
+                    response_parts,
+                    Body::from(data_),
+                );
             }
             None => {
-                return Response::from_parts(response_parts, Body::empty());
+                return Response::from_parts(
+                    response_parts,
+                    Body::empty(),
+                );
             }
         }
     }

@@ -1,7 +1,7 @@
 pub use auditor::{
     Auditor,
     Backtrace,
+    OptionConverter,
     ResultConverter,
     ResultConverter_,
-    OptionConverter,
 };

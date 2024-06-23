@@ -28,23 +28,51 @@ impl Sender<Email> {
             .from("from_changethis@yandex.ru".to_string())
             .to(to)
             .build()
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         // TODO В static OnceLock
-        let mut email_server_socket_address_registry =
-            environment_configuration.resource.email_server.socket_address.to_socket_addrs().convert_into_error(Backtrace::new(line!(), file!()))?;
+        let mut email_server_socket_address_registry = environment_configuration.resource.email_server.socket_address.to_socket_addrs().convert_into_error(
+            Backtrace::new(
+                line!(),
+                file!(),
+            ),
+        )?;
         let email_server_socket_address = match email_server_socket_address_registry.next() {
             Some(email_server_socket_address_) => email_server_socket_address_,
             None => {
-                return Err(Auditor::<Error>::new(
-                    Error::Logic {
-                        message: "Invalid socket address.",
-                    },
-                    Backtrace::new(line!(), file!()),
-                ));
+                return Err(
+                    Auditor::<Error>::new(
+                        Error::Logic {
+                            message: "Invalid socket address.",
+                        },
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                );
             }
         };
-        let smtp_client = SmtpClient::new(&email_server_socket_address, ClientSecurity::None).convert_into_error(Backtrace::new(line!(), file!()))?;
-        smtp_client.transport().send(email.into()).convert_into_error(Backtrace::new(line!(), file!()))?;
+        let smtp_client = SmtpClient::new(
+            &email_server_socket_address,
+            ClientSecurity::None,
+        )
+        .convert_into_error(
+            Backtrace::new(
+                line!(),
+                file!(),
+            ),
+        )?;
+        smtp_client.transport().send(email.into()).convert_into_error(
+            Backtrace::new(
+                line!(),
+                file!(),
+            ),
+        )?;
         return Ok(());
     }
 }

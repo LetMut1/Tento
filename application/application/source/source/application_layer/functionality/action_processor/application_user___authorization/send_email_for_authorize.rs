@@ -26,8 +26,8 @@ use crate::{
             auditor::{
                 Auditor,
                 Backtrace,
-                ResultConverter,
                 OptionConverter,
+                ResultConverter,
             },
             control_type::{
                 ApplicationUser__Authorization___SendEmailForAuthorize,
@@ -84,20 +84,44 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let incoming_ = incoming.convert_value_does_not_exist(Backtrace::new(line!(), file!()))?;
+        let incoming_ = incoming.convert_value_does_not_exist(
+            Backtrace::new(
+                line!(),
+                file!(),
+            ),
+        )?;
         if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming_.application_user_device__id.as_str()) {
-            return Ok(Err(Auditor::<InvalidArgument>::new(
-                InvalidArgument,
-                Backtrace::new(line!(), file!()),
-            )));
+            return Ok(
+                Err(
+                    Auditor::<InvalidArgument>::new(
+                        InvalidArgument,
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                ),
+            );
         }
         if !Validator::<ApplicationUser_Id>::is_valid(incoming_.application_user__id) {
-            return Ok(Err(Auditor::<InvalidArgument>::new(
-                InvalidArgument,
-                Backtrace::new(line!(), file!()),
-            )));
+            return Ok(
+                Err(
+                    Auditor::<InvalidArgument>::new(
+                        InvalidArgument,
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                ),
+            );
         }
-        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert_into_error(Backtrace::new(line!(), file!()))?;
+        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert_into_error(
+            Backtrace::new(
+                line!(),
+                file!(),
+            ),
+        )?;
         let application_user = match PostgresqlRepository::<ApplicationUser>::find_6(
             &*database_1_postgresql_pooled_connection,
             By3 {
@@ -108,12 +132,15 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
         {
             Some(application_user_) => application_user_,
             None => {
-                return Ok(Ok(UnifiedReport::precedent(
-                    Precedent::ApplicationUser_NotFound,
-                )));
+                return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUser_NotFound)));
             }
         };
-        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert_into_error(Backtrace::new(line!(), file!()))?;
+        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert_into_error(
+            Backtrace::new(
+                line!(),
+                file!(),
+            ),
+        )?;
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
         let mut application_user_authorization_token = match PostgresqlRepository::<ApplicationUserAuthorizationToken>::find_3(
             database_2_postgresql_connection,
@@ -126,9 +153,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
         {
             Some(application_user_authorization_token_) => application_user_authorization_token_,
             None => {
-                return Ok(Ok(UnifiedReport::precedent(
-                    Precedent::ApplicationUserAuthorizationToken_NotFound,
-                )));
+                return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserAuthorizationToken_NotFound)));
             }
         };
         if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token.expires_at) {
@@ -140,14 +165,10 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
                 },
             )
             .await?;
-            return Ok(Ok(UnifiedReport::precedent(
-                Precedent::ApplicationUserAuthorizationToken_AlreadyExpired,
-            )));
+            return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserAuthorizationToken_AlreadyExpired)));
         }
         if !ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token.can_be_resent_from) {
-            return Ok(Ok(UnifiedReport::precedent(
-                Precedent::ApplicationUserAuthorizationToken_TimeToResendHasNotCome,
-            )));
+            return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserAuthorizationToken_TimeToResendHasNotCome)));
         }
         application_user_authorization_token.can_be_resent_from = Generator::<ApplicationUserAuthorizationToken_CanBeResentFrom>::generate()?;
         PostgresqlRepository::<ApplicationUserAuthorizationToken>::update_3(

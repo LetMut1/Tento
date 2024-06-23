@@ -73,48 +73,106 @@ impl PostgresqlRepository<Channel<'_>> {
                 c.id AS i,
                 c.created_at::TEXT AS ca;";
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&insert_1.channel__owner, Type::INT8)
-            .add_parameter(&channel__name, Type::TEXT)
-            .add_parameter(&channel__linked_name, Type::TEXT)
-            .add_parameter(&channel__description, Type::TEXT)
-            .add_parameter(&insert_1.channel__access_modifier, Type::INT2)
-            .add_parameter(&insert_1.channel__visability_modifier, Type::INT2)
-            .add_parameter(&channel__orientation, Type::INT2_ARRAY)
-            .add_parameter(&channel__cover_image_path, Type::TEXT)
-            .add_parameter(&channel__background_image_path, Type::TEXT)
-            .add_parameter(&insert_1.channel__subscribers_quantity, Type::INT8)
-            .add_parameter(&insert_1.channel__marks_quantity, Type::INT8)
-            .add_parameter(&insert_1.channel__viewing_quantity, Type::INT8);
+            .add_parameter(
+                &insert_1.channel__owner,
+                Type::INT8,
+            )
+            .add_parameter(
+                &channel__name,
+                Type::TEXT,
+            )
+            .add_parameter(
+                &channel__linked_name,
+                Type::TEXT,
+            )
+            .add_parameter(
+                &channel__description,
+                Type::TEXT,
+            )
+            .add_parameter(
+                &insert_1.channel__access_modifier,
+                Type::INT2,
+            )
+            .add_parameter(
+                &insert_1.channel__visability_modifier,
+                Type::INT2,
+            )
+            .add_parameter(
+                &channel__orientation,
+                Type::INT2_ARRAY,
+            )
+            .add_parameter(
+                &channel__cover_image_path,
+                Type::TEXT,
+            )
+            .add_parameter(
+                &channel__background_image_path,
+                Type::TEXT,
+            )
+            .add_parameter(
+                &insert_1.channel__subscribers_quantity,
+                Type::INT8,
+            )
+            .add_parameter(
+                &insert_1.channel__marks_quantity,
+                Type::INT8,
+            )
+            .add_parameter(
+                &insert_1.channel__viewing_quantity,
+                Type::INT8,
+            );
         let statement = database_1_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         let row_registry = database_1_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
-        return Ok(Channel::new(
-            row_registry[0].try_get::<'_, usize, i64>(0).convert_into_error(Backtrace::new(line!(), file!()))?,
-            insert_1.channel__owner,
-            Cow::Owned(insert_1.channel__name),
-            insert_1.channel__linked_name,
-            insert_1.channel__description,
-            insert_1.channel__access_modifier,
-            insert_1.channel__visability_modifier,
-            insert_1.channel__orientation,
-            insert_1.channel__cover_image_path,
-            insert_1.channel__background_image_path,
-            insert_1.channel__subscribers_quantity,
-            insert_1.channel__marks_quantity,
-            insert_1.channel__viewing_quantity,
-            row_registry[0].try_get::<'_, usize, String>(1).convert_into_error(Backtrace::new(line!(), file!()))?,
-        ));
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
+        return Ok(
+            Channel::new(
+                row_registry[0].try_get::<'_, usize, i64>(0).convert_into_error(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?,
+                insert_1.channel__owner,
+                Cow::Owned(insert_1.channel__name),
+                insert_1.channel__linked_name,
+                insert_1.channel__description,
+                insert_1.channel__access_modifier,
+                insert_1.channel__visability_modifier,
+                insert_1.channel__orientation,
+                insert_1.channel__cover_image_path,
+                insert_1.channel__background_image_path,
+                insert_1.channel__subscribers_quantity,
+                insert_1.channel__marks_quantity,
+                insert_1.channel__viewing_quantity,
+                row_registry[0].try_get::<'_, usize, String>(1).convert_into_error(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?,
+            ),
+        );
     }
     pub async fn find_1<'a>(database_1_connection: &'a Connection, by_1: By1) -> Result<Option<Channel<'static>>, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -135,40 +193,124 @@ impl PostgresqlRepository<Channel<'_>> {
                 c.created_at::TEXT AS ca \
             FROM public.channel c \
             WHERE c.id = $1;";
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&by_1.channel__id, Type::INT8);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(
+            &by_1.channel__id,
+            Type::INT8,
+        );
         let statement = database_1_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         let row_registry = database_1_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         if row_registry.is_empty() {
             return Ok(None);
         }
-        return Ok(Some(Channel::new(
-            by_1.channel__id,
-            row_registry[0].try_get::<'_, usize, i64>(0).convert_into_error(Backtrace::new(line!(), file!()))?,
-            Cow::Owned(row_registry[0].try_get::<'_, usize, String>(1).convert_into_error(Backtrace::new(line!(), file!()))?),
-            row_registry[0].try_get::<'_, usize, String>(2).convert_into_error(Backtrace::new(line!(), file!()))?,
-            row_registry[0].try_get::<'_, usize, Option<String>>(3).convert_into_error(Backtrace::new(line!(), file!()))?,
-            row_registry[0].try_get::<'_, usize, i16>(4).convert_into_error(Backtrace::new(line!(), file!()))?,
-            row_registry[0].try_get::<'_, usize, i16>(5).convert_into_error(Backtrace::new(line!(), file!()))?,
-            row_registry[0].try_get::<'_, usize, Vec<i16>>(6).convert_into_error(Backtrace::new(line!(), file!()))?,
-            row_registry[0].try_get::<'_, usize, Option<String>>(7).convert_into_error(Backtrace::new(line!(), file!()))?,
-            row_registry[0].try_get::<'_, usize, Option<String>>(8).convert_into_error(Backtrace::new(line!(), file!()))?,
-            row_registry[0].try_get::<'_, usize, i64>(9).convert_into_error(Backtrace::new(line!(), file!()))?,
-            row_registry[0].try_get::<'_, usize, i64>(10).convert_into_error(Backtrace::new(line!(), file!()))?,
-            row_registry[0].try_get::<'_, usize, i64>(11).convert_into_error(Backtrace::new(line!(), file!()))?,
-            row_registry[0].try_get::<'_, usize, String>(12).convert_into_error(Backtrace::new(line!(), file!()))?,
-        )));
+        return Ok(
+            Some(
+                Channel::new(
+                    by_1.channel__id,
+                    row_registry[0].try_get::<'_, usize, i64>(0).convert_into_error(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )?,
+                    Cow::Owned(
+                        row_registry[0].try_get::<'_, usize, String>(1).convert_into_error(
+                            Backtrace::new(
+                                line!(),
+                                file!(),
+                            ),
+                        )?,
+                    ),
+                    row_registry[0].try_get::<'_, usize, String>(2).convert_into_error(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )?,
+                    row_registry[0].try_get::<'_, usize, Option<String>>(3).convert_into_error(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )?,
+                    row_registry[0].try_get::<'_, usize, i16>(4).convert_into_error(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )?,
+                    row_registry[0].try_get::<'_, usize, i16>(5).convert_into_error(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )?,
+                    row_registry[0].try_get::<'_, usize, Vec<i16>>(6).convert_into_error(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )?,
+                    row_registry[0].try_get::<'_, usize, Option<String>>(7).convert_into_error(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )?,
+                    row_registry[0].try_get::<'_, usize, Option<String>>(8).convert_into_error(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )?,
+                    row_registry[0].try_get::<'_, usize, i64>(9).convert_into_error(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )?,
+                    row_registry[0].try_get::<'_, usize, i64>(10).convert_into_error(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )?,
+                    row_registry[0].try_get::<'_, usize, i64>(11).convert_into_error(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )?,
+                    row_registry[0].try_get::<'_, usize, String>(12).convert_into_error(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )?,
+                ),
+            ),
+        );
     }
     pub async fn find_2<'a, 'b>(database_1_connection: &'a Connection, by_2: By2<'b>) -> Result<Option<Channel<'b>>, Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -189,40 +331,122 @@ impl PostgresqlRepository<Channel<'_>> {
                 c.created_at::TEXT AS ca \
             FROM public.channel c \
             WHERE c.name = $1;";
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&by_2.channel__name, Type::TEXT);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(
+            &by_2.channel__name,
+            Type::TEXT,
+        );
         let statement = database_1_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         let row_registry = database_1_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         if row_registry.is_empty() {
             return Ok(None);
         }
-        return Ok(Some(Channel::new(
-            row_registry[0].try_get::<'_, usize, i64>(0).convert_into_error(Backtrace::new(line!(), file!()))?,
-            row_registry[0].try_get::<'_, usize, i64>(1).convert_into_error(Backtrace::new(line!(), file!()))?,
-            Cow::Borrowed(by_2.channel__name),
-            row_registry[0].try_get::<'_, usize, String>(2).convert_into_error(Backtrace::new(line!(), file!()))?,
-            row_registry[0].try_get::<'_, usize, Option<String>>(3).convert_into_error(Backtrace::new(line!(), file!()))?,
-            row_registry[0].try_get::<'_, usize, i16>(4).convert_into_error(Backtrace::new(line!(), file!()))?,
-            row_registry[0].try_get::<'_, usize, i16>(5).convert_into_error(Backtrace::new(line!(), file!()))?,
-            row_registry[0].try_get::<'_, usize, Vec<i16>>(6).convert_into_error(Backtrace::new(line!(), file!()))?,
-            row_registry[0].try_get::<'_, usize, Option<String>>(7).convert_into_error(Backtrace::new(line!(), file!()))?,
-            row_registry[0].try_get::<'_, usize, Option<String>>(8).convert_into_error(Backtrace::new(line!(), file!()))?,
-            row_registry[0].try_get::<'_, usize, i64>(9).convert_into_error(Backtrace::new(line!(), file!()))?,
-            row_registry[0].try_get::<'_, usize, i64>(10).convert_into_error(Backtrace::new(line!(), file!()))?,
-            row_registry[0].try_get::<'_, usize, i64>(11).convert_into_error(Backtrace::new(line!(), file!()))?,
-            row_registry[0].try_get::<'_, usize, String>(12).convert_into_error(Backtrace::new(line!(), file!()))?,
-        )));
+        return Ok(
+            Some(
+                Channel::new(
+                    row_registry[0].try_get::<'_, usize, i64>(0).convert_into_error(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )?,
+                    row_registry[0].try_get::<'_, usize, i64>(1).convert_into_error(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )?,
+                    Cow::Borrowed(by_2.channel__name),
+                    row_registry[0].try_get::<'_, usize, String>(2).convert_into_error(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )?,
+                    row_registry[0].try_get::<'_, usize, Option<String>>(3).convert_into_error(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )?,
+                    row_registry[0].try_get::<'_, usize, i16>(4).convert_into_error(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )?,
+                    row_registry[0].try_get::<'_, usize, i16>(5).convert_into_error(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )?,
+                    row_registry[0].try_get::<'_, usize, Vec<i16>>(6).convert_into_error(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )?,
+                    row_registry[0].try_get::<'_, usize, Option<String>>(7).convert_into_error(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )?,
+                    row_registry[0].try_get::<'_, usize, Option<String>>(8).convert_into_error(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )?,
+                    row_registry[0].try_get::<'_, usize, i64>(9).convert_into_error(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )?,
+                    row_registry[0].try_get::<'_, usize, i64>(10).convert_into_error(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )?,
+                    row_registry[0].try_get::<'_, usize, i64>(11).convert_into_error(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )?,
+                    row_registry[0].try_get::<'_, usize, String>(12).convert_into_error(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )?,
+                ),
+            ),
+        );
     }
 }
 pub struct Insert1 {

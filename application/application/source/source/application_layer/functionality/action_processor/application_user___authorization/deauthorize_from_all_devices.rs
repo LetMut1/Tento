@@ -18,8 +18,8 @@ use crate::{
             auditor::{
                 Auditor,
                 Backtrace,
-                ResultConverter,
                 OptionConverter,
+                ResultConverter,
             },
             control_type::{
                 ApplicationUser__Authorization___DeauthorizeFromAllDevices,
@@ -73,7 +73,12 @@ impl ActionProcessor<ApplicationUser__Authorization___DeauthorizeFromAllDevices>
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let incoming_ = incoming.convert_value_does_not_exist(Backtrace::new(line!(), file!()))?;
+        let incoming_ = incoming.convert_value_does_not_exist(
+            Backtrace::new(
+                line!(),
+                file!(),
+            ),
+        )?;
         let application_user_access_token = match Extractor::<ApplicationUserAccessToken<'_>>::extract(
             environment_configuration,
             incoming_.application_user_access_token_encrypted.as_str(),
@@ -86,14 +91,10 @@ impl ActionProcessor<ApplicationUser__Authorization___DeauthorizeFromAllDevices>
                         application_user_access_token: application_user_access_token__,
                     } => application_user_access_token__,
                     ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
-                        return Ok(Ok(UnifiedReport::precedent(
-                            Precedent::ApplicationUserAccessToken_AlreadyExpired,
-                        )));
+                        return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_AlreadyExpired)));
                     }
                     ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
-                        return Ok(Ok(UnifiedReport::precedent(
-                            Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList,
-                        )));
+                        return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList)));
                     }
                 };
                 application_user_access_token_
@@ -102,7 +103,12 @@ impl ActionProcessor<ApplicationUser__Authorization___DeauthorizeFromAllDevices>
                 return Ok(Err(invalid_argument_auditor));
             }
         };
-        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert_into_error(Backtrace::new(line!(), file!()))?;
+        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert_into_error(
+            Backtrace::new(
+                line!(),
+                file!(),
+            ),
+        )?;
         PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::delete_2(
             &*database_2_postgresql_pooled_connection,
             By1 {

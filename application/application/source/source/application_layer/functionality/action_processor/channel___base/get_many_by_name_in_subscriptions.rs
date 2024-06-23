@@ -21,8 +21,8 @@ use crate::{
             auditor::{
                 Auditor,
                 Backtrace,
-                ResultConverter,
                 OptionConverter,
+                ResultConverter,
             },
             control_type::Channel__Base___GetManyByNameInSubscriptions,
             environment_configuration::EnvironmentConfiguration,
@@ -73,7 +73,12 @@ impl ActionProcessor<Channel__Base___GetManyByNameInSubscriptions> {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let incoming_ = incoming.convert_value_does_not_exist(Backtrace::new(line!(), file!()))?;
+        let incoming_ = incoming.convert_value_does_not_exist(
+            Backtrace::new(
+                line!(),
+                file!(),
+            ),
+        )?;
         let application_user_access_token = match Extractor::<ApplicationUserAccessToken<'_>>::extract(
             environment_configuration,
             incoming_.application_user_access_token_encrypted.as_str(),
@@ -86,14 +91,10 @@ impl ActionProcessor<Channel__Base___GetManyByNameInSubscriptions> {
                         application_user_access_token: application_user_access_token__,
                     } => application_user_access_token__,
                     ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
-                        return Ok(Ok(UnifiedReport::precedent(
-                            Precedent::ApplicationUserAccessToken_AlreadyExpired,
-                        )));
+                        return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_AlreadyExpired)));
                     }
                     ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
-                        return Ok(Ok(UnifiedReport::precedent(
-                            Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList,
-                        )));
+                        return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList)));
                     }
                 };
                 application_user_access_token_
@@ -103,26 +104,52 @@ impl ActionProcessor<Channel__Base___GetManyByNameInSubscriptions> {
             }
         };
         if incoming_.limit <= 0 || incoming_.limit > Self::LIMIT {
-            return Ok(Err(Auditor::<InvalidArgument>::new(
-                InvalidArgument,
-                Backtrace::new(line!(), file!()),
-            )));
+            return Ok(
+                Err(
+                    Auditor::<InvalidArgument>::new(
+                        InvalidArgument,
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                ),
+            );
         }
         if !Validator::<Channel_Name>::is_valid(incoming_.channel__name.as_str()) {
-            return Ok(Err(Auditor::<InvalidArgument>::new(
-                InvalidArgument,
-                Backtrace::new(line!(), file!()),
-            )));
+            return Ok(
+                Err(
+                    Auditor::<InvalidArgument>::new(
+                        InvalidArgument,
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                ),
+            );
         }
         if let Some(ref requery___channel__name_) = incoming_.requery___channel__name {
             if !Validator::<Channel_Name>::is_valid(requery___channel__name_.as_str()) {
-                return Ok(Err(Auditor::<InvalidArgument>::new(
-                    InvalidArgument,
-                    Backtrace::new(line!(), file!()),
-                )));
+                return Ok(
+                    Err(
+                        Auditor::<InvalidArgument>::new(
+                            InvalidArgument,
+                            Backtrace::new(
+                                line!(),
+                                file!(),
+                            ),
+                        ),
+                    ),
+                );
             }
         }
-        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert_into_error(Backtrace::new(line!(), file!()))?;
+        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert_into_error(
+            Backtrace::new(
+                line!(),
+                file!(),
+            ),
+        )?;
         let common_registry = PostgresqlRepository::<Common1>::find_2(
             &*database_1_postgresql_pooled_connection,
             By2 {

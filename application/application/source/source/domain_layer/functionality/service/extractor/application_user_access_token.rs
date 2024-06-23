@@ -30,13 +30,15 @@ impl Extractor<ApplicationUserAccessToken<'_>> {
             }
         };
         if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_access_token.expires_at) {
-            return Ok(Ok(
-                ExtractorResult::ApplicationUserAccessTokenAlreadyExpired,
-            ));
+            return Ok(Ok(ExtractorResult::ApplicationUserAccessTokenAlreadyExpired));
         }
-        return Ok(Ok(ExtractorResult::ApplicationUserAccessToken {
-            application_user_access_token,
-        }));
+        return Ok(
+            Ok(
+                ExtractorResult::ApplicationUserAccessToken {
+                    application_user_access_token,
+                },
+            ),
+        );
     }
 }
 pub enum ExtractorResult {

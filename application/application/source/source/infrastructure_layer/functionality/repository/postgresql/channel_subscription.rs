@@ -33,26 +33,47 @@ impl PostgresqlRepository<ChannelSubscription> {
             RETURNING \
                 cs.created_at::TEXT AS ca;";
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&insert_1.application_user__id, Type::INT8)
-            .add_parameter(&insert_1.channel__id, Type::INT8);
+            .add_parameter(
+                &insert_1.application_user__id,
+                Type::INT8,
+            )
+            .add_parameter(
+                &insert_1.channel__id,
+                Type::INT8,
+            );
         let statement = database_1_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         let row_registry = database_1_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         let channel_subscription = ChannelSubscription::new(
             insert_1.application_user__id,
             insert_1.channel__id,
-            row_registry[0].try_get::<'_, usize, String>(0).convert_into_error(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, String>(0).convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?,
         );
         return Ok(channel_subscription);
     }
@@ -63,21 +84,39 @@ impl PostgresqlRepository<ChannelSubscription> {
                 cs.application_user__id AS aui \
             FROM public.channel_subscription cs \
             WHERE cs.application_user__id = $1 AND cs.channel__id = $2;";
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&by_1.application_user__id, Type::INT8).add_parameter(&by_1.channel__id, Type::INT8);
+        prepared_statemant_parameter_convertation_resolver
+            .add_parameter(
+                &by_1.application_user__id,
+                Type::INT8,
+            )
+            .add_parameter(
+                &by_1.channel__id,
+                Type::INT8,
+            );
         let statement = database_1_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         let row_registry = database_1_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         if row_registry.is_empty() {
             return Ok(false);
         }

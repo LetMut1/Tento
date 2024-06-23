@@ -108,15 +108,18 @@ impl CommandProcessor<CreateFixtures> {
             "{}/environment_configuration",
             std::env::var("CARGO_MANIFEST_DIR").convert_into_error(Backtrace::new(line!(), file!()))?.as_str(),
         );
-        return Ok(Loader::<EnvironmentConfiguration>::load_from_file(
-            environment_configuration_file_path.as_str(),
-        )?);
+        return Ok(Loader::<EnvironmentConfiguration>::load_from_file(environment_configuration_file_path.as_str())?);
     }
     fn run_runtime<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<(), Auditor<Error>> {
         Builder::new_current_thread()
             .enable_all()
             .build()
-            .convert_into_error(Backtrace::new(line!(), file!()))?
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?
             .block_on(Self::create_fixtures(environment_configuration))?;
         return Ok(());
     }
@@ -124,7 +127,12 @@ impl CommandProcessor<CreateFixtures> {
         let database_1_postgresql_connection_pool = Creator::<PostgresqlConnectionPoolNoTls>::create_database_1(environment_configuration).await?;
         let application_user_password = Self::APPLICATION_USER__PASSWORD.to_string();
         let application_user__password_hash = Encoder::<ApplicationUser_Password>::encode(application_user_password.as_str())?;
-        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert_into_error(Backtrace::new(line!(), file!()))?;
+        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert_into_error(
+            Backtrace::new(
+                line!(),
+                file!(),
+            ),
+        )?;
         let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
         '_a: for _ in 1..=Self::QUANTITY_OF_APPLICATION_USERS {
             let mut application_user__nickname = String::new();
@@ -133,33 +141,48 @@ impl CommandProcessor<CreateFixtures> {
                 application_user__nickname = format!("{}{}", application_user__nickname.as_str(), character);
             }
             if !Validator::<ApplicationUser_Nickname>::is_valid(application_user__nickname.as_str()) {
-                return Err(Auditor::<Error>::new(
-                    Error::Logic {
-                        message: "Application_user nickname should be valid.",
-                    },
-                    Backtrace::new(line!(), file!()),
-                ));
+                return Err(
+                    Auditor::<Error>::new(
+                        Error::Logic {
+                            message: "Application_user nickname should be valid.",
+                        },
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                );
             }
             let application_user__email = format!("{}@fixture.com", application_user__nickname.as_str());
             if !Validator::<ApplicationUser_Email>::is_valid(application_user__email.as_str())? {
-                return Err(Auditor::<Error>::new(
-                    Error::Logic {
-                        message: "Application_user email should be valid.",
-                    },
-                    Backtrace::new(line!(), file!()),
-                ));
+                return Err(
+                    Auditor::<Error>::new(
+                        Error::Logic {
+                            message: "Application_user email should be valid.",
+                        },
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                );
             }
             if !Validator::<ApplicationUser_Password>::is_valid(
                 application_user_password.as_str(),
                 application_user__email.as_str(),
                 application_user__nickname.as_str(),
             ) {
-                return Err(Auditor::<Error>::new(
-                    Error::Logic {
-                        message: "Application_user_password should be valid.",
-                    },
-                    Backtrace::new(line!(), file!()),
-                ));
+                return Err(
+                    Auditor::<Error>::new(
+                        Error::Logic {
+                            message: "Application_user_password should be valid.",
+                        },
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                );
             }
             let application_user = match PostgresqlRepository::<ApplicationUser<'_>>::find_1(
                 database_1_postgresql_connection,
@@ -188,12 +211,17 @@ impl CommandProcessor<CreateFixtures> {
                 Self::APPLICATION_USER_DEVICE__ID_PART
             );
             if !Validator::<ApplicationUserDevice_Id>::is_valid(&application_user_device__id) {
-                return Err(Auditor::<Error>::new(
-                    Error::Logic {
-                        message: "Application_user_device id should be valid.",
-                    },
-                    Backtrace::new(line!(), file!()),
-                ));
+                return Err(
+                    Auditor::<Error>::new(
+                        Error::Logic {
+                            message: "Application_user_device id should be valid.",
+                        },
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                );
             }
             PostgresqlRepository::<ApplicationUserDevice>::create_1(
                 database_1_postgresql_connection,
@@ -210,21 +238,31 @@ impl CommandProcessor<CreateFixtures> {
                     channel__name = format!("{}{}", channel__name.as_str(), character,);
                 }
                 if !Validator::<Channel_Name>::is_valid(channel__name.as_str()) {
-                    return Err(Auditor::<Error>::new(
-                        Error::Logic {
-                            message: "Channel name should be valid.",
-                        },
-                        Backtrace::new(line!(), file!()),
-                    ));
+                    return Err(
+                        Auditor::<Error>::new(
+                            Error::Logic {
+                                message: "Channel name should be valid.",
+                            },
+                            Backtrace::new(
+                                line!(),
+                                file!(),
+                            ),
+                        ),
+                    );
                 }
                 let channel__linked_name = channel__name.clone();
                 if !Validator::<Channel_LinkedName>::is_valid(channel__linked_name.as_str()) {
-                    return Err(Auditor::<Error>::new(
-                        Error::Logic {
-                            message: "Channel linked name should be valid.",
-                        },
-                        Backtrace::new(line!(), file!()),
-                    ));
+                    return Err(
+                        Auditor::<Error>::new(
+                            Error::Logic {
+                                message: "Channel linked name should be valid.",
+                            },
+                            Backtrace::new(
+                                line!(),
+                                file!(),
+                            ),
+                        ),
+                    );
                 }
                 let channel__description = if thread_rng().gen_range::<i8, _>(0..=1) == 1 {
                     let mut channel__description_ = String::new();
@@ -233,12 +271,17 @@ impl CommandProcessor<CreateFixtures> {
                         channel__description_ = format!("{}{}", channel__description_.as_str(), character,);
                     }
                     if !Validator::<Channel_Description>::is_valid(channel__description_.as_str()) {
-                        return Err(Auditor::<Error>::new(
-                            Error::Logic {
-                                message: "Channel description should be valid.",
-                            },
-                            Backtrace::new(line!(), file!()),
-                        ));
+                        return Err(
+                            Auditor::<Error>::new(
+                                Error::Logic {
+                                    message: "Channel description should be valid.",
+                                },
+                                Backtrace::new(
+                                    line!(),
+                                    file!(),
+                                ),
+                            ),
+                        );
                     }
                     Some(channel__description_)
                 } else {
@@ -248,12 +291,17 @@ impl CommandProcessor<CreateFixtures> {
                     0, 1, 2,
                 ];
                 if !Validator::<Channel_Orientation>::is_valid(channel__orientation.as_slice()) {
-                    return Err(Auditor::<Error>::new(
-                        Error::Logic {
-                            message: "Channel orientation email should be valid.",
-                        },
-                        Backtrace::new(line!(), file!()),
-                    ));
+                    return Err(
+                        Auditor::<Error>::new(
+                            Error::Logic {
+                                message: "Channel orientation email should be valid.",
+                            },
+                            Backtrace::new(
+                                line!(),
+                                file!(),
+                            ),
+                        ),
+                    );
                 }
                 let channel = PostgresqlRepository::<Channel<'_>>::find_2(
                     database_1_postgresql_connection,

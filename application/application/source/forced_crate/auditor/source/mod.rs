@@ -1,9 +1,9 @@
 use error::Error;
+use invalid_argument::InvalidArgument;
 use std::{
     boxed::Box,
     error::Error as StdError,
 };
-use invalid_argument::InvalidArgument;
 pub struct Auditor<T> {
     pub subject: T,
     pub backtrace: Backtrace,
@@ -40,10 +40,12 @@ where
         return match self {
             Ok(value) => Ok(value),
             Err(error) => {
-                Err(Auditor::<Error>::new(
-                    Error::new_runtime(error),
-                    backtrace_part,
-                ))
+                Err(
+                    Auditor::<Error>::new(
+                        Error::new_runtime(error),
+                        backtrace_part,
+                    ),
+                )
             }
         };
     }
@@ -51,10 +53,12 @@ where
         return match self {
             Ok(value) => Ok(value),
             Err(_) => {
-                Err(Auditor::<InvalidArgument>::new(
-                    InvalidArgument,
-                    backtrace_part,
-                ))
+                Err(
+                    Auditor::<InvalidArgument>::new(
+                        InvalidArgument,
+                        backtrace_part,
+                    ),
+                )
             }
         };
     }
@@ -68,10 +72,12 @@ impl<T> ResultConverter_<T> for Result<T, Box<dyn StdError + Sync + Send + 'stat
         return match self {
             Ok(value) => Ok(value),
             Err(error) => {
-                Err(Auditor::<Error>::new(
-                    Error::new_runtime_(error),
-                    backtrace_part,
-                ))
+                Err(
+                    Auditor::<Error>::new(
+                        Error::new_runtime_(error),
+                        backtrace_part,
+                    ),
+                )
             }
         };
     }
@@ -79,10 +85,12 @@ impl<T> ResultConverter_<T> for Result<T, Box<dyn StdError + Sync + Send + 'stat
         return match self {
             Ok(value) => Ok(value),
             Err(_) => {
-                Err(Auditor::<InvalidArgument>::new(
-                    InvalidArgument,
-                    backtrace_part,
-                ))
+                Err(
+                    Auditor::<InvalidArgument>::new(
+                        InvalidArgument,
+                        backtrace_part,
+                    ),
+                )
             }
         };
     }
@@ -97,10 +105,12 @@ impl<T> OptionConverter<T> for Option<T> {
         return match self {
             Some(value) => Ok(value),
             None => {
-                return Err(Auditor::<Error>::new(
-                    Error::new_logic_unreachable_state(),
-                    backtrace_part,
-                ));
+                return Err(
+                    Auditor::<Error>::new(
+                        Error::new_logic_unreachable_state(),
+                        backtrace_part,
+                    ),
+                );
             }
         };
     }
@@ -108,10 +118,12 @@ impl<T> OptionConverter<T> for Option<T> {
         return match self {
             Some(value) => Ok(value),
             None => {
-                return Err(Auditor::<Error>::new(
-                    Error::new_logic_out_of_range(),
-                    backtrace_part,
-                ));
+                return Err(
+                    Auditor::<Error>::new(
+                        Error::new_logic_out_of_range(),
+                        backtrace_part,
+                    ),
+                );
             }
         };
     }
@@ -119,10 +131,12 @@ impl<T> OptionConverter<T> for Option<T> {
         return match self {
             Some(value) => Ok(value),
             None => {
-                return Err(Auditor::<Error>::new(
-                    Error::new_logic_value_does_not_exist(),
-                    backtrace_part,
-                ));
+                return Err(
+                    Auditor::<Error>::new(
+                        Error::new_logic_value_does_not_exist(),
+                        backtrace_part,
+                    ),
+                );
             }
         };
     }

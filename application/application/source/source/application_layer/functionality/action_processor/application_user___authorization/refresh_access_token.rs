@@ -27,8 +27,8 @@ use crate::{
             auditor::{
                 Auditor,
                 Backtrace,
-                ResultConverter,
                 OptionConverter,
+                ResultConverter,
             },
             control_type::{
                 ApplicationUser__Authorization___RefreshAccessToken,
@@ -85,7 +85,12 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let incoming_ = incoming.convert_value_does_not_exist(Backtrace::new(line!(), file!()))?;
+        let incoming_ = incoming.convert_value_does_not_exist(
+            Backtrace::new(
+                line!(),
+                file!(),
+            ),
+        )?;
         let application_user_access_token = match FormResolver::<ApplicationUserAccessToken<'_>>::from_encrypted(
             environment_configuration,
             incoming_.application_user_access_token_encrypted.as_str(),
@@ -95,7 +100,12 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
                 return Ok(Err(invalid_argument_auditor));
             }
         };
-        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert_into_error(Backtrace::new(line!(), file!()))?;
+        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert_into_error(
+            Backtrace::new(
+                line!(),
+                file!(),
+            ),
+        )?;
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
         let mut application_user_access_refresh_token = match PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::find_1(
             database_2_postgresql_connection,
@@ -108,9 +118,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
         {
             Some(application_user_access_refresh_token_) => application_user_access_refresh_token_,
             None => {
-                return Ok(Ok(UnifiedReport::precedent(
-                    Precedent::ApplicationUserAccessRefreshToken_NotFound,
-                )));
+                return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessRefreshToken_NotFound)));
             }
         };
         let is_valid = FormResolver::<ApplicationUserAccessRefreshToken<'_>>::is_valid(
@@ -119,10 +127,17 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
             incoming_.application_user_access_refresh_token_encrypted.as_str(),
         )?;
         if !is_valid || application_user_access_token.id != application_user_access_refresh_token.application_user_access_token__id.as_ref() {
-            return Ok(Err(Auditor::<InvalidArgument>::new(
-                InvalidArgument,
-                Backtrace::new(line!(), file!()),
-            )));
+            return Ok(
+                Err(
+                    Auditor::<InvalidArgument>::new(
+                        InvalidArgument,
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                ),
+            );
         }
         if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_access_refresh_token.expires_at) {
             PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::delete_1(
@@ -133,9 +148,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
                 },
             )
             .await?;
-            return Ok(Ok(UnifiedReport::precedent(
-                Precedent::ApplicationUserAccessRefreshToken_AlreadyExpired,
-            )));
+            return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessRefreshToken_AlreadyExpired)));
         }
         let application_user_access_token_new = ApplicationUserAccessToken::new(
             Generator::<ApplicationUserAccessToken_Id>::generate(),

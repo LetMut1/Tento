@@ -43,10 +43,12 @@ impl FormResolver<ApplicationUserAccessRefreshToken<'_>> {
     ) -> Result<bool, Auditor<Error>> {
         let data = Serializer::<MessagePack>::serialize(application_user_access_refresh_token)?;
         let encoded_data = Encoder::<Base64>::decode(application_user_access_refresh_token_encrypted.as_bytes())?;
-        return Ok(Encoder::<HmacSha3_512>::is_valid(
-            environment_configuration.encryption.private_key.application_user_access_refresh_token.as_bytes(),
-            data.as_slice(),
-            encoded_data.as_slice(),
-        )?);
+        return Ok(
+            Encoder::<HmacSha3_512>::is_valid(
+                environment_configuration.encryption.private_key.application_user_access_refresh_token.as_bytes(),
+                data.as_slice(),
+                encoded_data.as_slice(),
+            )?,
+        );
     }
 }

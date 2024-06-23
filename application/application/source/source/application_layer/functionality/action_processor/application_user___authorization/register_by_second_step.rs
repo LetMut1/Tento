@@ -20,8 +20,8 @@ use crate::{
             auditor::{
                 Auditor,
                 Backtrace,
-                ResultConverter,
                 OptionConverter,
+                ResultConverter,
             },
             control_type::{
                 ApplicationUser__Authorization___RegisterBySecondStep,
@@ -78,26 +78,57 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let incoming_ = incoming.convert_value_does_not_exist(Backtrace::new(line!(), file!()))?;
+        let incoming_ = incoming.convert_value_does_not_exist(
+            Backtrace::new(
+                line!(),
+                file!(),
+            ),
+        )?;
         if !Validator::<ApplicationUser_Email>::is_valid(incoming_.application_user__email.as_str())? {
-            return Ok(Err(Auditor::<InvalidArgument>::new(
-                InvalidArgument,
-                Backtrace::new(line!(), file!()),
-            )));
+            return Ok(
+                Err(
+                    Auditor::<InvalidArgument>::new(
+                        InvalidArgument,
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                ),
+            );
         }
         if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming_.application_user_device__id.as_str()) {
-            return Ok(Err(Auditor::<InvalidArgument>::new(
-                InvalidArgument,
-                Backtrace::new(line!(), file!()),
-            )));
+            return Ok(
+                Err(
+                    Auditor::<InvalidArgument>::new(
+                        InvalidArgument,
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                ),
+            );
         }
         if !Validator::<ApplicationUserRegistrationToken_Value>::is_valid(incoming_.application_user_registration_token__value.as_str())? {
-            return Ok(Err(Auditor::<InvalidArgument>::new(
-                InvalidArgument,
-                Backtrace::new(line!(), file!()),
-            )));
+            return Ok(
+                Err(
+                    Auditor::<InvalidArgument>::new(
+                        InvalidArgument,
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                ),
+            );
         }
-        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert_into_error(Backtrace::new(line!(), file!()))?;
+        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert_into_error(
+            Backtrace::new(
+                line!(),
+                file!(),
+            ),
+        )?;
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
         let mut application_user_registration_token = match PostgresqlRepository::<ApplicationUserRegistrationToken>::find_2(
             database_2_postgresql_connection,
@@ -110,9 +141,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
         {
             Some(application_user_registration_token_) => application_user_registration_token_,
             None => {
-                return Ok(Ok(UnifiedReport::precedent(
-                    Precedent::ApplicationUserRegistrationToken_NotFound,
-                )));
+                return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_NotFound)));
             }
         };
         if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token.expires_at) {
@@ -124,18 +153,18 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
                 },
             )
             .await?;
-            return Ok(Ok(UnifiedReport::precedent(
-                Precedent::ApplicationUserRegistrationToken_AlreadyExpired,
-            )));
+            return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_AlreadyExpired)));
         }
         if application_user_registration_token.is_approved {
-            return Ok(Ok(UnifiedReport::precedent(
-                Precedent::ApplicationUserRegistrationToken_AlreadyApproved,
-            )));
+            return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_AlreadyApproved)));
         }
         if application_user_registration_token.value != incoming_.application_user_registration_token__value {
-            application_user_registration_token.wrong_enter_tries_quantity =
-                application_user_registration_token.wrong_enter_tries_quantity.checked_add(1).convert_out_of_range(Backtrace::new(line!(), file!()))?;
+            application_user_registration_token.wrong_enter_tries_quantity = application_user_registration_token.wrong_enter_tries_quantity.checked_add(1).convert_out_of_range(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
             if application_user_registration_token.wrong_enter_tries_quantity < ApplicationUserRegistrationToken_WrongEnterTriesQuantity::LIMIT {
                 PostgresqlRepository::<ApplicationUserRegistrationToken>::update_4(
                     database_2_postgresql_connection,
@@ -158,11 +187,15 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
                 )
                 .await?;
             }
-            return Ok(Ok(UnifiedReport::precedent(
-                Precedent::ApplicationUserRegistrationToken_WrongValue {
-                    application_user_registration_token__wrong_enter_tries_quantity: application_user_registration_token.wrong_enter_tries_quantity,
-                },
-            )));
+            return Ok(
+                Ok(
+                    UnifiedReport::precedent(
+                        Precedent::ApplicationUserRegistrationToken_WrongValue {
+                            application_user_registration_token__wrong_enter_tries_quantity: application_user_registration_token.wrong_enter_tries_quantity,
+                        },
+                    ),
+                ),
+            );
         }
         application_user_registration_token.is_approved = true;
         PostgresqlRepository::<ApplicationUserRegistrationToken>::update_5(

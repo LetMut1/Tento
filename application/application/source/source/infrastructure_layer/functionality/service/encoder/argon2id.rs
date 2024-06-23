@@ -15,11 +15,30 @@ impl Encoder<Argon2Id> {
         // // TODO TODO TODO ARGON2id . ПРОВЕрИТЬЬ, он или нет, понять, почему не он.  // TODO отрабатывает за 320 млсекунд, как увеличить скорость, https://users.rust-lang.org/t/which-crate-should-i-use-for-argon2/26090
         let config = Config::default(); // TODO настроить конфиг, возможно, вынестки в константу
         let salt = Uuid::new_v4();
-        let value = argon2::hash_encoded(data, salt.as_bytes().as_slice(), &config).convert_into_error(Backtrace::new(line!(), file!()))?;
+        let value = argon2::hash_encoded(
+            data,
+            salt.as_bytes().as_slice(),
+            &config,
+        )
+        .convert_into_error(
+            Backtrace::new(
+                line!(),
+                file!(),
+            ),
+        )?;
         return Ok(value);
     }
     pub fn is_valid<'a>(data: &'a [u8], encoded_data: &'a str) -> Result<bool, Auditor<Error>> {
-        let value = argon2::verify_encoded(encoded_data, data).convert_into_error(Backtrace::new(line!(), file!()))?;
+        let value = argon2::verify_encoded(
+            encoded_data,
+            data,
+        )
+        .convert_into_error(
+            Backtrace::new(
+                line!(),
+                file!(),
+            ),
+        )?;
         return Ok(value);
     }
 }

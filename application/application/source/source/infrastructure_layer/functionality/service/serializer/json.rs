@@ -23,12 +23,26 @@ impl Serialize for Serializer<Json> {
     where
         T: SerdeSerialize,
     {
-        return Ok(serde_json::to_vec(subject).convert_into_error(Backtrace::new(line!(), file!()))?);
+        return Ok(
+            serde_json::to_vec(subject).convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?,
+        );
     }
     fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, Auditor<Error>>
     where
         T: Deserialize<'a>,
     {
-        return Ok(serde_json::from_slice::<'_, T>(data).convert_into_error(Backtrace::new(line!(), file!()))?);
+        return Ok(
+            serde_json::from_slice::<'_, T>(data).convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?,
+        );
     }
 }

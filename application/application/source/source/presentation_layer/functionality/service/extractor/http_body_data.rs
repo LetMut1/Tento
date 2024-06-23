@@ -33,14 +33,26 @@ impl Extractor<HttpBodyData> {
         D: for<'de> Deserialize<'de>,
         Serializer<SF>: Serialize,
     {
-        let bytes = to_bytes(body).await.convert_into_error(Backtrace::new(line!(), file!()))?;
+        let bytes = to_bytes(body).await.convert_into_error(
+            Backtrace::new(
+                line!(),
+                file!(),
+            ),
+        )?;
         let data = match Serializer::<SF>::deserialize::<'_, D>(bytes.chunk()) {
             Ok(data_) => data_,
             Err(_) => {
-                return Ok(Err(Auditor::<InvalidArgument>::new(
-                    InvalidArgument,
-                    Backtrace::new(line!(), file!()),
-                )));
+                return Ok(
+                    Err(
+                        Auditor::<InvalidArgument>::new(
+                            InvalidArgument,
+                            Backtrace::new(
+                                line!(),
+                                file!(),
+                            ),
+                        ),
+                    ),
+                );
             }
         };
         return Ok(Ok(Some(data)));

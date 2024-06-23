@@ -32,8 +32,8 @@ use crate::{
             auditor::{
                 Auditor,
                 Backtrace,
-                ResultConverter,
                 OptionConverter,
+                ResultConverter,
             },
             control_type::{
                 ApplicationUser__Authorization___AuthorizeByFirstStep,
@@ -101,20 +101,44 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let incoming_ = incoming.convert_value_does_not_exist(Backtrace::new(line!(), file!()))?;
+        let incoming_ = incoming.convert_value_does_not_exist(
+            Backtrace::new(
+                line!(),
+                file!(),
+            ),
+        )?;
         if !Validator::<ApplicationUser_Password>::is_valid_part_1(incoming_.application_user_password.as_str()) {
-            return Ok(Err(Auditor::<InvalidArgument>::new(
-                InvalidArgument,
-                Backtrace::new(line!(), file!()),
-            )));
+            return Ok(
+                Err(
+                    Auditor::<InvalidArgument>::new(
+                        InvalidArgument,
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                ),
+            );
         }
         if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming_.application_user_device__id.as_str()) {
-            return Ok(Err(Auditor::<InvalidArgument>::new(
-                InvalidArgument,
-                Backtrace::new(line!(), file!()),
-            )));
+            return Ok(
+                Err(
+                    Auditor::<InvalidArgument>::new(
+                        InvalidArgument,
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                ),
+            );
         }
-        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert_into_error(Backtrace::new(line!(), file!()))?;
+        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert_into_error(
+            Backtrace::new(
+                line!(),
+                file!(),
+            ),
+        )?;
         let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
         let (application_user__id, application_user__email, application_user__nickname, application_user__password_hash) =
             if Validator::<ApplicationUser_Email>::is_valid(incoming_.application_user__email___or___application_user__nickname.as_str())? {
@@ -128,9 +152,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                 let application_user__ = match application_user_ {
                     Some(application_user___) => application_user___,
                     None => {
-                        return Ok(Ok(UnifiedReport::precedent(
-                            Precedent::ApplicationUser_WrongEmailOrNicknameOrPassword,
-                        )));
+                        return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUser_WrongEmailOrNicknameOrPassword)));
                     }
                 };
                 (
@@ -151,9 +173,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                     let application_user__ = match application_user_ {
                         Some(application_user___) => application_user___,
                         None => {
-                            return Ok(Ok(UnifiedReport::precedent(
-                                Precedent::ApplicationUser_WrongEmailOrNicknameOrPassword,
-                            )));
+                            return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUser_WrongEmailOrNicknameOrPassword)));
                         }
                     };
                     (
@@ -163,10 +183,17 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                         application_user__.password_hash,
                     )
                 } else {
-                    return Ok(Err(Auditor::<InvalidArgument>::new(
-                        InvalidArgument,
-                        Backtrace::new(line!(), file!()),
-                    )));
+                    return Ok(
+                        Err(
+                            Auditor::<InvalidArgument>::new(
+                                InvalidArgument,
+                                Backtrace::new(
+                                    line!(),
+                                    file!(),
+                                ),
+                            ),
+                        ),
+                    );
                 }
             };
         if !Validator::<ApplicationUser_Password>::is_valid_part_2(
@@ -174,24 +201,40 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
             application_user__email.as_str(),
             application_user__nickname.as_str(),
         ) {
-            return Ok(Err(Auditor::<InvalidArgument>::new(
-                InvalidArgument,
-                Backtrace::new(line!(), file!()),
-            )));
-        }
-        let closure = move || -> _ {
-            return Encoder::<ApplicationUser_Password>::is_valid(
-                incoming_.application_user_password.as_str(),
-                application_user__password_hash.as_str(),
+            return Ok(
+                Err(
+                    Auditor::<InvalidArgument>::new(
+                        InvalidArgument,
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                ),
             );
-        };
-        let join_handle = Spawner::<TokioBlockingTask>::spawn_processed(closure);
-        if !join_handle.await.convert_into_error(Backtrace::new(line!(), file!()))?? {
-            return Ok(Ok(UnifiedReport::precedent(
-                Precedent::ApplicationUser_WrongEmailOrNicknameOrPassword,
-            )));
         }
-        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert_into_error(Backtrace::new(line!(), file!()))?;
+        let join_handle = Spawner::<TokioBlockingTask>::spawn_processed(
+            move || -> _ {
+                return Encoder::<ApplicationUser_Password>::is_valid(
+                    incoming_.application_user_password.as_str(),
+                    application_user__password_hash.as_str(),
+                );
+            },
+        );
+        if !join_handle.await.convert_into_error(
+            Backtrace::new(
+                line!(),
+                file!(),
+            ),
+        )?? {
+            return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUser_WrongEmailOrNicknameOrPassword)));
+        }
+        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert_into_error(
+            Backtrace::new(
+                line!(),
+                file!(),
+            ),
+        )?;
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
         let (
             application_user_authorization_token__value,
@@ -210,9 +253,15 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
             Some(mut application_user_authorization_token) => {
                 let (can_send_, need_to_update_1) = if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token.can_be_resent_from) {
                     application_user_authorization_token.can_be_resent_from = Generator::<ApplicationUserAuthorizationToken_CanBeResentFrom>::generate()?;
-                    (true, true)
+                    (
+                        true,
+                        true,
+                    )
                 } else {
-                    (false, false)
+                    (
+                        false,
+                        false,
+                    )
                 };
                 let need_to_update_2 = if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token.expires_at) {
                     application_user_authorization_token.value = Generator::<ApplicationUserAuthorizationToken_Value>::generate();

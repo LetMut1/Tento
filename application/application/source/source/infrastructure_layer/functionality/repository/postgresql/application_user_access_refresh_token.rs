@@ -39,9 +39,18 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 $6 \
             );";
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&insert_1.application_user__id, Type::INT8)
-            .add_parameter(&insert_1.application_user_device__id, Type::TEXT)
-            .add_parameter(&insert_1.application_user_access_token__id, Type::TEXT)
+            .add_parameter(
+                &insert_1.application_user__id,
+                Type::INT8,
+            )
+            .add_parameter(
+                &insert_1.application_user_device__id,
+                Type::TEXT,
+            )
+            .add_parameter(
+                &insert_1.application_user_access_token__id,
+                Type::TEXT,
+            )
             .add_parameter(
                 &application_user_access_refresh_token__obfuscation_value,
                 Type::TEXT,
@@ -60,22 +69,34 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         database_2_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
-        return Ok(ApplicationUserAccessRefreshToken::new(
-            insert_1.application_user__id,
-            Cow::Borrowed(insert_1.application_user_device__id),
-            Cow::Borrowed(insert_1.application_user_access_token__id),
-            insert_1.application_user_access_refresh_token__obfuscation_value,
-            insert_1.application_user_access_refresh_token__expires_at,
-            insert_1.application_user_access_refresh_token__updated_at,
-        ));
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
+        return Ok(
+            ApplicationUserAccessRefreshToken::new(
+                insert_1.application_user__id,
+                Cow::Borrowed(insert_1.application_user_device__id),
+                Cow::Borrowed(insert_1.application_user_access_token__id),
+                insert_1.application_user_access_refresh_token__obfuscation_value,
+                insert_1.application_user_access_refresh_token__expires_at,
+                insert_1.application_user_access_refresh_token__updated_at,
+            ),
+        );
     }
     pub async fn update_1<'a>(database_2_connection: &'a Connection, update_1: Update1<'_>, by_2: By2<'_>) -> Result<(), Auditor<Error>> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -94,7 +115,10 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
             ) \
             WHERE auart.application_user__id = $5 AND auart.application_user_device__id = $6;";
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&update_1.application_user_access_token__id, Type::TEXT)
+            .add_parameter(
+                &update_1.application_user_access_token__id,
+                Type::TEXT,
+            )
             .add_parameter(
                 &update_1.application_user_access_refresh_token__obfuscation_value,
                 Type::TEXT,
@@ -107,22 +131,38 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 &update_1.application_user_access_refresh_token__updated_at,
                 Type::INT8,
             )
-            .add_parameter(&by_2.application_user__id, Type::INT8)
-            .add_parameter(&by_2.application_user_device__id, Type::TEXT);
+            .add_parameter(
+                &by_2.application_user__id,
+                Type::INT8,
+            )
+            .add_parameter(
+                &by_2.application_user_device__id,
+                Type::TEXT,
+            );
         let statement = database_2_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         database_2_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         return Ok(());
     }
     pub async fn delete_1<'a>(database_2_connection: &'a Connection, by_2: By2<'_>) -> Result<(), Auditor<Error>> {
@@ -130,22 +170,38 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
         let query = "DELETE FROM ONLY public.application_user_access_refresh_token AS auart  \
             WHERE auart.application_user__id = $1 AND auart.application_user_device__id = $2;";
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&by_2.application_user__id, Type::INT8)
-            .add_parameter(&by_2.application_user_device__id, Type::TEXT);
+            .add_parameter(
+                &by_2.application_user__id,
+                Type::INT8,
+            )
+            .add_parameter(
+                &by_2.application_user_device__id,
+                Type::TEXT,
+            );
         let statement = database_2_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         database_2_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         return Ok(());
     }
     pub async fn delete_2<'a>(database_2_connection: &'a Connection, by_1: By1) -> Result<(), Auditor<Error>> {
@@ -153,21 +209,34 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
         let query = "\
             DELETE FROM ONLY public.application_user_access_refresh_token AS auart  \
             WHERE auart.application_user__id = $1;";
-        prepared_statemant_parameter_convertation_resolver.add_parameter(&by_1.application_user__id, Type::INT8);
+        prepared_statemant_parameter_convertation_resolver.add_parameter(
+            &by_1.application_user__id,
+            Type::INT8,
+        );
         let statement = database_2_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         database_2_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         return Ok(());
     }
     pub async fn find_1<'a, 'b>(database_2_connection: &'a Connection, by_2: By2<'b>) -> Result<Option<ApplicationUserAccessRefreshToken<'b>>, Auditor<Error>> {
@@ -181,33 +250,75 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
             FROM public.application_user_access_refresh_token auart \
             WHERE auart.application_user__id = $1 AND auart.application_user_device__id = $2;";
         prepared_statemant_parameter_convertation_resolver
-            .add_parameter(&by_2.application_user__id, Type::INT8)
-            .add_parameter(&by_2.application_user_device__id, Type::TEXT);
+            .add_parameter(
+                &by_2.application_user__id,
+                Type::INT8,
+            )
+            .add_parameter(
+                &by_2.application_user_device__id,
+                Type::TEXT,
+            );
         let statement = database_2_connection
             .prepare_typed(
                 query,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         let row_registry = database_2_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert_into_error(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
         if row_registry.is_empty() {
             return Ok(None);
         }
-        return Ok(Some(ApplicationUserAccessRefreshToken::new(
-            by_2.application_user__id,
-            Cow::Borrowed(by_2.application_user_device__id),
-            Cow::Owned(row_registry[0].try_get::<'_, usize, String>(0).convert_into_error(Backtrace::new(line!(), file!()))?),
-            row_registry[0].try_get::<'_, usize, String>(1).convert_into_error(Backtrace::new(line!(), file!()))?,
-            row_registry[0].try_get::<'_, usize, i64>(2).convert_into_error(Backtrace::new(line!(), file!()))?,
-            row_registry[0].try_get::<'_, usize, i64>(3).convert_into_error(Backtrace::new(line!(), file!()))?,
-        )));
+        return Ok(
+            Some(
+                ApplicationUserAccessRefreshToken::new(
+                    by_2.application_user__id,
+                    Cow::Borrowed(by_2.application_user_device__id),
+                    Cow::Owned(
+                        row_registry[0].try_get::<'_, usize, String>(0).convert_into_error(
+                            Backtrace::new(
+                                line!(),
+                                file!(),
+                            ),
+                        )?,
+                    ),
+                    row_registry[0].try_get::<'_, usize, String>(1).convert_into_error(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )?,
+                    row_registry[0].try_get::<'_, usize, i64>(2).convert_into_error(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )?,
+                    row_registry[0].try_get::<'_, usize, i64>(3).convert_into_error(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )?,
+                ),
+            ),
+        );
     }
 }
 pub struct Insert1<'a> {
