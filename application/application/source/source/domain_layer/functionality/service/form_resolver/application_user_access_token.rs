@@ -123,23 +123,9 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
                 );
             }
         };
-        let application_user_access_token = match Serializer::<MessagePack>::deserialize::<'_, ApplicationUserAccessToken<'static>>(data.as_slice()) {
-            Ok(application_user_access_token_) => application_user_access_token_,
-            Err(_) => {
-                return Ok(
-                    Err(
-                        Auditor::<InvalidArgument>::new(
-                            InvalidArgument,
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        ),
-                    ),
-                );
-            }
-        };
-        return Ok(Ok(application_user_access_token));
+        return Ok(
+            Serializer::<MessagePack>::deserialize::<'_, ApplicationUserAccessToken<'static>>(data.as_slice())
+        );
     }
 }
 struct Signature;

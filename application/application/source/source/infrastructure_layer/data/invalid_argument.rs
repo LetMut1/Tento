@@ -1,1 +1,1 @@
-pub struct InvalidArgument;
+pub use invalid_argument::InvalidArgument;

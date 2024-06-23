@@ -11,6 +11,7 @@ use crate::infrastructure_layer::data::{
         ResultConverter,
     },
     error::Error,
+    invalid_argument::InvalidArgument,
 };
 use serde::{
     Deserialize,
@@ -32,17 +33,15 @@ impl Serialize for Serializer<Json> {
             )?,
         );
     }
-    fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, Auditor<Error>>
+    fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, Auditor<InvalidArgument>>
     where
         T: Deserialize<'a>,
     {
-        return Ok(
-            serde_json::from_slice::<'_, T>(data).convert_into_error(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            )?,
+        return serde_json::from_slice::<'_, T>(data).convert_into_invalid_argument(
+            Backtrace::new(
+                line!(),
+                file!(),
+            ),
         );
     }
 }

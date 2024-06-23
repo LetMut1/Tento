@@ -116,6 +116,7 @@ dependencies = [
  "hmac",
  "http",
  "hyper",
+ "invalid_argument",
  "lettre",
  "lettre_email",
  "matchit",

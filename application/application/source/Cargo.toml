@@ -32,6 +32,7 @@ formatter = { path = "./forced_crate/formatter", package = "formatter", version 
 hmac = { package = "hmac", version = "0.12.1", default-features = true, features = [], optional = false }
 http = { package = "http", version = "0.2.9", default-features = true, features = [], optional = false }
 hyper = { package = "hyper", version = "0.14.27", default-features = true, features = ["full"], optional = false }
+invalid_argument = { path = "./forced_crate/invalid_argument", package = "invalid_argument", version = "1.0.0", default-features = true, features = [], optional = false }
 lettre = { package = "lettre", version = "0.9.6", default-features = true, features = [], optional = false }
 lettre_email = { package = "lettre_email", version = "0.9.4", default-features = true, features = [], optional = false }
 matchit = { package = "matchit", version = "0.7.3", default-features = true, features = [], optional = false }
