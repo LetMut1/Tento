@@ -18,7 +18,7 @@ use crate::{
             auditor::{
                 Auditor,
                 Backtrace,
-                ErrorConverter,
+                ResultConverter,
                 OptionConverter,
             },
             control_type::{
@@ -102,7 +102,7 @@ impl ActionProcessor<ApplicationUser__Authorization___DeauthorizeFromAllDevices>
                 return Ok(Err(invalid_argument_auditor));
             }
         };
-        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
+        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert_into_error(Backtrace::new(line!(), file!()))?;
         PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::delete_2(
             &*database_2_postgresql_pooled_connection,
             By1 {

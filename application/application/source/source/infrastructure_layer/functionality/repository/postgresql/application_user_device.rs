@@ -6,7 +6,7 @@ use crate::{
             auditor::{
                 Auditor,
                 Backtrace,
-                ErrorConverter,
+                ResultConverter,
             },
             error::Error,
         },
@@ -39,14 +39,14 @@ impl PostgresqlRepository<ApplicationUserDevice> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(Backtrace::new(line!(), file!()))?;
         database_1_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(Backtrace::new(line!(), file!()))?;
         return Ok(ApplicationUserDevice::new(
             insert_1.application_user_device__id,
             insert_1.application_user__id,

@@ -41,7 +41,7 @@ use crate::{
             auditor::{
                 Auditor,
                 Backtrace,
-                ErrorConverter,
+                ResultConverter,
                 OptionConverter,
             },
             control_type::{
@@ -129,7 +129,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
                 Backtrace::new(line!(), file!()),
             )));
         }
-        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
+        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert_into_error(Backtrace::new(line!(), file!()))?;
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
         let application_user_authorization_token = PostgresqlRepository::<ApplicationUserAuthorizationToken>::find_2(
             database_2_postgresql_connection,
@@ -191,7 +191,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
                 },
             )));
         }
-        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
+        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert_into_error(Backtrace::new(line!(), file!()))?;
         let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
         if !PostgresqlRepository::<ApplicationUser<'_>>::is_exist_3(
             database_1_postgresql_connection,
@@ -271,7 +271,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
         let database_1_postgresql_connection_pool_ = database_1_postgresql_connection_pool.clone();
         let database_2_postgresql_connection_pool_ = database_2_postgresql_connection_pool.clone();
         let future = async move {
-            let database_1_postgresql_pooled_connection_ = database_1_postgresql_connection_pool_.get().await.convert(Backtrace::new(line!(), file!()))?;
+            let database_1_postgresql_pooled_connection_ = database_1_postgresql_connection_pool_.get().await.convert_into_error(Backtrace::new(line!(), file!()))?;
             let application_user_device = PostgresqlRepository::<ApplicationUserDevice>::create_1(
                 &*database_1_postgresql_pooled_connection_,
                 ApplicationUserDeviceInsert1 {
@@ -280,7 +280,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
                 },
             )
             .await?;
-            let database_2_postgresql_pooled_connection_ = database_2_postgresql_connection_pool_.get().await.convert(Backtrace::new(line!(), file!()))?;
+            let database_2_postgresql_pooled_connection_ = database_2_postgresql_connection_pool_.get().await.convert_into_error(Backtrace::new(line!(), file!()))?;
             PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::delete_1(
                 &*database_2_postgresql_pooled_connection_,
                 By1 {

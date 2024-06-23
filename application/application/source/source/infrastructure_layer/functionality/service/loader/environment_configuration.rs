@@ -3,7 +3,7 @@ use crate::infrastructure_layer::data::{
     auditor::{
         Auditor,
         Backtrace,
-        ErrorConverter,
+        ResultConverter,
     },
     environment_configuration::{
         environment_configuration_file::EnvironmentConfigurationFile,
@@ -35,15 +35,15 @@ impl Loader<EnvironmentConfiguration> {
             Self::ENVIRONMENT_FILE_NAME,
         );
         let environment_file_path_ = Path::new(environment_file_path.as_str());
-        let environment_file_data = if environment_file_path_.try_exists().convert(Backtrace::new(line!(), file!()))? {
-            std::fs::read_to_string(environment_file_path_).convert(Backtrace::new(line!(), file!()))?
+        let environment_file_data = if environment_file_path_.try_exists().convert_into_error(Backtrace::new(line!(), file!()))? {
+            std::fs::read_to_string(environment_file_path_).convert_into_error(Backtrace::new(line!(), file!()))?
         } else {
             return Err(Auditor::<Error>::new(
                 Error::new_logic("The environment.toml file does not exist."),
                 Backtrace::new(line!(), file!()),
             ));
         };
-        let environment_configuration_file = toml::from_str::<EnvironmentConfigurationFile>(environment_file_data.as_str()).convert(Backtrace::new(line!(), file!()))?;
+        let environment_configuration_file = toml::from_str::<EnvironmentConfigurationFile>(environment_file_data.as_str()).convert_into_error(Backtrace::new(line!(), file!()))?;
         let application_server = {
             let tcp = {
                 let keepalive = {

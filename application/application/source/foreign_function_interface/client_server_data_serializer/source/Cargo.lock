@@ -27,6 +27,7 @@ name = "auditor"
 version = "1.0.0"
 dependencies = [
  "error",
+ "invalid_argument",
 ]
 
 [[package]]
@@ -219,6 +220,10 @@ dependencies = [
  "autocfg",
  "hashbrown",
 ]
+
+[[package]]
+name = "invalid_argument"
+version = "1.0.0"
 
 [[package]]
 name = "itoa"

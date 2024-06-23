@@ -5,7 +5,7 @@ use crate::{
         auditor::{
             Auditor,
             Backtrace,
-            ErrorConverter,
+            ResultConverter,
             OptionConverter,
         },
         error::Error,
@@ -19,7 +19,7 @@ impl Validator<ApplicationUser_Email> {
         let regular_expression = match REGULAR_EXPRESSION.get() {
             Some(regular_expression_) => regular_expression_,
             None => {
-                if let Err(_) = REGULAR_EXPRESSION.set(Regex::new(ApplicationUser_Email::REGULAR_EXPRESSION).convert(Backtrace::new(line!(), file!()))?) {
+                if let Err(_) = REGULAR_EXPRESSION.set(Regex::new(ApplicationUser_Email::REGULAR_EXPRESSION).convert_into_error(Backtrace::new(line!(), file!()))?) {
                     return Err(Auditor::<Error>::new(
                         Error::new_logic_value_already_exist(),
                         Backtrace::new(line!(), file!()),

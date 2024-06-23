@@ -1,0 +1,21 @@
+[package]
+name = "invalid_argument"
+version = "1.0.0"
+authors.workspace = true
+edition = "2021"
+
+[lib]
+name = "invalid_argument"
+path = "./source/mod.rs"
+test = true
+doctest = true
+bench = true
+doc = true
+proc-macro = false
+harness = true
+edition = "2021"
+crate-type = ["lib"]
+required-features = []
+
+[features]
+default = []

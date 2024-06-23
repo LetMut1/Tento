@@ -15,7 +15,7 @@ use crate::{
             auditor::{
                 Auditor,
                 Backtrace,
-                ErrorConverter,
+                ResultConverter,
             },
             error::Error,
         },
@@ -60,20 +60,20 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(Backtrace::new(line!(), file!()))?;
         let row_registry = database_1_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(Backtrace::new(line!(), file!()))?;
         return Ok(ApplicationUser::new(
-            row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, i64>(0).convert_into_error(Backtrace::new(line!(), file!()))?,
             insert_1.application_user__email,
             Cow::Owned(insert_1.application_user__nickname),
             insert_1.application_user__password_hash,
-            row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, String>(1).convert_into_error(Backtrace::new(line!(), file!()))?,
         ));
     }
     pub async fn update_1<'a>(database_1_connection: &'a Connection, update_1: Update1<'_>, by_3: By3) -> Result<(), Auditor<Error>> {
@@ -97,14 +97,14 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(Backtrace::new(line!(), file!()))?;
         database_1_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(Backtrace::new(line!(), file!()))?;
         return Ok(());
     }
     pub async fn is_exist_1<'a>(database_1_connection: &'a Connection, by_1: By1<'_>) -> Result<bool, Auditor<Error>> {
@@ -122,14 +122,14 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(Backtrace::new(line!(), file!()))?;
         let row_registry = database_1_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(Backtrace::new(line!(), file!()))?;
         if row_registry.is_empty() {
             return Ok(false);
         }
@@ -150,14 +150,14 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(Backtrace::new(line!(), file!()))?;
         let row_registry = database_1_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(Backtrace::new(line!(), file!()))?;
         if row_registry.is_empty() {
             return Ok(false);
         }
@@ -177,14 +177,14 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(Backtrace::new(line!(), file!()))?;
         let row_registry = database_1_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(Backtrace::new(line!(), file!()))?;
         if row_registry.is_empty() {
             return Ok(false);
         }
@@ -208,23 +208,23 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(Backtrace::new(line!(), file!()))?;
         let row_registry = database_1_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(Backtrace::new(line!(), file!()))?;
         if row_registry.is_empty() {
             return Ok(None);
         }
         return Ok(Some(ApplicationUser::new(
-            row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
-            row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, i64>(0).convert_into_error(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, String>(1).convert_into_error(Backtrace::new(line!(), file!()))?,
             Cow::Borrowed(by_1.application_user__nickname),
-            row_registry[0].try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?,
-            row_registry[0].try_get::<'_, usize, String>(3).convert(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, String>(2).convert_into_error(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, String>(3).convert_into_error(Backtrace::new(line!(), file!()))?,
         )));
     }
     pub async fn find_2<'a>(database_1_connection: &'a Connection, by_1: By1<'_>) -> Result<Option<ApplicationUser1>, Auditor<Error>> {
@@ -244,21 +244,21 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(Backtrace::new(line!(), file!()))?;
         let row_registry = database_1_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(Backtrace::new(line!(), file!()))?;
         if row_registry.is_empty() {
             return Ok(None);
         }
         return Ok(Some(ApplicationUser1 {
-            id: row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
-            email: row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
-            password_hash: row_registry[0].try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?,
+            id: row_registry[0].try_get::<'_, usize, i64>(0).convert_into_error(Backtrace::new(line!(), file!()))?,
+            email: row_registry[0].try_get::<'_, usize, String>(1).convert_into_error(Backtrace::new(line!(), file!()))?,
+            password_hash: row_registry[0].try_get::<'_, usize, String>(2).convert_into_error(Backtrace::new(line!(), file!()))?,
         }));
     }
     pub async fn find_3<'a>(database_1_connection: &'a Connection, by_2: By2<'_>) -> Result<Option<ApplicationUser2>, Auditor<Error>> {
@@ -278,21 +278,21 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(Backtrace::new(line!(), file!()))?;
         let row_registry = database_1_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(Backtrace::new(line!(), file!()))?;
         if row_registry.is_empty() {
             return Ok(None);
         }
         return Ok(Some(ApplicationUser2 {
-            id: row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
-            nickname: row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
-            password_hash: row_registry[0].try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?,
+            id: row_registry[0].try_get::<'_, usize, i64>(0).convert_into_error(Backtrace::new(line!(), file!()))?,
+            nickname: row_registry[0].try_get::<'_, usize, String>(1).convert_into_error(Backtrace::new(line!(), file!()))?,
+            password_hash: row_registry[0].try_get::<'_, usize, String>(2).convert_into_error(Backtrace::new(line!(), file!()))?,
         }));
     }
     pub async fn find_4<'a>(database_1_connection: &'a Connection, by_2: By2<'_>) -> Result<Option<ApplicationUser3>, Auditor<Error>> {
@@ -310,19 +310,19 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(Backtrace::new(line!(), file!()))?;
         let row_registry = database_1_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(Backtrace::new(line!(), file!()))?;
         if row_registry.is_empty() {
             return Ok(None);
         }
         return Ok(Some(ApplicationUser3 {
-            id: row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
+            id: row_registry[0].try_get::<'_, usize, i64>(0).convert_into_error(Backtrace::new(line!(), file!()))?,
         }));
     }
     pub async fn find_5<'a>(database_1_connection: &'a Connection, by_3: By3) -> Result<Option<ApplicationUser4>, Auditor<Error>> {
@@ -341,21 +341,21 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(Backtrace::new(line!(), file!()))?;
         let row_registry = database_1_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(Backtrace::new(line!(), file!()))?;
         if row_registry.is_empty() {
             return Ok(None);
         }
         return Ok(Some(ApplicationUser4 {
-            email: row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
-            nickname: row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
-            password_hash: row_registry[0].try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?,
+            email: row_registry[0].try_get::<'_, usize, String>(0).convert_into_error(Backtrace::new(line!(), file!()))?,
+            nickname: row_registry[0].try_get::<'_, usize, String>(1).convert_into_error(Backtrace::new(line!(), file!()))?,
+            password_hash: row_registry[0].try_get::<'_, usize, String>(2).convert_into_error(Backtrace::new(line!(), file!()))?,
         }));
     }
     pub async fn find_6<'a>(database_1_connection: &'a Connection, by_3: By3) -> Result<Option<ApplicationUser5>, Auditor<Error>> {
@@ -372,19 +372,19 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(Backtrace::new(line!(), file!()))?;
         let row_registry = database_1_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(Backtrace::new(line!(), file!()))?;
         if row_registry.is_empty() {
             return Ok(None);
         }
         return Ok(Some(ApplicationUser5 {
-            email: row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
+            email: row_registry[0].try_get::<'_, usize, String>(0).convert_into_error(Backtrace::new(line!(), file!()))?,
         }));
     }
 }

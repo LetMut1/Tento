@@ -26,7 +26,7 @@ use crate::{
             auditor::{
                 Auditor,
                 Backtrace,
-                ErrorConverter,
+                ResultConverter,
                 OptionConverter,
             },
             control_type::{
@@ -97,7 +97,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForResetPassword>
                 Backtrace::new(line!(), file!()),
             )));
         }
-        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
+        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert_into_error(Backtrace::new(line!(), file!()))?;
         let application_user = match PostgresqlRepository::<ApplicationUser>::find_6(
             &*database_1_postgresql_pooled_connection,
             By3 {
@@ -113,7 +113,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForResetPassword>
                 )));
             }
         };
-        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
+        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert_into_error(Backtrace::new(line!(), file!()))?;
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
         let mut application_user_reset_password_token = match PostgresqlRepository::<ApplicationUserResetPasswordToken>::find_3(
             database_2_postgresql_connection,

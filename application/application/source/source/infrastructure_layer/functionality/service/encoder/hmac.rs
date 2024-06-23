@@ -3,7 +3,7 @@ use crate::infrastructure_layer::data::{
     auditor::{
         Auditor,
         Backtrace,
-        ErrorConverter,
+        ResultConverter,
     },
     error::Error,
 };
@@ -28,7 +28,7 @@ impl Encoder<HmacSha3_512> {
         return Ok(true);
     }
     fn prepare_hmac<'a>(salt: &'a [u8], data: &'a [u8]) -> Result<HmacSha3_512, Auditor<Error>> {
-        let mut hmac = HmacSha3_512::new_from_slice(salt).convert(Backtrace::new(line!(), file!()))?;
+        let mut hmac = HmacSha3_512::new_from_slice(salt).convert_into_error(Backtrace::new(line!(), file!()))?;
         hmac.update(data);
         return Ok(hmac);
     }

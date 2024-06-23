@@ -44,7 +44,7 @@ use crate::{
             auditor::{
                 Auditor,
                 Backtrace,
-                ErrorConverter,
+                ResultConverter,
                 OptionConverter,
             },
             control_type::{
@@ -149,7 +149,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
                 Backtrace::new(line!(), file!()),
             )));
         }
-        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
+        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert_into_error(Backtrace::new(line!(), file!()))?;
         let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
         if PostgresqlRepository::<ApplicationUser<'_>>::is_exist_1(
             database_1_postgresql_connection,
@@ -175,7 +175,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
                 Precedent::ApplicationUser_EmailAlreadyExist,
             )));
         }
-        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
+        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert_into_error(Backtrace::new(line!(), file!()))?;
         let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
         let mut application_user_registration_token = match PostgresqlRepository::<ApplicationUserRegistrationToken>::find_2(
             database_2_postgresql_connection,
@@ -249,7 +249,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
             ApplicationUserInsert1 {
                 application_user__email: incoming_.application_user__email,
                 application_user__nickname: incoming_.application_user__nickname,
-                application_user__password_hash: join_handle.await.convert(Backtrace::new(line!(), file!()))??,
+                application_user__password_hash: join_handle.await.convert_into_error(Backtrace::new(line!(), file!()))??,
             },
         )
         .await?;
@@ -280,7 +280,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
         let database_1_postgresql_connection_pool_ = database_1_postgresql_connection_pool.clone();
         let database_2_postgresql_connection_pool_ = database_2_postgresql_connection_pool.clone();
         let future = async move {
-            let database_1_postgresql_pooled_connection_ = database_1_postgresql_connection_pool_.get().await.convert(Backtrace::new(line!(), file!()))?;
+            let database_1_postgresql_pooled_connection_ = database_1_postgresql_connection_pool_.get().await.convert_into_error(Backtrace::new(line!(), file!()))?;
             let application_user_device = PostgresqlRepository::<ApplicationUserDevice>::create_1(
                 &*database_1_postgresql_pooled_connection_,
                 Insert1 {
@@ -289,7 +289,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
                 },
             )
             .await?;
-            let database_2_postgresql_pooled_connection_ = database_2_postgresql_connection_pool_.get().await.convert(Backtrace::new(line!(), file!()))?;
+            let database_2_postgresql_pooled_connection_ = database_2_postgresql_connection_pool_.get().await.convert_into_error(Backtrace::new(line!(), file!()))?;
             PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete_2(
                 &*database_2_postgresql_pooled_connection_,
                 By1_ {

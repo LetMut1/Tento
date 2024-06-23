@@ -15,7 +15,7 @@ use crate::{
             auditor::{
                 Auditor,
                 Backtrace,
-                ErrorConverter,
+                ResultConverter,
                 OptionConverter,
             },
             control_type::ApplicationUser__Authorization___CheckNicknameForExisting,
@@ -70,7 +70,7 @@ impl ActionProcessor<ApplicationUser__Authorization___CheckNicknameForExisting> 
                 Backtrace::new(line!(), file!()),
             )));
         }
-        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
+        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert_into_error(Backtrace::new(line!(), file!()))?;
         let is_exist = PostgresqlRepository::<ApplicationUser<'_>>::is_exist_1(
             &*database_1_postgresql_pooled_connection,
             By1 {

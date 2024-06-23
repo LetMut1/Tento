@@ -3,7 +3,7 @@ use crate::infrastructure_layer::data::{
     auditor::{
         Auditor,
         Backtrace,
-        ErrorConverter,
+        ResultConverter,
     },
     control_type::Base64,
     error::Error,
@@ -19,7 +19,7 @@ impl Encoder<Base64> {
         return base64::encode_config(data, Self::BASE64_STANDARD_CONFIGURATION);
     }
     pub fn decode<'a>(encoded_data: &'a [u8]) -> Result<Vec<u8>, Auditor<Error>> {
-        let data = base64::decode_config(encoded_data, Self::BASE64_STANDARD_CONFIGURATION).convert(Backtrace::new(line!(), file!()))?;
+        let data = base64::decode_config(encoded_data, Self::BASE64_STANDARD_CONFIGURATION).convert_into_error(Backtrace::new(line!(), file!()))?;
         return Ok(data);
     }
 }

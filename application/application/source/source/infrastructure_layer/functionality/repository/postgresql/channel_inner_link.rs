@@ -6,7 +6,7 @@ use crate::{
             auditor::{
                 Auditor,
                 Backtrace,
-                ErrorConverter,
+                ResultConverter,
             },
             error::Error,
         },
@@ -42,18 +42,18 @@ impl PostgresqlRepository<ChannelInnerLink> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(Backtrace::new(line!(), file!()))?;
         let row_registry = database_1_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(Backtrace::new(line!(), file!()))?;
         return Ok(ChannelInnerLink::new(
             insert_1.channel_inner_link__from,
             insert_1.channel_inner_link__to,
-            row_registry[0].try_get::<'_, usize, String>(0).convert(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, String>(0).convert_into_error(Backtrace::new(line!(), file!()))?,
         ));
     }
     pub async fn find_1<'a>(database_1_connection: &'a Connection, by_1: By1, limit: i16) -> Result<Vec<ChannelInnerLink1>, Auditor<Error>> {
@@ -71,21 +71,21 @@ impl PostgresqlRepository<ChannelInnerLink> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(Backtrace::new(line!(), file!()))?;
         let row_registry = database_1_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(Backtrace::new(line!(), file!()))?;
         let mut channel_inner_link_registry: Vec<ChannelInnerLink1> = vec![];
         if row_registry.is_empty() {
             return Ok(channel_inner_link_registry);
         }
         '_a: for row in row_registry.iter() {
             let channel_inner_link = ChannelInnerLink1 {
-                channel_inner_link__to: row.try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
+                channel_inner_link__to: row.try_get::<'_, usize, i64>(0).convert_into_error(Backtrace::new(line!(), file!()))?,
             };
             channel_inner_link_registry.push(channel_inner_link);
         }

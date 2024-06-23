@@ -3,7 +3,7 @@ use crate::infrastructure_layer::data::{
     auditor::{
         Auditor,
         Backtrace,
-        ErrorConverter,
+        ResultConverter,
     },
     control_type::Email,
     environment_configuration::EnvironmentConfiguration,
@@ -28,10 +28,10 @@ impl Sender<Email> {
             .from("from_changethis@yandex.ru".to_string())
             .to(to)
             .build()
-            .convert(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(Backtrace::new(line!(), file!()))?;
         // TODO В static OnceLock
         let mut email_server_socket_address_registry =
-            environment_configuration.resource.email_server.socket_address.to_socket_addrs().convert(Backtrace::new(line!(), file!()))?;
+            environment_configuration.resource.email_server.socket_address.to_socket_addrs().convert_into_error(Backtrace::new(line!(), file!()))?;
         let email_server_socket_address = match email_server_socket_address_registry.next() {
             Some(email_server_socket_address_) => email_server_socket_address_,
             None => {
@@ -43,8 +43,8 @@ impl Sender<Email> {
                 ));
             }
         };
-        let smtp_client = SmtpClient::new(&email_server_socket_address, ClientSecurity::None).convert(Backtrace::new(line!(), file!()))?;
-        smtp_client.transport().send(email.into()).convert(Backtrace::new(line!(), file!()))?;
+        let smtp_client = SmtpClient::new(&email_server_socket_address, ClientSecurity::None).convert_into_error(Backtrace::new(line!(), file!()))?;
+        smtp_client.transport().send(email.into()).convert_into_error(Backtrace::new(line!(), file!()))?;
         return Ok(());
     }
 }

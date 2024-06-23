@@ -3,6 +3,7 @@ use std::{
     boxed::Box,
     error::Error as StdError,
 };
+use invalid_argument::InvalidArgument;
 pub struct Auditor<T> {
     pub subject: T,
     pub backtrace: Backtrace,
@@ -27,15 +28,16 @@ impl Backtrace {
         };
     }
 }
-pub trait ErrorConverter<T> {
-    fn convert(self, backtrace_part: Backtrace) -> Result<T, Auditor<Error>>;
+pub trait ResultConverter<T> {
+    fn convert_into_error(self, backtrace_part: Backtrace) -> Result<T, Auditor<Error>>;
+    fn convert_into_invalid_argument(self, backtrace_part: Backtrace) -> Result<T, Auditor<InvalidArgument>>;
 }
-impl<E, T> ErrorConverter<T> for Result<T, E>
+impl<E, T> ResultConverter<T> for Result<T, E>
 where
     E: StdError + Send + Sync + 'static,
 {
-    fn convert(self, backtrace_part: Backtrace) -> Result<T, Auditor<Error>> {
-        let result = match self {
+    fn convert_into_error(self, backtrace_part: Backtrace) -> Result<T, Auditor<Error>> {
+        return match self {
             Ok(value) => Ok(value),
             Err(error) => {
                 Err(Auditor::<Error>::new(
@@ -44,15 +46,26 @@ where
                 ))
             }
         };
-        return result;
+    }
+    fn convert_into_invalid_argument(self, backtrace_part: Backtrace) -> Result<T, Auditor<InvalidArgument>> {
+        return match self {
+            Ok(value) => Ok(value),
+            Err(_) => {
+                Err(Auditor::<InvalidArgument>::new(
+                    InvalidArgument,
+                    backtrace_part,
+                ))
+            }
+        };
     }
 }
-pub trait ErrorConverter_<T> {
-    fn convert(self, backtrace_part: Backtrace) -> Result<T, Auditor<Error>>;
+pub trait ResultConverter_<T> {
+    fn convert_into_error(self, backtrace_part: Backtrace) -> Result<T, Auditor<Error>>;
+    fn convert_into_invalid_argument(self, backtrace_part: Backtrace) -> Result<T, Auditor<InvalidArgument>>;
 }
-impl<T> ErrorConverter_<T> for Result<T, Box<dyn StdError + Sync + Send + 'static>> {
-    fn convert(self, backtrace_part: Backtrace) -> Result<T, Auditor<Error>> {
-        let result = match self {
+impl<T> ResultConverter_<T> for Result<T, Box<dyn StdError + Sync + Send + 'static>> {
+    fn convert_into_error(self, backtrace_part: Backtrace) -> Result<T, Auditor<Error>> {
+        return match self {
             Ok(value) => Ok(value),
             Err(error) => {
                 Err(Auditor::<Error>::new(
@@ -61,7 +74,17 @@ impl<T> ErrorConverter_<T> for Result<T, Box<dyn StdError + Sync + Send + 'stati
                 ))
             }
         };
-        return result;
+    }
+    fn convert_into_invalid_argument(self, backtrace_part: Backtrace) -> Result<T, Auditor<InvalidArgument>> {
+        return match self {
+            Ok(value) => Ok(value),
+            Err(_) => {
+                Err(Auditor::<InvalidArgument>::new(
+                    InvalidArgument,
+                    backtrace_part,
+                ))
+            }
+        };
     }
 }
 pub trait OptionConverter<T> {
@@ -71,7 +94,7 @@ pub trait OptionConverter<T> {
 }
 impl<T> OptionConverter<T> for Option<T> {
     fn convert_unreachable_state(self, backtrace_part: Backtrace) -> Result<T, Auditor<Error>> {
-        let result = match self {
+        return match self {
             Some(value) => Ok(value),
             None => {
                 return Err(Auditor::<Error>::new(
@@ -80,10 +103,9 @@ impl<T> OptionConverter<T> for Option<T> {
                 ));
             }
         };
-        return result;
     }
     fn convert_out_of_range(self, backtrace_part: Backtrace) -> Result<T, Auditor<Error>> {
-        let result = match self {
+        return match self {
             Some(value) => Ok(value),
             None => {
                 return Err(Auditor::<Error>::new(
@@ -92,10 +114,9 @@ impl<T> OptionConverter<T> for Option<T> {
                 ));
             }
         };
-        return result;
     }
     fn convert_value_does_not_exist(self, backtrace_part: Backtrace) -> Result<T, Auditor<Error>> {
-        let result = match self {
+        return match self {
             Some(value) => Ok(value),
             None => {
                 return Err(Auditor::<Error>::new(
@@ -104,6 +125,5 @@ impl<T> OptionConverter<T> for Option<T> {
                 ));
             }
         };
-        return result;
     }
 }

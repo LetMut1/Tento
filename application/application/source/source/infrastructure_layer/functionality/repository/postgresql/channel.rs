@@ -6,7 +6,7 @@ use crate::{
             auditor::{
                 Auditor,
                 Backtrace,
-                ErrorConverter,
+                ResultConverter,
             },
             error::Error,
         },
@@ -91,16 +91,16 @@ impl PostgresqlRepository<Channel<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(Backtrace::new(line!(), file!()))?;
         let row_registry = database_1_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(Backtrace::new(line!(), file!()))?;
         return Ok(Channel::new(
-            row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, i64>(0).convert_into_error(Backtrace::new(line!(), file!()))?,
             insert_1.channel__owner,
             Cow::Owned(insert_1.channel__name),
             insert_1.channel__linked_name,
@@ -113,7 +113,7 @@ impl PostgresqlRepository<Channel<'_>> {
             insert_1.channel__subscribers_quantity,
             insert_1.channel__marks_quantity,
             insert_1.channel__viewing_quantity,
-            row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, String>(1).convert_into_error(Backtrace::new(line!(), file!()))?,
         ));
     }
     pub async fn find_1<'a>(database_1_connection: &'a Connection, by_1: By1) -> Result<Option<Channel<'static>>, Auditor<Error>> {
@@ -142,32 +142,32 @@ impl PostgresqlRepository<Channel<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(Backtrace::new(line!(), file!()))?;
         let row_registry = database_1_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(Backtrace::new(line!(), file!()))?;
         if row_registry.is_empty() {
             return Ok(None);
         }
         return Ok(Some(Channel::new(
             by_1.channel__id,
-            row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
-            Cow::Owned(row_registry[0].try_get::<'_, usize, String>(1).convert(Backtrace::new(line!(), file!()))?),
-            row_registry[0].try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?,
-            row_registry[0].try_get::<'_, usize, Option<String>>(3).convert(Backtrace::new(line!(), file!()))?,
-            row_registry[0].try_get::<'_, usize, i16>(4).convert(Backtrace::new(line!(), file!()))?,
-            row_registry[0].try_get::<'_, usize, i16>(5).convert(Backtrace::new(line!(), file!()))?,
-            row_registry[0].try_get::<'_, usize, Vec<i16>>(6).convert(Backtrace::new(line!(), file!()))?,
-            row_registry[0].try_get::<'_, usize, Option<String>>(7).convert(Backtrace::new(line!(), file!()))?,
-            row_registry[0].try_get::<'_, usize, Option<String>>(8).convert(Backtrace::new(line!(), file!()))?,
-            row_registry[0].try_get::<'_, usize, i64>(9).convert(Backtrace::new(line!(), file!()))?,
-            row_registry[0].try_get::<'_, usize, i64>(10).convert(Backtrace::new(line!(), file!()))?,
-            row_registry[0].try_get::<'_, usize, i64>(11).convert(Backtrace::new(line!(), file!()))?,
-            row_registry[0].try_get::<'_, usize, String>(12).convert(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, i64>(0).convert_into_error(Backtrace::new(line!(), file!()))?,
+            Cow::Owned(row_registry[0].try_get::<'_, usize, String>(1).convert_into_error(Backtrace::new(line!(), file!()))?),
+            row_registry[0].try_get::<'_, usize, String>(2).convert_into_error(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, Option<String>>(3).convert_into_error(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, i16>(4).convert_into_error(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, i16>(5).convert_into_error(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, Vec<i16>>(6).convert_into_error(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, Option<String>>(7).convert_into_error(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, Option<String>>(8).convert_into_error(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, i64>(9).convert_into_error(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, i64>(10).convert_into_error(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, i64>(11).convert_into_error(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, String>(12).convert_into_error(Backtrace::new(line!(), file!()))?,
         )));
     }
     pub async fn find_2<'a, 'b>(database_1_connection: &'a Connection, by_2: By2<'b>) -> Result<Option<Channel<'b>>, Auditor<Error>> {
@@ -196,32 +196,32 @@ impl PostgresqlRepository<Channel<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(Backtrace::new(line!(), file!()))?;
         let row_registry = database_1_connection
             .query(
                 &statement,
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert(Backtrace::new(line!(), file!()))?;
+            .convert_into_error(Backtrace::new(line!(), file!()))?;
         if row_registry.is_empty() {
             return Ok(None);
         }
         return Ok(Some(Channel::new(
-            row_registry[0].try_get::<'_, usize, i64>(0).convert(Backtrace::new(line!(), file!()))?,
-            row_registry[0].try_get::<'_, usize, i64>(1).convert(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, i64>(0).convert_into_error(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, i64>(1).convert_into_error(Backtrace::new(line!(), file!()))?,
             Cow::Borrowed(by_2.channel__name),
-            row_registry[0].try_get::<'_, usize, String>(2).convert(Backtrace::new(line!(), file!()))?,
-            row_registry[0].try_get::<'_, usize, Option<String>>(3).convert(Backtrace::new(line!(), file!()))?,
-            row_registry[0].try_get::<'_, usize, i16>(4).convert(Backtrace::new(line!(), file!()))?,
-            row_registry[0].try_get::<'_, usize, i16>(5).convert(Backtrace::new(line!(), file!()))?,
-            row_registry[0].try_get::<'_, usize, Vec<i16>>(6).convert(Backtrace::new(line!(), file!()))?,
-            row_registry[0].try_get::<'_, usize, Option<String>>(7).convert(Backtrace::new(line!(), file!()))?,
-            row_registry[0].try_get::<'_, usize, Option<String>>(8).convert(Backtrace::new(line!(), file!()))?,
-            row_registry[0].try_get::<'_, usize, i64>(9).convert(Backtrace::new(line!(), file!()))?,
-            row_registry[0].try_get::<'_, usize, i64>(10).convert(Backtrace::new(line!(), file!()))?,
-            row_registry[0].try_get::<'_, usize, i64>(11).convert(Backtrace::new(line!(), file!()))?,
-            row_registry[0].try_get::<'_, usize, String>(12).convert(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, String>(2).convert_into_error(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, Option<String>>(3).convert_into_error(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, i16>(4).convert_into_error(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, i16>(5).convert_into_error(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, Vec<i16>>(6).convert_into_error(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, Option<String>>(7).convert_into_error(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, Option<String>>(8).convert_into_error(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, i64>(9).convert_into_error(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, i64>(10).convert_into_error(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, i64>(11).convert_into_error(Backtrace::new(line!(), file!()))?,
+            row_registry[0].try_get::<'_, usize, String>(12).convert_into_error(Backtrace::new(line!(), file!()))?,
         )));
     }
 }

@@ -26,7 +26,7 @@ use crate::{
             auditor::{
                 Auditor,
                 Backtrace,
-                ErrorConverter,
+                ResultConverter,
                 OptionConverter,
             },
             control_type::ChannelSubscription__Base___Create,
@@ -110,7 +110,7 @@ impl ActionProcessor<ChannelSubscription__Base___Create> {
                 Backtrace::new(line!(), file!()),
             )));
         }
-        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert(Backtrace::new(line!(), file!()))?;
+        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert_into_error(Backtrace::new(line!(), file!()))?;
         let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
         let channel = match PostgresqlRepository::<Channel<'_>>::find_1(
             database_1_postgresql_connection,

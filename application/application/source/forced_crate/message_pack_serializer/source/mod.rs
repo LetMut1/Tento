@@ -83,7 +83,7 @@
 use auditor::{
     Auditor,
     Backtrace,
-    ErrorConverter,
+    ResultConverter,
 };
 use error::Error;
 use serde::{
@@ -96,12 +96,12 @@ impl Serializer {
     where
         T: SerdeSerialize,
     {
-        return rmp_serde::to_vec(subject).convert(Backtrace::new(line!(), file!()));
+        return rmp_serde::to_vec(subject).convert_into_error(Backtrace::new(line!(), file!()));
     }
     pub fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, Auditor<Error>>
     where
         T: Deserialize<'a>,
     {
-        return rmp_serde::from_read_ref::<'_, [u8], T>(data).convert(Backtrace::new(line!(), file!()));
+        return rmp_serde::from_read_ref::<'_, [u8], T>(data).convert_into_error(Backtrace::new(line!(), file!()));
     }
 }
