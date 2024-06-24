@@ -30,7 +30,6 @@ impl Backtrace {
 }
 pub trait ResultConverter<T> {
     fn convert_into_error(self, backtrace_part: Backtrace) -> Result<T, Auditor<Error>>;
-    fn convert_into_invalid_argument(self, backtrace_part: Backtrace) -> Result<T, Auditor<InvalidArgument>>;
 }
 impl<E, T> ResultConverter<T> for Result<T, E>
 where
@@ -49,23 +48,9 @@ where
             }
         };
     }
-    fn convert_into_invalid_argument(self, backtrace_part: Backtrace) -> Result<T, Auditor<InvalidArgument>> {
-        return match self {
-            Ok(value) => Ok(value),
-            Err(_) => {
-                Err(
-                    Auditor::<InvalidArgument>::new(
-                        InvalidArgument,
-                        backtrace_part,
-                    ),
-                )
-            }
-        };
-    }
 }
 pub trait ResultConverter_<T> {
     fn convert_into_error(self, backtrace_part: Backtrace) -> Result<T, Auditor<Error>>;
-    fn convert_into_invalid_argument(self, backtrace_part: Backtrace) -> Result<T, Auditor<InvalidArgument>>;
 }
 impl<T> ResultConverter_<T> for Result<T, Box<dyn StdError + Sync + Send + 'static>> {
     fn convert_into_error(self, backtrace_part: Backtrace) -> Result<T, Auditor<Error>> {
@@ -75,19 +60,6 @@ impl<T> ResultConverter_<T> for Result<T, Box<dyn StdError + Sync + Send + 'stat
                 Err(
                     Auditor::<Error>::new(
                         Error::new_internal_runtime_(error),
-                        backtrace_part,
-                    ),
-                )
-            }
-        };
-    }
-    fn convert_into_invalid_argument(self, backtrace_part: Backtrace) -> Result<T, Auditor<InvalidArgument>> {
-        return match self {
-            Ok(value) => Ok(value),
-            Err(_) => {
-                Err(
-                    Auditor::<InvalidArgument>::new(
-                        InvalidArgument,
                         backtrace_part,
                     ),
                 )

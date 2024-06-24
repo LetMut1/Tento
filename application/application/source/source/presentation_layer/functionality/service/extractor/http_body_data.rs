@@ -39,12 +39,6 @@ impl Extractor<HttpBodyData> {
                 file!(),
             ),
         )?;
-        let data = match Serializer::<SF>::deserialize::<'_, D>(bytes.chunk()) {
-            Ok(data_) => data_,
-            Err(invalid_argument_auditor) => {
-                return Ok(Err(invalid_argument_auditor));
-            }
-        };
-        return Ok(Ok(Some(data)));
+        return Ok(Ok(Some(Serializer::<SF>::deserialize::<'_, D>(bytes.chunk())?)));
     }
 }

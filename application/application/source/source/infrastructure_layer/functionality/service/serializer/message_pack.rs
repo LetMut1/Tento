@@ -5,11 +5,9 @@ use super::{
 use crate::infrastructure_layer::data::{
     auditor::{
         Auditor,
-        Backtrace
     },
     control_type::MessagePack,
     error::Error,
-    invalid_argument::InvalidArgument
 };
 use message_pack_serializer::Serializer as Serializer_;
 use serde::{
@@ -21,22 +19,12 @@ impl Serialize for Serializer<MessagePack> {
     where
         T: SerdeSerialize,
     {
-        return Ok(Serializer_::serialize(subject)?);
+        return Serializer_::serialize(subject);
     }
-    fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, Auditor<InvalidArgument>>
+    fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, Auditor<Error>>
     where
         T: Deserialize<'a>,
     {
-        return Serializer_::deserialize::<'_, T>(data).map_err(
-            |_: _| -> _ {
-                return Auditor::<InvalidArgument>::new(
-                    InvalidArgument,
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    )
-                );
-            }
-        );
+        return Serializer_::deserialize::<'_, T>(data);
     }
 }

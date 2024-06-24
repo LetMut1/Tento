@@ -124,7 +124,9 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
             }
         };
         return Ok(
-            Serializer::<MessagePack>::deserialize::<'_, ApplicationUserAccessToken<'static>>(data.as_slice())
+            Ok(
+                Serializer::<MessagePack>::deserialize::<'_, ApplicationUserAccessToken<'static>>(data.as_slice())?
+            )
         );
     }
 }
