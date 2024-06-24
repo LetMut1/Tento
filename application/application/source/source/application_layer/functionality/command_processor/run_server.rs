@@ -200,9 +200,7 @@ impl CommandProcessor<RunServer> {
         {
             return Err(
                 Auditor::<Error>::new(
-                    Error::Logic {
-                        message: "Invalid Tokio runtime configuration.",
-                    },
+                    Error::new_logic("Invalid Tokio runtime configuration."),
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -250,9 +248,7 @@ impl CommandProcessor<RunServer> {
             None => {
                 return Err(
                     Auditor::<Error>::new(
-                        Error::Logic {
-                            message: "Invalid socket address.",
-                        },
+                        Error::new_logic("Invalid socket address."),
                         Backtrace::new(
                             line!(),
                             file!(),

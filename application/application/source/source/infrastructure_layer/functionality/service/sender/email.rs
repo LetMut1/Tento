@@ -46,9 +46,7 @@ impl Sender<Email> {
             None => {
                 return Err(
                     Auditor::<Error>::new(
-                        Error::Logic {
-                            message: "Invalid socket address.",
-                        },
+                        Error::new_logic("Invalid socket address."),
                         Backtrace::new(
                             line!(),
                             file!(),

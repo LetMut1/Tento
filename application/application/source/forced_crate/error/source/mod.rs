@@ -8,55 +8,34 @@ use std::{
     },
 };
 pub enum Error {
-    Logic {
-        message: &'static str,
-    },
-    Runtime {
-        runtime: Runtime,
-    },
+    Internal {
+        internal: Internal,
+    }
 }
 impl Error {
     pub fn new_logic(message: &'static str) -> Self {
-        return Self::Logic {
-            message,
-        };
+        return Self::Internal { internal: Internal::Logic { message } };
     }
     pub fn new_logic_value_does_not_exist() -> Self {
-        return Self::Logic {
-            message: "Value does not exist.",
-        };
+        return Self::Internal { internal: Internal::Logic { message: "Value does not exist." } };
     }
     pub fn new_logic_value_already_exist() -> Self {
-        return Self::Logic {
-            message: "Value already exist.",
-        };
+        return Self::Internal { internal: Internal::Logic { message: "Value already exist."} };
     }
     pub fn new_logic_unreachable_state() -> Self {
-        return Self::Logic {
-            message: "Unreachable state.",
-        };
+        return Self::Internal { internal: Internal::Logic { message: "Unreachable state." } };
     }
     pub fn new_logic_out_of_range() -> Self {
-        return Self::Logic {
-            message: "Out of range.",
-        };
+        return Self::Internal { internal: Internal::Logic { message: "Out of range." } };
     }
     pub fn new_runtime<E>(error: E) -> Self
     where
         E: StdError + Send + Sync + 'static,
     {
-        return Self::Runtime {
-            runtime: Runtime {
-                error: error.into(),
-            },
-        };
+        return Self::Internal { internal: Internal::Runtime { runtime: Runtime { inner: error.into() } } };
     }
     pub fn new_runtime_(error: Box<dyn StdError + Send + Sync + 'static>) -> Self {
-        return Self::Runtime {
-            runtime: Runtime {
-                error,
-            },
-        };
+        return Self::Internal { internal: Internal::Runtime { runtime: Runtime { inner: error } } };
     }
 }
 impl Debug for Error {
@@ -70,11 +49,19 @@ impl Display for Error {
     }
 }
 impl StdError for Error {}
+pub enum Internal {
+    Logic {
+        message: &'static str,
+    },
+    Runtime {
+        runtime: Runtime,
+    },
+}
 pub struct Runtime {
-    error: Box<dyn StdError + Send + Sync + 'static>,
+    inner: Box<dyn StdError + Send + Sync + 'static>,
 }
 impl Runtime {
     pub fn get<'a>(&'a self) -> &'a (dyn StdError + 'static) {
-        return self.error.as_ref();
+        return self.inner.as_ref();
     }
 }
