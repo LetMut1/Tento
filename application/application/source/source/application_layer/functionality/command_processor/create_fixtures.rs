@@ -166,7 +166,7 @@ impl CommandProcessor<CreateFixtures> {
             if !Validator::<ApplicationUser_Nickname>::is_valid(application_user__nickname.as_str()) {
                 return Err(
                     Auditor::<Error>::new(
-                        Error::new_logic("Application_user nickname should be valid."),
+                        Error::new_internal_logic("Application_user nickname should be valid."),
                         Backtrace::new(
                             line!(),
                             file!(),
@@ -178,7 +178,7 @@ impl CommandProcessor<CreateFixtures> {
             if !Validator::<ApplicationUser_Email>::is_valid(application_user__email.as_str())? {
                 return Err(
                     Auditor::<Error>::new(
-                        Error::new_logic("Application_user email should be valid."),
+                        Error::new_internal_logic("Application_user email should be valid."),
                         Backtrace::new(
                             line!(),
                             file!(),
@@ -193,7 +193,7 @@ impl CommandProcessor<CreateFixtures> {
             ) {
                 return Err(
                     Auditor::<Error>::new(
-                        Error::new_logic( "Application_user_password should be valid."),
+                        Error::new_internal_logic( "Application_user_password should be valid."),
                         Backtrace::new(
                             line!(),
                             file!(),
@@ -230,7 +230,7 @@ impl CommandProcessor<CreateFixtures> {
             if !Validator::<ApplicationUserDevice_Id>::is_valid(&application_user_device__id) {
                 return Err(
                     Auditor::<Error>::new(
-                        Error::new_logic("Application_user_device id should be valid."),
+                        Error::new_internal_logic("Application_user_device id should be valid."),
                         Backtrace::new(
                             line!(),
                             file!(),
@@ -255,7 +255,7 @@ impl CommandProcessor<CreateFixtures> {
                 if !Validator::<Channel_Name>::is_valid(channel__name.as_str()) {
                     return Err(
                         Auditor::<Error>::new(
-                            Error::new_logic("Channel_name should be valid."),
+                            Error::new_internal_logic("Channel_name should be valid."),
                             Backtrace::new(
                                 line!(),
                                 file!(),
@@ -267,7 +267,7 @@ impl CommandProcessor<CreateFixtures> {
                 if !Validator::<Channel_LinkedName>::is_valid(channel__linked_name.as_str()) {
                     return Err(
                         Auditor::<Error>::new(
-                            Error::new_logic("Channel_linked_name should be valid."),
+                            Error::new_internal_logic("Channel_linked_name should be valid."),
                             Backtrace::new(
                                 line!(),
                                 file!(),
@@ -284,7 +284,7 @@ impl CommandProcessor<CreateFixtures> {
                     if !Validator::<Channel_Description>::is_valid(channel__description_.as_str()) {
                         return Err(
                             Auditor::<Error>::new(
-                                Error::new_logic("Channel_description should be valid."),
+                                Error::new_internal_logic("Channel_description should be valid."),
                                 Backtrace::new(
                                     line!(),
                                     file!(),
@@ -302,7 +302,7 @@ impl CommandProcessor<CreateFixtures> {
                 if !Validator::<Channel_Orientation>::is_valid(channel__orientation.as_slice()) {
                     return Err(
                         Auditor::<Error>::new(
-                            Error::new_logic("Channel_orientation should be valid."),
+                            Error::new_internal_logic("Channel_orientation should be valid."),
                             Backtrace::new(
                                 line!(),
                                 file!(),

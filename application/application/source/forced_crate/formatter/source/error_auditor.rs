@@ -20,6 +20,9 @@ impl Formatter<Auditor<Error>> {
                     } => format!("Runtime: {}.", runtime.get(),),
                 };
                 error_message_
+            },
+            Error::External { ref external } => {
+                todo!();
             }
         };
         return format!(

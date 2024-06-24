@@ -42,7 +42,7 @@ where
             Err(error) => {
                 Err(
                     Auditor::<Error>::new(
-                        Error::new_runtime(error),
+                        Error::new_internal_runtime(error),
                         backtrace_part,
                     ),
                 )
@@ -74,7 +74,7 @@ impl<T> ResultConverter_<T> for Result<T, Box<dyn StdError + Sync + Send + 'stat
             Err(error) => {
                 Err(
                     Auditor::<Error>::new(
-                        Error::new_runtime_(error),
+                        Error::new_internal_runtime_(error),
                         backtrace_part,
                     ),
                 )
@@ -107,7 +107,7 @@ impl<T> OptionConverter<T> for Option<T> {
             None => {
                 return Err(
                     Auditor::<Error>::new(
-                        Error::new_logic_unreachable_state(),
+                        Error::new_internal_logic_unreachable_state(),
                         backtrace_part,
                     ),
                 );
@@ -120,7 +120,7 @@ impl<T> OptionConverter<T> for Option<T> {
             None => {
                 return Err(
                     Auditor::<Error>::new(
-                        Error::new_logic_out_of_range(),
+                        Error::new_internal_logic_out_of_range(),
                         backtrace_part,
                     ),
                 );
@@ -133,7 +133,7 @@ impl<T> OptionConverter<T> for Option<T> {
             None => {
                 return Err(
                     Auditor::<Error>::new(
-                        Error::new_logic_value_does_not_exist(),
+                        Error::new_internal_logic_value_does_not_exist(),
                         backtrace_part,
                     ),
                 );

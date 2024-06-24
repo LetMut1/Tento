@@ -50,7 +50,7 @@ impl Loader<EnvironmentConfiguration> {
         } else {
             return Err(
                 Auditor::<Error>::new(
-                    Error::new_logic("The environment.toml file does not exist."),
+                    Error::new_internal_logic("The environment.toml file does not exist."),
                     Backtrace::new(
                         line!(),
                         file!(),

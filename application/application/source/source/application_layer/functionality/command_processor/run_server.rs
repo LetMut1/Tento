@@ -123,7 +123,7 @@ impl CommandProcessor<RunServer> {
             Some(_) => {
                 return Err(
                     Auditor::<Error>::new(
-                        Error::new_logic_value_already_exist(),
+                        Error::new_internal_logic_value_already_exist(),
                         Backtrace::new(
                             line!(),
                             file!(),
@@ -135,7 +135,7 @@ impl CommandProcessor<RunServer> {
                 if let Err(_) = ENVIRONMENT_CONFIGURATION.set(environment_configuration) {
                     return Err(
                         Auditor::<Error>::new(
-                            Error::new_logic_value_already_exist(),
+                            Error::new_internal_logic_value_already_exist(),
                             Backtrace::new(
                                 line!(),
                                 file!(),
@@ -200,7 +200,7 @@ impl CommandProcessor<RunServer> {
         {
             return Err(
                 Auditor::<Error>::new(
-                    Error::new_logic("Invalid Tokio runtime configuration."),
+                    Error::new_internal_logic("Invalid Tokio runtime configuration."),
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -248,7 +248,7 @@ impl CommandProcessor<RunServer> {
             None => {
                 return Err(
                     Auditor::<Error>::new(
-                        Error::new_logic("Invalid socket address."),
+                        Error::new_internal_logic("Invalid socket address."),
                         Backtrace::new(
                             line!(),
                             file!(),

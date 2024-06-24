@@ -29,7 +29,7 @@ impl Validator<ApplicationUserRegistrationToken_Value> {
                 ) {
                     return Err(
                         Auditor::<Error>::new(
-                            Error::new_logic_value_already_exist(),
+                            Error::new_internal_logic_value_already_exist(),
                             Backtrace::new(
                                 line!(),
                                 file!(),

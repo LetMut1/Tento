@@ -141,7 +141,7 @@ fn process() -> Result<(), Box<dyn StdError + 'static>> {
         _ => {
             Some(
                 Auditor::<Error>::new(
-                    Error::new_runtime_("Unexpexted subcommand.".into()),
+                    Error::new_internal_runtime_("Unexpexted subcommand.".into()),
                     Backtrace::new(
                         line!(),
                         file!(),
