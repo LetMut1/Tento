@@ -242,12 +242,12 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
                 ),
             );
         }
-        let join_handle = Spawner::<TokioBlockingTask>::spawn_processed(
+        let application_user__password_hash___join_handle = Spawner::<TokioBlockingTask>::spawn_processed(
             move || -> _ {
                 return Encoder::<ApplicationUser_Password>::encode(incoming_.application_user_password.as_str());
             },
         );
-        application_user.password_hash = join_handle.await.into_internal_runtime(
+        application_user.password_hash = application_user__password_hash___join_handle.await.into_internal_runtime(
             Backtrace::new(
                 line!(),
                 file!(),

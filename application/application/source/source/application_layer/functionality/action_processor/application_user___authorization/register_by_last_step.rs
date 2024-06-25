@@ -266,7 +266,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
             }
             return Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_WrongValue));
         }
-        let join_handle = Spawner::<TokioBlockingTask>::spawn_processed(
+        let application_user__password_hash___join_handle = Spawner::<TokioBlockingTask>::spawn_processed(
             move || -> _ {
                 return Encoder::<ApplicationUser_Password>::encode(incoming_.application_user_password.as_str());
             },
@@ -276,7 +276,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
             ApplicationUserInsert1 {
                 application_user__email: incoming_.application_user__email,
                 application_user__nickname: incoming_.application_user__nickname,
-                application_user__password_hash: join_handle.await.into_internal_runtime(
+                application_user__password_hash: application_user__password_hash___join_handle.await.into_internal_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
