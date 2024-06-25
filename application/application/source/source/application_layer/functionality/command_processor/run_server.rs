@@ -225,8 +225,8 @@ impl CommandProcessor<RunServer> {
     }
     async fn serve(environment_configuration: &'static EnvironmentConfiguration) -> Result<(), AlternativeWorkflow> {
         'a: loop {
-            if let Err(error) = Self::serve_(environment_configuration).await {
-                Logger::<AlternativeWorkflow>::log(&error);
+            if let Err(alternative_workflow) = Self::serve_(environment_configuration).await {
+                Logger::<AlternativeWorkflow>::log(&alternative_workflow);
                 tokio::time::sleep(Duration::from_secs(Self::QUANTITY_OF_SECONDS_FOR_RERUN_SERVING)).await;
                 continue 'a;
             }

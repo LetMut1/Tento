@@ -18,8 +18,8 @@ impl Spawner<TokioNonBlockingTask> {
     {
         tokio::spawn(
             async move {
-                if let Err(error) = future.await {
-                    Logger::<AlternativeWorkflow>::log(&error);
+                if let Err(alternative_workflow) = future.await {
+                    Logger::<AlternativeWorkflow>::log(&alternative_workflow);
                 }
                 return ();
             },

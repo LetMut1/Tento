@@ -16,8 +16,8 @@ impl Spawner<TokioBlockingTask> {
     {
         tokio::task::spawn_blocking(
             move || -> () {
-                if let Err(error) = closure() {
-                    Logger::<AlternativeWorkflow>::log(&error);
+                if let Err(alternative_workflow) = closure() {
+                    Logger::<AlternativeWorkflow>::log(&alternative_workflow);
                 }
                 return ();
             },

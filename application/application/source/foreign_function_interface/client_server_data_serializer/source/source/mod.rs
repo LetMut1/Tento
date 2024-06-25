@@ -3368,14 +3368,11 @@ mod test {
                 E: Copy,
                 D: FnOnce(*mut C_Result<E>) -> (),
             {
-                let registry = match Serializer_::serialize(data) {
-                    Ok(registry_) => registry_,
-                    Err(error) => {
-                        return Err(
-                            Formatter::<AlternativeWorkflow>::format(&error).into()
-                        );
+                let registry = Serializer_::serialize(data).map_err(
+                    |alternative_workflow: _| -> Box<dyn StdError + 'static> {
+                        return Formatter::<AlternativeWorkflow>::format(&alternative_workflow).into()
                     }
-                };
+                )?;
 
                 let c_vector = Allocator::<C_Vector<_>>::allocate(registry);
 

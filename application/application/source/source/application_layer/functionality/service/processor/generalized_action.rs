@@ -95,8 +95,8 @@ impl Processor<GeneralizedAction> {
                 );
                 response
             }
-            Err(error) => {
-                let response = match error {
+            Err(alternative_workflow) => {
+                let response = match alternative_workflow {
                     AlternativeWorkflow::External { external_auditor } => {
                         let response_ = Creator::<Response>::create_bad_request();
                         Logger::<(

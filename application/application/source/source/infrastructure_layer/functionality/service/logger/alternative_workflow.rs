@@ -4,10 +4,10 @@ pub use crate::infrastructure_layer::data::{
 };
 use crate::infrastructure_layer::functionality::service::formatter::Formatter;
 impl Logger<AlternativeWorkflow> {
-    pub fn log<'a>(error: &'a AlternativeWorkflow) -> () {
+    pub fn log<'a>(alternative_workflow: &'a AlternativeWorkflow) -> () {
         tracing::error!(
             "{}",
-            Formatter::<AlternativeWorkflow>::format(error).as_str(),
+            Formatter::<AlternativeWorkflow>::format(alternative_workflow).as_str(),
         );
         return ();
     }

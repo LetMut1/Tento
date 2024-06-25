@@ -80,7 +80,6 @@ use application::{
     infrastructure_layer::{
         data::{
             auditor::{
-                Auditor,
                 Backtrace,
             },
             alternative_workflow::AlternativeWorkflow,
@@ -116,27 +115,27 @@ fn process() -> Result<(), Box<dyn StdError + 'static>> {
             return Err("Exhausted list of subcommands and subcommand_required prevents `None`.".into());
         }
     };
-    let error = match subcommand_arg_matches {
+    let alternative_workflow = match subcommand_arg_matches {
         (RUN_SERVER, _) => {
-            let error_ = match CommandProcessor::<RunServer>::process() {
+            let alternative_workflow_ = match CommandProcessor::<RunServer>::process() {
                 Ok(_) => None,
-                Err(error__) => Some(error__),
+                Err(alternative_workflow__) => Some(alternative_workflow__),
             };
-            error_
+            alternative_workflow_
         }
         (CREATE_FIXTURES, _) => {
-            let error_ = match CommandProcessor::<CreateFixtures>::process() {
+            let alternative_workflow_ = match CommandProcessor::<CreateFixtures>::process() {
                 Ok(_) => None,
-                Err(error__) => Some(error__),
+                Err(alternative_workflow__) => Some(alternative_workflow__),
             };
-            error_
+            alternative_workflow_
         }
         (REMOVE_INCOMPLITE_STATE, _) => {
-            let error_ = match CommandProcessor::<RemoveIncompliteState>::process() {
+            let alternative_workflow_ = match CommandProcessor::<RemoveIncompliteState>::process() {
                 Ok(_) => None,
-                Err(error__) => Some(error__),
+                Err(alternative_workflow__) => Some(alternative_workflow__),
             };
-            error_
+            alternative_workflow_
         }
         _ => {
             Some(
@@ -150,9 +149,9 @@ fn process() -> Result<(), Box<dyn StdError + 'static>> {
             )
         }
     };
-    match error {
-        Some(error_) => {
-            return Err(Formatter::<AlternativeWorkflow>::format(&error_).into());
+    match alternative_workflow {
+        Some(alternative_workflow_) => {
+            return Err(Formatter::<AlternativeWorkflow>::format(&alternative_workflow_).into());
         }
         None => {
             return Ok(());
@@ -220,6 +219,12 @@ fn process() -> Result<(), Box<dyn StdError + 'static>> {
 // - ! Для Кэша использовать https://crates.io/crates/lru .
 // СДелать механизм защиты от DDDos на кеше - для каждого апи разное количество допустимых запросов.
 // - ! Шифроать емейлы в Бд как пароли?
+// -------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------
 // Возможно ли не хранить Рефреш токен в Бд? Завязать его на Аксессе?  но как тогда делать разлогин на сервере принудительный?
 // Или идти от обратного??? В Бд хранить только те токены, котоыре разлогинились принудительно, потому что принудительный разлогин делают намного меньше людей.
 // email_sender должен быть async.
@@ -231,8 +236,6 @@ fn process() -> Result<(), Box<dyn StdError + 'static>> {
 // Пройтись по всем сущностяи и сделать генерацию времени из кода, если это время по логике не нужно генерировать внутри бд. То есть, CreatedAt и подобных
 // !!!!!!! reset_password_last_step добавить емейл (посмотреть, подобные кейсы), чтобы проверять соотетсвие емейла и айдишника???????????
 // channel_subscription create обработать ALready_subscribed
-// data.len() as u64  это безопасно, но лучше сделать через конвертер.
-// TODO  TODO  TODO  TODO  TODO  Имена PreparedStatement, их отмена - нужно ли это все?  Если извне оборачивать в транзакцию, что будет с декларирование подготовленного запроса? То есть: Бегин- создать препэрэд стэйстмент - иполнить пр ст- коммит/роллбэу
 // impl<S> UnifiedReport<S> -> сделать через трейт,
 // В Ресендах_емейла проверять на ВронгЕнтертраесКвантити на всякий случай.
 // 2 импл трейта под Writer реализовать в самом трейте.
