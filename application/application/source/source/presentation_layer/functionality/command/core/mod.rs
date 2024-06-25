@@ -96,65 +96,68 @@ const RUN_SERVER: &'static str = "run_server";
 const CREATE_FIXTURES: &'static str = "create_fixtures";
 const REMOVE_INCOMPLITE_STATE: &'static str = "remove_incomplite_state";
 fn main() -> Result<(), Box<dyn StdError + 'static>> {
-    if let Err(error) = process() {
+    if let Err(error) = Processor::process() {
         println!("{}", &error);
         return Err(error);
     }
     return Ok(());
 }
-fn process() -> Result<(), Box<dyn StdError + 'static>> {
-    let arg_matches = command!()
-        .arg_required_else_help(true)
-        .subcommand_required(true)
-        .subcommand(Command::new(RUN_SERVER))
-        .subcommand(Command::new(CREATE_FIXTURES))
-        .get_matches();
-    let subcommand_arg_matches = match arg_matches.subcommand() {
-        Some(subcommand_arg_matches_) => subcommand_arg_matches_,
-        None => {
-            return Err("Exhausted list of subcommands and subcommand_required prevents `None`.".into());
-        }
-    };
-    let alternative_workflow = match subcommand_arg_matches {
-        (RUN_SERVER, _) => {
-            let alternative_workflow_ = match CommandProcessor::<RunServer>::process() {
-                Ok(_) => None,
-                Err(alternative_workflow__) => Some(alternative_workflow__),
-            };
-            alternative_workflow_
-        }
-        (CREATE_FIXTURES, _) => {
-            let alternative_workflow_ = match CommandProcessor::<CreateFixtures>::process() {
-                Ok(_) => None,
-                Err(alternative_workflow__) => Some(alternative_workflow__),
-            };
-            alternative_workflow_
-        }
-        (REMOVE_INCOMPLITE_STATE, _) => {
-            let alternative_workflow_ = match CommandProcessor::<RemoveIncompliteState>::process() {
-                Ok(_) => None,
-                Err(alternative_workflow__) => Some(alternative_workflow__),
-            };
-            alternative_workflow_
-        }
-        _ => {
-            Some(
-                AlternativeWorkflow::new_internal_runtime_(
-                    "Unexpected subcommand.".into(),
-                    Backtrace::new(
-                        line!(),
-                        file!(),
+struct Processor;
+impl Processor {
+    fn process() -> Result<(), Box<dyn StdError + 'static>> {
+        let arg_matches = command!()
+            .arg_required_else_help(true)
+            .subcommand_required(true)
+            .subcommand(Command::new(RUN_SERVER))
+            .subcommand(Command::new(CREATE_FIXTURES))
+            .get_matches();
+        let subcommand_arg_matches = match arg_matches.subcommand() {
+            Some(subcommand_arg_matches_) => subcommand_arg_matches_,
+            None => {
+                return Err("Exhausted list of subcommands and subcommand_required prevents `None`.".into());
+            }
+        };
+        let alternative_workflow = match subcommand_arg_matches {
+            (RUN_SERVER, _) => {
+                let alternative_workflow_ = match CommandProcessor::<RunServer>::process() {
+                    Ok(_) => None,
+                    Err(alternative_workflow__) => Some(alternative_workflow__),
+                };
+                alternative_workflow_
+            }
+            (CREATE_FIXTURES, _) => {
+                let alternative_workflow_ = match CommandProcessor::<CreateFixtures>::process() {
+                    Ok(_) => None,
+                    Err(alternative_workflow__) => Some(alternative_workflow__),
+                };
+                alternative_workflow_
+            }
+            (REMOVE_INCOMPLITE_STATE, _) => {
+                let alternative_workflow_ = match CommandProcessor::<RemoveIncompliteState>::process() {
+                    Ok(_) => None,
+                    Err(alternative_workflow__) => Some(alternative_workflow__),
+                };
+                alternative_workflow_
+            }
+            _ => {
+                Some(
+                    AlternativeWorkflow::new_internal_runtime_(
+                        "Unexpected subcommand.".into(),
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
                     ),
-                ),
-            )
-        }
-    };
-    match alternative_workflow {
-        Some(alternative_workflow_) => {
-            return Err(Formatter::<AlternativeWorkflow>::format(&alternative_workflow_).into());
-        }
-        None => {
-            return Ok(());
+                )
+            }
+        };
+        match alternative_workflow {
+            Some(alternative_workflow_) => {
+                return Err(Formatter::<AlternativeWorkflow>::format(&alternative_workflow_).into());
+            }
+            None => {
+                return Ok(());
+            }
         }
     }
 }
@@ -253,5 +256,4 @@ fn process() -> Result<(), Box<dyn StdError + 'static>> {
 // СДелал оптимизацию запросов для:
 // - application_user_authorization. // ToDo ДОделать остальные. и сделать репозиторий по новым правилам.
 // ПОсылка писем через async клиент в бэкграунд таске
-// invalid_argument__?__auditor
 // весь декодинг конвертируем в invalid_argument? или же в Error:decoding
