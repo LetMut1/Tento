@@ -11,17 +11,17 @@ impl Formatter<Auditor<Internal>> {
                 message,
             } => {
                 format!(
-                "Logic: {}.",
-                message
-            )
+                    "Logic: {}.",
+                    message
+                )
             }
             Internal::Runtime {
                 ref runtime,
             } => {
                 format!(
-                "Runtime: {}.",
-                runtime.get()
-            )
+                    "Runtime: {}.",
+                    runtime.get()
+                )
             }
         };
         return format!(
