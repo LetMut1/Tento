@@ -4,9 +4,7 @@ use crate::infrastructure_layer::data::{
         AlternativeWorkflow,
         ResultConverter,
     },
-    auditor::{
-        Backtrace,
-    },
+    auditor::Backtrace,
     control_type::Email,
     environment_configuration::EnvironmentConfiguration,
 };

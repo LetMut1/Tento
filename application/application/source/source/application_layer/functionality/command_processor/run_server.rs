@@ -8,9 +8,7 @@ use crate::{
                 OptionConverter,
                 ResultConverter,
             },
-            auditor::{
-                Backtrace,
-            },
+            auditor::Backtrace,
             control_type::{
                 ApplicationUser__Authorization___AuthorizeByFirstStep,
                 ApplicationUser__Authorization___AuthorizeByLastStep,
