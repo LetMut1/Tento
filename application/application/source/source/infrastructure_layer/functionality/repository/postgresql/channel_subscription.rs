@@ -4,11 +4,10 @@ use crate::{
     infrastructure_layer::{
         data::{
             auditor::{
-                Auditor,
                 Backtrace,
-                ResultConverter,
             },
             error::Error,
+            error::ResultConverter,
         },
         functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver,
     },
@@ -18,7 +17,7 @@ use tokio_postgres::{
     Client as Connection,
 };
 impl PostgresqlRepository<ChannelSubscription> {
-    pub async fn create_1<'a>(database_1_connection: &'a Connection, insert_1: Insert1) -> Result<ChannelSubscription, Auditor<Error>> {
+    pub async fn create_1<'a>(database_1_connection: &'a Connection, insert_1: Insert1) -> Result<ChannelSubscription, Error> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             INSERT INTO public.channel_subscription AS cs ( \
@@ -77,7 +76,7 @@ impl PostgresqlRepository<ChannelSubscription> {
         );
         return Ok(channel_subscription);
     }
-    pub async fn is_exist_1<'a>(database_1_connection: &'a Connection, by_1: By1) -> Result<bool, Auditor<Error>> {
+    pub async fn is_exist_1<'a>(database_1_connection: &'a Connection, by_1: By1) -> Result<bool, Error> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             SELECT \

@@ -25,10 +25,6 @@ dependencies = [
 [[package]]
 name = "auditor"
 version = "1.0.0"
-dependencies = [
- "error",
- "invalid_argument",
-]
 
 [[package]]
 name = "autocfg"
@@ -123,7 +119,6 @@ name = "client_server_data_serializer"
 version = "1.0.0"
 dependencies = [
  "action_processor_incoming_outcoming",
- "auditor",
  "cargo-emit",
  "cbindgen",
  "error",
@@ -164,6 +159,9 @@ dependencies = [
 [[package]]
 name = "error"
 version = "1.0.0"
+dependencies = [
+ "auditor",
+]
 
 [[package]]
 name = "fastrand"
@@ -222,10 +220,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "invalid_argument"
-version = "1.0.0"
-
-[[package]]
 name = "itoa"
 version = "1.0.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -261,7 +255,6 @@ dependencies = [
  "error",
  "rmp-serde",
  "serde",
- "void",
 ]
 
 [[package]]

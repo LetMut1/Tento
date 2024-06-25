@@ -3,7 +3,6 @@ use crate::{
     domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken,
     infrastructure_layer::{
         data::{
-            auditor::Auditor,
             control_type::Email,
             environment_configuration::EnvironmentConfiguration,
             error::Error,
@@ -17,7 +16,7 @@ impl EmailSender<ApplicationUserResetPasswordToken<'_>> {
         application_user_reset_password_token__value: &'a str,
         application_user__email: &'a str,
         application_user_device__id: &'a str,
-    ) -> Result<(), Auditor<Error>> {
+    ) -> Result<(), Error> {
         let message_body = format!(
             "Your code: {} for device {}.",
             application_user_reset_password_token__value, application_user_device__id,

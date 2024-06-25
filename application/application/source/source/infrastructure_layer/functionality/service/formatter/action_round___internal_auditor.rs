@@ -5,21 +5,21 @@ use super::{
 use crate::infrastructure_layer::data::{
     auditor::Auditor,
     control_type::ActionRound,
-    invalid_argument::InvalidArgument,
+    error::Internal
 };
 impl
     Formatter<(
         ActionRound,
-        Auditor<InvalidArgument>,
+        Auditor<Internal>,
     )>
 {
-    pub fn format<'a>(request_uri: &'a str, request_method: &'a str, response_status_code: u16, invalid_argument_auditor: &'a Auditor<InvalidArgument>) -> String {
+    pub fn format<'a>(request_uri: &'a str, request_method: &'a str, response_status_code: u16, internal_auditor: &'a Auditor<Internal>) -> String {
         return format!(
             context_report!(),
             response_status_code,
             request_method,
             request_uri,
-            Formatter::<Auditor<InvalidArgument>>::format(invalid_argument_auditor).as_str(),
+            Formatter::<Auditor<Internal>>::format(internal_auditor).as_str(),
         );
     }
 }

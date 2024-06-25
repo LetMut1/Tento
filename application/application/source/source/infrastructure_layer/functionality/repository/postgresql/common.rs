@@ -5,11 +5,10 @@ use super::{
 use crate::infrastructure_layer::{
     data::{
         auditor::{
-            Auditor,
             Backtrace,
-            ResultConverter,
         },
         error::Error,
+        error::ResultConverter,
     },
     functionality::service::{
         counter::Counter,
@@ -22,7 +21,7 @@ use tokio_postgres::{
     Client as Connection,
 };
 impl PostgresqlRepository<Common1> {
-    pub async fn find_1<'a>(database_1_connection: &'a Connection, by_1: By1<'_>, limit: i16) -> Result<Vec<Common1>, Auditor<Error>> {
+    pub async fn find_1<'a>(database_1_connection: &'a Connection, by_1: By1<'_>, limit: i16) -> Result<Vec<Common1>, Error> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let mut counter = Counter::<i16>::new_classic();
         let mut query = format!(
@@ -162,7 +161,7 @@ impl PostgresqlRepository<Common1> {
         }
         return Ok(common_registry);
     }
-    pub async fn find_2<'a>(database_1_connection: &'a Connection, by_2: By2<'_>, limit: i16) -> Result<Vec<Common1>, Auditor<Error>> {
+    pub async fn find_2<'a>(database_1_connection: &'a Connection, by_2: By2<'_>, limit: i16) -> Result<Vec<Common1>, Error> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let mut counter = Counter::<i16>::new_classic();
         let mut query = format!(
@@ -293,7 +292,7 @@ impl PostgresqlRepository<Common1> {
         }
         return Ok(common_registry);
     }
-    pub async fn find_3<'a>(database_1_connection: &'a Connection, by_3: By3, limit: i16) -> Result<Vec<Common1>, Auditor<Error>> {
+    pub async fn find_3<'a>(database_1_connection: &'a Connection, by_3: By3, limit: i16) -> Result<Vec<Common1>, Error> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let mut counter = Counter::<i16>::new_classic();
         let mut query = format!(

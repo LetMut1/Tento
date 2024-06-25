@@ -1,10 +1,9 @@
 use crate::infrastructure_layer::data::{
     auditor::{
-        Auditor,
         Backtrace,
-        OptionConverter,
     },
     error::Error,
+    error::OptionConverter,
 };
 pub struct Counter<T> {
     value: T,
@@ -24,7 +23,7 @@ impl Counter<i16> {
             step_size: Self::CLASSIC_STEP_SIZE,
         };
     }
-    pub fn get_next_value<'a>(&'a mut self) -> Result<i16, Auditor<Error>> {
+    pub fn get_next_value<'a>(&'a mut self) -> Result<i16, Error> {
         self.value = self.value.checked_add(self.step_size).convert_out_of_range(
             Backtrace::new(
                 line!(),

@@ -81,18 +81,19 @@
     clippy::zero_sized_map_values
 )]
 use auditor::{
-    Auditor,
     Backtrace,
+};
+use error::{
+    Error,
     ResultConverter,
 };
-use error::Error;
 use serde::{
     Deserialize,
     Serialize as SerdeSerialize,
 };
 pub struct Serializer;
 impl Serializer {
-    pub fn serialize<'a, T>(subject: &'a T) -> Result<Vec<u8>, Auditor<Error>>
+    pub fn serialize<'a, T>(subject: &'a T) -> Result<Vec<u8>, Error>
     where
         T: SerdeSerialize,
     {
@@ -103,7 +104,7 @@ impl Serializer {
             ),
         );
     }
-    pub fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, Auditor<Error>>
+    pub fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, Error>
     where
         T: Deserialize<'a>,
     {

@@ -13,15 +13,15 @@ use crate::{
     infrastructure_layer::{
         data::{
             auditor::{
-                Auditor,
                 Backtrace,
-                OptionConverter,
-                ResultConverter,
             },
             control_type::ApplicationUser__Authorization___CheckEmailForExisting,
             environment_configuration::EnvironmentConfiguration,
-            error::Error,
-            invalid_argument::InvalidArgument,
+            error::{
+                Error,
+                OptionConverter,
+                ResultConverter,
+            },
             void::Void,
         },
         functionality::repository::postgresql::{
@@ -56,7 +56,7 @@ impl ActionProcessor<ApplicationUser__Authorization___CheckEmailForExisting> {
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         incoming: Option<Incoming>,
-    ) -> Result<Result<UnifiedReport<Outcoming, Void>, Auditor<InvalidArgument>>, Auditor<Error>>
+    ) -> Result<UnifiedReport<Outcoming, Void>, Error>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -70,16 +70,13 @@ impl ActionProcessor<ApplicationUser__Authorization___CheckEmailForExisting> {
             ),
         )?;
         if !Validator::<ApplicationUser_Email>::is_valid(incoming_.application_user__email.as_str())? {
-            return Ok(
-                Err(
-                    Auditor::<InvalidArgument>::new(
-                        InvalidArgument,
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
+            return Err(
+                Error::new_external_invalid_argument(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
                     ),
-                ),
+                )
             );
         }
         let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert_into_error(
@@ -98,6 +95,6 @@ impl ActionProcessor<ApplicationUser__Authorization___CheckEmailForExisting> {
         let outcoming = Outcoming {
             result: is_exist,
         };
-        return Ok(Ok(UnifiedReport::target_filled(outcoming)));
+        return Ok(UnifiedReport::target_filled(outcoming));
     }
 }

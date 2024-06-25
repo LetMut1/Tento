@@ -31,13 +31,14 @@ use crate::{
     infrastructure_layer::{
         data::{
             auditor::{
-                Auditor,
                 Backtrace,
-                ResultConverter,
             },
             control_type::PostgresqlConnectionPoolNoTls,
             environment_configuration::EnvironmentConfiguration,
-            error::Error,
+            error::{
+                Error,
+                ResultConverter,
+            },
         },
         functionality::{
             repository::postgresql::{
@@ -98,19 +99,19 @@ impl CommandProcessor<CreateFixtures> {
     const QUANTITY_OF_APPLICATION_USERS: u16 = 10_000;
     const QUANTITY_OF_CHANNELS: u8 = 5;
     const STUB: &'static str = "s_t_u_b";
-    pub fn process() -> Result<(), Auditor<Error>> {
+    pub fn process() -> Result<(), Error> {
         let environment_configuration = Self::initialize_environment()?;
         Self::run_runtime(&environment_configuration)?;
         return Ok(());
     }
-    fn initialize_environment() -> Result<EnvironmentConfiguration, Auditor<Error>> {
+    fn initialize_environment() -> Result<EnvironmentConfiguration, Error> {
         let environment_configuration_file_path = format!(
             "{}/environment_configuration",
             std::env::var("CARGO_MANIFEST_DIR").convert_into_error(Backtrace::new(line!(), file!()))?.as_str(),
         );
         return Ok(Loader::<EnvironmentConfiguration>::load_from_file(environment_configuration_file_path.as_str())?);
     }
-    fn run_runtime<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<(), Auditor<Error>> {
+    fn run_runtime<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<(), Error> {
         Builder::new_current_thread()
             .enable_all()
             .build()
@@ -123,30 +124,7 @@ impl CommandProcessor<CreateFixtures> {
             .block_on(Self::create_fixtures(environment_configuration))?;
         return Ok(());
     }
-    async fn create_fixtures<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<(), Auditor<Error>> {
-
-
-
-
-
-
-
-
-
-        todo!("Error::new_logic( -> InvalidArgument");
-
-
-
-
-
-
-
-
-
-
-
-
-
+    async fn create_fixtures<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<(), Error> {
         let database_1_postgresql_connection_pool = Creator::<PostgresqlConnectionPoolNoTls>::create_database_1(environment_configuration).await?;
         let application_user_password = Self::APPLICATION_USER__PASSWORD.to_string();
         let application_user__password_hash = Encoder::<ApplicationUser_Password>::encode(application_user_password.as_str())?;
@@ -165,25 +143,23 @@ impl CommandProcessor<CreateFixtures> {
             }
             if !Validator::<ApplicationUser_Nickname>::is_valid(application_user__nickname.as_str()) {
                 return Err(
-                    Auditor::<Error>::new(
-                        Error::new_internal_logic("Application_user nickname should be valid."),
+                    Error::new_external_invalid_argument(
                         Backtrace::new(
                             line!(),
                             file!(),
-                        ),
-                    ),
+                        )
+                    )
                 );
             }
             let application_user__email = format!("{}@fixture.com", application_user__nickname.as_str());
             if !Validator::<ApplicationUser_Email>::is_valid(application_user__email.as_str())? {
                 return Err(
-                    Auditor::<Error>::new(
-                        Error::new_internal_logic("Application_user email should be valid."),
+                    Error::new_external_invalid_argument(
                         Backtrace::new(
                             line!(),
                             file!(),
-                        ),
-                    ),
+                        )
+                    )
                 );
             }
             if !Validator::<ApplicationUser_Password>::is_valid(
@@ -192,13 +168,12 @@ impl CommandProcessor<CreateFixtures> {
                 application_user__nickname.as_str(),
             ) {
                 return Err(
-                    Auditor::<Error>::new(
-                        Error::new_internal_logic( "Application_user_password should be valid."),
+                    Error::new_external_invalid_argument(
                         Backtrace::new(
                             line!(),
                             file!(),
-                        ),
-                    ),
+                        )
+                    )
                 );
             }
             let application_user = match PostgresqlRepository::<ApplicationUser<'_>>::find_1(
@@ -229,13 +204,12 @@ impl CommandProcessor<CreateFixtures> {
             );
             if !Validator::<ApplicationUserDevice_Id>::is_valid(&application_user_device__id) {
                 return Err(
-                    Auditor::<Error>::new(
-                        Error::new_internal_logic("Application_user_device id should be valid."),
+                    Error::new_external_invalid_argument(
                         Backtrace::new(
                             line!(),
                             file!(),
-                        ),
-                    ),
+                        )
+                    )
                 );
             }
             PostgresqlRepository::<ApplicationUserDevice>::create_1(
@@ -254,25 +228,23 @@ impl CommandProcessor<CreateFixtures> {
                 }
                 if !Validator::<Channel_Name>::is_valid(channel__name.as_str()) {
                     return Err(
-                        Auditor::<Error>::new(
-                            Error::new_internal_logic("Channel_name should be valid."),
+                        Error::new_external_invalid_argument(
                             Backtrace::new(
                                 line!(),
                                 file!(),
-                            ),
-                        ),
+                            )
+                        )
                     );
                 }
                 let channel__linked_name = channel__name.clone();
                 if !Validator::<Channel_LinkedName>::is_valid(channel__linked_name.as_str()) {
                     return Err(
-                        Auditor::<Error>::new(
-                            Error::new_internal_logic("Channel_linked_name should be valid."),
+                        Error::new_external_invalid_argument(
                             Backtrace::new(
                                 line!(),
                                 file!(),
-                            ),
-                        ),
+                            )
+                        )
                     );
                 }
                 let channel__description = if thread_rng().gen_range::<i8, _>(0..=1) == 1 {
@@ -283,13 +255,12 @@ impl CommandProcessor<CreateFixtures> {
                     }
                     if !Validator::<Channel_Description>::is_valid(channel__description_.as_str()) {
                         return Err(
-                            Auditor::<Error>::new(
-                                Error::new_internal_logic("Channel_description should be valid."),
+                            Error::new_external_invalid_argument(
                                 Backtrace::new(
                                     line!(),
                                     file!(),
-                                ),
-                            ),
+                                )
+                            )
                         );
                     }
                     Some(channel__description_)
@@ -301,13 +272,12 @@ impl CommandProcessor<CreateFixtures> {
                 ];
                 if !Validator::<Channel_Orientation>::is_valid(channel__orientation.as_slice()) {
                     return Err(
-                        Auditor::<Error>::new(
-                            Error::new_internal_logic("Channel_orientation should be valid."),
+                        Error::new_external_invalid_argument(
                             Backtrace::new(
                                 line!(),
                                 file!(),
-                            ),
-                        ),
+                            )
+                        )
                     );
                 }
                 let channel = PostgresqlRepository::<Channel<'_>>::find_2(

@@ -19,15 +19,15 @@ use crate::{
     infrastructure_layer::{
         data::{
             auditor::{
-                Auditor,
                 Backtrace,
-                OptionConverter,
-                ResultConverter,
             },
             control_type::Channel__Base___GetManyBySubscription,
             environment_configuration::EnvironmentConfiguration,
-            error::Error,
-            invalid_argument::InvalidArgument,
+            error::{
+                Error,
+                OptionConverter,
+                ResultConverter,
+            }
         },
         functionality::repository::postgresql::{
             common::{
@@ -66,7 +66,7 @@ impl ActionProcessor<Channel__Base___GetManyBySubscription> {
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         incoming: Option<Incoming>,
-    ) -> Result<Result<UnifiedReport<Outcoming, Precedent>, Auditor<InvalidArgument>>, Auditor<Error>>
+    ) -> Result<UnifiedReport<Outcoming, Precedent>, Error>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -85,50 +85,36 @@ impl ActionProcessor<Channel__Base___GetManyBySubscription> {
         )
         .await?
         {
-            Ok(extractor_result) => {
-                let application_user_access_token_ = match extractor_result {
-                    ExtractorResult::ApplicationUserAccessToken {
-                        application_user_access_token: application_user_access_token__,
-                    } => application_user_access_token__,
-                    ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
-                        return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_AlreadyExpired)));
-                    }
-                    ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
-                        return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList)));
-                    }
-                };
-                application_user_access_token_
+            ExtractorResult::ApplicationUserAccessToken {
+                application_user_access_token: application_user_access_token_,
+            } => application_user_access_token_,
+            ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
+                return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_AlreadyExpired));
             }
-            Err(invalid_argument_auditor) => {
-                return Ok(Err(invalid_argument_auditor));
+            ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
+                return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList));
             }
         };
         if let Some(requery___channel__id_) = incoming_.requery___channel__id {
             if !Validator::<Channel_Id>::is_valid(requery___channel__id_) {
-                return Ok(
-                    Err(
-                        Auditor::<InvalidArgument>::new(
-                            InvalidArgument,
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        ),
-                    ),
+                return Err(
+                    Error::new_external_invalid_argument(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        )
+                    )
                 );
             }
         }
         if incoming_.limit <= 0 || incoming_.limit > Self::LIMIT {
-            return Ok(
-                Err(
-                    Auditor::<InvalidArgument>::new(
-                        InvalidArgument,
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                ),
+            return Err(
+                Error::new_external_invalid_argument(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    )
+                )
             );
         }
         let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert_into_error(
@@ -149,6 +135,6 @@ impl ActionProcessor<Channel__Base___GetManyBySubscription> {
         let outcoming = Outcoming {
             common_registry,
         };
-        return Ok(Ok(UnifiedReport::target_filled(outcoming)));
+        return Ok(UnifiedReport::target_filled(outcoming));
     }
 }

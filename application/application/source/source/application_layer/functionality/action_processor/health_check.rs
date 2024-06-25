@@ -4,11 +4,9 @@ use crate::{
         functionality::action_processor::ActionProcessor,
     },
     infrastructure_layer::data::{
-        auditor::Auditor,
         control_type::HealthCheck,
         environment_configuration::EnvironmentConfiguration,
         error::Error,
-        invalid_argument::InvalidArgument,
         void::Void,
     },
 };
@@ -34,7 +32,7 @@ impl ActionProcessor<HealthCheck> {
         _database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _incoming: Option<Void>,
-    ) -> Result<Result<UnifiedReport<Void, Void>, Auditor<InvalidArgument>>, Auditor<Error>>
+    ) -> Result<UnifiedReport<Void, Void>, Error>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,

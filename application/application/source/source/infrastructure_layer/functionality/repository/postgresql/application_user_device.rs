@@ -4,11 +4,10 @@ use crate::{
     infrastructure_layer::{
         data::{
             auditor::{
-                Auditor,
                 Backtrace,
-                ResultConverter,
             },
             error::Error,
+            error::ResultConverter,
         },
         functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver,
     },
@@ -18,7 +17,7 @@ use tokio_postgres::{
     Client as Connection,
 };
 impl PostgresqlRepository<ApplicationUserDevice> {
-    pub async fn create_1<'a>(database_1_connection: &'a Connection, insert_1: Insert1) -> Result<ApplicationUserDevice, Auditor<Error>> {
+    pub async fn create_1<'a>(database_1_connection: &'a Connection, insert_1: Insert1) -> Result<ApplicationUserDevice, Error> {
         let application_user_device__id = insert_1.application_user_device__id.as_str();
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\

@@ -1,7 +1,6 @@
 use super::Spawner;
 use crate::infrastructure_layer::{
     data::{
-        auditor::Auditor,
         control_type::TokioBlockingTask,
         error::Error,
     },
@@ -12,13 +11,13 @@ use tokio::task::JoinHandle;
 impl Spawner<TokioBlockingTask> {
     pub fn spawn_into_background<F, T>(closure: F) -> ()
     where
-        F: FnOnce() -> Result<T, Auditor<Error>> + Send + 'static,
+        F: FnOnce() -> Result<T, Error> + Send + 'static,
         T: Send + 'static,
     {
         tokio::task::spawn_blocking(
             move || -> () {
-                if let Err(error_auditor) = closure() {
-                    Logger::<Auditor<Error>>::log(&error_auditor);
+                if let Err(error) = closure() {
+                    Logger::<Error>::log(&error);
                 }
                 return ();
             },

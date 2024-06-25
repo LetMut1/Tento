@@ -17,9 +17,5 @@ edition = "2021"
 crate-type = ["lib"]
 required-features = []
 
-[dependencies]
-error = { path = "./../error", package = "error", version = "1.0.0", default-features = true, features = [], optional = false }
-invalid_argument = { path = "./../invalid_argument", package = "invalid_argument", version = "1.0.0", default-features = true, features = [], optional = false }
-
 [features]
 default = []

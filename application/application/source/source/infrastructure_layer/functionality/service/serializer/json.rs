@@ -6,11 +6,10 @@ use super::{
 use crate::infrastructure_layer::data::control_type::Json;
 use crate::infrastructure_layer::data::{
     auditor::{
-        Auditor,
         Backtrace,
-        ResultConverter,
     },
     error::Error,
+    error::ResultConverter,
 };
 use serde::{
     Deserialize,
@@ -19,7 +18,7 @@ use serde::{
 use serde_json;
 #[cfg(feature = "manual_testing")]
 impl Serialize for Serializer<Json> {
-    fn serialize<'a, T>(subject: &'a T) -> Result<Vec<u8>, Auditor<Error>>
+    fn serialize<'a, T>(subject: &'a T) -> Result<Vec<u8>, Error>
     where
         T: SerdeSerialize,
     {
@@ -30,7 +29,7 @@ impl Serialize for Serializer<Json> {
             ),
         );
     }
-    fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, Auditor<Error>>
+    fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, Error>
     where
         T: Deserialize<'a>,
     {

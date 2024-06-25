@@ -2,13 +2,11 @@ use super::Extractor;
 use crate::infrastructure_layer::{
     data::{
         auditor::{
-            Auditor,
             Backtrace,
-            ResultConverter,
         },
         control_type::HttpBodyData,
         error::Error,
-        invalid_argument::InvalidArgument,
+        error::ResultConverter,
     },
     functionality::service::serializer::{
         Serialize,
@@ -28,7 +26,7 @@ impl Extractor<HttpBodyData> {
         body: &'a mut Body,
         _parts: &'a Parts,
         _route_parameters: &'a Params<'_, '_>,
-    ) -> Result<Result<Option<D>, Auditor<InvalidArgument>>, Auditor<Error>>
+    ) -> Result<Option<D>, Error>
     where
         D: for<'de> Deserialize<'de>,
         Serializer<SF>: Serialize,
@@ -39,6 +37,6 @@ impl Extractor<HttpBodyData> {
                 file!(),
             ),
         )?;
-        return Ok(Ok(Some(Serializer::<SF>::deserialize::<'_, D>(bytes.chunk())?)));
+        return Ok(Some(Serializer::<SF>::deserialize::<'_, D>(bytes.chunk())?));
     }
 }

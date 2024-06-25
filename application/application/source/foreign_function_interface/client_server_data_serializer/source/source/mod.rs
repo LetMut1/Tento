@@ -3353,7 +3353,6 @@ mod test {
         const STRING_LITERAL: &'static str = "qwerty";
 
         mod server_response_data_deserialization {
-            use auditor::Auditor;
             use error::Error;
             use formatter::Formatter;
             use super::*;
@@ -3371,9 +3370,9 @@ mod test {
             {
                 let registry = match Serializer_::serialize(data) {
                     Ok(registry_) => registry_,
-                    Err(error_auditor) => {
+                    Err(error) => {
                         return Err(
-                            Formatter::<Auditor<Error>>::format(&error_auditor).into()
+                            Formatter::<Error>::format(&error).into()
                         );
                     }
                 };

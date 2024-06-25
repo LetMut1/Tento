@@ -3,11 +3,11 @@ use crate::infrastructure_layer::data::{
     auditor::{
         Auditor,
         Backtrace,
-        ResultConverter,
     },
     control_type::Email,
     environment_configuration::EnvironmentConfiguration,
     error::Error,
+    error::ResultConverter,
 };
 use lettre::{
     smtp::SmtpClient,
@@ -19,9 +19,8 @@ use std::{
     convert::Into,
     net::ToSocketAddrs,
 };
-impl Sender<Email> {
-    // TODO Возможно, сразу можно положить объект в константу.  // TODO В предпродакшене, когда будет smtp-ссервер, настройить все через константы и енв
-    pub fn send<'a>(environment_configuration: &'a EnvironmentConfiguration, subject: &'a str, body: String, to: &'a str) -> Result<(), Auditor<Error>> {
+impl Sender<Email> { // TODO Возможно, сразу можно положить объект в константу.  // TODO В предпродакшене, когда будет smtp-ссервер, настройить все через константы и енв
+    pub fn send<'a>(environment_configuration: &'a EnvironmentConfiguration, subject: &'a str, body: String, to: &'a str) -> Result<(), Error> {
         let email = EmailBuilder::new() //TODO
             .subject(subject)
             .text(body)
@@ -45,13 +44,13 @@ impl Sender<Email> {
             Some(email_server_socket_address_) => email_server_socket_address_,
             None => {
                 return Err(
-                    Auditor::<Error>::new(
-                        Error::new_internal_logic("Invalid socket address."),
+                    Error::new_internal_logic(
+                        "Invalid socket address.",
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
-                    ),
+                    )
                 );
             }
         };

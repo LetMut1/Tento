@@ -22,7 +22,6 @@ auditor = { path = "./../auditor", package = "auditor", version = "1.0.0", defau
 error = { path = "./../error", package = "error", version = "1.0.0", default-features = true, features = [], optional = false }
 rmp_serde = { package = "rmp-serde", version = "0.15.5", default-features = true, features = [], optional = false }
 serde = { package = "serde", version = "1.0.188", default-features = true, features = ["derive"], optional = false }
-void = { path = "./../void", package = "void", version = "1.0.0", default-features = true, features = [], optional = false }
 
 [features]
 default = []

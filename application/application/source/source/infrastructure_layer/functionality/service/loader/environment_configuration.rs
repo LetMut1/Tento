@@ -1,9 +1,7 @@
 use super::Loader;
 use crate::infrastructure_layer::data::{
     auditor::{
-        Auditor,
         Backtrace,
-        ResultConverter,
     },
     environment_configuration::{
         environment_configuration_file::EnvironmentConfigurationFile,
@@ -24,11 +22,12 @@ use crate::infrastructure_layer::data::{
         TokioRuntime,
     },
     error::Error,
+    error::ResultConverter,
 };
 use std::path::Path;
 impl Loader<EnvironmentConfiguration> {
     const ENVIRONMENT_FILE_NAME: &'static str = "environment.toml";
-    pub fn load_from_file<'a>(environment_configuration_directory_path: &'a str) -> Result<EnvironmentConfiguration, Auditor<Error>> {
+    pub fn load_from_file<'a>(environment_configuration_directory_path: &'a str) -> Result<EnvironmentConfiguration, Error> {
         let environment_file_path = format!(
             "{}/{}",
             environment_configuration_directory_path,
@@ -49,13 +48,13 @@ impl Loader<EnvironmentConfiguration> {
             )?
         } else {
             return Err(
-                Auditor::<Error>::new(
-                    Error::new_internal_logic("The environment.toml file does not exist."),
+                Error::new_internal_logic(
+                    "The environment.toml file does not exist.",
                     Backtrace::new(
                         line!(),
                         file!(),
                     ),
-                ),
+                )
             );
         };
         let environment_configuration_file = toml::from_str::<EnvironmentConfigurationFile>(environment_file_data.as_str()).convert_into_error(
@@ -139,36 +138,37 @@ impl Loader<EnvironmentConfiguration> {
                 http,
             }
         };
-        let environment_configuration = EnvironmentConfiguration {
-            tokio_runtime: TokioRuntime {
-                maximum_blocking_threads_quantity: environment_configuration_file.tokio_runtime.maximum_blocking_threads_quantity.value,
-                worker_threads_quantity: environment_configuration_file.tokio_runtime.worker_threads_quantity.value,
-                worker_thread_stack_size: environment_configuration_file.tokio_runtime.worker_thread_stack_size.value,
-            },
-            application_server,
-            logging: Logging {
-                directory_path: environment_configuration_file.logging.directory_path.value,
-                file_name_prefix: environment_configuration_file.logging.file_name_prefix.value,
-            },
-            resource: Resource {
-                postgresql: Postgresql {
-                    database_1_url: environment_configuration_file.resource.postgresql.database_1_url.value,
-                    database_2_url: environment_configuration_file.resource.postgresql.database_2_url.value,
+        return Ok(
+            EnvironmentConfiguration {
+                tokio_runtime: TokioRuntime {
+                    maximum_blocking_threads_quantity: environment_configuration_file.tokio_runtime.maximum_blocking_threads_quantity.value,
+                    worker_threads_quantity: environment_configuration_file.tokio_runtime.worker_threads_quantity.value,
+                    worker_thread_stack_size: environment_configuration_file.tokio_runtime.worker_thread_stack_size.value,
                 },
-                redis: Redis {
-                    database_1_url: environment_configuration_file.resource.redis.database_1_url.value,
+                application_server,
+                logging: Logging {
+                    directory_path: environment_configuration_file.logging.directory_path.value,
+                    file_name_prefix: environment_configuration_file.logging.file_name_prefix.value,
                 },
-                email_server: EmailServer {
-                    socket_address: environment_configuration_file.resource.email_server.socket_address.value,
+                resource: Resource {
+                    postgresql: Postgresql {
+                        database_1_url: environment_configuration_file.resource.postgresql.database_1_url.value,
+                        database_2_url: environment_configuration_file.resource.postgresql.database_2_url.value,
+                    },
+                    redis: Redis {
+                        database_1_url: environment_configuration_file.resource.redis.database_1_url.value,
+                    },
+                    email_server: EmailServer {
+                        socket_address: environment_configuration_file.resource.email_server.socket_address.value,
+                    },
                 },
-            },
-            encryption: Encryption {
-                private_key: PrivateKey {
-                    application_user_access_token: environment_configuration_file.encryption.private_key.application_user_access_token.value,
-                    application_user_access_refresh_token: environment_configuration_file.encryption.private_key.application_user_access_refresh_token.value,
+                encryption: Encryption {
+                    private_key: PrivateKey {
+                        application_user_access_token: environment_configuration_file.encryption.private_key.application_user_access_token.value,
+                        application_user_access_refresh_token: environment_configuration_file.encryption.private_key.application_user_access_refresh_token.value,
+                    },
                 },
-            },
-        };
-        return Ok(environment_configuration);
+            }
+        );
     }
 }

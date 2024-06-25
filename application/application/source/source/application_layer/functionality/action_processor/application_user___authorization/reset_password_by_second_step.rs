@@ -18,18 +18,18 @@ use crate::{
     infrastructure_layer::{
         data::{
             auditor::{
-                Auditor,
                 Backtrace,
-                OptionConverter,
-                ResultConverter,
             },
             control_type::{
                 ApplicationUser__Authorization___ResetPasswordBySecondStep,
                 UnixTime,
             },
             environment_configuration::EnvironmentConfiguration,
-            error::Error,
-            invalid_argument::InvalidArgument,
+            error::{
+                Error,
+                OptionConverter,
+                ResultConverter,
+            },
             void::Void,
         },
         functionality::{
@@ -71,7 +71,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordBySecondStep>
         _database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         incoming: Option<Incoming>,
-    ) -> Result<Result<UnifiedReport<Void, Precedent>, Auditor<InvalidArgument>>, Auditor<Error>>
+    ) -> Result<UnifiedReport<Void, Precedent>, Error>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -85,42 +85,33 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordBySecondStep>
             ),
         )?;
         if !Validator::<ApplicationUserResetPasswordToken_Value>::is_valid(incoming_.application_user_reset_password_token__value.as_str())? {
-            return Ok(
-                Err(
-                    Auditor::<InvalidArgument>::new(
-                        InvalidArgument,
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                ),
+            return Err(
+                Error::new_external_invalid_argument(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    )
+                )
             );
         }
         if !Validator::<ApplicationUser_Id>::is_valid(incoming_.application_user__id) {
-            return Ok(
-                Err(
-                    Auditor::<InvalidArgument>::new(
-                        InvalidArgument,
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                ),
+            return Err(
+                Error::new_external_invalid_argument(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    )
+                )
             );
         }
         if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming_.application_user_device__id.as_str()) {
-            return Ok(
-                Err(
-                    Auditor::<InvalidArgument>::new(
-                        InvalidArgument,
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                ),
+            return Err(
+                Error::new_external_invalid_argument(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    )
+                )
             );
         }
         let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert_into_error(
@@ -141,7 +132,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordBySecondStep>
         {
             Some(application_user_reset_password_token_) => application_user_reset_password_token_,
             None => {
-                return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_NotFound)));
+                return Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_NotFound));
             }
         };
         if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_reset_password_token.expires_at) {
@@ -153,10 +144,10 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordBySecondStep>
                 },
             )
             .await?;
-            return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_AlreadyExpired)));
+            return Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_AlreadyExpired));
         }
         if application_user_reset_password_token.is_approved {
-            return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_AlreadyApproved)));
+            return Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_AlreadyApproved));
         }
         if application_user_reset_password_token.value != incoming_.application_user_reset_password_token__value {
             application_user_reset_password_token.wrong_enter_tries_quantity =
@@ -189,12 +180,10 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordBySecondStep>
                 .await?;
             }
             return Ok(
-                Ok(
-                    UnifiedReport::precedent(
-                        Precedent::ApplicationUserResetPasswordToken_WrongValue {
-                            application_user_reset_password_token__wrong_enter_tries_quantity: application_user_reset_password_token.wrong_enter_tries_quantity,
-                        },
-                    ),
+                UnifiedReport::precedent(
+                    Precedent::ApplicationUserResetPasswordToken_WrongValue {
+                        application_user_reset_password_token__wrong_enter_tries_quantity: application_user_reset_password_token.wrong_enter_tries_quantity,
+                    },
                 ),
             );
         }
@@ -210,6 +199,6 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordBySecondStep>
             },
         )
         .await?;
-        return Ok(Ok(UnifiedReport::target_empty()));
+        return Ok(UnifiedReport::target_empty());
     }
 }

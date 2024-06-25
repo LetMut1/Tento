@@ -26,15 +26,15 @@ use crate::{
     infrastructure_layer::{
         data::{
             auditor::{
-                Auditor,
                 Backtrace,
-                OptionConverter,
-                ResultConverter,
             },
             control_type::Channel__Base___GetOneById,
             environment_configuration::EnvironmentConfiguration,
-            error::Error,
-            invalid_argument::InvalidArgument,
+            error::{
+                Error,
+                OptionConverter,
+                ResultConverter,
+            }
         },
         functionality::repository::postgresql::{
             channel::By1 as By1___,
@@ -73,7 +73,7 @@ impl ActionProcessor<Channel__Base___GetOneById> {
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         incoming: Option<Incoming>,
-    ) -> Result<Result<UnifiedReport<Outcoming, Precedent>, Auditor<InvalidArgument>>, Auditor<Error>>
+    ) -> Result<UnifiedReport<Outcoming, Precedent>, Error>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -92,35 +92,24 @@ impl ActionProcessor<Channel__Base___GetOneById> {
         )
         .await?
         {
-            Ok(extractor_result) => {
-                let application_user_access_token_ = match extractor_result {
-                    ExtractorResult::ApplicationUserAccessToken {
-                        application_user_access_token: application_user_access_token__,
-                    } => application_user_access_token__,
-                    ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
-                        return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_AlreadyExpired)));
-                    }
-                    ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
-                        return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList)));
-                    }
-                };
-                application_user_access_token_
+            ExtractorResult::ApplicationUserAccessToken {
+                application_user_access_token: application_user_access_token_,
+            } => application_user_access_token_,
+            ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
+                return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_AlreadyExpired));
             }
-            Err(invalid_argument_auditor) => {
-                return Ok(Err(invalid_argument_auditor));
+            ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
+                return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList));
             }
         };
         if !Validator::<Channel_Id>::is_valid(incoming_.channel__id) {
-            return Ok(
-                Err(
-                    Auditor::<InvalidArgument>::new(
-                        InvalidArgument,
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                ),
+            return Err(
+                Error::new_external_invalid_argument(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    )
+                )
             );
         }
         let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.convert_into_error(
@@ -139,7 +128,7 @@ impl ActionProcessor<Channel__Base___GetOneById> {
         {
             Some(channel_) => channel_,
             None => {
-                return Ok(Ok(UnifiedReport::precedent(Precedent::Channel_NotFound)));
+                return Ok(UnifiedReport::precedent(Precedent::Channel_NotFound));
             }
         };
         if let Channel_AccessModifier::Close = Channel_AccessModifier::to_representation(channel.access_modifier) {
@@ -152,7 +141,7 @@ impl ActionProcessor<Channel__Base___GetOneById> {
             )
             .await?;
             if !is_exist && application_user_access_token.application_user__id != channel.owner {
-                return Ok(Ok(UnifiedReport::precedent(Precedent::Channel_IsClose)));
+                return Ok(UnifiedReport::precedent(Precedent::Channel_IsClose));
             }
         }
         let channel_inner_link_registry = PostgresqlRepository::<ChannelInnerLink>::find_1(
@@ -190,6 +179,6 @@ impl ActionProcessor<Channel__Base___GetOneById> {
             channel_inner_link_registry,
             channel_outer_link_registry,
         };
-        return Ok(Ok(UnifiedReport::target_filled(outcoming)));
+        return Ok(UnifiedReport::target_filled(outcoming));
     }
 }

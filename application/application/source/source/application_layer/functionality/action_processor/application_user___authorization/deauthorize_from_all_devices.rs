@@ -16,18 +16,18 @@ use crate::{
     infrastructure_layer::{
         data::{
             auditor::{
-                Auditor,
                 Backtrace,
-                OptionConverter,
-                ResultConverter,
             },
             control_type::{
                 ApplicationUser__Authorization___DeauthorizeFromAllDevices,
                 CloudMessage,
             },
             environment_configuration::EnvironmentConfiguration,
-            error::Error,
-            invalid_argument::InvalidArgument,
+            error::{
+                Error,
+                OptionConverter,
+                ResultConverter,
+            },
             void::Void,
         },
         functionality::{
@@ -66,7 +66,7 @@ impl ActionProcessor<ApplicationUser__Authorization___DeauthorizeFromAllDevices>
         _database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         incoming: Option<Incoming>,
-    ) -> Result<Result<UnifiedReport<Void, Precedent>, Auditor<InvalidArgument>>, Auditor<Error>>
+    ) -> Result<UnifiedReport<Void, Precedent>, Error>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -85,22 +85,14 @@ impl ActionProcessor<ApplicationUser__Authorization___DeauthorizeFromAllDevices>
         )
         .await?
         {
-            Ok(extractor_result) => {
-                let application_user_access_token_ = match extractor_result {
-                    ExtractorResult::ApplicationUserAccessToken {
-                        application_user_access_token: application_user_access_token__,
-                    } => application_user_access_token__,
-                    ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
-                        return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_AlreadyExpired)));
-                    }
-                    ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
-                        return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList)));
-                    }
-                };
-                application_user_access_token_
+            ExtractorResult::ApplicationUserAccessToken {
+                application_user_access_token: application_user_access_token_,
+            } => application_user_access_token_,
+            ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
+                return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_AlreadyExpired));
             }
-            Err(invalid_argument_auditor) => {
-                return Ok(Err(invalid_argument_auditor));
+            ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
+                return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList));
             }
         };
         let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert_into_error(
@@ -117,6 +109,6 @@ impl ActionProcessor<ApplicationUser__Authorization___DeauthorizeFromAllDevices>
         )
         .await?;
         Resolver::<CloudMessage>::deauthorize_application_user_from_all_devices();
-        return Ok(Ok(UnifiedReport::target_empty()));
+        return Ok(UnifiedReport::target_empty());
     }
 }

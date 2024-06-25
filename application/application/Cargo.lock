@@ -116,7 +116,6 @@ dependencies = [
  "hmac",
  "http",
  "hyper",
- "invalid_argument",
  "lettre",
  "lettre_email",
  "matchit",
@@ -170,10 +169,6 @@ dependencies = [
 [[package]]
 name = "auditor"
 version = "1.0.0"
-dependencies = [
- "error",
- "invalid_argument",
-]
 
 [[package]]
 name = "autocfg"
@@ -615,6 +610,9 @@ dependencies = [
 [[package]]
 name = "error"
 version = "1.0.0"
+dependencies = [
+ "auditor",
+]
 
 [[package]]
 name = "fallible-iterator"
@@ -921,10 +919,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "invalid_argument"
-version = "1.0.0"
-
-[[package]]
 name = "itoa"
 version = "1.0.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1038,7 +1032,6 @@ dependencies = [
  "error",
  "rmp-serde",
  "serde",
- "void",
 ]
 
 [[package]]

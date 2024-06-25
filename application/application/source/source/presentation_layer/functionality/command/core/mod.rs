@@ -116,32 +116,32 @@ fn process() -> Result<(), Box<dyn StdError + 'static>> {
             return Err("Exhausted list of subcommands and subcommand_required prevents `None`.".into());
         }
     };
-    let error_auditor = match subcommand_arg_matches {
+    let error = match subcommand_arg_matches {
         (RUN_SERVER, _) => {
-            let error_auditor_ = match CommandProcessor::<RunServer>::process() {
+            let error_ = match CommandProcessor::<RunServer>::process() {
                 Ok(_) => None,
-                Err(error_auditor__) => Some(error_auditor__),
+                Err(error__) => Some(error__),
             };
-            error_auditor_
+            error_
         }
         (CREATE_FIXTURES, _) => {
-            let error_auditor_ = match CommandProcessor::<CreateFixtures>::process() {
+            let error_ = match CommandProcessor::<CreateFixtures>::process() {
                 Ok(_) => None,
-                Err(error_auditor__) => Some(error_auditor__),
+                Err(error__) => Some(error__),
             };
-            error_auditor_
+            error_
         }
         (REMOVE_INCOMPLITE_STATE, _) => {
-            let error_auditor_ = match CommandProcessor::<RemoveIncompliteState>::process() {
+            let error_ = match CommandProcessor::<RemoveIncompliteState>::process() {
                 Ok(_) => None,
-                Err(error_auditor__) => Some(error_auditor__),
+                Err(error__) => Some(error__),
             };
-            error_auditor_
+            error_
         }
         _ => {
             Some(
-                Auditor::<Error>::new(
-                    Error::new_internal_runtime_("Unexpexted subcommand.".into()),
+                Error::new_internal_runtime_(
+                    "Unexpected subcommand.".into(),
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -150,9 +150,9 @@ fn process() -> Result<(), Box<dyn StdError + 'static>> {
             )
         }
     };
-    match error_auditor {
-        Some(error_auditor_) => {
-            return Err(Formatter::<Auditor<Error>>::format(&error_auditor_).into());
+    match error {
+        Some(error_) => {
+            return Err(Formatter::<Error>::format(&error_).into());
         }
         None => {
             return Ok(());

@@ -39,10 +39,7 @@ use crate::{
     infrastructure_layer::{
         data::{
             auditor::{
-                Auditor,
                 Backtrace,
-                OptionConverter,
-                ResultConverter,
             },
             control_type::{
                 ApplicationUser__Authorization___AuthorizeByLastStep,
@@ -50,8 +47,11 @@ use crate::{
                 UnixTime,
             },
             environment_configuration::EnvironmentConfiguration,
-            error::Error,
-            invalid_argument::InvalidArgument,
+            error::{
+                Error,
+                OptionConverter,
+                ResultConverter,
+            },
         },
         functionality::{
             repository::postgresql::{
@@ -103,7 +103,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>, // TODO  TODO  TODO  TODO  TODO МОжет ли хакер войти на этом шаге, если пользователь сделал первый шаг.
         incoming: Option<Incoming>,
-    ) -> Result<Result<UnifiedReport<Outcoming, Precedent>, Auditor<InvalidArgument>>, Auditor<Error>>
+    ) -> Result<UnifiedReport<Outcoming, Precedent>, Error>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -117,42 +117,33 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
             ),
         )?;
         if !Validator::<ApplicationUser_Id>::is_valid(incoming_.application_user__id) {
-            return Ok(
-                Err(
-                    Auditor::<InvalidArgument>::new(
-                        InvalidArgument,
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
+            return Err(
+                Error::new_external_invalid_argument(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
                     ),
-                ),
+                )
             );
         }
         if !Validator::<ApplicationUserAuthorizationToken_Value>::is_valid(incoming_.application_user_authorization_token__value.as_str())? {
-            return Ok(
-                Err(
-                    Auditor::<InvalidArgument>::new(
-                        InvalidArgument,
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
+            return Err(
+                Error::new_external_invalid_argument(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
                     ),
-                ),
+                )
             );
         }
         if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming_.application_user_device__id.as_str()) {
-            return Ok(
-                Err(
-                    Auditor::<InvalidArgument>::new(
-                        InvalidArgument,
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
+            return Err(
+                Error::new_external_invalid_argument(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
                     ),
-                ),
+                )
             );
         }
         let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert_into_error(
@@ -173,7 +164,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
         let mut application_user_authorization_token_ = match application_user_authorization_token {
             Some(application_user_authorization_token__) => application_user_authorization_token__,
             None => {
-                return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserAuthorizationToken_NotFound)));
+                return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAuthorizationToken_NotFound));
             }
         };
         if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token_.expires_at) {
@@ -185,7 +176,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
                 },
             )
             .await?;
-            return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserAuthorizationToken_AlreadyExpired)));
+            return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAuthorizationToken_AlreadyExpired));
         }
         if application_user_authorization_token_.value != incoming_.application_user_authorization_token__value {
             application_user_authorization_token_.wrong_enter_tries_quantity =
@@ -218,12 +209,10 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
                 .await?;
             }
             return Ok(
-                Ok(
-                    UnifiedReport::precedent(
-                        Precedent::ApplicationUserAuthorizationToken_WrongValue {
-                            application_user_authorization_token__wrong_enter_tries_quantity: application_user_authorization_token_.wrong_enter_tries_quantity,
-                        },
-                    ),
+                UnifiedReport::precedent(
+                    Precedent::ApplicationUserAuthorizationToken_WrongValue {
+                        application_user_authorization_token__wrong_enter_tries_quantity: application_user_authorization_token_.wrong_enter_tries_quantity,
+                    },
                 ),
             );
         }
@@ -242,7 +231,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
         )
         .await?
         {
-            return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUser_NotFound)));
+            return Ok(UnifiedReport::precedent(Precedent::ApplicationUser_NotFound));
         }
         let application_user_access_token = ApplicationUserAccessToken::new(
             Generator::<ApplicationUserAccessToken_Id>::generate(),
@@ -349,6 +338,6 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
             application_user_access_token_encrypted,
             application_user_access_refresh_token_encrypted,
         };
-        return Ok(Ok(UnifiedReport::target_filled(outcoming)));
+        return Ok(UnifiedReport::target_filled(outcoming));
     }
 }

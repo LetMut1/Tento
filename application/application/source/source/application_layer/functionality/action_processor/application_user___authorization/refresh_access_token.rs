@@ -25,18 +25,18 @@ use crate::{
     infrastructure_layer::{
         data::{
             auditor::{
-                Auditor,
                 Backtrace,
-                OptionConverter,
-                ResultConverter,
             },
             control_type::{
                 ApplicationUser__Authorization___RefreshAccessToken,
                 UnixTime,
             },
             environment_configuration::EnvironmentConfiguration,
-            error::Error,
-            invalid_argument::InvalidArgument,
+            error::{
+                Error,
+                OptionConverter,
+                ResultConverter,
+            }
         },
         functionality::{
             repository::postgresql::{
@@ -78,7 +78,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
         _database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         incoming: Option<Incoming>,
-    ) -> Result<Result<UnifiedReport<Outcoming, Precedent>, Auditor<InvalidArgument>>, Auditor<Error>>
+    ) -> Result<UnifiedReport<Outcoming, Precedent>, Error>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -91,15 +91,10 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
                 file!(),
             ),
         )?;
-        let application_user_access_token = match FormResolver::<ApplicationUserAccessToken<'_>>::from_encrypted(
+        let application_user_access_token = FormResolver::<ApplicationUserAccessToken<'_>>::from_encrypted(
             environment_configuration,
             incoming_.application_user_access_token_encrypted.as_str(),
-        )? {
-            Ok(application_user_access_token_) => application_user_access_token_,
-            Err(invalid_argument_auditor) => {
-                return Ok(Err(invalid_argument_auditor));
-            }
-        };
+        )?;
         let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert_into_error(
             Backtrace::new(
                 line!(),
@@ -118,7 +113,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
         {
             Some(application_user_access_refresh_token_) => application_user_access_refresh_token_,
             None => {
-                return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessRefreshToken_NotFound)));
+                return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessRefreshToken_NotFound));
             }
         };
         let is_valid = FormResolver::<ApplicationUserAccessRefreshToken<'_>>::is_valid(
@@ -127,16 +122,13 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
             incoming_.application_user_access_refresh_token_encrypted.as_str(),
         )?;
         if !is_valid || application_user_access_token.id != application_user_access_refresh_token.application_user_access_token__id.as_ref() {
-            return Ok(
-                Err(
-                    Auditor::<InvalidArgument>::new(
-                        InvalidArgument,
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                ),
+            return Err(
+                Error::new_external_invalid_argument(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    )
+                )
             );
         }
         if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_access_refresh_token.expires_at) {
@@ -148,7 +140,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
                 },
             )
             .await?;
-            return Ok(Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessRefreshToken_AlreadyExpired)));
+            return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessRefreshToken_AlreadyExpired));
         }
         let application_user_access_token_new = ApplicationUserAccessToken::new(
             Generator::<ApplicationUserAccessToken_Id>::generate(),
@@ -184,6 +176,6 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
                 &application_user_access_refresh_token,
             )?,
         };
-        return Ok(Ok(UnifiedReport::target_filled(outcoming)));
+        return Ok(UnifiedReport::target_filled(outcoming));
     }
 }

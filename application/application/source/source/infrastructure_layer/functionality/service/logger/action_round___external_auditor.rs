@@ -7,7 +7,7 @@ use crate::infrastructure_layer::{
             Response,
             TokioNonBlockingTask,
         },
-        invalid_argument::InvalidArgument,
+        error::External,
     },
     functionality::service::{
         formatter::Formatter,
@@ -18,10 +18,10 @@ use http::request::Parts;
 impl
     Logger<(
         ActionRound,
-        Auditor<InvalidArgument>,
+        Auditor<External>,
     )>
 {
-    pub fn log<'a>(request_parts: &'a Parts, response: &'a Response, invalid_argument_auditor: Auditor<InvalidArgument>) -> () {
+    pub fn log<'a>(request_parts: &'a Parts, response: &'a Response, external_auditor: Auditor<External>) -> () {
         let request_uri = request_parts.uri.path().to_string();
         let request_method = request_parts.method.to_string();
         let response_status_code = response.status().as_u16();
@@ -29,11 +29,11 @@ impl
             async move {
                 tracing::error!(
                     "{}",
-                    Formatter::<(ActionRound, Auditor<InvalidArgument>)>::format(
+                    Formatter::<(ActionRound, Auditor<External>)>::format(
                         request_uri.as_str(),
                         request_method.as_str(),
                         response_status_code,
-                        &invalid_argument_auditor,
+                        &external_auditor,
                     )
                     .as_str()
                 );

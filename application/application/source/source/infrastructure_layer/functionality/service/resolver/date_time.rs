@@ -1,12 +1,11 @@
 use super::Resolver;
 use crate::infrastructure_layer::data::{
     auditor::{
-        Auditor,
         Backtrace,
-        OptionConverter,
     },
     control_type::DateTime,
     error::Error,
+    error::OptionConverter,
 };
 use chrono::{
     DateTime as ChronoDateTime,
@@ -20,20 +19,19 @@ impl Resolver<DateTime> {
     pub fn unixtime_get_now() -> i64 {
         return Utc::now().timestamp();
     }
-    pub fn unixtime_add_minutes_interval_from_now(quantity_of_minutes: i64) -> Result<i64, Auditor<Error>> {
-        let mut quantity_of_seconds = quantity_of_minutes.checked_mul(60).convert_out_of_range(
+    pub fn unixtime_add_minutes_interval_from_now(quantity_of_minutes: i64) -> Result<i64, Error> {
+        let quantity_of_seconds = quantity_of_minutes.checked_mul(60).convert_out_of_range(
             Backtrace::new(
                 line!(),
                 file!(),
             ),
         )?;
-        quantity_of_seconds = Utc::now().timestamp().checked_add(quantity_of_seconds).convert_out_of_range(
+        return Utc::now().timestamp().checked_add(quantity_of_seconds).convert_out_of_range(
             Backtrace::new(
                 line!(),
                 file!(),
             ),
-        )?;
-        return Ok(quantity_of_seconds);
+        );
     }
     pub fn unixtime_is_greater_or_equal_than_now(unix_time: i64) -> bool {
         return unix_time >= Utc::now().timestamp();
