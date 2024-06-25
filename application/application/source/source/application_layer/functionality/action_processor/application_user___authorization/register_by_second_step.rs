@@ -78,7 +78,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let incoming_ = incoming.convert_value_does_not_exist(
+        let incoming_ = incoming.into_internal_logic_value_does_not_exist(
             Backtrace::new(
                 line!(),
                 file!(),
@@ -114,7 +114,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
                 )
             );
         }
-        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.convert_into_error(
+        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.into_internal_runtime(
             Backtrace::new(
                 line!(),
                 file!(),
@@ -150,7 +150,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
             return Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_AlreadyApproved));
         }
         if application_user_registration_token.value != incoming_.application_user_registration_token__value {
-            application_user_registration_token.wrong_enter_tries_quantity = application_user_registration_token.wrong_enter_tries_quantity.checked_add(1).convert_out_of_range(
+            application_user_registration_token.wrong_enter_tries_quantity = application_user_registration_token.wrong_enter_tries_quantity.checked_add(1).into_internal_logic_out_of_range(
                 Backtrace::new(
                     line!(),
                     file!(),

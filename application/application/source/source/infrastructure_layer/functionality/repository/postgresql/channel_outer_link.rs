@@ -55,7 +55,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert_into_error(
+            .into_internal_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -67,7 +67,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert_into_error(
+            .into_internal_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -77,7 +77,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
             insert_1.channel_outer_link__from,
             insert_1.channel_outer_link__alias,
             insert_1.channel_outer_link__address,
-            row_registry[0].try_get::<'_, usize, String>(0).convert_into_error(
+            row_registry[0].try_get::<'_, usize, String>(0).into_internal_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -110,7 +110,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert_into_error(
+            .into_internal_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -122,7 +122,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert_into_error(
+            .into_internal_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -134,13 +134,13 @@ impl PostgresqlRepository<ChannelOuterLink> {
         }
         '_a: for row in row_registry.iter() {
             let channel_outer_link = ChannelOuterLink1 {
-                channel_outer_link__alias: row.try_get::<'_, usize, String>(0).convert_into_error(
+                channel_outer_link__alias: row.try_get::<'_, usize, String>(0).into_internal_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
                     ),
                 )?,
-                channel_outer_link__address: row.try_get::<'_, usize, String>(1).convert_into_error(
+                channel_outer_link__address: row.try_get::<'_, usize, String>(1).into_internal_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),

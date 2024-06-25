@@ -44,7 +44,7 @@ impl PostgresqlRepository<ApplicationUserDevice> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert_into_error(
+            .into_internal_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -56,7 +56,7 @@ impl PostgresqlRepository<ApplicationUserDevice> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert_into_error(
+            .into_internal_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),

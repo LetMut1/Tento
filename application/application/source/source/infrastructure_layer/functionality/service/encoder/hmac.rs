@@ -34,7 +34,7 @@ impl Encoder<HmacSha3_512> {
         );
     }
     fn prepare_hmac<'a>(salt: &'a [u8], data: &'a [u8]) -> Result<HmacSha3_512, AlternativeWorkflow> {
-        let mut hmac = HmacSha3_512::new_from_slice(salt).convert_into_error(
+        let mut hmac = HmacSha3_512::new_from_slice(salt).into_internal_runtime(
             Backtrace::new(
                 line!(),
                 file!(),

@@ -27,14 +27,14 @@ impl Sender<Email> { // TODO Возможно, сразу можно полож�
             .from("from_changethis@yandex.ru".to_string())
             .to(to)
             .build()
-            .convert_into_error(
+            .into_internal_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
                 ),
             )?;
         // TODO В static OnceLock
-        let mut email_server_socket_address_registry = environment_configuration.resource.email_server.socket_address.to_socket_addrs().convert_into_error(
+        let mut email_server_socket_address_registry = environment_configuration.resource.email_server.socket_address.to_socket_addrs().into_internal_runtime(
             Backtrace::new(
                 line!(),
                 file!(),
@@ -58,13 +58,13 @@ impl Sender<Email> { // TODO Возможно, сразу можно полож�
             &email_server_socket_address,
             ClientSecurity::None,
         )
-        .convert_into_error(
+        .into_internal_runtime(
             Backtrace::new(
                 line!(),
                 file!(),
             ),
         )?;
-        smtp_client.transport().send(email.into()).convert_into_error(
+        smtp_client.transport().send(email.into()).into_internal_runtime(
             Backtrace::new(
                 line!(),
                 file!(),

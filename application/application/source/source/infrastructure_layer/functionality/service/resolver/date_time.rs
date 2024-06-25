@@ -20,13 +20,13 @@ impl Resolver<DateTime> {
         return Utc::now().timestamp();
     }
     pub fn unixtime_add_minutes_interval_from_now(quantity_of_minutes: i64) -> Result<i64, AlternativeWorkflow> {
-        let quantity_of_seconds = quantity_of_minutes.checked_mul(60).convert_out_of_range(
+        let quantity_of_seconds = quantity_of_minutes.checked_mul(60).into_internal_logic_out_of_range(
             Backtrace::new(
                 line!(),
                 file!(),
             ),
         )?;
-        return Utc::now().timestamp().checked_add(quantity_of_seconds).convert_out_of_range(
+        return Utc::now().timestamp().checked_add(quantity_of_seconds).into_internal_logic_out_of_range(
             Backtrace::new(
                 line!(),
                 file!(),

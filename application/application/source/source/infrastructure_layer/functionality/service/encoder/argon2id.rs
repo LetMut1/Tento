@@ -18,7 +18,7 @@ impl Encoder<Argon2Id> {
             salt.as_bytes().as_slice(),
             &config,
         )
-        .convert_into_error(
+        .into_internal_runtime(
             Backtrace::new(
                 line!(),
                 file!(),
@@ -30,7 +30,7 @@ impl Encoder<Argon2Id> {
             encoded_data,
             data,
         )
-        .convert_into_error(
+        .into_internal_runtime(
             Backtrace::new(
                 line!(),
                 file!(),

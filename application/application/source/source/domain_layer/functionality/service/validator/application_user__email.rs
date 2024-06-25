@@ -21,7 +21,7 @@ impl Validator<ApplicationUser_Email> {
             Some(regular_expression_) => regular_expression_,
             None => {
                 if let Err(_) = REGULAR_EXPRESSION.set(
-                    Regex::new(ApplicationUser_Email::REGULAR_EXPRESSION).convert_into_error(
+                    Regex::new(ApplicationUser_Email::REGULAR_EXPRESSION).into_internal_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
@@ -37,7 +37,7 @@ impl Validator<ApplicationUser_Email> {
                         ),
                     );
                 }
-                REGULAR_EXPRESSION.get().convert_value_does_not_exist(
+                REGULAR_EXPRESSION.get().into_internal_logic_value_does_not_exist(
                     Backtrace::new(
                         line!(),
                         file!(),

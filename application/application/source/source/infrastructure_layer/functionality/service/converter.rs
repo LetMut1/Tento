@@ -18,7 +18,7 @@ where
 impl Convert<u16, i16> for Converter {
     fn convert(subject: u16) -> Result<i16, AlternativeWorkflow> {
         return Ok(
-            i16::try_from(subject).convert_into_error(
+            i16::try_from(subject).into_internal_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),

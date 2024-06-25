@@ -68,7 +68,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert_into_error(
+            .into_internal_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -80,7 +80,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert_into_error(
+            .into_internal_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -88,7 +88,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             )?;
         return Ok(
             ApplicationUser::new(
-                row_registry[0].try_get::<'_, usize, i64>(0).convert_into_error(
+                row_registry[0].try_get::<'_, usize, i64>(0).into_internal_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -97,7 +97,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 insert_1.application_user__email,
                 Cow::Owned(insert_1.application_user__nickname),
                 insert_1.application_user__password_hash,
-                row_registry[0].try_get::<'_, usize, String>(1).convert_into_error(
+                row_registry[0].try_get::<'_, usize, String>(1).into_internal_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -133,7 +133,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert_into_error(
+            .into_internal_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -145,7 +145,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert_into_error(
+            .into_internal_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -171,7 +171,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert_into_error(
+            .into_internal_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -183,7 +183,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert_into_error(
+            .into_internal_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -212,7 +212,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert_into_error(
+            .into_internal_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -224,7 +224,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert_into_error(
+            .into_internal_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -252,7 +252,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert_into_error(
+            .into_internal_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -264,7 +264,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert_into_error(
+            .into_internal_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -296,7 +296,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert_into_error(
+            .into_internal_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -308,7 +308,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert_into_error(
+            .into_internal_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -320,26 +320,26 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         return Ok(
             Some(
                 ApplicationUser::new(
-                    row_registry[0].try_get::<'_, usize, i64>(0).convert_into_error(
+                    row_registry[0].try_get::<'_, usize, i64>(0).into_internal_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, String>(1).convert_into_error(
+                    row_registry[0].try_get::<'_, usize, String>(1).into_internal_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
                     Cow::Borrowed(by_1.application_user__nickname),
-                    row_registry[0].try_get::<'_, usize, String>(2).convert_into_error(
+                    row_registry[0].try_get::<'_, usize, String>(2).into_internal_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, String>(3).convert_into_error(
+                    row_registry[0].try_get::<'_, usize, String>(3).into_internal_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
@@ -369,7 +369,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert_into_error(
+            .into_internal_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -381,7 +381,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert_into_error(
+            .into_internal_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -393,19 +393,19 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         return Ok(
             Some(
                 ApplicationUser1 {
-                    id: row_registry[0].try_get::<'_, usize, i64>(0).convert_into_error(
+                    id: row_registry[0].try_get::<'_, usize, i64>(0).into_internal_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    email: row_registry[0].try_get::<'_, usize, String>(1).convert_into_error(
+                    email: row_registry[0].try_get::<'_, usize, String>(1).into_internal_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    password_hash: row_registry[0].try_get::<'_, usize, String>(2).convert_into_error(
+                    password_hash: row_registry[0].try_get::<'_, usize, String>(2).into_internal_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
@@ -435,7 +435,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert_into_error(
+            .into_internal_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -447,7 +447,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert_into_error(
+            .into_internal_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -459,19 +459,19 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         return Ok(
             Some(
                 ApplicationUser2 {
-                    id: row_registry[0].try_get::<'_, usize, i64>(0).convert_into_error(
+                    id: row_registry[0].try_get::<'_, usize, i64>(0).into_internal_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    nickname: row_registry[0].try_get::<'_, usize, String>(1).convert_into_error(
+                    nickname: row_registry[0].try_get::<'_, usize, String>(1).into_internal_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    password_hash: row_registry[0].try_get::<'_, usize, String>(2).convert_into_error(
+                    password_hash: row_registry[0].try_get::<'_, usize, String>(2).into_internal_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
@@ -499,7 +499,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert_into_error(
+            .into_internal_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -511,7 +511,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert_into_error(
+            .into_internal_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -523,7 +523,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         return Ok(
             Some(
                 ApplicationUser3 {
-                    id: row_registry[0].try_get::<'_, usize, i64>(0).convert_into_error(
+                    id: row_registry[0].try_get::<'_, usize, i64>(0).into_internal_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
@@ -552,7 +552,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert_into_error(
+            .into_internal_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -564,7 +564,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert_into_error(
+            .into_internal_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -576,19 +576,19 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         return Ok(
             Some(
                 ApplicationUser4 {
-                    email: row_registry[0].try_get::<'_, usize, String>(0).convert_into_error(
+                    email: row_registry[0].try_get::<'_, usize, String>(0).into_internal_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    nickname: row_registry[0].try_get::<'_, usize, String>(1).convert_into_error(
+                    nickname: row_registry[0].try_get::<'_, usize, String>(1).into_internal_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    password_hash: row_registry[0].try_get::<'_, usize, String>(2).convert_into_error(
+                    password_hash: row_registry[0].try_get::<'_, usize, String>(2).into_internal_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
@@ -615,7 +615,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .convert_into_error(
+            .into_internal_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -627,7 +627,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .convert_into_error(
+            .into_internal_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -639,7 +639,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         return Ok(
             Some(
                 ApplicationUser5 {
-                    email: row_registry[0].try_get::<'_, usize, String>(0).convert_into_error(
+                    email: row_registry[0].try_get::<'_, usize, String>(0).into_internal_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
