@@ -39,10 +39,10 @@ impl AlternativeWorkflow {
     where
         E: StdError + Send + Sync + 'static,
     {
-        return Self::Internal { internal_auditor: Auditor::new(Internal::Runtime { runtime: Runtime { inner: error.into() } }, backtrace) };
+        return Self::Internal { internal_auditor: Auditor::new(Internal::Runtime { runtime: Runtime { error: error.into() } }, backtrace) };
     }
     pub fn new_internal_runtime_(error: Box<dyn StdError + Send + Sync + 'static>, backtrace: Backtrace) -> Self {
-        return Self::Internal { internal_auditor: Auditor::new(Internal::Runtime { runtime: Runtime { inner: error } }, backtrace) };
+        return Self::Internal { internal_auditor: Auditor::new(Internal::Runtime { runtime: Runtime { error } }, backtrace) };
     }
     pub fn new_external_invalid_argument(backtrace: Backtrace) -> Self {
         return Self::External { external_auditor: Auditor::new(External::InvalidArgument, backtrace) };
@@ -68,11 +68,11 @@ pub enum Internal {
     },
 }
 pub struct Runtime {
-    inner: Box<dyn StdError + Send + Sync + 'static>,
+    error: Box<dyn StdError + Send + Sync + 'static>,
 }
 impl Runtime {
     pub fn get<'a>(&'a self) -> &'a (dyn StdError + 'static) {
-        return self.inner.as_ref();
+        return self.error.as_ref();
     }
 }
 pub enum External {
