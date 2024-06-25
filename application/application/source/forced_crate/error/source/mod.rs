@@ -50,28 +50,11 @@ impl Error {
 }
 impl Debug for Error {
     fn fmt<'a, 'b>(&'a self, _: &'b mut Formatter<'_>) -> Result<(), FmtError> {
-        //TODO форматтером
-
-        todo!();
-
-
-
-
         return Ok(());
     }
 }
 impl Display for Error {
     fn fmt<'a, 'b>(&'a self, _: &'b mut Formatter<'_>) -> Result<(), FmtError> {
-        //TODO форматтером
-
-
-
-todo!();
-
-
-
-
-
         return Ok(());
     }
 }
