@@ -5,7 +5,7 @@ use super::{
 use crate::infrastructure_layer::data::{
     auditor::Auditor,
     control_type::ActionRound,
-    error::External
+    alternative_workflow::External
 };
 impl
     Formatter<(

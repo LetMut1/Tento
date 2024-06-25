@@ -4,8 +4,8 @@ use crate::infrastructure_layer::data::{
         Backtrace,
     },
     control_type::Argon2Id,
-    error::AlternativeWorkflow,
-    error::ResultConverter,
+    alternative_workflow::AlternativeWorkflow,
+    alternative_workflow::ResultConverter,
 };
 use argon2::Config;
 use uuid::Uuid;

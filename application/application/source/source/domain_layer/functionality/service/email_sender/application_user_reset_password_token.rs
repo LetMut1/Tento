@@ -5,7 +5,7 @@ use crate::{
         data::{
             control_type::Email,
             environment_configuration::EnvironmentConfiguration,
-            error::AlternativeWorkflow,
+            alternative_workflow::AlternativeWorkflow,
         },
         functionality::service::sender::Sender,
     },

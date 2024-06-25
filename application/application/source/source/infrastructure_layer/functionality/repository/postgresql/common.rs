@@ -7,8 +7,8 @@ use crate::infrastructure_layer::{
         auditor::{
             Backtrace,
         },
-        error::AlternativeWorkflow,
-        error::ResultConverter,
+        alternative_workflow::AlternativeWorkflow,
+        alternative_workflow::ResultConverter,
     },
     functionality::service::{
         counter::Counter,

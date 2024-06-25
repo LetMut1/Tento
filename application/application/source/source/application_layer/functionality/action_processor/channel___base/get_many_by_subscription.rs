@@ -23,7 +23,7 @@ use crate::{
             },
             control_type::Channel__Base___GetManyBySubscription,
             environment_configuration::EnvironmentConfiguration,
-            error::{
+            alternative_workflow::{
                 AlternativeWorkflow,
                 OptionConverter,
                 ResultConverter,

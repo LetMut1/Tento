@@ -32,7 +32,7 @@ use crate::{
                 UnixTime,
             },
             environment_configuration::EnvironmentConfiguration,
-            error::{
+            alternative_workflow::{
                 AlternativeWorkflow,
                 OptionConverter,
                 ResultConverter,

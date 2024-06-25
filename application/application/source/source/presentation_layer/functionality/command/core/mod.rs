@@ -83,7 +83,7 @@ use application::{
                 Auditor,
                 Backtrace,
             },
-            error::AlternativeWorkflow,
+            alternative_workflow::AlternativeWorkflow,
         },
         functionality::service::formatter::Formatter,
     },

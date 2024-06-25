@@ -8,7 +8,7 @@ use crate::{
         data::{
             control_type::UnixTime,
             environment_configuration::EnvironmentConfiguration,
-            error::AlternativeWorkflow,
+            alternative_workflow::AlternativeWorkflow,
         },
         functionality::service::expiration_time_checker::ExpirationTimeChecker,
     },

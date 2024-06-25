@@ -3,8 +3,8 @@ use crate::infrastructure_layer::data::{
     auditor::{
         Backtrace,
     },
-    error::AlternativeWorkflow,
-    error::ResultConverter,
+    alternative_workflow::AlternativeWorkflow,
+    alternative_workflow::ResultConverter,
 };
 use hmac::{
     digest::CtOutput,

@@ -15,8 +15,8 @@ use crate::{
             auditor::{
                 Backtrace,
             },
-            error::AlternativeWorkflow,
-            error::ResultConverter,
+            alternative_workflow::AlternativeWorkflow,
+            alternative_workflow::ResultConverter,
         },
         functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver,
     },

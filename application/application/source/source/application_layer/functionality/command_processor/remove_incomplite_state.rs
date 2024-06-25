@@ -1,7 +1,7 @@
 use super::CommandProcessor;
 pub use crate::infrastructure_layer::data::control_type::RemoveIncompliteState;
 use crate::infrastructure_layer::data::{
-    error::AlternativeWorkflow,
+    alternative_workflow::AlternativeWorkflow,
 };
 impl CommandProcessor<RemoveIncompliteState> {
     pub fn process() -> Result<(), AlternativeWorkflow> {

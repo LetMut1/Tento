@@ -4,7 +4,7 @@ use crate::{
     infrastructure_layer::{
         data::{
             control_type::Argon2Id,
-            error::AlternativeWorkflow,
+            alternative_workflow::AlternativeWorkflow,
         },
         functionality::service::encoder::Encoder as Encoder_,
     },

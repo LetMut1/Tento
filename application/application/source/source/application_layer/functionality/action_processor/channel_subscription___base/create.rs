@@ -28,7 +28,7 @@ use crate::{
             },
             control_type::ChannelSubscription__Base___Create,
             environment_configuration::EnvironmentConfiguration,
-            error::{
+            alternative_workflow::{
                 AlternativeWorkflow,
                 OptionConverter,
                 ResultConverter,

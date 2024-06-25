@@ -6,8 +6,8 @@ use crate::infrastructure_layer::data::{
     },
     control_type::Email,
     environment_configuration::EnvironmentConfiguration,
-    error::AlternativeWorkflow,
-    error::ResultConverter,
+    alternative_workflow::AlternativeWorkflow,
+    alternative_workflow::ResultConverter,
 };
 use lettre::{
     smtp::SmtpClient,

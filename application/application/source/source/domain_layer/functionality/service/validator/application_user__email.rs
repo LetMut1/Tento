@@ -5,7 +5,7 @@ use crate::{
         auditor::{
             Backtrace,
         },
-        error::{
+        alternative_workflow::{
             AlternativeWorkflow,
             OptionConverter,
             ResultConverter,

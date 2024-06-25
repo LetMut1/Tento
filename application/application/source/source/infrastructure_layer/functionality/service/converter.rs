@@ -2,8 +2,8 @@ use crate::infrastructure_layer::data::{
     auditor::{
         Backtrace,
     },
-    error::AlternativeWorkflow,
-    error::ResultConverter,
+    alternative_workflow::AlternativeWorkflow,
+    alternative_workflow::ResultConverter,
 };
 use core::marker::Sized;
 use std::convert::TryFrom;

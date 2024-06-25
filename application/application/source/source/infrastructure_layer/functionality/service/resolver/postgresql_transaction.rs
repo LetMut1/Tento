@@ -4,8 +4,8 @@ use crate::infrastructure_layer::data::{
         Backtrace,
     },
     control_type::PostgresqlTransaction,
-    error::AlternativeWorkflow,
-    error::ResultConverter,
+    alternative_workflow::AlternativeWorkflow,
+    alternative_workflow::ResultConverter,
 };
 use tokio_postgres::Client as Connection;
 impl Resolver<PostgresqlTransaction> {

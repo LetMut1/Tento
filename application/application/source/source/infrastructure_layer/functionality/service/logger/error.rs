@@ -1,6 +1,6 @@
 use super::Logger;
 pub use crate::infrastructure_layer::data::{
-    error::AlternativeWorkflow,
+    alternative_workflow::AlternativeWorkflow,
 };
 use crate::infrastructure_layer::functionality::service::formatter::Formatter;
 impl Logger<AlternativeWorkflow> {

@@ -1,6 +1,6 @@
 use super::Extractor;
 use crate::infrastructure_layer::data::{
-    error::AlternativeWorkflow,
+    alternative_workflow::AlternativeWorkflow,
     void::Void,
 };
 use http::request::Parts;

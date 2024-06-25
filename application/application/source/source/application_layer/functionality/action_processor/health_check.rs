@@ -6,7 +6,7 @@ use crate::{
     infrastructure_layer::data::{
         control_type::HealthCheck,
         environment_configuration::EnvironmentConfiguration,
-        error::AlternativeWorkflow,
+        alternative_workflow::AlternativeWorkflow,
         void::Void,
     },
 };

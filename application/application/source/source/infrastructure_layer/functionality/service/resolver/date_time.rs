@@ -4,8 +4,8 @@ use crate::infrastructure_layer::data::{
         Backtrace,
     },
     control_type::DateTime,
-    error::AlternativeWorkflow,
-    error::OptionConverter,
+    alternative_workflow::AlternativeWorkflow,
+    alternative_workflow::OptionConverter,
 };
 use chrono::{
     DateTime as ChronoDateTime,

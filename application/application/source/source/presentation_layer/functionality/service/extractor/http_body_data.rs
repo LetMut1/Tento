@@ -5,8 +5,8 @@ use crate::infrastructure_layer::{
             Backtrace,
         },
         control_type::HttpBodyData,
-        error::AlternativeWorkflow,
-        error::ResultConverter,
+        alternative_workflow::AlternativeWorkflow,
+        alternative_workflow::ResultConverter,
     },
     functionality::service::serializer::{
         Serialize,

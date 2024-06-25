@@ -5,8 +5,8 @@ use crate::infrastructure_layer::data::{
     },
     control_type::PostgresqlConnectionPoolNoTls,
     environment_configuration::EnvironmentConfiguration,
-    error::AlternativeWorkflow,
-    error::ResultConverter,
+    alternative_workflow::AlternativeWorkflow,
+    alternative_workflow::ResultConverter,
 };
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;

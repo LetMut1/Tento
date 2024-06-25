@@ -7,7 +7,7 @@ use crate::infrastructure_layer::{
             Response,
             TokioNonBlockingTask,
         },
-        error::External,
+        alternative_workflow::External,
     },
     functionality::service::{
         formatter::Formatter,

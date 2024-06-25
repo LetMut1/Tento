@@ -35,7 +35,7 @@ use crate::{
                 RouteNotFound,
             },
             environment_configuration::EnvironmentConfiguration,
-            error::{
+            alternative_workflow::{
                 AlternativeWorkflow,
                 OptionConverter,
                 ResultConverter,

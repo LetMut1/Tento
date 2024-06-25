@@ -2,7 +2,7 @@
 pub mod json;
 pub mod message_pack;
 use crate::infrastructure_layer::data::{
-    error::AlternativeWorkflow,
+    alternative_workflow::AlternativeWorkflow,
 };
 use serde::{
     Deserialize,

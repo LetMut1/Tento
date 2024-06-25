@@ -21,8 +21,8 @@ use crate::infrastructure_layer::data::{
         Tls,
         TokioRuntime,
     },
-    error::AlternativeWorkflow,
-    error::ResultConverter,
+    alternative_workflow::AlternativeWorkflow,
+    alternative_workflow::ResultConverter,
 };
 use std::path::Path;
 impl Loader<EnvironmentConfiguration> {

@@ -4,7 +4,7 @@ use super::{
 };
 use crate::infrastructure_layer::data::{
     control_type::MessagePack,
-    error::AlternativeWorkflow,
+    alternative_workflow::AlternativeWorkflow,
 };
 use message_pack_serializer::Serializer as Serializer_;
 use serde::{

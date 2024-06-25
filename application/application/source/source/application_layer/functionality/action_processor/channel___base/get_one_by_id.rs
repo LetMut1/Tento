@@ -30,7 +30,7 @@ use crate::{
             },
             control_type::Channel__Base___GetOneById,
             environment_configuration::EnvironmentConfiguration,
-            error::{
+            alternative_workflow::{
                 AlternativeWorkflow,
                 OptionConverter,
                 ResultConverter,

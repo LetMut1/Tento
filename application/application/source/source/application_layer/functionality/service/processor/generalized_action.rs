@@ -13,7 +13,7 @@ use crate::{
                 Response,
             },
             environment_configuration::EnvironmentConfiguration,
-            error::AlternativeWorkflow,
+            alternative_workflow::AlternativeWorkflow,
         },
         functionality::service::{
             creator::Creator,
@@ -28,7 +28,7 @@ use crate::{
 };
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
-use crate::infrastructure_layer::data::error::{External, Internal};
+use crate::infrastructure_layer::data::alternative_workflow::{External, Internal};
 use http::request::Parts;
 use hyper::Body;
 use matchit::Params;

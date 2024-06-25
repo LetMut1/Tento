@@ -26,7 +26,7 @@ use crate::{
             },
             control_type::Channel__Base___GetManyPublicByName,
             environment_configuration::EnvironmentConfiguration,
-            error::{
+            alternative_workflow::{
                 AlternativeWorkflow,
                 OptionConverter,
                 ResultConverter,

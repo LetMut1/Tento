@@ -4,7 +4,7 @@ use crate::{
     infrastructure_layer::{
         data::{
             control_type::DateTime,
-            error::AlternativeWorkflow,
+            alternative_workflow::AlternativeWorkflow,
         },
         functionality::service::resolver::Resolver,
     },

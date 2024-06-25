@@ -17,7 +17,7 @@ use crate::{
             },
             control_type::ApplicationUser__Authorization___CheckEmailForExisting,
             environment_configuration::EnvironmentConfiguration,
-            error::{
+            alternative_workflow::{
                 AlternativeWorkflow,
                 OptionConverter,
                 ResultConverter,

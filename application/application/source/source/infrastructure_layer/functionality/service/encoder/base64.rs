@@ -4,8 +4,8 @@ use crate::infrastructure_layer::data::{
         Backtrace,
     },
     control_type::Base64,
-    error::AlternativeWorkflow,
-    error::ResultConverter,
+    alternative_workflow::AlternativeWorkflow,
+    alternative_workflow::ResultConverter,
 };
 use base64::{
     Config,

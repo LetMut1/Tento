@@ -35,7 +35,7 @@ use crate::{
             },
             control_type::PostgresqlConnectionPoolNoTls,
             environment_configuration::EnvironmentConfiguration,
-            error::{
+            alternative_workflow::{
                 AlternativeWorkflow,
                 ResultConverter,
             },

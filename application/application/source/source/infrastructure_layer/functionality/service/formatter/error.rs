@@ -3,7 +3,7 @@ use super::{
     Formatter_,
 };
 use crate::infrastructure_layer::data::{
-    error::AlternativeWorkflow,
+    alternative_workflow::AlternativeWorkflow,
 };
 impl Formatter<AlternativeWorkflow> {
     pub fn format<'a>(error: &'a AlternativeWorkflow) -> String {

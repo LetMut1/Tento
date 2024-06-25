@@ -6,7 +6,7 @@ use crate::infrastructure_layer::data::{
     auditor::{
         Auditor,
     },
-    error::Internal,
+    alternative_workflow::Internal,
 };
 impl Formatter<Auditor<Internal>> {
     pub fn format<'a>(internal_auditor: &'a Auditor<Internal>) -> String {

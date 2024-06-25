@@ -20,7 +20,7 @@ use crate::{
             },
             control_type::ApplicationUser__Authorization___DeauthorizeFromOneDevice,
             environment_configuration::EnvironmentConfiguration,
-            error::{
+            alternative_workflow::{
                 AlternativeWorkflow,
                 OptionConverter,
                 ResultConverter,
