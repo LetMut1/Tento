@@ -5,7 +5,6 @@ use crate::infrastructure_layer::data::{
         ResultConverter,
     },
     auditor::{
-        Auditor,
         Backtrace,
     },
     control_type::Email,

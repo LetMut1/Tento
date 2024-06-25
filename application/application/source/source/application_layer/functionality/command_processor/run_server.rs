@@ -9,7 +9,6 @@ use crate::{
                 ResultConverter,
             },
             auditor::{
-                Auditor,
                 Backtrace,
             },
             control_type::{
