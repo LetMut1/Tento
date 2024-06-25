@@ -1,26 +1,28 @@
 use super::Formatter;
+use alternative_workflow::Internal;
 use auditor::{
     Auditor,
     Backtrace,
-};
-use alternative_workflow::{
-    Internal,
 };
 impl Formatter<Auditor<Internal>> {
     pub fn format<'a>(internal_auditor: &'a Auditor<Internal>) -> String {
         let message_part = match internal_auditor.subject {
             Internal::Logic {
                 message,
-            } => format!(
+            } => {
+                format!(
                 "Logic: {}.",
                 message
-            ),
+            )
+            }
             Internal::Runtime {
                 ref runtime,
-            } => format!(
+            } => {
+                format!(
                 "Runtime: {}.",
                 runtime.get()
-            ),
+            )
+            }
         };
         return format!(
             "{}:\n{}",

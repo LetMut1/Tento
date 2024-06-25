@@ -5,11 +5,11 @@ use super::{
 #[cfg(feature = "manual_testing")]
 use crate::infrastructure_layer::data::control_type::Json;
 use crate::infrastructure_layer::data::{
-    auditor::{
-        Backtrace,
+    alternative_workflow::{
+        AlternativeWorkflow,
+        ResultConverter,
     },
-    alternative_workflow::AlternativeWorkflow,
-    alternative_workflow::ResultConverter,
+    auditor::Backtrace,
 };
 use serde::{
     Deserialize,

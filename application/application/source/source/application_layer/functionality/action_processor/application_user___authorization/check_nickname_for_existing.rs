@@ -12,16 +12,14 @@ use crate::{
     },
     infrastructure_layer::{
         data::{
-            auditor::{
-                Backtrace,
-            },
-            control_type::ApplicationUser__Authorization___CheckNicknameForExisting,
-            environment_configuration::EnvironmentConfiguration,
             alternative_workflow::{
                 AlternativeWorkflow,
                 OptionConverter,
                 ResultConverter,
             },
+            auditor::Backtrace,
+            control_type::ApplicationUser__Authorization___CheckNicknameForExisting,
+            environment_configuration::EnvironmentConfiguration,
             void::Void,
         },
         functionality::repository::postgresql::{
@@ -76,7 +74,7 @@ impl ActionProcessor<ApplicationUser__Authorization___CheckNicknameForExisting> 
                         line!(),
                         file!(),
                     ),
-                )
+                ),
             );
         }
         let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.into_internal_runtime(

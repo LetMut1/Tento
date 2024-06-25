@@ -4,9 +4,9 @@ use crate::{
         functionality::action_processor::ActionProcessor,
     },
     infrastructure_layer::data::{
+        alternative_workflow::AlternativeWorkflow,
         control_type::HealthCheck,
         environment_configuration::EnvironmentConfiguration,
-        alternative_workflow::AlternativeWorkflow,
         void::Void,
     },
 };

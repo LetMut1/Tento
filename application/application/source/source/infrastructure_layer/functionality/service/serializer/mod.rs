@@ -1,9 +1,7 @@
 #[cfg(feature = "manual_testing")]
 pub mod json;
 pub mod message_pack;
-use crate::infrastructure_layer::data::{
-    alternative_workflow::AlternativeWorkflow,
-};
+use crate::infrastructure_layer::data::alternative_workflow::AlternativeWorkflow;
 use serde::{
     Deserialize,
     Serialize as SerdeSerialize,

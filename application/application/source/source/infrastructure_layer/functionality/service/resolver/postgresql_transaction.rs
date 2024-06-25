@@ -1,11 +1,11 @@
 use super::Resolver;
 use crate::infrastructure_layer::data::{
-    auditor::{
-        Backtrace,
+    alternative_workflow::{
+        AlternativeWorkflow,
+        ResultConverter,
     },
+    auditor::Backtrace,
     control_type::PostgresqlTransaction,
-    alternative_workflow::AlternativeWorkflow,
-    alternative_workflow::ResultConverter,
 };
 use tokio_postgres::Client as Connection;
 impl Resolver<PostgresqlTransaction> {

@@ -79,10 +79,8 @@ use application::{
     },
     infrastructure_layer::{
         data::{
-            auditor::{
-                Backtrace,
-            },
             alternative_workflow::AlternativeWorkflow,
+            auditor::Backtrace,
         },
         functionality::service::formatter::Formatter,
     },

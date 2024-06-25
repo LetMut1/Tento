@@ -6,9 +6,9 @@ use crate::{
     },
     infrastructure_layer::{
         data::{
+            alternative_workflow::AlternativeWorkflow,
             control_type::UnixTime,
             environment_configuration::EnvironmentConfiguration,
-            alternative_workflow::AlternativeWorkflow,
         },
         functionality::service::expiration_time_checker::ExpirationTimeChecker,
     },
@@ -28,7 +28,7 @@ impl Extractor<ApplicationUserAccessToken<'_>> {
         return Ok(
             ExtractorResult::ApplicationUserAccessToken {
                 application_user_access_token,
-            }
+            },
         );
     }
 }

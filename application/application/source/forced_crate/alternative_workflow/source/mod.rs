@@ -1,3 +1,7 @@
+use auditor::{
+    Auditor,
+    Backtrace,
+};
 use std::{
     error::Error as StdError,
     fmt::{
@@ -7,45 +11,99 @@ use std::{
         Formatter,
     },
 };
-use auditor::{
-    Auditor,
-    Backtrace,
-};
 pub enum AlternativeWorkflow {
     Internal {
         internal_auditor: Auditor<Internal>,
     },
     External {
         external_auditor: Auditor<External>,
-    }
+    },
 }
 impl AlternativeWorkflow {
     pub fn new_internal_logic(message: &'static str, backtrace: Backtrace) -> Self {
-        return Self::Internal { internal_auditor: Auditor::new(Internal::Logic { message }, backtrace) };
+        return Self::Internal {
+            internal_auditor: Auditor::new(
+                Internal::Logic {
+                    message,
+                },
+                backtrace,
+            ),
+        };
     }
     pub fn new_internal_logic_value_does_not_exist(backtrace: Backtrace) -> Self {
-        return Self::Internal { internal_auditor: Auditor::new(Internal::Logic { message: "Value does not exist." }, backtrace) };
+        return Self::Internal {
+            internal_auditor: Auditor::new(
+                Internal::Logic {
+                    message: "Value does not exist.",
+                },
+                backtrace,
+            ),
+        };
     }
     pub fn new_internal_logic_value_already_exist(backtrace: Backtrace) -> Self {
-        return Self::Internal { internal_auditor: Auditor::new(Internal::Logic { message: "Value already exist."}, backtrace) };
+        return Self::Internal {
+            internal_auditor: Auditor::new(
+                Internal::Logic {
+                    message: "Value already exist.",
+                },
+                backtrace,
+            ),
+        };
     }
     pub fn new_internal_logic_unreachable_state(backtrace: Backtrace) -> Self {
-        return Self::Internal { internal_auditor: Auditor::new(Internal::Logic { message: "Unreachable state." }, backtrace) };
+        return Self::Internal {
+            internal_auditor: Auditor::new(
+                Internal::Logic {
+                    message: "Unreachable state.",
+                },
+                backtrace,
+            ),
+        };
     }
     pub fn new_internal_logic_out_of_range(backtrace: Backtrace) -> Self {
-        return Self::Internal { internal_auditor: Auditor::new(Internal::Logic { message: "Out of range." }, backtrace) };
+        return Self::Internal {
+            internal_auditor: Auditor::new(
+                Internal::Logic {
+                    message: "Out of range.",
+                },
+                backtrace,
+            ),
+        };
     }
     pub fn new_internal_runtime<E>(error: E, backtrace: Backtrace) -> Self
     where
         E: StdError + Send + Sync + 'static,
     {
-        return Self::Internal { internal_auditor: Auditor::new(Internal::Runtime { runtime: Runtime { error: error.into() } }, backtrace) };
+        return Self::Internal {
+            internal_auditor: Auditor::new(
+                Internal::Runtime {
+                    runtime: Runtime {
+                        error: error.into(),
+                    },
+                },
+                backtrace,
+            ),
+        };
     }
     pub fn new_internal_runtime_(error: Box<dyn StdError + Send + Sync + 'static>, backtrace: Backtrace) -> Self {
-        return Self::Internal { internal_auditor: Auditor::new(Internal::Runtime { runtime: Runtime { error } }, backtrace) };
+        return Self::Internal {
+            internal_auditor: Auditor::new(
+                Internal::Runtime {
+                    runtime: Runtime {
+                        error,
+                    },
+                },
+                backtrace,
+            ),
+        };
     }
     pub fn new_external_invalid_argument(backtrace: Backtrace) -> Self {
-        return Self::External { external_auditor: Auditor::new(External::InvalidArgument, backtrace) };
+        return Self::External {
+            external_auditor: Auditor::new(
+                External::InvalidArgument,
+                backtrace,
+            ),
+        };
     }
 }
 impl Debug for AlternativeWorkflow {
@@ -88,8 +146,11 @@ where
     fn into_internal_runtime(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow> {
         return self.map_err(
             move |error: _| -> _ {
-                return AlternativeWorkflow::new_internal_runtime(error, backtrace);
-            }
+                return AlternativeWorkflow::new_internal_runtime(
+                    error,
+                    backtrace,
+                );
+            },
         );
     }
 }
@@ -100,8 +161,11 @@ impl<T> ResultConverter_<T> for Result<T, Box<dyn StdError + Sync + Send + 'stat
     fn into_internal_runtime(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow> {
         return self.map_err(
             move |error: _| -> _ {
-                return AlternativeWorkflow::new_internal_runtime_(error, backtrace);
-            }
+                return AlternativeWorkflow::new_internal_runtime_(
+                    error,
+                    backtrace,
+                );
+            },
         );
     }
 }
@@ -115,21 +179,21 @@ impl<T> OptionConverter<T> for Option<T> {
         return self.ok_or_else(
             move || -> _ {
                 return AlternativeWorkflow::new_internal_logic_unreachable_state(backtrace);
-            }
+            },
         );
     }
     fn into_internal_logic_out_of_range(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow> {
         return self.ok_or_else(
             move || -> _ {
                 return AlternativeWorkflow::new_internal_logic_out_of_range(backtrace);
-            }
+            },
         );
     }
     fn into_internal_logic_value_does_not_exist(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow> {
         return self.ok_or_else(
             move || -> _ {
                 return AlternativeWorkflow::new_internal_logic_value_does_not_exist(backtrace);
-            }
+            },
         );
     }
 }

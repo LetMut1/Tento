@@ -80,13 +80,11 @@
     clippy::verbose_file_reads,
     clippy::zero_sized_map_values
 )]
-use auditor::{
-    Backtrace,
-};
 use alternative_workflow::{
     AlternativeWorkflow,
     ResultConverter,
 };
+use auditor::Backtrace;
 use serde::{
     Deserialize,
     Serialize as SerdeSerialize,

@@ -3,9 +3,9 @@ use crate::{
     domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken,
     infrastructure_layer::{
         data::{
+            alternative_workflow::AlternativeWorkflow,
             control_type::Email,
             environment_configuration::EnvironmentConfiguration,
-            alternative_workflow::AlternativeWorkflow,
         },
         functionality::service::sender::Sender,
     },

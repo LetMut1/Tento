@@ -1,8 +1,8 @@
 use super::Spawner;
 use crate::infrastructure_layer::{
     data::{
-        control_type::TokioNonBlockingTask,
         alternative_workflow::AlternativeWorkflow,
+        control_type::TokioNonBlockingTask,
     },
     functionality::service::logger::Logger,
 };

@@ -3,8 +3,8 @@ use crate::{
     domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_CanBeResentFrom,
     infrastructure_layer::{
         data::{
-            control_type::DateTime,
             alternative_workflow::AlternativeWorkflow,
+            control_type::DateTime,
         },
         functionality::service::resolver::Resolver,
     },

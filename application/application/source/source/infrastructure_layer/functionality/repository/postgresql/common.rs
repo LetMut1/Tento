@@ -4,11 +4,11 @@ use super::{
 };
 use crate::infrastructure_layer::{
     data::{
-        auditor::{
-            Backtrace,
+        alternative_workflow::{
+            AlternativeWorkflow,
+            ResultConverter,
         },
-        alternative_workflow::AlternativeWorkflow,
-        alternative_workflow::ResultConverter,
+        auditor::Backtrace,
     },
     functionality::service::{
         counter::Counter,

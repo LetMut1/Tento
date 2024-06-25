@@ -41,9 +41,12 @@ use crate::{
     },
     infrastructure_layer::{
         data::{
-            auditor::{
-                Backtrace,
+            alternative_workflow::{
+                AlternativeWorkflow,
+                OptionConverter,
+                ResultConverter,
             },
+            auditor::Backtrace,
             control_type::{
                 ApplicationUser__Authorization___RegisterByLastStep,
                 TokioBlockingTask,
@@ -51,11 +54,6 @@ use crate::{
                 UnixTime,
             },
             environment_configuration::EnvironmentConfiguration,
-            alternative_workflow::{
-                AlternativeWorkflow,
-                OptionConverter,
-                ResultConverter,
-            }
         },
         functionality::{
             repository::postgresql::{
@@ -130,8 +128,8 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
                     Backtrace::new(
                         line!(),
                         file!(),
-                    )
-                )
+                    ),
+                ),
             );
         }
         if !Validator::<ApplicationUser_Nickname>::is_valid(incoming_.application_user__nickname.as_str()) {
@@ -140,8 +138,8 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
                     Backtrace::new(
                         line!(),
                         file!(),
-                    )
-                )
+                    ),
+                ),
             );
         }
         if !Validator::<ApplicationUser_Email>::is_valid(incoming_.application_user__email.as_str())? {
@@ -150,8 +148,8 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
                     Backtrace::new(
                         line!(),
                         file!(),
-                    )
-                )
+                    ),
+                ),
             );
         }
         if !Validator::<ApplicationUserRegistrationToken_Value>::is_valid(incoming_.application_user_registration_token__value.as_str())? {
@@ -160,8 +158,8 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
                     Backtrace::new(
                         line!(),
                         file!(),
-                    )
-                )
+                    ),
+                ),
             );
         }
         if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming_.application_user_device__id.as_str()) {
@@ -170,8 +168,8 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
                     Backtrace::new(
                         line!(),
                         file!(),
-                    )
-                )
+                    ),
+                ),
             );
         }
         let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.into_internal_runtime(
@@ -237,12 +235,13 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
             return Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_IsNotApproved));
         }
         if application_user_registration_token.value != incoming_.application_user_registration_token__value {
-            application_user_registration_token.wrong_enter_tries_quantity = application_user_registration_token.wrong_enter_tries_quantity.checked_add(1).into_internal_logic_out_of_range(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            )?;
+            application_user_registration_token.wrong_enter_tries_quantity =
+                application_user_registration_token.wrong_enter_tries_quantity.checked_add(1).into_internal_logic_out_of_range(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?;
             if application_user_registration_token.wrong_enter_tries_quantity < ApplicationUserRegistrationToken_WrongEnterTriesQuantity::LIMIT {
                 PostgresqlRepository::<ApplicationUserRegistrationToken>::update_4(
                     database_2_postgresql_connection,

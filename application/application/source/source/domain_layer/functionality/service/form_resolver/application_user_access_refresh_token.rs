@@ -3,12 +3,12 @@ use crate::{
     domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken,
     infrastructure_layer::{
         data::{
+            alternative_workflow::AlternativeWorkflow,
             control_type::{
                 Base64,
                 MessagePack,
             },
             environment_configuration::EnvironmentConfiguration,
-            alternative_workflow::AlternativeWorkflow,
         },
         functionality::service::{
             encoder::{

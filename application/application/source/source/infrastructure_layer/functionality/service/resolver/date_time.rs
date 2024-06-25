@@ -1,11 +1,11 @@
 use super::Resolver;
 use crate::infrastructure_layer::data::{
-    auditor::{
-        Backtrace,
+    alternative_workflow::{
+        AlternativeWorkflow,
+        OptionConverter,
     },
+    auditor::Backtrace,
     control_type::DateTime,
-    alternative_workflow::AlternativeWorkflow,
-    alternative_workflow::OptionConverter,
 };
 use chrono::{
     DateTime as ChronoDateTime,

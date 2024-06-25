@@ -1,8 +1,6 @@
 use super::CommandProcessor;
+use crate::infrastructure_layer::data::alternative_workflow::AlternativeWorkflow;
 pub use crate::infrastructure_layer::data::control_type::RemoveIncompliteState;
-use crate::infrastructure_layer::data::{
-    alternative_workflow::AlternativeWorkflow,
-};
 impl CommandProcessor<RemoveIncompliteState> {
     pub fn process() -> Result<(), AlternativeWorkflow> {
         // TODO УДалять из БД состояние с вышедшим сроком экспирации:

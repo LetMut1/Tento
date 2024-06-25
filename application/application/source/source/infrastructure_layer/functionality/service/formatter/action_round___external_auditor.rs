@@ -3,9 +3,9 @@ use super::{
     Formatter,
 };
 use crate::infrastructure_layer::data::{
+    alternative_workflow::External,
     auditor::Auditor,
     control_type::ActionRound,
-    alternative_workflow::External
 };
 impl
     Formatter<(

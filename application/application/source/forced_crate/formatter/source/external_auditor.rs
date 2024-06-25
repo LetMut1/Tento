@@ -1,10 +1,8 @@
 use super::Formatter;
+use alternative_workflow::External;
 use auditor::{
     Auditor,
     Backtrace,
-};
-use alternative_workflow::{
-    External,
 };
 impl Formatter<Auditor<External>> {
     pub fn format<'a>(external_auditor: &'a Auditor<External>) -> String {

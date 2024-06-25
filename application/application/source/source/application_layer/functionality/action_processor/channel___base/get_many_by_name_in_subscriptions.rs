@@ -18,16 +18,14 @@ use crate::{
     },
     infrastructure_layer::{
         data::{
-            auditor::{
-                Backtrace,
-            },
-            control_type::Channel__Base___GetManyByNameInSubscriptions,
-            environment_configuration::EnvironmentConfiguration,
             alternative_workflow::{
                 AlternativeWorkflow,
                 OptionConverter,
                 ResultConverter,
             },
+            auditor::Backtrace,
+            control_type::Channel__Base___GetManyByNameInSubscriptions,
+            environment_configuration::EnvironmentConfiguration,
         },
         functionality::repository::postgresql::{
             common::{
@@ -101,8 +99,8 @@ impl ActionProcessor<Channel__Base___GetManyByNameInSubscriptions> {
                     Backtrace::new(
                         line!(),
                         file!(),
-                    )
-                )
+                    ),
+                ),
             );
         }
         if !Validator::<Channel_Name>::is_valid(incoming_.channel__name.as_str()) {
@@ -111,8 +109,8 @@ impl ActionProcessor<Channel__Base___GetManyByNameInSubscriptions> {
                     Backtrace::new(
                         line!(),
                         file!(),
-                    )
-                )
+                    ),
+                ),
             );
         }
         if let Some(ref requery___channel__name_) = incoming_.requery___channel__name {
@@ -122,8 +120,8 @@ impl ActionProcessor<Channel__Base___GetManyByNameInSubscriptions> {
                         Backtrace::new(
                             line!(),
                             file!(),
-                        )
-                    )
+                        ),
+                    ),
                 );
             }
         }

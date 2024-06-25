@@ -1,9 +1,9 @@
 use crate::infrastructure_layer::data::{
-    auditor::{
-        Backtrace,
+    alternative_workflow::{
+        AlternativeWorkflow,
+        OptionConverter,
     },
-    alternative_workflow::AlternativeWorkflow,
-    alternative_workflow::OptionConverter,
+    auditor::Backtrace,
 };
 pub struct Counter<T> {
     value: T,

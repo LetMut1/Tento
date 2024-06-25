@@ -1,8 +1,10 @@
 use super::Loader;
 use crate::infrastructure_layer::data::{
-    auditor::{
-        Backtrace,
+    alternative_workflow::{
+        AlternativeWorkflow,
+        ResultConverter,
     },
+    auditor::Backtrace,
     environment_configuration::{
         environment_configuration_file::EnvironmentConfigurationFile,
         ApplicationServer,
@@ -21,8 +23,6 @@ use crate::infrastructure_layer::data::{
         Tls,
         TokioRuntime,
     },
-    alternative_workflow::AlternativeWorkflow,
-    alternative_workflow::ResultConverter,
 };
 use std::path::Path;
 impl Loader<EnvironmentConfiguration> {
@@ -54,7 +54,7 @@ impl Loader<EnvironmentConfiguration> {
                         line!(),
                         file!(),
                     ),
-                )
+                ),
             );
         };
         let environment_configuration_file = toml::from_str::<EnvironmentConfigurationFile>(environment_file_data.as_str()).into_internal_runtime(
@@ -168,7 +168,7 @@ impl Loader<EnvironmentConfiguration> {
                         application_user_access_refresh_token: environment_configuration_file.encryption.private_key.application_user_access_refresh_token.value,
                     },
                 },
-            }
+            },
         );
     }
 }

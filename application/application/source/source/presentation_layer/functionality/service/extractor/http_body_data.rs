@@ -1,12 +1,12 @@
 use super::Extractor;
 use crate::infrastructure_layer::{
     data::{
-        auditor::{
-            Backtrace,
+        alternative_workflow::{
+            AlternativeWorkflow,
+            ResultConverter,
         },
+        auditor::Backtrace,
         control_type::HttpBodyData,
-        alternative_workflow::AlternativeWorkflow,
-        alternative_workflow::ResultConverter,
     },
     functionality::service::serializer::{
         Serialize,
@@ -22,11 +22,7 @@ use hyper::{
 use matchit::Params;
 use serde::Deserialize;
 impl Extractor<HttpBodyData> {
-    pub async fn extract<'a, D, SF>(
-        body: &'a mut Body,
-        _parts: &'a Parts,
-        _route_parameters: &'a Params<'_, '_>,
-    ) -> Result<Option<D>, AlternativeWorkflow>
+    pub async fn extract<'a, D, SF>(body: &'a mut Body, _parts: &'a Parts, _route_parameters: &'a Params<'_, '_>) -> Result<Option<D>, AlternativeWorkflow>
     where
         D: for<'de> Deserialize<'de>,
         Serializer<SF>: Serialize,

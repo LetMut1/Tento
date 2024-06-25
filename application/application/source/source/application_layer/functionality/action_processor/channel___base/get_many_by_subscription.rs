@@ -18,16 +18,14 @@ use crate::{
     },
     infrastructure_layer::{
         data::{
-            auditor::{
-                Backtrace,
-            },
-            control_type::Channel__Base___GetManyBySubscription,
-            environment_configuration::EnvironmentConfiguration,
             alternative_workflow::{
                 AlternativeWorkflow,
                 OptionConverter,
                 ResultConverter,
-            }
+            },
+            auditor::Backtrace,
+            control_type::Channel__Base___GetManyBySubscription,
+            environment_configuration::EnvironmentConfiguration,
         },
         functionality::repository::postgresql::{
             common::{
@@ -102,8 +100,8 @@ impl ActionProcessor<Channel__Base___GetManyBySubscription> {
                         Backtrace::new(
                             line!(),
                             file!(),
-                        )
-                    )
+                        ),
+                    ),
                 );
             }
         }
@@ -113,8 +111,8 @@ impl ActionProcessor<Channel__Base___GetManyBySubscription> {
                     Backtrace::new(
                         line!(),
                         file!(),
-                    )
-                )
+                    ),
+                ),
             );
         }
         let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.into_internal_runtime(

@@ -25,16 +25,14 @@ use crate::{
     },
     infrastructure_layer::{
         data::{
-            auditor::{
-                Backtrace,
-            },
-            control_type::Channel__Base___GetOneById,
-            environment_configuration::EnvironmentConfiguration,
             alternative_workflow::{
                 AlternativeWorkflow,
                 OptionConverter,
                 ResultConverter,
-            }
+            },
+            auditor::Backtrace,
+            control_type::Channel__Base___GetOneById,
+            environment_configuration::EnvironmentConfiguration,
         },
         functionality::repository::postgresql::{
             channel::By1 as By1___,
@@ -108,8 +106,8 @@ impl ActionProcessor<Channel__Base___GetOneById> {
                     Backtrace::new(
                         line!(),
                         file!(),
-                    )
-                )
+                    ),
+                ),
             );
         }
         let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.into_internal_runtime(

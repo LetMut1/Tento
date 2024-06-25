@@ -24,19 +24,17 @@ use crate::{
     },
     infrastructure_layer::{
         data::{
-            auditor::{
-                Backtrace,
+            alternative_workflow::{
+                AlternativeWorkflow,
+                OptionConverter,
+                ResultConverter,
             },
+            auditor::Backtrace,
             control_type::{
                 ApplicationUser__Authorization___RefreshAccessToken,
                 UnixTime,
             },
             environment_configuration::EnvironmentConfiguration,
-            alternative_workflow::{
-                AlternativeWorkflow,
-                OptionConverter,
-                ResultConverter,
-            }
         },
         functionality::{
             repository::postgresql::{
@@ -127,8 +125,8 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
                     Backtrace::new(
                         line!(),
                         file!(),
-                    )
-                )
+                    ),
+                ),
             );
         }
         if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_access_refresh_token.expires_at) {

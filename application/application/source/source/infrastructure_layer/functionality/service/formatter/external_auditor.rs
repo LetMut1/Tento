@@ -3,10 +3,8 @@ use super::{
     Formatter_,
 };
 use crate::infrastructure_layer::data::{
-    auditor::{
-        Auditor,
-    },
     alternative_workflow::External,
+    auditor::Auditor,
 };
 impl Formatter<Auditor<External>> {
     pub fn format<'a>(external_auditor: &'a Auditor<External>) -> String {

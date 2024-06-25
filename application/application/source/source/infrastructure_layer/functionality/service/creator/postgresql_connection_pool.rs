@@ -1,12 +1,12 @@
 use super::Creator;
 use crate::infrastructure_layer::data::{
-    auditor::{
-        Backtrace,
+    alternative_workflow::{
+        AlternativeWorkflow,
+        ResultConverter,
     },
+    auditor::Backtrace,
     control_type::PostgresqlConnectionPoolNoTls,
     environment_configuration::EnvironmentConfiguration,
-    alternative_workflow::AlternativeWorkflow,
-    alternative_workflow::ResultConverter,
 };
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;

@@ -25,9 +25,12 @@ use crate::{
     },
     infrastructure_layer::{
         data::{
-            auditor::{
-                Backtrace,
+            alternative_workflow::{
+                AlternativeWorkflow,
+                OptionConverter,
+                ResultConverter,
             },
+            auditor::Backtrace,
             control_type::{
                 ApplicationUser__Authorization___ResetPasswordByLastStep,
                 CloudMessage,
@@ -36,11 +39,6 @@ use crate::{
                 UnixTime,
             },
             environment_configuration::EnvironmentConfiguration,
-            alternative_workflow::{
-                AlternativeWorkflow,
-                OptionConverter,
-                ResultConverter,
-            },
             void::Void,
         },
         functionality::{
@@ -109,8 +107,8 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
                     Backtrace::new(
                         line!(),
                         file!(),
-                    )
-                )
+                    ),
+                ),
             );
         }
         if !Validator::<ApplicationUser_Id>::is_valid(incoming_.application_user__id) {
@@ -119,8 +117,8 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
                     Backtrace::new(
                         line!(),
                         file!(),
-                    )
-                )
+                    ),
+                ),
             );
         }
         if !Validator::<ApplicationUser_Password>::is_valid_part_1(incoming_.application_user_password.as_str()) {
@@ -129,8 +127,8 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
                     Backtrace::new(
                         line!(),
                         file!(),
-                    )
-                )
+                    ),
+                ),
             );
         }
         if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming_.application_user_device__id.as_str()) {
@@ -139,8 +137,8 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
                     Backtrace::new(
                         line!(),
                         file!(),
-                    )
-                )
+                    ),
+                ),
             );
         }
         let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.into_internal_runtime(
@@ -240,8 +238,8 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
                     Backtrace::new(
                         line!(),
                         file!(),
-                    )
-                )
+                    ),
+                ),
             );
         }
         let join_handle = Spawner::<TokioBlockingTask>::spawn_processed(

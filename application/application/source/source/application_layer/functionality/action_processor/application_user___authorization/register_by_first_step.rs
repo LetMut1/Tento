@@ -26,19 +26,17 @@ use crate::{
     },
     infrastructure_layer::{
         data::{
-            auditor::{
-                Backtrace,
+            alternative_workflow::{
+                AlternativeWorkflow,
+                OptionConverter,
+                ResultConverter,
             },
+            auditor::Backtrace,
             control_type::{
                 ApplicationUser__Authorization___RegisterByFirstStep,
                 UnixTime,
             },
             environment_configuration::EnvironmentConfiguration,
-            alternative_workflow::{
-                AlternativeWorkflow,
-                OptionConverter,
-                ResultConverter,
-            }
         },
         functionality::{
             repository::postgresql::{
@@ -102,8 +100,8 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
                     Backtrace::new(
                         line!(),
                         file!(),
-                    )
-                )
+                    ),
+                ),
             );
         }
         if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming_.application_user_device__id.as_str()) {
@@ -112,8 +110,8 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
                     Backtrace::new(
                         line!(),
                         file!(),
-                    )
-                )
+                    ),
+                ),
             );
         }
         let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.into_internal_runtime(

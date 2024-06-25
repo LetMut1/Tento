@@ -3,6 +3,11 @@ pub use crate::infrastructure_layer::data::control_type::RunServer;
 use crate::{
     infrastructure_layer::{
         data::{
+            alternative_workflow::{
+                AlternativeWorkflow,
+                OptionConverter,
+                ResultConverter,
+            },
             auditor::{
                 Auditor,
                 Backtrace,
@@ -35,11 +40,6 @@ use crate::{
                 RouteNotFound,
             },
             environment_configuration::EnvironmentConfiguration,
-            alternative_workflow::{
-                AlternativeWorkflow,
-                OptionConverter,
-                ResultConverter,
-            },
             void::Void,
         },
         functionality::service::{

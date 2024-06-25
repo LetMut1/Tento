@@ -3,8 +3,8 @@ use crate::{
     domain_layer::data::entity::application_user::ApplicationUser_Password,
     infrastructure_layer::{
         data::{
-            control_type::Argon2Id,
             alternative_workflow::AlternativeWorkflow,
+            control_type::Argon2Id,
         },
         functionality::service::encoder::Encoder as Encoder_,
     },

@@ -3,6 +3,11 @@ use crate::{
     application_layer::data::unified_report::UnifiedReport,
     infrastructure_layer::{
         data::{
+            alternative_workflow::{
+                AlternativeWorkflow,
+                External,
+                Internal,
+            },
             auditor::{
                 Auditor,
                 Backtrace,
@@ -13,7 +18,6 @@ use crate::{
                 Response,
             },
             environment_configuration::EnvironmentConfiguration,
-            alternative_workflow::AlternativeWorkflow,
         },
         functionality::service::{
             creator::Creator,
@@ -28,7 +32,6 @@ use crate::{
 };
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
-use crate::infrastructure_layer::data::alternative_workflow::{External, Internal};
 use http::request::Parts;
 use hyper::Body;
 use matchit::Params;
@@ -80,7 +83,7 @@ impl Processor<GeneralizedAction> {
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
             data_extractor,
-            action_processor
+            action_processor,
         )
         .await
         {
@@ -97,7 +100,9 @@ impl Processor<GeneralizedAction> {
             }
             Err(alternative_workflow) => {
                 let response = match alternative_workflow {
-                    AlternativeWorkflow::External { external_auditor } => {
+                    AlternativeWorkflow::External {
+                        external_auditor,
+                    } => {
                         let response_ = Creator::<Response>::create_bad_request();
                         Logger::<(
                             ActionRound,
@@ -109,7 +114,9 @@ impl Processor<GeneralizedAction> {
                         );
                         response_
                     }
-                    AlternativeWorkflow::Internal { internal_auditor } => {
+                    AlternativeWorkflow::Internal {
+                        internal_auditor,
+                    } => {
                         let response_ = Creator::<Response>::create_internal_server_error();
                         Logger::<(
                             ActionRound,
@@ -126,7 +133,6 @@ impl Processor<GeneralizedAction> {
             }
         };
     }
-
     async fn process_<'a, 'b, 'c, T, DE, F1, AP, F2, I, O, P, SF>(
         environment_configuration: &'a EnvironmentConfiguration,
         body: &'a mut Body,
@@ -148,7 +154,7 @@ impl Processor<GeneralizedAction> {
         F2: Future<Output = Result<UnifiedReport<O, P>, AlternativeWorkflow>>,
         O: SerdeSerialize,
         P: SerdeSerialize,
-        Serializer<SF>: Serialize
+        Serializer<SF>: Serialize,
     {
         if !Validator::<Parts>::is_valid(parts) {
             return Err(
@@ -157,7 +163,7 @@ impl Processor<GeneralizedAction> {
                         line!(),
                         file!(),
                     ),
-                )
+                ),
             );
         }
         let incoming = data_extractor(

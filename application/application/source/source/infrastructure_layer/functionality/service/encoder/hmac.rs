@@ -1,10 +1,10 @@
 use super::Encoder;
 use crate::infrastructure_layer::data::{
-    auditor::{
-        Backtrace,
+    alternative_workflow::{
+        AlternativeWorkflow,
+        ResultConverter,
     },
-    alternative_workflow::AlternativeWorkflow,
-    alternative_workflow::ResultConverter,
+    auditor::Backtrace,
 };
 use hmac::{
     digest::CtOutput,
@@ -20,7 +20,7 @@ impl Encoder<HmacSha3_512> {
                 salt,
                 data,
             )?
-            .finalize()
+            .finalize(),
         );
     }
     pub fn is_valid<'a>(salt: &'a [u8], data: &'a [u8], encoded_data: &'a [u8]) -> Result<bool, AlternativeWorkflow> {
@@ -30,7 +30,7 @@ impl Encoder<HmacSha3_512> {
                 data,
             )?
             .verify_slice(encoded_data)
-            .is_ok()
+            .is_ok(),
         );
     }
     fn prepare_hmac<'a>(salt: &'a [u8], data: &'a [u8]) -> Result<HmacSha3_512, AlternativeWorkflow> {

@@ -6,15 +6,13 @@ use crate::{
     },
     infrastructure_layer::{
         data::{
-            auditor::{
-                Backtrace,
-            },
+            alternative_workflow::AlternativeWorkflow,
+            auditor::Backtrace,
             control_type::{
                 Base64,
                 MessagePack,
             },
             environment_configuration::EnvironmentConfiguration,
-            alternative_workflow::AlternativeWorkflow,
         },
         functionality::service::{
             encoder::{
@@ -46,7 +44,7 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
                 application_user_access_token_serialized.as_str(),
                 Self::TOKEN_PARTS_SEPARATOR,
                 application_user_access_token_serialized_signature.as_str()
-            )
+            ),
         );
     }
     pub fn from_encrypted<'a>(
@@ -63,9 +61,9 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
                     Backtrace::new(
                         line!(),
                         file!(),
-                    )
+                    ),
                 );
-            }
+            },
         )?;
         let application_user_access_token_serialized_signature = token_part_registry.next().ok_or_else(
             || -> _ {
@@ -73,9 +71,9 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
                     Backtrace::new(
                         line!(),
                         file!(),
-                    )
+                    ),
                 );
-            }
+            },
         )?;
         if !Encoder::<Signature>::is_valid(
             environment_configuration,
@@ -87,8 +85,8 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
                     Backtrace::new(
                         line!(),
                         file!(),
-                    )
-                )
+                    ),
+                ),
             );
         }
         let data = Encoder_::<Base64>::decode(application_user_access_token_serialized.as_bytes())?;

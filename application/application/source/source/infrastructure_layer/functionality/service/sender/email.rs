@@ -1,13 +1,15 @@
 use super::Sender;
 use crate::infrastructure_layer::data::{
+    alternative_workflow::{
+        AlternativeWorkflow,
+        ResultConverter,
+    },
     auditor::{
         Auditor,
         Backtrace,
     },
     control_type::Email,
     environment_configuration::EnvironmentConfiguration,
-    alternative_workflow::AlternativeWorkflow,
-    alternative_workflow::ResultConverter,
 };
 use lettre::{
     smtp::SmtpClient,
@@ -19,7 +21,8 @@ use std::{
     convert::Into,
     net::ToSocketAddrs,
 };
-impl Sender<Email> { //TODO  ASYNC client // TODO Возможно, сразу можно положить объект в константу.  // TODO В предпродакшене, когда будет smtp-ссервер, настройить все через константы и енв
+impl Sender<Email> {
+    //TODO  ASYNC client // TODO Возможно, сразу можно положить объект в константу.  // TODO В предпродакшене, когда будет smtp-ссервер, настройить все через константы и енв
     pub fn send<'a>(environment_configuration: &'a EnvironmentConfiguration, subject: &'a str, body: String, to: &'a str) -> Result<(), AlternativeWorkflow> {
         let email = EmailBuilder::new() //TODO
             .subject(subject)
@@ -50,7 +53,7 @@ impl Sender<Email> { //TODO  ASYNC client // TODO Возможно, сразу �
                             line!(),
                             file!(),
                         ),
-                    )
+                    ),
                 );
             }
         };

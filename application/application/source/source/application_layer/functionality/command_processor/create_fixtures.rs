@@ -30,15 +30,13 @@ use crate::{
     },
     infrastructure_layer::{
         data::{
-            auditor::{
-                Backtrace,
-            },
-            control_type::PostgresqlConnectionPoolNoTls,
-            environment_configuration::EnvironmentConfiguration,
             alternative_workflow::{
                 AlternativeWorkflow,
                 ResultConverter,
             },
+            auditor::Backtrace,
+            control_type::PostgresqlConnectionPoolNoTls,
+            environment_configuration::EnvironmentConfiguration,
         },
         functionality::{
             repository::postgresql::{
@@ -147,8 +145,8 @@ impl CommandProcessor<CreateFixtures> {
                         Backtrace::new(
                             line!(),
                             file!(),
-                        )
-                    )
+                        ),
+                    ),
                 );
             }
             let application_user__email = format!("{}@fixture.com", application_user__nickname.as_str());
@@ -158,8 +156,8 @@ impl CommandProcessor<CreateFixtures> {
                         Backtrace::new(
                             line!(),
                             file!(),
-                        )
-                    )
+                        ),
+                    ),
                 );
             }
             if !Validator::<ApplicationUser_Password>::is_valid(
@@ -172,8 +170,8 @@ impl CommandProcessor<CreateFixtures> {
                         Backtrace::new(
                             line!(),
                             file!(),
-                        )
-                    )
+                        ),
+                    ),
                 );
             }
             let application_user = match PostgresqlRepository::<ApplicationUser<'_>>::find_1(
@@ -208,8 +206,8 @@ impl CommandProcessor<CreateFixtures> {
                         Backtrace::new(
                             line!(),
                             file!(),
-                        )
-                    )
+                        ),
+                    ),
                 );
             }
             PostgresqlRepository::<ApplicationUserDevice>::create_1(
@@ -232,8 +230,8 @@ impl CommandProcessor<CreateFixtures> {
                             Backtrace::new(
                                 line!(),
                                 file!(),
-                            )
-                        )
+                            ),
+                        ),
                     );
                 }
                 let channel__linked_name = channel__name.clone();
@@ -243,8 +241,8 @@ impl CommandProcessor<CreateFixtures> {
                             Backtrace::new(
                                 line!(),
                                 file!(),
-                            )
-                        )
+                            ),
+                        ),
                     );
                 }
                 let channel__description = if thread_rng().gen_range::<i8, _>(0..=1) == 1 {
@@ -259,8 +257,8 @@ impl CommandProcessor<CreateFixtures> {
                                 Backtrace::new(
                                     line!(),
                                     file!(),
-                                )
-                            )
+                                ),
+                            ),
                         );
                     }
                     Some(channel__description_)
@@ -276,8 +274,8 @@ impl CommandProcessor<CreateFixtures> {
                             Backtrace::new(
                                 line!(),
                                 file!(),
-                            )
-                        )
+                            ),
+                        ),
                     );
                 }
                 let channel = PostgresqlRepository::<Channel<'_>>::find_2(

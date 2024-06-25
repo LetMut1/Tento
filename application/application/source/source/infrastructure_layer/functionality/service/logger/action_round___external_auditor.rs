@@ -1,13 +1,13 @@
 use super::Logger;
 use crate::infrastructure_layer::{
     data::{
+        alternative_workflow::External,
         auditor::Auditor,
         control_type::{
             ActionRound,
             Response,
             TokioNonBlockingTask,
         },
-        alternative_workflow::External,
     },
     functionality::service::{
         formatter::Formatter,

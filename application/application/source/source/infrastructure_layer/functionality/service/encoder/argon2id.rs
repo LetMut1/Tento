@@ -1,16 +1,17 @@
 use super::Encoder;
 use crate::infrastructure_layer::data::{
-    auditor::{
-        Backtrace,
+    alternative_workflow::{
+        AlternativeWorkflow,
+        ResultConverter,
     },
+    auditor::Backtrace,
     control_type::Argon2Id,
-    alternative_workflow::AlternativeWorkflow,
-    alternative_workflow::ResultConverter,
 };
 use argon2::Config;
 use uuid::Uuid;
 impl Encoder<Argon2Id> {
-    pub fn encode<'a>(data: &'a [u8]) -> Result<String, AlternativeWorkflow> { // // TODO TODO TODO ARGON2id . ПРОВЕрИТЬЬ, он или нет, понять, почему не он.  // TODO отрабатывает за 320 млсекунд, как увеличить скорость, https://users.rust-lang.org/t/which-crate-should-i-use-for-argon2/26090
+    pub fn encode<'a>(data: &'a [u8]) -> Result<String, AlternativeWorkflow> {
+        // // TODO TODO TODO ARGON2id . ПРОВЕрИТЬЬ, он или нет, понять, почему не он.  // TODO отрабатывает за 320 млсекунд, как увеличить скорость, https://users.rust-lang.org/t/which-crate-should-i-use-for-argon2/26090
         let config = Config::default(); // TODO настроить конфиг, возможно, вынестки в константу
         let salt = Uuid::new_v4();
         return argon2::hash_encoded(

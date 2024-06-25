@@ -2,14 +2,12 @@ use super::Validator;
 use crate::{
     domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_Value,
     infrastructure_layer::data::{
-        auditor::{
-            Backtrace,
-        },
         alternative_workflow::{
             AlternativeWorkflow,
             OptionConverter,
             ResultConverter,
         },
+        auditor::Backtrace,
     },
 };
 use regex::Regex;
@@ -33,7 +31,7 @@ impl Validator<ApplicationUserAuthorizationToken_Value> {
                             Backtrace::new(
                                 line!(),
                                 file!(),
-                            )
+                            ),
                         ),
                     );
                 }

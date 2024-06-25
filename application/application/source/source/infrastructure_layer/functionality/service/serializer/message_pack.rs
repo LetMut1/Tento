@@ -3,8 +3,8 @@ use super::{
     Serializer,
 };
 use crate::infrastructure_layer::data::{
-    control_type::MessagePack,
     alternative_workflow::AlternativeWorkflow,
+    control_type::MessagePack,
 };
 use message_pack_serializer::Serializer as Serializer_;
 use serde::{
