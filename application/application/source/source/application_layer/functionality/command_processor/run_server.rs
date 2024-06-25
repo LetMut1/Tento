@@ -145,13 +145,11 @@ impl CommandProcessor<RunServer> {
                 }
             }
         }
-        return Ok(
-            ENVIRONMENT_CONFIGURATION.get().into_internal_logic_value_does_not_exist(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            )?,
+        return ENVIRONMENT_CONFIGURATION.get().into_internal_logic_value_does_not_exist(
+            Backtrace::new(
+                line!(),
+                file!(),
+            ),
         );
     }
     fn initialize_logger<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<WorkerGuard, AlternativeWorkflow> {

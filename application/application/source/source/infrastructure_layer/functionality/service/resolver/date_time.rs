@@ -37,12 +37,10 @@ impl Resolver<DateTime> {
         return unix_time >= Utc::now().timestamp();
     }
     pub fn timestamp_is_valid_timestamp<'a>(date_time: &'a str) -> bool {
-        if let Ok(_) = ChronoDateTime::parse_from_str(
+        return ChronoDateTime::parse_from_str(
             date_time,
             Self::TIMESTAMP_FORMAT_TO_PARSE,
-        ) {
-            return true;
-        }
-        return false;
+        )
+        .is_ok();
     }
 }
