@@ -6,7 +6,7 @@ use crate::{
             auditor::{
                 Backtrace,
             },
-            error::Error,
+            error::AlternativeWorkflow,
             error::ResultConverter,
         },
         functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver,
@@ -18,7 +18,7 @@ use tokio_postgres::{
     Client as Connection,
 };
 impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
-    pub async fn create_1<'a>(database_2_connection: &'a Connection, insert_1: Insert1<'a>) -> Result<ApplicationUserAccessRefreshToken<'a>, Error> {
+    pub async fn create_1<'a>(database_2_connection: &'a Connection, insert_1: Insert1<'a>) -> Result<ApplicationUserAccessRefreshToken<'a>, AlternativeWorkflow> {
         let application_user_access_refresh_token__obfuscation_value = insert_1.application_user_access_refresh_token__obfuscation_value.as_str();
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
@@ -97,7 +97,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
             ),
         );
     }
-    pub async fn update_1<'a>(database_2_connection: &'a Connection, update_1: Update1<'_>, by_2: By2<'_>) -> Result<(), Error> {
+    pub async fn update_1<'a>(database_2_connection: &'a Connection, update_1: Update1<'_>, by_2: By2<'_>) -> Result<(), AlternativeWorkflow> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             UPDATE ONLY public.application_user_access_refresh_token AS auart \
@@ -164,7 +164,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
             )?;
         return Ok(());
     }
-    pub async fn delete_1<'a>(database_2_connection: &'a Connection, by_2: By2<'_>) -> Result<(), Error> {
+    pub async fn delete_1<'a>(database_2_connection: &'a Connection, by_2: By2<'_>) -> Result<(), AlternativeWorkflow> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "DELETE FROM ONLY public.application_user_access_refresh_token AS auart  \
             WHERE auart.application_user__id = $1 AND auart.application_user_device__id = $2;";
@@ -203,7 +203,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
             )?;
         return Ok(());
     }
-    pub async fn delete_2<'a>(database_2_connection: &'a Connection, by_1: By1) -> Result<(), Error> {
+    pub async fn delete_2<'a>(database_2_connection: &'a Connection, by_1: By1) -> Result<(), AlternativeWorkflow> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             DELETE FROM ONLY public.application_user_access_refresh_token AS auart  \
@@ -238,7 +238,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
             )?;
         return Ok(());
     }
-    pub async fn find_1<'a, 'b>(database_2_connection: &'a Connection, by_2: By2<'b>) -> Result<Option<ApplicationUserAccessRefreshToken<'b>>, Error> {
+    pub async fn find_1<'a, 'b>(database_2_connection: &'a Connection, by_2: By2<'b>) -> Result<Option<ApplicationUserAccessRefreshToken<'b>>, AlternativeWorkflow> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             SELECT \

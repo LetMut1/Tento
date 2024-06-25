@@ -6,7 +6,7 @@ use crate::{
             auditor::{
                 Backtrace,
             },
-            error::Error,
+            error::AlternativeWorkflow,
             error::ResultConverter,
         },
         functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver,
@@ -18,7 +18,7 @@ use tokio_postgres::{
     Client as Connection,
 };
 impl PostgresqlRepository<ChannelOuterLink> {
-    pub async fn create_1<'a>(database_1_connection: &'a Connection, insert_1: Insert1) -> Result<ChannelOuterLink, Error> {
+    pub async fn create_1<'a>(database_1_connection: &'a Connection, insert_1: Insert1) -> Result<ChannelOuterLink, AlternativeWorkflow> {
         let channel_outer_link__alias = insert_1.channel_outer_link__alias.as_str();
         let channel_outer_link__address = insert_1.channel_outer_link__address.as_str();
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -86,7 +86,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
         );
         return Ok(channel_outer_link);
     }
-    pub async fn find_1<'a>(database_1_connection: &'a Connection, by_1: By1, limit: i16) -> Result<Vec<ChannelOuterLink1>, Error> {
+    pub async fn find_1<'a>(database_1_connection: &'a Connection, by_1: By1, limit: i16) -> Result<Vec<ChannelOuterLink1>, AlternativeWorkflow> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             SELECT \

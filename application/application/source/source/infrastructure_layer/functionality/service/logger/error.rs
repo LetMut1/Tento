@@ -1,13 +1,13 @@
 use super::Logger;
 pub use crate::infrastructure_layer::data::{
-    error::Error,
+    error::AlternativeWorkflow,
 };
 use crate::infrastructure_layer::functionality::service::formatter::Formatter;
-impl Logger<Error> {
-    pub fn log<'a>(error: &'a Error) -> () {
+impl Logger<AlternativeWorkflow> {
+    pub fn log<'a>(error: &'a AlternativeWorkflow) -> () {
         tracing::error!(
             "{}",
-            Formatter::<Error>::format(error).as_str(),
+            Formatter::<AlternativeWorkflow>::format(error).as_str(),
         );
         return ();
     }

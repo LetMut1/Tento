@@ -3,7 +3,7 @@ use auditor::{
     Auditor,
     Backtrace,
 };
-use error::{
+use alternative_workflow::{
     Internal,
 };
 impl Formatter<Auditor<Internal>> {

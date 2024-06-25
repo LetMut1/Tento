@@ -83,8 +83,8 @@
 use auditor::{
     Backtrace,
 };
-use error::{
-    Error,
+use alternative_workflow::{
+    AlternativeWorkflow,
     ResultConverter,
 };
 use serde::{
@@ -93,7 +93,7 @@ use serde::{
 };
 pub struct Serializer;
 impl Serializer {
-    pub fn serialize<'a, T>(subject: &'a T) -> Result<Vec<u8>, Error>
+    pub fn serialize<'a, T>(subject: &'a T) -> Result<Vec<u8>, AlternativeWorkflow>
     where
         T: SerdeSerialize,
     {
@@ -104,7 +104,7 @@ impl Serializer {
             ),
         );
     }
-    pub fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, Error>
+    pub fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, AlternativeWorkflow>
     where
         T: Deserialize<'a>,
     {

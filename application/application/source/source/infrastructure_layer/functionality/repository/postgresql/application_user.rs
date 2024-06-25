@@ -15,7 +15,7 @@ use crate::{
             auditor::{
                 Backtrace,
             },
-            error::Error,
+            error::AlternativeWorkflow,
             error::ResultConverter,
         },
         functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver,
@@ -27,7 +27,7 @@ use tokio_postgres::{
     Client as Connection,
 };
 impl PostgresqlRepository<ApplicationUser<'_>> {
-    pub async fn create_1<'a>(database_1_connection: &'a Connection, insert_1: Insert1) -> Result<ApplicationUser<'static>, Error> {
+    pub async fn create_1<'a>(database_1_connection: &'a Connection, insert_1: Insert1) -> Result<ApplicationUser<'static>, AlternativeWorkflow> {
         let application_user__email = insert_1.application_user__email.as_str();
         let application_user__nickname = insert_1.application_user__nickname.as_str();
         let application_user__password_hash = insert_1.application_user__password_hash.as_str();
@@ -106,7 +106,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             ),
         );
     }
-    pub async fn update_1<'a>(database_1_connection: &'a Connection, update_1: Update1<'_>, by_3: By3) -> Result<(), Error> {
+    pub async fn update_1<'a>(database_1_connection: &'a Connection, update_1: Update1<'_>, by_3: By3) -> Result<(), AlternativeWorkflow> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             UPDATE ONLY public.application_user AS au \
@@ -153,7 +153,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             )?;
         return Ok(());
     }
-    pub async fn is_exist_1<'a>(database_1_connection: &'a Connection, by_1: By1<'_>) -> Result<bool, Error> {
+    pub async fn is_exist_1<'a>(database_1_connection: &'a Connection, by_1: By1<'_>) -> Result<bool, AlternativeWorkflow> {
         let application_user__nickname = by_1.application_user__nickname;
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
@@ -194,7 +194,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         }
         return Ok(true);
     }
-    pub async fn is_exist_2<'a>(database_1_connection: &'a Connection, by_2: By2<'_>) -> Result<bool, Error> {
+    pub async fn is_exist_2<'a>(database_1_connection: &'a Connection, by_2: By2<'_>) -> Result<bool, AlternativeWorkflow> {
         let application_user__email = by_2.application_user__email;
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
@@ -235,7 +235,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         }
         return Ok(true);
     }
-    pub async fn is_exist_3<'a>(database_1_connection: &'a Connection, by_3: By3) -> Result<bool, Error> {
+    pub async fn is_exist_3<'a>(database_1_connection: &'a Connection, by_3: By3) -> Result<bool, AlternativeWorkflow> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             SELECT \
@@ -275,7 +275,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         }
         return Ok(true);
     }
-    pub async fn find_1<'a, 'b>(database_1_connection: &'a Connection, by_1: By1<'b>) -> Result<Option<ApplicationUser<'b>>, Error> {
+    pub async fn find_1<'a, 'b>(database_1_connection: &'a Connection, by_1: By1<'b>) -> Result<Option<ApplicationUser<'b>>, AlternativeWorkflow> {
         let application_user__nickname = by_1.application_user__nickname;
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
@@ -349,7 +349,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             ),
         );
     }
-    pub async fn find_2<'a>(database_1_connection: &'a Connection, by_1: By1<'_>) -> Result<Option<ApplicationUser1>, Error> {
+    pub async fn find_2<'a>(database_1_connection: &'a Connection, by_1: By1<'_>) -> Result<Option<ApplicationUser1>, AlternativeWorkflow> {
         let application_user__nickname = by_1.application_user__nickname;
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
@@ -415,7 +415,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             ),
         );
     }
-    pub async fn find_3<'a>(database_1_connection: &'a Connection, by_2: By2<'_>) -> Result<Option<ApplicationUser2>, Error> {
+    pub async fn find_3<'a>(database_1_connection: &'a Connection, by_2: By2<'_>) -> Result<Option<ApplicationUser2>, AlternativeWorkflow> {
         let application_user__email = by_2.application_user__email;
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
@@ -481,7 +481,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             ),
         );
     }
-    pub async fn find_4<'a>(database_1_connection: &'a Connection, by_2: By2<'_>) -> Result<Option<ApplicationUser3>, Error> {
+    pub async fn find_4<'a>(database_1_connection: &'a Connection, by_2: By2<'_>) -> Result<Option<ApplicationUser3>, AlternativeWorkflow> {
         let application_user__email = by_2.application_user__email;
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
@@ -533,7 +533,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             ),
         );
     }
-    pub async fn find_5<'a>(database_1_connection: &'a Connection, by_3: By3) -> Result<Option<ApplicationUser4>, Error> {
+    pub async fn find_5<'a>(database_1_connection: &'a Connection, by_3: By3) -> Result<Option<ApplicationUser4>, AlternativeWorkflow> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             SELECT \
@@ -598,7 +598,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             ),
         );
     }
-    pub async fn find_6<'a>(database_1_connection: &'a Connection, by_3: By3) -> Result<Option<ApplicationUser5>, Error> {
+    pub async fn find_6<'a>(database_1_connection: &'a Connection, by_3: By3) -> Result<Option<ApplicationUser5>, AlternativeWorkflow> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             SELECT \

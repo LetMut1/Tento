@@ -83,7 +83,7 @@ use application::{
                 Auditor,
                 Backtrace,
             },
-            error::Error,
+            error::AlternativeWorkflow,
         },
         functionality::service::formatter::Formatter,
     },
@@ -140,7 +140,7 @@ fn process() -> Result<(), Box<dyn StdError + 'static>> {
         }
         _ => {
             Some(
-                Error::new_internal_runtime_(
+                AlternativeWorkflow::new_internal_runtime_(
                     "Unexpected subcommand.".into(),
                     Backtrace::new(
                         line!(),
@@ -152,7 +152,7 @@ fn process() -> Result<(), Box<dyn StdError + 'static>> {
     };
     match error {
         Some(error_) => {
-            return Err(Formatter::<Error>::format(&error_).into());
+            return Err(Formatter::<AlternativeWorkflow>::format(&error_).into());
         }
         None => {
             return Ok(());

@@ -8,7 +8,7 @@ use crate::infrastructure_layer::data::{
     auditor::{
         Backtrace,
     },
-    error::Error,
+    error::AlternativeWorkflow,
     error::ResultConverter,
 };
 use serde::{
@@ -18,7 +18,7 @@ use serde::{
 use serde_json;
 #[cfg(feature = "manual_testing")]
 impl Serialize for Serializer<Json> {
-    fn serialize<'a, T>(subject: &'a T) -> Result<Vec<u8>, Error>
+    fn serialize<'a, T>(subject: &'a T) -> Result<Vec<u8>, AlternativeWorkflow>
     where
         T: SerdeSerialize,
     {
@@ -29,7 +29,7 @@ impl Serialize for Serializer<Json> {
             ),
         );
     }
-    fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, Error>
+    fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, AlternativeWorkflow>
     where
         T: Deserialize<'a>,
     {

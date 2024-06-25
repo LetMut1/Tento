@@ -36,6 +36,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "alternative_workflow"
+version = "1.0.0"
+dependencies = [
+ "auditor",
+]
+
+[[package]]
 name = "android-tzdata"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -103,6 +110,7 @@ name = "application"
 version = "1.0.0"
 dependencies = [
  "action_processor_incoming_outcoming",
+ "alternative_workflow",
  "auditor",
  "base64 0.13.1",
  "bb8",
@@ -111,7 +119,6 @@ dependencies = [
  "cargo-emit",
  "chrono",
  "const_format",
- "error",
  "formatter",
  "hmac",
  "http",
@@ -608,13 +615,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "error"
-version = "1.0.0"
-dependencies = [
- "auditor",
-]
-
-[[package]]
 name = "fallible-iterator"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -660,8 +660,8 @@ checksum = "00b0228411908ca8685dba7fc2cdd70ec9990a6e753e89b6ac91a84c40fbaf4b"
 name = "formatter"
 version = "1.0.0"
 dependencies = [
+ "alternative_workflow",
  "auditor",
- "error",
 ]
 
 [[package]]
@@ -1028,8 +1028,8 @@ checksum = "2dffe52ecf27772e601905b7522cb4ef790d2cc203488bbd0e2fe85fcb74566d"
 name = "message_pack_serializer"
 version = "1.0.0"
 dependencies = [
+ "alternative_workflow",
  "auditor",
- "error",
  "rmp-serde",
  "serde",
 ]

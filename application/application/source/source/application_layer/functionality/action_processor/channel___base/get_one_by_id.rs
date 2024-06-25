@@ -31,7 +31,7 @@ use crate::{
             control_type::Channel__Base___GetOneById,
             environment_configuration::EnvironmentConfiguration,
             error::{
-                Error,
+                AlternativeWorkflow,
                 OptionConverter,
                 ResultConverter,
             }
@@ -73,7 +73,7 @@ impl ActionProcessor<Channel__Base___GetOneById> {
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         incoming: Option<Incoming>,
-    ) -> Result<UnifiedReport<Outcoming, Precedent>, Error>
+    ) -> Result<UnifiedReport<Outcoming, Precedent>, AlternativeWorkflow>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -104,7 +104,7 @@ impl ActionProcessor<Channel__Base___GetOneById> {
         };
         if !Validator::<Channel_Id>::is_valid(incoming_.channel__id) {
             return Err(
-                Error::new_external_invalid_argument(
+                AlternativeWorkflow::new_external_invalid_argument(
                     Backtrace::new(
                         line!(),
                         file!(),

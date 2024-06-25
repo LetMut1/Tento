@@ -20,6 +20,7 @@ required-features = []
 
 [dependencies]
 action_processor_incoming_outcoming = { path = "./forced_crate/action_processor_incoming_outcoming", package = "action_processor_incoming_outcoming", version = "1.0.0", default-features = true, features = [], optional = false }
+alternative_workflow = { path = "./forced_crate/alternative_workflow", package = "alternative_workflow", version = "1.0.0", default-features = true, features = [], optional = false }
 argon2 = { package = "rust-argon2", version = "0.8.3", default-features = true, features = [], optional = false }
 auditor = { path = "./forced_crate/auditor", package = "auditor", version = "1.0.0", default-features = true, features = [], optional = false }
 base64 = { package = "base64", version = "0.13.1", default-features = true, features = [], optional = false }
@@ -27,7 +28,6 @@ bb8 = { package = "bb8", version = "0.7.1", default-features = true, features = 
 bb8_postgres = { package = "bb8-postgres", version = "0.7.0", default-features = true, features = [], optional = false }
 bytes = { package = "bytes", version = "1.1.0", default-features = true, features = [], optional = false }
 chrono = { package = "chrono", version = "0.4.31", default-features = true, features = [], optional = false }
-error = { path = "./forced_crate/error", package = "error", version = "1.0.0", default-features = true, features = [], optional = false }
 formatter = { path = "./forced_crate/formatter", package = "formatter", version = "1.0.0", default-features = true, features = [], optional = false }
 hmac = { package = "hmac", version = "0.12.1", default-features = true, features = [], optional = false }
 http = { package = "http", version = "0.2.9", default-features = true, features = [], optional = false }

@@ -24,7 +24,7 @@ use crate::{
             control_type::Channel__Base___GetManyByNameInSubscriptions,
             environment_configuration::EnvironmentConfiguration,
             error::{
-                Error,
+                AlternativeWorkflow,
                 OptionConverter,
                 ResultConverter,
             },
@@ -66,7 +66,7 @@ impl ActionProcessor<Channel__Base___GetManyByNameInSubscriptions> {
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         incoming: Option<Incoming>,
-    ) -> Result<UnifiedReport<Outcoming, Precedent>, Error>
+    ) -> Result<UnifiedReport<Outcoming, Precedent>, AlternativeWorkflow>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -97,7 +97,7 @@ impl ActionProcessor<Channel__Base___GetManyByNameInSubscriptions> {
         };
         if incoming_.limit <= 0 || incoming_.limit > Self::LIMIT {
             return Err(
-                Error::new_external_invalid_argument(
+                AlternativeWorkflow::new_external_invalid_argument(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -107,7 +107,7 @@ impl ActionProcessor<Channel__Base___GetManyByNameInSubscriptions> {
         }
         if !Validator::<Channel_Name>::is_valid(incoming_.channel__name.as_str()) {
             return Err(
-                Error::new_external_invalid_argument(
+                AlternativeWorkflow::new_external_invalid_argument(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -118,7 +118,7 @@ impl ActionProcessor<Channel__Base___GetManyByNameInSubscriptions> {
         if let Some(ref requery___channel__name_) = incoming_.requery___channel__name {
             if !Validator::<Channel_Name>::is_valid(requery___channel__name_.as_str()) {
                 return Err(
-                    Error::new_external_invalid_argument(
+                    AlternativeWorkflow::new_external_invalid_argument(
                         Backtrace::new(
                             line!(),
                             file!(),

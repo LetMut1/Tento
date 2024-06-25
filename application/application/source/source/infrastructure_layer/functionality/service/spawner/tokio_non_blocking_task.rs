@@ -2,7 +2,7 @@ use super::Spawner;
 use crate::infrastructure_layer::{
     data::{
         control_type::TokioNonBlockingTask,
-        error::Error,
+        error::AlternativeWorkflow,
     },
     functionality::service::logger::Logger,
 };
@@ -14,12 +14,12 @@ use tokio::task::JoinHandle;
 impl Spawner<TokioNonBlockingTask> {
     pub fn spawn_into_background<F, T>(future: F) -> ()
     where
-        F: Future<Output = Result<T, Error>> + Send + 'static,
+        F: Future<Output = Result<T, AlternativeWorkflow>> + Send + 'static,
     {
         tokio::spawn(
             async move {
                 if let Err(error) = future.await {
-                    Logger::<Error>::log(&error);
+                    Logger::<AlternativeWorkflow>::log(&error);
                 }
                 return ();
             },

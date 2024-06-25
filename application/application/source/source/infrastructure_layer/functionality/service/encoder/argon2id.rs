@@ -4,13 +4,13 @@ use crate::infrastructure_layer::data::{
         Backtrace,
     },
     control_type::Argon2Id,
-    error::Error,
+    error::AlternativeWorkflow,
     error::ResultConverter,
 };
 use argon2::Config;
 use uuid::Uuid;
 impl Encoder<Argon2Id> {
-    pub fn encode<'a>(data: &'a [u8]) -> Result<String, Error> { // // TODO TODO TODO ARGON2id . ПРОВЕрИТЬЬ, он или нет, понять, почему не он.  // TODO отрабатывает за 320 млсекунд, как увеличить скорость, https://users.rust-lang.org/t/which-crate-should-i-use-for-argon2/26090
+    pub fn encode<'a>(data: &'a [u8]) -> Result<String, AlternativeWorkflow> { // // TODO TODO TODO ARGON2id . ПРОВЕрИТЬЬ, он или нет, понять, почему не он.  // TODO отрабатывает за 320 млсекунд, как увеличить скорость, https://users.rust-lang.org/t/which-crate-should-i-use-for-argon2/26090
         let config = Config::default(); // TODO настроить конфиг, возможно, вынестки в константу
         let salt = Uuid::new_v4();
         return argon2::hash_encoded(
@@ -25,7 +25,7 @@ impl Encoder<Argon2Id> {
             ),
         );
     }
-    pub fn is_valid<'a>(data: &'a [u8], encoded_data: &'a str) -> Result<bool, Error> {
+    pub fn is_valid<'a>(data: &'a [u8], encoded_data: &'a str) -> Result<bool, AlternativeWorkflow> {
         return argon2::verify_encoded(
             encoded_data,
             data,

@@ -4,7 +4,7 @@ use crate::infrastructure_layer::data::{
         Backtrace,
     },
     control_type::DateTime,
-    error::Error,
+    error::AlternativeWorkflow,
     error::OptionConverter,
 };
 use chrono::{
@@ -19,7 +19,7 @@ impl Resolver<DateTime> {
     pub fn unixtime_get_now() -> i64 {
         return Utc::now().timestamp();
     }
-    pub fn unixtime_add_minutes_interval_from_now(quantity_of_minutes: i64) -> Result<i64, Error> {
+    pub fn unixtime_add_minutes_interval_from_now(quantity_of_minutes: i64) -> Result<i64, AlternativeWorkflow> {
         let quantity_of_seconds = quantity_of_minutes.checked_mul(60).convert_out_of_range(
             Backtrace::new(
                 line!(),

@@ -6,7 +6,7 @@ use crate::{
             auditor::{
                 Backtrace,
             },
-            error::Error,
+            error::AlternativeWorkflow,
             error::ResultConverter,
         },
         functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver,
@@ -19,7 +19,7 @@ use tokio_postgres::{
     Client as Connection,
 };
 impl PostgresqlRepository<Channel<'_>> {
-    pub async fn create_1<'a>(database_1_connection: &'a Connection, insert_1: Insert1) -> Result<Channel<'static>, Error> {
+    pub async fn create_1<'a>(database_1_connection: &'a Connection, insert_1: Insert1) -> Result<Channel<'static>, AlternativeWorkflow> {
         let channel__name = insert_1.channel__name.as_str();
         let channel__linked_name = insert_1.channel__linked_name.as_str();
         let channel__description = match insert_1.channel__description {
@@ -173,7 +173,7 @@ impl PostgresqlRepository<Channel<'_>> {
             ),
         );
     }
-    pub async fn find_1<'a>(database_1_connection: &'a Connection, by_1: By1) -> Result<Option<Channel<'static>>, Error> {
+    pub async fn find_1<'a>(database_1_connection: &'a Connection, by_1: By1) -> Result<Option<Channel<'static>>, AlternativeWorkflow> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             SELECT \
@@ -311,7 +311,7 @@ impl PostgresqlRepository<Channel<'_>> {
             ),
         );
     }
-    pub async fn find_2<'a, 'b>(database_1_connection: &'a Connection, by_2: By2<'b>) -> Result<Option<Channel<'b>>, Error> {
+    pub async fn find_2<'a, 'b>(database_1_connection: &'a Connection, by_2: By2<'b>) -> Result<Option<Channel<'b>>, AlternativeWorkflow> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             SELECT \

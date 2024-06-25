@@ -1,11 +1,11 @@
 [package]
-name = "error"
+name = "alternative_workflow"
 version = "1.0.0"
 authors.workspace = true
 edition = "2021"
 
 [lib]
-name = "error"
+name = "alternative_workflow"
 path = "./source/mod.rs"
 test = true
 doctest = true

@@ -5,7 +5,7 @@ use crate::{
         data::{
             control_type::Email,
             environment_configuration::EnvironmentConfiguration,
-            error::Error,
+            error::AlternativeWorkflow,
         },
         functionality::service::sender::Sender,
     },
@@ -16,7 +16,7 @@ impl EmailSender<ApplicationUserRegistrationToken<'_>> {
         application_user_registration_token__value: &'a str,
         application_user__email: &'a str,
         application_user_device__id: &'a str,
-    ) -> Result<(), Error> {
+    ) -> Result<(), AlternativeWorkflow> {
         let message_body = format!(
             "Your code {} for device {}.",
             application_user_registration_token__value, application_user_device__id,

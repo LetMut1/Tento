@@ -14,7 +14,7 @@ use crate::{
                 MessagePack,
             },
             environment_configuration::EnvironmentConfiguration,
-            error::Error,
+            error::AlternativeWorkflow,
         },
         functionality::service::{
             encoder::{
@@ -33,7 +33,7 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
     pub fn to_encrypted<'a>(
         environment_configuration: &'a EnvironmentConfiguration,
         application_user_access_token: &'a ApplicationUserAccessToken<'_>,
-    ) -> Result<String, Error> {
+    ) -> Result<String, AlternativeWorkflow> {
         let data = Serializer::<MessagePack>::serialize(application_user_access_token)?;
         let application_user_access_token_serialized = Encoder_::<Base64>::encode(data.as_slice());
         let application_user_access_token_serialized_signature = Encoder::<Signature>::encode(
@@ -52,14 +52,14 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
     pub fn from_encrypted<'a>(
         environment_configuration: &'a EnvironmentConfiguration,
         application_user_access_token_encrypted: &'a str,
-    ) -> Result<ApplicationUserAccessToken<'static>, Error> {
+    ) -> Result<ApplicationUserAccessToken<'static>, AlternativeWorkflow> {
         let mut token_part_registry = application_user_access_token_encrypted.splitn::<'_, &'_ str>(
             2,
             Self::TOKEN_PARTS_SEPARATOR,
         );
         let application_user_access_token_serialized = token_part_registry.next().ok_or_else(
             || -> _ {
-                return Error::new_external_invalid_argument(
+                return AlternativeWorkflow::new_external_invalid_argument(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -69,7 +69,7 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
         )?;
         let application_user_access_token_serialized_signature = token_part_registry.next().ok_or_else(
             || -> _ {
-                return Error::new_external_invalid_argument(
+                return AlternativeWorkflow::new_external_invalid_argument(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -83,7 +83,7 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
             application_user_access_token_serialized_signature.as_bytes(),
         )? {
             return Err(
-                Error::new_external_invalid_argument(
+                AlternativeWorkflow::new_external_invalid_argument(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -97,7 +97,7 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
 }
 struct Signature;
 impl Encoder<Signature> {
-    fn encode<'a>(environment_configuration: &'a EnvironmentConfiguration, application_user_access_token_serialized: &'a [u8]) -> Result<String, Error> {
+    fn encode<'a>(environment_configuration: &'a EnvironmentConfiguration, application_user_access_token_serialized: &'a [u8]) -> Result<String, AlternativeWorkflow> {
         let application_user_access_token_serialized_encoded = Encoder_::<HmacSha3_512>::encode(
             environment_configuration.encryption.private_key.application_user_access_token.as_bytes(),
             application_user_access_token_serialized,
@@ -108,7 +108,7 @@ impl Encoder<Signature> {
         environment_configuration: &'a EnvironmentConfiguration,
         application_user_access_token_serialized: &'a [u8],
         application_user_access_token_serialized_signature: &'a [u8],
-    ) -> Result<bool, Error> {
+    ) -> Result<bool, AlternativeWorkflow> {
         return Encoder_::<HmacSha3_512>::is_valid(
             environment_configuration.encryption.private_key.application_user_access_token.as_bytes(),
             application_user_access_token_serialized,

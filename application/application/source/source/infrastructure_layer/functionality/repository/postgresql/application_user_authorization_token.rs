@@ -13,7 +13,7 @@ use crate::{
             auditor::{
                 Backtrace,
             },
-            error::Error,
+            error::AlternativeWorkflow,
             error::ResultConverter,
         },
         functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver,
@@ -25,7 +25,7 @@ use tokio_postgres::{
     Client as Connection,
 };
 impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
-    pub async fn create_1<'a>(database_2_connection: &'a Connection, insert_1: Insert1<'a>) -> Result<ApplicationUserAuthorizationToken<'a>, Error> {
+    pub async fn create_1<'a>(database_2_connection: &'a Connection, insert_1: Insert1<'a>) -> Result<ApplicationUserAuthorizationToken<'a>, AlternativeWorkflow> {
         let application_user_authorization_token__value = insert_1.application_user_authorization_token__value.as_str();
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
@@ -104,7 +104,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
             ),
         );
     }
-    pub async fn delete_1<'a>(database_2_connection: &'a Connection, by_1: By1<'_>) -> Result<(), Error> {
+    pub async fn delete_1<'a>(database_2_connection: &'a Connection, by_1: By1<'_>) -> Result<(), AlternativeWorkflow> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             DELETE FROM ONLY public.application_user_authorization_token AS auat \
@@ -144,7 +144,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
             )?;
         return Ok(());
     }
-    pub async fn update_1<'a>(database_2_connection: &'a Connection, update_1: Update1<'_>, by_1: By1<'_>) -> Result<(), Error> {
+    pub async fn update_1<'a>(database_2_connection: &'a Connection, update_1: Update1<'_>, by_1: By1<'_>) -> Result<(), AlternativeWorkflow> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             UPDATE ONLY public.application_user_authorization_token AS auat \
@@ -211,7 +211,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
             )?;
         return Ok(());
     }
-    pub async fn update_2<'a>(database_2_connection: &'a Connection, update_2: Update2<'_>, by_1: By1<'_>) -> Result<(), Error> {
+    pub async fn update_2<'a>(database_2_connection: &'a Connection, update_2: Update2<'_>, by_1: By1<'_>) -> Result<(), AlternativeWorkflow> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             UPDATE ONLY public.application_user_authorization_token AS auat \
@@ -272,7 +272,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
             )?;
         return Ok(());
     }
-    pub async fn update_3<'a>(database_2_connection: &'a Connection, update_3: Update3, by_1: By1<'_>) -> Result<(), Error> {
+    pub async fn update_3<'a>(database_2_connection: &'a Connection, update_3: Update3, by_1: By1<'_>) -> Result<(), AlternativeWorkflow> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             UPDATE ONLY public.application_user_authorization_token AS auat \
@@ -321,7 +321,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
             )?;
         return Ok(());
     }
-    pub async fn update_4<'a>(database_2_connection: &'a Connection, update_4: Update4, by_1: By1<'_>) -> Result<(), Error> {
+    pub async fn update_4<'a>(database_2_connection: &'a Connection, update_4: Update4, by_1: By1<'_>) -> Result<(), AlternativeWorkflow> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             UPDATE ONLY public.application_user_authorization_token AS auat \
@@ -370,7 +370,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
             )?;
         return Ok(());
     }
-    pub async fn find_1<'a>(database_2_connection: &'a Connection, by_1: By1<'_>) -> Result<Option<ApplicationUserAuthorizationToken1>, Error> {
+    pub async fn find_1<'a>(database_2_connection: &'a Connection, by_1: By1<'_>) -> Result<Option<ApplicationUserAuthorizationToken1>, AlternativeWorkflow> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             SELECT \
@@ -447,7 +447,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
             ),
         );
     }
-    pub async fn find_2<'a>(database_2_connection: &'a Connection, by_1: By1<'_>) -> Result<Option<ApplicationUserAuthorizationToken2>, Error> {
+    pub async fn find_2<'a>(database_2_connection: &'a Connection, by_1: By1<'_>) -> Result<Option<ApplicationUserAuthorizationToken2>, AlternativeWorkflow> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             SELECT \
@@ -517,7 +517,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
             ),
         );
     }
-    pub async fn find_3<'a>(database_2_connection: &'a Connection, by_1: By1<'_>) -> Result<Option<ApplicationUserAuthorizationToken3>, Error> {
+    pub async fn find_3<'a>(database_2_connection: &'a Connection, by_1: By1<'_>) -> Result<Option<ApplicationUserAuthorizationToken3>, AlternativeWorkflow> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             SELECT \

@@ -4,7 +4,7 @@ use crate::infrastructure_layer::data::{
         Backtrace,
     },
     control_type::Base64,
-    error::Error,
+    error::AlternativeWorkflow,
     error::ResultConverter,
 };
 use base64::{
@@ -19,7 +19,7 @@ impl Encoder<Base64> {
             Self::BASE64_STANDARD_CONFIGURATION,
         );
     }
-    pub fn decode<'a>(encoded_data: &'a [u8]) -> Result<Vec<u8>, Error> {
+    pub fn decode<'a>(encoded_data: &'a [u8]) -> Result<Vec<u8>, AlternativeWorkflow> {
         return base64::decode_config(
             encoded_data,
             Self::BASE64_STANDARD_CONFIGURATION,

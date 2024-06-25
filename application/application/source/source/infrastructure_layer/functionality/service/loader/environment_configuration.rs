@@ -21,13 +21,13 @@ use crate::infrastructure_layer::data::{
         Tls,
         TokioRuntime,
     },
-    error::Error,
+    error::AlternativeWorkflow,
     error::ResultConverter,
 };
 use std::path::Path;
 impl Loader<EnvironmentConfiguration> {
     const ENVIRONMENT_FILE_NAME: &'static str = "environment.toml";
-    pub fn load_from_file<'a>(environment_configuration_directory_path: &'a str) -> Result<EnvironmentConfiguration, Error> {
+    pub fn load_from_file<'a>(environment_configuration_directory_path: &'a str) -> Result<EnvironmentConfiguration, AlternativeWorkflow> {
         let environment_file_path = format!(
             "{}/{}",
             environment_configuration_directory_path,
@@ -48,7 +48,7 @@ impl Loader<EnvironmentConfiguration> {
             )?
         } else {
             return Err(
-                Error::new_internal_logic(
+                AlternativeWorkflow::new_internal_logic(
                     "The environment.toml file does not exist.",
                     Backtrace::new(
                         line!(),

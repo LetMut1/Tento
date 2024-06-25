@@ -2,7 +2,7 @@ use crate::infrastructure_layer::data::{
     auditor::{
         Backtrace,
     },
-    error::Error,
+    error::AlternativeWorkflow,
     error::ResultConverter,
 };
 use core::marker::Sized;
@@ -13,10 +13,10 @@ where
     F: Sized,
     T: Sized,
 {
-    fn convert(subject: F) -> Result<T, Error>;
+    fn convert(subject: F) -> Result<T, AlternativeWorkflow>;
 }
 impl Convert<u16, i16> for Converter {
-    fn convert(subject: u16) -> Result<i16, Error> {
+    fn convert(subject: u16) -> Result<i16, AlternativeWorkflow> {
         return Ok(
             i16::try_from(subject).convert_into_error(
                 Backtrace::new(

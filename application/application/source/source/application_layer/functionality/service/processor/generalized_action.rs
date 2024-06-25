@@ -13,7 +13,7 @@ use crate::{
                 Response,
             },
             environment_configuration::EnvironmentConfiguration,
-            error::Error,
+            error::AlternativeWorkflow,
         },
         functionality::service::{
             creator::Creator,
@@ -28,7 +28,7 @@ use crate::{
 };
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
-use error::{External, Internal};
+use crate::infrastructure_layer::data::error::{External, Internal};
 use http::request::Parts;
 use hyper::Body;
 use matchit::Params;
@@ -65,9 +65,9 @@ impl Processor<GeneralizedAction> {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
         DE: FnOnce(&'a mut Body, &'a Parts, &'a Params<'b, 'c>) -> F1,
-        F1: Future<Output = Result<Option<I>, Error>>,
+        F1: Future<Output = Result<Option<I>, AlternativeWorkflow>>,
         AP: FnOnce(&'a EnvironmentConfiguration, &'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<PostgresqlConnectionManager<T>>, Option<I>) -> F2,
-        F2: Future<Output = Result<UnifiedReport<O, P>, Error>>,
+        F2: Future<Output = Result<UnifiedReport<O, P>, AlternativeWorkflow>>,
         O: SerdeSerialize,
         P: SerdeSerialize,
         Serializer<SF>: Serialize,
@@ -97,7 +97,7 @@ impl Processor<GeneralizedAction> {
             }
             Err(error) => {
                 let response = match error {
-                    Error::External { external_auditor } => {
+                    AlternativeWorkflow::External { external_auditor } => {
                         let response_ = Creator::<Response>::create_bad_request();
                         Logger::<(
                             ActionRound,
@@ -109,7 +109,7 @@ impl Processor<GeneralizedAction> {
                         );
                         response_
                     }
-                    Error::Internal { internal_auditor } => {
+                    AlternativeWorkflow::Internal { internal_auditor } => {
                         let response_ = Creator::<Response>::create_internal_server_error();
                         Logger::<(
                             ActionRound,
@@ -136,23 +136,23 @@ impl Processor<GeneralizedAction> {
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         data_extractor: DE,
         action_processor: AP,
-    ) -> Result<Vec<u8>, Error>
+    ) -> Result<Vec<u8>, AlternativeWorkflow>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
         DE: FnOnce(&'a mut Body, &'a Parts, &'a Params<'b, 'c>) -> F1,
-        F1: Future<Output = Result<Option<I>, Error>>,
+        F1: Future<Output = Result<Option<I>, AlternativeWorkflow>>,
         AP: FnOnce(&'a EnvironmentConfiguration, &'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<PostgresqlConnectionManager<T>>, Option<I>) -> F2,
-        F2: Future<Output = Result<UnifiedReport<O, P>, Error>>,
+        F2: Future<Output = Result<UnifiedReport<O, P>, AlternativeWorkflow>>,
         O: SerdeSerialize,
         P: SerdeSerialize,
         Serializer<SF>: Serialize
     {
         if !Validator::<Parts>::is_valid(parts) {
             return Err(
-                Error::new_external_invalid_argument(
+                AlternativeWorkflow::new_external_invalid_argument(
                     Backtrace::new(
                         line!(),
                         file!(),

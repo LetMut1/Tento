@@ -4,7 +4,7 @@ use super::{
 };
 use crate::infrastructure_layer::data::{
     control_type::MessagePack,
-    error::Error,
+    error::AlternativeWorkflow,
 };
 use message_pack_serializer::Serializer as Serializer_;
 use serde::{
@@ -12,13 +12,13 @@ use serde::{
     Serialize as SerdeSerialize,
 };
 impl Serialize for Serializer<MessagePack> {
-    fn serialize<'a, T>(subject: &'a T) -> Result<Vec<u8>, Error>
+    fn serialize<'a, T>(subject: &'a T) -> Result<Vec<u8>, AlternativeWorkflow>
     where
         T: SerdeSerialize,
     {
         return Serializer_::serialize(subject);
     }
-    fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, Error>
+    fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, AlternativeWorkflow>
     where
         T: Deserialize<'a>,
     {

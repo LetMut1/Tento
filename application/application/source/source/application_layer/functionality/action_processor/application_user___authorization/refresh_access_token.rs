@@ -33,7 +33,7 @@ use crate::{
             },
             environment_configuration::EnvironmentConfiguration,
             error::{
-                Error,
+                AlternativeWorkflow,
                 OptionConverter,
                 ResultConverter,
             }
@@ -78,7 +78,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
         _database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         incoming: Option<Incoming>,
-    ) -> Result<UnifiedReport<Outcoming, Precedent>, Error>
+    ) -> Result<UnifiedReport<Outcoming, Precedent>, AlternativeWorkflow>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -123,7 +123,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
         )?;
         if !is_valid || application_user_access_token.id != application_user_access_refresh_token.application_user_access_token__id.as_ref() {
             return Err(
-                Error::new_external_invalid_argument(
+                AlternativeWorkflow::new_external_invalid_argument(
                     Backtrace::new(
                         line!(),
                         file!(),

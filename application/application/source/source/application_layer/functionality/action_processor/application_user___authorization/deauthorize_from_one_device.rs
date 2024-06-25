@@ -21,7 +21,7 @@ use crate::{
             control_type::ApplicationUser__Authorization___DeauthorizeFromOneDevice,
             environment_configuration::EnvironmentConfiguration,
             error::{
-                Error,
+                AlternativeWorkflow,
                 OptionConverter,
                 ResultConverter,
             },
@@ -59,7 +59,7 @@ impl ActionProcessor<ApplicationUser__Authorization___DeauthorizeFromOneDevice> 
         _database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         incoming: Option<Incoming>,
-    ) -> Result<UnifiedReport<Void, Precedent>, Error>
+    ) -> Result<UnifiedReport<Void, Precedent>, AlternativeWorkflow>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,

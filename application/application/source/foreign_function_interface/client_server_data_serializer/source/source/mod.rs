@@ -3353,7 +3353,7 @@ mod test {
         const STRING_LITERAL: &'static str = "qwerty";
 
         mod server_response_data_deserialization {
-            use error::Error;
+            use alternative_workflow::AlternativeWorkflow;
             use formatter::Formatter;
             use super::*;
 
@@ -3372,7 +3372,7 @@ mod test {
                     Ok(registry_) => registry_,
                     Err(error) => {
                         return Err(
-                            Formatter::<Error>::format(&error).into()
+                            Formatter::<AlternativeWorkflow>::format(&error).into()
                         );
                     }
                 };

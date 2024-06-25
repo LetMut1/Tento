@@ -1,5 +1,5 @@
-pub use error::{
-    Error,
+pub use alternative_workflow::{
+    AlternativeWorkflow,
     Runtime,
     External,
     Internal,

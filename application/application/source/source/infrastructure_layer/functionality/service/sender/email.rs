@@ -6,7 +6,7 @@ use crate::infrastructure_layer::data::{
     },
     control_type::Email,
     environment_configuration::EnvironmentConfiguration,
-    error::Error,
+    error::AlternativeWorkflow,
     error::ResultConverter,
 };
 use lettre::{
@@ -20,7 +20,7 @@ use std::{
     net::ToSocketAddrs,
 };
 impl Sender<Email> { // TODO Возможно, сразу можно положить объект в константу.  // TODO В предпродакшене, когда будет smtp-ссервер, настройить все через константы и енв
-    pub fn send<'a>(environment_configuration: &'a EnvironmentConfiguration, subject: &'a str, body: String, to: &'a str) -> Result<(), Error> {
+    pub fn send<'a>(environment_configuration: &'a EnvironmentConfiguration, subject: &'a str, body: String, to: &'a str) -> Result<(), AlternativeWorkflow> {
         let email = EmailBuilder::new() //TODO
             .subject(subject)
             .text(body)
@@ -44,7 +44,7 @@ impl Sender<Email> { // TODO Возможно, сразу можно полож�
             Some(email_server_socket_address_) => email_server_socket_address_,
             None => {
                 return Err(
-                    Error::new_internal_logic(
+                    AlternativeWorkflow::new_internal_logic(
                         "Invalid socket address.",
                         Backtrace::new(
                             line!(),

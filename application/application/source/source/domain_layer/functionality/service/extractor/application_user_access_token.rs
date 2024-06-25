@@ -8,7 +8,7 @@ use crate::{
         data::{
             control_type::UnixTime,
             environment_configuration::EnvironmentConfiguration,
-            error::Error,
+            error::AlternativeWorkflow,
         },
         functionality::service::expiration_time_checker::ExpirationTimeChecker,
     },
@@ -17,7 +17,7 @@ impl Extractor<ApplicationUserAccessToken<'_>> {
     pub async fn extract<'a>(
         environment_configuration: &'a EnvironmentConfiguration,
         application_user_access_token_encrypted: &'a str,
-    ) -> Result<ExtractorResult, Error> {
+    ) -> Result<ExtractorResult, AlternativeWorkflow> {
         let application_user_access_token = FormResolver::<ApplicationUserAccessToken<'_>>::from_encrypted(
             environment_configuration,
             application_user_access_token_encrypted,

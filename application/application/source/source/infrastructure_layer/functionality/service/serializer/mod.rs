@@ -2,7 +2,7 @@
 pub mod json;
 pub mod message_pack;
 use crate::infrastructure_layer::data::{
-    error::Error,
+    error::AlternativeWorkflow,
 };
 use serde::{
     Deserialize,
@@ -13,10 +13,10 @@ pub struct Serializer<T> {
     _format: PhantomData<T>,
 }
 pub trait Serialize {
-    fn serialize<'a, T>(subject: &'a T) -> Result<Vec<u8>, Error>
+    fn serialize<'a, T>(subject: &'a T) -> Result<Vec<u8>, AlternativeWorkflow>
     where
         T: SerdeSerialize;
-    fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, Error>
+    fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, AlternativeWorkflow>
     where
         T: Deserialize<'a>;
 }

@@ -12,6 +12,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "alternative_workflow"
+version = "1.0.0"
+dependencies = [
+ "auditor",
+]
+
+[[package]]
 name = "atty"
 version = "0.2.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -119,9 +126,9 @@ name = "client_server_data_serializer"
 version = "1.0.0"
 dependencies = [
  "action_processor_incoming_outcoming",
+ "alternative_workflow",
  "cargo-emit",
  "cbindgen",
- "error",
  "formatter",
  "libc",
  "message_pack_serializer",
@@ -157,13 +164,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "error"
-version = "1.0.0"
-dependencies = [
- "auditor",
-]
-
-[[package]]
 name = "fastrand"
 version = "2.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -173,8 +173,8 @@ checksum = "25cbce373ec4653f1a01a31e8a5e5ec0c622dc27ff9c4e6606eefef5cbbed4a5"
 name = "formatter"
 version = "1.0.0"
 dependencies = [
+ "alternative_workflow",
  "auditor",
- "error",
 ]
 
 [[package]]
@@ -251,8 +251,8 @@ version = "1.0.0"
 name = "message_pack_serializer"
 version = "1.0.0"
 dependencies = [
+ "alternative_workflow",
  "auditor",
- "error",
  "rmp-serde",
  "serde",
 ]

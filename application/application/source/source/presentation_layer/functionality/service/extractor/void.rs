@@ -1,6 +1,6 @@
 use super::Extractor;
 use crate::infrastructure_layer::data::{
-    error::Error,
+    error::AlternativeWorkflow,
     void::Void,
 };
 use http::request::Parts;
@@ -11,7 +11,7 @@ impl Extractor<Void> {
         _body: &'a mut Body,
         _parts: &'a Parts,
         _route_parameters: &'a Params<'_, '_>,
-    ) -> Result<Option<Void>, Error> {
+    ) -> Result<Option<Void>, AlternativeWorkflow> {
         return Ok(None);
     }
 }

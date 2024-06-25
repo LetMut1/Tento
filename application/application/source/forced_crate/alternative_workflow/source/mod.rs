@@ -11,7 +11,7 @@ use auditor::{
     Auditor,
     Backtrace,
 };
-pub enum Error {
+pub enum AlternativeWorkflow {
     Internal {
         internal_auditor: Auditor<Internal>,
     },
@@ -19,7 +19,7 @@ pub enum Error {
         external_auditor: Auditor<External>,
     }
 }
-impl Error {
+impl AlternativeWorkflow {
     pub fn new_internal_logic(message: &'static str, backtrace: Backtrace) -> Self {
         return Self::Internal { internal_auditor: Auditor::new(Internal::Logic { message }, backtrace) };
     }
@@ -48,17 +48,17 @@ impl Error {
         return Self::External { external_auditor: Auditor::new(External::InvalidArgument, backtrace) };
     }
 }
-impl Debug for Error {
+impl Debug for AlternativeWorkflow {
     fn fmt<'a, 'b>(&'a self, _: &'b mut Formatter<'_>) -> Result<(), FmtError> {
         return Ok(());
     }
 }
-impl Display for Error {
+impl Display for AlternativeWorkflow {
     fn fmt<'a, 'b>(&'a self, _: &'b mut Formatter<'_>) -> Result<(), FmtError> {
         return Ok(());
     }
 }
-impl StdError for Error {}
+impl StdError for AlternativeWorkflow {}
 pub enum Internal {
     Logic {
         message: &'static str,
@@ -79,56 +79,56 @@ pub enum External {
     InvalidArgument,
 }
 pub trait ResultConverter<T> {
-    fn convert_into_error(self, backtrace: Backtrace) -> Result<T, Error>;
+    fn convert_into_error(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow>;
 }
 impl<E, T> ResultConverter<T> for Result<T, E>
 where
     E: StdError + Send + Sync + 'static,
 {
-    fn convert_into_error(self, backtrace: Backtrace) -> Result<T, Error> {
+    fn convert_into_error(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow> {
         return self.map_err(
             move |error: _| -> _ {
-                return Error::new_internal_runtime(error, backtrace);
+                return AlternativeWorkflow::new_internal_runtime(error, backtrace);
             }
         );
     }
 }
 pub trait ResultConverter_<T> {
-    fn convert_into_error(self, backtrace: Backtrace) -> Result<T, Error>;
+    fn convert_into_error(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow>;
 }
 impl<T> ResultConverter_<T> for Result<T, Box<dyn StdError + Sync + Send + 'static>> {
-    fn convert_into_error(self, backtrace: Backtrace) -> Result<T, Error> {
+    fn convert_into_error(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow> {
         return self.map_err(
             move |error: _| -> _ {
-                return Error::new_internal_runtime_(error, backtrace);
+                return AlternativeWorkflow::new_internal_runtime_(error, backtrace);
             }
         );
     }
 }
 pub trait OptionConverter<T> {
-    fn convert_unreachable_state(self, backtrace: Backtrace) -> Result<T, Error>;
-    fn convert_out_of_range(self, backtrace: Backtrace) -> Result<T, Error>;
-    fn convert_value_does_not_exist(self, backtrace: Backtrace) -> Result<T, Error>;
+    fn convert_unreachable_state(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow>;
+    fn convert_out_of_range(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow>;
+    fn convert_value_does_not_exist(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow>;
 }
 impl<T> OptionConverter<T> for Option<T> {
-    fn convert_unreachable_state(self, backtrace: Backtrace) -> Result<T, Error> {
+    fn convert_unreachable_state(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow> {
         return self.ok_or_else(
             move || -> _ {
-                return Error::new_internal_logic_unreachable_state(backtrace);
+                return AlternativeWorkflow::new_internal_logic_unreachable_state(backtrace);
             }
         );
     }
-    fn convert_out_of_range(self, backtrace: Backtrace) -> Result<T, Error> {
+    fn convert_out_of_range(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow> {
         return self.ok_or_else(
             move || -> _ {
-                return Error::new_internal_logic_out_of_range(backtrace);
+                return AlternativeWorkflow::new_internal_logic_out_of_range(backtrace);
             }
         );
     }
-    fn convert_value_does_not_exist(self, backtrace: Backtrace) -> Result<T, Error> {
+    fn convert_value_does_not_exist(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow> {
         return self.ok_or_else(
             move || -> _ {
-                return Error::new_internal_logic_value_does_not_exist(backtrace);
+                return AlternativeWorkflow::new_internal_logic_value_does_not_exist(backtrace);
             }
         );
     }

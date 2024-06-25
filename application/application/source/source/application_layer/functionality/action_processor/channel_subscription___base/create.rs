@@ -29,7 +29,7 @@ use crate::{
             control_type::ChannelSubscription__Base___Create,
             environment_configuration::EnvironmentConfiguration,
             error::{
-                Error,
+                AlternativeWorkflow,
                 OptionConverter,
                 ResultConverter,
             },
@@ -68,7 +68,7 @@ impl ActionProcessor<ChannelSubscription__Base___Create> {
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         incoming: Option<Incoming>,
-    ) -> Result<UnifiedReport<Void, Precedent>, Error>
+    ) -> Result<UnifiedReport<Void, Precedent>, AlternativeWorkflow>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -99,7 +99,7 @@ impl ActionProcessor<ChannelSubscription__Base___Create> {
         };
         if !Validator::<Channel_Id>::is_valid(incoming_.channel__id) {
             return Err(
-                Error::new_external_invalid_argument(
+                AlternativeWorkflow::new_external_invalid_argument(
                     Backtrace::new(
                         line!(),
                         file!(),

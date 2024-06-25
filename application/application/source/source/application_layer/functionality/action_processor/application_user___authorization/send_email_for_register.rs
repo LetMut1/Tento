@@ -29,7 +29,7 @@ use crate::{
             },
             environment_configuration::EnvironmentConfiguration,
             error::{
-                Error,
+                AlternativeWorkflow,
                 OptionConverter,
                 ResultConverter,
             }
@@ -73,7 +73,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForRegister> {
         _database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         incoming: Option<Incoming>,
-    ) -> Result<UnifiedReport<Outcoming, Precedent>, Error>
+    ) -> Result<UnifiedReport<Outcoming, Precedent>, AlternativeWorkflow>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -88,7 +88,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForRegister> {
         )?;
         if !Validator::<ApplicationUser_Email>::is_valid(incoming_.application_user__email.as_str())? {
             return Err(
-                Error::new_external_invalid_argument(
+                AlternativeWorkflow::new_external_invalid_argument(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -98,7 +98,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForRegister> {
         }
         if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming_.application_user_device__id.as_str()) {
             return Err(
-                Error::new_external_invalid_argument(
+                AlternativeWorkflow::new_external_invalid_argument(
                     Backtrace::new(
                         line!(),
                         file!(),

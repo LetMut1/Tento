@@ -5,7 +5,7 @@ use crate::infrastructure_layer::{
             Backtrace,
         },
         control_type::HttpBodyData,
-        error::Error,
+        error::AlternativeWorkflow,
         error::ResultConverter,
     },
     functionality::service::serializer::{
@@ -26,7 +26,7 @@ impl Extractor<HttpBodyData> {
         body: &'a mut Body,
         _parts: &'a Parts,
         _route_parameters: &'a Params<'_, '_>,
-    ) -> Result<Option<D>, Error>
+    ) -> Result<Option<D>, AlternativeWorkflow>
     where
         D: for<'de> Deserialize<'de>,
         Serializer<SF>: Serialize,

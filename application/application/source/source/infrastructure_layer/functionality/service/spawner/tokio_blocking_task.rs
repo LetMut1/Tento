@@ -2,7 +2,7 @@ use super::Spawner;
 use crate::infrastructure_layer::{
     data::{
         control_type::TokioBlockingTask,
-        error::Error,
+        error::AlternativeWorkflow,
     },
     functionality::service::logger::Logger,
 };
@@ -11,13 +11,13 @@ use tokio::task::JoinHandle;
 impl Spawner<TokioBlockingTask> {
     pub fn spawn_into_background<F, T>(closure: F) -> ()
     where
-        F: FnOnce() -> Result<T, Error> + Send + 'static,
+        F: FnOnce() -> Result<T, AlternativeWorkflow> + Send + 'static,
         T: Send + 'static,
     {
         tokio::task::spawn_blocking(
             move || -> () {
                 if let Err(error) = closure() {
-                    Logger::<Error>::log(&error);
+                    Logger::<AlternativeWorkflow>::log(&error);
                 }
                 return ();
             },

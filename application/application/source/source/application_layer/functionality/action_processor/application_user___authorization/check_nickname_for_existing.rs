@@ -18,7 +18,7 @@ use crate::{
             control_type::ApplicationUser__Authorization___CheckNicknameForExisting,
             environment_configuration::EnvironmentConfiguration,
             error::{
-                Error,
+                AlternativeWorkflow,
                 OptionConverter,
                 ResultConverter,
             },
@@ -56,7 +56,7 @@ impl ActionProcessor<ApplicationUser__Authorization___CheckNicknameForExisting> 
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         incoming: Option<Incoming>,
-    ) -> Result<UnifiedReport<Outcoming, Void>, Error>
+    ) -> Result<UnifiedReport<Outcoming, Void>, AlternativeWorkflow>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -71,7 +71,7 @@ impl ActionProcessor<ApplicationUser__Authorization___CheckNicknameForExisting> 
         )?;
         if !Validator::<ApplicationUser_Nickname>::is_valid(incoming_.application_user__nickname.as_str()) {
             return Err(
-                Error::new_external_invalid_argument(
+                AlternativeWorkflow::new_external_invalid_argument(
                     Backtrace::new(
                         line!(),
                         file!(),

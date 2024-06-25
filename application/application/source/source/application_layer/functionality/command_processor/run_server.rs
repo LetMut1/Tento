@@ -36,7 +36,7 @@ use crate::{
             },
             environment_configuration::EnvironmentConfiguration,
             error::{
-                Error,
+                AlternativeWorkflow,
                 OptionConverter,
                 ResultConverter,
             },
@@ -109,13 +109,13 @@ use tracing_subscriber::FmtSubscriber;
 static ENVIRONMENT_CONFIGURATION: OnceLock<EnvironmentConfiguration> = OnceLock::new();
 impl CommandProcessor<RunServer> {
     const QUANTITY_OF_SECONDS_FOR_RERUN_SERVING: u64 = 1;
-    pub fn process() -> Result<(), Error> {
+    pub fn process() -> Result<(), AlternativeWorkflow> {
         let environment_configuration = Self::initialize_environment()?;
         let _worker_guard = Self::initialize_logger(environment_configuration)?;
         Self::run_runtime(environment_configuration)?;
         return Ok(());
     }
-    fn initialize_environment() -> Result<&'static EnvironmentConfiguration, Error> {
+    fn initialize_environment() -> Result<&'static EnvironmentConfiguration, AlternativeWorkflow> {
         let environment_configuration_file_path = format!(
             "{}/environment_configuration",
             std::env::var("CARGO_MANIFEST_DIR").convert_into_error(Backtrace::new(line!(), file!()))?.as_str(),
@@ -124,7 +124,7 @@ impl CommandProcessor<RunServer> {
         match ENVIRONMENT_CONFIGURATION.get() {
             Some(_) => {
                 return Err(
-                    Error::new_internal_logic_value_already_exist(
+                    AlternativeWorkflow::new_internal_logic_value_already_exist(
                         Backtrace::new(
                             line!(),
                             file!(),
@@ -135,7 +135,7 @@ impl CommandProcessor<RunServer> {
             None => {
                 if let Err(_) = ENVIRONMENT_CONFIGURATION.set(environment_configuration) {
                     return Err(
-                        Error::new_internal_logic_value_already_exist(
+                        AlternativeWorkflow::new_internal_logic_value_already_exist(
                             Backtrace::new(
                                 line!(),
                                 file!(),
@@ -154,7 +154,7 @@ impl CommandProcessor<RunServer> {
             )?,
         );
     }
-    fn initialize_logger<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<WorkerGuard, Error> {
+    fn initialize_logger<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<WorkerGuard, AlternativeWorkflow> {
         let non_blocking;
         let worker_guard;
         #[cfg(feature = "file_log")]
@@ -193,13 +193,13 @@ impl CommandProcessor<RunServer> {
         )?;
         return Ok(worker_guard);
     }
-    fn run_runtime(environment_configuration: &'static EnvironmentConfiguration) -> Result<(), Error> {
+    fn run_runtime(environment_configuration: &'static EnvironmentConfiguration) -> Result<(), AlternativeWorkflow> {
         if environment_configuration.tokio_runtime.maximum_blocking_threads_quantity == 0
             || environment_configuration.tokio_runtime.worker_threads_quantity == 0
             || environment_configuration.tokio_runtime.worker_thread_stack_size < (1024 * 1024)
         {
             return Err(
-                Error::new_internal_logic(
+                AlternativeWorkflow::new_internal_logic(
                     "Invalid Tokio runtime configuration.",
                     Backtrace::new(
                         line!(),
@@ -223,10 +223,10 @@ impl CommandProcessor<RunServer> {
             .block_on(Self::serve(environment_configuration))?;
         return Ok(());
     }
-    async fn serve(environment_configuration: &'static EnvironmentConfiguration) -> Result<(), Error> {
+    async fn serve(environment_configuration: &'static EnvironmentConfiguration) -> Result<(), AlternativeWorkflow> {
         'a: loop {
             if let Err(error) = Self::serve_(environment_configuration).await {
-                Logger::<Error>::log(&error);
+                Logger::<AlternativeWorkflow>::log(&error);
                 tokio::time::sleep(Duration::from_secs(Self::QUANTITY_OF_SECONDS_FOR_RERUN_SERVING)).await;
                 continue 'a;
             }
@@ -234,7 +234,7 @@ impl CommandProcessor<RunServer> {
         }
         return Ok(());
     }
-    async fn serve_(environment_configuration: &'static EnvironmentConfiguration) -> Result<(), Error> {
+    async fn serve_(environment_configuration: &'static EnvironmentConfiguration) -> Result<(), AlternativeWorkflow> {
         let router = Self::create_router()?;
         // TODO TODO в Env
         let mut application_http_socket_address_registry = environment_configuration.application_server.tcp.socket_address.to_socket_addrs().convert_into_error(
@@ -247,7 +247,7 @@ impl CommandProcessor<RunServer> {
             Some(application_http_socket_address_) => application_http_socket_address_,
             None => {
                 return Err(
-                    Error::new_internal_logic(
+                    AlternativeWorkflow::new_internal_logic(
                         "Invalid socket address.",
                         Backtrace::new(
                             line!(),
@@ -360,7 +360,7 @@ impl CommandProcessor<RunServer> {
             )?;
         return Ok(());
     }
-    fn create_router() -> Result<Router<ActionRoute_>, Error> {
+    fn create_router() -> Result<Router<ActionRoute_>, AlternativeWorkflow> {
         let mut router = Router::new();
         router
             .insert(
@@ -1471,7 +1471,7 @@ impl CommandProcessor<RunServer> {
         }
         return Action::<RouteNotFound>::run(&parts);
     }
-    fn create_signal(signal_kind: SignalKind) -> Result<impl Future<Output = ()>, Error> {
+    fn create_signal(signal_kind: SignalKind) -> Result<impl Future<Output = ()>, AlternativeWorkflow> {
         let mut signal = tokio::signal::unix::signal(signal_kind).convert_into_error(
             Backtrace::new(
                 line!(),

@@ -1,10 +1,10 @@
 use super::CommandProcessor;
 pub use crate::infrastructure_layer::data::control_type::RemoveIncompliteState;
 use crate::infrastructure_layer::data::{
-    error::Error,
+    error::AlternativeWorkflow,
 };
 impl CommandProcessor<RemoveIncompliteState> {
-    pub fn process() -> Result<(), Error> {
+    pub fn process() -> Result<(), AlternativeWorkflow> {
         // TODO УДалять из БД состояние с вышедшим сроком экспирации:
         // ApplicationUserRegistrationToken
         // ApplicationUserAuthorizationToken
