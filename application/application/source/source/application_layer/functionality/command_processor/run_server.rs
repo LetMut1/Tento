@@ -321,7 +321,7 @@ impl CommandProcessor<RunServer> {
             let database_1_postgresql_connection_pool_ = database_1_postgresql_connection_pool.clone();
             let database_2_postgresql_connection_pool_ = database_2_postgresql_connection_pool.clone();
             return async move {
-                Ok::<_, Void>(
+                return Ok::<_, Void>(
                     hyper::service::service_fn(
                         move |request: Request| -> _ {
                             let router___ = router__.clone();
@@ -336,11 +336,11 @@ impl CommandProcessor<RunServer> {
                                     &database_2_postgresql_connection_pool__,
                                 )
                                 .await;
-                                Ok::<_, Void>(response)
+                                return Ok::<_, Void>(response);
                             };
                         },
                     ),
-                )
+                );
             };
         };
         server_builder
