@@ -64,8 +64,6 @@ use hyper::{
     Server,
 };
 use matchit::Router;
-#[cfg(not(feature = "file_log"))]
-use std::io::stdout;
 use std::{
     clone::Clone,
     future::Future,
@@ -169,7 +167,7 @@ impl CommandProcessor<RunServer> {
             (
                 non_blocking,
                 worker_guard,
-            ) = NonBlockingBuilder::default().finish(stdout());
+            ) = NonBlockingBuilder::default().finish(std::io::stdout);
         }
         let fmt_subscriber = FmtSubscriber::builder()
             .with_max_level(Level::INFO)
