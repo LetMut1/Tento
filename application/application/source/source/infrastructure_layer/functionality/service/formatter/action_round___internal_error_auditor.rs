@@ -3,23 +3,23 @@ use super::{
     Formatter,
 };
 use crate::infrastructure_layer::data::{
-    alternative_workflow::Internal,
+    alternative_workflow::InternalError,
     auditor::Auditor,
     control_type::ActionRound,
 };
 impl
     Formatter<(
         ActionRound,
-        Auditor<Internal>,
+        Auditor<InternalError>,
     )>
 {
-    pub fn format<'a>(request_uri: &'a str, request_method: &'a str, response_status_code: u16, internal_auditor: &'a Auditor<Internal>) -> String {
+    pub fn format<'a>(request_uri: &'a str, request_method: &'a str, response_status_code: u16, internal_error_auditor: &'a Auditor<InternalError>) -> String {
         return format!(
             context_report!(),
             response_status_code,
             request_method,
             request_uri,
-            Formatter::<Auditor<Internal>>::format(internal_auditor).as_str(),
+            Formatter::<Auditor<InternalError>>::format(internal_error_auditor).as_str(),
         );
     }
 }

@@ -27,7 +27,7 @@ impl Validator<ApplicationUserAuthorizationToken_Value> {
                     )?,
                 ) {
                     return Err(
-                        AlternativeWorkflow::new_internal_logic_value_already_exist(
+                        AlternativeWorkflow::new_internal_error_logic_value_already_exist(
                             Backtrace::new(
                                 line!(),
                                 file!(),

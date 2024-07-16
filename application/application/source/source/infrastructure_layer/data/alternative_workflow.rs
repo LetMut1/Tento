@@ -1,7 +1,7 @@
 pub use alternative_workflow::{
     AlternativeWorkflow,
     External,
-    Internal,
+    InternalError,
     OptionConverter,
     ResultConverter,
     ResultConverter_,

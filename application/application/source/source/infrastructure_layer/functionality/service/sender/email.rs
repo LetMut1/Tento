@@ -44,7 +44,7 @@ impl Sender<Email> {
             Some(email_server_socket_address_) => email_server_socket_address_,
             None => {
                 return Err(
-                    AlternativeWorkflow::new_internal_logic(
+                    AlternativeWorkflow::new_internal_error_logic(
                         "Invalid socket address.",
                         Backtrace::new(
                             line!(),

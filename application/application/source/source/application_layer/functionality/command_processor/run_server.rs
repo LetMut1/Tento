@@ -119,7 +119,7 @@ impl CommandProcessor<RunServer> {
         match ENVIRONMENT_CONFIGURATION.get() {
             Some(_) => {
                 return Err(
-                    AlternativeWorkflow::new_internal_logic_value_already_exist(
+                    AlternativeWorkflow::new_internal_error_logic_value_already_exist(
                         Backtrace::new(
                             line!(),
                             file!(),
@@ -130,7 +130,7 @@ impl CommandProcessor<RunServer> {
             None => {
                 if let Err(_) = ENVIRONMENT_CONFIGURATION.set(environment_configuration) {
                     return Err(
-                        AlternativeWorkflow::new_internal_logic_value_already_exist(
+                        AlternativeWorkflow::new_internal_error_logic_value_already_exist(
                             Backtrace::new(
                                 line!(),
                                 file!(),
@@ -192,7 +192,7 @@ impl CommandProcessor<RunServer> {
             || environment_configuration.tokio_runtime.worker_thread_stack_size < (1024 * 1024)
         {
             return Err(
-                AlternativeWorkflow::new_internal_logic(
+                AlternativeWorkflow::new_internal_error_logic(
                     "Invalid Tokio runtime configuration.",
                     Backtrace::new(
                         line!(),
@@ -240,7 +240,7 @@ impl CommandProcessor<RunServer> {
             Some(application_http_socket_address_) => application_http_socket_address_,
             None => {
                 return Err(
-                    AlternativeWorkflow::new_internal_logic(
+                    AlternativeWorkflow::new_internal_error_logic(
                         "Invalid socket address.",
                         Backtrace::new(
                             line!(),

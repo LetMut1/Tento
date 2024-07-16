@@ -6,7 +6,7 @@ use crate::{
             alternative_workflow::{
                 AlternativeWorkflow,
                 External,
-                Internal,
+                InternalError,
             },
             auditor::{
                 Auditor,
@@ -114,17 +114,17 @@ impl Processor<GeneralizedAction> {
                         );
                         response_
                     }
-                    AlternativeWorkflow::Internal {
-                        internal_auditor,
+                    AlternativeWorkflow::InternalError {
+                        internal_error_auditor,
                     } => {
                         let response_ = Creator::<Response>::create_internal_server_error();
                         Logger::<(
                             ActionRound,
-                            Auditor<Internal>,
+                            Auditor<InternalError>,
                         )>::log(
                             parts,
                             &response_,
-                            internal_auditor,
+                            internal_error_auditor,
                         );
                         response_
                     }

@@ -12,71 +12,71 @@ use std::{
     },
 };
 pub enum AlternativeWorkflow {
-    Internal {
-        internal_auditor: Auditor<Internal>,
+    InternalError {
+        internal_error_auditor: Auditor<InternalError>,
     },
     External {
         external_auditor: Auditor<External>,
     },
 }
 impl AlternativeWorkflow {
-    pub fn new_internal_logic(message: &'static str, backtrace: Backtrace) -> Self {
-        return Self::Internal {
-            internal_auditor: Auditor::new(
-                Internal::Logic {
+    pub fn new_internal_error_logic(message: &'static str, backtrace: Backtrace) -> Self {
+        return Self::InternalError {
+            internal_error_auditor: Auditor::new(
+                InternalError::Logic {
                     message,
                 },
                 backtrace,
             ),
         };
     }
-    pub fn new_internal_logic_value_does_not_exist(backtrace: Backtrace) -> Self {
-        return Self::Internal {
-            internal_auditor: Auditor::new(
-                Internal::Logic {
+    pub fn new_internal_error_logic_value_does_not_exist(backtrace: Backtrace) -> Self {
+        return Self::InternalError {
+            internal_error_auditor: Auditor::new(
+                InternalError::Logic {
                     message: "Value does not exist.",
                 },
                 backtrace,
             ),
         };
     }
-    pub fn new_internal_logic_value_already_exist(backtrace: Backtrace) -> Self {
-        return Self::Internal {
-            internal_auditor: Auditor::new(
-                Internal::Logic {
+    pub fn new_internal_error_logic_value_already_exist(backtrace: Backtrace) -> Self {
+        return Self::InternalError {
+            internal_error_auditor: Auditor::new(
+                InternalError::Logic {
                     message: "Value already exist.",
                 },
                 backtrace,
             ),
         };
     }
-    pub fn new_internal_logic_unreachable_state(backtrace: Backtrace) -> Self {
-        return Self::Internal {
-            internal_auditor: Auditor::new(
-                Internal::Logic {
+    pub fn new_internal_error_logic_unreachable_state(backtrace: Backtrace) -> Self {
+        return Self::InternalError {
+            internal_error_auditor: Auditor::new(
+                InternalError::Logic {
                     message: "Unreachable state.",
                 },
                 backtrace,
             ),
         };
     }
-    pub fn new_internal_logic_out_of_range(backtrace: Backtrace) -> Self {
-        return Self::Internal {
-            internal_auditor: Auditor::new(
-                Internal::Logic {
+    pub fn new_internal_error_logic_out_of_range(backtrace: Backtrace) -> Self {
+        return Self::InternalError {
+            internal_error_auditor: Auditor::new(
+                InternalError::Logic {
                     message: "Out of range.",
                 },
                 backtrace,
             ),
         };
     }
-    pub fn new_internal_runtime<E>(error: E, backtrace: Backtrace) -> Self
+    pub fn new_internal_error_runtime<E>(error: E, backtrace: Backtrace) -> Self
     where
         E: StdError + Send + Sync + 'static,
     {
-        return Self::Internal {
-            internal_auditor: Auditor::new(
-                Internal::Runtime {
+        return Self::InternalError {
+            internal_error_auditor: Auditor::new(
+                InternalError::Runtime {
                     runtime: Runtime {
                         error: error.into(),
                     },
@@ -85,10 +85,10 @@ impl AlternativeWorkflow {
             ),
         };
     }
-    pub fn new_internal_runtime_(error: Box<dyn StdError + Send + Sync + 'static>, backtrace: Backtrace) -> Self {
-        return Self::Internal {
-            internal_auditor: Auditor::new(
-                Internal::Runtime {
+    pub fn new_internal_error_runtime_(error: Box<dyn StdError + Send + Sync + 'static>, backtrace: Backtrace) -> Self {
+        return Self::InternalError {
+            internal_error_auditor: Auditor::new(
+                InternalError::Runtime {
                     runtime: Runtime {
                         error,
                     },
@@ -117,7 +117,7 @@ impl Display for AlternativeWorkflow {
     }
 }
 impl StdError for AlternativeWorkflow {}
-pub enum Internal {
+pub enum InternalError {
     Logic {
         message: &'static str,
     },
@@ -146,7 +146,7 @@ where
     fn into_internal_runtime(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow> {
         return self.map_err(
             move |error: _| -> _ {
-                return AlternativeWorkflow::new_internal_runtime(
+                return AlternativeWorkflow::new_internal_error_runtime(
                     error,
                     backtrace,
                 );
@@ -161,7 +161,7 @@ impl<T> ResultConverter_<T> for Result<T, Box<dyn StdError + Sync + Send + 'stat
     fn into_internal_runtime(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow> {
         return self.map_err(
             move |error: _| -> _ {
-                return AlternativeWorkflow::new_internal_runtime_(
+                return AlternativeWorkflow::new_internal_error_runtime_(
                     error,
                     backtrace,
                 );
@@ -178,21 +178,21 @@ impl<T> OptionConverter<T> for Option<T> {
     fn into_internal_logic_unreachable_state(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow> {
         return self.ok_or_else(
             move || -> _ {
-                return AlternativeWorkflow::new_internal_logic_unreachable_state(backtrace);
+                return AlternativeWorkflow::new_internal_error_logic_unreachable_state(backtrace);
             },
         );
     }
     fn into_internal_logic_out_of_range(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow> {
         return self.ok_or_else(
             move || -> _ {
-                return AlternativeWorkflow::new_internal_logic_out_of_range(backtrace);
+                return AlternativeWorkflow::new_internal_error_logic_out_of_range(backtrace);
             },
         );
     }
     fn into_internal_logic_value_does_not_exist(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow> {
         return self.ok_or_else(
             move || -> _ {
-                return AlternativeWorkflow::new_internal_logic_value_does_not_exist(backtrace);
+                return AlternativeWorkflow::new_internal_error_logic_value_does_not_exist(backtrace);
             },
         );
     }

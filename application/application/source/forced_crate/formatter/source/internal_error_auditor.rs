@@ -1,13 +1,13 @@
 use super::Formatter;
-use alternative_workflow::Internal;
+use alternative_workflow::InternalError;
 use auditor::{
     Auditor,
     Backtrace,
 };
-impl Formatter<Auditor<Internal>> {
-    pub fn format<'a>(internal_auditor: &'a Auditor<Internal>) -> String {
-        let message_part = match internal_auditor.subject {
-            Internal::Logic {
+impl Formatter<Auditor<InternalError>> {
+    pub fn format<'a>(internal_error_auditor: &'a Auditor<InternalError>) -> String {
+        let message_part = match internal_error_auditor.subject {
+            InternalError::Logic {
                 message,
             } => {
                 format!(
@@ -15,7 +15,7 @@ impl Formatter<Auditor<Internal>> {
                     message
                 )
             }
-            Internal::Runtime {
+            InternalError::Runtime {
                 ref runtime,
             } => {
                 format!(
@@ -27,7 +27,7 @@ impl Formatter<Auditor<Internal>> {
         return format!(
             "{}:\n{}",
             message_part.as_str(),
-            Formatter::<Backtrace>::format(&internal_auditor.backtrace).as_str(),
+            Formatter::<Backtrace>::format(&internal_error_auditor.backtrace).as_str(),
         );
     }
 }

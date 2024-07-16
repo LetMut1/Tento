@@ -48,7 +48,7 @@ impl Loader<EnvironmentConfiguration> {
             )?
         } else {
             return Err(
-                AlternativeWorkflow::new_internal_logic(
+                AlternativeWorkflow::new_internal_error_logic(
                     "The environment.toml file does not exist.",
                     Backtrace::new(
                         line!(),

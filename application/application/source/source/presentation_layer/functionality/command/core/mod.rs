@@ -139,7 +139,7 @@ impl Processor {
             }
             _ => {
                 Some(
-                    AlternativeWorkflow::new_internal_runtime_(
+                    AlternativeWorkflow::new_internal_error_runtime_(
                         "Unexpected subcommand.".into(),
                         Backtrace::new(
                             line!(),
