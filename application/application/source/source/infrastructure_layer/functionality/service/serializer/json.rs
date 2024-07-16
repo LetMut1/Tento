@@ -22,7 +22,7 @@ impl Serialize for Serializer<Json> {
     where
         T: SerdeSerialize,
     {
-        return serde_json::to_vec(subject).into_internal_error_runtime(
+        return serde_json::to_vec(subject).into_invalid_argument_from_client_code(
             Backtrace::new(
                 line!(),
                 file!(),
@@ -33,7 +33,7 @@ impl Serialize for Serializer<Json> {
     where
         T: Deserialize<'a>,
     {
-        return serde_json::from_slice::<'_, T>(data).into_internal_error_runtime(
+        return serde_json::from_slice::<'_, T>(data).into_invalid_argument_from_client_code(
             Backtrace::new(
                 line!(),
                 file!(),

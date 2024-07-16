@@ -78,7 +78,7 @@ impl AlternativeWorkflow {
             internal_error_auditor: Auditor::new(
                 InternalError::Runtime {
                     runtime: Runtime {
-                        error: error.into(),
+                        context: error.into(),
                     },
                 },
                 backtrace,
@@ -90,7 +90,7 @@ impl AlternativeWorkflow {
             internal_error_auditor: Auditor::new(
                 InternalError::Runtime {
                     runtime: Runtime {
-                        error,
+                        context: error,
                     },
                 },
                 backtrace,
@@ -129,16 +129,17 @@ pub enum InternalError {
     Logic {
         message: &'static str,
     },
+    // This is used for methods that can work as expected or return an error at different times with the same set of parameters.
     Runtime {
         runtime: Runtime,
     },
 }
 pub struct Runtime {
-    error: Box<dyn StdError + Send + Sync + 'static>,
+    context: Box<dyn StdError + Send + Sync + 'static>,
 }
 impl Runtime {
     pub fn get<'a>(&'a self) -> &'a (dyn StdError + 'static) {
-        return self.error.as_ref();
+        return self.context.as_ref();
     }
 }
 pub enum InvalidArgument {
@@ -147,6 +148,8 @@ pub enum InvalidArgument {
 }
 pub trait ResultConverter<T> {
     fn into_internal_error_runtime(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow>;
+    fn into_invalid_argument_from_outside(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow>;
+    fn into_invalid_argument_from_client_code(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow>;
 }
 impl<E, T> ResultConverter<T> for Result<T, E>
 where
@@ -162,9 +165,25 @@ where
             },
         );
     }
+    fn into_invalid_argument_from_outside(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow> {
+        return self.map_err(
+            move |_: _| -> _ {
+                return AlternativeWorkflow::new_invalid_argument_from_outside(backtrace);
+            },
+        );
+    }
+    fn into_invalid_argument_from_client_code(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow> {
+        return self.map_err(
+            move |_: _| -> _ {
+                return AlternativeWorkflow::new_invalid_argument_from_client_code(backtrace);
+            },
+        );
+    }
 }
 pub trait ResultConverter_<T> {
     fn into_internal_error_runtime(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow>;
+    fn into_invalid_argument_from_outside(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow>;
+    fn into_invalid_argument_from_client_code(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow>;
 }
 impl<T> ResultConverter_<T> for Result<T, Box<dyn StdError + Sync + Send + 'static>> {
     fn into_internal_error_runtime(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow> {
@@ -174,6 +193,20 @@ impl<T> ResultConverter_<T> for Result<T, Box<dyn StdError + Sync + Send + 'stat
                     error,
                     backtrace,
                 );
+            },
+        );
+    }
+    fn into_invalid_argument_from_outside(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow> {
+        return self.map_err(
+            move |_: _| -> _ {
+                return AlternativeWorkflow::new_invalid_argument_from_outside(backtrace);
+            },
+        );
+    }
+    fn into_invalid_argument_from_client_code(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow> {
+        return self.map_err(
+            move |_: _| -> _ {
+                return AlternativeWorkflow::new_invalid_argument_from_client_code(backtrace);
             },
         );
     }

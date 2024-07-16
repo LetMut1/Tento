@@ -12,9 +12,9 @@ use chrono::{
     Utc,
 };
 impl Resolver<DateTime> {
-    /// Rule for 2022-09-18 03:03:39.308889+0000
+    // Rule for 2022-09-18 03:03:39.308889+0000
     const TIMESTAMP_FORMAT_TO_FORMAT: &'static str = "%Y-%m-%d %H:%M:%S%.6f%z";
-    /// Rule for 2022-09-18 03:03:39.308889+00
+    // Rule for 2022-09-18 03:03:39.308889+00
     const TIMESTAMP_FORMAT_TO_PARSE: &'static str = "%Y-%m-%d %H:%M:%S%.6f%#z";
     pub fn unixtime_get_now() -> i64 {
         return Utc::now().timestamp();
