@@ -108,7 +108,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let incoming_ = incoming.into_internal_logic_value_does_not_exist(
+        let incoming_ = incoming.into_internal_error_logic_value_does_not_exist(
             Backtrace::new(
                 line!(),
                 file!(),
@@ -144,7 +144,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
                 ),
             );
         }
-        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.into_internal_runtime(
+        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.into_internal_error_runtime(
             Backtrace::new(
                 line!(),
                 file!(),
@@ -178,7 +178,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
         }
         if application_user_authorization_token_.value != incoming_.application_user_authorization_token__value {
             application_user_authorization_token_.wrong_enter_tries_quantity =
-                application_user_authorization_token_.wrong_enter_tries_quantity.checked_add(1).into_internal_logic_out_of_range(
+                application_user_authorization_token_.wrong_enter_tries_quantity.checked_add(1).into_internal_error_logic_out_of_range(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -214,7 +214,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
                 ),
             );
         }
-        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.into_internal_runtime(
+        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.into_internal_error_runtime(
             Backtrace::new(
                 line!(),
                 file!(),
@@ -301,7 +301,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
         let database_2_postgresql_connection_pool_ = database_2_postgresql_connection_pool.clone();
         Spawner::<TokioNonBlockingTask>::spawn_into_background(
             async move {
-                let database_1_postgresql_pooled_connection_ = database_1_postgresql_connection_pool_.get().await.into_internal_runtime(
+                let database_1_postgresql_pooled_connection_ = database_1_postgresql_connection_pool_.get().await.into_internal_error_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -315,7 +315,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
                     },
                 )
                 .await?;
-                let database_2_postgresql_pooled_connection_ = database_2_postgresql_connection_pool_.get().await.into_internal_runtime(
+                let database_2_postgresql_pooled_connection_ = database_2_postgresql_connection_pool_.get().await.into_internal_error_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),

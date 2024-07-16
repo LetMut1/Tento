@@ -68,7 +68,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -80,7 +80,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -144,7 +144,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -156,7 +156,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -183,7 +183,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -195,7 +195,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -218,7 +218,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -230,7 +230,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -263,7 +263,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -275,7 +275,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -290,26 +290,26 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                     by_2.application_user__id,
                     Cow::Borrowed(by_2.application_user_device__id),
                     Cow::Owned(
-                        row_registry[0].try_get::<'_, usize, String>(0).into_internal_runtime(
+                        row_registry[0].try_get::<'_, usize, String>(0).into_internal_error_runtime(
                             Backtrace::new(
                                 line!(),
                                 file!(),
                             ),
                         )?,
                     ),
-                    row_registry[0].try_get::<'_, usize, String>(1).into_internal_runtime(
+                    row_registry[0].try_get::<'_, usize, String>(1).into_internal_error_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, i64>(2).into_internal_runtime(
+                    row_registry[0].try_get::<'_, usize, i64>(2).into_internal_error_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, i64>(3).into_internal_runtime(
+                    row_registry[0].try_get::<'_, usize, i64>(3).into_internal_error_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),

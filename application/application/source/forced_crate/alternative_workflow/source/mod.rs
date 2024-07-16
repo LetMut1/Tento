@@ -146,13 +146,13 @@ pub enum InvalidArgument {
     FromClientCode,
 }
 pub trait ResultConverter<T> {
-    fn into_internal_runtime(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow>;
+    fn into_internal_error_runtime(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow>;
 }
 impl<E, T> ResultConverter<T> for Result<T, E>
 where
     E: StdError + Send + Sync + 'static,
 {
-    fn into_internal_runtime(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow> {
+    fn into_internal_error_runtime(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow> {
         return self.map_err(
             move |error: _| -> _ {
                 return AlternativeWorkflow::new_internal_error_runtime(
@@ -164,10 +164,10 @@ where
     }
 }
 pub trait ResultConverter_<T> {
-    fn into_internal_runtime(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow>;
+    fn into_internal_error_runtime(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow>;
 }
 impl<T> ResultConverter_<T> for Result<T, Box<dyn StdError + Sync + Send + 'static>> {
-    fn into_internal_runtime(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow> {
+    fn into_internal_error_runtime(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow> {
         return self.map_err(
             move |error: _| -> _ {
                 return AlternativeWorkflow::new_internal_error_runtime_(
@@ -179,26 +179,26 @@ impl<T> ResultConverter_<T> for Result<T, Box<dyn StdError + Sync + Send + 'stat
     }
 }
 pub trait OptionConverter<T> {
-    fn into_internal_logic_unreachable_state(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow>;
-    fn into_internal_logic_out_of_range(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow>;
-    fn into_internal_logic_value_does_not_exist(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow>;
+    fn into_internal_error_logic_unreachable_state(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow>;
+    fn into_internal_error_logic_out_of_range(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow>;
+    fn into_internal_error_logic_value_does_not_exist(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow>;
 }
 impl<T> OptionConverter<T> for Option<T> {
-    fn into_internal_logic_unreachable_state(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow> {
+    fn into_internal_error_logic_unreachable_state(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow> {
         return self.ok_or_else(
             move || -> _ {
                 return AlternativeWorkflow::new_internal_error_logic_unreachable_state(backtrace);
             },
         );
     }
-    fn into_internal_logic_out_of_range(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow> {
+    fn into_internal_error_logic_out_of_range(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow> {
         return self.ok_or_else(
             move || -> _ {
                 return AlternativeWorkflow::new_internal_error_logic_out_of_range(backtrace);
             },
         );
     }
-    fn into_internal_logic_value_does_not_exist(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow> {
+    fn into_internal_error_logic_value_does_not_exist(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow> {
         return self.ok_or_else(
             move || -> _ {
                 return AlternativeWorkflow::new_internal_error_logic_value_does_not_exist(backtrace);

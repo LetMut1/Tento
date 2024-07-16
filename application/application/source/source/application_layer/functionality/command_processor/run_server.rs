@@ -113,7 +113,7 @@ impl CommandProcessor<RunServer> {
     fn initialize_environment() -> Result<&'static EnvironmentConfiguration, AlternativeWorkflow> {
         let environment_configuration_file_path = format!(
             "{}/environment_configuration",
-            std::env::var("CARGO_MANIFEST_DIR").into_internal_runtime(Backtrace::new(line!(), file!()))?.as_str(),
+            std::env::var("CARGO_MANIFEST_DIR").into_internal_error_runtime(Backtrace::new(line!(), file!()))?.as_str(),
         );
         let environment_configuration = Loader::<EnvironmentConfiguration>::load_from_file(environment_configuration_file_path.as_str())?;
         match ENVIRONMENT_CONFIGURATION.get() {
@@ -140,7 +140,7 @@ impl CommandProcessor<RunServer> {
                 }
             }
         }
-        return ENVIRONMENT_CONFIGURATION.get().into_internal_logic_value_does_not_exist(
+        return ENVIRONMENT_CONFIGURATION.get().into_internal_error_logic_value_does_not_exist(
             Backtrace::new(
                 line!(),
                 file!(),
@@ -178,7 +178,7 @@ impl CommandProcessor<RunServer> {
             .with_thread_names(false)
             .with_ansi(false)
             .finish();
-        tracing::subscriber::set_global_default(fmt_subscriber).into_internal_runtime(
+        tracing::subscriber::set_global_default(fmt_subscriber).into_internal_error_runtime(
             Backtrace::new(
                 line!(),
                 file!(),
@@ -207,7 +207,7 @@ impl CommandProcessor<RunServer> {
             .thread_stack_size(environment_configuration.tokio_runtime.worker_thread_stack_size)
             .enable_all()
             .build()
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -230,7 +230,7 @@ impl CommandProcessor<RunServer> {
     async fn serve_(environment_configuration: &'static EnvironmentConfiguration) -> Result<(), AlternativeWorkflow> {
         let router = Self::create_router()?;
         // TODO TODO в Env
-        let mut application_http_socket_address_registry = environment_configuration.application_server.tcp.socket_address.to_socket_addrs().into_internal_runtime(
+        let mut application_http_socket_address_registry = environment_configuration.application_server.tcp.socket_address.to_socket_addrs().into_internal_error_runtime(
             Backtrace::new(
                 line!(),
                 file!(),
@@ -262,7 +262,7 @@ impl CommandProcessor<RunServer> {
                 },
             }
         };
-        let mut server_builder = Server::try_bind(&application_http_socket_address).into_internal_runtime(
+        let mut server_builder = Server::try_bind(&application_http_socket_address).into_internal_error_runtime(
             Backtrace::new(
                 line!(),
                 file!(),
@@ -345,7 +345,7 @@ impl CommandProcessor<RunServer> {
             .serve(hyper::service::make_service_fn(make_service_function_closure))
             .with_graceful_shutdown(graceful_shutdown_signal_future)
             .await
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -362,7 +362,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::CheckNicknameForExisting,
                 },
             )
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -375,7 +375,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::CheckEmailForExisting,
                 },
             )
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -388,7 +388,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::RegisterByFirstStep,
                 },
             )
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -401,7 +401,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::RegisterBySecondStep,
                 },
             )
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -414,7 +414,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::RegisterByLastStep,
                 },
             )
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -427,7 +427,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::SendEmailForRegister,
                 },
             )
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -440,7 +440,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::AuthorizeByFirstStep,
                 },
             )
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -453,7 +453,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::AuthorizeByLastStep,
                 },
             )
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -466,7 +466,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::SendEmailForAuthorize,
                 },
             )
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -479,7 +479,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::ResetPasswordByFirstStep,
                 },
             )
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -492,7 +492,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::ResetPasswordBySecondStep,
                 },
             )
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -505,7 +505,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::ResetPasswordByLastStep,
                 },
             )
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -518,7 +518,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::SendEmailForResetPassword,
                 },
             )
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -531,7 +531,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::RefreshAccessToken,
                 },
             )
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -544,7 +544,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::DeauthorizeFromOneDevice,
                 },
             )
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -557,7 +557,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::DeauthorizeFromAllDevices,
                 },
             )
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -570,7 +570,7 @@ impl CommandProcessor<RunServer> {
                     channel___base: Channel__Base_::GetOneById,
                 },
             )
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -583,7 +583,7 @@ impl CommandProcessor<RunServer> {
                     channel___base: Channel__Base_::GetManyByNameInSubscriptions,
                 },
             )
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -596,7 +596,7 @@ impl CommandProcessor<RunServer> {
                     channel___base: Channel__Base_::GetManyBySubscription,
                 },
             )
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -609,7 +609,7 @@ impl CommandProcessor<RunServer> {
                     channel___base: Channel__Base_::GetManyPublicByName,
                 },
             )
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -622,7 +622,7 @@ impl CommandProcessor<RunServer> {
                     channel_subscription___base: ChannelSubscription__Base_::Create,
                 },
             )
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -637,7 +637,7 @@ impl CommandProcessor<RunServer> {
                         application_user___authorization: ApplicationUser__Authorization_::CheckNicknameForExisting_,
                     },
                 )
-                .into_internal_runtime(
+                .into_internal_error_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -650,7 +650,7 @@ impl CommandProcessor<RunServer> {
                         application_user___authorization: ApplicationUser__Authorization_::CheckEmailForExisting_,
                     },
                 )
-                .into_internal_runtime(
+                .into_internal_error_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -663,7 +663,7 @@ impl CommandProcessor<RunServer> {
                         application_user___authorization: ApplicationUser__Authorization_::RegisterByFirstStep_,
                     },
                 )
-                .into_internal_runtime(
+                .into_internal_error_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -676,7 +676,7 @@ impl CommandProcessor<RunServer> {
                         application_user___authorization: ApplicationUser__Authorization_::RegisterBySecondStep_,
                     },
                 )
-                .into_internal_runtime(
+                .into_internal_error_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -689,7 +689,7 @@ impl CommandProcessor<RunServer> {
                         application_user___authorization: ApplicationUser__Authorization_::RegisterByLastStep_,
                     },
                 )
-                .into_internal_runtime(
+                .into_internal_error_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -702,7 +702,7 @@ impl CommandProcessor<RunServer> {
                         application_user___authorization: ApplicationUser__Authorization_::SendEmailForRegister_,
                     },
                 )
-                .into_internal_runtime(
+                .into_internal_error_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -715,7 +715,7 @@ impl CommandProcessor<RunServer> {
                         application_user___authorization: ApplicationUser__Authorization_::AuthorizeByFirstStep_,
                     },
                 )
-                .into_internal_runtime(
+                .into_internal_error_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -728,7 +728,7 @@ impl CommandProcessor<RunServer> {
                         application_user___authorization: ApplicationUser__Authorization_::AuthorizeByLastStep_,
                     },
                 )
-                .into_internal_runtime(
+                .into_internal_error_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -741,7 +741,7 @@ impl CommandProcessor<RunServer> {
                         application_user___authorization: ApplicationUser__Authorization_::SendEmailForAuthorize_,
                     },
                 )
-                .into_internal_runtime(
+                .into_internal_error_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -754,7 +754,7 @@ impl CommandProcessor<RunServer> {
                         application_user___authorization: ApplicationUser__Authorization_::ResetPasswordByFirstStep_,
                     },
                 )
-                .into_internal_runtime(
+                .into_internal_error_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -767,7 +767,7 @@ impl CommandProcessor<RunServer> {
                         application_user___authorization: ApplicationUser__Authorization_::ResetPasswordBySecondStep_,
                     },
                 )
-                .into_internal_runtime(
+                .into_internal_error_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -780,7 +780,7 @@ impl CommandProcessor<RunServer> {
                         application_user___authorization: ApplicationUser__Authorization_::ResetPasswordByLastStep_,
                     },
                 )
-                .into_internal_runtime(
+                .into_internal_error_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -793,7 +793,7 @@ impl CommandProcessor<RunServer> {
                         application_user___authorization: ApplicationUser__Authorization_::SendEmailForResetPassword_,
                     },
                 )
-                .into_internal_runtime(
+                .into_internal_error_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -806,7 +806,7 @@ impl CommandProcessor<RunServer> {
                         application_user___authorization: ApplicationUser__Authorization_::RefreshAccessToken_,
                     },
                 )
-                .into_internal_runtime(
+                .into_internal_error_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -819,7 +819,7 @@ impl CommandProcessor<RunServer> {
                         application_user___authorization: ApplicationUser__Authorization_::DeauthorizeFromOneDevice_,
                     },
                 )
-                .into_internal_runtime(
+                .into_internal_error_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -832,7 +832,7 @@ impl CommandProcessor<RunServer> {
                         application_user___authorization: ApplicationUser__Authorization_::DeauthorizeFromAllDevices_,
                     },
                 )
-                .into_internal_runtime(
+                .into_internal_error_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -845,7 +845,7 @@ impl CommandProcessor<RunServer> {
                         channel___base: Channel__Base_::GetOneById_,
                     },
                 )
-                .into_internal_runtime(
+                .into_internal_error_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -858,7 +858,7 @@ impl CommandProcessor<RunServer> {
                         channel___base: Channel__Base_::GetManyByNameInSubscriptions_,
                     },
                 )
-                .into_internal_runtime(
+                .into_internal_error_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -871,7 +871,7 @@ impl CommandProcessor<RunServer> {
                         channel___base: Channel__Base_::GetManyBySubscription_,
                     },
                 )
-                .into_internal_runtime(
+                .into_internal_error_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -884,7 +884,7 @@ impl CommandProcessor<RunServer> {
                         channel___base: Channel__Base_::GetManyPublicByName_,
                     },
                 )
-                .into_internal_runtime(
+                .into_internal_error_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -897,7 +897,7 @@ impl CommandProcessor<RunServer> {
                         channel_subscription___base: ChannelSubscription__Base_::Create_,
                     },
                 )
-                .into_internal_runtime(
+                .into_internal_error_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -1465,7 +1465,7 @@ impl CommandProcessor<RunServer> {
         return Action::<RouteNotFound>::run(&parts);
     }
     fn create_signal(signal_kind: SignalKind) -> Result<impl Future<Output = ()>, AlternativeWorkflow> {
-        let mut signal = tokio::signal::unix::signal(signal_kind).into_internal_runtime(
+        let mut signal = tokio::signal::unix::signal(signal_kind).into_internal_error_runtime(
             Backtrace::new(
                 line!(),
                 file!(),

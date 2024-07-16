@@ -25,7 +25,7 @@ impl Encoder<Base64> {
             encoded_data,
             Self::BASE64_STANDARD_CONFIGURATION,
         )
-        .into_internal_runtime(
+        .into_internal_error_runtime(
             Backtrace::new(
                 line!(),
                 file!(),

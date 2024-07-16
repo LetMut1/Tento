@@ -95,7 +95,7 @@ impl Serializer {
     where
         T: SerdeSerialize,
     {
-        return rmp_serde::to_vec(subject).into_internal_runtime(
+        return rmp_serde::to_vec(subject).into_internal_error_runtime(
             Backtrace::new(
                 line!(),
                 file!(),
@@ -106,7 +106,7 @@ impl Serializer {
     where
         T: Deserialize<'a>,
     {
-        return rmp_serde::from_read_ref::<'_, [u8], T>(data).into_internal_runtime(
+        return rmp_serde::from_read_ref::<'_, [u8], T>(data).into_internal_error_runtime(
             Backtrace::new(
                 line!(),
                 file!(),

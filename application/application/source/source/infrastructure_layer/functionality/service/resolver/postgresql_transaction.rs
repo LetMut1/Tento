@@ -41,7 +41,7 @@ impl Resolver<PostgresqlTransaction> {
                 &[],
             )
             .await
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -57,7 +57,7 @@ impl Resolver<PostgresqlTransaction> {
                 &[],
             )
             .await
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -73,7 +73,7 @@ impl Resolver<PostgresqlTransaction> {
                 &[],
             )
             .await
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),

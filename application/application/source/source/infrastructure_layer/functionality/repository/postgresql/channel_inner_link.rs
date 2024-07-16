@@ -47,7 +47,7 @@ impl PostgresqlRepository<ChannelInnerLink> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -59,7 +59,7 @@ impl PostgresqlRepository<ChannelInnerLink> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -69,7 +69,7 @@ impl PostgresqlRepository<ChannelInnerLink> {
             ChannelInnerLink::new(
                 insert_1.channel_inner_link__from,
                 insert_1.channel_inner_link__to,
-                row_registry[0].try_get::<'_, usize, String>(0).into_internal_runtime(
+                row_registry[0].try_get::<'_, usize, String>(0).into_internal_error_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -101,7 +101,7 @@ impl PostgresqlRepository<ChannelInnerLink> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -113,7 +113,7 @@ impl PostgresqlRepository<ChannelInnerLink> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -125,7 +125,7 @@ impl PostgresqlRepository<ChannelInnerLink> {
         }
         '_a: for row in row_registry.iter() {
             let channel_inner_link = ChannelInnerLink1 {
-                channel_inner_link__to: row.try_get::<'_, usize, i64>(0).into_internal_runtime(
+                channel_inner_link__to: row.try_get::<'_, usize, i64>(0).into_internal_error_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),

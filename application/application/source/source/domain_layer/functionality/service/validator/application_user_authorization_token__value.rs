@@ -19,7 +19,7 @@ impl Validator<ApplicationUserAuthorizationToken_Value> {
             Some(regular_expression_) => regular_expression_,
             None => {
                 if let Err(_) = REGULAR_EXPRESSION.set(
-                    Regex::new(ApplicationUserAuthorizationToken_Value::REGULAR_EXPRESSION).into_internal_runtime(
+                    Regex::new(ApplicationUserAuthorizationToken_Value::REGULAR_EXPRESSION).into_internal_error_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
@@ -35,7 +35,7 @@ impl Validator<ApplicationUserAuthorizationToken_Value> {
                         ),
                     );
                 }
-                REGULAR_EXPRESSION.get().into_internal_logic_value_does_not_exist(
+                REGULAR_EXPRESSION.get().into_internal_error_logic_value_does_not_exist(
                     Backtrace::new(
                         line!(),
                         file!(),

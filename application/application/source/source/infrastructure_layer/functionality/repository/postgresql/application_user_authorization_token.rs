@@ -75,7 +75,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -87,7 +87,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -124,7 +124,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -136,7 +136,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -191,7 +191,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -203,7 +203,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -252,7 +252,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -264,7 +264,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -301,7 +301,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -313,7 +313,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -350,7 +350,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -362,7 +362,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -395,7 +395,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -407,7 +407,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -419,25 +419,25 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
         return Ok(
             Some(
                 ApplicationUserAuthorizationToken1 {
-                    value: row_registry[0].try_get::<'_, usize, String>(0).into_internal_runtime(
+                    value: row_registry[0].try_get::<'_, usize, String>(0).into_internal_error_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    wrong_enter_tries_quantity: row_registry[0].try_get::<'_, usize, i16>(1).into_internal_runtime(
+                    wrong_enter_tries_quantity: row_registry[0].try_get::<'_, usize, i16>(1).into_internal_error_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    expires_at: row_registry[0].try_get::<'_, usize, i64>(2).into_internal_runtime(
+                    expires_at: row_registry[0].try_get::<'_, usize, i64>(2).into_internal_error_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    can_be_resent_from: row_registry[0].try_get::<'_, usize, i64>(3).into_internal_runtime(
+                    can_be_resent_from: row_registry[0].try_get::<'_, usize, i64>(3).into_internal_error_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
@@ -471,7 +471,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -483,7 +483,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -495,19 +495,19 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
         return Ok(
             Some(
                 ApplicationUserAuthorizationToken2 {
-                    value: row_registry[0].try_get::<'_, usize, String>(0).into_internal_runtime(
+                    value: row_registry[0].try_get::<'_, usize, String>(0).into_internal_error_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    wrong_enter_tries_quantity: row_registry[0].try_get::<'_, usize, i16>(1).into_internal_runtime(
+                    wrong_enter_tries_quantity: row_registry[0].try_get::<'_, usize, i16>(1).into_internal_error_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    expires_at: row_registry[0].try_get::<'_, usize, i64>(2).into_internal_runtime(
+                    expires_at: row_registry[0].try_get::<'_, usize, i64>(2).into_internal_error_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
@@ -541,7 +541,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -553,7 +553,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -565,19 +565,19 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
         return Ok(
             Some(
                 ApplicationUserAuthorizationToken3 {
-                    value: row_registry[0].try_get::<'_, usize, String>(0).into_internal_runtime(
+                    value: row_registry[0].try_get::<'_, usize, String>(0).into_internal_error_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    expires_at: row_registry[0].try_get::<'_, usize, i64>(1).into_internal_runtime(
+                    expires_at: row_registry[0].try_get::<'_, usize, i64>(1).into_internal_error_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    can_be_resent_from: row_registry[0].try_get::<'_, usize, i64>(2).into_internal_runtime(
+                    can_be_resent_from: row_registry[0].try_get::<'_, usize, i64>(2).into_internal_error_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),

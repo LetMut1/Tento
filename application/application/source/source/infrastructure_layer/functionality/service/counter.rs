@@ -24,7 +24,7 @@ impl Counter<i16> {
         };
     }
     pub fn get_next_value<'a>(&'a mut self) -> Result<i16, AlternativeWorkflow> {
-        self.value = self.value.checked_add(self.step_size).into_internal_logic_out_of_range(
+        self.value = self.value.checked_add(self.step_size).into_internal_error_logic_out_of_range(
             Backtrace::new(
                 line!(),
                 file!(),

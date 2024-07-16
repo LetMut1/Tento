@@ -105,7 +105,7 @@ impl CommandProcessor<CreateFixtures> {
     fn initialize_environment() -> Result<EnvironmentConfiguration, AlternativeWorkflow> {
         let environment_configuration_file_path = format!(
             "{}/environment_configuration",
-            std::env::var("CARGO_MANIFEST_DIR").into_internal_runtime(Backtrace::new(line!(), file!()))?.as_str(),
+            std::env::var("CARGO_MANIFEST_DIR").into_internal_error_runtime(Backtrace::new(line!(), file!()))?.as_str(),
         );
         return Ok(Loader::<EnvironmentConfiguration>::load_from_file(environment_configuration_file_path.as_str())?);
     }
@@ -113,7 +113,7 @@ impl CommandProcessor<CreateFixtures> {
         Builder::new_current_thread()
             .enable_all()
             .build()
-            .into_internal_runtime(
+            .into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -126,7 +126,7 @@ impl CommandProcessor<CreateFixtures> {
         let database_1_postgresql_connection_pool = Creator::<PostgresqlConnectionPoolNoTls>::create_database_1(environment_configuration).await?;
         let application_user_password = Self::APPLICATION_USER__PASSWORD.to_string();
         let application_user__password_hash = Encoder::<ApplicationUser_Password>::encode(application_user_password.as_str())?;
-        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.into_internal_runtime(
+        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.into_internal_error_runtime(
             Backtrace::new(
                 line!(),
                 file!(),

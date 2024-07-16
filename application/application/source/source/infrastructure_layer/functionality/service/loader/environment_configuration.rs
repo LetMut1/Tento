@@ -34,13 +34,13 @@ impl Loader<EnvironmentConfiguration> {
             Self::ENVIRONMENT_FILE_NAME,
         );
         let environment_file_path_ = Path::new(environment_file_path.as_str());
-        let environment_file_data = if environment_file_path_.try_exists().into_internal_runtime(
+        let environment_file_data = if environment_file_path_.try_exists().into_internal_error_runtime(
             Backtrace::new(
                 line!(),
                 file!(),
             ),
         )? {
-            std::fs::read_to_string(environment_file_path_).into_internal_runtime(
+            std::fs::read_to_string(environment_file_path_).into_internal_error_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -57,7 +57,7 @@ impl Loader<EnvironmentConfiguration> {
                 ),
             );
         };
-        let environment_configuration_file = toml::from_str::<EnvironmentConfigurationFile>(environment_file_data.as_str()).into_internal_runtime(
+        let environment_configuration_file = toml::from_str::<EnvironmentConfigurationFile>(environment_file_data.as_str()).into_internal_error_runtime(
             Backtrace::new(
                 line!(),
                 file!(),
