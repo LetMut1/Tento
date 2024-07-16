@@ -69,7 +69,7 @@ impl ActionProcessor<ApplicationUser__Authorization___CheckEmailForExisting> {
         )?;
         if !Validator::<ApplicationUser_Email>::is_valid(incoming_.application_user__email.as_str())? {
             return Err(
-                AlternativeWorkflow::new_external_invalid_argument(
+                AlternativeWorkflow::new_invalid_argument_from_outside(
                     Backtrace::new(
                         line!(),
                         file!(),

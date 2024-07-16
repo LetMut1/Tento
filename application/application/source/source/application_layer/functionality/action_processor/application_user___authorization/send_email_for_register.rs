@@ -86,7 +86,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForRegister> {
         )?;
         if !Validator::<ApplicationUser_Email>::is_valid(incoming_.application_user__email.as_str())? {
             return Err(
-                AlternativeWorkflow::new_external_invalid_argument(
+                AlternativeWorkflow::new_invalid_argument_from_outside(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -96,7 +96,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForRegister> {
         }
         if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming_.application_user_device__id.as_str()) {
             return Err(
-                AlternativeWorkflow::new_external_invalid_argument(
+                AlternativeWorkflow::new_invalid_argument_from_outside(
                     Backtrace::new(
                         line!(),
                         file!(),

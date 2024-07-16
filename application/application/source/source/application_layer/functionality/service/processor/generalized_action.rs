@@ -5,7 +5,7 @@ use crate::{
         data::{
             alternative_workflow::{
                 AlternativeWorkflow,
-                External,
+                InvalidArgument,
                 InternalError,
             },
             auditor::{
@@ -100,17 +100,17 @@ impl Processor<GeneralizedAction> {
             }
             Err(alternative_workflow) => {
                 let response = match alternative_workflow {
-                    AlternativeWorkflow::External {
-                        external_auditor,
+                    AlternativeWorkflow::InvalidArgument {
+                        invalid_argument_auditor,
                     } => {
                         let response_ = Creator::<Response>::create_bad_request();
                         Logger::<(
                             ActionRound,
-                            Auditor<External>,
+                            Auditor<InvalidArgument>,
                         )>::log(
                             parts,
                             &response_,
-                            external_auditor,
+                            invalid_argument_auditor,
                         );
                         response_
                     }
@@ -158,7 +158,7 @@ impl Processor<GeneralizedAction> {
     {
         if !Validator::<Parts>::is_valid(parts) {
             return Err(
-                AlternativeWorkflow::new_external_invalid_argument(
+                AlternativeWorkflow::new_invalid_argument_from_outside(
                     Backtrace::new(
                         line!(),
                         file!(),

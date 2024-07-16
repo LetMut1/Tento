@@ -57,7 +57,7 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
         );
         let application_user_access_token_serialized = token_part_registry.next().ok_or_else(
             || -> _ {
-                return AlternativeWorkflow::new_external_invalid_argument(
+                return AlternativeWorkflow::new_invalid_argument_from_outside(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -67,7 +67,7 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
         )?;
         let application_user_access_token_serialized_signature = token_part_registry.next().ok_or_else(
             || -> _ {
-                return AlternativeWorkflow::new_external_invalid_argument(
+                return AlternativeWorkflow::new_invalid_argument_from_outside(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -81,7 +81,7 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
             application_user_access_token_serialized_signature.as_bytes(),
         )? {
             return Err(
-                AlternativeWorkflow::new_external_invalid_argument(
+                AlternativeWorkflow::new_invalid_argument_from_outside(
                     Backtrace::new(
                         line!(),
                         file!(),

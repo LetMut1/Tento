@@ -1,7 +1,7 @@
 use super::Logger;
 use crate::infrastructure_layer::{
     data::{
-        alternative_workflow::External,
+        alternative_workflow::InvalidArgument,
         auditor::Auditor,
         control_type::{
             ActionRound,
@@ -18,10 +18,10 @@ use http::request::Parts;
 impl
     Logger<(
         ActionRound,
-        Auditor<External>,
+        Auditor<InvalidArgument>,
     )>
 {
-    pub fn log<'a>(request_parts: &'a Parts, response: &'a Response, external_auditor: Auditor<External>) -> () {
+    pub fn log<'a>(request_parts: &'a Parts, response: &'a Response, invalid_argument_auditor: Auditor<InvalidArgument>) -> () {
         let request_uri = request_parts.uri.path().to_string();
         let request_method = request_parts.method.to_string();
         let response_status_code = response.status().as_u16();
@@ -29,11 +29,11 @@ impl
             async move {
                 tracing::error!(
                     "{}",
-                    Formatter::<(ActionRound, Auditor<External>)>::format(
+                    Formatter::<(ActionRound, Auditor<InvalidArgument>)>::format(
                         request_uri.as_str(),
                         request_method.as_str(),
                         response_status_code,
-                        &external_auditor,
+                        &invalid_argument_auditor,
                     )
                     .as_str()
                 );

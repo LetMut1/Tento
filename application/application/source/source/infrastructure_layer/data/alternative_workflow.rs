@@ -1,6 +1,6 @@
 pub use alternative_workflow::{
     AlternativeWorkflow,
-    External,
+    InvalidArgument,
     InternalError,
     OptionConverter,
     ResultConverter,

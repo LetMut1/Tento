@@ -121,7 +121,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
         )?;
         if !is_valid || application_user_access_token.id != application_user_access_refresh_token.application_user_access_token__id.as_ref() {
             return Err(
-                AlternativeWorkflow::new_external_invalid_argument(
+                AlternativeWorkflow::new_invalid_argument_from_outside(
                     Backtrace::new(
                         line!(),
                         file!(),

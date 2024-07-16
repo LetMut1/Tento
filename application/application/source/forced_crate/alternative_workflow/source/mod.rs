@@ -15,8 +15,8 @@ pub enum AlternativeWorkflow {
     InternalError {
         internal_error_auditor: Auditor<InternalError>,
     },
-    External {
-        external_auditor: Auditor<External>,
+    InvalidArgument {
+        invalid_argument_auditor: Auditor<InvalidArgument>,
     },
 }
 impl AlternativeWorkflow {
@@ -97,10 +97,18 @@ impl AlternativeWorkflow {
             ),
         };
     }
-    pub fn new_external_invalid_argument(backtrace: Backtrace) -> Self {
-        return Self::External {
-            external_auditor: Auditor::new(
-                External::InvalidArgument,
+    pub fn new_invalid_argument_from_outside(backtrace: Backtrace) -> Self {
+        return Self::InvalidArgument {
+            invalid_argument_auditor: Auditor::new(
+                InvalidArgument::FromOutside,
+                backtrace,
+            ),
+        };
+    }
+    pub fn new_invalid_argument_from_client_code(backtrace: Backtrace) -> Self {
+        return Self::InvalidArgument {
+            invalid_argument_auditor: Auditor::new(
+                InvalidArgument::FromClientCode,
                 backtrace,
             ),
         };
@@ -133,8 +141,9 @@ impl Runtime {
         return self.error.as_ref();
     }
 }
-pub enum External {
-    InvalidArgument,
+pub enum InvalidArgument {
+    FromOutside,
+    FromClientCode,
 }
 pub trait ResultConverter<T> {
     fn into_internal_runtime(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow>;

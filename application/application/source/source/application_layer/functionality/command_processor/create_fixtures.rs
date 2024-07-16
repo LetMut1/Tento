@@ -141,7 +141,7 @@ impl CommandProcessor<CreateFixtures> {
             }
             if !Validator::<ApplicationUser_Nickname>::is_valid(application_user__nickname.as_str()) {
                 return Err(
-                    AlternativeWorkflow::new_external_invalid_argument(
+                    AlternativeWorkflow::new_invalid_argument_from_outside(
                         Backtrace::new(
                             line!(),
                             file!(),
@@ -152,7 +152,7 @@ impl CommandProcessor<CreateFixtures> {
             let application_user__email = format!("{}@fixture.com", application_user__nickname.as_str());
             if !Validator::<ApplicationUser_Email>::is_valid(application_user__email.as_str())? {
                 return Err(
-                    AlternativeWorkflow::new_external_invalid_argument(
+                    AlternativeWorkflow::new_invalid_argument_from_outside(
                         Backtrace::new(
                             line!(),
                             file!(),
@@ -166,7 +166,7 @@ impl CommandProcessor<CreateFixtures> {
                 application_user__nickname.as_str(),
             ) {
                 return Err(
-                    AlternativeWorkflow::new_external_invalid_argument(
+                    AlternativeWorkflow::new_invalid_argument_from_outside(
                         Backtrace::new(
                             line!(),
                             file!(),
@@ -202,7 +202,7 @@ impl CommandProcessor<CreateFixtures> {
             );
             if !Validator::<ApplicationUserDevice_Id>::is_valid(&application_user_device__id) {
                 return Err(
-                    AlternativeWorkflow::new_external_invalid_argument(
+                    AlternativeWorkflow::new_invalid_argument_from_outside(
                         Backtrace::new(
                             line!(),
                             file!(),
@@ -226,7 +226,7 @@ impl CommandProcessor<CreateFixtures> {
                 }
                 if !Validator::<Channel_Name>::is_valid(channel__name.as_str()) {
                     return Err(
-                        AlternativeWorkflow::new_external_invalid_argument(
+                        AlternativeWorkflow::new_invalid_argument_from_outside(
                             Backtrace::new(
                                 line!(),
                                 file!(),
@@ -237,7 +237,7 @@ impl CommandProcessor<CreateFixtures> {
                 let channel__linked_name = channel__name.clone();
                 if !Validator::<Channel_LinkedName>::is_valid(channel__linked_name.as_str()) {
                     return Err(
-                        AlternativeWorkflow::new_external_invalid_argument(
+                        AlternativeWorkflow::new_invalid_argument_from_outside(
                             Backtrace::new(
                                 line!(),
                                 file!(),
@@ -253,7 +253,7 @@ impl CommandProcessor<CreateFixtures> {
                     }
                     if !Validator::<Channel_Description>::is_valid(channel__description_.as_str()) {
                         return Err(
-                            AlternativeWorkflow::new_external_invalid_argument(
+                            AlternativeWorkflow::new_invalid_argument_from_outside(
                                 Backtrace::new(
                                     line!(),
                                     file!(),
@@ -270,7 +270,7 @@ impl CommandProcessor<CreateFixtures> {
                 ];
                 if !Validator::<Channel_Orientation>::is_valid(channel__orientation.as_slice()) {
                     return Err(
-                        AlternativeWorkflow::new_external_invalid_argument(
+                        AlternativeWorkflow::new_invalid_argument_from_outside(
                             Backtrace::new(
                                 line!(),
                                 file!(),

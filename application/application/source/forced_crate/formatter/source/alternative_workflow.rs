@@ -1,7 +1,7 @@
 use super::Formatter;
 use alternative_workflow::{
     AlternativeWorkflow,
-    External,
+    InvalidArgument,
     InternalError,
 };
 use auditor::Auditor;
@@ -11,9 +11,9 @@ impl Formatter<AlternativeWorkflow> {
             AlternativeWorkflow::InternalError {
                 ref internal_error_auditor,
             } => Formatter::<Auditor<InternalError>>::format(internal_error_auditor),
-            AlternativeWorkflow::External {
-                ref external_auditor,
-            } => Formatter::<Auditor<External>>::format(external_auditor),
+            AlternativeWorkflow::InvalidArgument {
+                ref invalid_argument_auditor,
+            } => Formatter::<Auditor<InvalidArgument>>::format(invalid_argument_auditor),
         };
     }
 }

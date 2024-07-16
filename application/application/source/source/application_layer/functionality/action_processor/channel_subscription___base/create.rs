@@ -97,7 +97,7 @@ impl ActionProcessor<ChannelSubscription__Base___Create> {
         };
         if !Validator::<Channel_Id>::is_valid(incoming_.channel__id) {
             return Err(
-                AlternativeWorkflow::new_external_invalid_argument(
+                AlternativeWorkflow::new_invalid_argument_from_outside(
                     Backtrace::new(
                         line!(),
                         file!(),

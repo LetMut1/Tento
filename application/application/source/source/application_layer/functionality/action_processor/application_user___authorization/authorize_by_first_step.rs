@@ -107,7 +107,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
         )?;
         if !Validator::<ApplicationUser_Password>::is_valid_part_1(incoming_.application_user_password.as_str()) {
             return Err(
-                AlternativeWorkflow::new_external_invalid_argument(
+                AlternativeWorkflow::new_invalid_argument_from_outside(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -117,7 +117,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
         }
         if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming_.application_user_device__id.as_str()) {
             return Err(
-                AlternativeWorkflow::new_external_invalid_argument(
+                AlternativeWorkflow::new_invalid_argument_from_outside(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -176,7 +176,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
                     )
                 } else {
                     return Err(
-                        AlternativeWorkflow::new_external_invalid_argument(
+                        AlternativeWorkflow::new_invalid_argument_from_outside(
                             Backtrace::new(
                                 line!(),
                                 file!(),
@@ -191,7 +191,7 @@ impl ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
             application_user__nickname.as_str(),
         ) {
             return Err(
-                AlternativeWorkflow::new_external_invalid_argument(
+                AlternativeWorkflow::new_invalid_argument_from_outside(
                     Backtrace::new(
                         line!(),
                         file!(),

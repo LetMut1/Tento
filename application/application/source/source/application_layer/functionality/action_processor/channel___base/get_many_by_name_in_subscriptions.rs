@@ -95,7 +95,7 @@ impl ActionProcessor<Channel__Base___GetManyByNameInSubscriptions> {
         };
         if incoming_.limit <= 0 || incoming_.limit > Self::LIMIT {
             return Err(
-                AlternativeWorkflow::new_external_invalid_argument(
+                AlternativeWorkflow::new_invalid_argument_from_outside(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -105,7 +105,7 @@ impl ActionProcessor<Channel__Base___GetManyByNameInSubscriptions> {
         }
         if !Validator::<Channel_Name>::is_valid(incoming_.channel__name.as_str()) {
             return Err(
-                AlternativeWorkflow::new_external_invalid_argument(
+                AlternativeWorkflow::new_invalid_argument_from_outside(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -116,7 +116,7 @@ impl ActionProcessor<Channel__Base___GetManyByNameInSubscriptions> {
         if let Some(ref requery___channel__name_) = incoming_.requery___channel__name {
             if !Validator::<Channel_Name>::is_valid(requery___channel__name_.as_str()) {
                 return Err(
-                    AlternativeWorkflow::new_external_invalid_argument(
+                    AlternativeWorkflow::new_invalid_argument_from_outside(
                         Backtrace::new(
                             line!(),
                             file!(),

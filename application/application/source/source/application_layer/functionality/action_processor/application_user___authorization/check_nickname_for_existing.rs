@@ -69,7 +69,7 @@ impl ActionProcessor<ApplicationUser__Authorization___CheckNicknameForExisting> 
         )?;
         if !Validator::<ApplicationUser_Nickname>::is_valid(incoming_.application_user__nickname.as_str()) {
             return Err(
-                AlternativeWorkflow::new_external_invalid_argument(
+                AlternativeWorkflow::new_invalid_argument_from_outside(
                     Backtrace::new(
                         line!(),
                         file!(),

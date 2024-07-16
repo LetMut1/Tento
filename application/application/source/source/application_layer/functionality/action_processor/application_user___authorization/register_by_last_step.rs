@@ -124,7 +124,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
             incoming_.application_user__nickname.as_str(),
         ) {
             return Err(
-                AlternativeWorkflow::new_external_invalid_argument(
+                AlternativeWorkflow::new_invalid_argument_from_outside(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -134,7 +134,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
         }
         if !Validator::<ApplicationUser_Nickname>::is_valid(incoming_.application_user__nickname.as_str()) {
             return Err(
-                AlternativeWorkflow::new_external_invalid_argument(
+                AlternativeWorkflow::new_invalid_argument_from_outside(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -144,7 +144,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
         }
         if !Validator::<ApplicationUser_Email>::is_valid(incoming_.application_user__email.as_str())? {
             return Err(
-                AlternativeWorkflow::new_external_invalid_argument(
+                AlternativeWorkflow::new_invalid_argument_from_outside(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -154,7 +154,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
         }
         if !Validator::<ApplicationUserRegistrationToken_Value>::is_valid(incoming_.application_user_registration_token__value.as_str())? {
             return Err(
-                AlternativeWorkflow::new_external_invalid_argument(
+                AlternativeWorkflow::new_invalid_argument_from_outside(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -164,7 +164,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
         }
         if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming_.application_user_device__id.as_str()) {
             return Err(
-                AlternativeWorkflow::new_external_invalid_argument(
+                AlternativeWorkflow::new_invalid_argument_from_outside(
                     Backtrace::new(
                         line!(),
                         file!(),

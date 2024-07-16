@@ -103,7 +103,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
         )?;
         if !Validator::<ApplicationUserResetPasswordToken_Value>::is_valid(incoming_.application_user_reset_password_token__value.as_str())? {
             return Err(
-                AlternativeWorkflow::new_external_invalid_argument(
+                AlternativeWorkflow::new_invalid_argument_from_outside(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -113,7 +113,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
         }
         if !Validator::<ApplicationUser_Id>::is_valid(incoming_.application_user__id) {
             return Err(
-                AlternativeWorkflow::new_external_invalid_argument(
+                AlternativeWorkflow::new_invalid_argument_from_outside(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -123,7 +123,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
         }
         if !Validator::<ApplicationUser_Password>::is_valid_part_1(incoming_.application_user_password.as_str()) {
             return Err(
-                AlternativeWorkflow::new_external_invalid_argument(
+                AlternativeWorkflow::new_invalid_argument_from_outside(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -133,7 +133,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
         }
         if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming_.application_user_device__id.as_str()) {
             return Err(
-                AlternativeWorkflow::new_external_invalid_argument(
+                AlternativeWorkflow::new_invalid_argument_from_outside(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -234,7 +234,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
             application_user.nickname.as_str(),
         ) {
             return Err(
-                AlternativeWorkflow::new_external_invalid_argument(
+                AlternativeWorkflow::new_invalid_argument_from_outside(
                     Backtrace::new(
                         line!(),
                         file!(),

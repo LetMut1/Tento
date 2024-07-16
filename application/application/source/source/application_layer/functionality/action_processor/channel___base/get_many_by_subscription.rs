@@ -96,7 +96,7 @@ impl ActionProcessor<Channel__Base___GetManyBySubscription> {
         if let Some(requery___channel__id_) = incoming_.requery___channel__id {
             if !Validator::<Channel_Id>::is_valid(requery___channel__id_) {
                 return Err(
-                    AlternativeWorkflow::new_external_invalid_argument(
+                    AlternativeWorkflow::new_invalid_argument_from_outside(
                         Backtrace::new(
                             line!(),
                             file!(),
@@ -107,7 +107,7 @@ impl ActionProcessor<Channel__Base___GetManyBySubscription> {
         }
         if incoming_.limit <= 0 || incoming_.limit > Self::LIMIT {
             return Err(
-                AlternativeWorkflow::new_external_invalid_argument(
+                AlternativeWorkflow::new_invalid_argument_from_outside(
                     Backtrace::new(
                         line!(),
                         file!(),
