@@ -20,7 +20,7 @@ required-features = []
 
 [dependencies]
 action_processor_incoming_outcoming = { path = "./forced_crate/action_processor_incoming_outcoming", package = "action_processor_incoming_outcoming", version = "1.0.0", default-features = true, features = [], optional = false }
-alternative_workflow = { path = "./forced_crate/alternative_workflow", package = "alternative_workflow", version = "1.0.0", default-features = true, features = [], optional = false }
+aggregate_error = { path = "./forced_crate/aggregate_error", package = "aggregate_error", version = "1.0.0", default-features = true, features = [], optional = false }
 argon2 = { package = "rust-argon2", version = "0.8.3", default-features = true, features = [], optional = false }
 auditor = { path = "./forced_crate/auditor", package = "auditor", version = "1.0.0", default-features = true, features = [], optional = false }
 base64 = { package = "base64", version = "0.13.1", default-features = true, features = [], optional = false }

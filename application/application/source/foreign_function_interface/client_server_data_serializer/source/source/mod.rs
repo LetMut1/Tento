@@ -3112,7 +3112,7 @@ mod test {
         const STRING_LITERAL: &'static str = "qwerty";
         mod server_response_data_deserialization {
             use super::*;
-            use alternative_workflow::AlternativeWorkflow;
+            use aggregate_error::AlternativeWorkflow;
             use formatter::Formatter;
             fn run_by_template<'a, T, E, A, D>(data: &'a T, allocator: A, deallocator: D) -> Result<(), Box<dyn StdError + 'static>>
             where

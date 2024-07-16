@@ -12,7 +12,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "alternative_workflow"
+name = "aggregate_error"
 version = "1.0.0"
 dependencies = [
  "auditor",
@@ -126,7 +126,7 @@ name = "client_server_data_serializer"
 version = "1.0.0"
 dependencies = [
  "action_processor_incoming_outcoming",
- "alternative_workflow",
+ "aggregate_error",
  "cargo-emit",
  "cbindgen",
  "formatter",
@@ -173,7 +173,7 @@ checksum = "25cbce373ec4653f1a01a31e8a5e5ec0c622dc27ff9c4e6606eefef5cbbed4a5"
 name = "formatter"
 version = "1.0.0"
 dependencies = [
- "alternative_workflow",
+ "aggregate_error",
  "auditor",
 ]
 
@@ -251,7 +251,7 @@ version = "1.0.0"
 name = "message_pack_serializer"
 version = "1.0.0"
 dependencies = [
- "alternative_workflow",
+ "aggregate_error",
  "auditor",
  "rmp-serde",
  "serde",

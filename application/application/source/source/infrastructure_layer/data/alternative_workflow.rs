@@ -1,4 +1,4 @@
-pub use alternative_workflow::{
+pub use aggregate_error::{
     AlternativeWorkflow,
     InvalidArgument,
     InternalError,

@@ -80,7 +80,7 @@
     clippy::verbose_file_reads,
     clippy::zero_sized_map_values
 )]
-use alternative_workflow::{
+use aggregate_error::{
     AlternativeWorkflow,
     ResultConverter,
 };

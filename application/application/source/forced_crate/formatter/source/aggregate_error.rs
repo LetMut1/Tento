@@ -1,5 +1,5 @@
 use super::Formatter;
-use alternative_workflow::{
+use aggregate_error::{
     AlternativeWorkflow,
     InvalidArgument,
     InternalError,

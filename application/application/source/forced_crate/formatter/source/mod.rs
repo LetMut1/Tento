@@ -1,4 +1,4 @@
-pub mod alternative_workflow;
+pub mod aggregate_error;
 mod backtrace;
 mod invalid_argument_auditor;
 mod internal_error_auditor;

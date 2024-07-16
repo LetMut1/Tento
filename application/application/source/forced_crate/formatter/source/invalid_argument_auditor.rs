@@ -1,5 +1,5 @@
 use super::Formatter;
-use alternative_workflow::InvalidArgument;
+use aggregate_error::InvalidArgument;
 use auditor::{
     Auditor,
     Backtrace,

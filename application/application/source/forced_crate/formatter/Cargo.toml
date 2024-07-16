@@ -18,7 +18,7 @@ crate-type = ["lib"]
 required-features = []
 
 [dependencies]
-alternative_workflow = { path = "./../alternative_workflow", package = "alternative_workflow", version = "1.0.0", default-features = true, features = [], optional = false }
+aggregate_error = { path = "./../aggregate_error", package = "aggregate_error", version = "1.0.0", default-features = true, features = [], optional = false }
 auditor = { path = "./../auditor", package = "auditor", version = "1.0.0", default-features = true, features = [], optional = false }
 
 [features]
