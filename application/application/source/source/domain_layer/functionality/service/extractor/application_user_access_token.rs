@@ -14,10 +14,7 @@ use crate::{
     },
 };
 impl Extractor<ApplicationUserAccessToken<'_>> {
-    pub async fn extract<'a>(
-        environment_configuration: &'a EnvironmentConfiguration,
-        application_user_access_token_encrypted: &'a str,
-    ) -> Result<ExtractorResult, AggregateError> {
+    pub async fn extract<'a>(environment_configuration: &'a EnvironmentConfiguration, application_user_access_token_encrypted: &'a str) -> Result<ExtractorResult, AggregateError> {
         let application_user_access_token = FormResolver::<ApplicationUserAccessToken<'_>>::from_encrypted(
             environment_configuration,
             application_user_access_token_encrypted,

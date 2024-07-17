@@ -5,8 +5,8 @@ pub mod invalid_argument;
 pub mod logic;
 pub mod runtime;
 use formatter::{
-    Formatter as Formatter_,
     context_report,
+    Formatter as Formatter_,
 };
 use std::marker::PhantomData;
 pub struct Formatter<S> {

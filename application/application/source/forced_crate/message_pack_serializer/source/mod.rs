@@ -82,8 +82,8 @@
 )]
 use aggregate_error::{
     AggregateError,
-    ResultConverter,
     Backtrace,
+    ResultConverter,
 };
 use serde::{
     Deserialize,

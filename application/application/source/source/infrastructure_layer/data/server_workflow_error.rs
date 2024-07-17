@@ -1,3 +1,11 @@
+use super::aggregate_error::{
+    AggregateError,
+    AggregateError_,
+    Auditor,
+    InvalidArgument,
+    Logic,
+    Runtime,
+};
 use std::{
     error::Error as StdError,
     fmt::{
@@ -6,14 +14,6 @@ use std::{
         Error as FmtError,
         Formatter,
     },
-};
-use super::aggregate_error::{
-    AggregateError,
-    AggregateError_,
-    InvalidArgument,
-    Runtime,
-    Logic,
-    Auditor,
 };
 pub enum ServerWorkflowError {
     Unexpected {
@@ -27,35 +27,41 @@ impl ServerWorkflowError {
     pub fn new(aggregate_error: AggregateError) -> Self {
         return match aggregate_error.0.subject {
             AggregateError_::Logic {
-                logic
-            } => Self::Unexpected {
-                unexpected_auditor: Auditor::<Unexpected>::new(
-                    Unexpected::Logic {
-                        logic
-                    },
-                    aggregate_error.0.backtrace,
-                ),
-            },
+                logic,
+            } => {
+                Self::Unexpected {
+                    unexpected_auditor: Auditor::<Unexpected>::new(
+                        Unexpected::Logic {
+                            logic,
+                        },
+                        aggregate_error.0.backtrace,
+                    ),
+                }
+            }
             AggregateError_::Runtime {
-                runtime
-            } => Self::Unexpected {
-                unexpected_auditor: Auditor::<Unexpected>::new(
-                    Unexpected::Runtime {
-                        runtime
-                    },
-                    aggregate_error.0.backtrace,
-                ),
-            },
+                runtime,
+            } => {
+                Self::Unexpected {
+                    unexpected_auditor: Auditor::<Unexpected>::new(
+                        Unexpected::Runtime {
+                            runtime,
+                        },
+                        aggregate_error.0.backtrace,
+                    ),
+                }
+            }
             AggregateError_::InvalidArgument {
-                invalid_argument
-            } => Self::Expected {
-                expected_auditor: Auditor::<Expected>::new(
-                    Expected {
-                        invalid_argument,
-                    },
-                    aggregate_error.0.backtrace,
-                ),
-            },
+                invalid_argument,
+            } => {
+                Self::Expected {
+                    expected_auditor: Auditor::<Expected>::new(
+                        Expected {
+                            invalid_argument,
+                        },
+                        aggregate_error.0.backtrace,
+                    ),
+                }
+            }
         };
     }
 }

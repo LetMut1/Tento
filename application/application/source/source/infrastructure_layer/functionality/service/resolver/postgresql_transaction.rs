@@ -2,9 +2,9 @@ use super::Resolver;
 use crate::infrastructure_layer::data::{
     aggregate_error::{
         AggregateError,
+        Backtrace,
         ResultConverter,
     },
-    aggregate_error::Backtrace,
     control_type::PostgresqlTransaction,
 };
 use tokio_postgres::Client as Connection;

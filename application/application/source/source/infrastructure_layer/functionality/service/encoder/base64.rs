@@ -2,9 +2,9 @@ use super::Encoder;
 use crate::infrastructure_layer::data::{
     aggregate_error::{
         AggregateError,
+        Backtrace,
         ResultConverter,
     },
-    aggregate_error::Backtrace,
     control_type::Base64,
 };
 use base64::{

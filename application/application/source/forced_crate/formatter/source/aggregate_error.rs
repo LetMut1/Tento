@@ -1,27 +1,28 @@
-use super::Formatter;
+use super::{
+    context_report,
+    Formatter,
+};
 use aggregate_error::{
     AggregateError,
-    InvalidArgument,
     AggregateError_,
+    Backtrace,
+    InvalidArgument,
     Logic,
     Runtime,
-    Backtrace,
 };
-use super::context_report;
 impl Formatter<AggregateError> {
     pub fn format<'a>(aggregate_error: &'a AggregateError) -> String {
         let message_part = match aggregate_error.0.subject {
             AggregateError_::Logic {
-                ref logic
+                ref logic,
             } => Formatter::<Logic>::format(logic),
             AggregateError_::Runtime {
-                ref runtime
+                ref runtime,
             } => Formatter::<Runtime>::format(runtime),
             AggregateError_::InvalidArgument {
-                ref invalid_argument
+                ref invalid_argument,
             } => Formatter::<InvalidArgument>::format(invalid_argument),
         };
-
         return format!(
             context_report!(),
             message_part.as_str(),

@@ -1,11 +1,16 @@
 use super::Logger;
 use crate::infrastructure_layer::{
-    data::{control_type::{
-        ActionRound,
-        Response,
-        TokioNonBlockingTask,
-    }, server_workflow_error::{Expected, Unexpected},
-    aggregate_error::Auditor,
+    data::{
+        aggregate_error::Auditor,
+        control_type::{
+            ActionRound,
+            Response,
+            TokioNonBlockingTask,
+        },
+        server_workflow_error::{
+            Expected,
+            Unexpected,
+        },
     },
     functionality::service::{
         formatter::Formatter,

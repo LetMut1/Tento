@@ -32,9 +32,9 @@ use crate::{
         data::{
             aggregate_error::{
                 AggregateError,
+                Backtrace,
                 ResultConverter,
             },
-            aggregate_error::Backtrace,
             control_type::PostgresqlConnectionPoolNoTls,
             environment_configuration::EnvironmentConfiguration,
         },

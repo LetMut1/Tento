@@ -1,9 +1,7 @@
-use crate::infrastructure_layer::data::{
-    aggregate_error::{
-        AggregateError,
-        ResultConverter,
-    },
-    aggregate_error::Backtrace,
+use crate::infrastructure_layer::data::aggregate_error::{
+    AggregateError,
+    Backtrace,
+    ResultConverter,
 };
 use core::marker::Sized;
 use std::convert::TryFrom;

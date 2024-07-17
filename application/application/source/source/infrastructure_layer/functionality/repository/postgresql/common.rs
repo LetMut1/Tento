@@ -3,12 +3,10 @@ use super::{
     PostgresqlRepository,
 };
 use crate::infrastructure_layer::{
-    data::{
-        aggregate_error::{
-            AggregateError,
-            ResultConverter,
-        },
-        aggregate_error::Backtrace,
+    data::aggregate_error::{
+        AggregateError,
+        Backtrace,
+        ResultConverter,
     },
     functionality::service::{
         counter::Counter,

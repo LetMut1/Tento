@@ -5,11 +5,13 @@ impl Formatter<InvalidArgument> {
         return match *invalid_argument {
             InvalidArgument::FromOutside => "Invalid argument.".to_string(),
             InvalidArgument::FromClientCode {
-                ref from_client_code
-            } => format!(
+                ref from_client_code,
+            } => {
+                format!(
                 "Invalid argument: {}.",
                 from_client_code.context.get(),
-            ),
+            )
+            }
         };
     }
 }

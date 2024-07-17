@@ -6,8 +6,10 @@ use crate::{
     },
     infrastructure_layer::{
         data::{
-            aggregate_error::AggregateError,
-            aggregate_error::Backtrace,
+            aggregate_error::{
+                AggregateError,
+                Backtrace,
+            },
             control_type::{
                 Base64,
                 MessagePack,

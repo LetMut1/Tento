@@ -2,9 +2,9 @@ use super::Loader;
 use crate::infrastructure_layer::data::{
     aggregate_error::{
         AggregateError,
+        Backtrace,
         ResultConverter,
     },
-    aggregate_error::Backtrace,
     environment_configuration::{
         environment_configuration_file::EnvironmentConfigurationFile,
         ApplicationServer,

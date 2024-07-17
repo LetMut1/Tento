@@ -14,7 +14,7 @@ impl AggregateError {
             Auditor::<AggregateError_>::new(
                 AggregateError_::Logic {
                     logic: Logic {
-                        message
+                        message,
                     },
                 },
                 backtrace,
@@ -228,7 +228,10 @@ where
     fn into_invalid_argument_from_client_code(self, backtrace: Backtrace) -> Result<T, AggregateError> {
         return self.map_err(
             move |error: _| -> _ {
-                return AggregateError::new_invalid_argument_from_client_code(error, backtrace);
+                return AggregateError::new_invalid_argument_from_client_code(
+                    error,
+                    backtrace,
+                );
             },
         );
     }
@@ -251,7 +254,10 @@ impl<T> ResultConverter_<T> for Result<T, Box<dyn StdError + Sync + Send + 'stat
     fn into_invalid_argument_from_client_code(self, backtrace: Backtrace) -> Result<T, AggregateError> {
         return self.map_err(
             move |error: _| -> _ {
-                return AggregateError::new_invalid_argument_from_client_code_(error, backtrace);
+                return AggregateError::new_invalid_argument_from_client_code_(
+                    error,
+                    backtrace,
+                );
             },
         );
     }

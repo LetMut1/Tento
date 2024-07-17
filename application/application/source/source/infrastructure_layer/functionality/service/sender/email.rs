@@ -2,9 +2,9 @@ use super::Sender;
 use crate::infrastructure_layer::data::{
     aggregate_error::{
         AggregateError,
+        Backtrace,
         ResultConverter,
     },
-    aggregate_error::Backtrace,
     control_type::Email,
     environment_configuration::EnvironmentConfiguration,
 };

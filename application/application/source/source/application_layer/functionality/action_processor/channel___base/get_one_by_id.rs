@@ -27,10 +27,10 @@ use crate::{
         data::{
             aggregate_error::{
                 AggregateError,
+                Backtrace,
                 OptionConverter,
                 ResultConverter,
             },
-            aggregate_error::Backtrace,
             control_type::Channel__Base___GetOneById,
             environment_configuration::EnvironmentConfiguration,
         },

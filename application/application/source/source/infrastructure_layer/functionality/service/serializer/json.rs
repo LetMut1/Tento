@@ -2,15 +2,13 @@ use super::{
     Serialize,
     Serializer,
 };
+use crate::infrastructure_layer::data::aggregate_error::{
+    AggregateError,
+    Backtrace,
+    ResultConverter,
+};
 #[cfg(feature = "manual_testing")]
 use crate::infrastructure_layer::data::control_type::Json;
-use crate::infrastructure_layer::data::{
-    aggregate_error::{
-        AggregateError,
-        ResultConverter,
-    },
-    aggregate_error::Backtrace,
-};
 use serde::{
     Deserialize,
     Serialize as SerdeSerialize,

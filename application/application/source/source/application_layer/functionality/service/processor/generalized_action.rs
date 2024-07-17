@@ -5,10 +5,7 @@ use crate::{
         data::{
             aggregate_error::{
                 AggregateError,
-                Backtrace
-            },
-            server_workflow_error::{
-                ServerWorkflowError,
+                Backtrace,
             },
             control_type::{
                 ActionRound,
@@ -16,6 +13,7 @@ use crate::{
                 Response,
             },
             environment_configuration::EnvironmentConfiguration,
+            server_workflow_error::ServerWorkflowError,
         },
         functionality::service::{
             creator::Creator,
@@ -96,7 +94,7 @@ impl Processor<GeneralizedAction> {
             Err(aggregate_error) => {
                 let response = match ServerWorkflowError::new(aggregate_error) {
                     ServerWorkflowError::Unexpected {
-                        unexpected_auditor
+                        unexpected_auditor,
                     } => {
                         let response_ = Creator::<Response>::create_internal_server_error();
                         Logger::<ActionRound>::log_unexpected_auditor(
@@ -107,7 +105,7 @@ impl Processor<GeneralizedAction> {
                         response_
                     }
                     ServerWorkflowError::Expected {
-                        expected_auditor
+                        expected_auditor,
                     } => {
                         let response_ = Creator::<Response>::create_bad_request();
                         Logger::<ActionRound>::log_expected_auditor(

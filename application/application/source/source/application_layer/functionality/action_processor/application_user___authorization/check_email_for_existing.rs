@@ -14,10 +14,10 @@ use crate::{
         data::{
             aggregate_error::{
                 AggregateError,
+                Backtrace,
                 OptionConverter,
                 ResultConverter,
             },
-            aggregate_error::Backtrace,
             control_type::ApplicationUser__Authorization___CheckEmailForExisting,
             environment_configuration::EnvironmentConfiguration,
             void::Void,

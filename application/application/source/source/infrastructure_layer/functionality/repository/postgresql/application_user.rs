@@ -11,12 +11,10 @@ use crate::{
         ApplicationUser,
     },
     infrastructure_layer::{
-        data::{
-            aggregate_error::{
-                AggregateError,
-                ResultConverter,
-            },
-            aggregate_error::Backtrace,
+        data::aggregate_error::{
+            AggregateError,
+            Backtrace,
+            ResultConverter,
         },
         functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver,
     },

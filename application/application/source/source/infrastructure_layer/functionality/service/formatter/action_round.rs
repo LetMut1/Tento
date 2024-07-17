@@ -1,11 +1,20 @@
-use aggregate_error::{Auditor, Backtrace, InvalidArgument, Logic, Runtime};
 use super::{
-    Formatter,
     context_report,
+    Formatter,
 };
 use crate::infrastructure_layer::data::{
     control_type::ActionRound,
-    server_workflow_error::{Expected, Unexpected}
+    server_workflow_error::{
+        Expected,
+        Unexpected,
+    },
+};
+use aggregate_error::{
+    Auditor,
+    Backtrace,
+    InvalidArgument,
+    Logic,
+    Runtime,
 };
 impl Formatter<ActionRound> {
     pub fn format<'a>(request_uri: &'a str, request_method: &'a str, response_status_code: u16) -> String {
@@ -19,13 +28,12 @@ impl Formatter<ActionRound> {
     pub fn format_unexpected_auditor<'a>(request_uri: &'a str, request_method: &'a str, response_status_code: u16, unexpected_auditor: &'a Auditor<Unexpected>) -> String {
         let error_message = match unexpected_auditor.subject {
             Unexpected::Logic {
-                ref logic
+                ref logic,
             } => Formatter::<Logic>::format(logic),
             Unexpected::Runtime {
-                ref runtime
+                ref runtime,
             } => Formatter::<Runtime>::format(runtime),
         };
-
         return format!(
             context_report!(),
             format!(

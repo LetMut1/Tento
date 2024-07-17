@@ -1,9 +1,7 @@
-use crate::infrastructure_layer::data::{
-    aggregate_error::{
-        AggregateError,
-        OptionConverter,
-    },
-    aggregate_error::Backtrace,
+use crate::infrastructure_layer::data::aggregate_error::{
+    AggregateError,
+    Backtrace,
+    OptionConverter,
 };
 pub struct Counter<T> {
     value: T,

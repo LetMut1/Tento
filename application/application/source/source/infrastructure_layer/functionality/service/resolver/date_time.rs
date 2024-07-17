@@ -2,9 +2,9 @@ use super::Resolver;
 use crate::infrastructure_layer::data::{
     aggregate_error::{
         AggregateError,
+        Backtrace,
         OptionConverter,
     },
-    aggregate_error::Backtrace,
     control_type::DateTime,
 };
 use chrono::{

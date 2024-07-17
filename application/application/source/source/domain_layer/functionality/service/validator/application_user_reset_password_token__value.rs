@@ -1,13 +1,11 @@
 use super::Validator;
 use crate::{
     domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken_Value,
-    infrastructure_layer::data::{
-        aggregate_error::{
-            AggregateError,
-            OptionConverter,
-            ResultConverter,
-        },
-        aggregate_error::Backtrace,
+    infrastructure_layer::data::aggregate_error::{
+        AggregateError,
+        Backtrace,
+        OptionConverter,
+        ResultConverter,
     },
 };
 use regex::Regex;

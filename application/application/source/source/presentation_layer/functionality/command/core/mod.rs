@@ -78,9 +78,9 @@ use application::{
         CommandProcessor,
     },
     infrastructure_layer::{
-        data::{
-            aggregate_error::AggregateError,
-            aggregate_error::Backtrace,
+        data::aggregate_error::{
+            AggregateError,
+            Backtrace,
         },
         functionality::service::formatter::Formatter,
     },
