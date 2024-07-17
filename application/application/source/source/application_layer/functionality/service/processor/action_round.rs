@@ -9,7 +9,6 @@ use crate::{
             },
             control_type::{
                 ActionRound,
-                GeneralizedAction,
                 Response,
             },
             environment_configuration::EnvironmentConfiguration,
@@ -47,7 +46,7 @@ use tokio_postgres::{
     },
     Socket,
 };
-impl Processor<GeneralizedAction> {
+impl Processor<ActionRound> {
     pub async fn process<'a, 'b, 'c, T, DE, F1, AP, F2, I, O, P, SF>(
         environment_configuration: &'a EnvironmentConfiguration,
         body: &'a mut Body,

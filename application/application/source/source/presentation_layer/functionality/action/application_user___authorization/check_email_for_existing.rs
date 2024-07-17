@@ -8,7 +8,7 @@ use crate::{
     infrastructure_layer::data::{
         control_type::{
             ApplicationUser__Authorization___CheckEmailForExisting,
-            GeneralizedAction,
+            ActionRound,
             HttpBodyData,
             MessagePack,
             Response,
@@ -54,7 +54,7 @@ impl Action<ApplicationUser__Authorization___CheckEmailForExisting> {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        return Processor::<GeneralizedAction>::process::<'_, '_, '_, _, _, _, _, _, _, _, _, MessagePack>(
+        return Processor::<ActionRound>::process::<'_, '_, '_, _, _, _, _, _, _, _, _, MessagePack>(
             environment_configuration,
             body,
             parts,
@@ -83,7 +83,7 @@ impl Action<ApplicationUser__Authorization___CheckEmailForExisting> {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        return Processor::<GeneralizedAction>::process::<'_, '_, '_, _, _, _, _, _, _, _, _, Json>(
+        return Processor::<ActionRound>::process::<'_, '_, '_, _, _, _, _, _, _, _, _, Json>(
             environment_configuration,
             body,
             parts,

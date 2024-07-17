@@ -5,7 +5,7 @@ use crate::{
     },
     infrastructure_layer::data::{
         control_type::{
-            GeneralizedAction,
+            ActionRound,
             HealthCheck,
             MessagePack,
             Response,
@@ -52,7 +52,7 @@ impl Action<HealthCheck> {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        return Processor::<GeneralizedAction>::process::<'_, '_, '_, _, _, _, _, _, _, _, _, MessagePack>(
+        return Processor::<ActionRound>::process::<'_, '_, '_, _, _, _, _, _, _, _, _, MessagePack>(
             environment_configuration,
             body,
             parts,
