@@ -4,11 +4,11 @@ use super::{
 };
 use crate::infrastructure_layer::{
     data::{
-        alternative_workflow::{
-            AlternativeWorkflow,
+        aggregate_error::{
+            AggregateError,
             ResultConverter,
         },
-        auditor::Backtrace,
+        aggregate_error::Backtrace,
     },
     functionality::service::{
         counter::Counter,
@@ -21,7 +21,7 @@ use tokio_postgres::{
     Client as Connection,
 };
 impl PostgresqlRepository<Common1> {
-    pub async fn find_1<'a>(database_1_connection: &'a Connection, by_1: By1<'_>, limit: i16) -> Result<Vec<Common1>, AlternativeWorkflow> {
+    pub async fn find_1<'a>(database_1_connection: &'a Connection, by_1: By1<'_>, limit: i16) -> Result<Vec<Common1>, AggregateError> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let mut counter = Counter::<i16>::new_classic();
         let mut query = format!(
@@ -82,7 +82,7 @@ impl PostgresqlRepository<Common1> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -94,7 +94,7 @@ impl PostgresqlRepository<Common1> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -106,45 +106,45 @@ impl PostgresqlRepository<Common1> {
         }
         '_a: for row in row_registry.iter() {
             let channel = Channel1 {
-                channel__id: row.try_get::<'_, usize, i64>(0).into_internal_error_runtime(
+                channel__id: row.try_get::<'_, usize, i64>(0).into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
                     ),
                 )?,
-                channel__name: row.try_get::<'_, usize, String>(1).into_internal_error_runtime(
+                channel__name: row.try_get::<'_, usize, String>(1).into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
                     ),
                 )?,
-                channel__linked_name: row.try_get::<'_, usize, String>(2).into_internal_error_runtime(
+                channel__linked_name: row.try_get::<'_, usize, String>(2).into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
                     ),
                 )?,
-                channel__access_modifier: row.try_get::<'_, usize, i16>(3).into_internal_error_runtime(
+                channel__access_modifier: row.try_get::<'_, usize, i16>(3).into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
                     ),
                 )?,
                 channel__visability_modifier: by_1.channel__visability_modifier,
-                channel__cover_image_path: row.try_get::<'_, usize, Option<String>>(4).into_internal_error_runtime(
+                channel__cover_image_path: row.try_get::<'_, usize, Option<String>>(4).into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
                     ),
                 )?,
-                channel__background_image_path: row.try_get::<'_, usize, Option<String>>(5).into_internal_error_runtime(
+                channel__background_image_path: row.try_get::<'_, usize, Option<String>>(5).into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
                     ),
                 )?,
             };
-            let is_application_user_subscribed = match row.try_get::<'_, usize, Option<i64>>(6).into_internal_error_runtime(
+            let is_application_user_subscribed = match row.try_get::<'_, usize, Option<i64>>(6).into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -161,7 +161,7 @@ impl PostgresqlRepository<Common1> {
         }
         return Ok(common_registry);
     }
-    pub async fn find_2<'a>(database_1_connection: &'a Connection, by_2: By2<'_>, limit: i16) -> Result<Vec<Common1>, AlternativeWorkflow> {
+    pub async fn find_2<'a>(database_1_connection: &'a Connection, by_2: By2<'_>, limit: i16) -> Result<Vec<Common1>, AggregateError> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let mut counter = Counter::<i16>::new_classic();
         let mut query = format!(
@@ -217,7 +217,7 @@ impl PostgresqlRepository<Common1> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -229,7 +229,7 @@ impl PostgresqlRepository<Common1> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -241,43 +241,43 @@ impl PostgresqlRepository<Common1> {
         }
         '_a: for row in row_registry.iter() {
             let channel = Channel1 {
-                channel__id: row.try_get::<'_, usize, i64>(0).into_internal_error_runtime(
+                channel__id: row.try_get::<'_, usize, i64>(0).into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
                     ),
                 )?,
-                channel__name: row.try_get::<'_, usize, String>(1).into_internal_error_runtime(
+                channel__name: row.try_get::<'_, usize, String>(1).into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
                     ),
                 )?,
-                channel__linked_name: row.try_get::<'_, usize, String>(2).into_internal_error_runtime(
+                channel__linked_name: row.try_get::<'_, usize, String>(2).into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
                     ),
                 )?,
-                channel__access_modifier: row.try_get::<'_, usize, i16>(3).into_internal_error_runtime(
+                channel__access_modifier: row.try_get::<'_, usize, i16>(3).into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
                     ),
                 )?,
-                channel__visability_modifier: row.try_get::<'_, usize, i16>(4).into_internal_error_runtime(
+                channel__visability_modifier: row.try_get::<'_, usize, i16>(4).into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
                     ),
                 )?,
-                channel__cover_image_path: row.try_get::<'_, usize, Option<String>>(5).into_internal_error_runtime(
+                channel__cover_image_path: row.try_get::<'_, usize, Option<String>>(5).into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
                     ),
                 )?,
-                channel__background_image_path: row.try_get::<'_, usize, Option<String>>(6).into_internal_error_runtime(
+                channel__background_image_path: row.try_get::<'_, usize, Option<String>>(6).into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -292,7 +292,7 @@ impl PostgresqlRepository<Common1> {
         }
         return Ok(common_registry);
     }
-    pub async fn find_3<'a>(database_1_connection: &'a Connection, by_3: By3, limit: i16) -> Result<Vec<Common1>, AlternativeWorkflow> {
+    pub async fn find_3<'a>(database_1_connection: &'a Connection, by_3: By3, limit: i16) -> Result<Vec<Common1>, AggregateError> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let mut counter = Counter::<i16>::new_classic();
         let mut query = format!(
@@ -343,7 +343,7 @@ impl PostgresqlRepository<Common1> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -355,7 +355,7 @@ impl PostgresqlRepository<Common1> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -367,43 +367,43 @@ impl PostgresqlRepository<Common1> {
         }
         '_a: for row in row_registry.iter() {
             let channel = Channel1 {
-                channel__id: row.try_get::<'_, usize, i64>(0).into_internal_error_runtime(
+                channel__id: row.try_get::<'_, usize, i64>(0).into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
                     ),
                 )?,
-                channel__name: row.try_get::<'_, usize, String>(1).into_internal_error_runtime(
+                channel__name: row.try_get::<'_, usize, String>(1).into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
                     ),
                 )?,
-                channel__linked_name: row.try_get::<'_, usize, String>(2).into_internal_error_runtime(
+                channel__linked_name: row.try_get::<'_, usize, String>(2).into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
                     ),
                 )?,
-                channel__access_modifier: row.try_get::<'_, usize, i16>(3).into_internal_error_runtime(
+                channel__access_modifier: row.try_get::<'_, usize, i16>(3).into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
                     ),
                 )?,
-                channel__visability_modifier: row.try_get::<'_, usize, i16>(4).into_internal_error_runtime(
+                channel__visability_modifier: row.try_get::<'_, usize, i16>(4).into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
                     ),
                 )?,
-                channel__cover_image_path: row.try_get::<'_, usize, Option<String>>(5).into_internal_error_runtime(
+                channel__cover_image_path: row.try_get::<'_, usize, Option<String>>(5).into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
                     ),
                 )?,
-                channel__background_image_path: row.try_get::<'_, usize, Option<String>>(6).into_internal_error_runtime(
+                channel__background_image_path: row.try_get::<'_, usize, Option<String>>(6).into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),

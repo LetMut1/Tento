@@ -14,9 +14,6 @@ dependencies = [
 [[package]]
 name = "aggregate_error"
 version = "1.0.0"
-dependencies = [
- "auditor",
-]
 
 [[package]]
 name = "atty"
@@ -28,10 +25,6 @@ dependencies = [
  "libc",
  "winapi",
 ]
-
-[[package]]
-name = "auditor"
-version = "1.0.0"
 
 [[package]]
 name = "autocfg"
@@ -174,7 +167,6 @@ name = "formatter"
 version = "1.0.0"
 dependencies = [
  "aggregate_error",
- "auditor",
 ]
 
 [[package]]
@@ -252,7 +244,6 @@ name = "message_pack_serializer"
 version = "1.0.0"
 dependencies = [
  "aggregate_error",
- "auditor",
  "rmp-serde",
  "serde",
 ]

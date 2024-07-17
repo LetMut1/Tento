@@ -1,15 +1,15 @@
 use super::Resolver;
 use crate::infrastructure_layer::data::{
-    alternative_workflow::{
-        AlternativeWorkflow,
+    aggregate_error::{
+        AggregateError,
         ResultConverter,
     },
-    auditor::Backtrace,
+    aggregate_error::Backtrace,
     control_type::PostgresqlTransaction,
 };
 use tokio_postgres::Client as Connection;
 impl Resolver<PostgresqlTransaction> {
-    pub async fn start<'a>(connection: &'a Connection, transaction_isolation_level: TransactionIsolationLevel) -> Result<Self, AlternativeWorkflow> {
+    pub async fn start<'a>(connection: &'a Connection, transaction_isolation_level: TransactionIsolationLevel) -> Result<Self, AggregateError> {
         let mut query = "START TRANSACTION ISOLATION LEVEL".to_string();
         match transaction_isolation_level {
             TransactionIsolationLevel::ReadCommitted => {
@@ -41,7 +41,7 @@ impl Resolver<PostgresqlTransaction> {
                 &[],
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -49,7 +49,7 @@ impl Resolver<PostgresqlTransaction> {
             )?;
         return Ok(Self::new());
     }
-    pub async fn commit<'a>(self, connection: &'a Connection) -> Result<(), AlternativeWorkflow> {
+    pub async fn commit<'a>(self, connection: &'a Connection) -> Result<(), AggregateError> {
         let query = "COMMIT;";
         connection
             .execute(
@@ -57,7 +57,7 @@ impl Resolver<PostgresqlTransaction> {
                 &[],
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -65,7 +65,7 @@ impl Resolver<PostgresqlTransaction> {
             )?;
         return Ok(());
     }
-    pub async fn rollback<'a>(self, connection: &'a Connection) -> Result<(), AlternativeWorkflow> {
+    pub async fn rollback<'a>(self, connection: &'a Connection) -> Result<(), AggregateError> {
         let query = "ROLLBACK;";
         connection
             .execute(
@@ -73,7 +73,7 @@ impl Resolver<PostgresqlTransaction> {
                 &[],
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),

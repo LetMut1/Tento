@@ -3,7 +3,7 @@ use crate::{
     domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken,
     infrastructure_layer::{
         data::{
-            alternative_workflow::AlternativeWorkflow,
+            aggregate_error::AggregateError,
             control_type::{
                 Base64,
                 MessagePack,
@@ -26,7 +26,7 @@ impl FormResolver<ApplicationUserAccessRefreshToken<'_>> {
     pub fn to_encrypted<'a>(
         environment_configuration: &'a EnvironmentConfiguration,
         application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>,
-    ) -> Result<String, AlternativeWorkflow> {
+    ) -> Result<String, AggregateError> {
         let data = Serializer::<MessagePack>::serialize(application_user_access_refresh_token)?;
         let encoded_data = Encoder::<HmacSha3_512>::encode(
             environment_configuration.encryption.private_key.application_user_access_refresh_token.as_bytes(),
@@ -38,7 +38,7 @@ impl FormResolver<ApplicationUserAccessRefreshToken<'_>> {
         environment_configuration: &'a EnvironmentConfiguration,
         application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>,
         application_user_access_refresh_token_encrypted: &'a str,
-    ) -> Result<bool, AlternativeWorkflow> {
+    ) -> Result<bool, AggregateError> {
         let data = Serializer::<MessagePack>::serialize(application_user_access_refresh_token)?;
         let encoded_data = Encoder::<Base64>::decode(application_user_access_refresh_token_encrypted.as_bytes())?;
         return Encoder::<HmacSha3_512>::is_valid(

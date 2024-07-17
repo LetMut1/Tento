@@ -18,12 +18,12 @@ use crate::{
     },
     infrastructure_layer::{
         data::{
-            alternative_workflow::{
-                AlternativeWorkflow,
+            aggregate_error::{
+                AggregateError,
                 OptionConverter,
                 ResultConverter,
             },
-            auditor::Backtrace,
+            aggregate_error::Backtrace,
             control_type::Channel__Base___GetManyByNameInSubscriptions,
             environment_configuration::EnvironmentConfiguration,
         },
@@ -64,14 +64,14 @@ impl ActionProcessor<Channel__Base___GetManyByNameInSubscriptions> {
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         incoming: Option<Incoming>,
-    ) -> Result<UnifiedReport<Outcoming, Precedent>, AlternativeWorkflow>
+    ) -> Result<UnifiedReport<Outcoming, Precedent>, AggregateError>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let incoming_ = incoming.into_internal_error_logic_value_does_not_exist(
+        let incoming_ = incoming.into_logic_value_does_not_exist(
             Backtrace::new(
                 line!(),
                 file!(),
@@ -95,7 +95,7 @@ impl ActionProcessor<Channel__Base___GetManyByNameInSubscriptions> {
         };
         if incoming_.limit <= 0 || incoming_.limit > Self::LIMIT {
             return Err(
-                AlternativeWorkflow::new_invalid_argument_from_outside(
+                AggregateError::new_invalid_argument_from_outside(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -105,7 +105,7 @@ impl ActionProcessor<Channel__Base___GetManyByNameInSubscriptions> {
         }
         if !Validator::<Channel_Name>::is_valid(incoming_.channel__name.as_str()) {
             return Err(
-                AlternativeWorkflow::new_invalid_argument_from_outside(
+                AggregateError::new_invalid_argument_from_outside(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -116,7 +116,7 @@ impl ActionProcessor<Channel__Base___GetManyByNameInSubscriptions> {
         if let Some(ref requery___channel__name_) = incoming_.requery___channel__name {
             if !Validator::<Channel_Name>::is_valid(requery___channel__name_.as_str()) {
                 return Err(
-                    AlternativeWorkflow::new_invalid_argument_from_outside(
+                    AggregateError::new_invalid_argument_from_outside(
                         Backtrace::new(
                             line!(),
                             file!(),
@@ -125,7 +125,7 @@ impl ActionProcessor<Channel__Base___GetManyByNameInSubscriptions> {
                 );
             }
         }
-        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.into_internal_error_runtime(
+        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.into_runtime(
             Backtrace::new(
                 line!(),
                 file!(),

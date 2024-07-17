@@ -2,7 +2,7 @@ use super::{
     Formatter,
     Formatter_,
 };
-use crate::infrastructure_layer::data::auditor::Backtrace;
+use crate::infrastructure_layer::data::aggregate_error::Backtrace;
 impl Formatter<Backtrace> {
     pub fn format<'a>(backtrace: &'a Backtrace) -> String {
         return Formatter_::<Backtrace>::format(backtrace);

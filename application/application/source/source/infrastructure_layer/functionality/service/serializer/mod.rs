@@ -1,7 +1,7 @@
 #[cfg(feature = "manual_testing")]
 pub mod json;
 pub mod message_pack;
-use crate::infrastructure_layer::data::alternative_workflow::AlternativeWorkflow;
+use crate::infrastructure_layer::data::aggregate_error::AggregateError;
 use serde::{
     Deserialize,
     Serialize as SerdeSerialize,
@@ -11,10 +11,10 @@ pub struct Serializer<T> {
     _format: PhantomData<T>,
 }
 pub trait Serialize {
-    fn serialize<'a, T>(subject: &'a T) -> Result<Vec<u8>, AlternativeWorkflow>
+    fn serialize<'a, T>(subject: &'a T) -> Result<Vec<u8>, AggregateError>
     where
         T: SerdeSerialize;
-    fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, AlternativeWorkflow>
+    fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, AggregateError>
     where
         T: Deserialize<'a>;
 }

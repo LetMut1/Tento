@@ -1,9 +1,9 @@
 use crate::infrastructure_layer::data::{
-    alternative_workflow::{
-        AlternativeWorkflow,
+    aggregate_error::{
+        AggregateError,
         ResultConverter,
     },
-    auditor::Backtrace,
+    aggregate_error::Backtrace,
 };
 use core::marker::Sized;
 use std::convert::TryFrom;
@@ -13,11 +13,11 @@ where
     F: Sized,
     T: Sized,
 {
-    fn convert(subject: F) -> Result<T, AlternativeWorkflow>;
+    fn convert(subject: F) -> Result<T, AggregateError>;
 }
 impl Convert<u16, i16> for Converter {
-    fn convert(subject: u16) -> Result<i16, AlternativeWorkflow> {
-        return i16::try_from(subject).into_internal_error_runtime(
+    fn convert(subject: u16) -> Result<i16, AggregateError> {
+        return i16::try_from(subject).into_runtime(
             Backtrace::new(
                 line!(),
                 file!(),

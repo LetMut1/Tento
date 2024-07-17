@@ -23,12 +23,12 @@ use crate::{
     },
     infrastructure_layer::{
         data::{
-            alternative_workflow::{
-                AlternativeWorkflow,
+            aggregate_error::{
+                AggregateError,
                 OptionConverter,
                 ResultConverter,
             },
-            auditor::Backtrace,
+            aggregate_error::Backtrace,
             control_type::{
                 ApplicationUser__Authorization___SendEmailForAuthorize,
                 UnixTime,
@@ -75,14 +75,14 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         incoming: Option<Incoming>,
-    ) -> Result<UnifiedReport<Outcoming, Precedent>, AlternativeWorkflow>
+    ) -> Result<UnifiedReport<Outcoming, Precedent>, AggregateError>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let incoming_ = incoming.into_internal_error_logic_value_does_not_exist(
+        let incoming_ = incoming.into_logic_value_does_not_exist(
             Backtrace::new(
                 line!(),
                 file!(),
@@ -90,7 +90,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
         )?;
         if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming_.application_user_device__id.as_str()) {
             return Err(
-                AlternativeWorkflow::new_invalid_argument_from_outside(
+                AggregateError::new_invalid_argument_from_outside(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -100,7 +100,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
         }
         if !Validator::<ApplicationUser_Id>::is_valid(incoming_.application_user__id) {
             return Err(
-                AlternativeWorkflow::new_invalid_argument_from_outside(
+                AggregateError::new_invalid_argument_from_outside(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -108,7 +108,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
                 ),
             );
         }
-        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.into_internal_error_runtime(
+        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.into_runtime(
             Backtrace::new(
                 line!(),
                 file!(),
@@ -127,7 +127,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
                 return Ok(UnifiedReport::precedent(Precedent::ApplicationUser_NotFound));
             }
         };
-        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.into_internal_error_runtime(
+        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.into_runtime(
             Backtrace::new(
                 line!(),
                 file!(),

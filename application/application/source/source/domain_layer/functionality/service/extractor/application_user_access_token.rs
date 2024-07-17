@@ -6,7 +6,7 @@ use crate::{
     },
     infrastructure_layer::{
         data::{
-            alternative_workflow::AlternativeWorkflow,
+            aggregate_error::AggregateError,
             control_type::UnixTime,
             environment_configuration::EnvironmentConfiguration,
         },
@@ -17,7 +17,7 @@ impl Extractor<ApplicationUserAccessToken<'_>> {
     pub async fn extract<'a>(
         environment_configuration: &'a EnvironmentConfiguration,
         application_user_access_token_encrypted: &'a str,
-    ) -> Result<ExtractorResult, AlternativeWorkflow> {
+    ) -> Result<ExtractorResult, AggregateError> {
         let application_user_access_token = FormResolver::<ApplicationUserAccessToken<'_>>::from_encrypted(
             environment_configuration,
             application_user_access_token_encrypted,

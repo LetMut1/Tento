@@ -1,9 +1,9 @@
 use crate::infrastructure_layer::data::{
-    alternative_workflow::{
-        AlternativeWorkflow,
+    aggregate_error::{
+        AggregateError,
         OptionConverter,
     },
-    auditor::Backtrace,
+    aggregate_error::Backtrace,
 };
 pub struct Counter<T> {
     value: T,
@@ -23,8 +23,8 @@ impl Counter<i16> {
             step_size: Self::CLASSIC_STEP_SIZE,
         };
     }
-    pub fn get_next_value<'a>(&'a mut self) -> Result<i16, AlternativeWorkflow> {
-        self.value = self.value.checked_add(self.step_size).into_internal_error_logic_out_of_range(
+    pub fn get_next_value<'a>(&'a mut self) -> Result<i16, AggregateError> {
+        self.value = self.value.checked_add(self.step_size).into_logic_out_of_range(
             Backtrace::new(
                 line!(),
                 file!(),

@@ -14,10 +14,7 @@ use http::request::Parts;
 impl Action<RouteNotFound> {
     pub fn run<'a>(parts: &'a Parts) -> Response {
         let response = ActionProcessor::<RouteNotFound>::process();
-        Logger::<(
-            ActionRound,
-            Response,
-        )>::log(
+        Logger::<ActionRound>::log(
             parts,
             &response,
         );

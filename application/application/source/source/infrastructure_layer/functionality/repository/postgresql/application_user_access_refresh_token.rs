@@ -3,11 +3,11 @@ use crate::{
     domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken,
     infrastructure_layer::{
         data::{
-            alternative_workflow::{
-                AlternativeWorkflow,
+            aggregate_error::{
+                AggregateError,
                 ResultConverter,
             },
-            auditor::Backtrace,
+            aggregate_error::Backtrace,
         },
         functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver,
     },
@@ -18,7 +18,7 @@ use tokio_postgres::{
     Client as Connection,
 };
 impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
-    pub async fn create_1<'a>(database_2_connection: &'a Connection, insert_1: Insert1<'a>) -> Result<ApplicationUserAccessRefreshToken<'a>, AlternativeWorkflow> {
+    pub async fn create_1<'a>(database_2_connection: &'a Connection, insert_1: Insert1<'a>) -> Result<ApplicationUserAccessRefreshToken<'a>, AggregateError> {
         let application_user_access_refresh_token__obfuscation_value = insert_1.application_user_access_refresh_token__obfuscation_value.as_str();
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
@@ -68,7 +68,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -80,7 +80,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -97,7 +97,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
             ),
         );
     }
-    pub async fn update_1<'a>(database_2_connection: &'a Connection, update_1: Update1<'_>, by_2: By2<'_>) -> Result<(), AlternativeWorkflow> {
+    pub async fn update_1<'a>(database_2_connection: &'a Connection, update_1: Update1<'_>, by_2: By2<'_>) -> Result<(), AggregateError> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             UPDATE ONLY public.application_user_access_refresh_token AS auart \
@@ -144,7 +144,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -156,7 +156,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -164,7 +164,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
             )?;
         return Ok(());
     }
-    pub async fn delete_1<'a>(database_2_connection: &'a Connection, by_2: By2<'_>) -> Result<(), AlternativeWorkflow> {
+    pub async fn delete_1<'a>(database_2_connection: &'a Connection, by_2: By2<'_>) -> Result<(), AggregateError> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "DELETE FROM ONLY public.application_user_access_refresh_token AS auart  \
             WHERE auart.application_user__id = $1 AND auart.application_user_device__id = $2;";
@@ -183,7 +183,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -195,7 +195,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -203,7 +203,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
             )?;
         return Ok(());
     }
-    pub async fn delete_2<'a>(database_2_connection: &'a Connection, by_1: By1) -> Result<(), AlternativeWorkflow> {
+    pub async fn delete_2<'a>(database_2_connection: &'a Connection, by_1: By1) -> Result<(), AggregateError> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             DELETE FROM ONLY public.application_user_access_refresh_token AS auart  \
@@ -218,7 +218,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -230,7 +230,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -238,7 +238,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
             )?;
         return Ok(());
     }
-    pub async fn find_1<'a, 'b>(database_2_connection: &'a Connection, by_2: By2<'b>) -> Result<Option<ApplicationUserAccessRefreshToken<'b>>, AlternativeWorkflow> {
+    pub async fn find_1<'a, 'b>(database_2_connection: &'a Connection, by_2: By2<'b>) -> Result<Option<ApplicationUserAccessRefreshToken<'b>>, AggregateError> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             SELECT \
@@ -263,7 +263,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -275,7 +275,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -290,26 +290,26 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                     by_2.application_user__id,
                     Cow::Borrowed(by_2.application_user_device__id),
                     Cow::Owned(
-                        row_registry[0].try_get::<'_, usize, String>(0).into_internal_error_runtime(
+                        row_registry[0].try_get::<'_, usize, String>(0).into_runtime(
                             Backtrace::new(
                                 line!(),
                                 file!(),
                             ),
                         )?,
                     ),
-                    row_registry[0].try_get::<'_, usize, String>(1).into_internal_error_runtime(
+                    row_registry[0].try_get::<'_, usize, String>(1).into_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, i64>(2).into_internal_error_runtime(
+                    row_registry[0].try_get::<'_, usize, i64>(2).into_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, i64>(3).into_internal_error_runtime(
+                    row_registry[0].try_get::<'_, usize, i64>(3).into_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),

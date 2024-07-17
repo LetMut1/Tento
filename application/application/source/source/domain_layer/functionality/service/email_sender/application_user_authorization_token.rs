@@ -3,7 +3,7 @@ use crate::{
     domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken,
     infrastructure_layer::{
         data::{
-            alternative_workflow::AlternativeWorkflow,
+            aggregate_error::AggregateError,
             control_type::Email,
             environment_configuration::EnvironmentConfiguration,
         },
@@ -16,7 +16,7 @@ impl EmailSender<ApplicationUserAuthorizationToken<'_>> {
         application_user_authorization_token__value: &'a str,
         application_user__email: &'a str,
         application_user_device__id: &'a str,
-    ) -> Result<(), AlternativeWorkflow> {
+    ) -> Result<(), AggregateError> {
         let message_body = format!(
             "Your code {} for device {}.",
             application_user_authorization_token__value, application_user_device__id,

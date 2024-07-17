@@ -1,10 +1,10 @@
 use super::Creator;
 use crate::infrastructure_layer::data::{
-    alternative_workflow::{
-        AlternativeWorkflow,
+    aggregate_error::{
+        AggregateError,
         ResultConverter,
     },
-    auditor::Backtrace,
+    aggregate_error::Backtrace,
     control_type::PostgresqlConnectionPoolNoTls,
     environment_configuration::EnvironmentConfiguration,
 };
@@ -19,9 +19,9 @@ use tokio_postgres::{
     NoTls,
 };
 impl Creator<PostgresqlConnectionPoolNoTls> {
-    pub async fn create_database_1<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<Pool<PostgresqlConnectionManager<NoTls>>, AlternativeWorkflow> {
+    pub async fn create_database_1<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<Pool<PostgresqlConnectionManager<NoTls>>, AggregateError> {
         return Self::create(
-            &Config::from_str(environment_configuration.resource.postgresql.database_1_url.as_str()).into_internal_error_runtime(
+            &Config::from_str(environment_configuration.resource.postgresql.database_1_url.as_str()).into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -30,9 +30,9 @@ impl Creator<PostgresqlConnectionPoolNoTls> {
         )
         .await;
     }
-    pub async fn create_database_2<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<Pool<PostgresqlConnectionManager<NoTls>>, AlternativeWorkflow> {
+    pub async fn create_database_2<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<Pool<PostgresqlConnectionManager<NoTls>>, AggregateError> {
         return Self::create(
-            &Config::from_str(environment_configuration.resource.postgresql.database_2_url.as_str()).into_internal_error_runtime(
+            &Config::from_str(environment_configuration.resource.postgresql.database_2_url.as_str()).into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -41,7 +41,7 @@ impl Creator<PostgresqlConnectionPoolNoTls> {
         )
         .await;
     }
-    async fn create<'a>(configuration: &'a Config) -> Result<Pool<PostgresqlConnectionManager<NoTls>>, AlternativeWorkflow> {
+    async fn create<'a>(configuration: &'a Config) -> Result<Pool<PostgresqlConnectionManager<NoTls>>, AggregateError> {
         return Pool::builder()
             .build(
                 PostgresqlConnectionManager::new(
@@ -50,7 +50,7 @@ impl Creator<PostgresqlConnectionPoolNoTls> {
                 ),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),

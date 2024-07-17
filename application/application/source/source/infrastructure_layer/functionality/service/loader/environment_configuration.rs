@@ -1,10 +1,10 @@
 use super::Loader;
 use crate::infrastructure_layer::data::{
-    alternative_workflow::{
-        AlternativeWorkflow,
+    aggregate_error::{
+        AggregateError,
         ResultConverter,
     },
-    auditor::Backtrace,
+    aggregate_error::Backtrace,
     environment_configuration::{
         environment_configuration_file::EnvironmentConfigurationFile,
         ApplicationServer,
@@ -27,20 +27,20 @@ use crate::infrastructure_layer::data::{
 use std::path::Path;
 impl Loader<EnvironmentConfiguration> {
     const ENVIRONMENT_FILE_NAME: &'static str = "environment.toml";
-    pub fn load_from_file<'a>(environment_configuration_directory_path: &'a str) -> Result<EnvironmentConfiguration, AlternativeWorkflow> {
+    pub fn load_from_file<'a>(environment_configuration_directory_path: &'a str) -> Result<EnvironmentConfiguration, AggregateError> {
         let environment_file_path = format!(
             "{}/{}",
             environment_configuration_directory_path,
             Self::ENVIRONMENT_FILE_NAME,
         );
         let environment_file_path_ = Path::new(environment_file_path.as_str());
-        let environment_file_data = if environment_file_path_.try_exists().into_internal_error_runtime(
+        let environment_file_data = if environment_file_path_.try_exists().into_runtime(
             Backtrace::new(
                 line!(),
                 file!(),
             ),
         )? {
-            std::fs::read_to_string(environment_file_path_).into_internal_error_runtime(
+            std::fs::read_to_string(environment_file_path_).into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -48,7 +48,7 @@ impl Loader<EnvironmentConfiguration> {
             )?
         } else {
             return Err(
-                AlternativeWorkflow::new_internal_error_logic(
+                AggregateError::new_logic(
                     "The environment.toml file does not exist.",
                     Backtrace::new(
                         line!(),
@@ -57,7 +57,7 @@ impl Loader<EnvironmentConfiguration> {
                 ),
             );
         };
-        let environment_configuration_file = toml::from_str::<EnvironmentConfigurationFile>(environment_file_data.as_str()).into_internal_error_runtime(
+        let environment_configuration_file = toml::from_str::<EnvironmentConfigurationFile>(environment_file_data.as_str()).into_runtime(
             Backtrace::new(
                 line!(),
                 file!(),

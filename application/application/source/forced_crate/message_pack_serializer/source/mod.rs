@@ -81,17 +81,17 @@
     clippy::zero_sized_map_values
 )]
 use aggregate_error::{
-    AlternativeWorkflow,
+    AggregateError,
     ResultConverter,
+    Backtrace,
 };
-use auditor::Backtrace;
 use serde::{
     Deserialize,
     Serialize as SerdeSerialize,
 };
 pub struct Serializer;
 impl Serializer {
-    pub fn serialize<'a, T>(subject: &'a T) -> Result<Vec<u8>, AlternativeWorkflow>
+    pub fn serialize<'a, T>(subject: &'a T) -> Result<Vec<u8>, AggregateError>
     where
         T: SerdeSerialize,
     {
@@ -102,7 +102,7 @@ impl Serializer {
             ),
         );
     }
-    pub fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, AlternativeWorkflow>
+    pub fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, AggregateError>
     where
         T: Deserialize<'a>,
     {

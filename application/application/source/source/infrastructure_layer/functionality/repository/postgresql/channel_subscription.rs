@@ -3,11 +3,11 @@ use crate::{
     domain_layer::data::entity::channel_subscription::ChannelSubscription,
     infrastructure_layer::{
         data::{
-            alternative_workflow::{
-                AlternativeWorkflow,
+            aggregate_error::{
+                AggregateError,
                 ResultConverter,
             },
-            auditor::Backtrace,
+            aggregate_error::Backtrace,
         },
         functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver,
     },
@@ -17,7 +17,7 @@ use tokio_postgres::{
     Client as Connection,
 };
 impl PostgresqlRepository<ChannelSubscription> {
-    pub async fn create_1<'a>(database_1_connection: &'a Connection, insert_1: Insert1) -> Result<ChannelSubscription, AlternativeWorkflow> {
+    pub async fn create_1<'a>(database_1_connection: &'a Connection, insert_1: Insert1) -> Result<ChannelSubscription, AggregateError> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             INSERT INTO public.channel_subscription AS cs ( \
@@ -46,7 +46,7 @@ impl PostgresqlRepository<ChannelSubscription> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -58,7 +58,7 @@ impl PostgresqlRepository<ChannelSubscription> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -67,7 +67,7 @@ impl PostgresqlRepository<ChannelSubscription> {
         let channel_subscription = ChannelSubscription::new(
             insert_1.application_user__id,
             insert_1.channel__id,
-            row_registry[0].try_get::<'_, usize, String>(0).into_internal_error_runtime(
+            row_registry[0].try_get::<'_, usize, String>(0).into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -76,7 +76,7 @@ impl PostgresqlRepository<ChannelSubscription> {
         );
         return Ok(channel_subscription);
     }
-    pub async fn is_exist_1<'a>(database_1_connection: &'a Connection, by_1: By1) -> Result<bool, AlternativeWorkflow> {
+    pub async fn is_exist_1<'a>(database_1_connection: &'a Connection, by_1: By1) -> Result<bool, AggregateError> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             SELECT \
@@ -98,7 +98,7 @@ impl PostgresqlRepository<ChannelSubscription> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -110,7 +110,7 @@ impl PostgresqlRepository<ChannelSubscription> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),

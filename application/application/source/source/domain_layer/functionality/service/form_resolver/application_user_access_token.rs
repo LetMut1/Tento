@@ -6,8 +6,8 @@ use crate::{
     },
     infrastructure_layer::{
         data::{
-            alternative_workflow::AlternativeWorkflow,
-            auditor::Backtrace,
+            aggregate_error::AggregateError,
+            aggregate_error::Backtrace,
             control_type::{
                 Base64,
                 MessagePack,
@@ -31,7 +31,7 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
     pub fn to_encrypted<'a>(
         environment_configuration: &'a EnvironmentConfiguration,
         application_user_access_token: &'a ApplicationUserAccessToken<'_>,
-    ) -> Result<String, AlternativeWorkflow> {
+    ) -> Result<String, AggregateError> {
         let data = Serializer::<MessagePack>::serialize(application_user_access_token)?;
         let application_user_access_token_serialized = Encoder_::<Base64>::encode(data.as_slice());
         let application_user_access_token_serialized_signature = Encoder::<Signature>::encode(
@@ -50,14 +50,14 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
     pub fn from_encrypted<'a>(
         environment_configuration: &'a EnvironmentConfiguration,
         application_user_access_token_encrypted: &'a str,
-    ) -> Result<ApplicationUserAccessToken<'static>, AlternativeWorkflow> {
+    ) -> Result<ApplicationUserAccessToken<'static>, AggregateError> {
         let mut token_part_registry = application_user_access_token_encrypted.splitn::<'_, &'_ str>(
             2,
             Self::TOKEN_PARTS_SEPARATOR,
         );
         let application_user_access_token_serialized = token_part_registry.next().ok_or_else(
             || -> _ {
-                return AlternativeWorkflow::new_invalid_argument_from_outside(
+                return AggregateError::new_invalid_argument_from_outside(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -67,7 +67,7 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
         )?;
         let application_user_access_token_serialized_signature = token_part_registry.next().ok_or_else(
             || -> _ {
-                return AlternativeWorkflow::new_invalid_argument_from_outside(
+                return AggregateError::new_invalid_argument_from_outside(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -81,7 +81,7 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
             application_user_access_token_serialized_signature.as_bytes(),
         )? {
             return Err(
-                AlternativeWorkflow::new_invalid_argument_from_outside(
+                AggregateError::new_invalid_argument_from_outside(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -95,7 +95,7 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
 }
 struct Signature;
 impl Encoder<Signature> {
-    fn encode<'a>(environment_configuration: &'a EnvironmentConfiguration, application_user_access_token_serialized: &'a [u8]) -> Result<String, AlternativeWorkflow> {
+    fn encode<'a>(environment_configuration: &'a EnvironmentConfiguration, application_user_access_token_serialized: &'a [u8]) -> Result<String, AggregateError> {
         let application_user_access_token_serialized_encoded = Encoder_::<HmacSha3_512>::encode(
             environment_configuration.encryption.private_key.application_user_access_token.as_bytes(),
             application_user_access_token_serialized,
@@ -106,7 +106,7 @@ impl Encoder<Signature> {
         environment_configuration: &'a EnvironmentConfiguration,
         application_user_access_token_serialized: &'a [u8],
         application_user_access_token_serialized_signature: &'a [u8],
-    ) -> Result<bool, AlternativeWorkflow> {
+    ) -> Result<bool, AggregateError> {
         return Encoder_::<HmacSha3_512>::is_valid(
             environment_configuration.encryption.private_key.application_user_access_token.as_bytes(),
             application_user_access_token_serialized,

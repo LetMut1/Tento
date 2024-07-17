@@ -5,11 +5,11 @@ use super::{
 #[cfg(feature = "manual_testing")]
 use crate::infrastructure_layer::data::control_type::Json;
 use crate::infrastructure_layer::data::{
-    alternative_workflow::{
-        AlternativeWorkflow,
+    aggregate_error::{
+        AggregateError,
         ResultConverter,
     },
-    auditor::Backtrace,
+    aggregate_error::Backtrace,
 };
 use serde::{
     Deserialize,
@@ -18,7 +18,7 @@ use serde::{
 use serde_json;
 #[cfg(feature = "manual_testing")]
 impl Serialize for Serializer<Json> {
-    fn serialize<'a, T>(subject: &'a T) -> Result<Vec<u8>, AlternativeWorkflow>
+    fn serialize<'a, T>(subject: &'a T) -> Result<Vec<u8>, AggregateError>
     where
         T: SerdeSerialize,
     {
@@ -29,7 +29,7 @@ impl Serialize for Serializer<Json> {
             ),
         );
     }
-    fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, AlternativeWorkflow>
+    fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, AggregateError>
     where
         T: Deserialize<'a>,
     {

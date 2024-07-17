@@ -79,8 +79,8 @@ use application::{
     },
     infrastructure_layer::{
         data::{
-            alternative_workflow::AlternativeWorkflow,
-            auditor::Backtrace,
+            aggregate_error::AggregateError,
+            aggregate_error::Backtrace,
         },
         functionality::service::formatter::Formatter,
     },
@@ -115,31 +115,31 @@ impl Processor {
                 return Err("Exhausted list of subcommands and subcommand_required prevents `None`.".into());
             }
         };
-        let alternative_workflow = match subcommand_arg_matches {
+        let aggregate_error = match subcommand_arg_matches {
             (RUN_SERVER, _) => {
-                let alternative_workflow_ = match CommandProcessor::<RunServer>::process() {
+                let aggregate_error_ = match CommandProcessor::<RunServer>::process() {
                     Ok(_) => None,
-                    Err(alternative_workflow__) => Some(alternative_workflow__),
+                    Err(aggregate_error__) => Some(aggregate_error__),
                 };
-                alternative_workflow_
+                aggregate_error_
             }
             (CREATE_FIXTURES, _) => {
-                let alternative_workflow_ = match CommandProcessor::<CreateFixtures>::process() {
+                let aggregate_error_ = match CommandProcessor::<CreateFixtures>::process() {
                     Ok(_) => None,
-                    Err(alternative_workflow__) => Some(alternative_workflow__),
+                    Err(aggregate_error__) => Some(aggregate_error__),
                 };
-                alternative_workflow_
+                aggregate_error_
             }
             (REMOVE_INCOMPLITE_STATE, _) => {
-                let alternative_workflow_ = match CommandProcessor::<RemoveIncompliteState>::process() {
+                let aggregate_error_ = match CommandProcessor::<RemoveIncompliteState>::process() {
                     Ok(_) => None,
-                    Err(alternative_workflow__) => Some(alternative_workflow__),
+                    Err(aggregate_error__) => Some(aggregate_error__),
                 };
-                alternative_workflow_
+                aggregate_error_
             }
             _ => {
                 Some(
-                    AlternativeWorkflow::new_internal_error_runtime_(
+                    AggregateError::new_runtime_(
                         "Unexpected subcommand.".into(),
                         Backtrace::new(
                             line!(),
@@ -149,9 +149,9 @@ impl Processor {
                 )
             }
         };
-        match alternative_workflow {
-            Some(alternative_workflow_) => {
-                return Err(Formatter::<AlternativeWorkflow>::format(&alternative_workflow_).into());
+        match aggregate_error {
+            Some(aggregate_error_) => {
+                return Err(Formatter::<AggregateError>::format(&aggregate_error_).into());
             }
             None => {
                 return Ok(());

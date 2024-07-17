@@ -3,14 +3,12 @@ use crate::{
     application_layer::data::unified_report::UnifiedReport,
     infrastructure_layer::{
         data::{
-            alternative_workflow::{
-                AlternativeWorkflow,
-                InvalidArgument,
-                InternalError,
+            aggregate_error::{
+                AggregateError,
+                Backtrace
             },
-            auditor::{
-                Auditor,
-                Backtrace,
+            server_workflow_error::{
+                ServerWorkflowError,
             },
             control_type::{
                 ActionRound,
@@ -68,9 +66,9 @@ impl Processor<GeneralizedAction> {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
         DE: FnOnce(&'a mut Body, &'a Parts, &'a Params<'b, 'c>) -> F1,
-        F1: Future<Output = Result<Option<I>, AlternativeWorkflow>>,
+        F1: Future<Output = Result<Option<I>, AggregateError>>,
         AP: FnOnce(&'a EnvironmentConfiguration, &'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<PostgresqlConnectionManager<T>>, Option<I>) -> F2,
-        F2: Future<Output = Result<UnifiedReport<O, P>, AlternativeWorkflow>>,
+        F2: Future<Output = Result<UnifiedReport<O, P>, AggregateError>>,
         O: SerdeSerialize,
         P: SerdeSerialize,
         Serializer<SF>: Serialize,
@@ -89,42 +87,33 @@ impl Processor<GeneralizedAction> {
         {
             Ok(data) => {
                 let response = Creator::<Response>::create_ok(data);
-                Logger::<(
-                    ActionRound,
-                    Response,
-                )>::log(
+                Logger::<ActionRound>::log(
                     parts,
                     &response,
                 );
                 response
             }
-            Err(alternative_workflow) => {
-                let response = match alternative_workflow {
-                    AlternativeWorkflow::InvalidArgument {
-                        invalid_argument_auditor,
+            Err(aggregate_error) => {
+                let response = match ServerWorkflowError::new(aggregate_error) {
+                    ServerWorkflowError::Unexpected {
+                        unexpected_auditor
                     } => {
-                        let response_ = Creator::<Response>::create_bad_request();
-                        Logger::<(
-                            ActionRound,
-                            Auditor<InvalidArgument>,
-                        )>::log(
+                        let response_ = Creator::<Response>::create_internal_server_error();
+                        Logger::<ActionRound>::log_unexpected_auditor(
                             parts,
                             &response_,
-                            invalid_argument_auditor,
+                            unexpected_auditor,
                         );
                         response_
                     }
-                    AlternativeWorkflow::InternalError {
-                        internal_error_auditor,
+                    ServerWorkflowError::Expected {
+                        expected_auditor
                     } => {
-                        let response_ = Creator::<Response>::create_internal_server_error();
-                        Logger::<(
-                            ActionRound,
-                            Auditor<InternalError>,
-                        )>::log(
+                        let response_ = Creator::<Response>::create_bad_request();
+                        Logger::<ActionRound>::log_expected_auditor(
                             parts,
                             &response_,
-                            internal_error_auditor,
+                            expected_auditor,
                         );
                         response_
                     }
@@ -142,23 +131,23 @@ impl Processor<GeneralizedAction> {
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         data_extractor: DE,
         action_processor: AP,
-    ) -> Result<Vec<u8>, AlternativeWorkflow>
+    ) -> Result<Vec<u8>, AggregateError>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
         DE: FnOnce(&'a mut Body, &'a Parts, &'a Params<'b, 'c>) -> F1,
-        F1: Future<Output = Result<Option<I>, AlternativeWorkflow>>,
+        F1: Future<Output = Result<Option<I>, AggregateError>>,
         AP: FnOnce(&'a EnvironmentConfiguration, &'a Pool<PostgresqlConnectionManager<T>>, &'a Pool<PostgresqlConnectionManager<T>>, Option<I>) -> F2,
-        F2: Future<Output = Result<UnifiedReport<O, P>, AlternativeWorkflow>>,
+        F2: Future<Output = Result<UnifiedReport<O, P>, AggregateError>>,
         O: SerdeSerialize,
         P: SerdeSerialize,
         Serializer<SF>: Serialize,
     {
         if !Validator::<Parts>::is_valid(parts) {
             return Err(
-                AlternativeWorkflow::new_invalid_argument_from_outside(
+                AggregateError::new_invalid_argument_from_outside(
                     Backtrace::new(
                         line!(),
                         file!(),

@@ -1,19 +1,31 @@
 use super::Formatter;
 use aggregate_error::{
-    AlternativeWorkflow,
+    AggregateError,
     InvalidArgument,
-    InternalError,
+    AggregateError_,
+    Logic,
+    Runtime,
+    Backtrace,
 };
-use auditor::Auditor;
-impl Formatter<AlternativeWorkflow> {
-    pub fn format<'a>(alternative_workflow: &'a AlternativeWorkflow) -> String {
-        return match *alternative_workflow {
-            AlternativeWorkflow::InternalError {
-                ref internal_error_auditor,
-            } => Formatter::<Auditor<InternalError>>::format(internal_error_auditor),
-            AlternativeWorkflow::InvalidArgument {
-                ref invalid_argument_auditor,
-            } => Formatter::<Auditor<InvalidArgument>>::format(invalid_argument_auditor),
+use super::context_report;
+impl Formatter<AggregateError> {
+    pub fn format<'a>(aggregate_error: &'a AggregateError) -> String {
+        let message_part = match aggregate_error.0.subject {
+            AggregateError_::Logic {
+                ref logic
+            } => Formatter::<Logic>::format(logic),
+            AggregateError_::Runtime {
+                ref runtime
+            } => Formatter::<Runtime>::format(runtime),
+            AggregateError_::InvalidArgument {
+                ref invalid_argument
+            } => Formatter::<InvalidArgument>::format(invalid_argument),
         };
+
+        return format!(
+            context_report!(),
+            message_part.as_str(),
+            Formatter::<Backtrace>::format(&aggregate_error.0.backtrace).as_str(),
+        );
     }
 }

@@ -24,12 +24,12 @@ use crate::{
     },
     infrastructure_layer::{
         data::{
-            alternative_workflow::{
-                AlternativeWorkflow,
+            aggregate_error::{
+                AggregateError,
                 OptionConverter,
                 ResultConverter,
             },
-            auditor::Backtrace,
+            aggregate_error::Backtrace,
             control_type::{
                 ApplicationUser__Authorization___RefreshAccessToken,
                 UnixTime,
@@ -76,14 +76,14 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
         _database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         incoming: Option<Incoming>,
-    ) -> Result<UnifiedReport<Outcoming, Precedent>, AlternativeWorkflow>
+    ) -> Result<UnifiedReport<Outcoming, Precedent>, AggregateError>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let incoming_ = incoming.into_internal_error_logic_value_does_not_exist(
+        let incoming_ = incoming.into_logic_value_does_not_exist(
             Backtrace::new(
                 line!(),
                 file!(),
@@ -93,7 +93,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
             environment_configuration,
             incoming_.application_user_access_token_encrypted.as_str(),
         )?;
-        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.into_internal_error_runtime(
+        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.into_runtime(
             Backtrace::new(
                 line!(),
                 file!(),
@@ -121,7 +121,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
         )?;
         if !is_valid || application_user_access_token.id != application_user_access_refresh_token.application_user_access_token__id.as_ref() {
             return Err(
-                AlternativeWorkflow::new_invalid_argument_from_outside(
+                AggregateError::new_invalid_argument_from_outside(
                     Backtrace::new(
                         line!(),
                         file!(),

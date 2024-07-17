@@ -3,11 +3,11 @@ use crate::{
     domain_layer::data::entity::channel_outer_link::ChannelOuterLink,
     infrastructure_layer::{
         data::{
-            alternative_workflow::{
-                AlternativeWorkflow,
+            aggregate_error::{
+                AggregateError,
                 ResultConverter,
             },
-            auditor::Backtrace,
+            aggregate_error::Backtrace,
         },
         functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver,
     },
@@ -18,7 +18,7 @@ use tokio_postgres::{
     Client as Connection,
 };
 impl PostgresqlRepository<ChannelOuterLink> {
-    pub async fn create_1<'a>(database_1_connection: &'a Connection, insert_1: Insert1) -> Result<ChannelOuterLink, AlternativeWorkflow> {
+    pub async fn create_1<'a>(database_1_connection: &'a Connection, insert_1: Insert1) -> Result<ChannelOuterLink, AggregateError> {
         let channel_outer_link__alias = insert_1.channel_outer_link__alias.as_str();
         let channel_outer_link__address = insert_1.channel_outer_link__address.as_str();
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
@@ -55,7 +55,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -67,7 +67,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -77,7 +77,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
             insert_1.channel_outer_link__from,
             insert_1.channel_outer_link__alias,
             insert_1.channel_outer_link__address,
-            row_registry[0].try_get::<'_, usize, String>(0).into_internal_error_runtime(
+            row_registry[0].try_get::<'_, usize, String>(0).into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -86,7 +86,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
         );
         return Ok(channel_outer_link);
     }
-    pub async fn find_1<'a>(database_1_connection: &'a Connection, by_1: By1, limit: i16) -> Result<Vec<ChannelOuterLink1>, AlternativeWorkflow> {
+    pub async fn find_1<'a>(database_1_connection: &'a Connection, by_1: By1, limit: i16) -> Result<Vec<ChannelOuterLink1>, AggregateError> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             SELECT \
@@ -110,7 +110,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -122,7 +122,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -134,13 +134,13 @@ impl PostgresqlRepository<ChannelOuterLink> {
         }
         '_a: for row in row_registry.iter() {
             let channel_outer_link = ChannelOuterLink1 {
-                channel_outer_link__alias: row.try_get::<'_, usize, String>(0).into_internal_error_runtime(
+                channel_outer_link__alias: row.try_get::<'_, usize, String>(0).into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
                     ),
                 )?,
-                channel_outer_link__address: row.try_get::<'_, usize, String>(1).into_internal_error_runtime(
+                channel_outer_link__address: row.try_get::<'_, usize, String>(1).into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),

@@ -1,7 +1,3 @@
-use auditor::{
-    Auditor,
-    Backtrace,
-};
 use std::{
     error::Error as StdError,
     fmt::{
@@ -11,230 +7,279 @@ use std::{
         Formatter,
     },
 };
-pub enum AlternativeWorkflow {
-    InternalError {
-        internal_error_auditor: Auditor<InternalError>,
-    },
-    InvalidArgument {
-        invalid_argument_auditor: Auditor<InvalidArgument>,
-    },
-}
-impl AlternativeWorkflow {
-    pub fn new_internal_error_logic(message: &'static str, backtrace: Backtrace) -> Self {
-        return Self::InternalError {
-            internal_error_auditor: Auditor::new(
-                InternalError::Logic {
-                    message,
+pub struct AggregateError(pub Auditor<AggregateError_>);
+impl AggregateError {
+    pub fn new_logic(message: &'static str, backtrace: Backtrace) -> Self {
+        return Self(
+            Auditor::<AggregateError_>::new(
+                AggregateError_::Logic {
+                    logic: Logic {
+                        message
+                    },
                 },
                 backtrace,
             ),
-        };
+        );
     }
-    pub fn new_internal_error_logic_value_does_not_exist(backtrace: Backtrace) -> Self {
-        return Self::InternalError {
-            internal_error_auditor: Auditor::new(
-                InternalError::Logic {
-                    message: "Value does not exist.",
+    pub fn new_logic_value_does_not_exist(backtrace: Backtrace) -> Self {
+        return Self(
+            Auditor::<AggregateError_>::new(
+                AggregateError_::Logic {
+                    logic: Logic {
+                        message: "Value does not exist.",
+                    },
                 },
                 backtrace,
             ),
-        };
+        );
     }
-    pub fn new_internal_error_logic_value_already_exist(backtrace: Backtrace) -> Self {
-        return Self::InternalError {
-            internal_error_auditor: Auditor::new(
-                InternalError::Logic {
-                    message: "Value already exist.",
+    pub fn new_logic_value_already_exist(backtrace: Backtrace) -> Self {
+        return Self(
+            Auditor::<AggregateError_>::new(
+                AggregateError_::Logic {
+                    logic: Logic {
+                        message: "Value already exist.",
+                    },
                 },
                 backtrace,
             ),
-        };
+        );
     }
-    pub fn new_internal_error_logic_unreachable_state(backtrace: Backtrace) -> Self {
-        return Self::InternalError {
-            internal_error_auditor: Auditor::new(
-                InternalError::Logic {
-                    message: "Unreachable state.",
+    pub fn new_logic_unreachable_state(backtrace: Backtrace) -> Self {
+        return Self(
+            Auditor::<AggregateError_>::new(
+                AggregateError_::Logic {
+                    logic: Logic {
+                        message: "Unreachable state.",
+                    },
                 },
                 backtrace,
             ),
-        };
+        );
     }
-    pub fn new_internal_error_logic_out_of_range(backtrace: Backtrace) -> Self {
-        return Self::InternalError {
-            internal_error_auditor: Auditor::new(
-                InternalError::Logic {
-                    message: "Out of range.",
+    pub fn new_logic_out_of_range(backtrace: Backtrace) -> Self {
+        return Self(
+            Auditor::<AggregateError_>::new(
+                AggregateError_::Logic {
+                    logic: Logic {
+                        message: "Out of range.",
+                    },
                 },
                 backtrace,
             ),
-        };
+        );
     }
-    pub fn new_internal_error_runtime<E>(error: E, backtrace: Backtrace) -> Self
+    pub fn new_runtime<E>(error: E, backtrace: Backtrace) -> Self
     where
         E: StdError + Send + Sync + 'static,
     {
-        return Self::InternalError {
-            internal_error_auditor: Auditor::new(
-                InternalError::Runtime {
+        return Self(
+            Auditor::<AggregateError_>::new(
+                AggregateError_::Runtime {
                     runtime: Runtime {
-                        context: error.into(),
+                        context: Context(error.into()),
                     },
                 },
                 backtrace,
             ),
-        };
+        );
     }
-    pub fn new_internal_error_runtime_(error: Box<dyn StdError + Send + Sync + 'static>, backtrace: Backtrace) -> Self {
-        return Self::InternalError {
-            internal_error_auditor: Auditor::new(
-                InternalError::Runtime {
+    pub fn new_runtime_(error: Box<dyn StdError + Send + Sync + 'static>, backtrace: Backtrace) -> Self {
+        return Self(
+            Auditor::<AggregateError_>::new(
+                AggregateError_::Runtime {
                     runtime: Runtime {
-                        context: error,
+                        context: Context(error),
                     },
                 },
                 backtrace,
             ),
-        };
+        );
     }
     pub fn new_invalid_argument_from_outside(backtrace: Backtrace) -> Self {
-        return Self::InvalidArgument {
-            invalid_argument_auditor: Auditor::new(
-                InvalidArgument::FromOutside,
+        return Self(
+            Auditor::<AggregateError_>::new(
+                AggregateError_::InvalidArgument {
+                    invalid_argument: InvalidArgument::FromOutside,
+                },
                 backtrace,
             ),
-        };
+        );
     }
-    pub fn new_invalid_argument_from_client_code(backtrace: Backtrace) -> Self {
-        return Self::InvalidArgument {
-            invalid_argument_auditor: Auditor::new(
-                InvalidArgument::FromClientCode,
+    pub fn new_invalid_argument_from_client_code<E>(error: E, backtrace: Backtrace) -> Self
+    where
+        E: StdError + Send + Sync + 'static,
+    {
+        return Self(
+            Auditor::<AggregateError_>::new(
+                AggregateError_::InvalidArgument {
+                    invalid_argument: InvalidArgument::FromClientCode {
+                        from_client_code: FromClientCode {
+                            context: Context(error.into()),
+                        },
+                    },
+                },
                 backtrace,
             ),
-        };
+        );
+    }
+    pub fn new_invalid_argument_from_client_code_(error: Box<dyn StdError + Send + Sync + 'static>, backtrace: Backtrace) -> Self {
+        return Self(
+            Auditor::<AggregateError_>::new(
+                AggregateError_::InvalidArgument {
+                    invalid_argument: InvalidArgument::FromClientCode {
+                        from_client_code: FromClientCode {
+                            context: Context(error),
+                        },
+                    },
+                },
+                backtrace,
+            ),
+        );
     }
 }
-impl Debug for AlternativeWorkflow {
+impl Debug for AggregateError {
     fn fmt<'a, 'b>(&'a self, _: &'b mut Formatter<'_>) -> Result<(), FmtError> {
         return Ok(());
     }
 }
-impl Display for AlternativeWorkflow {
+impl Display for AggregateError {
     fn fmt<'a, 'b>(&'a self, _: &'b mut Formatter<'_>) -> Result<(), FmtError> {
         return Ok(());
     }
 }
-impl StdError for AlternativeWorkflow {}
-pub enum InternalError {
+impl StdError for AggregateError {}
+pub enum AggregateError_ {
     Logic {
-        message: &'static str,
+        logic: Logic,
     },
-    // This is used for methods that can work as expected or return an error at different times with the same set of parameters.
+    // Used for methods that can return Ok or Err at different times with the same set of parameters.
     Runtime {
         runtime: Runtime,
     },
+    // Used for methods that should always return only one of Ok or Err at different times with the same set of parameters.
+    InvalidArgument {
+        invalid_argument: InvalidArgument,
+    },
+}
+pub struct Logic {
+    pub message: &'static str,
 }
 pub struct Runtime {
-    context: Box<dyn StdError + Send + Sync + 'static>,
+    pub context: Context,
 }
-impl Runtime {
+pub struct Context(Box<dyn StdError + Send + Sync + 'static>);
+impl Context {
     pub fn get<'a>(&'a self) -> &'a (dyn StdError + 'static) {
-        return self.context.as_ref();
+        return self.0.as_ref();
     }
 }
 pub enum InvalidArgument {
     FromOutside,
-    FromClientCode,
+    FromClientCode {
+        from_client_code: FromClientCode,
+    },
+}
+pub struct FromClientCode {
+    pub context: Context,
+}
+pub struct Auditor<T> {
+    pub subject: T,
+    pub backtrace: Backtrace,
+}
+impl<T> Auditor<T> {
+    pub fn new(subject: T, backtrace: Backtrace) -> Self {
+        return Self {
+            subject,
+            backtrace,
+        };
+    }
+}
+pub struct Backtrace {
+    pub line_number: u32,
+    pub file_path: &'static str,
+}
+impl Backtrace {
+    pub fn new(line_number: u32, file_path: &'static str) -> Self {
+        return Self {
+            line_number,
+            file_path,
+        };
+    }
 }
 pub trait ResultConverter<T> {
-    fn into_internal_error_runtime(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow>;
-    fn into_invalid_argument_from_outside(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow>;
-    fn into_invalid_argument_from_client_code(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow>;
+    fn into_runtime(self, backtrace: Backtrace) -> Result<T, AggregateError>;
+    fn into_invalid_argument_from_client_code(self, backtrace: Backtrace) -> Result<T, AggregateError>;
 }
 impl<E, T> ResultConverter<T> for Result<T, E>
 where
     E: StdError + Send + Sync + 'static,
 {
-    fn into_internal_error_runtime(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow> {
+    fn into_runtime(self, backtrace: Backtrace) -> Result<T, AggregateError> {
         return self.map_err(
             move |error: _| -> _ {
-                return AlternativeWorkflow::new_internal_error_runtime(
+                return AggregateError::new_runtime(
                     error,
                     backtrace,
                 );
             },
         );
     }
-    fn into_invalid_argument_from_outside(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow> {
+    fn into_invalid_argument_from_client_code(self, backtrace: Backtrace) -> Result<T, AggregateError> {
         return self.map_err(
-            move |_: _| -> _ {
-                return AlternativeWorkflow::new_invalid_argument_from_outside(backtrace);
-            },
-        );
-    }
-    fn into_invalid_argument_from_client_code(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow> {
-        return self.map_err(
-            move |_: _| -> _ {
-                return AlternativeWorkflow::new_invalid_argument_from_client_code(backtrace);
+            move |error: _| -> _ {
+                return AggregateError::new_invalid_argument_from_client_code(error, backtrace);
             },
         );
     }
 }
 pub trait ResultConverter_<T> {
-    fn into_internal_error_runtime(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow>;
-    fn into_invalid_argument_from_outside(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow>;
-    fn into_invalid_argument_from_client_code(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow>;
+    fn into_runtime(self, backtrace: Backtrace) -> Result<T, AggregateError>;
+    fn into_invalid_argument_from_client_code(self, backtrace: Backtrace) -> Result<T, AggregateError>;
 }
 impl<T> ResultConverter_<T> for Result<T, Box<dyn StdError + Sync + Send + 'static>> {
-    fn into_internal_error_runtime(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow> {
+    fn into_runtime(self, backtrace: Backtrace) -> Result<T, AggregateError> {
         return self.map_err(
             move |error: _| -> _ {
-                return AlternativeWorkflow::new_internal_error_runtime_(
+                return AggregateError::new_runtime_(
                     error,
                     backtrace,
                 );
             },
         );
     }
-    fn into_invalid_argument_from_outside(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow> {
+    fn into_invalid_argument_from_client_code(self, backtrace: Backtrace) -> Result<T, AggregateError> {
         return self.map_err(
-            move |_: _| -> _ {
-                return AlternativeWorkflow::new_invalid_argument_from_outside(backtrace);
-            },
-        );
-    }
-    fn into_invalid_argument_from_client_code(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow> {
-        return self.map_err(
-            move |_: _| -> _ {
-                return AlternativeWorkflow::new_invalid_argument_from_client_code(backtrace);
+            move |error: _| -> _ {
+                return AggregateError::new_invalid_argument_from_client_code_(error, backtrace);
             },
         );
     }
 }
 pub trait OptionConverter<T> {
-    fn into_internal_error_logic_unreachable_state(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow>;
-    fn into_internal_error_logic_out_of_range(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow>;
-    fn into_internal_error_logic_value_does_not_exist(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow>;
+    fn into_logic_unreachable_state(self, backtrace: Backtrace) -> Result<T, AggregateError>;
+    fn into_logic_out_of_range(self, backtrace: Backtrace) -> Result<T, AggregateError>;
+    fn into_logic_value_does_not_exist(self, backtrace: Backtrace) -> Result<T, AggregateError>;
 }
 impl<T> OptionConverter<T> for Option<T> {
-    fn into_internal_error_logic_unreachable_state(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow> {
+    fn into_logic_unreachable_state(self, backtrace: Backtrace) -> Result<T, AggregateError> {
         return self.ok_or_else(
             move || -> _ {
-                return AlternativeWorkflow::new_internal_error_logic_unreachable_state(backtrace);
+                return AggregateError::new_logic_unreachable_state(backtrace);
             },
         );
     }
-    fn into_internal_error_logic_out_of_range(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow> {
+    fn into_logic_out_of_range(self, backtrace: Backtrace) -> Result<T, AggregateError> {
         return self.ok_or_else(
             move || -> _ {
-                return AlternativeWorkflow::new_internal_error_logic_out_of_range(backtrace);
+                return AggregateError::new_logic_out_of_range(backtrace);
             },
         );
     }
-    fn into_internal_error_logic_value_does_not_exist(self, backtrace: Backtrace) -> Result<T, AlternativeWorkflow> {
+    fn into_logic_value_does_not_exist(self, backtrace: Backtrace) -> Result<T, AggregateError> {
         return self.ok_or_else(
             move || -> _ {
-                return AlternativeWorkflow::new_internal_error_logic_value_does_not_exist(backtrace);
+                return AggregateError::new_logic_value_does_not_exist(backtrace);
             },
         );
     }

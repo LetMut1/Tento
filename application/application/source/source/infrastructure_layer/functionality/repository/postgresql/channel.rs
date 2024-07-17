@@ -3,11 +3,11 @@ use crate::{
     domain_layer::data::entity::channel::Channel,
     infrastructure_layer::{
         data::{
-            alternative_workflow::{
-                AlternativeWorkflow,
+            aggregate_error::{
+                AggregateError,
                 ResultConverter,
             },
-            auditor::Backtrace,
+            aggregate_error::Backtrace,
         },
         functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver,
     },
@@ -19,7 +19,7 @@ use tokio_postgres::{
     Client as Connection,
 };
 impl PostgresqlRepository<Channel<'_>> {
-    pub async fn create_1<'a>(database_1_connection: &'a Connection, insert_1: Insert1) -> Result<Channel<'static>, AlternativeWorkflow> {
+    pub async fn create_1<'a>(database_1_connection: &'a Connection, insert_1: Insert1) -> Result<Channel<'static>, AggregateError> {
         let channel__name = insert_1.channel__name.as_str();
         let channel__linked_name = insert_1.channel__linked_name.as_str();
         let channel__description = match insert_1.channel__description {
@@ -126,7 +126,7 @@ impl PostgresqlRepository<Channel<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -138,7 +138,7 @@ impl PostgresqlRepository<Channel<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -146,7 +146,7 @@ impl PostgresqlRepository<Channel<'_>> {
             )?;
         return Ok(
             Channel::new(
-                row_registry[0].try_get::<'_, usize, i64>(0).into_internal_error_runtime(
+                row_registry[0].try_get::<'_, usize, i64>(0).into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -164,7 +164,7 @@ impl PostgresqlRepository<Channel<'_>> {
                 insert_1.channel__subscribers_quantity,
                 insert_1.channel__marks_quantity,
                 insert_1.channel__viewing_quantity,
-                row_registry[0].try_get::<'_, usize, String>(1).into_internal_error_runtime(
+                row_registry[0].try_get::<'_, usize, String>(1).into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -173,7 +173,7 @@ impl PostgresqlRepository<Channel<'_>> {
             ),
         );
     }
-    pub async fn find_1<'a>(database_1_connection: &'a Connection, by_1: By1) -> Result<Option<Channel<'static>>, AlternativeWorkflow> {
+    pub async fn find_1<'a>(database_1_connection: &'a Connection, by_1: By1) -> Result<Option<Channel<'static>>, AggregateError> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             SELECT \
@@ -202,7 +202,7 @@ impl PostgresqlRepository<Channel<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -214,7 +214,7 @@ impl PostgresqlRepository<Channel<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -227,81 +227,81 @@ impl PostgresqlRepository<Channel<'_>> {
             Some(
                 Channel::new(
                     by_1.channel__id,
-                    row_registry[0].try_get::<'_, usize, i64>(0).into_internal_error_runtime(
+                    row_registry[0].try_get::<'_, usize, i64>(0).into_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
                     Cow::Owned(
-                        row_registry[0].try_get::<'_, usize, String>(1).into_internal_error_runtime(
+                        row_registry[0].try_get::<'_, usize, String>(1).into_runtime(
                             Backtrace::new(
                                 line!(),
                                 file!(),
                             ),
                         )?,
                     ),
-                    row_registry[0].try_get::<'_, usize, String>(2).into_internal_error_runtime(
+                    row_registry[0].try_get::<'_, usize, String>(2).into_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, Option<String>>(3).into_internal_error_runtime(
+                    row_registry[0].try_get::<'_, usize, Option<String>>(3).into_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, i16>(4).into_internal_error_runtime(
+                    row_registry[0].try_get::<'_, usize, i16>(4).into_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, i16>(5).into_internal_error_runtime(
+                    row_registry[0].try_get::<'_, usize, i16>(5).into_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, Vec<i16>>(6).into_internal_error_runtime(
+                    row_registry[0].try_get::<'_, usize, Vec<i16>>(6).into_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, Option<String>>(7).into_internal_error_runtime(
+                    row_registry[0].try_get::<'_, usize, Option<String>>(7).into_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, Option<String>>(8).into_internal_error_runtime(
+                    row_registry[0].try_get::<'_, usize, Option<String>>(8).into_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, i64>(9).into_internal_error_runtime(
+                    row_registry[0].try_get::<'_, usize, i64>(9).into_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, i64>(10).into_internal_error_runtime(
+                    row_registry[0].try_get::<'_, usize, i64>(10).into_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, i64>(11).into_internal_error_runtime(
+                    row_registry[0].try_get::<'_, usize, i64>(11).into_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, String>(12).into_internal_error_runtime(
+                    row_registry[0].try_get::<'_, usize, String>(12).into_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
@@ -311,7 +311,7 @@ impl PostgresqlRepository<Channel<'_>> {
             ),
         );
     }
-    pub async fn find_2<'a, 'b>(database_1_connection: &'a Connection, by_2: By2<'b>) -> Result<Option<Channel<'b>>, AlternativeWorkflow> {
+    pub async fn find_2<'a, 'b>(database_1_connection: &'a Connection, by_2: By2<'b>) -> Result<Option<Channel<'b>>, AggregateError> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             SELECT \
@@ -340,7 +340,7 @@ impl PostgresqlRepository<Channel<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -352,7 +352,7 @@ impl PostgresqlRepository<Channel<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -364,80 +364,80 @@ impl PostgresqlRepository<Channel<'_>> {
         return Ok(
             Some(
                 Channel::new(
-                    row_registry[0].try_get::<'_, usize, i64>(0).into_internal_error_runtime(
+                    row_registry[0].try_get::<'_, usize, i64>(0).into_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, i64>(1).into_internal_error_runtime(
+                    row_registry[0].try_get::<'_, usize, i64>(1).into_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
                     Cow::Borrowed(by_2.channel__name),
-                    row_registry[0].try_get::<'_, usize, String>(2).into_internal_error_runtime(
+                    row_registry[0].try_get::<'_, usize, String>(2).into_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, Option<String>>(3).into_internal_error_runtime(
+                    row_registry[0].try_get::<'_, usize, Option<String>>(3).into_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, i16>(4).into_internal_error_runtime(
+                    row_registry[0].try_get::<'_, usize, i16>(4).into_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, i16>(5).into_internal_error_runtime(
+                    row_registry[0].try_get::<'_, usize, i16>(5).into_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, Vec<i16>>(6).into_internal_error_runtime(
+                    row_registry[0].try_get::<'_, usize, Vec<i16>>(6).into_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, Option<String>>(7).into_internal_error_runtime(
+                    row_registry[0].try_get::<'_, usize, Option<String>>(7).into_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, Option<String>>(8).into_internal_error_runtime(
+                    row_registry[0].try_get::<'_, usize, Option<String>>(8).into_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, i64>(9).into_internal_error_runtime(
+                    row_registry[0].try_get::<'_, usize, i64>(9).into_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, i64>(10).into_internal_error_runtime(
+                    row_registry[0].try_get::<'_, usize, i64>(10).into_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, i64>(11).into_internal_error_runtime(
+                    row_registry[0].try_get::<'_, usize, i64>(11).into_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, String>(12).into_internal_error_runtime(
+                    row_registry[0].try_get::<'_, usize, String>(12).into_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),

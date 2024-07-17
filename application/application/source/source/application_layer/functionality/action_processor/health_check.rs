@@ -4,7 +4,7 @@ use crate::{
         functionality::action_processor::ActionProcessor,
     },
     infrastructure_layer::data::{
-        alternative_workflow::AlternativeWorkflow,
+        aggregate_error::AggregateError,
         control_type::HealthCheck,
         environment_configuration::EnvironmentConfiguration,
         void::Void,
@@ -32,7 +32,7 @@ impl ActionProcessor<HealthCheck> {
         _database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _incoming: Option<Void>,
-    ) -> Result<UnifiedReport<Void, Void>, AlternativeWorkflow>
+    ) -> Result<UnifiedReport<Void, Void>, AggregateError>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,

@@ -12,11 +12,11 @@ use crate::{
     },
     infrastructure_layer::{
         data::{
-            alternative_workflow::{
-                AlternativeWorkflow,
+            aggregate_error::{
+                AggregateError,
                 ResultConverter,
             },
-            auditor::Backtrace,
+            aggregate_error::Backtrace,
         },
         functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver,
     },
@@ -27,7 +27,7 @@ use tokio_postgres::{
     Client as Connection,
 };
 impl PostgresqlRepository<ApplicationUser<'_>> {
-    pub async fn create_1<'a>(database_1_connection: &'a Connection, insert_1: Insert1) -> Result<ApplicationUser<'static>, AlternativeWorkflow> {
+    pub async fn create_1<'a>(database_1_connection: &'a Connection, insert_1: Insert1) -> Result<ApplicationUser<'static>, AggregateError> {
         let application_user__email = insert_1.application_user__email.as_str();
         let application_user__nickname = insert_1.application_user__nickname.as_str();
         let application_user__password_hash = insert_1.application_user__password_hash.as_str();
@@ -68,7 +68,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -80,7 +80,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -88,7 +88,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             )?;
         return Ok(
             ApplicationUser::new(
-                row_registry[0].try_get::<'_, usize, i64>(0).into_internal_error_runtime(
+                row_registry[0].try_get::<'_, usize, i64>(0).into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -97,7 +97,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 insert_1.application_user__email,
                 Cow::Owned(insert_1.application_user__nickname),
                 insert_1.application_user__password_hash,
-                row_registry[0].try_get::<'_, usize, String>(1).into_internal_error_runtime(
+                row_registry[0].try_get::<'_, usize, String>(1).into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -106,7 +106,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             ),
         );
     }
-    pub async fn update_1<'a>(database_1_connection: &'a Connection, update_1: Update1<'_>, by_3: By3) -> Result<(), AlternativeWorkflow> {
+    pub async fn update_1<'a>(database_1_connection: &'a Connection, update_1: Update1<'_>, by_3: By3) -> Result<(), AggregateError> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             UPDATE ONLY public.application_user AS au \
@@ -133,7 +133,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -145,7 +145,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -153,7 +153,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             )?;
         return Ok(());
     }
-    pub async fn is_exist_1<'a>(database_1_connection: &'a Connection, by_1: By1<'_>) -> Result<bool, AlternativeWorkflow> {
+    pub async fn is_exist_1<'a>(database_1_connection: &'a Connection, by_1: By1<'_>) -> Result<bool, AggregateError> {
         let application_user__nickname = by_1.application_user__nickname;
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
@@ -171,7 +171,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -183,7 +183,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -194,7 +194,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         }
         return Ok(true);
     }
-    pub async fn is_exist_2<'a>(database_1_connection: &'a Connection, by_2: By2<'_>) -> Result<bool, AlternativeWorkflow> {
+    pub async fn is_exist_2<'a>(database_1_connection: &'a Connection, by_2: By2<'_>) -> Result<bool, AggregateError> {
         let application_user__email = by_2.application_user__email;
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
@@ -212,7 +212,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -224,7 +224,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -235,7 +235,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         }
         return Ok(true);
     }
-    pub async fn is_exist_3<'a>(database_1_connection: &'a Connection, by_3: By3) -> Result<bool, AlternativeWorkflow> {
+    pub async fn is_exist_3<'a>(database_1_connection: &'a Connection, by_3: By3) -> Result<bool, AggregateError> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             SELECT \
@@ -252,7 +252,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -264,7 +264,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -275,7 +275,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         }
         return Ok(true);
     }
-    pub async fn find_1<'a, 'b>(database_1_connection: &'a Connection, by_1: By1<'b>) -> Result<Option<ApplicationUser<'b>>, AlternativeWorkflow> {
+    pub async fn find_1<'a, 'b>(database_1_connection: &'a Connection, by_1: By1<'b>) -> Result<Option<ApplicationUser<'b>>, AggregateError> {
         let application_user__nickname = by_1.application_user__nickname;
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
@@ -296,7 +296,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -308,7 +308,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -320,26 +320,26 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         return Ok(
             Some(
                 ApplicationUser::new(
-                    row_registry[0].try_get::<'_, usize, i64>(0).into_internal_error_runtime(
+                    row_registry[0].try_get::<'_, usize, i64>(0).into_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, String>(1).into_internal_error_runtime(
+                    row_registry[0].try_get::<'_, usize, String>(1).into_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
                     Cow::Borrowed(by_1.application_user__nickname),
-                    row_registry[0].try_get::<'_, usize, String>(2).into_internal_error_runtime(
+                    row_registry[0].try_get::<'_, usize, String>(2).into_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, String>(3).into_internal_error_runtime(
+                    row_registry[0].try_get::<'_, usize, String>(3).into_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
@@ -349,7 +349,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             ),
         );
     }
-    pub async fn find_2<'a>(database_1_connection: &'a Connection, by_1: By1<'_>) -> Result<Option<ApplicationUser1>, AlternativeWorkflow> {
+    pub async fn find_2<'a>(database_1_connection: &'a Connection, by_1: By1<'_>) -> Result<Option<ApplicationUser1>, AggregateError> {
         let application_user__nickname = by_1.application_user__nickname;
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
@@ -369,7 +369,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -381,7 +381,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -393,19 +393,19 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         return Ok(
             Some(
                 ApplicationUser1 {
-                    id: row_registry[0].try_get::<'_, usize, i64>(0).into_internal_error_runtime(
+                    id: row_registry[0].try_get::<'_, usize, i64>(0).into_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    email: row_registry[0].try_get::<'_, usize, String>(1).into_internal_error_runtime(
+                    email: row_registry[0].try_get::<'_, usize, String>(1).into_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    password_hash: row_registry[0].try_get::<'_, usize, String>(2).into_internal_error_runtime(
+                    password_hash: row_registry[0].try_get::<'_, usize, String>(2).into_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
@@ -415,7 +415,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             ),
         );
     }
-    pub async fn find_3<'a>(database_1_connection: &'a Connection, by_2: By2<'_>) -> Result<Option<ApplicationUser2>, AlternativeWorkflow> {
+    pub async fn find_3<'a>(database_1_connection: &'a Connection, by_2: By2<'_>) -> Result<Option<ApplicationUser2>, AggregateError> {
         let application_user__email = by_2.application_user__email;
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
@@ -435,7 +435,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -447,7 +447,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -459,19 +459,19 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         return Ok(
             Some(
                 ApplicationUser2 {
-                    id: row_registry[0].try_get::<'_, usize, i64>(0).into_internal_error_runtime(
+                    id: row_registry[0].try_get::<'_, usize, i64>(0).into_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    nickname: row_registry[0].try_get::<'_, usize, String>(1).into_internal_error_runtime(
+                    nickname: row_registry[0].try_get::<'_, usize, String>(1).into_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    password_hash: row_registry[0].try_get::<'_, usize, String>(2).into_internal_error_runtime(
+                    password_hash: row_registry[0].try_get::<'_, usize, String>(2).into_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
@@ -481,7 +481,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             ),
         );
     }
-    pub async fn find_4<'a>(database_1_connection: &'a Connection, by_2: By2<'_>) -> Result<Option<ApplicationUser3>, AlternativeWorkflow> {
+    pub async fn find_4<'a>(database_1_connection: &'a Connection, by_2: By2<'_>) -> Result<Option<ApplicationUser3>, AggregateError> {
         let application_user__email = by_2.application_user__email;
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
@@ -499,7 +499,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -511,7 +511,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -523,7 +523,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         return Ok(
             Some(
                 ApplicationUser3 {
-                    id: row_registry[0].try_get::<'_, usize, i64>(0).into_internal_error_runtime(
+                    id: row_registry[0].try_get::<'_, usize, i64>(0).into_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
@@ -533,7 +533,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             ),
         );
     }
-    pub async fn find_5<'a>(database_1_connection: &'a Connection, by_3: By3) -> Result<Option<ApplicationUser4>, AlternativeWorkflow> {
+    pub async fn find_5<'a>(database_1_connection: &'a Connection, by_3: By3) -> Result<Option<ApplicationUser4>, AggregateError> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             SELECT \
@@ -552,7 +552,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -564,7 +564,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -576,19 +576,19 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         return Ok(
             Some(
                 ApplicationUser4 {
-                    email: row_registry[0].try_get::<'_, usize, String>(0).into_internal_error_runtime(
+                    email: row_registry[0].try_get::<'_, usize, String>(0).into_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    nickname: row_registry[0].try_get::<'_, usize, String>(1).into_internal_error_runtime(
+                    nickname: row_registry[0].try_get::<'_, usize, String>(1).into_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    password_hash: row_registry[0].try_get::<'_, usize, String>(2).into_internal_error_runtime(
+                    password_hash: row_registry[0].try_get::<'_, usize, String>(2).into_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
@@ -598,7 +598,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
             ),
         );
     }
-    pub async fn find_6<'a>(database_1_connection: &'a Connection, by_3: By3) -> Result<Option<ApplicationUser5>, AlternativeWorkflow> {
+    pub async fn find_6<'a>(database_1_connection: &'a Connection, by_3: By3) -> Result<Option<ApplicationUser5>, AggregateError> {
         let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
         let query = "\
             SELECT \
@@ -615,7 +615,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -627,7 +627,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
             )
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -639,7 +639,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         return Ok(
             Some(
                 ApplicationUser5 {
-                    email: row_registry[0].try_get::<'_, usize, String>(0).into_internal_error_runtime(
+                    email: row_registry[0].try_get::<'_, usize, String>(0).into_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),

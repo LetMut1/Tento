@@ -1,10 +1,10 @@
 use super::Resolver;
 use crate::infrastructure_layer::data::{
-    alternative_workflow::{
-        AlternativeWorkflow,
+    aggregate_error::{
+        AggregateError,
         OptionConverter,
     },
-    auditor::Backtrace,
+    aggregate_error::Backtrace,
     control_type::DateTime,
 };
 use chrono::{
@@ -19,14 +19,14 @@ impl Resolver<DateTime> {
     pub fn unixtime_get_now() -> i64 {
         return Utc::now().timestamp();
     }
-    pub fn unixtime_add_minutes_interval_from_now(quantity_of_minutes: i64) -> Result<i64, AlternativeWorkflow> {
-        let quantity_of_seconds = quantity_of_minutes.checked_mul(60).into_internal_error_logic_out_of_range(
+    pub fn unixtime_add_minutes_interval_from_now(quantity_of_minutes: i64) -> Result<i64, AggregateError> {
+        let quantity_of_seconds = quantity_of_minutes.checked_mul(60).into_logic_out_of_range(
             Backtrace::new(
                 line!(),
                 file!(),
             ),
         )?;
-        return Utc::now().timestamp().checked_add(quantity_of_seconds).into_internal_error_logic_out_of_range(
+        return Utc::now().timestamp().checked_add(quantity_of_seconds).into_logic_out_of_range(
             Backtrace::new(
                 line!(),
                 file!(),

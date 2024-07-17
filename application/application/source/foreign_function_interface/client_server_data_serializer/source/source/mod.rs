@@ -3112,7 +3112,7 @@ mod test {
         const STRING_LITERAL: &'static str = "qwerty";
         mod server_response_data_deserialization {
             use super::*;
-            use aggregate_error::AlternativeWorkflow;
+            use aggregate_error::AggregateError;
             use formatter::Formatter;
             fn run_by_template<'a, T, E, A, D>(data: &'a T, allocator: A, deallocator: D) -> Result<(), Box<dyn StdError + 'static>>
             where
@@ -3122,7 +3122,11 @@ mod test {
                 D: FnOnce(*mut C_Result<E>) -> (),
             {
                 let registry = Serializer_::serialize(data)
-                    .map_err(|alternative_workflow: _| -> Box<dyn StdError + 'static> { return Formatter::<AlternativeWorkflow>::format(&alternative_workflow).into() })?;
+                    .map_err(
+                        |aggregate_error: _| -> Box<dyn StdError + 'static> {
+                            return Formatter::<AggregateError>::format(&aggregate_error).into()
+                        }
+                    )?;
                 let c_vector = Allocator::<C_Vector<_>>::allocate(registry);
                 let c_vector_ = ((&c_vector) as *const _) as *mut _;
                 let c_result = allocator(c_vector_);

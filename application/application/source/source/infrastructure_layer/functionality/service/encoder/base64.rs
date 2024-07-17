@@ -1,10 +1,10 @@
 use super::Encoder;
 use crate::infrastructure_layer::data::{
-    alternative_workflow::{
-        AlternativeWorkflow,
+    aggregate_error::{
+        AggregateError,
         ResultConverter,
     },
-    auditor::Backtrace,
+    aggregate_error::Backtrace,
     control_type::Base64,
 };
 use base64::{
@@ -20,7 +20,7 @@ impl Encoder<Base64> {
             Self::BASE64_STANDARD_CONFIGURATION,
         );
     }
-    pub fn decode<'a>(encoded_data: &'a [u8]) -> Result<Vec<u8>, AlternativeWorkflow> {
+    pub fn decode<'a>(encoded_data: &'a [u8]) -> Result<Vec<u8>, AggregateError> {
         return base64::decode_config(
             encoded_data,
             Self::BASE64_STANDARD_CONFIGURATION,

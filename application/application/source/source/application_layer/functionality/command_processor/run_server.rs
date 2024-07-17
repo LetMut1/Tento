@@ -3,12 +3,12 @@ pub use crate::infrastructure_layer::data::control_type::RunServer;
 use crate::{
     infrastructure_layer::{
         data::{
-            alternative_workflow::{
-                AlternativeWorkflow,
+            aggregate_error::{
+                AggregateError,
                 OptionConverter,
                 ResultConverter,
             },
-            auditor::Backtrace,
+            aggregate_error::Backtrace,
             control_type::{
                 ApplicationUser__Authorization___AuthorizeByFirstStep,
                 ApplicationUser__Authorization___AuthorizeByLastStep,
@@ -104,22 +104,22 @@ use tracing_subscriber::FmtSubscriber;
 static ENVIRONMENT_CONFIGURATION: OnceLock<EnvironmentConfiguration> = OnceLock::new();
 impl CommandProcessor<RunServer> {
     const QUANTITY_OF_SECONDS_FOR_RERUN_SERVING: u64 = 1;
-    pub fn process() -> Result<(), AlternativeWorkflow> {
+    pub fn process() -> Result<(), AggregateError> {
         let environment_configuration = Self::initialize_environment()?;
         let _worker_guard = Self::initialize_logger(environment_configuration)?;
         Self::run_runtime(environment_configuration)?;
         return Ok(());
     }
-    fn initialize_environment() -> Result<&'static EnvironmentConfiguration, AlternativeWorkflow> {
+    fn initialize_environment() -> Result<&'static EnvironmentConfiguration, AggregateError> {
         let environment_configuration_file_path = format!(
             "{}/environment_configuration",
-            std::env::var("CARGO_MANIFEST_DIR").into_internal_error_runtime(Backtrace::new(line!(), file!()))?.as_str(),
+            std::env::var("CARGO_MANIFEST_DIR").into_runtime(Backtrace::new(line!(), file!()))?.as_str(),
         );
         let environment_configuration = Loader::<EnvironmentConfiguration>::load_from_file(environment_configuration_file_path.as_str())?;
         match ENVIRONMENT_CONFIGURATION.get() {
             Some(_) => {
                 return Err(
-                    AlternativeWorkflow::new_internal_error_logic_value_already_exist(
+                    AggregateError::new_logic_value_already_exist(
                         Backtrace::new(
                             line!(),
                             file!(),
@@ -130,7 +130,7 @@ impl CommandProcessor<RunServer> {
             None => {
                 if let Err(_) = ENVIRONMENT_CONFIGURATION.set(environment_configuration) {
                     return Err(
-                        AlternativeWorkflow::new_internal_error_logic_value_already_exist(
+                        AggregateError::new_logic_value_already_exist(
                             Backtrace::new(
                                 line!(),
                                 file!(),
@@ -140,14 +140,14 @@ impl CommandProcessor<RunServer> {
                 }
             }
         }
-        return ENVIRONMENT_CONFIGURATION.get().into_internal_error_logic_value_does_not_exist(
+        return ENVIRONMENT_CONFIGURATION.get().into_logic_value_does_not_exist(
             Backtrace::new(
                 line!(),
                 file!(),
             ),
         );
     }
-    fn initialize_logger<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<WorkerGuard, AlternativeWorkflow> {
+    fn initialize_logger<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<WorkerGuard, AggregateError> {
         let non_blocking;
         let worker_guard;
         #[cfg(feature = "file_log")]
@@ -178,7 +178,7 @@ impl CommandProcessor<RunServer> {
             .with_thread_names(false)
             .with_ansi(false)
             .finish();
-        tracing::subscriber::set_global_default(fmt_subscriber).into_internal_error_runtime(
+        tracing::subscriber::set_global_default(fmt_subscriber).into_runtime(
             Backtrace::new(
                 line!(),
                 file!(),
@@ -186,13 +186,13 @@ impl CommandProcessor<RunServer> {
         )?;
         return Ok(worker_guard);
     }
-    fn run_runtime(environment_configuration: &'static EnvironmentConfiguration) -> Result<(), AlternativeWorkflow> {
+    fn run_runtime(environment_configuration: &'static EnvironmentConfiguration) -> Result<(), AggregateError> {
         if environment_configuration.tokio_runtime.maximum_blocking_threads_quantity == 0
             || environment_configuration.tokio_runtime.worker_threads_quantity == 0
             || environment_configuration.tokio_runtime.worker_thread_stack_size < (1024 * 1024)
         {
             return Err(
-                AlternativeWorkflow::new_internal_error_logic(
+                AggregateError::new_logic(
                     "Invalid Tokio runtime configuration.",
                     Backtrace::new(
                         line!(),
@@ -207,7 +207,7 @@ impl CommandProcessor<RunServer> {
             .thread_stack_size(environment_configuration.tokio_runtime.worker_thread_stack_size)
             .enable_all()
             .build()
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -216,10 +216,10 @@ impl CommandProcessor<RunServer> {
             .block_on(Self::serve(environment_configuration))?;
         return Ok(());
     }
-    async fn serve(environment_configuration: &'static EnvironmentConfiguration) -> Result<(), AlternativeWorkflow> {
+    async fn serve(environment_configuration: &'static EnvironmentConfiguration) -> Result<(), AggregateError> {
         'a: loop {
-            if let Err(alternative_workflow) = Self::serve_(environment_configuration).await {
-                Logger::<AlternativeWorkflow>::log(&alternative_workflow);
+            if let Err(aggregate_error) = Self::serve_(environment_configuration).await {
+                Logger::<AggregateError>::log(&aggregate_error);
                 tokio::time::sleep(Duration::from_secs(Self::QUANTITY_OF_SECONDS_FOR_RERUN_SERVING)).await;
                 continue 'a;
             }
@@ -227,10 +227,10 @@ impl CommandProcessor<RunServer> {
         }
         return Ok(());
     }
-    async fn serve_(environment_configuration: &'static EnvironmentConfiguration) -> Result<(), AlternativeWorkflow> {
+    async fn serve_(environment_configuration: &'static EnvironmentConfiguration) -> Result<(), AggregateError> {
         let router = Self::create_router()?;
         // TODO TODO в Env
-        let mut application_http_socket_address_registry = environment_configuration.application_server.tcp.socket_address.to_socket_addrs().into_internal_error_runtime(
+        let mut application_http_socket_address_registry = environment_configuration.application_server.tcp.socket_address.to_socket_addrs().into_runtime(
             Backtrace::new(
                 line!(),
                 file!(),
@@ -240,7 +240,7 @@ impl CommandProcessor<RunServer> {
             Some(application_http_socket_address_) => application_http_socket_address_,
             None => {
                 return Err(
-                    AlternativeWorkflow::new_internal_error_logic(
+                    AggregateError::new_logic(
                         "Invalid socket address.",
                         Backtrace::new(
                             line!(),
@@ -262,7 +262,7 @@ impl CommandProcessor<RunServer> {
                 },
             }
         };
-        let mut server_builder = Server::try_bind(&application_http_socket_address).into_internal_error_runtime(
+        let mut server_builder = Server::try_bind(&application_http_socket_address).into_runtime(
             Backtrace::new(
                 line!(),
                 file!(),
@@ -345,7 +345,7 @@ impl CommandProcessor<RunServer> {
             .serve(hyper::service::make_service_fn(make_service_function_closure))
             .with_graceful_shutdown(graceful_shutdown_signal_future)
             .await
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -353,7 +353,7 @@ impl CommandProcessor<RunServer> {
             )?;
         return Ok(());
     }
-    fn create_router() -> Result<Router<ActionRoute_>, AlternativeWorkflow> {
+    fn create_router() -> Result<Router<ActionRoute_>, AggregateError> {
         let mut router = Router::new();
         router
             .insert(
@@ -362,7 +362,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::CheckNicknameForExisting,
                 },
             )
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -375,7 +375,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::CheckEmailForExisting,
                 },
             )
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -388,7 +388,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::RegisterByFirstStep,
                 },
             )
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -401,7 +401,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::RegisterBySecondStep,
                 },
             )
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -414,7 +414,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::RegisterByLastStep,
                 },
             )
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -427,7 +427,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::SendEmailForRegister,
                 },
             )
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -440,7 +440,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::AuthorizeByFirstStep,
                 },
             )
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -453,7 +453,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::AuthorizeByLastStep,
                 },
             )
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -466,7 +466,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::SendEmailForAuthorize,
                 },
             )
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -479,7 +479,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::ResetPasswordByFirstStep,
                 },
             )
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -492,7 +492,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::ResetPasswordBySecondStep,
                 },
             )
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -505,7 +505,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::ResetPasswordByLastStep,
                 },
             )
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -518,7 +518,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::SendEmailForResetPassword,
                 },
             )
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -531,7 +531,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::RefreshAccessToken,
                 },
             )
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -544,7 +544,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::DeauthorizeFromOneDevice,
                 },
             )
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -557,7 +557,7 @@ impl CommandProcessor<RunServer> {
                     application_user___authorization: ApplicationUser__Authorization_::DeauthorizeFromAllDevices,
                 },
             )
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -570,7 +570,7 @@ impl CommandProcessor<RunServer> {
                     channel___base: Channel__Base_::GetOneById,
                 },
             )
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -583,7 +583,7 @@ impl CommandProcessor<RunServer> {
                     channel___base: Channel__Base_::GetManyByNameInSubscriptions,
                 },
             )
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -596,7 +596,7 @@ impl CommandProcessor<RunServer> {
                     channel___base: Channel__Base_::GetManyBySubscription,
                 },
             )
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -609,7 +609,7 @@ impl CommandProcessor<RunServer> {
                     channel___base: Channel__Base_::GetManyPublicByName,
                 },
             )
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -622,7 +622,7 @@ impl CommandProcessor<RunServer> {
                     channel_subscription___base: ChannelSubscription__Base_::Create,
                 },
             )
-            .into_internal_error_runtime(
+            .into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -637,7 +637,7 @@ impl CommandProcessor<RunServer> {
                         application_user___authorization: ApplicationUser__Authorization_::CheckNicknameForExisting_,
                     },
                 )
-                .into_internal_error_runtime(
+                .into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -650,7 +650,7 @@ impl CommandProcessor<RunServer> {
                         application_user___authorization: ApplicationUser__Authorization_::CheckEmailForExisting_,
                     },
                 )
-                .into_internal_error_runtime(
+                .into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -663,7 +663,7 @@ impl CommandProcessor<RunServer> {
                         application_user___authorization: ApplicationUser__Authorization_::RegisterByFirstStep_,
                     },
                 )
-                .into_internal_error_runtime(
+                .into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -676,7 +676,7 @@ impl CommandProcessor<RunServer> {
                         application_user___authorization: ApplicationUser__Authorization_::RegisterBySecondStep_,
                     },
                 )
-                .into_internal_error_runtime(
+                .into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -689,7 +689,7 @@ impl CommandProcessor<RunServer> {
                         application_user___authorization: ApplicationUser__Authorization_::RegisterByLastStep_,
                     },
                 )
-                .into_internal_error_runtime(
+                .into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -702,7 +702,7 @@ impl CommandProcessor<RunServer> {
                         application_user___authorization: ApplicationUser__Authorization_::SendEmailForRegister_,
                     },
                 )
-                .into_internal_error_runtime(
+                .into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -715,7 +715,7 @@ impl CommandProcessor<RunServer> {
                         application_user___authorization: ApplicationUser__Authorization_::AuthorizeByFirstStep_,
                     },
                 )
-                .into_internal_error_runtime(
+                .into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -728,7 +728,7 @@ impl CommandProcessor<RunServer> {
                         application_user___authorization: ApplicationUser__Authorization_::AuthorizeByLastStep_,
                     },
                 )
-                .into_internal_error_runtime(
+                .into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -741,7 +741,7 @@ impl CommandProcessor<RunServer> {
                         application_user___authorization: ApplicationUser__Authorization_::SendEmailForAuthorize_,
                     },
                 )
-                .into_internal_error_runtime(
+                .into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -754,7 +754,7 @@ impl CommandProcessor<RunServer> {
                         application_user___authorization: ApplicationUser__Authorization_::ResetPasswordByFirstStep_,
                     },
                 )
-                .into_internal_error_runtime(
+                .into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -767,7 +767,7 @@ impl CommandProcessor<RunServer> {
                         application_user___authorization: ApplicationUser__Authorization_::ResetPasswordBySecondStep_,
                     },
                 )
-                .into_internal_error_runtime(
+                .into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -780,7 +780,7 @@ impl CommandProcessor<RunServer> {
                         application_user___authorization: ApplicationUser__Authorization_::ResetPasswordByLastStep_,
                     },
                 )
-                .into_internal_error_runtime(
+                .into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -793,7 +793,7 @@ impl CommandProcessor<RunServer> {
                         application_user___authorization: ApplicationUser__Authorization_::SendEmailForResetPassword_,
                     },
                 )
-                .into_internal_error_runtime(
+                .into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -806,7 +806,7 @@ impl CommandProcessor<RunServer> {
                         application_user___authorization: ApplicationUser__Authorization_::RefreshAccessToken_,
                     },
                 )
-                .into_internal_error_runtime(
+                .into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -819,7 +819,7 @@ impl CommandProcessor<RunServer> {
                         application_user___authorization: ApplicationUser__Authorization_::DeauthorizeFromOneDevice_,
                     },
                 )
-                .into_internal_error_runtime(
+                .into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -832,7 +832,7 @@ impl CommandProcessor<RunServer> {
                         application_user___authorization: ApplicationUser__Authorization_::DeauthorizeFromAllDevices_,
                     },
                 )
-                .into_internal_error_runtime(
+                .into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -845,7 +845,7 @@ impl CommandProcessor<RunServer> {
                         channel___base: Channel__Base_::GetOneById_,
                     },
                 )
-                .into_internal_error_runtime(
+                .into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -858,7 +858,7 @@ impl CommandProcessor<RunServer> {
                         channel___base: Channel__Base_::GetManyByNameInSubscriptions_,
                     },
                 )
-                .into_internal_error_runtime(
+                .into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -871,7 +871,7 @@ impl CommandProcessor<RunServer> {
                         channel___base: Channel__Base_::GetManyBySubscription_,
                     },
                 )
-                .into_internal_error_runtime(
+                .into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -884,7 +884,7 @@ impl CommandProcessor<RunServer> {
                         channel___base: Channel__Base_::GetManyPublicByName_,
                     },
                 )
-                .into_internal_error_runtime(
+                .into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -897,7 +897,7 @@ impl CommandProcessor<RunServer> {
                         channel_subscription___base: ChannelSubscription__Base_::Create_,
                     },
                 )
-                .into_internal_error_runtime(
+                .into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -1464,8 +1464,8 @@ impl CommandProcessor<RunServer> {
         }
         return Action::<RouteNotFound>::run(&parts);
     }
-    fn create_signal(signal_kind: SignalKind) -> Result<impl Future<Output = ()>, AlternativeWorkflow> {
-        let mut signal = tokio::signal::unix::signal(signal_kind).into_internal_error_runtime(
+    fn create_signal(signal_kind: SignalKind) -> Result<impl Future<Output = ()>, AggregateError> {
+        let mut signal = tokio::signal::unix::signal(signal_kind).into_runtime(
             Backtrace::new(
                 line!(),
                 file!(),

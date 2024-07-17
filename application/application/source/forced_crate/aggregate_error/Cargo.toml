@@ -17,8 +17,5 @@ edition = "2021"
 crate-type = ["lib"]
 required-features = []
 
-[dependencies]
-auditor = { path = "./../auditor", package = "auditor", version = "1.0.0", default-features = true, features = [], optional = false }
-
 [features]
 default = []
