@@ -82,27 +82,27 @@ use application::{
             AggregateError,
             Backtrace,
         },
-        functionality::service::formatter::Formatter,
+        functionality::service::formatter::Formatter_,
     },
 };
 use clap::{
     command,
     Command,
 };
-use std::error::Error as StdError;
-const RUN_SERVER: &'static str = "run_server";
-const CREATE_FIXTURES: &'static str = "create_fixtures";
-const REMOVE_INCOMPLITE_STATE: &'static str = "remove_incomplite_state";
-fn main() -> Result<(), Box<dyn StdError + 'static>> {
-    if let Err(error) = Processor::process() {
-        println!("{}", &error);
-        return Err(error);
+// The type is 'Result<(), ()>' but not '()' to return a success/error exit code but not only success exit code.
+fn main() -> Result<(), ()> {
+    if let Err(aggregate_error) = Processor::process() {
+        println!("{}", Formatter_::<AggregateError>::format(&aggregate_error));
+        return Err(());
     }
     return Ok(());
 }
 struct Processor;
 impl Processor {
-    fn process() -> Result<(), Box<dyn StdError + 'static>> {
+    fn process() -> Result<(), AggregateError> {
+        const RUN_SERVER: &'static str = "run_server";
+        const CREATE_FIXTURES: &'static str = "create_fixtures";
+        const REMOVE_INCOMPLITE_STATE: &'static str = "remove_incomplite_state";
         let arg_matches = command!()
             .arg_required_else_help(true)
             .subcommand_required(true)
@@ -112,50 +112,37 @@ impl Processor {
         let subcommand_arg_matches = match arg_matches.subcommand() {
             Some(subcommand_arg_matches_) => subcommand_arg_matches_,
             None => {
-                return Err("Exhausted list of subcommands and subcommand_required prevents `None`.".into());
+                return Err(
+                    AggregateError::new_logic_unreachable_state(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )
+                );
             }
         };
-        let aggregate_error = match subcommand_arg_matches {
+        return match subcommand_arg_matches {
             (RUN_SERVER, _) => {
-                let aggregate_error_ = match CommandProcessor::<RunServer>::process() {
-                    Ok(_) => None,
-                    Err(aggregate_error__) => Some(aggregate_error__),
-                };
-                aggregate_error_
+                CommandProcessor::<RunServer>::process()
             }
             (CREATE_FIXTURES, _) => {
-                let aggregate_error_ = match CommandProcessor::<CreateFixtures>::process() {
-                    Ok(_) => None,
-                    Err(aggregate_error__) => Some(aggregate_error__),
-                };
-                aggregate_error_
+                CommandProcessor::<CreateFixtures>::process()
             }
             (REMOVE_INCOMPLITE_STATE, _) => {
-                let aggregate_error_ = match CommandProcessor::<RemoveIncompliteState>::process() {
-                    Ok(_) => None,
-                    Err(aggregate_error__) => Some(aggregate_error__),
-                };
-                aggregate_error_
+                CommandProcessor::<RemoveIncompliteState>::process()
             }
             _ => {
-                Some(
-                    AggregateError::new_runtime_(
+                Err(
+                    AggregateError::new_invalid_argument_from_client_code_(
                         "Unexpected subcommand.".into(),
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
-                    ),
+                    )
                 )
             }
         };
-        match aggregate_error {
-            Some(aggregate_error_) => {
-                return Err(Formatter::<AggregateError>::format(&aggregate_error_).into());
-            }
-            None => {
-                return Ok(());
-            }
-        }
     }
 }

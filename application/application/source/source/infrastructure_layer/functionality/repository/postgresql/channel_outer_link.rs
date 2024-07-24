@@ -53,7 +53,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_runtime(
+            .into_invalid_argument_from_client_code(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -75,7 +75,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
             insert_1.channel_outer_link__from,
             insert_1.channel_outer_link__alias,
             insert_1.channel_outer_link__address,
-            row_registry[0].try_get::<'_, usize, String>(0).into_runtime(
+            row_registry[0].try_get::<'_, usize, String>(0).into_invalid_argument_from_client_code(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -108,7 +108,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_runtime(
+            .into_invalid_argument_from_client_code(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -132,13 +132,13 @@ impl PostgresqlRepository<ChannelOuterLink> {
         }
         '_a: for row in row_registry.iter() {
             let channel_outer_link = ChannelOuterLink1 {
-                channel_outer_link__alias: row.try_get::<'_, usize, String>(0).into_runtime(
+                channel_outer_link__alias: row.try_get::<'_, usize, String>(0).into_invalid_argument_from_client_code(
                     Backtrace::new(
                         line!(),
                         file!(),
                     ),
                 )?,
-                channel_outer_link__address: row.try_get::<'_, usize, String>(1).into_runtime(
+                channel_outer_link__address: row.try_get::<'_, usize, String>(1).into_invalid_argument_from_client_code(
                     Backtrace::new(
                         line!(),
                         file!(),

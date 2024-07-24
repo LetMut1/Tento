@@ -106,7 +106,7 @@ impl Serializer {
     where
         T: Deserialize<'a>,
     {
-        return rmp_serde::from_read_ref::<'_, [u8], T>(data).into_invalid_argument_from_client_code(
+        return rmp_serde::from_read_ref::<'_, [u8], T>(data).into_invalid_argument_from_outside_and_client_code(
             Backtrace::new(
                 line!(),
                 file!(),

@@ -25,7 +25,7 @@ impl Encoder<Base64> {
             encoded_data,
             Self::BASE64_STANDARD_CONFIGURATION,
         )
-        .into_invalid_argument_from_client_code(
+        .into_invalid_argument_from_outside_and_client_code(
             Backtrace::new(
                 line!(),
                 file!(),

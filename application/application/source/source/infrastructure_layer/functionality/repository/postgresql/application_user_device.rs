@@ -42,7 +42,7 @@ impl PostgresqlRepository<ApplicationUserDevice> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_runtime(
+            .into_invalid_argument_from_client_code(
                 Backtrace::new(
                     line!(),
                     file!(),

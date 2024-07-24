@@ -1,14 +1,9 @@
 pub mod action_round;
-pub mod aggregate_error;
-pub mod backtrace;
-pub mod invalid_argument;
-pub mod logic;
-pub mod runtime;
-use formatter::{
-    context_report,
-    Formatter as Formatter_,
-};
+pub mod unexpected_invalid_argument;
+pub mod expected_invalid_argument;
+use formatter::context_report;
 use std::marker::PhantomData;
+pub use formatter::Formatter as Formatter_;
 pub struct Formatter<S> {
     _subject: PhantomData<S>,
 }

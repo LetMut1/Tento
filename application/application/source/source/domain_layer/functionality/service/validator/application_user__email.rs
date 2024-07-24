@@ -17,7 +17,7 @@ impl Validator<ApplicationUser_Email> {
             Some(regular_expression_) => regular_expression_,
             None => {
                 if let Err(_) = REGULAR_EXPRESSION.set(
-                    Regex::new(ApplicationUser_Email::REGULAR_EXPRESSION).into_runtime(
+                    Regex::new(ApplicationUser_Email::REGULAR_EXPRESSION).into_invalid_argument_from_client_code(
                         Backtrace::new(
                             line!(),
                             file!(),

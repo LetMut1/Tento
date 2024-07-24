@@ -31,7 +31,7 @@ impl Serialize for Serializer<Json> {
     where
         T: Deserialize<'a>,
     {
-        return serde_json::from_slice::<'_, T>(data).into_invalid_argument_from_client_code(
+        return serde_json::from_slice::<'_, T>(data).into_invalid_argument_from_outside_and_client_code(
             Backtrace::new(
                 line!(),
                 file!(),

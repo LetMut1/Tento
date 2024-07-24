@@ -124,7 +124,7 @@ impl PostgresqlRepository<Channel<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_runtime(
+            .into_invalid_argument_from_client_code(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -144,7 +144,7 @@ impl PostgresqlRepository<Channel<'_>> {
             )?;
         return Ok(
             Channel::new(
-                row_registry[0].try_get::<'_, usize, i64>(0).into_runtime(
+                row_registry[0].try_get::<'_, usize, i64>(0).into_invalid_argument_from_client_code(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -162,7 +162,7 @@ impl PostgresqlRepository<Channel<'_>> {
                 insert_1.channel__subscribers_quantity,
                 insert_1.channel__marks_quantity,
                 insert_1.channel__viewing_quantity,
-                row_registry[0].try_get::<'_, usize, String>(1).into_runtime(
+                row_registry[0].try_get::<'_, usize, String>(1).into_invalid_argument_from_client_code(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -200,7 +200,7 @@ impl PostgresqlRepository<Channel<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_runtime(
+            .into_invalid_argument_from_client_code(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -225,81 +225,81 @@ impl PostgresqlRepository<Channel<'_>> {
             Some(
                 Channel::new(
                     by_1.channel__id,
-                    row_registry[0].try_get::<'_, usize, i64>(0).into_runtime(
+                    row_registry[0].try_get::<'_, usize, i64>(0).into_invalid_argument_from_client_code(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
                     Cow::Owned(
-                        row_registry[0].try_get::<'_, usize, String>(1).into_runtime(
+                        row_registry[0].try_get::<'_, usize, String>(1).into_invalid_argument_from_client_code(
                             Backtrace::new(
                                 line!(),
                                 file!(),
                             ),
                         )?,
                     ),
-                    row_registry[0].try_get::<'_, usize, String>(2).into_runtime(
+                    row_registry[0].try_get::<'_, usize, String>(2).into_invalid_argument_from_client_code(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, Option<String>>(3).into_runtime(
+                    row_registry[0].try_get::<'_, usize, Option<String>>(3).into_invalid_argument_from_client_code(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, i16>(4).into_runtime(
+                    row_registry[0].try_get::<'_, usize, i16>(4).into_invalid_argument_from_client_code(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, i16>(5).into_runtime(
+                    row_registry[0].try_get::<'_, usize, i16>(5).into_invalid_argument_from_client_code(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, Vec<i16>>(6).into_runtime(
+                    row_registry[0].try_get::<'_, usize, Vec<i16>>(6).into_invalid_argument_from_client_code(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, Option<String>>(7).into_runtime(
+                    row_registry[0].try_get::<'_, usize, Option<String>>(7).into_invalid_argument_from_client_code(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, Option<String>>(8).into_runtime(
+                    row_registry[0].try_get::<'_, usize, Option<String>>(8).into_invalid_argument_from_client_code(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, i64>(9).into_runtime(
+                    row_registry[0].try_get::<'_, usize, i64>(9).into_invalid_argument_from_client_code(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, i64>(10).into_runtime(
+                    row_registry[0].try_get::<'_, usize, i64>(10).into_invalid_argument_from_client_code(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, i64>(11).into_runtime(
+                    row_registry[0].try_get::<'_, usize, i64>(11).into_invalid_argument_from_client_code(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, String>(12).into_runtime(
+                    row_registry[0].try_get::<'_, usize, String>(12).into_invalid_argument_from_client_code(
                         Backtrace::new(
                             line!(),
                             file!(),
@@ -338,7 +338,7 @@ impl PostgresqlRepository<Channel<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_runtime(
+            .into_invalid_argument_from_client_code(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -362,80 +362,80 @@ impl PostgresqlRepository<Channel<'_>> {
         return Ok(
             Some(
                 Channel::new(
-                    row_registry[0].try_get::<'_, usize, i64>(0).into_runtime(
+                    row_registry[0].try_get::<'_, usize, i64>(0).into_invalid_argument_from_client_code(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, i64>(1).into_runtime(
+                    row_registry[0].try_get::<'_, usize, i64>(1).into_invalid_argument_from_client_code(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
                     Cow::Borrowed(by_2.channel__name),
-                    row_registry[0].try_get::<'_, usize, String>(2).into_runtime(
+                    row_registry[0].try_get::<'_, usize, String>(2).into_invalid_argument_from_client_code(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, Option<String>>(3).into_runtime(
+                    row_registry[0].try_get::<'_, usize, Option<String>>(3).into_invalid_argument_from_client_code(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, i16>(4).into_runtime(
+                    row_registry[0].try_get::<'_, usize, i16>(4).into_invalid_argument_from_client_code(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, i16>(5).into_runtime(
+                    row_registry[0].try_get::<'_, usize, i16>(5).into_invalid_argument_from_client_code(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, Vec<i16>>(6).into_runtime(
+                    row_registry[0].try_get::<'_, usize, Vec<i16>>(6).into_invalid_argument_from_client_code(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, Option<String>>(7).into_runtime(
+                    row_registry[0].try_get::<'_, usize, Option<String>>(7).into_invalid_argument_from_client_code(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, Option<String>>(8).into_runtime(
+                    row_registry[0].try_get::<'_, usize, Option<String>>(8).into_invalid_argument_from_client_code(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, i64>(9).into_runtime(
+                    row_registry[0].try_get::<'_, usize, i64>(9).into_invalid_argument_from_client_code(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, i64>(10).into_runtime(
+                    row_registry[0].try_get::<'_, usize, i64>(10).into_invalid_argument_from_client_code(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, i64>(11).into_runtime(
+                    row_registry[0].try_get::<'_, usize, i64>(11).into_invalid_argument_from_client_code(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    row_registry[0].try_get::<'_, usize, String>(12).into_runtime(
+                    row_registry[0].try_get::<'_, usize, String>(12).into_invalid_argument_from_client_code(
                         Backtrace::new(
                             line!(),
                             file!(),

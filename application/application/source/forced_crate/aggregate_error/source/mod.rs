@@ -137,6 +137,37 @@ impl AggregateError {
             ),
         );
     }
+    pub fn new_invalid_argument_from_outside_and_client_code<E>(error: E, backtrace: Backtrace) -> Self
+    where
+        E: StdError + Send + Sync + 'static,
+    {
+        return Self(
+            Auditor::<AggregateError_>::new(
+                AggregateError_::InvalidArgument {
+                    invalid_argument: InvalidArgument::FromOutsideAndClientCode {
+                        from_outside_and_client_code: FromOutsideAndClientCode {
+                            context: Context(error.into()),
+                        },
+                    },
+                },
+                backtrace,
+            ),
+        );
+    }
+    pub fn new_invalid_argument_from_outside_and_client_code_(error: Box<dyn StdError + Send + Sync + 'static>, backtrace: Backtrace) -> Self {
+        return Self(
+            Auditor::<AggregateError_>::new(
+                AggregateError_::InvalidArgument {
+                    invalid_argument: InvalidArgument::FromOutsideAndClientCode {
+                        from_outside_and_client_code: FromOutsideAndClientCode {
+                            context: Context(error),
+                        },
+                    },
+                },
+                backtrace,
+            ),
+        );
+    }
 }
 impl Debug for AggregateError {
     fn fmt<'a, 'b>(&'a self, _: &'b mut Formatter<'_>) -> Result<(), FmtError> {
@@ -153,11 +184,9 @@ pub enum AggregateError_ {
     Logic {
         logic: Logic,
     },
-    // Used for methods that can return Ok or Err at different times with the same set of parameters.
     Runtime {
         runtime: Runtime,
     },
-    // Used for methods that should always return only one of Ok or Err at different times with the same set of parameters.
     InvalidArgument {
         invalid_argument: InvalidArgument,
     },
@@ -165,6 +194,8 @@ pub enum AggregateError_ {
 pub struct Logic {
     pub message: &'static str,
 }
+// Used for methods that can return 'Ok' or 'Err' at different times with the same
+// set of parameters.
 pub struct Runtime {
     pub context: Context,
 }
@@ -174,13 +205,23 @@ impl Context {
         return self.0.as_ref();
     }
 }
+// Used for methods that should always return only one of 'Ok' or 'Err' at different
+// times with the same set of parameters. It is also important to understand the cause
+// of the error. That is, whether the developer himself caused this error to occur or
+// is it the result of an invalid argument accepted from the outside
 pub enum InvalidArgument {
     FromOutside,
     FromClientCode {
         from_client_code: FromClientCode,
     },
+    FromOutsideAndClientCode {
+        from_outside_and_client_code: FromOutsideAndClientCode,
+    },
 }
 pub struct FromClientCode {
+    pub context: Context,
+}
+pub struct FromOutsideAndClientCode {
     pub context: Context,
 }
 pub struct Auditor<T> {
@@ -210,6 +251,7 @@ impl Backtrace {
 pub trait ResultConverter<T> {
     fn into_runtime(self, backtrace: Backtrace) -> Result<T, AggregateError>;
     fn into_invalid_argument_from_client_code(self, backtrace: Backtrace) -> Result<T, AggregateError>;
+    fn into_invalid_argument_from_outside_and_client_code(self, backtrace: Backtrace) -> Result<T, AggregateError>;
 }
 impl<E, T> ResultConverter<T> for Result<T, E>
 where
@@ -235,10 +277,21 @@ where
             },
         );
     }
+    fn into_invalid_argument_from_outside_and_client_code(self, backtrace: Backtrace) -> Result<T, AggregateError> {
+        return self.map_err(
+            move |error: _| -> _ {
+                return AggregateError::new_invalid_argument_from_outside_and_client_code(
+                    error,
+                    backtrace,
+                );
+            },
+        );
+    }
 }
 pub trait ResultConverter_<T> {
     fn into_runtime(self, backtrace: Backtrace) -> Result<T, AggregateError>;
     fn into_invalid_argument_from_client_code(self, backtrace: Backtrace) -> Result<T, AggregateError>;
+    fn into_invalid_argument_from_outside_and_client_code(self, backtrace: Backtrace) -> Result<T, AggregateError>;
 }
 impl<T> ResultConverter_<T> for Result<T, Box<dyn StdError + Sync + Send + 'static>> {
     fn into_runtime(self, backtrace: Backtrace) -> Result<T, AggregateError> {
@@ -255,6 +308,16 @@ impl<T> ResultConverter_<T> for Result<T, Box<dyn StdError + Sync + Send + 'stat
         return self.map_err(
             move |error: _| -> _ {
                 return AggregateError::new_invalid_argument_from_client_code_(
+                    error,
+                    backtrace,
+                );
+            },
+        );
+    }
+    fn into_invalid_argument_from_outside_and_client_code(self, backtrace: Backtrace) -> Result<T, AggregateError> {
+        return self.map_err(
+            move |error: _| -> _ {
+                return AggregateError::new_invalid_argument_from_outside_and_client_code_(
                     error,
                     backtrace,
                 );

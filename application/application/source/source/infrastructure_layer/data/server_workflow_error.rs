@@ -3,6 +3,8 @@ use super::aggregate_error::{
     AggregateError_,
     Auditor,
     InvalidArgument,
+    FromClientCode,
+    FromOutsideAndClientCode,
     Logic,
     Runtime,
 };
@@ -28,39 +30,62 @@ impl ServerWorkflowError {
         return match aggregate_error.0.subject {
             AggregateError_::Logic {
                 logic,
-            } => {
-                Self::Unexpected {
-                    unexpected_auditor: Auditor::<Unexpected>::new(
-                        Unexpected::Logic {
-                            logic,
-                        },
-                        aggregate_error.0.backtrace,
-                    ),
-                }
-            }
+            } => Self::Unexpected {
+                unexpected_auditor: Auditor::<Unexpected>::new(
+                    Unexpected::Logic {
+                        logic,
+                    },
+                    aggregate_error.0.backtrace,
+                ),
+            },
             AggregateError_::Runtime {
                 runtime,
-            } => {
-                Self::Unexpected {
-                    unexpected_auditor: Auditor::<Unexpected>::new(
-                        Unexpected::Runtime {
-                            runtime,
-                        },
-                        aggregate_error.0.backtrace,
-                    ),
-                }
-            }
+            } => Self::Unexpected {
+                unexpected_auditor: Auditor::<Unexpected>::new(
+                    Unexpected::Runtime {
+                        runtime,
+                    },
+                    aggregate_error.0.backtrace,
+                ),
+            },
             AggregateError_::InvalidArgument {
                 invalid_argument,
             } => {
-                Self::Expected {
-                    expected_auditor: Auditor::<Expected>::new(
-                        Expected {
-                            invalid_argument,
-                        },
-                        aggregate_error.0.backtrace,
-                    ),
-                }
+                let server_workflow_error = match invalid_argument {
+                    InvalidArgument::FromOutside => Self::Expected {
+                        expected_auditor: Auditor::<Expected>::new(
+                            Expected {
+                                expected_invalid_argument: ExpectedInvalidArgument::FromOutside,
+                            },
+                            aggregate_error.0.backtrace,
+                        ),
+                    },
+                    InvalidArgument::FromClientCode {
+                        from_client_code
+                    } => Self::Unexpected {
+                        unexpected_auditor: Auditor::<Unexpected>::new(
+                            Unexpected::InvalidArgument {
+                                unexpected_invalid_argument: UnexpectedInvalidArgument {
+                                    from_client_code,
+                                }
+                            },
+                            aggregate_error.0.backtrace,
+                        ),
+                    },
+                    InvalidArgument::FromOutsideAndClientCode {
+                        from_outside_and_client_code
+                    } => Self::Expected {
+                        expected_auditor: Auditor::<Expected>::new(
+                            Expected {
+                                expected_invalid_argument: ExpectedInvalidArgument::FromOutsideAndClientCode {
+                                    from_outside_and_client_code,
+                                },
+                            },
+                            aggregate_error.0.backtrace,
+                        ),
+                    },
+                };
+                server_workflow_error
             }
         };
     }
@@ -83,7 +108,19 @@ pub enum Unexpected {
     Runtime {
         runtime: Runtime,
     },
+    InvalidArgument {
+        unexpected_invalid_argument: UnexpectedInvalidArgument,
+    }
+}
+pub struct UnexpectedInvalidArgument {
+    pub from_client_code: FromClientCode,
 }
 pub struct Expected {
-    pub invalid_argument: InvalidArgument,
+    pub expected_invalid_argument: ExpectedInvalidArgument,
+}
+pub enum ExpectedInvalidArgument {
+    FromOutside,
+    FromOutsideAndClientCode {
+        from_outside_and_client_code: FromOutsideAndClientCode,
+    },
 }

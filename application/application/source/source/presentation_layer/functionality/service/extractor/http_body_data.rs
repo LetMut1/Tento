@@ -27,7 +27,7 @@ impl Extractor<HttpBodyData> {
         D: for<'de> Deserialize<'de>,
         Serializer<SF>: Serialize,
     {
-        let bytes = to_bytes(body).await.into_runtime(
+        let bytes = to_bytes(body).await.into_invalid_argument_from_outside_and_client_code(
             Backtrace::new(
                 line!(),
                 file!(),

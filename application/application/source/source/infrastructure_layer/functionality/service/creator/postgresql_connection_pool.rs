@@ -21,7 +21,7 @@ use tokio_postgres::{
 impl Creator<PostgresqlConnectionPoolNoTls> {
     pub async fn create_database_1<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<Pool<PostgresqlConnectionManager<NoTls>>, AggregateError> {
         return Self::create(
-            &Config::from_str(environment_configuration.resource.postgresql.database_1_url.as_str()).into_runtime(
+            &Config::from_str(environment_configuration.resource.postgresql.database_1_url.as_str()).into_invalid_argument_from_client_code(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -32,7 +32,7 @@ impl Creator<PostgresqlConnectionPoolNoTls> {
     }
     pub async fn create_database_2<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<Pool<PostgresqlConnectionManager<NoTls>>, AggregateError> {
         return Self::create(
-            &Config::from_str(environment_configuration.resource.postgresql.database_2_url.as_str()).into_runtime(
+            &Config::from_str(environment_configuration.resource.postgresql.database_2_url.as_str()).into_invalid_argument_from_client_code(
                 Backtrace::new(
                     line!(),
                     file!(),

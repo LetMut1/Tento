@@ -27,7 +27,7 @@ impl Sender<Email> {
             .from("from_changethis@yandex.ru".to_string())
             .to(to)
             .build()
-            .into_runtime(
+            .into_invalid_argument_from_client_code(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -58,7 +58,7 @@ impl Sender<Email> {
             &email_server_socket_address,
             ClientSecurity::None,
         )
-        .into_runtime(
+        .into_invalid_argument_from_client_code(
             Backtrace::new(
                 line!(),
                 file!(),

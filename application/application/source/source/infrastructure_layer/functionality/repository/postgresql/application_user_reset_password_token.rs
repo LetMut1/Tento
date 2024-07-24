@@ -79,7 +79,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_runtime(
+            .into_invalid_argument_from_client_code(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -129,7 +129,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_runtime(
+            .into_invalid_argument_from_client_code(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -202,7 +202,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_runtime(
+            .into_invalid_argument_from_client_code(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -251,7 +251,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_runtime(
+            .into_invalid_argument_from_client_code(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -318,7 +318,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_runtime(
+            .into_invalid_argument_from_client_code(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -367,7 +367,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_runtime(
+            .into_invalid_argument_from_client_code(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -416,7 +416,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_runtime(
+            .into_invalid_argument_from_client_code(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -462,7 +462,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_runtime(
+            .into_invalid_argument_from_client_code(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -486,31 +486,31 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
         return Ok(
             Some(
                 ApplicationUserResetPasswordToken1 {
-                    value: row_registry[0].try_get::<'_, usize, String>(0).into_runtime(
+                    value: row_registry[0].try_get::<'_, usize, String>(0).into_invalid_argument_from_client_code(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    wrong_enter_tries_quantity: row_registry[0].try_get::<'_, usize, i16>(1).into_runtime(
+                    wrong_enter_tries_quantity: row_registry[0].try_get::<'_, usize, i16>(1).into_invalid_argument_from_client_code(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    is_approved: row_registry[0].try_get::<'_, usize, bool>(2).into_runtime(
+                    is_approved: row_registry[0].try_get::<'_, usize, bool>(2).into_invalid_argument_from_client_code(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    expires_at: row_registry[0].try_get::<'_, usize, i64>(3).into_runtime(
+                    expires_at: row_registry[0].try_get::<'_, usize, i64>(3).into_invalid_argument_from_client_code(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    can_be_resent_from: row_registry[0].try_get::<'_, usize, i64>(4).into_runtime(
+                    can_be_resent_from: row_registry[0].try_get::<'_, usize, i64>(4).into_invalid_argument_from_client_code(
                         Backtrace::new(
                             line!(),
                             file!(),
@@ -545,7 +545,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_runtime(
+            .into_invalid_argument_from_client_code(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -569,25 +569,25 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
         return Ok(
             Some(
                 ApplicationUserResetPasswordToken2 {
-                    value: row_registry[0].try_get::<'_, usize, String>(0).into_runtime(
+                    value: row_registry[0].try_get::<'_, usize, String>(0).into_invalid_argument_from_client_code(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    wrong_enter_tries_quantity: row_registry[0].try_get::<'_, usize, i16>(1).into_runtime(
+                    wrong_enter_tries_quantity: row_registry[0].try_get::<'_, usize, i16>(1).into_invalid_argument_from_client_code(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    is_approved: row_registry[0].try_get::<'_, usize, bool>(2).into_runtime(
+                    is_approved: row_registry[0].try_get::<'_, usize, bool>(2).into_invalid_argument_from_client_code(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    expires_at: row_registry[0].try_get::<'_, usize, i64>(3).into_runtime(
+                    expires_at: row_registry[0].try_get::<'_, usize, i64>(3).into_invalid_argument_from_client_code(
                         Backtrace::new(
                             line!(),
                             file!(),
@@ -622,7 +622,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_runtime(
+            .into_invalid_argument_from_client_code(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -646,25 +646,25 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
         return Ok(
             Some(
                 ApplicationUserResetPasswordToken3 {
-                    value: row_registry[0].try_get::<'_, usize, String>(0).into_runtime(
+                    value: row_registry[0].try_get::<'_, usize, String>(0).into_invalid_argument_from_client_code(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    is_approved: row_registry[0].try_get::<'_, usize, bool>(1).into_runtime(
+                    is_approved: row_registry[0].try_get::<'_, usize, bool>(1).into_invalid_argument_from_client_code(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    expires_at: row_registry[0].try_get::<'_, usize, i64>(2).into_runtime(
+                    expires_at: row_registry[0].try_get::<'_, usize, i64>(2).into_invalid_argument_from_client_code(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?,
-                    can_be_resent_from: row_registry[0].try_get::<'_, usize, i64>(3).into_runtime(
+                    can_be_resent_from: row_registry[0].try_get::<'_, usize, i64>(3).into_invalid_argument_from_client_code(
                         Backtrace::new(
                             line!(),
                             file!(),

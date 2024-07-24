@@ -19,7 +19,7 @@ impl Encoder<Argon2Id> {
             salt.as_bytes().as_slice(),
             &config,
         )
-        .into_invalid_argument_from_client_code(
+        .into_invalid_argument_from_outside_and_client_code(
             Backtrace::new(
                 line!(),
                 file!(),
@@ -31,7 +31,7 @@ impl Encoder<Argon2Id> {
             encoded_data,
             data,
         )
-        .into_invalid_argument_from_client_code(
+        .into_invalid_argument_from_outside_and_client_code(
             Backtrace::new(
                 line!(),
                 file!(),

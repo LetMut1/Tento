@@ -40,7 +40,7 @@ impl Loader<EnvironmentConfiguration> {
                 file!(),
             ),
         )? {
-            std::fs::read_to_string(environment_file_path_).into_runtime(
+            std::fs::read_to_string(environment_file_path_).into_invalid_argument_from_client_code(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -57,7 +57,7 @@ impl Loader<EnvironmentConfiguration> {
                 ),
             );
         };
-        let environment_configuration_file = toml::from_str::<EnvironmentConfigurationFile>(environment_file_data.as_str()).into_runtime(
+        let environment_configuration_file = toml::from_str::<EnvironmentConfigurationFile>(environment_file_data.as_str()).into_invalid_argument_from_client_code(
             Backtrace::new(
                 line!(),
                 file!(),

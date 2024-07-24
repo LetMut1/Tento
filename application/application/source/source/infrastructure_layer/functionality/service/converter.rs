@@ -15,7 +15,7 @@ where
 }
 impl Convert<u16, i16> for Converter {
     fn convert(subject: u16) -> Result<i16, AggregateError> {
-        return i16::try_from(subject).into_runtime(
+        return i16::try_from(subject).into_invalid_argument_from_client_code(
             Backtrace::new(
                 line!(),
                 file!(),

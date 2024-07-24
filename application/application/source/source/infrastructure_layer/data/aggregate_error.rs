@@ -9,4 +9,6 @@ pub use aggregate_error::{
     ResultConverter,
     ResultConverter_,
     Runtime,
+    FromClientCode,
+    FromOutsideAndClientCode,
 };

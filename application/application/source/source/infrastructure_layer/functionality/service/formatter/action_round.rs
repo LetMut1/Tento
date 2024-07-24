@@ -1,18 +1,17 @@
 use super::{
     context_report,
     Formatter,
+    Formatter_,
 };
 use crate::infrastructure_layer::data::{
     control_type::ActionRound,
     server_workflow_error::{
-        Expected,
-        Unexpected,
+        Expected, ExpectedInvalidArgument, Unexpected, UnexpectedInvalidArgument
     },
 };
 use aggregate_error::{
     Auditor,
     Backtrace,
-    InvalidArgument,
     Logic,
     Runtime,
 };
@@ -29,10 +28,13 @@ impl Formatter<ActionRound> {
         let error_message = match unexpected_auditor.subject {
             Unexpected::Logic {
                 ref logic,
-            } => Formatter::<Logic>::format(logic),
+            } => Formatter_::<Logic>::format(logic),
             Unexpected::Runtime {
                 ref runtime,
-            } => Formatter::<Runtime>::format(runtime),
+            } => Formatter_::<Runtime>::format(runtime),
+            Unexpected::InvalidArgument {
+                ref unexpected_invalid_argument
+            } => Formatter::<UnexpectedInvalidArgument>::format(unexpected_invalid_argument),
         };
         return format!(
             context_report!(),
@@ -46,7 +48,7 @@ impl Formatter<ActionRound> {
                 ).as_str(),
                 error_message.as_str(),
             ).as_str(),
-            Formatter::<Backtrace>::format(&unexpected_auditor.backtrace),
+            Formatter_::<Backtrace>::format(&unexpected_auditor.backtrace),
         );
     }
     pub fn format_expected_auditor<'a>(request_uri: &'a str, request_method: &'a str, response_status_code: u16, expected_auditor: &'a Auditor<Expected>) -> String {
@@ -60,9 +62,9 @@ impl Formatter<ActionRound> {
                     request_method,
                     request_uri,
                 ).as_str(),
-                Formatter::<InvalidArgument>::format(&expected_auditor.subject.invalid_argument).as_str(),
+                Formatter::<ExpectedInvalidArgument>::format(&expected_auditor.subject.expected_invalid_argument).as_str(),
             ).as_str(),
-            Formatter::<Backtrace>::format(&expected_auditor.backtrace),
+            Formatter_::<Backtrace>::format(&expected_auditor.backtrace),
         );
     }
 }

@@ -44,7 +44,7 @@ impl PostgresqlRepository<ChannelSubscription> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_runtime(
+            .into_invalid_argument_from_client_code(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -65,7 +65,7 @@ impl PostgresqlRepository<ChannelSubscription> {
         let channel_subscription = ChannelSubscription::new(
             insert_1.application_user__id,
             insert_1.channel__id,
-            row_registry[0].try_get::<'_, usize, String>(0).into_runtime(
+            row_registry[0].try_get::<'_, usize, String>(0).into_invalid_argument_from_client_code(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -96,7 +96,7 @@ impl PostgresqlRepository<ChannelSubscription> {
                 prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
             )
             .await
-            .into_runtime(
+            .into_invalid_argument_from_client_code(
                 Backtrace::new(
                     line!(),
                     file!(),
