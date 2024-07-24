@@ -24,6 +24,8 @@ pub struct ApplicationUser<'a> {
 
     pub created_at: String,
     _created_at: PhantomData<CreatedAt>,
+
+    _password: PhantomData<Password>,
 }
 impl<'a> ApplicationUser<'a> {
     pub fn new(id: i64, email: String, nickname: Cow<'a, str>, password_hash: String, created_at: String) -> Self {
@@ -38,6 +40,7 @@ impl<'a> ApplicationUser<'a> {
             _password_hash: PhantomData,
             created_at,
             _created_at: PhantomData,
+            _password: PhantomData,
         };
     }
 }

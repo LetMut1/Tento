@@ -403,7 +403,7 @@ Request data:
 struct Incoming {
     application_user_device__id: String,
     application_user__nickname: String,
-    application_user_password: String,
+    application_user__password: String,
     application_user__email: String,
     application_user_registration_token__value: String
 }
@@ -460,7 +460,7 @@ Request data:
 struct Incoming {
     application_user_device__id: String,
     application_user__email___or___application_user__nickname: String,
-    application_user_password: String
+    application_user__password: String
 }
 ```
 ```
@@ -581,7 +581,7 @@ Request data:
 struct Incoming {
     application_user_device__id: String,
     application_user__id: i64,
-    application_user_password: String,
+    application_user__password: String,
     application_user_reset_password_token__value: String
 }
 ```
@@ -679,7 +679,7 @@ Can not contain whitespace character.
 Can not be empty.
 
 ```
- - ## application_user_password
+ - ## application_user__password
 ```
 7 - minimum number of characters.
 

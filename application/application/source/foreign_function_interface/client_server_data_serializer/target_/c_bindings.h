@@ -20,7 +20,7 @@ typedef struct C_String {
 typedef struct ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming {
   struct C_String application_user_device__id;
   struct C_String application_user__email___or___application_user__nickname;
-  struct C_String application_user_password;
+  struct C_String application_user__password;
 } ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming;
 
 typedef struct ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming {
@@ -300,7 +300,7 @@ typedef struct C_Result_C_UnifiedReport_C_Void__ApplicationUser__Authorization__
 typedef struct ApplicationUser__Authorization___RegisterByLastStep___Incoming {
   struct C_String application_user_device__id;
   struct C_String application_user__nickname;
-  struct C_String application_user_password;
+  struct C_String application_user__password;
   struct C_String application_user__email;
   struct C_String application_user_registration_token__value;
 } ApplicationUser__Authorization___RegisterByLastStep___Incoming;
@@ -406,7 +406,7 @@ typedef struct C_Result_C_UnifiedReport_C_Void__ApplicationUser__Authorization__
 typedef struct ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming {
   long application_user__id;
   struct C_String application_user_device__id;
-  struct C_String application_user_password;
+  struct C_String application_user__password;
   struct C_String application_user_reset_password_token__value;
 } ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming;
 

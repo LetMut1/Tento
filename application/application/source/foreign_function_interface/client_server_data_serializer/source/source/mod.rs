@@ -578,7 +578,7 @@ pub struct ChannelOuterLink1 {
 pub struct ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming {
     pub application_user_device__id: C_String,
     pub application_user__email___or___application_user__nickname: C_String,
-    pub application_user_password: C_String,
+    pub application_user__password: C_String,
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____authorize_by_first_step____serialize(
@@ -588,7 +588,7 @@ pub extern "C" fn application_user___authorization____authorize_by_first_step___
         let incoming_ = ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming_ {
             application_user_device__id: incoming.application_user_device__id.to_string()?,
             application_user__email___or___application_user__nickname: incoming.application_user__email___or___application_user__nickname.to_string()?,
-            application_user_password: incoming.application_user_password.to_string()?,
+            application_user__password: incoming.application_user__password.to_string()?,
         };
 
         return Ok(incoming_);
@@ -1497,7 +1497,7 @@ pub extern "C" fn application_user___authorization____register_by_second_step___
 pub struct ApplicationUser__Authorization___RegisterByLastStep___Incoming {
     pub application_user_device__id: C_String,
     pub application_user__nickname: C_String,
-    pub application_user_password: C_String,
+    pub application_user__password: C_String,
     pub application_user__email: C_String,
     pub application_user_registration_token__value: C_String,
 }
@@ -1510,7 +1510,7 @@ pub extern "C" fn application_user___authorization____register_by_last_step____s
             application_user_device__id: incoming.application_user_device__id.to_string()?,
             application_user__email: incoming.application_user__email.to_string()?,
             application_user__nickname: incoming.application_user__nickname.to_string()?,
-            application_user_password: incoming.application_user_password.to_string()?,
+            application_user__password: incoming.application_user__password.to_string()?,
             application_user_registration_token__value: incoming.application_user_registration_token__value.to_string()?,
         };
 
@@ -1870,7 +1870,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_second_s
 pub struct ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming {
     pub application_user__id: c_long,
     pub application_user_device__id: C_String,
-    pub application_user_password: C_String,
+    pub application_user__password: C_String,
     pub application_user_reset_password_token__value: C_String,
 }
 #[no_mangle]
@@ -1881,7 +1881,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_last_ste
         let incoming_ = ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming_ {
             application_user__id: incoming.application_user__id,
             application_user_device__id: incoming.application_user_device__id.to_string()?,
-            application_user_password: incoming.application_user_password.to_string()?,
+            application_user__password: incoming.application_user__password.to_string()?,
             application_user_reset_password_token__value: incoming.application_user_reset_password_token__value.to_string()?,
         };
 
@@ -4529,7 +4529,7 @@ mod test {
                 let incoming = ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming {
                     application_user_device__id: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
                     application_user__email___or___application_user__nickname: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
-                    application_user_password: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    application_user__password: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
                 };
                 let allocator = move |incoming: *mut ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
                     return application_user___authorization____authorize_by_first_step____serialize(incoming);
@@ -4545,7 +4545,7 @@ mod test {
                 )?;
                 Allocator::<C_String>::deallocate(incoming.application_user_device__id);
                 Allocator::<C_String>::deallocate(incoming.application_user__email___or___application_user__nickname);
-                Allocator::<C_String>::deallocate(incoming.application_user_password);
+                Allocator::<C_String>::deallocate(incoming.application_user__password);
                 return Ok(());
             }
             #[test]
@@ -4724,7 +4724,7 @@ mod test {
                 let incoming = ApplicationUser__Authorization___RegisterByLastStep___Incoming {
                     application_user_device__id: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
                     application_user__nickname: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
-                    application_user_password: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    application_user__password: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
                     application_user__email: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
                     application_user_registration_token__value: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
                 };
@@ -4742,7 +4742,7 @@ mod test {
                 )?;
                 Allocator::<C_String>::deallocate(incoming.application_user_device__id);
                 Allocator::<C_String>::deallocate(incoming.application_user__nickname);
-                Allocator::<C_String>::deallocate(incoming.application_user_password);
+                Allocator::<C_String>::deallocate(incoming.application_user__password);
                 Allocator::<C_String>::deallocate(incoming.application_user__email);
                 Allocator::<C_String>::deallocate(incoming.application_user_registration_token__value);
                 return Ok(());
@@ -4797,7 +4797,7 @@ mod test {
                 let incoming = ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming {
                     application_user__id: 0,
                     application_user_device__id: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
-                    application_user_password: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    application_user__password: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
                     application_user_reset_password_token__value: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
                 };
                 let allocator = move |incoming: *mut ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
@@ -4813,7 +4813,7 @@ mod test {
                     deallocator,
                 )?;
                 Allocator::<C_String>::deallocate(incoming.application_user_device__id);
-                Allocator::<C_String>::deallocate(incoming.application_user_password);
+                Allocator::<C_String>::deallocate(incoming.application_user__password);
                 Allocator::<C_String>::deallocate(incoming.application_user_reset_password_token__value);
                 return Ok(());
             }

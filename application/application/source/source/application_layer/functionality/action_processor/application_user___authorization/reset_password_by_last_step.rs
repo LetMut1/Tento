@@ -121,7 +121,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
                 ),
             );
         }
-        if !Validator::<ApplicationUser_Password>::is_valid_part_1(incoming_.application_user_password.as_str()) {
+        if !Validator::<ApplicationUser_Password>::is_valid_part_1(incoming_.application_user__password.as_str()) {
             return Err(
                 AggregateError::new_invalid_argument_from_outside(
                     Backtrace::new(
@@ -229,7 +229,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
             }
         };
         if !Validator::<ApplicationUser_Password>::is_valid_part_2(
-            incoming_.application_user_password.as_str(),
+            incoming_.application_user__password.as_str(),
             application_user.email.as_str(),
             application_user.nickname.as_str(),
         ) {
@@ -244,7 +244,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
         }
         let application_user__password_hash___join_handle = Spawner::<TokioBlockingTask>::spawn_processed(
             move || -> _ {
-                return Encoder::<ApplicationUser_Password>::encode(incoming_.application_user_password.as_str());
+                return Encoder::<ApplicationUser_Password>::encode(incoming_.application_user__password.as_str());
             },
         );
         application_user.password_hash = application_user__password_hash___join_handle.await.into_runtime(

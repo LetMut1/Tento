@@ -8,7 +8,7 @@ use serde::{
 pub struct Incoming {
     pub application_user_device__id: String,
     pub application_user__nickname: String,
-    pub application_user_password: String,
+    pub application_user__password: String,
     pub application_user__email: String,
     pub application_user_registration_token__value: String,
 }

@@ -124,8 +124,8 @@ impl CommandProcessor<CreateFixtures> {
     }
     async fn create_fixtures<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<(), AggregateError> {
         let database_1_postgresql_connection_pool = Creator::<PostgresqlConnectionPoolNoTls>::create_database_1(environment_configuration).await?;
-        let application_user_password = Self::APPLICATION_USER__PASSWORD.to_string();
-        let application_user__password_hash = Encoder::<ApplicationUser_Password>::encode(application_user_password.as_str())?;
+        let application_user__password = Self::APPLICATION_USER__PASSWORD.to_string();
+        let application_user__password_hash = Encoder::<ApplicationUser_Password>::encode(application_user__password.as_str())?;
         let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.into_runtime(
             Backtrace::new(
                 line!(),
@@ -161,7 +161,7 @@ impl CommandProcessor<CreateFixtures> {
                 );
             }
             if !Validator::<ApplicationUser_Password>::is_valid(
-                application_user_password.as_str(),
+                application_user__password.as_str(),
                 application_user__email.as_str(),
                 application_user__nickname.as_str(),
             ) {

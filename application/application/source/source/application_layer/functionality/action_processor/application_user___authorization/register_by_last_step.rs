@@ -119,7 +119,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
             ),
         )?;
         if !Validator::<ApplicationUser_Password>::is_valid(
-            incoming_.application_user_password.as_str(),
+            incoming_.application_user__password.as_str(),
             incoming_.application_user__email.as_str(),
             incoming_.application_user__nickname.as_str(),
         ) {
@@ -268,7 +268,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
         }
         let application_user__password_hash___join_handle = Spawner::<TokioBlockingTask>::spawn_processed(
             move || -> _ {
-                return Encoder::<ApplicationUser_Password>::encode(incoming_.application_user_password.as_str());
+                return Encoder::<ApplicationUser_Password>::encode(incoming_.application_user__password.as_str());
             },
         );
         let application_user = PostgresqlRepository::<ApplicationUser<'_>>::create_1(
