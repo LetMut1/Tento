@@ -29,7 +29,6 @@ use crate::{
             aggregate_error::{
                 AggregateError,
                 Backtrace,
-                OptionConverter,
                 ResultConverter,
             },
             control_type::{
@@ -80,7 +79,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
         environment_configuration: &'a EnvironmentConfiguration,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
-        incoming: Option<Incoming>,
+        incoming: Incoming,
     ) -> Result<UnifiedReport<Outcoming, Precedent>, AggregateError>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -88,13 +87,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let incoming_ = incoming.into_logic_value_does_not_exist(
-            Backtrace::new(
-                line!(),
-                file!(),
-            ),
-        )?;
-        if !Validator::<ApplicationUser_Email>::is_valid(incoming_.application_user__email.as_str())? {
+        if !Validator::<ApplicationUser_Email>::is_valid(incoming.application_user__email.as_str())? {
             return Err(
                 AggregateError::new_invalid_argument_from_outside(
                     Backtrace::new(
@@ -104,7 +97,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
                 ),
             );
         }
-        if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming_.application_user_device__id.as_str()) {
+        if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming.application_user_device__id.as_str()) {
             return Err(
                 AggregateError::new_invalid_argument_from_outside(
                     Backtrace::new(
@@ -123,7 +116,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
         if PostgresqlRepository::<ApplicationUser<'_>>::is_exist_2(
             &*database_1_postgresql_pooled_connection,
             By2 {
-                application_user__email: incoming_.application_user__email.as_str(),
+                application_user__email: incoming.application_user__email.as_str(),
             },
         )
         .await?
@@ -145,8 +138,8 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
         ) = match PostgresqlRepository::<ApplicationUserRegistrationToken>::find_1(
             database_2_postgresql_connection,
             By1 {
-                application_user__email: incoming_.application_user__email.as_str(),
-                application_user_device__id: incoming_.application_user_device__id.as_str(),
+                application_user__email: incoming.application_user__email.as_str(),
+                application_user_device__id: incoming.application_user_device__id.as_str(),
             },
         )
         .await?
@@ -185,8 +178,8 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
                             application_user_registration_token__can_be_resent_from: application_user_registration_token.can_be_resent_from,
                         },
                         By1 {
-                            application_user__email: incoming_.application_user__email.as_str(),
-                            application_user_device__id: incoming_.application_user_device__id.as_str(),
+                            application_user__email: incoming.application_user__email.as_str(),
+                            application_user_device__id: incoming.application_user_device__id.as_str(),
                         },
                     )
                     .await?;
@@ -198,8 +191,8 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
                                 application_user_registration_token__can_be_resent_from: application_user_registration_token.can_be_resent_from,
                             },
                             By1 {
-                                application_user__email: incoming_.application_user__email.as_str(),
-                                application_user_device__id: incoming_.application_user_device__id.as_str(),
+                                application_user__email: incoming.application_user__email.as_str(),
+                                application_user_device__id: incoming.application_user_device__id.as_str(),
                             },
                         )
                         .await?;
@@ -214,8 +207,8 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
                                 application_user_registration_token__expires_at: application_user_registration_token.expires_at,
                             },
                             By1 {
-                                application_user__email: incoming_.application_user__email.as_str(),
-                                application_user_device__id: incoming_.application_user_device__id.as_str(),
+                                application_user__email: incoming.application_user__email.as_str(),
+                                application_user_device__id: incoming.application_user_device__id.as_str(),
                             },
                         )
                         .await?;
@@ -232,8 +225,8 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
                 let application_user_registration_token = PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::create_1(
                     database_2_postgresql_connection,
                     Insert1 {
-                        application_user__email: incoming_.application_user__email.as_str(),
-                        application_user_device__id: incoming_.application_user_device__id.as_str(),
+                        application_user__email: incoming.application_user__email.as_str(),
+                        application_user_device__id: incoming.application_user_device__id.as_str(),
                         application_user_registration_token__value: Generator::<ApplicationUserRegistrationToken_Value>::generate(),
                         application_user_registration_token__wrong_enter_tries_quantity: 0,
                         application_user_registration_token__is_approved: false,
@@ -254,8 +247,8 @@ impl ActionProcessor<ApplicationUser__Authorization___RegisterByFirstStep> {
             EmailSender::<ApplicationUserRegistrationToken<'_>>::send(
                 environment_configuration,
                 application_user_registration_token__value.as_str(),
-                incoming_.application_user__email.as_str(),
-                incoming_.application_user_device__id.as_str(),
+                incoming.application_user__email.as_str(),
+                incoming.application_user_device__id.as_str(),
             )?;
         }
         let outcoming = Outcoming {

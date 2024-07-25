@@ -21,7 +21,6 @@ use crate::{
             aggregate_error::{
                 AggregateError,
                 Backtrace,
-                OptionConverter,
                 ResultConverter,
             },
             control_type::Channel__Base___GetManyByNameInSubscriptions,
@@ -63,7 +62,7 @@ impl ActionProcessor<Channel__Base___GetManyByNameInSubscriptions> {
         environment_configuration: &'a EnvironmentConfiguration,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
-        incoming: Option<Incoming>,
+        incoming: Incoming,
     ) -> Result<UnifiedReport<Outcoming, Precedent>, AggregateError>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -71,15 +70,9 @@ impl ActionProcessor<Channel__Base___GetManyByNameInSubscriptions> {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let incoming_ = incoming.into_logic_value_does_not_exist(
-            Backtrace::new(
-                line!(),
-                file!(),
-            ),
-        )?;
         let application_user_access_token = match Extractor::<ApplicationUserAccessToken<'_>>::extract(
             environment_configuration,
-            incoming_.application_user_access_token_encrypted.as_str(),
+            incoming.application_user_access_token_encrypted.as_str(),
         )
         .await?
         {
@@ -93,7 +86,7 @@ impl ActionProcessor<Channel__Base___GetManyByNameInSubscriptions> {
                 return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList));
             }
         };
-        if incoming_.limit <= 0 || incoming_.limit > Self::LIMIT {
+        if incoming.limit <= 0 || incoming.limit > Self::LIMIT {
             return Err(
                 AggregateError::new_invalid_argument_from_outside(
                     Backtrace::new(
@@ -103,7 +96,7 @@ impl ActionProcessor<Channel__Base___GetManyByNameInSubscriptions> {
                 ),
             );
         }
-        if !Validator::<Channel_Name>::is_valid(incoming_.channel__name.as_str()) {
+        if !Validator::<Channel_Name>::is_valid(incoming.channel__name.as_str()) {
             return Err(
                 AggregateError::new_invalid_argument_from_outside(
                     Backtrace::new(
@@ -113,7 +106,7 @@ impl ActionProcessor<Channel__Base___GetManyByNameInSubscriptions> {
                 ),
             );
         }
-        if let Some(ref requery___channel__name_) = incoming_.requery___channel__name {
+        if let Some(ref requery___channel__name_) = incoming.requery___channel__name {
             if !Validator::<Channel_Name>::is_valid(requery___channel__name_.as_str()) {
                 return Err(
                     AggregateError::new_invalid_argument_from_outside(
@@ -135,10 +128,10 @@ impl ActionProcessor<Channel__Base___GetManyByNameInSubscriptions> {
             &*database_1_postgresql_pooled_connection,
             By2 {
                 application_user__id: application_user_access_token.application_user__id,
-                channel__name: incoming_.channel__name.as_str(),
-                requery___channel__name: incoming_.requery___channel__name.as_deref(),
+                channel__name: incoming.channel__name.as_str(),
+                requery___channel__name: incoming.requery___channel__name.as_deref(),
             },
-            incoming_.limit,
+            incoming.limit,
         )
         .await?;
         let outcoming = Outcoming {

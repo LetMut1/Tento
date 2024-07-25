@@ -1,12 +1,8 @@
-use super::Extractor;
 use crate::infrastructure_layer::{
-    data::{
-        aggregate_error::{
-            AggregateError,
-            Backtrace,
-            ResultConverter,
-        },
-        control_type::HttpBodyData,
+    data::aggregate_error::{
+        AggregateError,
+        Backtrace,
+        ResultConverter,
     },
     functionality::service::serializer::{
         Serialize,
@@ -21,8 +17,9 @@ use hyper::{
 };
 use matchit::Params;
 use serde::Deserialize;
-impl Extractor<HttpBodyData> {
-    pub async fn extract<'a, D, SF>(body: &'a mut Body, _parts: &'a Parts, _route_parameters: &'a Params<'_, '_>) -> Result<Option<D>, AggregateError>
+pub struct DataExtractor;
+impl DataExtractor {
+    pub async fn from_http_body<'a, D, SF>(body: &'a mut Body, _parts: &'a Parts, _route_parameters: &'a Params<'_, '_>) -> Result<D, AggregateError>
     where
         D: for<'de> Deserialize<'de>,
         Serializer<SF>: Serialize,
@@ -33,6 +30,9 @@ impl Extractor<HttpBodyData> {
                 file!(),
             ),
         )?;
-        return Ok(Some(Serializer::<SF>::deserialize::<'_, D>(bytes.chunk())?));
+        return Serializer::<SF>::deserialize::<'_, D>(bytes.chunk());
+    }
+    pub async fn empty<'a>(_body: &'a mut Body, _parts: &'a Parts, _route_parameters: &'a Params<'_, '_>) -> Result<(), AggregateError> {
+        return Ok(());
     }
 }

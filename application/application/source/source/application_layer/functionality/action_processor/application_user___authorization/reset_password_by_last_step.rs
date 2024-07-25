@@ -87,7 +87,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
         _environment_configuration: &'a EnvironmentConfiguration,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
-        incoming: Option<Incoming>,
+        incoming: Incoming,
     ) -> Result<UnifiedReport<Void, Precedent>, AggregateError>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -95,13 +95,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let incoming_ = incoming.into_logic_value_does_not_exist(
-            Backtrace::new(
-                line!(),
-                file!(),
-            ),
-        )?;
-        if !Validator::<ApplicationUserResetPasswordToken_Value>::is_valid(incoming_.application_user_reset_password_token__value.as_str())? {
+        if !Validator::<ApplicationUserResetPasswordToken_Value>::is_valid(incoming.application_user_reset_password_token__value.as_str())? {
             return Err(
                 AggregateError::new_invalid_argument_from_outside(
                     Backtrace::new(
@@ -111,7 +105,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
                 ),
             );
         }
-        if !Validator::<ApplicationUser_Id>::is_valid(incoming_.application_user__id) {
+        if !Validator::<ApplicationUser_Id>::is_valid(incoming.application_user__id) {
             return Err(
                 AggregateError::new_invalid_argument_from_outside(
                     Backtrace::new(
@@ -121,7 +115,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
                 ),
             );
         }
-        if !Validator::<ApplicationUser_Password>::is_valid_part_1(incoming_.application_user__password.as_str()) {
+        if !Validator::<ApplicationUser_Password>::is_valid_part_1(incoming.application_user__password.as_str()) {
             return Err(
                 AggregateError::new_invalid_argument_from_outside(
                     Backtrace::new(
@@ -131,7 +125,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
                 ),
             );
         }
-        if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming_.application_user_device__id.as_str()) {
+        if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming.application_user_device__id.as_str()) {
             return Err(
                 AggregateError::new_invalid_argument_from_outside(
                     Backtrace::new(
@@ -151,8 +145,8 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
         let mut application_user_reset_password_token = match PostgresqlRepository::<ApplicationUserResetPasswordToken>::find_2(
             database_2_postgresql_connection,
             By1_ {
-                application_user__id: incoming_.application_user__id,
-                application_user_device__id: incoming_.application_user_device__id.as_str(),
+                application_user__id: incoming.application_user__id,
+                application_user_device__id: incoming.application_user_device__id.as_str(),
             },
         )
         .await?
@@ -166,8 +160,8 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
             PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete_2(
                 database_2_postgresql_connection,
                 By1_ {
-                    application_user__id: incoming_.application_user__id,
-                    application_user_device__id: incoming_.application_user_device__id.as_str(),
+                    application_user__id: incoming.application_user__id,
+                    application_user_device__id: incoming.application_user_device__id.as_str(),
                 },
             )
             .await?;
@@ -176,7 +170,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
         if !application_user_reset_password_token.is_approved {
             return Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_IsNotApproved));
         }
-        if application_user_reset_password_token.value != incoming_.application_user_reset_password_token__value {
+        if application_user_reset_password_token.value != incoming.application_user_reset_password_token__value {
             application_user_reset_password_token.wrong_enter_tries_quantity =
                 application_user_reset_password_token.wrong_enter_tries_quantity.checked_add(1).into_logic_out_of_range(
                     Backtrace::new(
@@ -191,8 +185,8 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
                         application_user_reset_password_token__wrong_enter_tries_quantity: application_user_reset_password_token.wrong_enter_tries_quantity,
                     },
                     By1_ {
-                        application_user__id: incoming_.application_user__id,
-                        application_user_device__id: incoming_.application_user_device__id.as_str(),
+                        application_user__id: incoming.application_user__id,
+                        application_user_device__id: incoming.application_user_device__id.as_str(),
                     },
                 )
                 .await?;
@@ -200,8 +194,8 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
                 PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete_2(
                     database_2_postgresql_connection,
                     By1_ {
-                        application_user__id: incoming_.application_user__id,
-                        application_user_device__id: incoming_.application_user_device__id.as_str(),
+                        application_user__id: incoming.application_user__id,
+                        application_user_device__id: incoming.application_user_device__id.as_str(),
                     },
                 )
                 .await?;
@@ -218,7 +212,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
         let mut application_user = match PostgresqlRepository::<ApplicationUser>::find_5(
             database_1_postgresql_connection,
             By3 {
-                application_user__id: incoming_.application_user__id,
+                application_user__id: incoming.application_user__id,
             },
         )
         .await?
@@ -229,7 +223,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
             }
         };
         if !Validator::<ApplicationUser_Password>::is_valid_part_2(
-            incoming_.application_user__password.as_str(),
+            incoming.application_user__password.as_str(),
             application_user.email.as_str(),
             application_user.nickname.as_str(),
         ) {
@@ -244,7 +238,7 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
         }
         let application_user__password_hash___join_handle = Spawner::<TokioBlockingTask>::spawn_processed(
             move || -> _ {
-                return Encoder::<ApplicationUser_Password>::encode(incoming_.application_user__password.as_str());
+                return Encoder::<ApplicationUser_Password>::encode(incoming.application_user__password.as_str());
             },
         );
         application_user.password_hash = application_user__password_hash___join_handle.await.into_runtime(
@@ -259,14 +253,14 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
                 application_user__password_hash: application_user.password_hash.as_str(),
             },
             By3 {
-                application_user__id: incoming_.application_user__id,
+                application_user__id: incoming.application_user__id,
             },
         )
         .await?;
         PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::delete_2(
             &*database_2_postgresql_pooled_connection,
             By1 {
-                application_user__id: incoming_.application_user__id,
+                application_user__id: incoming.application_user__id,
             },
         )
         .await?;
@@ -283,8 +277,8 @@ impl ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
                 PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete_2(
                     &*database_2_postgresql_pooled_connection_,
                     By1_ {
-                        application_user__id: incoming_.application_user__id,
-                        application_user_device__id: incoming_.application_user_device__id.as_str(),
+                        application_user__id: incoming.application_user__id,
+                        application_user_device__id: incoming.application_user_device__id.as_str(),
                     },
                 )
                 .await?;

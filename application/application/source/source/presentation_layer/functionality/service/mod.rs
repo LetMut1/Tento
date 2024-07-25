@@ -1,1 +1,1 @@
-pub mod extractor;
+pub mod data_extractor;

@@ -11,11 +11,10 @@ use crate::{
             Response,
         },
         environment_configuration::EnvironmentConfiguration,
-        void::Void,
     },
     presentation_layer::functionality::{
         action::Action,
-        service::extractor::Extractor,
+        service::data_extractor::DataExtractor,
     },
 };
 use bb8::Pool;
@@ -59,7 +58,7 @@ impl Action<HealthCheck> {
             route_parameters,
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
-            Extractor::<Void>::extract,
+            DataExtractor::empty,
             ActionProcessor::<HealthCheck>::process,
         )
         .await;

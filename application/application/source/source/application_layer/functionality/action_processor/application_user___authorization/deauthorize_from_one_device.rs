@@ -18,7 +18,6 @@ use crate::{
             aggregate_error::{
                 AggregateError,
                 Backtrace,
-                OptionConverter,
                 ResultConverter,
             },
             control_type::ApplicationUser__Authorization___DeauthorizeFromOneDevice,
@@ -56,7 +55,7 @@ impl ActionProcessor<ApplicationUser__Authorization___DeauthorizeFromOneDevice> 
         environment_configuration: &'a EnvironmentConfiguration,
         _database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
-        incoming: Option<Incoming>,
+        incoming: Incoming,
     ) -> Result<UnifiedReport<Void, Precedent>, AggregateError>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -64,15 +63,9 @@ impl ActionProcessor<ApplicationUser__Authorization___DeauthorizeFromOneDevice> 
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let incoming_ = incoming.into_logic_value_does_not_exist(
-            Backtrace::new(
-                line!(),
-                file!(),
-            ),
-        )?;
         let application_user_access_token = match Extractor::<ApplicationUserAccessToken<'_>>::extract(
             environment_configuration,
-            incoming_.application_user_access_token_encrypted.as_str(),
+            incoming.application_user_access_token_encrypted.as_str(),
         )
         .await?
         {

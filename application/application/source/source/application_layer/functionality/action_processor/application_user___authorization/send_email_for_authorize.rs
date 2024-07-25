@@ -26,7 +26,6 @@ use crate::{
             aggregate_error::{
                 AggregateError,
                 Backtrace,
-                OptionConverter,
                 ResultConverter,
             },
             control_type::{
@@ -74,7 +73,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
         environment_configuration: &'a EnvironmentConfiguration,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
-        incoming: Option<Incoming>,
+        incoming: Incoming,
     ) -> Result<UnifiedReport<Outcoming, Precedent>, AggregateError>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -82,13 +81,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let incoming_ = incoming.into_logic_value_does_not_exist(
-            Backtrace::new(
-                line!(),
-                file!(),
-            ),
-        )?;
-        if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming_.application_user_device__id.as_str()) {
+        if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming.application_user_device__id.as_str()) {
             return Err(
                 AggregateError::new_invalid_argument_from_outside(
                     Backtrace::new(
@@ -98,7 +91,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
                 ),
             );
         }
-        if !Validator::<ApplicationUser_Id>::is_valid(incoming_.application_user__id) {
+        if !Validator::<ApplicationUser_Id>::is_valid(incoming.application_user__id) {
             return Err(
                 AggregateError::new_invalid_argument_from_outside(
                     Backtrace::new(
@@ -117,7 +110,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
         let application_user = match PostgresqlRepository::<ApplicationUser>::find_6(
             &*database_1_postgresql_pooled_connection,
             By3 {
-                application_user__id: incoming_.application_user__id,
+                application_user__id: incoming.application_user__id,
             },
         )
         .await?
@@ -137,8 +130,8 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
         let mut application_user_authorization_token = match PostgresqlRepository::<ApplicationUserAuthorizationToken>::find_3(
             database_2_postgresql_connection,
             By1 {
-                application_user__id: incoming_.application_user__id,
-                application_user_device__id: incoming_.application_user_device__id.as_str(),
+                application_user__id: incoming.application_user__id,
+                application_user_device__id: incoming.application_user_device__id.as_str(),
             },
         )
         .await?
@@ -152,8 +145,8 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
             PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::delete_1(
                 database_2_postgresql_connection,
                 By1 {
-                    application_user__id: incoming_.application_user__id,
-                    application_user_device__id: incoming_.application_user_device__id.as_str(),
+                    application_user__id: incoming.application_user__id,
+                    application_user_device__id: incoming.application_user_device__id.as_str(),
                 },
             )
             .await?;
@@ -169,8 +162,8 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
                 application_user_authorization_token__can_be_resent_from: application_user_authorization_token.can_be_resent_from,
             },
             By1 {
-                application_user__id: incoming_.application_user__id,
-                application_user_device__id: incoming_.application_user_device__id.as_str(),
+                application_user__id: incoming.application_user__id,
+                application_user_device__id: incoming.application_user_device__id.as_str(),
             },
         )
         .await?;
@@ -178,7 +171,7 @@ impl ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
             environment_configuration,
             application_user_authorization_token.value.as_str(),
             application_user.email.as_str(),
-            incoming_.application_user_device__id.as_str(),
+            incoming.application_user_device__id.as_str(),
         )?;
         let outcoming = Outcoming {
             application_user_authorization_token__can_be_resent_from: application_user_authorization_token.can_be_resent_from,

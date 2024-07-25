@@ -27,7 +27,6 @@ use crate::{
             aggregate_error::{
                 AggregateError,
                 Backtrace,
-                OptionConverter,
                 ResultConverter,
             },
             control_type::{
@@ -75,7 +74,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
         environment_configuration: &'a EnvironmentConfiguration,
         _database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
-        incoming: Option<Incoming>,
+        incoming: Incoming,
     ) -> Result<UnifiedReport<Outcoming, Precedent>, AggregateError>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -83,15 +82,9 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let incoming_ = incoming.into_logic_value_does_not_exist(
-            Backtrace::new(
-                line!(),
-                file!(),
-            ),
-        )?;
         let application_user_access_token = FormResolver::<ApplicationUserAccessToken<'_>>::from_encrypted(
             environment_configuration,
-            incoming_.application_user_access_token_encrypted.as_str(),
+            incoming.application_user_access_token_encrypted.as_str(),
         )?;
         let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.into_runtime(
             Backtrace::new(
@@ -117,7 +110,7 @@ impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
         let is_valid = FormResolver::<ApplicationUserAccessRefreshToken<'_>>::is_valid(
             environment_configuration,
             &application_user_access_refresh_token,
-            incoming_.application_user_access_refresh_token_encrypted.as_str(),
+            incoming.application_user_access_refresh_token_encrypted.as_str(),
         )?;
         if !is_valid || application_user_access_token.id != application_user_access_refresh_token.application_user_access_token__id.as_ref() {
             return Err(

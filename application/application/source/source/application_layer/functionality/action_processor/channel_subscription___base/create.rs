@@ -26,7 +26,6 @@ use crate::{
             aggregate_error::{
                 AggregateError,
                 Backtrace,
-                OptionConverter,
                 ResultConverter,
             },
             control_type::ChannelSubscription__Base___Create,
@@ -65,7 +64,7 @@ impl ActionProcessor<ChannelSubscription__Base___Create> {
         environment_configuration: &'a EnvironmentConfiguration,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
-        incoming: Option<Incoming>,
+        incoming: Incoming,
     ) -> Result<UnifiedReport<Void, Precedent>, AggregateError>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -73,15 +72,9 @@ impl ActionProcessor<ChannelSubscription__Base___Create> {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let incoming_ = incoming.into_logic_value_does_not_exist(
-            Backtrace::new(
-                line!(),
-                file!(),
-            ),
-        )?;
         let application_user_access_token = match Extractor::<ApplicationUserAccessToken<'_>>::extract(
             environment_configuration,
-            incoming_.application_user_access_token_encrypted.as_str(),
+            incoming.application_user_access_token_encrypted.as_str(),
         )
         .await?
         {
@@ -95,7 +88,7 @@ impl ActionProcessor<ChannelSubscription__Base___Create> {
                 return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList));
             }
         };
-        if !Validator::<Channel_Id>::is_valid(incoming_.channel__id) {
+        if !Validator::<Channel_Id>::is_valid(incoming.channel__id) {
             return Err(
                 AggregateError::new_invalid_argument_from_outside(
                     Backtrace::new(
@@ -115,7 +108,7 @@ impl ActionProcessor<ChannelSubscription__Base___Create> {
         let channel = match PostgresqlRepository::<Channel<'_>>::find_1(
             database_1_postgresql_connection,
             By1 {
-                channel__id: incoming_.channel__id,
+                channel__id: incoming.channel__id,
             },
         )
         .await?

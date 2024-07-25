@@ -15,7 +15,6 @@ use crate::{
             aggregate_error::{
                 AggregateError,
                 Backtrace,
-                OptionConverter,
                 ResultConverter,
             },
             control_type::ApplicationUser__Authorization___CheckNicknameForExisting,
@@ -53,7 +52,7 @@ impl ActionProcessor<ApplicationUser__Authorization___CheckNicknameForExisting> 
         _environment_configuration: &'a EnvironmentConfiguration,
         database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
-        incoming: Option<Incoming>,
+        incoming: Incoming,
     ) -> Result<UnifiedReport<Outcoming, Void>, AggregateError>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -61,13 +60,7 @@ impl ActionProcessor<ApplicationUser__Authorization___CheckNicknameForExisting> 
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let incoming_ = incoming.into_logic_value_does_not_exist(
-            Backtrace::new(
-                line!(),
-                file!(),
-            ),
-        )?;
-        if !Validator::<ApplicationUser_Nickname>::is_valid(incoming_.application_user__nickname.as_str()) {
+        if !Validator::<ApplicationUser_Nickname>::is_valid(incoming.application_user__nickname.as_str()) {
             return Err(
                 AggregateError::new_invalid_argument_from_outside(
                     Backtrace::new(
@@ -86,7 +79,7 @@ impl ActionProcessor<ApplicationUser__Authorization___CheckNicknameForExisting> 
         let is_exist = PostgresqlRepository::<ApplicationUser<'_>>::is_exist_1(
             &*database_1_postgresql_pooled_connection,
             By1 {
-                application_user__nickname: incoming_.application_user__nickname.as_str(),
+                application_user__nickname: incoming.application_user__nickname.as_str(),
             },
         )
         .await?;

@@ -36,7 +36,6 @@ pub struct Email;
 pub struct RemoveIncompliteState;
 pub struct ActionRound;
 pub struct HealthCheck;
-pub struct HttpBodyData;
 pub struct MessagePack;
 pub struct NumberRow;
 pub struct PostgresqlTransaction;

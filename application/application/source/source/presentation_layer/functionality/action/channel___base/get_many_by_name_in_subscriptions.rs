@@ -9,7 +9,6 @@ use crate::{
         control_type::{
             Channel__Base___GetManyByNameInSubscriptions,
             ActionRound,
-            HttpBodyData,
             MessagePack,
             Response,
         },
@@ -17,7 +16,7 @@ use crate::{
     },
     presentation_layer::functionality::{
         action::Action,
-        service::extractor::Extractor,
+        service::data_extractor::DataExtractor,
     },
 };
 use bb8::Pool;
@@ -61,7 +60,7 @@ impl Action<Channel__Base___GetManyByNameInSubscriptions> {
             route_parameters,
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
-            Extractor::<HttpBodyData>::extract::<_, MessagePack>,
+            DataExtractor::from_http_body::<_, MessagePack>,
             ActionProcessor::<Channel__Base___GetManyByNameInSubscriptions>::process,
         )
         .await;
@@ -90,7 +89,7 @@ impl Action<Channel__Base___GetManyByNameInSubscriptions> {
             route_parameters,
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
-            Extractor::<HttpBodyData>::extract::<_, Json>,
+            DataExtractor::from_http_body::<_, Json>,
             ActionProcessor::<Channel__Base___GetManyByNameInSubscriptions>::process,
         )
         .await;

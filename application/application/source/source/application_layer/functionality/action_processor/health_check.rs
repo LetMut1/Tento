@@ -31,7 +31,7 @@ impl ActionProcessor<HealthCheck> {
         _environment_configuration: &'a EnvironmentConfiguration,
         _database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
         _database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
-        _incoming: Option<Void>,
+        _incoming: (),
     ) -> Result<UnifiedReport<Void, Void>, AggregateError>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
