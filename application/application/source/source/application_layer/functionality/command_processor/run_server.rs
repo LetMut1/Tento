@@ -167,7 +167,7 @@ impl CommandProcessor<RunServer> {
             (
                 non_blocking,
                 worker_guard,
-            ) = NonBlockingBuilder::default().finish(std::io::stdout);
+            ) = NonBlockingBuilder::default().finish(std::io::stdout());
         }
         let fmt_subscriber = FmtSubscriber::builder()
             .with_max_level(Level::INFO)
