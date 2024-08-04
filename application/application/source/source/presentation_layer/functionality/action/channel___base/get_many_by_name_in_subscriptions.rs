@@ -16,7 +16,6 @@ use crate::{
     },
     presentation_layer::functionality::{
         action::Action,
-        service::data_extractor::DataExtractor,
     },
 };
 use bb8::Pool;
@@ -53,14 +52,13 @@ impl Action<Channel__Base___GetManyByNameInSubscriptions> {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        return Processor::<ActionRound>::process::<'_, '_, '_, _, _, _, _, _, _, _, _, MessagePack>(
+        return Processor::<ActionRound>::process::<'_, '_, '_, _, _, _, _, _, _, MessagePack, MessagePack>(
             environment_configuration,
             body,
             parts,
             route_parameters,
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
-            DataExtractor::from_http_body::<_, MessagePack>,
             ActionProcessor::<Channel__Base___GetManyByNameInSubscriptions>::process,
         )
         .await;
@@ -82,14 +80,13 @@ impl Action<Channel__Base___GetManyByNameInSubscriptions> {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        return Processor::<ActionRound>::process::<'_, '_, '_, _, _, _, _, _, _, _, _, Json>(
+        return Processor::<ActionRound>::process::<'_, '_, '_, _, _, _, _, _, _, Json, Json>(
             environment_configuration,
             body,
             parts,
             route_parameters,
             database_1_postgresql_connection_pool,
             database_2_postgresql_connection_pool,
-            DataExtractor::from_http_body::<_, Json>,
             ActionProcessor::<Channel__Base___GetManyByNameInSubscriptions>::process,
         )
         .await;

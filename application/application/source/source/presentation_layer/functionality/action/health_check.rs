@@ -1,66 +1,14 @@
 use crate::{
     application_layer::functionality::{
-        action_processor::ActionProcessor,
-        service::processor::Processor,
     },
     infrastructure_layer::data::{
         control_type::{
-            ActionRound,
             HealthCheck,
-            MessagePack,
-            Response,
         },
-        environment_configuration::EnvironmentConfiguration,
     },
     presentation_layer::functionality::{
         action::Action,
-        service::data_extractor::DataExtractor,
     },
 };
-use bb8::Pool;
-use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
-use http::request::Parts;
-use hyper::Body;
-use matchit::Params;
-use std::{
-    clone::Clone,
-    marker::{
-        Send,
-        Sync,
-    },
-};
-use tokio_postgres::{
-    tls::{
-        MakeTlsConnect,
-        TlsConnect,
-    },
-    Socket,
-};
-impl Action<HealthCheck> {
-    pub async fn run<'a, T>(
-        environment_configuration: &'a EnvironmentConfiguration,
-        body: &'a mut Body,
-        parts: &'a Parts,
-        route_parameters: &'a Params<'_, '_>,
-        database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
-        database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
-    ) -> Response
-    where
-        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
-        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
-        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
-        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
-    {
-        return Processor::<ActionRound>::process::<'_, '_, '_, _, _, _, _, _, _, _, _, MessagePack>(
-            environment_configuration,
-            body,
-            parts,
-            route_parameters,
-            database_1_postgresql_connection_pool,
-            database_2_postgresql_connection_pool,
-            DataExtractor::empty,
-            ActionProcessor::<HealthCheck>::process,
-        )
-        .await;
-    }
-}
+
+impl Action<HealthCheck> {}

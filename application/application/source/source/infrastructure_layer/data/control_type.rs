@@ -34,6 +34,7 @@ pub struct CreateFixtures;
 pub struct DateTime;
 pub struct Email;
 pub struct RemoveIncompliteState;
+pub struct HttpBody;
 pub struct ActionRound;
 pub struct HealthCheck;
 pub struct MessagePack;
