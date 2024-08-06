@@ -58,16 +58,18 @@ use crate::infrastructure_layer::data::control_type::Json;
 pub struct Action<S> {
     _subject: PhantomData<S>,
 }
-impl<AP> Action<AP> {
-    pub fn run_X<'a, 'b, 'c, 'd, T>(
+impl<AP> Action<AP>
+where
+    ActionProcessor<AP>: ActionProcessor_,
+    <ActionProcessor<AP> as ActionProcessor_>::Incoming: for<'de> SerdeDeserialize<'de>,
+    <ActionProcessor<AP> as ActionProcessor_>::Outcoming: SerdeSerialize,
+    <ActionProcessor<AP> as ActionProcessor_>::Precedent: SerdeSerialize,
+{
+    pub fn run<'a, 'b, 'c, 'd, T>(
         inner: Inner<'b, 'c, 'd>,
         action_processor_inner: &'a ActionProcessorInner<'b, T>,
     ) -> impl Future<Output = Response> + 'a
     where
-        ActionProcessor<AP>: ActionProcessor_,
-        <ActionProcessor<AP> as ActionProcessor_>::Incoming: for<'de> SerdeDeserialize<'de>,
-        <ActionProcessor<AP> as ActionProcessor_>::Outcoming: SerdeSerialize,
-        <ActionProcessor<AP> as ActionProcessor_>::Precedent: SerdeSerialize,
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
@@ -77,16 +79,18 @@ impl<AP> Action<AP> {
     }
 }
 #[cfg(feature = "manual_testing")]
-impl<AP> Action<AP> {
+impl<AP> Action<AP>
+where
+    ActionProcessor<AP>: ActionProcessor_,
+    <ActionProcessor<AP> as ActionProcessor_>::Incoming: for<'de> SerdeDeserialize<'de>,
+    <ActionProcessor<AP> as ActionProcessor_>::Outcoming: SerdeSerialize,
+    <ActionProcessor<AP> as ActionProcessor_>::Precedent: SerdeSerialize,
+{
     pub fn run_<'a, 'b, 'c, 'd, T>(
         inner: Inner<'b, 'c, 'd>,
         action_processor_inner: &'a ActionProcessorInner<'b, T>,
     ) -> impl Future<Output = Response> + 'a
     where
-        ActionProcessor<AP>: ActionProcessor_,
-        <ActionProcessor<AP> as ActionProcessor_>::Incoming: for<'de> SerdeDeserialize<'de>,
-        <ActionProcessor<AP> as ActionProcessor_>::Outcoming: SerdeSerialize,
-        <ActionProcessor<AP> as ActionProcessor_>::Precedent: SerdeSerialize,
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
