@@ -78,7 +78,7 @@ impl<AP> Action<AP> {
 }
 #[cfg(feature = "manual_testing")]
 impl<AP> Action<AP> {
-    pub fn run_X_ <'a, 'b, 'c, 'd, T>(
+    pub fn run_ <'a, 'b, 'c, 'd, T>(
         inner: Inner<'b, 'c, 'd>,
         action_processor_inner: &'a ActionProcessorInner<'b, T>,
     ) -> impl Future<Output = Response> + 'a
