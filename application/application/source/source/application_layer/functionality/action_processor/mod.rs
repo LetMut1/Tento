@@ -55,23 +55,23 @@ where
     <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
 {
     pub fn get_database_1_postgresql_pooled_connection<'b>(&'b self) -> impl Future<Output = Result<PooledConnection<PostgresqlConnectionManager<T>>, AggregateError>> {
-        async move {
+        return async move {
             return self.database_1_postgresql_connection_pool.get().await.into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
                 ),
             );
-        }
+        };
     }
     pub fn get_database_2_postgresql_pooled_connection<'b>(&'b self) -> impl Future<Output = Result<PooledConnection<PostgresqlConnectionManager<T>>, AggregateError>> {
-        async move {
+        return async move {
             return self.database_2_postgresql_connection_pool.get().await.into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
                 ),
             );
-        }
+        };
     }
 }
