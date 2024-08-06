@@ -1,4 +1,4 @@
-use std::marker::PhantomData;
+use std::{future::Future, marker::PhantomData};
 use crate::{
     application_layer::{
         functionality::action_processor::{ActionProcessor, ActionProcessor_, Inner as ActionProcessorInner},
@@ -44,10 +44,10 @@ use tokio_postgres::{
 };
 use super::Processor;
 impl Processor<ActionRound> {
-    pub async fn process<'a, T, AP, SS, SD>(
-        inner: Inner<'_, '_, '_>,
-        action_processor_inner: &'a ActionProcessorInner<'_, T>,
-    ) -> Response
+    pub fn process<'a, 'b, 'c, 'd, T, AP, SS, SD>(
+        inner: Inner<'b, 'c, 'd>,
+        action_processor_inner: &'a ActionProcessorInner<'b, T>,
+    ) -> impl Future<Output = Response> + 'a
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -60,64 +60,69 @@ impl Processor<ActionRound> {
         Serializer<SS>: Serialize,
         Serializer<SD>: Serialize,
         'a: 'a,
+        'b: 'b,
+        'c: 'c,
+        'd: 'd,
     {
-        let future = async {
-            if !Validator::<Parts>::is_valid(inner.parts) {
-                return Result::<Vec<u8>, AggregateError>::Err(
-                    AggregateError::new_invalid_argument_from_outside(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
+        return async move {
+            let future = async {
+                if !Validator::<Parts>::is_valid(inner.parts) {
+                    return Result::<Vec<u8>, AggregateError>::Err(
+                        AggregateError::new_invalid_argument_from_outside(
+                            Backtrace::new(
+                                line!(),
+                                file!(),
+                            ),
                         ),
+                    );
+                }
+                let bytes = hyper::body::to_bytes(inner.body).await.into_invalid_argument_from_outside_and_client_code(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
                     ),
-                );
-            }
-            let bytes = hyper::body::to_bytes(inner.body).await.into_invalid_argument_from_outside_and_client_code(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            )?;
-            let incoming = Serializer::<SS>::deserialize::<'_, <ActionProcessor<AP> as ActionProcessor_>::Incoming>(bytes.chunk())?;
-            let unified_report = ActionProcessor::<AP>::process(action_processor_inner, incoming).await?;
-            return Serializer::<SD>::serialize(&unified_report);
-        };
-        return match future.await {
-            Ok(data) => {
-                let response = Creator::<Response>::create_ok(data);
-                Logger::<ActionRound>::log(
-                    inner.parts,
-                    &response,
-                );
-                response
-            }
-            Err(aggregate_error) => {
-                let response = match ServerWorkflowError::new(aggregate_error) {
-                    ServerWorkflowError::Unexpected {
-                        unexpected_auditor,
-                    } => {
-                        let response_ = Creator::<Response>::create_internal_server_error();
-                        Logger::<ActionRound>::log_unexpected_auditor(
-                            inner.parts,
-                            &response_,
+                )?;
+                let incoming = Serializer::<SS>::deserialize::<'_, <ActionProcessor<AP> as ActionProcessor_>::Incoming>(bytes.chunk())?;
+                let unified_report = ActionProcessor::<AP>::process(action_processor_inner, incoming).await?;
+                return Serializer::<SD>::serialize(&unified_report);
+            };
+            return match future.await {
+                Ok(data) => {
+                    let response = Creator::<Response>::create_ok(data);
+                    Logger::<ActionRound>::log(
+                        inner.parts,
+                        &response,
+                    );
+                    response
+                }
+                Err(aggregate_error) => {
+                    let response = match ServerWorkflowError::new(aggregate_error) {
+                        ServerWorkflowError::Unexpected {
                             unexpected_auditor,
-                        );
-                        response_
-                    }
-                    ServerWorkflowError::Expected {
-                        expected_auditor,
-                    } => {
-                        let response_ = Creator::<Response>::create_bad_request();
-                        Logger::<ActionRound>::log_expected_auditor(
-                            inner.parts,
-                            &response_,
+                        } => {
+                            let response_ = Creator::<Response>::create_internal_server_error();
+                            Logger::<ActionRound>::log_unexpected_auditor(
+                                inner.parts,
+                                &response_,
+                                unexpected_auditor,
+                            );
+                            response_
+                        }
+                        ServerWorkflowError::Expected {
                             expected_auditor,
-                        );
-                        response_
-                    }
-                };
-                response
-            }
-        };
+                        } => {
+                            let response_ = Creator::<Response>::create_bad_request();
+                            Logger::<ActionRound>::log_expected_auditor(
+                                inner.parts,
+                                &response_,
+                                expected_auditor,
+                            );
+                            response_
+                        }
+                    };
+                    response
+                }
+            };
+        }
     }
 }

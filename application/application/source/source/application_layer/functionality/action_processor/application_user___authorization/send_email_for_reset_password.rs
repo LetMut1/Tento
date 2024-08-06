@@ -81,7 +81,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        async move {
+        return async move {
             if !Validator::<ApplicationUser_Id>::is_valid(incoming.application_user__id) {
                 return Err(
                     AggregateError::new_invalid_argument_from_outside(
@@ -171,6 +171,6 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
                 application_user_reset_password_token__can_be_resent_from: application_user_reset_password_token.can_be_resent_from,
             };
             return Ok(UnifiedReport::target_filled(outcoming));
-        }
+        };
     }
 }

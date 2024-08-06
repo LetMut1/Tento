@@ -87,7 +87,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Reset
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        async move {
+        return async move {
             if !Validator::<ApplicationUser_Email>::is_valid(incoming.application_user__email.as_str())? {
                 return Err(
                     AggregateError::new_invalid_argument_from_outside(
@@ -253,6 +253,6 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Reset
                 application_user_reset_password_token__wrong_enter_tries_quantity_limit: ApplicationUserResetPasswordToken_WrongEnterTriesQuantity::LIMIT,
             };
             return Ok(UnifiedReport::target_filled(outcoming));
-        }
+        };
     }
 }

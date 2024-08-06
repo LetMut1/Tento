@@ -62,7 +62,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Deaut
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        async move {
+        return async move {
             let application_user_access_token = match Extractor::<ApplicationUserAccessToken<'_>>::extract(
                 inner.environment_configuration,
                 incoming.application_user_access_token_encrypted.as_str(),
@@ -89,6 +89,6 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Deaut
             )
             .await?;
             return Ok(UnifiedReport::target_empty());
-        }
+        };
     }
 }

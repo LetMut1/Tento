@@ -73,7 +73,7 @@ impl ActionProcessor_ for ActionProcessor<Channel__Base___GetManyPublicByName> {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
         const LIMIT: i16 = 100;
-        async move {
+        return async move {
             let application_user_access_token = match Extractor::<ApplicationUserAccessToken<'_>>::extract(
                 inner.environment_configuration,
                 incoming.application_user_access_token_encrypted.as_str(),
@@ -138,6 +138,6 @@ impl ActionProcessor_ for ActionProcessor<Channel__Base___GetManyPublicByName> {
                 common_registry,
             };
             return Ok(UnifiedReport::target_filled(outcoming));
-        }
+        };
     }
 }

@@ -109,7 +109,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        async move {
+        return async move {
             if !Validator::<ApplicationUser_Id>::is_valid(incoming.application_user__id) {
                 return Err(
                     AggregateError::new_invalid_argument_from_outside(
@@ -323,6 +323,6 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                 application_user_access_refresh_token_encrypted,
             };
             return Ok(UnifiedReport::target_filled(outcoming));
-        }
+        };
     }
 }

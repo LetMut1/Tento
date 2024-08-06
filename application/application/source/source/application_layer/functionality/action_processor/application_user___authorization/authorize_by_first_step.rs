@@ -96,7 +96,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        async move {
+        return async move {
             if !Validator::<ApplicationUser_Password>::is_valid_part_1(incoming.application_user__password.as_str()) {
                 return Err(
                     AggregateError::new_invalid_argument_from_outside(
@@ -328,6 +328,6 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                 application_user_authorization_token__wrong_enter_tries_quantity_limit: ApplicationUserAuthorizationToken_WrongEnterTriesQuantity::LIMIT,
             };
             return Ok(UnifiedReport::target_filled(outcoming));
-        }
+        };
     }
 }

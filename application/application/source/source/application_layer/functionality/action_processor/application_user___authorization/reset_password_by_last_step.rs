@@ -96,7 +96,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Reset
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        async move {
+        return async move {
             if !Validator::<ApplicationUserResetPasswordToken_Value>::is_valid(incoming.application_user_reset_password_token__value.as_str())? {
                 return Err(
                     AggregateError::new_invalid_argument_from_outside(
@@ -278,6 +278,6 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Reset
                 },
             );
             return Ok(UnifiedReport::target_empty());
-        }
+        };
     }
 }

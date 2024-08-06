@@ -113,7 +113,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        async move {
+        return async move {
             if !Validator::<ApplicationUser_Password>::is_valid(
                 incoming.application_user__password.as_str(),
                 incoming.application_user__email.as_str(),
@@ -338,6 +338,6 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
                 application_user_access_refresh_token_encrypted,
             };
             return Ok(UnifiedReport::target_filled(outcoming));
-        }
+        };
     }
 }
