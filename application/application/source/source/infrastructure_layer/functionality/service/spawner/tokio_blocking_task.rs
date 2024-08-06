@@ -6,7 +6,6 @@ use crate::infrastructure_layer::{
     },
     functionality::service::logger::Logger,
 };
-use std::marker::Send;
 use tokio::task::JoinHandle;
 impl Spawner<TokioBlockingTask> {
     pub fn spawn_into_background<F, T>(closure: F) -> ()

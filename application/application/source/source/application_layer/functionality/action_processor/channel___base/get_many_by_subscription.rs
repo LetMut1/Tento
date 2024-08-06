@@ -21,10 +21,8 @@ use crate::{
             aggregate_error::{
                 AggregateError,
                 Backtrace,
-                ResultConverter,
             },
             control_type::Channel__Base___GetManyBySubscription,
-            environment_configuration::EnvironmentConfiguration,
         },
         functionality::repository::postgresql::{
             common::{
@@ -40,8 +38,6 @@ use action_processor_incoming_outcoming::action_processor::channel___base::get_m
     Outcoming,
     Precedent,
 };
-use bb8::Pool;
-use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use std::{
     clone::Clone,
     marker::{
@@ -56,38 +52,54 @@ use tokio_postgres::{
     },
     Socket,
 };
-impl ActionProcessor<Channel__Base___GetManyBySubscription> {
-    const LIMIT: i16 = 100;
-    pub async fn process<'a, T>(
-        environment_configuration: &'a EnvironmentConfiguration,
-        database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
-        _database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
-        incoming: Incoming,
-    ) -> Result<UnifiedReport<Outcoming, Precedent>, AggregateError>
+use crate::application_layer::functionality::action_processor::Inner;
+use crate::application_layer::functionality::action_processor::ActionProcessor_;
+use std::future::Future;
+impl ActionProcessor_ for ActionProcessor<Channel__Base___GetManyBySubscription> {
+    type Incoming = Incoming;
+    type Outcoming = Outcoming;
+    type Precedent = Precedent;
+    fn process<'a, T> (
+        inner: &'a Inner<'_, T>,
+        incoming: Self::Incoming,
+    ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send + 'a
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let application_user_access_token = match Extractor::<ApplicationUserAccessToken<'_>>::extract(
-            environment_configuration,
-            incoming.application_user_access_token_encrypted.as_str(),
-        )
-        .await?
-        {
-            ExtractorResult::ApplicationUserAccessToken {
-                application_user_access_token: application_user_access_token_,
-            } => application_user_access_token_,
-            ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
-                return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_AlreadyExpired));
+        const LIMIT: i16 = 100;
+        async move {
+            let application_user_access_token = match Extractor::<ApplicationUserAccessToken<'_>>::extract(
+                inner.environment_configuration,
+                incoming.application_user_access_token_encrypted.as_str(),
+            )
+            .await?
+            {
+                ExtractorResult::ApplicationUserAccessToken {
+                    application_user_access_token: application_user_access_token_,
+                } => application_user_access_token_,
+                ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
+                    return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_AlreadyExpired));
+                }
+                ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
+                    return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList));
+                }
+            };
+            if let Some(requery___channel__id_) = incoming.requery___channel__id {
+                if !Validator::<Channel_Id>::is_valid(requery___channel__id_) {
+                    return Err(
+                        AggregateError::new_invalid_argument_from_outside(
+                            Backtrace::new(
+                                line!(),
+                                file!(),
+                            ),
+                        ),
+                    );
+                }
             }
-            ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
-                return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList));
-            }
-        };
-        if let Some(requery___channel__id_) = incoming.requery___channel__id {
-            if !Validator::<Channel_Id>::is_valid(requery___channel__id_) {
+            if incoming.limit <= 0 || incoming.limit > LIMIT {
                 return Err(
                     AggregateError::new_invalid_argument_from_outside(
                         Backtrace::new(
@@ -97,35 +109,20 @@ impl ActionProcessor<Channel__Base___GetManyBySubscription> {
                     ),
                 );
             }
+            let database_1_postgresql_pooled_connection = inner.get_database_1_postgresql_pooled_connection().await?;
+            let common_registry = PostgresqlRepository::<Common1>::find_3(
+                &*database_1_postgresql_pooled_connection,
+                By3 {
+                    application_user__id: application_user_access_token.application_user__id,
+                    requery___channel__id: incoming.requery___channel__id,
+                },
+                incoming.limit,
+            )
+            .await?;
+            let outcoming = Outcoming {
+                common_registry,
+            };
+            return Ok(UnifiedReport::target_filled(outcoming));
         }
-        if incoming.limit <= 0 || incoming.limit > Self::LIMIT {
-            return Err(
-                AggregateError::new_invalid_argument_from_outside(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        }
-        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.into_runtime(
-            Backtrace::new(
-                line!(),
-                file!(),
-            ),
-        )?;
-        let common_registry = PostgresqlRepository::<Common1>::find_3(
-            &*database_1_postgresql_pooled_connection,
-            By3 {
-                application_user__id: application_user_access_token.application_user__id,
-                requery___channel__id: incoming.requery___channel__id,
-            },
-            incoming.limit,
-        )
-        .await?;
-        let outcoming = Outcoming {
-            common_registry,
-        };
-        return Ok(UnifiedReport::target_filled(outcoming));
     }
 }

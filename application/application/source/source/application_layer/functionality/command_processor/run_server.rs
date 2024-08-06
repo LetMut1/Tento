@@ -56,6 +56,8 @@ use crate::{
         functionality::action::Action,
     },
 };
+use crate::presentation_layer::functionality::action::Inner as ActionInner;
+use crate::application_layer::functionality::action_processor::Inner as ActionProcessorInner;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use hyper::{
@@ -329,9 +331,9 @@ impl CommandProcessor<RunServer> {
                                 let response = Self::resolve(
                                     environment_configuration,
                                     router___,
+                                    database_1_postgresql_connection_pool__,
+                                    database_2_postgresql_connection_pool__,
                                     request,
-                                    &database_1_postgresql_connection_pool__,
-                                    &database_2_postgresql_connection_pool__,
                                 )
                                 .await;
                                 return Ok::<_, Void>(response);
@@ -909,9 +911,9 @@ impl CommandProcessor<RunServer> {
     async fn resolve<'a, T>(
         environment_configuration: &'a EnvironmentConfiguration,
         router: Arc<Router<ActionRoute_>>,
+        database_1_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        database_2_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         request: Request,
-        database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
-        database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
     ) -> Response
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -926,6 +928,16 @@ impl CommandProcessor<RunServer> {
                 return Action::<RouteNotFound>::run(&parts);
             }
         };
+        let action_inner = ActionInner {
+            body: &mut body,
+            parts: &parts,
+            route_parameters: &r#match.params,
+        };
+        let action_processor_inner = ActionProcessorInner {
+            environment_configuration,
+            database_1_postgresql_connection_pool: &database_1_postgresql_connection_pool,
+            database_2_postgresql_connection_pool: &database_2_postgresql_connection_pool,
+        };
         match r#match.value {
             &ActionRoute_::ApplicationUser__Authorization {
                 ref application_user___authorization,
@@ -936,181 +948,53 @@ impl CommandProcessor<RunServer> {
                 ) {
                     // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                     (&ApplicationUser__Authorization_::CheckNicknameForExisting, &Method::POST) => {
-                        return Action::<ApplicationUser__Authorization___CheckNicknameForExisting>::run(
-                            environment_configuration,
-                            &mut body,
-                            &parts,
-                            &r#match.params,
-                            database_1_postgresql_connection_pool,
-                            database_2_postgresql_connection_pool,
-                        )
-                        .await;
+                        return Action::<ApplicationUser__Authorization___CheckNicknameForExisting>::run_X(action_inner, &action_processor_inner).await;
                     }
                     // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                     (&ApplicationUser__Authorization_::CheckEmailForExisting, &Method::POST) => {
-                        return Action::<ApplicationUser__Authorization___CheckEmailForExisting>::run(
-                            environment_configuration,
-                            &mut body,
-                            &parts,
-                            &r#match.params,
-                            database_1_postgresql_connection_pool,
-                            database_2_postgresql_connection_pool,
-                        )
-                        .await;
+                        return Action::<ApplicationUser__Authorization___CheckEmailForExisting>::run_X(action_inner, &action_processor_inner).await;
                     }
                     (&ApplicationUser__Authorization_::RegisterByFirstStep, &Method::POST) => {
-                        return Action::<ApplicationUser__Authorization___RegisterByFirstStep>::run(
-                            environment_configuration,
-                            &mut body,
-                            &parts,
-                            &r#match.params,
-                            database_1_postgresql_connection_pool,
-                            database_2_postgresql_connection_pool,
-                        )
-                        .await;
+                        return Action::<ApplicationUser__Authorization___RegisterByFirstStep>::run_X(action_inner, &action_processor_inner).await;
                     }
                     (&ApplicationUser__Authorization_::RegisterBySecondStep, &Method::POST) => {
-                        return Action::<ApplicationUser__Authorization___RegisterBySecondStep>::run(
-                            environment_configuration,
-                            &mut body,
-                            &parts,
-                            &r#match.params,
-                            database_1_postgresql_connection_pool,
-                            database_2_postgresql_connection_pool,
-                        )
-                        .await;
+                        return Action::<ApplicationUser__Authorization___RegisterBySecondStep>::run_X(action_inner, &action_processor_inner).await;
                     }
                     (&ApplicationUser__Authorization_::RegisterByLastStep, &Method::POST) => {
-                        return Action::<ApplicationUser__Authorization___RegisterByLastStep>::run(
-                            environment_configuration,
-                            &mut body,
-                            &parts,
-                            &r#match.params,
-                            database_1_postgresql_connection_pool,
-                            database_2_postgresql_connection_pool,
-                        )
-                        .await;
+                        return Action::<ApplicationUser__Authorization___RegisterByLastStep>::run_X(action_inner, &action_processor_inner).await;
                     }
                     (&ApplicationUser__Authorization_::SendEmailForRegister, &Method::POST) => {
-                        return Action::<ApplicationUser__Authorization___SendEmailForRegister>::run(
-                            environment_configuration,
-                            &mut body,
-                            &parts,
-                            &r#match.params,
-                            database_1_postgresql_connection_pool,
-                            database_2_postgresql_connection_pool,
-                        )
-                        .await;
+                        return Action::<ApplicationUser__Authorization___SendEmailForRegister>::run_X(action_inner, &action_processor_inner).await;
                     }
                     (&ApplicationUser__Authorization_::AuthorizeByFirstStep, &Method::POST) => {
-                        return Action::<ApplicationUser__Authorization___AuthorizeByFirstStep>::run(
-                            environment_configuration,
-                            &mut body,
-                            &parts,
-                            &r#match.params,
-                            database_1_postgresql_connection_pool,
-                            database_2_postgresql_connection_pool,
-                        )
-                        .await;
+                        return Action::<ApplicationUser__Authorization___AuthorizeByFirstStep>::run_X(action_inner, &action_processor_inner).await;
                     }
                     (&ApplicationUser__Authorization_::AuthorizeByLastStep, &Method::POST) => {
-                        return Action::<ApplicationUser__Authorization___AuthorizeByLastStep>::run(
-                            environment_configuration,
-                            &mut body,
-                            &parts,
-                            &r#match.params,
-                            database_1_postgresql_connection_pool,
-                            database_2_postgresql_connection_pool,
-                        )
-                        .await;
+                        return Action::<ApplicationUser__Authorization___AuthorizeByLastStep>::run_X(action_inner, &action_processor_inner).await;
                     }
                     (&ApplicationUser__Authorization_::SendEmailForAuthorize, &Method::POST) => {
-                        return Action::<ApplicationUser__Authorization___SendEmailForAuthorize>::run(
-                            environment_configuration,
-                            &mut body,
-                            &parts,
-                            &r#match.params,
-                            database_1_postgresql_connection_pool,
-                            database_2_postgresql_connection_pool,
-                        )
-                        .await;
+                        return Action::<ApplicationUser__Authorization___SendEmailForAuthorize>::run_X(action_inner, &action_processor_inner).await;
                     }
                     (&ApplicationUser__Authorization_::ResetPasswordByFirstStep, &Method::POST) => {
-                        return Action::<ApplicationUser__Authorization___ResetPasswordByFirstStep>::run(
-                            environment_configuration,
-                            &mut body,
-                            &parts,
-                            &r#match.params,
-                            database_1_postgresql_connection_pool,
-                            database_2_postgresql_connection_pool,
-                        )
-                        .await;
+                        return Action::<ApplicationUser__Authorization___ResetPasswordByFirstStep>::run_X(action_inner, &action_processor_inner).await;
                     }
                     (&ApplicationUser__Authorization_::ResetPasswordBySecondStep, &Method::POST) => {
-                        return Action::<ApplicationUser__Authorization___ResetPasswordBySecondStep>::run(
-                            environment_configuration,
-                            &mut body,
-                            &parts,
-                            &r#match.params,
-                            database_1_postgresql_connection_pool,
-                            database_2_postgresql_connection_pool,
-                        )
-                        .await;
+                        return Action::<ApplicationUser__Authorization___ResetPasswordBySecondStep>::run_X(action_inner, &action_processor_inner).await;
                     }
                     (&ApplicationUser__Authorization_::ResetPasswordByLastStep, &Method::POST) => {
-                        return Action::<ApplicationUser__Authorization___ResetPasswordByLastStep>::run(
-                            environment_configuration,
-                            &mut body,
-                            &parts,
-                            &r#match.params,
-                            database_1_postgresql_connection_pool,
-                            database_2_postgresql_connection_pool,
-                        )
-                        .await;
+                        return Action::<ApplicationUser__Authorization___ResetPasswordByLastStep>::run_X(action_inner, &action_processor_inner).await;
                     }
                     (&ApplicationUser__Authorization_::SendEmailForResetPassword, &Method::POST) => {
-                        return Action::<ApplicationUser__Authorization___SendEmailForResetPassword>::run(
-                            environment_configuration,
-                            &mut body,
-                            &parts,
-                            &r#match.params,
-                            database_1_postgresql_connection_pool,
-                            database_2_postgresql_connection_pool,
-                        )
-                        .await;
+                        return Action::<ApplicationUser__Authorization___SendEmailForResetPassword>::run_X(action_inner, &action_processor_inner).await;
                     }
                     (&ApplicationUser__Authorization_::RefreshAccessToken, &Method::POST) => {
-                        return Action::<ApplicationUser__Authorization___RefreshAccessToken>::run(
-                            environment_configuration,
-                            &mut body,
-                            &parts,
-                            &r#match.params,
-                            database_1_postgresql_connection_pool,
-                            database_2_postgresql_connection_pool,
-                        )
-                        .await;
+                        return Action::<ApplicationUser__Authorization___RefreshAccessToken>::run_X(action_inner, &action_processor_inner).await;
                     }
                     (&ApplicationUser__Authorization_::DeauthorizeFromOneDevice, &Method::POST) => {
-                        return Action::<ApplicationUser__Authorization___DeauthorizeFromOneDevice>::run(
-                            environment_configuration,
-                            &mut body,
-                            &parts,
-                            &r#match.params,
-                            database_1_postgresql_connection_pool,
-                            database_2_postgresql_connection_pool,
-                        )
-                        .await;
+                        return Action::<ApplicationUser__Authorization___DeauthorizeFromOneDevice>::run_X(action_inner, &action_processor_inner).await;
                     }
                     (&ApplicationUser__Authorization_::DeauthorizeFromAllDevices, &Method::POST) => {
-                        return Action::<ApplicationUser__Authorization___DeauthorizeFromAllDevices>::run(
-                            environment_configuration,
-                            &mut body,
-                            &parts,
-                            &r#match.params,
-                            database_1_postgresql_connection_pool,
-                            database_2_postgresql_connection_pool,
-                        )
-                        .await;
+                        return Action::<ApplicationUser__Authorization___DeauthorizeFromAllDevices>::run_X(action_inner, &action_processor_inner).await;
                     }
                     _ => {
                         #[cfg(feature = "manual_testing")]
@@ -1121,181 +1005,53 @@ impl CommandProcessor<RunServer> {
                             ) {
                                 // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                                 (&ApplicationUser__Authorization_::CheckNicknameForExisting_, &Method::POST) => {
-                                    return Action::<ApplicationUser__Authorization___CheckNicknameForExisting>::run_(
-                                        environment_configuration,
-                                        &mut body,
-                                        &parts,
-                                        &r#match.params,
-                                        database_1_postgresql_connection_pool,
-                                        database_2_postgresql_connection_pool,
-                                    )
-                                    .await;
+                                    return Action::<ApplicationUser__Authorization___CheckNicknameForExisting>::run_X(action_inner, &action_processor_inner).await;
                                 }
                                 // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                                 (&ApplicationUser__Authorization_::CheckEmailForExisting_, &Method::POST) => {
-                                    return Action::<ApplicationUser__Authorization___CheckEmailForExisting>::run_(
-                                        environment_configuration,
-                                        &mut body,
-                                        &parts,
-                                        &r#match.params,
-                                        database_1_postgresql_connection_pool,
-                                        database_2_postgresql_connection_pool,
-                                    )
-                                    .await;
+                                    return Action::<ApplicationUser__Authorization___CheckEmailForExisting>::run_X(action_inner, &action_processor_inner).await;
                                 }
                                 (&ApplicationUser__Authorization_::RegisterByFirstStep_, &Method::POST) => {
-                                    return Action::<ApplicationUser__Authorization___RegisterByFirstStep>::run_(
-                                        environment_configuration,
-                                        &mut body,
-                                        &parts,
-                                        &r#match.params,
-                                        database_1_postgresql_connection_pool,
-                                        database_2_postgresql_connection_pool,
-                                    )
-                                    .await;
+                                    return Action::<ApplicationUser__Authorization___RegisterByFirstStep>::run_X(action_inner, &action_processor_inner).await;
                                 }
                                 (&ApplicationUser__Authorization_::RegisterBySecondStep_, &Method::POST) => {
-                                    return Action::<ApplicationUser__Authorization___RegisterBySecondStep>::run_(
-                                        environment_configuration,
-                                        &mut body,
-                                        &parts,
-                                        &r#match.params,
-                                        database_1_postgresql_connection_pool,
-                                        database_2_postgresql_connection_pool,
-                                    )
-                                    .await;
+                                    return Action::<ApplicationUser__Authorization___RegisterBySecondStep>::run_X(action_inner, &action_processor_inner).await;
                                 }
                                 (&ApplicationUser__Authorization_::RegisterByLastStep_, &Method::POST) => {
-                                    return Action::<ApplicationUser__Authorization___RegisterByLastStep>::run_(
-                                        environment_configuration,
-                                        &mut body,
-                                        &parts,
-                                        &r#match.params,
-                                        database_1_postgresql_connection_pool,
-                                        database_2_postgresql_connection_pool,
-                                    )
-                                    .await;
+                                    return Action::<ApplicationUser__Authorization___RegisterByLastStep>::run_X(action_inner, &action_processor_inner).await;
                                 }
                                 (&ApplicationUser__Authorization_::SendEmailForRegister_, &Method::POST) => {
-                                    return Action::<ApplicationUser__Authorization___SendEmailForRegister>::run_(
-                                        environment_configuration,
-                                        &mut body,
-                                        &parts,
-                                        &r#match.params,
-                                        database_1_postgresql_connection_pool,
-                                        database_2_postgresql_connection_pool,
-                                    )
-                                    .await;
+                                    return Action::<ApplicationUser__Authorization___SendEmailForRegister>::run_X(action_inner, &action_processor_inner).await;
                                 }
                                 (&ApplicationUser__Authorization_::AuthorizeByFirstStep_, &Method::POST) => {
-                                    return Action::<ApplicationUser__Authorization___AuthorizeByFirstStep>::run_(
-                                        environment_configuration,
-                                        &mut body,
-                                        &parts,
-                                        &r#match.params,
-                                        database_1_postgresql_connection_pool,
-                                        database_2_postgresql_connection_pool,
-                                    )
-                                    .await;
+                                    return Action::<ApplicationUser__Authorization___AuthorizeByFirstStep>::run_X(action_inner, &action_processor_inner).await;
                                 }
                                 (&ApplicationUser__Authorization_::AuthorizeByLastStep_, &Method::POST) => {
-                                    return Action::<ApplicationUser__Authorization___AuthorizeByLastStep>::run_(
-                                        environment_configuration,
-                                        &mut body,
-                                        &parts,
-                                        &r#match.params,
-                                        database_1_postgresql_connection_pool,
-                                        database_2_postgresql_connection_pool,
-                                    )
-                                    .await;
+                                    return Action::<ApplicationUser__Authorization___AuthorizeByLastStep>::run_X(action_inner, &action_processor_inner).await;
                                 }
                                 (&ApplicationUser__Authorization_::SendEmailForAuthorize_, &Method::POST) => {
-                                    return Action::<ApplicationUser__Authorization___SendEmailForAuthorize>::run_(
-                                        environment_configuration,
-                                        &mut body,
-                                        &parts,
-                                        &r#match.params,
-                                        database_1_postgresql_connection_pool,
-                                        database_2_postgresql_connection_pool,
-                                    )
-                                    .await;
+                                    return Action::<ApplicationUser__Authorization___SendEmailForAuthorize>::run_X(action_inner, &action_processor_inner).await;
                                 }
                                 (&ApplicationUser__Authorization_::ResetPasswordByFirstStep_, &Method::POST) => {
-                                    return Action::<ApplicationUser__Authorization___ResetPasswordByFirstStep>::run_(
-                                        environment_configuration,
-                                        &mut body,
-                                        &parts,
-                                        &r#match.params,
-                                        database_1_postgresql_connection_pool,
-                                        database_2_postgresql_connection_pool,
-                                    )
-                                    .await;
+                                    return Action::<ApplicationUser__Authorization___ResetPasswordByFirstStep>::run_X(action_inner, &action_processor_inner).await;
                                 }
                                 (&ApplicationUser__Authorization_::ResetPasswordBySecondStep_, &Method::POST) => {
-                                    return Action::<ApplicationUser__Authorization___ResetPasswordBySecondStep>::run_(
-                                        environment_configuration,
-                                        &mut body,
-                                        &parts,
-                                        &r#match.params,
-                                        database_1_postgresql_connection_pool,
-                                        database_2_postgresql_connection_pool,
-                                    )
-                                    .await;
+                                    return Action::<ApplicationUser__Authorization___ResetPasswordBySecondStep>::run_X(action_inner, &action_processor_inner).await;
                                 }
                                 (&ApplicationUser__Authorization_::ResetPasswordByLastStep_, &Method::POST) => {
-                                    return Action::<ApplicationUser__Authorization___ResetPasswordByLastStep>::run_(
-                                        environment_configuration,
-                                        &mut body,
-                                        &parts,
-                                        &r#match.params,
-                                        database_1_postgresql_connection_pool,
-                                        database_2_postgresql_connection_pool,
-                                    )
-                                    .await;
+                                    return Action::<ApplicationUser__Authorization___ResetPasswordByLastStep>::run_X(action_inner, &action_processor_inner).await;
                                 }
                                 (&ApplicationUser__Authorization_::SendEmailForResetPassword_, &Method::POST) => {
-                                    return Action::<ApplicationUser__Authorization___SendEmailForResetPassword>::run_(
-                                        environment_configuration,
-                                        &mut body,
-                                        &parts,
-                                        &r#match.params,
-                                        database_1_postgresql_connection_pool,
-                                        database_2_postgresql_connection_pool,
-                                    )
-                                    .await;
+                                    return Action::<ApplicationUser__Authorization___SendEmailForResetPassword>::run_X(action_inner, &action_processor_inner).await;
                                 }
                                 (&ApplicationUser__Authorization_::RefreshAccessToken_, &Method::POST) => {
-                                    return Action::<ApplicationUser__Authorization___RefreshAccessToken>::run_(
-                                        environment_configuration,
-                                        &mut body,
-                                        &parts,
-                                        &r#match.params,
-                                        database_1_postgresql_connection_pool,
-                                        database_2_postgresql_connection_pool,
-                                    )
-                                    .await;
+                                    return Action::<ApplicationUser__Authorization___RefreshAccessToken>::run_X(action_inner, &action_processor_inner).await;
                                 }
                                 (&ApplicationUser__Authorization_::DeauthorizeFromOneDevice_, &Method::POST) => {
-                                    return Action::<ApplicationUser__Authorization___DeauthorizeFromOneDevice>::run_(
-                                        environment_configuration,
-                                        &mut body,
-                                        &parts,
-                                        &r#match.params,
-                                        database_1_postgresql_connection_pool,
-                                        database_2_postgresql_connection_pool,
-                                    )
-                                    .await;
+                                    return Action::<ApplicationUser__Authorization___DeauthorizeFromOneDevice>::run_X(action_inner, &action_processor_inner).await;
                                 }
                                 (&ApplicationUser__Authorization_::DeauthorizeFromAllDevices_, &Method::POST) => {
-                                    return Action::<ApplicationUser__Authorization___DeauthorizeFromAllDevices>::run_(
-                                        environment_configuration,
-                                        &mut body,
-                                        &parts,
-                                        &r#match.params,
-                                        database_1_postgresql_connection_pool,
-                                        database_2_postgresql_connection_pool,
-                                    )
-                                    .await;
+                                    return Action::<ApplicationUser__Authorization___DeauthorizeFromAllDevices>::run_X(action_inner, &action_processor_inner).await;
                                 }
                                 _ => {}
                             }
@@ -1312,51 +1068,19 @@ impl CommandProcessor<RunServer> {
                 ) {
                     // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                     (&Channel__Base_::GetOneById, &Method::POST) => {
-                        return Action::<Channel__Base___GetOneById>::run(
-                            environment_configuration,
-                            &mut body,
-                            &parts,
-                            &r#match.params,
-                            database_1_postgresql_connection_pool,
-                            database_2_postgresql_connection_pool,
-                        )
-                        .await;
+                        return Action::<Channel__Base___GetOneById>::run_X(action_inner, &action_processor_inner).await;
                     }
                     // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                     (&Channel__Base_::GetManyByNameInSubscriptions, &Method::POST) => {
-                        return Action::<Channel__Base___GetManyByNameInSubscriptions>::run(
-                            environment_configuration,
-                            &mut body,
-                            &parts,
-                            &r#match.params,
-                            database_1_postgresql_connection_pool,
-                            database_2_postgresql_connection_pool,
-                        )
-                        .await;
+                        return Action::<Channel__Base___GetManyByNameInSubscriptions>::run_X(action_inner, &action_processor_inner).await;
                     }
                     // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                     (&Channel__Base_::GetManyBySubscription, &Method::POST) => {
-                        return Action::<Channel__Base___GetManyBySubscription>::run(
-                            environment_configuration,
-                            &mut body,
-                            &parts,
-                            &r#match.params,
-                            database_1_postgresql_connection_pool,
-                            database_2_postgresql_connection_pool,
-                        )
-                        .await;
+                        return Action::<Channel__Base___GetManyBySubscription>::run_X(action_inner, &action_processor_inner).await;
                     }
                     // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                     (&Channel__Base_::GetManyPublicByName, &Method::POST) => {
-                        return Action::<Channel__Base___GetManyPublicByName>::run(
-                            environment_configuration,
-                            &mut body,
-                            &parts,
-                            &r#match.params,
-                            database_1_postgresql_connection_pool,
-                            database_2_postgresql_connection_pool,
-                        )
-                        .await;
+                        return Action::<Channel__Base___GetManyPublicByName>::run_X(action_inner, &action_processor_inner).await;
                     }
                     _ => {
                         #[cfg(feature = "manual_testing")]
@@ -1367,51 +1091,19 @@ impl CommandProcessor<RunServer> {
                             ) {
                                 // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                                 (&Channel__Base_::GetOneById_, &Method::POST) => {
-                                    return Action::<Channel__Base___GetOneById>::run_(
-                                        environment_configuration,
-                                        &mut body,
-                                        &parts,
-                                        &r#match.params,
-                                        database_1_postgresql_connection_pool,
-                                        database_2_postgresql_connection_pool,
-                                    )
-                                    .await;
+                                    return Action::<Channel__Base___GetOneById>::run_X(action_inner, &action_processor_inner).await;
                                 }
                                 // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                                 (&Channel__Base_::GetManyByNameInSubscriptions_, &Method::POST) => {
-                                    return Action::<Channel__Base___GetManyByNameInSubscriptions>::run_(
-                                        environment_configuration,
-                                        &mut body,
-                                        &parts,
-                                        &r#match.params,
-                                        database_1_postgresql_connection_pool,
-                                        database_2_postgresql_connection_pool,
-                                    )
-                                    .await;
+                                    return Action::<Channel__Base___GetManyByNameInSubscriptions>::run_X(action_inner, &action_processor_inner).await;
                                 }
                                 // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                                 (&Channel__Base_::GetManyBySubscription_, &Method::POST) => {
-                                    return Action::<Channel__Base___GetManyBySubscription>::run_(
-                                        environment_configuration,
-                                        &mut body,
-                                        &parts,
-                                        &r#match.params,
-                                        database_1_postgresql_connection_pool,
-                                        database_2_postgresql_connection_pool,
-                                    )
-                                    .await;
+                                    return Action::<Channel__Base___GetManyBySubscription>::run_X(action_inner, &action_processor_inner).await;
                                 }
                                 // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                                 (&Channel__Base_::GetManyPublicByName_, &Method::POST) => {
-                                    return Action::<Channel__Base___GetManyPublicByName>::run_(
-                                        environment_configuration,
-                                        &mut body,
-                                        &parts,
-                                        &r#match.params,
-                                        database_1_postgresql_connection_pool,
-                                        database_2_postgresql_connection_pool,
-                                    )
-                                    .await;
+                                    return Action::<Channel__Base___GetManyPublicByName>::run_X(action_inner, &action_processor_inner).await;
                                 }
                                 _ => {}
                             }
@@ -1427,15 +1119,7 @@ impl CommandProcessor<RunServer> {
                     &parts.method,
                 ) {
                     (&ChannelSubscription__Base_::Create, &Method::POST) => {
-                        return Action::<ChannelSubscription__Base___Create>::run(
-                            environment_configuration,
-                            &mut body,
-                            &parts,
-                            &r#match.params,
-                            database_1_postgresql_connection_pool,
-                            database_2_postgresql_connection_pool,
-                        )
-                        .await;
+                        return Action::<ChannelSubscription__Base___Create>::run_X(action_inner, &action_processor_inner).await;
                     }
                     _ => {
                         #[cfg(feature = "manual_testing")]
@@ -1445,15 +1129,7 @@ impl CommandProcessor<RunServer> {
                                 &parts.method,
                             ) {
                                 (&ChannelSubscription__Base_::Create_, &Method::POST) => {
-                                    return Action::<ChannelSubscription__Base___Create>::run_(
-                                        environment_configuration,
-                                        &mut body,
-                                        &parts,
-                                        &r#match.params,
-                                        database_1_postgresql_connection_pool,
-                                        database_2_postgresql_connection_pool,
-                                    )
-                                    .await;
+                                    return Action::<ChannelSubscription__Base___Create>::run_X(action_inner, &action_processor_inner).await;
                                 }
                                 _ => {}
                             }

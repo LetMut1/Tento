@@ -27,13 +27,11 @@ use crate::{
             aggregate_error::{
                 AggregateError,
                 Backtrace,
-                ResultConverter,
             },
             control_type::{
                 ApplicationUser__Authorization___RefreshAccessToken,
                 UnixTime,
             },
-            environment_configuration::EnvironmentConfiguration,
         },
         functionality::{
             repository::postgresql::{
@@ -47,13 +45,14 @@ use crate::{
         },
     },
 };
+use crate::application_layer::functionality::action_processor::Inner;
+use crate::application_layer::functionality::action_processor::ActionProcessor_;
+use std::future::Future;
 use action_processor_incoming_outcoming::action_processor::application_user___authorization::refresh_access_token::{
     Incoming,
     Outcoming,
     Precedent,
 };
-use bb8::Pool;
-use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use std::{
     borrow::Cow,
     clone::Clone,
@@ -69,104 +68,102 @@ use tokio_postgres::{
     },
     Socket,
 };
-impl ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
-    pub async fn process<'a, T>(
-        environment_configuration: &'a EnvironmentConfiguration,
-        _database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
-        database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
-        incoming: Incoming,
-    ) -> Result<UnifiedReport<Outcoming, Precedent>, AggregateError>
+impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
+    type Incoming = Incoming;
+    type Outcoming = Outcoming;
+    type Precedent = Precedent;
+    fn process<'a, T> (
+        inner: &'a Inner<'_, T>,
+        incoming: Self::Incoming,
+    ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send + 'a
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let application_user_access_token = FormResolver::<ApplicationUserAccessToken<'_>>::from_encrypted(
-            environment_configuration,
-            incoming.application_user_access_token_encrypted.as_str(),
-        )?;
-        let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.into_runtime(
-            Backtrace::new(
-                line!(),
-                file!(),
-            ),
-        )?;
-        let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
-        let mut application_user_access_refresh_token = match PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::find_1(
-            database_2_postgresql_connection,
-            By2 {
-                application_user__id: application_user_access_token.application_user__id,
-                application_user_device__id: application_user_access_token.application_user_device__id.as_ref(),
-            },
-        )
-        .await?
-        {
-            Some(application_user_access_refresh_token_) => application_user_access_refresh_token_,
-            None => {
-                return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessRefreshToken_NotFound));
-            }
-        };
-        let is_valid = FormResolver::<ApplicationUserAccessRefreshToken<'_>>::is_valid(
-            environment_configuration,
-            &application_user_access_refresh_token,
-            incoming.application_user_access_refresh_token_encrypted.as_str(),
-        )?;
-        if !is_valid || application_user_access_token.id != application_user_access_refresh_token.application_user_access_token__id.as_ref() {
-            return Err(
-                AggregateError::new_invalid_argument_from_outside(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        }
-        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_access_refresh_token.expires_at) {
-            PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::delete_1(
+        async move {
+            let application_user_access_token = FormResolver::<ApplicationUserAccessToken<'_>>::from_encrypted(
+                inner.environment_configuration,
+                incoming.application_user_access_token_encrypted.as_str(),
+            )?;
+            let database_2_postgresql_pooled_connection = inner.get_database_2_postgresql_pooled_connection().await?;
+            let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
+            let mut application_user_access_refresh_token = match PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::find_1(
                 database_2_postgresql_connection,
                 By2 {
                     application_user__id: application_user_access_token.application_user__id,
                     application_user_device__id: application_user_access_token.application_user_device__id.as_ref(),
                 },
             )
-            .await?;
-            return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessRefreshToken_AlreadyExpired));
-        }
-        let application_user_access_token_new = ApplicationUserAccessToken::new(
-            Generator::<ApplicationUserAccessToken_Id>::generate(),
-            application_user_access_token.application_user__id,
-            Cow::Borrowed(application_user_access_token.application_user_device__id.as_ref()),
-            Generator::<ApplicationUserAccessToken_ExpiresAt>::generate()?,
-        );
-        application_user_access_refresh_token.application_user_access_token__id = Cow::Borrowed(application_user_access_token_new.id.as_str());
-        application_user_access_refresh_token.obfuscation_value = Generator::<ApplicationUserAccessRefreshToken_ObfuscationValue>::generate();
-        application_user_access_refresh_token.expires_at = Generator::<ApplicationUserAccessRefreshToken_ExpiresAt>::generate()?;
-        application_user_access_refresh_token.updated_at = Generator::<ApplicationUserAccessRefreshToken_UpdatedAt>::generate();
-        PostgresqlRepository::<ApplicationUserAccessRefreshToken>::update_1(
-            database_2_postgresql_connection,
-            Update1 {
-                application_user_access_token__id: application_user_access_refresh_token.application_user_access_token__id.as_ref(),
-                application_user_access_refresh_token__obfuscation_value: application_user_access_refresh_token.obfuscation_value.as_str(),
-                application_user_access_refresh_token__expires_at: application_user_access_refresh_token.expires_at,
-                application_user_access_refresh_token__updated_at: application_user_access_refresh_token.updated_at,
-            },
-            By2 {
-                application_user__id: application_user_access_token.application_user__id,
-                application_user_device__id: application_user_access_token.application_user_device__id.as_ref(),
-            },
-        )
-        .await?;
-        let outcoming = Outcoming {
-            application_user_access_token_encrypted: FormResolver::<ApplicationUserAccessToken<'_>>::to_encrypted(
-                environment_configuration,
-                &application_user_access_token_new,
-            )?,
-            application_user_access_refresh_token_encrypted: FormResolver::<ApplicationUserAccessRefreshToken<'_>>::to_encrypted(
-                environment_configuration,
+            .await?
+            {
+                Some(application_user_access_refresh_token_) => application_user_access_refresh_token_,
+                None => {
+                    return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessRefreshToken_NotFound));
+                }
+            };
+            let is_valid = FormResolver::<ApplicationUserAccessRefreshToken<'_>>::is_valid(
+                inner.environment_configuration,
                 &application_user_access_refresh_token,
-            )?,
-        };
-        return Ok(UnifiedReport::target_filled(outcoming));
+                incoming.application_user_access_refresh_token_encrypted.as_str(),
+            )?;
+            if !is_valid || application_user_access_token.id != application_user_access_refresh_token.application_user_access_token__id.as_ref() {
+                return Err(
+                    AggregateError::new_invalid_argument_from_outside(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                );
+            }
+            if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_access_refresh_token.expires_at) {
+                PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::delete_1(
+                    database_2_postgresql_connection,
+                    By2 {
+                        application_user__id: application_user_access_token.application_user__id,
+                        application_user_device__id: application_user_access_token.application_user_device__id.as_ref(),
+                    },
+                )
+                .await?;
+                return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessRefreshToken_AlreadyExpired));
+            }
+            let application_user_access_token_new = ApplicationUserAccessToken::new(
+                Generator::<ApplicationUserAccessToken_Id>::generate(),
+                application_user_access_token.application_user__id,
+                Cow::Borrowed(application_user_access_token.application_user_device__id.as_ref()),
+                Generator::<ApplicationUserAccessToken_ExpiresAt>::generate()?,
+            );
+            application_user_access_refresh_token.application_user_access_token__id = Cow::Borrowed(application_user_access_token_new.id.as_str());
+            application_user_access_refresh_token.obfuscation_value = Generator::<ApplicationUserAccessRefreshToken_ObfuscationValue>::generate();
+            application_user_access_refresh_token.expires_at = Generator::<ApplicationUserAccessRefreshToken_ExpiresAt>::generate()?;
+            application_user_access_refresh_token.updated_at = Generator::<ApplicationUserAccessRefreshToken_UpdatedAt>::generate();
+            PostgresqlRepository::<ApplicationUserAccessRefreshToken>::update_1(
+                database_2_postgresql_connection,
+                Update1 {
+                    application_user_access_token__id: application_user_access_refresh_token.application_user_access_token__id.as_ref(),
+                    application_user_access_refresh_token__obfuscation_value: application_user_access_refresh_token.obfuscation_value.as_str(),
+                    application_user_access_refresh_token__expires_at: application_user_access_refresh_token.expires_at,
+                    application_user_access_refresh_token__updated_at: application_user_access_refresh_token.updated_at,
+                },
+                By2 {
+                    application_user__id: application_user_access_token.application_user__id,
+                    application_user_device__id: application_user_access_token.application_user_device__id.as_ref(),
+                },
+            )
+            .await?;
+            let outcoming = Outcoming {
+                application_user_access_token_encrypted: FormResolver::<ApplicationUserAccessToken<'_>>::to_encrypted(
+                    inner.environment_configuration,
+                    &application_user_access_token_new,
+                )?,
+                application_user_access_refresh_token_encrypted: FormResolver::<ApplicationUserAccessRefreshToken<'_>>::to_encrypted(
+                    inner.environment_configuration,
+                    &application_user_access_refresh_token,
+                )?,
+            };
+            return Ok(UnifiedReport::target_filled(outcoming));
+        }
     }
 }

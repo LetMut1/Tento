@@ -24,10 +24,8 @@ use crate::{
             aggregate_error::{
                 AggregateError,
                 Backtrace,
-                ResultConverter,
             },
             control_type::Channel__Base___GetManyPublicByName,
-            environment_configuration::EnvironmentConfiguration,
         },
         functionality::repository::postgresql::{
             common::{
@@ -43,8 +41,6 @@ use action_processor_incoming_outcoming::action_processor::channel___base::get_m
     Outcoming,
     Precedent,
 };
-use bb8::Pool;
-use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use std::{
     clone::Clone,
     marker::{
@@ -52,6 +48,9 @@ use std::{
         Sync,
     },
 };
+use crate::application_layer::functionality::action_processor::Inner;
+use crate::application_layer::functionality::action_processor::ActionProcessor_;
+use std::future::Future;
 use tokio_postgres::{
     tls::{
         MakeTlsConnect,
@@ -59,58 +58,39 @@ use tokio_postgres::{
     },
     Socket,
 };
-impl ActionProcessor<Channel__Base___GetManyPublicByName> {
-    const LIMIT: i16 = 100;
-    pub async fn process<'a, T>(
-        environment_configuration: &'a EnvironmentConfiguration,
-        database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
-        _database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
-        incoming: Incoming,
-    ) -> Result<UnifiedReport<Outcoming, Precedent>, AggregateError>
+impl ActionProcessor_ for ActionProcessor<Channel__Base___GetManyPublicByName> {
+    type Incoming = Incoming;
+    type Outcoming = Outcoming;
+    type Precedent = Precedent;
+    fn process<'a, T> (
+        inner: &'a Inner<'_, T>,
+        incoming: Self::Incoming,
+    ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send + 'a
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        let application_user_access_token = match Extractor::<ApplicationUserAccessToken<'_>>::extract(
-            environment_configuration,
-            incoming.application_user_access_token_encrypted.as_str(),
-        )
-        .await?
-        {
-            ExtractorResult::ApplicationUserAccessToken {
-                application_user_access_token: application_user_access_token_,
-            } => application_user_access_token_,
-            ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
-                return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_AlreadyExpired));
-            }
-            ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
-                return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList));
-            }
-        };
-        if incoming.limit <= 0 || incoming.limit > Self::LIMIT {
-            return Err(
-                AggregateError::new_invalid_argument_from_outside(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        }
-        if !Validator::<Channel_Name>::is_valid(incoming.channel__name.as_str()) {
-            return Err(
-                AggregateError::new_invalid_argument_from_outside(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                ),
-            );
-        }
-        if let Some(ref requery___channel__name_) = incoming.requery___channel__name {
-            if !Validator::<Channel_Name>::is_valid(requery___channel__name_.as_str()) {
+        const LIMIT: i16 = 100;
+        async move {
+            let application_user_access_token = match Extractor::<ApplicationUserAccessToken<'_>>::extract(
+                inner.environment_configuration,
+                incoming.application_user_access_token_encrypted.as_str(),
+            )
+            .await?
+            {
+                ExtractorResult::ApplicationUserAccessToken {
+                    application_user_access_token: application_user_access_token_,
+                } => application_user_access_token_,
+                ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
+                    return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_AlreadyExpired));
+                }
+                ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
+                    return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList));
+                }
+            };
+            if incoming.limit <= 0 || incoming.limit > LIMIT {
                 return Err(
                     AggregateError::new_invalid_argument_from_outside(
                         Backtrace::new(
@@ -120,27 +100,44 @@ impl ActionProcessor<Channel__Base___GetManyPublicByName> {
                     ),
                 );
             }
+            if !Validator::<Channel_Name>::is_valid(incoming.channel__name.as_str()) {
+                return Err(
+                    AggregateError::new_invalid_argument_from_outside(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                );
+            }
+            if let Some(ref requery___channel__name_) = incoming.requery___channel__name {
+                if !Validator::<Channel_Name>::is_valid(requery___channel__name_.as_str()) {
+                    return Err(
+                        AggregateError::new_invalid_argument_from_outside(
+                            Backtrace::new(
+                                line!(),
+                                file!(),
+                            ),
+                        ),
+                    );
+                }
+            }
+            let database_1_postgresql_pooled_connection = inner.get_database_1_postgresql_pooled_connection().await?;
+            let common_registry = PostgresqlRepository::<Common1>::find_1(
+                &*database_1_postgresql_pooled_connection,
+                By1 {
+                    application_user__id: application_user_access_token.application_user__id,
+                    channel__name: incoming.channel__name.as_str(),
+                    requery___channel__name: incoming.requery___channel__name.as_deref(),
+                    channel__visability_modifier: Channel_VisabilityModifier::from_representation(Channel_VisabilityModifier::Public),
+                },
+                incoming.limit,
+            )
+            .await?;
+            let outcoming = Outcoming {
+                common_registry,
+            };
+            return Ok(UnifiedReport::target_filled(outcoming));
         }
-        let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.into_runtime(
-            Backtrace::new(
-                line!(),
-                file!(),
-            ),
-        )?;
-        let common_registry = PostgresqlRepository::<Common1>::find_1(
-            &*database_1_postgresql_pooled_connection,
-            By1 {
-                application_user__id: application_user_access_token.application_user__id,
-                channel__name: incoming.channel__name.as_str(),
-                requery___channel__name: incoming.requery___channel__name.as_deref(),
-                channel__visability_modifier: Channel_VisabilityModifier::from_representation(Channel_VisabilityModifier::Public),
-            },
-            incoming.limit,
-        )
-        .await?;
-        let outcoming = Outcoming {
-            common_registry,
-        };
-        return Ok(UnifiedReport::target_filled(outcoming));
     }
 }
