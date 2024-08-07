@@ -56,10 +56,9 @@ impl Processor<ActionRound> {
         <ActionProcessor<AP> as ActionProcessor_>::Precedent: SerdeSerialize,
         Serializer<SS>: Serialize,
         Serializer<SD>: Serialize,
-        'a: 'a,
-        'b: 'b,
-        'c: 'c,
-        'd: 'd,
+        'b: 'a,
+        'c: 'b,
+        'd: 'b,
     {
         return async move {
             let future = async {
