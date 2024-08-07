@@ -52,6 +52,8 @@ use tokio_postgres::{
     },
     Socket,
 };
+use crate::infrastructure_layer::data::capture::Capture;
+use crate::infrastructure_layer::data::void::Void;
 use crate::application_layer::functionality::action_processor::Inner;
 use crate::application_layer::functionality::action_processor::ActionProcessor_;
 use std::future::Future;
@@ -62,7 +64,7 @@ impl ActionProcessor_ for ActionProcessor<Channel__Base___GetManyBySubscription>
     fn process<'a, T> (
         inner: &'a Inner<'_, T>,
         incoming: Self::Incoming,
-    ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send + 'a
+    ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send + Capture<&'a Void>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,

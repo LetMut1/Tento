@@ -19,6 +19,8 @@ use crate::infrastructure_layer::data::aggregate_error::{
     ResultConverter,
 };
 use crate::infrastructure_layer::data::environment_configuration::EnvironmentConfiguration;
+use crate::infrastructure_layer::data::capture::Capture;
+use crate::infrastructure_layer::data::void::Void;
 pub struct ActionProcessor<S> {
     _subject: PhantomData<S>,
 }
@@ -29,7 +31,7 @@ pub trait ActionProcessor_ {
     fn process<'a, T> (
         inner: &'a Inner<'_, T>,
         incoming: Self::Incoming,
-    ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send + 'a
+    ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send + Capture<&'a Void>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,

@@ -44,7 +44,7 @@ impl Processor<ActionRound> {
     pub fn process<'a, 'b, 'c, 'd, T, AP, SS, SD>(
         inner: Inner<'b, 'c, 'd>,
         action_processor_inner: &'a ActionProcessorInner<'b, T>,
-    ) -> impl Future<Output = Response> + Capture<(&'a Void, &'b Void, &'c Void, &'d Void)>
+    ) -> impl Future<Output = Response> + Capture<&'a Void>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,

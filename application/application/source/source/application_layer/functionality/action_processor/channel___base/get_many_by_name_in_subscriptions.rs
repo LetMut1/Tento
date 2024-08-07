@@ -33,6 +33,8 @@ use crate::{
         },
     },
 };
+use crate::infrastructure_layer::data::capture::Capture;
+use crate::infrastructure_layer::data::void::Void;
 use action_processor_incoming_outcoming::action_processor::channel___base::get_many_by_name_in_subscriptions::{
     Incoming,
     Outcoming,
@@ -62,7 +64,7 @@ impl ActionProcessor_ for ActionProcessor<Channel__Base___GetManyByNameInSubscri
     fn process<'a, T> (
         inner: &'a Inner<'_, T>,
         incoming: Self::Incoming,
-    ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send + 'a
+    ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send + Capture<&'a Void>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,

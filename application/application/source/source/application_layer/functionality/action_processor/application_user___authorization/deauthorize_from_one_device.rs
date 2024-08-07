@@ -34,6 +34,7 @@ use action_processor_incoming_outcoming::action_processor::application_user___au
     Incoming,
     Precedent,
 };
+use crate::infrastructure_layer::data::capture::Capture;
 use std::{
     clone::Clone,
     marker::{
@@ -55,7 +56,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Deaut
     fn process<'a, T> (
         inner: &'a Inner<'_, T>,
         incoming: Self::Incoming,
-    ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send + 'a
+    ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send + Capture<&'a Void>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
