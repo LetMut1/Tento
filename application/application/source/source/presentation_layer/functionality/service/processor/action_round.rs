@@ -13,13 +13,10 @@ use crate::{
             }, server_workflow_error::ServerWorkflowError
         },
         functionality::service::{
-            creator::Creator,
-            logger::Logger,
-            serializer::{
+            creator::Creator, formatter::action_round::RowData, logger::Logger, serializer::{
                 Serialize,
                 Serializer,
-            },
-            validator::Validator,
+            }, validator::Validator
         },
     },
 };
@@ -41,10 +38,10 @@ use tokio_postgres::{
 };
 use super::Processor;
 impl Processor<ActionRound> {
-    pub fn process<'a, 'b, 'c, 'd, T, AP, SS, SD>(
-        inner: &'a mut Inner<'b, 'c, 'd>,
+    pub fn process<'a, 'b, T, AP, SS, SD>(
+        inner: &'a mut Inner<'b>,
         action_processor_inner: &'a ActionProcessorInner<'b, T>,
-    ) -> impl Future<Output = Response> + Capture<(&'a Void, &'b Void, &'c Void, &'d Void,)>
+    ) -> impl Future<Output = Response> + Capture<(&'a Void, &'b Void)>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -57,11 +54,11 @@ impl Processor<ActionRound> {
         Serializer<SS>: Serialize,
         Serializer<SD>: Serialize,
         'b: 'a,
-        'c: 'b,
-        'd: 'b,
     {
         return async move {
-            let future = async {
+            let request_path = inner.parts.uri.path().to_string();
+            let request_method = inner.parts.method.clone();
+            let future = async move {
                 if !Validator::<Parts>::is_valid(inner.parts) {
                     return Result::<Vec<u8>, AggregateError>::Err(
                         AggregateError::new_invalid_argument_from_outside(
@@ -86,8 +83,11 @@ impl Processor<ActionRound> {
                 Ok(data) => {
                     let response = Creator::<Response>::create_ok(data);
                     Logger::<ActionRound>::log(
-                        inner.parts,
-                        &response,
+                        RowData {
+                            request_path,
+                            request_method,
+                            response_status_code: response.status().as_u16(),
+                        },
                     );
                     response
                 }
@@ -98,8 +98,11 @@ impl Processor<ActionRound> {
                         } => {
                             let response_ = Creator::<Response>::create_internal_server_error();
                             Logger::<ActionRound>::log_unexpected_auditor(
-                                inner.parts,
-                                &response_,
+                                RowData {
+                                    request_path,
+                                    request_method,
+                                    response_status_code: response_.status().as_u16(),
+                                },
                                 unexpected_auditor,
                             );
                             response_
@@ -109,8 +112,11 @@ impl Processor<ActionRound> {
                         } => {
                             let response_ = Creator::<Response>::create_bad_request();
                             Logger::<ActionRound>::log_expected_auditor(
-                                inner.parts,
-                                &response_,
+                                RowData {
+                                    request_path,
+                                    request_method,
+                                    response_status_code: response_.status().as_u16(),
+                                },
                                 expected_auditor,
                             );
                             response_

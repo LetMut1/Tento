@@ -5,17 +5,20 @@ use crate::{
             Response,
             RouteNotFound,
         },
-        functionality::service::{creator::Creator, logger::Logger},
+        functionality::service::{creator::Creator, formatter::action_round::RowData, logger::Logger},
     },
     presentation_layer::functionality::action::Action,
 };
-use http::request::Parts;
+use super::Inner;
 impl Action<RouteNotFound> {
-    pub fn run<'a>(parts: &'a Parts) -> Response {
+    pub fn run<'a>(inner: &'a mut Inner<'_>,) -> Response {
         let response = Creator::<Response>::create_not_found();
         Logger::<ActionRound>::log(
-            parts,
-            &response,
+            RowData {
+                request_path: inner.parts.uri.path().to_string(),
+                request_method: inner.parts.method.clone(),
+                response_status_code: response.status().as_u16(),
+            },
         );
         return response;
     }

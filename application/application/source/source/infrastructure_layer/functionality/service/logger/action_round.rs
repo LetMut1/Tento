@@ -4,7 +4,6 @@ use crate::infrastructure_layer::{
         aggregate_error::Auditor,
         control_type::{
             ActionRound,
-            Response,
             TokioNonBlockingTask,
         },
         server_workflow_error::{
@@ -17,40 +16,27 @@ use crate::infrastructure_layer::{
         spawner::Spawner,
     },
 };
-use http::request::Parts;
+use crate::infrastructure_layer::functionality::service::formatter::action_round::RowData;
 impl Logger<ActionRound> {
-    pub fn log<'a>(request_parts: &'a Parts, response: &'a Response) -> () {
-        let request_uri = request_parts.uri.path().to_string();
-        let request_method = request_parts.method.to_string();
-        let response_status_code = response.status().as_u16();
+    pub fn log<'a>(row_data: RowData) -> () {
         Spawner::<TokioNonBlockingTask>::spawn_into_background(
             async move {
                 tracing::info!(
                     "{}",
-                    Formatter::<ActionRound>::format(
-                        request_uri.as_str(),
-                        request_method.as_str(),
-                        response_status_code,
-                    )
-                    .as_str(),
+                    Formatter::<ActionRound>::format(&row_data).as_str(),
                 );
                 return Ok(());
             },
         );
         return ();
     }
-    pub fn log_unexpected_auditor<'a>(request_parts: &'a Parts, response: &'a Response, unexpected_auditor: Auditor<Unexpected>) -> () {
-        let request_uri = request_parts.uri.path().to_string();
-        let request_method = request_parts.method.to_string();
-        let response_status_code = response.status().as_u16();
+    pub fn log_unexpected_auditor<'a>(row_data: RowData, unexpected_auditor: Auditor<Unexpected>) -> () {
         Spawner::<TokioNonBlockingTask>::spawn_into_background(
             async move {
                 tracing::error!(
                     "{}",
                     Formatter::<ActionRound>::format_unexpected_auditor(
-                        request_uri.as_str(),
-                        request_method.as_str(),
-                        response_status_code,
+                        &row_data,
                         &unexpected_auditor,
                     )
                     .as_str(),
@@ -60,18 +46,13 @@ impl Logger<ActionRound> {
         );
         return ();
     }
-    pub fn log_expected_auditor<'a>(request_parts: &'a Parts, response: &'a Response, expected_auditor: Auditor<Expected>) -> () {
-        let request_uri = request_parts.uri.path().to_string();
-        let request_method = request_parts.method.to_string();
-        let response_status_code = response.status().as_u16();
+    pub fn log_expected_auditor<'a>(row_data: RowData, expected_auditor: Auditor<Expected>) -> () {
         Spawner::<TokioNonBlockingTask>::spawn_into_background(
             async move {
                 tracing::info!(
                     "{}",
                     Formatter::<ActionRound>::format_expected_auditor(
-                        request_uri.as_str(),
-                        request_method.as_str(),
-                        response_status_code,
+                        &row_data,
                         &expected_auditor,
                     )
                     .as_str(),

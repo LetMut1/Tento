@@ -50,17 +50,17 @@ where
     <ActionProcessor<AP> as ActionProcessor_>::Outcoming: SerdeSerialize,
     <ActionProcessor<AP> as ActionProcessor_>::Precedent: SerdeSerialize,
 {
-    pub fn run<'a, 'b, 'c, 'd, T>(
-        inner: &'a mut Inner<'b, 'c, 'd>,
+    pub fn run<'a, 'b, T>(
+        inner: &'a mut Inner<'b>,
         action_processor_inner: &'a ActionProcessorInner<'b, T>,
-    ) -> impl Future<Output = Response> + Capture<(&'a Void, &'b Void, &'c Void, &'d Void)>
+    ) -> impl Future<Output = Response> + Capture<(&'a Void, &'b Void)>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        return Processor::<ActionRound>::process::<'_, '_, '_, '_, _, AP, MessagePack, MessagePack>(inner, action_processor_inner);
+        return Processor::<ActionRound>::process::<'_, '_, _, AP, MessagePack, MessagePack>(inner, action_processor_inner);
     }
 }
 #[cfg(feature = "manual_testing")]
@@ -71,21 +71,20 @@ where
     <ActionProcessor<AP> as ActionProcessor_>::Outcoming: SerdeSerialize,
     <ActionProcessor<AP> as ActionProcessor_>::Precedent: SerdeSerialize,
 {
-    pub fn run_<'a, 'b, 'c, 'd, T>(
-        inner: &'a mut Inner<'b, 'c, 'd>,
+    pub fn run_<'a, 'b, T>(
+        inner: &'a mut Inner<'b>,
         action_processor_inner: &'a ActionProcessorInner<'b, T>,
-    ) -> impl Future<Output = Response> + Capture<(&'a Void, &'b Void, &'c Void, &'d Void)>
+    ) -> impl Future<Output = Response> + Capture<(&'a Void, &'b Void)>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        return Processor::<ActionRound>::process::<'_, '_, '_, '_, _, AP, Json, Json>(inner, action_processor_inner);
+        return Processor::<ActionRound>::process::<'_, '_, _, AP, Json, Json>(inner, action_processor_inner);
     }
 }
-pub struct Inner<'a, 'b, 'c> {
+pub struct Inner<'a> {
     pub body: &'a mut Body,
     pub parts: &'a Parts,
-    pub route_parameters: &'a Params<'b, 'c>,
 }

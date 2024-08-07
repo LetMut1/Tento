@@ -922,16 +922,15 @@ impl CommandProcessor<RunServer> {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
         let (parts, mut body) = request.into_parts();
-        let r#match = match router.at(parts.uri.path()) {
-            Ok(r#match_) => r#match_,
-            Err(_) => {
-                return Action::<RouteNotFound>::run(&parts);
-            }
-        };
         let mut action_inner = ActionInner {
             body: &mut body,
             parts: &parts,
-            route_parameters: &r#match.params,
+        };
+        let r#match = match router.at(parts.uri.path()) {
+            Ok(r#match_) => r#match_,
+            Err(_) => {
+                return Action::<RouteNotFound>::run(&mut action_inner);
+            }
         };
         let action_processor_inner = ActionProcessorInner {
             environment_configuration,
@@ -1138,7 +1137,7 @@ impl CommandProcessor<RunServer> {
                 }
             }
         }
-        return Action::<RouteNotFound>::run(&parts);
+        return Action::<RouteNotFound>::run(&mut action_inner);
     }
     fn create_signal(signal_kind: SignalKind) -> Result<impl Future<Output = ()>, AggregateError> {
         let mut signal = tokio::signal::unix::signal(signal_kind).into_invalid_argument_from_client_code(
@@ -1149,7 +1148,7 @@ impl CommandProcessor<RunServer> {
         )?;
         let signal_ = async move {
             signal.recv().await;
-            ()
+            return ();
         };
         return Ok(signal_);
     }
