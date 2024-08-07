@@ -42,9 +42,9 @@ use tokio_postgres::{
 use super::Processor;
 impl Processor<ActionRound> {
     pub fn process<'a, 'b, 'c, 'd, T, AP, SS, SD>(
-        inner: Inner<'b, 'c, 'd>,
+        inner: &'a mut Inner<'b, 'c, 'd>,
         action_processor_inner: &'a ActionProcessorInner<'b, T>,
-    ) -> impl Future<Output = Response> + Capture<&'a Void>
+    ) -> impl Future<Output = Response> + Capture<(&'a Void, &'b Void, &'c Void, &'d Void,)>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -72,7 +72,7 @@ impl Processor<ActionRound> {
                         ),
                     );
                 }
-                let bytes = hyper::body::to_bytes(inner.body).await.into_invalid_argument_from_outside_and_client_code(
+                let bytes = hyper::body::to_bytes(&mut *inner.body).await.into_invalid_argument_from_outside_and_client_code(
                     Backtrace::new(
                         line!(),
                         file!(),

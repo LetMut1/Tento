@@ -6,28 +6,14 @@ use crate::{
     infrastructure_layer::{
         data::{
             aggregate_error::{
-                AggregateError,
-                Backtrace,
-                ResultConverter,
             }, capture::Capture, control_type::{
                 ActionRound, MessagePack, Response
-            }, server_workflow_error::ServerWorkflowError
-        },
-        functionality::service::{
-            creator::Creator,
-            logger::Logger,
-            serializer::{
-                Serialize,
-                Serializer,
-            },
-            validator::Validator,
+            }
         },
     },
 };
-use bytes::Buf;
 use http::request::Parts;
 use hyper::{
-    body::to_bytes,
     Body,
 };
 use matchit::Params;
@@ -65,9 +51,9 @@ where
     <ActionProcessor<AP> as ActionProcessor_>::Precedent: SerdeSerialize,
 {
     pub fn run<'a, 'b, 'c, 'd, T>(
-        inner: Inner<'b, 'c, 'd>,
+        inner: &'a mut Inner<'b, 'c, 'd>,
         action_processor_inner: &'a ActionProcessorInner<'b, T>,
-    ) -> impl Future<Output = Response> + Capture<&'a Void>
+    ) -> impl Future<Output = Response> + Capture<(&'a Void, &'b Void, &'c Void, &'d Void)>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -86,9 +72,9 @@ where
     <ActionProcessor<AP> as ActionProcessor_>::Precedent: SerdeSerialize,
 {
     pub fn run_<'a, 'b, 'c, 'd, T>(
-        inner: Inner<'b, 'c, 'd>,
+        inner: &'a mut Inner<'b, 'c, 'd>,
         action_processor_inner: &'a ActionProcessorInner<'b, T>,
-    ) -> impl Future<Output = Response> + Capture<&'a Void>
+    ) -> impl Future<Output = Response> + Capture<(&'a Void, &'b Void, &'c Void, &'d Void)>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,

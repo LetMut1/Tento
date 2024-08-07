@@ -928,7 +928,7 @@ impl CommandProcessor<RunServer> {
                 return Action::<RouteNotFound>::run(&parts);
             }
         };
-        let action_inner = ActionInner {
+        let mut action_inner = ActionInner {
             body: &mut body,
             parts: &parts,
             route_parameters: &r#match.params,
@@ -948,53 +948,53 @@ impl CommandProcessor<RunServer> {
                 ) {
                     // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                     (&ApplicationUser__Authorization_::CheckNicknameForExisting, &Method::POST) => {
-                        return Action::<ApplicationUser__Authorization___CheckNicknameForExisting>::run(action_inner, &action_processor_inner).await;
+                        return Action::<ApplicationUser__Authorization___CheckNicknameForExisting>::run(&mut action_inner, &action_processor_inner).await;
                     }
                     // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                     (&ApplicationUser__Authorization_::CheckEmailForExisting, &Method::POST) => {
-                        return Action::<ApplicationUser__Authorization___CheckEmailForExisting>::run(action_inner, &action_processor_inner).await;
+                        return Action::<ApplicationUser__Authorization___CheckEmailForExisting>::run(&mut action_inner, &action_processor_inner).await;
                     }
                     (&ApplicationUser__Authorization_::RegisterByFirstStep, &Method::POST) => {
-                        return Action::<ApplicationUser__Authorization___RegisterByFirstStep>::run(action_inner, &action_processor_inner).await;
+                        return Action::<ApplicationUser__Authorization___RegisterByFirstStep>::run(&mut action_inner, &action_processor_inner).await;
                     }
                     (&ApplicationUser__Authorization_::RegisterBySecondStep, &Method::POST) => {
-                        return Action::<ApplicationUser__Authorization___RegisterBySecondStep>::run(action_inner, &action_processor_inner).await;
+                        return Action::<ApplicationUser__Authorization___RegisterBySecondStep>::run(&mut action_inner, &action_processor_inner).await;
                     }
                     (&ApplicationUser__Authorization_::RegisterByLastStep, &Method::POST) => {
-                        return Action::<ApplicationUser__Authorization___RegisterByLastStep>::run(action_inner, &action_processor_inner).await;
+                        return Action::<ApplicationUser__Authorization___RegisterByLastStep>::run(&mut action_inner, &action_processor_inner).await;
                     }
                     (&ApplicationUser__Authorization_::SendEmailForRegister, &Method::POST) => {
-                        return Action::<ApplicationUser__Authorization___SendEmailForRegister>::run(action_inner, &action_processor_inner).await;
+                        return Action::<ApplicationUser__Authorization___SendEmailForRegister>::run(&mut action_inner, &action_processor_inner).await;
                     }
                     (&ApplicationUser__Authorization_::AuthorizeByFirstStep, &Method::POST) => {
-                        return Action::<ApplicationUser__Authorization___AuthorizeByFirstStep>::run(action_inner, &action_processor_inner).await;
+                        return Action::<ApplicationUser__Authorization___AuthorizeByFirstStep>::run(&mut action_inner, &action_processor_inner).await;
                     }
                     (&ApplicationUser__Authorization_::AuthorizeByLastStep, &Method::POST) => {
-                        return Action::<ApplicationUser__Authorization___AuthorizeByLastStep>::run(action_inner, &action_processor_inner).await;
+                        return Action::<ApplicationUser__Authorization___AuthorizeByLastStep>::run(&mut action_inner, &action_processor_inner).await;
                     }
                     (&ApplicationUser__Authorization_::SendEmailForAuthorize, &Method::POST) => {
-                        return Action::<ApplicationUser__Authorization___SendEmailForAuthorize>::run(action_inner, &action_processor_inner).await;
+                        return Action::<ApplicationUser__Authorization___SendEmailForAuthorize>::run(&mut action_inner, &action_processor_inner).await;
                     }
                     (&ApplicationUser__Authorization_::ResetPasswordByFirstStep, &Method::POST) => {
-                        return Action::<ApplicationUser__Authorization___ResetPasswordByFirstStep>::run(action_inner, &action_processor_inner).await;
+                        return Action::<ApplicationUser__Authorization___ResetPasswordByFirstStep>::run(&mut action_inner, &action_processor_inner).await;
                     }
                     (&ApplicationUser__Authorization_::ResetPasswordBySecondStep, &Method::POST) => {
-                        return Action::<ApplicationUser__Authorization___ResetPasswordBySecondStep>::run(action_inner, &action_processor_inner).await;
+                        return Action::<ApplicationUser__Authorization___ResetPasswordBySecondStep>::run(&mut action_inner, &action_processor_inner).await;
                     }
                     (&ApplicationUser__Authorization_::ResetPasswordByLastStep, &Method::POST) => {
-                        return Action::<ApplicationUser__Authorization___ResetPasswordByLastStep>::run(action_inner, &action_processor_inner).await;
+                        return Action::<ApplicationUser__Authorization___ResetPasswordByLastStep>::run(&mut action_inner, &action_processor_inner).await;
                     }
                     (&ApplicationUser__Authorization_::SendEmailForResetPassword, &Method::POST) => {
-                        return Action::<ApplicationUser__Authorization___SendEmailForResetPassword>::run(action_inner, &action_processor_inner).await;
+                        return Action::<ApplicationUser__Authorization___SendEmailForResetPassword>::run(&mut action_inner, &action_processor_inner).await;
                     }
                     (&ApplicationUser__Authorization_::RefreshAccessToken, &Method::POST) => {
-                        return Action::<ApplicationUser__Authorization___RefreshAccessToken>::run(action_inner, &action_processor_inner).await;
+                        return Action::<ApplicationUser__Authorization___RefreshAccessToken>::run(&mut action_inner, &action_processor_inner).await;
                     }
                     (&ApplicationUser__Authorization_::DeauthorizeFromOneDevice, &Method::POST) => {
-                        return Action::<ApplicationUser__Authorization___DeauthorizeFromOneDevice>::run(action_inner, &action_processor_inner).await;
+                        return Action::<ApplicationUser__Authorization___DeauthorizeFromOneDevice>::run(&mut action_inner, &action_processor_inner).await;
                     }
                     (&ApplicationUser__Authorization_::DeauthorizeFromAllDevices, &Method::POST) => {
-                        return Action::<ApplicationUser__Authorization___DeauthorizeFromAllDevices>::run(action_inner, &action_processor_inner).await;
+                        return Action::<ApplicationUser__Authorization___DeauthorizeFromAllDevices>::run(&mut action_inner, &action_processor_inner).await;
                     }
                     _ => {
                         #[cfg(feature = "manual_testing")]
@@ -1005,53 +1005,53 @@ impl CommandProcessor<RunServer> {
                             ) {
                                 // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                                 (&ApplicationUser__Authorization_::CheckNicknameForExisting_, &Method::POST) => {
-                                    return Action::<ApplicationUser__Authorization___CheckNicknameForExisting>::run_(action_inner, &action_processor_inner).await;
+                                    return Action::<ApplicationUser__Authorization___CheckNicknameForExisting>::run_(&mut action_inner, &action_processor_inner).await;
                                 }
                                 // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                                 (&ApplicationUser__Authorization_::CheckEmailForExisting_, &Method::POST) => {
-                                    return Action::<ApplicationUser__Authorization___CheckEmailForExisting>::run_(action_inner, &action_processor_inner).await;
+                                    return Action::<ApplicationUser__Authorization___CheckEmailForExisting>::run_(&mut action_inner, &action_processor_inner).await;
                                 }
                                 (&ApplicationUser__Authorization_::RegisterByFirstStep_, &Method::POST) => {
-                                    return Action::<ApplicationUser__Authorization___RegisterByFirstStep>::run_(action_inner, &action_processor_inner).await;
+                                    return Action::<ApplicationUser__Authorization___RegisterByFirstStep>::run_(&mut action_inner, &action_processor_inner).await;
                                 }
                                 (&ApplicationUser__Authorization_::RegisterBySecondStep_, &Method::POST) => {
-                                    return Action::<ApplicationUser__Authorization___RegisterBySecondStep>::run_(action_inner, &action_processor_inner).await;
+                                    return Action::<ApplicationUser__Authorization___RegisterBySecondStep>::run_(&mut action_inner, &action_processor_inner).await;
                                 }
                                 (&ApplicationUser__Authorization_::RegisterByLastStep_, &Method::POST) => {
-                                    return Action::<ApplicationUser__Authorization___RegisterByLastStep>::run_(action_inner, &action_processor_inner).await;
+                                    return Action::<ApplicationUser__Authorization___RegisterByLastStep>::run_(&mut action_inner, &action_processor_inner).await;
                                 }
                                 (&ApplicationUser__Authorization_::SendEmailForRegister_, &Method::POST) => {
-                                    return Action::<ApplicationUser__Authorization___SendEmailForRegister>::run_(action_inner, &action_processor_inner).await;
+                                    return Action::<ApplicationUser__Authorization___SendEmailForRegister>::run_(&mut action_inner, &action_processor_inner).await;
                                 }
                                 (&ApplicationUser__Authorization_::AuthorizeByFirstStep_, &Method::POST) => {
-                                    return Action::<ApplicationUser__Authorization___AuthorizeByFirstStep>::run_(action_inner, &action_processor_inner).await;
+                                    return Action::<ApplicationUser__Authorization___AuthorizeByFirstStep>::run_(&mut action_inner, &action_processor_inner).await;
                                 }
                                 (&ApplicationUser__Authorization_::AuthorizeByLastStep_, &Method::POST) => {
-                                    return Action::<ApplicationUser__Authorization___AuthorizeByLastStep>::run_(action_inner, &action_processor_inner).await;
+                                    return Action::<ApplicationUser__Authorization___AuthorizeByLastStep>::run_(&mut action_inner, &action_processor_inner).await;
                                 }
                                 (&ApplicationUser__Authorization_::SendEmailForAuthorize_, &Method::POST) => {
-                                    return Action::<ApplicationUser__Authorization___SendEmailForAuthorize>::run_(action_inner, &action_processor_inner).await;
+                                    return Action::<ApplicationUser__Authorization___SendEmailForAuthorize>::run_(&mut action_inner, &action_processor_inner).await;
                                 }
                                 (&ApplicationUser__Authorization_::ResetPasswordByFirstStep_, &Method::POST) => {
-                                    return Action::<ApplicationUser__Authorization___ResetPasswordByFirstStep>::run_(action_inner, &action_processor_inner).await;
+                                    return Action::<ApplicationUser__Authorization___ResetPasswordByFirstStep>::run_(&mut action_inner, &action_processor_inner).await;
                                 }
                                 (&ApplicationUser__Authorization_::ResetPasswordBySecondStep_, &Method::POST) => {
-                                    return Action::<ApplicationUser__Authorization___ResetPasswordBySecondStep>::run_(action_inner, &action_processor_inner).await;
+                                    return Action::<ApplicationUser__Authorization___ResetPasswordBySecondStep>::run_(&mut action_inner, &action_processor_inner).await;
                                 }
                                 (&ApplicationUser__Authorization_::ResetPasswordByLastStep_, &Method::POST) => {
-                                    return Action::<ApplicationUser__Authorization___ResetPasswordByLastStep>::run_(action_inner, &action_processor_inner).await;
+                                    return Action::<ApplicationUser__Authorization___ResetPasswordByLastStep>::run_(&mut action_inner, &action_processor_inner).await;
                                 }
                                 (&ApplicationUser__Authorization_::SendEmailForResetPassword_, &Method::POST) => {
-                                    return Action::<ApplicationUser__Authorization___SendEmailForResetPassword>::run_(action_inner, &action_processor_inner).await;
+                                    return Action::<ApplicationUser__Authorization___SendEmailForResetPassword>::run_(&mut action_inner, &action_processor_inner).await;
                                 }
                                 (&ApplicationUser__Authorization_::RefreshAccessToken_, &Method::POST) => {
-                                    return Action::<ApplicationUser__Authorization___RefreshAccessToken>::run_(action_inner, &action_processor_inner).await;
+                                    return Action::<ApplicationUser__Authorization___RefreshAccessToken>::run_(&mut action_inner, &action_processor_inner).await;
                                 }
                                 (&ApplicationUser__Authorization_::DeauthorizeFromOneDevice_, &Method::POST) => {
-                                    return Action::<ApplicationUser__Authorization___DeauthorizeFromOneDevice>::run_(action_inner, &action_processor_inner).await;
+                                    return Action::<ApplicationUser__Authorization___DeauthorizeFromOneDevice>::run_(&mut action_inner, &action_processor_inner).await;
                                 }
                                 (&ApplicationUser__Authorization_::DeauthorizeFromAllDevices_, &Method::POST) => {
-                                    return Action::<ApplicationUser__Authorization___DeauthorizeFromAllDevices>::run_(action_inner, &action_processor_inner).await;
+                                    return Action::<ApplicationUser__Authorization___DeauthorizeFromAllDevices>::run_(&mut action_inner, &action_processor_inner).await;
                                 }
                                 _ => {}
                             }
@@ -1068,19 +1068,19 @@ impl CommandProcessor<RunServer> {
                 ) {
                     // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                     (&Channel__Base_::GetOneById, &Method::POST) => {
-                        return Action::<Channel__Base___GetOneById>::run(action_inner, &action_processor_inner).await;
+                        return Action::<Channel__Base___GetOneById>::run(&mut action_inner, &action_processor_inner).await;
                     }
                     // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                     (&Channel__Base_::GetManyByNameInSubscriptions, &Method::POST) => {
-                        return Action::<Channel__Base___GetManyByNameInSubscriptions>::run(action_inner, &action_processor_inner).await;
+                        return Action::<Channel__Base___GetManyByNameInSubscriptions>::run(&mut action_inner, &action_processor_inner).await;
                     }
                     // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                     (&Channel__Base_::GetManyBySubscription, &Method::POST) => {
-                        return Action::<Channel__Base___GetManyBySubscription>::run(action_inner, &action_processor_inner).await;
+                        return Action::<Channel__Base___GetManyBySubscription>::run(&mut action_inner, &action_processor_inner).await;
                     }
                     // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                     (&Channel__Base_::GetManyPublicByName, &Method::POST) => {
-                        return Action::<Channel__Base___GetManyPublicByName>::run(action_inner, &action_processor_inner).await;
+                        return Action::<Channel__Base___GetManyPublicByName>::run(&mut action_inner, &action_processor_inner).await;
                     }
                     _ => {
                         #[cfg(feature = "manual_testing")]
@@ -1091,19 +1091,19 @@ impl CommandProcessor<RunServer> {
                             ) {
                                 // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                                 (&Channel__Base_::GetOneById_, &Method::POST) => {
-                                    return Action::<Channel__Base___GetOneById>::run_(action_inner, &action_processor_inner).await;
+                                    return Action::<Channel__Base___GetOneById>::run_(&mut action_inner, &action_processor_inner).await;
                                 }
                                 // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                                 (&Channel__Base_::GetManyByNameInSubscriptions_, &Method::POST) => {
-                                    return Action::<Channel__Base___GetManyByNameInSubscriptions>::run_(action_inner, &action_processor_inner).await;
+                                    return Action::<Channel__Base___GetManyByNameInSubscriptions>::run_(&mut action_inner, &action_processor_inner).await;
                                 }
                                 // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                                 (&Channel__Base_::GetManyBySubscription_, &Method::POST) => {
-                                    return Action::<Channel__Base___GetManyBySubscription>::run_(action_inner, &action_processor_inner).await;
+                                    return Action::<Channel__Base___GetManyBySubscription>::run_(&mut action_inner, &action_processor_inner).await;
                                 }
                                 // Should be GET. But due to restrictions of third-party services, the method is put in Post.
                                 (&Channel__Base_::GetManyPublicByName_, &Method::POST) => {
-                                    return Action::<Channel__Base___GetManyPublicByName>::run_(action_inner, &action_processor_inner).await;
+                                    return Action::<Channel__Base___GetManyPublicByName>::run_(&mut action_inner, &action_processor_inner).await;
                                 }
                                 _ => {}
                             }
@@ -1119,7 +1119,7 @@ impl CommandProcessor<RunServer> {
                     &parts.method,
                 ) {
                     (&ChannelSubscription__Base_::Create, &Method::POST) => {
-                        return Action::<ChannelSubscription__Base___Create>::run(action_inner, &action_processor_inner).await;
+                        return Action::<ChannelSubscription__Base___Create>::run(&mut action_inner, &action_processor_inner).await;
                     }
                     _ => {
                         #[cfg(feature = "manual_testing")]
@@ -1129,7 +1129,7 @@ impl CommandProcessor<RunServer> {
                                 &parts.method,
                             ) {
                                 (&ChannelSubscription__Base_::Create_, &Method::POST) => {
-                                    return Action::<ChannelSubscription__Base___Create>::run_(action_inner, &action_processor_inner).await;
+                                    return Action::<ChannelSubscription__Base___Create>::run_(&mut action_inner, &action_processor_inner).await;
                                 }
                                 _ => {}
                             }
