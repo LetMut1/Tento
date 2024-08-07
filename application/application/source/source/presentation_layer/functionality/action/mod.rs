@@ -9,11 +9,9 @@ use crate::{
                 AggregateError,
                 Backtrace,
                 ResultConverter,
-            },
-            control_type::{
+            }, capture::Capture, control_type::{
                 ActionRound, MessagePack, Response
-            },
-            server_workflow_error::ServerWorkflowError,
+            }, server_workflow_error::ServerWorkflowError
         },
         functionality::service::{
             creator::Creator,
@@ -37,6 +35,7 @@ use serde::{
     Serialize as SerdeSerialize,
     Deserialize as SerdeDeserialize,
 };
+use void::Void;
 use std::{
     clone::Clone,
     future::Future,
@@ -68,7 +67,7 @@ where
     pub fn run<'a, 'b, 'c, 'd, T>(
         inner: Inner<'b, 'c, 'd>,
         action_processor_inner: &'a ActionProcessorInner<'b, T>,
-    ) -> impl Future<Output = Response> + 'a
+    ) -> impl Future<Output = Response> + Capture<(&'a Void, &'b Void, &'c Void, &'d Void)>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -89,7 +88,7 @@ where
     pub fn run_<'a, 'b, 'c, 'd, T>(
         inner: Inner<'b, 'c, 'd>,
         action_processor_inner: &'a ActionProcessorInner<'b, T>,
-    ) -> impl Future<Output = Response> + 'a
+    ) -> impl Future<Output = Response> + Capture<(&'a Void, &'b Void, &'c Void, &'d Void)>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,

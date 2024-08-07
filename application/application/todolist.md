@@ -115,3 +115,9 @@ https://stackoverflow.com/questions/58819199/how-to-keep-long-connection-in-http
 
 
 убрать data-control-type и вставить типы в конкретные сервисы, где они и используются впервые по цепочке.
+
+
+
+
+
+Rust 2024 - edition. Поменять, как только выйдет.

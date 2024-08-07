@@ -1,20 +1,16 @@
 use std::{future::Future};
 use crate::{
-    application_layer::{
-        functionality::action_processor::{ActionProcessor, ActionProcessor_, Inner as ActionProcessorInner},
-    },
+    application_layer::functionality::action_processor::{ActionProcessor, ActionProcessor_, Inner as ActionProcessorInner},
     infrastructure_layer::{
         data::{
             aggregate_error::{
                 AggregateError,
                 Backtrace,
                 ResultConverter,
-            },
-            control_type::{
+            }, capture::Capture, control_type::{
                 ActionRound,
                 Response,
-            },
-            server_workflow_error::ServerWorkflowError,
+            }, server_workflow_error::ServerWorkflowError
         },
         functionality::service::{
             creator::Creator,
@@ -33,6 +29,7 @@ use serde::{
     Serialize as SerdeSerialize,
     Deserialize as SerdeDeserialize,
 };
+use void::Void;
 use crate::presentation_layer::functionality::action::Inner;
 
 use tokio_postgres::{
@@ -47,7 +44,7 @@ impl Processor<ActionRound> {
     pub fn process<'a, 'b, 'c, 'd, T, AP, SS, SD>(
         inner: Inner<'b, 'c, 'd>,
         action_processor_inner: &'a ActionProcessorInner<'b, T>,
-    ) -> impl Future<Output = Response> + 'a
+    ) -> impl Future<Output = Response> + Capture<(&'a Void, &'b Void, &'c Void, &'d Void)>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
