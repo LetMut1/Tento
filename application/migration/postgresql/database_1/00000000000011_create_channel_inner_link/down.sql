@@ -1,0 +1,1 @@
+DROP TABLE public.channel_inner_link;

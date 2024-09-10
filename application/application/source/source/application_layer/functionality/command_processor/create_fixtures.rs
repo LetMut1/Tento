@@ -1,0 +1,324 @@
+use super::CommandProcessor;
+use crate::{
+    domain_layer::{
+        data::entity::{
+            application_user::{
+                ApplicationUser,
+                ApplicationUser_Email,
+                ApplicationUser_Nickname,
+                ApplicationUser_Password,
+            },
+            application_user_device::{
+                ApplicationUserDevice,
+                ApplicationUserDevice_Id,
+            },
+            channel::{
+                Channel,
+                Channel_AccessModifier,
+                Channel_Description,
+                Channel_LinkedName,
+                Channel_Name,
+                Channel_Orientation,
+                Channel_VisabilityModifier,
+            },
+        },
+        functionality::service::{
+            encoder::Encoder,
+            validator::Validator,
+        },
+    },
+    infrastructure_layer::{
+        data::{
+            capture::Capture,
+            control_type::{
+                CreateFixtures,
+                PostgresqlConnectionPoolNoTls,
+            },
+            environment_configuration::environment_configuration::EnvironmentConfiguration,
+        },
+        functionality::{
+            repository::postgresql::{
+                application_user::{
+                    By1,
+                    Insert1 as ApplicationUserInsert1,
+                },
+                application_user_device::Insert1 as ApplicationUserDeviceInsert1,
+                channel::{
+                    By2,
+                    Insert1 as ChannelInsert1,
+                },
+                PostgresqlRepository,
+            },
+            service::{
+                creator::Creator,
+                loader::Loader,
+            },
+        },
+    },
+};
+use aggregate_error::{
+    AggregateError,
+    Backtrace,
+    ResultConverter,
+};
+use rand::{
+    thread_rng,
+    Rng,
+};
+use std::future::Future;
+use tokio::runtime::Builder;
+use void::Void;
+impl CommandProcessor<CreateFixtures> {
+    const APPLICATION_USER_DEVICE__ID_PART: &'static str = "device";
+    const APPLICATION_USER__PASSWORD: &'static str = "passworD1";
+    const ASCII_CHARACTER_REGISTRY: [char; 26] = [
+        'a',
+        'b',
+        'c',
+        'd',
+        'e',
+        'f',
+        'g',
+        'h',
+        'i',
+        'j',
+        'k',
+        'l',
+        'm',
+        'n',
+        'o',
+        'p',
+        'q',
+        'r',
+        's',
+        't',
+        'u',
+        'v',
+        'w',
+        'x',
+        'y',
+        'z',
+    ];
+    const QUANTITY_OF_APPLICATION_USERS: u16 = 10_000;
+    const QUANTITY_OF_CHANNELS: u8 = 5;
+    const STUB: &'static str = "s_t_u_b";
+    pub fn process() -> Result<(), AggregateError> {
+        let environment_configuration = Self::initialize_environment()?;
+        Self::run_runtime(&environment_configuration)?;
+        return Ok(());
+    }
+    fn initialize_environment() -> Result<EnvironmentConfiguration, AggregateError> {
+        let environment_configuration_file_path = format!(
+            "{}/environment_configuration",
+            std::env::var("CARGO_MANIFEST_DIR").into_runtime(Backtrace::new(line!(), file!()))?.as_str(),
+        );
+        return Ok(Loader::<EnvironmentConfiguration>::load_from_file(environment_configuration_file_path.as_str())?);
+    }
+    fn run_runtime<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<(), AggregateError> {
+        Builder::new_current_thread()
+            .enable_all()
+            .build()
+            .into_runtime(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?
+            .block_on(Self::create_fixtures(environment_configuration))?;
+        return Ok(());
+    }
+    fn create_fixtures<'a>(environment_configuration: &'a EnvironmentConfiguration) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
+        return async move {
+            let database_1_postgresql_connection_pool = Creator::<PostgresqlConnectionPoolNoTls>::create_database_1(environment_configuration).await?;
+            let application_user__password = Self::APPLICATION_USER__PASSWORD.to_string();
+            let application_user__password_hash = Encoder::<ApplicationUser_Password>::encode(application_user__password.as_str())?;
+            let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.into_runtime(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
+            let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
+            '_a: for _ in 1..=Self::QUANTITY_OF_APPLICATION_USERS {
+                let mut application_user__nickname = String::new();
+                '_b: for _ in 1..=thread_rng().gen_range::<usize, _>(1..=ApplicationUser_Nickname::MAXIMUM_LENGTH) {
+                    let character = Self::ASCII_CHARACTER_REGISTRY[thread_rng().gen_range::<usize, _>(0..Self::ASCII_CHARACTER_REGISTRY.len())];
+                    application_user__nickname = format!("{}{}", application_user__nickname.as_str(), character);
+                }
+                if !Validator::<ApplicationUser_Nickname>::is_valid(application_user__nickname.as_str()) {
+                    return Err(
+                        AggregateError::new_invalid_argument(
+                            Backtrace::new(
+                                line!(),
+                                file!(),
+                            ),
+                        ),
+                    );
+                }
+                let application_user__email = format!("{}@fixture.com", application_user__nickname.as_str());
+                if !Validator::<ApplicationUser_Email>::is_valid(application_user__email.as_str())? {
+                    return Err(
+                        AggregateError::new_invalid_argument(
+                            Backtrace::new(
+                                line!(),
+                                file!(),
+                            ),
+                        ),
+                    );
+                }
+                if !Validator::<ApplicationUser_Password>::is_valid(
+                    application_user__password.as_str(),
+                    application_user__email.as_str(),
+                    application_user__nickname.as_str(),
+                ) {
+                    return Err(
+                        AggregateError::new_invalid_argument(
+                            Backtrace::new(
+                                line!(),
+                                file!(),
+                            ),
+                        ),
+                    );
+                }
+                let application_user = match PostgresqlRepository::<ApplicationUser<'_>>::find_1(
+                    database_1_postgresql_connection,
+                    By1 {
+                        application_user__nickname: application_user__nickname.as_str(),
+                    },
+                )
+                .await?
+                {
+                    Some(application_user_) => application_user_,
+                    None => {
+                        PostgresqlRepository::<ApplicationUser<'_>>::create_1(
+                            database_1_postgresql_connection,
+                            ApplicationUserInsert1 {
+                                application_user__email,
+                                application_user__nickname,
+                                application_user__password_hash: application_user__password_hash.clone(),
+                            },
+                        )
+                        .await?
+                    }
+                };
+                let application_user_device__id = format!(
+                    "{}_{}",
+                    application_user.nickname.as_ref(),
+                    Self::APPLICATION_USER_DEVICE__ID_PART
+                );
+                if !Validator::<ApplicationUserDevice_Id>::is_valid(&application_user_device__id) {
+                    return Err(
+                        AggregateError::new_invalid_argument(
+                            Backtrace::new(
+                                line!(),
+                                file!(),
+                            ),
+                        ),
+                    );
+                }
+                PostgresqlRepository::<ApplicationUserDevice>::create_1(
+                    database_1_postgresql_connection,
+                    ApplicationUserDeviceInsert1 {
+                        application_user_device__id,
+                        application_user__id: application_user.id,
+                    },
+                )
+                .await?;
+                'b: for _ in 1..=Self::QUANTITY_OF_CHANNELS {
+                    let mut channel__name = String::new();
+                    '_c: for _ in 1..=thread_rng().gen_range::<usize, _>(1..=Channel_Name::MAXIMUM_LENGTH) {
+                        let character = Self::ASCII_CHARACTER_REGISTRY[thread_rng().gen_range::<usize, _>(0..Self::ASCII_CHARACTER_REGISTRY.len())];
+                        channel__name = format!("{}{}", channel__name.as_str(), character,);
+                    }
+                    if !Validator::<Channel_Name>::is_valid(channel__name.as_str()) {
+                        return Err(
+                            AggregateError::new_invalid_argument(
+                                Backtrace::new(
+                                    line!(),
+                                    file!(),
+                                ),
+                            ),
+                        );
+                    }
+                    let channel__linked_name = channel__name.clone();
+                    if !Validator::<Channel_LinkedName>::is_valid(channel__linked_name.as_str()) {
+                        return Err(
+                            AggregateError::new_invalid_argument(
+                                Backtrace::new(
+                                    line!(),
+                                    file!(),
+                                ),
+                            ),
+                        );
+                    }
+                    let channel__description = if thread_rng().gen_range::<i8, _>(0..=1) == 1 {
+                        let mut channel__description_ = String::new();
+                        '_c: for _ in 1..=thread_rng().gen_range::<usize, _>(1..=Channel_Description::MAXIMUM_LENGTH) {
+                            let character = Self::ASCII_CHARACTER_REGISTRY[thread_rng().gen_range::<usize, _>(0..Self::ASCII_CHARACTER_REGISTRY.len())];
+                            channel__description_ = format!("{}{}", channel__description_.as_str(), character,);
+                        }
+                        if !Validator::<Channel_Description>::is_valid(channel__description_.as_str()) {
+                            return Err(
+                                AggregateError::new_invalid_argument(
+                                    Backtrace::new(
+                                        line!(),
+                                        file!(),
+                                    ),
+                                ),
+                            );
+                        }
+                        Some(channel__description_)
+                    } else {
+                        None
+                    };
+                    let channel__orientation: Vec<i16> = vec![
+                        0, 1, 2,
+                    ];
+                    if !Validator::<Channel_Orientation>::is_valid(channel__orientation.as_slice()) {
+                        return Err(
+                            AggregateError::new_invalid_argument(
+                                Backtrace::new(
+                                    line!(),
+                                    file!(),
+                                ),
+                            ),
+                        );
+                    }
+                    let channel = PostgresqlRepository::<Channel<'_>>::find_2(
+                        database_1_postgresql_connection,
+                        By2 {
+                            channel__name: channel__name.as_str(),
+                        },
+                    )
+                    .await?;
+                    match channel {
+                        Some(_) => {
+                            continue 'b;
+                        }
+                        None => {
+                            PostgresqlRepository::<Channel<'_>>::create_1(
+                                database_1_postgresql_connection,
+                                ChannelInsert1 {
+                                    channel__owner: application_user.id,
+                                    channel__name,
+                                    channel__linked_name,
+                                    channel__description,
+                                    channel__access_modifier: Channel_AccessModifier::from_representation(Channel_AccessModifier::Open),
+                                    channel__visability_modifier: Channel_VisabilityModifier::from_representation(Channel_VisabilityModifier::Public),
+                                    channel__orientation,
+                                    channel__cover_image_path: Some(Self::STUB.to_string()),
+                                    channel__background_image_path: Some(Self::STUB.to_string()),
+                                    channel__subscribers_quantity: 0,
+                                    channel__marks_quantity: 0,
+                                    channel__viewing_quantity: 0,
+                                },
+                            )
+                            .await?;
+                        }
+                    }
+                }
+            }
+            return Ok(());
+        };
+    }
+}

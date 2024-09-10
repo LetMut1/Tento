@@ -1,0 +1,1 @@
+DROP TABLE public.application_user_registration_token;

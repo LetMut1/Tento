@@ -1,0 +1,158 @@
+[workspace]
+resolver = "2"
+members = [
+    "./source",
+    "./source/forced_crate/action_processor_incoming_outcoming",
+    "./source/forced_crate/aggregate_error",
+    "./source/forced_crate/common_precedent",
+    "./source/forced_crate/formatter",
+    "./source/forced_crate/macro_rules",
+    "./source/forced_crate/message_pack_serializer",
+    "./source/forced_crate/unified_report",
+    "./source/forced_crate/void",
+    "./source/source/presentation_layer/functionality/command/core",
+]
+default-members = [
+    "./source",
+    "./source/forced_crate/action_processor_incoming_outcoming",
+    "./source/forced_crate/aggregate_error",
+    "./source/forced_crate/common_precedent",
+    "./source/forced_crate/formatter",
+    "./source/forced_crate/macro_rules",
+    "./source/forced_crate/message_pack_serializer",
+    "./source/forced_crate/unified_report",
+    "./source/forced_crate/void",
+    "./source/source/presentation_layer/functionality/command/core",
+]
+
+[workspace.package]
+authors = ["Zimin Dmitriy <dimazimin96@yandex.ru>"]
+rust-version = "1.80.0"
+
+[workspace.lints]
+
+[workspace.lints.rust]
+dead_code = { level = "allow", priority = 0 }
+non_camel_case_types = { level = "allow", priority = 0 }
+non_snake_case = { level = "allow", priority = 0 }
+non_upper_case_globals = { level = "allow", priority = 0 }
+unreachable_code = { level = "allow", priority = 0 }
+
+[workspace.lints.clippy]
+branches_sharing_code = { level = "deny", priority = 0 }
+cast_lossless = { level = "deny", priority = 0 }
+cast_possible_truncation = { level = "deny", priority = 0 }
+cast_possible_wrap = { level = "deny", priority = 0 }
+cast_precision_loss = { level = "deny", priority = 0 }
+cast_ptr_alignment = { level = "deny", priority = 0 }
+cast_sign_loss = { level = "deny", priority = 0 }
+checked_conversions = { level = "deny", priority = 0}
+clear_with_drain = { level = "deny", priority = 0 }
+collapsible_else_if = { level = "allow", priority = 0 }
+collapsible_match = { level = "allow", priority = 0 }
+default_numeric_fallback = { level = "deny", priority = 0 }
+default_trait_access = { level = "deny", priority = 0 }
+empty_enum = { level = "allow", priority = 0 }
+empty_enum_variants_with_brackets = { level = "deny", priority = 0 }
+empty_structs_with_brackets = { level = "deny", priority = 0 }
+enum_glob_use = { level = "deny", priority = 0 }
+exit = { level = "deny", priority = 0 }
+explicit_auto_deref = { level = "allow", priority = 0 }
+inefficient_to_string = { level = "deny", priority = 0 }
+invalid_upcast_comparisons = { level = "deny", priority = 0 }
+large_digit_groups = { level = "deny", priority = 0 }
+large_stack_arrays = { level = "deny", priority = 0 }
+large_types_passed_by_value = { level = "deny", priority = 0 }
+macro_use_imports = { level = "deny", priority = 0 }
+manual_range_contains = { level = "allow", priority = 0 }
+match_on_vec_items = { level = "deny", priority = 0 }
+match_same_arms = { level = "deny", priority = 0 }
+match_wild_err_arm = { level = "deny", priority = 0 }
+mem_forget = { level = "deny", priority = 0 }
+multiple_crate_versions = { level = "deny", priority = 0 }
+mut_mut = { level = "deny", priority = 0 }
+mutex_atomic = { level = "deny", priority = 0 }
+mutex_integer = { level = "deny", priority = 0 }
+needless_bitwise_bool = { level = "deny", priority = 0 }
+needless_continue = { level = "allow", priority = 0 }
+needless_for_each = { level = "deny", priority = 0 }
+needless_lifetimes = { level = "allow", priority = 0 }
+needless_pass_by_ref_mut = { level = "deny", priority = 0 }
+needless_return = { level = "allow", priority = 0 }
+new_without_default = { level = "allow", priority = 0 }
+option_as_ref_cloned = { level = "deny", priority = 0 }
+option_option = { level = "deny", priority = 0 }
+panic = { level = "deny", priority = 0 }
+panic_in_result_fn = { level = "deny", priority = 0 }
+path_buf_push_overwrite = { level = "deny", priority = 0 }
+print_stderr = { level = "deny", priority = 0 }
+print_stdout = { level = "deny", priority = 0 }
+ptr_as_ptr = { level = "deny", priority = 0 }
+pub_underscore_fields = { level = "deny", priority = 0 }
+range_minus_one = { level = "deny", priority = 0 }
+range_plus_one = { level = "deny", priority = 0 }
+rc_mutex = { level = "deny", priority = 0 }
+redundant_clone = { level = "deny", priority = 0 }
+redundant_pub_crate = { level = "deny", priority = 0 }
+redundant_static_lifetimes = { level = "allow", priority = 0 }
+ref_option_ref = { level = "deny", priority = 0 }
+rest_pat_in_fully_bound_structs = { level = "deny", priority = 0 }
+same_functions_in_if_condition = { level = "deny", priority = 0 }
+semicolon_if_nothing_returned = { level = "deny", priority = 0 }
+separated_literal_suffix = { level = "deny", priority = 0 }
+shadow_reuse = { level = "deny", priority = 0 }
+shadow_same = { level = "deny", priority = 0 }
+shadow_unrelated = { level = "deny", priority = 0 }
+single_match_else = { level = "deny", priority = 0 }
+string_add = { level = "deny", priority = 0 }
+string_lit_as_bytes = { level = "deny", priority = 0 }
+string_to_string = { level = "deny", priority = 0 }
+tests_outside_test_module = { level = "deny", priority = 0 }
+todo = { level = "deny", priority = 0 }
+too_many_arguments = { level = "allow", priority = 0 }
+trait_duplication_in_bounds = { level = "deny", priority = 0 }
+transmute_ptr_to_ptr = { level = "deny", priority = 0 }
+type_complexity = { level = "allow", priority = 0 }
+unimplemented = { level = "deny", priority = 0 }
+unnecessary_struct_initialization = { level = "deny", priority = 0 }
+unnested_or_patterns = { level = "deny", priority = 0 }
+unreachable = { level = "deny", priority = 0 }
+unused_async = { level = "deny", priority = 0 }
+unused_self = { level = "deny", priority = 0 }
+unwrap_in_result = { level = "deny", priority = 0 }
+unwrap_used = { level = "deny", priority = 0 }
+verbose_file_reads = { level = "deny", priority = 0 }
+wildcard_imports = { level = "deny", priority = 0 }
+zero_sized_map_values = { level = "deny", priority = 0 }
+
+[profile]
+
+[profile.dev]
+opt-level = 0
+debug = true
+debug-assertions = true
+overflow-checks = true
+lto = false
+panic = "unwind"
+incremental = true
+codegen-units = 256
+rpath = false
+
+[profile.dev.build-override]
+opt-level = 0
+codegen-units = 256
+
+[profile.release]
+opt-level = 3
+debug = false
+debug-assertions = false
+overflow-checks = true
+lto = "fat"
+panic = "unwind"
+incremental = false
+codegen-units = 16
+rpath = false
+
+[profile.release.build-override]
+opt-level = 3
+codegen-units = 16

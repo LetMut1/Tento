@@ -1,0 +1,76 @@
+version: '3.8'
+
+services:
+    database_1_postgresql:
+        container_name: tento_database_1_postgresql
+        build:
+            context: ./service/postgresql
+            dockerfile: dockerfile
+        environment:
+            PGDATA: '/var/lib/postgresql/data'
+            POSTGRES_HOST_AUTH_METHOD: 'md5'
+            POSTGRES_USER: 'root'
+            POSTGRES_PASSWORD: 'password'
+            POSTGRES_DB: 'tento'
+        volumes:
+            - database_1_postgresql_data:/var/lib/postgresql/data
+        restart: always
+    database_1_postgresql_client:
+        container_name: tento_database_1_postgresql_client
+        build:
+            context: ./service/postgresql_client
+            dockerfile: dockerfile
+        ports:
+        - 8081:8080
+        restart: always
+    database_2_postgresql:
+        container_name: tento_database_2_postgresql
+        build:
+            context: ./service/postgresql
+            dockerfile: dockerfile
+        environment:
+            PGDATA: '/var/lib/postgresql/data'
+            POSTGRES_HOST_AUTH_METHOD: 'md5'
+            POSTGRES_USER: 'root'
+            POSTGRES_PASSWORD: 'password'
+            POSTGRES_DB: 'tento'
+        volumes:
+            - database_2_postgresql_data:/var/lib/postgresql/data
+        restart: always
+    database_2_postgresql_client:
+        container_name: tento_database_2_postgresql_client
+        build:
+            context: ./service/postgresql_client
+            dockerfile: dockerfile
+        ports:
+        - 8082:8080
+        restart: always
+    dbmate:
+        container_name: tento_dbmate
+        build:
+            context: ./service/dbmate
+            dockerfile: dockerfile
+        volumes:
+            - ./../../../:/_tento
+        restart: always
+        tty: true
+        init: true
+    mailhog:
+        container_name: tento_mailhog
+        build:
+            context: ./service/mailhog
+            dockerfile: dockerfile
+        ports:
+        - 8025:8025
+        restart: always
+
+volumes:
+    database_1_postgresql_data:
+        driver: local
+    database_2_postgresql_data:
+        driver: local
+
+networks:
+    default:
+        external: true
+        name: resource

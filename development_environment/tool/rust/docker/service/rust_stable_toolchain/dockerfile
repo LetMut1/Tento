@@ -1,0 +1,20 @@
+FROM rust:1.80.0
+
+RUN \
+mkdir -p /_tento && \
+rustup default stable && \
+rustup toolchain install nightly && \
+rustup component add --toolchain=stable \
+    clippy \
+    rust-src && \
+rustup component add --toolchain=nightly-x86_64-unknown-linux-gnu \
+    rustfmt && \
+rustup target add --toolchain=stable \
+    aarch64-apple-ios \
+    aarch64-apple-ios-sim \
+    aarch64-linux-android \
+    x86_64-linux-android && \
+apt-get update && \
+apt-get install -y \
+    valgrind && \
+cargo install cargo-valgrind

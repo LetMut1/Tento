@@ -1,0 +1,30 @@
+[lib]
+name = "action_processor_incoming_outcoming"
+path = "./source/mod.rs"
+test = true
+doctest = true
+bench = true
+doc = true
+proc-macro = false
+harness = true
+edition = "2021"
+crate-type = ["lib"]
+required-features = []
+
+[package]
+name = "action_processor_incoming_outcoming"
+version = "1.0.0"
+authors.workspace = true
+rust-version.workspace = true
+edition = "2021"
+
+[lints]
+workspace = true
+
+[dependencies]
+serde = { package = "serde", version = "=1.0.210", default-features = true, features = ["derive"], optional = false }
+common_precedent = { path = "./../common_precedent", package = "common_precedent", version = "=1.0.0", default-features = true, features = [], optional = false }
+macro_rules = { path = "./../macro_rules", package = "macro_rules", version = "=1.0.0", default-features = true, features = [], optional = false }
+
+[features]
+default = []

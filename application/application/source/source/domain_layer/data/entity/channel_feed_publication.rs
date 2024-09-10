@@ -1,0 +1,16 @@
+pub struct ChannelFeedPublication {
+    id: i64,
+    channel__id: i64,
+    application_user__id: i64,
+    content_type: u8,
+    content_type_component: String,
+    content_type_component_preview: String,
+    public_marks_quantity: i64,
+    hidden_marks_quantity: i64,
+    reactions_quantity: i64,
+    viewing_quantity: i64,
+    status: u8,
+    visible_from: String,
+    delete_on: Option<String>,
+    created_at: String,
+}
