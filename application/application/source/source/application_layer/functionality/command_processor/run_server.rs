@@ -258,7 +258,9 @@ impl CommandProcessor<RunServer> {
     }
     fn serve_(environment_configuration: &'static EnvironmentConfiguration) -> impl Future<Output = Result<(), AggregateError>> + Send {
         return async move {
-            let router = Self::create_router()?;
+            let router = Arc::new(Self::create_router()?);
+            let database_1_postgresql_connection_pool = Creator::<PostgresqlConnectionPoolNoTls>::create_database_1(environment_configuration).await?;
+            let database_2_postgresql_connection_pool = Creator::<PostgresqlConnectionPoolNoTls>::create_database_2(environment_configuration).await?;
             let signal_interrupt_future = Self::create_signal(SignalKind::interrupt())?;
             let signal_terminate_future = Self::create_signal(SignalKind::terminate())?;
             let graceful_shutdown_signal_future = async move {
@@ -292,7 +294,7 @@ impl CommandProcessor<RunServer> {
                 None => http2_builder.keep_alive_interval(None),
             };
             match environment_configuration.application_server.http.maximum_pending_accept_reset_streams {
-                Some(maximum_pending_accept_reset_streams_) => http2_builder.max_pending_accept_reset_streams(Some(maximum_pending_accept_reset_streams_)),
+                Some(maximum_pending_accept_reset_streams) => http2_builder.max_pending_accept_reset_streams(Some(maximum_pending_accept_reset_streams)),
                 None => http2_builder.max_pending_accept_reset_streams(None),
             };
 
@@ -308,9 +310,6 @@ impl CommandProcessor<RunServer> {
                     file!(),
                 ),
             )?;
-            let database_1_postgresql_connection_pool = Creator::<PostgresqlConnectionPoolNoTls>::create_database_1(environment_configuration).await?;
-            let database_2_postgresql_connection_pool = Creator::<PostgresqlConnectionPoolNoTls>::create_database_2(environment_configuration).await?;
-            let router_ = Arc::new(router);
             '_a: loop {
                 let tcp_stream = tcp_listener.accept().await.into_runtime(
                     Backtrace::new(
@@ -318,20 +317,20 @@ impl CommandProcessor<RunServer> {
                         file!(),
                     ),
                 )?.0;
-                let router__ = router_.clone();
+                let router_ = router.clone();
                 let database_1_postgresql_connection_pool_ = database_1_postgresql_connection_pool.clone();
                 let database_2_postgresql_connection_pool_ = database_2_postgresql_connection_pool.clone();
                 let serving_connection_future = http2_builder.serve_connection(
                     TokioIo::new(tcp_stream),
                     service_fn(
                         move |request: Req<Incoming>| -> _ {
-                            let router___ = router__.clone();
+                            let router__ = router_.clone();
                             let database_1_postgresql_connection_pool__ = database_1_postgresql_connection_pool_.clone();
                             let database_2_postgresql_connection_pool__ = database_2_postgresql_connection_pool_.clone();
                             return async move {
                                 let response = Self::resolveXXX(
                                     environment_configuration,
-                                    router___,
+                                    router__,
                                     database_1_postgresql_connection_pool__,
                                     database_2_postgresql_connection_pool__,
                                     request,
