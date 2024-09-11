@@ -13,4 +13,3 @@ pub mod sender;
 pub mod serializer;
 pub mod spawner;
 pub mod validator;
-pub mod server;
