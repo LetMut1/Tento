@@ -133,7 +133,6 @@ use hyper_util::rt::tokio::TokioExecutor;
 
 
 static ENVIRONMENT_CONFIGURATION: OnceLock<EnvironmentConfiguration> = OnceLock::new();
-static HTTP2_BUILDER: OnceLock<Http2Builder<TokioExecutor>> = OnceLock::new();
 impl CommandProcessor<RunServer> {
     pub fn process() -> Result<(), AggregateError> {
         let _worker_guard;
@@ -296,28 +295,7 @@ impl CommandProcessor<RunServer> {
                 Some(maximum_pending_accept_reset_streams_) => http2_builder.max_pending_accept_reset_streams(Some(maximum_pending_accept_reset_streams_)),
                 None => http2_builder.max_pending_accept_reset_streams(None),
             };
-            let http2_builder_ = match HTTP2_BUILDER.get() {
-                Some(http2_builder__) => http2_builder__,
-                None => {
-                    if let Err(_) = HTTP2_BUILDER.set(http2_builder) {
-                        return Err(
-                            AggregateError::new_logic_(
-                                Common::ValueAlreadyExist,
-                                Backtrace::new(
-                                    line!(),
-                                    file!(),
-                                ),
-                            ),
-                        );
-                    }
-                    HTTP2_BUILDER.get().into_logic_value_does_not_exist(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    )?
-                }
-            };
+
             if let Some(ref _tls) = environment_configuration.application_server.http.tls {
                 todo!("// TODO ssl_protocolsTLSv1 TLSv1.1 TLSv1.2 TLSv1.3;  ssl_ciphers HIGH:!aNULL:!MD5;")
             }
@@ -343,30 +321,30 @@ impl CommandProcessor<RunServer> {
                 let router__ = router_.clone();
                 let database_1_postgresql_connection_pool_ = database_1_postgresql_connection_pool.clone();
                 let database_2_postgresql_connection_pool_ = database_2_postgresql_connection_pool.clone();
+                let serving_connection_future = http2_builder.serve_connection(
+                    TokioIo::new(tcp_stream),
+                    service_fn(
+                        move |request: Req<Incoming>| -> _ {
+                            let router___ = router__.clone();
+                            let database_1_postgresql_connection_pool__ = database_1_postgresql_connection_pool_.clone();
+                            let database_2_postgresql_connection_pool__ = database_2_postgresql_connection_pool_.clone();
+                            return async move {
+                                let response = Self::resolveXXX(
+                                    environment_configuration,
+                                    router___,
+                                    database_1_postgresql_connection_pool__,
+                                    database_2_postgresql_connection_pool__,
+                                    request,
+                                )
+                                .await;
+                                return Ok::<_, Void>(response);
+                            };
+                        }
+                    ),
+                );
                 Spawner::<TokioNonBlockingTask>::spawn_into_background(
                     async move {
-                        return http2_builder_.serve_connection(
-                            TokioIo::new(tcp_stream),
-                            service_fn(
-                                move |request: Req<Incoming>| -> _ {
-                                    let router___ = router__.clone();
-                                    let database_1_postgresql_connection_pool__ = database_1_postgresql_connection_pool_.clone();
-                                    let database_2_postgresql_connection_pool__ = database_2_postgresql_connection_pool_.clone();
-                                    return async move {
-                                        let response = Self::resolveXXX(
-                                            environment_configuration,
-                                            router___,
-                                            database_1_postgresql_connection_pool__,
-                                            database_2_postgresql_connection_pool__,
-                                            request,
-                                        )
-                                        .await;
-                                        return Ok::<_, Void>(response);
-                                    };
-                                }
-                            ),
-                        ).await
-                        .into_runtime(
+                        return serving_connection_future.await.into_runtime(
                             Backtrace::new(
                                 line!(),
                                 file!(),
