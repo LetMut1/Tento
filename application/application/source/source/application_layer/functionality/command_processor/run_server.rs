@@ -72,8 +72,7 @@ use matchit::Router;
 use std::{
     future::Future,
     sync::{
-        Arc,
-        OnceLock,
+        atomic::Ordering, Arc, OnceLock
     },
     time::Duration,
 };
@@ -117,14 +116,12 @@ use std::net::SocketAddr;
 use std::pin::Pin;
 use hyper_util::rt::tokio::TokioExecutor;
 use hyper_util::server::graceful::GracefulShutdown;
+use std::sync::atomic::AtomicU64;
 
 
 
 
-
-
-
-
+static CONNECTION_QUANTITY: AtomicU64 = AtomicU64::new(0);
 static ENVIRONMENT_CONFIGURATION: OnceLock<EnvironmentConfiguration> = OnceLock::new();
 impl CommandProcessor<RunServer> {
     pub fn process() -> Result<(), AggregateError> {
@@ -303,16 +300,12 @@ impl CommandProcessor<RunServer> {
                     file!(),
                 ),
             )?;
-            let graceful_shutdown = GracefulShutdown::new();
-            let graceful_shutdown_ = Arc::new(&graceful_shutdown);
-            let graceful_shutdown__ = graceful_shutdown_.clone();
             let serving_connection_registry_future = async move {
-                let graceful_shutdown___ = graceful_shutdown__;
                 let router_ = router;
                 let database_1_postgresql_connection_pool_ = database_1_postgresql_connection_pool;
                 let database_2_postgresql_connection_pool_ = database_2_postgresql_connection_pool;
                 '_a: loop {
-                    let tcp_stream = tcp_listener.accept().await.into_runtime(
+                    let tcp_stream = tcp_listener.accept().await.into_runtime(     // TODO TODO TODO TODO TODO что вот здесь делаем?
                         Backtrace::new(
                             line!(),
                             file!(),
@@ -342,15 +335,17 @@ impl CommandProcessor<RunServer> {
                             }
                         ),
                     );
-                    let graceful_shutdown_future = graceful_shutdown___.as_ref().watch(serving_connection_future);
                     Spawner::<TokioNonBlockingTask>::spawn_into_background(
                         async move {
-                            return graceful_shutdown_future.await.into_runtime(
+                            CONNECTION_QUANTITY.fetch_add(1, Ordering::Relaxed);
+                            let result = serving_connection_future.await.into_runtime(
                                 Backtrace::new(
                                     line!(),
                                     file!(),
                                 ),
                             );
+                            CONNECTION_QUANTITY.fetch_sub(1, Ordering::Relaxed);
+                            return result;
                         }
                     );
                 }
@@ -364,13 +359,25 @@ impl CommandProcessor<RunServer> {
                     ()
                 },
                 _ = serving_connection_registry_join_handle => {
-                    ()
+                    return Err(
+                        AggregateError::new_logic_(
+                            Common::UnreachableState,
+                            Backtrace::new(
+                                line!(),
+                                file!(),
+                            ),
+                        ),
+                    );
                 },
             }
-
-
-
-            graceful_shutdown.shutdown().await;
+            'a: loop {
+                if CONNECTION_QUANTITY.load(Ordering::Relaxed) != 0 {
+                    tokio::time::sleep(Duration::from_secs(1)).await;
+                    continue 'a;
+                } else {
+                    break 'a;
+                }
+            }
             return Ok(());
         };
     }
@@ -942,6 +949,11 @@ impl CommandProcessor<RunServer> {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
         return async move {
+
+            // В одну структуру и Arc, чтобы клонировать эту структуру один раз.
+        //     router: Arc<Router<ActionRoute_>>,
+        // database_1_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+        // database_2_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
 
 
             return Res::new(Full::new(Bytes::from("Hello World!")));
