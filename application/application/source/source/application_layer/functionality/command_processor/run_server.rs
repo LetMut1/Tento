@@ -101,10 +101,6 @@ use tracing_appender::rolling::{
 };
 use tracing_subscriber::FmtSubscriber;
 use void::Void;
-
-
-
-
 use bytes::Bytes;
 use http_body_util::Full;
 use hyper_x::server::conn::http2::Builder as Http2Builder;
@@ -120,10 +116,7 @@ use hyper_util::rt::TokioIo;
 use std::net::SocketAddr;
 use std::pin::Pin;
 use hyper_util::rt::tokio::TokioExecutor;
-
-
-
-
+use hyper_util::server::graceful::GracefulShutdown;
 
 
 
@@ -310,51 +303,74 @@ impl CommandProcessor<RunServer> {
                     file!(),
                 ),
             )?;
-            '_a: loop {
-                let tcp_stream = tcp_listener.accept().await.into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?.0;
-                let router_ = router.clone();
-                let database_1_postgresql_connection_pool_ = database_1_postgresql_connection_pool.clone();
-                let database_2_postgresql_connection_pool_ = database_2_postgresql_connection_pool.clone();
-                let serving_connection_future = http2_builder.serve_connection(
-                    TokioIo::new(tcp_stream),
-                    service_fn(
-                        move |request: Req<Incoming>| -> _ {
-                            let router__ = router_.clone();
-                            let database_1_postgresql_connection_pool__ = database_1_postgresql_connection_pool_.clone();
-                            let database_2_postgresql_connection_pool__ = database_2_postgresql_connection_pool_.clone();
-                            return async move {
-                                let response = Self::resolveXXX(
-                                    environment_configuration,
-                                    router__,
-                                    database_1_postgresql_connection_pool__,
-                                    database_2_postgresql_connection_pool__,
-                                    request,
-                                )
-                                .await;
-                                return Ok::<_, Void>(response);
-                            };
+            let graceful_shutdown = GracefulShutdown::new();
+            let graceful_shutdown_ = Arc::new(&graceful_shutdown);
+            let graceful_shutdown__ = graceful_shutdown_.clone();
+            let serving_connection_registry_future = async move {
+                let graceful_shutdown___ = graceful_shutdown__;
+                let router_ = router;
+                let database_1_postgresql_connection_pool_ = database_1_postgresql_connection_pool;
+                let database_2_postgresql_connection_pool_ = database_2_postgresql_connection_pool;
+                '_a: loop {
+                    let tcp_stream = tcp_listener.accept().await.into_runtime(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )?.0;
+                    let router_ = router_.clone();
+                    let database_1_postgresql_connection_pool__ = database_1_postgresql_connection_pool_.clone();
+                    let database_2_postgresql_connection_pool__ = database_2_postgresql_connection_pool_.clone();
+                    let serving_connection_future = http2_builder.serve_connection(
+                        TokioIo::new(tcp_stream),
+                        service_fn(
+                            move |request: Req<Incoming>| -> _ {
+                                let router__ = router_.clone();
+                                let database_1_postgresql_connection_pool___ = database_1_postgresql_connection_pool__.clone();
+                                let database_2_postgresql_connection_pool___ = database_2_postgresql_connection_pool__.clone();
+                                return async move {
+                                    let response = Self::resolveXXX(
+                                        environment_configuration,
+                                        router__,
+                                        database_1_postgresql_connection_pool___,
+                                        database_2_postgresql_connection_pool___,
+                                        request,
+                                    )
+                                    .await;
+                                    return Ok::<_, Void>(response);
+                                };
+                            }
+                        ),
+                    );
+                    let graceful_shutdown_future = graceful_shutdown___.as_ref().watch(serving_connection_future);
+                    Spawner::<TokioNonBlockingTask>::spawn_into_background(
+                        async move {
+                            return graceful_shutdown_future.await.into_runtime(
+                                Backtrace::new(
+                                    line!(),
+                                    file!(),
+                                ),
+                            );
                         }
-                    ),
-                );
-                Spawner::<TokioNonBlockingTask>::spawn_into_background(
-                    async move {
-                        return serving_connection_future.await.into_runtime(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        );
-                    }
-                );
+                    );
+                }
+                return Ok::<_, AggregateError>(());
+            };
+            let serving_connection_registry_join_handle = Spawner::<TokioNonBlockingTask>::spawn_processed(serving_connection_registry_future);
+            let graceful_shutdown_signal_join_handle = Spawner::<TokioNonBlockingTask>::spawn_processed(graceful_shutdown_signal_future);
+            tokio::select! {
+                biased;
+                _ = graceful_shutdown_signal_join_handle => {
+                    ()
+                },
+                _ = serving_connection_registry_join_handle => {
+                    ()
+                },
             }
 
 
-            // TODO gracefull shutdown
+
+            graceful_shutdown.shutdown().await;
             return Ok(());
         };
     }
