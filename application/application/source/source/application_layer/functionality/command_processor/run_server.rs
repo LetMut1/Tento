@@ -248,9 +248,16 @@ impl CommandProcessor<RunServer> {
     }
     fn serve_(environment_configuration: &'static EnvironmentConfiguration) -> impl Future<Output = Result<(), AggregateError>> + Send {
         return async move {
-            let router = Arc::new(Self::create_router()?);
+            let router = Self::create_router()?;
             let database_1_postgresql_connection_pool = Creator::<PostgresqlConnectionPoolNoTls>::create_database_1(environment_configuration).await?;
             let database_2_postgresql_connection_pool = Creator::<PostgresqlConnectionPoolNoTls>::create_database_2(environment_configuration).await?;
+            let cloned = Arc::new(
+                Cloned {
+                    router,
+                    database_1_postgresql_connection_pool,
+                    database_2_postgresql_connection_pool,
+                },
+            );
             let signal_interrupt_future = Self::create_signal(SignalKind::interrupt())?;
             let signal_terminate_future = Self::create_signal(SignalKind::terminate())?;
             let graceful_shutdown_signal_future = async move {
@@ -301,9 +308,6 @@ impl CommandProcessor<RunServer> {
                 ),
             )?;
             let serving_connection_registry_future = async move {
-                let router_ = router;
-                let database_1_postgresql_connection_pool_ = database_1_postgresql_connection_pool;
-                let database_2_postgresql_connection_pool_ = database_2_postgresql_connection_pool;
                 '_a: loop {
                     let tcp_stream = tcp_listener.accept().await.into_runtime(     // TODO TODO TODO TODO TODO что вот здесь делаем?
                         Backtrace::new(
@@ -311,23 +315,17 @@ impl CommandProcessor<RunServer> {
                             file!(),
                         ),
                     )?.0;
-                    let router_ = router_.clone();
-                    let database_1_postgresql_connection_pool__ = database_1_postgresql_connection_pool_.clone();
-                    let database_2_postgresql_connection_pool__ = database_2_postgresql_connection_pool_.clone();
+                    let cloned_ = cloned.clone();
                     let serving_connection_future = http2_builder.serve_connection(
                         TokioIo::new(tcp_stream),
                         service_fn(
                             move |request: Req<Incoming>| -> _ {
-                                let router__ = router_.clone();
-                                let database_1_postgresql_connection_pool___ = database_1_postgresql_connection_pool__.clone();
-                                let database_2_postgresql_connection_pool___ = database_2_postgresql_connection_pool__.clone();
+                                let cloned__ = cloned_.clone();
                                 return async move {
                                     let response = Self::resolveXXX(
-                                        environment_configuration,
-                                        router__,
-                                        database_1_postgresql_connection_pool___,
-                                        database_2_postgresql_connection_pool___,
                                         request,
+                                        environment_configuration,
+                                        cloned__,
                                     )
                                     .await;
                                     return Ok::<_, Void>(response);
@@ -934,13 +932,10 @@ impl CommandProcessor<RunServer> {
         }
         return Ok(router);
     }
-    // DELETE
     fn resolveXXX<'a, T>(
-        environment_configuration: &'a EnvironmentConfiguration,
-        router: Arc<Router<ActionRoute_>>,
-        database_1_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        database_2_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
         request: Req<Incoming>,
+        environment_configuration: &'a EnvironmentConfiguration,
+        cloned: Arc<Cloned<T>>,
     ) -> impl Future<Output = Res<Full<Bytes>>> + Send + Capture<&'a Void>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -949,11 +944,6 @@ impl CommandProcessor<RunServer> {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
         return async move {
-
-            // В одну структуру и Arc, чтобы клонировать эту структуру один раз.
-        //     router: Arc<Router<ActionRoute_>>,
-        // database_1_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        // database_2_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
 
 
             return Res::new(Full::new(Bytes::from("Hello World!")));
@@ -1379,7 +1369,17 @@ impl CommandProcessor<RunServer> {
         return Ok(signal_);
     }
 }
-
+struct Cloned<T>
+where
+    T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+    <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+    <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
+    <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
+{
+    router: Router<ActionRoute_>,
+    database_1_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+    database_2_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
+}
 // http2_builder = http2_builder
 //     .tcp_nodelay(environment_configuration.application_server.tcp.nodelay)
 //     .tcp_sleep_on_accept_errors(environment_configuration.application_server.tcp.sleep_on_accept_errors)
