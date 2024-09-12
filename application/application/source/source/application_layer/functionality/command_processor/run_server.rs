@@ -23,9 +23,7 @@ use std::{
     sync::{OnceLock
     },
 };
-use tokio::{
-    runtime::Builder as RuntimeBuilder,
-};
+use tokio::runtime::{Builder as RuntimeBuilder, Runtime};
 use tracing::Level;
 use tracing_appender::non_blocking::{
     NonBlocking,
@@ -53,7 +51,10 @@ impl CommandProcessor<RunServer> {
         {
             _worker_guard = Self::initialize_stdout_logger();
         }
-        Self::run_runtime(environment_configuration)?;
+        let runtime = Self::initialize_runtime(environment_configuration)?;
+        runtime.block_on(
+            HttpServer::run(environment_configuration),
+        )?;
         return Ok(());
     }
     fn initialize_environment() -> Result<&'static EnvironmentConfiguration, AggregateError> {
@@ -126,7 +127,7 @@ impl CommandProcessor<RunServer> {
         )?;
         return Ok(());
     }
-    fn run_runtime(environment_configuration: &'static EnvironmentConfiguration) -> Result<(), AggregateError> {
+    fn initialize_runtime(environment_configuration: &'static EnvironmentConfiguration) -> Result<Runtime, AggregateError> {
         if environment_configuration.tokio_runtime.maximum_blocking_threads_quantity == 0
             || environment_configuration.tokio_runtime.worker_threads_quantity == 0
             || environment_configuration.tokio_runtime.worker_thread_stack_size < (1024 * 1024)
@@ -141,21 +142,19 @@ impl CommandProcessor<RunServer> {
                 ),
             );
         }
-        RuntimeBuilder::new_multi_thread()
-            .max_blocking_threads(environment_configuration.tokio_runtime.maximum_blocking_threads_quantity)
-            .worker_threads(environment_configuration.tokio_runtime.worker_threads_quantity)
-            .thread_stack_size(environment_configuration.tokio_runtime.worker_thread_stack_size)
-            .enable_all()
-            .build()
-            .into_runtime(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            )?
-            .block_on(
-                HttpServer::run(environment_configuration),
-            )?;
-        return Ok(());
+        return Ok(
+            RuntimeBuilder::new_multi_thread()
+                .max_blocking_threads(environment_configuration.tokio_runtime.maximum_blocking_threads_quantity)
+                .worker_threads(environment_configuration.tokio_runtime.worker_threads_quantity)
+                .thread_stack_size(environment_configuration.tokio_runtime.worker_thread_stack_size)
+                .enable_all()
+                .build()
+                .into_runtime(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?
+        );
     }
 }
