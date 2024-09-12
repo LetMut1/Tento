@@ -1,15 +1,12 @@
 use super::CommandProcessor;
-use crate::{
-    infrastructure_layer::{
-        data::{
-            control_type::{
-                RunServer,
-            },
-            environment_configuration::environment_configuration::EnvironmentConfiguration,
-        },
-        functionality::service::{
-            http_server::HttpServer, loader::Loader,
-        },
+use crate::infrastructure_layer::{
+    data::{
+        control_type::RunServer,
+        environment_configuration::environment_configuration::EnvironmentConfiguration,
+    },
+    functionality::service::{
+        http_server::HttpServer,
+        loader::Loader,
     },
 };
 use aggregate_error::{
@@ -19,11 +16,14 @@ use aggregate_error::{
     OptionConverter,
     ResultConverter,
 };
-use std::{
-    sync::{OnceLock
-    },
+use std::sync::{
+    atomic::AtomicU64,
+    OnceLock,
 };
-use tokio::runtime::{Builder as RuntimeBuilder, Runtime};
+use tokio::runtime::{
+    Builder as RuntimeBuilder,
+    Runtime,
+};
 use tracing::Level;
 use tracing_appender::non_blocking::{
     NonBlocking,
@@ -36,7 +36,6 @@ use tracing_appender::rolling::{
     Rotation,
 };
 use tracing_subscriber::FmtSubscriber;
-use std::sync::atomic::AtomicU64;
 static CONNECTION_QUANTITY: AtomicU64 = AtomicU64::new(0);
 static ENVIRONMENT_CONFIGURATION: OnceLock<EnvironmentConfiguration> = OnceLock::new();
 impl CommandProcessor<RunServer> {
@@ -52,9 +51,7 @@ impl CommandProcessor<RunServer> {
             _worker_guard = Self::initialize_stdout_logger();
         }
         let runtime = Self::initialize_runtime(environment_configuration)?;
-        runtime.block_on(
-            HttpServer::run(environment_configuration),
-        )?;
+        runtime.block_on(HttpServer::run(environment_configuration))?;
         return Ok(());
     }
     fn initialize_environment() -> Result<&'static EnvironmentConfiguration, AggregateError> {
@@ -154,7 +151,7 @@ impl CommandProcessor<RunServer> {
                         line!(),
                         file!(),
                     ),
-                )?
+                )?,
         );
     }
 }

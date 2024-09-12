@@ -1,7 +1,5 @@
 use super::Creator;
-use crate::infrastructure_layer::data::{
-    capture::Capture,
-};
+use crate::infrastructure_layer::data::capture::Capture;
 use aggregate_error::{
     AggregateError,
     Backtrace,
@@ -24,21 +22,22 @@ impl Creator<Pool<PostgresConnectionManager<NoTls>>> {
             return Pool::builder()
                 .build(
                     PostgresConnectionManager::new(
-                    Config::from_str(database_url).into_logic(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    )?,
-                    NoTls,
+                        Config::from_str(database_url).into_logic(
+                            Backtrace::new(
+                                line!(),
+                                file!(),
+                            ),
+                        )?,
+                        NoTls,
+                    ),
                 )
-            ).await
-            .into_runtime(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            );
+                .await
+                .into_runtime(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                );
         };
     }
 }

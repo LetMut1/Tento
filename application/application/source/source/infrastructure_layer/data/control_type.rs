@@ -1,6 +1,10 @@
-use hyper::{body::Incoming, Request as HyperRequest, Response as HyperResponse};
-use http_body_util::Full;
 use bytes::Bytes;
+use http_body_util::Full;
+use hyper::{
+    body::Incoming,
+    Request as HyperRequest,
+    Response as HyperResponse,
+};
 pub struct ApplicationUser__Authorization___AuthorizeByFirstStep;
 pub struct ApplicationUser__Authorization___AuthorizeByLastStep;
 pub struct ApplicationUser__Authorization___CheckEmailForExisting;

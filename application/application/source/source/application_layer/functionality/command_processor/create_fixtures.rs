@@ -30,9 +30,7 @@ use crate::{
     infrastructure_layer::{
         data::{
             capture::Capture,
-            control_type::{
-                CreateFixtures,
-            },
+            control_type::CreateFixtures,
             environment_configuration::environment_configuration::EnvironmentConfiguration,
         },
         functionality::{
@@ -55,20 +53,20 @@ use crate::{
         },
     },
 };
-use bb8_postgres::PostgresConnectionManager;
 use aggregate_error::{
     AggregateError,
     Backtrace,
     ResultConverter,
 };
 use bb8::Pool;
+use bb8_postgres::PostgresConnectionManager;
 use rand::{
     thread_rng,
     Rng,
 };
-use tokio_postgres::NoTls;
 use std::future::Future;
 use tokio::runtime::Builder;
+use tokio_postgres::NoTls;
 use void::Void;
 impl CommandProcessor<CreateFixtures> {
     const APPLICATION_USER_DEVICE__ID_PART: &'static str = "device";
@@ -131,9 +129,8 @@ impl CommandProcessor<CreateFixtures> {
     }
     fn create_fixtures<'a>(environment_configuration: &'a EnvironmentConfiguration) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
-            let database_1_postgresql_connection_pool = Creator::<Pool<PostgresConnectionManager<NoTls>>>::create(
-                environment_configuration.resource.postgresql.database_1_url.as_str(),
-            ).await?;
+            let database_1_postgresql_connection_pool =
+                Creator::<Pool<PostgresConnectionManager<NoTls>>>::create(environment_configuration.resource.postgresql.database_1_url.as_str()).await?;
             let application_user__password = Self::APPLICATION_USER__PASSWORD.to_string();
             let application_user__password_hash = Encoder::<ApplicationUser_Password>::encode(application_user__password.as_str())?;
             let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.into_runtime(

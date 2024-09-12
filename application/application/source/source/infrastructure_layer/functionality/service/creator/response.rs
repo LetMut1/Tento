@@ -1,17 +1,21 @@
 use super::Creator;
 use crate::infrastructure_layer::data::control_type::Response;
-use http::{
-    header,HeaderMap, HeaderValue, StatusCode, Version
-};
-use hyper::Response as HyperResponse;
-use http_body_util::Full;
 use bytes::Bytes;
+use http::{
+    header,
+    HeaderMap,
+    HeaderValue,
+    StatusCode,
+    Version,
+};
+use http_body_util::Full;
+use hyper::Response as HyperResponse;
 use std::convert::From;
 impl Creator<Response> {
     pub const HEADER_VALUE_CONTENT_TYPE: HeaderValue = HeaderValue::from_static("application/octet-stream");
     pub const HEADER_VALUE_X_CONTENT_TYPE_OPTIONS: HeaderValue = HeaderValue::from_static("nosniff");
     fn create(status_code: StatusCode, data: Option<Vec<u8>>) -> Response {
-        let mut header_map = HeaderMap::new();                      // TODO TODO TODO TODO TODO  ContentLength is needed?
+        let mut header_map = HeaderMap::new(); // TODO TODO TODO TODO TODO  ContentLength is needed?
         header_map.append(
             header::CONTENT_TYPE,
             Self::HEADER_VALUE_CONTENT_TYPE,

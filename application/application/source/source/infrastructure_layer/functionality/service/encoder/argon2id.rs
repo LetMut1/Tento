@@ -1,47 +1,57 @@
 use super::Encoder;
 use crate::infrastructure_layer::data::control_type::Argon2Id;
 use aggregate_error::{
-    AggregateError, Backtrace, Common, ResultConverter, OptionConverter,
+    AggregateError,
+    Backtrace,
+    Common,
+    OptionConverter,
+    ResultConverter,
 };
 use argon2::{
-    Algorithm,
-    Version,
-    Params,
     password_hash::{
         rand_core::OsRng,
-        PasswordHash, PasswordHasher, PasswordVerifier, SaltString,
+        PasswordHash,
+        PasswordHasher,
+        PasswordVerifier,
+        SaltString,
     },
-    Argon2
+    Algorithm,
+    Argon2,
+    Params,
+    Version,
 };
 use std::sync::OnceLock;
 static ARGON2: OnceLock<Argon2<'static>> = OnceLock::new();
 impl Encoder<Argon2Id> {
     pub fn encode<'a>(data: &'a [u8]) -> Result<String, AggregateError> {
         return Ok(
-            Self::get()?.hash_password(
-                data,
-                &SaltString::generate(OsRng),
-            )
-            .into_indefinite_argument(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            )?
-            .to_string()
-        );
-    }
-    pub fn is_valid<'a>(data: &'a [u8], encoded_data: &'a str) -> Result<bool, AggregateError> {
-        return Ok(
-            Self::get()?.verify_password(
-                data,
-                &PasswordHash::new(encoded_data).into_indefinite_argument(
+            Self::get()?
+                .hash_password(
+                    data,
+                    &SaltString::generate(OsRng),
+                )
+                .into_indefinite_argument(
                     Backtrace::new(
                         line!(),
                         file!(),
                     ),
-                )?,
-            ).is_ok()
+                )?
+                .to_string(),
+        );
+    }
+    pub fn is_valid<'a>(data: &'a [u8], encoded_data: &'a str) -> Result<bool, AggregateError> {
+        return Ok(
+            Self::get()?
+                .verify_password(
+                    data,
+                    &PasswordHash::new(encoded_data).into_indefinite_argument(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )?,
+                )
+                .is_ok(),
         );
     }
     fn get() -> Result<&'static Argon2<'static>, AggregateError> {
@@ -53,7 +63,7 @@ impl Encoder<Argon2Id> {
                         Algorithm::Argon2id,
                         Version::V0x13,
                         Params::default(),
-                    )
+                    ),
                 ) {
                     return Err(
                         AggregateError::new_logic_(

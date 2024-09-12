@@ -33,8 +33,12 @@ use crate::{
             environment_configuration::environment_configuration::EnvironmentConfiguration,
         },
         functionality::service::{
-            creator::Creator,
-            logger::Logger, spawner::Spawner,
+            creator::{
+                router::Router,
+                Creator,
+            },
+            logger::Logger,
+            spawner::Spawner,
         },
     },
     presentation_layer::{
@@ -58,29 +62,39 @@ use aggregate_error::{
 };
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager;
-use crate::infrastructure_layer::functionality::service::creator::router::Router;
+use hyper::{
+    server::conn::http2::Builder,
+    service::service_fn,
+    Method,
+};
+use hyper_util::rt::{
+    tokio::TokioExecutor,
+    TokioIo,
+};
 use std::{
-    future::Future, sync::{
-        atomic::Ordering, Arc,
-    }, time::Duration
+    future::Future,
+    sync::{
+        atomic::{
+            AtomicU64,
+            Ordering,
+        },
+        Arc,
+    },
+    time::Duration,
 };
 use tokio::{
+    net::TcpListener,
     signal::unix::SignalKind,
 };
 use tokio_postgres::{
     tls::{
         MakeTlsConnect,
         TlsConnect,
-    }, NoTls, Socket
+    },
+    NoTls,
+    Socket,
 };
 use void::Void;
-use hyper::server::conn::http2::Builder;
-use hyper::service::service_fn;
-use hyper::Method;
-use tokio::net::TcpListener;
-use hyper_util::rt::TokioIo;
-use hyper_util::rt::tokio::TokioExecutor;
-use std::sync::atomic::AtomicU64;
 static CONNECTION_QUANTITY: AtomicU64 = AtomicU64::new(0);
 pub struct HttpServer;
 impl HttpServer {
@@ -91,17 +105,20 @@ impl HttpServer {
                     router: Creator::<Router>::create()?,
                     database_1_postgresql_connection_pool: Creator::<Pool<PostgresConnectionManager<NoTls>>>::create(
                         environment_configuration.resource.postgresql.database_1_url.as_str(),
-                    ).await?,
+                    )
+                    .await?,
                     database_2_postgresql_connection_pool: Creator::<Pool<PostgresConnectionManager<NoTls>>>::create(
                         environment_configuration.resource.postgresql.database_2_url.as_str(),
-                    ).await?,
+                    )
+                    .await?,
                 },
             );
             'a: loop {
                 if let Err(aggregate_error) = Self::run_(
                     environment_configuration,
                     cloned.clone(),
-                ).await
+                )
+                .await
                 {
                     Logger::<AggregateError>::log(&aggregate_error);
                     tokio::time::sleep(Duration::from_secs(1)).await;
@@ -112,10 +129,7 @@ impl HttpServer {
             return Ok(());
         };
     }
-    fn run_<T>(
-        environment_configuration: &'static EnvironmentConfiguration,
-        cloned: Arc<Cloned<T>>,
-    ) -> impl Future<Output = Result<(), AggregateError>> + Send
+    fn run_<T>(environment_configuration: &'static EnvironmentConfiguration, cloned: Arc<Cloned<T>>) -> impl Future<Output = Result<(), AggregateError>> + Send
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -136,8 +150,7 @@ impl HttpServer {
                 }
                 return ();
             };
-            let mut http2_builder = Builder::new(TokioExecutor::new())
-            .max_local_error_reset_streams(Some(1024));
+            let mut http2_builder = Builder::new(TokioExecutor::new()).max_local_error_reset_streams(Some(1024));
             http2_builder
                 .auto_date_header(false)
                 .max_header_list_size(environment_configuration.application_server.http.maximum_header_list_size)
@@ -151,23 +164,21 @@ impl HttpServer {
                 http2_builder.enable_connect_protocol();
             };
             match environment_configuration.application_server.http.keepalive {
-                Some(ref keepalive) => http2_builder
-                    .keep_alive_interval(Some(Duration::from_secs(keepalive.interval_duration)))
-                    .keep_alive_timeout(Duration::from_secs(keepalive.timeout_duration)),
+                Some(ref keepalive) => {
+                    http2_builder
+                        .keep_alive_interval(Some(Duration::from_secs(keepalive.interval_duration)))
+                        .keep_alive_timeout(Duration::from_secs(keepalive.timeout_duration))
+                }
                 None => http2_builder.keep_alive_interval(None),
             };
             match environment_configuration.application_server.http.maximum_pending_accept_reset_streams {
                 Some(maximum_pending_accept_reset_streams) => http2_builder.max_pending_accept_reset_streams(Some(maximum_pending_accept_reset_streams)),
                 None => http2_builder.max_pending_accept_reset_streams(None),
             };
-
             if let Some(ref _tls) = environment_configuration.application_server.http.tls {
                 todo!("// TODO ssl_protocolsTLSv1 TLSv1.1 TLSv1.2 TLSv1.3;  ssl_ciphers HIGH:!aNULL:!MD5;")
             }
-            let tcp_listener = TcpListener::bind(
-                &environment_configuration.application_server.tcp.socket_address,
-            ).await
-            .into_logic(
+            let tcp_listener = TcpListener::bind(&environment_configuration.application_server.tcp.socket_address).await.into_logic(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -175,7 +186,7 @@ impl HttpServer {
             )?;
             let serving_connection_registry_future = async move {
                 '_a: loop {
-                    let tcp_stream = tcp_listener.accept().await.unwrap().0;  // TODO TODO TODOUNWRAP TODO UNWRAP TODO UNWRAP TODO UNWRAP TODO UNWRAP
+                    let tcp_stream = tcp_listener.accept().await.unwrap().0; // TODO TODO TODOUNWRAP TODO UNWRAP TODO UNWRAP TODO UNWRAP TODO UNWRAP
                     let cloned_ = cloned.clone();
                     let serving_connection_future = http2_builder.serve_connection(
                         TokioIo::new(tcp_stream),
@@ -191,21 +202,27 @@ impl HttpServer {
                                     .await;
                                     return Ok::<_, Void>(response);
                                 };
-                            }
+                            },
                         ),
                     );
                     Spawner::<TokioNonBlockingTask>::spawn_into_background(
                         async move {
-                            CONNECTION_QUANTITY.fetch_add(1, Ordering::Relaxed);
+                            CONNECTION_QUANTITY.fetch_add(
+                                1,
+                                Ordering::Relaxed,
+                            );
                             let result = serving_connection_future.await.into_runtime(
                                 Backtrace::new(
                                     line!(),
                                     file!(),
                                 ),
                             );
-                            CONNECTION_QUANTITY.fetch_sub(1, Ordering::Relaxed);
+                            CONNECTION_QUANTITY.fetch_sub(
+                                1,
+                                Ordering::Relaxed,
+                            );
                             return result;
-                        }
+                        },
                     );
                 }
                 return ();
