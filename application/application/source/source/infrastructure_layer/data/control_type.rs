@@ -1,11 +1,9 @@
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
-use hyper::{
-    Body,
-    Request as HyperRequest,
-    Response as HyperResponse,
-};
 use tokio_postgres::NoTls;
+use hyper_x::{body::Incoming, Request as HyperRequest, Response as HyperResponse};
+use http_body_util::Full;
+use bytes::Bytes;
 pub struct ApplicationUser__Authorization___AuthorizeByFirstStep;
 pub struct ApplicationUser__Authorization___AuthorizeByLastStep;
 pub struct ApplicationUser__Authorization___CheckEmailForExisting;
@@ -46,7 +44,7 @@ pub struct TokioBlockingTask;
 pub struct TokioNonBlockingTask;
 pub struct UnixTime;
 pub type PostgresqlConnectionPoolNoTls = Pool<PostgresqlConnectionManager<NoTls>>;
-pub type Request = HyperRequest<Body>;
-pub type Response = HyperResponse<Body>;
+pub type Request = HyperRequest<Incoming>;
+pub type Response = HyperResponse<Full<Bytes>>;
 #[cfg(feature = "manual_testing")]
 pub struct Json;

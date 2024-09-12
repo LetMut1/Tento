@@ -11,7 +11,7 @@ use formatter::{
     report_variant_2,
     Formatter as Formatter_,
 };
-use http::method::Method;
+use http_x::method::Method;
 impl Formatter<ActionRound> {
     pub fn format<'a>(row_data: &'a RowData) -> String {
         return format!(

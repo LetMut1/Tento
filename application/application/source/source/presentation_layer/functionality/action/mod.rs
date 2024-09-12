@@ -18,8 +18,8 @@ use crate::{
     },
     presentation_layer::functionality::service::processor::Processor,
 };
-use http::request::Parts;
-use hyper::Body;
+use hyper_x::body::Incoming;
+use http_x::request::Parts;
 use serde::{
     Deserialize as SerdeDeserialize,
     Serialize as SerdeSerialize,
@@ -97,6 +97,6 @@ where
     }
 }
 pub struct Inner<'a> {
-    pub body: &'a mut Body,
+    pub incoming: &'a mut Incoming,
     pub parts: &'a Parts,
 }

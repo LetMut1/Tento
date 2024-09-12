@@ -63,11 +63,6 @@ use aggregate_error::{
 };
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
-use hyper::{
-    server::conn::AddrStream,
-    Method,
-    Server,
-};
 use matchit::Router;
 use std::{
     future::Future,
@@ -105,8 +100,8 @@ use http_body_util::Full;
 use hyper_x::server::conn::http2::Builder as Http2Builder;
 use hyper_x::server::conn::http2::Connection;
 use hyper_x::service::service_fn;
+use hyper_x::Method;
 use hyper_x::service::Service as HyperService;
-use hyper_x::{body::Incoming, Request as Req, Response as Res};
 use tokio::net::TcpListener;
 use std::fmt::Debug;
 use hyper_x::body::Body;
@@ -117,10 +112,6 @@ use std::pin::Pin;
 use hyper_util::rt::tokio::TokioExecutor;
 use hyper_util::server::graceful::GracefulShutdown;
 use std::sync::atomic::AtomicU64;
-
-
-
-
 static CONNECTION_QUANTITY: AtomicU64 = AtomicU64::new(0);
 static ENVIRONMENT_CONFIGURATION: OnceLock<EnvironmentConfiguration> = OnceLock::new();
 impl CommandProcessor<RunServer> {
@@ -233,12 +224,11 @@ impl CommandProcessor<RunServer> {
         return Ok(());
     }
     fn serve(environment_configuration: &'static EnvironmentConfiguration) -> impl Future<Output = Result<(), AggregateError>> + Send {
-        const QUANTITY_OF_SECONDS_FOR_RERUN_SERVING: u64 = 1;
         return async move {
             'a: loop {
                 if let Err(aggregate_error) = Self::serve_(environment_configuration).await {
                     Logger::<AggregateError>::log(&aggregate_error);
-                    tokio::time::sleep(Duration::from_secs(QUANTITY_OF_SECONDS_FOR_RERUN_SERVING)).await;
+                    tokio::time::sleep(Duration::from_secs(1)).await;
                     continue 'a;
                 }
                 break 'a;
@@ -319,7 +309,7 @@ impl CommandProcessor<RunServer> {
                     let serving_connection_future = http2_builder.serve_connection(
                         TokioIo::new(tcp_stream),
                         service_fn(
-                            move |request: Req<Incoming>| -> _ {
+                            move |request: Request| -> _ {
                                 let cloned__ = cloned_.clone();
                                 return async move {
                                     let response = Self::resolveXXX(
@@ -933,10 +923,10 @@ impl CommandProcessor<RunServer> {
         return Ok(router);
     }
     fn resolveXXX<'a, T>(
-        request: Req<Incoming>,
+        request: Request,
         environment_configuration: &'a EnvironmentConfiguration,
         cloned: Arc<Cloned<T>>,
-    ) -> impl Future<Output = Res<Full<Bytes>>> + Send + Capture<&'a Void>
+    ) -> impl Future<Output = Response> + Send + Capture<&'a Void>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -946,7 +936,7 @@ impl CommandProcessor<RunServer> {
         return async move {
 
 
-            return Res::new(Full::new(Bytes::from("Hello World!")));
+            return hyper_x::Response::new(Full::new(Bytes::from("Hello World!")));
 
 
 
@@ -968,9 +958,9 @@ impl CommandProcessor<RunServer> {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
         return async move {
-            let (parts, mut body) = request.into_parts();
+            let (parts, mut incoming) = request.into_parts();
             let mut action_inner = ActionInner {
-                body: &mut body,
+                incoming: &mut incoming,
                 parts: &parts,
             };
             let r#match = match router.at(parts.uri.path()) {

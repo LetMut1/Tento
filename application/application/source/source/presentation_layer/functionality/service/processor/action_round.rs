@@ -33,7 +33,8 @@ use aggregate_error::{
     ResultConverter,
 };
 use bytes::Buf;
-use http::request::Parts;
+use http_x::request::Parts;
+use http_body_util::BodyExt;
 use serde::{
     Deserialize as SerdeDeserialize,
     Serialize as SerdeSerialize,
@@ -84,13 +85,16 @@ impl Processor<ActionRound> {
                         ),
                     );
                 }
-                let bytes = hyper::body::to_bytes(&mut *inner.body).await.into_indefinite_argument(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
+                let incoming = Serializer::<SS>::deserialize::<'_, <ActionProcessor<AP> as ActionProcessor_>::Incoming>(
+                    inner.incoming.collect().await.into_runtime(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )?
+                    .aggregate()
+                    .chunk(),
                 )?;
-                let incoming = Serializer::<SS>::deserialize::<'_, <ActionProcessor<AP> as ActionProcessor_>::Incoming>(bytes.chunk())?;
                 let unified_report = ActionProcessor::<AP>::process(
                     action_processor_inner,
                     incoming,
