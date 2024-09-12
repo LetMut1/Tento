@@ -6,7 +6,7 @@ use http_x::{
 use hyper_x::Response as HyperResponse;
 use http_body_util::Full;
 use bytes::Bytes;
-use std::{convert::From};
+use std::convert::From;
 impl Creator<Response> {
     pub const HEADER_VALUE_CONTENT_TYPE: HeaderValue = HeaderValue::from_static("application/octet-stream");
     pub const HEADER_VALUE_X_CONTENT_TYPE_OPTIONS: HeaderValue = HeaderValue::from_static("nosniff");

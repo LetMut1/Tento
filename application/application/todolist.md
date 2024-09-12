@@ -69,7 +69,19 @@ https://stackoverflow.com/questions/58819199/how-to-keep-long-connection-in-http
 // Лайки к публикации постоянны.
 // СДелал оптимизацию запросов для:
 // - application_user_authorization. // ToDo ДОделать остальные. и сделать репозиторий по новым правилам.
-// Настроить TCP.
+// Настроить TCP:
+     http2_builder = http2_builder
+         .tcp_nodelay(environment_configuration.application_server.tcp.nodelay)
+         .tcp_sleep_on_accept_errors(environment_configuration.application_server.tcp.sleep_on_accept_errors)
+         .tcp_keepalive_retries(environment_configuration.application_server.tcp.keepalive.retries_quantity);
+     http2_builder = match environment_configuration.application_server.tcp.keepalive.duration {
+         Some(duration) => http2_builder.tcp_keepalive(Some(Duration::from_secs(duration))),
+         None => http2_builder.tcp_keepalive(None),
+     };
+     http2_builder = match environment_configuration.application_server.tcp.keepalive.interval_duration {
+         Some(interval_duration) => http2_builder.tcp_keepalive_interval(Some(Duration::from_secs(interval_duration))),
+         None => http2_builder.tcp_keepalive_interval(None),
+     };
 // Hyper TCP/HTTp connection pool - ?
 
 - сделать миграции как команду, чтобы можно было запускать из кода и не использовать сторонний сервис по типу Дизеля.

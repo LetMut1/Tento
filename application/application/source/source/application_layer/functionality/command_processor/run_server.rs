@@ -65,11 +65,9 @@ use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use matchit::Router;
 use std::{
-    future::Future,
-    sync::{
+    future::Future, sync::{
         atomic::Ordering, Arc, OnceLock
-    },
-    time::Duration,
+    }, time::Duration
 };
 use tokio::{
     runtime::Builder as RuntimeBuilder,
@@ -95,22 +93,12 @@ use tracing_appender::rolling::{
 };
 use tracing_subscriber::FmtSubscriber;
 use void::Void;
-use bytes::Bytes;
-use http_body_util::Full;
 use hyper_x::server::conn::http2::Builder as Http2Builder;
-use hyper_x::server::conn::http2::Connection;
 use hyper_x::service::service_fn;
 use hyper_x::Method;
-use hyper_x::service::Service as HyperService;
 use tokio::net::TcpListener;
-use std::fmt::Debug;
-use hyper_x::body::Body;
-use std::marker::PhantomData;
 use hyper_util::rt::TokioIo;
-use std::net::SocketAddr;
-use std::pin::Pin;
 use hyper_util::rt::tokio::TokioExecutor;
-use hyper_util::server::graceful::GracefulShutdown;
 use std::sync::atomic::AtomicU64;
 static CONNECTION_QUANTITY: AtomicU64 = AtomicU64::new(0);
 static ENVIRONMENT_CONFIGURATION: OnceLock<EnvironmentConfiguration> = OnceLock::new();
@@ -312,7 +300,7 @@ impl CommandProcessor<RunServer> {
                             move |request: Request| -> _ {
                                 let cloned__ = cloned_.clone();
                                 return async move {
-                                    let response = Self::resolveXXX(
+                                    let response = Self::resolve(
                                         request,
                                         environment_configuration,
                                         cloned__,
@@ -922,34 +910,10 @@ impl CommandProcessor<RunServer> {
         }
         return Ok(router);
     }
-    fn resolveXXX<'a, T>(
+    fn resolve<'a, T>(
         request: Request,
         environment_configuration: &'a EnvironmentConfiguration,
         cloned: Arc<Cloned<T>>,
-    ) -> impl Future<Output = Response> + Send + Capture<&'a Void>
-    where
-        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
-        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
-        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
-        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
-    {
-        return async move {
-
-
-            return hyper_x::Response::new(Full::new(Bytes::from("Hello World!")));
-
-
-
-
-
-        };
-    }
-    fn resolve<'a, T>(
-        environment_configuration: &'a EnvironmentConfiguration,
-        router: Arc<Router<ActionRoute_>>,
-        database_1_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        database_2_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
-        request: Request,
     ) -> impl Future<Output = Response> + Send + Capture<&'a Void>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
@@ -963,7 +927,7 @@ impl CommandProcessor<RunServer> {
                 incoming: &mut incoming,
                 parts: &parts,
             };
-            let r#match = match router.at(parts.uri.path()) {
+            let r#match = match cloned.router.at(parts.uri.path()) {
                 Ok(r#match_) => r#match_,
                 Err(_) => {
                     return Action::<RouteNotFound>::run(&mut action_inner);
@@ -971,8 +935,8 @@ impl CommandProcessor<RunServer> {
             };
             let action_processor_inner = ActionProcessorInner {
                 environment_configuration,
-                database_1_postgresql_connection_pool: &database_1_postgresql_connection_pool,
-                database_2_postgresql_connection_pool: &database_2_postgresql_connection_pool,
+                database_1_postgresql_connection_pool: &cloned.database_1_postgresql_connection_pool,
+                database_2_postgresql_connection_pool: &cloned.database_2_postgresql_connection_pool,
             };
             match r#match.value {
                 &ActionRoute_::ApplicationUser__Authorization {
@@ -1370,15 +1334,3 @@ where
     database_1_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
     database_2_postgresql_connection_pool: Pool<PostgresqlConnectionManager<T>>,
 }
-// http2_builder = http2_builder
-//     .tcp_nodelay(environment_configuration.application_server.tcp.nodelay)
-//     .tcp_sleep_on_accept_errors(environment_configuration.application_server.tcp.sleep_on_accept_errors)
-//     .tcp_keepalive_retries(environment_configuration.application_server.tcp.keepalive.retries_quantity);
-// http2_builder = match environment_configuration.application_server.tcp.keepalive.duration {
-//     Some(duration) => http2_builder.tcp_keepalive(Some(Duration::from_secs(duration))),
-//     None => http2_builder.tcp_keepalive(None),
-// };
-// http2_builder = match environment_configuration.application_server.tcp.keepalive.interval_duration {
-//     Some(interval_duration) => http2_builder.tcp_keepalive_interval(Some(Duration::from_secs(interval_duration))),
-//     None => http2_builder.tcp_keepalive_interval(None),
-// };
