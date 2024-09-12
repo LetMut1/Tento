@@ -1,7 +1,7 @@
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
 use tokio_postgres::NoTls;
-use hyper_x::{body::Incoming, Request as HyperRequest, Response as HyperResponse};
+use hyper::{body::Incoming, Request as HyperRequest, Response as HyperResponse};
 use http_body_util::Full;
 use bytes::Bytes;
 pub struct ApplicationUser__Authorization___AuthorizeByFirstStep;

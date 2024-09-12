@@ -33,7 +33,7 @@ use aggregate_error::{
     ResultConverter,
 };
 use bytes::Buf;
-use http_x::request::Parts;
+use http::request::Parts;
 use http_body_util::BodyExt;
 use serde::{
     Deserialize as SerdeDeserialize,

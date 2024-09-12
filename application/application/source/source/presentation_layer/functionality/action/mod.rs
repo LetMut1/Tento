@@ -18,8 +18,8 @@ use crate::{
     },
     presentation_layer::functionality::service::processor::Processor,
 };
-use hyper_x::body::Incoming;
-use http_x::request::Parts;
+use hyper::body::Incoming;
+use http::request::Parts;
 use serde::{
     Deserialize as SerdeDeserialize,
     Serialize as SerdeSerialize,

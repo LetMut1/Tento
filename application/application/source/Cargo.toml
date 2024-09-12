@@ -34,8 +34,10 @@ chrono = { package = "chrono", version = "=0.4.38", default-features = true, fea
 const_format = { package = "const_format", version = "=0.2.33", default-features = true, features = [], optional = true }
 formatter = { path = "./forced_crate/formatter", package = "formatter", version = "=1.0.0", default-features = true, features = [], optional = false }
 hmac = { package = "hmac", version = "=0.12.1", default-features = true, features = [], optional = false }
-http = { package = "http", version = "=0.2.12", default-features = true, features = [], optional = false }# TODO
-hyper = { package = "hyper", version = "=0.14.30", default-features = true, features = ["full"], optional = false }# TODO
+http = { package = "http", version = "=1.1.0", default-features = true, features = [], optional = false }
+http-body-util = { package = "http-body-util", version = "=0.1.2", default-features = true, features = [], optional = false }
+hyper = { package = "hyper", version = "=1.4.1", default-features = true, features = ["full"], optional = false }
+hyper_util = { package = "hyper-util", version = "=0.1.8", default-features = true, features = ["full"], optional = false }
 lettre = { package = "lettre", version = "=0.9.6", default-features = true, features = [], optional = false }# ЗАМЕНИТЬ# ЗАМЕНИТЬ# ЗАМЕНИТЬ# ЗАМЕНИТЬ# ЗАМЕНИТЬ
 lettre_email = { package = "lettre_email", version = "=0.9.4", default-features = true, features = [], optional = false }# ЗАМЕНИТЬ# ЗАМЕНИТЬ# ЗАМЕНИТЬ# ЗАМЕНИТЬ# ЗАМЕНИТЬ
 matchit = { package = "matchit", version = "=0.8.4", default-features = true, features = [], optional = false }
@@ -54,13 +56,6 @@ tracing-subscriber = { package = "tracing-subscriber", version = "=0.3.18", defa
 unified_report = { path = "./forced_crate/unified_report", package = "unified_report", version = "=1.0.0", default-features = true, features = [], optional = false }
 uuid = { package = "uuid", version = "=1.10.0", default-features = true, features = ["v4"], optional = false }
 void = { path = "./forced_crate/void", package = "void", version = "=1.0.0", default-features = true, features = [], optional = false }
-
-
-http_x = { package = "http", version = "=1.1.0", default-features = true, features = [], optional = false }
-hyper_x = { package = "hyper", version = "=1.4.1", default-features = true, features = ["full"], optional = false }
-hyper_util = { package = "hyper-util", version = "=0.1.8", default-features = true, features = ["full"], optional = false }
-http-body-util = { package = "http-body-util", version = "=0.1.2", default-features = true, features = [], optional = false }
-
 
 [build-dependencies]
 cargo-emit = { package = "cargo-emit", version = "=0.2.1", default-features = true, features = [], optional = false }

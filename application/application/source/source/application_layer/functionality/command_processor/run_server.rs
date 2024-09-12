@@ -93,9 +93,9 @@ use tracing_appender::rolling::{
 };
 use tracing_subscriber::FmtSubscriber;
 use void::Void;
-use hyper_x::server::conn::http2::Builder as Http2Builder;
-use hyper_x::service::service_fn;
-use hyper_x::Method;
+use hyper::server::conn::http2::Builder as Http2Builder;
+use hyper::service::service_fn;
+use hyper::Method;
 use tokio::net::TcpListener;
 use hyper_util::rt::TokioIo;
 use hyper_util::rt::tokio::TokioExecutor;

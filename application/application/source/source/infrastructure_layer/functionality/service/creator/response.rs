@@ -1,9 +1,9 @@
 use super::Creator;
 use crate::infrastructure_layer::data::control_type::Response;
-use http_x::{
+use http::{
     header,HeaderMap, HeaderValue, StatusCode, Version
 };
-use hyper_x::Response as HyperResponse;
+use hyper::Response as HyperResponse;
 use http_body_util::Full;
 use bytes::Bytes;
 use std::convert::From;
