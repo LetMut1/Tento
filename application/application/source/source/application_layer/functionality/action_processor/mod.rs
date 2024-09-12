@@ -14,7 +14,7 @@ use bb8::{
     Pool,
     PooledConnection,
 };
-use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
+use bb8_postgres::PostgresConnectionManager;
 use std::{
     future::Future,
     marker::PhantomData,
@@ -53,8 +53,8 @@ where
     <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
 {
     pub environment_configuration: &'a EnvironmentConfiguration,
-    pub database_1_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
-    pub database_2_postgresql_connection_pool: &'a Pool<PostgresqlConnectionManager<T>>,
+    pub database_1_postgresql_connection_pool: &'a Pool<PostgresConnectionManager<T>>,
+    pub database_2_postgresql_connection_pool: &'a Pool<PostgresConnectionManager<T>>,
 }
 impl<'a, T> Inner<'a, T>
 where
@@ -63,7 +63,7 @@ where
     <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
     <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
 {
-    pub fn get_database_1_postgresql_pooled_connection<'b>(&'b self) -> impl Future<Output = Result<PooledConnection<PostgresqlConnectionManager<T>>, AggregateError>> + Send {
+    pub fn get_database_1_postgresql_pooled_connection<'b>(&'b self) -> impl Future<Output = Result<PooledConnection<PostgresConnectionManager<T>>, AggregateError>> + Send {
         return async move {
             return self.database_1_postgresql_connection_pool.get().await.into_runtime(
                 Backtrace::new(
@@ -73,7 +73,7 @@ where
             );
         };
     }
-    pub fn get_database_2_postgresql_pooled_connection<'b>(&'b self) -> impl Future<Output = Result<PooledConnection<PostgresqlConnectionManager<T>>, AggregateError>> + Send {
+    pub fn get_database_2_postgresql_pooled_connection<'b>(&'b self) -> impl Future<Output = Result<PooledConnection<PostgresConnectionManager<T>>, AggregateError>> + Send {
         return async move {
             return self.database_2_postgresql_connection_pool.get().await.into_runtime(
                 Backtrace::new(

@@ -10,7 +10,6 @@ use crate::infrastructure_layer::data::environment_configuration::{
         Logging,
         Postgresql,
         PrivateKey,
-        Redis,
         Resource,
         Tcp,
         TcpKeepalive,
@@ -192,9 +191,6 @@ impl Loader<EnvironmentConfiguration> {
                     postgresql: Postgresql {
                         database_1_url: environment_configuration_file.resource.postgresql.database_1_url.value,
                         database_2_url: environment_configuration_file.resource.postgresql.database_2_url.value,
-                    },
-                    redis: Redis {
-                        database_1_url: environment_configuration_file.resource.redis.database_1_url.value,
                     },
                     email_server: EmailServer {
                         socket_address: email_server_tcp_socket_address,

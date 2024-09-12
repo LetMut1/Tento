@@ -1,6 +1,3 @@
-use bb8::Pool;
-use bb8_postgres::PostgresConnectionManager as PostgresqlConnectionManager;
-use tokio_postgres::NoTls;
 use hyper::{body::Incoming, Request as HyperRequest, Response as HyperResponse};
 use http_body_util::Full;
 use bytes::Bytes;
@@ -43,7 +40,6 @@ pub struct RunServer;
 pub struct TokioBlockingTask;
 pub struct TokioNonBlockingTask;
 pub struct UnixTime;
-pub type PostgresqlConnectionPoolNoTls = Pool<PostgresqlConnectionManager<NoTls>>;
 pub type Request = HyperRequest<Incoming>;
 pub type Response = HyperResponse<Full<Bytes>>;
 #[cfg(feature = "manual_testing")]

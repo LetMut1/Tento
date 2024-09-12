@@ -52,15 +52,11 @@ pub struct Logging {
 }
 pub struct Resource {
     pub postgresql: Postgresql,
-    pub redis: Redis,
     pub email_server: EmailServer,
 }
 pub struct Postgresql {
     pub database_1_url: String,
     pub database_2_url: String,
-}
-pub struct Redis {
-    pub database_1_url: String,
 }
 pub struct EmailServer {
     pub socket_address: SocketAddr,

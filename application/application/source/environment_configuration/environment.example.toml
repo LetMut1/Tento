@@ -104,11 +104,6 @@ value = "postgres://root:password@database_1_postgresql/tento"
 [resource.postgresql.database_2_url]
 value = "postgres://root:password@database_2_postgresql/tento"
 
-[resource.redis]
-
-[resource.redis.database_1_url]
-value = "redis://redis"
-
 [resource.email_server]
 
 [resource.email_server.socket_address]

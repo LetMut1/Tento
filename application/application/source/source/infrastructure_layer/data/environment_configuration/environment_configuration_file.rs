@@ -64,17 +64,12 @@ pub struct Logging {
 #[derive(Deserialize)]
 pub struct Resource {
     pub postgresql: Postgresql,
-    pub redis: Redis,
     pub email_server: EmailServer,
 }
 #[derive(Deserialize)]
 pub struct Postgresql {
     pub database_1_url: Value<String>,
     pub database_2_url: Value<String>,
-}
-#[derive(Deserialize)]
-pub struct Redis {
-    pub database_1_url: Value<String>,
 }
 #[derive(Deserialize)]
 pub struct EmailServer {
