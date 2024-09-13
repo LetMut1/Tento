@@ -36,7 +36,6 @@ use tracing_appender::rolling::{
     Rotation,
 };
 use tracing_subscriber::FmtSubscriber;
-static CONNECTION_QUANTITY: AtomicU64 = AtomicU64::new(0);
 static ENVIRONMENT_CONFIGURATION: OnceLock<EnvironmentConfiguration> = OnceLock::new();
 impl CommandProcessor<RunServer> {
     pub fn process() -> Result<(), AggregateError> {
