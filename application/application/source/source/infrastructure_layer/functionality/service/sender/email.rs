@@ -1,51 +1,67 @@
+use std::future::Future;
+
 use super::Sender;
 use crate::infrastructure_layer::data::{
-    control_type::Email,
-    environment_configuration::environment_configuration::EnvironmentConfiguration,
+    capture::Capture, control_type::Email, environment_configuration::environment_configuration::EnvironmentConfiguration
 };
 use aggregate_error::{
     AggregateError,
-    Backtrace,
-    ResultConverter,
+    // Backtrace,
+    // ResultConverter,
 };
-use lettre::{
-    smtp::SmtpClient,
-    ClientSecurity,
-    Transport,
-};
-use lettre_email::EmailBuilder;
-use std::convert::Into;
+use void::Void;
+// use lettre::{
+
+//     message::header::ContentType, transport::smtp::authentication::Credentials, AsyncSmtpTransport,
+//     AsyncTransport, Message, Tokio1Executor,
+// };
+// use std::convert::Into;
 impl Sender<Email> {
-    //TODO  ASYNC client // TODO сразу можно положить объект в статику.  // TODO В предпродакшене, когда будет smtp-ссервер, настройить все через константы и енв
-    pub fn send<'a>(environment_configuration: &'a EnvironmentConfiguration, subject: &'a str, body: String, to: &'a str) -> Result<(), AggregateError> {
-        let email = EmailBuilder::new() //TODO
-            .subject(subject)
-            .text(body)
-            .from("from_changethis@yandex.ru".to_string())
-            .to(to)
-            .build()
-            .into_logic(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            )?;
-        let smtp_client = SmtpClient::new(
-            &environment_configuration.resource.email_server.socket_address,
-            ClientSecurity::None,
-        )
-        .into_logic(
-            Backtrace::new(
-                line!(),
-                file!(),
-            ),
-        )?;
-        smtp_client.transport().send(email.into()).into_runtime(
-            Backtrace::new(
-                line!(),
-                file!(),
-            ),
-        )?;
-        return Ok(());
+    pub fn send<'a>(
+        _environment_configuration: &'a EnvironmentConfiguration,
+        _subject: &'a str,
+        _body: String,
+        _to: &'a str
+    ) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
+        return async move {
+            // TODO сделать посторяему отправку при ошибке на количество времени (отправлять через секунду, пока не выйдет время) или раз.
+            return Ok(());
+        };
     }
 }
+// // TODO https://github.com/lettre/lettre/blob/master/examples/tokio1_smtp_tls.rs
+// let message = Message::builder()
+// .from(
+//     "YourDaddy@yandex.ru".parse().into_logic(
+//         Backtrace::new(
+//             line!(),
+//             file!(),
+//         ),
+//     )?,
+// )
+// .to(
+//     to.parse().into_logic(
+//         Backtrace::new(
+//             line!(),
+//             file!(),
+//         ),
+//     )?,
+// )
+// .subject(subject)
+// .body(body)
+// .into_logic(
+//     Backtrace::new(
+//         line!(),
+//         file!(),
+//     ),
+// )?;
+// let creds = Credentials::new("smtp_username".to_owned(), "smtp_password".to_owned());
+// let mailer: AsyncSmtpTransport<Tokio1Executor> =
+//     AsyncSmtpTransport::<Tokio1Executor>::relay("smtp.gmail.com")
+//         .unwrap()
+//         .credentials(creds)
+//         .build();
+// match mailer.send(message).await {
+//     Ok(_) => println!("Email sent successfully!"),
+//     Err(e) => panic!("Could not send email: {e:?}"),
+// }
