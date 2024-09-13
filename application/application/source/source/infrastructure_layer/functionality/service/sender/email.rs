@@ -18,7 +18,7 @@ use void::Void;
 // use std::convert::Into;
 impl Sender<Email> {
     pub fn send<'a>(
-        _environment_configuration: &'a EnvironmentConfiguration,
+        _environment_configuration: &'static EnvironmentConfiguration,
         _subject: &'a str,
         _body: String,
         _to: &'a str

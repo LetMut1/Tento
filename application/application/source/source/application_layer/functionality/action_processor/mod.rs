@@ -52,7 +52,7 @@ where
     <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
     <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
 {
-    pub environment_configuration: &'a EnvironmentConfiguration,
+    pub environment_configuration: &'static EnvironmentConfiguration,
     pub database_1_postgresql_connection_pool: &'a Pool<PostgresConnectionManager<T>>,
     pub database_2_postgresql_connection_pool: &'a Pool<PostgresConnectionManager<T>>,
 }

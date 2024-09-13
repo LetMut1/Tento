@@ -13,7 +13,7 @@ use aggregate_error::AggregateError;
 use void::Void;
 impl EmailSender<ApplicationUserResetPasswordToken<'_>> {
     pub fn send<'a>(
-        environment_configuration: &'a EnvironmentConfiguration,
+        environment_configuration: &'static EnvironmentConfiguration,
         application_user_reset_password_token__value: &'a str,
         application_user__email: &'a str,
         application_user_device__id: &'a str,

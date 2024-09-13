@@ -29,8 +29,7 @@ use crate::{
         data::{
             capture::Capture,
             control_type::{
-                ApplicationUser__Authorization___RegisterByFirstStep,
-                UnixTime,
+                ApplicationUser__Authorization___RegisterByFirstStep, TokioNonBlockingTask, UnixTime
             },
         },
         functionality::{
@@ -45,7 +44,7 @@ use crate::{
                 },
                 PostgresqlRepository,
             },
-            service::expiration_time_checker::ExpirationTimeChecker,
+            service::{expiration_time_checker::ExpirationTimeChecker, spawner::Spawner},
         },
     },
 };
@@ -230,12 +229,18 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
                 }
             };
             if can_send {
-                EmailSender::<ApplicationUserRegistrationToken<'_>>::send(
-                    inner.environment_configuration,
-                    application_user_registration_token__value.as_str(),
-                    incoming.application_user__email.as_str(),
-                    incoming.application_user_device__id.as_str(),
-                )?;
+                let environment_configuration_ = inner.environment_configuration;
+                Spawner::<TokioNonBlockingTask>::spawn_into_background(
+                    async move {
+                        EmailSender::<ApplicationUserRegistrationToken<'_>>::send(
+                            environment_configuration_,
+                            application_user_registration_token__value.as_str(),
+                            incoming.application_user__email.as_str(),
+                            incoming.application_user_device__id.as_str(),
+                        ).await?;
+                        return Ok(());
+                    }
+                );
             }
             let outcoming = Outcoming {
                 verification_message_sent: can_send,

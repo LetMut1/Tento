@@ -13,7 +13,7 @@ use aggregate_error::AggregateError;
 use void::Void;
 impl EmailSender<ApplicationUserRegistrationToken<'_>> {
     pub fn send<'a>(
-        environment_configuration: &'a EnvironmentConfiguration,
+        environment_configuration: &'static EnvironmentConfiguration,
         application_user_registration_token__value: &'a str,
         application_user__email: &'a str,
         application_user_device__id: &'a str,

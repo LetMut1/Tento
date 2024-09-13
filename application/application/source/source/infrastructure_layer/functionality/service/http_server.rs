@@ -2,7 +2,6 @@ use crate::{
     application_layer::functionality::action_processor::Inner as ActionProcessorInner,
     infrastructure_layer::{
         data::{
-            capture::Capture,
             control_type::{
                 ApplicationUser__Authorization___AuthorizeByFirstStep,
                 ApplicationUser__Authorization___AuthorizeByLastStep,
@@ -283,11 +282,11 @@ impl HttpServer {
             return Ok(());
         };
     }
-    fn process_request<'a, T>(
+    fn process_request<T>(
         request: Request,
-        environment_configuration: &'a EnvironmentConfiguration,
+        environment_configuration: &'static EnvironmentConfiguration,
         cloned: Arc<Cloned<T>>,
-    ) -> impl Future<Output = Response> + Send + Capture<&'a Void>
+    ) -> impl Future<Output = Response> + Send
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,

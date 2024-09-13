@@ -32,9 +32,7 @@ use crate::{
         data::{
             capture::Capture,
             control_type::{
-                ApplicationUser__Authorization___AuthorizeByFirstStep,
-                TokioBlockingTask,
-                UnixTime,
+                ApplicationUser__Authorization___AuthorizeByFirstStep, TokioBlockingTask, TokioNonBlockingTask, UnixTime
             },
         },
         functionality::{
@@ -310,12 +308,18 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                 }
             };
             if can_send {
-                EmailSender::<ApplicationUserAuthorizationToken<'_>>::send(
-                    inner.environment_configuration,
-                    application_user_authorization_token__value.as_str(),
-                    application_user__email.as_str(),
-                    incoming.application_user_device__id.as_str(),
-                )?;
+                let environment_configuration_ = inner.environment_configuration;
+                Spawner::<TokioNonBlockingTask>::spawn_into_background(
+                    async move {
+                        EmailSender::<ApplicationUserAuthorizationToken<'_>>::send(
+                            environment_configuration_,
+                            application_user_authorization_token__value.as_str(),
+                            application_user__email.as_str(),
+                            incoming.application_user_device__id.as_str(),
+                        ).await?;
+                        return Ok(());
+                    }
+                );
             }
             let outcoming = Outcoming {
                 application_user__id,

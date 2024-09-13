@@ -26,8 +26,7 @@ use crate::{
         data::{
             capture::Capture,
             control_type::{
-                ApplicationUser__Authorization___SendEmailForAuthorize,
-                UnixTime,
+                ApplicationUser__Authorization___SendEmailForAuthorize, TokioNonBlockingTask, UnixTime
             },
         },
         functionality::{
@@ -39,7 +38,7 @@ use crate::{
                 },
                 PostgresqlRepository,
             },
-            service::expiration_time_checker::ExpirationTimeChecker,
+            service::{expiration_time_checker::ExpirationTimeChecker, spawner::Spawner},
         },
     },
 };
@@ -153,12 +152,18 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
                 },
             )
             .await?;
-            EmailSender::<ApplicationUserAuthorizationToken<'_>>::send(
-                inner.environment_configuration,
-                application_user_authorization_token.value.as_str(),
-                application_user.email.as_str(),
-                incoming.application_user_device__id.as_str(),
-            )?;
+            let environment_configuration_ = inner.environment_configuration;
+            Spawner::<TokioNonBlockingTask>::spawn_into_background(
+                async move {
+                    EmailSender::<ApplicationUserAuthorizationToken<'_>>::send(
+                        environment_configuration_,
+                        application_user_authorization_token.value.as_str(),
+                        application_user.email.as_str(),
+                        incoming.application_user_device__id.as_str(),
+                    ).await?;
+                    return Ok(());
+                }
+            );
             let outcoming = Outcoming {
                 application_user_authorization_token__can_be_resent_from: application_user_authorization_token.can_be_resent_from,
             };

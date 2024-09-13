@@ -31,7 +31,7 @@ use aggregate_error::{
 impl FormResolver<ApplicationUserAccessToken<'_>> {
     const TOKEN_PARTS_SEPARATOR: &'static str = ".";
     pub fn to_encrypted<'a>(
-        environment_configuration: &'a EnvironmentConfiguration,
+        environment_configuration: &'static EnvironmentConfiguration,
         application_user_access_token: &'a ApplicationUserAccessToken<'_>,
     ) -> Result<String, AggregateError> {
         let data = Serializer::<MessagePack>::serialize(application_user_access_token)?;
@@ -50,7 +50,7 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
         );
     }
     pub fn from_encrypted<'a>(
-        environment_configuration: &'a EnvironmentConfiguration,
+        environment_configuration: &'static EnvironmentConfiguration,
         application_user_access_token_encrypted: &'a str,
     ) -> Result<ApplicationUserAccessToken<'static>, AggregateError> {
         let mut token_part_registry = application_user_access_token_encrypted.splitn::<'_, &'_ str>(
@@ -97,7 +97,7 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
 }
 struct Signature;
 impl Encoder<Signature> {
-    fn encode<'a>(environment_configuration: &'a EnvironmentConfiguration, application_user_access_token_serialized: &'a [u8]) -> Result<String, AggregateError> {
+    fn encode<'a>(environment_configuration: &'static EnvironmentConfiguration, application_user_access_token_serialized: &'a [u8]) -> Result<String, AggregateError> {
         let application_user_access_token_serialized_encoded = Encoder_::<HmacSha3_512>::encode(
             environment_configuration.encryption.private_key.application_user_access_token.as_bytes(),
             application_user_access_token_serialized,
@@ -105,7 +105,7 @@ impl Encoder<Signature> {
         return Ok(Encoder_::<Base64>::encode(application_user_access_token_serialized_encoded.into_bytes().as_slice()));
     }
     fn is_valid<'a>(
-        environment_configuration: &'a EnvironmentConfiguration,
+        environment_configuration: &'static EnvironmentConfiguration,
         application_user_access_token_serialized: &'a [u8],
         application_user_access_token_serialized_signature: &'a [u8],
     ) -> Result<bool, AggregateError> {

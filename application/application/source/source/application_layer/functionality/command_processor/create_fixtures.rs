@@ -65,7 +65,7 @@ use rand::{
     Rng,
 };
 use std::future::Future;
-use tokio::runtime::Builder;
+use tokio::runtime::{Builder, Runtime};
 use tokio_postgres::NoTls;
 use void::Void;
 impl CommandProcessor<CreateFixtures> {
@@ -104,7 +104,8 @@ impl CommandProcessor<CreateFixtures> {
     const STUB: &'static str = "s_t_u_b";
     pub fn process() -> Result<(), AggregateError> {
         let environment_configuration = Self::initialize_environment()?;
-        Self::run_runtime(&environment_configuration)?;
+        let runtime = Self::initialize_runtime()?;
+        runtime.block_on(Self::create_fixtures(&environment_configuration))?;
         return Ok(());
     }
     fn initialize_environment() -> Result<EnvironmentConfiguration, AggregateError> {
@@ -114,18 +115,18 @@ impl CommandProcessor<CreateFixtures> {
         );
         return Ok(Loader::<EnvironmentConfiguration>::load_from_file(environment_configuration_file_path.as_str())?);
     }
-    fn run_runtime<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<(), AggregateError> {
-        Builder::new_current_thread()
-            .enable_all()
-            .build()
-            .into_runtime(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            )?
-            .block_on(Self::create_fixtures(environment_configuration))?;
-        return Ok(());
+    fn initialize_runtime() -> Result<Runtime, AggregateError> {
+        return Ok(
+            Builder::new_current_thread()
+                .enable_all()
+                .build()
+                .into_runtime(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?
+        );
     }
     fn create_fixtures<'a>(environment_configuration: &'a EnvironmentConfiguration) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {

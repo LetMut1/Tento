@@ -18,7 +18,7 @@ use std::future::Future;
 use void::Void;
 impl Extractor<ApplicationUserAccessToken<'_>> {
     pub fn extract<'a>(
-        environment_configuration: &'a EnvironmentConfiguration,
+        environment_configuration: &'static EnvironmentConfiguration,
         application_user_access_token_encrypted: &'a str,
     ) -> impl Future<Output = Result<ExtractorResult, AggregateError>> + Send + Capture<&'a Void> {
         return async move {

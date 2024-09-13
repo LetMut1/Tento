@@ -26,8 +26,7 @@ use crate::{
         data::{
             capture::Capture,
             control_type::{
-                ApplicationUser__Authorization___SendEmailForResetPassword,
-                UnixTime,
+                ApplicationUser__Authorization___SendEmailForResetPassword, TokioNonBlockingTask, UnixTime
             },
         },
         functionality::{
@@ -39,7 +38,7 @@ use crate::{
                 },
                 PostgresqlRepository,
             },
-            service::expiration_time_checker::ExpirationTimeChecker,
+            service::{expiration_time_checker::ExpirationTimeChecker, spawner::Spawner},
         },
     },
 };
@@ -156,12 +155,18 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
                 },
             )
             .await?;
-            EmailSender::<ApplicationUserResetPasswordToken<'_>>::send(
-                inner.environment_configuration,
-                application_user_reset_password_token.value.as_str(),
-                application_user.email.as_str(),
-                incoming.application_user_device__id.as_str(),
-            )?;
+            let environment_configuration_ = inner.environment_configuration;
+            Spawner::<TokioNonBlockingTask>::spawn_into_background(
+                async move {
+                    EmailSender::<ApplicationUserResetPasswordToken<'_>>::send(
+                        environment_configuration_,
+                        application_user_reset_password_token.value.as_str(),
+                        application_user.email.as_str(),
+                        incoming.application_user_device__id.as_str(),
+                    ).await?;
+                    return Ok(());
+                }
+            );
             let outcoming = Outcoming {
                 application_user_reset_password_token__can_be_resent_from: application_user_reset_password_token.can_be_resent_from,
             };

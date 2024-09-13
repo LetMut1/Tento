@@ -24,7 +24,7 @@ use crate::{
 use aggregate_error::AggregateError;
 impl FormResolver<ApplicationUserAccessRefreshToken<'_>> {
     pub fn to_encrypted<'a>(
-        environment_configuration: &'a EnvironmentConfiguration,
+        environment_configuration: &'static EnvironmentConfiguration,
         application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>,
     ) -> Result<String, AggregateError> {
         let data = Serializer::<MessagePack>::serialize(application_user_access_refresh_token)?;
@@ -35,7 +35,7 @@ impl FormResolver<ApplicationUserAccessRefreshToken<'_>> {
         return Ok(Encoder::<Base64>::encode(encoded_data.into_bytes().as_slice()));
     }
     pub fn is_valid<'a>(
-        environment_configuration: &'a EnvironmentConfiguration,
+        environment_configuration: &'static EnvironmentConfiguration,
         application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>,
         application_user_access_refresh_token_encrypted: &'a str,
     ) -> Result<bool, AggregateError> {

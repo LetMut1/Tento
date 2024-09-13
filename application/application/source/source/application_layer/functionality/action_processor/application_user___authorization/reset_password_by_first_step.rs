@@ -29,8 +29,7 @@ use crate::{
         data::{
             capture::Capture,
             control_type::{
-                ApplicationUser__Authorization___ResetPasswordByFirstStep,
-                UnixTime,
+                ApplicationUser__Authorization___ResetPasswordByFirstStep, TokioNonBlockingTask, UnixTime
             },
         },
         functionality::{
@@ -45,7 +44,7 @@ use crate::{
                 },
                 PostgresqlRepository,
             },
-            service::expiration_time_checker::ExpirationTimeChecker,
+            service::{expiration_time_checker::ExpirationTimeChecker, spawner::Spawner},
         },
     },
 };
@@ -233,12 +232,18 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Reset
                 }
             };
             if can_send {
-                EmailSender::<ApplicationUserResetPasswordToken<'_>>::send(
-                    inner.environment_configuration,
-                    application_user_reset_password_token__value.as_str(),
-                    incoming.application_user__email.as_str(),
-                    incoming.application_user_device__id.as_str(),
-                )?;
+                let environment_configuration_ = inner.environment_configuration;
+                Spawner::<TokioNonBlockingTask>::spawn_into_background(
+                    async move {
+                        EmailSender::<ApplicationUserResetPasswordToken<'_>>::send(
+                            environment_configuration_,
+                            application_user_reset_password_token__value.as_str(),
+                            incoming.application_user__email.as_str(),
+                            incoming.application_user_device__id.as_str(),
+                        ).await?;
+                        return Ok(());
+                    }
+                );
             }
             let outcoming = Outcoming {
                 application_user__id: application_user_.id,

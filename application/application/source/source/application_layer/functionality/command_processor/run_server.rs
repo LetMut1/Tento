@@ -106,7 +106,7 @@ impl CommandProcessor<RunServer> {
         Self::initialize_tracing_subscriber(non_blocking)?;
         return Ok(worker_guard);
     }
-    fn initialize_tracing_subscriber<'a>(non_blocking: NonBlocking) -> Result<(), AggregateError> {
+    fn initialize_tracing_subscriber(non_blocking: NonBlocking) -> Result<(), AggregateError> {
         let fmt_subscriber = FmtSubscriber::builder()
             .with_max_level(Level::INFO)
             .with_writer(non_blocking)
