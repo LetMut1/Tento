@@ -515,7 +515,7 @@ pub struct ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming {
     pub application_user__password: C_String,
 }
 #[no_mangle]
-pub extern "C" fn application_user___authorization____authorize_by_first_step____serialize(
+pub extern "C" fn application_user___authorization____authorize_by_first_step____serialize____allocate(
     incoming: *mut ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming| -> Result<ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming_, Box<dyn StdError + 'static>> {
@@ -554,7 +554,7 @@ pub struct ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent {
     pub application_user__wrong_email_or_nickname_or_password: bool,
 }
 #[no_mangle]
-pub extern "C" fn application_user___authorization____authorize_by_first_step____deserialize(
+pub extern "C" fn application_user___authorization____authorize_by_first_step____deserialize____allocate(
     vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___AuthorizeByFirstStep___C_Result {
     let converter = move |unified_report: UnifiedReport<
@@ -623,7 +623,7 @@ pub struct ApplicationUser__Authorization___AuthorizeByLastStep___Incoming {
     pub application_user_authorization_token__value: C_String,
 }
 #[no_mangle]
-pub extern "C" fn application_user___authorization____authorize_by_last_step____serialize(
+pub extern "C" fn application_user___authorization____authorize_by_last_step____serialize____allocate(
     incoming: *mut ApplicationUser__Authorization___AuthorizeByLastStep___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: ApplicationUser__Authorization___AuthorizeByLastStep___Incoming| -> Result<ApplicationUser__Authorization___AuthorizeByLastStep___Incoming_, Box<dyn StdError + 'static>> {
@@ -668,7 +668,7 @@ pub struct ApplicationUserAuthorizationToken_WrongValue {
     pub application_user_authorization_token__wrong_enter_tries_quantity: c_short,
 }
 #[no_mangle]
-pub extern "C" fn application_user___authorization____authorize_by_last_step____deserialize(
+pub extern "C" fn application_user___authorization____authorize_by_last_step____deserialize____allocate(
     vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___AuthorizeByLastStep___C_Result {
     let converter = move |unified_report: UnifiedReport<
@@ -765,7 +765,7 @@ pub struct ApplicationUser__Authorization___CheckEmailForExisting___Incoming {
     pub application_user__email: C_String,
 }
 #[no_mangle]
-pub extern "C" fn application_user___authorization____check_email_for_existing____serialize(
+pub extern "C" fn application_user___authorization____check_email_for_existing____serialize____allocate(
     incoming: *mut ApplicationUser__Authorization___CheckEmailForExisting___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: ApplicationUser__Authorization___CheckEmailForExisting___Incoming| -> Result<ApplicationUser__Authorization___CheckEmailForExisting___Incoming_, Box<dyn StdError + 'static>> {
@@ -792,7 +792,7 @@ pub struct ApplicationUser__Authorization___CheckEmailForExisting___Outcoming {
     pub result: bool,
 }
 #[no_mangle]
-pub extern "C" fn application_user___authorization____check_email_for_existing____deserialize(
+pub extern "C" fn application_user___authorization____check_email_for_existing____deserialize____allocate(
     vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___CheckEmailForExisting___C_Result {
     let converter = move |unified_report: UnifiedReport<ApplicationUser__Authorization___CheckEmailForExisting___Outcoming_, Void>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___CheckEmailForExisting___Outcoming, C_Void>, Box<dyn StdError + 'static>> {
@@ -841,7 +841,7 @@ pub struct ApplicationUser__Authorization___CheckNicknameForExisting___Incoming 
     pub application_user__nickname: C_String,
 }
 #[no_mangle]
-pub extern "C" fn application_user___authorization____check_nickname_for_existing____serialize(
+pub extern "C" fn application_user___authorization____check_nickname_for_existing____serialize____allocate(
     incoming: *mut ApplicationUser__Authorization___CheckNicknameForExisting___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: ApplicationUser__Authorization___CheckNicknameForExisting___Incoming| -> Result<ApplicationUser__Authorization___CheckNicknameForExisting___Incoming_, Box<dyn StdError + 'static>> {
@@ -869,7 +869,7 @@ pub struct ApplicationUser__Authorization___CheckNicknameForExisting___Outcoming
     pub result: bool,
 }
 #[no_mangle]
-pub extern "C" fn application_user___authorization____check_nickname_for_existing____deserialize(
+pub extern "C" fn application_user___authorization____check_nickname_for_existing____deserialize____allocate(
     vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___CheckNicknameForExisting___C_Result {
     let converter = move |unified_report: UnifiedReport<ApplicationUser__Authorization___CheckNicknameForExisting___Outcoming_, Void>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___CheckNicknameForExisting___Outcoming, C_Void>, Box<dyn StdError + 'static>> {
@@ -918,7 +918,7 @@ pub struct ApplicationUser__Authorization___DeauthorizeFromAllDevices___Incoming
     pub application_user_access_token_encrypted: C_String,
 }
 #[no_mangle]
-pub extern "C" fn application_user___authorization____deauthorize_from_all_devices____serialize(
+pub extern "C" fn application_user___authorization____deauthorize_from_all_devices____serialize____allocate(
     incoming: *mut ApplicationUser__Authorization___DeauthorizeFromAllDevices___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: ApplicationUser__Authorization___DeauthorizeFromAllDevices___Incoming| -> Result<ApplicationUser__Authorization___DeauthorizeFromAllDevices___Incoming_, Box<dyn StdError + 'static>> {
@@ -947,7 +947,7 @@ pub struct ApplicationUser__Authorization___DeauthorizeFromAllDevices___Preceden
     pub application_user_access_token__in_application_user_access_token_black_list: bool,
 }
 #[no_mangle]
-pub extern "C" fn application_user___authorization____deauthorize_from_all_devices____deserialize(
+pub extern "C" fn application_user___authorization____deauthorize_from_all_devices____deserialize____allocate(
     vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___DeauthorizeFromAllDevices___C_Result {
     let converter = move |unified_report: UnifiedReport<Void, ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent_>| -> Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent>, Box<dyn StdError + 'static>> {
@@ -1015,7 +1015,7 @@ pub struct ApplicationUser__Authorization___DeauthorizeFromOneDevice___Incoming 
     pub application_user_access_token_encrypted: C_String,
 }
 #[no_mangle]
-pub extern "C" fn application_user___authorization____deauthorize_from_one_device____serialize(
+pub extern "C" fn application_user___authorization____deauthorize_from_one_device____serialize____allocate(
     incoming: *mut ApplicationUser__Authorization___DeauthorizeFromOneDevice___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: ApplicationUser__Authorization___DeauthorizeFromOneDevice___Incoming| -> Result<ApplicationUser__Authorization___DeauthorizeFromOneDevice___Incoming_, Box<dyn StdError + 'static>> {
@@ -1036,7 +1036,7 @@ pub extern "C" fn application_user___authorization____deauthorize_from_one_devic
     return ();
 }
 #[no_mangle]
-pub extern "C" fn application_user___authorization____deauthorize_from_one_device____deserialize(
+pub extern "C" fn application_user___authorization____deauthorize_from_one_device____deserialize____allocate(
     vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___DeauthorizeFromOneDevice___C_Result {
     let converter = move |unified_report: UnifiedReport<Void, ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent_>| -> Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent>, Box<dyn StdError + 'static>> {
@@ -1097,7 +1097,7 @@ pub struct ApplicationUser__Authorization___RefreshAccessToken___Incoming {
     pub application_user_access_refresh_token_encrypted: C_Vector<c_uchar>,
 }
 #[no_mangle]
-pub extern "C" fn application_user___authorization____refresh_access_token____serialize(
+pub extern "C" fn application_user___authorization____refresh_access_token____serialize____allocate(
     incoming: *mut ApplicationUser__Authorization___RefreshAccessToken___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: ApplicationUser__Authorization___RefreshAccessToken___Incoming| -> Result<ApplicationUser__Authorization___RefreshAccessToken___Incoming_, Box<dyn StdError + 'static>> {
@@ -1133,7 +1133,7 @@ pub struct ApplicationUser__Authorization___RefreshAccessToken___Precedent {
     pub application_user_access_refresh_token__already_expired: bool,
 }
 #[no_mangle]
-pub extern "C" fn application_user___authorization____refresh_access_token____deserialize(
+pub extern "C" fn application_user___authorization____refresh_access_token____deserialize____allocate(
     vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___RefreshAccessToken___C_Result {
     let converter = move |unified_report: UnifiedReport<
@@ -1214,7 +1214,7 @@ pub struct ApplicationUser__Authorization___RegisterByFirstStep___Incoming {
     pub application_user_device__id: C_String,
 }
 #[no_mangle]
-pub extern "C" fn application_user___authorization____register_by_first_step____serialize(
+pub extern "C" fn application_user___authorization____register_by_first_step____serialize____allocate(
     incoming: *mut ApplicationUser__Authorization___RegisterByFirstStep___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: ApplicationUser__Authorization___RegisterByFirstStep___Incoming| -> Result<ApplicationUser__Authorization___RegisterByFirstStep___Incoming_, Box<dyn StdError + 'static>> {
@@ -1251,7 +1251,7 @@ pub struct ApplicationUser__Authorization___RegisterByFirstStep___Precedent {
     pub application_user__email_already_exist: bool,
 }
 #[no_mangle]
-pub extern "C" fn application_user___authorization____register_by_first_step____deserialize(
+pub extern "C" fn application_user___authorization____register_by_first_step____deserialize____allocate(
     vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___RegisterByFirstStep___C_Result {
     let converter = move |unified_report: UnifiedReport<
@@ -1319,7 +1319,7 @@ pub struct ApplicationUser__Authorization___RegisterBySecondStep___Incoming {
     pub application_user_registration_token__value: C_String,
 }
 #[no_mangle]
-pub extern "C" fn application_user___authorization____register_by_second_step____serialize(
+pub extern "C" fn application_user___authorization____register_by_second_step____serialize____allocate(
     incoming: *mut ApplicationUser__Authorization___RegisterBySecondStep___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: ApplicationUser__Authorization___RegisterBySecondStep___Incoming| -> Result<ApplicationUser__Authorization___RegisterBySecondStep___Incoming_, Box<dyn StdError + 'static>> {
@@ -1357,7 +1357,7 @@ pub struct ApplicationUserRegistrationToken_WrongValue {
     pub application_user_registration_token__wrong_enter_tries_quantity: c_short,
 }
 #[no_mangle]
-pub extern "C" fn application_user___authorization____register_by_second_step____deserialize(
+pub extern "C" fn application_user___authorization____register_by_second_step____deserialize____allocate(
     vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___RegisterBySecondStep___C_Result {
     let converter = move |unified_report: UnifiedReport<Void, ApplicationUser__Authorization___RegisterBySecondStep___Precedent_>| -> Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___RegisterBySecondStep___Precedent>, Box<dyn StdError + 'static>> {
@@ -1436,7 +1436,7 @@ pub struct ApplicationUser__Authorization___RegisterByLastStep___Incoming {
     pub application_user_registration_token__value: C_String,
 }
 #[no_mangle]
-pub extern "C" fn application_user___authorization____register_by_last_step____serialize(
+pub extern "C" fn application_user___authorization____register_by_last_step____serialize____allocate(
     incoming: *mut ApplicationUser__Authorization___RegisterByLastStep___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: ApplicationUser__Authorization___RegisterByLastStep___Incoming| -> Result<ApplicationUser__Authorization___RegisterByLastStep___Incoming_, Box<dyn StdError + 'static>> {
@@ -1479,7 +1479,7 @@ pub struct ApplicationUser__Authorization___RegisterByLastStep___Precedent {
     pub application_user_registration_token__wrong_value: bool,
 }
 #[no_mangle]
-pub extern "C" fn application_user___authorization____register_by_last_step____deserialize(
+pub extern "C" fn application_user___authorization____register_by_last_step____deserialize____allocate(
     vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___RegisterByLastStep___C_Result {
     let converter = move |unified_report: UnifiedReport<
@@ -1584,7 +1584,7 @@ pub struct ApplicationUser__Authorization___ResetPasswordByFirstStep___Incoming 
     pub application_user_device__id: C_String,
 }
 #[no_mangle]
-pub extern "C" fn application_user___authorization____reset_password_by_first_step____serialize(
+pub extern "C" fn application_user___authorization____reset_password_by_first_step____serialize____allocate(
     incoming: *mut ApplicationUser__Authorization___ResetPasswordByFirstStep___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: ApplicationUser__Authorization___ResetPasswordByFirstStep___Incoming| -> Result<ApplicationUser__Authorization___ResetPasswordByFirstStep___Incoming_, Box<dyn StdError + 'static>> {
@@ -1622,7 +1622,7 @@ pub struct ApplicationUser__Authorization___ResetPasswordByFirstStep___Precedent
     pub application_user__not_found: bool,
 }
 #[no_mangle]
-pub extern "C" fn application_user___authorization____reset_password_by_first_step____deserialize(
+pub extern "C" fn application_user___authorization____reset_password_by_first_step____deserialize____allocate(
     vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___ResetPasswordByFirstStep___C_Result {
     let converter = move |unified_report: UnifiedReport<
@@ -1691,7 +1691,7 @@ pub struct ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming
     pub application_user_reset_password_token__value: C_String,
 }
 #[no_mangle]
-pub extern "C" fn application_user___authorization____reset_password_by_second_step____serialize(
+pub extern "C" fn application_user___authorization____reset_password_by_second_step____serialize____allocate(
     incoming: *mut ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming| -> Result<ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming_, Box<dyn StdError + 'static>> {
@@ -1730,7 +1730,7 @@ pub struct ApplicationUserResetPasswordToken_WrongValue {
     pub application_user_reset_password_token__wrong_enter_tries_quantity: c_short,
 }
 #[no_mangle]
-pub extern "C" fn application_user___authorization____reset_password_by_second_step____deserialize(
+pub extern "C" fn application_user___authorization____reset_password_by_second_step____deserialize____allocate(
     vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___ResetPasswordBySecondStep___C_Result {
     let converter = move |unified_report: UnifiedReport<Void, ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_>| -> Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent>, Box<dyn StdError + 'static>> {
@@ -1808,7 +1808,7 @@ pub struct ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming {
     pub application_user_reset_password_token__value: C_String,
 }
 #[no_mangle]
-pub extern "C" fn application_user___authorization____reset_password_by_last_step____serialize(
+pub extern "C" fn application_user___authorization____reset_password_by_last_step____serialize____allocate(
     incoming: *mut ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming| -> Result<ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming_, Box<dyn StdError + 'static>> {
@@ -1842,7 +1842,7 @@ pub struct ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent 
     pub application_user_reset_password_token__wrong_value: bool,
 }
 #[no_mangle]
-pub extern "C" fn application_user___authorization____reset_password_by_last_step____deserialize(
+pub extern "C" fn application_user___authorization____reset_password_by_last_step____deserialize____allocate(
     vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___ResetPasswordByLastStep___C_Result {
     let converter = move |unified_report: UnifiedReport<Void, ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_>| -> Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent>, Box<dyn StdError + 'static>> {
@@ -1921,7 +1921,7 @@ pub struct ApplicationUser__Authorization___SendEmailForRegister___Incoming {
     pub application_user_device__id: C_String,
 }
 #[no_mangle]
-pub extern "C" fn application_user___authorization____send_email_for_register____serialize(
+pub extern "C" fn application_user___authorization____send_email_for_register____serialize____allocate(
     incoming: *mut ApplicationUser__Authorization___SendEmailForRegister___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: ApplicationUser__Authorization___SendEmailForRegister___Incoming| -> Result<ApplicationUser__Authorization___SendEmailForRegister___Incoming_, Box<dyn StdError + 'static>> {
@@ -1958,7 +1958,7 @@ pub struct ApplicationUser__Authorization___SendEmailForRegister___Precedent {
     pub application_user_registration_token__time_to_resend_has_not_come: bool,
 }
 #[no_mangle]
-pub extern "C" fn application_user___authorization____send_email_for_register____deserialize(
+pub extern "C" fn application_user___authorization____send_email_for_register____deserialize____allocate(
     vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___SendEmailForRegister___C_Result {
     let converter = move |unified_report: UnifiedReport<
@@ -2042,7 +2042,7 @@ pub struct ApplicationUser__Authorization___SendEmailForAuthorize___Incoming {
     pub application_user__id: c_long,
 }
 #[no_mangle]
-pub extern "C" fn application_user___authorization____send_email_for_authorize____serialize(
+pub extern "C" fn application_user___authorization____send_email_for_authorize____serialize____allocate(
     incoming: *mut ApplicationUser__Authorization___SendEmailForAuthorize___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: ApplicationUser__Authorization___SendEmailForAuthorize___Incoming| -> Result<ApplicationUser__Authorization___SendEmailForAuthorize___Incoming_, Box<dyn StdError + 'static>> {
@@ -2079,7 +2079,7 @@ pub struct ApplicationUser__Authorization___SendEmailForAuthorize___Precedent {
     pub application_user_authorization_token__time_to_resend_has_not_come: bool,
 }
 #[no_mangle]
-pub extern "C" fn application_user___authorization____send_email_for_authorize____deserialize(
+pub extern "C" fn application_user___authorization____send_email_for_authorize____deserialize____allocate(
     vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___SendEmailForAuthorize___C_Result {
     let converter = move |unified_report: UnifiedReport<
@@ -2163,7 +2163,7 @@ pub struct ApplicationUser__Authorization___SendEmailForResetPassword___Incoming
     pub application_user_device__id: C_String,
 }
 #[no_mangle]
-pub extern "C" fn application_user___authorization____send_email_for_reset_password____serialize(
+pub extern "C" fn application_user___authorization____send_email_for_reset_password____serialize____allocate(
     incoming: *mut ApplicationUser__Authorization___SendEmailForResetPassword___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: ApplicationUser__Authorization___SendEmailForResetPassword___Incoming| -> Result<ApplicationUser__Authorization___SendEmailForResetPassword___Incoming_, Box<dyn StdError + 'static>> {
@@ -2201,7 +2201,7 @@ pub struct ApplicationUser__Authorization___SendEmailForResetPassword___Preceden
     pub application_user_reset_password_token__time_to_resend_has_not_come: bool,
 }
 #[no_mangle]
-pub extern "C" fn application_user___authorization____send_email_for_reset_password____deserialize(
+pub extern "C" fn application_user___authorization____send_email_for_reset_password____deserialize____allocate(
     vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___SendEmailForResetPassword___C_Result {
     let converter = move |unified_report: UnifiedReport<
@@ -2293,7 +2293,7 @@ pub struct Channel__Base___GetManyByNameInSubscriptions___Incoming {
     pub limit: c_short,
 }
 #[no_mangle]
-pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____serialize(
+pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____serialize____allocate(
     incoming: *mut Channel__Base___GetManyByNameInSubscriptions___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter =
@@ -2335,7 +2335,7 @@ pub struct Channel__Base___GetManyByNameInSubscriptions___Precedent {
     pub application_user_access_token__in_application_user_access_token_black_list: bool,
 }
 #[no_mangle]
-pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____deserialize(
+pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____deserialize____allocate(
     vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut Channel__Base___GetManyByNameInSubscriptions___C_Result {
     let converter = move |unified_report: UnifiedReport<Channel__Base___GetManyByNameInSubscriptions___Outcoming_, Channel__Base___GetManyByNameInSubscriptions___Precedent_>| -> Result<
@@ -2449,7 +2449,7 @@ pub struct Channel__Base___GetManyBySubscription___Incoming {
     pub limit: c_short,
 }
 #[no_mangle]
-pub extern "C" fn channel___base____get_many_by_subscription____serialize(incoming: *mut Channel__Base___GetManyBySubscription___Incoming) -> *mut C_Result<C_Vector<c_uchar>> {
+pub extern "C" fn channel___base____get_many_by_subscription____serialize____allocate(incoming: *mut Channel__Base___GetManyBySubscription___Incoming) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: Channel__Base___GetManyBySubscription___Incoming| -> Result<Channel__Base___GetManyBySubscription___Incoming_, Box<dyn StdError + 'static>> {
         let requery___channel__id = if incoming.requery___channel__id.is_data {
             Some(incoming.requery___channel__id.data)
@@ -2487,7 +2487,7 @@ pub struct Channel__Base___GetManyBySubscription___Precedent {
     pub application_user_access_token__in_application_user_access_token_black_list: bool,
 }
 #[no_mangle]
-pub extern "C" fn channel___base____get_many_by_subscription____deserialize(vector_of_bytes: *mut C_Vector<c_uchar>) -> *mut Channel__Base___GetManyBySubscription___C_Result {
+pub extern "C" fn channel___base____get_many_by_subscription____deserialize____allocate(vector_of_bytes: *mut C_Vector<c_uchar>) -> *mut Channel__Base___GetManyBySubscription___C_Result {
     let converter = move |unified_report: UnifiedReport<Channel__Base___GetManyBySubscription___Outcoming_, Channel__Base___GetManyBySubscription___Precedent_>| -> Result<
         C_UnifiedReport<Channel__Base___GetManyBySubscription___Outcoming, Channel__Base___GetManyBySubscription___Precedent>,
         Box<dyn StdError + 'static>,
@@ -2600,7 +2600,7 @@ pub struct Channel__Base___GetManyPublicByName___Incoming {
     pub limit: c_short,
 }
 #[no_mangle]
-pub extern "C" fn channel___base____get_many_public_by_name____serialize(incoming: *mut Channel__Base___GetManyPublicByName___Incoming) -> *mut C_Result<C_Vector<c_uchar>> {
+pub extern "C" fn channel___base____get_many_public_by_name____serialize____allocate(incoming: *mut Channel__Base___GetManyPublicByName___Incoming) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: Channel__Base___GetManyPublicByName___Incoming| -> Result<Channel__Base___GetManyPublicByName___Incoming_, Box<dyn StdError + 'static>> {
         let requery___channel__name = if incoming.requery___channel__name.is_data {
             Some(incoming.requery___channel__name.data.to_string()?)
@@ -2638,7 +2638,7 @@ pub struct Channel__Base___GetManyPublicByName___Precedent {
     pub application_user_access_token__in_application_user_access_token_black_list: bool,
 }
 #[no_mangle]
-pub extern "C" fn channel___base____get_many_public_by_name____deserialize(vector_of_bytes: *mut C_Vector<c_uchar>) -> *mut Channel__Base___GetManyPublicByName___C_Result {
+pub extern "C" fn channel___base____get_many_public_by_name____deserialize____allocate(vector_of_bytes: *mut C_Vector<c_uchar>) -> *mut Channel__Base___GetManyPublicByName___C_Result {
     let converter = move |unified_report: UnifiedReport<Channel__Base___GetManyPublicByName___Outcoming_, Channel__Base___GetManyPublicByName___Precedent_>| -> Result<
         C_UnifiedReport<Channel__Base___GetManyPublicByName___Outcoming, Channel__Base___GetManyPublicByName___Precedent>,
         Box<dyn StdError + 'static>,
@@ -2749,7 +2749,7 @@ pub struct Channel__Base___GetOneById___Incoming {
     pub channel__id: c_long,
 }
 #[no_mangle]
-pub extern "C" fn channel___base____get_one_by_id____serialize(incoming: *mut Channel__Base___GetOneById___Incoming) -> *mut C_Result<C_Vector<c_uchar>> {
+pub extern "C" fn channel___base____get_one_by_id____serialize____allocate(incoming: *mut Channel__Base___GetOneById___Incoming) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: Channel__Base___GetOneById___Incoming| -> Result<Channel__Base___GetOneById___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = Channel__Base___GetOneById___Incoming_ {
             application_user_access_token_encrypted: incoming.application_user_access_token_encrypted.to_string()?,
@@ -2784,7 +2784,7 @@ pub struct Channel__Base___GetOneById___Precedent {
     pub channel__is_close: bool,
 }
 #[no_mangle]
-pub extern "C" fn channel___base____get_one_by_id____deserialize(vector_of_bytes: *mut C_Vector<c_uchar>) -> *mut Channel__Base___GetOneById___C_Result {
+pub extern "C" fn channel___base____get_one_by_id____deserialize____allocate(vector_of_bytes: *mut C_Vector<c_uchar>) -> *mut Channel__Base___GetOneById___C_Result {
     let converter = move |unified_report: UnifiedReport<Channel__Base___GetOneById___Outcoming_, Channel__Base___GetOneById___Precedent_>| -> Result<C_UnifiedReport<Channel__Base___GetOneById___Outcoming, Channel__Base___GetOneById___Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
@@ -2940,7 +2940,7 @@ pub struct ChannelSubscription__Base___Create___Incoming {
     pub channel__id: c_long,
 }
 #[no_mangle]
-pub extern "C" fn channel_subscription___base____create____serialize(incoming: *mut ChannelSubscription__Base___Create___Incoming) -> *mut C_Result<C_Vector<c_uchar>> {
+pub extern "C" fn channel_subscription___base____create____serialize____allocate(incoming: *mut ChannelSubscription__Base___Create___Incoming) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: ChannelSubscription__Base___Create___Incoming| -> Result<ChannelSubscription__Base___Create___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ChannelSubscription__Base___Create___Incoming_ {
             application_user_access_token_encrypted: incoming.application_user_access_token_encrypted.to_string()?,
@@ -2969,7 +2969,7 @@ pub struct ChannelSubscription__Base___Create___Precedent {
     pub application_user__is_channel__owner: bool,
 }
 #[no_mangle]
-pub extern "C" fn channel_subscription___base____create____deserialize(vector_of_bytes: *mut C_Vector<c_uchar>) -> *mut ChannelSubscription__Base___Create___C_Result {
+pub extern "C" fn channel_subscription___base____create____deserialize____allocate(vector_of_bytes: *mut C_Vector<c_uchar>) -> *mut ChannelSubscription__Base___Create___C_Result {
     let converter = move |unified_report: UnifiedReport<Void, ChannelSubscription__Base___Create___Precedent_>| -> Result<C_UnifiedReport<C_Void, ChannelSubscription__Base___Create___Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
@@ -3093,7 +3093,7 @@ mod test {
                         ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent_,
                     >::target_empty();
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___AuthorizeByFirstStep___C_Result {
-                        return application_user___authorization____authorize_by_first_step____deserialize(vector_of_bytes);
+                        return application_user___authorization____authorize_by_first_step____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut ApplicationUser__Authorization___AuthorizeByFirstStep___C_Result| -> () {
                         application_user___authorization____authorize_by_first_step____deserialize____deallocate(c_result);
@@ -3119,7 +3119,7 @@ mod test {
                         ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent_,
                     >::target_filled(outcoming);
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___AuthorizeByFirstStep___C_Result {
-                        return application_user___authorization____authorize_by_first_step____deserialize(vector_of_bytes);
+                        return application_user___authorization____authorize_by_first_step____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut ApplicationUser__Authorization___AuthorizeByFirstStep___C_Result| -> () {
                         application_user___authorization____authorize_by_first_step____deserialize____deallocate(c_result);
@@ -3139,7 +3139,7 @@ mod test {
                         ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent_,
                     >::precedent(precedent);
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___AuthorizeByFirstStep___C_Result {
-                        return application_user___authorization____authorize_by_first_step____deserialize(vector_of_bytes);
+                        return application_user___authorization____authorize_by_first_step____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut ApplicationUser__Authorization___AuthorizeByFirstStep___C_Result| -> () {
                         application_user___authorization____authorize_by_first_step____deserialize____deallocate(c_result);
@@ -3158,7 +3158,7 @@ mod test {
                         ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_,
                     >::target_empty();
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___AuthorizeByLastStep___C_Result {
-                        return application_user___authorization____authorize_by_last_step____deserialize(vector_of_bytes);
+                        return application_user___authorization____authorize_by_last_step____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut ApplicationUser__Authorization___AuthorizeByLastStep___C_Result| -> () {
                         application_user___authorization____authorize_by_last_step____deserialize____deallocate(c_result);
@@ -3181,7 +3181,7 @@ mod test {
                         ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_,
                     >::target_filled(outcoming);
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___AuthorizeByLastStep___C_Result {
-                        return application_user___authorization____authorize_by_last_step____deserialize(vector_of_bytes);
+                        return application_user___authorization____authorize_by_last_step____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut ApplicationUser__Authorization___AuthorizeByLastStep___C_Result| -> () {
                         application_user___authorization____authorize_by_last_step____deserialize____deallocate(c_result);
@@ -3201,7 +3201,7 @@ mod test {
                         ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_,
                     >::precedent(precedent);
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___AuthorizeByLastStep___C_Result {
-                        return application_user___authorization____authorize_by_last_step____deserialize(vector_of_bytes);
+                        return application_user___authorization____authorize_by_last_step____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut ApplicationUser__Authorization___AuthorizeByLastStep___C_Result| -> () {
                         application_user___authorization____authorize_by_last_step____deserialize____deallocate(c_result);
@@ -3233,7 +3233,7 @@ mod test {
                 fn target_empty____application_user___authorization____check_email_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
                     let unified_report = UnifiedReport::<ApplicationUser__Authorization___CheckEmailForExisting___Outcoming_, Void>::target_empty();
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___CheckEmailForExisting___C_Result {
-                        return application_user___authorization____check_email_for_existing____deserialize(vector_of_bytes);
+                        return application_user___authorization____check_email_for_existing____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut ApplicationUser__Authorization___CheckEmailForExisting___C_Result| -> () {
                         application_user___authorization____check_email_for_existing____deserialize____deallocate(c_result);
@@ -3252,7 +3252,7 @@ mod test {
                     };
                     let unified_report = UnifiedReport::<ApplicationUser__Authorization___CheckEmailForExisting___Outcoming_, Void>::target_filled(outcoming);
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___CheckEmailForExisting___C_Result {
-                        return application_user___authorization____check_email_for_existing____deserialize(vector_of_bytes);
+                        return application_user___authorization____check_email_for_existing____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut ApplicationUser__Authorization___CheckEmailForExisting___C_Result| -> () {
                         application_user___authorization____check_email_for_existing____deserialize____deallocate(c_result);
@@ -3272,7 +3272,7 @@ mod test {
                 fn target_empty____application_user___authorization____check_nickname_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
                     let unified_report = UnifiedReport::<ApplicationUser__Authorization___CheckNicknameForExisting___Outcoming_, Void>::target_empty();
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___CheckNicknameForExisting___C_Result {
-                        return application_user___authorization____check_nickname_for_existing____deserialize(vector_of_bytes);
+                        return application_user___authorization____check_nickname_for_existing____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut ApplicationUser__Authorization___CheckNicknameForExisting___C_Result| -> () {
                         application_user___authorization____check_nickname_for_existing____deserialize____deallocate(c_result);
@@ -3291,7 +3291,7 @@ mod test {
                     };
                     let unified_report = UnifiedReport::<ApplicationUser__Authorization___CheckNicknameForExisting___Outcoming_, Void>::target_filled(outcoming);
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___CheckNicknameForExisting___C_Result {
-                        return application_user___authorization____check_nickname_for_existing____deserialize(vector_of_bytes);
+                        return application_user___authorization____check_nickname_for_existing____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut ApplicationUser__Authorization___CheckNicknameForExisting___C_Result| -> () {
                         application_user___authorization____check_nickname_for_existing____deserialize____deallocate(c_result);
@@ -3311,7 +3311,7 @@ mod test {
                 fn target_empty____application_user___authorization____deauthorize_from_all_devices() -> Result<(), Box<dyn StdError + 'static>> {
                     let unified_report = UnifiedReport::<Void, ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent_>::target_empty();
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___DeauthorizeFromAllDevices___C_Result {
-                        return application_user___authorization____deauthorize_from_all_devices____deserialize(vector_of_bytes);
+                        return application_user___authorization____deauthorize_from_all_devices____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut ApplicationUser__Authorization___DeauthorizeFromAllDevices___C_Result| -> () {
                         application_user___authorization____deauthorize_from_all_devices____deserialize____deallocate(c_result);
@@ -3332,7 +3332,7 @@ mod test {
                 ) -> Result<(), Box<dyn StdError + 'static>> {
                     let unified_report = UnifiedReport::<Void, ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent_>::precedent(precedent);
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___DeauthorizeFromAllDevices___C_Result {
-                        return application_user___authorization____deauthorize_from_all_devices____deserialize(vector_of_bytes);
+                        return application_user___authorization____deauthorize_from_all_devices____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut ApplicationUser__Authorization___DeauthorizeFromAllDevices___C_Result| -> () {
                         application_user___authorization____deauthorize_from_all_devices____deserialize____deallocate(c_result);
@@ -3359,7 +3359,7 @@ mod test {
                 fn target_empty____application_user___authorization____deauthorize_from_one_device() -> Result<(), Box<dyn StdError + 'static>> {
                     let unified_report = UnifiedReport::<Void, ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent_>::target_empty();
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___DeauthorizeFromOneDevice___C_Result {
-                        return application_user___authorization____deauthorize_from_one_device____deserialize(vector_of_bytes);
+                        return application_user___authorization____deauthorize_from_one_device____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut ApplicationUser__Authorization___DeauthorizeFromOneDevice___C_Result| -> () {
                         application_user___authorization____deauthorize_from_one_device____deserialize____deallocate(c_result);
@@ -3380,7 +3380,7 @@ mod test {
                 ) -> Result<(), Box<dyn StdError + 'static>> {
                     let unified_report = UnifiedReport::<Void, ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent_>::precedent(precedent);
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___DeauthorizeFromOneDevice___C_Result {
-                        return application_user___authorization____deauthorize_from_one_device____deserialize(vector_of_bytes);
+                        return application_user___authorization____deauthorize_from_one_device____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut ApplicationUser__Authorization___DeauthorizeFromOneDevice___C_Result| -> () {
                         application_user___authorization____deauthorize_from_one_device____deserialize____deallocate(c_result);
@@ -3410,7 +3410,7 @@ mod test {
                         ApplicationUser__Authorization___RefreshAccessToken___Precedent_,
                     >::target_empty();
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___RefreshAccessToken___C_Result {
-                        return application_user___authorization____refresh_access_token____deserialize(vector_of_bytes);
+                        return application_user___authorization____refresh_access_token____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut ApplicationUser__Authorization___RefreshAccessToken___C_Result| -> () {
                         application_user___authorization____refresh_access_token____deserialize____deallocate(c_result);
@@ -3433,7 +3433,7 @@ mod test {
                         ApplicationUser__Authorization___RefreshAccessToken___Precedent_,
                     >::target_filled(outcoming);
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___RefreshAccessToken___C_Result {
-                        return application_user___authorization____refresh_access_token____deserialize(vector_of_bytes);
+                        return application_user___authorization____refresh_access_token____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut ApplicationUser__Authorization___RefreshAccessToken___C_Result| -> () {
                         application_user___authorization____refresh_access_token____deserialize____deallocate(c_result);
@@ -3453,7 +3453,7 @@ mod test {
                         ApplicationUser__Authorization___RefreshAccessToken___Precedent_,
                     >::precedent(precedent);
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___RefreshAccessToken___C_Result {
-                        return application_user___authorization____refresh_access_token____deserialize(vector_of_bytes);
+                        return application_user___authorization____refresh_access_token____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut ApplicationUser__Authorization___RefreshAccessToken___C_Result| -> () {
                         application_user___authorization____refresh_access_token____deserialize____deallocate(c_result);
@@ -3482,7 +3482,7 @@ mod test {
                         ApplicationUser__Authorization___RegisterByFirstStep___Precedent_,
                     >::target_empty();
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___RegisterByFirstStep___C_Result {
-                        return application_user___authorization____register_by_first_step____deserialize(vector_of_bytes);
+                        return application_user___authorization____register_by_first_step____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut ApplicationUser__Authorization___RegisterByFirstStep___C_Result| -> () {
                         application_user___authorization____register_by_first_step____deserialize____deallocate(c_result);
@@ -3507,7 +3507,7 @@ mod test {
                         ApplicationUser__Authorization___RegisterByFirstStep___Precedent_,
                     >::target_filled(outcoming);
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___RegisterByFirstStep___C_Result {
-                        return application_user___authorization____register_by_first_step____deserialize(vector_of_bytes);
+                        return application_user___authorization____register_by_first_step____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut ApplicationUser__Authorization___RegisterByFirstStep___C_Result| -> () {
                         application_user___authorization____register_by_first_step____deserialize____deallocate(c_result);
@@ -3527,7 +3527,7 @@ mod test {
                         ApplicationUser__Authorization___RegisterByFirstStep___Precedent_,
                     >::precedent(precedent);
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___RegisterByFirstStep___C_Result {
-                        return application_user___authorization____register_by_first_step____deserialize(vector_of_bytes);
+                        return application_user___authorization____register_by_first_step____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut ApplicationUser__Authorization___RegisterByFirstStep___C_Result| -> () {
                         application_user___authorization____register_by_first_step____deserialize____deallocate(c_result);
@@ -3543,7 +3543,7 @@ mod test {
                 fn target_empty____application_user___authorization____register_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
                     let unified_report = UnifiedReport::<Void, ApplicationUser__Authorization___RegisterBySecondStep___Precedent_>::target_empty();
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___RegisterBySecondStep___C_Result {
-                        return application_user___authorization____register_by_second_step____deserialize(vector_of_bytes);
+                        return application_user___authorization____register_by_second_step____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut ApplicationUser__Authorization___RegisterBySecondStep___C_Result| -> () {
                         application_user___authorization____register_by_second_step____deserialize____deallocate(c_result);
@@ -3564,7 +3564,7 @@ mod test {
                 ) -> Result<(), Box<dyn StdError + 'static>> {
                     let unified_report = UnifiedReport::<Void, ApplicationUser__Authorization___RegisterBySecondStep___Precedent_>::precedent(precedent);
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___RegisterBySecondStep___C_Result {
-                        return application_user___authorization____register_by_second_step____deserialize(vector_of_bytes);
+                        return application_user___authorization____register_by_second_step____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut ApplicationUser__Authorization___RegisterBySecondStep___C_Result| -> () {
                         application_user___authorization____register_by_second_step____deserialize____deallocate(c_result);
@@ -3599,7 +3599,7 @@ mod test {
                         ApplicationUser__Authorization___RegisterByLastStep___Precedent_,
                     >::target_empty();
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___RegisterByLastStep___C_Result {
-                        return application_user___authorization____register_by_last_step____deserialize(vector_of_bytes);
+                        return application_user___authorization____register_by_last_step____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut ApplicationUser__Authorization___RegisterByLastStep___C_Result| -> () {
                         application_user___authorization____register_by_last_step____deserialize____deallocate(c_result);
@@ -3622,7 +3622,7 @@ mod test {
                         ApplicationUser__Authorization___RegisterByLastStep___Precedent_,
                     >::target_filled(outcoming);
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___RegisterByLastStep___C_Result {
-                        return application_user___authorization____register_by_last_step____deserialize(vector_of_bytes);
+                        return application_user___authorization____register_by_last_step____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut ApplicationUser__Authorization___RegisterByLastStep___C_Result| -> () {
                         application_user___authorization____register_by_last_step____deserialize____deallocate(c_result);
@@ -3642,7 +3642,7 @@ mod test {
                         ApplicationUser__Authorization___RegisterByLastStep___Precedent_,
                     >::precedent(precedent);
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___RegisterByLastStep___C_Result {
-                        return application_user___authorization____register_by_last_step____deserialize(vector_of_bytes);
+                        return application_user___authorization____register_by_last_step____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut ApplicationUser__Authorization___RegisterByLastStep___C_Result| -> () {
                         application_user___authorization____register_by_last_step____deserialize____deallocate(c_result);
@@ -3675,7 +3675,7 @@ mod test {
                         ApplicationUser__Authorization___ResetPasswordByFirstStep___Precedent_,
                     >::target_empty();
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___ResetPasswordByFirstStep___C_Result {
-                        return application_user___authorization____reset_password_by_first_step____deserialize(vector_of_bytes);
+                        return application_user___authorization____reset_password_by_first_step____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut ApplicationUser__Authorization___ResetPasswordByFirstStep___C_Result| -> () {
                         application_user___authorization____reset_password_by_first_step____deserialize____deallocate(c_result);
@@ -3701,7 +3701,7 @@ mod test {
                         ApplicationUser__Authorization___ResetPasswordByFirstStep___Precedent_,
                     >::target_filled(outcoming);
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___ResetPasswordByFirstStep___C_Result {
-                        return application_user___authorization____reset_password_by_first_step____deserialize(vector_of_bytes);
+                        return application_user___authorization____reset_password_by_first_step____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut ApplicationUser__Authorization___ResetPasswordByFirstStep___C_Result| -> () {
                         application_user___authorization____reset_password_by_first_step____deserialize____deallocate(c_result);
@@ -3721,7 +3721,7 @@ mod test {
                         ApplicationUser__Authorization___ResetPasswordByFirstStep___Precedent_,
                     >::precedent(precedent);
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___ResetPasswordByFirstStep___C_Result {
-                        return application_user___authorization____reset_password_by_first_step____deserialize(vector_of_bytes);
+                        return application_user___authorization____reset_password_by_first_step____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut ApplicationUser__Authorization___ResetPasswordByFirstStep___C_Result| -> () {
                         application_user___authorization____reset_password_by_first_step____deserialize____deallocate(c_result);
@@ -3737,7 +3737,7 @@ mod test {
                 fn target_empty____application_user___authorization____reset_password_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
                     let unified_report = UnifiedReport::<Void, ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_>::target_empty();
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___ResetPasswordBySecondStep___C_Result {
-                        return application_user___authorization____reset_password_by_second_step____deserialize(vector_of_bytes);
+                        return application_user___authorization____reset_password_by_second_step____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut ApplicationUser__Authorization___ResetPasswordBySecondStep___C_Result| -> () {
                         application_user___authorization____reset_password_by_second_step____deserialize____deallocate(c_result);
@@ -3758,7 +3758,7 @@ mod test {
                 ) -> Result<(), Box<dyn StdError + 'static>> {
                     let unified_report = UnifiedReport::<Void, ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_>::precedent(precedent);
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___ResetPasswordBySecondStep___C_Result {
-                        return application_user___authorization____reset_password_by_second_step____deserialize(vector_of_bytes);
+                        return application_user___authorization____reset_password_by_second_step____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut ApplicationUser__Authorization___ResetPasswordBySecondStep___C_Result| -> () {
                         application_user___authorization____reset_password_by_second_step____deserialize____deallocate(c_result);
@@ -3790,7 +3790,7 @@ mod test {
                 fn target_empty____application_user___authorization____reset_password_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
                     let unified_report = UnifiedReport::<Void, ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_>::target_empty();
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___ResetPasswordByLastStep___C_Result {
-                        return application_user___authorization____reset_password_by_last_step____deserialize(vector_of_bytes);
+                        return application_user___authorization____reset_password_by_last_step____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut ApplicationUser__Authorization___ResetPasswordByLastStep___C_Result| -> () {
                         application_user___authorization____reset_password_by_last_step____deserialize____deallocate(c_result);
@@ -3811,7 +3811,7 @@ mod test {
                 ) -> Result<(), Box<dyn StdError + 'static>> {
                     let unified_report = UnifiedReport::<Void, ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_>::precedent(precedent);
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___ResetPasswordByLastStep___C_Result {
-                        return application_user___authorization____reset_password_by_last_step____deserialize(vector_of_bytes);
+                        return application_user___authorization____reset_password_by_last_step____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut ApplicationUser__Authorization___ResetPasswordByLastStep___C_Result| -> () {
                         application_user___authorization____reset_password_by_last_step____deserialize____deallocate(c_result);
@@ -3843,7 +3843,7 @@ mod test {
                         ApplicationUser__Authorization___SendEmailForRegister___Precedent_,
                     >::target_empty();
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___SendEmailForRegister___C_Result {
-                        return application_user___authorization____send_email_for_register____deserialize(vector_of_bytes);
+                        return application_user___authorization____send_email_for_register____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut ApplicationUser__Authorization___SendEmailForRegister___C_Result| -> () {
                         application_user___authorization____send_email_for_register____deserialize____deallocate(c_result);
@@ -3865,7 +3865,7 @@ mod test {
                         ApplicationUser__Authorization___SendEmailForRegister___Precedent_,
                     >::target_filled(outcoming);
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___SendEmailForRegister___C_Result {
-                        return application_user___authorization____send_email_for_register____deserialize(vector_of_bytes);
+                        return application_user___authorization____send_email_for_register____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut ApplicationUser__Authorization___SendEmailForRegister___C_Result| -> () {
                         application_user___authorization____send_email_for_register____deserialize____deallocate(c_result);
@@ -3885,7 +3885,7 @@ mod test {
                         ApplicationUser__Authorization___SendEmailForRegister___Precedent_,
                     >::precedent(precedent);
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___SendEmailForRegister___C_Result {
-                        return application_user___authorization____send_email_for_register____deserialize(vector_of_bytes);
+                        return application_user___authorization____send_email_for_register____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut ApplicationUser__Authorization___SendEmailForRegister___C_Result| -> () {
                         application_user___authorization____send_email_for_register____deserialize____deallocate(c_result);
@@ -3916,7 +3916,7 @@ mod test {
                         ApplicationUser__Authorization___SendEmailForAuthorize___Precedent_,
                     >::target_empty();
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___SendEmailForAuthorize___C_Result {
-                        return application_user___authorization____send_email_for_authorize____deserialize(vector_of_bytes);
+                        return application_user___authorization____send_email_for_authorize____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut ApplicationUser__Authorization___SendEmailForAuthorize___C_Result| -> () {
                         application_user___authorization____send_email_for_authorize____deserialize____deallocate(c_result);
@@ -3938,7 +3938,7 @@ mod test {
                         ApplicationUser__Authorization___SendEmailForAuthorize___Precedent_,
                     >::target_filled(outcoming);
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___SendEmailForAuthorize___C_Result {
-                        return application_user___authorization____send_email_for_authorize____deserialize(vector_of_bytes);
+                        return application_user___authorization____send_email_for_authorize____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut ApplicationUser__Authorization___SendEmailForAuthorize___C_Result| -> () {
                         application_user___authorization____send_email_for_authorize____deserialize____deallocate(c_result);
@@ -3958,7 +3958,7 @@ mod test {
                         ApplicationUser__Authorization___SendEmailForAuthorize___Precedent_,
                     >::precedent(precedent);
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___SendEmailForAuthorize___C_Result {
-                        return application_user___authorization____send_email_for_authorize____deserialize(vector_of_bytes);
+                        return application_user___authorization____send_email_for_authorize____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut ApplicationUser__Authorization___SendEmailForAuthorize___C_Result| -> () {
                         application_user___authorization____send_email_for_authorize____deserialize____deallocate(c_result);
@@ -3989,7 +3989,7 @@ mod test {
                         ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_,
                     >::target_empty();
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___SendEmailForResetPassword___C_Result {
-                        return application_user___authorization____send_email_for_reset_password____deserialize(vector_of_bytes);
+                        return application_user___authorization____send_email_for_reset_password____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut ApplicationUser__Authorization___SendEmailForResetPassword___C_Result| -> () {
                         application_user___authorization____send_email_for_reset_password____deserialize____deallocate(c_result);
@@ -4011,7 +4011,7 @@ mod test {
                         ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_,
                     >::target_filled(outcoming);
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___SendEmailForResetPassword___C_Result {
-                        return application_user___authorization____send_email_for_reset_password____deserialize(vector_of_bytes);
+                        return application_user___authorization____send_email_for_reset_password____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut ApplicationUser__Authorization___SendEmailForResetPassword___C_Result| -> () {
                         application_user___authorization____send_email_for_reset_password____deserialize____deallocate(c_result);
@@ -4031,7 +4031,7 @@ mod test {
                         ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_,
                     >::precedent(precedent);
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___SendEmailForResetPassword___C_Result {
-                        return application_user___authorization____send_email_for_reset_password____deserialize(vector_of_bytes);
+                        return application_user___authorization____send_email_for_reset_password____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut ApplicationUser__Authorization___SendEmailForResetPassword___C_Result| -> () {
                         application_user___authorization____send_email_for_reset_password____deserialize____deallocate(c_result);
@@ -4061,7 +4061,7 @@ mod test {
                     let unified_report =
                         UnifiedReport::<Channel__Base___GetManyByNameInSubscriptions___Outcoming_, Channel__Base___GetManyByNameInSubscriptions___Precedent_>::target_empty();
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut Channel__Base___GetManyByNameInSubscriptions___C_Result {
-                        return channel___base____get_many_by_name_in_subscriptions____deserialize(vector_of_bytes);
+                        return channel___base____get_many_by_name_in_subscriptions____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut Channel__Base___GetManyByNameInSubscriptions___C_Result| -> () {
                         channel___base____get_many_by_name_in_subscriptions____deserialize____deallocate(c_result);
@@ -4099,7 +4099,7 @@ mod test {
                             outcoming,
                         );
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut Channel__Base___GetManyByNameInSubscriptions___C_Result {
-                        return channel___base____get_many_by_name_in_subscriptions____deserialize(vector_of_bytes);
+                        return channel___base____get_many_by_name_in_subscriptions____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut Channel__Base___GetManyByNameInSubscriptions___C_Result| -> () {
                         channel___base____get_many_by_name_in_subscriptions____deserialize____deallocate(c_result);
@@ -4117,7 +4117,7 @@ mod test {
                     let unified_report =
                         UnifiedReport::<Channel__Base___GetManyByNameInSubscriptions___Outcoming_, Channel__Base___GetManyByNameInSubscriptions___Precedent_>::precedent(precedent);
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut Channel__Base___GetManyByNameInSubscriptions___C_Result {
-                        return channel___base____get_many_by_name_in_subscriptions____deserialize(vector_of_bytes);
+                        return channel___base____get_many_by_name_in_subscriptions____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut Channel__Base___GetManyByNameInSubscriptions___C_Result| -> () {
                         channel___base____get_many_by_name_in_subscriptions____deserialize____deallocate(c_result);
@@ -4143,7 +4143,7 @@ mod test {
                 fn target_empty____channel___base____get_many_by_subscription() -> Result<(), Box<dyn StdError + 'static>> {
                     let unified_report = UnifiedReport::<Channel__Base___GetManyBySubscription___Outcoming_, Channel__Base___GetManyBySubscription___Precedent_>::target_empty();
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut Channel__Base___GetManyBySubscription___C_Result {
-                        return channel___base____get_many_by_subscription____deserialize(vector_of_bytes);
+                        return channel___base____get_many_by_subscription____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut Channel__Base___GetManyBySubscription___C_Result| -> () {
                         channel___base____get_many_by_subscription____deserialize____deallocate(c_result);
@@ -4179,7 +4179,7 @@ mod test {
                     let unified_report =
                         UnifiedReport::<Channel__Base___GetManyBySubscription___Outcoming_, Channel__Base___GetManyBySubscription___Precedent_>::target_filled(outcoming);
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut Channel__Base___GetManyBySubscription___C_Result {
-                        return channel___base____get_many_by_subscription____deserialize(vector_of_bytes);
+                        return channel___base____get_many_by_subscription____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut Channel__Base___GetManyBySubscription___C_Result| -> () {
                         channel___base____get_many_by_subscription____deserialize____deallocate(c_result);
@@ -4197,7 +4197,7 @@ mod test {
                     let unified_report =
                         UnifiedReport::<Channel__Base___GetManyBySubscription___Outcoming_, Channel__Base___GetManyBySubscription___Precedent_>::precedent(precedent);
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut Channel__Base___GetManyBySubscription___C_Result {
-                        return channel___base____get_many_by_subscription____deserialize(vector_of_bytes);
+                        return channel___base____get_many_by_subscription____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut Channel__Base___GetManyBySubscription___C_Result| -> () {
                         channel___base____get_many_by_subscription____deserialize____deallocate(c_result);
@@ -4223,7 +4223,7 @@ mod test {
                 fn target_empty____channel___base____get_many_public_by_name() -> Result<(), Box<dyn StdError + 'static>> {
                     let unified_report = UnifiedReport::<Channel__Base___GetManyPublicByName___Outcoming_, Channel__Base___GetManyPublicByName___Precedent_>::target_empty();
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut Channel__Base___GetManyPublicByName___C_Result {
-                        return channel___base____get_many_public_by_name____deserialize(vector_of_bytes);
+                        return channel___base____get_many_public_by_name____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut Channel__Base___GetManyPublicByName___C_Result| -> () {
                         channel___base____get_many_public_by_name____deserialize____deallocate(c_result);
@@ -4259,7 +4259,7 @@ mod test {
                     let unified_report =
                         UnifiedReport::<Channel__Base___GetManyPublicByName___Outcoming_, Channel__Base___GetManyPublicByName___Precedent_>::target_filled(outcoming);
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut Channel__Base___GetManyPublicByName___C_Result {
-                        return channel___base____get_many_public_by_name____deserialize(vector_of_bytes);
+                        return channel___base____get_many_public_by_name____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut Channel__Base___GetManyPublicByName___C_Result| -> () {
                         channel___base____get_many_public_by_name____deserialize____deallocate(c_result);
@@ -4274,7 +4274,7 @@ mod test {
                 fn _precedent____channel___base____get_many_public_by_name(precedent: Channel__Base___GetManyPublicByName___Precedent_) -> Result<(), Box<dyn StdError + 'static>> {
                     let unified_report = UnifiedReport::<Channel__Base___GetManyPublicByName___Outcoming_, Channel__Base___GetManyPublicByName___Precedent_>::precedent(precedent);
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut Channel__Base___GetManyPublicByName___C_Result {
-                        return channel___base____get_many_public_by_name____deserialize(vector_of_bytes);
+                        return channel___base____get_many_public_by_name____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut Channel__Base___GetManyPublicByName___C_Result| -> () {
                         channel___base____get_many_public_by_name____deserialize____deallocate(c_result);
@@ -4300,7 +4300,7 @@ mod test {
                 fn target_empty____channel___base____get_one_by_id() -> Result<(), Box<dyn StdError + 'static>> {
                     let unified_report = UnifiedReport::<Channel__Base___GetOneById___Outcoming_, Channel__Base___GetOneById___Precedent_>::target_empty();
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut Channel__Base___GetOneById___C_Result {
-                        return channel___base____get_one_by_id____deserialize(vector_of_bytes);
+                        return channel___base____get_one_by_id____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut Channel__Base___GetOneById___C_Result| -> () {
                         channel___base____get_one_by_id____deserialize____deallocate(c_result);
@@ -4350,7 +4350,7 @@ mod test {
                     };
                     let unified_report = UnifiedReport::<Channel__Base___GetOneById___Outcoming_, Channel__Base___GetOneById___Precedent_>::target_filled(outcoming);
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut Channel__Base___GetOneById___C_Result {
-                        return channel___base____get_one_by_id____deserialize(vector_of_bytes);
+                        return channel___base____get_one_by_id____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut Channel__Base___GetOneById___C_Result| -> () {
                         channel___base____get_one_by_id____deserialize____deallocate(c_result);
@@ -4365,7 +4365,7 @@ mod test {
                 fn _precedent____channel___base____get_one_by_id(precedent: Channel__Base___GetOneById___Precedent_) -> Result<(), Box<dyn StdError + 'static>> {
                     let unified_report = UnifiedReport::<Channel__Base___GetOneById___Outcoming_, Channel__Base___GetOneById___Precedent_>::precedent(precedent);
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut Channel__Base___GetOneById___C_Result {
-                        return channel___base____get_one_by_id____deserialize(vector_of_bytes);
+                        return channel___base____get_one_by_id____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut Channel__Base___GetOneById___C_Result| -> () {
                         channel___base____get_one_by_id____deserialize____deallocate(c_result);
@@ -4393,7 +4393,7 @@ mod test {
                 fn target_empty____channel_subscription___base____create() -> Result<(), Box<dyn StdError + 'static>> {
                     let unified_report = UnifiedReport::<Void, ChannelSubscription__Base___Create___Precedent_>::target_empty();
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ChannelSubscription__Base___Create___C_Result {
-                        return channel_subscription___base____create____deserialize(vector_of_bytes);
+                        return channel_subscription___base____create____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut ChannelSubscription__Base___Create___C_Result| -> () {
                         channel_subscription___base____create____deserialize____deallocate(c_result);
@@ -4412,7 +4412,7 @@ mod test {
                 fn _precedent____channel_subscription___base____create(precedent: ChannelSubscription__Base___Create___Precedent_) -> Result<(), Box<dyn StdError + 'static>> {
                     let unified_report = UnifiedReport::<Void, ChannelSubscription__Base___Create___Precedent_>::precedent(precedent);
                     let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ChannelSubscription__Base___Create___C_Result {
-                        return channel_subscription___base____create____deserialize(vector_of_bytes);
+                        return channel_subscription___base____create____deserialize____allocate(vector_of_bytes);
                     };
                     let deallocator = move |c_result: *mut ChannelSubscription__Base___Create___C_Result| -> () {
                         channel_subscription___base____create____deserialize____deallocate(c_result);
@@ -4467,7 +4467,7 @@ mod test {
                     application_user__password: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
                 };
                 let allocator = move |incoming: *mut ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
-                    return application_user___authorization____authorize_by_first_step____serialize(incoming);
+                    return application_user___authorization____authorize_by_first_step____serialize____allocate(incoming);
                 };
                 let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
                     application_user___authorization____authorize_by_first_step____serialize____deallocate(c_result);
@@ -4491,7 +4491,7 @@ mod test {
                     application_user_authorization_token__value: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
                 };
                 let allocator = move |incoming: *mut ApplicationUser__Authorization___AuthorizeByLastStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
-                    return application_user___authorization____authorize_by_last_step____serialize(incoming);
+                    return application_user___authorization____authorize_by_last_step____serialize____allocate(incoming);
                 };
                 let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
                     application_user___authorization____authorize_by_last_step____serialize____deallocate(c_result);
@@ -4512,7 +4512,7 @@ mod test {
                     application_user__email: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
                 };
                 let allocator = move |incoming: *mut ApplicationUser__Authorization___CheckEmailForExisting___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
-                    return application_user___authorization____check_email_for_existing____serialize(incoming);
+                    return application_user___authorization____check_email_for_existing____serialize____allocate(incoming);
                 };
                 let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
                     application_user___authorization____check_email_for_existing____serialize____deallocate(c_result);
@@ -4532,7 +4532,7 @@ mod test {
                     application_user__nickname: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
                 };
                 let allocator = move |incoming: *mut ApplicationUser__Authorization___CheckNicknameForExisting___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
-                    return application_user___authorization____check_nickname_for_existing____serialize(incoming);
+                    return application_user___authorization____check_nickname_for_existing____serialize____allocate(incoming);
                 };
                 let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
                     application_user___authorization____check_nickname_for_existing____serialize____deallocate(c_result);
@@ -4552,7 +4552,7 @@ mod test {
                     application_user_access_token_encrypted: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
                 };
                 let allocator = move |incoming: *mut ApplicationUser__Authorization___DeauthorizeFromAllDevices___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
-                    return application_user___authorization____deauthorize_from_all_devices____serialize(incoming);
+                    return application_user___authorization____deauthorize_from_all_devices____serialize____allocate(incoming);
                 };
                 let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
                     application_user___authorization____deauthorize_from_all_devices____serialize____deallocate(c_result);
@@ -4572,7 +4572,7 @@ mod test {
                     application_user_access_token_encrypted: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
                 };
                 let allocator = move |incoming: *mut ApplicationUser__Authorization___DeauthorizeFromOneDevice___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
-                    return application_user___authorization____deauthorize_from_one_device____serialize(incoming);
+                    return application_user___authorization____deauthorize_from_one_device____serialize____allocate(incoming);
                 };
                 let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
                     application_user___authorization____deauthorize_from_one_device____serialize____deallocate(c_result);
@@ -4593,7 +4593,7 @@ mod test {
                     application_user_access_refresh_token_encrypted: Allocator::<C_Vector<c_uchar>>::allocate(ARRAY_LITERAL.to_vec()),
                 };
                 let allocator = move |incoming: *mut ApplicationUser__Authorization___RefreshAccessToken___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
-                    return application_user___authorization____refresh_access_token____serialize(incoming);
+                    return application_user___authorization____refresh_access_token____serialize____allocate(incoming);
                 };
                 let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
                     application_user___authorization____refresh_access_token____serialize____deallocate(c_result);
@@ -4615,7 +4615,7 @@ mod test {
                     application_user_device__id: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
                 };
                 let allocator = move |incoming: *mut ApplicationUser__Authorization___RegisterByFirstStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
-                    return application_user___authorization____register_by_first_step____serialize(incoming);
+                    return application_user___authorization____register_by_first_step____serialize____allocate(incoming);
                 };
                 let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
                     application_user___authorization____register_by_first_step____serialize____deallocate(c_result);
@@ -4638,7 +4638,7 @@ mod test {
                     application_user_registration_token__value: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
                 };
                 let allocator = move |incoming: *mut ApplicationUser__Authorization___RegisterBySecondStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
-                    return application_user___authorization____register_by_second_step____serialize(incoming);
+                    return application_user___authorization____register_by_second_step____serialize____allocate(incoming);
                 };
                 let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
                     application_user___authorization____register_by_second_step____serialize____deallocate(c_result);
@@ -4664,7 +4664,7 @@ mod test {
                     application_user_registration_token__value: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
                 };
                 let allocator = move |incoming: *mut ApplicationUser__Authorization___RegisterByLastStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
-                    return application_user___authorization____register_by_last_step____serialize(incoming);
+                    return application_user___authorization____register_by_last_step____serialize____allocate(incoming);
                 };
                 let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
                     application_user___authorization____register_by_last_step____serialize____deallocate(c_result);
@@ -4689,7 +4689,7 @@ mod test {
                     application_user_device__id: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
                 };
                 let allocator = move |incoming: *mut ApplicationUser__Authorization___ResetPasswordByFirstStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
-                    return application_user___authorization____reset_password_by_first_step____serialize(incoming);
+                    return application_user___authorization____reset_password_by_first_step____serialize____allocate(incoming);
                 };
                 let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
                     application_user___authorization____reset_password_by_first_step____serialize____deallocate(c_result);
@@ -4712,7 +4712,7 @@ mod test {
                     application_user_reset_password_token__value: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
                 };
                 let allocator = move |incoming: *mut ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
-                    return application_user___authorization____reset_password_by_second_step____serialize(incoming);
+                    return application_user___authorization____reset_password_by_second_step____serialize____allocate(incoming);
                 };
                 let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
                     application_user___authorization____reset_password_by_second_step____serialize____deallocate(c_result);
@@ -4736,7 +4736,7 @@ mod test {
                     application_user_reset_password_token__value: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
                 };
                 let allocator = move |incoming: *mut ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
-                    return application_user___authorization____reset_password_by_last_step____serialize(incoming);
+                    return application_user___authorization____reset_password_by_last_step____serialize____allocate(incoming);
                 };
                 let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
                     application_user___authorization____reset_password_by_last_step____serialize____deallocate(c_result);
@@ -4759,7 +4759,7 @@ mod test {
                     application_user_device__id: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
                 };
                 let allocator = move |incoming: *mut ApplicationUser__Authorization___SendEmailForRegister___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
-                    return application_user___authorization____send_email_for_register____serialize(incoming);
+                    return application_user___authorization____send_email_for_register____serialize____allocate(incoming);
                 };
                 let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
                     application_user___authorization____send_email_for_register____serialize____deallocate(c_result);
@@ -4781,7 +4781,7 @@ mod test {
                     application_user__id: 0,
                 };
                 let allocator = move |incoming: *mut ApplicationUser__Authorization___SendEmailForAuthorize___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
-                    return application_user___authorization____send_email_for_authorize____serialize(incoming);
+                    return application_user___authorization____send_email_for_authorize____serialize____allocate(incoming);
                 };
                 let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
                     application_user___authorization____send_email_for_authorize____serialize____deallocate(c_result);
@@ -4802,7 +4802,7 @@ mod test {
                     application_user_device__id: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
                 };
                 let allocator = move |incoming: *mut ApplicationUser__Authorization___SendEmailForResetPassword___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
-                    return application_user___authorization____send_email_for_reset_password____serialize(incoming);
+                    return application_user___authorization____send_email_for_reset_password____serialize____allocate(incoming);
                 };
                 let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
                     application_user___authorization____send_email_for_reset_password____serialize____deallocate(c_result);
@@ -4825,7 +4825,7 @@ mod test {
                     limit: 0,
                 };
                 let allocator = move |incoming: *mut Channel__Base___GetManyByNameInSubscriptions___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
-                    return channel___base____get_many_by_name_in_subscriptions____serialize(incoming);
+                    return channel___base____get_many_by_name_in_subscriptions____serialize____allocate(incoming);
                 };
                 let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
                     channel___base____get_many_by_name_in_subscriptions____serialize____deallocate(c_result);
@@ -4849,7 +4849,7 @@ mod test {
                     limit: 0,
                 };
                 let allocator = move |incoming: *mut Channel__Base___GetManyBySubscription___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
-                    return channel___base____get_many_by_subscription____serialize(incoming);
+                    return channel___base____get_many_by_subscription____serialize____allocate(incoming);
                 };
                 let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
                     channel___base____get_many_by_subscription____serialize____deallocate(c_result);
@@ -4872,7 +4872,7 @@ mod test {
                     limit: 0,
                 };
                 let allocator = move |incoming: *mut Channel__Base___GetManyPublicByName___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
-                    return channel___base____get_many_public_by_name____serialize(incoming);
+                    return channel___base____get_many_public_by_name____serialize____allocate(incoming);
                 };
                 let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
                     channel___base____get_many_public_by_name____serialize____deallocate(c_result);
@@ -4895,7 +4895,7 @@ mod test {
                     channel__id: 0,
                 };
                 let allocator = move |incoming: *mut Channel__Base___GetOneById___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
-                    return channel___base____get_one_by_id____serialize(incoming);
+                    return channel___base____get_one_by_id____serialize____allocate(incoming);
                 };
                 let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
                     channel___base____get_one_by_id____serialize____deallocate(c_result);
@@ -4916,7 +4916,7 @@ mod test {
                     channel__id: 0,
                 };
                 let allocator = move |incoming: *mut ChannelSubscription__Base___Create___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
-                    return channel_subscription___base____create____serialize(incoming);
+                    return channel_subscription___base____create____serialize____allocate(incoming);
                 };
                 let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
                     channel_subscription___base____create____serialize____deallocate(c_result);
