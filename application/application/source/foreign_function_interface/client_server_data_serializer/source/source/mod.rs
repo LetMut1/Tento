@@ -351,9 +351,10 @@ struct Allocator<S> {
 }
 impl Allocator<C_String> {
     fn allocate(string: String) -> C_String {
-        let c_string = unsafe { CString::from_vec_unchecked(string.into_bytes()) };
         return C_String {
-            pointer: c_string.into_raw(),
+            pointer: unsafe {
+                CString::from_vec_unchecked(string.into_bytes())
+            }.into_raw(),
         };
     }
     fn deallocate(c_string: C_String) -> () {
