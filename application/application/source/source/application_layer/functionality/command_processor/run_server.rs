@@ -16,10 +16,7 @@ use aggregate_error::{
     OptionConverter,
     ResultConverter,
 };
-use std::sync::{
-    atomic::AtomicU64,
-    OnceLock,
-};
+use std::sync::OnceLock;
 use tokio::runtime::{
     Builder as RuntimeBuilder,
     Runtime,
