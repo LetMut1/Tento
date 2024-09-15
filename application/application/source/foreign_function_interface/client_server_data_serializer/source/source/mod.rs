@@ -305,17 +305,23 @@ where
     T: Clone,
 {
     fn to_vec(self) -> Result<Vec<T>, Box<dyn StdError + 'static>> {
+        return Ok(
+            self.as_slice()?.to_vec()
+        )
+    }
+    fn as_slice<'a>(&'a self) -> Result<&'a [T], Box<dyn StdError + 'static>> {
         if self.pointer.is_null() {
             return Err(NULL_POINTER_ERROR_MESAGE.into());
         }
-        return Ok(
-            unsafe {
-                std::slice::from_raw_parts(
-                    self.pointer as *const _,
-                    self.length,
-                )
-            }.to_vec(),
-        );
+        return Ok(self.as_slice_unchecked());
+    }
+    fn as_slice_unchecked<'a>(&'a self) -> &'a [T] {
+        return unsafe {
+            std::slice::from_raw_parts(
+                self.pointer as *const _,
+                self.length,
+            )
+        };
     }
 }
 impl<T> Default for C_Vector<T> {
@@ -2419,12 +2425,7 @@ pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____deseria
     if result_.is_data {
         if result_.data.is_target {
             if result_.data.target.is_filled {
-                let common_registry = unsafe {
-                    std::slice::from_raw_parts(
-                        result_.data.target.filled.common_registry.pointer,
-                        result_.data.target.filled.common_registry.length,
-                    )
-                };
+                let common_registry = result_.data.target.filled.common_registry.as_slice_unchecked();
                 for common in common_registry {
                     Allocator::<C_String>::deallocate(common.channel.channel__name);
                     Allocator::<C_String>::deallocate(common.channel.channel__linked_name);
@@ -2569,12 +2570,7 @@ pub extern "C" fn channel___base____get_many_by_subscription____deserialize____d
     if result_.is_data {
         if result_.data.is_target {
             if result_.data.target.is_filled {
-                let common_registry = unsafe {
-                    std::slice::from_raw_parts(
-                        result_.data.target.filled.common_registry.pointer,
-                        result_.data.target.filled.common_registry.length,
-                    )
-                };
+                let common_registry = result_.data.target.filled.common_registry.as_slice_unchecked();
                 for common in common_registry {
                     Allocator::<C_String>::deallocate(common.channel.channel__name);
                     Allocator::<C_String>::deallocate(common.channel.channel__linked_name);
@@ -2720,12 +2716,7 @@ pub extern "C" fn channel___base____get_many_public_by_name____deserialize____de
     if result_.is_data {
         if result_.data.is_target {
             if result_.data.target.is_filled {
-                let common_registry = unsafe {
-                    std::slice::from_raw_parts(
-                        result_.data.target.filled.common_registry.pointer,
-                        result_.data.target.filled.common_registry.length,
-                    )
-                };
+                let common_registry = result_.data.target.filled.common_registry.as_slice_unchecked();
                 for common_1 in common_registry {
                     Allocator::<C_String>::deallocate(common_1.channel.channel__name);
                     Allocator::<C_String>::deallocate(common_1.channel.channel__linked_name);
@@ -2917,12 +2908,7 @@ pub extern "C" fn channel___base____get_one_by_id____deserialize____deallocate(c
                 }
                 Allocator::<C_Vector<_>>::deallocate(result_.data.target.filled.channel.channel__orientation);
                 Allocator::<C_Vector<_>>::deallocate(result_.data.target.filled.channel_inner_link_registry);
-                let channel_outer_link_registry = unsafe {
-                    std::slice::from_raw_parts(
-                        result_.data.target.filled.channel_outer_link_registry.pointer,
-                        result_.data.target.filled.channel_outer_link_registry.length,
-                    )
-                };
+                let channel_outer_link_registry = result_.data.target.filled.channel_outer_link_registry.as_slice_unchecked();
                 for channel_outer_link_1 in channel_outer_link_registry {
                     Allocator::<C_String>::deallocate(channel_outer_link_1.channel_outer_link__alias);
                     Allocator::<C_String>::deallocate(channel_outer_link_1.channel_outer_link__address);
