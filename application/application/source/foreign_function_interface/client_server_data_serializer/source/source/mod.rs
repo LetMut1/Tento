@@ -352,9 +352,9 @@ struct Allocator<S> {
 impl Allocator<C_String> {
     fn allocate(string: String) -> C_String {
         let c_string = unsafe { CString::from_vec_unchecked(string.into_bytes()) };
-        C_String {
+        return C_String {
             pointer: c_string.into_raw(),
-        }
+        };
     }
     fn deallocate(c_string: C_String) -> () {
         if c_string.pointer.is_null() {
@@ -367,12 +367,12 @@ impl Allocator<C_String> {
 impl<T> Allocator<C_Vector<T>> {
     fn allocate(vector: Vec<T>) -> C_Vector<T> {
         let mut boxed_slice = vector.into_boxed_slice();
-        let self_ = C_Vector {
+        let c_vector = C_Vector {
             pointer: boxed_slice.as_mut_ptr(),
             length: boxed_slice.len(),
         };
         std::mem::forget(boxed_slice);
-        return self_;
+        return c_vector;
     }
     fn deallocate(c_vector: C_Vector<T>) -> () {
         if c_vector.pointer.is_null() {
@@ -386,18 +386,32 @@ impl<T> Allocator<C_Vector<T>> {
         return ();
     }
 }
-impl<T> Allocator<C_Result<C_Vector<T>>> {
-    fn deallocate(c_result: *mut C_Result<C_Vector<T>>) -> () {
+impl Allocator<C_Result<C_Vector<c_uchar>>> {
+    fn deallocate(c_result: *mut C_Result<C_Vector<c_uchar>>) -> () {
         if c_result.is_null() {
             return ();
         }
         let c_result_ = unsafe { Box::from_raw(c_result) };
         if c_result_.is_data {
-            Allocator::<C_Vector<T>>::deallocate(c_result_.data);
+            Allocator::<C_Vector<c_uchar>>::deallocate(c_result_.data);
         }
         return ();
     }
 }
+
+
+pub extern "C" fn applicard_by_second_step____deserialize____deallocate(
+    c_result: *mut ApplicationUser__Authorization___ResetPasswordBySecondStep___C_Result,
+) -> () {
+    if c_result.is_null() {
+        return ();
+    }
+    let _ = unsafe { Box::from_raw(c_result) };
+    return ();
+}
+
+
+
 struct Transformer<S> {
     _subject: PhantomData<S>,
 }
@@ -754,12 +768,12 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
     if c_result.is_null() {
         return ();
     }
-    let result_ = unsafe { Box::from_raw(c_result) };
-    if result_.is_data {
-        if result_.data.is_target {
-            if result_.data.target.is_filled {
-                Allocator::<C_String>::deallocate(result_.data.target.filled.application_user_access_token_encrypted);
-                Allocator::<C_Vector<c_uchar>>::deallocate(result_.data.target.filled.application_user_access_refresh_token_encrypted);
+    let c_result_ = unsafe { Box::from_raw(c_result) };
+    if c_result_.is_data {
+        if c_result_.data.is_target {
+            if c_result_.data.target.is_filled {
+                Allocator::<C_String>::deallocate(c_result_.data.target.filled.application_user_access_token_encrypted);
+                Allocator::<C_Vector<c_uchar>>::deallocate(c_result_.data.target.filled.application_user_access_refresh_token_encrypted);
             }
         }
     }
@@ -1202,12 +1216,12 @@ pub extern "C" fn application_user___authorization____refresh_access_token____de
     if c_result.is_null() {
         return ();
     }
-    let result_ = unsafe { Box::from_raw(c_result) };
-    if result_.is_data {
-        if result_.data.is_target {
-            if result_.data.target.is_filled {
-                Allocator::<C_String>::deallocate(result_.data.target.filled.application_user_access_token_encrypted);
-                Allocator::<C_Vector<c_uchar>>::deallocate(result_.data.target.filled.application_user_access_refresh_token_encrypted);
+    let c_result_ = unsafe { Box::from_raw(c_result) };
+    if c_result_.is_data {
+        if c_result_.data.is_target {
+            if c_result_.data.target.is_filled {
+                Allocator::<C_String>::deallocate(c_result_.data.target.filled.application_user_access_token_encrypted);
+                Allocator::<C_Vector<c_uchar>>::deallocate(c_result_.data.target.filled.application_user_access_refresh_token_encrypted);
             }
         }
     }
@@ -1572,12 +1586,12 @@ pub extern "C" fn application_user___authorization____register_by_last_step____d
     if c_result.is_null() {
         return ();
     }
-    let result_ = unsafe { Box::from_raw(c_result) };
-    if result_.is_data {
-        if result_.data.is_target {
-            if result_.data.target.is_filled {
-                Allocator::<C_String>::deallocate(result_.data.target.filled.application_user_access_token_encrypted);
-                Allocator::<C_Vector<c_uchar>>::deallocate(result_.data.target.filled.application_user_access_refresh_token_encrypted);
+    let c_result_ = unsafe { Box::from_raw(c_result) };
+    if c_result_.is_data {
+        if c_result_.data.is_target {
+            if c_result_.data.target.is_filled {
+                Allocator::<C_String>::deallocate(c_result_.data.target.filled.application_user_access_token_encrypted);
+                Allocator::<C_Vector<c_uchar>>::deallocate(c_result_.data.target.filled.application_user_access_refresh_token_encrypted);
             }
         }
     }
@@ -2421,11 +2435,11 @@ pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____deseria
     if c_result.is_null() {
         return ();
     }
-    let result_ = unsafe { Box::from_raw(c_result) };
-    if result_.is_data {
-        if result_.data.is_target {
-            if result_.data.target.is_filled {
-                let common_registry = result_.data.target.filled.common_registry.as_slice_unchecked();
+    let c_result_ = unsafe { Box::from_raw(c_result) };
+    if c_result_.is_data {
+        if c_result_.data.is_target {
+            if c_result_.data.target.is_filled {
+                let common_registry = c_result_.data.target.filled.common_registry.as_slice_unchecked();
                 for common in common_registry {
                     Allocator::<C_String>::deallocate(common.channel.channel__name);
                     Allocator::<C_String>::deallocate(common.channel.channel__linked_name);
@@ -2436,7 +2450,7 @@ pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____deseria
                         Allocator::<C_String>::deallocate(common.channel.channel__cover_image_path.data);
                     }
                 }
-                Allocator::<C_Vector<_>>::deallocate(result_.data.target.filled.common_registry);
+                Allocator::<C_Vector<_>>::deallocate(c_result_.data.target.filled.common_registry);
             }
         }
     }
@@ -2566,11 +2580,11 @@ pub extern "C" fn channel___base____get_many_by_subscription____deserialize____d
     if c_result.is_null() {
         return ();
     }
-    let result_ = unsafe { Box::from_raw(c_result) };
-    if result_.is_data {
-        if result_.data.is_target {
-            if result_.data.target.is_filled {
-                let common_registry = result_.data.target.filled.common_registry.as_slice_unchecked();
+    let c_result_ = unsafe { Box::from_raw(c_result) };
+    if c_result_.is_data {
+        if c_result_.data.is_target {
+            if c_result_.data.target.is_filled {
+                let common_registry = c_result_.data.target.filled.common_registry.as_slice_unchecked();
                 for common in common_registry {
                     Allocator::<C_String>::deallocate(common.channel.channel__name);
                     Allocator::<C_String>::deallocate(common.channel.channel__linked_name);
@@ -2581,7 +2595,7 @@ pub extern "C" fn channel___base____get_many_by_subscription____deserialize____d
                         Allocator::<C_String>::deallocate(common.channel.channel__cover_image_path.data);
                     }
                 }
-                Allocator::<C_Vector<_>>::deallocate(result_.data.target.filled.common_registry);
+                Allocator::<C_Vector<_>>::deallocate(c_result_.data.target.filled.common_registry);
             }
         }
     }
@@ -2712,11 +2726,11 @@ pub extern "C" fn channel___base____get_many_public_by_name____deserialize____de
     if c_result.is_null() {
         return ();
     }
-    let result_ = unsafe { Box::from_raw(c_result) };
-    if result_.is_data {
-        if result_.data.is_target {
-            if result_.data.target.is_filled {
-                let common_registry = result_.data.target.filled.common_registry.as_slice_unchecked();
+    let c_result_ = unsafe { Box::from_raw(c_result) };
+    if c_result_.is_data {
+        if c_result_.data.is_target {
+            if c_result_.data.target.is_filled {
+                let common_registry = c_result_.data.target.filled.common_registry.as_slice_unchecked();
                 for common_1 in common_registry {
                     Allocator::<C_String>::deallocate(common_1.channel.channel__name);
                     Allocator::<C_String>::deallocate(common_1.channel.channel__linked_name);
@@ -2727,7 +2741,7 @@ pub extern "C" fn channel___base____get_many_public_by_name____deserialize____de
                         Allocator::<C_String>::deallocate(common_1.channel.channel__cover_image_path.data);
                     }
                 }
-                Allocator::<C_Vector<_>>::deallocate(result_.data.target.filled.common_registry);
+                Allocator::<C_Vector<_>>::deallocate(c_result_.data.target.filled.common_registry);
             }
         }
     }
@@ -2891,29 +2905,29 @@ pub extern "C" fn channel___base____get_one_by_id____deserialize____deallocate(c
     if c_result.is_null() {
         return ();
     }
-    let result_ = unsafe { Box::from_raw(c_result) };
-    if result_.is_data {
-        if result_.data.is_target {
-            if result_.data.target.is_filled {
-                Allocator::<C_String>::deallocate(result_.data.target.filled.channel.channel__name);
-                Allocator::<C_String>::deallocate(result_.data.target.filled.channel.channel__linked_name);
-                if result_.data.target.filled.channel.channel__description.is_data {
-                    Allocator::<C_String>::deallocate(result_.data.target.filled.channel.channel__description.data);
+    let c_result_ = unsafe { Box::from_raw(c_result) };
+    if c_result_.is_data {
+        if c_result_.data.is_target {
+            if c_result_.data.target.is_filled {
+                Allocator::<C_String>::deallocate(c_result_.data.target.filled.channel.channel__name);
+                Allocator::<C_String>::deallocate(c_result_.data.target.filled.channel.channel__linked_name);
+                if c_result_.data.target.filled.channel.channel__description.is_data {
+                    Allocator::<C_String>::deallocate(c_result_.data.target.filled.channel.channel__description.data);
                 }
-                if result_.data.target.filled.channel.channel__background_image_path.is_data {
-                    Allocator::<C_String>::deallocate(result_.data.target.filled.channel.channel__background_image_path.data);
+                if c_result_.data.target.filled.channel.channel__background_image_path.is_data {
+                    Allocator::<C_String>::deallocate(c_result_.data.target.filled.channel.channel__background_image_path.data);
                 }
-                if result_.data.target.filled.channel.channel__cover_image_path.is_data {
-                    Allocator::<C_String>::deallocate(result_.data.target.filled.channel.channel__cover_image_path.data);
+                if c_result_.data.target.filled.channel.channel__cover_image_path.is_data {
+                    Allocator::<C_String>::deallocate(c_result_.data.target.filled.channel.channel__cover_image_path.data);
                 }
-                Allocator::<C_Vector<_>>::deallocate(result_.data.target.filled.channel.channel__orientation);
-                Allocator::<C_Vector<_>>::deallocate(result_.data.target.filled.channel_inner_link_registry);
-                let channel_outer_link_registry = result_.data.target.filled.channel_outer_link_registry.as_slice_unchecked();
+                Allocator::<C_Vector<_>>::deallocate(c_result_.data.target.filled.channel.channel__orientation);
+                Allocator::<C_Vector<_>>::deallocate(c_result_.data.target.filled.channel_inner_link_registry);
+                let channel_outer_link_registry = c_result_.data.target.filled.channel_outer_link_registry.as_slice_unchecked();
                 for channel_outer_link_1 in channel_outer_link_registry {
                     Allocator::<C_String>::deallocate(channel_outer_link_1.channel_outer_link__alias);
                     Allocator::<C_String>::deallocate(channel_outer_link_1.channel_outer_link__address);
                 }
-                Allocator::<C_Vector<_>>::deallocate(result_.data.target.filled.channel_outer_link_registry);
+                Allocator::<C_Vector<_>>::deallocate(c_result_.data.target.filled.channel_outer_link_registry);
             }
         }
     }
