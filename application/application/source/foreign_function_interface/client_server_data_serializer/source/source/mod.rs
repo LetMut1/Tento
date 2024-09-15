@@ -357,7 +357,7 @@ impl Allocator<C_String> {
             }.into_raw(),
         };
     }
-    fn deallocate(c_string: C_String) -> () {
+    fn deallocate<'a>(c_string: &'a C_String) -> () {
         if c_string.pointer.is_null() {
             return ();
         }
@@ -765,7 +765,7 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
     if c_result_.is_data {
         if c_result_.data.is_target {
             if c_result_.data.target.is_filled {
-                Allocator::<C_String>::deallocate(c_result_.data.target.filled.application_user_access_token_encrypted);
+                Allocator::<C_String>::deallocate(&c_result_.data.target.filled.application_user_access_token_encrypted);
                 Allocator::<C_Vector<_>>::deallocate(c_result_.data.target.filled.application_user_access_refresh_token_encrypted);
             }
         }
@@ -1201,7 +1201,7 @@ pub extern "C" fn application_user___authorization____refresh_access_token____de
     if c_result_.is_data {
         if c_result_.data.is_target {
             if c_result_.data.target.is_filled {
-                Allocator::<C_String>::deallocate(c_result_.data.target.filled.application_user_access_token_encrypted);
+                Allocator::<C_String>::deallocate(&c_result_.data.target.filled.application_user_access_token_encrypted);
                 Allocator::<C_Vector<_>>::deallocate(c_result_.data.target.filled.application_user_access_refresh_token_encrypted);
             }
         }
@@ -1565,7 +1565,7 @@ pub extern "C" fn application_user___authorization____register_by_last_step____d
     if c_result_.is_data {
         if c_result_.data.is_target {
             if c_result_.data.target.is_filled {
-                Allocator::<C_String>::deallocate(c_result_.data.target.filled.application_user_access_token_encrypted);
+                Allocator::<C_String>::deallocate(&c_result_.data.target.filled.application_user_access_token_encrypted);
                 Allocator::<C_Vector<_>>::deallocate(c_result_.data.target.filled.application_user_access_refresh_token_encrypted);
             }
         }
@@ -2398,13 +2398,13 @@ pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____deseria
             if c_result_.data.target.is_filled {
                 let common_registry = c_result_.data.target.filled.common_registry.as_slice_unchecked();
                 for common in common_registry {
-                    Allocator::<C_String>::deallocate(common.channel.channel__name);
-                    Allocator::<C_String>::deallocate(common.channel.channel__linked_name);
+                    Allocator::<C_String>::deallocate(&common.channel.channel__name);
+                    Allocator::<C_String>::deallocate(&common.channel.channel__linked_name);
                     if common.channel.channel__background_image_path.is_data {
-                        Allocator::<C_String>::deallocate(common.channel.channel__background_image_path.data);
+                        Allocator::<C_String>::deallocate(&common.channel.channel__background_image_path.data);
                     }
                     if common.channel.channel__cover_image_path.is_data {
-                        Allocator::<C_String>::deallocate(common.channel.channel__cover_image_path.data);
+                        Allocator::<C_String>::deallocate(&common.channel.channel__cover_image_path.data);
                     }
                 }
                 Allocator::<C_Vector<_>>::deallocate(c_result_.data.target.filled.common_registry);
@@ -2543,13 +2543,13 @@ pub extern "C" fn channel___base____get_many_by_subscription____deserialize____d
             if c_result_.data.target.is_filled {
                 let common_registry = c_result_.data.target.filled.common_registry.as_slice_unchecked();
                 for common in common_registry {
-                    Allocator::<C_String>::deallocate(common.channel.channel__name);
-                    Allocator::<C_String>::deallocate(common.channel.channel__linked_name);
+                    Allocator::<C_String>::deallocate(&common.channel.channel__name);
+                    Allocator::<C_String>::deallocate(&common.channel.channel__linked_name);
                     if common.channel.channel__background_image_path.is_data {
-                        Allocator::<C_String>::deallocate(common.channel.channel__background_image_path.data);
+                        Allocator::<C_String>::deallocate(&common.channel.channel__background_image_path.data);
                     }
                     if common.channel.channel__cover_image_path.is_data {
-                        Allocator::<C_String>::deallocate(common.channel.channel__cover_image_path.data);
+                        Allocator::<C_String>::deallocate(&common.channel.channel__cover_image_path.data);
                     }
                 }
                 Allocator::<C_Vector<_>>::deallocate(c_result_.data.target.filled.common_registry);
@@ -2689,13 +2689,13 @@ pub extern "C" fn channel___base____get_many_public_by_name____deserialize____de
             if c_result_.data.target.is_filled {
                 let common_registry = c_result_.data.target.filled.common_registry.as_slice_unchecked();
                 for common_1 in common_registry {
-                    Allocator::<C_String>::deallocate(common_1.channel.channel__name);
-                    Allocator::<C_String>::deallocate(common_1.channel.channel__linked_name);
+                    Allocator::<C_String>::deallocate(&common_1.channel.channel__name);
+                    Allocator::<C_String>::deallocate(&common_1.channel.channel__linked_name);
                     if common_1.channel.channel__background_image_path.is_data {
-                        Allocator::<C_String>::deallocate(common_1.channel.channel__background_image_path.data);
+                        Allocator::<C_String>::deallocate(&common_1.channel.channel__background_image_path.data);
                     }
                     if common_1.channel.channel__cover_image_path.is_data {
-                        Allocator::<C_String>::deallocate(common_1.channel.channel__cover_image_path.data);
+                        Allocator::<C_String>::deallocate(&common_1.channel.channel__cover_image_path.data);
                     }
                 }
                 Allocator::<C_Vector<_>>::deallocate(c_result_.data.target.filled.common_registry);
@@ -2866,23 +2866,23 @@ pub extern "C" fn channel___base____get_one_by_id____deserialize____deallocate(c
     if c_result_.is_data {
         if c_result_.data.is_target {
             if c_result_.data.target.is_filled {
-                Allocator::<C_String>::deallocate(c_result_.data.target.filled.channel.channel__name);
-                Allocator::<C_String>::deallocate(c_result_.data.target.filled.channel.channel__linked_name);
+                Allocator::<C_String>::deallocate(&c_result_.data.target.filled.channel.channel__name);
+                Allocator::<C_String>::deallocate(&c_result_.data.target.filled.channel.channel__linked_name);
                 if c_result_.data.target.filled.channel.channel__description.is_data {
-                    Allocator::<C_String>::deallocate(c_result_.data.target.filled.channel.channel__description.data);
+                    Allocator::<C_String>::deallocate(&c_result_.data.target.filled.channel.channel__description.data);
                 }
                 if c_result_.data.target.filled.channel.channel__background_image_path.is_data {
-                    Allocator::<C_String>::deallocate(c_result_.data.target.filled.channel.channel__background_image_path.data);
+                    Allocator::<C_String>::deallocate(&c_result_.data.target.filled.channel.channel__background_image_path.data);
                 }
                 if c_result_.data.target.filled.channel.channel__cover_image_path.is_data {
-                    Allocator::<C_String>::deallocate(c_result_.data.target.filled.channel.channel__cover_image_path.data);
+                    Allocator::<C_String>::deallocate(&c_result_.data.target.filled.channel.channel__cover_image_path.data);
                 }
                 Allocator::<C_Vector<_>>::deallocate(c_result_.data.target.filled.channel.channel__orientation);
                 Allocator::<C_Vector<_>>::deallocate(c_result_.data.target.filled.channel_inner_link_registry);
                 let channel_outer_link_registry = c_result_.data.target.filled.channel_outer_link_registry.as_slice_unchecked();
                 for channel_outer_link_1 in channel_outer_link_registry {
-                    Allocator::<C_String>::deallocate(channel_outer_link_1.channel_outer_link__alias);
-                    Allocator::<C_String>::deallocate(channel_outer_link_1.channel_outer_link__address);
+                    Allocator::<C_String>::deallocate(&channel_outer_link_1.channel_outer_link__alias);
+                    Allocator::<C_String>::deallocate(&channel_outer_link_1.channel_outer_link__address);
                 }
                 Allocator::<C_Vector<_>>::deallocate(c_result_.data.target.filled.channel_outer_link_registry);
             }
@@ -4432,9 +4432,9 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_String>::deallocate(incoming.application_user_device__id);
-                Allocator::<C_String>::deallocate(incoming.application_user__email___or___application_user__nickname);
-                Allocator::<C_String>::deallocate(incoming.application_user__password);
+                Allocator::<C_String>::deallocate(&incoming.application_user_device__id);
+                Allocator::<C_String>::deallocate(&incoming.application_user__email___or___application_user__nickname);
+                Allocator::<C_String>::deallocate(&incoming.application_user__password);
                 return Ok(());
             }
             #[test]
@@ -4456,8 +4456,8 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_String>::deallocate(incoming.application_user_device__id);
-                Allocator::<C_String>::deallocate(incoming.application_user_authorization_token__value);
+                Allocator::<C_String>::deallocate(&incoming.application_user_device__id);
+                Allocator::<C_String>::deallocate(&incoming.application_user_authorization_token__value);
                 return Ok(());
             }
             #[test]
@@ -4477,7 +4477,7 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_String>::deallocate(incoming.application_user__email);
+                Allocator::<C_String>::deallocate(&incoming.application_user__email);
                 return Ok(());
             }
             #[test]
@@ -4497,7 +4497,7 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_String>::deallocate(incoming.application_user__nickname);
+                Allocator::<C_String>::deallocate(&incoming.application_user__nickname);
                 return Ok(());
             }
             #[test]
@@ -4517,7 +4517,7 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_String>::deallocate(incoming.application_user_access_token_encrypted);
+                Allocator::<C_String>::deallocate(&incoming.application_user_access_token_encrypted);
                 return Ok(());
             }
             #[test]
@@ -4537,7 +4537,7 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_String>::deallocate(incoming.application_user_access_token_encrypted);
+                Allocator::<C_String>::deallocate(&incoming.application_user_access_token_encrypted);
                 return Ok(());
             }
             #[test]
@@ -4558,7 +4558,7 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_String>::deallocate(incoming.application_user_access_token_encrypted);
+                Allocator::<C_String>::deallocate(&incoming.application_user_access_token_encrypted);
                 Allocator::<C_Vector<_>>::deallocate(incoming.application_user_access_refresh_token_encrypted);
                 return Ok(());
             }
@@ -4580,8 +4580,8 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_String>::deallocate(incoming.application_user__email);
-                Allocator::<C_String>::deallocate(incoming.application_user_device__id);
+                Allocator::<C_String>::deallocate(&incoming.application_user__email);
+                Allocator::<C_String>::deallocate(&incoming.application_user_device__id);
                 return Ok(());
             }
             #[test]
@@ -4603,9 +4603,9 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_String>::deallocate(incoming.application_user__email);
-                Allocator::<C_String>::deallocate(incoming.application_user_device__id);
-                Allocator::<C_String>::deallocate(incoming.application_user_registration_token__value);
+                Allocator::<C_String>::deallocate(&incoming.application_user__email);
+                Allocator::<C_String>::deallocate(&incoming.application_user_device__id);
+                Allocator::<C_String>::deallocate(&incoming.application_user_registration_token__value);
                 return Ok(());
             }
             #[test]
@@ -4629,11 +4629,11 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_String>::deallocate(incoming.application_user_device__id);
-                Allocator::<C_String>::deallocate(incoming.application_user__nickname);
-                Allocator::<C_String>::deallocate(incoming.application_user__password);
-                Allocator::<C_String>::deallocate(incoming.application_user__email);
-                Allocator::<C_String>::deallocate(incoming.application_user_registration_token__value);
+                Allocator::<C_String>::deallocate(&incoming.application_user_device__id);
+                Allocator::<C_String>::deallocate(&incoming.application_user__nickname);
+                Allocator::<C_String>::deallocate(&incoming.application_user__password);
+                Allocator::<C_String>::deallocate(&incoming.application_user__email);
+                Allocator::<C_String>::deallocate(&incoming.application_user_registration_token__value);
                 return Ok(());
             }
             #[test]
@@ -4654,8 +4654,8 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_String>::deallocate(incoming.application_user__email);
-                Allocator::<C_String>::deallocate(incoming.application_user_device__id);
+                Allocator::<C_String>::deallocate(&incoming.application_user__email);
+                Allocator::<C_String>::deallocate(&incoming.application_user_device__id);
                 return Ok(());
             }
             #[test]
@@ -4677,8 +4677,8 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_String>::deallocate(incoming.application_user_device__id);
-                Allocator::<C_String>::deallocate(incoming.application_user_reset_password_token__value);
+                Allocator::<C_String>::deallocate(&incoming.application_user_device__id);
+                Allocator::<C_String>::deallocate(&incoming.application_user_reset_password_token__value);
                 return Ok(());
             }
             #[test]
@@ -4701,9 +4701,9 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_String>::deallocate(incoming.application_user_device__id);
-                Allocator::<C_String>::deallocate(incoming.application_user__password);
-                Allocator::<C_String>::deallocate(incoming.application_user_reset_password_token__value);
+                Allocator::<C_String>::deallocate(&incoming.application_user_device__id);
+                Allocator::<C_String>::deallocate(&incoming.application_user__password);
+                Allocator::<C_String>::deallocate(&incoming.application_user_reset_password_token__value);
                 return Ok(());
             }
             #[test]
@@ -4724,8 +4724,8 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_String>::deallocate(incoming.application_user__email);
-                Allocator::<C_String>::deallocate(incoming.application_user_device__id);
+                Allocator::<C_String>::deallocate(&incoming.application_user__email);
+                Allocator::<C_String>::deallocate(&incoming.application_user_device__id);
                 return Ok(());
             }
             #[test]
@@ -4746,7 +4746,7 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_String>::deallocate(incoming.application_user_device__id);
+                Allocator::<C_String>::deallocate(&incoming.application_user_device__id);
                 return Ok(());
             }
             #[test]
@@ -4767,7 +4767,7 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_String>::deallocate(incoming.application_user_device__id);
+                Allocator::<C_String>::deallocate(&incoming.application_user_device__id);
                 return Ok(());
             }
             #[test]
@@ -4790,9 +4790,9 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_String>::deallocate(incoming.application_user_access_token_encrypted);
-                Allocator::<C_String>::deallocate(incoming.channel__name);
-                Allocator::<C_String>::deallocate(incoming.requery___channel__name.data);
+                Allocator::<C_String>::deallocate(&incoming.application_user_access_token_encrypted);
+                Allocator::<C_String>::deallocate(&incoming.channel__name);
+                Allocator::<C_String>::deallocate(&incoming.requery___channel__name.data);
                 return Ok(());
             }
             #[test]
@@ -4814,7 +4814,7 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_String>::deallocate(incoming.application_user_access_token_encrypted);
+                Allocator::<C_String>::deallocate(&incoming.application_user_access_token_encrypted);
                 return Ok(());
             }
             #[test]
@@ -4837,9 +4837,9 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_String>::deallocate(incoming.application_user_access_token_encrypted);
-                Allocator::<C_String>::deallocate(incoming.channel__name);
-                Allocator::<C_String>::deallocate(incoming.requery___channel__name.data);
+                Allocator::<C_String>::deallocate(&incoming.application_user_access_token_encrypted);
+                Allocator::<C_String>::deallocate(&incoming.channel__name);
+                Allocator::<C_String>::deallocate(&incoming.requery___channel__name.data);
                 return Ok(());
             }
             #[test]
@@ -4860,7 +4860,7 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_String>::deallocate(incoming.application_user_access_token_encrypted);
+                Allocator::<C_String>::deallocate(&incoming.application_user_access_token_encrypted);
                 return Ok(());
             }
             #[test]
@@ -4881,7 +4881,7 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_String>::deallocate(incoming.application_user_access_token_encrypted);
+                Allocator::<C_String>::deallocate(&incoming.application_user_access_token_encrypted);
                 return Ok(());
             }
         }
