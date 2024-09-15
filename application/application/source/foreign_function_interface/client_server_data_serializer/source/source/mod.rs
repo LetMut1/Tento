@@ -393,25 +393,20 @@ impl Allocator<C_Result<C_Vector<c_uchar>>> {
         }
         let c_result_ = unsafe { Box::from_raw(c_result) };
         if c_result_.is_data {
-            Allocator::<C_Vector<c_uchar>>::deallocate(c_result_.data);
+            Allocator::<C_Vector<_>>::deallocate(c_result_.data);
         }
         return ();
     }
 }
-
-
-pub extern "C" fn applicard_by_second_step____deserialize____deallocate(
-    c_result: *mut ApplicationUser__Authorization___ResetPasswordBySecondStep___C_Result,
-) -> () {
-    if c_result.is_null() {
+impl<T, E> Allocator<C_Result<C_UnifiedReport<T, E>>> {
+    fn deallocate(c_result: *mut C_Result<C_UnifiedReport<T, E>>) -> () {
+        if c_result.is_null() {
+            return ();
+        }
+        let _ = unsafe { Box::from_raw(c_result) };
         return ();
     }
-    let _ = unsafe { Box::from_raw(c_result) };
-    return ();
 }
-
-
-
 struct Transformer<S> {
     _subject: PhantomData<S>,
 }
@@ -629,10 +624,7 @@ pub extern "C" fn application_user___authorization____authorize_by_first_step___
 pub extern "C" fn application_user___authorization____authorize_by_first_step____deserialize____deallocate(
     c_result: *mut ApplicationUser__Authorization___AuthorizeByFirstStep___C_Result,
 ) -> () {
-    if c_result.is_null() {
-        return ();
-    }
-    let _ = unsafe { Box::from_raw(c_result) };
+    Allocator::<C_Result<C_UnifiedReport<_, _>>>::deallocate(c_result);
     return ();
 }
 #[repr(C)]
@@ -710,7 +702,7 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
                     } => {
                         let outcoming = ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming {
                             application_user_access_token_encrypted: Allocator::<C_String>::allocate(data__.application_user_access_token_encrypted),
-                            application_user_access_refresh_token_encrypted: Allocator::<C_Vector<c_uchar>>::allocate(data__.application_user_access_refresh_token_encrypted),
+                            application_user_access_refresh_token_encrypted: Allocator::<C_Vector<_>>::allocate(data__.application_user_access_refresh_token_encrypted),
                         };
                         C_Data::filled(outcoming)
                     }
@@ -773,7 +765,7 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
         if c_result_.data.is_target {
             if c_result_.data.target.is_filled {
                 Allocator::<C_String>::deallocate(c_result_.data.target.filled.application_user_access_token_encrypted);
-                Allocator::<C_Vector<c_uchar>>::deallocate(c_result_.data.target.filled.application_user_access_refresh_token_encrypted);
+                Allocator::<C_Vector<_>>::deallocate(c_result_.data.target.filled.application_user_access_refresh_token_encrypted);
             }
         }
     }
@@ -849,10 +841,7 @@ pub extern "C" fn application_user___authorization____check_email_for_existing__
 pub extern "C" fn application_user___authorization____check_email_for_existing____deserialize____deallocate(
     c_result: *mut ApplicationUser__Authorization___CheckEmailForExisting___C_Result,
 ) -> () {
-    if c_result.is_null() {
-        return ();
-    }
-    let _ = unsafe { Box::from_raw(c_result) };
+    Allocator::<C_Result<C_UnifiedReport<_, _>>>::deallocate(c_result);
     return ();
 }
 #[repr(C)]
@@ -926,10 +915,7 @@ pub extern "C" fn application_user___authorization____check_nickname_for_existin
 pub extern "C" fn application_user___authorization____check_nickname_for_existing____deserialize____deallocate(
     c_result: *mut ApplicationUser__Authorization___CheckNicknameForExisting___C_Result,
 ) -> () {
-    if c_result.is_null() {
-        return ();
-    }
-    let _ = unsafe { Box::from_raw(c_result) };
+    Allocator::<C_Result<C_UnifiedReport<_, _>>>::deallocate(c_result);
     return ();
 }
 #[repr(C)]
@@ -1015,10 +1001,7 @@ pub extern "C" fn application_user___authorization____deauthorize_from_all_devic
 pub extern "C" fn application_user___authorization____deauthorize_from_all_devices____deserialize____deallocate(
     c_result: *mut ApplicationUser__Authorization___DeauthorizeFromAllDevices___C_Result,
 ) -> () {
-    if c_result.is_null() {
-        return ();
-    }
-    let _ = unsafe { Box::from_raw(c_result) };
+    Allocator::<C_Result<C_UnifiedReport<_, _>>>::deallocate(c_result);
     return ();
 }
 type ApplicationUser__Authorization___DeauthorizeFromOneDevice___C_Result =
@@ -1104,10 +1087,7 @@ pub extern "C" fn application_user___authorization____deauthorize_from_one_devic
 pub extern "C" fn application_user___authorization____deauthorize_from_one_device____deserialize____deallocate(
     c_result: *mut ApplicationUser__Authorization___DeauthorizeFromOneDevice___C_Result,
 ) -> () {
-    if c_result.is_null() {
-        return ();
-    }
-    let _ = unsafe { Box::from_raw(c_result) };
+    Allocator::<C_Result<C_UnifiedReport<_, _>>>::deallocate(c_result);
     return ();
 }
 #[repr(C)]
@@ -1175,7 +1155,7 @@ pub extern "C" fn application_user___authorization____refresh_access_token____de
                     } => {
                         let outcoming = ApplicationUser__Authorization___RefreshAccessToken___Outcoming {
                             application_user_access_token_encrypted: Allocator::<C_String>::allocate(data__.application_user_access_token_encrypted),
-                            application_user_access_refresh_token_encrypted: Allocator::<C_Vector<c_uchar>>::allocate(data__.application_user_access_refresh_token_encrypted),
+                            application_user_access_refresh_token_encrypted: Allocator::<C_Vector<_>>::allocate(data__.application_user_access_refresh_token_encrypted),
                         };
                         C_Data::filled(outcoming)
                     }
@@ -1221,7 +1201,7 @@ pub extern "C" fn application_user___authorization____refresh_access_token____de
         if c_result_.data.is_target {
             if c_result_.data.target.is_filled {
                 Allocator::<C_String>::deallocate(c_result_.data.target.filled.application_user_access_token_encrypted);
-                Allocator::<C_Vector<c_uchar>>::deallocate(c_result_.data.target.filled.application_user_access_refresh_token_encrypted);
+                Allocator::<C_Vector<_>>::deallocate(c_result_.data.target.filled.application_user_access_refresh_token_encrypted);
             }
         }
     }
@@ -1325,10 +1305,7 @@ pub extern "C" fn application_user___authorization____register_by_first_step____
 pub extern "C" fn application_user___authorization____register_by_first_step____deserialize____deallocate(
     c_result: *mut ApplicationUser__Authorization___RegisterByFirstStep___C_Result,
 ) -> () {
-    if c_result.is_null() {
-        return ();
-    }
-    let _ = unsafe { Box::from_raw(c_result) };
+    Allocator::<C_Result<C_UnifiedReport<_, _>>>::deallocate(c_result);
     return ();
 }
 #[repr(C)]
@@ -1440,10 +1417,7 @@ pub extern "C" fn application_user___authorization____register_by_second_step___
 pub extern "C" fn application_user___authorization____register_by_second_step____deserialize____deallocate(
     c_result: *mut ApplicationUser__Authorization___RegisterBySecondStep___C_Result,
 ) -> () {
-    if c_result.is_null() {
-        return ();
-    }
-    let _ = unsafe { Box::from_raw(c_result) };
+    Allocator::<C_Result<C_UnifiedReport<_, _>>>::deallocate(c_result);
     return ();
 }
 #[repr(C)]
@@ -1521,7 +1495,7 @@ pub extern "C" fn application_user___authorization____register_by_last_step____d
                     } => {
                         let outcoming = ApplicationUser__Authorization___RegisterByLastStep___Outcoming {
                             application_user_access_token_encrypted: Allocator::<C_String>::allocate(data__.application_user_access_token_encrypted),
-                            application_user_access_refresh_token_encrypted: Allocator::<C_Vector<c_uchar>>::allocate(data__.application_user_access_refresh_token_encrypted),
+                            application_user_access_refresh_token_encrypted: Allocator::<C_Vector<_>>::allocate(data__.application_user_access_refresh_token_encrypted),
                         };
                         C_Data::filled(outcoming)
                     }
@@ -1591,7 +1565,7 @@ pub extern "C" fn application_user___authorization____register_by_last_step____d
         if c_result_.data.is_target {
             if c_result_.data.target.is_filled {
                 Allocator::<C_String>::deallocate(c_result_.data.target.filled.application_user_access_token_encrypted);
-                Allocator::<C_Vector<c_uchar>>::deallocate(c_result_.data.target.filled.application_user_access_refresh_token_encrypted);
+                Allocator::<C_Vector<_>>::deallocate(c_result_.data.target.filled.application_user_access_refresh_token_encrypted);
             }
         }
     }
@@ -1697,10 +1671,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_first_st
 pub extern "C" fn application_user___authorization____reset_password_by_first_step____deserialize____deallocate(
     c_result: *mut ApplicationUser__Authorization___ResetPasswordByFirstStep___C_Result,
 ) -> () {
-    if c_result.is_null() {
-        return ();
-    }
-    let _ = unsafe { Box::from_raw(c_result) };
+    Allocator::<C_Result<C_UnifiedReport<_, _>>>::deallocate(c_result);
     return ();
 }
 #[repr(C)]
@@ -1813,10 +1784,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_second_s
 pub extern "C" fn application_user___authorization____reset_password_by_second_step____deserialize____deallocate(
     c_result: *mut ApplicationUser__Authorization___ResetPasswordBySecondStep___C_Result,
 ) -> () {
-    if c_result.is_null() {
-        return ();
-    }
-    let _ = unsafe { Box::from_raw(c_result) };
+    Allocator::<C_Result<C_UnifiedReport<_, _>>>::deallocate(c_result);
     return ();
 }
 #[repr(C)]
@@ -1928,10 +1896,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_last_ste
 pub extern "C" fn application_user___authorization____reset_password_by_last_step____deserialize____deallocate(
     c_result: *mut ApplicationUser__Authorization___ResetPasswordByLastStep___C_Result,
 ) -> () {
-    if c_result.is_null() {
-        return ();
-    }
-    let _ = unsafe { Box::from_raw(c_result) };
+    Allocator::<C_Result<C_UnifiedReport<_, _>>>::deallocate(c_result);
     return ();
 }
 #[repr(C)]
@@ -2049,10 +2014,7 @@ pub extern "C" fn application_user___authorization____send_email_for_register___
 pub extern "C" fn application_user___authorization____send_email_for_register____deserialize____deallocate(
     c_result: *mut ApplicationUser__Authorization___SendEmailForRegister___C_Result,
 ) -> () {
-    if c_result.is_null() {
-        return ();
-    }
-    let _ = unsafe { Box::from_raw(c_result) };
+    Allocator::<C_Result<C_UnifiedReport<_, _>>>::deallocate(c_result);
     return ();
 }
 #[repr(C)]
@@ -2170,10 +2132,7 @@ pub extern "C" fn application_user___authorization____send_email_for_authorize__
 pub extern "C" fn application_user___authorization____send_email_for_authorize____deserialize____deallocate(
     c_result: *mut ApplicationUser__Authorization___SendEmailForAuthorize___C_Result,
 ) -> () {
-    if c_result.is_null() {
-        return ();
-    }
-    let _ = unsafe { Box::from_raw(c_result) };
+    Allocator::<C_Result<C_UnifiedReport<_, _>>>::deallocate(c_result);
     return ();
 }
 #[repr(C)]
@@ -2298,10 +2257,7 @@ pub extern "C" fn application_user___authorization____send_email_for_reset_passw
 pub extern "C" fn application_user___authorization____send_email_for_reset_password____deserialize____deallocate(
     c_result: *mut ApplicationUser__Authorization___SendEmailForResetPassword___C_Result,
 ) -> () {
-    if c_result.is_null() {
-        return ();
-    }
-    let _ = unsafe { Box::from_raw(c_result) };
+    Allocator::<C_Result<C_UnifiedReport<_, _>>>::deallocate(c_result);
     return ();
 }
 #[repr(C)]
@@ -3031,10 +2987,7 @@ pub extern "C" fn channel_subscription___base____create____deserialize____alloca
 }
 #[no_mangle]
 pub extern "C" fn channel_subscription___base____create____deserialize____deallocate(c_result: *mut ChannelSubscription__Base___Create___C_Result) -> () {
-    if c_result.is_null() {
-        return ();
-    }
-    let _ = unsafe { Box::from_raw(c_result) };
+    Allocator::<C_Result<C_UnifiedReport<_, _>>>::deallocate(c_result);
     return ();
 }
 // All tests should be executed using the `Valgrind` utility as `cargo valgrind test ...' command.
@@ -4590,7 +4543,7 @@ mod test {
             fn application_user___authorization____refresh_access_token() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = ApplicationUser__Authorization___RefreshAccessToken___Incoming {
                     application_user_access_token_encrypted: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
-                    application_user_access_refresh_token_encrypted: Allocator::<C_Vector<c_uchar>>::allocate(ARRAY_LITERAL.to_vec()),
+                    application_user_access_refresh_token_encrypted: Allocator::<C_Vector<_>>::allocate(ARRAY_LITERAL.to_vec()),
                 };
                 let allocator = move |incoming: *mut ApplicationUser__Authorization___RefreshAccessToken___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
                     return application_user___authorization____refresh_access_token____serialize____allocate(incoming);
@@ -4605,7 +4558,7 @@ mod test {
                     deallocator,
                 )?;
                 Allocator::<C_String>::deallocate(incoming.application_user_access_token_encrypted);
-                Allocator::<C_Vector<c_uchar>>::deallocate(incoming.application_user_access_refresh_token_encrypted);
+                Allocator::<C_Vector<_>>::deallocate(incoming.application_user_access_refresh_token_encrypted);
                 return Ok(());
             }
             #[test]
