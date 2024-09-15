@@ -61,7 +61,7 @@ typedef struct ApplicationUser__Authorization___AuthorizeByLastStep___Incoming {
 
 typedef struct ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming {
   struct C_String application_user_access_token_encrypted;
-  struct C_String application_user_access_refresh_token_encrypted;
+  struct C_Vector_c_uchar application_user_access_refresh_token_encrypted;
 } ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming;
 
 typedef struct C_Data_ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming {
@@ -201,12 +201,12 @@ typedef struct C_Result_C_UnifiedReport_C_Void__ApplicationUser__Authorization__
 
 typedef struct ApplicationUser__Authorization___RefreshAccessToken___Incoming {
   struct C_String application_user_access_token_encrypted;
-  struct C_String application_user_access_refresh_token_encrypted;
+  struct C_Vector_c_uchar application_user_access_refresh_token_encrypted;
 } ApplicationUser__Authorization___RefreshAccessToken___Incoming;
 
 typedef struct ApplicationUser__Authorization___RefreshAccessToken___Outcoming {
   struct C_String application_user_access_token_encrypted;
-  struct C_String application_user_access_refresh_token_encrypted;
+  struct C_Vector_c_uchar application_user_access_refresh_token_encrypted;
 } ApplicationUser__Authorization___RefreshAccessToken___Outcoming;
 
 typedef struct C_Data_ApplicationUser__Authorization___RefreshAccessToken___Outcoming {
@@ -307,7 +307,7 @@ typedef struct ApplicationUser__Authorization___RegisterByLastStep___Incoming {
 
 typedef struct ApplicationUser__Authorization___RegisterByLastStep___Outcoming {
   struct C_String application_user_access_token_encrypted;
-  struct C_String application_user_access_refresh_token_encrypted;
+  struct C_Vector_c_uchar application_user_access_refresh_token_encrypted;
 } ApplicationUser__Authorization___RegisterByLastStep___Outcoming;
 
 typedef struct C_Data_ApplicationUser__Authorization___RegisterByLastStep___Outcoming {

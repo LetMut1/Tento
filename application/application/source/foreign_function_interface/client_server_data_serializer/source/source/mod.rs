@@ -122,12 +122,9 @@ use std::{
         CString,
     },
     marker::PhantomData,
-    mem::forget,
     ptr,
-    ptr::slice_from_raw_parts_mut,
     result::Result,
     slice,
-    slice::from_raw_parts,
 };
 use unified_report::{
     Data,
@@ -153,6 +150,7 @@ use void::Void;
 // TODO-------------------------------------------------------------------------------------------------------------------------------------------
 // TODO-------------------------------------------------------------------------------------------------------------------------------------------
 // TODO-------------------------------------------------------------------------------------------------------------------------------------------
+const NULL_POINTER_ERROR_MESAGE: &'static str = "There should not be a null-pointer.";
 #[repr(C)]
 #[derive(Clone, Copy)]
 pub struct C_Result<T> {
@@ -282,7 +280,7 @@ pub struct C_String {
 impl C_String {
     fn to_string(self) -> Result<String, Box<dyn StdError + 'static>> {
         if self.pointer.is_null() {
-            return Err("There should not be a null-pointer.".into());
+            return Err(NULL_POINTER_ERROR_MESAGE.into());
         }
         let c_str = unsafe { CStr::from_ptr(self.pointer as *const _) };
         let c_string = c_str.to_str()?.to_string();
@@ -301,6 +299,24 @@ impl Default for C_String {
 pub struct C_Vector<T> {
     pointer: *mut T,
     length: size_t,
+}
+impl<T> C_Vector<T>
+where
+    T: Clone,
+{
+    fn to_vec(self) -> Result<Vec<T>, Box<dyn StdError + 'static>> {
+        if self.pointer.is_null() {
+            return Err(NULL_POINTER_ERROR_MESAGE.into());
+        }
+        return Ok(
+            unsafe {
+                std::slice::from_raw_parts(
+                    self.pointer as *const _,
+                    self.length,
+                )
+            }.to_vec(),
+        );
+    }
 }
 impl<T> Default for C_Vector<T> {
     fn default() -> Self {
@@ -349,14 +365,14 @@ impl<T> Allocator<C_Vector<T>> {
             pointer: boxed_slice.as_mut_ptr(),
             length: boxed_slice.len(),
         };
-        forget(boxed_slice);
+        std::mem::forget(boxed_slice);
         return self_;
     }
     fn deallocate(c_vector: C_Vector<T>) -> () {
         if c_vector.pointer.is_null() {
             return ();
         }
-        let pointer = slice_from_raw_parts_mut(
+        let pointer = std::ptr::slice_from_raw_parts_mut(
             c_vector.pointer,
             c_vector.length,
         );
@@ -635,7 +651,7 @@ type ApplicationUser__Authorization___AuthorizeByLastStep___C_Result =
 #[derive(Default, Clone, Copy)]
 pub struct ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming {
     pub application_user_access_token_encrypted: C_String,
-    pub application_user_access_refresh_token_encrypted: C_String,
+    pub application_user_access_refresh_token_encrypted: C_Vector<c_uchar>,
 }
 #[repr(C)]
 #[derive(Default, Clone, Copy)]
@@ -674,7 +690,7 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
                     } => {
                         let outcoming = ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming {
                             application_user_access_token_encrypted: Allocator::<C_String>::allocate(data__.application_user_access_token_encrypted),
-                            application_user_access_refresh_token_encrypted: Allocator::<C_String>::allocate(data__.application_user_access_refresh_token_encrypted),
+                            application_user_access_refresh_token_encrypted: Allocator::<C_Vector<c_uchar>>::allocate(data__.application_user_access_refresh_token_encrypted),
                         };
                         C_Data::filled(outcoming)
                     }
@@ -737,7 +753,7 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
         if result_.data.is_target {
             if result_.data.target.is_filled {
                 Allocator::<C_String>::deallocate(result_.data.target.filled.application_user_access_token_encrypted);
-                Allocator::<C_String>::deallocate(result_.data.target.filled.application_user_access_refresh_token_encrypted);
+                Allocator::<C_Vector<c_uchar>>::deallocate(result_.data.target.filled.application_user_access_refresh_token_encrypted);
             }
         }
     }
@@ -1078,7 +1094,7 @@ pub extern "C" fn application_user___authorization____deauthorize_from_one_devic
 #[derive(Clone, Copy)]
 pub struct ApplicationUser__Authorization___RefreshAccessToken___Incoming {
     pub application_user_access_token_encrypted: C_String,
-    pub application_user_access_refresh_token_encrypted: C_String,
+    pub application_user_access_refresh_token_encrypted: C_Vector<c_uchar>,
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____refresh_access_token____serialize(
@@ -1087,7 +1103,7 @@ pub extern "C" fn application_user___authorization____refresh_access_token____se
     let converter = move |incoming: ApplicationUser__Authorization___RefreshAccessToken___Incoming| -> Result<ApplicationUser__Authorization___RefreshAccessToken___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___RefreshAccessToken___Incoming_ {
             application_user_access_token_encrypted: incoming.application_user_access_token_encrypted.to_string()?,
-            application_user_access_refresh_token_encrypted: incoming.application_user_access_refresh_token_encrypted.to_string()?,
+            application_user_access_refresh_token_encrypted: incoming.application_user_access_refresh_token_encrypted.to_vec()?,
         };
 
         return Ok(incoming_);
@@ -1108,7 +1124,7 @@ type ApplicationUser__Authorization___RefreshAccessToken___C_Result =
 #[derive(Default, Clone, Copy)]
 pub struct ApplicationUser__Authorization___RefreshAccessToken___Outcoming {
     pub application_user_access_token_encrypted: C_String,
-    pub application_user_access_refresh_token_encrypted: C_String,
+    pub application_user_access_refresh_token_encrypted: C_Vector<c_uchar>,
 }
 #[repr(C)]
 #[derive(Default, Clone, Copy)]
@@ -1139,7 +1155,7 @@ pub extern "C" fn application_user___authorization____refresh_access_token____de
                     } => {
                         let outcoming = ApplicationUser__Authorization___RefreshAccessToken___Outcoming {
                             application_user_access_token_encrypted: Allocator::<C_String>::allocate(data__.application_user_access_token_encrypted),
-                            application_user_access_refresh_token_encrypted: Allocator::<C_String>::allocate(data__.application_user_access_refresh_token_encrypted),
+                            application_user_access_refresh_token_encrypted: Allocator::<C_Vector<c_uchar>>::allocate(data__.application_user_access_refresh_token_encrypted),
                         };
                         C_Data::filled(outcoming)
                     }
@@ -1185,7 +1201,7 @@ pub extern "C" fn application_user___authorization____refresh_access_token____de
         if result_.data.is_target {
             if result_.data.target.is_filled {
                 Allocator::<C_String>::deallocate(result_.data.target.filled.application_user_access_token_encrypted);
-                Allocator::<C_String>::deallocate(result_.data.target.filled.application_user_access_refresh_token_encrypted);
+                Allocator::<C_Vector<c_uchar>>::deallocate(result_.data.target.filled.application_user_access_refresh_token_encrypted);
             }
         }
     }
@@ -1450,7 +1466,7 @@ type ApplicationUser__Authorization___RegisterByLastStep___C_Result =
 #[derive(Default, Clone, Copy)]
 pub struct ApplicationUser__Authorization___RegisterByLastStep___Outcoming {
     pub application_user_access_token_encrypted: C_String,
-    pub application_user_access_refresh_token_encrypted: C_String,
+    pub application_user_access_refresh_token_encrypted: C_Vector<c_uchar>,
 }
 #[repr(C)]
 #[derive(Default, Clone, Copy)]
@@ -1485,7 +1501,7 @@ pub extern "C" fn application_user___authorization____register_by_last_step____d
                     } => {
                         let outcoming = ApplicationUser__Authorization___RegisterByLastStep___Outcoming {
                             application_user_access_token_encrypted: Allocator::<C_String>::allocate(data__.application_user_access_token_encrypted),
-                            application_user_access_refresh_token_encrypted: Allocator::<C_String>::allocate(data__.application_user_access_refresh_token_encrypted),
+                            application_user_access_refresh_token_encrypted: Allocator::<C_Vector<c_uchar>>::allocate(data__.application_user_access_refresh_token_encrypted),
                         };
                         C_Data::filled(outcoming)
                     }
@@ -1555,7 +1571,7 @@ pub extern "C" fn application_user___authorization____register_by_last_step____d
         if result_.data.is_target {
             if result_.data.target.is_filled {
                 Allocator::<C_String>::deallocate(result_.data.target.filled.application_user_access_token_encrypted);
-                Allocator::<C_String>::deallocate(result_.data.target.filled.application_user_access_refresh_token_encrypted);
+                Allocator::<C_Vector<c_uchar>>::deallocate(result_.data.target.filled.application_user_access_refresh_token_encrypted);
             }
         }
     }
@@ -2404,7 +2420,7 @@ pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____deseria
         if result_.data.is_target {
             if result_.data.target.is_filled {
                 let common_registry = unsafe {
-                    from_raw_parts(
+                    std::slice::from_raw_parts(
                         result_.data.target.filled.common_registry.pointer,
                         result_.data.target.filled.common_registry.length,
                     )
@@ -2554,7 +2570,7 @@ pub extern "C" fn channel___base____get_many_by_subscription____deserialize____d
         if result_.data.is_target {
             if result_.data.target.is_filled {
                 let common_registry = unsafe {
-                    from_raw_parts(
+                    std::slice::from_raw_parts(
                         result_.data.target.filled.common_registry.pointer,
                         result_.data.target.filled.common_registry.length,
                     )
@@ -2705,7 +2721,7 @@ pub extern "C" fn channel___base____get_many_public_by_name____deserialize____de
         if result_.data.is_target {
             if result_.data.target.is_filled {
                 let common_registry = unsafe {
-                    from_raw_parts(
+                    std::slice::from_raw_parts(
                         result_.data.target.filled.common_registry.pointer,
                         result_.data.target.filled.common_registry.length,
                     )
@@ -2902,7 +2918,7 @@ pub extern "C" fn channel___base____get_one_by_id____deserialize____deallocate(c
                 Allocator::<C_Vector<_>>::deallocate(result_.data.target.filled.channel.channel__orientation);
                 Allocator::<C_Vector<_>>::deallocate(result_.data.target.filled.channel_inner_link_registry);
                 let channel_outer_link_registry = unsafe {
-                    from_raw_parts(
+                    std::slice::from_raw_parts(
                         result_.data.target.filled.channel_outer_link_registry.pointer,
                         result_.data.target.filled.channel_outer_link_registry.length,
                     )
@@ -3028,6 +3044,7 @@ mod test {
     mod deallocation {
         use super::*;
         const STRING_LITERAL: &'static str = "qwerty";
+        const ARRAY_LITERAL: [u8; 3] = [0, 1, 2];
         mod server_response_data_deserialization {
             use super::*;
             use aggregate_error::AggregateError;
@@ -3157,7 +3174,7 @@ mod test {
                 fn target_filled____application_user___authorization____authorize_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
                     let outcoming = ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming_ {
                         application_user_access_token_encrypted: STRING_LITERAL.to_string(),
-                        application_user_access_refresh_token_encrypted: STRING_LITERAL.to_string(),
+                        application_user_access_refresh_token_encrypted: ARRAY_LITERAL.to_vec(),
                     };
                     let unified_report = UnifiedReport::<
                         ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming_,
@@ -3409,7 +3426,7 @@ mod test {
                 fn target_filled____application_user___authorization____refresh_access_token() -> Result<(), Box<dyn StdError + 'static>> {
                     let outcoming = ApplicationUser__Authorization___RefreshAccessToken___Outcoming_ {
                         application_user_access_token_encrypted: STRING_LITERAL.to_string(),
-                        application_user_access_refresh_token_encrypted: STRING_LITERAL.to_string(),
+                        application_user_access_refresh_token_encrypted: ARRAY_LITERAL.to_vec(),
                     };
                     let unified_report = UnifiedReport::<
                         ApplicationUser__Authorization___RefreshAccessToken___Outcoming_,
@@ -3598,7 +3615,7 @@ mod test {
                 fn target_filled____application_user___authorization____register_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
                     let outcoming = ApplicationUser__Authorization___RegisterByLastStep___Outcoming_ {
                         application_user_access_token_encrypted: STRING_LITERAL.to_string(),
-                        application_user_access_refresh_token_encrypted: STRING_LITERAL.to_string(),
+                        application_user_access_refresh_token_encrypted: ARRAY_LITERAL.to_vec(),
                     };
                     let unified_report = UnifiedReport::<
                         ApplicationUser__Authorization___RegisterByLastStep___Outcoming_,
@@ -4573,7 +4590,7 @@ mod test {
             fn application_user___authorization____refresh_access_token() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = ApplicationUser__Authorization___RefreshAccessToken___Incoming {
                     application_user_access_token_encrypted: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
-                    application_user_access_refresh_token_encrypted: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    application_user_access_refresh_token_encrypted: Allocator::<C_Vector<c_uchar>>::allocate(ARRAY_LITERAL.to_vec()),
                 };
                 let allocator = move |incoming: *mut ApplicationUser__Authorization___RefreshAccessToken___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
                     return application_user___authorization____refresh_access_token____serialize(incoming);
@@ -4588,7 +4605,7 @@ mod test {
                     deallocator,
                 )?;
                 Allocator::<C_String>::deallocate(incoming.application_user_access_token_encrypted);
-                Allocator::<C_String>::deallocate(incoming.application_user_access_refresh_token_encrypted);
+                Allocator::<C_Vector<c_uchar>>::deallocate(incoming.application_user_access_refresh_token_encrypted);
                 return Ok(());
             }
             #[test]

@@ -103,9 +103,9 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Refre
             let is_valid = FormResolver::<ApplicationUserAccessRefreshToken<'_>>::is_valid(
                 inner.environment_configuration,
                 &application_user_access_refresh_token,
-                incoming.application_user_access_refresh_token_encrypted.as_str(),
+                incoming.application_user_access_refresh_token_encrypted.as_slice(),
             )?;
-            if !is_valid || application_user_access_token.id != application_user_access_refresh_token.application_user_access_token__id.as_ref() {
+            if !is_valid || application_user_access_token.id.as_str() != application_user_access_refresh_token.application_user_access_token__id.as_ref() {
                 return Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(

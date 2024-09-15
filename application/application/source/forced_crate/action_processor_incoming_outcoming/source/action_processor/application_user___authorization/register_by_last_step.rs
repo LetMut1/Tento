@@ -15,7 +15,7 @@ pub struct Incoming {
 #[derive(Serialize, Deserialize)]
 pub struct Outcoming {
     pub application_user_access_token_encrypted: String,
-    pub application_user_access_refresh_token_encrypted: String,
+    pub application_user_access_refresh_token_encrypted: Vec<u8>,
 }
 r#enum!(
     pub enum Precedent {

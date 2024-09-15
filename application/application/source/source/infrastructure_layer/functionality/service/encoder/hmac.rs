@@ -5,20 +5,21 @@ use aggregate_error::{
     ResultConverter,
 };
 use hmac::{
-    digest::CtOutput,
     Hmac,
     Mac,
 };
 use sha3::Sha3_512;
 pub type HmacSha3_512 = Hmac<Sha3_512>;
 impl Encoder<HmacSha3_512> {
-    pub fn encode<'a>(salt: &'a [u8], data: &'a [u8]) -> Result<CtOutput<HmacSha3_512>, AggregateError> {
+    pub fn encode<'a>(salt: &'a [u8], data: &'a [u8]) -> Result<Vec<u8>, AggregateError> {
         return Ok(
             Self::prepare_hmac(
                 salt,
                 data,
             )?
-            .finalize(),
+            .finalize()
+            .into_bytes()
+            .to_vec(),
         );
     }
     pub fn is_valid<'a>(salt: &'a [u8], data: &'a [u8], encoded_data: &'a [u8]) -> Result<bool, AggregateError> {
