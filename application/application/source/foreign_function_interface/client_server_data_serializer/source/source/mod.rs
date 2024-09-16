@@ -151,8 +151,9 @@ use void::Void;
 // TODO-------------------------------------------------------------------------------------------------------------------------------------------
 // TODO-------------------------------------------------------------------------------------------------------------------------------------------
 const NULL_POINTER_ERROR_MESAGE: &'static str = "There should not be a null-pointer.";
+const ALLOCATION_ERROR: &'static str = "Data is not allocated.";
+const DEALLOCATION_ERROR: &'static str = "Data is still allocated.";
 #[repr(C)]
-#[derive(Clone, Copy)]
 pub struct C_Result<T> {
     pub data: T,
     // If false, then it means an error occurred.
@@ -3019,13 +3020,13 @@ mod test {
                 let c_vector = Allocator::<C_Vector<_>>::allocate(registry);
                 let c_vector_ = ((&c_vector) as *const _) as *mut _;
                 let c_result = allocator(c_vector_);
-                let c_result_ = unsafe { *c_result };
+                let c_result_ = unsafe { &*c_result };
                 if !c_result_.is_data {
-                    return Err("Function inner error.".into());
+                    return Err(ALLOCATION_ERROR.into());
                 }
                 deallocator(c_result);
                 if c_vector_.is_null() {
-                    return Err("The pointer must continue to point to the data.".into());
+                    return Err(DEALLOCATION_ERROR.into());
                 }
                 Allocator::<C_Vector<_>>::deallocate(c_vector);
                 return Ok(());
@@ -4403,13 +4404,13 @@ mod test {
             {
                 let incoming_ = (incoming as *const _) as *mut _;
                 let c_result = allocator(incoming_);
-                let c_result_ = unsafe { *c_result };
+                let c_result_ = unsafe { &*c_result };
                 if !c_result_.is_data {
-                    return Err("Function inner error.".into());
+                    return Err(ALLOCATION_ERROR.into());
                 }
                 deallocator(c_result);
                 if incoming_.is_null() {
-                    return Err("The pointer must continue to point to the data.".into());
+                    return Err(DEALLOCATION_ERROR.into());
                 }
                 return Ok(());
             }
