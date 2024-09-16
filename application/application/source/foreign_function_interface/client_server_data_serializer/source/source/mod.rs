@@ -122,9 +122,7 @@ use std::{
         CString,
     },
     marker::PhantomData,
-    ptr,
     result::Result,
-    slice,
 };
 use unified_report::{
     Data,
@@ -150,6 +148,9 @@ use void::Void;
 // TODO-------------------------------------------------------------------------------------------------------------------------------------------
 // TODO-------------------------------------------------------------------------------------------------------------------------------------------
 // TODO-------------------------------------------------------------------------------------------------------------------------------------------
+// TODO ВОзвращать во вронтенд без Еррора, то, есть сделать здесь на Анвреп
+// TODO ВОзвращать во вронтенд без Еррора, то, есть сделать здесь на Анвреп
+// TODO ВОзвращать во вронтенд без Еррора, то, есть сделать здесь на Анвреп
 const NULL_POINTER_ERROR_MESAGE: &'static str = "There should not be a null-pointer.";
 const ALLOCATION_ERROR: &'static str = "Data is not allocated.";
 const DEALLOCATION_ERROR: &'static str = "Data is still allocated.";
@@ -277,7 +278,7 @@ pub struct C_String {
     pub pointer: *mut c_char,
 }
 impl C_String {
-    fn to_string<'a>(&'a self) -> Result<String, Box<dyn StdError + 'static>> {
+    fn clone_as_string<'a>(&'a self) -> Result<String, Box<dyn StdError + 'static>> {
         if self.pointer.is_null() {
             return Err(NULL_POINTER_ERROR_MESAGE.into());
         }
@@ -289,20 +290,20 @@ impl C_String {
 impl Default for C_String {
     fn default() -> Self {
         return Self {
-            pointer: ptr::null_mut(),
+            pointer: std::ptr::null_mut(),
         };
     }
 }
 #[repr(C)]
 pub struct C_Vector<T> {
-    pointer: *mut T,
-    length: size_t,
+    pub pointer: *mut T,
+    pub length: size_t,
 }
 impl<T> C_Vector<T>
 where
     T: Clone,
 {
-    fn to_vec<'a>(&'a self) -> Result<Vec<T>, Box<dyn StdError + 'static>> {
+    fn clone_as_vec<'a>(&'a self) -> Result<Vec<T>, Box<dyn StdError + 'static>> {
         return Ok(
             self.as_slice()?.to_vec()
         )
@@ -327,7 +328,7 @@ impl<T> C_Vector<T> {
 impl<T> Default for C_Vector<T> {
     fn default() -> Self {
         return Self {
-            pointer: ptr::null_mut(),
+            pointer: std::ptr::null_mut(),
             length: 0,
         };
     }
@@ -361,7 +362,9 @@ impl Allocator<C_String> {
         if c_string.pointer.is_null() {
             return ();
         }
-        let _ = unsafe { CString::from_raw(c_string.pointer) };
+        {
+            let _ = unsafe { CString::from_raw(c_string.pointer) };
+        }
         return ();
     }
 }
@@ -383,7 +386,9 @@ impl<T> Allocator<C_Vector<T>> {
             c_vector.pointer,
             c_vector.length,
         );
-        let _ = unsafe { Box::from_raw(pointer) };
+        {
+            let _ = unsafe { Box::from_raw(pointer) };
+        }
         return ();
     }
 }
@@ -404,7 +409,9 @@ impl<T, E> Allocator<C_Result<C_UnifiedReport<T, E>>> {
         if c_result.is_null() {
             return ();
         }
-        let _ = unsafe { Box::from_raw(c_result) };
+        {
+            let _ = unsafe { Box::from_raw(c_result) };
+        }
         return ();
     }
 }
@@ -414,7 +421,7 @@ struct Transformer<S> {
 struct ServerRequestData;
 struct ServerResponseData;
 impl Transformer<ServerResponseData> {
-    fn transform<F, O1, P1, O2, P2>(vector_of_bytes: *mut C_Vector<c_uchar>, converter: F) -> *mut C_Result<C_UnifiedReport<O2, P2>>
+    fn transform<F, O1, P1, O2, P2>(c_vector_of_bytes: *mut C_Vector<c_uchar>, converter: F) -> *mut C_Result<C_UnifiedReport<O2, P2>>
     where
         F: FnOnce(UnifiedReport<O1, P1>) -> Result<C_UnifiedReport<O2, P2>, Box<dyn StdError + 'static>>,
         O1: for<'de> Deserialize<'de>,
@@ -422,20 +429,16 @@ impl Transformer<ServerResponseData> {
         O2: Default,
         P2: Default,
     {
-        if vector_of_bytes.is_null() {
+        if c_vector_of_bytes.is_null() {
             return C_Result::error().into_raw();
         }
-        let vector_ = unsafe { &*vector_of_bytes };
-        if vector_.pointer.is_null() || vector_.length == 0 {
+        let vector_of_bytes_ = unsafe { &*c_vector_of_bytes };
+        if vector_of_bytes_.pointer.is_null() || vector_of_bytes_.length == 0 {
             return C_Result::error().into_raw();
         }
-        let data = unsafe {
-            slice::from_raw_parts::<u8>(
-                vector_.pointer as *mut u8,
-                vector_.length,
-            )
-        };
-        let unified_report = match Serializer_::deserialize::<'_, UnifiedReport<O1, P1>>(data) {
+        let unified_report = match Serializer_::deserialize::<'_, UnifiedReport<O1, P1>>(
+            vector_of_bytes_.as_slice_unchecked(),
+        ) {
             Ok(unified_report_) => unified_report_,
             Err(_) => {
                 return C_Result::error().into_raw();
@@ -534,9 +537,9 @@ pub extern "C" fn application_user___authorization____authorize_by_first_step___
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: &'_ ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming| -> Result<ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming_ {
-            application_user_device__id: incoming.application_user_device__id.to_string()?,
-            application_user__email___or___application_user__nickname: incoming.application_user__email___or___application_user__nickname.to_string()?,
-            application_user__password: incoming.application_user__password.to_string()?,
+            application_user_device__id: incoming.application_user_device__id.clone_as_string()?,
+            application_user__email___or___application_user__nickname: incoming.application_user__email___or___application_user__nickname.clone_as_string()?,
+            application_user__password: incoming.application_user__password.clone_as_string()?,
         };
         return Ok(incoming_);
     };
@@ -568,7 +571,7 @@ pub struct ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent {
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____authorize_by_first_step____deserialize____allocate(
-    vector_of_bytes: *mut C_Vector<c_uchar>,
+    c_vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___AuthorizeByFirstStep___C_Result {
     let converter = move |unified_report: UnifiedReport<
         ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming_,
@@ -614,7 +617,7 @@ pub extern "C" fn application_user___authorization____authorize_by_first_step___
         return Ok(unified_report_);
     };
     return Transformer::<ServerResponseData>::transform(
-        vector_of_bytes,
+        c_vector_of_bytes,
         converter,
     );
 }
@@ -638,8 +641,8 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
     let converter = move |incoming: &'_ ApplicationUser__Authorization___AuthorizeByLastStep___Incoming| -> Result<ApplicationUser__Authorization___AuthorizeByLastStep___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___AuthorizeByLastStep___Incoming_ {
             application_user__id: incoming.application_user__id,
-            application_user_device__id: incoming.application_user_device__id.to_string()?,
-            application_user_authorization_token__value: incoming.application_user_authorization_token__value.to_string()?,
+            application_user_device__id: incoming.application_user_device__id.clone_as_string()?,
+            application_user_authorization_token__value: incoming.application_user_authorization_token__value.clone_as_string()?,
         };
         return Ok(incoming_);
     };
@@ -677,7 +680,7 @@ pub struct ApplicationUserAuthorizationToken_WrongValue {
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____authorize_by_last_step____deserialize____allocate(
-    vector_of_bytes: *mut C_Vector<c_uchar>,
+    c_vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___AuthorizeByLastStep___C_Result {
     let converter = move |unified_report: UnifiedReport<
         ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming_,
@@ -745,7 +748,7 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
         return Ok(unified_report_);
     };
     return Transformer::<ServerResponseData>::transform(
-        vector_of_bytes,
+        c_vector_of_bytes,
         converter,
     );
 }
@@ -777,7 +780,7 @@ pub extern "C" fn application_user___authorization____check_email_for_existing__
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: &'_ ApplicationUser__Authorization___CheckEmailForExisting___Incoming| -> Result<ApplicationUser__Authorization___CheckEmailForExisting___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___CheckEmailForExisting___Incoming_ {
-            application_user__email: incoming.application_user__email.to_string()?,
+            application_user__email: incoming.application_user__email.clone_as_string()?,
         };
         return Ok(incoming_);
     };
@@ -799,7 +802,7 @@ pub struct ApplicationUser__Authorization___CheckEmailForExisting___Outcoming {
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____check_email_for_existing____deserialize____allocate(
-    vector_of_bytes: *mut C_Vector<c_uchar>,
+    c_vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___CheckEmailForExisting___C_Result {
     let converter = move |unified_report: UnifiedReport<ApplicationUser__Authorization___CheckEmailForExisting___Outcoming_, Void>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___CheckEmailForExisting___Outcoming, C_Void>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
@@ -827,7 +830,7 @@ pub extern "C" fn application_user___authorization____check_email_for_existing__
         return Ok(unified_report_);
     };
     return Transformer::<ServerResponseData>::transform(
-        vector_of_bytes,
+        c_vector_of_bytes,
         converter,
     );
 }
@@ -848,7 +851,7 @@ pub extern "C" fn application_user___authorization____check_nickname_for_existin
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: &'_ ApplicationUser__Authorization___CheckNicknameForExisting___Incoming| -> Result<ApplicationUser__Authorization___CheckNicknameForExisting___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___CheckNicknameForExisting___Incoming_ {
-            application_user__nickname: incoming.application_user__nickname.to_string()?,
+            application_user__nickname: incoming.application_user__nickname.clone_as_string()?,
         };
         return Ok(incoming_);
     };
@@ -871,7 +874,7 @@ pub struct ApplicationUser__Authorization___CheckNicknameForExisting___Outcoming
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____check_nickname_for_existing____deserialize____allocate(
-    vector_of_bytes: *mut C_Vector<c_uchar>,
+    c_vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___CheckNicknameForExisting___C_Result {
     let converter = move |unified_report: UnifiedReport<ApplicationUser__Authorization___CheckNicknameForExisting___Outcoming_, Void>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___CheckNicknameForExisting___Outcoming, C_Void>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
@@ -899,7 +902,7 @@ pub extern "C" fn application_user___authorization____check_nickname_for_existin
         return Ok(unified_report_);
     };
     return Transformer::<ServerResponseData>::transform(
-        vector_of_bytes,
+        c_vector_of_bytes,
         converter,
     );
 }
@@ -920,7 +923,7 @@ pub extern "C" fn application_user___authorization____deauthorize_from_all_devic
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: &'_ ApplicationUser__Authorization___DeauthorizeFromAllDevices___Incoming| -> Result<ApplicationUser__Authorization___DeauthorizeFromAllDevices___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___DeauthorizeFromAllDevices___Incoming_ {
-            application_user_access_token_encrypted: incoming.application_user_access_token_encrypted.to_string()?,
+            application_user_access_token_encrypted: incoming.application_user_access_token_encrypted.clone_as_string()?,
         };
         return Ok(incoming_);
     };
@@ -944,7 +947,7 @@ pub struct ApplicationUser__Authorization___DeauthorizeFromAllDevices___Preceden
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____deauthorize_from_all_devices____deserialize____allocate(
-    vector_of_bytes: *mut C_Vector<c_uchar>,
+    c_vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___DeauthorizeFromAllDevices___C_Result {
     let converter = move |unified_report: UnifiedReport<Void, ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent_>| -> Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
@@ -983,7 +986,7 @@ pub extern "C" fn application_user___authorization____deauthorize_from_all_devic
         return Ok(unified_report_);
     };
     return Transformer::<ServerResponseData>::transform(
-        vector_of_bytes,
+        c_vector_of_bytes,
         converter,
     );
 }
@@ -1012,7 +1015,7 @@ pub extern "C" fn application_user___authorization____deauthorize_from_one_devic
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: &'_ ApplicationUser__Authorization___DeauthorizeFromOneDevice___Incoming| -> Result<ApplicationUser__Authorization___DeauthorizeFromOneDevice___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___DeauthorizeFromOneDevice___Incoming_ {
-            application_user_access_token_encrypted: incoming.application_user_access_token_encrypted.to_string()?,
+            application_user_access_token_encrypted: incoming.application_user_access_token_encrypted.clone_as_string()?,
         };
         return Ok(incoming_);
     };
@@ -1028,7 +1031,7 @@ pub extern "C" fn application_user___authorization____deauthorize_from_one_devic
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____deauthorize_from_one_device____deserialize____allocate(
-    vector_of_bytes: *mut C_Vector<c_uchar>,
+    c_vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___DeauthorizeFromOneDevice___C_Result {
     let converter = move |unified_report: UnifiedReport<Void, ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent_>| -> Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
@@ -1067,7 +1070,7 @@ pub extern "C" fn application_user___authorization____deauthorize_from_one_devic
         return Ok(unified_report_);
     };
     return Transformer::<ServerResponseData>::transform(
-        vector_of_bytes,
+        c_vector_of_bytes,
         converter,
     );
 }
@@ -1089,8 +1092,8 @@ pub extern "C" fn application_user___authorization____refresh_access_token____se
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: &'_ ApplicationUser__Authorization___RefreshAccessToken___Incoming| -> Result<ApplicationUser__Authorization___RefreshAccessToken___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___RefreshAccessToken___Incoming_ {
-            application_user_access_token_encrypted: incoming.application_user_access_token_encrypted.to_string()?,
-            application_user_access_refresh_token_encrypted: incoming.application_user_access_refresh_token_encrypted.to_vec()?,
+            application_user_access_token_encrypted: incoming.application_user_access_token_encrypted.clone_as_string()?,
+            application_user_access_refresh_token_encrypted: incoming.application_user_access_refresh_token_encrypted.clone_as_vec()?,
         };
         return Ok(incoming_);
     };
@@ -1120,7 +1123,7 @@ pub struct ApplicationUser__Authorization___RefreshAccessToken___Precedent {
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____refresh_access_token____deserialize____allocate(
-    vector_of_bytes: *mut C_Vector<c_uchar>,
+    c_vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___RefreshAccessToken___C_Result {
     let converter = move |unified_report: UnifiedReport<
         ApplicationUser__Authorization___RefreshAccessToken___Outcoming_,
@@ -1171,7 +1174,7 @@ pub extern "C" fn application_user___authorization____refresh_access_token____de
         return Ok(unified_report_);
     };
     return Transformer::<ServerResponseData>::transform(
-        vector_of_bytes,
+        c_vector_of_bytes,
         converter,
     );
 }
@@ -1204,8 +1207,8 @@ pub extern "C" fn application_user___authorization____register_by_first_step____
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: &'_ ApplicationUser__Authorization___RegisterByFirstStep___Incoming| -> Result<ApplicationUser__Authorization___RegisterByFirstStep___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___RegisterByFirstStep___Incoming_ {
-            application_user__email: incoming.application_user__email.to_string()?,
-            application_user_device__id: incoming.application_user_device__id.to_string()?,
+            application_user__email: incoming.application_user__email.clone_as_string()?,
+            application_user_device__id: incoming.application_user_device__id.clone_as_string()?,
         };
         return Ok(incoming_);
     };
@@ -1236,7 +1239,7 @@ pub struct ApplicationUser__Authorization___RegisterByFirstStep___Precedent {
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____register_by_first_step____deserialize____allocate(
-    vector_of_bytes: *mut C_Vector<c_uchar>,
+    c_vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___RegisterByFirstStep___C_Result {
     let converter = move |unified_report: UnifiedReport<
         ApplicationUser__Authorization___RegisterByFirstStep___Outcoming_,
@@ -1281,7 +1284,7 @@ pub extern "C" fn application_user___authorization____register_by_first_step____
         return Ok(unified_report_);
     };
     return Transformer::<ServerResponseData>::transform(
-        vector_of_bytes,
+        c_vector_of_bytes,
         converter,
     );
 }
@@ -1304,9 +1307,9 @@ pub extern "C" fn application_user___authorization____register_by_second_step___
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: &'_ ApplicationUser__Authorization___RegisterBySecondStep___Incoming| -> Result<ApplicationUser__Authorization___RegisterBySecondStep___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___RegisterBySecondStep___Incoming_ {
-            application_user__email: incoming.application_user__email.to_string()?,
-            application_user_device__id: incoming.application_user_device__id.to_string()?,
-            application_user_registration_token__value: incoming.application_user_registration_token__value.to_string()?,
+            application_user__email: incoming.application_user__email.clone_as_string()?,
+            application_user_device__id: incoming.application_user_device__id.clone_as_string()?,
+            application_user_registration_token__value: incoming.application_user_registration_token__value.clone_as_string()?,
         };
         return Ok(incoming_);
     };
@@ -1337,7 +1340,7 @@ pub struct ApplicationUserRegistrationToken_WrongValue {
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____register_by_second_step____deserialize____allocate(
-    vector_of_bytes: *mut C_Vector<c_uchar>,
+    c_vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___RegisterBySecondStep___C_Result {
     let converter = move |unified_report: UnifiedReport<Void, ApplicationUser__Authorization___RegisterBySecondStep___Precedent_>| -> Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___RegisterBySecondStep___Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
@@ -1391,7 +1394,7 @@ pub extern "C" fn application_user___authorization____register_by_second_step___
         return Ok(unified_report_);
     };
     return Transformer::<ServerResponseData>::transform(
-        vector_of_bytes,
+        c_vector_of_bytes,
         converter,
     );
 }
@@ -1416,11 +1419,11 @@ pub extern "C" fn application_user___authorization____register_by_last_step____s
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: &'_ ApplicationUser__Authorization___RegisterByLastStep___Incoming| -> Result<ApplicationUser__Authorization___RegisterByLastStep___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___RegisterByLastStep___Incoming_ {
-            application_user_device__id: incoming.application_user_device__id.to_string()?,
-            application_user__email: incoming.application_user__email.to_string()?,
-            application_user__nickname: incoming.application_user__nickname.to_string()?,
-            application_user__password: incoming.application_user__password.to_string()?,
-            application_user_registration_token__value: incoming.application_user_registration_token__value.to_string()?,
+            application_user_device__id: incoming.application_user_device__id.clone_as_string()?,
+            application_user__email: incoming.application_user__email.clone_as_string()?,
+            application_user__nickname: incoming.application_user__nickname.clone_as_string()?,
+            application_user__password: incoming.application_user__password.clone_as_string()?,
+            application_user_registration_token__value: incoming.application_user_registration_token__value.clone_as_string()?,
         };
         return Ok(incoming_);
     };
@@ -1454,7 +1457,7 @@ pub struct ApplicationUser__Authorization___RegisterByLastStep___Precedent {
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____register_by_last_step____deserialize____allocate(
-    vector_of_bytes: *mut C_Vector<c_uchar>,
+    c_vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___RegisterByLastStep___C_Result {
     let converter = move |unified_report: UnifiedReport<
         ApplicationUser__Authorization___RegisterByLastStep___Outcoming_,
@@ -1529,7 +1532,7 @@ pub extern "C" fn application_user___authorization____register_by_last_step____d
         return Ok(unified_report_);
     };
     return Transformer::<ServerResponseData>::transform(
-        vector_of_bytes,
+        c_vector_of_bytes,
         converter,
     );
 }
@@ -1562,8 +1565,8 @@ pub extern "C" fn application_user___authorization____reset_password_by_first_st
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: &'_ ApplicationUser__Authorization___ResetPasswordByFirstStep___Incoming| -> Result<ApplicationUser__Authorization___ResetPasswordByFirstStep___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___ResetPasswordByFirstStep___Incoming_ {
-            application_user__email: incoming.application_user__email.to_string()?,
-            application_user_device__id: incoming.application_user_device__id.to_string()?,
+            application_user__email: incoming.application_user__email.clone_as_string()?,
+            application_user_device__id: incoming.application_user_device__id.clone_as_string()?,
         };
         return Ok(incoming_);
     };
@@ -1595,7 +1598,7 @@ pub struct ApplicationUser__Authorization___ResetPasswordByFirstStep___Precedent
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____reset_password_by_first_step____deserialize____allocate(
-    vector_of_bytes: *mut C_Vector<c_uchar>,
+    c_vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___ResetPasswordByFirstStep___C_Result {
     let converter = move |unified_report: UnifiedReport<
         ApplicationUser__Authorization___ResetPasswordByFirstStep___Outcoming_,
@@ -1641,7 +1644,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_first_st
         return Ok(unified_report_);
     };
     return Transformer::<ServerResponseData>::transform(
-        vector_of_bytes,
+        c_vector_of_bytes,
         converter,
     );
 }
@@ -1665,8 +1668,8 @@ pub extern "C" fn application_user___authorization____reset_password_by_second_s
     let converter = move |incoming: &'_ ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming| -> Result<ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming_ {
             application_user__id: incoming.application_user__id,
-            application_user_device__id: incoming.application_user_device__id.to_string()?,
-            application_user_reset_password_token__value: incoming.application_user_reset_password_token__value.to_string()?,
+            application_user_device__id: incoming.application_user_device__id.clone_as_string()?,
+            application_user_reset_password_token__value: incoming.application_user_reset_password_token__value.clone_as_string()?,
         };
         return Ok(incoming_);
     };
@@ -1698,7 +1701,7 @@ pub struct ApplicationUserResetPasswordToken_WrongValue {
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____reset_password_by_second_step____deserialize____allocate(
-    vector_of_bytes: *mut C_Vector<c_uchar>,
+    c_vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___ResetPasswordBySecondStep___C_Result {
     let converter = move |unified_report: UnifiedReport<Void, ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_>| -> Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
@@ -1752,7 +1755,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_second_s
         return Ok(unified_report_);
     };
     return Transformer::<ServerResponseData>::transform(
-        vector_of_bytes,
+        c_vector_of_bytes,
         converter,
     );
 }
@@ -1777,9 +1780,9 @@ pub extern "C" fn application_user___authorization____reset_password_by_last_ste
     let converter = move |incoming: &'_ ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming| -> Result<ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming_ {
             application_user__id: incoming.application_user__id,
-            application_user_device__id: incoming.application_user_device__id.to_string()?,
-            application_user__password: incoming.application_user__password.to_string()?,
-            application_user_reset_password_token__value: incoming.application_user_reset_password_token__value.to_string()?,
+            application_user_device__id: incoming.application_user_device__id.clone_as_string()?,
+            application_user__password: incoming.application_user__password.clone_as_string()?,
+            application_user_reset_password_token__value: incoming.application_user_reset_password_token__value.clone_as_string()?,
         };
         return Ok(incoming_);
     };
@@ -1805,7 +1808,7 @@ pub struct ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent 
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____reset_password_by_last_step____deserialize____allocate(
-    vector_of_bytes: *mut C_Vector<c_uchar>,
+    c_vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___ResetPasswordByLastStep___C_Result {
     let converter = move |unified_report: UnifiedReport<Void, ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_>| -> Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
@@ -1862,7 +1865,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_last_ste
         return Ok(unified_report_);
     };
     return Transformer::<ServerResponseData>::transform(
-        vector_of_bytes,
+        c_vector_of_bytes,
         converter,
     );
 }
@@ -1884,8 +1887,8 @@ pub extern "C" fn application_user___authorization____send_email_for_register___
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: &'_ ApplicationUser__Authorization___SendEmailForRegister___Incoming| -> Result<ApplicationUser__Authorization___SendEmailForRegister___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___SendEmailForRegister___Incoming_ {
-            application_user__email: incoming.application_user__email.to_string()?,
-            application_user_device__id: incoming.application_user_device__id.to_string()?,
+            application_user__email: incoming.application_user__email.clone_as_string()?,
+            application_user_device__id: incoming.application_user_device__id.clone_as_string()?,
         };
         return Ok(incoming_);
     };
@@ -1916,7 +1919,7 @@ pub struct ApplicationUser__Authorization___SendEmailForRegister___Precedent {
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____send_email_for_register____deserialize____allocate(
-    vector_of_bytes: *mut C_Vector<c_uchar>,
+    c_vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___SendEmailForRegister___C_Result {
     let converter = move |unified_report: UnifiedReport<
         ApplicationUser__Authorization___SendEmailForRegister___Outcoming_,
@@ -1978,7 +1981,7 @@ pub extern "C" fn application_user___authorization____send_email_for_register___
         return Ok(unified_report_);
     };
     return Transformer::<ServerResponseData>::transform(
-        vector_of_bytes,
+        c_vector_of_bytes,
         converter,
     );
 }
@@ -2000,7 +2003,7 @@ pub extern "C" fn application_user___authorization____send_email_for_authorize__
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: &'_ ApplicationUser__Authorization___SendEmailForAuthorize___Incoming| -> Result<ApplicationUser__Authorization___SendEmailForAuthorize___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___SendEmailForAuthorize___Incoming_ {
-            application_user_device__id: incoming.application_user_device__id.to_string()?,
+            application_user_device__id: incoming.application_user_device__id.clone_as_string()?,
             application_user__id: incoming.application_user__id,
         };
         return Ok(incoming_);
@@ -2032,7 +2035,7 @@ pub struct ApplicationUser__Authorization___SendEmailForAuthorize___Precedent {
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____send_email_for_authorize____deserialize____allocate(
-    vector_of_bytes: *mut C_Vector<c_uchar>,
+    c_vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___SendEmailForAuthorize___C_Result {
     let converter = move |unified_report: UnifiedReport<
         ApplicationUser__Authorization___SendEmailForAuthorize___Outcoming_,
@@ -2094,7 +2097,7 @@ pub extern "C" fn application_user___authorization____send_email_for_authorize__
         return Ok(unified_report_);
     };
     return Transformer::<ServerResponseData>::transform(
-        vector_of_bytes,
+        c_vector_of_bytes,
         converter,
     );
 }
@@ -2117,7 +2120,7 @@ pub extern "C" fn application_user___authorization____send_email_for_reset_passw
     let converter = move |incoming: &'_ ApplicationUser__Authorization___SendEmailForResetPassword___Incoming| -> Result<ApplicationUser__Authorization___SendEmailForResetPassword___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___SendEmailForResetPassword___Incoming_ {
             application_user__id: incoming.application_user__id,
-            application_user_device__id: incoming.application_user_device__id.to_string()?,
+            application_user_device__id: incoming.application_user_device__id.clone_as_string()?,
         };
         return Ok(incoming_);
     };
@@ -2149,7 +2152,7 @@ pub struct ApplicationUser__Authorization___SendEmailForResetPassword___Preceden
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____send_email_for_reset_password____deserialize____allocate(
-    vector_of_bytes: *mut C_Vector<c_uchar>,
+    c_vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut ApplicationUser__Authorization___SendEmailForResetPassword___C_Result {
     let converter = move |unified_report: UnifiedReport<
         ApplicationUser__Authorization___SendEmailForResetPassword___Outcoming_,
@@ -2217,7 +2220,7 @@ pub extern "C" fn application_user___authorization____send_email_for_reset_passw
         return Ok(unified_report_);
     };
     return Transformer::<ServerResponseData>::transform(
-        vector_of_bytes,
+        c_vector_of_bytes,
         converter,
     );
 }
@@ -2242,13 +2245,13 @@ pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____seriali
     let converter =
         move |incoming: &'_ Channel__Base___GetManyByNameInSubscriptions___Incoming| -> Result<Channel__Base___GetManyByNameInSubscriptions___Incoming_, Box<dyn StdError + 'static>> {
             let requery___channel__name = if incoming.requery___channel__name.is_data {
-                Some(incoming.requery___channel__name.data.to_string()?)
+                Some(incoming.requery___channel__name.data.clone_as_string()?)
             } else {
                 None
             };
             let incoming_ = Channel__Base___GetManyByNameInSubscriptions___Incoming_ {
-                application_user_access_token_encrypted: incoming.application_user_access_token_encrypted.to_string()?,
-                channel__name: incoming.channel__name.to_string()?,
+                application_user_access_token_encrypted: incoming.application_user_access_token_encrypted.clone_as_string()?,
+                channel__name: incoming.channel__name.clone_as_string()?,
                 requery___channel__name,
                 limit: incoming.limit,
             };
@@ -2279,7 +2282,7 @@ pub struct Channel__Base___GetManyByNameInSubscriptions___Precedent {
 }
 #[no_mangle]
 pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____deserialize____allocate(
-    vector_of_bytes: *mut C_Vector<c_uchar>,
+    c_vector_of_bytes: *mut C_Vector<c_uchar>,
 ) -> *mut Channel__Base___GetManyByNameInSubscriptions___C_Result {
     let converter = move |unified_report: UnifiedReport<Channel__Base___GetManyByNameInSubscriptions___Outcoming_, Channel__Base___GetManyByNameInSubscriptions___Precedent_>| -> Result<
         C_UnifiedReport<Channel__Base___GetManyByNameInSubscriptions___Outcoming, Channel__Base___GetManyByNameInSubscriptions___Precedent>,
@@ -2349,7 +2352,7 @@ pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____deseria
         return Ok(unified_report_);
     };
     return Transformer::<ServerResponseData>::transform(
-        vector_of_bytes,
+        c_vector_of_bytes,
         converter,
     );
 }
@@ -2394,7 +2397,7 @@ pub extern "C" fn channel___base____get_many_by_subscription____serialize____all
             None
         };
         let incoming_ = Channel__Base___GetManyBySubscription___Incoming_ {
-            application_user_access_token_encrypted: incoming.application_user_access_token_encrypted.to_string()?,
+            application_user_access_token_encrypted: incoming.application_user_access_token_encrypted.clone_as_string()?,
             requery___channel__id,
             limit: incoming.limit,
         };
@@ -2424,7 +2427,7 @@ pub struct Channel__Base___GetManyBySubscription___Precedent {
     pub application_user_access_token__in_application_user_access_token_black_list: bool,
 }
 #[no_mangle]
-pub extern "C" fn channel___base____get_many_by_subscription____deserialize____allocate(vector_of_bytes: *mut C_Vector<c_uchar>) -> *mut Channel__Base___GetManyBySubscription___C_Result {
+pub extern "C" fn channel___base____get_many_by_subscription____deserialize____allocate(c_vector_of_bytes: *mut C_Vector<c_uchar>) -> *mut Channel__Base___GetManyBySubscription___C_Result {
     let converter = move |unified_report: UnifiedReport<Channel__Base___GetManyBySubscription___Outcoming_, Channel__Base___GetManyBySubscription___Precedent_>| -> Result<
         C_UnifiedReport<Channel__Base___GetManyBySubscription___Outcoming, Channel__Base___GetManyBySubscription___Precedent>,
         Box<dyn StdError + 'static>,
@@ -2493,7 +2496,7 @@ pub extern "C" fn channel___base____get_many_by_subscription____deserialize____a
         return Ok(unified_report_);
     };
     return Transformer::<ServerResponseData>::transform(
-        vector_of_bytes,
+        c_vector_of_bytes,
         converter,
     );
 }
@@ -2534,13 +2537,13 @@ pub struct Channel__Base___GetManyPublicByName___Incoming {
 pub extern "C" fn channel___base____get_many_public_by_name____serialize____allocate(incoming: *mut Channel__Base___GetManyPublicByName___Incoming) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: &'_ Channel__Base___GetManyPublicByName___Incoming| -> Result<Channel__Base___GetManyPublicByName___Incoming_, Box<dyn StdError + 'static>> {
         let requery___channel__name = if incoming.requery___channel__name.is_data {
-            Some(incoming.requery___channel__name.data.to_string()?)
+            Some(incoming.requery___channel__name.data.clone_as_string()?)
         } else {
             None
         };
         let incoming_ = Channel__Base___GetManyPublicByName___Incoming_ {
-            application_user_access_token_encrypted: incoming.application_user_access_token_encrypted.to_string()?,
-            channel__name: incoming.channel__name.to_string()?,
+            application_user_access_token_encrypted: incoming.application_user_access_token_encrypted.clone_as_string()?,
+            channel__name: incoming.channel__name.clone_as_string()?,
             requery___channel__name,
             limit: incoming.limit,
         };
@@ -2569,7 +2572,7 @@ pub struct Channel__Base___GetManyPublicByName___Precedent {
     pub application_user_access_token__in_application_user_access_token_black_list: bool,
 }
 #[no_mangle]
-pub extern "C" fn channel___base____get_many_public_by_name____deserialize____allocate(vector_of_bytes: *mut C_Vector<c_uchar>) -> *mut Channel__Base___GetManyPublicByName___C_Result {
+pub extern "C" fn channel___base____get_many_public_by_name____deserialize____allocate(c_vector_of_bytes: *mut C_Vector<c_uchar>) -> *mut Channel__Base___GetManyPublicByName___C_Result {
     let converter = move |unified_report: UnifiedReport<Channel__Base___GetManyPublicByName___Outcoming_, Channel__Base___GetManyPublicByName___Precedent_>| -> Result<
         C_UnifiedReport<Channel__Base___GetManyPublicByName___Outcoming, Channel__Base___GetManyPublicByName___Precedent>,
         Box<dyn StdError + 'static>,
@@ -2638,7 +2641,7 @@ pub extern "C" fn channel___base____get_many_public_by_name____deserialize____al
         return Ok(unified_report_);
     };
     return Transformer::<ServerResponseData>::transform(
-        vector_of_bytes,
+        c_vector_of_bytes,
         converter,
     );
 }
@@ -2677,7 +2680,7 @@ pub struct Channel__Base___GetOneById___Incoming {
 pub extern "C" fn channel___base____get_one_by_id____serialize____allocate(incoming: *mut Channel__Base___GetOneById___Incoming) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: &'_ Channel__Base___GetOneById___Incoming| -> Result<Channel__Base___GetOneById___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = Channel__Base___GetOneById___Incoming_ {
-            application_user_access_token_encrypted: incoming.application_user_access_token_encrypted.to_string()?,
+            application_user_access_token_encrypted: incoming.application_user_access_token_encrypted.clone_as_string()?,
             channel__id: incoming.channel__id,
         };
         return Ok(incoming_);
@@ -2709,7 +2712,7 @@ pub struct Channel__Base___GetOneById___Precedent {
     pub channel__is_close: bool,
 }
 #[no_mangle]
-pub extern "C" fn channel___base____get_one_by_id____deserialize____allocate(vector_of_bytes: *mut C_Vector<c_uchar>) -> *mut Channel__Base___GetOneById___C_Result {
+pub extern "C" fn channel___base____get_one_by_id____deserialize____allocate(c_vector_of_bytes: *mut C_Vector<c_uchar>) -> *mut Channel__Base___GetOneById___C_Result {
     let converter = move |unified_report: UnifiedReport<Channel__Base___GetOneById___Outcoming_, Channel__Base___GetOneById___Precedent_>| -> Result<C_UnifiedReport<Channel__Base___GetOneById___Outcoming, Channel__Base___GetOneById___Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
@@ -2816,7 +2819,7 @@ pub extern "C" fn channel___base____get_one_by_id____deserialize____allocate(vec
         return Ok(unified_report_);
     };
     return Transformer::<ServerResponseData>::transform(
-        vector_of_bytes,
+        c_vector_of_bytes,
         converter,
     );
 }
@@ -2862,7 +2865,7 @@ pub struct ChannelSubscription__Base___Create___Incoming {
 pub extern "C" fn channel_subscription___base____create____serialize____allocate(incoming: *mut ChannelSubscription__Base___Create___Incoming) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: &'_ ChannelSubscription__Base___Create___Incoming| -> Result<ChannelSubscription__Base___Create___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ChannelSubscription__Base___Create___Incoming_ {
-            application_user_access_token_encrypted: incoming.application_user_access_token_encrypted.to_string()?,
+            application_user_access_token_encrypted: incoming.application_user_access_token_encrypted.clone_as_string()?,
             channel__id: incoming.channel__id,
         };
         return Ok(incoming_);
@@ -2888,7 +2891,7 @@ pub struct ChannelSubscription__Base___Create___Precedent {
     pub application_user__is_channel__owner: bool,
 }
 #[no_mangle]
-pub extern "C" fn channel_subscription___base____create____deserialize____allocate(vector_of_bytes: *mut C_Vector<c_uchar>) -> *mut ChannelSubscription__Base___Create___C_Result {
+pub extern "C" fn channel_subscription___base____create____deserialize____allocate(c_vector_of_bytes: *mut C_Vector<c_uchar>) -> *mut ChannelSubscription__Base___Create___C_Result {
     let converter = move |unified_report: UnifiedReport<Void, ChannelSubscription__Base___Create___Precedent_>| -> Result<C_UnifiedReport<C_Void, ChannelSubscription__Base___Create___Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
@@ -2944,7 +2947,7 @@ pub extern "C" fn channel_subscription___base____create____deserialize____alloca
         return Ok(unified_report_);
     };
     return Transformer::<ServerResponseData>::transform(
-        vector_of_bytes,
+        c_vector_of_bytes,
         converter,
     );
 }
@@ -2961,6 +2964,30 @@ mod test {
         use super::*;
         const STRING_LITERAL: &'static str = "qwerty";
         const ARRAY_LITERAL: [u8; 3] = [0, 1, 2];
+        #[test]
+        fn c_vector_clone() -> Result<(), Box<dyn StdError + 'static>> {
+            let c_vector = Allocator::<C_Vector<_>>::allocate(ARRAY_LITERAL.to_vec());
+            {
+                let _ = c_vector.clone_as_vec()?;
+            }
+            if c_vector.pointer.is_null() {
+                return Err(ALLOCATION_ERROR.into());
+            }
+            Allocator::<C_Vector<_>>::deallocate(c_vector);
+            return Ok(());
+        }
+        #[test]
+        fn c_string_clone() -> Result<(), Box<dyn StdError + 'static>> {
+            let c_string = Allocator::<C_String>::allocate(STRING_LITERAL.to_string());
+            {
+                let _ = c_string.clone_as_string()?;
+            }
+            if c_string.pointer.is_null() {
+                return Err(ALLOCATION_ERROR.into());
+            }
+            Allocator::<C_String>::deallocate(&c_string);
+            return Ok(());
+        }
         mod server_response_data_deserialization {
             use super::*;
             use aggregate_error::AggregateError;
@@ -3014,11 +3041,12 @@ mod test {
                         application_user___authorization____authorize_by_first_step____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 #[test]
                 fn target_filled____application_user___authorization____authorize_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3040,11 +3068,12 @@ mod test {
                         application_user___authorization____authorize_by_first_step____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 #[test]
                 fn precedent____application_user___authorization____authorize_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3060,11 +3089,12 @@ mod test {
                         application_user___authorization____authorize_by_first_step____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 #[test]
                 fn target_empty____application_user___authorization____authorize_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3079,11 +3109,12 @@ mod test {
                         application_user___authorization____authorize_by_last_step____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 #[test]
                 fn target_filled____application_user___authorization____authorize_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3102,11 +3133,12 @@ mod test {
                         application_user___authorization____authorize_by_last_step____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 fn _precedent____application_user___authorization____authorize_by_last_step(
                     precedent: ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_,
@@ -3122,11 +3154,12 @@ mod test {
                         application_user___authorization____authorize_by_last_step____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 #[test]
                 fn precedent____application_user___authorization____authorize_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3154,11 +3187,12 @@ mod test {
                         application_user___authorization____check_email_for_existing____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 #[test]
                 fn target_filled____application_user___authorization____check_email_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3173,11 +3207,12 @@ mod test {
                         application_user___authorization____check_email_for_existing____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 #[test]
                 fn precedent____application_user___authorization____check_email_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3193,11 +3228,12 @@ mod test {
                         application_user___authorization____check_nickname_for_existing____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 #[test]
                 fn target_filled____application_user___authorization____check_nickname_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3212,11 +3248,12 @@ mod test {
                         application_user___authorization____check_nickname_for_existing____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 #[test]
                 fn precedent____application_user___authorization____check_nickname_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3232,11 +3269,12 @@ mod test {
                         application_user___authorization____deauthorize_from_all_devices____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 #[test]
                 fn target_filled____application_user___authorization____deauthorize_from_all_devices() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3253,11 +3291,12 @@ mod test {
                         application_user___authorization____deauthorize_from_all_devices____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 #[test]
                 fn precedent____application_user___authorization____deauthorize_from_all_devices() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3280,11 +3319,12 @@ mod test {
                         application_user___authorization____deauthorize_from_one_device____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 #[test]
                 fn target_filled____application_user___authorization____deauthorize_from_one_device() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3301,11 +3341,12 @@ mod test {
                         application_user___authorization____deauthorize_from_one_device____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 #[test]
                 fn precedent____application_user___authorization____deauthorize_from_one_device() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3331,11 +3372,12 @@ mod test {
                         application_user___authorization____refresh_access_token____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 #[test]
                 fn target_filled____application_user___authorization____refresh_access_token() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3354,11 +3396,12 @@ mod test {
                         application_user___authorization____refresh_access_token____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 fn _precedent____application_user___authorization____refresh_access_token(
                     precedent: ApplicationUser__Authorization___RefreshAccessToken___Precedent_,
@@ -3374,11 +3417,12 @@ mod test {
                         application_user___authorization____refresh_access_token____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 #[test]
                 fn precedent____application_user___authorization____refresh_access_token() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3403,11 +3447,12 @@ mod test {
                         application_user___authorization____register_by_first_step____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 #[test]
                 fn target_filled____application_user___authorization____register_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3428,11 +3473,12 @@ mod test {
                         application_user___authorization____register_by_first_step____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 #[test]
                 fn precedent____application_user___authorization____register_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3448,11 +3494,12 @@ mod test {
                         application_user___authorization____register_by_first_step____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 #[test]
                 fn target_empty____application_user___authorization____register_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3464,11 +3511,12 @@ mod test {
                         application_user___authorization____register_by_second_step____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 #[test]
                 fn target_filled____application_user___authorization____register_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3485,11 +3533,12 @@ mod test {
                         application_user___authorization____register_by_second_step____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 #[test]
                 fn precedent____application_user___authorization____register_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3520,11 +3569,12 @@ mod test {
                         application_user___authorization____register_by_last_step____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 #[test]
                 fn target_filled____application_user___authorization____register_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3543,11 +3593,12 @@ mod test {
                         application_user___authorization____register_by_last_step____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 fn _precedent____application_user___authorization____register_by_last_step(
                     precedent: ApplicationUser__Authorization___RegisterByLastStep___Precedent_,
@@ -3563,11 +3614,12 @@ mod test {
                         application_user___authorization____register_by_last_step____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 #[test]
                 fn precedent____application_user___authorization____register_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3596,11 +3648,12 @@ mod test {
                         application_user___authorization____reset_password_by_first_step____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 #[test]
                 fn target_filled____application_user___authorization____reset_password_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3622,11 +3675,12 @@ mod test {
                         application_user___authorization____reset_password_by_first_step____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 #[test]
                 fn precedent____application_user___authorization____reset_password_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3642,11 +3696,12 @@ mod test {
                         application_user___authorization____reset_password_by_first_step____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 #[test]
                 fn target_empty____application_user___authorization____reset_password_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3658,11 +3713,12 @@ mod test {
                         application_user___authorization____reset_password_by_second_step____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 #[test]
                 fn target_filled____application_user___authorization____reset_password_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3679,11 +3735,12 @@ mod test {
                         application_user___authorization____reset_password_by_second_step____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 #[test]
                 fn precedent____application_user___authorization____reset_password_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3711,11 +3768,12 @@ mod test {
                         application_user___authorization____reset_password_by_last_step____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 #[test]
                 fn target_filled____application_user___authorization____reset_password_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3732,11 +3790,12 @@ mod test {
                         application_user___authorization____reset_password_by_last_step____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 #[test]
                 fn precedent____application_user___authorization____reset_password_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3764,11 +3823,12 @@ mod test {
                         application_user___authorization____send_email_for_register____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 #[test]
                 fn target_filled____application_user___authorization____send_email_for_register() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3786,11 +3846,12 @@ mod test {
                         application_user___authorization____send_email_for_register____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 fn _precedent____application_user___authorization____send_email_for_register(
                     precedent: ApplicationUser__Authorization___SendEmailForRegister___Precedent_,
@@ -3806,11 +3867,12 @@ mod test {
                         application_user___authorization____send_email_for_register____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 #[test]
                 fn precedent____application_user___authorization____send_email_for_register() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3837,11 +3899,12 @@ mod test {
                         application_user___authorization____send_email_for_authorize____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 #[test]
                 fn target_filled____application_user___authorization____send_email_for_authorize() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3859,11 +3922,12 @@ mod test {
                         application_user___authorization____send_email_for_authorize____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 fn _precedent____application_user___authorization____send_email_for_authorize(
                     precedent: ApplicationUser__Authorization___SendEmailForAuthorize___Precedent_,
@@ -3879,11 +3943,12 @@ mod test {
                         application_user___authorization____send_email_for_authorize____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 #[test]
                 fn precedent____application_user___authorization____send_email_for_authorize() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3910,11 +3975,12 @@ mod test {
                         application_user___authorization____send_email_for_reset_password____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 #[test]
                 fn target_filled____application_user___authorization____send_email_for_reset_password() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3932,11 +3998,12 @@ mod test {
                         application_user___authorization____send_email_for_reset_password____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 fn _precedent____application_user___authorization____send_email_for_reset_password(
                     precedent: ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_,
@@ -3952,11 +4019,12 @@ mod test {
                         application_user___authorization____send_email_for_reset_password____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 #[test]
                 fn precedent____application_user___authorization____send_email_for_reset_password() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3982,11 +4050,12 @@ mod test {
                         channel___base____get_many_by_name_in_subscriptions____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 #[test]
                 fn target_filled____channel___base____get_many_by_name_in_subscriptions() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4020,11 +4089,12 @@ mod test {
                         channel___base____get_many_by_name_in_subscriptions____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 fn _precedent____channel___base____get_many_by_name_in_subscriptions(
                     precedent: Channel__Base___GetManyByNameInSubscriptions___Precedent_,
@@ -4038,11 +4108,12 @@ mod test {
                         channel___base____get_many_by_name_in_subscriptions____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 #[test]
                 fn precedent____channel___base____get_many_by_name_in_subscriptions() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4064,11 +4135,12 @@ mod test {
                         channel___base____get_many_by_subscription____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 #[test]
                 fn target_filled____channel___base____get_many_by_subscription() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4100,11 +4172,12 @@ mod test {
                         channel___base____get_many_by_subscription____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 fn _precedent____channel___base____get_many_by_subscription(
                     precedent: Channel__Base___GetManyBySubscription___Precedent_,
@@ -4118,11 +4191,12 @@ mod test {
                         channel___base____get_many_by_subscription____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 #[test]
                 fn precedent____channel___base____get_many_by_subscription() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4144,11 +4218,12 @@ mod test {
                         channel___base____get_many_public_by_name____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 #[test]
                 fn target_filled____channel___base____get_many_public_by_name() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4180,11 +4255,12 @@ mod test {
                         channel___base____get_many_public_by_name____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 fn _precedent____channel___base____get_many_public_by_name(precedent: Channel__Base___GetManyPublicByName___Precedent_) -> Result<(), Box<dyn StdError + 'static>> {
                     let unified_report = UnifiedReport::<Channel__Base___GetManyPublicByName___Outcoming_, Channel__Base___GetManyPublicByName___Precedent_>::precedent(precedent);
@@ -4195,11 +4271,12 @@ mod test {
                         channel___base____get_many_public_by_name____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 #[test]
                 fn precedent____channel___base____get_many_public_by_name() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4221,11 +4298,12 @@ mod test {
                         channel___base____get_one_by_id____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 #[test]
                 fn target_filled____channel___base____get_one_by_id() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4271,11 +4349,12 @@ mod test {
                         channel___base____get_one_by_id____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 fn _precedent____channel___base____get_one_by_id(precedent: Channel__Base___GetOneById___Precedent_) -> Result<(), Box<dyn StdError + 'static>> {
                     let unified_report = UnifiedReport::<Channel__Base___GetOneById___Outcoming_, Channel__Base___GetOneById___Precedent_>::precedent(precedent);
@@ -4286,11 +4365,12 @@ mod test {
                         channel___base____get_one_by_id____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 #[test]
                 fn precedent____channel___base____get_one_by_id() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4314,11 +4394,12 @@ mod test {
                         channel_subscription___base____create____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 #[test]
                 fn target_filled____channel_subscription___base____create() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4333,11 +4414,12 @@ mod test {
                         channel_subscription___base____create____deserialize____deallocate(c_result);
                         return ();
                     };
-                    return run_by_template(
+                    run_by_template(
                         &unified_report,
                         allocator,
                         deallocator,
-                    );
+                    )?;
+                    return Ok(());
                 }
                 #[test]
                 fn precedent____channel_subscription___base____create() -> Result<(), Box<dyn StdError + 'static>> {

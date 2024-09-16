@@ -116,20 +116,5 @@ base64 - нужен ли? он нужен для кодирования байт
 
 
 
-let allocator = move |incoming: *mut ApplicationUser__Authorization___RefreshAccessToken___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
-    return application_user___authorization____refresh_access_token____serialize(incoming);
-};
-Посмотреть, зачем Closure вообще нужно.
-
-
-
 
 unsafe { ... } - В многострочие, проверить, как fmt будет реагировать.
-
-
-
-Проверить У Влада на стороне C_String.to_string()/C_Vector.to_vec() на предмет того, как дропается аргумент на стороне Влада. Нет ли паники/утечки на его стороне.
-написать тесты Валгринд.
-
-
-Allocator::<C_String>::deallocate(common.channel.channel__name); - почему тут из-по сылки компилируется.
