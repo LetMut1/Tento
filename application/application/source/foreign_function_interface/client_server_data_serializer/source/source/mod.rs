@@ -182,7 +182,6 @@ where
     }
 }
 #[repr(C)]
-#[derive(Clone, Copy)]
 pub struct C_Option<T> {
     pub data: T,
     // If false, then it means it it None.
@@ -216,7 +215,7 @@ where
     }
 }
 #[repr(C)]
-#[derive(Default, Clone, Copy)]
+#[derive(Default)]
 pub struct C_UnifiedReport<D, P> {
     pub target: C_Data<D>,
     pub precedent: P,
@@ -248,7 +247,7 @@ where
     }
 }
 #[repr(C)]
-#[derive(Default, Clone, Copy)]
+#[derive(Default)]
 pub struct C_Data<T> {
     pub filled: T,
     // If false, then it means data is empty.
@@ -274,12 +273,11 @@ where
     }
 }
 #[repr(C)]
-#[derive(Clone, Copy)]
 pub struct C_String {
     pub pointer: *mut c_char,
 }
 impl C_String {
-    fn to_string(self) -> Result<String, Box<dyn StdError + 'static>> {
+    fn to_string<'a>(&'a self) -> Result<String, Box<dyn StdError + 'static>> {
         if self.pointer.is_null() {
             return Err(NULL_POINTER_ERROR_MESAGE.into());
         }
@@ -296,7 +294,6 @@ impl Default for C_String {
     }
 }
 #[repr(C)]
-#[derive(Clone, Copy)]
 pub struct C_Vector<T> {
     pointer: *mut T,
     length: size_t,
@@ -305,11 +302,13 @@ impl<T> C_Vector<T>
 where
     T: Clone,
 {
-    fn to_vec(self) -> Result<Vec<T>, Box<dyn StdError + 'static>> {
+    fn to_vec<'a>(&'a self) -> Result<Vec<T>, Box<dyn StdError + 'static>> {
         return Ok(
             self.as_slice()?.to_vec()
         )
     }
+}
+impl<T> C_Vector<T> {
     fn as_slice<'a>(&'a self) -> Result<&'a [T], Box<dyn StdError + 'static>> {
         if self.pointer.is_null() {
             return Err(NULL_POINTER_ERROR_MESAGE.into());
@@ -336,7 +335,7 @@ impl<T> Default for C_Vector<T> {
 // Struct for simulating Void type. That is, we will use this structure
 // in those moments when we would like to use the classic Void type.
 #[repr(C)]
-#[derive(Default, Clone, Copy)]
+#[derive(Default)]
 pub struct C_Void {
     _inner: bool,
 }
@@ -415,18 +414,18 @@ struct Transformer<S> {
 struct ServerRequestData;
 struct ServerResponseData;
 impl Transformer<ServerResponseData> {
-    fn transform<F, APO1, APP1, APO2, APP2>(vector_of_bytes: *mut C_Vector<c_uchar>, converter: F) -> *mut C_Result<C_UnifiedReport<APO2, APP2>>
+    fn transform<F, O1, P1, O2, P2>(vector_of_bytes: *mut C_Vector<c_uchar>, converter: F) -> *mut C_Result<C_UnifiedReport<O2, P2>>
     where
-        F: FnOnce(UnifiedReport<APO1, APP1>) -> Result<C_UnifiedReport<APO2, APP2>, Box<dyn StdError + 'static>>,
-        APO1: for<'de> Deserialize<'de>,
-        APP1: for<'de> Deserialize<'de>,
-        APO2: Default,
-        APP2: Default,
+        F: FnOnce(UnifiedReport<O1, P1>) -> Result<C_UnifiedReport<O2, P2>, Box<dyn StdError + 'static>>,
+        O1: for<'de> Deserialize<'de>,
+        P1: for<'de> Deserialize<'de>,
+        O2: Default,
+        P2: Default,
     {
         if vector_of_bytes.is_null() {
             return C_Result::error().into_raw();
         }
-        let vector_ = unsafe { *vector_of_bytes };
+        let vector_ = unsafe { &*vector_of_bytes };
         if vector_.pointer.is_null() || vector_.length == 0 {
             return C_Result::error().into_raw();
         }
@@ -436,7 +435,7 @@ impl Transformer<ServerResponseData> {
                 vector_.length,
             )
         };
-        let unified_report = match Serializer_::deserialize::<'_, UnifiedReport<APO1, APP1>>(data) {
+        let unified_report = match Serializer_::deserialize::<'_, UnifiedReport<O1, P1>>(data) {
             Ok(unified_report_) => unified_report_,
             Err(_) => {
                 return C_Result::error().into_raw();
@@ -455,14 +454,13 @@ impl Transformer<ServerResponseData> {
 impl Transformer<ServerRequestData> {
     fn transform<I1, F, I2>(incoming: *mut I1, converter: F) -> *mut C_Result<C_Vector<c_uchar>>
     where
-        I1: Copy,
-        F: FnOnce(I1) -> Result<I2, Box<dyn StdError + 'static>>,
+        F: for<'a> FnOnce(&'a I1) -> Result<I2, Box<dyn StdError + 'static>>,
         I2: Serialize,
     {
         if incoming.is_null() {
             return C_Result::error().into_raw();
         }
-        let incoming_ = unsafe { *incoming };
+        let incoming_ = unsafe { &*incoming };
         let incoming__ = match converter(incoming_) {
             Ok(incoming___) => incoming___,
             Err(_) => {
@@ -481,13 +479,13 @@ impl Transformer<ServerRequestData> {
     }
 }
 #[repr(C)]
-#[derive(Default, Clone, Copy)]
+#[derive(Default)]
 pub struct Common1 {
     pub channel: Channel1,
     pub is_application_user_subscribed: bool,
 }
 #[repr(C)]
-#[derive(Default, Clone, Copy)]
+#[derive(Default)]
 pub struct Channel1 {
     pub channel__id: c_long,
     pub channel__name: C_String,
@@ -498,7 +496,7 @@ pub struct Channel1 {
     pub channel__background_image_path: C_Option<C_String>,
 }
 #[repr(C)]
-#[derive(Default, Clone, Copy)]
+#[derive(Default)]
 pub struct Channel2 {
     pub channel__owner: c_long,
     pub channel__name: C_String,
@@ -514,18 +512,17 @@ pub struct Channel2 {
     pub channel__viewing_quantity: c_long,
 }
 #[repr(C)]
-#[derive(Default, Clone, Copy)]
+#[derive(Default)]
 pub struct ChannelInnerLink1 {
     pub channel_inner_link__to: c_long,
 }
 #[repr(C)]
-#[derive(Default, Clone, Copy)]
+#[derive(Default)]
 pub struct ChannelOuterLink1 {
     pub channel_outer_link__alias: C_String,
     pub channel_outer_link__address: C_String,
 }
 #[repr(C)]
-#[derive(Clone, Copy)]
 pub struct ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming {
     pub application_user_device__id: C_String,
     pub application_user__email___or___application_user__nickname: C_String,
@@ -535,13 +532,12 @@ pub struct ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming {
 pub extern "C" fn application_user___authorization____authorize_by_first_step____serialize____allocate(
     incoming: *mut ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
-    let converter = move |incoming: ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming| -> Result<ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming_, Box<dyn StdError + 'static>> {
+    let converter = move |incoming: &'_ ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming| -> Result<ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming_ {
             application_user_device__id: incoming.application_user_device__id.to_string()?,
             application_user__email___or___application_user__nickname: incoming.application_user__email___or___application_user__nickname.to_string()?,
             application_user__password: incoming.application_user__password.to_string()?,
         };
-
         return Ok(incoming_);
     };
     return Transformer::<ServerRequestData>::transform(
@@ -630,7 +626,6 @@ pub extern "C" fn application_user___authorization____authorize_by_first_step___
     return ();
 }
 #[repr(C)]
-#[derive(Clone, Copy)]
 pub struct ApplicationUser__Authorization___AuthorizeByLastStep___Incoming {
     pub application_user__id: c_long,
     pub application_user_device__id: C_String,
@@ -640,13 +635,12 @@ pub struct ApplicationUser__Authorization___AuthorizeByLastStep___Incoming {
 pub extern "C" fn application_user___authorization____authorize_by_last_step____serialize____allocate(
     incoming: *mut ApplicationUser__Authorization___AuthorizeByLastStep___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
-    let converter = move |incoming: ApplicationUser__Authorization___AuthorizeByLastStep___Incoming| -> Result<ApplicationUser__Authorization___AuthorizeByLastStep___Incoming_, Box<dyn StdError + 'static>> {
+    let converter = move |incoming: &'_ ApplicationUser__Authorization___AuthorizeByLastStep___Incoming| -> Result<ApplicationUser__Authorization___AuthorizeByLastStep___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___AuthorizeByLastStep___Incoming_ {
             application_user__id: incoming.application_user__id,
             application_user_device__id: incoming.application_user_device__id.to_string()?,
             application_user_authorization_token__value: incoming.application_user_authorization_token__value.to_string()?,
         };
-
         return Ok(incoming_);
     };
     return Transformer::<ServerRequestData>::transform(
@@ -662,7 +656,7 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
 type ApplicationUser__Authorization___AuthorizeByLastStep___C_Result =
     C_Result<C_UnifiedReport<ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming, ApplicationUser__Authorization___AuthorizeByLastStep___Precedent>>;
 #[repr(C)]
-#[derive(Default, Clone, Copy)]
+#[derive(Default)]
 pub struct ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming {
     pub application_user_access_token_encrypted: C_String,
     pub application_user_access_refresh_token_encrypted: C_Vector<c_uchar>,
@@ -774,7 +768,6 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
     return ();
 }
 #[repr(C)]
-#[derive(Clone, Copy)]
 pub struct ApplicationUser__Authorization___CheckEmailForExisting___Incoming {
     pub application_user__email: C_String,
 }
@@ -782,11 +775,10 @@ pub struct ApplicationUser__Authorization___CheckEmailForExisting___Incoming {
 pub extern "C" fn application_user___authorization____check_email_for_existing____serialize____allocate(
     incoming: *mut ApplicationUser__Authorization___CheckEmailForExisting___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
-    let converter = move |incoming: ApplicationUser__Authorization___CheckEmailForExisting___Incoming| -> Result<ApplicationUser__Authorization___CheckEmailForExisting___Incoming_, Box<dyn StdError + 'static>> {
+    let converter = move |incoming: &'_ ApplicationUser__Authorization___CheckEmailForExisting___Incoming| -> Result<ApplicationUser__Authorization___CheckEmailForExisting___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___CheckEmailForExisting___Incoming_ {
             application_user__email: incoming.application_user__email.to_string()?,
         };
-
         return Ok(incoming_);
     };
     return Transformer::<ServerRequestData>::transform(
@@ -847,7 +839,6 @@ pub extern "C" fn application_user___authorization____check_email_for_existing__
     return ();
 }
 #[repr(C)]
-#[derive(Clone, Copy)]
 pub struct ApplicationUser__Authorization___CheckNicknameForExisting___Incoming {
     pub application_user__nickname: C_String,
 }
@@ -855,11 +846,10 @@ pub struct ApplicationUser__Authorization___CheckNicknameForExisting___Incoming 
 pub extern "C" fn application_user___authorization____check_nickname_for_existing____serialize____allocate(
     incoming: *mut ApplicationUser__Authorization___CheckNicknameForExisting___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
-    let converter = move |incoming: ApplicationUser__Authorization___CheckNicknameForExisting___Incoming| -> Result<ApplicationUser__Authorization___CheckNicknameForExisting___Incoming_, Box<dyn StdError + 'static>> {
+    let converter = move |incoming: &'_ ApplicationUser__Authorization___CheckNicknameForExisting___Incoming| -> Result<ApplicationUser__Authorization___CheckNicknameForExisting___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___CheckNicknameForExisting___Incoming_ {
             application_user__nickname: incoming.application_user__nickname.to_string()?,
         };
-
         return Ok(incoming_);
     };
     return Transformer::<ServerRequestData>::transform(
@@ -921,7 +911,6 @@ pub extern "C" fn application_user___authorization____check_nickname_for_existin
     return ();
 }
 #[repr(C)]
-#[derive(Clone, Copy)]
 pub struct ApplicationUser__Authorization___DeauthorizeFromAllDevices___Incoming {
     pub application_user_access_token_encrypted: C_String,
 }
@@ -929,11 +918,10 @@ pub struct ApplicationUser__Authorization___DeauthorizeFromAllDevices___Incoming
 pub extern "C" fn application_user___authorization____deauthorize_from_all_devices____serialize____allocate(
     incoming: *mut ApplicationUser__Authorization___DeauthorizeFromAllDevices___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
-    let converter = move |incoming: ApplicationUser__Authorization___DeauthorizeFromAllDevices___Incoming| -> Result<ApplicationUser__Authorization___DeauthorizeFromAllDevices___Incoming_, Box<dyn StdError + 'static>> {
+    let converter = move |incoming: &'_ ApplicationUser__Authorization___DeauthorizeFromAllDevices___Incoming| -> Result<ApplicationUser__Authorization___DeauthorizeFromAllDevices___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___DeauthorizeFromAllDevices___Incoming_ {
             application_user_access_token_encrypted: incoming.application_user_access_token_encrypted.to_string()?,
         };
-
         return Ok(incoming_);
     };
     return Transformer::<ServerRequestData>::transform(
@@ -1015,7 +1003,6 @@ pub struct ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent
     pub application_user_access_token__in_application_user_access_token_black_list: bool,
 }
 #[repr(C)]
-#[derive(Clone, Copy)]
 pub struct ApplicationUser__Authorization___DeauthorizeFromOneDevice___Incoming {
     pub application_user_access_token_encrypted: C_String,
 }
@@ -1023,11 +1010,10 @@ pub struct ApplicationUser__Authorization___DeauthorizeFromOneDevice___Incoming 
 pub extern "C" fn application_user___authorization____deauthorize_from_one_device____serialize____allocate(
     incoming: *mut ApplicationUser__Authorization___DeauthorizeFromOneDevice___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
-    let converter = move |incoming: ApplicationUser__Authorization___DeauthorizeFromOneDevice___Incoming| -> Result<ApplicationUser__Authorization___DeauthorizeFromOneDevice___Incoming_, Box<dyn StdError + 'static>> {
+    let converter = move |incoming: &'_ ApplicationUser__Authorization___DeauthorizeFromOneDevice___Incoming| -> Result<ApplicationUser__Authorization___DeauthorizeFromOneDevice___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___DeauthorizeFromOneDevice___Incoming_ {
             application_user_access_token_encrypted: incoming.application_user_access_token_encrypted.to_string()?,
         };
-
         return Ok(incoming_);
     };
     return Transformer::<ServerRequestData>::transform(
@@ -1093,7 +1079,6 @@ pub extern "C" fn application_user___authorization____deauthorize_from_one_devic
     return ();
 }
 #[repr(C)]
-#[derive(Clone, Copy)]
 pub struct ApplicationUser__Authorization___RefreshAccessToken___Incoming {
     pub application_user_access_token_encrypted: C_String,
     pub application_user_access_refresh_token_encrypted: C_Vector<c_uchar>,
@@ -1102,12 +1087,11 @@ pub struct ApplicationUser__Authorization___RefreshAccessToken___Incoming {
 pub extern "C" fn application_user___authorization____refresh_access_token____serialize____allocate(
     incoming: *mut ApplicationUser__Authorization___RefreshAccessToken___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
-    let converter = move |incoming: ApplicationUser__Authorization___RefreshAccessToken___Incoming| -> Result<ApplicationUser__Authorization___RefreshAccessToken___Incoming_, Box<dyn StdError + 'static>> {
+    let converter = move |incoming: &'_ ApplicationUser__Authorization___RefreshAccessToken___Incoming| -> Result<ApplicationUser__Authorization___RefreshAccessToken___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___RefreshAccessToken___Incoming_ {
             application_user_access_token_encrypted: incoming.application_user_access_token_encrypted.to_string()?,
             application_user_access_refresh_token_encrypted: incoming.application_user_access_refresh_token_encrypted.to_vec()?,
         };
-
         return Ok(incoming_);
     };
     return Transformer::<ServerRequestData>::transform(
@@ -1123,7 +1107,7 @@ pub extern "C" fn application_user___authorization____refresh_access_token____se
 type ApplicationUser__Authorization___RefreshAccessToken___C_Result =
     C_Result<C_UnifiedReport<ApplicationUser__Authorization___RefreshAccessToken___Outcoming, ApplicationUser__Authorization___RefreshAccessToken___Precedent>>;
 #[repr(C)]
-#[derive(Default, Clone, Copy)]
+#[derive(Default)]
 pub struct ApplicationUser__Authorization___RefreshAccessToken___Outcoming {
     pub application_user_access_token_encrypted: C_String,
     pub application_user_access_refresh_token_encrypted: C_Vector<c_uchar>,
@@ -1210,7 +1194,6 @@ pub extern "C" fn application_user___authorization____refresh_access_token____de
     return ();
 }
 #[repr(C)]
-#[derive(Clone, Copy)]
 pub struct ApplicationUser__Authorization___RegisterByFirstStep___Incoming {
     pub application_user__email: C_String,
     pub application_user_device__id: C_String,
@@ -1219,12 +1202,11 @@ pub struct ApplicationUser__Authorization___RegisterByFirstStep___Incoming {
 pub extern "C" fn application_user___authorization____register_by_first_step____serialize____allocate(
     incoming: *mut ApplicationUser__Authorization___RegisterByFirstStep___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
-    let converter = move |incoming: ApplicationUser__Authorization___RegisterByFirstStep___Incoming| -> Result<ApplicationUser__Authorization___RegisterByFirstStep___Incoming_, Box<dyn StdError + 'static>> {
+    let converter = move |incoming: &'_ ApplicationUser__Authorization___RegisterByFirstStep___Incoming| -> Result<ApplicationUser__Authorization___RegisterByFirstStep___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___RegisterByFirstStep___Incoming_ {
             application_user__email: incoming.application_user__email.to_string()?,
             application_user_device__id: incoming.application_user_device__id.to_string()?,
         };
-
         return Ok(incoming_);
     };
     return Transformer::<ServerRequestData>::transform(
@@ -1311,7 +1293,6 @@ pub extern "C" fn application_user___authorization____register_by_first_step____
     return ();
 }
 #[repr(C)]
-#[derive(Clone, Copy)]
 pub struct ApplicationUser__Authorization___RegisterBySecondStep___Incoming {
     pub application_user__email: C_String,
     pub application_user_device__id: C_String,
@@ -1321,13 +1302,12 @@ pub struct ApplicationUser__Authorization___RegisterBySecondStep___Incoming {
 pub extern "C" fn application_user___authorization____register_by_second_step____serialize____allocate(
     incoming: *mut ApplicationUser__Authorization___RegisterBySecondStep___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
-    let converter = move |incoming: ApplicationUser__Authorization___RegisterBySecondStep___Incoming| -> Result<ApplicationUser__Authorization___RegisterBySecondStep___Incoming_, Box<dyn StdError + 'static>> {
+    let converter = move |incoming: &'_ ApplicationUser__Authorization___RegisterBySecondStep___Incoming| -> Result<ApplicationUser__Authorization___RegisterBySecondStep___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___RegisterBySecondStep___Incoming_ {
             application_user__email: incoming.application_user__email.to_string()?,
             application_user_device__id: incoming.application_user_device__id.to_string()?,
             application_user_registration_token__value: incoming.application_user_registration_token__value.to_string()?,
         };
-
         return Ok(incoming_);
     };
     return Transformer::<ServerRequestData>::transform(
@@ -1423,7 +1403,6 @@ pub extern "C" fn application_user___authorization____register_by_second_step___
     return ();
 }
 #[repr(C)]
-#[derive(Clone, Copy)]
 pub struct ApplicationUser__Authorization___RegisterByLastStep___Incoming {
     pub application_user_device__id: C_String,
     pub application_user__nickname: C_String,
@@ -1435,7 +1414,7 @@ pub struct ApplicationUser__Authorization___RegisterByLastStep___Incoming {
 pub extern "C" fn application_user___authorization____register_by_last_step____serialize____allocate(
     incoming: *mut ApplicationUser__Authorization___RegisterByLastStep___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
-    let converter = move |incoming: ApplicationUser__Authorization___RegisterByLastStep___Incoming| -> Result<ApplicationUser__Authorization___RegisterByLastStep___Incoming_, Box<dyn StdError + 'static>> {
+    let converter = move |incoming: &'_ ApplicationUser__Authorization___RegisterByLastStep___Incoming| -> Result<ApplicationUser__Authorization___RegisterByLastStep___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___RegisterByLastStep___Incoming_ {
             application_user_device__id: incoming.application_user_device__id.to_string()?,
             application_user__email: incoming.application_user__email.to_string()?,
@@ -1443,7 +1422,6 @@ pub extern "C" fn application_user___authorization____register_by_last_step____s
             application_user__password: incoming.application_user__password.to_string()?,
             application_user_registration_token__value: incoming.application_user_registration_token__value.to_string()?,
         };
-
         return Ok(incoming_);
     };
     return Transformer::<ServerRequestData>::transform(
@@ -1459,7 +1437,7 @@ pub extern "C" fn application_user___authorization____register_by_last_step____s
 type ApplicationUser__Authorization___RegisterByLastStep___C_Result =
     C_Result<C_UnifiedReport<ApplicationUser__Authorization___RegisterByLastStep___Outcoming, ApplicationUser__Authorization___RegisterByLastStep___Precedent>>;
 #[repr(C)]
-#[derive(Default, Clone, Copy)]
+#[derive(Default)]
 pub struct ApplicationUser__Authorization___RegisterByLastStep___Outcoming {
     pub application_user_access_token_encrypted: C_String,
     pub application_user_access_refresh_token_encrypted: C_Vector<c_uchar>,
@@ -1574,7 +1552,6 @@ pub extern "C" fn application_user___authorization____register_by_last_step____d
     return ();
 }
 #[repr(C)]
-#[derive(Clone, Copy)]
 pub struct ApplicationUser__Authorization___ResetPasswordByFirstStep___Incoming {
     pub application_user__email: C_String,
     pub application_user_device__id: C_String,
@@ -1583,12 +1560,11 @@ pub struct ApplicationUser__Authorization___ResetPasswordByFirstStep___Incoming 
 pub extern "C" fn application_user___authorization____reset_password_by_first_step____serialize____allocate(
     incoming: *mut ApplicationUser__Authorization___ResetPasswordByFirstStep___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
-    let converter = move |incoming: ApplicationUser__Authorization___ResetPasswordByFirstStep___Incoming| -> Result<ApplicationUser__Authorization___ResetPasswordByFirstStep___Incoming_, Box<dyn StdError + 'static>> {
+    let converter = move |incoming: &'_ ApplicationUser__Authorization___ResetPasswordByFirstStep___Incoming| -> Result<ApplicationUser__Authorization___ResetPasswordByFirstStep___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___ResetPasswordByFirstStep___Incoming_ {
             application_user__email: incoming.application_user__email.to_string()?,
             application_user_device__id: incoming.application_user_device__id.to_string()?,
         };
-
         return Ok(incoming_);
     };
     return Transformer::<ServerRequestData>::transform(
@@ -1677,7 +1653,6 @@ pub extern "C" fn application_user___authorization____reset_password_by_first_st
     return ();
 }
 #[repr(C)]
-#[derive(Clone, Copy)]
 pub struct ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming {
     pub application_user__id: c_long,
     pub application_user_device__id: C_String,
@@ -1687,13 +1662,12 @@ pub struct ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming
 pub extern "C" fn application_user___authorization____reset_password_by_second_step____serialize____allocate(
     incoming: *mut ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
-    let converter = move |incoming: ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming| -> Result<ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming_, Box<dyn StdError + 'static>> {
+    let converter = move |incoming: &'_ ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming| -> Result<ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming_ {
             application_user__id: incoming.application_user__id,
             application_user_device__id: incoming.application_user_device__id.to_string()?,
             application_user_reset_password_token__value: incoming.application_user_reset_password_token__value.to_string()?,
         };
-
         return Ok(incoming_);
     };
     return Transformer::<ServerRequestData>::transform(
@@ -1790,7 +1764,6 @@ pub extern "C" fn application_user___authorization____reset_password_by_second_s
     return ();
 }
 #[repr(C)]
-#[derive(Clone, Copy)]
 pub struct ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming {
     pub application_user__id: c_long,
     pub application_user_device__id: C_String,
@@ -1801,14 +1774,13 @@ pub struct ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming {
 pub extern "C" fn application_user___authorization____reset_password_by_last_step____serialize____allocate(
     incoming: *mut ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
-    let converter = move |incoming: ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming| -> Result<ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming_, Box<dyn StdError + 'static>> {
+    let converter = move |incoming: &'_ ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming| -> Result<ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming_ {
             application_user__id: incoming.application_user__id,
             application_user_device__id: incoming.application_user_device__id.to_string()?,
             application_user__password: incoming.application_user__password.to_string()?,
             application_user_reset_password_token__value: incoming.application_user_reset_password_token__value.to_string()?,
         };
-
         return Ok(incoming_);
     };
     return Transformer::<ServerRequestData>::transform(
@@ -1902,7 +1874,6 @@ pub extern "C" fn application_user___authorization____reset_password_by_last_ste
     return ();
 }
 #[repr(C)]
-#[derive(Clone, Copy)]
 pub struct ApplicationUser__Authorization___SendEmailForRegister___Incoming {
     pub application_user__email: C_String,
     pub application_user_device__id: C_String,
@@ -1911,12 +1882,11 @@ pub struct ApplicationUser__Authorization___SendEmailForRegister___Incoming {
 pub extern "C" fn application_user___authorization____send_email_for_register____serialize____allocate(
     incoming: *mut ApplicationUser__Authorization___SendEmailForRegister___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
-    let converter = move |incoming: ApplicationUser__Authorization___SendEmailForRegister___Incoming| -> Result<ApplicationUser__Authorization___SendEmailForRegister___Incoming_, Box<dyn StdError + 'static>> {
+    let converter = move |incoming: &'_ ApplicationUser__Authorization___SendEmailForRegister___Incoming| -> Result<ApplicationUser__Authorization___SendEmailForRegister___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___SendEmailForRegister___Incoming_ {
             application_user__email: incoming.application_user__email.to_string()?,
             application_user_device__id: incoming.application_user_device__id.to_string()?,
         };
-
         return Ok(incoming_);
     };
     return Transformer::<ServerRequestData>::transform(
@@ -2020,7 +1990,6 @@ pub extern "C" fn application_user___authorization____send_email_for_register___
     return ();
 }
 #[repr(C)]
-#[derive(Clone, Copy)]
 pub struct ApplicationUser__Authorization___SendEmailForAuthorize___Incoming {
     pub application_user_device__id: C_String,
     pub application_user__id: c_long,
@@ -2029,12 +1998,11 @@ pub struct ApplicationUser__Authorization___SendEmailForAuthorize___Incoming {
 pub extern "C" fn application_user___authorization____send_email_for_authorize____serialize____allocate(
     incoming: *mut ApplicationUser__Authorization___SendEmailForAuthorize___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
-    let converter = move |incoming: ApplicationUser__Authorization___SendEmailForAuthorize___Incoming| -> Result<ApplicationUser__Authorization___SendEmailForAuthorize___Incoming_, Box<dyn StdError + 'static>> {
+    let converter = move |incoming: &'_ ApplicationUser__Authorization___SendEmailForAuthorize___Incoming| -> Result<ApplicationUser__Authorization___SendEmailForAuthorize___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___SendEmailForAuthorize___Incoming_ {
             application_user_device__id: incoming.application_user_device__id.to_string()?,
             application_user__id: incoming.application_user__id,
         };
-
         return Ok(incoming_);
     };
     return Transformer::<ServerRequestData>::transform(
@@ -2138,7 +2106,6 @@ pub extern "C" fn application_user___authorization____send_email_for_authorize__
     return ();
 }
 #[repr(C)]
-#[derive(Clone, Copy)]
 pub struct ApplicationUser__Authorization___SendEmailForResetPassword___Incoming {
     pub application_user__id: c_long,
     pub application_user_device__id: C_String,
@@ -2147,12 +2114,11 @@ pub struct ApplicationUser__Authorization___SendEmailForResetPassword___Incoming
 pub extern "C" fn application_user___authorization____send_email_for_reset_password____serialize____allocate(
     incoming: *mut ApplicationUser__Authorization___SendEmailForResetPassword___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
-    let converter = move |incoming: ApplicationUser__Authorization___SendEmailForResetPassword___Incoming| -> Result<ApplicationUser__Authorization___SendEmailForResetPassword___Incoming_, Box<dyn StdError + 'static>> {
+    let converter = move |incoming: &'_ ApplicationUser__Authorization___SendEmailForResetPassword___Incoming| -> Result<ApplicationUser__Authorization___SendEmailForResetPassword___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___SendEmailForResetPassword___Incoming_ {
             application_user__id: incoming.application_user__id,
             application_user_device__id: incoming.application_user_device__id.to_string()?,
         };
-
         return Ok(incoming_);
     };
     return Transformer::<ServerRequestData>::transform(
@@ -2263,7 +2229,6 @@ pub extern "C" fn application_user___authorization____send_email_for_reset_passw
     return ();
 }
 #[repr(C)]
-#[derive(Clone, Copy)]
 pub struct Channel__Base___GetManyByNameInSubscriptions___Incoming {
     pub application_user_access_token_encrypted: C_String,
     pub channel__name: C_String,
@@ -2275,7 +2240,7 @@ pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____seriali
     incoming: *mut Channel__Base___GetManyByNameInSubscriptions___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter =
-        move |incoming: Channel__Base___GetManyByNameInSubscriptions___Incoming| -> Result<Channel__Base___GetManyByNameInSubscriptions___Incoming_, Box<dyn StdError + 'static>> {
+        move |incoming: &'_ Channel__Base___GetManyByNameInSubscriptions___Incoming| -> Result<Channel__Base___GetManyByNameInSubscriptions___Incoming_, Box<dyn StdError + 'static>> {
             let requery___channel__name = if incoming.requery___channel__name.is_data {
                 Some(incoming.requery___channel__name.data.to_string()?)
             } else {
@@ -2302,7 +2267,7 @@ pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____seriali
 type Channel__Base___GetManyByNameInSubscriptions___C_Result =
     C_Result<C_UnifiedReport<Channel__Base___GetManyByNameInSubscriptions___Outcoming, Channel__Base___GetManyByNameInSubscriptions___Precedent>>;
 #[repr(C)]
-#[derive(Default, Clone, Copy)]
+#[derive(Default)]
 pub struct Channel__Base___GetManyByNameInSubscriptions___Outcoming {
     pub common_registry: C_Vector<Common1>,
 }
@@ -2415,7 +2380,6 @@ pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____deseria
     return ();
 }
 #[repr(C)]
-#[derive(Clone, Copy)]
 pub struct Channel__Base___GetManyBySubscription___Incoming {
     pub application_user_access_token_encrypted: C_String,
     pub requery___channel__id: C_Option<c_long>,
@@ -2423,7 +2387,7 @@ pub struct Channel__Base___GetManyBySubscription___Incoming {
 }
 #[no_mangle]
 pub extern "C" fn channel___base____get_many_by_subscription____serialize____allocate(incoming: *mut Channel__Base___GetManyBySubscription___Incoming) -> *mut C_Result<C_Vector<c_uchar>> {
-    let converter = move |incoming: Channel__Base___GetManyBySubscription___Incoming| -> Result<Channel__Base___GetManyBySubscription___Incoming_, Box<dyn StdError + 'static>> {
+    let converter = move |incoming: &'_ Channel__Base___GetManyBySubscription___Incoming| -> Result<Channel__Base___GetManyBySubscription___Incoming_, Box<dyn StdError + 'static>> {
         let requery___channel__id = if incoming.requery___channel__id.is_data {
             Some(incoming.requery___channel__id.data)
         } else {
@@ -2449,7 +2413,7 @@ pub extern "C" fn channel___base____get_many_by_subscription____serialize____dea
 type Channel__Base___GetManyBySubscription___C_Result =
     C_Result<C_UnifiedReport<Channel__Base___GetManyBySubscription___Outcoming, Channel__Base___GetManyBySubscription___Precedent>>;
 #[repr(C)]
-#[derive(Default, Clone, Copy)]
+#[derive(Default)]
 pub struct Channel__Base___GetManyBySubscription___Outcoming {
     pub common_registry: C_Vector<Common1>,
 }
@@ -2560,7 +2524,6 @@ pub extern "C" fn channel___base____get_many_by_subscription____deserialize____d
     return ();
 }
 #[repr(C)]
-#[derive(Clone, Copy)]
 pub struct Channel__Base___GetManyPublicByName___Incoming {
     pub application_user_access_token_encrypted: C_String,
     pub channel__name: C_String,
@@ -2569,7 +2532,7 @@ pub struct Channel__Base___GetManyPublicByName___Incoming {
 }
 #[no_mangle]
 pub extern "C" fn channel___base____get_many_public_by_name____serialize____allocate(incoming: *mut Channel__Base___GetManyPublicByName___Incoming) -> *mut C_Result<C_Vector<c_uchar>> {
-    let converter = move |incoming: Channel__Base___GetManyPublicByName___Incoming| -> Result<Channel__Base___GetManyPublicByName___Incoming_, Box<dyn StdError + 'static>> {
+    let converter = move |incoming: &'_ Channel__Base___GetManyPublicByName___Incoming| -> Result<Channel__Base___GetManyPublicByName___Incoming_, Box<dyn StdError + 'static>> {
         let requery___channel__name = if incoming.requery___channel__name.is_data {
             Some(incoming.requery___channel__name.data.to_string()?)
         } else {
@@ -2595,7 +2558,7 @@ pub extern "C" fn channel___base____get_many_public_by_name____serialize____deal
 }
 type Channel__Base___GetManyPublicByName___C_Result = C_Result<C_UnifiedReport<Channel__Base___GetManyPublicByName___Outcoming, Channel__Base___GetManyPublicByName___Precedent>>;
 #[repr(C)]
-#[derive(Default, Clone, Copy)]
+#[derive(Default)]
 pub struct Channel__Base___GetManyPublicByName___Outcoming {
     pub common_registry: C_Vector<Common1>,
 }
@@ -2706,14 +2669,13 @@ pub extern "C" fn channel___base____get_many_public_by_name____deserialize____de
     return ();
 }
 #[repr(C)]
-#[derive(Clone, Copy)]
 pub struct Channel__Base___GetOneById___Incoming {
     pub application_user_access_token_encrypted: C_String,
     pub channel__id: c_long,
 }
 #[no_mangle]
 pub extern "C" fn channel___base____get_one_by_id____serialize____allocate(incoming: *mut Channel__Base___GetOneById___Incoming) -> *mut C_Result<C_Vector<c_uchar>> {
-    let converter = move |incoming: Channel__Base___GetOneById___Incoming| -> Result<Channel__Base___GetOneById___Incoming_, Box<dyn StdError + 'static>> {
+    let converter = move |incoming: &'_ Channel__Base___GetOneById___Incoming| -> Result<Channel__Base___GetOneById___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = Channel__Base___GetOneById___Incoming_ {
             application_user_access_token_encrypted: incoming.application_user_access_token_encrypted.to_string()?,
             channel__id: incoming.channel__id,
@@ -2732,7 +2694,7 @@ pub extern "C" fn channel___base____get_one_by_id____serialize____deallocate(c_r
 }
 type Channel__Base___GetOneById___C_Result = C_Result<C_UnifiedReport<Channel__Base___GetOneById___Outcoming, Channel__Base___GetOneById___Precedent>>;
 #[repr(C)]
-#[derive(Default, Clone, Copy)]
+#[derive(Default)]
 pub struct Channel__Base___GetOneById___Outcoming {
     pub channel: Channel2,
     pub channel_inner_link_registry: C_Vector<ChannelInnerLink1>,
@@ -2892,14 +2854,13 @@ pub extern "C" fn channel___base____get_one_by_id____deserialize____deallocate(c
     return ();
 }
 #[repr(C)]
-#[derive(Clone, Copy)]
 pub struct ChannelSubscription__Base___Create___Incoming {
     pub application_user_access_token_encrypted: C_String,
     pub channel__id: c_long,
 }
 #[no_mangle]
 pub extern "C" fn channel_subscription___base____create____serialize____allocate(incoming: *mut ChannelSubscription__Base___Create___Incoming) -> *mut C_Result<C_Vector<c_uchar>> {
-    let converter = move |incoming: ChannelSubscription__Base___Create___Incoming| -> Result<ChannelSubscription__Base___Create___Incoming_, Box<dyn StdError + 'static>> {
+    let converter = move |incoming: &'_ ChannelSubscription__Base___Create___Incoming| -> Result<ChannelSubscription__Base___Create___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ChannelSubscription__Base___Create___Incoming_ {
             application_user_access_token_encrypted: incoming.application_user_access_token_encrypted.to_string()?,
             channel__id: incoming.channel__id,
@@ -3008,7 +2969,6 @@ mod test {
             where
                 T: Serialize,
                 A: FnOnce(*mut C_Vector<c_uchar>) -> *mut C_Result<E>,
-                E: Copy,
                 D: FnOnce(*mut C_Result<E>) -> (),
             {
                 let registry = Serializer_::serialize(data)
@@ -4398,7 +4358,6 @@ mod test {
             use super::*;
             fn run_by_template<'a, I, A, D>(incoming: &'a I, allocator: A, deallocator: D) -> Result<(), Box<dyn StdError + 'static>>
             where
-                I: Copy,
                 A: FnOnce(*mut I) -> *mut C_Result<C_Vector<c_uchar>>,
                 D: FnOnce(*mut C_Result<C_Vector<c_uchar>>) -> (),
             {
