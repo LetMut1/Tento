@@ -553,7 +553,7 @@ pub extern "C" fn application_user___authorization____authorize_by_first_step___
 type ApplicationUser__Authorization___AuthorizeByFirstStep___C_Result =
     C_Result<C_UnifiedReport<ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming, ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent>>;
 #[repr(C)]
-#[derive(Default, Clone, Copy)]
+#[derive(Default)]
 pub struct ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming {
     pub application_user__id: c_long,
     pub verification_message_sent: bool,
@@ -562,7 +562,7 @@ pub struct ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming {
     pub application_user_authorization_token__wrong_enter_tries_quantity_limit: c_short,
 }
 #[repr(C)]
-#[derive(Default, Clone, Copy)]
+#[derive(Default)]
 pub struct ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent {
     pub application_user__wrong_email_or_nickname_or_password: bool,
 }
@@ -662,7 +662,7 @@ pub struct ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming {
     pub application_user_access_refresh_token_encrypted: C_Vector<c_uchar>,
 }
 #[repr(C)]
-#[derive(Default, Clone, Copy)]
+#[derive(Default)]
 pub struct ApplicationUser__Authorization___AuthorizeByLastStep___Precedent {
     pub application_user_authorization_token__not_found: bool,
     pub application_user_authorization_token__already_expired: bool,
@@ -670,7 +670,7 @@ pub struct ApplicationUser__Authorization___AuthorizeByLastStep___Precedent {
     pub application_user__not_found: bool,
 }
 #[repr(C)]
-#[derive(Default, Clone, Copy)]
+#[derive(Default)]
 pub struct ApplicationUserAuthorizationToken_WrongValue {
     pub is_exist: bool,
     pub application_user_authorization_token__wrong_enter_tries_quantity: c_short,
@@ -793,7 +793,7 @@ pub extern "C" fn application_user___authorization____check_email_for_existing__
 }
 type ApplicationUser__Authorization___CheckEmailForExisting___C_Result = C_Result<C_UnifiedReport<ApplicationUser__Authorization___CheckEmailForExisting___Outcoming, C_Void>>;
 #[repr(C)]
-#[derive(Default, Clone, Copy)]
+#[derive(Default)]
 pub struct ApplicationUser__Authorization___CheckEmailForExisting___Outcoming {
     pub result: bool,
 }
@@ -865,7 +865,7 @@ pub extern "C" fn application_user___authorization____check_nickname_for_existin
 type ApplicationUser__Authorization___CheckNicknameForExisting___C_Result =
     C_Result<C_UnifiedReport<ApplicationUser__Authorization___CheckNicknameForExisting___Outcoming, C_Void>>;
 #[repr(C)]
-#[derive(Default, Clone, Copy)]
+#[derive(Default)]
 pub struct ApplicationUser__Authorization___CheckNicknameForExisting___Outcoming {
     pub result: bool,
 }
@@ -937,7 +937,7 @@ pub extern "C" fn application_user___authorization____deauthorize_from_all_devic
 type ApplicationUser__Authorization___DeauthorizeFromAllDevices___C_Result =
     C_Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent>>;
 #[repr(C)]
-#[derive(Default, Clone, Copy)]
+#[derive(Default)]
 pub struct ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent {
     pub application_user_access_token__already_expired: bool,
     pub application_user_access_token__in_application_user_access_token_black_list: bool,
@@ -997,7 +997,7 @@ pub extern "C" fn application_user___authorization____deauthorize_from_all_devic
 type ApplicationUser__Authorization___DeauthorizeFromOneDevice___C_Result =
     C_Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent>>;
 #[repr(C)]
-#[derive(Default, Clone, Copy)]
+#[derive(Default)]
 pub struct ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent {
     pub application_user_access_token__already_expired: bool,
     pub application_user_access_token__in_application_user_access_token_black_list: bool,
@@ -1113,7 +1113,7 @@ pub struct ApplicationUser__Authorization___RefreshAccessToken___Outcoming {
     pub application_user_access_refresh_token_encrypted: C_Vector<c_uchar>,
 }
 #[repr(C)]
-#[derive(Default, Clone, Copy)]
+#[derive(Default)]
 pub struct ApplicationUser__Authorization___RefreshAccessToken___Precedent {
     pub application_user_access_refresh_token__not_found: bool,
     pub application_user_access_refresh_token__already_expired: bool,
@@ -1222,7 +1222,7 @@ pub extern "C" fn application_user___authorization____register_by_first_step____
 type ApplicationUser__Authorization___RegisterByFirstStep___C_Result =
     C_Result<C_UnifiedReport<ApplicationUser__Authorization___RegisterByFirstStep___Outcoming, ApplicationUser__Authorization___RegisterByFirstStep___Precedent>>;
 #[repr(C)]
-#[derive(Default, Clone, Copy)]
+#[derive(Default)]
 pub struct ApplicationUser__Authorization___RegisterByFirstStep___Outcoming {
     pub verification_message_sent: bool,
     pub application_user_registration_token__can_be_resent_from: c_long,
@@ -1230,7 +1230,7 @@ pub struct ApplicationUser__Authorization___RegisterByFirstStep___Outcoming {
     pub application_user_registration_token__wrong_enter_tries_quantity_limit: c_short,
 }
 #[repr(C)]
-#[derive(Default, Clone, Copy)]
+#[derive(Default)]
 pub struct ApplicationUser__Authorization___RegisterByFirstStep___Precedent {
     pub application_user__email_already_exist: bool,
 }
@@ -1322,7 +1322,7 @@ pub extern "C" fn application_user___authorization____register_by_second_step___
 }
 type ApplicationUser__Authorization___RegisterBySecondStep___C_Result = C_Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___RegisterBySecondStep___Precedent>>;
 #[repr(C)]
-#[derive(Default, Clone, Copy)]
+#[derive(Default)]
 pub struct ApplicationUser__Authorization___RegisterBySecondStep___Precedent {
     pub application_user_registration_token__not_found: bool,
     pub application_user_registration_token__already_expired: bool,
@@ -1330,7 +1330,7 @@ pub struct ApplicationUser__Authorization___RegisterBySecondStep___Precedent {
     pub application_user_registration_token__wrong_value: ApplicationUserRegistrationToken_WrongValue,
 }
 #[repr(C)]
-#[derive(Default, Clone, Copy)]
+#[derive(Default)]
 pub struct ApplicationUserRegistrationToken_WrongValue {
     pub is_exist: bool,
     pub application_user_registration_token__wrong_enter_tries_quantity: c_short,
@@ -1443,7 +1443,7 @@ pub struct ApplicationUser__Authorization___RegisterByLastStep___Outcoming {
     pub application_user_access_refresh_token_encrypted: C_Vector<c_uchar>,
 }
 #[repr(C)]
-#[derive(Default, Clone, Copy)]
+#[derive(Default)]
 pub struct ApplicationUser__Authorization___RegisterByLastStep___Precedent {
     pub application_user__nickname_already_exist: bool,
     pub application_user__email_already_exist: bool,
@@ -1580,7 +1580,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_first_st
 type ApplicationUser__Authorization___ResetPasswordByFirstStep___C_Result =
     C_Result<C_UnifiedReport<ApplicationUser__Authorization___ResetPasswordByFirstStep___Outcoming, ApplicationUser__Authorization___ResetPasswordByFirstStep___Precedent>>;
 #[repr(C)]
-#[derive(Default, Clone, Copy)]
+#[derive(Default)]
 pub struct ApplicationUser__Authorization___ResetPasswordByFirstStep___Outcoming {
     pub application_user__id: c_long,
     pub verification_message_sent: bool,
@@ -1589,7 +1589,7 @@ pub struct ApplicationUser__Authorization___ResetPasswordByFirstStep___Outcoming
     pub application_user_reset_password_token__wrong_enter_tries_quantity_limit: c_short,
 }
 #[repr(C)]
-#[derive(Default, Clone, Copy)]
+#[derive(Default)]
 pub struct ApplicationUser__Authorization___ResetPasswordByFirstStep___Precedent {
     pub application_user__not_found: bool,
 }
@@ -1683,7 +1683,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_second_s
 type ApplicationUser__Authorization___ResetPasswordBySecondStep___C_Result =
     C_Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent>>;
 #[repr(C)]
-#[derive(Default, Clone, Copy)]
+#[derive(Default)]
 pub struct ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent {
     pub application_user_reset_password_token__not_found: bool,
     pub application_user_reset_password_token__already_expired: bool,
@@ -1691,7 +1691,7 @@ pub struct ApplicationUser__Authorization___ResetPasswordBySecondStep___Preceden
     pub application_user_reset_password_token__wrong_value: ApplicationUserResetPasswordToken_WrongValue,
 }
 #[repr(C)]
-#[derive(Default, Clone, Copy)]
+#[derive(Default)]
 pub struct ApplicationUserResetPasswordToken_WrongValue {
     pub is_exist: bool,
     pub application_user_reset_password_token__wrong_enter_tries_quantity: c_short,
@@ -1795,7 +1795,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_last_ste
 }
 type ApplicationUser__Authorization___ResetPasswordByLastStep___C_Result = C_Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent>>;
 #[repr(C)]
-#[derive(Default, Clone, Copy)]
+#[derive(Default)]
 pub struct ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent {
     pub application_user__not_found: bool,
     pub application_user_reset_password_token__not_found: bool,
@@ -1902,12 +1902,12 @@ pub extern "C" fn application_user___authorization____send_email_for_register___
 type ApplicationUser__Authorization___SendEmailForRegister___C_Result =
     C_Result<C_UnifiedReport<ApplicationUser__Authorization___SendEmailForRegister___Outcoming, ApplicationUser__Authorization___SendEmailForRegister___Precedent>>;
 #[repr(C)]
-#[derive(Default, Clone, Copy)]
+#[derive(Default)]
 pub struct ApplicationUser__Authorization___SendEmailForRegister___Outcoming {
     pub application_user_registration_token__can_be_resent_from: c_long,
 }
 #[repr(C)]
-#[derive(Default, Clone, Copy)]
+#[derive(Default)]
 pub struct ApplicationUser__Authorization___SendEmailForRegister___Precedent {
     pub application_user_registration_token__not_found: bool,
     pub application_user_registration_token__already_expired: bool,
@@ -2018,12 +2018,12 @@ pub extern "C" fn application_user___authorization____send_email_for_authorize__
 type ApplicationUser__Authorization___SendEmailForAuthorize___C_Result =
     C_Result<C_UnifiedReport<ApplicationUser__Authorization___SendEmailForAuthorize___Outcoming, ApplicationUser__Authorization___SendEmailForAuthorize___Precedent>>;
 #[repr(C)]
-#[derive(Default, Clone, Copy)]
+#[derive(Default)]
 pub struct ApplicationUser__Authorization___SendEmailForAuthorize___Outcoming {
     pub application_user_authorization_token__can_be_resent_from: c_long,
 }
 #[repr(C)]
-#[derive(Default, Clone, Copy)]
+#[derive(Default)]
 pub struct ApplicationUser__Authorization___SendEmailForAuthorize___Precedent {
     pub application_user__not_found: bool,
     pub application_user_authorization_token__not_found: bool,
@@ -2134,12 +2134,12 @@ pub extern "C" fn application_user___authorization____send_email_for_reset_passw
 type ApplicationUser__Authorization___SendEmailForResetPassword___C_Result =
     C_Result<C_UnifiedReport<ApplicationUser__Authorization___SendEmailForResetPassword___Outcoming, ApplicationUser__Authorization___SendEmailForResetPassword___Precedent>>;
 #[repr(C)]
-#[derive(Default, Clone, Copy)]
+#[derive(Default)]
 pub struct ApplicationUser__Authorization___SendEmailForResetPassword___Outcoming {
     pub application_user_resep_password_token_can_be_resent_from: c_long,
 }
 #[repr(C)]
-#[derive(Default, Clone, Copy)]
+#[derive(Default)]
 pub struct ApplicationUser__Authorization___SendEmailForResetPassword___Precedent {
     pub application_user__not_found: bool,
     pub application_user_reset_password_token__not_found: bool,
@@ -2272,7 +2272,7 @@ pub struct Channel__Base___GetManyByNameInSubscriptions___Outcoming {
     pub common_registry: C_Vector<Common1>,
 }
 #[repr(C)]
-#[derive(Default, Clone, Copy)]
+#[derive(Default)]
 pub struct Channel__Base___GetManyByNameInSubscriptions___Precedent {
     pub application_user_access_token__already_expired: bool,
     pub application_user_access_token__in_application_user_access_token_black_list: bool,
@@ -2418,7 +2418,7 @@ pub struct Channel__Base___GetManyBySubscription___Outcoming {
     pub common_registry: C_Vector<Common1>,
 }
 #[repr(C)]
-#[derive(Default, Clone, Copy)]
+#[derive(Default)]
 pub struct Channel__Base___GetManyBySubscription___Precedent {
     pub application_user_access_token__already_expired: bool,
     pub application_user_access_token__in_application_user_access_token_black_list: bool,
@@ -2563,7 +2563,7 @@ pub struct Channel__Base___GetManyPublicByName___Outcoming {
     pub common_registry: C_Vector<Common1>,
 }
 #[repr(C)]
-#[derive(Default, Clone, Copy)]
+#[derive(Default)]
 pub struct Channel__Base___GetManyPublicByName___Precedent {
     pub application_user_access_token__already_expired: bool,
     pub application_user_access_token__in_application_user_access_token_black_list: bool,
@@ -2701,7 +2701,7 @@ pub struct Channel__Base___GetOneById___Outcoming {
     pub channel_outer_link_registry: C_Vector<ChannelOuterLink1>,
 }
 #[repr(C)]
-#[derive(Default, Clone, Copy)]
+#[derive(Default)]
 pub struct Channel__Base___GetOneById___Precedent {
     pub application_user_access_token__already_expired: bool,
     pub application_user_access_token__in_application_user_access_token_black_list: bool,
@@ -2879,7 +2879,7 @@ pub extern "C" fn channel_subscription___base____create____serialize____dealloca
 }
 type ChannelSubscription__Base___Create___C_Result = C_Result<C_UnifiedReport<C_Void, ChannelSubscription__Base___Create___Precedent>>;
 #[repr(C)]
-#[derive(Default, Clone, Copy)]
+#[derive(Default)]
 pub struct ChannelSubscription__Base___Create___Precedent {
     pub application_user_access_token__already_expired: bool,
     pub application_user_access_token__in_application_user_access_token_black_list: bool,
