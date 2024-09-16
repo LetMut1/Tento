@@ -16,7 +16,7 @@ use crate::{
         },
         functionality::service::{
             extractor::{
-                application_user_access_token::ExtractorResult,
+                application_user_access_token::Extracted,
                 Extractor,
             },
             validator::Validator,
@@ -69,17 +69,16 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription__Base___Create> {
         return async move {
             let application_user_access_token = match Extractor::<ApplicationUserAccessToken<'_>>::extract(
                 inner.environment_configuration,
-                incoming.application_user_access_token_encrypted.as_str(),
-            )
-            .await?
+                &incoming.application_user_access_token_encrypted,
+            )?
             {
-                ExtractorResult::ApplicationUserAccessToken {
+                Extracted::ApplicationUserAccessToken {
                     application_user_access_token: application_user_access_token_,
                 } => application_user_access_token_,
-                ExtractorResult::ApplicationUserAccessTokenAlreadyExpired => {
+                Extracted::ApplicationUserAccessTokenAlreadyExpired => {
                     return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_AlreadyExpired));
                 }
-                ExtractorResult::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
+                Extracted::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
                     return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList));
                 }
             };

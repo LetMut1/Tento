@@ -118,3 +118,6 @@ base64 - нужен ли? он нужен для кодирования байт
 
 
 unsafe { ... } - В многострочие, проверить, как fmt будет реагировать.
+
+
+application_user_access_refresh_token_encrypted: Vec<u8>, - через ньютайп паттерн

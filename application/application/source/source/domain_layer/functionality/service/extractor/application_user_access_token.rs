@@ -2,42 +2,38 @@ use super::Extractor;
 use crate::{
     domain_layer::{
         data::entity::application_user_access_token::ApplicationUserAccessToken,
-        functionality::service::form_resolver::FormResolver,
+        functionality::service::form_resolver::{FormResolver},
     },
     infrastructure_layer::{
         data::{
-            capture::Capture,
             control_type::UnixTime,
             environment_configuration::environment_configuration::EnvironmentConfiguration,
         },
         functionality::service::expiration_time_checker::ExpirationTimeChecker,
     },
 };
+use application_user_access_token_encrypted::ApplicationUserAccessTokenEncrypted;
 use aggregate_error::AggregateError;
-use std::future::Future;
-use void::Void;
 impl Extractor<ApplicationUserAccessToken<'_>> {
     pub fn extract<'a>(
         environment_configuration: &'static EnvironmentConfiguration,
-        application_user_access_token_encrypted: &'a str,
-    ) -> impl Future<Output = Result<ExtractorResult, AggregateError>> + Send + Capture<&'a Void> {
-        return async move {
-            let application_user_access_token = FormResolver::<ApplicationUserAccessToken<'_>>::from_encrypted(
-                environment_configuration,
-                application_user_access_token_encrypted,
-            )?;
-            if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_access_token.expires_at) {
-                return Ok(ExtractorResult::ApplicationUserAccessTokenAlreadyExpired);
-            }
-            return Ok(
-                ExtractorResult::ApplicationUserAccessToken {
-                    application_user_access_token,
-                },
-            );
-        };
+        application_user_access_token_encrypted: &'a ApplicationUserAccessTokenEncrypted,
+    ) -> Result<Extracted, AggregateError> {
+        let application_user_access_token = FormResolver::<ApplicationUserAccessToken<'_>>::from_encrypted(
+            environment_configuration,
+            application_user_access_token_encrypted,
+        )?;
+        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_access_token.expires_at) {
+            return Ok(Extracted::ApplicationUserAccessTokenAlreadyExpired);
+        }
+        return Ok(
+            Extracted::ApplicationUserAccessToken {
+                application_user_access_token,
+            },
+        );
     }
 }
-pub enum ExtractorResult {
+pub enum Extracted {
     ApplicationUserAccessToken {
         application_user_access_token: ApplicationUserAccessToken<'static>,
     },

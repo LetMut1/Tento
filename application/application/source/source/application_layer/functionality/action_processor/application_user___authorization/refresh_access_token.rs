@@ -82,7 +82,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Refre
         return async move {
             let application_user_access_token = FormResolver::<ApplicationUserAccessToken<'_>>::from_encrypted(
                 inner.environment_configuration,
-                incoming.application_user_access_token_encrypted.as_str(),
+                &incoming.application_user_access_token_encrypted,
             )?;
             let database_2_postgresql_pooled_connection = inner.get_database_2_postgresql_pooled_connection().await?;
             let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;

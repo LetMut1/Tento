@@ -22,7 +22,6 @@ pub struct ApplicationUser__Authorization___SendEmailForAuthorize;
 pub struct ApplicationUser__Authorization___SendEmailForRegister;
 pub struct ApplicationUser__Authorization___SendEmailForResetPassword;
 pub struct Argon2Id;
-pub struct Base64;
 pub struct Channel__Base___GetManyByNameInSubscriptions;
 pub struct Channel__Base___GetManyBySubscription;
 pub struct Channel__Base___GetManyPublicByName;
