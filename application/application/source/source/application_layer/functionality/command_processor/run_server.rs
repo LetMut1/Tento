@@ -1,7 +1,6 @@
 use super::CommandProcessor;
 use crate::infrastructure_layer::{
     data::{
-        control_type::RunServer,
         environment_configuration::environment_configuration::EnvironmentConfiguration,
     },
     functionality::service::{
@@ -34,6 +33,7 @@ use tracing_appender::rolling::{
 };
 use tracing_subscriber::FmtSubscriber;
 static ENVIRONMENT_CONFIGURATION: OnceLock<EnvironmentConfiguration> = OnceLock::new();
+pub struct RunServer;
 impl CommandProcessor<RunServer> {
     pub fn process() -> Result<(), AggregateError> {
         let _worker_guard;

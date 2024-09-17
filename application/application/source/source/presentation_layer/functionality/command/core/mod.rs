@@ -5,12 +5,10 @@ use aggregate_error::{
 };
 use application::{
     application_layer::functionality::command_processor::CommandProcessor,
-    infrastructure_layer::data::control_type::{
-        CreateFixtures,
-        RemoveIncompliteState,
-        RunServer,
-    },
 };
+use application::application_layer::functionality::command_processor::run_server::RunServer;
+use application::application_layer::functionality::command_processor::remove_incomplite_state::RemoveIncompliteState;
+use application::application_layer::functionality::command_processor::create_fixtures::CreateFixtures;
 use clap::{
     command,
     Command,

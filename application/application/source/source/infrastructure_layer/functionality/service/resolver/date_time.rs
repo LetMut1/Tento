@@ -1,5 +1,4 @@
 use super::Resolver;
-use crate::infrastructure_layer::data::control_type::DateTime;
 use aggregate_error::{
     AggregateError,
     Backtrace,
@@ -9,6 +8,7 @@ use chrono::{
     DateTime as ChronoDateTime,
     Utc,
 };
+pub struct DateTime;
 impl Resolver<DateTime> {
     // Rule for 2022-09-18 03:03:39.308889+0000
     const TIMESTAMP_FORMAT_TO_FORMAT: &'static str = "%Y-%m-%d %H:%M:%S%.6f%z";

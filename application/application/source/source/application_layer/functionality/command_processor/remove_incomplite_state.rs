@@ -1,6 +1,6 @@
 use super::CommandProcessor;
-use crate::infrastructure_layer::data::control_type::RemoveIncompliteState;
 use aggregate_error::AggregateError;
+pub struct RemoveIncompliteState;
 impl CommandProcessor<RemoveIncompliteState> {
     pub fn process() -> Result<(), AggregateError> {
         // TODO УДалять из БД состояние с вышедшим сроком экспирации:

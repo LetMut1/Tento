@@ -30,7 +30,6 @@ use crate::{
     infrastructure_layer::{
         data::{
             capture::Capture,
-            control_type::CreateFixtures,
             environment_configuration::environment_configuration::EnvironmentConfiguration,
         },
         functionality::{
@@ -68,6 +67,7 @@ use std::future::Future;
 use tokio::runtime::{Builder, Runtime};
 use tokio_postgres::NoTls;
 use void::Void;
+pub struct CreateFixtures;
 impl CommandProcessor<CreateFixtures> {
     const APPLICATION_USER_DEVICE__ID_PART: &'static str = "device";
     const APPLICATION_USER__PASSWORD: &'static str = "passworD1";
