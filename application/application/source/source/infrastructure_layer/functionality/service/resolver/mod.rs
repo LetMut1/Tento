@@ -1,7 +1,7 @@
 pub mod cloud_message;
 pub mod date_time;
-pub mod postgresql_transaction;
 pub mod expiration;
+pub mod postgresql_transaction;
 use std::marker::PhantomData;
 pub struct Resolver<S> {
     _subject: PhantomData<S>,

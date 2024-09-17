@@ -57,6 +57,10 @@ use crate::{
                 PostgresqlRepository,
             },
             service::{
+                resolver::{
+                    expiration::Expiration,
+                    Resolver,
+                },
                 spawner::{
                     tokio_blocking_task::TokioBlockingTask,
                     tokio_non_blocking_task::TokioNonBlockingTask,
@@ -88,8 +92,6 @@ use tokio_postgres::{
     },
     Socket,
 };
-use crate::infrastructure_layer::functionality::service::resolver::Resolver;
-use crate::infrastructure_layer::functionality::service::resolver::expiration::Expiration;
 use unified_report::UnifiedReport;
 use void::Void;
 pub struct ApplicationUser__Authorization___RegisterByLastStep;

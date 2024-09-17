@@ -46,6 +46,10 @@ use crate::{
                 PostgresqlRepository,
             },
             service::{
+                resolver::{
+                    expiration::Expiration,
+                    Resolver,
+                },
                 spawner::{
                     tokio_blocking_task::TokioBlockingTask,
                     tokio_non_blocking_task::TokioNonBlockingTask,
@@ -55,8 +59,6 @@ use crate::{
         },
     },
 };
-use crate::infrastructure_layer::functionality::service::resolver::Resolver;
-use crate::infrastructure_layer::functionality::service::resolver::expiration::Expiration;
 use action_processor_incoming_outcoming::action_processor::application_user___authorization::authorize_by_first_step::{
     Incoming,
     Outcoming,

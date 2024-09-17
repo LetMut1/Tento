@@ -6,10 +6,12 @@ use crate::{
     },
     infrastructure_layer::{
         data::environment_configuration::environment_configuration::EnvironmentConfiguration,
+        functionality::service::resolver::{
+            expiration::Expiration,
+            Resolver,
+        },
     },
 };
-use crate::infrastructure_layer::functionality::service::resolver::Resolver;
-use crate::infrastructure_layer::functionality::service::resolver::expiration::Expiration;
 use aggregate_error::AggregateError;
 use application_user_access_token_encoded::ApplicationUserAccessTokenEncoded;
 impl Extractor<ApplicationUserAccessToken<'_>> {

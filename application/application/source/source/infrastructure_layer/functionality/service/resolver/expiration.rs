@@ -1,6 +1,6 @@
 use super::{
     date_time::DateTime,
-    Resolver
+    Resolver,
 };
 pub struct Expiration;
 impl Resolver<Expiration> {
