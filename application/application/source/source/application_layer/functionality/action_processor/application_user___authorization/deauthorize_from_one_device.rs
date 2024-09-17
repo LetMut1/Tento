@@ -17,7 +17,6 @@ use crate::{
     infrastructure_layer::{
         data::{
             capture::Capture,
-            control_type::ApplicationUser__Authorization___DeauthorizeFromOneDevice,
         },
         functionality::repository::postgresql::{
             application_user_access_refresh_token::By2,
@@ -40,6 +39,7 @@ use tokio_postgres::{
 };
 use unified_report::UnifiedReport;
 use void::Void;
+pub struct ApplicationUser__Authorization___DeauthorizeFromOneDevice;
 impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___DeauthorizeFromOneDevice> {
     type Incoming = Incoming;
     type Outcoming = Void;

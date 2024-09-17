@@ -17,9 +17,6 @@ use crate::{
     infrastructure_layer::{
         data::{
             capture::Capture,
-            control_type::{
-                ApplicationUser__Authorization___DeauthorizeFromAllDevices,
-            },
         },
         functionality::{
             repository::postgresql::{
@@ -46,6 +43,7 @@ use tokio_postgres::{
 use unified_report::UnifiedReport;
 use void::Void;
 use crate::infrastructure_layer::functionality::service::resolver::cloud_message::CloudMessage;
+pub struct ApplicationUser__Authorization___DeauthorizeFromAllDevices;
 impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___DeauthorizeFromAllDevices> {
     type Incoming = Incoming;
     type Outcoming = Void;

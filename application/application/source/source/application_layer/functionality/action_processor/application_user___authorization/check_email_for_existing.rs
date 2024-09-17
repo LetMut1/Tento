@@ -14,7 +14,6 @@ use crate::{
     infrastructure_layer::{
         data::{
             capture::Capture,
-            control_type::ApplicationUser__Authorization___CheckEmailForExisting,
         },
         functionality::repository::postgresql::{
             application_user::By2,
@@ -40,6 +39,7 @@ use tokio_postgres::{
 };
 use unified_report::UnifiedReport;
 use void::Void;
+pub struct ApplicationUser__Authorization___CheckEmailForExisting;
 impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___CheckEmailForExisting> {
     type Incoming = Incoming;
     type Outcoming = Outcoming;

@@ -19,9 +19,6 @@ use crate::{
     infrastructure_layer::{
         data::{
             capture::Capture,
-            control_type::{
-                ApplicationUser__Authorization___RegisterBySecondStep,
-            },
         },
         functionality::{
             repository::postgresql::{
@@ -56,6 +53,7 @@ use tokio_postgres::{
 };
 use unified_report::UnifiedReport;
 use void::Void;
+pub struct ApplicationUser__Authorization___RegisterBySecondStep;
 impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
     type Incoming = Incoming;
     type Outcoming = Void;

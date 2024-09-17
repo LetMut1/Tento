@@ -1,7 +1,6 @@
 use super::Resolver;
 use crate::infrastructure_layer::data::{
     capture::Capture,
-    control_type::PostgresqlTransaction,
 };
 use aggregate_error::{
     AggregateError,
@@ -11,6 +10,7 @@ use aggregate_error::{
 use std::future::Future;
 use tokio_postgres::Client as Connection;
 use void::Void;
+pub struct PostgresqlTransaction;
 impl Resolver<PostgresqlTransaction> {
     pub fn start<'a>(
         connection: &'a Connection,

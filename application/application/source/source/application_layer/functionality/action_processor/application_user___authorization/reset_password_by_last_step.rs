@@ -27,9 +27,6 @@ use crate::{
     infrastructure_layer::{
         data::{
             capture::Capture,
-            control_type::{
-                ApplicationUser__Authorization___ResetPasswordByLastStep,
-            },
         },
         functionality::{
             repository::postgresql::{
@@ -76,6 +73,7 @@ use tokio_postgres::{
 };
 use unified_report::UnifiedReport;
 use void::Void;
+pub struct ApplicationUser__Authorization___ResetPasswordByLastStep;
 impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___ResetPasswordByLastStep> {
     type Incoming = Incoming;
     type Outcoming = Void;

@@ -2,9 +2,7 @@ use super::Inner;
 use crate::{
     infrastructure_layer::{
         data::control_type::{
-            ActionRound,
             Response,
-            RouteNotFound,
         },
         functionality::service::{
             creator::Creator,
@@ -14,6 +12,8 @@ use crate::{
     },
     presentation_layer::functionality::action::Action,
 };
+use crate::presentation_layer::functionality::service::processor::action_round::ActionRound;
+pub struct RouteNotFound;
 impl Action<RouteNotFound> {
     pub fn run<'a>(inner: &'a mut Inner<'_>) -> Response {
         let response = Creator::<Response>::create_not_found();

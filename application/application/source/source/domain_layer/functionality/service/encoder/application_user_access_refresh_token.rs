@@ -3,7 +3,6 @@ use crate::{
     domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken,
     infrastructure_layer::{
         data::{
-            control_type::MessagePack,
             environment_configuration::environment_configuration::EnvironmentConfiguration,
         },
         functionality::service::{
@@ -18,6 +17,7 @@ use crate::{
         },
     },
 };
+use crate::infrastructure_layer::functionality::service::serializer::message_pack::MessagePack;
 use application_user_access_refresh_token_encoded::ApplicationUserAccessRefreshTokenEncoded;
 use aggregate_error::AggregateError;
 impl Encoder<ApplicationUserAccessRefreshToken<'_>> {

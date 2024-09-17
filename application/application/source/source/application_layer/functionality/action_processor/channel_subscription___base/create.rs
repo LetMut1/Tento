@@ -25,7 +25,6 @@ use crate::{
     infrastructure_layer::{
         data::{
             capture::Capture,
-            control_type::ChannelSubscription__Base___Create,
         },
         functionality::repository::postgresql::{
             channel::By1,
@@ -52,6 +51,7 @@ use tokio_postgres::{
 };
 use unified_report::UnifiedReport;
 use void::Void;
+pub struct ChannelSubscription__Base___Create;
 impl ActionProcessor_ for ActionProcessor<ChannelSubscription__Base___Create> {
     type Incoming = Incoming;
     type Outcoming = Void;

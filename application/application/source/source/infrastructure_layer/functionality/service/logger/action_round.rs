@@ -1,9 +1,6 @@
 use super::Logger;
 use crate::infrastructure_layer::{
     data::{
-        control_type::{
-            ActionRound,
-        },
         server_workflow_error::{
             Responsive,
             Unresponsive,
@@ -17,6 +14,7 @@ use crate::infrastructure_layer::{
         spawner::Spawner,
     },
 };
+use crate::presentation_layer::functionality::service::processor::action_round::ActionRound;
 use crate::infrastructure_layer::functionality::service::spawner::tokio_non_blocking_task::TokioNonBlockingTask;
 use aggregate_error::Auditor;
 impl Logger<ActionRound> {

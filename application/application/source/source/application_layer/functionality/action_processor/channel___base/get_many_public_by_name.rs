@@ -23,7 +23,6 @@ use crate::{
     infrastructure_layer::{
         data::{
             capture::Capture,
-            control_type::Channel__Base___GetManyPublicByName,
         },
         functionality::repository::postgresql::{
             common::By1,
@@ -53,6 +52,7 @@ use tokio_postgres::{
 };
 use unified_report::UnifiedReport;
 use void::Void;
+pub struct Channel__Base___GetManyPublicByName;
 impl ActionProcessor_ for ActionProcessor<Channel__Base___GetManyPublicByName> {
     type Incoming = Incoming;
     type Outcoming = Outcoming;

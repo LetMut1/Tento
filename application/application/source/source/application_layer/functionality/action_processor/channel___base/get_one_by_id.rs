@@ -27,7 +27,6 @@ use crate::{
     infrastructure_layer::{
         data::{
             capture::Capture,
-            control_type::Channel__Base___GetOneById,
         },
         functionality::repository::postgresql::{
             channel::By1 as By1___,
@@ -60,6 +59,7 @@ use tokio_postgres::{
 };
 use unified_report::UnifiedReport;
 use void::Void;
+pub struct Channel__Base___GetOneById;
 impl ActionProcessor_ for ActionProcessor<Channel__Base___GetOneById> {
     type Incoming = Incoming;
     type Outcoming = Outcoming;

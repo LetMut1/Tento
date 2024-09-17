@@ -9,7 +9,6 @@ use crate::{
         data::{
             capture::Capture,
             control_type::{
-                ActionRound,
                 Response,
             },
             server_workflow_error::ServerWorkflowError,
@@ -48,6 +47,7 @@ use tokio_postgres::{
     Socket,
 };
 use void::Void;
+pub struct ActionRound;
 impl Processor<ActionRound> {
     pub fn process<'a, 'b, T, AP, SS, SD>(
         inner: &'a mut Inner<'b>,
