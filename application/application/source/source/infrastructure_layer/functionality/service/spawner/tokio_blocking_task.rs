@@ -1,10 +1,10 @@
 use super::Spawner;
 use crate::infrastructure_layer::{
-    data::control_type::TokioBlockingTask,
     functionality::service::logger::Logger,
 };
 use aggregate_error::AggregateError;
 use tokio::task::JoinHandle;
+pub struct TokioBlockingTask;
 impl Spawner<TokioBlockingTask> {
     pub fn spawn_into_background<F, T>(closure: F) -> ()
     where

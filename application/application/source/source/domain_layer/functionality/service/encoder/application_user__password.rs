@@ -2,8 +2,8 @@ use super::Encoder;
 use crate::{
     domain_layer::data::entity::application_user::ApplicationUser_Password,
     infrastructure_layer::{
-        data::control_type::Argon2Id,
         functionality::service::encoder::Encoder as Encoder_,
+        functionality::service::encoder::argon2id::Argon2Id,
     },
 };
 use aggregate_error::AggregateError;

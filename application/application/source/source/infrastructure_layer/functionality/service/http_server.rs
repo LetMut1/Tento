@@ -27,7 +27,6 @@ use crate::{
                 Request,
                 Response,
                 RouteNotFound,
-                TokioNonBlockingTask,
             },
             environment_configuration::environment_configuration::EnvironmentConfiguration,
         },
@@ -53,6 +52,7 @@ use crate::{
         },
     },
 };
+use crate::infrastructure_layer::functionality::service::spawner::tokio_non_blocking_task::TokioNonBlockingTask;
 use aggregate_error::{
     AggregateError,
     Backtrace,

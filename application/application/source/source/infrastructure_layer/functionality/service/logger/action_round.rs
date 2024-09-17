@@ -3,7 +3,6 @@ use crate::infrastructure_layer::{
     data::{
         control_type::{
             ActionRound,
-            TokioNonBlockingTask,
         },
         server_workflow_error::{
             Responsive,
@@ -18,6 +17,7 @@ use crate::infrastructure_layer::{
         spawner::Spawner,
     },
 };
+use crate::infrastructure_layer::functionality::service::spawner::tokio_non_blocking_task::TokioNonBlockingTask;
 use aggregate_error::Auditor;
 impl Logger<ActionRound> {
     pub fn log<'a>(row_data: RowData) -> () {

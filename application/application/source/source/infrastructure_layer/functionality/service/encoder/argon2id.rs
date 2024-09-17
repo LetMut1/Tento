@@ -1,5 +1,4 @@
 use super::Encoder;
-use crate::infrastructure_layer::data::control_type::Argon2Id;
 use aggregate_error::{
     AggregateError,
     Backtrace,
@@ -22,6 +21,7 @@ use argon2::{
 };
 use std::sync::OnceLock;
 static ARGON2: OnceLock<Argon2<'static>> = OnceLock::new();
+pub struct Argon2Id;
 impl Encoder<Argon2Id> {
     pub fn encode<'a>(data: &'a [u8]) -> Result<String, AggregateError> {
         return Ok(
