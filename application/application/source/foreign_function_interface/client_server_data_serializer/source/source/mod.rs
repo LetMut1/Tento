@@ -379,7 +379,7 @@ impl<T> Allocator<C_Vector<T>> {
         std::mem::forget(boxed_slice);
         return c_vector;
     }
-    fn deallocate(c_vector: C_Vector<T>) -> () {
+    fn deallocate<'a>(c_vector: &'a C_Vector<T>) -> () {
         if c_vector.pointer.is_null() {
             return ();
         }
@@ -398,9 +398,11 @@ impl Allocator<C_Result<C_Vector<c_uchar>>> {
         if c_result.is_null() {
             return ();
         }
-        let c_result_ = unsafe { Box::from_raw(c_result) };
-        if c_result_.is_data {
-            Allocator::<C_Vector<_>>::deallocate(c_result_.data);
+        {
+            let c_result_ = unsafe { Box::from_raw(c_result) };
+            if c_result_.is_data {
+                Allocator::<C_Vector<_>>::deallocate(&c_result_.data);
+            }
         }
         return ();
     }
@@ -773,9 +775,9 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
     if c_result_.is_data {
         if c_result_.data.is_target {
             if c_result_.data.target.is_filled {
-                Allocator::<C_Vector<_>>::deallocate(c_result_.data.target.filled.application_user_access_token_encrypted.serialized);
-                Allocator::<C_Vector<_>>::deallocate(c_result_.data.target.filled.application_user_access_token_encrypted.encoded);
-                Allocator::<C_Vector<_>>::deallocate(c_result_.data.target.filled.application_user_access_refresh_token_encrypted);
+                Allocator::<C_Vector<_>>::deallocate(&c_result_.data.target.filled.application_user_access_token_encrypted.serialized);
+                Allocator::<C_Vector<_>>::deallocate(&c_result_.data.target.filled.application_user_access_token_encrypted.encoded);
+                Allocator::<C_Vector<_>>::deallocate(&c_result_.data.target.filled.application_user_access_refresh_token_encrypted);
             }
         }
     }
@@ -1212,9 +1214,9 @@ pub extern "C" fn application_user___authorization____refresh_access_token____de
     if c_result_.is_data {
         if c_result_.data.is_target {
             if c_result_.data.target.is_filled {
-                Allocator::<C_Vector<_>>::deallocate(c_result_.data.target.filled.application_user_access_token_encrypted.serialized);
-                Allocator::<C_Vector<_>>::deallocate(c_result_.data.target.filled.application_user_access_token_encrypted.encoded);
-                Allocator::<C_Vector<_>>::deallocate(c_result_.data.target.filled.application_user_access_refresh_token_encrypted);
+                Allocator::<C_Vector<_>>::deallocate(&c_result_.data.target.filled.application_user_access_token_encrypted.serialized);
+                Allocator::<C_Vector<_>>::deallocate(&c_result_.data.target.filled.application_user_access_token_encrypted.encoded);
+                Allocator::<C_Vector<_>>::deallocate(&c_result_.data.target.filled.application_user_access_refresh_token_encrypted);
             }
         }
     }
@@ -1574,9 +1576,9 @@ pub extern "C" fn application_user___authorization____register_by_last_step____d
     if c_result_.is_data {
         if c_result_.data.is_target {
             if c_result_.data.target.is_filled {
-                Allocator::<C_Vector<_>>::deallocate(c_result_.data.target.filled.application_user_access_token_encrypted.serialized);
-                Allocator::<C_Vector<_>>::deallocate(c_result_.data.target.filled.application_user_access_token_encrypted.encoded);
-                Allocator::<C_Vector<_>>::deallocate(c_result_.data.target.filled.application_user_access_refresh_token_encrypted);
+                Allocator::<C_Vector<_>>::deallocate(&c_result_.data.target.filled.application_user_access_token_encrypted.serialized);
+                Allocator::<C_Vector<_>>::deallocate(&c_result_.data.target.filled.application_user_access_token_encrypted.encoded);
+                Allocator::<C_Vector<_>>::deallocate(&c_result_.data.target.filled.application_user_access_refresh_token_encrypted);
             }
         }
     }
@@ -2407,7 +2409,7 @@ pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____deseria
                         Allocator::<C_String>::deallocate(&common.channel.channel__cover_image_path.data);
                     }
                 }
-                Allocator::<C_Vector<_>>::deallocate(c_result_.data.target.filled.common_registry);
+                Allocator::<C_Vector<_>>::deallocate(&c_result_.data.target.filled.common_registry);
             }
         }
     }
@@ -2554,7 +2556,7 @@ pub extern "C" fn channel___base____get_many_by_subscription____deserialize____d
                         Allocator::<C_String>::deallocate(&common.channel.channel__cover_image_path.data);
                     }
                 }
-                Allocator::<C_Vector<_>>::deallocate(c_result_.data.target.filled.common_registry);
+                Allocator::<C_Vector<_>>::deallocate(&c_result_.data.target.filled.common_registry);
             }
         }
     }
@@ -2702,7 +2704,7 @@ pub extern "C" fn channel___base____get_many_public_by_name____deserialize____de
                         Allocator::<C_String>::deallocate(&common_1.channel.channel__cover_image_path.data);
                     }
                 }
-                Allocator::<C_Vector<_>>::deallocate(c_result_.data.target.filled.common_registry);
+                Allocator::<C_Vector<_>>::deallocate(&c_result_.data.target.filled.common_registry);
             }
         }
     }
@@ -2883,14 +2885,14 @@ pub extern "C" fn channel___base____get_one_by_id____deserialize____deallocate(c
                 if c_result_.data.target.filled.channel.channel__cover_image_path.is_data {
                     Allocator::<C_String>::deallocate(&c_result_.data.target.filled.channel.channel__cover_image_path.data);
                 }
-                Allocator::<C_Vector<_>>::deallocate(c_result_.data.target.filled.channel.channel__orientation);
-                Allocator::<C_Vector<_>>::deallocate(c_result_.data.target.filled.channel_inner_link_registry);
+                Allocator::<C_Vector<_>>::deallocate(&c_result_.data.target.filled.channel.channel__orientation);
+                Allocator::<C_Vector<_>>::deallocate(&c_result_.data.target.filled.channel_inner_link_registry);
                 let channel_outer_link_registry = c_result_.data.target.filled.channel_outer_link_registry.as_slice_unchecked();
                 for channel_outer_link_1 in channel_outer_link_registry {
                     Allocator::<C_String>::deallocate(&channel_outer_link_1.channel_outer_link__alias);
                     Allocator::<C_String>::deallocate(&channel_outer_link_1.channel_outer_link__address);
                 }
-                Allocator::<C_Vector<_>>::deallocate(c_result_.data.target.filled.channel_outer_link_registry);
+                Allocator::<C_Vector<_>>::deallocate(&c_result_.data.target.filled.channel_outer_link_registry);
             }
         }
     }
@@ -3016,7 +3018,7 @@ mod test {
             if c_vector.pointer.is_null() {
                 return Err(ALLOCATION_ERROR.into());
             }
-            Allocator::<C_Vector<_>>::deallocate(c_vector);
+            Allocator::<C_Vector<_>>::deallocate(&c_vector);
             return Ok(());
         }
         #[test]
@@ -3058,7 +3060,7 @@ mod test {
                 if c_vector_.is_null() {
                     return Err(DEALLOCATION_ERROR.into());
                 }
-                Allocator::<C_Vector<_>>::deallocate(c_vector);
+                Allocator::<C_Vector<_>>::deallocate(&c_vector);
                 return Ok(());
             }
             // Needed to test all `unified_report::UnifiedReport` variants.
@@ -4614,8 +4616,8 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_Vector<_>>::deallocate(incoming.application_user_access_token_encrypted.serialized);
-                Allocator::<C_Vector<_>>::deallocate(incoming.application_user_access_token_encrypted.encoded);
+                Allocator::<C_Vector<_>>::deallocate(&incoming.application_user_access_token_encrypted.serialized);
+                Allocator::<C_Vector<_>>::deallocate(&incoming.application_user_access_token_encrypted.encoded);
                 return Ok(());
             }
             #[test]
@@ -4638,8 +4640,8 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_Vector<_>>::deallocate(incoming.application_user_access_token_encrypted.serialized);
-                Allocator::<C_Vector<_>>::deallocate(incoming.application_user_access_token_encrypted.encoded);
+                Allocator::<C_Vector<_>>::deallocate(&incoming.application_user_access_token_encrypted.serialized);
+                Allocator::<C_Vector<_>>::deallocate(&incoming.application_user_access_token_encrypted.encoded);
                 return Ok(());
             }
             #[test]
@@ -4663,9 +4665,9 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_Vector<_>>::deallocate(incoming.application_user_access_token_encrypted.serialized);
-                Allocator::<C_Vector<_>>::deallocate(incoming.application_user_access_token_encrypted.encoded);
-                Allocator::<C_Vector<_>>::deallocate(incoming.application_user_access_refresh_token_encrypted);
+                Allocator::<C_Vector<_>>::deallocate(&incoming.application_user_access_token_encrypted.serialized);
+                Allocator::<C_Vector<_>>::deallocate(&incoming.application_user_access_token_encrypted.encoded);
+                Allocator::<C_Vector<_>>::deallocate(&incoming.application_user_access_refresh_token_encrypted);
                 return Ok(());
             }
             #[test]
@@ -4899,8 +4901,8 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_Vector<_>>::deallocate(incoming.application_user_access_token_encrypted.serialized);
-                Allocator::<C_Vector<_>>::deallocate(incoming.application_user_access_token_encrypted.encoded);
+                Allocator::<C_Vector<_>>::deallocate(&incoming.application_user_access_token_encrypted.serialized);
+                Allocator::<C_Vector<_>>::deallocate(&incoming.application_user_access_token_encrypted.encoded);
                 Allocator::<C_String>::deallocate(&incoming.channel__name);
                 Allocator::<C_String>::deallocate(&incoming.requery___channel__name.data);
                 return Ok(());
@@ -4927,8 +4929,8 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_Vector<_>>::deallocate(incoming.application_user_access_token_encrypted.serialized);
-                Allocator::<C_Vector<_>>::deallocate(incoming.application_user_access_token_encrypted.encoded);
+                Allocator::<C_Vector<_>>::deallocate(&incoming.application_user_access_token_encrypted.serialized);
+                Allocator::<C_Vector<_>>::deallocate(&incoming.application_user_access_token_encrypted.encoded);
                 return Ok(());
             }
             #[test]
@@ -4954,8 +4956,8 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_Vector<_>>::deallocate(incoming.application_user_access_token_encrypted.serialized);
-                Allocator::<C_Vector<_>>::deallocate(incoming.application_user_access_token_encrypted.encoded);
+                Allocator::<C_Vector<_>>::deallocate(&incoming.application_user_access_token_encrypted.serialized);
+                Allocator::<C_Vector<_>>::deallocate(&incoming.application_user_access_token_encrypted.encoded);
                 Allocator::<C_String>::deallocate(&incoming.channel__name);
                 Allocator::<C_String>::deallocate(&incoming.requery___channel__name.data);
                 return Ok(());
@@ -4981,8 +4983,8 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_Vector<_>>::deallocate(incoming.application_user_access_token_encrypted.serialized);
-                Allocator::<C_Vector<_>>::deallocate(incoming.application_user_access_token_encrypted.encoded);
+                Allocator::<C_Vector<_>>::deallocate(&incoming.application_user_access_token_encrypted.serialized);
+                Allocator::<C_Vector<_>>::deallocate(&incoming.application_user_access_token_encrypted.encoded);
                 return Ok(());
             }
             #[test]
@@ -5006,8 +5008,8 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_Vector<_>>::deallocate(incoming.application_user_access_token_encrypted.serialized);
-                Allocator::<C_Vector<_>>::deallocate(incoming.application_user_access_token_encrypted.encoded);
+                Allocator::<C_Vector<_>>::deallocate(&incoming.application_user_access_token_encrypted.serialized);
+                Allocator::<C_Vector<_>>::deallocate(&incoming.application_user_access_token_encrypted.encoded);
                 return Ok(());
             }
         }
