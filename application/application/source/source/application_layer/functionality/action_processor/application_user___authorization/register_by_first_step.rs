@@ -40,10 +40,6 @@ use crate::{
                 PostgresqlRepository,
             },
             service::{
-                expiration_time_checker::{
-                    unix_time::UnixTime,
-                    ExpirationTimeChecker,
-                },
                 spawner::{
                     tokio_non_blocking_task::TokioNonBlockingTask,
                     Spawner,
@@ -52,6 +48,8 @@ use crate::{
         },
     },
 };
+use crate::infrastructure_layer::functionality::service::resolver::Resolver;
+use crate::infrastructure_layer::functionality::service::resolver::expiration::Expiration;
 use action_processor_incoming_outcoming::action_processor::application_user___authorization::register_by_first_step::{
     Incoming,
     Outcoming,
@@ -135,7 +133,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
             .await?
             {
                 Some(mut application_user_registration_token) => {
-                    let (can_send_, need_to_update_1) = if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token.can_be_resent_from) {
+                    let (can_send_, need_to_update_1) = if Resolver::<Expiration>::is_expired(application_user_registration_token.can_be_resent_from) {
                         application_user_registration_token.can_be_resent_from = Generator::<ApplicationUserRegistrationToken_CanBeResentFrom>::generate()?;
                         (
                             true,
@@ -148,7 +146,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
                         )
                     };
                     let need_to_update_2 =
-                        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token.expires_at) || application_user_registration_token.is_approved {
+                        if Resolver::<Expiration>::is_expired(application_user_registration_token.expires_at) || application_user_registration_token.is_approved {
                             application_user_registration_token.value = Generator::<ApplicationUserRegistrationToken_Value>::generate();
                             application_user_registration_token.wrong_enter_tries_quantity = 0;
                             application_user_registration_token.is_approved = false;

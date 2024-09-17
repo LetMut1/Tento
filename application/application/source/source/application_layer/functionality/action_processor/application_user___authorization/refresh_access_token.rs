@@ -33,13 +33,11 @@ use crate::{
                 },
                 PostgresqlRepository,
             },
-            service::expiration_time_checker::{
-                unix_time::UnixTime,
-                ExpirationTimeChecker,
-            },
         },
     },
 };
+use crate::infrastructure_layer::functionality::service::resolver::Resolver;
+use crate::infrastructure_layer::functionality::service::resolver::expiration::Expiration;
 use action_processor_incoming_outcoming::action_processor::application_user___authorization::refresh_access_token::{
     Incoming,
     Outcoming,
@@ -113,7 +111,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Refre
                     ),
                 );
             }
-            if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_access_refresh_token.expires_at) {
+            if Resolver::<Expiration>::is_expired(application_user_access_refresh_token.expires_at) {
                 PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::delete_1(
                     database_2_postgresql_connection,
                     By2 {

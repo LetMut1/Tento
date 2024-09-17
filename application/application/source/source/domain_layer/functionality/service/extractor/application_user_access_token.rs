@@ -6,12 +6,10 @@ use crate::{
     },
     infrastructure_layer::{
         data::environment_configuration::environment_configuration::EnvironmentConfiguration,
-        functionality::service::expiration_time_checker::{
-            unix_time::UnixTime,
-            ExpirationTimeChecker,
-        },
     },
 };
+use crate::infrastructure_layer::functionality::service::resolver::Resolver;
+use crate::infrastructure_layer::functionality::service::resolver::expiration::Expiration;
 use aggregate_error::AggregateError;
 use application_user_access_token_encoded::ApplicationUserAccessTokenEncoded;
 impl Extractor<ApplicationUserAccessToken<'_>> {
@@ -23,7 +21,7 @@ impl Extractor<ApplicationUserAccessToken<'_>> {
             environment_configuration,
             application_user_access_token_encoded,
         )?;
-        if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_access_token.expires_at) {
+        if Resolver::<Expiration>::is_expired(application_user_access_token.expires_at) {
             return Ok(Extracted::ApplicationUserAccessTokenAlreadyExpired);
         }
         return Ok(

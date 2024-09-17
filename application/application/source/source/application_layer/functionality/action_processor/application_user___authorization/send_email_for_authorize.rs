@@ -34,10 +34,6 @@ use crate::{
                 PostgresqlRepository,
             },
             service::{
-                expiration_time_checker::{
-                    unix_time::UnixTime,
-                    ExpirationTimeChecker,
-                },
                 spawner::{
                     tokio_non_blocking_task::TokioNonBlockingTask,
                     Spawner,
@@ -46,6 +42,8 @@ use crate::{
         },
     },
 };
+use crate::infrastructure_layer::functionality::service::resolver::Resolver;
+use crate::infrastructure_layer::functionality::service::resolver::expiration::Expiration;
 use action_processor_incoming_outcoming::action_processor::application_user___authorization::send_email_for_authorize::{
     Incoming,
     Outcoming,
@@ -131,7 +129,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
                     return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAuthorizationToken_NotFound));
                 }
             };
-            if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token.expires_at) {
+            if Resolver::<Expiration>::is_expired(application_user_authorization_token.expires_at) {
                 PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::delete_1(
                     database_2_postgresql_connection,
                     By1 {
@@ -142,7 +140,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
                 .await?;
                 return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAuthorizationToken_AlreadyExpired));
             }
-            if !ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token.can_be_resent_from) {
+            if !Resolver::<Expiration>::is_expired(application_user_authorization_token.can_be_resent_from) {
                 return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAuthorizationToken_TimeToResendHasNotCome));
             }
             application_user_authorization_token.can_be_resent_from = Generator::<ApplicationUserAuthorizationToken_CanBeResentFrom>::generate()?;

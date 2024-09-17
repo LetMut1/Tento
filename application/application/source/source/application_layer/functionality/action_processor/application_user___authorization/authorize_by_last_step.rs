@@ -55,15 +55,14 @@ use crate::{
                 PostgresqlRepository,
             },
             service::{
-                expiration_time_checker::ExpirationTimeChecker,
                 spawner::Spawner,
             },
         },
     },
 };
-pub struct ApplicationUser__Authorization___AuthorizeByLastStep;
+use crate::infrastructure_layer::functionality::service::resolver::Resolver;
+use crate::infrastructure_layer::functionality::service::resolver::expiration::Expiration;
 use crate::infrastructure_layer::functionality::service::{
-    expiration_time_checker::unix_time::UnixTime,
     spawner::tokio_non_blocking_task::TokioNonBlockingTask,
 };
 use action_processor_incoming_outcoming::action_processor::application_user___authorization::authorize_by_last_step::{
@@ -90,6 +89,7 @@ use tokio_postgres::{
 };
 use unified_report::UnifiedReport;
 use void::Void;
+pub struct ApplicationUser__Authorization___AuthorizeByLastStep;
 impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
     type Incoming = Incoming;
     type Outcoming = Outcoming;
@@ -151,7 +151,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                     return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAuthorizationToken_NotFound));
                 }
             };
-            if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_authorization_token_.expires_at) {
+            if Resolver::<Expiration>::is_expired(application_user_authorization_token_.expires_at) {
                 PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::delete_1(
                     database_2_postgresql_connection,
                     By1 {

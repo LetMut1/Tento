@@ -2,7 +2,6 @@ pub mod converter;
 pub mod counter;
 pub mod creator;
 pub mod encoder;
-pub mod expiration_time_checker;
 pub mod formatter;
 pub mod generator;
 pub mod http_server;

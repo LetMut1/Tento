@@ -30,10 +30,6 @@ use crate::{
                 PostgresqlRepository,
             },
             service::{
-                expiration_time_checker::{
-                    unix_time::UnixTime,
-                    ExpirationTimeChecker,
-                },
                 spawner::{
                     tokio_non_blocking_task::TokioNonBlockingTask,
                     Spawner,
@@ -42,6 +38,8 @@ use crate::{
         },
     },
 };
+use crate::infrastructure_layer::functionality::service::resolver::Resolver;
+use crate::infrastructure_layer::functionality::service::resolver::expiration::Expiration;
 use action_processor_incoming_outcoming::action_processor::application_user___authorization::send_email_for_register::{
     Incoming,
     Outcoming,
@@ -113,7 +111,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
                     return Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_NotFound));
                 }
             };
-            if ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token.expires_at) {
+            if Resolver::<Expiration>::is_expired(application_user_registration_token.expires_at) {
                 PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete_2(
                     database_2_postgresql_connection,
                     By1 {
@@ -127,7 +125,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
             if application_user_registration_token.is_approved {
                 return Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_AlreadyApproved));
             }
-            if !ExpirationTimeChecker::<UnixTime>::is_expired(application_user_registration_token.can_be_resent_from) {
+            if !Resolver::<Expiration>::is_expired(application_user_registration_token.can_be_resent_from) {
                 return Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_TimeToResendHasNotCome));
             }
             application_user_registration_token.can_be_resent_from = Generator::<ApplicationUserRegistrationToken_CanBeResentFrom>::generate()?;
