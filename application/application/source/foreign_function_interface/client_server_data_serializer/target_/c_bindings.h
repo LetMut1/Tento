@@ -59,8 +59,13 @@ typedef struct ApplicationUser__Authorization___AuthorizeByLastStep___Incoming {
   struct C_String application_user_authorization_token__value;
 } ApplicationUser__Authorization___AuthorizeByLastStep___Incoming;
 
+typedef struct ApplicationUserAccessTokenEncrypted {
+  struct C_Vector_c_uchar serialized;
+  struct C_Vector_c_uchar encoded;
+} ApplicationUserAccessTokenEncrypted;
+
 typedef struct ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming {
-  struct C_String application_user_access_token_encrypted;
+  struct ApplicationUserAccessTokenEncrypted application_user_access_token_encrypted;
   struct C_Vector_c_uchar application_user_access_refresh_token_encrypted;
 } ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming;
 
@@ -151,7 +156,7 @@ typedef struct C_Result_C_UnifiedReport_ApplicationUser__Authorization___CheckNi
 typedef struct C_Result_C_UnifiedReport_ApplicationUser__Authorization___CheckNicknameForExisting___Outcoming__C_Void ApplicationUser__Authorization___CheckNicknameForExisting___C_Result;
 
 typedef struct ApplicationUser__Authorization___DeauthorizeFromAllDevices___Incoming {
-  struct C_String application_user_access_token_encrypted;
+  struct ApplicationUserAccessTokenEncrypted application_user_access_token_encrypted;
 } ApplicationUser__Authorization___DeauthorizeFromAllDevices___Incoming;
 
 typedef struct C_Data_C_Void {
@@ -178,7 +183,7 @@ typedef struct C_Result_C_UnifiedReport_C_Void__ApplicationUser__Authorization__
 typedef struct C_Result_C_UnifiedReport_C_Void__ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent ApplicationUser__Authorization___DeauthorizeFromAllDevices___C_Result;
 
 typedef struct ApplicationUser__Authorization___DeauthorizeFromOneDevice___Incoming {
-  struct C_String application_user_access_token_encrypted;
+  struct ApplicationUserAccessTokenEncrypted application_user_access_token_encrypted;
 } ApplicationUser__Authorization___DeauthorizeFromOneDevice___Incoming;
 
 typedef struct ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent {
@@ -200,12 +205,12 @@ typedef struct C_Result_C_UnifiedReport_C_Void__ApplicationUser__Authorization__
 typedef struct C_Result_C_UnifiedReport_C_Void__ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent ApplicationUser__Authorization___DeauthorizeFromOneDevice___C_Result;
 
 typedef struct ApplicationUser__Authorization___RefreshAccessToken___Incoming {
-  struct C_String application_user_access_token_encrypted;
+  struct ApplicationUserAccessTokenEncrypted application_user_access_token_encrypted;
   struct C_Vector_c_uchar application_user_access_refresh_token_encrypted;
 } ApplicationUser__Authorization___RefreshAccessToken___Incoming;
 
 typedef struct ApplicationUser__Authorization___RefreshAccessToken___Outcoming {
-  struct C_String application_user_access_token_encrypted;
+  struct ApplicationUserAccessTokenEncrypted application_user_access_token_encrypted;
   struct C_Vector_c_uchar application_user_access_refresh_token_encrypted;
 } ApplicationUser__Authorization___RefreshAccessToken___Outcoming;
 
@@ -306,7 +311,7 @@ typedef struct ApplicationUser__Authorization___RegisterByLastStep___Incoming {
 } ApplicationUser__Authorization___RegisterByLastStep___Incoming;
 
 typedef struct ApplicationUser__Authorization___RegisterByLastStep___Outcoming {
-  struct C_String application_user_access_token_encrypted;
+  struct ApplicationUserAccessTokenEncrypted application_user_access_token_encrypted;
   struct C_Vector_c_uchar application_user_access_refresh_token_encrypted;
 } ApplicationUser__Authorization___RegisterByLastStep___Outcoming;
 
@@ -540,7 +545,7 @@ typedef struct C_Option_C_String {
 } C_Option_C_String;
 
 typedef struct Channel__Base___GetManyByNameInSubscriptions___Incoming {
-  struct C_String application_user_access_token_encrypted;
+  struct ApplicationUserAccessTokenEncrypted application_user_access_token_encrypted;
   struct C_String channel__name;
   struct C_Option_C_String requery___channel__name;
   short limit;
@@ -599,7 +604,7 @@ typedef struct C_Option_c_long {
 } C_Option_c_long;
 
 typedef struct Channel__Base___GetManyBySubscription___Incoming {
-  struct C_String application_user_access_token_encrypted;
+  struct ApplicationUserAccessTokenEncrypted application_user_access_token_encrypted;
   struct C_Option_c_long requery___channel__id;
   short limit;
 } Channel__Base___GetManyBySubscription___Incoming;
@@ -632,7 +637,7 @@ typedef struct C_Result_C_UnifiedReport_Channel__Base___GetManyBySubscription___
 typedef struct C_Result_C_UnifiedReport_Channel__Base___GetManyBySubscription___Outcoming__Channel__Base___GetManyBySubscription___Precedent Channel__Base___GetManyBySubscription___C_Result;
 
 typedef struct Channel__Base___GetManyPublicByName___Incoming {
-  struct C_String application_user_access_token_encrypted;
+  struct ApplicationUserAccessTokenEncrypted application_user_access_token_encrypted;
   struct C_String channel__name;
   struct C_Option_C_String requery___channel__name;
   short limit;
@@ -666,7 +671,7 @@ typedef struct C_Result_C_UnifiedReport_Channel__Base___GetManyPublicByName___Ou
 typedef struct C_Result_C_UnifiedReport_Channel__Base___GetManyPublicByName___Outcoming__Channel__Base___GetManyPublicByName___Precedent Channel__Base___GetManyPublicByName___C_Result;
 
 typedef struct Channel__Base___GetOneById___Incoming {
-  struct C_String application_user_access_token_encrypted;
+  struct ApplicationUserAccessTokenEncrypted application_user_access_token_encrypted;
   long channel__id;
 } Channel__Base___GetOneById___Incoming;
 
@@ -741,7 +746,7 @@ typedef struct C_Result_C_UnifiedReport_Channel__Base___GetOneById___Outcoming__
 typedef struct C_Result_C_UnifiedReport_Channel__Base___GetOneById___Outcoming__Channel__Base___GetOneById___Precedent Channel__Base___GetOneById___C_Result;
 
 typedef struct ChannelSubscription__Base___Create___Incoming {
-  struct C_String application_user_access_token_encrypted;
+  struct ApplicationUserAccessTokenEncrypted application_user_access_token_encrypted;
   long channel__id;
 } ChannelSubscription__Base___Create___Incoming;
 

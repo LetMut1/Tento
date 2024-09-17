@@ -39,8 +39,8 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
         )?;
         return Ok(
             ApplicationUserAccessTokenEncrypted {
-                application_user_access_token_serialized,
-                application_user_access_token_encoded,
+                serialized: application_user_access_token_serialized,
+                encoded: application_user_access_token_encoded,
             }
         );
     }
@@ -50,8 +50,8 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
     ) -> Result<ApplicationUserAccessToken<'static>, AggregateError> {
         if !Encoder_::<HmacSha3_512>::is_valid(
             environment_configuration.encryption.private_key.application_user_access_token.as_bytes(),
-            application_user_access_token_encrypted.application_user_access_token_serialized.as_slice(),
-            application_user_access_token_encrypted.application_user_access_token_encoded.as_slice(),
+            application_user_access_token_encrypted.serialized.as_slice(),
+            application_user_access_token_encrypted.encoded.as_slice(),
         )? {
             return Err(
                 AggregateError::new_invalid_argument(
@@ -63,7 +63,7 @@ impl FormResolver<ApplicationUserAccessToken<'_>> {
             );
         }
         return Serializer::<MessagePack>::deserialize::<'_, ApplicationUserAccessToken<'static>>(
-            application_user_access_token_encrypted.application_user_access_token_serialized.as_slice()
+            application_user_access_token_encrypted.serialized.as_slice()
         );
     }
 }

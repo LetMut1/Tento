@@ -101,6 +101,7 @@ use action_processor_incoming_outcoming::action_processor::{
         Precedent as ChannelSubscription__Base___Create___Precedent_,
     },
 };
+use application_user_access_token_encrypted::ApplicationUserAccessTokenEncrypted as ApplicationUserAccessTokenEncrypted_;
 use libc::{
     c_char,
     c_long,
@@ -483,6 +484,12 @@ impl Transformer<ServerRequestData> {
 }
 #[repr(C)]
 #[derive(Default)]
+pub struct ApplicationUserAccessTokenEncrypted {
+    pub serialized: C_Vector<c_uchar>,
+    pub encoded: C_Vector<c_uchar>,
+}
+#[repr(C)]
+#[derive(Default)]
 pub struct Common1 {
     pub channel: Channel1,
     pub is_application_user_subscribed: bool,
@@ -661,7 +668,7 @@ type ApplicationUser__Authorization___AuthorizeByLastStep___C_Result =
 #[repr(C)]
 #[derive(Default)]
 pub struct ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming {
-    pub application_user_access_token_encrypted: C_String,
+    pub application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
     pub application_user_access_refresh_token_encrypted: C_Vector<c_uchar>,
 }
 #[repr(C)]
@@ -700,7 +707,10 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
                         data: data__,
                     } => {
                         let outcoming = ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming {
-                            application_user_access_token_encrypted: Allocator::<C_String>::allocate(data__.application_user_access_token_encrypted),
+                            application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted {
+                                serialized: Allocator::<C_Vector<_>>::allocate(data__.application_user_access_token_encrypted.serialized),
+                                encoded: Allocator::<C_Vector<_>>::allocate(data__.application_user_access_token_encrypted.encoded),
+                            },
                             application_user_access_refresh_token_encrypted: Allocator::<C_Vector<_>>::allocate(data__.application_user_access_refresh_token_encrypted),
                         };
                         C_Data::filled(outcoming)
@@ -763,7 +773,8 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
     if c_result_.is_data {
         if c_result_.data.is_target {
             if c_result_.data.target.is_filled {
-                Allocator::<C_String>::deallocate(&c_result_.data.target.filled.application_user_access_token_encrypted);
+                Allocator::<C_Vector<_>>::deallocate(c_result_.data.target.filled.application_user_access_token_encrypted.serialized);
+                Allocator::<C_Vector<_>>::deallocate(c_result_.data.target.filled.application_user_access_token_encrypted.encoded);
                 Allocator::<C_Vector<_>>::deallocate(c_result_.data.target.filled.application_user_access_refresh_token_encrypted);
             }
         }
@@ -915,7 +926,7 @@ pub extern "C" fn application_user___authorization____check_nickname_for_existin
 }
 #[repr(C)]
 pub struct ApplicationUser__Authorization___DeauthorizeFromAllDevices___Incoming {
-    pub application_user_access_token_encrypted: C_String,
+    pub application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____deauthorize_from_all_devices____serialize____allocate(
@@ -923,7 +934,10 @@ pub extern "C" fn application_user___authorization____deauthorize_from_all_devic
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: &'_ ApplicationUser__Authorization___DeauthorizeFromAllDevices___Incoming| -> Result<ApplicationUser__Authorization___DeauthorizeFromAllDevices___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___DeauthorizeFromAllDevices___Incoming_ {
-            application_user_access_token_encrypted: incoming.application_user_access_token_encrypted.clone_as_string()?,
+            application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted_ {
+                serialized: incoming.application_user_access_token_encrypted.serialized.clone_as_vec()?,
+                encoded: incoming.application_user_access_token_encrypted.encoded.clone_as_vec()?,
+            }
         };
         return Ok(incoming_);
     };
@@ -1007,7 +1021,7 @@ pub struct ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent
 }
 #[repr(C)]
 pub struct ApplicationUser__Authorization___DeauthorizeFromOneDevice___Incoming {
-    pub application_user_access_token_encrypted: C_String,
+    pub application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____deauthorize_from_one_device____serialize____allocate(
@@ -1015,7 +1029,10 @@ pub extern "C" fn application_user___authorization____deauthorize_from_one_devic
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: &'_ ApplicationUser__Authorization___DeauthorizeFromOneDevice___Incoming| -> Result<ApplicationUser__Authorization___DeauthorizeFromOneDevice___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___DeauthorizeFromOneDevice___Incoming_ {
-            application_user_access_token_encrypted: incoming.application_user_access_token_encrypted.clone_as_string()?,
+            application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted_ {
+                serialized: incoming.application_user_access_token_encrypted.serialized.clone_as_vec()?,
+                encoded: incoming.application_user_access_token_encrypted.encoded.clone_as_vec()?,
+            }
         };
         return Ok(incoming_);
     };
@@ -1083,7 +1100,7 @@ pub extern "C" fn application_user___authorization____deauthorize_from_one_devic
 }
 #[repr(C)]
 pub struct ApplicationUser__Authorization___RefreshAccessToken___Incoming {
-    pub application_user_access_token_encrypted: C_String,
+    pub application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
     pub application_user_access_refresh_token_encrypted: C_Vector<c_uchar>,
 }
 #[no_mangle]
@@ -1092,7 +1109,10 @@ pub extern "C" fn application_user___authorization____refresh_access_token____se
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: &'_ ApplicationUser__Authorization___RefreshAccessToken___Incoming| -> Result<ApplicationUser__Authorization___RefreshAccessToken___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ApplicationUser__Authorization___RefreshAccessToken___Incoming_ {
-            application_user_access_token_encrypted: incoming.application_user_access_token_encrypted.clone_as_string()?,
+            application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted_ {
+                serialized: incoming.application_user_access_token_encrypted.serialized.clone_as_vec()?,
+                encoded: incoming.application_user_access_token_encrypted.encoded.clone_as_vec()?,
+            },
             application_user_access_refresh_token_encrypted: incoming.application_user_access_refresh_token_encrypted.clone_as_vec()?,
         };
         return Ok(incoming_);
@@ -1112,7 +1132,7 @@ type ApplicationUser__Authorization___RefreshAccessToken___C_Result =
 #[repr(C)]
 #[derive(Default)]
 pub struct ApplicationUser__Authorization___RefreshAccessToken___Outcoming {
-    pub application_user_access_token_encrypted: C_String,
+    pub application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
     pub application_user_access_refresh_token_encrypted: C_Vector<c_uchar>,
 }
 #[repr(C)]
@@ -1143,7 +1163,10 @@ pub extern "C" fn application_user___authorization____refresh_access_token____de
                         data: data__,
                     } => {
                         let outcoming = ApplicationUser__Authorization___RefreshAccessToken___Outcoming {
-                            application_user_access_token_encrypted: Allocator::<C_String>::allocate(data__.application_user_access_token_encrypted),
+                            application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted {
+                                serialized: Allocator::<C_Vector<_>>::allocate(data__.application_user_access_token_encrypted.serialized),
+                                encoded: Allocator::<C_Vector<_>>::allocate(data__.application_user_access_token_encrypted.encoded),
+                            },
                             application_user_access_refresh_token_encrypted: Allocator::<C_Vector<_>>::allocate(data__.application_user_access_refresh_token_encrypted),
                         };
                         C_Data::filled(outcoming)
@@ -1189,7 +1212,8 @@ pub extern "C" fn application_user___authorization____refresh_access_token____de
     if c_result_.is_data {
         if c_result_.data.is_target {
             if c_result_.data.target.is_filled {
-                Allocator::<C_String>::deallocate(&c_result_.data.target.filled.application_user_access_token_encrypted);
+                Allocator::<C_Vector<_>>::deallocate(c_result_.data.target.filled.application_user_access_token_encrypted.serialized);
+                Allocator::<C_Vector<_>>::deallocate(c_result_.data.target.filled.application_user_access_token_encrypted.encoded);
                 Allocator::<C_Vector<_>>::deallocate(c_result_.data.target.filled.application_user_access_refresh_token_encrypted);
             }
         }
@@ -1442,7 +1466,7 @@ type ApplicationUser__Authorization___RegisterByLastStep___C_Result =
 #[repr(C)]
 #[derive(Default)]
 pub struct ApplicationUser__Authorization___RegisterByLastStep___Outcoming {
-    pub application_user_access_token_encrypted: C_String,
+    pub application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
     pub application_user_access_refresh_token_encrypted: C_Vector<c_uchar>,
 }
 #[repr(C)]
@@ -1477,7 +1501,10 @@ pub extern "C" fn application_user___authorization____register_by_last_step____d
                         data: data__,
                     } => {
                         let outcoming = ApplicationUser__Authorization___RegisterByLastStep___Outcoming {
-                            application_user_access_token_encrypted: Allocator::<C_String>::allocate(data__.application_user_access_token_encrypted),
+                            application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted {
+                                serialized: Allocator::<C_Vector<_>>::allocate(data__.application_user_access_token_encrypted.serialized),
+                                encoded: Allocator::<C_Vector<_>>::allocate(data__.application_user_access_token_encrypted.encoded),
+                            },
                             application_user_access_refresh_token_encrypted: Allocator::<C_Vector<_>>::allocate(data__.application_user_access_refresh_token_encrypted),
                         };
                         C_Data::filled(outcoming)
@@ -1547,7 +1574,8 @@ pub extern "C" fn application_user___authorization____register_by_last_step____d
     if c_result_.is_data {
         if c_result_.data.is_target {
             if c_result_.data.target.is_filled {
-                Allocator::<C_String>::deallocate(&c_result_.data.target.filled.application_user_access_token_encrypted);
+                Allocator::<C_Vector<_>>::deallocate(c_result_.data.target.filled.application_user_access_token_encrypted.serialized);
+                Allocator::<C_Vector<_>>::deallocate(c_result_.data.target.filled.application_user_access_token_encrypted.encoded);
                 Allocator::<C_Vector<_>>::deallocate(c_result_.data.target.filled.application_user_access_refresh_token_encrypted);
             }
         }
@@ -2233,7 +2261,7 @@ pub extern "C" fn application_user___authorization____send_email_for_reset_passw
 }
 #[repr(C)]
 pub struct Channel__Base___GetManyByNameInSubscriptions___Incoming {
-    pub application_user_access_token_encrypted: C_String,
+    pub application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
     pub channel__name: C_String,
     pub requery___channel__name: C_Option<C_String>,
     pub limit: c_short,
@@ -2250,7 +2278,10 @@ pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____seriali
                 None
             };
             let incoming_ = Channel__Base___GetManyByNameInSubscriptions___Incoming_ {
-                application_user_access_token_encrypted: incoming.application_user_access_token_encrypted.clone_as_string()?,
+                application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted_ {
+                    serialized: incoming.application_user_access_token_encrypted.serialized.clone_as_vec()?,
+                    encoded: incoming.application_user_access_token_encrypted.encoded.clone_as_vec()?,
+                },
                 channel__name: incoming.channel__name.clone_as_string()?,
                 requery___channel__name,
                 limit: incoming.limit,
@@ -2384,7 +2415,7 @@ pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____deseria
 }
 #[repr(C)]
 pub struct Channel__Base___GetManyBySubscription___Incoming {
-    pub application_user_access_token_encrypted: C_String,
+    pub application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
     pub requery___channel__id: C_Option<c_long>,
     pub limit: c_short,
 }
@@ -2397,7 +2428,10 @@ pub extern "C" fn channel___base____get_many_by_subscription____serialize____all
             None
         };
         let incoming_ = Channel__Base___GetManyBySubscription___Incoming_ {
-            application_user_access_token_encrypted: incoming.application_user_access_token_encrypted.clone_as_string()?,
+            application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted_ {
+                serialized: incoming.application_user_access_token_encrypted.serialized.clone_as_vec()?,
+                encoded: incoming.application_user_access_token_encrypted.encoded.clone_as_vec()?,
+            },
             requery___channel__id,
             limit: incoming.limit,
         };
@@ -2528,7 +2562,7 @@ pub extern "C" fn channel___base____get_many_by_subscription____deserialize____d
 }
 #[repr(C)]
 pub struct Channel__Base___GetManyPublicByName___Incoming {
-    pub application_user_access_token_encrypted: C_String,
+    pub application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
     pub channel__name: C_String,
     pub requery___channel__name: C_Option<C_String>,
     pub limit: c_short,
@@ -2542,7 +2576,10 @@ pub extern "C" fn channel___base____get_many_public_by_name____serialize____allo
             None
         };
         let incoming_ = Channel__Base___GetManyPublicByName___Incoming_ {
-            application_user_access_token_encrypted: incoming.application_user_access_token_encrypted.clone_as_string()?,
+            application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted_ {
+                serialized: incoming.application_user_access_token_encrypted.serialized.clone_as_vec()?,
+                encoded: incoming.application_user_access_token_encrypted.encoded.clone_as_vec()?,
+            },
             channel__name: incoming.channel__name.clone_as_string()?,
             requery___channel__name,
             limit: incoming.limit,
@@ -2673,14 +2710,17 @@ pub extern "C" fn channel___base____get_many_public_by_name____deserialize____de
 }
 #[repr(C)]
 pub struct Channel__Base___GetOneById___Incoming {
-    pub application_user_access_token_encrypted: C_String,
+    pub application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
     pub channel__id: c_long,
 }
 #[no_mangle]
 pub extern "C" fn channel___base____get_one_by_id____serialize____allocate(incoming: *mut Channel__Base___GetOneById___Incoming) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: &'_ Channel__Base___GetOneById___Incoming| -> Result<Channel__Base___GetOneById___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = Channel__Base___GetOneById___Incoming_ {
-            application_user_access_token_encrypted: incoming.application_user_access_token_encrypted.clone_as_string()?,
+            application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted_ {
+                serialized: incoming.application_user_access_token_encrypted.serialized.clone_as_vec()?,
+                encoded: incoming.application_user_access_token_encrypted.encoded.clone_as_vec()?,
+            },
             channel__id: incoming.channel__id,
         };
         return Ok(incoming_);
@@ -2858,14 +2898,17 @@ pub extern "C" fn channel___base____get_one_by_id____deserialize____deallocate(c
 }
 #[repr(C)]
 pub struct ChannelSubscription__Base___Create___Incoming {
-    pub application_user_access_token_encrypted: C_String,
+    pub application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
     pub channel__id: c_long,
 }
 #[no_mangle]
 pub extern "C" fn channel_subscription___base____create____serialize____allocate(incoming: *mut ChannelSubscription__Base___Create___Incoming) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: &'_ ChannelSubscription__Base___Create___Incoming| -> Result<ChannelSubscription__Base___Create___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ChannelSubscription__Base___Create___Incoming_ {
-            application_user_access_token_encrypted: incoming.application_user_access_token_encrypted.clone_as_string()?,
+            application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted_ {
+                serialized: incoming.application_user_access_token_encrypted.serialized.clone_as_vec()?,
+                encoded: incoming.application_user_access_token_encrypted.encoded.clone_as_vec()?,
+            },
             channel__id: incoming.channel__id,
         };
         return Ok(incoming_);
@@ -2962,11 +3005,11 @@ mod test {
     use super::*;
     mod deallocation {
         use super::*;
-        const STRING_LITERAL: &'static str = "qwerty";
-        const ARRAY_LITERAL: [u8; 3] = [0, 1, 2];
+        const NOT_EMPTY_STRING_LITERAL: &'static str = "qwerty";
+        const NOT_EMPTY_ARRAY_LITERAL: [u8; 3] = [0, 1, 2];
         #[test]
         fn c_vector_clone() -> Result<(), Box<dyn StdError + 'static>> {
-            let c_vector = Allocator::<C_Vector<_>>::allocate(ARRAY_LITERAL.to_vec());
+            let c_vector = Allocator::<C_Vector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec());
             {
                 let _ = c_vector.clone_as_vec()?;
             }
@@ -2978,7 +3021,7 @@ mod test {
         }
         #[test]
         fn c_string_clone() -> Result<(), Box<dyn StdError + 'static>> {
-            let c_string = Allocator::<C_String>::allocate(STRING_LITERAL.to_string());
+            let c_string = Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string());
             {
                 let _ = c_string.clone_as_string()?;
             }
@@ -3119,8 +3162,11 @@ mod test {
                 #[test]
                 fn target_filled____application_user___authorization____authorize_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
                     let outcoming = ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming_ {
-                        application_user_access_token_encrypted: STRING_LITERAL.to_string(),
-                        application_user_access_refresh_token_encrypted: ARRAY_LITERAL.to_vec(),
+                        application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted_ {
+                            serialized: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
+                            encoded: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
+                        },
+                        application_user_access_refresh_token_encrypted: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
                     };
                     let unified_report = UnifiedReport::<
                         ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming_,
@@ -3382,8 +3428,11 @@ mod test {
                 #[test]
                 fn target_filled____application_user___authorization____refresh_access_token() -> Result<(), Box<dyn StdError + 'static>> {
                     let outcoming = ApplicationUser__Authorization___RefreshAccessToken___Outcoming_ {
-                        application_user_access_token_encrypted: STRING_LITERAL.to_string(),
-                        application_user_access_refresh_token_encrypted: ARRAY_LITERAL.to_vec(),
+                        application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted_ {
+                            serialized: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
+                            encoded: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
+                        },
+                        application_user_access_refresh_token_encrypted: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
                     };
                     let unified_report = UnifiedReport::<
                         ApplicationUser__Authorization___RefreshAccessToken___Outcoming_,
@@ -3579,8 +3628,11 @@ mod test {
                 #[test]
                 fn target_filled____application_user___authorization____register_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
                     let outcoming = ApplicationUser__Authorization___RegisterByLastStep___Outcoming_ {
-                        application_user_access_token_encrypted: STRING_LITERAL.to_string(),
-                        application_user_access_refresh_token_encrypted: ARRAY_LITERAL.to_vec(),
+                        application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted_ {
+                            serialized: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
+                            encoded: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
+                        },
+                        application_user_access_refresh_token_encrypted: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
                     };
                     let unified_report = UnifiedReport::<
                         ApplicationUser__Authorization___RegisterByLastStep___Outcoming_,
@@ -4064,12 +4116,12 @@ mod test {
                         let common_1 = Common1_ {
                             channel: Channel1_ {
                                 channel__id: 0,
-                                channel__name: STRING_LITERAL.to_string(),
-                                channel__linked_name: STRING_LITERAL.to_string(),
+                                channel__name: NOT_EMPTY_STRING_LITERAL.to_string(),
+                                channel__linked_name: NOT_EMPTY_STRING_LITERAL.to_string(),
                                 channel__access_modifier: 0,
                                 channel__visability_modifier: 0,
-                                channel__background_image_path: Some(STRING_LITERAL.to_string()),
-                                channel__cover_image_path: Some(STRING_LITERAL.to_string()),
+                                channel__background_image_path: Some(NOT_EMPTY_STRING_LITERAL.to_string()),
+                                channel__cover_image_path: Some(NOT_EMPTY_STRING_LITERAL.to_string()),
                             },
                             is_application_user_subscribed: false,
                         };
@@ -4149,12 +4201,12 @@ mod test {
                         let common_1 = Common1_ {
                             channel: Channel1_ {
                                 channel__id: 0,
-                                channel__name: STRING_LITERAL.to_string(),
-                                channel__linked_name: STRING_LITERAL.to_string(),
+                                channel__name: NOT_EMPTY_STRING_LITERAL.to_string(),
+                                channel__linked_name: NOT_EMPTY_STRING_LITERAL.to_string(),
                                 channel__access_modifier: 0,
                                 channel__visability_modifier: 0,
-                                channel__background_image_path: Some(STRING_LITERAL.to_string()),
-                                channel__cover_image_path: Some(STRING_LITERAL.to_string()),
+                                channel__background_image_path: Some(NOT_EMPTY_STRING_LITERAL.to_string()),
+                                channel__cover_image_path: Some(NOT_EMPTY_STRING_LITERAL.to_string()),
                             },
                             is_application_user_subscribed: false,
                         };
@@ -4232,12 +4284,12 @@ mod test {
                         let common_1 = Common1_ {
                             channel: Channel1_ {
                                 channel__id: 0,
-                                channel__name: STRING_LITERAL.to_string(),
-                                channel__linked_name: STRING_LITERAL.to_string(),
+                                channel__name: NOT_EMPTY_STRING_LITERAL.to_string(),
+                                channel__linked_name: NOT_EMPTY_STRING_LITERAL.to_string(),
                                 channel__access_modifier: 0,
                                 channel__visability_modifier: 0,
-                                channel__background_image_path: Some(STRING_LITERAL.to_string()),
-                                channel__cover_image_path: Some(STRING_LITERAL.to_string()),
+                                channel__background_image_path: Some(NOT_EMPTY_STRING_LITERAL.to_string()),
+                                channel__cover_image_path: Some(NOT_EMPTY_STRING_LITERAL.to_string()),
                             },
                             is_application_user_subscribed: false,
                         };
@@ -4317,21 +4369,21 @@ mod test {
                     let mut channel_outer_link_registry: Vec<ChannelOuterLink1_> = vec![];
                     '_a: for _ in 1..=5 {
                         let channel_outer_link_1 = ChannelOuterLink1_ {
-                            channel_outer_link__alias: STRING_LITERAL.to_string(),
-                            channel_outer_link__address: STRING_LITERAL.to_string(),
+                            channel_outer_link__alias: NOT_EMPTY_STRING_LITERAL.to_string(),
+                            channel_outer_link__address: NOT_EMPTY_STRING_LITERAL.to_string(),
                         };
                         channel_outer_link_registry.push(channel_outer_link_1);
                     }
                     let channel_2 = Channel2_ {
                         channel__owner: 0,
-                        channel__name: STRING_LITERAL.to_string(),
-                        channel__linked_name: STRING_LITERAL.to_string(),
-                        channel__description: Some(STRING_LITERAL.to_string()),
+                        channel__name: NOT_EMPTY_STRING_LITERAL.to_string(),
+                        channel__linked_name: NOT_EMPTY_STRING_LITERAL.to_string(),
+                        channel__description: Some(NOT_EMPTY_STRING_LITERAL.to_string()),
                         channel__access_modifier: 0,
                         channel__visability_modifier: 0,
                         channel__orientation: vec![0, 0, 0],
-                        channel__background_image_path: Some(STRING_LITERAL.to_string()),
-                        channel__cover_image_path: Some(STRING_LITERAL.to_string()),
+                        channel__background_image_path: Some(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        channel__cover_image_path: Some(NOT_EMPTY_STRING_LITERAL.to_string()),
                         channel__subscribers_quantity: 0,
                         channel__marks_quantity: 0,
                         channel__viewing_quantity: 0,
@@ -4458,9 +4510,9 @@ mod test {
             #[test]
             fn application_user___authorization____authorize_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming {
-                    application_user_device__id: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
-                    application_user__email___or___application_user__nickname: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
-                    application_user__password: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    application_user_device__id: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    application_user__email___or___application_user__nickname: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    application_user__password: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
                 let allocator = move |incoming: *mut ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
                     return application_user___authorization____authorize_by_first_step____serialize____allocate(incoming);
@@ -4483,8 +4535,8 @@ mod test {
             fn application_user___authorization____authorize_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = ApplicationUser__Authorization___AuthorizeByLastStep___Incoming {
                     application_user__id: 0,
-                    application_user_device__id: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
-                    application_user_authorization_token__value: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    application_user_device__id: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    application_user_authorization_token__value: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
                 let allocator = move |incoming: *mut ApplicationUser__Authorization___AuthorizeByLastStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
                     return application_user___authorization____authorize_by_last_step____serialize____allocate(incoming);
@@ -4505,7 +4557,7 @@ mod test {
             #[test]
             fn application_user___authorization____check_email_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = ApplicationUser__Authorization___CheckEmailForExisting___Incoming {
-                    application_user__email: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    application_user__email: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
                 let allocator = move |incoming: *mut ApplicationUser__Authorization___CheckEmailForExisting___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
                     return application_user___authorization____check_email_for_existing____serialize____allocate(incoming);
@@ -4525,7 +4577,7 @@ mod test {
             #[test]
             fn application_user___authorization____check_nickname_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = ApplicationUser__Authorization___CheckNicknameForExisting___Incoming {
-                    application_user__nickname: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    application_user__nickname: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
                 let allocator = move |incoming: *mut ApplicationUser__Authorization___CheckNicknameForExisting___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
                     return application_user___authorization____check_nickname_for_existing____serialize____allocate(incoming);
@@ -4545,7 +4597,10 @@ mod test {
             #[test]
             fn application_user___authorization____deauthorize_from_all_devices() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = ApplicationUser__Authorization___DeauthorizeFromAllDevices___Incoming {
-                    application_user_access_token_encrypted: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted {
+                        serialized: Allocator::<C_Vector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+                        encoded: Allocator::<C_Vector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+                    },
                 };
                 let allocator = move |incoming: *mut ApplicationUser__Authorization___DeauthorizeFromAllDevices___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
                     return application_user___authorization____deauthorize_from_all_devices____serialize____allocate(incoming);
@@ -4559,13 +4614,17 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_String>::deallocate(&incoming.application_user_access_token_encrypted);
+                Allocator::<C_Vector<_>>::deallocate(incoming.application_user_access_token_encrypted.serialized);
+                Allocator::<C_Vector<_>>::deallocate(incoming.application_user_access_token_encrypted.encoded);
                 return Ok(());
             }
             #[test]
             fn application_user___authorization____deauthorize_from_one_device() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = ApplicationUser__Authorization___DeauthorizeFromOneDevice___Incoming {
-                    application_user_access_token_encrypted: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted {
+                        serialized: Allocator::<C_Vector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+                        encoded: Allocator::<C_Vector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+                    },
                 };
                 let allocator = move |incoming: *mut ApplicationUser__Authorization___DeauthorizeFromOneDevice___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
                     return application_user___authorization____deauthorize_from_one_device____serialize____allocate(incoming);
@@ -4579,14 +4638,18 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_String>::deallocate(&incoming.application_user_access_token_encrypted);
+                Allocator::<C_Vector<_>>::deallocate(incoming.application_user_access_token_encrypted.serialized);
+                Allocator::<C_Vector<_>>::deallocate(incoming.application_user_access_token_encrypted.encoded);
                 return Ok(());
             }
             #[test]
             fn application_user___authorization____refresh_access_token() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = ApplicationUser__Authorization___RefreshAccessToken___Incoming {
-                    application_user_access_token_encrypted: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
-                    application_user_access_refresh_token_encrypted: Allocator::<C_Vector<_>>::allocate(ARRAY_LITERAL.to_vec()),
+                    application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted {
+                        serialized: Allocator::<C_Vector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+                        encoded: Allocator::<C_Vector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+                    },
+                    application_user_access_refresh_token_encrypted: Allocator::<C_Vector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                 };
                 let allocator = move |incoming: *mut ApplicationUser__Authorization___RefreshAccessToken___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
                     return application_user___authorization____refresh_access_token____serialize____allocate(incoming);
@@ -4600,15 +4663,16 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_String>::deallocate(&incoming.application_user_access_token_encrypted);
+                Allocator::<C_Vector<_>>::deallocate(incoming.application_user_access_token_encrypted.serialized);
+                Allocator::<C_Vector<_>>::deallocate(incoming.application_user_access_token_encrypted.encoded);
                 Allocator::<C_Vector<_>>::deallocate(incoming.application_user_access_refresh_token_encrypted);
                 return Ok(());
             }
             #[test]
             fn application_user___authorization____register_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = ApplicationUser__Authorization___RegisterByFirstStep___Incoming {
-                    application_user__email: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
-                    application_user_device__id: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    application_user__email: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    application_user_device__id: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
                 let allocator = move |incoming: *mut ApplicationUser__Authorization___RegisterByFirstStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
                     return application_user___authorization____register_by_first_step____serialize____allocate(incoming);
@@ -4629,9 +4693,9 @@ mod test {
             #[test]
             fn application_user___authorization____register_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = ApplicationUser__Authorization___RegisterBySecondStep___Incoming {
-                    application_user__email: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
-                    application_user_device__id: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
-                    application_user_registration_token__value: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    application_user__email: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    application_user_device__id: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    application_user_registration_token__value: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
                 let allocator = move |incoming: *mut ApplicationUser__Authorization___RegisterBySecondStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
                     return application_user___authorization____register_by_second_step____serialize____allocate(incoming);
@@ -4653,11 +4717,11 @@ mod test {
             #[test]
             fn application_user___authorization____register_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = ApplicationUser__Authorization___RegisterByLastStep___Incoming {
-                    application_user_device__id: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
-                    application_user__nickname: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
-                    application_user__password: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
-                    application_user__email: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
-                    application_user_registration_token__value: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    application_user_device__id: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    application_user__nickname: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    application_user__password: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    application_user__email: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    application_user_registration_token__value: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
                 let allocator = move |incoming: *mut ApplicationUser__Authorization___RegisterByLastStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
                     return application_user___authorization____register_by_last_step____serialize____allocate(incoming);
@@ -4681,8 +4745,8 @@ mod test {
             #[test]
             fn application_user___authorization____reset_password_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = ApplicationUser__Authorization___ResetPasswordByFirstStep___Incoming {
-                    application_user__email: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
-                    application_user_device__id: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    application_user__email: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    application_user_device__id: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
                 let allocator = move |incoming: *mut ApplicationUser__Authorization___ResetPasswordByFirstStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
                     return application_user___authorization____reset_password_by_first_step____serialize____allocate(incoming);
@@ -4704,8 +4768,8 @@ mod test {
             fn application_user___authorization____reset_password_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming {
                     application_user__id: 0,
-                    application_user_device__id: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
-                    application_user_reset_password_token__value: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    application_user_device__id: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    application_user_reset_password_token__value: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
                 let allocator = move |incoming: *mut ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
                     return application_user___authorization____reset_password_by_second_step____serialize____allocate(incoming);
@@ -4727,9 +4791,9 @@ mod test {
             fn application_user___authorization____reset_password_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming {
                     application_user__id: 0,
-                    application_user_device__id: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
-                    application_user__password: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
-                    application_user_reset_password_token__value: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    application_user_device__id: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    application_user__password: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    application_user_reset_password_token__value: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
                 let allocator = move |incoming: *mut ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
                     return application_user___authorization____reset_password_by_last_step____serialize____allocate(incoming);
@@ -4751,8 +4815,8 @@ mod test {
             #[test]
             fn application_user___authorization____send_email_for_register() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = ApplicationUser__Authorization___SendEmailForRegister___Incoming {
-                    application_user__email: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
-                    application_user_device__id: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    application_user__email: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    application_user_device__id: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
                 let allocator = move |incoming: *mut ApplicationUser__Authorization___SendEmailForRegister___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
                     return application_user___authorization____send_email_for_register____serialize____allocate(incoming);
@@ -4773,7 +4837,7 @@ mod test {
             #[test]
             fn application_user___authorization____send_email_for_authorize() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = ApplicationUser__Authorization___SendEmailForAuthorize___Incoming {
-                    application_user_device__id: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    application_user_device__id: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                     application_user__id: 0,
                 };
                 let allocator = move |incoming: *mut ApplicationUser__Authorization___SendEmailForAuthorize___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
@@ -4795,7 +4859,7 @@ mod test {
             fn application_user___authorization____send_email_for_reset_password() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = ApplicationUser__Authorization___SendEmailForResetPassword___Incoming {
                     application_user__id: 0,
-                    application_user_device__id: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    application_user_device__id: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
                 let allocator = move |incoming: *mut ApplicationUser__Authorization___SendEmailForResetPassword___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
                     return application_user___authorization____send_email_for_reset_password____serialize____allocate(incoming);
@@ -4815,9 +4879,12 @@ mod test {
             #[test]
             fn channel___base____get_many_by_name_in_subscriptions() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = Channel__Base___GetManyByNameInSubscriptions___Incoming {
-                    application_user_access_token_encrypted: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
-                    channel__name: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
-                    requery___channel__name: C_Option::data(Allocator::<C_String>::allocate(STRING_LITERAL.to_string())),
+                    application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted {
+                        serialized: Allocator::<C_Vector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+                        encoded: Allocator::<C_Vector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+                    },
+                    channel__name: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    requery___channel__name: C_Option::data(Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string())),
                     limit: 0,
                 };
                 let allocator = move |incoming: *mut Channel__Base___GetManyByNameInSubscriptions___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
@@ -4832,7 +4899,8 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_String>::deallocate(&incoming.application_user_access_token_encrypted);
+                Allocator::<C_Vector<_>>::deallocate(incoming.application_user_access_token_encrypted.serialized);
+                Allocator::<C_Vector<_>>::deallocate(incoming.application_user_access_token_encrypted.encoded);
                 Allocator::<C_String>::deallocate(&incoming.channel__name);
                 Allocator::<C_String>::deallocate(&incoming.requery___channel__name.data);
                 return Ok(());
@@ -4840,7 +4908,10 @@ mod test {
             #[test]
             fn channel___base____get_many_by_subscription() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = Channel__Base___GetManyBySubscription___Incoming {
-                    application_user_access_token_encrypted: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted {
+                        serialized: Allocator::<C_Vector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+                        encoded: Allocator::<C_Vector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+                    },
                     requery___channel__id: C_Option::data(0),
                     limit: 0,
                 };
@@ -4856,15 +4927,19 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_String>::deallocate(&incoming.application_user_access_token_encrypted);
+                Allocator::<C_Vector<_>>::deallocate(incoming.application_user_access_token_encrypted.serialized);
+                Allocator::<C_Vector<_>>::deallocate(incoming.application_user_access_token_encrypted.encoded);
                 return Ok(());
             }
             #[test]
             fn channel___base____get_many_public_by_name() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = Channel__Base___GetManyPublicByName___Incoming {
-                    application_user_access_token_encrypted: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
-                    channel__name: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
-                    requery___channel__name: C_Option::data(Allocator::<C_String>::allocate(STRING_LITERAL.to_string())),
+                    application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted {
+                        serialized: Allocator::<C_Vector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+                        encoded: Allocator::<C_Vector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+                    },
+                    channel__name: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    requery___channel__name: C_Option::data(Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string())),
                     limit: 0,
                 };
                 let allocator = move |incoming: *mut Channel__Base___GetManyPublicByName___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
@@ -4879,7 +4954,8 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_String>::deallocate(&incoming.application_user_access_token_encrypted);
+                Allocator::<C_Vector<_>>::deallocate(incoming.application_user_access_token_encrypted.serialized);
+                Allocator::<C_Vector<_>>::deallocate(incoming.application_user_access_token_encrypted.encoded);
                 Allocator::<C_String>::deallocate(&incoming.channel__name);
                 Allocator::<C_String>::deallocate(&incoming.requery___channel__name.data);
                 return Ok(());
@@ -4887,7 +4963,10 @@ mod test {
             #[test]
             fn channel___base____get_one_by_id() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = Channel__Base___GetOneById___Incoming {
-                    application_user_access_token_encrypted: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted {
+                        serialized: Allocator::<C_Vector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+                        encoded: Allocator::<C_Vector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+                    },
                     channel__id: 0,
                 };
                 let allocator = move |incoming: *mut Channel__Base___GetOneById___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
@@ -4902,13 +4981,17 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_String>::deallocate(&incoming.application_user_access_token_encrypted);
+                Allocator::<C_Vector<_>>::deallocate(incoming.application_user_access_token_encrypted.serialized);
+                Allocator::<C_Vector<_>>::deallocate(incoming.application_user_access_token_encrypted.encoded);
                 return Ok(());
             }
             #[test]
             fn channel_subscription___base____create() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = ChannelSubscription__Base___Create___Incoming {
-                    application_user_access_token_encrypted: Allocator::<C_String>::allocate(STRING_LITERAL.to_string()),
+                    application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted {
+                        serialized: Allocator::<C_Vector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+                        encoded: Allocator::<C_Vector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+                    },
                     channel__id: 0,
                 };
                 let allocator = move |incoming: *mut ChannelSubscription__Base___Create___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
@@ -4923,7 +5006,8 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_String>::deallocate(&incoming.application_user_access_token_encrypted);
+                Allocator::<C_Vector<_>>::deallocate(incoming.application_user_access_token_encrypted.serialized);
+                Allocator::<C_Vector<_>>::deallocate(incoming.application_user_access_token_encrypted.encoded);
                 return Ok(());
             }
         }

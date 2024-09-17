@@ -23,6 +23,7 @@ build = "./build.rs"
 [dependencies]
 action_processor_incoming_outcoming = { path = "./../../../forced_crate/action_processor_incoming_outcoming", package = "action_processor_incoming_outcoming", version = "=1.0.0", default-features = true, features = [], optional = false }
 aggregate_error = { path = "./../../../forced_crate/aggregate_error", package = "aggregate_error", version = "=1.0.0", default-features = true, features = [], optional = false }
+application_user_access_token_encrypted = { path = "./../../../forced_crate/application_user_access_token_encrypted", package = "application_user_access_token_encrypted", version = "=1.0.0", default-features = true, features = [], optional = false }
 formatter = { path = "./../../../forced_crate/formatter", package = "formatter", version = "=1.0.0", default-features = true, features = [], optional = false }
 libc = { package = "libc", version = "=0.2.158", default-features = true, features = [], optional = false }
 message_pack_serializer = { path = "./../../../forced_crate/message_pack_serializer", package = "message_pack_serializer", version = "=1.0.0", default-features = true, features = [], optional = false }

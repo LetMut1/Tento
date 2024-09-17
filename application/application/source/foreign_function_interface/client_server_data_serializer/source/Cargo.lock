@@ -169,6 +169,7 @@ version = "1.0.0"
 dependencies = [
  "action_processor_incoming_outcoming",
  "aggregate_error",
+ "application_user_access_token_encrypted",
  "cargo-emit",
  "cbindgen",
  "formatter",
