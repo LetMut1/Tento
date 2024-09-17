@@ -272,11 +272,11 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                 }
             };
             // TODO  TRANZACTION
-            let application_user_access_token_encrypted = Encoder::<ApplicationUserAccessToken<'_>>::to_encrypted(
+            let application_user_access_token_encrypted = Encoder::<ApplicationUserAccessToken<'_>>::encode(
                 inner.environment_configuration,
                 &application_user_access_token,
             )?;
-            let application_user_access_refresh_token_encrypted = Encoder::<ApplicationUserAccessRefreshToken<'_>>::to_encrypted(
+            let application_user_access_refresh_token_encrypted = Encoder::<ApplicationUserAccessRefreshToken<'_>>::encode(
                 inner.environment_configuration,
                 &application_user_access_refresh_token,
             )?;

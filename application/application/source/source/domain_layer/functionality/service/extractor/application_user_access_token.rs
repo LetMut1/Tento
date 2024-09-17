@@ -19,7 +19,7 @@ impl Extractor<ApplicationUserAccessToken<'_>> {
         environment_configuration: &'static EnvironmentConfiguration,
         application_user_access_token_encrypted: &'a ApplicationUserAccessTokenEncrypted,
     ) -> Result<Extracted, AggregateError> {
-        let application_user_access_token = Encoder::<ApplicationUserAccessToken<'_>>::from_encrypted(
+        let application_user_access_token = Encoder::<ApplicationUserAccessToken<'_>>::decode(
             environment_configuration,
             application_user_access_token_encrypted,
         )?;

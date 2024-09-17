@@ -21,7 +21,7 @@ use crate::{
 use application_user_access_refresh_token_encrypted::ApplicationUserAccessRefreshTokenEncrypted;
 use aggregate_error::AggregateError;
 impl Encoder<ApplicationUserAccessRefreshToken<'_>> {
-    pub fn to_encrypted<'a>(
+    pub fn encode<'a>(
         environment_configuration: &'static EnvironmentConfiguration,
         application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>,
     ) -> Result<ApplicationUserAccessRefreshTokenEncrypted, AggregateError> {

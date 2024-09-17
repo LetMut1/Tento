@@ -80,7 +80,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Refre
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
         return async move {
-            let application_user_access_token = Encoder::<ApplicationUserAccessToken<'_>>::from_encrypted(
+            let application_user_access_token = Encoder::<ApplicationUserAccessToken<'_>>::decode(
                 inner.environment_configuration,
                 &incoming.application_user_access_token_encrypted,
             )?;
@@ -151,11 +151,11 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Refre
             )
             .await?;
             let outcoming = Outcoming {
-                application_user_access_token_encrypted: Encoder::<ApplicationUserAccessToken<'_>>::to_encrypted(
+                application_user_access_token_encrypted: Encoder::<ApplicationUserAccessToken<'_>>::encode(
                     inner.environment_configuration,
                     &application_user_access_token_new,
                 )?,
-                application_user_access_refresh_token_encrypted: Encoder::<ApplicationUserAccessRefreshToken<'_>>::to_encrypted(
+                application_user_access_refresh_token_encrypted: Encoder::<ApplicationUserAccessRefreshToken<'_>>::encode(
                     inner.environment_configuration,
                     &application_user_access_refresh_token,
                 )?,

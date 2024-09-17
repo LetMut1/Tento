@@ -28,7 +28,7 @@ use aggregate_error::{
     Backtrace,
 };
 impl Encoder<ApplicationUserAccessToken<'_>> {
-    pub fn to_encrypted<'a>(
+    pub fn encode<'a>(
         environment_configuration: &'static EnvironmentConfiguration,
         application_user_access_token: &'a ApplicationUserAccessToken<'_>,
     ) -> Result<ApplicationUserAccessTokenEncrypted, AggregateError> {
@@ -44,7 +44,7 @@ impl Encoder<ApplicationUserAccessToken<'_>> {
             }
         );
     }
-    pub fn from_encrypted<'a>(
+    pub fn decode<'a>(
         environment_configuration: &'static EnvironmentConfiguration,
         application_user_access_token_encrypted: &'a ApplicationUserAccessTokenEncrypted,
     ) -> Result<ApplicationUserAccessToken<'static>, AggregateError> {
