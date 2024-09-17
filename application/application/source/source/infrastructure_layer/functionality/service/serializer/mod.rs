@@ -1,4 +1,3 @@
-#[cfg(feature = "manual_testing")]
 pub mod json;
 pub mod message_pack;
 use aggregate_error::AggregateError;

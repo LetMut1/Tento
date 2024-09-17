@@ -42,5 +42,3 @@ pub struct RunServer;
 pub struct UnixTime;
 pub type Request = HyperRequest<Incoming>;
 pub type Response = HyperResponse<Full<Bytes>>;
-#[cfg(feature = "manual_testing")]
-pub struct Json;
