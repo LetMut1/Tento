@@ -6,8 +6,8 @@ version = 3
 name = "action_processor_incoming_outcoming"
 version = "1.0.0"
 dependencies = [
- "application_user_access_refresh_token_encrypted",
- "application_user_access_token_encrypted",
+ "application_user_access_refresh_token_encoded",
+ "application_user_access_token_encoded",
  "common_precedent",
  "macro_rules",
  "serde",
@@ -67,14 +67,14 @@ dependencies = [
 ]
 
 [[package]]
-name = "application_user_access_refresh_token_encrypted"
+name = "application_user_access_refresh_token_encoded"
 version = "1.0.0"
 dependencies = [
  "serde",
 ]
 
 [[package]]
-name = "application_user_access_token_encrypted"
+name = "application_user_access_token_encoded"
 version = "1.0.0"
 dependencies = [
  "serde",
@@ -177,8 +177,8 @@ version = "1.0.0"
 dependencies = [
  "action_processor_incoming_outcoming",
  "aggregate_error",
- "application_user_access_refresh_token_encrypted",
- "application_user_access_token_encrypted",
+ "application_user_access_refresh_token_encoded",
+ "application_user_access_token_encoded",
  "cargo-emit",
  "cbindgen",
  "formatter",

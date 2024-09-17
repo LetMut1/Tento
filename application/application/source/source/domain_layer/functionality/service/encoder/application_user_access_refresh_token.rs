@@ -18,15 +18,15 @@ use crate::{
         },
     },
 };
-use application_user_access_refresh_token_encrypted::ApplicationUserAccessRefreshTokenEncrypted;
+use application_user_access_refresh_token_encoded::ApplicationUserAccessRefreshTokenEncoded;
 use aggregate_error::AggregateError;
 impl Encoder<ApplicationUserAccessRefreshToken<'_>> {
     pub fn encode<'a>(
         environment_configuration: &'static EnvironmentConfiguration,
         application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>,
-    ) -> Result<ApplicationUserAccessRefreshTokenEncrypted, AggregateError> {
+    ) -> Result<ApplicationUserAccessRefreshTokenEncoded, AggregateError> {
         return Ok(
-            ApplicationUserAccessRefreshTokenEncrypted(
+            ApplicationUserAccessRefreshTokenEncoded(
                 Encoder_::<HmacSha3_512>::encode(
                     environment_configuration.encryption.private_key.application_user_access_refresh_token.as_bytes(),
                     Serializer::<MessagePack>::serialize(application_user_access_refresh_token)?.as_slice(),    // TODO TODO TODO Serializer::<MessagePack> - Нужен любой фаст алгоритм сериализации.
@@ -37,12 +37,12 @@ impl Encoder<ApplicationUserAccessRefreshToken<'_>> {
     pub fn is_valid<'a>(
         environment_configuration: &'static EnvironmentConfiguration,
         application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>,
-        application_user_access_refresh_token_encrypted: &'a ApplicationUserAccessRefreshTokenEncrypted,
+        application_user_access_refresh_token_encoded: &'a ApplicationUserAccessRefreshTokenEncoded,
     ) -> Result<bool, AggregateError> {
         return Encoder_::<HmacSha3_512>::is_valid(
             environment_configuration.encryption.private_key.application_user_access_refresh_token.as_bytes(),
             Serializer::<MessagePack>::serialize(application_user_access_refresh_token)?.as_slice(),
-            application_user_access_refresh_token_encrypted.0.as_slice(),
+            application_user_access_refresh_token_encoded.0.as_slice(),
         );
     }
 }

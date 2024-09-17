@@ -286,11 +286,11 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
                 },
             )
             .await?;
-            let application_user_access_token_encrypted = Encoder::<ApplicationUserAccessToken<'_>>::encode(
+            let application_user_access_token_encoded = Encoder::<ApplicationUserAccessToken<'_>>::encode(
                 inner.environment_configuration,
                 &application_user_access_token,
             )?;
-            let application_user_access_refresh_token_encrypted = Encoder::<ApplicationUserAccessRefreshToken<'_>>::encode(
+            let application_user_access_refresh_token_encoded = Encoder::<ApplicationUserAccessRefreshToken<'_>>::encode(
                 inner.environment_configuration,
                 &application_user_access_refresh_token,
             )?;
@@ -330,8 +330,8 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
                 },
             );
             let outcoming = Outcoming {
-                application_user_access_token_encrypted,
-                application_user_access_refresh_token_encrypted,
+                application_user_access_token_encoded,
+                application_user_access_refresh_token_encoded,
             };
             return Ok(UnifiedReport::target_filled(outcoming));
         };

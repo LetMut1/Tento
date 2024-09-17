@@ -4,17 +4,17 @@ use serde::{
     Deserialize,
     Serialize,
 };
-use application_user_access_refresh_token_encrypted::ApplicationUserAccessRefreshTokenEncrypted;
-use application_user_access_token_encrypted::ApplicationUserAccessTokenEncrypted;
+use application_user_access_refresh_token_encoded::ApplicationUserAccessRefreshTokenEncoded;
+use application_user_access_token_encoded::ApplicationUserAccessTokenEncoded;
 #[derive(Serialize, Deserialize)]
 pub struct Incoming {
-    pub application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
-    pub application_user_access_refresh_token_encrypted: ApplicationUserAccessRefreshTokenEncrypted,
+    pub application_user_access_token_encoded: ApplicationUserAccessTokenEncoded,
+    pub application_user_access_refresh_token_encoded: ApplicationUserAccessRefreshTokenEncoded,
 }
 #[derive(Serialize, Deserialize)]
 pub struct Outcoming {
-    pub application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
-    pub application_user_access_refresh_token_encrypted: ApplicationUserAccessRefreshTokenEncrypted,
+    pub application_user_access_token_encoded: ApplicationUserAccessTokenEncoded,
+    pub application_user_access_refresh_token_encoded: ApplicationUserAccessRefreshTokenEncoded,
 }
 r#enum!(
     pub enum Precedent {

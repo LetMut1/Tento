@@ -5,10 +5,10 @@ use serde::{
     Deserialize,
     Serialize,
 };
-use application_user_access_token_encrypted::ApplicationUserAccessTokenEncrypted;
+use application_user_access_token_encoded::ApplicationUserAccessTokenEncoded;
 #[derive(Serialize, Deserialize)]
 pub struct Incoming {
-    pub application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
+    pub application_user_access_token_encoded: ApplicationUserAccessTokenEncoded,
     pub requery___channel__id: Option<i64>,
     pub limit: i16,
 }

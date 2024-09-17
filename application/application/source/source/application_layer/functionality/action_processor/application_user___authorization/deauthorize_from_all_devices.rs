@@ -63,7 +63,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Deaut
         return async move {
             let application_user_access_token = match Extractor::<ApplicationUserAccessToken<'_>>::extract(
                 inner.environment_configuration,
-                &incoming.application_user_access_token_encrypted,
+                &incoming.application_user_access_token_encoded,
             )?
             {
                 Extracted::ApplicationUserAccessToken {

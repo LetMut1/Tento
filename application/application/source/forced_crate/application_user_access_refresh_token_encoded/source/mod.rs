@@ -3,4 +3,4 @@ use serde::{
     Serialize,
 };
 #[derive(Serialize, Deserialize)]
-pub struct ApplicationUserAccessRefreshTokenEncrypted(pub Vec<u8>);
+pub struct ApplicationUserAccessRefreshTokenEncoded(pub Vec<u8>);

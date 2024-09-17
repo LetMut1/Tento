@@ -82,7 +82,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Refre
         return async move {
             let application_user_access_token = Encoder::<ApplicationUserAccessToken<'_>>::decode(
                 inner.environment_configuration,
-                &incoming.application_user_access_token_encrypted,
+                &incoming.application_user_access_token_encoded,
             )?;
             let database_2_postgresql_pooled_connection = inner.get_database_2_postgresql_pooled_connection().await?;
             let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
@@ -103,7 +103,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Refre
             let is_valid = Encoder::<ApplicationUserAccessRefreshToken<'_>>::is_valid(
                 inner.environment_configuration,
                 &application_user_access_refresh_token,
-                &incoming.application_user_access_refresh_token_encrypted,
+                &incoming.application_user_access_refresh_token_encoded,
             )?;
             if !is_valid || application_user_access_token.id.as_str() != application_user_access_refresh_token.application_user_access_token__id.as_ref() {
                 return Err(
@@ -151,11 +151,11 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Refre
             )
             .await?;
             let outcoming = Outcoming {
-                application_user_access_token_encrypted: Encoder::<ApplicationUserAccessToken<'_>>::encode(
+                application_user_access_token_encoded: Encoder::<ApplicationUserAccessToken<'_>>::encode(
                     inner.environment_configuration,
                     &application_user_access_token_new,
                 )?,
-                application_user_access_refresh_token_encrypted: Encoder::<ApplicationUserAccessRefreshToken<'_>>::encode(
+                application_user_access_refresh_token_encoded: Encoder::<ApplicationUserAccessRefreshToken<'_>>::encode(
                     inner.environment_configuration,
                     &application_user_access_refresh_token,
                 )?,

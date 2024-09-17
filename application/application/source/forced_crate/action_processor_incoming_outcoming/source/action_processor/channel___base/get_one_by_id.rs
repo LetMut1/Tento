@@ -3,7 +3,7 @@ use crate::{
     ChannelInnerLink1,
     ChannelOuterLink1,
 };
-use application_user_access_token_encrypted::ApplicationUserAccessTokenEncrypted;
+use application_user_access_token_encoded::ApplicationUserAccessTokenEncoded;
 use common_precedent::CommonPrecedent;
 use macro_rules::r#enum;
 use serde::{
@@ -12,7 +12,7 @@ use serde::{
 };
 #[derive(Serialize, Deserialize)]
 pub struct Incoming {
-    pub application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
+    pub application_user_access_token_encoded: ApplicationUserAccessTokenEncoded,
     pub channel__id: i64,
 }
 #[derive(Serialize, Deserialize)]
