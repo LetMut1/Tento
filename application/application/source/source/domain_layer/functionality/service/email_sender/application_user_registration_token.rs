@@ -4,11 +4,12 @@ use crate::{
     domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken,
     infrastructure_layer::{
         data::{
-            capture::Capture, control_type::Email, environment_configuration::environment_configuration::EnvironmentConfiguration
+            capture::Capture, environment_configuration::environment_configuration::EnvironmentConfiguration
         },
         functionality::service::sender::Sender,
     },
 };
+use crate::infrastructure_layer::functionality::service::sender::email::Email;
 use aggregate_error::AggregateError;
 use void::Void;
 impl EmailSender<ApplicationUserRegistrationToken<'_>> {

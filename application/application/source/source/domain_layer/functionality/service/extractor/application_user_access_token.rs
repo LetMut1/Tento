@@ -6,12 +6,12 @@ use crate::{
     },
     infrastructure_layer::{
         data::{
-            control_type::UnixTime,
             environment_configuration::environment_configuration::EnvironmentConfiguration,
         },
         functionality::service::expiration_time_checker::ExpirationTimeChecker,
     },
 };
+use crate::infrastructure_layer::functionality::service::expiration_time_checker::unix_time::UnixTime;
 use application_user_access_token_encoded::ApplicationUserAccessTokenEncoded;
 use aggregate_error::AggregateError;
 impl Extractor<ApplicationUserAccessToken<'_>> {

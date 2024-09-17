@@ -2,7 +2,7 @@ use std::future::Future;
 
 use super::Sender;
 use crate::infrastructure_layer::data::{
-    capture::Capture, control_type::Email, environment_configuration::environment_configuration::EnvironmentConfiguration
+    capture::Capture, environment_configuration::environment_configuration::EnvironmentConfiguration
 };
 use aggregate_error::{
     AggregateError,
@@ -16,6 +16,7 @@ use void::Void;
 //     AsyncTransport, Message, Tokio1Executor,
 // };
 // use std::convert::Into;
+pub struct Email;
 impl Sender<Email> {
     pub fn send<'a>(
         _environment_configuration: &'static EnvironmentConfiguration,

@@ -103,3 +103,7 @@ Rust 2024 - edition. Поменять, как только выйдет.
 
 
 Проверить, что все крипто делается в blocked threads
+
+
+
+use crate::infrastructure_layer::functionality::service::expiration_time_checker  - в отдельный сервис без фантомной даты
