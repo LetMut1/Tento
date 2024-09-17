@@ -1,4 +1,4 @@
-use super::FormResolver;
+use super::Encoder;
 use crate::{
     domain_layer::{
         data::entity::application_user_access_token::ApplicationUserAccessToken,
@@ -27,7 +27,7 @@ use aggregate_error::{
     AggregateError,
     Backtrace,
 };
-impl FormResolver<ApplicationUserAccessToken<'_>> {
+impl Encoder<ApplicationUserAccessToken<'_>> {
     pub fn to_encrypted<'a>(
         environment_configuration: &'static EnvironmentConfiguration,
         application_user_access_token: &'a ApplicationUserAccessToken<'_>,

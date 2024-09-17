@@ -19,7 +19,7 @@ use crate::{
             },
         },
         functionality::service::{
-            form_resolver::FormResolver,
+            encoder::Encoder,
             generator::Generator,
         },
     },
@@ -80,7 +80,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Refre
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
         return async move {
-            let application_user_access_token = FormResolver::<ApplicationUserAccessToken<'_>>::from_encrypted(
+            let application_user_access_token = Encoder::<ApplicationUserAccessToken<'_>>::from_encrypted(
                 inner.environment_configuration,
                 &incoming.application_user_access_token_encrypted,
             )?;
@@ -100,7 +100,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Refre
                     return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessRefreshToken_NotFound));
                 }
             };
-            let is_valid = FormResolver::<ApplicationUserAccessRefreshToken<'_>>::is_valid(
+            let is_valid = Encoder::<ApplicationUserAccessRefreshToken<'_>>::is_valid(
                 inner.environment_configuration,
                 &application_user_access_refresh_token,
                 &incoming.application_user_access_refresh_token_encrypted,
@@ -151,11 +151,11 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Refre
             )
             .await?;
             let outcoming = Outcoming {
-                application_user_access_token_encrypted: FormResolver::<ApplicationUserAccessToken<'_>>::to_encrypted(
+                application_user_access_token_encrypted: Encoder::<ApplicationUserAccessToken<'_>>::to_encrypted(
                     inner.environment_configuration,
                     &application_user_access_token_new,
                 )?,
-                application_user_access_refresh_token_encrypted: FormResolver::<ApplicationUserAccessRefreshToken<'_>>::to_encrypted(
+                application_user_access_refresh_token_encrypted: Encoder::<ApplicationUserAccessRefreshToken<'_>>::to_encrypted(
                     inner.environment_configuration,
                     &application_user_access_refresh_token,
                 )?,

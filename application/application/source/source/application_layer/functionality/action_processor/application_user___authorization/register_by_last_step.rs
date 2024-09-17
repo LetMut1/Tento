@@ -35,7 +35,6 @@ use crate::{
         },
         functionality::service::{
             encoder::Encoder,
-            form_resolver::FormResolver,
             generator::Generator,
             validator::Validator,
         },
@@ -287,11 +286,11 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
                 },
             )
             .await?;
-            let application_user_access_token_encrypted = FormResolver::<ApplicationUserAccessToken<'_>>::to_encrypted(
+            let application_user_access_token_encrypted = Encoder::<ApplicationUserAccessToken<'_>>::to_encrypted(
                 inner.environment_configuration,
                 &application_user_access_token,
             )?;
-            let application_user_access_refresh_token_encrypted = FormResolver::<ApplicationUserAccessRefreshToken<'_>>::to_encrypted(
+            let application_user_access_refresh_token_encrypted = Encoder::<ApplicationUserAccessRefreshToken<'_>>::to_encrypted(
                 inner.environment_configuration,
                 &application_user_access_refresh_token,
             )?;

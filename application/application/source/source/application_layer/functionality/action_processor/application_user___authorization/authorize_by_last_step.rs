@@ -32,7 +32,7 @@ use crate::{
             },
         },
         functionality::service::{
-            form_resolver::FormResolver,
+            encoder::Encoder,
             generator::Generator,
             validator::Validator,
         },
@@ -272,11 +272,11 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                 }
             };
             // TODO  TRANZACTION
-            let application_user_access_token_encrypted = FormResolver::<ApplicationUserAccessToken<'_>>::to_encrypted(
+            let application_user_access_token_encrypted = Encoder::<ApplicationUserAccessToken<'_>>::to_encrypted(
                 inner.environment_configuration,
                 &application_user_access_token,
             )?;
-            let application_user_access_refresh_token_encrypted = FormResolver::<ApplicationUserAccessRefreshToken<'_>>::to_encrypted(
+            let application_user_access_refresh_token_encrypted = Encoder::<ApplicationUserAccessRefreshToken<'_>>::to_encrypted(
                 inner.environment_configuration,
                 &application_user_access_refresh_token,
             )?;

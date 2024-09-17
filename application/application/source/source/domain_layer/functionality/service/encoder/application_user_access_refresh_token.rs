@@ -1,4 +1,4 @@
-use super::FormResolver;
+use super::Encoder;
 use crate::{
     domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken,
     infrastructure_layer::{
@@ -9,7 +9,7 @@ use crate::{
         functionality::service::{
             encoder::{
                 hmac::HmacSha3_512,
-                Encoder,
+                Encoder as Encoder_,
             },
             serializer::{
                 Serialize,
@@ -20,14 +20,14 @@ use crate::{
 };
 use application_user_access_refresh_token_encrypted::ApplicationUserAccessRefreshTokenEncrypted;
 use aggregate_error::AggregateError;
-impl FormResolver<ApplicationUserAccessRefreshToken<'_>> {
+impl Encoder<ApplicationUserAccessRefreshToken<'_>> {
     pub fn to_encrypted<'a>(
         environment_configuration: &'static EnvironmentConfiguration,
         application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>,
     ) -> Result<ApplicationUserAccessRefreshTokenEncrypted, AggregateError> {
         return Ok(
             ApplicationUserAccessRefreshTokenEncrypted(
-                Encoder::<HmacSha3_512>::encode(
+                Encoder_::<HmacSha3_512>::encode(
                     environment_configuration.encryption.private_key.application_user_access_refresh_token.as_bytes(),
                     Serializer::<MessagePack>::serialize(application_user_access_refresh_token)?.as_slice(),    // TODO TODO TODO Serializer::<MessagePack> - Нужен любой фаст алгоритм сериализации.
                 )?,
@@ -39,7 +39,7 @@ impl FormResolver<ApplicationUserAccessRefreshToken<'_>> {
         application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>,
         application_user_access_refresh_token_encrypted: &'a ApplicationUserAccessRefreshTokenEncrypted,
     ) -> Result<bool, AggregateError> {
-        return Encoder::<HmacSha3_512>::is_valid(
+        return Encoder_::<HmacSha3_512>::is_valid(
             environment_configuration.encryption.private_key.application_user_access_refresh_token.as_bytes(),
             Serializer::<MessagePack>::serialize(application_user_access_refresh_token)?.as_slice(),
             application_user_access_refresh_token_encrypted.0.as_slice(),

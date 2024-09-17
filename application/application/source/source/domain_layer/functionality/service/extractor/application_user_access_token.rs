@@ -2,7 +2,7 @@ use super::Extractor;
 use crate::{
     domain_layer::{
         data::entity::application_user_access_token::ApplicationUserAccessToken,
-        functionality::service::form_resolver::{FormResolver},
+        functionality::service::encoder::Encoder,
     },
     infrastructure_layer::{
         data::{
@@ -19,7 +19,7 @@ impl Extractor<ApplicationUserAccessToken<'_>> {
         environment_configuration: &'static EnvironmentConfiguration,
         application_user_access_token_encrypted: &'a ApplicationUserAccessTokenEncrypted,
     ) -> Result<Extracted, AggregateError> {
-        let application_user_access_token = FormResolver::<ApplicationUserAccessToken<'_>>::from_encrypted(
+        let application_user_access_token = Encoder::<ApplicationUserAccessToken<'_>>::from_encrypted(
             environment_configuration,
             application_user_access_token_encrypted,
         )?;
