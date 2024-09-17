@@ -64,7 +64,10 @@ use rand::{
     Rng,
 };
 use std::future::Future;
-use tokio::runtime::{Builder, Runtime};
+use tokio::runtime::{
+    Builder,
+    Runtime,
+};
 use tokio_postgres::NoTls;
 use void::Void;
 pub struct CreateFixtures;
@@ -117,15 +120,12 @@ impl CommandProcessor<CreateFixtures> {
     }
     fn initialize_runtime() -> Result<Runtime, AggregateError> {
         return Ok(
-            Builder::new_current_thread()
-                .enable_all()
-                .build()
-                .into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?
+            Builder::new_current_thread().enable_all().build().into_runtime(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?,
         );
     }
     fn create_fixtures<'a>(environment_configuration: &'a EnvironmentConfiguration) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {

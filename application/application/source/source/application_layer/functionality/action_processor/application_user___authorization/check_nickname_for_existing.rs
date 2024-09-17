@@ -12,9 +12,7 @@ use crate::{
         functionality::service::validator::Validator,
     },
     infrastructure_layer::{
-        data::{
-            capture::Capture,
-        },
+        data::capture::Capture,
         functionality::repository::postgresql::{
             application_user::By1,
             PostgresqlRepository,

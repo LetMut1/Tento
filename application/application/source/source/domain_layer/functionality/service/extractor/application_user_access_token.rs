@@ -5,15 +5,15 @@ use crate::{
         functionality::service::encoder::Encoder,
     },
     infrastructure_layer::{
-        data::{
-            environment_configuration::environment_configuration::EnvironmentConfiguration,
+        data::environment_configuration::environment_configuration::EnvironmentConfiguration,
+        functionality::service::expiration_time_checker::{
+            unix_time::UnixTime,
+            ExpirationTimeChecker,
         },
-        functionality::service::expiration_time_checker::ExpirationTimeChecker,
     },
 };
-use crate::infrastructure_layer::functionality::service::expiration_time_checker::unix_time::UnixTime;
-use application_user_access_token_encoded::ApplicationUserAccessTokenEncoded;
 use aggregate_error::AggregateError;
+use application_user_access_token_encoded::ApplicationUserAccessTokenEncoded;
 impl Extractor<ApplicationUserAccessToken<'_>> {
     pub fn extract<'a>(
         environment_configuration: &'static EnvironmentConfiguration,

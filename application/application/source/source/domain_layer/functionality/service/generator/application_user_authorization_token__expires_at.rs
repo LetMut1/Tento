@@ -1,11 +1,11 @@
 use super::Generator;
 use crate::{
     domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken_ExpiresAt,
-    infrastructure_layer::{
-        functionality::service::resolver::Resolver,
+    infrastructure_layer::functionality::service::resolver::{
+        date_time::DateTime,
+        Resolver,
     },
 };
-use crate::infrastructure_layer::functionality::service::resolver::date_time::DateTime;
 use aggregate_error::AggregateError;
 impl Generator<ApplicationUserAuthorizationToken_ExpiresAt> {
     pub fn generate() -> Result<i64, AggregateError> {

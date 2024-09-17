@@ -17,9 +17,7 @@ use crate::{
         functionality::service::validator::Validator,
     },
     infrastructure_layer::{
-        data::{
-            capture::Capture,
-        },
+        data::capture::Capture,
         functionality::{
             repository::postgresql::{
                 application_user_registration_token::{
@@ -29,11 +27,13 @@ use crate::{
                 },
                 PostgresqlRepository,
             },
-            service::expiration_time_checker::ExpirationTimeChecker,
+            service::expiration_time_checker::{
+                unix_time::UnixTime,
+                ExpirationTimeChecker,
+            },
         },
     },
 };
-use crate::infrastructure_layer::functionality::service::expiration_time_checker::unix_time::UnixTime;
 use action_processor_incoming_outcoming::action_processor::application_user___authorization::register_by_second_step::{
     Incoming,
     Precedent,

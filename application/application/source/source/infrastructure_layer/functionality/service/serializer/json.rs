@@ -2,8 +2,10 @@
 pub use self::json::Json;
 #[cfg(feature = "manual_testing")]
 pub mod json {
-    use crate::infrastructure_layer::functionality::service::serializer::Serialize;
-    use crate::infrastructure_layer::functionality::service::serializer::Serializer;
+    use crate::infrastructure_layer::functionality::service::serializer::{
+        Serialize,
+        Serializer,
+    };
     use aggregate_error::{
         AggregateError,
         Backtrace,

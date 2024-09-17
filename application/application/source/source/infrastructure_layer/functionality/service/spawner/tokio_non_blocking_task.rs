@@ -1,7 +1,5 @@
 use super::Spawner;
-use crate::infrastructure_layer::{
-    functionality::service::logger::Logger,
-};
+use crate::infrastructure_layer::functionality::service::logger::Logger;
 use aggregate_error::AggregateError;
 use std::future::Future;
 use tokio::task::JoinHandle;

@@ -1,7 +1,5 @@
 use super::Resolver;
-use crate::infrastructure_layer::data::{
-    capture::Capture,
-};
+use crate::infrastructure_layer::data::capture::Capture;
 use aggregate_error::{
     AggregateError,
     Backtrace,

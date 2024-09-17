@@ -1,7 +1,5 @@
 use super::ExpirationTimeChecker;
-use crate::infrastructure_layer::{
-    functionality::service::resolver::Resolver,
-};
+use crate::infrastructure_layer::functionality::service::resolver::Resolver;
 pub struct UnixTime;
 use crate::infrastructure_layer::functionality::service::resolver::date_time::DateTime;
 impl ExpirationTimeChecker<UnixTime> {

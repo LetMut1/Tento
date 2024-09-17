@@ -1,17 +1,16 @@
-use std::future::Future;
-
 use super::Sender;
 use crate::infrastructure_layer::data::{
-    capture::Capture, environment_configuration::environment_configuration::EnvironmentConfiguration
+    capture::Capture,
+    environment_configuration::environment_configuration::EnvironmentConfiguration,
 };
 use aggregate_error::{
     AggregateError,
     // Backtrace,
     // ResultConverter,
 };
+use std::future::Future;
 use void::Void;
 // use lettre::{
-
 //     message::header::ContentType, transport::smtp::authentication::Credentials, AsyncSmtpTransport,
 //     AsyncTransport, Message, Tokio1Executor,
 // };
@@ -22,7 +21,7 @@ impl Sender<Email> {
         _environment_configuration: &'static EnvironmentConfiguration,
         _subject: &'a str,
         _body: String,
-        _to: &'a str
+        _to: &'a str,
     ) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             // TODO сделать посторяему отправку при ошибке на количество времени (отправлять через секунду, пока не выйдет время) или раз.

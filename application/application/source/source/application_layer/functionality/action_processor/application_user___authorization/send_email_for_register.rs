@@ -20,9 +20,7 @@ use crate::{
         },
     },
     infrastructure_layer::{
-        data::{
-            capture::Capture,
-        },
+        data::capture::Capture,
         functionality::{
             repository::postgresql::{
                 application_user_registration_token::{
@@ -31,12 +29,19 @@ use crate::{
                 },
                 PostgresqlRepository,
             },
-            service::{expiration_time_checker::ExpirationTimeChecker, spawner::Spawner},
+            service::{
+                expiration_time_checker::{
+                    unix_time::UnixTime,
+                    ExpirationTimeChecker,
+                },
+                spawner::{
+                    tokio_non_blocking_task::TokioNonBlockingTask,
+                    Spawner,
+                },
+            },
         },
     },
 };
-use crate::infrastructure_layer::functionality::service::expiration_time_checker::unix_time::UnixTime;
-use crate::infrastructure_layer::functionality::service::spawner::tokio_non_blocking_task::TokioNonBlockingTask;
 use action_processor_incoming_outcoming::action_processor::application_user___authorization::send_email_for_register::{
     Incoming,
     Outcoming,
@@ -145,9 +150,10 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
                         application_user_registration_token.value.as_str(),
                         incoming.application_user__email.as_str(),
                         incoming.application_user_device__id.as_str(),
-                    ).await?;
+                    )
+                    .await?;
                     return Ok(());
-                }
+                },
             );
             let outcoming = Outcoming {
                 application_user_registration_token__can_be_resent_from: application_user_registration_token.can_be_resent_from,

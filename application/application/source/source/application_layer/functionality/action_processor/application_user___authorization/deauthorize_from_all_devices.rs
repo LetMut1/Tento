@@ -15,15 +15,16 @@ use crate::{
         },
     },
     infrastructure_layer::{
-        data::{
-            capture::Capture,
-        },
+        data::capture::Capture,
         functionality::{
             repository::postgresql::{
                 application_user_access_refresh_token::By1,
                 PostgresqlRepository,
             },
-            service::resolver::Resolver,
+            service::resolver::{
+                cloud_message::CloudMessage,
+                Resolver,
+            },
         },
     },
 };
@@ -42,7 +43,6 @@ use tokio_postgres::{
 };
 use unified_report::UnifiedReport;
 use void::Void;
-use crate::infrastructure_layer::functionality::service::resolver::cloud_message::CloudMessage;
 pub struct ApplicationUser__Authorization___DeauthorizeFromAllDevices;
 impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___DeauthorizeFromAllDevices> {
     type Incoming = Incoming;
@@ -62,8 +62,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Deaut
             let application_user_access_token = match Extractor::<ApplicationUserAccessToken<'_>>::extract(
                 inner.environment_configuration,
                 &incoming.application_user_access_token_encoded,
-            )?
-            {
+            )? {
                 Extracted::ApplicationUserAccessToken {
                     application_user_access_token: application_user_access_token_,
                 } => application_user_access_token_,

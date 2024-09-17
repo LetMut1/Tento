@@ -8,9 +8,7 @@ use crate::{
     infrastructure_layer::{
         data::{
             capture::Capture,
-            control_type::{
-                Response,
-            },
+            control_type::Response,
             server_workflow_error::ServerWorkflowError,
         },
         functionality::service::{

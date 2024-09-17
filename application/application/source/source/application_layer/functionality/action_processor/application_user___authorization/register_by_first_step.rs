@@ -26,9 +26,7 @@ use crate::{
         },
     },
     infrastructure_layer::{
-        data::{
-            capture::Capture,
-        },
+        data::capture::Capture,
         functionality::{
             repository::postgresql::{
                 application_user::By2,
@@ -41,11 +39,19 @@ use crate::{
                 },
                 PostgresqlRepository,
             },
-            service::{expiration_time_checker::ExpirationTimeChecker, spawner::Spawner},
+            service::{
+                expiration_time_checker::{
+                    unix_time::UnixTime,
+                    ExpirationTimeChecker,
+                },
+                spawner::{
+                    tokio_non_blocking_task::TokioNonBlockingTask,
+                    Spawner,
+                },
+            },
         },
     },
 };
-use crate::infrastructure_layer::functionality::service::spawner::tokio_non_blocking_task::TokioNonBlockingTask;
 use action_processor_incoming_outcoming::action_processor::application_user___authorization::register_by_first_step::{
     Incoming,
     Outcoming,
@@ -55,7 +61,6 @@ use aggregate_error::{
     AggregateError,
     Backtrace,
 };
-use crate::infrastructure_layer::functionality::service::expiration_time_checker::unix_time::UnixTime;
 use std::future::Future;
 use tokio_postgres::{
     tls::{
@@ -237,9 +242,10 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
                             application_user_registration_token__value.as_str(),
                             incoming.application_user__email.as_str(),
                             incoming.application_user_device__id.as_str(),
-                        ).await?;
+                        )
+                        .await?;
                         return Ok(());
-                    }
+                    },
                 );
             }
             let outcoming = Outcoming {

@@ -38,9 +38,7 @@ use crate::{
         },
     },
     infrastructure_layer::{
-        data::{
-            capture::Capture,
-        },
+        data::capture::Capture,
         functionality::{
             repository::postgresql::{
                 application_user::By3,
@@ -64,8 +62,10 @@ use crate::{
     },
 };
 pub struct ApplicationUser__Authorization___AuthorizeByLastStep;
-use crate::infrastructure_layer::functionality::service::expiration_time_checker::unix_time::UnixTime;
-use crate::infrastructure_layer::functionality::service::spawner::tokio_non_blocking_task::TokioNonBlockingTask;
+use crate::infrastructure_layer::functionality::service::{
+    expiration_time_checker::unix_time::UnixTime,
+    spawner::tokio_non_blocking_task::TokioNonBlockingTask,
+};
 use action_processor_incoming_outcoming::action_processor::application_user___authorization::authorize_by_last_step::{
     Incoming,
     Outcoming,

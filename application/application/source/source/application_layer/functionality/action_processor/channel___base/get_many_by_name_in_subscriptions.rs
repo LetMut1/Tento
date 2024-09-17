@@ -18,9 +18,7 @@ use crate::{
         },
     },
     infrastructure_layer::{
-        data::{
-            capture::Capture,
-        },
+        data::capture::Capture,
         functionality::repository::postgresql::{
             common::By2,
             PostgresqlRepository,
@@ -69,8 +67,7 @@ impl ActionProcessor_ for ActionProcessor<Channel__Base___GetManyByNameInSubscri
             let application_user_access_token = match Extractor::<ApplicationUserAccessToken<'_>>::extract(
                 inner.environment_configuration,
                 &incoming.application_user_access_token_encoded,
-            )?
-            {
+            )? {
                 Extracted::ApplicationUserAccessToken {
                     application_user_access_token: application_user_access_token_,
                 } => application_user_access_token_,

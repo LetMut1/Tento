@@ -1,18 +1,20 @@
-use std::future::Future;
-use crate::infrastructure_layer::data::capture::Capture;
-use void::Void;
 use super::EmailSender;
 use crate::{
     domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken,
     infrastructure_layer::{
         data::{
+            capture::Capture,
             environment_configuration::environment_configuration::EnvironmentConfiguration,
         },
-        functionality::service::sender::Sender,
+        functionality::service::sender::{
+            email::Email,
+            Sender,
+        },
     },
 };
-use crate::infrastructure_layer::functionality::service::sender::email::Email;
 use aggregate_error::AggregateError;
+use std::future::Future;
+use void::Void;
 impl EmailSender<ApplicationUserAuthorizationToken<'_>> {
     pub fn send<'a>(
         environment_configuration: &'static EnvironmentConfiguration,
@@ -30,7 +32,8 @@ impl EmailSender<ApplicationUserAuthorizationToken<'_>> {
                 "Authorization confirmation",
                 message_body,
                 application_user__email,
-            ).await?;
+            )
+            .await?;
             return Ok(());
         };
     }

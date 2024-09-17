@@ -1,16 +1,19 @@
-use std::future::Future;
 use super::EmailSender;
 use crate::{
     domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken,
     infrastructure_layer::{
         data::{
-            capture::Capture, environment_configuration::environment_configuration::EnvironmentConfiguration
+            capture::Capture,
+            environment_configuration::environment_configuration::EnvironmentConfiguration,
         },
-        functionality::service::sender::Sender,
+        functionality::service::sender::{
+            email::Email,
+            Sender,
+        },
     },
 };
-use crate::infrastructure_layer::functionality::service::sender::email::Email;
 use aggregate_error::AggregateError;
+use std::future::Future;
 use void::Void;
 impl EmailSender<ApplicationUserRegistrationToken<'_>> {
     pub fn send<'a>(
@@ -29,7 +32,8 @@ impl EmailSender<ApplicationUserRegistrationToken<'_>> {
                 "Registration confirmation",
                 message_body,
                 application_user__email,
-            ).await?;
+            )
+            .await?;
             return Ok(());
         };
     }

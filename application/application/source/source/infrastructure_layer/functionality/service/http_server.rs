@@ -1,5 +1,32 @@
 use crate::{
-    application_layer::functionality::action_processor::Inner as ActionProcessorInner,
+    application_layer::functionality::action_processor::{
+        application_user___authorization::{
+            authorize_by_first_step::ApplicationUser__Authorization___AuthorizeByFirstStep,
+            authorize_by_last_step::ApplicationUser__Authorization___AuthorizeByLastStep,
+            check_email_for_existing::ApplicationUser__Authorization___CheckEmailForExisting,
+            check_nickname_for_existing::ApplicationUser__Authorization___CheckNicknameForExisting,
+            deauthorize_from_all_devices::ApplicationUser__Authorization___DeauthorizeFromAllDevices,
+            deauthorize_from_one_device::ApplicationUser__Authorization___DeauthorizeFromOneDevice,
+            refresh_access_token::ApplicationUser__Authorization___RefreshAccessToken,
+            register_by_first_step::ApplicationUser__Authorization___RegisterByFirstStep,
+            register_by_last_step::ApplicationUser__Authorization___RegisterByLastStep,
+            register_by_second_step::ApplicationUser__Authorization___RegisterBySecondStep,
+            reset_password_by_first_step::ApplicationUser__Authorization___ResetPasswordByFirstStep,
+            reset_password_by_last_step::ApplicationUser__Authorization___ResetPasswordByLastStep,
+            reset_password_by_second_step::ApplicationUser__Authorization___ResetPasswordBySecondStep,
+            send_email_for_authorize::ApplicationUser__Authorization___SendEmailForAuthorize,
+            send_email_for_register::ApplicationUser__Authorization___SendEmailForRegister,
+            send_email_for_reset_password::ApplicationUser__Authorization___SendEmailForResetPassword,
+        },
+        channel___base::{
+            get_many_by_name_in_subscriptions::Channel__Base___GetManyByNameInSubscriptions,
+            get_many_by_subscription::Channel__Base___GetManyBySubscription,
+            get_many_public_by_name::Channel__Base___GetManyPublicByName,
+            get_one_by_id::Channel__Base___GetOneById,
+        },
+        channel_subscription___base::create::ChannelSubscription__Base___Create,
+        Inner as ActionProcessorInner,
+    },
     infrastructure_layer::{
         data::{
             control_type::{
@@ -14,7 +41,10 @@ use crate::{
                 Creator,
             },
             logger::Logger,
-            spawner::Spawner,
+            spawner::{
+                tokio_non_blocking_task::TokioNonBlockingTask,
+                Spawner,
+            },
         },
     },
     presentation_layer::{
@@ -25,34 +55,12 @@ use crate::{
             Channel__Base_,
         },
         functionality::action::{
+            route_not_found::RouteNotFound,
             Action,
             Inner as ActionInner,
         },
     },
 };
-use crate::application_layer::functionality::action_processor::application_user___authorization::authorize_by_first_step::ApplicationUser__Authorization___AuthorizeByFirstStep;
-use crate::application_layer::functionality::action_processor::application_user___authorization::authorize_by_last_step::ApplicationUser__Authorization___AuthorizeByLastStep;
-use crate::application_layer::functionality::action_processor::application_user___authorization::check_email_for_existing::ApplicationUser__Authorization___CheckEmailForExisting;
-use crate::application_layer::functionality::action_processor::application_user___authorization::check_nickname_for_existing::ApplicationUser__Authorization___CheckNicknameForExisting;
-use crate::application_layer::functionality::action_processor::application_user___authorization::deauthorize_from_all_devices::ApplicationUser__Authorization___DeauthorizeFromAllDevices;
-use crate::application_layer::functionality::action_processor::application_user___authorization::deauthorize_from_one_device::ApplicationUser__Authorization___DeauthorizeFromOneDevice;
-use crate::application_layer::functionality::action_processor::application_user___authorization::refresh_access_token::ApplicationUser__Authorization___RefreshAccessToken;
-use crate::application_layer::functionality::action_processor::application_user___authorization::register_by_first_step::ApplicationUser__Authorization___RegisterByFirstStep;
-use crate::application_layer::functionality::action_processor::application_user___authorization::register_by_last_step::ApplicationUser__Authorization___RegisterByLastStep;
-use crate::application_layer::functionality::action_processor::application_user___authorization::register_by_second_step::ApplicationUser__Authorization___RegisterBySecondStep;
-use crate::application_layer::functionality::action_processor::application_user___authorization::reset_password_by_first_step::ApplicationUser__Authorization___ResetPasswordByFirstStep;
-use crate::application_layer::functionality::action_processor::application_user___authorization::reset_password_by_last_step::ApplicationUser__Authorization___ResetPasswordByLastStep;
-use crate::application_layer::functionality::action_processor::application_user___authorization::reset_password_by_second_step::ApplicationUser__Authorization___ResetPasswordBySecondStep;
-use crate::application_layer::functionality::action_processor::application_user___authorization::send_email_for_authorize::ApplicationUser__Authorization___SendEmailForAuthorize;
-use crate::application_layer::functionality::action_processor::application_user___authorization::send_email_for_register::ApplicationUser__Authorization___SendEmailForRegister;
-use crate::application_layer::functionality::action_processor::application_user___authorization::send_email_for_reset_password::ApplicationUser__Authorization___SendEmailForResetPassword;
-use crate::application_layer::functionality::action_processor::channel___base::get_many_by_name_in_subscriptions::Channel__Base___GetManyByNameInSubscriptions;
-use crate::application_layer::functionality::action_processor::channel___base::get_many_by_subscription::Channel__Base___GetManyBySubscription;
-use crate::application_layer::functionality::action_processor::channel___base::get_many_public_by_name::Channel__Base___GetManyPublicByName;
-use crate::application_layer::functionality::action_processor::channel___base::get_one_by_id::Channel__Base___GetOneById;
-use crate::application_layer::functionality::action_processor::channel_subscription___base::create::ChannelSubscription__Base___Create;
-use crate::presentation_layer::functionality::action::route_not_found::RouteNotFound;
-use crate::infrastructure_layer::functionality::service::spawner::tokio_non_blocking_task::TokioNonBlockingTask;
 use aggregate_error::{
     AggregateError,
     Backtrace,
@@ -282,11 +290,7 @@ impl HttpServer {
             return Ok(());
         };
     }
-    fn process_request<T>(
-        request: Request,
-        environment_configuration: &'static EnvironmentConfiguration,
-        cloned: Arc<Cloned<T>>,
-    ) -> impl Future<Output = Response> + Send
+    fn process_request<T>(request: Request, environment_configuration: &'static EnvironmentConfiguration, cloned: Arc<Cloned<T>>) -> impl Future<Output = Response> + Send
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
