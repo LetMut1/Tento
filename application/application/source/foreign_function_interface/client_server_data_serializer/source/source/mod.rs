@@ -101,6 +101,7 @@ use action_processor_incoming_outcoming::action_processor::{
         Precedent as ChannelSubscription__Base___Create___Precedent_,
     },
 };
+use application_user_access_refresh_token_encrypted::ApplicationUserAccessRefreshTokenEncrypted as ApplicationUserAccessRefreshTokenEncrypted_;
 use application_user_access_token_encrypted::ApplicationUserAccessTokenEncrypted as ApplicationUserAccessTokenEncrypted_;
 use libc::{
     c_char,
@@ -492,6 +493,9 @@ pub struct ApplicationUserAccessTokenEncrypted {
 }
 #[repr(C)]
 #[derive(Default)]
+pub struct ApplicationUserAccessRefreshTokenEncrypted(pub C_Vector<c_uchar>);
+#[repr(C)]
+#[derive(Default)]
 pub struct Common1 {
     pub channel: Channel1,
     pub is_application_user_subscribed: bool,
@@ -671,7 +675,7 @@ type ApplicationUser__Authorization___AuthorizeByLastStep___C_Result =
 #[derive(Default)]
 pub struct ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming {
     pub application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
-    pub application_user_access_refresh_token_encrypted: C_Vector<c_uchar>,
+    pub application_user_access_refresh_token_encrypted: ApplicationUserAccessRefreshTokenEncrypted,
 }
 #[repr(C)]
 #[derive(Default)]
@@ -713,7 +717,9 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
                                 serialized: Allocator::<C_Vector<_>>::allocate(data__.application_user_access_token_encrypted.serialized),
                                 encoded: Allocator::<C_Vector<_>>::allocate(data__.application_user_access_token_encrypted.encoded),
                             },
-                            application_user_access_refresh_token_encrypted: Allocator::<C_Vector<_>>::allocate(data__.application_user_access_refresh_token_encrypted),
+                            application_user_access_refresh_token_encrypted: ApplicationUserAccessRefreshTokenEncrypted(
+                                Allocator::<C_Vector<_>>::allocate(data__.application_user_access_refresh_token_encrypted.0),
+                            ),
                         };
                         C_Data::filled(outcoming)
                     }
@@ -777,7 +783,7 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
             if c_result_.data.target.is_filled {
                 Allocator::<C_Vector<_>>::deallocate(&c_result_.data.target.filled.application_user_access_token_encrypted.serialized);
                 Allocator::<C_Vector<_>>::deallocate(&c_result_.data.target.filled.application_user_access_token_encrypted.encoded);
-                Allocator::<C_Vector<_>>::deallocate(&c_result_.data.target.filled.application_user_access_refresh_token_encrypted);
+                Allocator::<C_Vector<_>>::deallocate(&c_result_.data.target.filled.application_user_access_refresh_token_encrypted.0);
             }
         }
     }
@@ -1103,7 +1109,7 @@ pub extern "C" fn application_user___authorization____deauthorize_from_one_devic
 #[repr(C)]
 pub struct ApplicationUser__Authorization___RefreshAccessToken___Incoming {
     pub application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
-    pub application_user_access_refresh_token_encrypted: C_Vector<c_uchar>,
+    pub application_user_access_refresh_token_encrypted: ApplicationUserAccessRefreshTokenEncrypted,
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____refresh_access_token____serialize____allocate(
@@ -1115,7 +1121,9 @@ pub extern "C" fn application_user___authorization____refresh_access_token____se
                 serialized: incoming.application_user_access_token_encrypted.serialized.clone_as_vec()?,
                 encoded: incoming.application_user_access_token_encrypted.encoded.clone_as_vec()?,
             },
-            application_user_access_refresh_token_encrypted: incoming.application_user_access_refresh_token_encrypted.clone_as_vec()?,
+            application_user_access_refresh_token_encrypted: ApplicationUserAccessRefreshTokenEncrypted_(
+                incoming.application_user_access_refresh_token_encrypted.0.clone_as_vec()?,
+            ),
         };
         return Ok(incoming_);
     };
@@ -1135,7 +1143,7 @@ type ApplicationUser__Authorization___RefreshAccessToken___C_Result =
 #[derive(Default)]
 pub struct ApplicationUser__Authorization___RefreshAccessToken___Outcoming {
     pub application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
-    pub application_user_access_refresh_token_encrypted: C_Vector<c_uchar>,
+    pub application_user_access_refresh_token_encrypted: ApplicationUserAccessRefreshTokenEncrypted,
 }
 #[repr(C)]
 #[derive(Default)]
@@ -1169,7 +1177,9 @@ pub extern "C" fn application_user___authorization____refresh_access_token____de
                                 serialized: Allocator::<C_Vector<_>>::allocate(data__.application_user_access_token_encrypted.serialized),
                                 encoded: Allocator::<C_Vector<_>>::allocate(data__.application_user_access_token_encrypted.encoded),
                             },
-                            application_user_access_refresh_token_encrypted: Allocator::<C_Vector<_>>::allocate(data__.application_user_access_refresh_token_encrypted),
+                            application_user_access_refresh_token_encrypted: ApplicationUserAccessRefreshTokenEncrypted(
+                                Allocator::<C_Vector<_>>::allocate(data__.application_user_access_refresh_token_encrypted.0),
+                            ),
                         };
                         C_Data::filled(outcoming)
                     }
@@ -1216,7 +1226,7 @@ pub extern "C" fn application_user___authorization____refresh_access_token____de
             if c_result_.data.target.is_filled {
                 Allocator::<C_Vector<_>>::deallocate(&c_result_.data.target.filled.application_user_access_token_encrypted.serialized);
                 Allocator::<C_Vector<_>>::deallocate(&c_result_.data.target.filled.application_user_access_token_encrypted.encoded);
-                Allocator::<C_Vector<_>>::deallocate(&c_result_.data.target.filled.application_user_access_refresh_token_encrypted);
+                Allocator::<C_Vector<_>>::deallocate(&c_result_.data.target.filled.application_user_access_refresh_token_encrypted.0);
             }
         }
     }
@@ -1469,7 +1479,7 @@ type ApplicationUser__Authorization___RegisterByLastStep___C_Result =
 #[derive(Default)]
 pub struct ApplicationUser__Authorization___RegisterByLastStep___Outcoming {
     pub application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
-    pub application_user_access_refresh_token_encrypted: C_Vector<c_uchar>,
+    pub application_user_access_refresh_token_encrypted: ApplicationUserAccessRefreshTokenEncrypted,
 }
 #[repr(C)]
 #[derive(Default)]
@@ -1507,7 +1517,9 @@ pub extern "C" fn application_user___authorization____register_by_last_step____d
                                 serialized: Allocator::<C_Vector<_>>::allocate(data__.application_user_access_token_encrypted.serialized),
                                 encoded: Allocator::<C_Vector<_>>::allocate(data__.application_user_access_token_encrypted.encoded),
                             },
-                            application_user_access_refresh_token_encrypted: Allocator::<C_Vector<_>>::allocate(data__.application_user_access_refresh_token_encrypted),
+                            application_user_access_refresh_token_encrypted: ApplicationUserAccessRefreshTokenEncrypted(
+                                Allocator::<C_Vector<_>>::allocate(data__.application_user_access_refresh_token_encrypted.0),
+                            ),
                         };
                         C_Data::filled(outcoming)
                     }
@@ -1578,7 +1590,7 @@ pub extern "C" fn application_user___authorization____register_by_last_step____d
             if c_result_.data.target.is_filled {
                 Allocator::<C_Vector<_>>::deallocate(&c_result_.data.target.filled.application_user_access_token_encrypted.serialized);
                 Allocator::<C_Vector<_>>::deallocate(&c_result_.data.target.filled.application_user_access_token_encrypted.encoded);
-                Allocator::<C_Vector<_>>::deallocate(&c_result_.data.target.filled.application_user_access_refresh_token_encrypted);
+                Allocator::<C_Vector<_>>::deallocate(&c_result_.data.target.filled.application_user_access_refresh_token_encrypted.0);
             }
         }
     }
@@ -3168,7 +3180,7 @@ mod test {
                             serialized: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
                             encoded: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
                         },
-                        application_user_access_refresh_token_encrypted: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
+                        application_user_access_refresh_token_encrypted: ApplicationUserAccessRefreshTokenEncrypted_(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     };
                     let unified_report = UnifiedReport::<
                         ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming_,
@@ -3434,7 +3446,7 @@ mod test {
                             serialized: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
                             encoded: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
                         },
-                        application_user_access_refresh_token_encrypted: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
+                        application_user_access_refresh_token_encrypted: ApplicationUserAccessRefreshTokenEncrypted_(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     };
                     let unified_report = UnifiedReport::<
                         ApplicationUser__Authorization___RefreshAccessToken___Outcoming_,
@@ -3634,7 +3646,7 @@ mod test {
                             serialized: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
                             encoded: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
                         },
-                        application_user_access_refresh_token_encrypted: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
+                        application_user_access_refresh_token_encrypted: ApplicationUserAccessRefreshTokenEncrypted_(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     };
                     let unified_report = UnifiedReport::<
                         ApplicationUser__Authorization___RegisterByLastStep___Outcoming_,
@@ -4651,7 +4663,9 @@ mod test {
                         serialized: Allocator::<C_Vector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                         encoded: Allocator::<C_Vector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     },
-                    application_user_access_refresh_token_encrypted: Allocator::<C_Vector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+                    application_user_access_refresh_token_encrypted: ApplicationUserAccessRefreshTokenEncrypted(
+                        Allocator::<C_Vector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec())
+                    ),
                 };
                 let allocator = move |incoming: *mut ApplicationUser__Authorization___RefreshAccessToken___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
                     return application_user___authorization____refresh_access_token____serialize____allocate(incoming);
@@ -4667,7 +4681,7 @@ mod test {
                 )?;
                 Allocator::<C_Vector<_>>::deallocate(&incoming.application_user_access_token_encrypted.serialized);
                 Allocator::<C_Vector<_>>::deallocate(&incoming.application_user_access_token_encrypted.encoded);
-                Allocator::<C_Vector<_>>::deallocate(&incoming.application_user_access_refresh_token_encrypted);
+                Allocator::<C_Vector<_>>::deallocate(&incoming.application_user_access_refresh_token_encrypted.0);
                 return Ok(());
             }
             #[test]

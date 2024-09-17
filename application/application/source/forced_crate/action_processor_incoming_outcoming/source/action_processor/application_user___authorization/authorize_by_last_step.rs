@@ -5,6 +5,7 @@ use serde::{
     Serialize,
 };
 use application_user_access_token_encrypted::ApplicationUserAccessTokenEncrypted;
+use application_user_access_refresh_token_encrypted::ApplicationUserAccessRefreshTokenEncrypted;
 #[derive(Serialize, Deserialize)]
 pub struct Incoming {
     pub application_user__id: i64,
@@ -14,7 +15,7 @@ pub struct Incoming {
 #[derive(Serialize, Deserialize)]
 pub struct Outcoming {
     pub application_user_access_token_encrypted: ApplicationUserAccessTokenEncrypted,
-    pub application_user_access_refresh_token_encrypted: Vec<u8>,
+    pub application_user_access_refresh_token_encrypted: ApplicationUserAccessRefreshTokenEncrypted,
 }
 r#enum!(
     pub enum Precedent {

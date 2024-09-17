@@ -6,6 +6,7 @@ version = 3
 name = "action_processor_incoming_outcoming"
 version = "1.0.0"
 dependencies = [
+ "application_user_access_refresh_token_encrypted",
  "application_user_access_token_encrypted",
  "common_precedent",
  "macro_rules",
@@ -128,6 +129,7 @@ version = "1.0.0"
 dependencies = [
  "action_processor_incoming_outcoming",
  "aggregate_error",
+ "application_user_access_refresh_token_encrypted",
  "application_user_access_token_encrypted",
  "argon2",
  "base64",
@@ -160,6 +162,13 @@ dependencies = [
  "unified_report",
  "uuid",
  "void",
+]
+
+[[package]]
+name = "application_user_access_refresh_token_encrypted"
+version = "1.0.0"
+dependencies = [
+ "serde",
 ]
 
 [[package]]

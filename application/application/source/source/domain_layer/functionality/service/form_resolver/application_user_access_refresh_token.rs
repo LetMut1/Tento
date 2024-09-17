@@ -3,9 +3,7 @@ use crate::{
     domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken,
     infrastructure_layer::{
         data::{
-            control_type::{
-                MessagePack,
-            },
+            control_type::MessagePack,
             environment_configuration::environment_configuration::EnvironmentConfiguration,
         },
         functionality::service::{
@@ -20,26 +18,31 @@ use crate::{
         },
     },
 };
+use application_user_access_refresh_token_encrypted::ApplicationUserAccessRefreshTokenEncrypted;
 use aggregate_error::AggregateError;
 impl FormResolver<ApplicationUserAccessRefreshToken<'_>> {
     pub fn to_encrypted<'a>(
         environment_configuration: &'static EnvironmentConfiguration,
         application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>,
-    ) -> Result<Vec<u8>, AggregateError> {
-        return Encoder::<HmacSha3_512>::encode(
-            environment_configuration.encryption.private_key.application_user_access_refresh_token.as_bytes(),
-            Serializer::<MessagePack>::serialize(application_user_access_refresh_token)?.as_slice(),    // TODO TODO TODO Serializer::<MessagePack> - Нужен любой фаст алгоритм сериализации.
+    ) -> Result<ApplicationUserAccessRefreshTokenEncrypted, AggregateError> {
+        return Ok(
+            ApplicationUserAccessRefreshTokenEncrypted(
+                Encoder::<HmacSha3_512>::encode(
+                    environment_configuration.encryption.private_key.application_user_access_refresh_token.as_bytes(),
+                    Serializer::<MessagePack>::serialize(application_user_access_refresh_token)?.as_slice(),    // TODO TODO TODO Serializer::<MessagePack> - Нужен любой фаст алгоритм сериализации.
+                )?,
+            ),
         );
     }
     pub fn is_valid<'a>(
         environment_configuration: &'static EnvironmentConfiguration,
         application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>,
-        application_user_access_refresh_token_encrypted: &'a [u8],
+        application_user_access_refresh_token_encrypted: &'a ApplicationUserAccessRefreshTokenEncrypted,
     ) -> Result<bool, AggregateError> {
         return Encoder::<HmacSha3_512>::is_valid(
             environment_configuration.encryption.private_key.application_user_access_refresh_token.as_bytes(),
             Serializer::<MessagePack>::serialize(application_user_access_refresh_token)?.as_slice(),
-            application_user_access_refresh_token_encrypted,
+            application_user_access_refresh_token_encrypted.0.as_slice(),
         );
     }
 }

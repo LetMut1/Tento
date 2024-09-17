@@ -6,6 +6,7 @@ version = 3
 name = "action_processor_incoming_outcoming"
 version = "1.0.0"
 dependencies = [
+ "application_user_access_refresh_token_encrypted",
  "application_user_access_token_encrypted",
  "common_precedent",
  "macro_rules",
@@ -63,6 +64,13 @@ checksum = "5bf74e1b6e971609db8ca7a9ce79fd5768ab6ae46441c572e46cf596f59e57f8"
 dependencies = [
  "anstyle",
  "windows-sys 0.52.0",
+]
+
+[[package]]
+name = "application_user_access_refresh_token_encrypted"
+version = "1.0.0"
+dependencies = [
+ "serde",
 ]
 
 [[package]]
@@ -169,6 +177,7 @@ version = "1.0.0"
 dependencies = [
  "action_processor_incoming_outcoming",
  "aggregate_error",
+ "application_user_access_refresh_token_encrypted",
  "application_user_access_token_encrypted",
  "cargo-emit",
  "cbindgen",

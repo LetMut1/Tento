@@ -22,6 +22,7 @@ edition = "2021"
 workspace = true
 
 [dependencies]
+application_user_access_refresh_token_encrypted = { path = "./../application_user_access_refresh_token_encrypted", package = "application_user_access_refresh_token_encrypted", version = "=1.0.0", default-features = true, features = [], optional = false }
 application_user_access_token_encrypted = { path = "./../application_user_access_token_encrypted", package = "application_user_access_token_encrypted", version = "=1.0.0", default-features = true, features = [], optional = false }
 common_precedent = { path = "./../common_precedent", package = "common_precedent", version = "=1.0.0", default-features = true, features = [], optional = false }
 macro_rules = { path = "./../macro_rules", package = "macro_rules", version = "=1.0.0", default-features = true, features = [], optional = false }
