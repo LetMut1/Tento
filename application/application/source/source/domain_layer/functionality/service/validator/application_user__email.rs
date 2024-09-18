@@ -15,7 +15,7 @@ impl Validator<ApplicationUser_Email> {
         let regular_expression = match REGULAR_EXPRESSION.get() {
             Some(regular_expression_) => regular_expression_,
             None => {
-                if let Err(_) = REGULAR_EXPRESSION.set(
+                if let Result::Err(_) = REGULAR_EXPRESSION.set(
                     Regex::new(ApplicationUser_Email::REGULAR_EXPRESSION).into_logic(
                         Backtrace::new(
                             line!(),
@@ -23,7 +23,7 @@ impl Validator<ApplicationUser_Email> {
                         ),
                     )?,
                 ) {
-                    return Err(
+                    return Result::Err(
                         AggregateError::new_logic_(
                             Common::ValueAlreadyExist,
                             Backtrace::new(
@@ -41,6 +41,6 @@ impl Validator<ApplicationUser_Email> {
                 )?
             }
         };
-        return Ok(regular_expression.is_match(application_user__email) && application_user__email.chars().count() <= ApplicationUser_Email::MAXIMUM_LENGTH);
+        return Result::Ok(regular_expression.is_match(application_user__email) && application_user__email.chars().count() <= ApplicationUser_Email::MAXIMUM_LENGTH);
     }
 }

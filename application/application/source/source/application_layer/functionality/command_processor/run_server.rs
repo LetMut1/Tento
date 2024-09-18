@@ -46,7 +46,7 @@ impl CommandProcessor<RunServer> {
         }
         let runtime = Self::initialize_runtime(environment_configuration)?;
         runtime.block_on(HttpServer::run(environment_configuration))?;
-        return Ok(());
+        return Result::Ok(());
     }
     fn initialize_environment() -> Result<&'static EnvironmentConfiguration, AggregateError> {
         let environment_configuration_file_path = format!(
@@ -61,10 +61,10 @@ impl CommandProcessor<RunServer> {
         );
         let environment_configuration = Loader::<EnvironmentConfiguration>::load_from_file(environment_configuration_file_path.as_str())?;
         return match ENVIRONMENT_CONFIGURATION.get() {
-            Some(environment_configuration__) => Ok(environment_configuration__),
+            Some(environment_configuration__) => Result::Ok(environment_configuration__),
             None => {
-                if let Err(_) = ENVIRONMENT_CONFIGURATION.set(environment_configuration) {
-                    return Err(
+                if let Result::Err(_) = ENVIRONMENT_CONFIGURATION.set(environment_configuration) {
+                    return Result::Err(
                         AggregateError::new_logic_(
                             Common::ValueAlreadyExist,
                             Backtrace::new(
@@ -92,13 +92,13 @@ impl CommandProcessor<RunServer> {
         );
         let (non_blocking, worker_guard) = NonBlockingBuilder::default().finish(rolling_file_appender);
         Self::initialize_tracing_subscriber(non_blocking)?;
-        return Ok(worker_guard);
+        return Result::Ok(worker_guard);
     }
     #[cfg(not(feature = "file_log"))]
     fn initialize_stdout_logger() -> Result<WorkerGuard, AggregateError> {
         let (non_blocking, worker_guard) = NonBlockingBuilder::default().finish(std::io::stdout());
         Self::initialize_tracing_subscriber(non_blocking)?;
-        return Ok(worker_guard);
+        return Result::Ok(worker_guard);
     }
     fn initialize_tracing_subscriber(non_blocking: NonBlocking) -> Result<(), AggregateError> {
         let fmt_subscriber = FmtSubscriber::builder()
@@ -116,14 +116,14 @@ impl CommandProcessor<RunServer> {
                 file!(),
             ),
         )?;
-        return Ok(());
+        return Result::Ok(());
     }
     fn initialize_runtime(environment_configuration: &'static EnvironmentConfiguration) -> Result<Runtime, AggregateError> {
         if environment_configuration.tokio_runtime.maximum_blocking_threads_quantity == 0
             || environment_configuration.tokio_runtime.worker_threads_quantity == 0
             || environment_configuration.tokio_runtime.worker_thread_stack_size < (1024 * 1024)
         {
-            return Err(
+            return Result::Err(
                 AggregateError::new_logic(
                     "Invalid Tokio runtime configuration.".into(),
                     Backtrace::new(
@@ -133,7 +133,7 @@ impl CommandProcessor<RunServer> {
                 ),
             );
         }
-        return Ok(
+        return Result::Ok(
             RuntimeBuilder::new_multi_thread()
                 .max_blocking_threads(environment_configuration.tokio_runtime.maximum_blocking_threads_quantity)
                 .worker_threads(environment_configuration.tokio_runtime.worker_threads_quantity)

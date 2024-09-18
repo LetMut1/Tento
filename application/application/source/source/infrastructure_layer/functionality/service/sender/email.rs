@@ -25,7 +25,7 @@ impl Sender<Email> {
     ) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             // TODO сделать посторяему отправку при ошибке на количество времени (отправлять через секунду, пока не выйдет время) или раз.
-            return Ok(());
+            return Result::Ok(());
         };
     }
 }
@@ -62,6 +62,6 @@ impl Sender<Email> {
 //         .credentials(creds)
 //         .build();
 // match mailer.send(message).await {
-//     Ok(_) => println!("Email sent successfully!"),
-//     Err(e) => panic!("Could not send email: {e:?}"),
+//     Result::Ok(_) => println!("Email sent successfully!"),
+//     Result::Err(e) => panic!("Could not send email: {e:?}"),
 // }

@@ -11,7 +11,7 @@ impl Spawner<TokioBlockingTask> {
     {
         tokio::task::spawn_blocking(
             move || -> () {
-                if let Err(aggregate_error) = closure() {
+                if let Result::Err(aggregate_error) = closure() {
                     Logger::<AggregateError>::log(&aggregate_error);
                 }
                 return ();

@@ -565,6 +565,6 @@ impl Creator<Router> {
                     ),
                 )?;
         }
-        return Ok(router);
+        return Result::Ok(router);
     }
 }

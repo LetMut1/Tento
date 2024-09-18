@@ -52,7 +52,7 @@ impl Resolver<PostgresqlTransaction> {
                         file!(),
                     ),
                 )?;
-            return Ok(Self::new());
+            return Result::Ok(Self::new());
         };
     }
     pub fn commit<'a>(self, connection: &'a Connection) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
@@ -70,7 +70,7 @@ impl Resolver<PostgresqlTransaction> {
                         file!(),
                     ),
                 )?;
-            return Ok(());
+            return Result::Ok(());
         };
     }
     pub fn rollback<'a>(self, connection: &'a Connection) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
@@ -88,7 +88,7 @@ impl Resolver<PostgresqlTransaction> {
                         file!(),
                     ),
                 )?;
-            return Ok(());
+            return Result::Ok(());
         };
     }
 }

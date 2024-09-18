@@ -82,7 +82,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
     {
         return async move {
             if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming.application_user_device__id.as_str()) {
-                return Err(
+                return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
                             line!(),
@@ -92,7 +92,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
                 );
             }
             if !Validator::<ApplicationUser_Id>::is_valid(incoming.application_user__id) {
-                return Err(
+                return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
                             line!(),
@@ -112,7 +112,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
             {
                 Some(application_user_) => application_user_,
                 None => {
-                    return Ok(UnifiedReport::precedent(Precedent::ApplicationUser_NotFound));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUser_NotFound));
                 }
             };
             let database_2_postgresql_pooled_connection = inner.get_database_2_postgresql_pooled_connection().await?;
@@ -128,7 +128,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
             {
                 Some(application_user_authorization_token_) => application_user_authorization_token_,
                 None => {
-                    return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAuthorizationToken_NotFound));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserAuthorizationToken_NotFound));
                 }
             };
             if Resolver::<Expiration>::is_expired(application_user_authorization_token.expires_at) {
@@ -140,10 +140,10 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
                     },
                 )
                 .await?;
-                return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAuthorizationToken_AlreadyExpired));
+                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserAuthorizationToken_AlreadyExpired));
             }
             if !Resolver::<Expiration>::is_expired(application_user_authorization_token.can_be_resent_from) {
-                return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAuthorizationToken_TimeToResendHasNotCome));
+                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserAuthorizationToken_TimeToResendHasNotCome));
             }
             application_user_authorization_token.can_be_resent_from = Generator::<ApplicationUserAuthorizationToken_CanBeResentFrom>::generate()?;
             PostgresqlRepository::<ApplicationUserAuthorizationToken>::update_3(
@@ -167,13 +167,13 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
                         incoming.application_user_device__id.as_str(),
                     )
                     .await?;
-                    return Ok(());
+                    return Result::Ok(());
                 },
             );
             let outcoming = Outcoming {
                 application_user_authorization_token__can_be_resent_from: application_user_authorization_token.can_be_resent_from,
             };
-            return Ok(UnifiedReport::target_filled(outcoming));
+            return Result::Ok(UnifiedReport::target_filled(outcoming));
         };
     }
 }

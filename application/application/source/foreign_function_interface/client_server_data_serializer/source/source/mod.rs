@@ -282,11 +282,11 @@ pub struct C_String {
 impl C_String {
     fn clone_as_string<'a>(&'a self) -> Result<String, Box<dyn StdError + 'static>> {
         if self.pointer.is_null() {
-            return Err(NULL_POINTER_ERROR_MESAGE.into());
+            return Result::Err(NULL_POINTER_ERROR_MESAGE.into());
         }
         let c_str = unsafe { CStr::from_ptr(self.pointer as *const _) };
         let c_string = c_str.to_str()?.to_string();
-        return Ok(c_string);
+        return Result::Ok(c_string);
     }
 }
 impl Default for C_String {
@@ -306,7 +306,7 @@ where
     T: Clone,
 {
     fn clone_as_vec<'a>(&'a self) -> Result<Vec<T>, Box<dyn StdError + 'static>> {
-        return Ok(
+        return Result::Ok(
             self.as_slice()?.to_vec()
         )
     }
@@ -314,9 +314,9 @@ where
 impl<T> C_Vector<T> {
     fn as_slice<'a>(&'a self) -> Result<&'a [T], Box<dyn StdError + 'static>> {
         if self.pointer.is_null() {
-            return Err(NULL_POINTER_ERROR_MESAGE.into());
+            return Result::Err(NULL_POINTER_ERROR_MESAGE.into());
         }
-        return Ok(self.as_slice_unchecked());
+        return Result::Ok(self.as_slice_unchecked());
     }
     fn as_slice_unchecked<'a>(&'a self) -> &'a [T] {
         return unsafe {
@@ -443,14 +443,14 @@ impl Transformer<ServerResponseData> {
         let unified_report = match Serializer_::deserialize::<'_, UnifiedReport<O1, P1>>(
             vector_of_bytes_.as_slice_unchecked(),
         ) {
-            Ok(unified_report_) => unified_report_,
-            Err(_) => {
+            Result::Ok(unified_report_) => unified_report_,
+            Result::Err(_) => {
                 return C_Result::error().into_raw();
             }
         };
         let c_unified_report = match converter(unified_report) {
-            Ok(c_unified_report_) => c_unified_report_,
-            Err(_) => {
+            Result::Ok(c_unified_report_) => c_unified_report_,
+            Result::Err(_) => {
                 return C_Result::error().into_raw();
             }
         };
@@ -469,14 +469,14 @@ impl Transformer<ServerRequestData> {
         }
         let incoming_ = unsafe { &*incoming };
         let incoming__ = match converter(incoming_) {
-            Ok(incoming___) => incoming___,
-            Err(_) => {
+            Result::Ok(incoming___) => incoming___,
+            Result::Err(_) => {
                 return C_Result::error().into_raw();
             }
         };
         let data = match Serializer_::serialize(&incoming__) {
-            Ok(data_) => data_,
-            Err(_) => {
+            Result::Ok(data_) => data_,
+            Result::Err(_) => {
                 return C_Result::error().into_raw();
             }
         };
@@ -554,7 +554,7 @@ pub extern "C" fn application_user___authorization____authorize_by_first_step___
             application_user__email___or___application_user__nickname: incoming.application_user__email___or___application_user__nickname.clone_as_string()?,
             application_user__password: incoming.application_user__password.clone_as_string()?,
         };
-        return Ok(incoming_);
+        return Result::Ok(incoming_);
     };
     return Transformer::<ServerRequestData>::transform(
         incoming,
@@ -627,7 +627,7 @@ pub extern "C" fn application_user___authorization____authorize_by_first_step___
                 C_UnifiedReport::precedent(precedent_)
             }
         };
-        return Ok(unified_report_);
+        return Result::Ok(unified_report_);
     };
     return Transformer::<ServerResponseData>::transform(
         c_vector_of_bytes,
@@ -657,7 +657,7 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
             application_user_device__id: incoming.application_user_device__id.clone_as_string()?,
             application_user_authorization_token__value: incoming.application_user_authorization_token__value.clone_as_string()?,
         };
-        return Ok(incoming_);
+        return Result::Ok(incoming_);
     };
     return Transformer::<ServerRequestData>::transform(
         incoming,
@@ -763,7 +763,7 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
                 C_UnifiedReport::precedent(precedent_)
             }
         };
-        return Ok(unified_report_);
+        return Result::Ok(unified_report_);
     };
     return Transformer::<ServerResponseData>::transform(
         c_vector_of_bytes,
@@ -801,7 +801,7 @@ pub extern "C" fn application_user___authorization____check_email_for_existing__
         let incoming_ = ApplicationUser__Authorization___CheckEmailForExisting___Incoming_ {
             application_user__email: incoming.application_user__email.clone_as_string()?,
         };
-        return Ok(incoming_);
+        return Result::Ok(incoming_);
     };
     return Transformer::<ServerRequestData>::transform(
         incoming,
@@ -846,7 +846,7 @@ pub extern "C" fn application_user___authorization____check_email_for_existing__
             }
         };
 
-        return Ok(unified_report_);
+        return Result::Ok(unified_report_);
     };
     return Transformer::<ServerResponseData>::transform(
         c_vector_of_bytes,
@@ -872,7 +872,7 @@ pub extern "C" fn application_user___authorization____check_nickname_for_existin
         let incoming_ = ApplicationUser__Authorization___CheckNicknameForExisting___Incoming_ {
             application_user__nickname: incoming.application_user__nickname.clone_as_string()?,
         };
-        return Ok(incoming_);
+        return Result::Ok(incoming_);
     };
     return Transformer::<ServerRequestData>::transform(
         incoming,
@@ -918,7 +918,7 @@ pub extern "C" fn application_user___authorization____check_nickname_for_existin
             }
         };
 
-        return Ok(unified_report_);
+        return Result::Ok(unified_report_);
     };
     return Transformer::<ServerResponseData>::transform(
         c_vector_of_bytes,
@@ -947,7 +947,7 @@ pub extern "C" fn application_user___authorization____deauthorize_from_all_devic
                 encoded: incoming.application_user_access_token_encoded.encoded.clone_as_vec()?,
             }
         };
-        return Ok(incoming_);
+        return Result::Ok(incoming_);
     };
     return Transformer::<ServerRequestData>::transform(
         incoming,
@@ -1005,7 +1005,7 @@ pub extern "C" fn application_user___authorization____deauthorize_from_all_devic
             }
         };
 
-        return Ok(unified_report_);
+        return Result::Ok(unified_report_);
     };
     return Transformer::<ServerResponseData>::transform(
         c_vector_of_bytes,
@@ -1042,7 +1042,7 @@ pub extern "C" fn application_user___authorization____deauthorize_from_one_devic
                 encoded: incoming.application_user_access_token_encoded.encoded.clone_as_vec()?,
             }
         };
-        return Ok(incoming_);
+        return Result::Ok(incoming_);
     };
     return Transformer::<ServerRequestData>::transform(
         incoming,
@@ -1092,7 +1092,7 @@ pub extern "C" fn application_user___authorization____deauthorize_from_one_devic
             }
         };
 
-        return Ok(unified_report_);
+        return Result::Ok(unified_report_);
     };
     return Transformer::<ServerResponseData>::transform(
         c_vector_of_bytes,
@@ -1125,7 +1125,7 @@ pub extern "C" fn application_user___authorization____refresh_access_token____se
                 incoming.application_user_access_refresh_token_encoded.0.clone_as_vec()?,
             ),
         };
-        return Ok(incoming_);
+        return Result::Ok(incoming_);
     };
     return Transformer::<ServerRequestData>::transform(
         incoming,
@@ -1206,7 +1206,7 @@ pub extern "C" fn application_user___authorization____refresh_access_token____de
                 C_UnifiedReport::precedent(precedent_)
             }
         };
-        return Ok(unified_report_);
+        return Result::Ok(unified_report_);
     };
     return Transformer::<ServerResponseData>::transform(
         c_vector_of_bytes,
@@ -1246,7 +1246,7 @@ pub extern "C" fn application_user___authorization____register_by_first_step____
             application_user__email: incoming.application_user__email.clone_as_string()?,
             application_user_device__id: incoming.application_user_device__id.clone_as_string()?,
         };
-        return Ok(incoming_);
+        return Result::Ok(incoming_);
     };
     return Transformer::<ServerRequestData>::transform(
         incoming,
@@ -1317,7 +1317,7 @@ pub extern "C" fn application_user___authorization____register_by_first_step____
                 C_UnifiedReport::precedent(precedent_)
             }
         };
-        return Ok(unified_report_);
+        return Result::Ok(unified_report_);
     };
     return Transformer::<ServerResponseData>::transform(
         c_vector_of_bytes,
@@ -1347,7 +1347,7 @@ pub extern "C" fn application_user___authorization____register_by_second_step___
             application_user_device__id: incoming.application_user_device__id.clone_as_string()?,
             application_user_registration_token__value: incoming.application_user_registration_token__value.clone_as_string()?,
         };
-        return Ok(incoming_);
+        return Result::Ok(incoming_);
     };
     return Transformer::<ServerRequestData>::transform(
         incoming,
@@ -1427,7 +1427,7 @@ pub extern "C" fn application_user___authorization____register_by_second_step___
             }
         };
 
-        return Ok(unified_report_);
+        return Result::Ok(unified_report_);
     };
     return Transformer::<ServerResponseData>::transform(
         c_vector_of_bytes,
@@ -1461,7 +1461,7 @@ pub extern "C" fn application_user___authorization____register_by_last_step____s
             application_user__password: incoming.application_user__password.clone_as_string()?,
             application_user_registration_token__value: incoming.application_user_registration_token__value.clone_as_string()?,
         };
-        return Ok(incoming_);
+        return Result::Ok(incoming_);
     };
     return Transformer::<ServerRequestData>::transform(
         incoming,
@@ -1570,7 +1570,7 @@ pub extern "C" fn application_user___authorization____register_by_last_step____d
                 C_UnifiedReport::precedent(precedent_)
             }
         };
-        return Ok(unified_report_);
+        return Result::Ok(unified_report_);
     };
     return Transformer::<ServerResponseData>::transform(
         c_vector_of_bytes,
@@ -1610,7 +1610,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_first_st
             application_user__email: incoming.application_user__email.clone_as_string()?,
             application_user_device__id: incoming.application_user_device__id.clone_as_string()?,
         };
-        return Ok(incoming_);
+        return Result::Ok(incoming_);
     };
     return Transformer::<ServerRequestData>::transform(
         incoming,
@@ -1683,7 +1683,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_first_st
                 C_UnifiedReport::precedent(precedent_)
             }
         };
-        return Ok(unified_report_);
+        return Result::Ok(unified_report_);
     };
     return Transformer::<ServerResponseData>::transform(
         c_vector_of_bytes,
@@ -1713,7 +1713,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_second_s
             application_user_device__id: incoming.application_user_device__id.clone_as_string()?,
             application_user_reset_password_token__value: incoming.application_user_reset_password_token__value.clone_as_string()?,
         };
-        return Ok(incoming_);
+        return Result::Ok(incoming_);
     };
     return Transformer::<ServerRequestData>::transform(
         incoming,
@@ -1794,7 +1794,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_second_s
             }
         };
 
-        return Ok(unified_report_);
+        return Result::Ok(unified_report_);
     };
     return Transformer::<ServerResponseData>::transform(
         c_vector_of_bytes,
@@ -1826,7 +1826,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_last_ste
             application_user__password: incoming.application_user__password.clone_as_string()?,
             application_user_reset_password_token__value: incoming.application_user_reset_password_token__value.clone_as_string()?,
         };
-        return Ok(incoming_);
+        return Result::Ok(incoming_);
     };
     return Transformer::<ServerRequestData>::transform(
         incoming,
@@ -1904,7 +1904,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_last_ste
             }
         };
 
-        return Ok(unified_report_);
+        return Result::Ok(unified_report_);
     };
     return Transformer::<ServerResponseData>::transform(
         c_vector_of_bytes,
@@ -1932,7 +1932,7 @@ pub extern "C" fn application_user___authorization____send_email_for_register___
             application_user__email: incoming.application_user__email.clone_as_string()?,
             application_user_device__id: incoming.application_user_device__id.clone_as_string()?,
         };
-        return Ok(incoming_);
+        return Result::Ok(incoming_);
     };
     return Transformer::<ServerRequestData>::transform(
         incoming,
@@ -2020,7 +2020,7 @@ pub extern "C" fn application_user___authorization____send_email_for_register___
                 C_UnifiedReport::precedent(precedent_)
             }
         };
-        return Ok(unified_report_);
+        return Result::Ok(unified_report_);
     };
     return Transformer::<ServerResponseData>::transform(
         c_vector_of_bytes,
@@ -2048,7 +2048,7 @@ pub extern "C" fn application_user___authorization____send_email_for_authorize__
             application_user_device__id: incoming.application_user_device__id.clone_as_string()?,
             application_user__id: incoming.application_user__id,
         };
-        return Ok(incoming_);
+        return Result::Ok(incoming_);
     };
     return Transformer::<ServerRequestData>::transform(
         incoming,
@@ -2136,7 +2136,7 @@ pub extern "C" fn application_user___authorization____send_email_for_authorize__
                 C_UnifiedReport::precedent(precedent_)
             }
         };
-        return Ok(unified_report_);
+        return Result::Ok(unified_report_);
     };
     return Transformer::<ServerResponseData>::transform(
         c_vector_of_bytes,
@@ -2164,7 +2164,7 @@ pub extern "C" fn application_user___authorization____send_email_for_reset_passw
             application_user__id: incoming.application_user__id,
             application_user_device__id: incoming.application_user_device__id.clone_as_string()?,
         };
-        return Ok(incoming_);
+        return Result::Ok(incoming_);
     };
     return Transformer::<ServerRequestData>::transform(
         incoming,
@@ -2259,7 +2259,7 @@ pub extern "C" fn application_user___authorization____send_email_for_reset_passw
                 C_UnifiedReport::precedent(precedent_)
             }
         };
-        return Ok(unified_report_);
+        return Result::Ok(unified_report_);
     };
     return Transformer::<ServerResponseData>::transform(
         c_vector_of_bytes,
@@ -2300,7 +2300,7 @@ pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____seriali
                 requery___channel__name,
                 limit: incoming.limit,
             };
-            return Ok(incoming_);
+            return Result::Ok(incoming_);
         };
     return Transformer::<ServerRequestData>::transform(
         incoming,
@@ -2394,7 +2394,7 @@ pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____deseria
                 C_UnifiedReport::precedent(precedent_)
             }
         };
-        return Ok(unified_report_);
+        return Result::Ok(unified_report_);
     };
     return Transformer::<ServerResponseData>::transform(
         c_vector_of_bytes,
@@ -2449,7 +2449,7 @@ pub extern "C" fn channel___base____get_many_by_subscription____serialize____all
             requery___channel__id,
             limit: incoming.limit,
         };
-        return Ok(incoming_);
+        return Result::Ok(incoming_);
     };
     return Transformer::<ServerRequestData>::transform(
         incoming,
@@ -2541,7 +2541,7 @@ pub extern "C" fn channel___base____get_many_by_subscription____deserialize____a
                 C_UnifiedReport::precedent(precedent_)
             }
         };
-        return Ok(unified_report_);
+        return Result::Ok(unified_report_);
     };
     return Transformer::<ServerResponseData>::transform(
         c_vector_of_bytes,
@@ -2598,7 +2598,7 @@ pub extern "C" fn channel___base____get_many_public_by_name____serialize____allo
             requery___channel__name,
             limit: incoming.limit,
         };
-        return Ok(incoming_);
+        return Result::Ok(incoming_);
     };
     return Transformer::<ServerRequestData>::transform(
         incoming,
@@ -2689,7 +2689,7 @@ pub extern "C" fn channel___base____get_many_public_by_name____deserialize____al
                 C_UnifiedReport::precedent(precedent_)
             }
         };
-        return Ok(unified_report_);
+        return Result::Ok(unified_report_);
     };
     return Transformer::<ServerResponseData>::transform(
         c_vector_of_bytes,
@@ -2737,7 +2737,7 @@ pub extern "C" fn channel___base____get_one_by_id____serialize____allocate(incom
             },
             channel__id: incoming.channel__id,
         };
-        return Ok(incoming_);
+        return Result::Ok(incoming_);
     };
     return Transformer::<ServerRequestData>::transform(
         incoming,
@@ -2870,7 +2870,7 @@ pub extern "C" fn channel___base____get_one_by_id____deserialize____allocate(c_v
             }
         };
 
-        return Ok(unified_report_);
+        return Result::Ok(unified_report_);
     };
     return Transformer::<ServerResponseData>::transform(
         c_vector_of_bytes,
@@ -2925,7 +2925,7 @@ pub extern "C" fn channel_subscription___base____create____serialize____allocate
             },
             channel__id: incoming.channel__id,
         };
-        return Ok(incoming_);
+        return Result::Ok(incoming_);
     };
     return Transformer::<ServerRequestData>::transform(
         incoming,
@@ -3001,7 +3001,7 @@ pub extern "C" fn channel_subscription___base____create____deserialize____alloca
             }
         };
 
-        return Ok(unified_report_);
+        return Result::Ok(unified_report_);
     };
     return Transformer::<ServerResponseData>::transform(
         c_vector_of_bytes,
@@ -3028,10 +3028,10 @@ mod test {
                 let _ = c_vector.clone_as_vec()?;
             }
             if c_vector.pointer.is_null() {
-                return Err(ALLOCATION_ERROR.into());
+                return Result::Err(ALLOCATION_ERROR.into());
             }
             Allocator::<C_Vector<_>>::deallocate(&c_vector);
-            return Ok(());
+            return Result::Ok(());
         }
         #[test]
         fn c_string_clone() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3040,10 +3040,10 @@ mod test {
                 let _ = c_string.clone_as_string()?;
             }
             if c_string.pointer.is_null() {
-                return Err(ALLOCATION_ERROR.into());
+                return Result::Err(ALLOCATION_ERROR.into());
             }
             Allocator::<C_String>::deallocate(&c_string);
-            return Ok(());
+            return Result::Ok(());
         }
         mod server_response_data_deserialization {
             use super::*;
@@ -3066,14 +3066,14 @@ mod test {
                 let c_result = allocator(c_vector_);
                 let c_result_ = unsafe { &*c_result };
                 if !c_result_.is_data {
-                    return Err(ALLOCATION_ERROR.into());
+                    return Result::Err(ALLOCATION_ERROR.into());
                 }
                 deallocator(c_result);
                 if c_vector_.is_null() {
-                    return Err(DEALLOCATION_ERROR.into());
+                    return Result::Err(DEALLOCATION_ERROR.into());
                 }
                 Allocator::<C_Vector<_>>::deallocate(&c_vector);
-                return Ok(());
+                return Result::Ok(());
             }
             // Needed to test all `unified_report::UnifiedReport` variants.
             mod unified_report {
@@ -3103,7 +3103,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn target_filled____application_user___authorization____authorize_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3130,7 +3130,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn precedent____application_user___authorization____authorize_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3151,7 +3151,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn target_empty____application_user___authorization____authorize_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3171,7 +3171,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn target_filled____application_user___authorization____authorize_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3198,7 +3198,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 fn _precedent____application_user___authorization____authorize_by_last_step(
                     precedent: ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_,
@@ -3219,7 +3219,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn precedent____application_user___authorization____authorize_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3235,7 +3235,7 @@ mod test {
                     '_a: for precedent in precedent_registry {
                         _precedent____application_user___authorization____authorize_by_last_step(precedent)?;
                     }
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn target_empty____application_user___authorization____check_email_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3252,7 +3252,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn target_filled____application_user___authorization____check_email_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3272,11 +3272,11 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn precedent____application_user___authorization____check_email_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn target_empty____application_user___authorization____check_nickname_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3293,7 +3293,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn target_filled____application_user___authorization____check_nickname_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3313,11 +3313,11 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn precedent____application_user___authorization____check_nickname_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn target_empty____application_user___authorization____deauthorize_from_all_devices() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3334,11 +3334,11 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn target_filled____application_user___authorization____deauthorize_from_all_devices() -> Result<(), Box<dyn StdError + 'static>> {
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 fn _precedent____application_user___authorization____deauthorize_from_all_devices(
                     precedent: ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent_,
@@ -3356,7 +3356,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn precedent____application_user___authorization____deauthorize_from_all_devices() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3367,7 +3367,7 @@ mod test {
                     '_a: for precedent in precedent_registry {
                         _precedent____application_user___authorization____deauthorize_from_all_devices(precedent)?;
                     }
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn target_empty____application_user___authorization____deauthorize_from_one_device() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3384,11 +3384,11 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn target_filled____application_user___authorization____deauthorize_from_one_device() -> Result<(), Box<dyn StdError + 'static>> {
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 fn _precedent____application_user___authorization____deauthorize_from_one_device(
                     precedent: ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent_,
@@ -3406,7 +3406,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn precedent____application_user___authorization____deauthorize_from_one_device() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3417,7 +3417,7 @@ mod test {
                     '_a: for precedent in precedent_registry {
                         _precedent____application_user___authorization____deauthorize_from_one_device(precedent)?;
                     }
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn target_empty____application_user___authorization____refresh_access_token() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3437,7 +3437,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn target_filled____application_user___authorization____refresh_access_token() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3464,7 +3464,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 fn _precedent____application_user___authorization____refresh_access_token(
                     precedent: ApplicationUser__Authorization___RefreshAccessToken___Precedent_,
@@ -3485,7 +3485,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn precedent____application_user___authorization____refresh_access_token() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3495,7 +3495,7 @@ mod test {
                     '_a: for precedent in precedent_registry {
                         _precedent____application_user___authorization____refresh_access_token(precedent)?;
                     }
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn target_empty____application_user___authorization____register_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3515,7 +3515,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn target_filled____application_user___authorization____register_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3541,7 +3541,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn precedent____application_user___authorization____register_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3562,7 +3562,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn target_empty____application_user___authorization____register_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3579,11 +3579,11 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn target_filled____application_user___authorization____register_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 fn _precedent____application_user___authorization____register_by_second_step(
                     precedent: ApplicationUser__Authorization___RegisterBySecondStep___Precedent_,
@@ -3601,7 +3601,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn precedent____application_user___authorization____register_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3617,7 +3617,7 @@ mod test {
                     '_a: for precedent in precedent_registry {
                         _precedent____application_user___authorization____register_by_second_step(precedent)?;
                     }
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn target_empty____application_user___authorization____register_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3637,7 +3637,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn target_filled____application_user___authorization____register_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3664,7 +3664,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 fn _precedent____application_user___authorization____register_by_last_step(
                     precedent: ApplicationUser__Authorization___RegisterByLastStep___Precedent_,
@@ -3685,7 +3685,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn precedent____application_user___authorization____register_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3699,7 +3699,7 @@ mod test {
                     '_a: for precedent in precedent_registry {
                         _precedent____application_user___authorization____register_by_last_step(precedent)?;
                     }
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn target_empty____application_user___authorization____reset_password_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3719,7 +3719,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn target_filled____application_user___authorization____reset_password_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3746,7 +3746,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn precedent____application_user___authorization____reset_password_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3767,7 +3767,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn target_empty____application_user___authorization____reset_password_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3784,11 +3784,11 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn target_filled____application_user___authorization____reset_password_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 fn _precedent____application_user___authorization____reset_password_by_second_step(
                     precedent: ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_,
@@ -3806,7 +3806,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn precedent____application_user___authorization____reset_password_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3822,7 +3822,7 @@ mod test {
                     '_a: for precedent in precedent_registry {
                         _precedent____application_user___authorization____reset_password_by_second_step(precedent)?;
                     }
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn target_empty____application_user___authorization____reset_password_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3839,11 +3839,11 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn target_filled____application_user___authorization____reset_password_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 fn _precedent____application_user___authorization____reset_password_by_last_step(
                     precedent: ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_,
@@ -3861,7 +3861,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn precedent____application_user___authorization____reset_password_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3874,7 +3874,7 @@ mod test {
                     '_a: for precedent in precedent_registry {
                         _precedent____application_user___authorization____reset_password_by_last_step(precedent)?;
                     }
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn target_empty____application_user___authorization____send_email_for_register() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3894,7 +3894,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn target_filled____application_user___authorization____send_email_for_register() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3917,7 +3917,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 fn _precedent____application_user___authorization____send_email_for_register(
                     precedent: ApplicationUser__Authorization___SendEmailForRegister___Precedent_,
@@ -3938,7 +3938,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn precedent____application_user___authorization____send_email_for_register() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3950,7 +3950,7 @@ mod test {
                     '_a: for precedent in precedent_registry {
                         _precedent____application_user___authorization____send_email_for_register(precedent)?;
                     }
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn target_empty____application_user___authorization____send_email_for_authorize() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3970,7 +3970,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn target_filled____application_user___authorization____send_email_for_authorize() -> Result<(), Box<dyn StdError + 'static>> {
@@ -3993,7 +3993,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 fn _precedent____application_user___authorization____send_email_for_authorize(
                     precedent: ApplicationUser__Authorization___SendEmailForAuthorize___Precedent_,
@@ -4014,7 +4014,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn precedent____application_user___authorization____send_email_for_authorize() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4026,7 +4026,7 @@ mod test {
                     '_a: for precedent in precedent_registry {
                         _precedent____application_user___authorization____send_email_for_authorize(precedent)?;
                     }
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn target_empty____application_user___authorization____send_email_for_reset_password() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4046,7 +4046,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn target_filled____application_user___authorization____send_email_for_reset_password() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4069,7 +4069,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 fn _precedent____application_user___authorization____send_email_for_reset_password(
                     precedent: ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_,
@@ -4090,7 +4090,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn precedent____application_user___authorization____send_email_for_reset_password() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4103,7 +4103,7 @@ mod test {
                     '_a: for precedent in precedent_registry {
                         _precedent____application_user___authorization____send_email_for_reset_password(precedent)?;
                     }
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn target_empty____channel___base____get_many_by_name_in_subscriptions() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4121,7 +4121,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn target_filled____channel___base____get_many_by_name_in_subscriptions() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4160,7 +4160,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 fn _precedent____channel___base____get_many_by_name_in_subscriptions(
                     precedent: Channel__Base___GetManyByNameInSubscriptions___Precedent_,
@@ -4179,7 +4179,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn precedent____channel___base____get_many_by_name_in_subscriptions() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4189,7 +4189,7 @@ mod test {
                     '_a: for precedent in precedent_registry {
                         _precedent____channel___base____get_many_by_name_in_subscriptions(precedent)?;
                     }
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn target_empty____channel___base____get_many_by_subscription() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4206,7 +4206,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn target_filled____channel___base____get_many_by_subscription() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4243,7 +4243,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 fn _precedent____channel___base____get_many_by_subscription(
                     precedent: Channel__Base___GetManyBySubscription___Precedent_,
@@ -4262,7 +4262,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn precedent____channel___base____get_many_by_subscription() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4272,7 +4272,7 @@ mod test {
                     '_a: for precedent in precedent_registry {
                         _precedent____channel___base____get_many_by_subscription(precedent)?;
                     }
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn target_empty____channel___base____get_many_public_by_name() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4289,7 +4289,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn target_filled____channel___base____get_many_public_by_name() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4326,7 +4326,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 fn _precedent____channel___base____get_many_public_by_name(precedent: Channel__Base___GetManyPublicByName___Precedent_) -> Result<(), Box<dyn StdError + 'static>> {
                     let unified_report = UnifiedReport::<Channel__Base___GetManyPublicByName___Outcoming_, Channel__Base___GetManyPublicByName___Precedent_>::precedent(precedent);
@@ -4342,7 +4342,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn precedent____channel___base____get_many_public_by_name() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4352,7 +4352,7 @@ mod test {
                     '_a: for precedent in precedent_registry {
                         _precedent____channel___base____get_many_public_by_name(precedent)?;
                     }
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn target_empty____channel___base____get_one_by_id() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4369,7 +4369,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn target_filled____channel___base____get_one_by_id() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4420,7 +4420,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 fn _precedent____channel___base____get_one_by_id(precedent: Channel__Base___GetOneById___Precedent_) -> Result<(), Box<dyn StdError + 'static>> {
                     let unified_report = UnifiedReport::<Channel__Base___GetOneById___Outcoming_, Channel__Base___GetOneById___Precedent_>::precedent(precedent);
@@ -4436,7 +4436,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn precedent____channel___base____get_one_by_id() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4448,7 +4448,7 @@ mod test {
                     '_a: for precedent in precedent_registry {
                         _precedent____channel___base____get_one_by_id(precedent)?;
                     }
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn target_empty____channel_subscription___base____create() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4465,11 +4465,11 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn target_filled____channel_subscription___base____create() -> Result<(), Box<dyn StdError + 'static>> {
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 fn _precedent____channel_subscription___base____create(precedent: ChannelSubscription__Base___Create___Precedent_) -> Result<(), Box<dyn StdError + 'static>> {
                     let unified_report = UnifiedReport::<Void, ChannelSubscription__Base___Create___Precedent_>::precedent(precedent);
@@ -4485,7 +4485,7 @@ mod test {
                         allocator,
                         deallocator,
                     )?;
-                    return Ok(());
+                    return Result::Ok(());
                 }
                 #[test]
                 fn precedent____channel_subscription___base____create() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4498,7 +4498,7 @@ mod test {
                     '_a: for precedent in precedent_registry {
                         _precedent____channel_subscription___base____create(precedent)?;
                     }
-                    return Ok(());
+                    return Result::Ok(());
                 }
             }
         }
@@ -4513,13 +4513,13 @@ mod test {
                 let c_result = allocator(incoming_);
                 let c_result_ = unsafe { &*c_result };
                 if !c_result_.is_data {
-                    return Err(ALLOCATION_ERROR.into());
+                    return Result::Err(ALLOCATION_ERROR.into());
                 }
                 deallocator(c_result);
                 if incoming_.is_null() {
-                    return Err(DEALLOCATION_ERROR.into());
+                    return Result::Err(DEALLOCATION_ERROR.into());
                 }
-                return Ok(());
+                return Result::Ok(());
             }
             #[test]
             fn application_user___authorization____authorize_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4543,7 +4543,7 @@ mod test {
                 Allocator::<C_String>::deallocate(&incoming.application_user_device__id);
                 Allocator::<C_String>::deallocate(&incoming.application_user__email___or___application_user__nickname);
                 Allocator::<C_String>::deallocate(&incoming.application_user__password);
-                return Ok(());
+                return Result::Ok(());
             }
             #[test]
             fn application_user___authorization____authorize_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4566,7 +4566,7 @@ mod test {
                 )?;
                 Allocator::<C_String>::deallocate(&incoming.application_user_device__id);
                 Allocator::<C_String>::deallocate(&incoming.application_user_authorization_token__value);
-                return Ok(());
+                return Result::Ok(());
             }
             #[test]
             fn application_user___authorization____check_email_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4586,7 +4586,7 @@ mod test {
                     deallocator,
                 )?;
                 Allocator::<C_String>::deallocate(&incoming.application_user__email);
-                return Ok(());
+                return Result::Ok(());
             }
             #[test]
             fn application_user___authorization____check_nickname_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4606,7 +4606,7 @@ mod test {
                     deallocator,
                 )?;
                 Allocator::<C_String>::deallocate(&incoming.application_user__nickname);
-                return Ok(());
+                return Result::Ok(());
             }
             #[test]
             fn application_user___authorization____deauthorize_from_all_devices() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4630,7 +4630,7 @@ mod test {
                 )?;
                 Allocator::<C_Vector<_>>::deallocate(&incoming.application_user_access_token_encoded.serialized);
                 Allocator::<C_Vector<_>>::deallocate(&incoming.application_user_access_token_encoded.encoded);
-                return Ok(());
+                return Result::Ok(());
             }
             #[test]
             fn application_user___authorization____deauthorize_from_one_device() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4654,7 +4654,7 @@ mod test {
                 )?;
                 Allocator::<C_Vector<_>>::deallocate(&incoming.application_user_access_token_encoded.serialized);
                 Allocator::<C_Vector<_>>::deallocate(&incoming.application_user_access_token_encoded.encoded);
-                return Ok(());
+                return Result::Ok(());
             }
             #[test]
             fn application_user___authorization____refresh_access_token() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4682,7 +4682,7 @@ mod test {
                 Allocator::<C_Vector<_>>::deallocate(&incoming.application_user_access_token_encoded.serialized);
                 Allocator::<C_Vector<_>>::deallocate(&incoming.application_user_access_token_encoded.encoded);
                 Allocator::<C_Vector<_>>::deallocate(&incoming.application_user_access_refresh_token_encoded.0);
-                return Ok(());
+                return Result::Ok(());
             }
             #[test]
             fn application_user___authorization____register_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4704,7 +4704,7 @@ mod test {
                 )?;
                 Allocator::<C_String>::deallocate(&incoming.application_user__email);
                 Allocator::<C_String>::deallocate(&incoming.application_user_device__id);
-                return Ok(());
+                return Result::Ok(());
             }
             #[test]
             fn application_user___authorization____register_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4728,7 +4728,7 @@ mod test {
                 Allocator::<C_String>::deallocate(&incoming.application_user__email);
                 Allocator::<C_String>::deallocate(&incoming.application_user_device__id);
                 Allocator::<C_String>::deallocate(&incoming.application_user_registration_token__value);
-                return Ok(());
+                return Result::Ok(());
             }
             #[test]
             fn application_user___authorization____register_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4756,7 +4756,7 @@ mod test {
                 Allocator::<C_String>::deallocate(&incoming.application_user__password);
                 Allocator::<C_String>::deallocate(&incoming.application_user__email);
                 Allocator::<C_String>::deallocate(&incoming.application_user_registration_token__value);
-                return Ok(());
+                return Result::Ok(());
             }
             #[test]
             fn application_user___authorization____reset_password_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4778,7 +4778,7 @@ mod test {
                 )?;
                 Allocator::<C_String>::deallocate(&incoming.application_user__email);
                 Allocator::<C_String>::deallocate(&incoming.application_user_device__id);
-                return Ok(());
+                return Result::Ok(());
             }
             #[test]
             fn application_user___authorization____reset_password_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4801,7 +4801,7 @@ mod test {
                 )?;
                 Allocator::<C_String>::deallocate(&incoming.application_user_device__id);
                 Allocator::<C_String>::deallocate(&incoming.application_user_reset_password_token__value);
-                return Ok(());
+                return Result::Ok(());
             }
             #[test]
             fn application_user___authorization____reset_password_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4826,7 +4826,7 @@ mod test {
                 Allocator::<C_String>::deallocate(&incoming.application_user_device__id);
                 Allocator::<C_String>::deallocate(&incoming.application_user__password);
                 Allocator::<C_String>::deallocate(&incoming.application_user_reset_password_token__value);
-                return Ok(());
+                return Result::Ok(());
             }
             #[test]
             fn application_user___authorization____send_email_for_register() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4848,7 +4848,7 @@ mod test {
                 )?;
                 Allocator::<C_String>::deallocate(&incoming.application_user__email);
                 Allocator::<C_String>::deallocate(&incoming.application_user_device__id);
-                return Ok(());
+                return Result::Ok(());
             }
             #[test]
             fn application_user___authorization____send_email_for_authorize() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4869,7 +4869,7 @@ mod test {
                     deallocator,
                 )?;
                 Allocator::<C_String>::deallocate(&incoming.application_user_device__id);
-                return Ok(());
+                return Result::Ok(());
             }
             #[test]
             fn application_user___authorization____send_email_for_reset_password() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4890,7 +4890,7 @@ mod test {
                     deallocator,
                 )?;
                 Allocator::<C_String>::deallocate(&incoming.application_user_device__id);
-                return Ok(());
+                return Result::Ok(());
             }
             #[test]
             fn channel___base____get_many_by_name_in_subscriptions() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4919,7 +4919,7 @@ mod test {
                 Allocator::<C_Vector<_>>::deallocate(&incoming.application_user_access_token_encoded.encoded);
                 Allocator::<C_String>::deallocate(&incoming.channel__name);
                 Allocator::<C_String>::deallocate(&incoming.requery___channel__name.data);
-                return Ok(());
+                return Result::Ok(());
             }
             #[test]
             fn channel___base____get_many_by_subscription() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4945,7 +4945,7 @@ mod test {
                 )?;
                 Allocator::<C_Vector<_>>::deallocate(&incoming.application_user_access_token_encoded.serialized);
                 Allocator::<C_Vector<_>>::deallocate(&incoming.application_user_access_token_encoded.encoded);
-                return Ok(());
+                return Result::Ok(());
             }
             #[test]
             fn channel___base____get_many_public_by_name() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4974,7 +4974,7 @@ mod test {
                 Allocator::<C_Vector<_>>::deallocate(&incoming.application_user_access_token_encoded.encoded);
                 Allocator::<C_String>::deallocate(&incoming.channel__name);
                 Allocator::<C_String>::deallocate(&incoming.requery___channel__name.data);
-                return Ok(());
+                return Result::Ok(());
             }
             #[test]
             fn channel___base____get_one_by_id() -> Result<(), Box<dyn StdError + 'static>> {
@@ -4999,7 +4999,7 @@ mod test {
                 )?;
                 Allocator::<C_Vector<_>>::deallocate(&incoming.application_user_access_token_encoded.serialized);
                 Allocator::<C_Vector<_>>::deallocate(&incoming.application_user_access_token_encoded.encoded);
-                return Ok(());
+                return Result::Ok(());
             }
             #[test]
             fn channel_subscription___base____create() -> Result<(), Box<dyn StdError + 'static>> {
@@ -5024,7 +5024,7 @@ mod test {
                 )?;
                 Allocator::<C_Vector<_>>::deallocate(&incoming.application_user_access_token_encoded.serialized);
                 Allocator::<C_Vector<_>>::deallocate(&incoming.application_user_access_token_encoded.encoded);
-                return Ok(());
+                return Result::Ok(());
             }
         }
     }

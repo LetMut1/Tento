@@ -34,7 +34,7 @@ impl EmailSender<ApplicationUserResetPasswordToken<'_>> {
                 application_user__email,
             )
             .await?;
-            return Ok(());
+            return Result::Ok(());
         };
     }
 }

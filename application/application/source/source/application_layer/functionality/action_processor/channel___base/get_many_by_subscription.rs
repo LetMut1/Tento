@@ -72,15 +72,15 @@ impl ActionProcessor_ for ActionProcessor<Channel__Base___GetManyBySubscription>
                     application_user_access_token: application_user_access_token_,
                 } => application_user_access_token_,
                 Extracted::ApplicationUserAccessTokenAlreadyExpired => {
-                    return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_AlreadyExpired));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_AlreadyExpired));
                 }
                 Extracted::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
-                    return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList));
                 }
             };
             if let Some(requery___channel__id_) = incoming.requery___channel__id {
                 if !Validator::<Channel_Id>::is_valid(requery___channel__id_) {
-                    return Err(
+                    return Result::Err(
                         AggregateError::new_invalid_argument(
                             Backtrace::new(
                                 line!(),
@@ -91,7 +91,7 @@ impl ActionProcessor_ for ActionProcessor<Channel__Base___GetManyBySubscription>
                 }
             }
             if incoming.limit <= 0 || incoming.limit > LIMIT {
-                return Err(
+                return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
                             line!(),
@@ -113,7 +113,7 @@ impl ActionProcessor_ for ActionProcessor<Channel__Base___GetManyBySubscription>
             let outcoming = Outcoming {
                 common_registry,
             };
-            return Ok(UnifiedReport::target_filled(outcoming));
+            return Result::Ok(UnifiedReport::target_filled(outcoming));
         };
     }
 }

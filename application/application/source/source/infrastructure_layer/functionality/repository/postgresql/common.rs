@@ -104,7 +104,7 @@ impl PostgresqlRepository<Common1> {
                 )?;
             let mut common_registry: Vec<Common1> = vec![];
             if row_registry.is_empty() {
-                return Ok(common_registry);
+                return Result::Ok(common_registry);
             }
             '_a: for row in row_registry.iter() {
                 let channel = Channel1 {
@@ -161,7 +161,7 @@ impl PostgresqlRepository<Common1> {
                 };
                 common_registry.push(common);
             }
-            return Ok(common_registry);
+            return Result::Ok(common_registry);
         };
     }
     pub fn find_2<'a>(database_1_connection: &'a Connection, by_2: By2<'a>, limit: i16) -> impl Future<Output = Result<Vec<Common1>, AggregateError>> + Send + Capture<&'a Void> {
@@ -241,7 +241,7 @@ impl PostgresqlRepository<Common1> {
                 )?;
             let mut common_registry: Vec<Common1> = vec![];
             if row_registry.is_empty() {
-                return Ok(common_registry);
+                return Result::Ok(common_registry);
             }
             '_a: for row in row_registry.iter() {
                 let channel = Channel1 {
@@ -294,7 +294,7 @@ impl PostgresqlRepository<Common1> {
                 };
                 common_registry.push(common);
             }
-            return Ok(common_registry);
+            return Result::Ok(common_registry);
         };
     }
     pub fn find_3<'a>(database_1_connection: &'a Connection, by_3: By3, limit: i16) -> impl Future<Output = Result<Vec<Common1>, AggregateError>> + Send + Capture<&'a Void> {
@@ -369,7 +369,7 @@ impl PostgresqlRepository<Common1> {
                 )?;
             let mut common_registry: Vec<Common1> = vec![];
             if row_registry.is_empty() {
-                return Ok(common_registry);
+                return Result::Ok(common_registry);
             }
             '_a: for row in row_registry.iter() {
                 let channel = Channel1 {
@@ -422,7 +422,7 @@ impl PostgresqlRepository<Common1> {
                 };
                 common_registry.push(common);
             }
-            return Ok(common_registry);
+            return Result::Ok(common_registry);
         };
     }
 }

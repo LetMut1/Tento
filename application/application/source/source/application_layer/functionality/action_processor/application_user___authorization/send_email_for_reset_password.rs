@@ -82,7 +82,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
     {
         return async move {
             if !Validator::<ApplicationUser_Id>::is_valid(incoming.application_user__id) {
-                return Err(
+                return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
                             line!(),
@@ -92,7 +92,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
                 );
             }
             if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming.application_user_device__id.as_str()) {
-                return Err(
+                return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
                             line!(),
@@ -112,7 +112,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
             {
                 Some(application_user_) => application_user_,
                 None => {
-                    return Ok(UnifiedReport::precedent(Precedent::ApplicationUser_NotFound));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUser_NotFound));
                 }
             };
             let database_2_postgresql_pooled_connection = inner.get_database_2_postgresql_pooled_connection().await?;
@@ -128,7 +128,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
             {
                 Some(application_user_reset_password_token_) => application_user_reset_password_token_,
                 None => {
-                    return Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_NotFound));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_NotFound));
                 }
             };
             if Resolver::<Expiration>::is_expired(application_user_reset_password_token.expires_at) {
@@ -140,13 +140,13 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
                     },
                 )
                 .await?;
-                return Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_AlreadyExpired));
+                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_AlreadyExpired));
             }
             if application_user_reset_password_token.is_approved {
-                return Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_AlreadyApproved));
+                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_AlreadyApproved));
             }
             if !Resolver::<Expiration>::is_expired(application_user_reset_password_token.can_be_resent_from) {
-                return Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_TimeToResendHasNotCome));
+                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_TimeToResendHasNotCome));
             }
             application_user_reset_password_token.can_be_resent_from = Generator::<ApplicationUserResetPasswordToken_CanBeResentFrom>::generate()?;
             PostgresqlRepository::<ApplicationUserResetPasswordToken>::update_2(
@@ -170,13 +170,13 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
                         incoming.application_user_device__id.as_str(),
                     )
                     .await?;
-                    return Ok(());
+                    return Result::Ok(());
                 },
             );
             let outcoming = Outcoming {
                 application_user_reset_password_token__can_be_resent_from: application_user_reset_password_token.can_be_resent_from,
             };
-            return Ok(UnifiedReport::target_filled(outcoming));
+            return Result::Ok(UnifiedReport::target_filled(outcoming));
         };
     }
 }

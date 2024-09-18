@@ -50,7 +50,7 @@ impl Loader<EnvironmentConfiguration> {
                 ),
             )?
         } else {
-            return Err(
+            return Result::Err(
                 AggregateError::new_logic(
                     "The environment.toml file does not exist.".into(),
                     Backtrace::new(
@@ -175,7 +175,7 @@ impl Loader<EnvironmentConfiguration> {
                 http,
             }
         };
-        return Ok(
+        return Result::Ok(
             EnvironmentConfiguration {
                 tokio_runtime: TokioRuntime {
                     maximum_blocking_threads_quantity: environment_configuration_file.tokio_runtime.maximum_blocking_threads_quantity.value,

@@ -12,7 +12,7 @@ use sha3::Sha3_512;
 pub type HmacSha3_512 = Hmac<Sha3_512>;
 impl Encoder<HmacSha3_512> {
     pub fn encode<'a>(salt: &'a [u8], data: &'a [u8]) -> Result<Vec<u8>, AggregateError> {
-        return Ok(
+        return Result::Ok(
             Self::prepare_hmac(
                 salt,
                 data,
@@ -23,7 +23,7 @@ impl Encoder<HmacSha3_512> {
         );
     }
     pub fn is_valid<'a>(salt: &'a [u8], data: &'a [u8], encoded_data: &'a [u8]) -> Result<bool, AggregateError> {
-        return Ok(
+        return Result::Ok(
             Self::prepare_hmac(
                 salt,
                 data,
@@ -40,6 +40,6 @@ impl Encoder<HmacSha3_512> {
             ),
         )?;
         hmac.update(data);
-        return Ok(hmac);
+        return Result::Ok(hmac);
     }
 }

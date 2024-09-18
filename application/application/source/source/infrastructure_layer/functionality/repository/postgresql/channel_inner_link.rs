@@ -67,7 +67,7 @@ impl PostgresqlRepository<ChannelInnerLink> {
                         file!(),
                     ),
                 )?;
-            return Ok(
+            return Result::Ok(
                 ChannelInnerLink::new(
                     insert_1.channel_inner_link__from,
                     insert_1.channel_inner_link__to,
@@ -129,7 +129,7 @@ impl PostgresqlRepository<ChannelInnerLink> {
                 )?;
             let mut channel_inner_link_registry: Vec<ChannelInnerLink1> = vec![];
             if row_registry.is_empty() {
-                return Ok(channel_inner_link_registry);
+                return Result::Ok(channel_inner_link_registry);
             }
             '_a: for row in row_registry.iter() {
                 let channel_inner_link = ChannelInnerLink1 {
@@ -142,7 +142,7 @@ impl PostgresqlRepository<ChannelInnerLink> {
                 };
                 channel_inner_link_registry.push(channel_inner_link);
             }
-            return Ok(channel_inner_link_registry);
+            return Result::Ok(channel_inner_link_registry);
         };
     }
 }

@@ -11,7 +11,7 @@ impl Spawner<TokioNonBlockingTask> {
     {
         tokio::spawn(
             async move {
-                if let Err(aggregate_error) = future.await {
+                if let Result::Err(aggregate_error) = future.await {
                     Logger::<AggregateError>::log(&aggregate_error);
                 }
                 return ();

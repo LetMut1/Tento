@@ -15,7 +15,7 @@ impl Validator<ApplicationUserAuthorizationToken_Value> {
         let regular_expression = match REGULAR_EXPRESSION.get() {
             Some(regular_expression_) => regular_expression_,
             None => {
-                if let Err(_) = REGULAR_EXPRESSION.set(
+                if let Result::Err(_) = REGULAR_EXPRESSION.set(
                     Regex::new(ApplicationUserAuthorizationToken_Value::REGULAR_EXPRESSION).into_logic(
                         Backtrace::new(
                             line!(),
@@ -23,7 +23,7 @@ impl Validator<ApplicationUserAuthorizationToken_Value> {
                         ),
                     )?,
                 ) {
-                    return Err(
+                    return Result::Err(
                         AggregateError::new_logic_(
                             Common::ValueAlreadyExist,
                             Backtrace::new(
@@ -41,6 +41,6 @@ impl Validator<ApplicationUserAuthorizationToken_Value> {
                 )?
             }
         };
-        return Ok(regular_expression.is_match(application_user_authorization_token__value));
+        return Result::Ok(regular_expression.is_match(application_user_authorization_token__value));
     }
 }

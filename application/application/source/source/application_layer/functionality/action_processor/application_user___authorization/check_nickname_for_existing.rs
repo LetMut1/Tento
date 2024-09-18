@@ -54,7 +54,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Check
     {
         return async move {
             if !Validator::<ApplicationUser_Nickname>::is_valid(incoming.application_user__nickname.as_str()) {
-                return Err(
+                return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
                             line!(),
@@ -74,7 +74,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Check
             let outcoming = Outcoming {
                 result: is_exist,
             };
-            return Ok(UnifiedReport::target_filled(outcoming));
+            return Result::Ok(UnifiedReport::target_filled(outcoming));
         };
     }
 }

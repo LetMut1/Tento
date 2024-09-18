@@ -24,9 +24,9 @@ impl Extractor<ApplicationUserAccessToken<'_>> {
             application_user_access_token_encoded,
         )?;
         if Resolver::<Expiration>::is_expired(application_user_access_token.expires_at) {
-            return Ok(Extracted::ApplicationUserAccessTokenAlreadyExpired);
+            return Result::Ok(Extracted::ApplicationUserAccessTokenAlreadyExpired);
         }
-        return Ok(
+        return Result::Ok(
             Extracted::ApplicationUserAccessToken {
                 application_user_access_token,
             },

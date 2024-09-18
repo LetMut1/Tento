@@ -115,7 +115,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
                 incoming.application_user__email.as_str(),
                 incoming.application_user__nickname.as_str(),
             ) {
-                return Err(
+                return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
                             line!(),
@@ -125,7 +125,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
                 );
             }
             if !Validator::<ApplicationUser_Nickname>::is_valid(incoming.application_user__nickname.as_str()) {
-                return Err(
+                return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
                             line!(),
@@ -135,7 +135,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
                 );
             }
             if !Validator::<ApplicationUser_Email>::is_valid(incoming.application_user__email.as_str())? {
-                return Err(
+                return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
                             line!(),
@@ -145,7 +145,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
                 );
             }
             if !Validator::<ApplicationUserRegistrationToken_Value>::is_valid(incoming.application_user_registration_token__value.as_str())? {
-                return Err(
+                return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
                             line!(),
@@ -155,7 +155,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
                 );
             }
             if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming.application_user_device__id.as_str()) {
-                return Err(
+                return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
                             line!(),
@@ -174,7 +174,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
             )
             .await?
             {
-                return Ok(UnifiedReport::precedent(Precedent::ApplicationUser_NicknameAlreadyExist));
+                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUser_NicknameAlreadyExist));
             }
             if PostgresqlRepository::<ApplicationUser<'_>>::is_exist_2(
                 database_1_postgresql_connection,
@@ -184,7 +184,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
             )
             .await?
             {
-                return Ok(UnifiedReport::precedent(Precedent::ApplicationUser_EmailAlreadyExist));
+                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUser_EmailAlreadyExist));
             }
             let database_2_postgresql_pooled_connection = inner.get_database_2_postgresql_pooled_connection().await?;
             let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
@@ -199,7 +199,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
             {
                 Some(application_user_registration_token_) => application_user_registration_token_,
                 None => {
-                    return Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_NotFound));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_NotFound));
                 }
             };
             if Resolver::<Expiration>::is_expired(application_user_registration_token.expires_at) {
@@ -211,10 +211,10 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
                     },
                 )
                 .await?;
-                return Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_AlreadyExpired));
+                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_AlreadyExpired));
             }
             if !application_user_registration_token.is_approved {
-                return Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_IsNotApproved));
+                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_IsNotApproved));
             }
             if application_user_registration_token.value != incoming.application_user_registration_token__value {
                 application_user_registration_token.wrong_enter_tries_quantity =
@@ -246,7 +246,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
                     )
                     .await?;
                 }
-                return Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_WrongValue));
+                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_WrongValue));
             }
             let application_user__password_hash___join_handle = Spawner::<TokioBlockingTask>::spawn_processed(
                 move || -> _ {
@@ -326,14 +326,14 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
                         },
                     )
                     .await?;
-                    return Ok(());
+                    return Result::Ok(());
                 },
             );
             let outcoming = Outcoming {
                 application_user_access_token_encoded,
                 application_user_access_refresh_token_encoded,
             };
-            return Ok(UnifiedReport::target_filled(outcoming));
+            return Result::Ok(UnifiedReport::target_filled(outcoming));
         };
     }
 }

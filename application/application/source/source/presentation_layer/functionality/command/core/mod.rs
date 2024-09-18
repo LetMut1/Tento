@@ -14,11 +14,11 @@ use clap::{
 use formatter::Formatter;
 // The type is 'Result<(), ()>' but not '()' to return a success/error exit code but not only success exit code.
 fn main() -> Result<(), ()> {
-    if let Err(aggregate_error) = Processor::process() {
+    if let Result::Err(aggregate_error) = Processor::process() {
         println!("{}", Formatter::<AggregateError>::format(&aggregate_error));
-        return Err(());
+        return Result::Err(());
     }
-    return Ok(());
+    return Result::Ok(());
 }
 struct Processor;
 impl Processor {
@@ -35,7 +35,7 @@ impl Processor {
         let subcommand_arg_matches = match arg_matches.subcommand() {
             Some(subcommand_arg_matches_) => subcommand_arg_matches_,
             None => {
-                return Err(
+                return Result::Err(
                     AggregateError::new_logic_(
                         Common::UnreachableState,
                         Backtrace::new(
@@ -51,7 +51,7 @@ impl Processor {
             (CREATE_FIXTURES, _) => CommandProcessor::<CreateFixtures>::process(),
             (REMOVE_INCOMPLITE_STATE, _) => CommandProcessor::<RemoveIncompliteState>::process(),
             _ => {
-                Err(
+                Result::Err(
                     AggregateError::new_logic(
                         "Unexpected subcommand.".into(),
                         Backtrace::new(

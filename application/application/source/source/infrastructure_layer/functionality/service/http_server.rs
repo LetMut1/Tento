@@ -121,7 +121,7 @@ impl HttpServer {
                 },
             );
             'a: loop {
-                if let Err(aggregate_error) = Self::run_(
+                if let Result::Err(aggregate_error) = Self::run_(
                     environment_configuration,
                     cloned.clone(),
                 )
@@ -133,7 +133,7 @@ impl HttpServer {
                 }
                 break 'a;
             }
-            return Ok(());
+            return Result::Ok(());
         };
     }
     fn run_<T>(environment_configuration: &'static EnvironmentConfiguration, cloned: Arc<Cloned<T>>) -> impl Future<Output = Result<(), AggregateError>> + Send
@@ -207,7 +207,7 @@ impl HttpServer {
                                         cloned__,
                                     )
                                     .await;
-                                    return Ok::<_, Void>(response);
+                                    return Result::<_, Void>::Ok(response);
                                 };
                             },
                         ),
@@ -242,7 +242,7 @@ impl HttpServer {
                     ()
                 },
                 _ = serving_connection_registry_join_handle => {
-                    return Err(
+                    return Result::Err(
                         AggregateError::new_logic_(
                             Common::UnreachableState,
                             Backtrace::new(
@@ -276,7 +276,7 @@ impl HttpServer {
                     ()
                 },
                 _ = completion_by_timer_join_handle => {
-                    return Err(
+                    return Result::Err(
                         AggregateError::new_logic_(
                             Common::UnreachableState,
                             Backtrace::new(
@@ -287,7 +287,7 @@ impl HttpServer {
                     );
                 },
             }
-            return Ok(());
+            return Result::Ok(());
         };
     }
     fn process_request<T>(request: Request, environment_configuration: &'static EnvironmentConfiguration, cloned: Arc<Cloned<T>>) -> impl Future<Output = Response> + Send
@@ -304,8 +304,8 @@ impl HttpServer {
                 parts: &parts,
             };
             let r#match = match cloned.router.at(parts.uri.path()) {
-                Ok(r#match_) => r#match_,
-                Err(_) => {
+                Result::Ok(r#match_) => r#match_,
+                Result::Err(_) => {
                     return Action::<RouteNotFound>::run(&mut action_inner);
                 }
             };
@@ -696,7 +696,7 @@ impl HttpServer {
             signal.recv().await;
             return ();
         };
-        return Ok(signal_future);
+        return Result::Ok(signal_future);
     }
 }
 struct Cloned<T>

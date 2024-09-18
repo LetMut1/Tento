@@ -9,6 +9,6 @@ use crate::{
 use aggregate_error::AggregateError;
 impl Generator<ApplicationUserResetPasswordToken_ExpiresAt> {
     pub fn generate() -> Result<i64, AggregateError> {
-        return Ok(Resolver::<DateTime>::unixtime_add_minutes_interval_from_now(ApplicationUserResetPasswordToken_ExpiresAt::QUANTITY_OF_MINUTES_FOR_EXPIRATION)?);
+        return Result::Ok(Resolver::<DateTime>::unixtime_add_minutes_interval_from_now(ApplicationUserResetPasswordToken_ExpiresAt::QUANTITY_OF_MINUTES_FOR_EXPIRATION)?);
     }
 }

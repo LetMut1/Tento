@@ -72,14 +72,14 @@ impl ActionProcessor_ for ActionProcessor<Channel__Base___GetManyByNameInSubscri
                     application_user_access_token: application_user_access_token_,
                 } => application_user_access_token_,
                 Extracted::ApplicationUserAccessTokenAlreadyExpired => {
-                    return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_AlreadyExpired));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_AlreadyExpired));
                 }
                 Extracted::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
-                    return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList));
                 }
             };
             if incoming.limit <= 0 || incoming.limit > LIMIT {
-                return Err(
+                return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
                             line!(),
@@ -89,7 +89,7 @@ impl ActionProcessor_ for ActionProcessor<Channel__Base___GetManyByNameInSubscri
                 );
             }
             if !Validator::<Channel_Name>::is_valid(incoming.channel__name.as_str()) {
-                return Err(
+                return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
                             line!(),
@@ -100,7 +100,7 @@ impl ActionProcessor_ for ActionProcessor<Channel__Base___GetManyByNameInSubscri
             }
             if let Some(ref requery___channel__name_) = incoming.requery___channel__name {
                 if !Validator::<Channel_Name>::is_valid(requery___channel__name_.as_str()) {
-                    return Err(
+                    return Result::Err(
                         AggregateError::new_invalid_argument(
                             Backtrace::new(
                                 line!(),
@@ -124,7 +124,7 @@ impl ActionProcessor_ for ActionProcessor<Channel__Base___GetManyByNameInSubscri
             let outcoming = Outcoming {
                 common_registry,
             };
-            return Ok(UnifiedReport::target_filled(outcoming));
+            return Result::Ok(UnifiedReport::target_filled(outcoming));
         };
     }
 }

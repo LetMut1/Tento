@@ -31,7 +31,7 @@ impl Encoder<ApplicationUserAccessToken<'_>> {
             environment_configuration.encryption.private_key.application_user_access_token.as_bytes(),
             application_user_access_token_serialized.as_slice(),
         )?;
-        return Ok(
+        return Result::Ok(
             ApplicationUserAccessTokenEncoded {
                 serialized: application_user_access_token_serialized,
                 encoded: application_user_access_token_encoded,
@@ -47,7 +47,7 @@ impl Encoder<ApplicationUserAccessToken<'_>> {
             application_user_access_token_encoded.serialized.as_slice(),
             application_user_access_token_encoded.encoded.as_slice(),
         )? {
-            return Err(
+            return Result::Err(
                 AggregateError::new_invalid_argument(
                     Backtrace::new(
                         line!(),

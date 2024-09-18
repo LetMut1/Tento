@@ -88,7 +88,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
     {
         return async move {
             if !Validator::<ApplicationUser_Email>::is_valid(incoming.application_user__email.as_str())? {
-                return Err(
+                return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
                             line!(),
@@ -98,7 +98,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
                 );
             }
             if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming.application_user_device__id.as_str()) {
-                return Err(
+                return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
                             line!(),
@@ -116,7 +116,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
             )
             .await?
             {
-                return Ok(UnifiedReport::precedent(Precedent::ApplicationUser_EmailAlreadyExist));
+                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUser_EmailAlreadyExist));
             }
             let database_2_postgresql_pooled_connection = inner.get_database_2_postgresql_pooled_connection().await?;
             let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
@@ -244,7 +244,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
                             incoming.application_user_device__id.as_str(),
                         )
                         .await?;
-                        return Ok(());
+                        return Result::Ok(());
                     },
                 );
             }
@@ -254,7 +254,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
                 application_user_registration_token__wrong_enter_tries_quantity,
                 application_user_registration_token__wrong_enter_tries_quantity_limit: ApplicationUserRegistrationToken_WrongEnterTriesQuantity::LIMIT,
             };
-            return Ok(UnifiedReport::target_filled(outcoming));
+            return Result::Ok(UnifiedReport::target_filled(outcoming));
         };
     }
 }

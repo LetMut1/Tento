@@ -147,7 +147,7 @@ impl PostgresqlRepository<Channel<'_>> {
                         file!(),
                     ),
                 )?;
-            return Ok(
+            return Result::Ok(
                 Channel::new(
                     row_registry[0].try_get::<'_, usize, i64>(0).into_logic(
                         Backtrace::new(
@@ -226,9 +226,9 @@ impl PostgresqlRepository<Channel<'_>> {
                     ),
                 )?;
             if row_registry.is_empty() {
-                return Ok(None);
+                return Result::Ok(None);
             }
-            return Ok(
+            return Result::Ok(
                 Some(
                     Channel::new(
                         by_1.channel__id,
@@ -366,9 +366,9 @@ impl PostgresqlRepository<Channel<'_>> {
                     ),
                 )?;
             if row_registry.is_empty() {
-                return Ok(None);
+                return Result::Ok(None);
             }
-            return Ok(
+            return Result::Ok(
                 Some(
                     Channel::new(
                         row_registry[0].try_get::<'_, usize, i64>(0).into_logic(

@@ -75,12 +75,12 @@ impl AggregateError {
 }
 impl Debug for AggregateError {
     fn fmt<'a, 'b>(&'a self, _: &'b mut Formatter<'_>) -> Result<(), FmtError> {
-        return Ok(());
+        return Result::Ok(());
     }
 }
 impl Display for AggregateError {
     fn fmt<'a, 'b>(&'a self, _: &'b mut Formatter<'_>) -> Result<(), FmtError> {
-        return Ok(());
+        return Result::Ok(());
     }
 }
 impl StdError for AggregateError {}

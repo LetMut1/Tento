@@ -93,7 +93,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                         file!(),
                     ),
                 )?;
-            return Ok(
+            return Result::Ok(
                 ApplicationUserAccessRefreshToken::new(
                     insert_1.application_user__id,
                     Cow::Borrowed(insert_1.application_user_device__id),
@@ -175,7 +175,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                         file!(),
                     ),
                 )?;
-            return Ok(());
+            return Result::Ok(());
         };
     }
     pub fn delete_1<'a>(database_2_connection: &'a Connection, by_2: By2<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
@@ -216,7 +216,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                         file!(),
                     ),
                 )?;
-            return Ok(());
+            return Result::Ok(());
         };
     }
     pub fn delete_2<'a>(database_2_connection: &'a Connection, by_1: By1) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
@@ -253,7 +253,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                         file!(),
                     ),
                 )?;
-            return Ok(());
+            return Result::Ok(());
         };
     }
     pub fn find_1<'a, 'b>(
@@ -304,9 +304,9 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                     ),
                 )?;
             if row_registry.is_empty() {
-                return Ok(None);
+                return Result::Ok(None);
             }
-            return Ok(
+            return Result::Ok(
                 Some(
                     ApplicationUserAccessRefreshToken::new(
                         by_2.application_user__id,

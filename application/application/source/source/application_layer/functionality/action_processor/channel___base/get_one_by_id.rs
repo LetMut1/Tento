@@ -81,14 +81,14 @@ impl ActionProcessor_ for ActionProcessor<Channel__Base___GetOneById> {
                     application_user_access_token: application_user_access_token_,
                 } => application_user_access_token_,
                 Extracted::ApplicationUserAccessTokenAlreadyExpired => {
-                    return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_AlreadyExpired));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_AlreadyExpired));
                 }
                 Extracted::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
-                    return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList));
                 }
             };
             if !Validator::<Channel_Id>::is_valid(incoming.channel__id) {
-                return Err(
+                return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
                             line!(),
@@ -108,7 +108,7 @@ impl ActionProcessor_ for ActionProcessor<Channel__Base___GetOneById> {
             {
                 Some(channel_) => channel_,
                 None => {
-                    return Ok(UnifiedReport::precedent(Precedent::Channel_NotFound));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::Channel_NotFound));
                 }
             };
             if let Channel_AccessModifier::Close = Channel_AccessModifier::to_representation(channel.access_modifier) {
@@ -121,7 +121,7 @@ impl ActionProcessor_ for ActionProcessor<Channel__Base___GetOneById> {
                 )
                 .await?;
                 if !is_exist && application_user_access_token.application_user__id != channel.owner {
-                    return Ok(UnifiedReport::precedent(Precedent::Channel_IsClose));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::Channel_IsClose));
                 }
             }
             let channel_inner_link_registry = PostgresqlRepository::<ChannelInnerLink>::find_1(
@@ -159,7 +159,7 @@ impl ActionProcessor_ for ActionProcessor<Channel__Base___GetOneById> {
                 channel_inner_link_registry,
                 channel_outer_link_registry,
             };
-            return Ok(UnifiedReport::target_filled(outcoming));
+            return Result::Ok(UnifiedReport::target_filled(outcoming));
         };
     }
 }

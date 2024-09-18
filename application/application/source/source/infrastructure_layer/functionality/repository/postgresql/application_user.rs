@@ -93,7 +93,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                         file!(),
                     ),
                 )?;
-            return Ok(
+            return Result::Ok(
                 ApplicationUser::new(
                     row_registry[0].try_get::<'_, usize, i64>(0).into_logic(
                         Backtrace::new(
@@ -160,7 +160,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                         file!(),
                     ),
                 )?;
-            return Ok(());
+            return Result::Ok(());
         };
     }
     pub fn is_exist_1<'a>(database_1_connection: &'a Connection, by_1: By1<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + Capture<&'a Void> {
@@ -201,9 +201,9 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                     ),
                 )?;
             if row_registry.is_empty() {
-                return Ok(false);
+                return Result::Ok(false);
             }
-            return Ok(true);
+            return Result::Ok(true);
         };
     }
     pub fn is_exist_2<'a>(database_1_connection: &'a Connection, by_2: By2<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + Capture<&'a Void> {
@@ -244,9 +244,9 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                     ),
                 )?;
             if row_registry.is_empty() {
-                return Ok(false);
+                return Result::Ok(false);
             }
-            return Ok(true);
+            return Result::Ok(true);
         };
     }
     pub fn is_exist_3<'a>(database_1_connection: &'a Connection, by_3: By3) -> impl Future<Output = Result<bool, AggregateError>> + Send + Capture<&'a Void> {
@@ -286,9 +286,9 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                     ),
                 )?;
             if row_registry.is_empty() {
-                return Ok(false);
+                return Result::Ok(false);
             }
-            return Ok(true);
+            return Result::Ok(true);
         };
     }
     pub fn find_1<'a, 'b>(
@@ -335,9 +335,9 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                     ),
                 )?;
             if row_registry.is_empty() {
-                return Ok(None);
+                return Result::Ok(None);
             }
-            return Ok(
+            return Result::Ok(
                 Some(
                     ApplicationUser::new(
                         row_registry[0].try_get::<'_, usize, i64>(0).into_logic(
@@ -410,9 +410,9 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                     ),
                 )?;
             if row_registry.is_empty() {
-                return Ok(None);
+                return Result::Ok(None);
             }
-            return Ok(
+            return Result::Ok(
                 Some(
                     ApplicationUser1 {
                         id: row_registry[0].try_get::<'_, usize, i64>(0).into_logic(
@@ -478,9 +478,9 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                     ),
                 )?;
             if row_registry.is_empty() {
-                return Ok(None);
+                return Result::Ok(None);
             }
-            return Ok(
+            return Result::Ok(
                 Some(
                     ApplicationUser2 {
                         id: row_registry[0].try_get::<'_, usize, i64>(0).into_logic(
@@ -544,9 +544,9 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                     ),
                 )?;
             if row_registry.is_empty() {
-                return Ok(None);
+                return Result::Ok(None);
             }
-            return Ok(
+            return Result::Ok(
                 Some(
                     ApplicationUser3 {
                         id: row_registry[0].try_get::<'_, usize, i64>(0).into_logic(
@@ -599,9 +599,9 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                     ),
                 )?;
             if row_registry.is_empty() {
-                return Ok(None);
+                return Result::Ok(None);
             }
-            return Ok(
+            return Result::Ok(
                 Some(
                     ApplicationUser4 {
                         email: row_registry[0].try_get::<'_, usize, String>(0).into_logic(
@@ -664,9 +664,9 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                     ),
                 )?;
             if row_registry.is_empty() {
-                return Ok(None);
+                return Result::Ok(None);
             }
-            return Ok(
+            return Result::Ok(
                 Some(
                     ApplicationUser5 {
                         email: row_registry[0].try_get::<'_, usize, String>(0).into_logic(

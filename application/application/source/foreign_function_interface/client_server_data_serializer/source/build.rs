@@ -10,7 +10,7 @@ use std::{
 };
 use uuid::Uuid;
 fn main() -> () {
-    if let Err(error) = Processor::process() {
+    if let Result::Err(error) = Processor::process() {
         panic!(
             "{}",
             error
@@ -23,7 +23,7 @@ impl Processor {
     fn process() -> Result<(), Box<dyn Error + 'static>> {
         Self::create_rerun_instruction()?;
         Self::create_c_bindings()?;
-        return Ok(());
+        return Result::Ok(());
     }
     fn create_rerun_instruction() -> Result<(), Box<dyn Error + 'static>> {
         let file_name = Uuid::new_v4().to_string();
@@ -33,7 +33,7 @@ impl Processor {
             file_name.as_str(),
         );
         rerun_if_changed!(file_path.as_str());
-        return Ok(());
+        return Result::Ok(());
     }
     fn create_c_bindings() -> Result<(), Box<dyn Error + 'static>> {
         let crate_path = var("CARGO_MANIFEST_DIR")?;
@@ -44,6 +44,6 @@ impl Processor {
         );
         let file_path_ = Path::new(file_path.as_str());
         Builder::new().with_crate(crate_path_).with_language(Language::C).generate()?.write_to_file(file_path_);
-        return Ok(());
+        return Result::Ok(());
     }
 }

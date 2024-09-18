@@ -28,6 +28,6 @@ impl Counter<i16> {
                 file!(),
             ),
         )?;
-        return Ok(self.value);
+        return Result::Ok(self.value);
     }
 }

@@ -109,17 +109,17 @@ impl CommandProcessor<CreateFixtures> {
         let environment_configuration = Self::initialize_environment()?;
         let runtime = Self::initialize_runtime()?;
         runtime.block_on(Self::create_fixtures(&environment_configuration))?;
-        return Ok(());
+        return Result::Ok(());
     }
     fn initialize_environment() -> Result<EnvironmentConfiguration, AggregateError> {
         let environment_configuration_file_path = format!(
             "{}/environment_configuration",
             std::env::var("CARGO_MANIFEST_DIR").into_runtime(Backtrace::new(line!(), file!()))?.as_str(),
         );
-        return Ok(Loader::<EnvironmentConfiguration>::load_from_file(environment_configuration_file_path.as_str())?);
+        return Result::Ok(Loader::<EnvironmentConfiguration>::load_from_file(environment_configuration_file_path.as_str())?);
     }
     fn initialize_runtime() -> Result<Runtime, AggregateError> {
-        return Ok(
+        return Result::Ok(
             Builder::new_current_thread().enable_all().build().into_runtime(
                 Backtrace::new(
                     line!(),
@@ -148,7 +148,7 @@ impl CommandProcessor<CreateFixtures> {
                     application_user__nickname = format!("{}{}", application_user__nickname.as_str(), character);
                 }
                 if !Validator::<ApplicationUser_Nickname>::is_valid(application_user__nickname.as_str()) {
-                    return Err(
+                    return Result::Err(
                         AggregateError::new_invalid_argument(
                             Backtrace::new(
                                 line!(),
@@ -159,7 +159,7 @@ impl CommandProcessor<CreateFixtures> {
                 }
                 let application_user__email = format!("{}@fixture.com", application_user__nickname.as_str());
                 if !Validator::<ApplicationUser_Email>::is_valid(application_user__email.as_str())? {
-                    return Err(
+                    return Result::Err(
                         AggregateError::new_invalid_argument(
                             Backtrace::new(
                                 line!(),
@@ -173,7 +173,7 @@ impl CommandProcessor<CreateFixtures> {
                     application_user__email.as_str(),
                     application_user__nickname.as_str(),
                 ) {
-                    return Err(
+                    return Result::Err(
                         AggregateError::new_invalid_argument(
                             Backtrace::new(
                                 line!(),
@@ -209,7 +209,7 @@ impl CommandProcessor<CreateFixtures> {
                     Self::APPLICATION_USER_DEVICE__ID_PART
                 );
                 if !Validator::<ApplicationUserDevice_Id>::is_valid(&application_user_device__id) {
-                    return Err(
+                    return Result::Err(
                         AggregateError::new_invalid_argument(
                             Backtrace::new(
                                 line!(),
@@ -233,7 +233,7 @@ impl CommandProcessor<CreateFixtures> {
                         channel__name = format!("{}{}", channel__name.as_str(), character,);
                     }
                     if !Validator::<Channel_Name>::is_valid(channel__name.as_str()) {
-                        return Err(
+                        return Result::Err(
                             AggregateError::new_invalid_argument(
                                 Backtrace::new(
                                     line!(),
@@ -244,7 +244,7 @@ impl CommandProcessor<CreateFixtures> {
                     }
                     let channel__linked_name = channel__name.clone();
                     if !Validator::<Channel_LinkedName>::is_valid(channel__linked_name.as_str()) {
-                        return Err(
+                        return Result::Err(
                             AggregateError::new_invalid_argument(
                                 Backtrace::new(
                                     line!(),
@@ -260,7 +260,7 @@ impl CommandProcessor<CreateFixtures> {
                             channel__description_ = format!("{}{}", channel__description_.as_str(), character,);
                         }
                         if !Validator::<Channel_Description>::is_valid(channel__description_.as_str()) {
-                            return Err(
+                            return Result::Err(
                                 AggregateError::new_invalid_argument(
                                     Backtrace::new(
                                         line!(),
@@ -277,7 +277,7 @@ impl CommandProcessor<CreateFixtures> {
                         0, 1, 2,
                     ];
                     if !Validator::<Channel_Orientation>::is_valid(channel__orientation.as_slice()) {
-                        return Err(
+                        return Result::Err(
                             AggregateError::new_invalid_argument(
                                 Backtrace::new(
                                     line!(),
@@ -320,7 +320,7 @@ impl CommandProcessor<CreateFixtures> {
                     }
                 }
             }
-            return Ok(());
+            return Result::Ok(());
         };
     }
 }

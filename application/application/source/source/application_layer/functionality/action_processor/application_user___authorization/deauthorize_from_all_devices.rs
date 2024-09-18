@@ -67,10 +67,10 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Deaut
                     application_user_access_token: application_user_access_token_,
                 } => application_user_access_token_,
                 Extracted::ApplicationUserAccessTokenAlreadyExpired => {
-                    return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_AlreadyExpired));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_AlreadyExpired));
                 }
                 Extracted::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
-                    return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList));
                 }
             };
             let database_2_postgresql_pooled_connection = inner.get_database_2_postgresql_pooled_connection().await?;
@@ -82,7 +82,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Deaut
             )
             .await?;
             Resolver::<CloudMessage>::deauthorize_application_user_from_all_devices();
-            return Ok(UnifiedReport::target_empty());
+            return Result::Ok(UnifiedReport::target_empty());
         };
     }
 }

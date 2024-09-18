@@ -16,6 +16,6 @@ pub enum Void {}
 impl Error for Void {}
 impl Display for Void {
     fn fmt<'a>(&'a self, _: &'a mut Formatter<'_>) -> Result<(), FmtError> {
-        return Ok(());
+        return Result::Ok(());
     }
 }

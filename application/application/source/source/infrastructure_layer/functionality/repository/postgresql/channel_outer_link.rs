@@ -86,7 +86,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
                     ),
                 )?,
             );
-            return Ok(channel_outer_link);
+            return Result::Ok(channel_outer_link);
         };
     }
     pub fn find_1<'a>(
@@ -138,7 +138,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
                 )?;
             let mut channel_outer_link_registry: Vec<ChannelOuterLink1> = vec![];
             if row_registry.is_empty() {
-                return Ok(channel_outer_link_registry);
+                return Result::Ok(channel_outer_link_registry);
             }
             '_a: for row in row_registry.iter() {
                 let channel_outer_link = ChannelOuterLink1 {
@@ -157,7 +157,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
                 };
                 channel_outer_link_registry.push(channel_outer_link);
             }
-            return Ok(channel_outer_link_registry);
+            return Result::Ok(channel_outer_link_registry);
         };
     }
 }

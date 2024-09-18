@@ -78,7 +78,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
     {
         return async move {
             if !Validator::<ApplicationUser_Email>::is_valid(incoming.application_user__email.as_str())? {
-                return Err(
+                return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
                             line!(),
@@ -88,7 +88,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
                 );
             }
             if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming.application_user_device__id.as_str()) {
-                return Err(
+                return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
                             line!(),
@@ -110,7 +110,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
             {
                 Some(application_user_registration_token_) => application_user_registration_token_,
                 None => {
-                    return Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_NotFound));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_NotFound));
                 }
             };
             if Resolver::<Expiration>::is_expired(application_user_registration_token.expires_at) {
@@ -122,13 +122,13 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
                     },
                 )
                 .await?;
-                return Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_AlreadyExpired));
+                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_AlreadyExpired));
             }
             if application_user_registration_token.is_approved {
-                return Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_AlreadyApproved));
+                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_AlreadyApproved));
             }
             if !Resolver::<Expiration>::is_expired(application_user_registration_token.can_be_resent_from) {
-                return Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_TimeToResendHasNotCome));
+                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_TimeToResendHasNotCome));
             }
             application_user_registration_token.can_be_resent_from = Generator::<ApplicationUserRegistrationToken_CanBeResentFrom>::generate()?;
             PostgresqlRepository::<ApplicationUserRegistrationToken>::update_2(
@@ -152,13 +152,13 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
                         incoming.application_user_device__id.as_str(),
                     )
                     .await?;
-                    return Ok(());
+                    return Result::Ok(());
                 },
             );
             let outcoming = Outcoming {
                 application_user_registration_token__can_be_resent_from: application_user_registration_token.can_be_resent_from,
             };
-            return Ok(UnifiedReport::target_filled(outcoming));
+            return Result::Ok(UnifiedReport::target_filled(outcoming));
         };
     }
 }

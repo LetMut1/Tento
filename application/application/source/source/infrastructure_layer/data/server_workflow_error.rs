@@ -82,12 +82,12 @@ impl ServerWorkflowError {
 }
 impl Debug for ServerWorkflowError {
     fn fmt<'a, 'b>(&'a self, _: &'b mut Formatter<'_>) -> Result<(), FmtError> {
-        return Ok(());
+        return Result::Ok(());
     }
 }
 impl Display for ServerWorkflowError {
     fn fmt<'a, 'b>(&'a self, _: &'b mut Formatter<'_>) -> Result<(), FmtError> {
-        return Ok(());
+        return Result::Ok(());
     }
 }
 impl StdError for ServerWorkflowError {}

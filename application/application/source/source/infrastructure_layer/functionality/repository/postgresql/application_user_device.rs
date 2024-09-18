@@ -67,7 +67,7 @@ impl PostgresqlRepository<ApplicationUserDevice> {
                         file!(),
                     ),
                 )?;
-            return Ok(
+            return Result::Ok(
                 ApplicationUserDevice::new(
                     insert_1.application_user_device__id,
                     insert_1.application_user__id,

@@ -105,7 +105,7 @@ impl Processor<ActionRound> {
                 return Serializer::<SD>::serialize(&unified_report);
             };
             return match future.await {
-                Ok(data) => {
+                Result::Ok(data) => {
                     let response = Creator::<Response>::create_ok(data);
                     Logger::<ActionRound>::log(
                         RowData {
@@ -116,7 +116,7 @@ impl Processor<ActionRound> {
                     );
                     response
                 }
-                Err(aggregate_error) => {
+                Result::Err(aggregate_error) => {
                     let response = match ServerWorkflowError::new(aggregate_error) {
                         ServerWorkflowError::Unresponsive {
                             unresponsive_auditor,

@@ -76,7 +76,7 @@ impl PostgresqlRepository<ChannelSubscription> {
                     ),
                 )?,
             );
-            return Ok(channel_subscription);
+            return Result::Ok(channel_subscription);
         };
     }
     pub fn is_exist_1<'a>(database_1_connection: &'a Connection, by_1: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + Capture<&'a Void> {
@@ -121,9 +121,9 @@ impl PostgresqlRepository<ChannelSubscription> {
                     ),
                 )?;
             if row_registry.is_empty() {
-                return Ok(false);
+                return Result::Ok(false);
             }
-            return Ok(true);
+            return Result::Ok(true);
         };
     }
 }

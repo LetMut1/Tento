@@ -95,7 +95,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Refre
             {
                 Some(application_user_access_refresh_token_) => application_user_access_refresh_token_,
                 None => {
-                    return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessRefreshToken_NotFound));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessRefreshToken_NotFound));
                 }
             };
             let is_valid = Encoder::<ApplicationUserAccessRefreshToken<'_>>::is_valid(
@@ -104,7 +104,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Refre
                 &incoming.application_user_access_refresh_token_encoded,
             )?;
             if !is_valid || application_user_access_token.id.as_str() != application_user_access_refresh_token.application_user_access_token__id.as_ref() {
-                return Err(
+                return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
                             line!(),
@@ -122,7 +122,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Refre
                     },
                 )
                 .await?;
-                return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessRefreshToken_AlreadyExpired));
+                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessRefreshToken_AlreadyExpired));
             }
             let application_user_access_token_new = ApplicationUserAccessToken::new(
                 Generator::<ApplicationUserAccessToken_Id>::generate(),
@@ -158,7 +158,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Refre
                     &application_user_access_refresh_token,
                 )?,
             };
-            return Ok(UnifiedReport::target_filled(outcoming));
+            return Result::Ok(UnifiedReport::target_filled(outcoming));
         };
     }
 }

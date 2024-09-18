@@ -100,7 +100,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                         file!(),
                     ),
                 )?;
-            return Ok(
+            return Result::Ok(
                 ApplicationUserAuthorizationToken::new(
                     insert_1.application_user__id,
                     Cow::Borrowed(insert_1.application_user_device__id),
@@ -151,7 +151,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                         file!(),
                     ),
                 )?;
-            return Ok(());
+            return Result::Ok(());
         };
     }
     pub fn update_1<'a>(
@@ -224,7 +224,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                         file!(),
                     ),
                 )?;
-            return Ok(());
+            return Result::Ok(());
         };
     }
     pub fn update_2<'a>(
@@ -291,7 +291,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                         file!(),
                     ),
                 )?;
-            return Ok(());
+            return Result::Ok(());
         };
     }
     pub fn update_3<'a>(database_2_connection: &'a Connection, update_3: Update3, by_1: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
@@ -342,7 +342,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                         file!(),
                     ),
                 )?;
-            return Ok(());
+            return Result::Ok(());
         };
     }
     pub fn update_4<'a>(database_2_connection: &'a Connection, update_4: Update4, by_1: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
@@ -393,7 +393,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                         file!(),
                     ),
                 )?;
-            return Ok(());
+            return Result::Ok(());
         };
     }
     pub fn find_1<'a>(
@@ -444,9 +444,9 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                     ),
                 )?;
             if row_registry.is_empty() {
-                return Ok(None);
+                return Result::Ok(None);
             }
-            return Ok(
+            return Result::Ok(
                 Some(
                     ApplicationUserAuthorizationToken1 {
                         value: row_registry[0].try_get::<'_, usize, String>(0).into_logic(
@@ -525,9 +525,9 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                     ),
                 )?;
             if row_registry.is_empty() {
-                return Ok(None);
+                return Result::Ok(None);
             }
-            return Ok(
+            return Result::Ok(
                 Some(
                     ApplicationUserAuthorizationToken2 {
                         value: row_registry[0].try_get::<'_, usize, String>(0).into_logic(
@@ -600,9 +600,9 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                     ),
                 )?;
             if row_registry.is_empty() {
-                return Ok(None);
+                return Result::Ok(None);
             }
-            return Ok(
+            return Result::Ok(
                 Some(
                     ApplicationUserAuthorizationToken3 {
                         value: row_registry[0].try_get::<'_, usize, String>(0).into_logic(

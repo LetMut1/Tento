@@ -27,7 +27,7 @@ impl Logger<ActionRound> {
                     "{}",
                     Formatter::<ActionRound>::format(&row_data).as_str(),
                 );
-                return Ok(());
+                return Result::Ok(());
             },
         );
         return ();
@@ -43,7 +43,7 @@ impl Logger<ActionRound> {
                     )
                     .as_str(),
                 );
-                return Ok(());
+                return Result::Ok(());
             },
         );
         return ();
@@ -59,7 +59,7 @@ impl Logger<ActionRound> {
                     )
                     .as_str(),
                 );
-                return Ok(());
+                return Result::Ok(());
             },
         );
         return ();

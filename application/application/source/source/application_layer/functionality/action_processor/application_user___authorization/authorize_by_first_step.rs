@@ -96,7 +96,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
     {
         return async move {
             if !Validator::<ApplicationUser_Password>::is_valid_part_1(incoming.application_user__password.as_str()) {
-                return Err(
+                return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
                             line!(),
@@ -106,7 +106,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                 );
             }
             if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming.application_user_device__id.as_str()) {
-                return Err(
+                return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
                             line!(),
@@ -129,7 +129,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                     let application_user__ = match application_user_ {
                         Some(application_user___) => application_user___,
                         None => {
-                            return Ok(UnifiedReport::precedent(Precedent::ApplicationUser_WrongEmailOrNicknameOrPassword));
+                            return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUser_WrongEmailOrNicknameOrPassword));
                         }
                     };
                     (
@@ -150,7 +150,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                         let application_user__ = match application_user_ {
                             Some(application_user___) => application_user___,
                             None => {
-                                return Ok(UnifiedReport::precedent(Precedent::ApplicationUser_WrongEmailOrNicknameOrPassword));
+                                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUser_WrongEmailOrNicknameOrPassword));
                             }
                         };
                         (
@@ -160,7 +160,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                             application_user__.password_hash,
                         )
                     } else {
-                        return Err(
+                        return Result::Err(
                             AggregateError::new_invalid_argument(
                                 Backtrace::new(
                                     line!(),
@@ -175,7 +175,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                 application_user__email.as_str(),
                 application_user__nickname.as_str(),
             ) {
-                return Err(
+                return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
                             line!(),
@@ -198,7 +198,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                     file!(),
                 ),
             )?? {
-                return Ok(UnifiedReport::precedent(Precedent::ApplicationUser_WrongEmailOrNicknameOrPassword));
+                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUser_WrongEmailOrNicknameOrPassword));
             }
             let database_2_postgresql_pooled_connection = inner.get_database_2_postgresql_pooled_connection().await?;
             let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
@@ -321,7 +321,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                             incoming.application_user_device__id.as_str(),
                         )
                         .await?;
-                        return Ok(());
+                        return Result::Ok(());
                     },
                 );
             }
@@ -332,7 +332,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                 application_user_authorization_token__wrong_enter_tries_quantity,
                 application_user_authorization_token__wrong_enter_tries_quantity_limit: ApplicationUserAuthorizationToken_WrongEnterTriesQuantity::LIMIT,
             };
-            return Ok(UnifiedReport::target_filled(outcoming));
+            return Result::Ok(UnifiedReport::target_filled(outcoming));
         };
     }
 }

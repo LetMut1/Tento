@@ -24,7 +24,7 @@ static ARGON2: OnceLock<Argon2<'static>> = OnceLock::new();
 pub struct Argon2Id;
 impl Encoder<Argon2Id> {
     pub fn encode<'a>(data: &'a [u8]) -> Result<String, AggregateError> {
-        return Ok(
+        return Result::Ok(
             Self::get()?
                 .hash_password(
                     data,
@@ -40,7 +40,7 @@ impl Encoder<Argon2Id> {
         );
     }
     pub fn is_valid<'a>(data: &'a [u8], encoded_data: &'a str) -> Result<bool, AggregateError> {
-        return Ok(
+        return Result::Ok(
             Self::get()?
                 .verify_password(
                     data,
@@ -56,16 +56,16 @@ impl Encoder<Argon2Id> {
     }
     fn get() -> Result<&'static Argon2<'static>, AggregateError> {
         return match ARGON2.get() {
-            Some(argon2) => Ok(argon2),
+            Some(argon2) => Result::Ok(argon2),
             None => {
-                if let Err(_) = ARGON2.set(
+                if let Result::Err(_) = ARGON2.set(
                     Argon2::new(
                         Algorithm::Argon2id,
                         Version::V0x13,
                         Params::default(),
                     ),
                 ) {
-                    return Err(
+                    return Result::Err(
                         AggregateError::new_logic_(
                             Common::ValueAlreadyExist,
                             Backtrace::new(

@@ -108,7 +108,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
     {
         return async move {
             if !Validator::<ApplicationUser_Id>::is_valid(incoming.application_user__id) {
-                return Err(
+                return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
                             line!(),
@@ -118,7 +118,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                 );
             }
             if !Validator::<ApplicationUserAuthorizationToken_Value>::is_valid(incoming.application_user_authorization_token__value.as_str())? {
-                return Err(
+                return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
                             line!(),
@@ -128,7 +128,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                 );
             }
             if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming.application_user_device__id.as_str()) {
-                return Err(
+                return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
                             line!(),
@@ -150,7 +150,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
             let mut application_user_authorization_token_ = match application_user_authorization_token {
                 Some(application_user_authorization_token__) => application_user_authorization_token__,
                 None => {
-                    return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAuthorizationToken_NotFound));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserAuthorizationToken_NotFound));
                 }
             };
             if Resolver::<Expiration>::is_expired(application_user_authorization_token_.expires_at) {
@@ -162,7 +162,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                     },
                 )
                 .await?;
-                return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAuthorizationToken_AlreadyExpired));
+                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserAuthorizationToken_AlreadyExpired));
             }
             if application_user_authorization_token_.value != incoming.application_user_authorization_token__value {
                 application_user_authorization_token_.wrong_enter_tries_quantity =
@@ -194,7 +194,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                     )
                     .await?;
                 }
-                return Ok(
+                return Result::Ok(
                     UnifiedReport::precedent(
                         Precedent::ApplicationUserAuthorizationToken_WrongValue {
                             application_user_authorization_token__wrong_enter_tries_quantity: application_user_authorization_token_.wrong_enter_tries_quantity,
@@ -212,7 +212,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
             )
             .await?
             {
-                return Ok(UnifiedReport::precedent(Precedent::ApplicationUser_NotFound));
+                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUser_NotFound));
             }
             let application_user_access_token = ApplicationUserAccessToken::new(
                 Generator::<ApplicationUserAccessToken_Id>::generate(),
@@ -312,14 +312,14 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                         },
                     )
                     .await?;
-                    return Ok(());
+                    return Result::Ok(());
                 },
             );
             let outcoming = Outcoming {
                 application_user_access_token_encoded,
                 application_user_access_refresh_token_encoded,
             };
-            return Ok(UnifiedReport::target_filled(outcoming));
+            return Result::Ok(UnifiedReport::target_filled(outcoming));
         };
     }
 }

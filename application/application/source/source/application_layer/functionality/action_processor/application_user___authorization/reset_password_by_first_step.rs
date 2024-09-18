@@ -88,7 +88,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Reset
     {
         return async move {
             if !Validator::<ApplicationUser_Email>::is_valid(incoming.application_user__email.as_str())? {
-                return Err(
+                return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
                             line!(),
@@ -98,7 +98,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Reset
                 );
             }
             if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming.application_user_device__id.as_str()) {
-                return Err(
+                return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
                             line!(),
@@ -118,7 +118,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Reset
             let application_user_ = match application_user {
                 Some(application_user__) => application_user__,
                 None => {
-                    return Ok(UnifiedReport::precedent(Precedent::ApplicationUser_NotFound));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUser_NotFound));
                 }
             };
             let database_2_postgresql_pooled_connection = inner.get_database_2_postgresql_pooled_connection().await?;
@@ -247,7 +247,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Reset
                             incoming.application_user_device__id.as_str(),
                         )
                         .await?;
-                        return Ok(());
+                        return Result::Ok(());
                     },
                 );
             }
@@ -258,7 +258,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Reset
                 application_user_reset_password_token__wrong_enter_tries_quantity,
                 application_user_reset_password_token__wrong_enter_tries_quantity_limit: ApplicationUserResetPasswordToken_WrongEnterTriesQuantity::LIMIT,
             };
-            return Ok(UnifiedReport::target_filled(outcoming));
+            return Result::Ok(UnifiedReport::target_filled(outcoming));
         };
     }
 }

@@ -23,7 +23,7 @@ impl Encoder<ApplicationUserAccessRefreshToken<'_>> {
         environment_configuration: &'static EnvironmentConfiguration,
         application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>,
     ) -> Result<ApplicationUserAccessRefreshTokenEncoded, AggregateError> {
-        return Ok(
+        return Result::Ok(
             ApplicationUserAccessRefreshTokenEncoded(
                 Encoder_::<HmacSha3_512>::encode(
                     environment_configuration.encryption.private_key.application_user_access_refresh_token.as_bytes(),

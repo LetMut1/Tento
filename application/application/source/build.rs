@@ -5,7 +5,7 @@ use std::{
 };
 use uuid::Uuid;
 fn main() -> () {
-    if let Err(error) = Processor::process() {
+    if let Result::Err(error) = Processor::process() {
         panic!("{}", error);
     }
     return ();
@@ -14,7 +14,7 @@ struct Processor;
 impl Processor {
     fn process() -> Result<(), Box<dyn Error + 'static>> {
         Self::create_rerun_instruction()?;
-        return Ok(());
+        return Result::Ok(());
     }
     // It is necessary that the build-script be run on each compilation command,
     // so we specify in the instructions that the Cargo watch for a non-existent
@@ -23,6 +23,6 @@ impl Processor {
         let file_name = Uuid::new_v4().to_string();
         let file_path = format!("{}/{}.txt", var("OUT_DIR")?.as_str(), file_name.as_str(),);
         rerun_if_changed!(file_path.as_str());
-        return Ok(());
+        return Result::Ok(());
     }
 }

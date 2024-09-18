@@ -91,7 +91,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Reset
     {
         return async move {
             if !Validator::<ApplicationUserResetPasswordToken_Value>::is_valid(incoming.application_user_reset_password_token__value.as_str())? {
-                return Err(
+                return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
                             line!(),
@@ -101,7 +101,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Reset
                 );
             }
             if !Validator::<ApplicationUser_Id>::is_valid(incoming.application_user__id) {
-                return Err(
+                return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
                             line!(),
@@ -111,7 +111,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Reset
                 );
             }
             if !Validator::<ApplicationUser_Password>::is_valid_part_1(incoming.application_user__password.as_str()) {
-                return Err(
+                return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
                             line!(),
@@ -121,7 +121,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Reset
                 );
             }
             if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming.application_user_device__id.as_str()) {
-                return Err(
+                return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
                             line!(),
@@ -143,7 +143,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Reset
             {
                 Some(application_user_reset_password_token_) => application_user_reset_password_token_,
                 None => {
-                    return Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_NotFound));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_NotFound));
                 }
             };
             if Resolver::<Expiration>::is_expired(application_user_reset_password_token.expires_at) {
@@ -155,10 +155,10 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Reset
                     },
                 )
                 .await?;
-                return Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_AlreadyExpired));
+                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_AlreadyExpired));
             }
             if !application_user_reset_password_token.is_approved {
-                return Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_IsNotApproved));
+                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_IsNotApproved));
             }
             if application_user_reset_password_token.value != incoming.application_user_reset_password_token__value {
                 application_user_reset_password_token.wrong_enter_tries_quantity =
@@ -190,7 +190,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Reset
                     )
                     .await?;
                 }
-                return Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_WrongValue));
+                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_WrongValue));
             }
             let database_1_postgresql_pooled_connection = inner.get_database_1_postgresql_pooled_connection().await?;
             let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
@@ -204,7 +204,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Reset
             {
                 Some(application_user_) => application_user_,
                 None => {
-                    return Ok(UnifiedReport::precedent(Precedent::ApplicationUser_NotFound));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUser_NotFound));
                 }
             };
             if !Validator::<ApplicationUser_Password>::is_valid_part_2(
@@ -212,7 +212,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Reset
                 application_user.email.as_str(),
                 application_user.nickname.as_str(),
             ) {
-                return Err(
+                return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
                             line!(),
@@ -267,10 +267,10 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Reset
                         },
                     )
                     .await?;
-                    return Ok(());
+                    return Result::Ok(());
                 },
             );
-            return Ok(UnifiedReport::target_empty());
+            return Result::Ok(UnifiedReport::target_empty());
         };
     }
 }

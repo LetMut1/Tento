@@ -73,14 +73,14 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription__Base___Create> {
                     application_user_access_token: application_user_access_token_,
                 } => application_user_access_token_,
                 Extracted::ApplicationUserAccessTokenAlreadyExpired => {
-                    return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_AlreadyExpired));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_AlreadyExpired));
                 }
                 Extracted::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
-                    return Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList));
                 }
             };
             if !Validator::<Channel_Id>::is_valid(incoming.channel__id) {
-                return Err(
+                return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
                             line!(),
@@ -101,14 +101,14 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription__Base___Create> {
             {
                 Some(channel_) => channel_,
                 None => {
-                    return Ok(UnifiedReport::precedent(Precedent::Channel_NotFound));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::Channel_NotFound));
                 }
             };
             if channel.owner == application_user_access_token.application_user__id {
-                return Ok(UnifiedReport::precedent(Precedent::ApplicationUser_IsChannelOwner));
+                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUser_IsChannelOwner));
             }
             if let Channel_AccessModifier::Close = Channel_AccessModifier::to_representation(channel.access_modifier) {
-                return Ok(UnifiedReport::precedent(Precedent::Channel_IsClose));
+                return Result::Ok(UnifiedReport::precedent(Precedent::Channel_IsClose));
             }
             PostgresqlRepository::<ChannelSubscription>::create_1(
                 database_1_postgresql_connection,
@@ -118,7 +118,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription__Base___Create> {
                 },
             )
             .await?;
-            return Ok(UnifiedReport::target_empty());
+            return Result::Ok(UnifiedReport::target_empty());
         };
     }
 }

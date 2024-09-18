@@ -9,6 +9,6 @@ use crate::{
 use aggregate_error::AggregateError;
 impl Generator<ApplicationUserAuthorizationToken_CanBeResentFrom> {
     pub fn generate() -> Result<i64, AggregateError> {
-        return Ok(Resolver::<DateTime>::unixtime_add_minutes_interval_from_now(ApplicationUserAuthorizationToken_CanBeResentFrom::QUANTITY_OF_MINUTES_BEFORE_RESENDING)?);
+        return Result::Ok(Resolver::<DateTime>::unixtime_add_minutes_interval_from_now(ApplicationUserAuthorizationToken_CanBeResentFrom::QUANTITY_OF_MINUTES_BEFORE_RESENDING)?);
     }
 }
