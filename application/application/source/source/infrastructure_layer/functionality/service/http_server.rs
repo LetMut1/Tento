@@ -66,6 +66,7 @@ use aggregate_error::{
     Common,
     ResultConverter,
 };
+use tokio::net::ToSocketAddrs;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager;
 use hyper::{
@@ -136,162 +137,149 @@ impl HttpServer {
                 },
             );
             'a: loop {
-                if let Result::Err(aggregate_error) = Self::run_(
-                    environment_configuration,
-                    graceful_shutdown_signal_future_.as_mut(),
-                    cloned.clone(),
-                )
-                .await
-                {
+                let cloned_ = cloned.clone();
+                let mut graceful_shutdown_signal_future__ = graceful_shutdown_signal_future_.as_mut();
+                let tcp_listener = TcpListener::bind(&environment_configuration.application_server.tcp.socket_address).await.into_logic(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?;
+                let future = async move {
+                    #[cfg(feature = "manual_testing")]
+                    let http1_builder = Http1Builder::new();
+                    let mut http2_builder = Http2Builder::new(TokioExecutor::new())
+                        .max_local_error_reset_streams(Option::Some(128));
+                    http2_builder
+                        .auto_date_header(false)
+                        .max_header_list_size(environment_configuration.application_server.http.maximum_header_list_size)
+                        .adaptive_window(environment_configuration.application_server.http.adaptive_window)
+                        .initial_connection_window_size(Option::Some(environment_configuration.application_server.http.connection_window_size))
+                        .initial_stream_window_size(Option::Some(environment_configuration.application_server.http.stream_window_size))
+                        .max_concurrent_streams(Option::None)
+                        .max_frame_size(Option::Some(environment_configuration.application_server.http.maximum_frame_size))
+                        .max_send_buf_size(environment_configuration.application_server.http.maximum_sending_buffer_size as usize);
+                    if environment_configuration.application_server.http.enable_connect_protocol {
+                        http2_builder.enable_connect_protocol();
+                    };
+                    match environment_configuration.application_server.http.keepalive {
+                        Option::Some(ref keepalive) => {
+                            http2_builder
+                                .keep_alive_interval(Option::Some(Duration::from_secs(keepalive.interval_duration)))
+                                .keep_alive_timeout(Duration::from_secs(keepalive.timeout_duration))
+                        }
+                        Option::None => http2_builder.keep_alive_interval(Option::None),
+                    };
+                    match environment_configuration.application_server.http.maximum_pending_accept_reset_streams {
+                        Option::Some(maximum_pending_accept_reset_streams) => http2_builder.max_pending_accept_reset_streams(Option::Some(maximum_pending_accept_reset_streams)),
+                        Option::None => http2_builder.max_pending_accept_reset_streams(Option::None),
+                    };
+                    if let Option::Some(ref _tls) = environment_configuration.application_server.http.tls {
+                        todo!("// TODO ssl_protocolsTLSv1 TLSv1.1 TLSv1.2 TLSv1.3;  ssl_ciphers HIGH:!aNULL:!MD5;")
+                    }
+                    'b: loop {
+                        tokio::select! {
+                            biased;
+                            _ = graceful_shutdown_signal_future__.as_mut() => {
+                                break 'b;
+                            },
+                            result = tcp_listener.accept() => {
+                                let tcp_stream = match result {
+                                    Ok((tcp_stream_, _)) => tcp_stream_,
+                                    Err(error) => {
+                                        Spawner::<TokioNonBlockingTask>::spawn_into_background(
+                                            async move {
+                                                Logger::<AggregateError>::log(
+                                                    &AggregateError::new_runtime(
+                                                        error.into(),
+                                                        Backtrace::new(
+                                                            line!(),
+                                                            file!(),
+                                                        ),
+                                                    )
+                                                );
+                                                return Ok(());
+                                            }
+                                        );
+                                        continue 'b;
+                                    }
+                                };
+                                let cloned__ = cloned_.clone();
+                                let serving_connection_future = http2_builder.serve_connection(
+                                    TokioIo::new(tcp_stream),
+                                    hyper::service::service_fn(
+                                        move |request: Request| -> _ {
+                                            let cloned___ = cloned__.clone();
+                                            return async move {
+                                                let response = Self::process_request(
+                                                    request,
+                                                    environment_configuration,
+                                                    cloned___,
+                                                )
+                                                .await;
+                                                return Result::<_, Void>::Ok(response);
+                                            };
+                                        },
+                                    ),
+                                );
+                                Spawner::<TokioNonBlockingTask>::spawn_into_background(
+                                    async move {
+                                        const STEP: u64 = 1;
+                                        CONNECTION_QUANTITY.fetch_add(
+                                            STEP,
+                                            Ordering::Relaxed,
+                                        );
+                                        let result = serving_connection_future.await.into_runtime(          // TODO нужно ли catch_unwind.
+                                            Backtrace::new(
+                                                line!(),
+                                                file!(),
+                                            ),
+                                        );
+                                        CONNECTION_QUANTITY.fetch_sub(
+                                            STEP,
+                                            Ordering::Relaxed,
+                                        );
+                                        return result;
+                                    },
+                                );
+                                continue 'b;
+                            },
+                        }
+                    }
+                    let completion_by_connection_quantity_future = async {
+                        'b: loop {
+                            if CONNECTION_QUANTITY.load(Ordering::Relaxed) != 0 {
+                                tokio::time::sleep(Duration::from_millis(100)).await;
+                                continue 'b;
+                            } else {
+                                break 'b;
+                            }
+                        }
+                        return ();
+                    };
+                    let completion_by_timer_future = async {
+                        tokio::time::sleep(Duration::from_secs(30)).await;
+                        return ();
+                    };
+                    let completion_by_connection_quantity_join_handle = Spawner::<TokioNonBlockingTask>::spawn_processed(completion_by_connection_quantity_future);
+                    let completion_by_timer_join_handle = Spawner::<TokioNonBlockingTask>::spawn_processed(completion_by_timer_future);
+                    tokio::select! {
+                        biased;
+                        _ = completion_by_connection_quantity_join_handle => {
+                            ()
+                        },
+                        _ = completion_by_timer_join_handle => {
+                            ()
+                        },
+                    }
+                    return Result::<_, AggregateError>::Ok(());
+                };
+                if let Result::Err(aggregate_error) = future.await {
                     Logger::<AggregateError>::log(&aggregate_error);
                     tokio::time::sleep(Duration::from_secs(1)).await;
                     continue 'a;
                 }
                 break 'a;
-            }
-            return Result::Ok(());
-        };
-    }
-    fn run_<'a, T>(
-        environment_configuration: &'static EnvironmentConfiguration,
-        mut graceful_shutdown_signal_future: Pin<&'a mut (impl Future<Output = ()> + Send)>,
-        cloned: Arc<Cloned<T>>
-    ) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void>
-    where
-        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
-        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
-        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
-        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
-    {
-        return async move {
-            let mut http2_builder = Http2Builder::new(TokioExecutor::new()).max_local_error_reset_streams(Option::Some(128));
-            http2_builder
-                .auto_date_header(false)
-                .max_header_list_size(environment_configuration.application_server.http.maximum_header_list_size)
-                .adaptive_window(environment_configuration.application_server.http.adaptive_window)
-                .initial_connection_window_size(Option::Some(environment_configuration.application_server.http.connection_window_size))
-                .initial_stream_window_size(Option::Some(environment_configuration.application_server.http.stream_window_size))
-                .max_concurrent_streams(Option::None)
-                .max_frame_size(Option::Some(environment_configuration.application_server.http.maximum_frame_size))
-                .max_send_buf_size(environment_configuration.application_server.http.maximum_sending_buffer_size as usize);
-            if environment_configuration.application_server.http.enable_connect_protocol {
-                http2_builder.enable_connect_protocol();
-            };
-            match environment_configuration.application_server.http.keepalive {
-                Option::Some(ref keepalive) => {
-                    http2_builder
-                        .keep_alive_interval(Option::Some(Duration::from_secs(keepalive.interval_duration)))
-                        .keep_alive_timeout(Duration::from_secs(keepalive.timeout_duration))
-                }
-                Option::None => http2_builder.keep_alive_interval(Option::None),
-            };
-            match environment_configuration.application_server.http.maximum_pending_accept_reset_streams {
-                Option::Some(maximum_pending_accept_reset_streams) => http2_builder.max_pending_accept_reset_streams(Option::Some(maximum_pending_accept_reset_streams)),
-                Option::None => http2_builder.max_pending_accept_reset_streams(Option::None),
-            };
-            if let Option::Some(ref _tls) = environment_configuration.application_server.http.tls {
-                todo!("// TODO ssl_protocolsTLSv1 TLSv1.1 TLSv1.2 TLSv1.3;  ssl_ciphers HIGH:!aNULL:!MD5;")
-            }
-            let tcp_listener = TcpListener::bind(&environment_configuration.application_server.tcp.socket_address).await.into_logic(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            )?;
-            'a: loop {
-                tokio::select! {
-                    biased;
-                    _ = graceful_shutdown_signal_future.as_mut() => {
-                        break 'a;
-                    },
-                    result = tcp_listener.accept() => {
-                        let tcp_stream = match result {
-                            Ok((tcp_stream_, _)) => tcp_stream_,
-                            Err(error) => {
-                                Spawner::<TokioNonBlockingTask>::spawn_into_background(
-                                    async move {
-                                        Logger::<AggregateError>::log(
-                                            &AggregateError::new_runtime(
-                                                error.into(),
-                                                Backtrace::new(
-                                                    line!(),
-                                                    file!(),
-                                                ),
-                                            )
-                                        );
-                                        return Ok(());
-                                    }
-                                );
-                                continue 'a;
-                            }
-                        };
-                        let cloned_ = cloned.clone();
-                        let serving_connection_future = http2_builder.serve_connection(
-                            TokioIo::new(tcp_stream),
-                            hyper::service::service_fn(
-                                move |request: Request| -> _ {
-                                    let cloned__ = cloned_.clone();
-                                    return async move {
-                                        let response = Self::process_request(
-                                            request,
-                                            environment_configuration,
-                                            cloned__,
-                                        )
-                                        .await;
-                                        return Result::<_, Void>::Ok(response);
-                                    };
-                                },
-                            ),
-                        );
-                        Spawner::<TokioNonBlockingTask>::spawn_into_background(
-                            async move {
-                                const STEP: u64 = 1;
-                                CONNECTION_QUANTITY.fetch_add(
-                                    STEP,
-                                    Ordering::Relaxed,
-                                );
-                                let result = serving_connection_future.await.into_runtime(          // TODO нужно ли catch_unwind.
-                                    Backtrace::new(
-                                        line!(),
-                                        file!(),
-                                    ),
-                                );
-                                CONNECTION_QUANTITY.fetch_sub(
-                                    STEP,
-                                    Ordering::Relaxed,
-                                );
-                                return result;
-                            },
-                        );
-                        continue 'a;
-                    },
-                }
-            }
-            let completion_by_connection_quantity_future = async {
-                'a: loop {
-                    if CONNECTION_QUANTITY.load(Ordering::Relaxed) != 0 {
-                        tokio::time::sleep(Duration::from_millis(100)).await;
-                        continue 'a;
-                    } else {
-                        break 'a;
-                    }
-                }
-                return ();
-            };
-            let completion_by_timer_future = async {
-                tokio::time::sleep(Duration::from_secs(30)).await;
-                return ();
-            };
-            let completion_by_connection_quantity_join_handle = Spawner::<TokioNonBlockingTask>::spawn_processed(completion_by_connection_quantity_future);
-            let completion_by_timer_join_handle = Spawner::<TokioNonBlockingTask>::spawn_processed(completion_by_timer_future);
-            tokio::select! {
-                biased;
-                _ = completion_by_connection_quantity_join_handle => {
-                    ()
-                },
-                _ = completion_by_timer_join_handle => {
-                    ()
-                },
             }
             return Result::Ok(());
         };
