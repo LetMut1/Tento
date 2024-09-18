@@ -29,8 +29,8 @@ impl Creator<Response> {
         parts.version = Version::HTTP_2;
         parts.headers = header_map;
         let bytes = match data {
-            Some(data_) => Bytes::from(data_),
-            None => Bytes::new(),
+            Option::Some(data_) => Bytes::from(data_),
+            Option::None => Bytes::new(),
         };
         return Response::from_parts(
             parts,
@@ -40,37 +40,37 @@ impl Creator<Response> {
     pub fn create_bad_request() -> Response {
         return Self::create(
             StatusCode::BAD_REQUEST,
-            None,
+            Option::None,
         );
     }
     pub fn create_unauthorized() -> Response {
         return Self::create(
             StatusCode::UNAUTHORIZED,
-            None,
+            Option::None,
         );
     }
     pub fn create_not_found() -> Response {
         return Self::create(
             StatusCode::NOT_FOUND,
-            None,
+            Option::None,
         );
     }
     pub fn create_internal_server_error() -> Response {
         return Self::create(
             StatusCode::INTERNAL_SERVER_ERROR,
-            None,
+            Option::None,
         );
     }
     pub fn create_not_extended() -> Response {
         return Self::create(
             StatusCode::NOT_EXTENDED,
-            None,
+            Option::None,
         );
     }
     pub fn create_ok(data: Vec<u8>) -> Response {
         return Self::create(
             StatusCode::OK,
-            Some(data),
+            Option::Some(data),
         );
     }
 }

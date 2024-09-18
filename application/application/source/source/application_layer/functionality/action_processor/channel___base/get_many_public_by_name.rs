@@ -101,7 +101,7 @@ impl ActionProcessor_ for ActionProcessor<Channel__Base___GetManyPublicByName> {
                     ),
                 );
             }
-            if let Some(ref requery___channel__name_) = incoming.requery___channel__name {
+            if let Option::Some(ref requery___channel__name_) = incoming.requery___channel__name {
                 if !Validator::<Channel_Name>::is_valid(requery___channel__name_.as_str()) {
                     return Result::Err(
                         AggregateError::new_invalid_argument(

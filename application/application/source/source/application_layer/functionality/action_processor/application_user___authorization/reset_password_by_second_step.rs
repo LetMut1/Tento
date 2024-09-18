@@ -110,8 +110,8 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Reset
             )
             .await?
             {
-                Some(application_user_reset_password_token_) => application_user_reset_password_token_,
-                None => {
+                Option::Some(application_user_reset_password_token_) => application_user_reset_password_token_,
+                Option::None => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_NotFound));
                 }
             };

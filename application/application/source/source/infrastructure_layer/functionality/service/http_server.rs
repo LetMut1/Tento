@@ -157,32 +157,32 @@ impl HttpServer {
                 }
                 return ();
             };
-            let mut http2_builder = Builder::new(TokioExecutor::new()).max_local_error_reset_streams(Some(1024));
+            let mut http2_builder = Builder::new(TokioExecutor::new()).max_local_error_reset_streams(Option::Some(1024));
             http2_builder
                 .auto_date_header(false)
                 .max_header_list_size(environment_configuration.application_server.http.maximum_header_list_size)
                 .adaptive_window(environment_configuration.application_server.http.adaptive_window)
-                .initial_connection_window_size(Some(environment_configuration.application_server.http.connection_window_size))
-                .initial_stream_window_size(Some(environment_configuration.application_server.http.stream_window_size))
-                .max_concurrent_streams(None)
-                .max_frame_size(Some(environment_configuration.application_server.http.maximum_frame_size))
+                .initial_connection_window_size(Option::Some(environment_configuration.application_server.http.connection_window_size))
+                .initial_stream_window_size(Option::Some(environment_configuration.application_server.http.stream_window_size))
+                .max_concurrent_streams(Option::None)
+                .max_frame_size(Option::Some(environment_configuration.application_server.http.maximum_frame_size))
                 .max_send_buf_size(environment_configuration.application_server.http.maximum_sending_buffer_size as usize);
             if environment_configuration.application_server.http.enable_connect_protocol {
                 http2_builder.enable_connect_protocol();
             };
             match environment_configuration.application_server.http.keepalive {
-                Some(ref keepalive) => {
+                Option::Some(ref keepalive) => {
                     http2_builder
-                        .keep_alive_interval(Some(Duration::from_secs(keepalive.interval_duration)))
+                        .keep_alive_interval(Option::Some(Duration::from_secs(keepalive.interval_duration)))
                         .keep_alive_timeout(Duration::from_secs(keepalive.timeout_duration))
                 }
-                None => http2_builder.keep_alive_interval(None),
+                Option::None => http2_builder.keep_alive_interval(Option::None),
             };
             match environment_configuration.application_server.http.maximum_pending_accept_reset_streams {
-                Some(maximum_pending_accept_reset_streams) => http2_builder.max_pending_accept_reset_streams(Some(maximum_pending_accept_reset_streams)),
-                None => http2_builder.max_pending_accept_reset_streams(None),
+                Option::Some(maximum_pending_accept_reset_streams) => http2_builder.max_pending_accept_reset_streams(Option::Some(maximum_pending_accept_reset_streams)),
+                Option::None => http2_builder.max_pending_accept_reset_streams(Option::None),
             };
-            if let Some(ref _tls) = environment_configuration.application_server.http.tls {
+            if let Option::Some(ref _tls) = environment_configuration.application_server.http.tls {
                 todo!("// TODO ssl_protocolsTLSv1 TLSv1.1 TLSv1.2 TLSv1.3;  ssl_ciphers HIGH:!aNULL:!MD5;")
             }
             let tcp_listener = TcpListener::bind(&environment_configuration.application_server.tcp.socket_address).await.into_logic(

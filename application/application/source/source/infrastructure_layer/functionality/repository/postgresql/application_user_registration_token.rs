@@ -515,10 +515,10 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
                     ),
                 )?;
             if row_registry.is_empty() {
-                return Result::Ok(None);
+                return Result::Ok(Option::None);
             }
             return Result::Ok(
-                Some(
+                Option::Some(
                     ApplicationUserRegistrationToken1 {
                         value: row_registry[0].try_get::<'_, usize, String>(0).into_logic(
                             Backtrace::new(
@@ -603,10 +603,10 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
                     ),
                 )?;
             if row_registry.is_empty() {
-                return Result::Ok(None);
+                return Result::Ok(Option::None);
             }
             return Result::Ok(
-                Some(
+                Option::Some(
                     ApplicationUserRegistrationToken2 {
                         value: row_registry[0].try_get::<'_, usize, String>(0).into_logic(
                             Backtrace::new(
@@ -685,10 +685,10 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
                     ),
                 )?;
             if row_registry.is_empty() {
-                return Result::Ok(None);
+                return Result::Ok(Option::None);
             }
             return Result::Ok(
-                Some(
+                Option::Some(
                     ApplicationUserRegistrationToken3 {
                         value: row_registry[0].try_get::<'_, usize, String>(0).into_logic(
                             Backtrace::new(

@@ -127,8 +127,8 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                     )
                     .await?;
                     let application_user__ = match application_user_ {
-                        Some(application_user___) => application_user___,
-                        None => {
+                        Option::Some(application_user___) => application_user___,
+                        Option::None => {
                             return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUser_WrongEmailOrNicknameOrPassword));
                         }
                     };
@@ -148,8 +148,8 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                         )
                         .await?;
                         let application_user__ = match application_user_ {
-                            Some(application_user___) => application_user___,
-                            None => {
+                            Option::Some(application_user___) => application_user___,
+                            Option::None => {
                                 return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUser_WrongEmailOrNicknameOrPassword));
                             }
                         };
@@ -216,7 +216,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
             )
             .await?
             {
-                Some(mut application_user_authorization_token) => {
+                Option::Some(mut application_user_authorization_token) => {
                     let (can_send_, need_to_update_1) = if Resolver::<Expiration>::is_expired(application_user_authorization_token.can_be_resent_from) {
                         application_user_authorization_token.can_be_resent_from = Generator::<ApplicationUserAuthorizationToken_CanBeResentFrom>::generate()?;
                         (
@@ -289,7 +289,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                         can_send_,
                     )
                 }
-                None => {
+                Option::None => {
                     let application_user_authorization_token = PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::create_1(
                         database_2_postgresql_connection,
                         Insert1 {

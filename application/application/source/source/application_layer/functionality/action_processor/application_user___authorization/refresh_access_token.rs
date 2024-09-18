@@ -93,8 +93,8 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Refre
             )
             .await?
             {
-                Some(application_user_access_refresh_token_) => application_user_access_refresh_token_,
-                None => {
+                Option::Some(application_user_access_refresh_token_) => application_user_access_refresh_token_,
+                Option::None => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessRefreshToken_NotFound));
                 }
             };

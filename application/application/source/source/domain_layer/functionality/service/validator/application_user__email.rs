@@ -13,8 +13,8 @@ static REGULAR_EXPRESSION: OnceLock<Regex> = OnceLock::new();
 impl Validator<ApplicationUser_Email> {
     pub fn is_valid<'a>(application_user__email: &'a str) -> Result<bool, AggregateError> {
         let regular_expression = match REGULAR_EXPRESSION.get() {
-            Some(regular_expression_) => regular_expression_,
-            None => {
+            Option::Some(regular_expression_) => regular_expression_,
+            Option::None => {
                 if let Result::Err(_) = REGULAR_EXPRESSION.set(
                     Regex::new(ApplicationUser_Email::REGULAR_EXPRESSION).into_logic(
                         Backtrace::new(

@@ -61,8 +61,8 @@ impl CommandProcessor<RunServer> {
         );
         let environment_configuration = Loader::<EnvironmentConfiguration>::load_from_file(environment_configuration_file_path.as_str())?;
         return match ENVIRONMENT_CONFIGURATION.get() {
-            Some(environment_configuration__) => Result::Ok(environment_configuration__),
-            None => {
+            Option::Some(environment_configuration__) => Result::Ok(environment_configuration__),
+            Option::None => {
                 if let Result::Err(_) = ENVIRONMENT_CONFIGURATION.set(environment_configuration) {
                     return Result::Err(
                         AggregateError::new_logic_(

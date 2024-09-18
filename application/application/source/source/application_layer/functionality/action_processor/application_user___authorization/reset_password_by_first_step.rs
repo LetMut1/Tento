@@ -116,8 +116,8 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Reset
             )
             .await?;
             let application_user_ = match application_user {
-                Some(application_user__) => application_user__,
-                None => {
+                Option::Some(application_user__) => application_user__,
+                Option::None => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUser_NotFound));
                 }
             };
@@ -137,7 +137,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Reset
             )
             .await?
             {
-                Some(mut application_user_reset_password_token) => {
+                Option::Some(mut application_user_reset_password_token) => {
                     let (can_send_, need_to_update_1) = if Resolver::<Expiration>::is_expired(application_user_reset_password_token.can_be_resent_from) {
                         application_user_reset_password_token.can_be_resent_from = Generator::<ApplicationUserResetPasswordToken_CanBeResentFrom>::generate()?;
                         (
@@ -214,7 +214,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Reset
                         can_send_,
                     )
                 }
-                None => {
+                Option::None => {
                     let application_user_reset_password_token = PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::create_1(
                         database_2_postgresql_connection,
                         Insert1 {

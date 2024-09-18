@@ -99,8 +99,8 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription__Base___Create> {
             )
             .await?
             {
-                Some(channel_) => channel_,
-                None => {
+                Option::Some(channel_) => channel_,
+                Option::None => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::Channel_NotFound));
                 }
             };

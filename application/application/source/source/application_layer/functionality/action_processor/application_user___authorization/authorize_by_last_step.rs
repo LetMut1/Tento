@@ -148,8 +148,8 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
             )
             .await?;
             let mut application_user_authorization_token_ = match application_user_authorization_token {
-                Some(application_user_authorization_token__) => application_user_authorization_token__,
-                None => {
+                Option::Some(application_user_authorization_token__) => application_user_authorization_token__,
+                Option::None => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserAuthorizationToken_NotFound));
                 }
             };
@@ -234,7 +234,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
             )
             .await?
             {
-                Some(mut application_user_access_refresh_token_) => {
+                Option::Some(mut application_user_access_refresh_token_) => {
                     application_user_access_refresh_token_.application_user_access_token__id = Cow::Borrowed(application_user_access_token__id);
                     application_user_access_refresh_token_.obfuscation_value = application_user_access_refresh_token__obfuscation_value;
                     application_user_access_refresh_token_.expires_at = application_user_access_refresh_token__expires_at;
@@ -255,7 +255,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                     .await?;
                     application_user_access_refresh_token_
                 }
-                None => {
+                Option::None => {
                     let application_user_access_refresh_token_ = PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::create_1(
                         database_2_postgresql_connection,
                         ApplicationUserAccessRefreshTokenInsert1 {

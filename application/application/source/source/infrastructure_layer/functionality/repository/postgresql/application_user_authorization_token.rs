@@ -444,10 +444,10 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                     ),
                 )?;
             if row_registry.is_empty() {
-                return Result::Ok(None);
+                return Result::Ok(Option::None);
             }
             return Result::Ok(
-                Some(
+                Option::Some(
                     ApplicationUserAuthorizationToken1 {
                         value: row_registry[0].try_get::<'_, usize, String>(0).into_logic(
                             Backtrace::new(
@@ -525,10 +525,10 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                     ),
                 )?;
             if row_registry.is_empty() {
-                return Result::Ok(None);
+                return Result::Ok(Option::None);
             }
             return Result::Ok(
-                Some(
+                Option::Some(
                     ApplicationUserAuthorizationToken2 {
                         value: row_registry[0].try_get::<'_, usize, String>(0).into_logic(
                             Backtrace::new(
@@ -600,10 +600,10 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                     ),
                 )?;
             if row_registry.is_empty() {
-                return Result::Ok(None);
+                return Result::Ok(Option::None);
             }
             return Result::Ok(
-                Some(
+                Option::Some(
                     ApplicationUserAuthorizationToken3 {
                         value: row_registry[0].try_get::<'_, usize, String>(0).into_logic(
                             Backtrace::new(

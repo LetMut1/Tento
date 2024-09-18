@@ -187,7 +187,7 @@ where
 #[repr(C)]
 pub struct C_Option<T> {
     pub data: T,
-    // If false, then it means it it None.
+    // If false, then it means it it Option::None.
     pub is_data: bool,
 }
 impl<T> C_Option<T> {
@@ -2287,9 +2287,9 @@ pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____seriali
     let converter =
         move |incoming: &'_ Channel__Base___GetManyByNameInSubscriptions___Incoming| -> Result<Channel__Base___GetManyByNameInSubscriptions___Incoming_, Box<dyn StdError + 'static>> {
             let requery___channel__name = if incoming.requery___channel__name.is_data {
-                Some(incoming.requery___channel__name.data.clone_as_string()?)
+                Option::Some(incoming.requery___channel__name.data.clone_as_string()?)
             } else {
-                None
+                Option::None
             };
             let incoming_ = Channel__Base___GetManyByNameInSubscriptions___Incoming_ {
                 application_user_access_token_encoded: ApplicationUserAccessTokenEncoded_ {
@@ -2345,12 +2345,12 @@ pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____deseria
                         let mut common_registry: Vec<Common1> = vec![];
                         '_a: for common_1 in data__.common_registry {
                             let channel__cover_image_path = match common_1.channel.channel__cover_image_path {
-                                Some(channel__cover_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel__cover_image_path_)),
-                                None => C_Option::none(),
+                                Option::Some(channel__cover_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel__cover_image_path_)),
+                                Option::None => C_Option::none(),
                             };
                             let channel__background_image_path = match common_1.channel.channel__background_image_path {
-                                Some(channel__background_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel__background_image_path_)),
-                                None => C_Option::none(),
+                                Option::Some(channel__background_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel__background_image_path_)),
+                                Option::None => C_Option::none(),
                             };
                             let common_1_ = Common1 {
                                 channel: Channel1 {
@@ -2437,9 +2437,9 @@ pub struct Channel__Base___GetManyBySubscription___Incoming {
 pub extern "C" fn channel___base____get_many_by_subscription____serialize____allocate(incoming: *mut Channel__Base___GetManyBySubscription___Incoming) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: &'_ Channel__Base___GetManyBySubscription___Incoming| -> Result<Channel__Base___GetManyBySubscription___Incoming_, Box<dyn StdError + 'static>> {
         let requery___channel__id = if incoming.requery___channel__id.is_data {
-            Some(incoming.requery___channel__id.data)
+            Option::Some(incoming.requery___channel__id.data)
         } else {
-            None
+            Option::None
         };
         let incoming_ = Channel__Base___GetManyBySubscription___Incoming_ {
             application_user_access_token_encoded: ApplicationUserAccessTokenEncoded_ {
@@ -2492,12 +2492,12 @@ pub extern "C" fn channel___base____get_many_by_subscription____deserialize____a
                         let mut common_registry: Vec<Common1> = vec![];
                         '_a: for common_1 in data__.common_registry {
                             let channel__cover_image_path = match common_1.channel.channel__cover_image_path {
-                                Some(channel__cover_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel__cover_image_path_)),
-                                None => C_Option::none(),
+                                Option::Some(channel__cover_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel__cover_image_path_)),
+                                Option::None => C_Option::none(),
                             };
                             let channel__background_image_path = match common_1.channel.channel__background_image_path {
-                                Some(channel__background_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel__background_image_path_)),
-                                None => C_Option::none(),
+                                Option::Some(channel__background_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel__background_image_path_)),
+                                Option::None => C_Option::none(),
                             };
                             let common_1_ = Common1 {
                                 channel: Channel1 {
@@ -2585,9 +2585,9 @@ pub struct Channel__Base___GetManyPublicByName___Incoming {
 pub extern "C" fn channel___base____get_many_public_by_name____serialize____allocate(incoming: *mut Channel__Base___GetManyPublicByName___Incoming) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: &'_ Channel__Base___GetManyPublicByName___Incoming| -> Result<Channel__Base___GetManyPublicByName___Incoming_, Box<dyn StdError + 'static>> {
         let requery___channel__name = if incoming.requery___channel__name.is_data {
-            Some(incoming.requery___channel__name.data.clone_as_string()?)
+            Option::Some(incoming.requery___channel__name.data.clone_as_string()?)
         } else {
-            None
+            Option::None
         };
         let incoming_ = Channel__Base___GetManyPublicByName___Incoming_ {
             application_user_access_token_encoded: ApplicationUserAccessTokenEncoded_ {
@@ -2640,12 +2640,12 @@ pub extern "C" fn channel___base____get_many_public_by_name____deserialize____al
                         let mut common_registry: Vec<Common1> = vec![];
                         '_a: for common_1 in data__.common_registry {
                             let channel__cover_image_path = match common_1.channel.channel__cover_image_path {
-                                Some(channel__cover_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel__cover_image_path_)),
-                                None => C_Option::none(),
+                                Option::Some(channel__cover_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel__cover_image_path_)),
+                                Option::None => C_Option::none(),
                             };
                             let channel__background_image_path = match common_1.channel.channel__background_image_path {
-                                Some(channel__background_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel__background_image_path_)),
-                                None => C_Option::none(),
+                                Option::Some(channel__background_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel__background_image_path_)),
+                                Option::None => C_Option::none(),
                             };
                             let common_1_ = Common1 {
                                 channel: Channel1 {
@@ -2776,18 +2776,18 @@ pub extern "C" fn channel___base____get_one_by_id____deserialize____allocate(c_v
                     }
                     Data::Filled { data: data__ } => {
                         let channel__description = match data__.channel.channel__description {
-                            Some(channel__description_) => C_Option::data(Allocator::<C_String>::allocate(channel__description_)),
-                            None => C_Option::none()
+                            Option::Some(channel__description_) => C_Option::data(Allocator::<C_String>::allocate(channel__description_)),
+                            Option::None => C_Option::none()
                         };
 
                         let channel__cover_image_path = match data__.channel.channel__cover_image_path {
-                            Some(channel__cover_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel__cover_image_path_)),
-                            None => C_Option::none()
+                            Option::Some(channel__cover_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel__cover_image_path_)),
+                            Option::None => C_Option::none()
                         };
 
                         let channel__background_image_path = match data__.channel.channel__background_image_path {
-                            Some(channel__background_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel__background_image_path_)),
-                            None => C_Option::none()
+                            Option::Some(channel__background_image_path_) => C_Option::data(Allocator::<C_String>::allocate(channel__background_image_path_)),
+                            Option::None => C_Option::none()
                         };
 
                         let channel_2 = Channel2 {
@@ -4134,8 +4134,8 @@ mod test {
                                 channel__linked_name: NOT_EMPTY_STRING_LITERAL.to_string(),
                                 channel__access_modifier: 0,
                                 channel__visability_modifier: 0,
-                                channel__background_image_path: Some(NOT_EMPTY_STRING_LITERAL.to_string()),
-                                channel__cover_image_path: Some(NOT_EMPTY_STRING_LITERAL.to_string()),
+                                channel__background_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
+                                channel__cover_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
                             },
                             is_application_user_subscribed: false,
                         };
@@ -4219,8 +4219,8 @@ mod test {
                                 channel__linked_name: NOT_EMPTY_STRING_LITERAL.to_string(),
                                 channel__access_modifier: 0,
                                 channel__visability_modifier: 0,
-                                channel__background_image_path: Some(NOT_EMPTY_STRING_LITERAL.to_string()),
-                                channel__cover_image_path: Some(NOT_EMPTY_STRING_LITERAL.to_string()),
+                                channel__background_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
+                                channel__cover_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
                             },
                             is_application_user_subscribed: false,
                         };
@@ -4302,8 +4302,8 @@ mod test {
                                 channel__linked_name: NOT_EMPTY_STRING_LITERAL.to_string(),
                                 channel__access_modifier: 0,
                                 channel__visability_modifier: 0,
-                                channel__background_image_path: Some(NOT_EMPTY_STRING_LITERAL.to_string()),
-                                channel__cover_image_path: Some(NOT_EMPTY_STRING_LITERAL.to_string()),
+                                channel__background_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
+                                channel__cover_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
                             },
                             is_application_user_subscribed: false,
                         };
@@ -4392,12 +4392,12 @@ mod test {
                         channel__owner: 0,
                         channel__name: NOT_EMPTY_STRING_LITERAL.to_string(),
                         channel__linked_name: NOT_EMPTY_STRING_LITERAL.to_string(),
-                        channel__description: Some(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        channel__description: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
                         channel__access_modifier: 0,
                         channel__visability_modifier: 0,
                         channel__orientation: vec![0, 0, 0],
-                        channel__background_image_path: Some(NOT_EMPTY_STRING_LITERAL.to_string()),
-                        channel__cover_image_path: Some(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        channel__background_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
+                        channel__cover_image_path: Option::Some(NOT_EMPTY_STRING_LITERAL.to_string()),
                         channel__subscribers_quantity: 0,
                         channel__marks_quantity: 0,
                         channel__viewing_quantity: 0,

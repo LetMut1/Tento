@@ -33,8 +33,8 @@ impl Processor {
             .subcommand(Command::new(CREATE_FIXTURES))
             .get_matches();
         let subcommand_arg_matches = match arg_matches.subcommand() {
-            Some(subcommand_arg_matches_) => subcommand_arg_matches_,
-            None => {
+            Option::Some(subcommand_arg_matches_) => subcommand_arg_matches_,
+            Option::None => {
                 return Result::Err(
                     AggregateError::new_logic_(
                         Common::UnreachableState,

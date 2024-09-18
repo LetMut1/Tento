@@ -56,8 +56,8 @@ impl Encoder<Argon2Id> {
     }
     fn get() -> Result<&'static Argon2<'static>, AggregateError> {
         return match ARGON2.get() {
-            Some(argon2) => Result::Ok(argon2),
-            None => {
+            Option::Some(argon2) => Result::Ok(argon2),
+            Option::None => {
                 if let Result::Err(_) = ARGON2.set(
                     Argon2::new(
                         Algorithm::Argon2id,

@@ -104,19 +104,19 @@ impl Loader<EnvironmentConfiguration> {
             let tcp = {
                 let keepalive = {
                     let duration = if environment_configuration_file.application_server.tcp.keepalive.duration.is_exist {
-                        Some(environment_configuration_file.application_server.tcp.keepalive.duration.value)
+                        Option::Some(environment_configuration_file.application_server.tcp.keepalive.duration.value)
                     } else {
-                        None
+                        Option::None
                     };
                     let interval_duration = if environment_configuration_file.application_server.tcp.keepalive.interval_duration.is_exist {
-                        Some(environment_configuration_file.application_server.tcp.keepalive.interval_duration.value)
+                        Option::Some(environment_configuration_file.application_server.tcp.keepalive.interval_duration.value)
                     } else {
-                        None
+                        Option::None
                     };
                     let retries_quantity = if environment_configuration_file.application_server.tcp.keepalive.retries_quantity.is_exist {
-                        Some(environment_configuration_file.application_server.tcp.keepalive.retries_quantity.value)
+                        Option::Some(environment_configuration_file.application_server.tcp.keepalive.retries_quantity.value)
                     } else {
-                        None
+                        Option::None
                     };
                     TcpKeepalive {
                         duration,
@@ -133,29 +133,29 @@ impl Loader<EnvironmentConfiguration> {
             };
             let http = {
                 let keepalive = if environment_configuration_file.application_server.http.keepalive.is_exist {
-                    Some(
+                    Option::Some(
                         HttpKeepalive {
                             interval_duration: environment_configuration_file.application_server.http.keepalive.interval_duration.value,
                             timeout_duration: environment_configuration_file.application_server.http.keepalive.timeout_duration.value,
                         },
                     )
                 } else {
-                    None
+                    Option::None
                 };
                 let tls = if environment_configuration_file.application_server.http.tls.is_exist {
-                    Some(
+                    Option::Some(
                         Tls {
                             certificate_crt_file_path: environment_configuration_file.application_server.http.tls.certificate_crt_file_path.value,
                             certificate_key_file_path: environment_configuration_file.application_server.http.tls.certificate_key_file_path.value,
                         },
                     )
                 } else {
-                    None
+                    Option::None
                 };
                 let maximum_pending_accept_reset_streams = if environment_configuration_file.application_server.http.maximum_pending_accept_reset_streams.is_exist {
-                    Some(environment_configuration_file.application_server.http.maximum_pending_accept_reset_streams.value)
+                    Option::Some(environment_configuration_file.application_server.http.maximum_pending_accept_reset_streams.value)
                 } else {
-                    None
+                    Option::None
                 };
                 Http {
                     adaptive_window: environment_configuration_file.application_server.http.adaptive_window.value,

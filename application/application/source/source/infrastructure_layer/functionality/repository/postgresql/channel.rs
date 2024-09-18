@@ -26,17 +26,17 @@ impl PostgresqlRepository<Channel<'_>> {
             let channel__name = insert_1.channel__name.as_str();
             let channel__linked_name = insert_1.channel__linked_name.as_str();
             let channel__description = match insert_1.channel__description {
-                Some(ref channel__description_) => Some(channel__description_.as_str()),
-                None => None,
+                Option::Some(ref channel__description_) => Option::Some(channel__description_.as_str()),
+                Option::None => Option::None,
             };
             let channel__orientation = insert_1.channel__orientation.as_slice();
             let channel__cover_image_path = match insert_1.channel__cover_image_path {
-                Some(ref channel__cover_image_path_) => Some(channel__cover_image_path_.as_str()),
-                None => None,
+                Option::Some(ref channel__cover_image_path_) => Option::Some(channel__cover_image_path_.as_str()),
+                Option::None => Option::None,
             };
             let channel__background_image_path = match insert_1.channel__background_image_path {
-                Some(ref channel__background_image_path_) => Some(channel__background_image_path_.as_str()),
-                None => None,
+                Option::Some(ref channel__background_image_path_) => Option::Some(channel__background_image_path_.as_str()),
+                Option::None => Option::None,
             };
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             let query = "\
@@ -226,10 +226,10 @@ impl PostgresqlRepository<Channel<'_>> {
                     ),
                 )?;
             if row_registry.is_empty() {
-                return Result::Ok(None);
+                return Result::Ok(Option::None);
             }
             return Result::Ok(
-                Some(
+                Option::Some(
                     Channel::new(
                         by_1.channel__id,
                         row_registry[0].try_get::<'_, usize, i64>(0).into_logic(
@@ -366,10 +366,10 @@ impl PostgresqlRepository<Channel<'_>> {
                     ),
                 )?;
             if row_registry.is_empty() {
-                return Result::Ok(None);
+                return Result::Ok(Option::None);
             }
             return Result::Ok(
-                Some(
+                Option::Some(
                     Channel::new(
                         row_registry[0].try_get::<'_, usize, i64>(0).into_logic(
                             Backtrace::new(

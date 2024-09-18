@@ -13,8 +13,8 @@ static REGULAR_EXPRESSION: OnceLock<Regex> = OnceLock::new();
 impl Validator<ApplicationUserRegistrationToken_Value> {
     pub fn is_valid<'a>(application_user_authorization_token__value: &'a str) -> Result<bool, AggregateError> {
         let regular_expression = match REGULAR_EXPRESSION.get() {
-            Some(regular_expression_) => regular_expression_,
-            None => {
+            Option::Some(regular_expression_) => regular_expression_,
+            Option::None => {
                 if let Result::Err(_) = REGULAR_EXPRESSION.set(
                     Regex::new(ApplicationUserRegistrationToken_Value::REGULAR_EXPRESSION).into_logic(
                         Backtrace::new(

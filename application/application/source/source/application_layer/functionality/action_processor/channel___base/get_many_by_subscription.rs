@@ -78,7 +78,7 @@ impl ActionProcessor_ for ActionProcessor<Channel__Base___GetManyBySubscription>
                     return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList));
                 }
             };
-            if let Some(requery___channel__id_) = incoming.requery___channel__id {
+            if let Option::Some(requery___channel__id_) = incoming.requery___channel__id {
                 if !Validator::<Channel_Id>::is_valid(requery___channel__id_) {
                     return Result::Err(
                         AggregateError::new_invalid_argument(

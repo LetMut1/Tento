@@ -304,10 +304,10 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                     ),
                 )?;
             if row_registry.is_empty() {
-                return Result::Ok(None);
+                return Result::Ok(Option::None);
             }
             return Result::Ok(
-                Some(
+                Option::Some(
                     ApplicationUserAccessRefreshToken::new(
                         by_2.application_user__id,
                         Cow::Borrowed(by_2.application_user_device__id),

@@ -197,8 +197,8 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
             )
             .await?
             {
-                Some(application_user_registration_token_) => application_user_registration_token_,
-                None => {
+                Option::Some(application_user_registration_token_) => application_user_registration_token_,
+                Option::None => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_NotFound));
                 }
             };

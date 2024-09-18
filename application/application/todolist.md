@@ -67,12 +67,12 @@ https://stackoverflow.com/questions/58819199/how-to-keep-long-connection-in-http
          .tcp_sleep_on_accept_errors(environment_configuration.application_server.tcp.sleep_on_accept_errors)
          .tcp_keepalive_retries(environment_configuration.application_server.tcp.keepalive.retries_quantity);
      http2_builder = match environment_configuration.application_server.tcp.keepalive.duration {
-         Some(duration) => http2_builder.tcp_keepalive(Some(Duration::from_secs(duration))),
-         None => http2_builder.tcp_keepalive(None),
+         Option::Some(duration) => http2_builder.tcp_keepalive(Option::Some(Duration::from_secs(duration))),
+         Option::None => http2_builder.tcp_keepalive(Option::None),
      };
      http2_builder = match environment_configuration.application_server.tcp.keepalive.interval_duration {
-         Some(interval_duration) => http2_builder.tcp_keepalive_interval(Some(Duration::from_secs(interval_duration))),
-         None => http2_builder.tcp_keepalive_interval(None),
+         Option::Some(interval_duration) => http2_builder.tcp_keepalive_interval(Option::Some(Duration::from_secs(interval_duration))),
+         Option::None => http2_builder.tcp_keepalive_interval(Option::None),
      };
 // Hyper TCP/HTTp connection pool - ?
 // Нужно ли вообще вообще все крипто(Encoding) делать в Tokio blocked threads.

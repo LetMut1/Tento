@@ -56,7 +56,7 @@ impl PostgresqlRepository<Common1> {
                     &wildcard,
                     Type::TEXT,
                 );
-            if let Some(ref requery___channel__name) = by_1.requery___channel__name {
+            if let Option::Some(ref requery___channel__name) = by_1.requery___channel__name {
                 query = format!(
                     "{} AND c.name > ${}",
                     query.as_str(),
@@ -152,8 +152,8 @@ impl PostgresqlRepository<Common1> {
                         file!(),
                     ),
                 )? {
-                    Some(_) => true,
-                    None => false,
+                    Option::Some(_) => true,
+                    Option::None => false,
                 };
                 let common = Common1 {
                     channel,
@@ -193,7 +193,7 @@ impl PostgresqlRepository<Common1> {
                     &wildcard,
                     Type::TEXT,
                 );
-            if let Some(ref requery___channel__name) = by_2.requery___channel__name {
+            if let Option::Some(ref requery___channel__name) = by_2.requery___channel__name {
                 query = format!(
                     "{} AND c.name > ${}",
                     query.as_str(),
@@ -319,7 +319,7 @@ impl PostgresqlRepository<Common1> {
                 Type::INT8,
             );
             let requery___channel__id: i64;
-            if let Some(requery___channel__id_) = by_3.requery___channel__id {
+            if let Option::Some(requery___channel__id_) = by_3.requery___channel__id {
                 requery___channel__id = requery___channel__id_;
                 query = format!(
                     "{} \

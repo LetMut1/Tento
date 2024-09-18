@@ -190,8 +190,8 @@ impl CommandProcessor<CreateFixtures> {
                 )
                 .await?
                 {
-                    Some(application_user_) => application_user_,
-                    None => {
+                    Option::Some(application_user_) => application_user_,
+                    Option::None => {
                         PostgresqlRepository::<ApplicationUser<'_>>::create_1(
                             database_1_postgresql_connection,
                             ApplicationUserInsert1 {
@@ -269,9 +269,9 @@ impl CommandProcessor<CreateFixtures> {
                                 ),
                             );
                         }
-                        Some(channel__description_)
+                        Option::Some(channel__description_)
                     } else {
-                        None
+                        Option::None
                     };
                     let channel__orientation: Vec<i16> = vec![
                         0, 1, 2,
@@ -294,10 +294,10 @@ impl CommandProcessor<CreateFixtures> {
                     )
                     .await?;
                     match channel {
-                        Some(_) => {
+                        Option::Some(_) => {
                             continue 'b;
                         }
-                        None => {
+                        Option::None => {
                             PostgresqlRepository::<Channel<'_>>::create_1(
                                 database_1_postgresql_connection,
                                 ChannelInsert1 {
@@ -308,8 +308,8 @@ impl CommandProcessor<CreateFixtures> {
                                     channel__access_modifier: Channel_AccessModifier::from_representation(Channel_AccessModifier::Open),
                                     channel__visability_modifier: Channel_VisabilityModifier::from_representation(Channel_VisabilityModifier::Public),
                                     channel__orientation,
-                                    channel__cover_image_path: Some(Self::STUB.to_string()),
-                                    channel__background_image_path: Some(Self::STUB.to_string()),
+                                    channel__cover_image_path: Option::Some(Self::STUB.to_string()),
+                                    channel__background_image_path: Option::Some(Self::STUB.to_string()),
                                     channel__subscribers_quantity: 0,
                                     channel__marks_quantity: 0,
                                     channel__viewing_quantity: 0,

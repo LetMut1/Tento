@@ -134,7 +134,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
             )
             .await?
             {
-                Some(mut application_user_registration_token) => {
+                Option::Some(mut application_user_registration_token) => {
                     let (can_send_, need_to_update_1) = if Resolver::<Expiration>::is_expired(application_user_registration_token.can_be_resent_from) {
                         application_user_registration_token.can_be_resent_from = Generator::<ApplicationUserRegistrationToken_CanBeResentFrom>::generate()?;
                         (
@@ -211,7 +211,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
                         can_send_,
                     )
                 }
-                None => {
+                Option::None => {
                     let application_user_registration_token = PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::create_1(
                         database_2_postgresql_connection,
                         Insert1 {
