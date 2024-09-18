@@ -29,11 +29,10 @@ use crate::{
     },
     infrastructure_layer::{
         data::{
-            control_type::{
+            capture::Capture, control_type::{
                 Request,
                 Response,
-            },
-            environment_configuration::environment_configuration::EnvironmentConfiguration,
+            }, environment_configuration::environment_configuration::EnvironmentConfiguration
         },
         functionality::service::{
             creator::{
@@ -70,8 +69,7 @@ use aggregate_error::{
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager;
 use hyper::{
-    server::conn::http2::Builder,
-    service::service_fn,
+    server::conn::http2::Builder as Http2Builder,
     Method,
 };
 use hyper_util::rt::{
@@ -93,6 +91,7 @@ use tokio::{
     net::TcpListener,
     signal::unix::SignalKind,
 };
+use std::pin::Pin;
 use tokio_postgres::{
     tls::{
         MakeTlsConnect,
@@ -102,11 +101,27 @@ use tokio_postgres::{
     Socket,
 };
 use void::Void;
+#[cfg(feature = "manual_testing")]
+use hyper::server::conn::http1::Builder as Http1Builder;
 static CONNECTION_QUANTITY: AtomicU64 = AtomicU64::new(0);
 pub struct HttpServer;
 impl HttpServer {
     pub fn run(environment_configuration: &'static EnvironmentConfiguration) -> impl Future<Output = Result<(), AggregateError>> + Send {
         return async move {
+            let signal_interrupt_future = Self::create_signal(SignalKind::interrupt())?;
+            let signal_terminate_future = Self::create_signal(SignalKind::terminate())?;
+            let graceful_shutdown_signal_future = async move {
+                tokio::select! {
+                    _ = signal_interrupt_future => {
+                        ()
+                    },
+                    _ = signal_terminate_future => {
+                        ()
+                    },
+                }
+                return ();
+            };
+            let mut graceful_shutdown_signal_future_ = std::pin::pin!(graceful_shutdown_signal_future);
             let cloned = Arc::new(
                 Cloned {
                     router: Creator::<Router>::create()?,
@@ -123,6 +138,7 @@ impl HttpServer {
             'a: loop {
                 if let Result::Err(aggregate_error) = Self::run_(
                     environment_configuration,
+                    graceful_shutdown_signal_future_.as_mut(),
                     cloned.clone(),
                 )
                 .await
@@ -136,7 +152,11 @@ impl HttpServer {
             return Result::Ok(());
         };
     }
-    fn run_<T>(environment_configuration: &'static EnvironmentConfiguration, cloned: Arc<Cloned<T>>) -> impl Future<Output = Result<(), AggregateError>> + Send
+    fn run_<'a, T>(
+        environment_configuration: &'static EnvironmentConfiguration,
+        mut graceful_shutdown_signal_future: Pin<&'a mut (impl Future<Output = ()> + Send)>,
+        cloned: Arc<Cloned<T>>
+    ) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -144,20 +164,7 @@ impl HttpServer {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
         return async move {
-            let signal_interrupt_future = Self::create_signal(SignalKind::interrupt())?; // TODO  TODO TODOможно ли регистрировать заново, если они уже есть
-            let signal_terminate_future = Self::create_signal(SignalKind::terminate())?;
-            let graceful_shutdown_signal_future = async move {
-                tokio::select! {
-                    _ = signal_interrupt_future => {
-                        ()
-                    },
-                    _ = signal_terminate_future => {
-                        ()
-                    },
-                }
-                return ();
-            };
-            let mut http2_builder = Builder::new(TokioExecutor::new()).max_local_error_reset_streams(Option::Some(1024));
+            let mut http2_builder = Http2Builder::new(TokioExecutor::new()).max_local_error_reset_streams(Option::Some(128));
             http2_builder
                 .auto_date_header(false)
                 .max_header_list_size(environment_configuration.application_server.http.maximum_header_list_size)
@@ -191,13 +198,17 @@ impl HttpServer {
                     file!(),
                 ),
             )?;
+
+
+
+
             let serving_connection_registry_future = async move {
                 '_a: loop {
                     let tcp_stream = tcp_listener.accept().await.unwrap().0; // TODO TODO TODOUNWRAP TODO UNWRAP TODO UNWRAP TODO UNWRAP TODO UNWRAP
                     let cloned_ = cloned.clone();
                     let serving_connection_future = http2_builder.serve_connection(
                         TokioIo::new(tcp_stream),
-                        service_fn(
+                        hyper::service::service_fn(
                             move |request: Request| -> _ {
                                 let cloned__ = cloned_.clone();
                                 return async move {
@@ -235,10 +246,9 @@ impl HttpServer {
                 return ();
             };
             let serving_connection_registry_join_handle = Spawner::<TokioNonBlockingTask>::spawn_processed(serving_connection_registry_future);
-            let graceful_shutdown_signal_join_handle = Spawner::<TokioNonBlockingTask>::spawn_processed(graceful_shutdown_signal_future);
             tokio::select! {
                 biased;
-                _ = graceful_shutdown_signal_join_handle => {
+                _ = graceful_shutdown_signal_future.as_mut() => {
                     ()
                 },
                 _ = serving_connection_registry_join_handle => {

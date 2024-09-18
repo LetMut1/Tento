@@ -43,6 +43,7 @@ https://stackoverflow.com/questions/58819199/how-to-keep-long-connection-in-http
 // СДелать механизм защиты от DDDos на кеше - для каждого апи разное количество допустимых запросов.
 // UUID v6/7 - последоватльеный алфавит. Стоит ли заменить в БД sequental integer?
 // opt-lvl=3 slower opt-level=2 https://doc.rust-lang.org/cargo/reference/profiles.html https://doc.rust-lang.org/rustc/profile-guided-optimization.html
+// Проверить, что не нужно заново создавать коннекшн пул (то есть, не нужно заново перезапускать сервер), если Бд отключилась и потом включилась.
 
 БЭКЕНД todo:
 // Возможно ли не хранить Рефреш токен в Бд? Завязать его на Аксессе?  но как тогда делать разлогин на сервере принудительный?
