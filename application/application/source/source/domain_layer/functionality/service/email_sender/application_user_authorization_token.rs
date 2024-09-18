@@ -16,7 +16,7 @@ use aggregate_error::AggregateError;
 use std::future::Future;
 use void::Void;
 impl EmailSender<ApplicationUserAuthorizationToken<'_>> {
-    pub fn send<'a>(
+    pub fn repeatable_send<'a>(
         environment_configuration: &'static EnvironmentConfiguration,
         application_user_authorization_token__value: &'a str,
         application_user__email: &'a str,
@@ -27,7 +27,7 @@ impl EmailSender<ApplicationUserAuthorizationToken<'_>> {
                 "Your code {} for device {}.",
                 application_user_authorization_token__value, application_user_device__id,
             );
-            Sender::<Email>::send(
+            Sender::<Email>::repeatable_send(
                 environment_configuration,
                 "Authorization confirmation",
                 message_body,

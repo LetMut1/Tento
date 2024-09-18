@@ -17,7 +17,7 @@ use void::Void;
 // use std::convert::Into;
 pub struct Email;
 impl Sender<Email> {
-    pub fn send<'a>(
+    pub fn repeatable_send<'a>(
         _environment_configuration: &'static EnvironmentConfiguration,
         _subject: &'a str,
         _body: String,

@@ -163,7 +163,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
             let environment_configuration_ = inner.environment_configuration;
             Spawner::<TokioNonBlockingTask>::spawn_into_background(
                 async move {
-                    EmailSender::<ApplicationUserResetPasswordToken<'_>>::send(
+                    EmailSender::<ApplicationUserResetPasswordToken<'_>>::repeatable_send(
                         environment_configuration_,
                         application_user_reset_password_token.value.as_str(),
                         application_user.email.as_str(),

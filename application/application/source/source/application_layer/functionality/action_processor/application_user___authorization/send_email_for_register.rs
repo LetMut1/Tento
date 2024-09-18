@@ -145,7 +145,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
             let environment_configuration_ = inner.environment_configuration;
             Spawner::<TokioNonBlockingTask>::spawn_into_background(
                 async move {
-                    EmailSender::<ApplicationUserRegistrationToken<'_>>::send(
+                    EmailSender::<ApplicationUserRegistrationToken<'_>>::repeatable_send(
                         environment_configuration_,
                         application_user_registration_token.value.as_str(),
                         incoming.application_user__email.as_str(),
