@@ -205,7 +205,26 @@ impl HttpServer {
                         break 'a;
                     },
                     result = tcp_listener.accept() => {
-                        let tcp_stream = result.unwrap().0; // TODO TODO TODOUNWRAP TODO UNWRAP TODO UNWRAP TODO UNWRAP TODO UNWRAP
+                        let tcp_stream = match result {
+                            Ok((tcp_stream_, _)) => tcp_stream_,
+                            Err(error) => {
+                                Spawner::<TokioNonBlockingTask>::spawn_into_background(
+                                    async move {
+                                        Logger::<AggregateError>::log(
+                                            &AggregateError::new_runtime(
+                                                error.into(),
+                                                Backtrace::new(
+                                                    line!(),
+                                                    file!(),
+                                                ),
+                                            )
+                                        );
+                                        return Ok(());
+                                    }
+                                );
+                                continue 'a;
+                            }
+                        };
                         let cloned_ = cloned.clone();
                         let serving_connection_future = http2_builder.serve_connection(
                             TokioIo::new(tcp_stream),
