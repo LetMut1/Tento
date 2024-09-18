@@ -198,70 +198,55 @@ impl HttpServer {
                     file!(),
                 ),
             )?;
-
-
-
-
-            let serving_connection_registry_future = async move {
-                '_a: loop {
-                    let tcp_stream = tcp_listener.accept().await.unwrap().0; // TODO TODO TODOUNWRAP TODO UNWRAP TODO UNWRAP TODO UNWRAP TODO UNWRAP
-                    let cloned_ = cloned.clone();
-                    let serving_connection_future = http2_builder.serve_connection(
-                        TokioIo::new(tcp_stream),
-                        hyper::service::service_fn(
-                            move |request: Request| -> _ {
-                                let cloned__ = cloned_.clone();
-                                return async move {
-                                    let response = Self::process_request(
-                                        request,
-                                        environment_configuration,
-                                        cloned__,
-                                    )
-                                    .await;
-                                    return Result::<_, Void>::Ok(response);
-                                };
-                            },
-                        ),
-                    );
-                    Spawner::<TokioNonBlockingTask>::spawn_into_background(
-                        async move {
-                            CONNECTION_QUANTITY.fetch_add(
-                                1,
-                                Ordering::Relaxed,
-                            );
-                            let result = serving_connection_future.await.into_runtime(
-                                Backtrace::new(
-                                    line!(),
-                                    file!(),
-                                ),
-                            );
-                            CONNECTION_QUANTITY.fetch_sub(
-                                1,
-                                Ordering::Relaxed,
-                            );
-                            return result;
-                        },
-                    );
-                }
-                return ();
-            };
-            let serving_connection_registry_join_handle = Spawner::<TokioNonBlockingTask>::spawn_processed(serving_connection_registry_future);
-            tokio::select! {
-                biased;
-                _ = graceful_shutdown_signal_future.as_mut() => {
-                    ()
-                },
-                _ = serving_connection_registry_join_handle => {
-                    return Result::Err(
-                        AggregateError::new_logic_(
-                            Common::UnreachableState,
-                            Backtrace::new(
-                                line!(),
-                                file!(),
+            'a: loop {
+                tokio::select! {
+                    biased;
+                    _ = graceful_shutdown_signal_future.as_mut() => {
+                        break 'a;
+                    },
+                    result = tcp_listener.accept() => {
+                        let tcp_stream = result.unwrap().0; // TODO TODO TODOUNWRAP TODO UNWRAP TODO UNWRAP TODO UNWRAP TODO UNWRAP
+                        let cloned_ = cloned.clone();
+                        let serving_connection_future = http2_builder.serve_connection(
+                            TokioIo::new(tcp_stream),
+                            hyper::service::service_fn(
+                                move |request: Request| -> _ {
+                                    let cloned__ = cloned_.clone();
+                                    return async move {
+                                        let response = Self::process_request(
+                                            request,
+                                            environment_configuration,
+                                            cloned__,
+                                        )
+                                        .await;
+                                        return Result::<_, Void>::Ok(response);
+                                    };
+                                },
                             ),
-                        ),
-                    );
-                },
+                        );
+                        Spawner::<TokioNonBlockingTask>::spawn_into_background(
+                            async move {
+                                const STEP: u64 = 1;
+                                CONNECTION_QUANTITY.fetch_add(
+                                    STEP,
+                                    Ordering::Relaxed,
+                                );
+                                let result = serving_connection_future.await.into_runtime(          // TODO нужно ли catch_unwind.
+                                    Backtrace::new(
+                                        line!(),
+                                        file!(),
+                                    ),
+                                );
+                                CONNECTION_QUANTITY.fetch_sub(
+                                    STEP,
+                                    Ordering::Relaxed,
+                                );
+                                return result;
+                            },
+                        );
+                        continue 'a;
+                    },
+                }
             }
             let completion_by_connection_quantity_future = async {
                 'a: loop {
@@ -286,15 +271,7 @@ impl HttpServer {
                     ()
                 },
                 _ = completion_by_timer_join_handle => {
-                    return Result::Err(
-                        AggregateError::new_logic_(
-                            Common::UnreachableState,
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        ),
-                    );
+                    ()
                 },
             }
             return Result::Ok(());
