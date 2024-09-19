@@ -63,10 +63,9 @@ use crate::{
 use aggregate_error::{
     AggregateError,
     Backtrace,
-    Common,
     ResultConverter,
 };
-use tokio::net::ToSocketAddrs;
+use core::net::SocketAddr;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager;
 use hyper::{
@@ -92,7 +91,6 @@ use tokio::{
     net::TcpListener,
     signal::unix::SignalKind,
 };
-use std::pin::Pin;
 use tokio_postgres::{
     tls::{
         MakeTlsConnect,
@@ -109,6 +107,19 @@ pub struct HttpServer;
 impl HttpServer {
     pub fn run(environment_configuration: &'static EnvironmentConfiguration) -> impl Future<Output = Result<(), AggregateError>> + Send {
         return async move {
+            #[cfg(feature = "manual_testing")]
+            let http1_socket_address = {
+                let mut http1_port_number = environment_configuration.application_server.tcp.socket_address.port();
+                http1_port_number = if http1_port_number >= u16::MIN && http1_port_number < u16::MAX {
+                    http1_port_number + 1
+                } else {
+                    http1_port_number - 1
+                };
+                SocketAddr::new(
+                    environment_configuration.application_server.tcp.socket_address.ip(),
+                    http1_port_number,
+                )
+            };
             let signal_interrupt_future = Self::create_signal(SignalKind::interrupt())?;
             let signal_terminate_future = Self::create_signal(SignalKind::terminate())?;
             let graceful_shutdown_signal_future = async move {
@@ -139,7 +150,14 @@ impl HttpServer {
             'a: loop {
                 let cloned_ = cloned.clone();
                 let mut graceful_shutdown_signal_future__ = graceful_shutdown_signal_future_.as_mut();
-                let tcp_listener = TcpListener::bind(&environment_configuration.application_server.tcp.socket_address).await.into_logic(
+                #[cfg(feature = "manual_testing")]
+                let http1_tcp_listener = TcpListener::bind(&http1_socket_address).await.into_logic(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?;
+                let http2_tcp_listener = TcpListener::bind(&environment_configuration.application_server.tcp.socket_address).await.into_logic(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -183,7 +201,7 @@ impl HttpServer {
                             _ = graceful_shutdown_signal_future__.as_mut() => {
                                 break 'b;
                             },
-                            result = tcp_listener.accept() => {
+                            result = http2_tcp_listener.accept() => {
                                 let tcp_stream = match result {
                                     Ok((tcp_stream_, _)) => tcp_stream_,
                                     Err(error) => {
