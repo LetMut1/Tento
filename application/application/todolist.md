@@ -82,5 +82,4 @@ https://stackoverflow.com/questions/58819199/how-to-keep-long-connection-in-http
 // Rust 2024 - edition. Поменять, как только выйдет.
 // Серилизация в Bytes сразу возможно ли ?
 // проставить инлайнинг
-// pub trait ResultConverter_<T> / pub trait ResultConverter<T> { - либо убрать привязку Еррор и написать через один, либо написать дляметоды для обоих через макрос
 // в Бд различать ConstraintException и недоступность базы данных.
