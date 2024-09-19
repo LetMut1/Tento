@@ -3,10 +3,12 @@ use aggregate_error::{
     Backtrace,
     Common,
 };
-use application::application_layer::functionality::command_processor::CommandProcessor;
-use application::application_layer::functionality::command_processor::run_server::RunServer;
-use application::application_layer::functionality::command_processor::remove_incomplite_state::RemoveIncompliteState;
-use application::application_layer::functionality::command_processor::create_fixtures::CreateFixtures;
+use application::application_layer::functionality::command_processor::{
+    create_fixtures::CreateFixtures,
+    remove_incomplite_state::RemoveIncompliteState,
+    run_server::RunServer,
+    CommandProcessor,
+};
 use clap::{
     command,
     Command,

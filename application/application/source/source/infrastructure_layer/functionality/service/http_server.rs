@@ -32,7 +32,8 @@ use crate::{
             control_type::{
                 Request,
                 Response,
-            }, environment_configuration::environment_configuration::EnvironmentConfiguration
+            },
+            environment_configuration::environment_configuration::EnvironmentConfiguration,
         },
         functionality::service::{
             creator::{
@@ -65,9 +66,11 @@ use aggregate_error::{
     Backtrace,
     ResultConverter,
 };
-use core::net::SocketAddr;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager;
+use core::net::SocketAddr;
+#[cfg(feature = "manual_testing")]
+use hyper::server::conn::http1::Builder as Http1Builder;
 use hyper::{
     server::conn::http2::Builder as Http2Builder,
     Method,
@@ -77,13 +80,16 @@ use hyper_util::rt::{
     TokioIo,
 };
 use std::{
-    error::Error, future::Future, sync::{
+    error::Error,
+    future::Future,
+    sync::{
         atomic::{
             AtomicU64,
             Ordering,
         },
         Arc,
-    }, time::Duration
+    },
+    time::Duration,
 };
 use tokio::{
     net::TcpListener,
@@ -98,8 +104,6 @@ use tokio_postgres::{
     Socket,
 };
 use void::Void;
-#[cfg(feature = "manual_testing")]
-use hyper::server::conn::http1::Builder as Http1Builder;
 static CONNECTION_QUANTITY: AtomicU64 = AtomicU64::new(0);
 pub struct HttpServer;
 impl HttpServer {
@@ -164,8 +168,7 @@ impl HttpServer {
                 let future = async move {
                     #[cfg(feature = "manual_testing")]
                     let http1_builder = Http1Builder::new();
-                    let mut http2_builder = Http2Builder::new(TokioExecutor::new())
-                        .max_local_error_reset_streams(Option::Some(128));
+                    let mut http2_builder = Http2Builder::new(TokioExecutor::new()).max_local_error_reset_streams(Option::Some(128));
                     http2_builder
                         .auto_date_header(false)
                         .max_header_list_size(environment_configuration.application_server.http.maximum_header_list_size)
@@ -195,7 +198,7 @@ impl HttpServer {
                     }
                     'b: loop {
                         #[cfg(not(feature = "manual_testing"))]
-                        let tcp_accepting_future  =  http2_tcp_listener.accept();
+                        let tcp_accepting_future = http2_tcp_listener.accept();
                         #[cfg(feature = "manual_testing")]
                         let tcp_accepting_future = async {
                             return tokio::select! {
@@ -328,8 +331,8 @@ impl HttpServer {
                 CONNECTION_QUANTITY.fetch_add(
                     STEP,
                     Ordering::Relaxed,
-                );
-                let result = serving_connection_future.await.into_runtime(          // TODO нужно ли catch_unwind.
+                ); // TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO нужно ли catch_unwind.
+                let result = serving_connection_future.await.into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
