@@ -68,6 +68,7 @@ use aggregate_error::{
 };
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager;
+#[cfg(feature = "manual_testing")]
 use core::net::SocketAddr;
 #[cfg(feature = "manual_testing")]
 use hyper::server::conn::http1::Builder as Http1Builder;
