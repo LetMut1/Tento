@@ -29,7 +29,7 @@ use crate::{
     },
     infrastructure_layer::{
         data::{
-            capture::Capture, control_type::{
+            control_type::{
                 Request,
                 Response,
             }, environment_configuration::environment_configuration::EnvironmentConfiguration
@@ -77,15 +77,13 @@ use hyper_util::rt::{
     TokioIo,
 };
 use std::{
-    future::Future,
-    sync::{
+    error::Error, future::Future, sync::{
         atomic::{
             AtomicU64,
             Ordering,
         },
         Arc,
-    },
-    time::Duration,
+    }, time::Duration
 };
 use tokio::{
     net::TcpListener,
@@ -110,10 +108,10 @@ impl HttpServer {
             #[cfg(feature = "manual_testing")]
             let http1_socket_address = {
                 let mut http1_port_number = environment_configuration.application_server.tcp.socket_address.port();
-                http1_port_number = if http1_port_number >= u16::MIN && http1_port_number < u16::MAX {
-                    http1_port_number + 1
+                if http1_port_number >= u16::MIN && http1_port_number < u16::MAX {
+                    http1_port_number += 1;
                 } else {
-                    http1_port_number - 1
+                    http1_port_number -= 1;
                 };
                 SocketAddr::new(
                     environment_configuration.application_server.tcp.socket_address.ip(),
@@ -196,15 +194,28 @@ impl HttpServer {
                         todo!("// TODO ssl_protocolsTLSv1 TLSv1.1 TLSv1.2 TLSv1.3;  ssl_ciphers HIGH:!aNULL:!MD5;")
                     }
                     'b: loop {
+                        #[cfg(not(feature = "manual_testing"))]
+                        let tcp_accepting_future  =  http2_tcp_listener.accept();
+                        #[cfg(feature = "manual_testing")]
+                        let tcp_accepting_future = async {
+                            return tokio::select! {
+                                result = http1_tcp_listener.accept() => {
+                                    result
+                                },
+                                result = http2_tcp_listener.accept() => {
+                                    result
+                                },
+                            };
+                        };
                         tokio::select! {
                             biased;
                             _ = graceful_shutdown_signal_future__.as_mut() => {
                                 break 'b;
                             },
-                            result = http2_tcp_listener.accept() => {
-                                let tcp_stream = match result {
-                                    Ok((tcp_stream_, _)) => tcp_stream_,
-                                    Err(error) => {
+                            result = tcp_accepting_future => {
+                                let result_ = match result {
+                                    Result::Ok(result__) => result__,
+                                    Result::Err(error) => {
                                         Spawner::<TokioNonBlockingTask>::spawn_into_background(
                                             async move {
                                                 Logger::<AggregateError>::log(
@@ -216,49 +227,53 @@ impl HttpServer {
                                                         ),
                                                     )
                                                 );
-                                                return Ok(());
+                                                return Result::Ok(());
                                             }
                                         );
                                         continue 'b;
                                     }
                                 };
+                                #[cfg(feature = "manual_testing")]
+                                let (tcp_stream, socket_address) = result_;
+                                #[cfg(not(feature = "manual_testing"))]
+                                let (tcp_stream, _) = result_;
                                 let cloned__ = cloned_.clone();
-                                let serving_connection_future = http2_builder.serve_connection(
-                                    TokioIo::new(tcp_stream),
-                                    hyper::service::service_fn(
-                                        move |request: Request| -> _ {
-                                            let cloned___ = cloned__.clone();
-                                            return async move {
-                                                let response = Self::process_request(
-                                                    request,
-                                                    environment_configuration,
-                                                    cloned___,
-                                                )
-                                                .await;
-                                                return Result::<_, Void>::Ok(response);
-                                            };
-                                        },
-                                    ),
-                                );
-                                Spawner::<TokioNonBlockingTask>::spawn_into_background(
-                                    async move {
-                                        const STEP: u64 = 1;
-                                        CONNECTION_QUANTITY.fetch_add(
-                                            STEP,
-                                            Ordering::Relaxed,
-                                        );
-                                        let result = serving_connection_future.await.into_runtime(          // TODO нужно ли catch_unwind.
-                                            Backtrace::new(
-                                                line!(),
-                                                file!(),
-                                            ),
-                                        );
-                                        CONNECTION_QUANTITY.fetch_sub(
-                                            STEP,
-                                            Ordering::Relaxed,
-                                        );
-                                        return result;
+                                let service_fn = hyper::service::service_fn(
+                                    move |request: Request| -> _ {
+                                        let cloned___ = cloned__.clone();
+                                        return async move {
+                                            let response = Self::process_request(
+                                                request,
+                                                environment_configuration,
+                                                cloned___,
+                                            )
+                                            .await;
+                                            return Result::<_, Void>::Ok(response);
+                                        };
                                     },
+                                );
+                                #[cfg(feature = "manual_testing")]
+                                if http1_socket_address.port() == socket_address.port() {
+                                    Self::spawn_connection_serving(
+                                        http1_builder.serve_connection(
+                                            TokioIo::new(tcp_stream),
+                                            service_fn,
+                                        ),
+                                    );
+                                } else {
+                                    Self::spawn_connection_serving(
+                                        http2_builder.serve_connection(
+                                            TokioIo::new(tcp_stream),
+                                            service_fn,
+                                        ),
+                                    );
+                                };
+                                #[cfg(not(feature = "manual_testing"))]
+                                Self::spawn_connection_serving(
+                                    http2_builder.serve_connection(
+                                        TokioIo::new(tcp_stream),
+                                        service_fn,
+                                    ),
                                 );
                                 continue 'b;
                             },
@@ -301,6 +316,33 @@ impl HttpServer {
             }
             return Result::Ok(());
         };
+    }
+    fn spawn_connection_serving<T, E>(serving_connection_future: T) -> ()
+    where
+        T: Future<Output = Result<(), E>> + Send + 'static,
+        E: Error + Send + Sync + 'static,
+    {
+        Spawner::<TokioNonBlockingTask>::spawn_into_background(
+            async move {
+                const STEP: u64 = 1;
+                CONNECTION_QUANTITY.fetch_add(
+                    STEP,
+                    Ordering::Relaxed,
+                );
+                let result = serving_connection_future.await.into_runtime(          // TODO нужно ли catch_unwind.
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                );
+                CONNECTION_QUANTITY.fetch_sub(
+                    STEP,
+                    Ordering::Relaxed,
+                );
+                return result;
+            },
+        );
+        return ();
     }
     fn process_request<T>(request: Request, environment_configuration: &'static EnvironmentConfiguration, cloned: Arc<Cloned<T>>) -> impl Future<Output = Response> + Send
     where
