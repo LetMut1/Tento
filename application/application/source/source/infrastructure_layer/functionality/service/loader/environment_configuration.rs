@@ -30,10 +30,10 @@ use std::{
 };
 impl Loader<EnvironmentConfiguration> {
     const ENVIRONMENT_FILE_NAME: &'static str = "environment.toml";
-    pub fn load_from_file<'a>(environment_configuration_directory_path: &'a str) -> Result<EnvironmentConfiguration, AggregateError> {
+    pub fn load_from_file<'a>(environment_configuration_file_directory: &'a str) -> Result<EnvironmentConfiguration, AggregateError> {
         let environment_file_path = format!(
             "{}/{}",
-            environment_configuration_directory_path,
+            environment_configuration_file_directory,
             Self::ENVIRONMENT_FILE_NAME,
         );
         let environment_file_path_ = Path::new(environment_file_path.as_str());

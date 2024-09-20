@@ -33,9 +33,9 @@ use tracing_subscriber::FmtSubscriber;
 static ENVIRONMENT_CONFIGURATION: OnceLock<EnvironmentConfiguration> = OnceLock::new();
 pub struct RunServer;
 impl CommandProcessor<RunServer> {
-    pub fn process() -> Result<(), AggregateError> {
+    pub fn process<'a>(environment_configuration_file_directory: &'a str) -> Result<(), AggregateError> {
         let _worker_guard;
-        let environment_configuration = Self::initialize_environment()?;
+        let environment_configuration = Self::initialize_environment(environment_configuration_file_directory)?;
         #[cfg(feature = "file_log")]
         {
             _worker_guard = Self::initialize_file_logger(environment_configuration)?;
@@ -48,18 +48,8 @@ impl CommandProcessor<RunServer> {
         runtime.block_on(HttpServer::run(environment_configuration))?;
         return Result::Ok(());
     }
-    fn initialize_environment() -> Result<&'static EnvironmentConfiguration, AggregateError> {
-        let environment_configuration_file_path = format!(
-            "{}/environment_configuration",
-            std::env::var("CARGO_MANIFEST_DIR").into_runtime(
-                Backtrace::new(
-                    line!(),
-                    file!()
-                )
-            )?
-            .as_str(),
-        );
-        let environment_configuration = Loader::<EnvironmentConfiguration>::load_from_file(environment_configuration_file_path.as_str())?;
+    fn initialize_environment<'a>(environment_configuration_file_directory: &'a str) -> Result<&'static EnvironmentConfiguration, AggregateError> {
+        let environment_configuration = Loader::<EnvironmentConfiguration>::load_from_file(environment_configuration_file_directory)?;
         return match ENVIRONMENT_CONFIGURATION.get() {
             Option::Some(environment_configuration__) => Result::Ok(environment_configuration__),
             Option::None => {

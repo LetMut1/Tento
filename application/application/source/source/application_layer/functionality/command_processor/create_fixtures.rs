@@ -105,18 +105,11 @@ impl CommandProcessor<CreateFixtures> {
     const QUANTITY_OF_APPLICATION_USERS: u16 = 10_000;
     const QUANTITY_OF_CHANNELS: u8 = 5;
     const STUB: &'static str = "s_t_u_b";
-    pub fn process() -> Result<(), AggregateError> {
-        let environment_configuration = Self::initialize_environment()?;
+    pub fn process<'a>(environment_configuration_file_directory: &'a str) -> Result<(), AggregateError> {
+        let environment_configuration = Loader::<EnvironmentConfiguration>::load_from_file(environment_configuration_file_directory)?;
         let runtime = Self::initialize_runtime()?;
         runtime.block_on(Self::create_fixtures(&environment_configuration))?;
         return Result::Ok(());
-    }
-    fn initialize_environment() -> Result<EnvironmentConfiguration, AggregateError> {
-        let environment_configuration_file_path = format!(
-            "{}/environment_configuration",
-            std::env::var("CARGO_MANIFEST_DIR").into_runtime(Backtrace::new(line!(), file!()))?.as_str(),
-        );
-        return Result::Ok(Loader::<EnvironmentConfiguration>::load_from_file(environment_configuration_file_path.as_str())?);
     }
     fn initialize_runtime() -> Result<Runtime, AggregateError> {
         return Result::Ok(
