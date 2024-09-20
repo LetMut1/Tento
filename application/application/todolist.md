@@ -90,3 +90,6 @@ https://stackoverflow.com/questions/58819199/how-to-keep-long-connection-in-http
 // Серилизация в Bytes сразу возможно ли ?
 // проставить инлайнинг
 // в Бд различать ConstraintException и недоступность базы данных.
+
+
+// Составить требования для пароля.
