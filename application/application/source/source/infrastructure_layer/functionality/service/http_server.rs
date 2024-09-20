@@ -216,9 +216,9 @@ impl HttpServer {
                             _ = graceful_shutdown_signal_future__.as_mut() => {
                                 break 'b;
                             },
-                            result = tcp_accepting_future => {
-                                let result_ = match result {
-                                    Result::Ok(result__) => result__,
+                            tcp_stream = tcp_accepting_future => {
+                                let tcp_stream_ = match tcp_stream {
+                                    Result::Ok((tcp_stream__, _)) => tcp_stream__,
                                     Result::Err(error) => {
                                         Spawner::<TokioNonBlockingTask>::spawn_into_background(
                                             async move {
@@ -237,10 +237,6 @@ impl HttpServer {
                                         continue 'b;
                                     }
                                 };
-                                #[cfg(feature = "manual_testing")]
-                                let (tcp_stream, socket_address) = result_;
-                                #[cfg(not(feature = "manual_testing"))]
-                                let (tcp_stream, _) = result_;
                                 let cloned__ = cloned_.clone();
                                 let service_fn = hyper::service::service_fn(
                                     move |request: Request| -> _ {
@@ -257,21 +253,29 @@ impl HttpServer {
                                     },
                                 );
                                 #[cfg(feature = "manual_testing")]
-                                if http1_socket_address.port() == socket_address.port() {
-                                    Self::spawn_connection_serving(
-                                        http1_builder.serve_connection(
-                                            TokioIo::new(tcp_stream),
-                                            service_fn,
+                                {
+                                    let socket_address_port = tcp_stream_.local_addr().into_logic(
+                                        Backtrace::new(
+                                            line!(),
+                                            file!(),
                                         ),
-                                    );
-                                } else {
-                                    Self::spawn_connection_serving(
-                                        http2_builder.serve_connection(
-                                            TokioIo::new(tcp_stream),
-                                            service_fn,
-                                        ),
-                                    );
-                                };
+                                    )?;
+                                    if http1_socket_address.port() == socket_address_port.port() {
+                                        Self::spawn_connection_serving(
+                                            http1_builder.serve_connection(
+                                                TokioIo::new(tcp_stream_),
+                                                service_fn,
+                                            ),
+                                        );
+                                    } else {
+                                        Self::spawn_connection_serving(
+                                            http2_builder.serve_connection(
+                                                TokioIo::new(tcp_stream_),
+                                                service_fn,
+                                            ),
+                                        );
+                                    };
+                                }
                                 #[cfg(not(feature = "manual_testing"))]
                                 Self::spawn_connection_serving(
                                     http2_builder.serve_connection(
