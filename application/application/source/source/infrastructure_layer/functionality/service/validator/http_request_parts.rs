@@ -15,16 +15,7 @@ impl Validator<Parts> {
                 return false;
             }
         };
-        if header_value_content_type.as_bytes() != Creator::<Response>::HEADER_VALUE_CONTENT_TYPE.as_bytes() {
-            return false;
-        }
-        let header_value_x_content_type_options = match parts.headers.get(header::X_CONTENT_TYPE_OPTIONS) {
-            Option::Some(header_value_x_content_type_options_) => header_value_x_content_type_options_,
-            Option::None => {
-                return false;
-            }
-        };
-        if *header_value_x_content_type_options != Creator::<Response>::HEADER_VALUE_X_CONTENT_TYPE_OPTIONS {
+        if *header_value_content_type != Creator::<Response>::HEADER_VALUE_CONTENT_TYPE {
             return false;
         }
         if let Option::None = parts.headers.get(header::CONTENT_LENGTH) {

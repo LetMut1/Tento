@@ -13,16 +13,11 @@ use hyper::Response as HyperResponse;
 use std::convert::From;
 impl Creator<Response> {
     pub const HEADER_VALUE_CONTENT_TYPE: HeaderValue = HeaderValue::from_static("application/octet-stream");
-    pub const HEADER_VALUE_X_CONTENT_TYPE_OPTIONS: HeaderValue = HeaderValue::from_static("nosniff");
     fn create(status_code: StatusCode, data: Option<Vec<u8>>) -> Response {
         let mut header_map = HeaderMap::new(); // TODO TODO TODO TODO TODO  ContentLength is needed?
         header_map.append(
             header::CONTENT_TYPE,
             Self::HEADER_VALUE_CONTENT_TYPE,
-        );
-        header_map.append(
-            header::X_CONTENT_TYPE_OPTIONS,
-            Self::HEADER_VALUE_X_CONTENT_TYPE_OPTIONS,
         );
         let mut parts = HyperResponse::new(()).into_parts().0;
         parts.status = status_code;
