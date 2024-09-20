@@ -45,10 +45,10 @@ services:
         ports:
         - 8082:8080
         restart: always
-    dbmate:
-        container_name: tento_dbmate
+    diesel:
+        container_name: tento_diesel
         build:
-            context: ./service/dbmate
+            context: ./service/diesel
             dockerfile: dockerfile
         volumes:
             - ./../../../:/_tento
