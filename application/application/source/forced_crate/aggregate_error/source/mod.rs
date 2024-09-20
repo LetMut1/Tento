@@ -211,36 +211,39 @@ pub trait OptionConverter<T> {
     fn into_logic_unreachable_state(self, backtrace: Backtrace) -> Result<T, AggregateError>;
     fn into_logic_out_of_range(self, backtrace: Backtrace) -> Result<T, AggregateError>;
     fn into_logic_value_does_not_exist(self, backtrace: Backtrace) -> Result<T, AggregateError>;
+    fn into_logic_invalid_socket_address(self, backtrace: Backtrace) -> Result<T, AggregateError>;
 }
 impl<T> OptionConverter<T> for Option<T> {
     fn into_logic_unreachable_state(self, backtrace: Backtrace) -> Result<T, AggregateError> {
-        return self.ok_or_else(
-            move || -> _ {
-                return AggregateError::new_logic(
-                    Common::UnreachableState.into(),
-                    backtrace,
-                );
-            },
+        return self.ok_or(
+            AggregateError::new_logic(
+                Common::UnreachableState.into(),
+                backtrace,
+            ),
         );
     }
     fn into_logic_out_of_range(self, backtrace: Backtrace) -> Result<T, AggregateError> {
-        return self.ok_or_else(
-            move || -> _ {
-                return AggregateError::new_logic(
-                    Common::OutOfRange.into(),
-                    backtrace,
-                );
-            },
+        return self.ok_or(
+            AggregateError::new_logic(
+                Common::OutOfRange.into(),
+                backtrace,
+            ),
         );
     }
     fn into_logic_value_does_not_exist(self, backtrace: Backtrace) -> Result<T, AggregateError> {
-        return self.ok_or_else(
-            move || -> _ {
-                return AggregateError::new_logic(
-                    Common::ValueDoesNotExist.into(),
-                    backtrace,
-                );
-            },
+        return self.ok_or(
+            AggregateError::new_logic(
+                Common::ValueDoesNotExist.into(),
+                backtrace,
+            ),
+        );
+    }
+    fn into_logic_invalid_socket_address(self, backtrace: Backtrace) -> Result<T, AggregateError> {
+        return self.ok_or(
+            AggregateError::new_logic(
+                Common::InvalidSocketAddress.into(),
+                backtrace,
+            ),
         );
     }
 }

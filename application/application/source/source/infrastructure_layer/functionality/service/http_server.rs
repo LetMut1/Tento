@@ -279,7 +279,7 @@ impl HttpServer {
                                 #[cfg(not(feature = "manual_testing"))]
                                 Self::spawn_connection_serving(
                                     http2_builder.serve_connection(
-                                        TokioIo::new(tcp_stream),
+                                        TokioIo::new(tcp_stream_),
                                         service_fn,
                                     ),
                                 );

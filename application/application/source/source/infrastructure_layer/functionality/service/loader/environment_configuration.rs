@@ -21,8 +21,8 @@ use crate::infrastructure_layer::data::environment_configuration::{
 use aggregate_error::{
     AggregateError,
     Backtrace,
-    Common,
     ResultConverter,
+    OptionConverter,
 };
 use std::{
     net::ToSocketAddrs,
@@ -72,16 +72,11 @@ impl Loader<EnvironmentConfiguration> {
                 file!(),
             ),
         )?;
-        let application_server_tcp_socket_address = application_server_tcp_socket_address_registry.next().ok_or_else(
-            || -> _ {
-                return AggregateError::new_logic_(
-                    Common::InvalidSocketAddress,
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-            },
+        let application_server_tcp_socket_address = application_server_tcp_socket_address_registry.next().into_logic_invalid_socket_address(
+            Backtrace::new(
+                line!(),
+                file!(),
+            )
         )?;
         let mut email_server_tcp_socket_address_registry = environment_configuration_file.resource.email_server.socket_address.value.to_socket_addrs().into_runtime(
             Backtrace::new(
@@ -89,16 +84,11 @@ impl Loader<EnvironmentConfiguration> {
                 file!(),
             ),
         )?;
-        let email_server_tcp_socket_address = email_server_tcp_socket_address_registry.next().ok_or_else(
-            || -> _ {
-                return AggregateError::new_logic_(
-                    Common::InvalidSocketAddress,
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
-            },
+        let email_server_tcp_socket_address = email_server_tcp_socket_address_registry.next().into_logic_invalid_socket_address(
+            Backtrace::new(
+                line!(),
+                file!(),
+            )
         )?;
         let application_server = {
             let tcp = {
