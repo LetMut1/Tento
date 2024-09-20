@@ -12,6 +12,7 @@ services:
             - ./../../../../:/_tento
         ports:
             - 80:80
+            - 81:81
         working_dir: /_tento
         restart: always
         tty: true
