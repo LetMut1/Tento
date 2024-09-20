@@ -1,4 +1,7 @@
-cargo run --features=manual_testing --bin=core -- --environment_configuration_file_directory=/qweqweqwe/qweqwe/qwe run_server
+cargo run --features=manual_testing --bin=core -- --environment_configuration_file_directory=/_tento/application/application/ run_server
+
+
+
 
 ФРОНТЕНД оптимизация:
 // Переиспользованеи коннекшна для http: - ????
