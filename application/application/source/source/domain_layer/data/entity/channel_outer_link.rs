@@ -10,12 +10,12 @@ pub struct ChannelOuterLink {
     pub address: String,
     _address: PhantomData<Address>,
 
-    pub created_at: String,
+    pub created_at: i64,
     _created_at: PhantomData<CreatedAt>,
 }
 impl ChannelOuterLink {
     pub const MAXIMUM_QUANTITY: i16 = 5;
-    pub fn new(from: i64, alias: String, address: String, created_at: String) -> Self {
+    pub fn new(from: i64, alias: String, address: String, created_at: i64) -> Self {
         return Self {
             from,
             _from: PhantomData,

@@ -34,10 +34,8 @@ impl PostgresqlRepository<ChannelOuterLink> {
                     $1, \
                     $2, \
                     $3, \
-                    current_timestamp(6) \
-                ) \
-                RETURNING \
-                    cs.created_at::TEXT AS ca;";
+                    $4 \
+                );";
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
                     &insert_1.channel_outer_link__from,
@@ -50,6 +48,10 @@ impl PostgresqlRepository<ChannelOuterLink> {
                 .add_parameter(
                     &channel_outer_link__address,
                     Type::TEXT,
+                )
+                .add_parameter(
+                    &insert_1.channel_outer_link__created_at,
+                    Type::INT8,
                 );
             let statement = database_1_connection
                 .prepare_typed(
@@ -63,7 +65,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
                         file!(),
                     ),
                 )?;
-            let row_registry = database_1_connection
+            database_1_connection
                 .query(
                     &statement,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
@@ -79,12 +81,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
                 insert_1.channel_outer_link__from,
                 insert_1.channel_outer_link__alias,
                 insert_1.channel_outer_link__address,
-                row_registry[0].try_get::<'_, usize, String>(0).into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?,
+                insert_1.channel_outer_link__created_at,
             );
             return Result::Ok(channel_outer_link);
         };
@@ -165,6 +162,7 @@ pub struct Insert1 {
     pub channel_outer_link__from: i64,
     pub channel_outer_link__alias: String,
     pub channel_outer_link__address: String,
+    pub channel_outer_link__created_at: i64,
 }
 pub struct By1 {
     pub channel_outer_link__from: i64,

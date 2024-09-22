@@ -2,7 +2,7 @@ CREATE TABLE public.channel_outer_link (
     from_ BIGINT,
     alias TEXT,
     address TEXT,
-    created_at TIMESTAMP(6) WITH TIME ZONE
+    created_at BIGINT
 ) WITH (oids = false, fillfactor = 85, autovacuum_enabled = true);
 
 CREATE INDEX channel_outer_link1 ON public.channel_outer_link
