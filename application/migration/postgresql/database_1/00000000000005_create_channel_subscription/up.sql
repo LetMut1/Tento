@@ -1,7 +1,7 @@
 CREATE TABLE public.channel_subscription (
     application_user__id BIGINT,
     channel__id BIGINT,
-    created_at TIMESTAMP(6) WITH TIME ZONE
+    created_at BIGINT
 ) WITH (oids = false, fillfactor = 90, autovacuum_enabled = true);
 
 CREATE UNIQUE INDEX channel_subscription1 ON public.channel_subscription

@@ -10,11 +10,11 @@ pub struct ChannelSubscription {
     pub channel__id: i64,
     _channel__id: PhantomData<Channel_Id>,
 
-    pub created_at: String,
+    pub created_at: i64,
     _created_at: PhantomData<CreatedAt>,
 }
 impl ChannelSubscription {
-    pub fn new(application_user__id: i64, channel__id: i64, created_at: String) -> Self {
+    pub fn new(application_user__id: i64, channel__id: i64, created_at: i64) -> Self {
         return Self {
             application_user__id,
             _application_user__id: PhantomData,

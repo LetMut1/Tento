@@ -93,3 +93,7 @@ https://stackoverflow.com/questions/58819199/how-to-keep-long-connection-in-http
 
 
 // Составить требования для пароля.
+
+
+
+// PostgresqlRepository<ChannelSubscription>::create_1  В подобных местах нужно делать в парадигме апсерта/ Do Nothing?

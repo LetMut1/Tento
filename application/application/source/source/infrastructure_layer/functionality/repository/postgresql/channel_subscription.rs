@@ -29,10 +29,8 @@ impl PostgresqlRepository<ChannelSubscription> {
                 ) VALUES ( \
                     $1, \
                     $2, \
-                    current_timestamp(6) \
-                ) \
-                RETURNING \
-                    cs.created_at::TEXT AS ca;";
+                    $3 \
+                );";
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
                     &insert_1.application_user__id,
@@ -40,6 +38,10 @@ impl PostgresqlRepository<ChannelSubscription> {
                 )
                 .add_parameter(
                     &insert_1.channel__id,
+                    Type::INT8,
+                )
+                .add_parameter(
+                    &insert_1.channel_subscription__created_at,
                     Type::INT8,
                 );
             let statement = database_1_connection
@@ -54,7 +56,7 @@ impl PostgresqlRepository<ChannelSubscription> {
                         file!(),
                     ),
                 )?;
-            let row_registry = database_1_connection
+            database_1_connection
                 .query(
                     &statement,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
@@ -69,12 +71,7 @@ impl PostgresqlRepository<ChannelSubscription> {
             let channel_subscription = ChannelSubscription::new(
                 insert_1.application_user__id,
                 insert_1.channel__id,
-                row_registry[0].try_get::<'_, usize, String>(0).into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?,
+                insert_1.channel_subscription__created_at,
             );
             return Result::Ok(channel_subscription);
         };
@@ -130,6 +127,7 @@ impl PostgresqlRepository<ChannelSubscription> {
 pub struct Insert1 {
     pub application_user__id: i64,
     pub channel__id: i64,
+    pub channel_subscription__created_at: i64
 }
 pub struct By1 {
     pub application_user__id: i64,
