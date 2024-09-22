@@ -1,36 +1,49 @@
-# Request standards
- - All data is transferred in `HTTP body` as `bytes` in encoded with `MessagePack protocol` form.
- - Every request should contain this `HTTP header`s:
+# Data standards
+- `application_user_access_token_encoded`:
 ```
-- content-type: application/octet-stream
-- content-length: ...
-- x-content-type-options: nosniff
+struct ApplicationUserAccessTokenEncoded {
+    serialized: Vec<u8>,
+    encoded: Vec<u8>,
+}
 ```
- - Values of variable for `sort_order` looks like:
+- `application_user_access_refresh_token_encoded`:
+```
+struct ApplicationUserAccessRefreshTokenEncoded(Vec<u8>)
+```
+- `sort_order`:
 ```
 0 - is equal to 'ASC'
 1 - is equal to 'DESC'
 ```
-
-# Response standards
-- All data is transferred in `HTTP body` as `bytes` in encoded with `MessagePack protocol` form.
-- Every response should contain this `HTTP header`s:
+# Request standards
+- All data is transferred in `HTTP Body`
+- Every request should contain this `HTTP Header`s:
 ```
 - content-type: application/octet-stream
-- x-content-type-options: nosniff
-- content-length: ...
+- content-length: <calculate>
 ```
- - The permanent general structure of the each response with `HTTP status code` equal to `200` looks like:
+# Response standards
+- All data is transferred in `HTTP Body`
+- Every response should contain this `HTTP Header`s:
 ```
-struct UnifiedReport<S>
-{
-    data: Option<Data<S>>,
-    communication_code: Option<i64>
+- content-type: application/octet-stream
+- content-length: <calculate>
+```
+ - The permanent general structure of the each response with `status code` equal to `200` looks like:
+```
+enum UnifiedReport<T, P> {
+    Target {
+        data: Data<T>,
+    },
+    Precedent {
+        precedent: P,
+    },
 }
-
-struct Data<S>
-{
-    data: Option<S>
+enum Data<D> {
+    Empty,
+    Filled {
+        data: D,
+    },
 }
 ```
 - `Result data` structures written under each API endpoint will be nested in the `data` field in the `struct Data<S>`.
@@ -47,9 +60,7 @@ struct Data<S>
 <br/><br/>
 
 # API for authorized application user.
-```
- Every endpoint at this area requires an existing of access token.
-```
+ Every endpoint at this area requires an existing of `application_user_access_token_encoded`.
  - ## APPLICATION_USER__DEAUTHORIZE_FROM_ONE_DEVICE POST
 ```
 Deauthorizes application user from one device.
@@ -57,7 +68,7 @@ Deauthorizes application user from one device.
 ```
 Request data:
 struct Incoming {
-    application_user_access_token_encoded: String
+    application_user_access_token_encoded: <Data standards>
 }
 ```
 ```
@@ -75,7 +86,7 @@ Deauthorizes application user from all devices.
 ```
 Request data:
 struct Incoming {
-    application_user_access_token_encoded: String
+    application_user_access_token_encoded: <Data standards>
 }
 ```
 ```
@@ -93,7 +104,7 @@ Returns channel data by id.
 ```
 Request data:
 struct Incoming {
-    application_user_access_token_encoded: String
+    application_user_access_token_encoded: <Data standards>
     channel__id: i64
 }
 ```
@@ -144,7 +155,7 @@ Returns channels the user is subscribed to by name.
 ```
 Request data:
 struct Incoming {
-    application_user_access_token_encoded: String
+    application_user_access_token_encoded: <Data standards>
     channel__name: String,
     requery___channel__name: Option<String>,
     limit: i16
@@ -192,7 +203,7 @@ Returns channels the user is subscribed to.
 ```
 Request data:
 struct Incoming {
-    application_user_access_token_encoded: String
+    application_user_access_token_encoded: <Data standards>
     requery___channel__id: Option<i64>,
     limit: i16
 }
@@ -239,7 +250,7 @@ Returns public channels by name.
 ```
 Request data:
 struct Incoming {
-    application_user_access_token_encoded: String
+    application_user_access_token_encoded: <Data standards>
     channel__name: String,
     requery___channel__name: Option<String>,
     limit: i16
@@ -287,7 +298,7 @@ Subscribes application user to channel.
 ```
 Request data:
 struct Incoming {
-    application_user_access_token_encoded: String
+    application_user_access_token_encoded: <Data standards>
     channel__id: i64
 }
 ```
@@ -411,8 +422,8 @@ struct Incoming {
 ```
 Result data:
 struct Outcoming {
-    application_user_access_token_encoded: String
-    application_user_access_refresh_token_encoded: String
+    application_user_access_token_encoded: <Data standards>
+    application_user_access_refresh_token_encoded: <Data standards>
 }
 ```
 ```
@@ -492,8 +503,8 @@ struct Incoming {
 ```
 Result data:
 struct Outcoming {
-    application_user_access_token_encoded: String
-    application_user_access_refresh_token_encoded: String
+    application_user_access_token_encoded: <Data standards>
+    application_user_access_refresh_token_encoded: <Data standards>
 }
 ```
 ```
@@ -628,15 +639,15 @@ Refreshs application user access token.
 ```
 Request data:
 struct Incoming {
-    application_user_access_token_encoded: String
-    application_user_access_refresh_token_encoded: String
+    application_user_access_token_encoded: <Data standards>
+    application_user_access_refresh_token_encoded: <Data standards>
 }
 ```
 ```
 Result data:
 struct Outcoming {
-    application_user_access_token_encoded: String
-    application_user_access_refresh_token_encoded: String
+    application_user_access_token_encoded: <Data standards>
+    application_user_access_refresh_token_encoded: <Data standards>
 }
 ```
 ```
@@ -644,7 +655,7 @@ Communication codes:
 - APPLICATION_USER_ACCESS_REFRESH_TOKEN__ALREADY_EXPIRED
 - APPLICATION_USER_ACCESS_REFRESH_TOKEN__NOT_FOUND
 ```
-# Incoming parameters validation rule.
+# Parameters validation rule.
  - ## application_user_registration_token__value
 ```
 ^[0-9]{6}$ - regular expression.
@@ -699,62 +710,3 @@ Can not be equal to application_user__nickname.
 ```
 75 - maximum number of characters.
 ```
-
-
-
-
-
-
-<!--
-## /v1/m/a/c/gmbca GET
-Returns Channel registry by Channel Created_at.
-### Request Quey parameters:
-```
-'cca': string; - 'channel__created_at', optional
-```
-```
-'o': integer; - 'order'.
-```
-```
-'l': integer; - 'limit'.
-
->0 && <=30
-```
-### Response parameters:
--PAYLOAD-:
-```
-'cr': array(object_1); - 'channel_registry', nullable.
-```
-
-object_1:
-```
-'ci': integer; - 'channel__id'.
-```
-```
-'cn': string; - 'channel__name'.
-```
-```
-'cpip': string; - 'channel_personalization_image_path'.
-```
-```
-'csq': integer; - 'channel__subscribers_quantity'.
-```
-```
-'cpmq': integer; - 'channel_public_marks_quantity'.
-```
-```
-'chmq': integer; - 'channel_hidden_marks_quantity'.
-```
-```
-'crq': integer; - 'channel_reactions_quantity'.
-```
-```
-'cvq': integer; - 'channel__viewing_quantity'.
-```
-```
-'cca': string; - 'channel__created_at'.
-```
--ERROR_CODE-:
-```
-is absent.
-``` -->
