@@ -307,6 +307,7 @@ impl CommandProcessor<CreateFixtures> {
                                     channel__subscribers_quantity: 0,
                                     channel__marks_quantity: 0,
                                     channel__viewing_quantity: 0,
+                                    channel__created_at: Resolver::<UnixTime>::get_now(),
                                 },
                             )
                             .await?;

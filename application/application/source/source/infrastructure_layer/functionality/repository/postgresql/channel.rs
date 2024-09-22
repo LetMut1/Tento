@@ -69,7 +69,7 @@ impl PostgresqlRepository<Channel<'_>> {
                     $10, \
                     $11, \
                     $12, \
-                    current_timestamp(6) \
+                    $13 \
                 ) \
                 RETURNING \
                     c.id AS i,
@@ -122,6 +122,10 @@ impl PostgresqlRepository<Channel<'_>> {
                 .add_parameter(
                     &insert_1.channel__viewing_quantity,
                     Type::INT8,
+                )
+                .add_parameter(
+                    &insert_1.channel__created_at,
+                    Type::INT8,
                 );
             let statement = database_1_connection
                 .prepare_typed(
@@ -167,12 +171,7 @@ impl PostgresqlRepository<Channel<'_>> {
                     insert_1.channel__subscribers_quantity,
                     insert_1.channel__marks_quantity,
                     insert_1.channel__viewing_quantity,
-                    row_registry[0].try_get::<'_, usize, String>(1).into_logic(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    )?,
+                    insert_1.channel__created_at,
                 ),
             );
         };
@@ -194,7 +193,7 @@ impl PostgresqlRepository<Channel<'_>> {
                     c.subscribers_quantity, \
                     c.marks_quantity AS mq, \
                     c.viewing_quantity AS vq, \
-                    c.created_at::TEXT AS ca \
+                    c.created_at AS ca \
                 FROM public.channel c \
                 WHERE c.id = $1;";
             prepared_statemant_parameter_convertation_resolver.add_parameter(
@@ -306,7 +305,7 @@ impl PostgresqlRepository<Channel<'_>> {
                                 file!(),
                             ),
                         )?,
-                        row_registry[0].try_get::<'_, usize, String>(12).into_logic(
+                        row_registry[0].try_get::<'_, usize, i64>(12).into_logic(
                             Backtrace::new(
                                 line!(),
                                 file!(),
@@ -334,7 +333,7 @@ impl PostgresqlRepository<Channel<'_>> {
                     c.subscribers_quantity, \
                     c.marks_quantity AS mq, \
                     c.viewing_quantity AS vq, \
-                    c.created_at::TEXT AS ca \
+                    c.created_at AS ca \
                 FROM public.channel c \
                 WHERE c.name = $1;";
             prepared_statemant_parameter_convertation_resolver.add_parameter(
@@ -444,7 +443,7 @@ impl PostgresqlRepository<Channel<'_>> {
                                 file!(),
                             ),
                         )?,
-                        row_registry[0].try_get::<'_, usize, String>(12).into_logic(
+                        row_registry[0].try_get::<'_, usize, i64>(12).into_logic(
                             Backtrace::new(
                                 line!(),
                                 file!(),
@@ -469,6 +468,7 @@ pub struct Insert1 {
     pub channel__subscribers_quantity: i64,
     pub channel__marks_quantity: i64,
     pub channel__viewing_quantity: i64,
+    pub channel__created_at: i64,
 }
 pub struct By1 {
     pub channel__id: i64,

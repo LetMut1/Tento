@@ -52,7 +52,7 @@ pub struct Channel<'a> {
     pub viewing_quantity: i64,
     _viewing_quantity: PhantomData<ViewingQuantity>,
 
-    pub created_at: String,
+    pub created_at: i64,
     _created_at: PhantomData<CreatedAt>,
 }
 impl<'a> Channel<'a> {
@@ -70,7 +70,7 @@ impl<'a> Channel<'a> {
         subscribers_quantity: i64,
         marks_quantity: i64,
         viewing_quantity: i64,
-        created_at: String,
+        created_at: i64,
     ) -> Self {
         return Self {
             id,

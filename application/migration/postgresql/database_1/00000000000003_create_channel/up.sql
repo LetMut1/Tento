@@ -12,7 +12,7 @@ CREATE TABLE public.channel (
     subscribers_quantity BIGINT,
     marks_quantity BIGINT,
     viewing_quantity BIGINT,
-    created_at TIMESTAMP(6) WITH TIME ZONE
+    created_at BIGINT
 ) WITH (oids = false, fillfactor = 85, autovacuum_enabled = true);
 
 CREATE SEQUENCE public.channel1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE
