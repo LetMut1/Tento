@@ -21,7 +21,6 @@ use void::Void;
 impl PostgresqlRepository<ChannelInnerLink> {
     pub fn create_1<'a>(database_1_connection: &'a Connection, insert_1: Insert1) -> impl Future<Output = Result<ChannelInnerLink, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
-            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             let query = "\
                 INSERT INTO public.channel_inner_link AS cil ( \
                     from_, \
@@ -32,6 +31,7 @@ impl PostgresqlRepository<ChannelInnerLink> {
                     $2, \
                     $3 \
                 );";
+            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
                     &insert_1.channel_inner_link__from,
@@ -84,13 +84,13 @@ impl PostgresqlRepository<ChannelInnerLink> {
         limit: i16,
     ) -> impl Future<Output = Result<Vec<ChannelInnerLink1>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
-            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             let query = "\
                 SELECT \
                     cil.to_ AS t \
                 FROM public.channel_inner_link cil \
                 WHERE cil.from_ = $1 \
                 LIMIT $2";
+            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
                     &by_1.channel_inner_link__from,

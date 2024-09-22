@@ -23,22 +23,6 @@ use void::Void;
 impl PostgresqlRepository<Channel<'_>> {
     pub fn create_1<'a>(database_1_connection: &'a Connection, insert_1: Insert1) -> impl Future<Output = Result<Channel<'static>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
-            let channel__name = insert_1.channel__name.as_str();
-            let channel__linked_name = insert_1.channel__linked_name.as_str();
-            let channel__description = match insert_1.channel__description {
-                Option::Some(ref channel__description_) => Option::Some(channel__description_.as_str()),
-                Option::None => Option::None,
-            };
-            let channel__orientation = insert_1.channel__orientation.as_slice();
-            let channel__cover_image_path = match insert_1.channel__cover_image_path {
-                Option::Some(ref channel__cover_image_path_) => Option::Some(channel__cover_image_path_.as_str()),
-                Option::None => Option::None,
-            };
-            let channel__background_image_path = match insert_1.channel__background_image_path {
-                Option::Some(ref channel__background_image_path_) => Option::Some(channel__background_image_path_.as_str()),
-                Option::None => Option::None,
-            };
-            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             let query = "\
                 INSERT INTO public.channel AS c ( \
                     id, \
@@ -74,17 +58,31 @@ impl PostgresqlRepository<Channel<'_>> {
                 RETURNING \
                     c.id AS i,
                     c.created_at::TEXT AS ca;";
+            let channel__description = match insert_1.channel__description {
+                Option::Some(ref channel__description_) => Option::Some(channel__description_.as_str()),
+                Option::None => Option::None,
+            };
+            let channel__orientation = insert_1.channel__orientation.as_slice();
+            let channel__cover_image_path = match insert_1.channel__cover_image_path {
+                Option::Some(ref channel__cover_image_path_) => Option::Some(channel__cover_image_path_.as_str()),
+                Option::None => Option::None,
+            };
+            let channel__background_image_path = match insert_1.channel__background_image_path {
+                Option::Some(ref channel__background_image_path_) => Option::Some(channel__background_image_path_.as_str()),
+                Option::None => Option::None,
+            };
+            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
                     &insert_1.channel__owner,
                     Type::INT8,
                 )
                 .add_parameter(
-                    &channel__name,
+                    &insert_1.channel__name,
                     Type::TEXT,
                 )
                 .add_parameter(
-                    &channel__linked_name,
+                    &insert_1.channel__linked_name,
                     Type::TEXT,
                 )
                 .add_parameter(
@@ -178,7 +176,6 @@ impl PostgresqlRepository<Channel<'_>> {
     }
     pub fn find_1<'a>(database_1_connection: &'a Connection, by_1: By1) -> impl Future<Output = Result<Option<Channel<'static>>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
-            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             let query = "\
                 SELECT \
                     c.owner AS ow, \
@@ -196,6 +193,7 @@ impl PostgresqlRepository<Channel<'_>> {
                     c.created_at AS ca \
                 FROM public.channel c \
                 WHERE c.id = $1;";
+            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver.add_parameter(
                 &by_1.channel__id,
                 Type::INT8,
@@ -318,7 +316,6 @@ impl PostgresqlRepository<Channel<'_>> {
     }
     pub fn find_2<'a, 'b>(database_1_connection: &'a Connection, by_2: By2<'b>) -> impl Future<Output = Result<Option<Channel<'b>>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
-            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             let query = "\
                 SELECT \
                     c.id AS i, \
@@ -336,6 +333,7 @@ impl PostgresqlRepository<Channel<'_>> {
                     c.created_at AS ca \
                 FROM public.channel c \
                 WHERE c.name = $1;";
+            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver.add_parameter(
                 &by_2.channel__name,
                 Type::TEXT,

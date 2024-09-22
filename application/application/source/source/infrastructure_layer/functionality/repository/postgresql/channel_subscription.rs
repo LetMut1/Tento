@@ -20,7 +20,6 @@ use void::Void;
 impl PostgresqlRepository<ChannelSubscription> {
     pub fn create_1<'a>(database_1_connection: &'a Connection, insert_1: Insert1) -> impl Future<Output = Result<ChannelSubscription, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
-            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             let query = "\
                 INSERT INTO public.channel_subscription AS cs ( \
                     application_user__id, \
@@ -31,6 +30,7 @@ impl PostgresqlRepository<ChannelSubscription> {
                     $2, \
                     $3 \
                 );";
+            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
                     &insert_1.application_user__id,
@@ -78,12 +78,12 @@ impl PostgresqlRepository<ChannelSubscription> {
     }
     pub fn is_exist_1<'a>(database_1_connection: &'a Connection, by_1: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
-            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             let query = "\
                 SELECT \
                     cs.application_user__id AS aui \
                 FROM public.channel_subscription cs \
                 WHERE cs.application_user__id = $1 AND cs.channel__id = $2;";
+            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
                     &by_1.application_user__id,

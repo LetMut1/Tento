@@ -24,7 +24,6 @@ use void::Void;
 impl PostgresqlRepository<Common1> {
     pub fn find_1<'a>(database_1_connection: &'a Connection, by_1: By1<'a>, limit: i16) -> impl Future<Output = Result<Vec<Common1>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
-            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             let mut counter = Counter::<i16>::new_classic();
             let mut query = format!(
                 "SELECT \
@@ -43,6 +42,7 @@ impl PostgresqlRepository<Common1> {
                 counter.get_next_value()?,
             );
             let wildcard = format!("{}%", by_1.channel__name,);
+            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
                     &by_1.application_user__id,
@@ -166,7 +166,6 @@ impl PostgresqlRepository<Common1> {
     }
     pub fn find_2<'a>(database_1_connection: &'a Connection, by_2: By2<'a>, limit: i16) -> impl Future<Output = Result<Vec<Common1>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
-            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             let mut counter = Counter::<i16>::new_classic();
             let mut query = format!(
                 "SELECT \
@@ -184,6 +183,7 @@ impl PostgresqlRepository<Common1> {
                 counter.get_next_value()?,
             );
             let wildcard = format!("{}%", by_2.channel__name,);
+            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
                     &by_2.application_user__id,
@@ -299,7 +299,6 @@ impl PostgresqlRepository<Common1> {
     }
     pub fn find_3<'a>(database_1_connection: &'a Connection, by_3: By3, limit: i16) -> impl Future<Output = Result<Vec<Common1>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
-            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             let mut counter = Counter::<i16>::new_classic();
             let mut query = format!(
                 "SELECT \
@@ -314,6 +313,7 @@ impl PostgresqlRepository<Common1> {
                 ON cs.application_user__id = ${} AND c.id = cs.channel__id",
                 counter.get_next_value()?,
             );
+            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver.add_parameter(
                 &by_3.application_user__id,
                 Type::INT8,

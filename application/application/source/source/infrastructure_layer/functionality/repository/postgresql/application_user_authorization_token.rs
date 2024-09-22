@@ -33,8 +33,6 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
         insert_1: Insert1<'b>,
     ) -> impl Future<Output = Result<ApplicationUserAuthorizationToken<'b>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
-            let application_user_authorization_token__value = insert_1.application_user_authorization_token__value.as_str();
-            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             let query = "\
                 INSERT INTO public.application_user_authorization_token AS auat ( \
                     application_user__id, \
@@ -51,6 +49,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                     $5, \
                     $6 \
                 );";
+            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
                     &insert_1.application_user__id,
@@ -61,7 +60,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                     Type::TEXT,
                 )
                 .add_parameter(
-                    &application_user_authorization_token__value,
+                    &insert_1.application_user_authorization_token__value,
                     Type::TEXT,
                 )
                 .add_parameter(
@@ -114,10 +113,10 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
     }
     pub fn delete_1<'a>(database_2_connection: &'a Connection, by_1: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
-            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             let query = "\
                 DELETE FROM ONLY public.application_user_authorization_token AS auat \
                 WHERE auat.application_user__id = $1 AND auat.application_user_device__id = $2;";
+            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
                     &by_1.application_user__id,
@@ -160,7 +159,6 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
         by_1: By1<'a>,
     ) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
-            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             let query = "\
                 UPDATE ONLY public.application_user_authorization_token AS auat \
                 SET ( \
@@ -175,6 +173,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                     $4 \
                 ) \
                 WHERE auat.application_user__id = $5 AND auat.application_user_device__id = $6;";
+            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
                     &update_1.application_user_authorization_token__value,
@@ -233,7 +232,6 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
         by_1: By1<'a>,
     ) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
-            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             let query = "\
                 UPDATE ONLY public.application_user_authorization_token AS auat \
                 SET ( \
@@ -246,6 +244,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                     $3 \
                 ) \
                 WHERE auat.application_user__id = $4 AND auat.application_user_device__id = $5;";
+            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
                     &update_2.application_user_authorization_token__value,
@@ -296,7 +295,6 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
     }
     pub fn update_3<'a>(database_2_connection: &'a Connection, update_3: Update3, by_1: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
-            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             let query = "\
                 UPDATE ONLY public.application_user_authorization_token AS auat \
                 SET ( \
@@ -305,6 +303,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                     $1 \
                 ) \
                 WHERE auat.application_user__id = $2 AND auat.application_user_device__id = $3;";
+            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
                     &update_3.application_user_authorization_token__can_be_resent_from,
@@ -347,7 +346,6 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
     }
     pub fn update_4<'a>(database_2_connection: &'a Connection, update_4: Update4, by_1: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
-            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             let query = "\
                 UPDATE ONLY public.application_user_authorization_token AS auat \
                 SET ( \
@@ -356,6 +354,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                     $1 \
                 ) \
                 WHERE auat.application_user__id = $2 AND auat.application_user_device__id = $3;";
+            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
                     &update_4.application_user_authorization_token__wrong_enter_tries_quantity,
@@ -401,7 +400,6 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
         by_1: By1<'a>,
     ) -> impl Future<Output = Result<Option<ApplicationUserAuthorizationToken1>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
-            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             let query = "\
                 SELECT \
                     auat.value AS v, \
@@ -410,6 +408,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                     auat.can_be_resent_from AS cbrf \
                 FROM public.application_user_authorization_token auat \
                 WHERE auat.application_user__id = $1 AND auat.application_user_device__id = $2;";
+            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
                     &by_1.application_user__id,
@@ -483,7 +482,6 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
         by_1: By1<'a>,
     ) -> impl Future<Output = Result<Option<ApplicationUserAuthorizationToken2>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
-            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             let query = "\
                 SELECT \
                     auat.value AS v, \
@@ -491,6 +489,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                     auat.expires_at AS ea \
                 FROM public.application_user_authorization_token auat \
                 WHERE auat.application_user__id = $1 AND auat.application_user_device__id = $2;";
+            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
                     &by_1.application_user__id,
@@ -558,7 +557,6 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
         by_1: By1<'a>,
     ) -> impl Future<Output = Result<Option<ApplicationUserAuthorizationToken3>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
-            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             let query = "\
                 SELECT \
                     auat.value AS v, \
@@ -566,6 +564,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                     auat.can_be_resent_from AS cbrf \
                 FROM public.application_user_authorization_token auat \
                 WHERE auat.application_user__id = $1 AND auat.application_user_device__id = $2;";
+            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
                     &by_1.application_user__id,

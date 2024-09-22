@@ -21,9 +21,6 @@ use void::Void;
 impl PostgresqlRepository<ChannelOuterLink> {
     pub fn create_1<'a>(database_1_connection: &'a Connection, insert_1: Insert1) -> impl Future<Output = Result<ChannelOuterLink, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
-            let channel_outer_link__alias = insert_1.channel_outer_link__alias.as_str();
-            let channel_outer_link__address = insert_1.channel_outer_link__address.as_str();
-            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             let query = "\
                 INSERT INTO public.channel_inner_link AS cil ( \
                     from_, \
@@ -36,17 +33,18 @@ impl PostgresqlRepository<ChannelOuterLink> {
                     $3, \
                     $4 \
                 );";
+            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
                     &insert_1.channel_outer_link__from,
                     Type::INT8,
                 )
                 .add_parameter(
-                    &channel_outer_link__alias,
+                    &insert_1.channel_outer_link__alias,
                     Type::TEXT,
                 )
                 .add_parameter(
-                    &channel_outer_link__address,
+                    &insert_1.channel_outer_link__address,
                     Type::TEXT,
                 )
                 .add_parameter(
@@ -92,7 +90,6 @@ impl PostgresqlRepository<ChannelOuterLink> {
         limit: i16,
     ) -> impl Future<Output = Result<Vec<ChannelOuterLink1>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
-            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             let query = "\
                 SELECT \
                     col.alias AS al, \
@@ -100,6 +97,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
                 FROM public.channel_outer_link col \
                 WHERE col.from_ = $1 \
                 LIMIT $2";
+            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
                     &by_1.channel_outer_link__from,

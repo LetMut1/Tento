@@ -23,7 +23,6 @@ impl PostgresqlRepository<ApplicationUserDevice> {
         insert_1: Insert1,
     ) -> impl Future<Output = Result<ApplicationUserDevice, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
-            let application_user_device__id = insert_1.application_user_device__id.as_str();
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             let query = "\
                 INSERT INTO public.application_user_device AS aud ( \
@@ -36,7 +35,7 @@ impl PostgresqlRepository<ApplicationUserDevice> {
                 ON CONFLICT ON CONSTRAINT application_user_device2 DO NOTHING;";
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
-                    &application_user_device__id,
+                    &insert_1.application_user_device__id,
                     Type::TEXT,
                 )
                 .add_parameter(
