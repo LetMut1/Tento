@@ -5,17 +5,7 @@ use crate::{
         Inner,
     },
     domain_layer::{
-        data::entity::{
-            application_user_access_token::ApplicationUserAccessToken,
-            channel::{
-                Channel as EntityChannel,
-                Channel_AccessModifier,
-                Channel_Id,
-            },
-            channel_inner_link::ChannelInnerLink,
-            channel_outer_link::ChannelOuterLink,
-            channel_subscription::ChannelSubscription,
-        },
+        data::entity::application_user_access_token::ApplicationUserAccessToken,
         functionality::service::{
             extractor::{
                 application_user_access_token::Extracted,
@@ -26,27 +16,20 @@ use crate::{
     },
     infrastructure_layer::{
         data::capture::Capture,
-        functionality::repository::postgresql::{
-            channel::By1 as By1___,
-            channel_inner_link::By1 as By1__,
-            channel_outer_link::By1 as By1_,
-            channel_subscription::By1,
+        functionality::{repository::postgresql::{
+            channel::Insert1,
             PostgresqlRepository,
-        },
+        }, service::resolver::{date_time::UnixTime, Resolver}},
     },
 };
-use action_processor_incoming_outcoming::{
-    action_processor::channel___base::create::{
-        Incoming,
-        Outcoming,
-        Precedent,
-    },
-    Channel2,
+use action_processor_incoming_outcoming::action_processor::channel___base::create::{
+    Incoming,
+    Outcoming,
+    Precedent,
 };
-use aggregate_error::{
-    AggregateError,
-    Backtrace,
-};
+use crate::domain_layer::data::entity::channel::Channel;
+use aggregate_error::AggregateError;
+use aggregate_error::Backtrace;
 use std::future::Future;
 use tokio_postgres::{
     tls::{
@@ -55,6 +38,10 @@ use tokio_postgres::{
     },
     Socket,
 };
+use crate::domain_layer::data::entity::channel::Channel_Name;
+use crate::domain_layer::data::entity::channel::Channel_LinkedName;
+use crate::infrastructure_layer::functionality::repository::postgresql::channel::By3;
+use crate::infrastructure_layer::functionality::repository::postgresql::channel::By2;
 use unified_report::UnifiedReport;
 use void::Void;
 pub struct Channel__Base___Create;
@@ -87,24 +74,70 @@ impl ActionProcessor_ for ActionProcessor<Channel__Base___Create> {
                     return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList));
                 }
             };
-
-
-
-
-
-
-
-
-
-
-
-            todo!();
-
-
-
-
-
-            return Result::Ok(UnifiedReport::target_empty());
+            if !Validator::<Channel_Name>::is_valid(incoming.channel__name.as_str()) {
+                return Result::Err(
+                    AggregateError::new_invalid_argument(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                );
+            }
+            if !Validator::<Channel_LinkedName>::is_valid(incoming.channel__linked_name.as_str()) {
+                return Result::Err(
+                    AggregateError::new_invalid_argument(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                );
+            }
+            let database_1_postgresql_connection = &*inner.get_database_1_postgresql_pooled_connection().await?;
+            if PostgresqlRepository::<Channel<'_>>::is_exist_1(
+                database_1_postgresql_connection,
+                By2 {
+                    channel__name: incoming.channel__name.as_str(),
+                },
+            ).await?
+            {
+                return Result::Ok(UnifiedReport::precedent(Precedent::Channel_NameAlreadyExist));
+            }
+            if PostgresqlRepository::<Channel<'_>>::is_exist_2(
+                database_1_postgresql_connection,
+                By3 {
+                    channel__linked_name: incoming.channel__linked_name.as_str(),
+                },
+            ).await?
+            {
+                return Result::Ok(UnifiedReport::precedent(Precedent::Channel_LinkedNameAlreadyExist));
+            }
+            let channel = PostgresqlRepository::<Channel<'_>>::create_1(
+                database_1_postgresql_connection,
+                Insert1 {
+                    channel__owner: application_user_access_token.application_user__id,
+                    channel__name: incoming.channel__name,
+                    channel__linked_name: incoming.channel__linked_name,
+                    channel__description: Option::None,
+                    channel__access_modifier: incoming.channel__access_modifier,
+                    channel__visability_modifier: incoming.channel__visability_modifier,
+                    channel__orientation: vec![],
+                    channel__cover_image_path: Option::None,
+                    channel__background_image_path: Option::None,
+                    channel__subscribers_quantity: 0,
+                    channel__marks_quantity: 0,
+                    channel__viewing_quantity: 0,
+                    channel__created_at: Resolver::<UnixTime>::get_now(),
+                },
+            ).await?;
+            return Result::Ok(
+                UnifiedReport::target_filled(
+                    Outcoming {
+                        channel__id: channel.id,
+                    },
+                ),
+            );
         };
     }
 }

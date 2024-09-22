@@ -26,5 +26,7 @@ pub enum CommonPrecedent {
     ApplicationUserResetPasswordToken_TimeToResendHasNotCome,
     ApplicationUserResetPasswordToken_WrongValue,
     Channel_IsClose,
+    Channel_LinkedNameAlreadyExist,
+    Channel_NameAlreadyExist,
     Channel_NotFound,
 }

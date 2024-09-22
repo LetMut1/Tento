@@ -452,6 +452,90 @@ impl PostgresqlRepository<Channel<'_>> {
             );
         };
     }
+    pub fn is_exist_1<'a>(database_1_connection: &'a Connection, by_2: By2<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + Capture<&'a Void> {
+        return async move {
+            let query = "\
+                SELECT \
+                    c.id AS i \
+                FROM public.channel c \
+                WHERE c.name = $1;";
+            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
+            prepared_statemant_parameter_convertation_resolver.add_parameter(
+                &by_2.channel__name,
+                Type::TEXT,
+            );
+            let statement = database_1_connection
+                .prepare_typed(
+                    query,
+                    prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
+                )
+                .await
+                .into_logic(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?;
+            let row_registry = database_1_connection
+                .query(
+                    &statement,
+                    prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
+                )
+                .await
+                .into_runtime(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?;
+            if row_registry.is_empty() {
+                return Result::Ok(false);
+            }
+            return Result::Ok(true);
+        };
+    }
+    pub fn is_exist_2<'a>(database_1_connection: &'a Connection, by_3: By3<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + Capture<&'a Void> {
+        return async move {
+            let query = "\
+                SELECT \
+                    c.id AS i \
+                FROM public.channel c \
+                WHERE c.linked_name = $1;";
+            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
+            prepared_statemant_parameter_convertation_resolver.add_parameter(
+                &by_3.channel__linked_name,
+                Type::TEXT,
+            );
+            let statement = database_1_connection
+                .prepare_typed(
+                    query,
+                    prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
+                )
+                .await
+                .into_logic(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?;
+            let row_registry = database_1_connection
+                .query(
+                    &statement,
+                    prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
+                )
+                .await
+                .into_runtime(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?;
+            if row_registry.is_empty() {
+                return Result::Ok(false);
+            }
+            return Result::Ok(true);
+        };
+    }
 }
 pub struct Insert1 {
     pub channel__owner: i64,
@@ -473,4 +557,7 @@ pub struct By1 {
 }
 pub struct By2<'a> {
     pub channel__name: &'a str,
+}
+pub struct By3<'a> {
+    pub channel__linked_name: &'a str,
 }

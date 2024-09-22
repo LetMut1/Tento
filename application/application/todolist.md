@@ -51,6 +51,7 @@ https://stackoverflow.com/questions/58819199/how-to-keep-long-connection-in-http
 // UUID v6/7 - последоватльеный алфавит. Стоит ли заменить в БД sequental integer?
 // opt-lvl=3 slower opt-level=2 https://doc.rust-lang.org/cargo/reference/profiles.html https://doc.rust-lang.org/rustc/profile-guided-optimization.html
 // Проверить, что не нужно заново создавать коннекшн пул (то есть, не нужно заново перезапускать сервер), если Бд отключилась и потом включилась.
+// Как синхронизировать время на серверах в распределенной системе? Нужно ли для моих задач (не требуется микроточности).Если нужнн один источник правды, то создать 1 сервер, отдающий время - есть ли смысл?
 
 БЭКЕНД todo:
 // Возможно ли не хранить Рефреш токен в Бд? Завязать его на Аксессе?  но как тогда делать разлогин на сервере принудительный?
@@ -97,3 +98,9 @@ https://stackoverflow.com/questions/58819199/how-to-keep-long-connection-in-http
 
 
 // PostgresqlRepository<ChannelSubscription>::create_1  В подобных местах нужно делать в парадигме апсерта/ Do Nothing?
+
+
+// PostgresqlRepository::< - найти и проставить <'_>
+
+
+// let database_1_postgresql_connection = &*inner.get_database_1_postgresql_pooled_connection().await?;    можно сразу без промежуточной переменной.

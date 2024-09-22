@@ -1,8 +1,3 @@
-use crate::{
-    Channel2,
-    ChannelInnerLink1,
-    ChannelOuterLink1,
-};
 use application_user_access_token_encoded::ApplicationUserAccessTokenEncoded;
 use common_precedent::CommonPrecedent;
 use macro_rules::r#enum;
@@ -13,22 +8,20 @@ use serde::{
 #[derive(Serialize, Deserialize)]
 pub struct Incoming {
     pub application_user_access_token_encoded: ApplicationUserAccessTokenEncoded,
-
-
-
-
+    pub channel__name: String,
+    pub channel__linked_name: String,
+    pub channel__access_modifier: i16,
+    pub channel__visability_modifier: i16,
 }
 #[derive(Serialize, Deserialize)]
 pub struct Outcoming {
+    pub channel__id: i64,
 }
 r#enum!(
     pub enum Precedent {
         CommonPrecedent::ApplicationUserAccessToken_AlreadyExpired,
         CommonPrecedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList,
-
-
-
-
-
+        CommonPrecedent::Channel_NameAlreadyExist,
+        CommonPrecedent::Channel_LinkedNameAlreadyExist
     }
 );
