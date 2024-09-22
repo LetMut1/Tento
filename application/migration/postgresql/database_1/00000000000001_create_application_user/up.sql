@@ -3,7 +3,7 @@ CREATE TABLE public.application_user (
     email TEXT,
     nickname TEXT,
     password_hash TEXT,
-    created_at TIMESTAMP(6) WITH TIME ZONE
+    created_at BIGINT
 ) WITH (oids = false, fillfactor = 95, autovacuum_enabled = true);
 
 CREATE SEQUENCE public.application_user1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE

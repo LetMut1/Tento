@@ -22,13 +22,13 @@ pub struct ApplicationUser<'a> {
     pub password_hash: String,
     _password_hash: PhantomData<PasswordHash>,
 
-    pub created_at: String,
+    pub created_at: i64,
     _created_at: PhantomData<CreatedAt>,
 
     _password: PhantomData<Password>,
 }
 impl<'a> ApplicationUser<'a> {
-    pub fn new(id: i64, email: String, nickname: Cow<'a, str>, password_hash: String, created_at: String) -> Self {
+    pub fn new(id: i64, email: String, nickname: Cow<'a, str>, password_hash: String, created_at: i64) -> Self {
         return Self {
             id,
             _id: PhantomData,

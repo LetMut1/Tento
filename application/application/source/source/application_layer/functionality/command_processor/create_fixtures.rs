@@ -47,7 +47,7 @@ use crate::{
             },
             service::{
                 creator::Creator,
-                loader::Loader,
+                loader::Loader, resolver::{date_time::UnixTime, Resolver},
             },
         },
     },
@@ -191,6 +191,7 @@ impl CommandProcessor<CreateFixtures> {
                                 application_user__email,
                                 application_user__nickname,
                                 application_user__password_hash: application_user__password_hash.clone(),
+                                application_user__created_at: Resolver::<UnixTime>::get_now(),
                             },
                         )
                         .await?

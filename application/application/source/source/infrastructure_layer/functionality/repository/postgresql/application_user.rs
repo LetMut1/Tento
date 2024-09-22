@@ -51,11 +51,10 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                     $1, \
                     $2, \
                     $3, \
-                    current_timestamp(6) \
+                    $4 \
                 ) \
                 RETURNING \
-                    au.id AS i,
-                    au.created_at::TEXT AS ca;";
+                    au.id AS i;";
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
                     &application_user__email,
@@ -68,6 +67,10 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                 .add_parameter(
                     &application_user__password_hash,
                     Type::TEXT,
+                )
+                .add_parameter(
+                    &insert_1.application_user__created_at,
+                    Type::INT8,
                 );
             let statement = database_1_connection
                 .prepare_typed(
@@ -104,12 +107,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                     insert_1.application_user__email,
                     Cow::Owned(insert_1.application_user__nickname),
                     insert_1.application_user__password_hash,
-                    row_registry[0].try_get::<'_, usize, String>(1).into_logic(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    )?,
+                    insert_1.application_user__created_at,
                 ),
             );
         };
@@ -303,7 +301,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                     au.id AS i, \
                     au.email AS e, \
                     au.password_hash AS ph, \
-                    au.created_at::TEXT AS ca \
+                    au.created_at AS ca \
                 FROM public.application_user au \
                 WHERE au.nickname = $1;";
             prepared_statemant_parameter_convertation_resolver.add_parameter(
@@ -359,7 +357,7 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
                                 file!(),
                             ),
                         )?,
-                        row_registry[0].try_get::<'_, usize, String>(3).into_logic(
+                        row_registry[0].try_get::<'_, usize, i64>(3).into_logic(
                             Backtrace::new(
                                 line!(),
                                 file!(),
@@ -685,6 +683,7 @@ pub struct Insert1 {
     pub application_user__email: String,
     pub application_user__nickname: String,
     pub application_user__password_hash: String,
+    pub application_user__created_at: i64,
 }
 pub struct Update1<'a> {
     pub application_user__password_hash: &'a str,

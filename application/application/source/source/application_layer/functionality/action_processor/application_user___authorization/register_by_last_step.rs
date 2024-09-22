@@ -58,8 +58,7 @@ use crate::{
             },
             service::{
                 resolver::{
-                    expiration::Expiration,
-                    Resolver,
+                    date_time::UnixTime, expiration::Expiration, Resolver
                 },
                 spawner::{
                     tokio_blocking_task::TokioBlockingTask,
@@ -264,6 +263,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
                             file!(),
                         ),
                     )??,
+                    application_user__created_at: Resolver::<UnixTime>::get_now(),
                 },
             )
             .await?;
