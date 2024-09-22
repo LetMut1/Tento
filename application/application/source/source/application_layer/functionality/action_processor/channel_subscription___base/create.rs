@@ -24,11 +24,11 @@ use crate::{
     },
     infrastructure_layer::{
         data::capture::Capture,
-        functionality::repository::postgresql::{
+        functionality::{repository::postgresql::{
             channel::By1,
             channel_subscription::Insert1,
             PostgresqlRepository,
-        },
+        }, service::resolver::{date_time::UnixTime, Resolver}},
     },
 };
 use action_processor_incoming_outcoming::action_processor::channel_subscription___base::create::{
@@ -115,6 +115,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription__Base___Create> {
                 Insert1 {
                     application_user__id: application_user_access_token.application_user__id,
                     channel__id: channel.id,
+                    channel_subscription__created_at: Resolver::<UnixTime>::get_now(),
                 },
             )
             .await?;

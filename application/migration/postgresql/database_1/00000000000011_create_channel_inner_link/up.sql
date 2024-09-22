@@ -1,7 +1,7 @@
 CREATE TABLE public.channel_inner_link (
     from_ BIGINT,
     to_ BIGINT,
-    created_at TIMESTAMP(6) WITH TIME ZONE
+    created_at BIGINT
 ) WITH (oids = false, fillfactor = 85, autovacuum_enabled = true);
 
 CREATE UNIQUE INDEX channel_inner_link1 ON public.channel_inner_link
