@@ -104,3 +104,5 @@ https://stackoverflow.com/questions/58819199/how-to-keep-long-connection-in-http
 
 
 // let database_1_postgresql_connection = &*inner.get_database_1_postgresql_pooled_connection().await?;    можно сразу без промежуточной переменной.
+
+// сделать роуты как /a/u/.... не цифры

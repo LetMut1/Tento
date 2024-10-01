@@ -36,10 +36,7 @@ use crate::{
             environment_configuration::environment_configuration::EnvironmentConfiguration,
         },
         functionality::service::{
-            creator::{
-                router::Router,
-                Creator,
-            },
+            creator::Creator,
             logger::Logger,
             spawner::{
                 tokio_non_blocking_task::TokioNonBlockingTask,
@@ -66,6 +63,7 @@ use aggregate_error::{
     Backtrace,
     ResultConverter,
 };
+use crate::presentation_layer::data::action_route::ACTION_ROUTE;
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager;
 #[cfg(feature = "manual_testing")]
@@ -92,6 +90,7 @@ use std::{
     },
     time::Duration,
 };
+use matchit::Router;
 use tokio::{
     net::TcpListener,
     signal::unix::SignalKind,
@@ -139,7 +138,7 @@ impl HttpServer {
             let mut graceful_shutdown_signal_future_ = std::pin::pin!(graceful_shutdown_signal_future);
             let cloned = Arc::new(
                 Cloned {
-                    router: Creator::<Router>::create()?,
+                    router: Self::create_router()?,
                     database_1_postgresql_connection_pool: Creator::<Pool<PostgresConnectionManager<NoTls>>>::create(
                         environment_configuration.resource.postgresql.database_1_url.as_str(),
                     )
@@ -325,6 +324,637 @@ impl HttpServer {
             return Result::Ok(());
         };
     }
+    fn create_router() -> Result<Router<ActionRoute_>, AggregateError> {
+        let mut router = Router::<ActionRoute_>::new();
+        router
+            .insert(
+                ACTION_ROUTE.application_user___authorization.check_nickname_for_existing,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::CheckNicknameForExisting,
+                },
+            )
+            .into_logic(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
+        router
+            .insert(
+                ACTION_ROUTE.application_user___authorization.check_email_for_existing,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::CheckEmailForExisting,
+                },
+            )
+            .into_logic(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
+        router
+            .insert(
+                ACTION_ROUTE.application_user___authorization.regisgter_by_first_step,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::RegisterByFirstStep,
+                },
+            )
+            .into_logic(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
+        router
+            .insert(
+                ACTION_ROUTE.application_user___authorization.regisgter_by_second_step,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::RegisterBySecondStep,
+                },
+            )
+            .into_logic(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
+        router
+            .insert(
+                ACTION_ROUTE.application_user___authorization.regisgter_by_last_step,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::RegisterByLastStep,
+                },
+            )
+            .into_logic(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
+        router
+            .insert(
+                ACTION_ROUTE.application_user___authorization.send_email_for_register,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::SendEmailForRegister,
+                },
+            )
+            .into_logic(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
+        router
+            .insert(
+                ACTION_ROUTE.application_user___authorization.authorize_by_first_step,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::AuthorizeByFirstStep,
+                },
+            )
+            .into_logic(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
+        router
+            .insert(
+                ACTION_ROUTE.application_user___authorization.authorize_by_last_step,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::AuthorizeByLastStep,
+                },
+            )
+            .into_logic(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
+        router
+            .insert(
+                ACTION_ROUTE.application_user___authorization.send_email_for_authorize,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::SendEmailForAuthorize,
+                },
+            )
+            .into_logic(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
+        router
+            .insert(
+                ACTION_ROUTE.application_user___authorization.reset_password_by_first_step,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::ResetPasswordByFirstStep,
+                },
+            )
+            .into_logic(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
+        router
+            .insert(
+                ACTION_ROUTE.application_user___authorization.reset_password_by_second_step,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::ResetPasswordBySecondStep,
+                },
+            )
+            .into_logic(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
+        router
+            .insert(
+                ACTION_ROUTE.application_user___authorization.reset_password_by_last_step,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::ResetPasswordByLastStep,
+                },
+            )
+            .into_logic(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
+        router
+            .insert(
+                ACTION_ROUTE.application_user___authorization.send_email_for_reset_password,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::SendEmailForResetPassword,
+                },
+            )
+            .into_logic(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
+        router
+            .insert(
+                ACTION_ROUTE.application_user___authorization.refresh_access_token,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::RefreshAccessToken,
+                },
+            )
+            .into_logic(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
+        router
+            .insert(
+                ACTION_ROUTE.application_user___authorization.deauthorize_from_one_device,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::DeauthorizeFromOneDevice,
+                },
+            )
+            .into_logic(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
+        router
+            .insert(
+                ACTION_ROUTE.application_user___authorization.deauthorize_from_all_devices,
+                ActionRoute_::ApplicationUser__Authorization {
+                    application_user___authorization: ApplicationUser__Authorization_::DeauthorizeFromAllDevices,
+                },
+            )
+            .into_logic(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
+        router
+            .insert(
+                ACTION_ROUTE.channel___base.get_one_by_id,
+                ActionRoute_::Channel__Base {
+                    channel___base: Channel__Base_::GetOneById,
+                },
+            )
+            .into_logic(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
+        router
+            .insert(
+                ACTION_ROUTE.channel___base.get_many_by_name_in_subscription,
+                ActionRoute_::Channel__Base {
+                    channel___base: Channel__Base_::GetManyByNameInSubscriptions,
+                },
+            )
+            .into_logic(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
+        router
+            .insert(
+                ACTION_ROUTE.channel___base.get_many_by_subscription,
+                ActionRoute_::Channel__Base {
+                    channel___base: Channel__Base_::GetManyBySubscription,
+                },
+            )
+            .into_logic(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
+        router
+            .insert(
+                ACTION_ROUTE.channel___base.get_many_public_by_name,
+                ActionRoute_::Channel__Base {
+                    channel___base: Channel__Base_::GetManyPublicByName,
+                },
+            )
+            .into_logic(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
+        router
+            .insert(
+                ACTION_ROUTE.channel___base.create,
+                ActionRoute_::Channel__Base {
+                    channel___base: Channel__Base_::Create,
+                },
+            )
+            .into_logic(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
+        router
+            .insert(
+                ACTION_ROUTE.channel___base.check_name_for_existing,
+                ActionRoute_::Channel__Base {
+                    channel___base: Channel__Base_::CheckNameForExisting,
+                },
+            )
+            .into_logic(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
+        router
+            .insert(
+                ACTION_ROUTE.channel___base.check_linked_name_for_existing,
+                ActionRoute_::Channel__Base {
+                    channel___base: Channel__Base_::CheckLinkedNameForExisting,
+                },
+            )
+            .into_logic(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
+        router
+            .insert(
+                ACTION_ROUTE.channel_subscription___base.create,
+                ActionRoute_::ChannelSubscription__Base {
+                    channel_subscription___base: ChannelSubscription__Base_::Create,
+                },
+            )
+            .into_logic(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
+        #[cfg(feature = "manual_testing")]
+        {
+            router
+                .insert(
+                    ACTION_ROUTE.application_user___authorization.check_nickname_for_existing_,
+                    ActionRoute_::ApplicationUser__Authorization {
+                        application_user___authorization: ApplicationUser__Authorization_::CheckNicknameForExisting_,
+                    },
+                )
+                .into_logic(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?;
+            router
+                .insert(
+                    ACTION_ROUTE.application_user___authorization.check_email_for_existing_,
+                    ActionRoute_::ApplicationUser__Authorization {
+                        application_user___authorization: ApplicationUser__Authorization_::CheckEmailForExisting_,
+                    },
+                )
+                .into_logic(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?;
+            router
+                .insert(
+                    ACTION_ROUTE.application_user___authorization.regisgter_by_first_step_,
+                    ActionRoute_::ApplicationUser__Authorization {
+                        application_user___authorization: ApplicationUser__Authorization_::RegisterByFirstStep_,
+                    },
+                )
+                .into_logic(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?;
+            router
+                .insert(
+                    ACTION_ROUTE.application_user___authorization.regisgter_by_second_step_,
+                    ActionRoute_::ApplicationUser__Authorization {
+                        application_user___authorization: ApplicationUser__Authorization_::RegisterBySecondStep_,
+                    },
+                )
+                .into_logic(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?;
+            router
+                .insert(
+                    ACTION_ROUTE.application_user___authorization.regisgter_by_last_step_,
+                    ActionRoute_::ApplicationUser__Authorization {
+                        application_user___authorization: ApplicationUser__Authorization_::RegisterByLastStep_,
+                    },
+                )
+                .into_logic(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?;
+            router
+                .insert(
+                    ACTION_ROUTE.application_user___authorization.send_email_for_register_,
+                    ActionRoute_::ApplicationUser__Authorization {
+                        application_user___authorization: ApplicationUser__Authorization_::SendEmailForRegister_,
+                    },
+                )
+                .into_logic(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?;
+            router
+                .insert(
+                    ACTION_ROUTE.application_user___authorization.authorize_by_first_step_,
+                    ActionRoute_::ApplicationUser__Authorization {
+                        application_user___authorization: ApplicationUser__Authorization_::AuthorizeByFirstStep_,
+                    },
+                )
+                .into_logic(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?;
+            router
+                .insert(
+                    ACTION_ROUTE.application_user___authorization.authorize_by_last_step_,
+                    ActionRoute_::ApplicationUser__Authorization {
+                        application_user___authorization: ApplicationUser__Authorization_::AuthorizeByLastStep_,
+                    },
+                )
+                .into_logic(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?;
+            router
+                .insert(
+                    ACTION_ROUTE.application_user___authorization.send_email_for_authorize_,
+                    ActionRoute_::ApplicationUser__Authorization {
+                        application_user___authorization: ApplicationUser__Authorization_::SendEmailForAuthorize_,
+                    },
+                )
+                .into_logic(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?;
+            router
+                .insert(
+                    ACTION_ROUTE.application_user___authorization.reset_password_by_first_step_,
+                    ActionRoute_::ApplicationUser__Authorization {
+                        application_user___authorization: ApplicationUser__Authorization_::ResetPasswordByFirstStep_,
+                    },
+                )
+                .into_logic(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?;
+            router
+                .insert(
+                    ACTION_ROUTE.application_user___authorization.reset_password_by_second_step_,
+                    ActionRoute_::ApplicationUser__Authorization {
+                        application_user___authorization: ApplicationUser__Authorization_::ResetPasswordBySecondStep_,
+                    },
+                )
+                .into_logic(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?;
+            router
+                .insert(
+                    ACTION_ROUTE.application_user___authorization.reset_password_by_last_step_,
+                    ActionRoute_::ApplicationUser__Authorization {
+                        application_user___authorization: ApplicationUser__Authorization_::ResetPasswordByLastStep_,
+                    },
+                )
+                .into_logic(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?;
+            router
+                .insert(
+                    ACTION_ROUTE.application_user___authorization.send_email_for_reset_password_,
+                    ActionRoute_::ApplicationUser__Authorization {
+                        application_user___authorization: ApplicationUser__Authorization_::SendEmailForResetPassword_,
+                    },
+                )
+                .into_logic(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?;
+            router
+                .insert(
+                    ACTION_ROUTE.application_user___authorization.refresh_access_token_,
+                    ActionRoute_::ApplicationUser__Authorization {
+                        application_user___authorization: ApplicationUser__Authorization_::RefreshAccessToken_,
+                    },
+                )
+                .into_logic(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?;
+            router
+                .insert(
+                    ACTION_ROUTE.application_user___authorization.deauthorize_from_one_device_,
+                    ActionRoute_::ApplicationUser__Authorization {
+                        application_user___authorization: ApplicationUser__Authorization_::DeauthorizeFromOneDevice_,
+                    },
+                )
+                .into_logic(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?;
+            router
+                .insert(
+                    ACTION_ROUTE.application_user___authorization.deauthorize_from_all_devices_,
+                    ActionRoute_::ApplicationUser__Authorization {
+                        application_user___authorization: ApplicationUser__Authorization_::DeauthorizeFromAllDevices_,
+                    },
+                )
+                .into_logic(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?;
+            router
+                .insert(
+                    ACTION_ROUTE.channel___base.get_one_by_id_,
+                    ActionRoute_::Channel__Base {
+                        channel___base: Channel__Base_::GetOneById_,
+                    },
+                )
+                .into_logic(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?;
+            router
+                .insert(
+                    ACTION_ROUTE.channel___base.get_many_by_name_in_subscription_,
+                    ActionRoute_::Channel__Base {
+                        channel___base: Channel__Base_::GetManyByNameInSubscriptions_,
+                    },
+                )
+                .into_logic(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?;
+            router
+                .insert(
+                    ACTION_ROUTE.channel___base.get_many_by_subscription_,
+                    ActionRoute_::Channel__Base {
+                        channel___base: Channel__Base_::GetManyBySubscription_,
+                    },
+                )
+                .into_logic(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?;
+            router
+                .insert(
+                    ACTION_ROUTE.channel___base.get_many_public_by_name_,
+                    ActionRoute_::Channel__Base {
+                        channel___base: Channel__Base_::GetManyPublicByName_,
+                    },
+                )
+                .into_logic(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?;
+            router
+                .insert(
+                    ACTION_ROUTE.channel___base.create_,
+                    ActionRoute_::Channel__Base {
+                        channel___base: Channel__Base_::Create_,
+                    },
+                )
+                .into_logic(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?;
+            router
+                .insert(
+                    ACTION_ROUTE.channel___base.check_name_for_existing_,
+                    ActionRoute_::Channel__Base {
+                        channel___base: Channel__Base_::CheckNameForExisting_,
+                    },
+                )
+                .into_logic(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?;
+            router
+                .insert(
+                    ACTION_ROUTE.channel___base.check_linked_name_for_existing_,
+                    ActionRoute_::Channel__Base {
+                        channel___base: Channel__Base_::CheckLinkedNameForExisting_,
+                    },
+                )
+                .into_logic(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?;
+            router
+                .insert(
+                    ACTION_ROUTE.channel_subscription___base.create_,
+                    ActionRoute_::ChannelSubscription__Base {
+                        channel_subscription___base: ChannelSubscription__Base_::Create_,
+                    },
+                )
+                .into_logic(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?;
+        }
+        return Result::Ok(router);
+    }
     fn spawn_connection_serving<T, E>(serving_connection_future: T) -> ()
     where
         T: Future<Output = Result<(), E>> + Send + 'static,
@@ -352,7 +982,11 @@ impl HttpServer {
         );
         return ();
     }
-    fn process_request<T>(request: Request, environment_configuration: &'static EnvironmentConfiguration, cloned: Arc<Cloned<T>>) -> impl Future<Output = Response> + Send
+    fn process_request<T>(
+        request: Request,
+        environment_configuration: &'static EnvironmentConfiguration,
+        cloned: Arc<Cloned<T>>
+    ) -> impl Future<Output = Response> + Send
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -768,7 +1402,7 @@ where
     <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
     <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
 {
-    router: Router,
+    router: Router<ActionRoute_>,
     database_1_postgresql_connection_pool: Pool<PostgresConnectionManager<T>>,
     database_2_postgresql_connection_pool: Pool<PostgresConnectionManager<T>>,
 }

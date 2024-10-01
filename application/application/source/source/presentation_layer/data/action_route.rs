@@ -55,7 +55,10 @@ pub const ACTION_ROUTE: ActionRoute = ActionRoute {
         get_one_by_id: Channel__Base::GET_ONE_BY_ID,
         get_many_by_name_in_subscription: Channel__Base::GET_MANY_BY_NAME_IN_SUBSCRIPTIONS,
         get_many_by_subscription: Channel__Base::GET_MANY_BY_SUBSCRIPTION,
-        get_many_piblic_by_name: Channel__Base::GET_MANY_PUBLIC_BY_NAME,
+        get_many_public_by_name: Channel__Base::GET_MANY_PUBLIC_BY_NAME,
+        create: Channel__Base::CREATE,
+        check_name_for_existing: Channel__Base::CHECK_NAME_FOR_EXISTING,
+        check_linked_name_for_existing: Channel__Base::CHECK_LINKED_NAME_FOR_EXISTING,
         #[cfg(feature = "manual_testing")]
         get_one_by_id_: Channel__Base::GET_ONE_BY_ID_,
         #[cfg(feature = "manual_testing")]
@@ -63,7 +66,13 @@ pub const ACTION_ROUTE: ActionRoute = ActionRoute {
         #[cfg(feature = "manual_testing")]
         get_many_by_subscription_: Channel__Base::GET_MANY_BY_SUBSCRIPTION_,
         #[cfg(feature = "manual_testing")]
-        get_many_piblic_by_name_: Channel__Base::GET_MANY_PUBLIC_BY_NAME_,
+        get_many_public_by_name_: Channel__Base::GET_MANY_PUBLIC_BY_NAME_,
+        #[cfg(feature = "manual_testing")]
+        create_: Channel__Base::CREATE_,
+        #[cfg(feature = "manual_testing")]
+        check_name_for_existing_: Channel__Base::CHECK_NAME_FOR_EXISTING_,
+        #[cfg(feature = "manual_testing")]
+        check_linked_name_for_existing_: Channel__Base::CHECK_LINKED_NAME_FOR_EXISTING_,
     },
     channel_subscription___base: ChannelSubscription__Base {
         create: ChannelSubscription__Base::CREATE,
@@ -219,7 +228,10 @@ pub struct Channel__Base {
     pub get_one_by_id: &'static str,
     pub get_many_by_name_in_subscription: &'static str,
     pub get_many_by_subscription: &'static str,
-    pub get_many_piblic_by_name: &'static str,
+    pub get_many_public_by_name: &'static str,
+    pub create: &'static str,
+    pub check_name_for_existing: &'static str,
+    pub check_linked_name_for_existing: &'static str,
     #[cfg(feature = "manual_testing")]
     pub get_one_by_id_: &'static str,
     #[cfg(feature = "manual_testing")]
@@ -227,13 +239,22 @@ pub struct Channel__Base {
     #[cfg(feature = "manual_testing")]
     pub get_many_by_subscription_: &'static str,
     #[cfg(feature = "manual_testing")]
-    pub get_many_piblic_by_name_: &'static str,
+    pub get_many_public_by_name_: &'static str,
+    #[cfg(feature = "manual_testing")]
+    pub create_: &'static str,
+    #[cfg(feature = "manual_testing")]
+    pub check_name_for_existing_: &'static str,
+    #[cfg(feature = "manual_testing")]
+    pub check_linked_name_for_existing_: &'static str,
 }
 impl Channel__Base {
     const GET_MANY_BY_NAME_IN_SUBSCRIPTIONS: &'static str = "/1/18";
     const GET_MANY_BY_SUBSCRIPTION: &'static str = "/1/19";
     const GET_MANY_PUBLIC_BY_NAME: &'static str = "/1/20";
     const GET_ONE_BY_ID: &'static str = "/1/17";
+    const CREATE: &'static str = "/1/22";
+    const CHECK_NAME_FOR_EXISTING: &'static str = "/1/23";
+    const CHECK_LINKED_NAME_FOR_EXISTING: &'static str = "/1/24";
 }
 #[cfg(feature = "manual_testing")]
 impl Channel__Base {
@@ -251,6 +272,18 @@ impl Channel__Base {
     );
     const GET_ONE_BY_ID_: &'static str = concatcp!(
         Channel__Base::GET_ONE_BY_ID,
+        ActionRoute::CONCATENATING_PART
+    );
+    const CREATE_: &'static str = concatcp!(
+        Channel__Base::CREATE,
+        ActionRoute::CONCATENATING_PART
+    );
+    const CHECK_NAME_FOR_EXISTING_: &'static str = concatcp!(
+        Channel__Base::CHECK_NAME_FOR_EXISTING,
+        ActionRoute::CONCATENATING_PART
+    );
+    const CHECK_LINKED_NAME_FOR_EXISTING_: &'static str = concatcp!(
+        Channel__Base::CHECK_LINKED_NAME_FOR_EXISTING,
         ActionRoute::CONCATENATING_PART
     );
 }
@@ -335,6 +368,9 @@ pub enum Channel__Base_ {
     GetManyByNameInSubscriptions,
     GetManyBySubscription,
     GetManyPublicByName,
+    Create,
+    CheckNameForExisting,
+    CheckLinkedNameForExisting,
     #[cfg(feature = "manual_testing")]
     GetOneById_,
     #[cfg(feature = "manual_testing")]
@@ -343,6 +379,12 @@ pub enum Channel__Base_ {
     GetManyBySubscription_,
     #[cfg(feature = "manual_testing")]
     GetManyPublicByName_,
+    #[cfg(feature = "manual_testing")]
+    Create_,
+    #[cfg(feature = "manual_testing")]
+    CheckNameForExisting_,
+    #[cfg(feature = "manual_testing")]
+    CheckLinkedNameForExisting_,
 }
 pub enum ChannelSubscription__Base_ {
     Create,
