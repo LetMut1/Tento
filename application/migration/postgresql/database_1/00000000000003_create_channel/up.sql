@@ -42,7 +42,7 @@ ALTER COLUMN viewing_quantity SET NOT NULL,
 ALTER COLUMN created_at SET NOT NULL,
 ADD CONSTRAINT channel8 PRIMARY KEY USING INDEX channel2,
 ADD CONSTRAINT channel9 FOREIGN KEY (owner)
-REFERENCES public.application_user (id) ON DELETE RESTRICT,
+REFERENCES public.user_ (id) ON DELETE RESTRICT,
 ADD CONSTRAINT channel10 UNIQUE USING INDEX channel3;
 
-COMMENT ON COLUMN public.channel.owner IS 'public.application_user.id';
+COMMENT ON COLUMN public.channel.owner IS 'public.user_.id';

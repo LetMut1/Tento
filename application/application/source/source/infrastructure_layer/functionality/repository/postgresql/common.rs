@@ -35,7 +35,7 @@ impl PostgresqlRepository<Common1> {
                     c.background_image_path AS bip, \
                     cs.channel__id AS ca \
                 FROM public.channel c LEFT OUTER JOIN public.channel_subscription cs \
-                ON cs.application_user__id = ${} AND c.id = cs.channel__id \
+                ON cs.user__id = ${} AND c.id = cs.channel__id \
                 WHERE c.visability_modifier = ${} AND c.name LIKE ${}",
                 counter.get_next_value()?,
                 counter.get_next_value()?,
@@ -177,7 +177,7 @@ impl PostgresqlRepository<Common1> {
                     c.cover_image_path AS cip, \
                     c.background_image_path AS bip \
                 FROM public.channel c INNER JOIN public.channel_subscription cs \
-                ON cs.application_user__id = ${} AND c.id = cs.channel__id \
+                ON cs.user__id = ${} AND c.id = cs.channel__id \
                 WHERE c.name LIKE ${}",
                 counter.get_next_value()?,
                 counter.get_next_value()?,
@@ -310,7 +310,7 @@ impl PostgresqlRepository<Common1> {
                     c.cover_image_path AS cip, \
                     c.background_image_path AS bip \
                 FROM public.channel c INNER JOIN public.channel_subscription cs \
-                ON cs.application_user__id = ${} AND c.id = cs.channel__id",
+                ON cs.user__id = ${} AND c.id = cs.channel__id",
                 counter.get_next_value()?,
             );
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();

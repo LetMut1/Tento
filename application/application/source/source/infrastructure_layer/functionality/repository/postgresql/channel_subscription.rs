@@ -22,7 +22,7 @@ impl PostgresqlRepository<ChannelSubscription> {
         return async move {
             let query = "\
                 INSERT INTO public.channel_subscription AS cs ( \
-                    application_user__id, \
+                    user__id, \
                     channel__id, \
                     created_at \
                 ) VALUES ( \
@@ -80,9 +80,9 @@ impl PostgresqlRepository<ChannelSubscription> {
         return async move {
             let query = "\
                 SELECT \
-                    cs.application_user__id AS aui \
+                    cs.user__id AS ui \
                 FROM public.channel_subscription cs \
-                WHERE cs.application_user__id = $1 AND cs.channel__id = $2;";
+                WHERE cs.user__id = $1 AND cs.channel__id = $2;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(

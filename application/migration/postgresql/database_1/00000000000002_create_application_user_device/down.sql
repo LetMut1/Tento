@@ -1,1 +1,0 @@
-DROP TABLE public.application_user_device;

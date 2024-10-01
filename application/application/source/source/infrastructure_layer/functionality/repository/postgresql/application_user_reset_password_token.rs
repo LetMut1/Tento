@@ -34,9 +34,9 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
     ) -> impl Future<Output = Result<ApplicationUserResetPasswordToken<'b>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
-                INSERT INTO public.application_user_reset_password_token AS aurpt ( \
-                    application_user__id, \
-                    application_user_device__id, \
+                INSERT INTO public.user_reset_password_token AS urpt ( \
+                    user__id, \
+                    user_device__id, \
                     value, \
                     wrong_enter_tries_quantity, \
                     is_approved, \
@@ -121,8 +121,8 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
     pub fn delete_2<'a>(database_2_connection: &'a Connection, by_1: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
-                DELETE FROM ONLY public.application_user_reset_password_token AS aurpt \
-                WHERE aurpt.application_user__id = $1 AND aurpt.application_user_device__id = $2;";
+                DELETE FROM ONLY public.user_reset_password_token AS urpt \
+                WHERE urpt.user__id = $1 AND urpt.user_device__id = $2;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
@@ -167,7 +167,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
     ) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
-                UPDATE ONLY public.application_user_reset_password_token AS aurpt
+                UPDATE ONLY public.user_reset_password_token AS urpt
                 SET ( \
                     value, \
                     wrong_enter_tries_quantity, \
@@ -181,7 +181,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
                     $4, \
                     $5 \
                 ) \
-                WHERE aurpt.application_user__id = $6 AND aurpt.application_user_device__id = $7;";
+                WHERE urpt.user__id = $6 AND urpt.user_device__id = $7;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
@@ -242,13 +242,13 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
     pub fn update_2<'a>(database_2_connection: &'a Connection, update_2: Update2, by_1: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
-                UPDATE ONLY public.application_user_reset_password_token AS aurpt
+                UPDATE ONLY public.user_reset_password_token AS urpt
                 SET ( \
                     can_be_resent_from \
                 ) = ROW( \
                     $1 \
                 ) \
-                WHERE aurpt.application_user__id = $2 AND aurpt.application_user_device__id = $3;";
+                WHERE urpt.user__id = $2 AND urpt.user_device__id = $3;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
@@ -297,7 +297,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
     ) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
-                UPDATE ONLY public.application_user_reset_password_token AS aurpt
+                UPDATE ONLY public.user_reset_password_token AS urpt
                 SET ( \
                     value, \
                     wrong_enter_tries_quantity, \
@@ -309,7 +309,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
                     $3, \
                     $4 \
                 ) \
-                WHERE aurpt.application_user__id = $5 AND aurpt.application_user_device__id = $6;";
+                WHERE urpt.user__id = $5 AND urpt.user_device__id = $6;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
@@ -366,13 +366,13 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
     pub fn update_4<'a>(database_2_connection: &'a Connection, update_4: Update4, by_1: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
-                UPDATE ONLY public.application_user_reset_password_token AS aurpt
+                UPDATE ONLY public.user_reset_password_token AS urpt
                 SET ( \
                     wrong_enter_tries_quantity \
                 ) = ROW( \
                     $1 \
                 ) \
-                WHERE aurpt.application_user__id = $2 AND aurpt.application_user_device__id = $3;";
+                WHERE urpt.user__id = $2 AND urpt.user_device__id = $3;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
@@ -417,13 +417,13 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
     pub fn update_5<'a>(database_2_connection: &'a Connection, update_5: Update5, by_1: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
-                UPDATE ONLY public.application_user_reset_password_token AS aurpt
+                UPDATE ONLY public.user_reset_password_token AS urpt
                 SET ( \
                     is_approved \
                 ) = ROW( \
                     $1 \
                 ) \
-                WHERE aurpt.application_user__id = $2 AND aurpt.application_user_device__id = $3;";
+                WHERE urpt.user__id = $2 AND urpt.user_device__id = $3;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
@@ -472,13 +472,13 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
         return async move {
             let query = "\
                 SELECT \
-                    aurpt.value AS v, \
-                    aurpt.wrong_enter_tries_quantity AS wetq, \
-                    aurpt.is_approved AS ia, \
-                    aurpt.expires_at AS ea,
-                    aurpt.can_be_resent_from AS cbrf \
-                FROM public.application_user_reset_password_token aurpt \
-                WHERE aurpt.application_user__id = $1 AND aurpt.application_user_device__id = $2;";
+                    urpt.value AS v, \
+                    urpt.wrong_enter_tries_quantity AS wetq, \
+                    urpt.is_approved AS ia, \
+                    urpt.expires_at AS ea,
+                    urpt.can_be_resent_from AS cbrf \
+                FROM public.user_reset_password_token urpt \
+                WHERE urpt.user__id = $1 AND urpt.user_device__id = $2;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
@@ -561,12 +561,12 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
         return async move {
             let query = "\
                 SELECT \
-                    aurpt.value AS v, \
-                    aurpt.wrong_enter_tries_quantity AS wetq, \
-                    aurpt.is_approved AS ia, \
-                    aurpt.expires_at AS ea \
-                FROM public.application_user_reset_password_token aurpt \
-                WHERE aurpt.application_user__id = $1 AND aurpt.application_user_device__id = $2;";
+                    urpt.value AS v, \
+                    urpt.wrong_enter_tries_quantity AS wetq, \
+                    urpt.is_approved AS ia, \
+                    urpt.expires_at AS ea \
+                FROM public.user_reset_password_token urpt \
+                WHERE urpt.user__id = $1 AND urpt.user_device__id = $2;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
@@ -643,12 +643,12 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
         return async move {
             let query = "\
                 SELECT \
-                    aurpt.value AS v, \
-                    aurpt.is_approved AS ia, \
-                    aurpt.expires_at AS ea,
-                    aurpt.can_be_resent_from AS cbrf \
-                FROM public.application_user_reset_password_token aurpt \
-                WHERE aurpt.application_user__id = $1 AND aurpt.application_user_device__id = $2;";
+                    urpt.value AS v, \
+                    urpt.is_approved AS ia, \
+                    urpt.expires_at AS ea,
+                    urpt.can_be_resent_from AS cbrf \
+                FROM public.user_reset_password_token urpt \
+                WHERE urpt.user__id = $1 AND urpt.user_device__id = $2;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(

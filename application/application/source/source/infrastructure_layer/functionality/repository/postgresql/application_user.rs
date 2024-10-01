@@ -36,21 +36,21 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
     ) -> impl Future<Output = Result<ApplicationUser<'static>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
-                INSERT INTO public.application_user AS au ( \
+                INSERT INTO public.user_ AS u ( \
                     id, \
                     email, \
                     nickname, \
                     password_hash, \
                     created_at \
                 ) VALUES ( \
-                    nextval('public.application_user1'), \
+                    nextval('public.user_1'), \
                     $1, \
                     $2, \
                     $3, \
                     $4 \
                 ) \
                 RETURNING \
-                    au.id AS i;";
+                    u.id AS i;";
                 let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
@@ -112,15 +112,15 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
     pub fn update_1<'a>(database_1_connection: &'a Connection, update_1: Update1<'a>, by_3: By3) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
-                UPDATE ONLY public.application_user AS au \
+                UPDATE ONLY public.user_ AS u \
                 SET ( \
                     password_hash \
                 ) = ROW( \
                     $1 \
                 ) \
-                WHERE au.id = $2 \
+                WHERE u.id = $2 \
                 RETURNING \
-                    au.id AS i;";
+                    u.id AS i;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
@@ -162,9 +162,9 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         return async move {
             let query = "\
                 SELECT \
-                    au.id AS i \
-                FROM public.application_user au \
-                WHERE au.nickname = $1;";
+                    u.id AS i \
+                FROM public.user_ u \
+                WHERE u.nickname = $1;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver.add_parameter(
                 &by_1.application_user__nickname,
@@ -204,9 +204,9 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         return async move {
             let query = "\
                 SELECT \
-                    au.id AS i \
-                FROM public.application_user au \
-                WHERE au.email = $1;";
+                    u.id AS i \
+                FROM public.user_ u \
+                WHERE u.email = $1;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver.add_parameter(
                 &by_2.application_user__email,
@@ -246,9 +246,9 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         return async move {
             let query = "\
                 SELECT \
-                    au.id AS i \
-                FROM public.application_user au \
-                WHERE au.id = $1;";
+                    u.id AS i \
+                FROM public.user_ u \
+                WHERE u.id = $1;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver.add_parameter(
                 &by_3.application_user__id,
@@ -291,12 +291,12 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         return async move {
             let query = "\
                 SELECT \
-                    au.id AS i, \
-                    au.email AS e, \
-                    au.password_hash AS ph, \
-                    au.created_at AS ca \
-                FROM public.application_user au \
-                WHERE au.nickname = $1;";
+                    u.id AS i, \
+                    u.email AS e, \
+                    u.password_hash AS ph, \
+                    u.created_at AS ca \
+                FROM public.user_ u \
+                WHERE u.nickname = $1;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver.add_parameter(
                 &by_1.application_user__nickname,
@@ -366,11 +366,11 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         return async move {
             let query = "\
                 SELECT \
-                    au.id AS i, \
-                    au.email AS e, \
-                    au.password_hash AS ph \
-                FROM public.application_user au \
-                WHERE au.nickname = $1;";
+                    u.id AS i, \
+                    u.email AS e, \
+                    u.password_hash AS ph \
+                FROM public.user_ u \
+                WHERE u.nickname = $1;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver.add_parameter(
                 &by_1.application_user__nickname,
@@ -433,11 +433,11 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         return async move {
             let query = "\
                 SELECT \
-                    au.id AS i, \
-                    au.nickname AS n, \
-                    au.password_hash AS ph \
-                FROM public.application_user au \
-                WHERE au.email = $1;";
+                    u.id AS i, \
+                    u.nickname AS n, \
+                    u.password_hash AS ph \
+                FROM public.user_ u \
+                WHERE u.email = $1;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver.add_parameter(
                 &by_2.application_user__email,
@@ -500,9 +500,9 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         return async move {
             let query = "\
                 SELECT \
-                    au.id AS i \
-                FROM public.application_user au \
-                WHERE au.email = $1;";
+                    u.id AS i \
+                FROM public.user_ u \
+                WHERE u.email = $1;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver.add_parameter(
                 &by_2.application_user__email,
@@ -553,11 +553,11 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         return async move {
             let query = "\
                 SELECT \
-                    au.email AS e, \
-                    au.nickname AS n, \
-                    au.password_hash AS ph \
-                FROM public.application_user au \
-                WHERE au.id = $1;";
+                    u.email AS e, \
+                    u.nickname AS n, \
+                    u.password_hash AS ph \
+                FROM public.user_ u \
+                WHERE u.id = $1;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver.add_parameter(
                 &by_3.application_user__id,
@@ -620,9 +620,9 @@ impl PostgresqlRepository<ApplicationUser<'_>> {
         return async move {
             let query = "\
                 SELECT \
-                    au.email AS e \
-                FROM public.application_user au \
-                WHERE au.id = $1;";
+                    u.email AS e \
+                FROM public.user_ u \
+                WHERE u.id = $1;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver.add_parameter(
                 &by_3.application_user__id,

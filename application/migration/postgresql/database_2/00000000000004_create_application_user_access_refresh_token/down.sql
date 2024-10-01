@@ -1,1 +1,0 @@
-DROP TABLE public.application_user_access_refresh_token;

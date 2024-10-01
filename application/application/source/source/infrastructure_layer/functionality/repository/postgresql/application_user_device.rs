@@ -25,14 +25,14 @@ impl PostgresqlRepository<ApplicationUserDevice> {
         return async move {
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             let query = "\
-                INSERT INTO public.application_user_device AS aud ( \
+                INSERT INTO public.user_device AS ud ( \
                     id, \
-                    application_user__id \
+                    user__id \
                 ) VALUES ( \
                     $1, \
                     $2 \
                 ) \
-                ON CONFLICT ON CONSTRAINT application_user_device2 DO NOTHING;";
+                ON CONFLICT ON CONSTRAINT user_device2 DO NOTHING;";
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
                     &insert_1.application_user_device__id,
