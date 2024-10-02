@@ -12,10 +12,10 @@ pub struct Incoming {
 }
 r#enum!(
     pub enum Precedent {
-        CommonPrecedent::ApplicationUserResetPasswordToken_NotFound,
-        CommonPrecedent::ApplicationUserResetPasswordToken_AlreadyExpired,
-        CommonPrecedent::ApplicationUserResetPasswordToken_AlreadyApproved,
-        CommonPrecedent::ApplicationUserResetPasswordToken_WrongValue {
+        CommonPrecedent::UserResetPasswordToken_NotFound,
+        CommonPrecedent::UserResetPasswordToken_AlreadyExpired,
+        CommonPrecedent::UserResetPasswordToken_AlreadyApproved,
+        CommonPrecedent::UserResetPasswordToken_WrongValue {
             application_user_reset_password_token__wrong_enter_tries_quantity: i16,
         },
     }

@@ -116,7 +116,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
             )
             .await?
             {
-                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUser_EmailAlreadyExist));
+                return Result::Ok(UnifiedReport::precedent(Precedent::User_EmailAlreadyExist));
             }
             let database_2_postgresql_pooled_connection = inner.get_database_2_postgresql_pooled_connection().await?;
             let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;

@@ -110,7 +110,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
             {
                 Option::Some(application_user_registration_token_) => application_user_registration_token_,
                 Option::None => {
-                    return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_NotFound));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_NotFound));
                 }
             };
             if Resolver::<Expiration>::is_expired(application_user_registration_token.expires_at) {
@@ -122,13 +122,13 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
                     },
                 )
                 .await?;
-                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_AlreadyExpired));
+                return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_AlreadyExpired));
             }
             if application_user_registration_token.is_approved {
-                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_AlreadyApproved));
+                return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_AlreadyApproved));
             }
             if !Resolver::<Expiration>::is_expired(application_user_registration_token.can_be_resent_from) {
-                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_TimeToResendHasNotCome));
+                return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_TimeToResendHasNotCome));
             }
             application_user_registration_token.can_be_resent_from = Generator::<UserRegistrationToken_CanBeResentFrom>::generate()?;
             PostgresqlRepository::<UserRegistrationToken>::update_2(

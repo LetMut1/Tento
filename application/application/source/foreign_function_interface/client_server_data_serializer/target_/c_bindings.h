@@ -78,15 +78,15 @@ typedef struct C_Data_ApplicationUser__Authorization___AuthorizeByLastStep___Out
   bool is_filled;
 } C_Data_ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming;
 
-typedef struct ApplicationUserAuthorizationToken_WrongValue {
+typedef struct UserAuthorizationToken_WrongValue {
   bool is_exist;
   short application_user_authorization_token__wrong_enter_tries_quantity;
-} ApplicationUserAuthorizationToken_WrongValue;
+} UserAuthorizationToken_WrongValue;
 
 typedef struct ApplicationUser__Authorization___AuthorizeByLastStep___Precedent {
   bool application_user_authorization_token__not_found;
   bool application_user_authorization_token__already_expired;
-  struct ApplicationUserAuthorizationToken_WrongValue application_user_authorization_token__wrong_value;
+  struct UserAuthorizationToken_WrongValue application_user_authorization_token__wrong_value;
   bool application_user__not_found;
 } ApplicationUser__Authorization___AuthorizeByLastStep___Precedent;
 
@@ -281,16 +281,16 @@ typedef struct ApplicationUser__Authorization___RegisterBySecondStep___Incoming 
   struct C_String application_user_registration_token__value;
 } ApplicationUser__Authorization___RegisterBySecondStep___Incoming;
 
-typedef struct ApplicationUserRegistrationToken_WrongValue {
+typedef struct UserRegistrationToken_WrongValue {
   bool is_exist;
   short application_user_registration_token__wrong_enter_tries_quantity;
-} ApplicationUserRegistrationToken_WrongValue;
+} UserRegistrationToken_WrongValue;
 
 typedef struct ApplicationUser__Authorization___RegisterBySecondStep___Precedent {
   bool application_user_registration_token__not_found;
   bool application_user_registration_token__already_expired;
   bool application_user_registration_token__already_approved;
-  struct ApplicationUserRegistrationToken_WrongValue application_user_registration_token__wrong_value;
+  struct UserRegistrationToken_WrongValue application_user_registration_token__wrong_value;
 } ApplicationUser__Authorization___RegisterBySecondStep___Precedent;
 
 typedef struct C_UnifiedReport_C_Void__ApplicationUser__Authorization___RegisterBySecondStep___Precedent {
@@ -387,16 +387,16 @@ typedef struct ApplicationUser__Authorization___ResetPasswordBySecondStep___Inco
   struct C_String application_user_reset_password_token__value;
 } ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming;
 
-typedef struct ApplicationUserResetPasswordToken_WrongValue {
+typedef struct UserResetPasswordToken_WrongValue {
   bool is_exist;
   short application_user_reset_password_token__wrong_enter_tries_quantity;
-} ApplicationUserResetPasswordToken_WrongValue;
+} UserResetPasswordToken_WrongValue;
 
 typedef struct ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent {
   bool application_user_reset_password_token__not_found;
   bool application_user_reset_password_token__already_expired;
   bool application_user_reset_password_token__already_approved;
-  struct ApplicationUserResetPasswordToken_WrongValue application_user_reset_password_token__wrong_value;
+  struct UserResetPasswordToken_WrongValue application_user_reset_password_token__wrong_value;
 } ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent;
 
 typedef struct C_UnifiedReport_C_Void__ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent {

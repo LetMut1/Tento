@@ -15,10 +15,10 @@ pub struct Outcoming {
 }
 r#enum!(
     pub enum Precedent {
-        CommonPrecedent::ApplicationUser_NotFound,
-        CommonPrecedent::ApplicationUserResetPasswordToken_NotFound,
-        CommonPrecedent::ApplicationUserResetPasswordToken_AlreadyExpired,
-        CommonPrecedent::ApplicationUserResetPasswordToken_AlreadyApproved,
-        CommonPrecedent::ApplicationUserResetPasswordToken_TimeToResendHasNotCome,
+        CommonPrecedent::User_NotFound,
+        CommonPrecedent::UserResetPasswordToken_NotFound,
+        CommonPrecedent::UserResetPasswordToken_AlreadyExpired,
+        CommonPrecedent::UserResetPasswordToken_AlreadyApproved,
+        CommonPrecedent::UserResetPasswordToken_TimeToResendHasNotCome,
     }
 );

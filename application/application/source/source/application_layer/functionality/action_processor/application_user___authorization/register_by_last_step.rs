@@ -173,7 +173,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
             )
             .await?
             {
-                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUser_NicknameAlreadyExist));
+                return Result::Ok(UnifiedReport::precedent(Precedent::User_NicknameAlreadyExist));
             }
             if PostgresqlRepository::<User<'_>>::is_exist_2(
                 database_1_postgresql_connection,
@@ -183,7 +183,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
             )
             .await?
             {
-                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUser_EmailAlreadyExist));
+                return Result::Ok(UnifiedReport::precedent(Precedent::User_EmailAlreadyExist));
             }
             let database_2_postgresql_pooled_connection = inner.get_database_2_postgresql_pooled_connection().await?;
             let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
@@ -198,7 +198,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
             {
                 Option::Some(application_user_registration_token_) => application_user_registration_token_,
                 Option::None => {
-                    return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_NotFound));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_NotFound));
                 }
             };
             if Resolver::<Expiration>::is_expired(application_user_registration_token.expires_at) {
@@ -210,10 +210,10 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
                     },
                 )
                 .await?;
-                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_AlreadyExpired));
+                return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_AlreadyExpired));
             }
             if !application_user_registration_token.is_approved {
-                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_IsNotApproved));
+                return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_IsNotApproved));
             }
             if application_user_registration_token.value != incoming.application_user_registration_token__value {
                 application_user_registration_token.wrong_enter_tries_quantity =
@@ -245,7 +245,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
                     )
                     .await?;
                 }
-                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_WrongValue));
+                return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_WrongValue));
             }
             let application_user__password_hash___join_handle = Spawner::<TokioBlockingTask>::spawn_processed(
                 move || -> _ {

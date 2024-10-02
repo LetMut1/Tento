@@ -95,7 +95,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Refre
             {
                 Option::Some(application_user_access_refresh_token_) => application_user_access_refresh_token_,
                 Option::None => {
-                    return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessRefreshToken_NotFound));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessRefreshToken_NotFound));
                 }
             };
             let is_valid = Encoder::<UserAccessRefreshToken<'_>>::is_valid(
@@ -122,7 +122,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Refre
                     },
                 )
                 .await?;
-                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessRefreshToken_AlreadyExpired));
+                return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessRefreshToken_AlreadyExpired));
             }
             let application_user_access_token_new = UserAccessToken::new(
                 Generator::<UserAccessToken_Id>::generate(),

@@ -20,6 +20,6 @@ pub struct Outcoming {
 }
 r#enum!(
     pub enum Precedent {
-        CommonPrecedent::ApplicationUser_WrongEmailOrNicknameOrPassword,
+        CommonPrecedent::User_WrongEmailOrNicknameOrPassword,
     }
 );

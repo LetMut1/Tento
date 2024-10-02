@@ -15,9 +15,9 @@ pub struct Outcoming {
 }
 r#enum!(
     pub enum Precedent {
-        CommonPrecedent::ApplicationUser_NotFound,
-        CommonPrecedent::ApplicationUserAuthorizationToken_NotFound,
-        CommonPrecedent::ApplicationUserAuthorizationToken_AlreadyExpired,
-        CommonPrecedent::ApplicationUserAuthorizationToken_TimeToResendHasNotCome,
+        CommonPrecedent::User_NotFound,
+        CommonPrecedent::UserAuthorizationToken_NotFound,
+        CommonPrecedent::UserAuthorizationToken_AlreadyExpired,
+        CommonPrecedent::UserAuthorizationToken_TimeToResendHasNotCome,
     }
 );

@@ -143,7 +143,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Reset
             {
                 Option::Some(application_user_reset_password_token_) => application_user_reset_password_token_,
                 Option::None => {
-                    return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_NotFound));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_NotFound));
                 }
             };
             if Resolver::<Expiration>::is_expired(application_user_reset_password_token.expires_at) {
@@ -155,10 +155,10 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Reset
                     },
                 )
                 .await?;
-                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_AlreadyExpired));
+                return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_AlreadyExpired));
             }
             if !application_user_reset_password_token.is_approved {
-                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_IsNotApproved));
+                return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_IsNotApproved));
             }
             if application_user_reset_password_token.value != incoming.application_user_reset_password_token__value {
                 application_user_reset_password_token.wrong_enter_tries_quantity =
@@ -190,7 +190,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Reset
                     )
                     .await?;
                 }
-                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_WrongValue));
+                return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_WrongValue));
             }
             let database_1_postgresql_pooled_connection = inner.get_database_1_postgresql_pooled_connection().await?;
             let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
@@ -204,7 +204,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Reset
             {
                 Option::Some(application_user_) => application_user_,
                 Option::None => {
-                    return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUser_NotFound));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::User_NotFound));
                 }
             };
             if !Validator::<User_Password>::is_valid_part_2(

@@ -112,7 +112,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
             {
                 Option::Some(application_user_registration_token_) => application_user_registration_token_,
                 Option::None => {
-                    return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_NotFound));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_NotFound));
                 }
             };
             if Resolver::<Expiration>::is_expired(application_user_registration_token.expires_at) {
@@ -124,10 +124,10 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
                     },
                 )
                 .await?;
-                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_AlreadyExpired));
+                return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_AlreadyExpired));
             }
             if application_user_registration_token.is_approved {
-                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_AlreadyApproved));
+                return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_AlreadyApproved));
             }
             if application_user_registration_token.value != incoming.application_user_registration_token__value {
                 application_user_registration_token.wrong_enter_tries_quantity =
@@ -161,7 +161,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
                 }
                 return Result::Ok(
                     UnifiedReport::precedent(
-                        Precedent::ApplicationUserRegistrationToken_WrongValue {
+                        Precedent::UserRegistrationToken_WrongValue {
                             application_user_registration_token__wrong_enter_tries_quantity: application_user_registration_token.wrong_enter_tries_quantity,
                         },
                     ),

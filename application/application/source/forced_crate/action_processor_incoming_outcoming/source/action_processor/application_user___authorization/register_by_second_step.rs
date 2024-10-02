@@ -12,10 +12,10 @@ pub struct Incoming {
 }
 r#enum!(
     pub enum Precedent {
-        CommonPrecedent::ApplicationUserRegistrationToken_NotFound,
-        CommonPrecedent::ApplicationUserRegistrationToken_AlreadyExpired,
-        CommonPrecedent::ApplicationUserRegistrationToken_AlreadyApproved,
-        CommonPrecedent::ApplicationUserRegistrationToken_WrongValue {
+        CommonPrecedent::UserRegistrationToken_NotFound,
+        CommonPrecedent::UserRegistrationToken_AlreadyExpired,
+        CommonPrecedent::UserRegistrationToken_AlreadyApproved,
+        CommonPrecedent::UserRegistrationToken_WrongValue {
             application_user_registration_token__wrong_enter_tries_quantity: i16,
         },
     }

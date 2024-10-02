@@ -118,7 +118,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Reset
             let application_user_ = match application_user {
                 Option::Some(application_user__) => application_user__,
                 Option::None => {
-                    return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUser_NotFound));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::User_NotFound));
                 }
             };
             let database_2_postgresql_pooled_connection = inner.get_database_2_postgresql_pooled_connection().await?;

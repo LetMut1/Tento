@@ -18,6 +18,6 @@ pub struct Outcoming {
 }
 r#enum!(
     pub enum Precedent {
-        CommonPrecedent::ApplicationUser_EmailAlreadyExist,
+        CommonPrecedent::User_EmailAlreadyExist,
     }
 );

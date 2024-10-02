@@ -72,10 +72,10 @@ impl ActionProcessor_ for ActionProcessor<Channel__Base___GetManyBySubscription>
                     application_user_access_token: application_user_access_token_,
                 } => application_user_access_token_,
                 Extracted::ApplicationUserAccessTokenAlreadyExpired => {
-                    return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_AlreadyExpired));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired));
                 }
                 Extracted::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
-                    return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_InUserAccessTokenBlackList));
                 }
             };
             if let Option::Some(requery___channel__id_) = incoming.requery___channel__id {

@@ -619,7 +619,7 @@ pub extern "C" fn application_user___authorization____authorize_by_first_step___
                 precedent,
             } => {
                 match precedent {
-                    ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent_::ApplicationUser_WrongEmailOrNicknameOrPassword => {}
+                    ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent_::User_WrongEmailOrNicknameOrPassword => {}
                 };
                 let precedent_ = ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent {
                     application_user__wrong_email_or_nickname_or_password: true,
@@ -682,12 +682,12 @@ pub struct ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming {
 pub struct ApplicationUser__Authorization___AuthorizeByLastStep___Precedent {
     pub application_user_authorization_token__not_found: bool,
     pub application_user_authorization_token__already_expired: bool,
-    pub application_user_authorization_token__wrong_value: ApplicationUserAuthorizationToken_WrongValue,
+    pub application_user_authorization_token__wrong_value: UserAuthorizationToken_WrongValue,
     pub application_user__not_found: bool,
 }
 #[repr(C)]
 #[derive(Default)]
-pub struct ApplicationUserAuthorizationToken_WrongValue {
+pub struct UserAuthorizationToken_WrongValue {
     pub is_exist: bool,
     pub application_user_authorization_token__wrong_enter_tries_quantity: c_short,
 }
@@ -730,30 +730,30 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_::ApplicationUserAuthorizationToken_AlreadyExpired => {
+                    ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_::UserAuthorizationToken_AlreadyExpired => {
                         ApplicationUser__Authorization___AuthorizeByLastStep___Precedent {
                             application_user_authorization_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_::ApplicationUserAuthorizationToken_NotFound => {
+                    ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_::UserAuthorizationToken_NotFound => {
                         ApplicationUser__Authorization___AuthorizeByLastStep___Precedent {
                             application_user_authorization_token__not_found: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_::ApplicationUserAuthorizationToken_WrongValue {
+                    ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_::UserAuthorizationToken_WrongValue {
                         application_user_authorization_token__wrong_enter_tries_quantity,
                     } => {
                         ApplicationUser__Authorization___AuthorizeByLastStep___Precedent {
-                            application_user_authorization_token__wrong_value: ApplicationUserAuthorizationToken_WrongValue {
+                            application_user_authorization_token__wrong_value: UserAuthorizationToken_WrongValue {
                                 is_exist: true,
                                 application_user_authorization_token__wrong_enter_tries_quantity,
                             },
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_::ApplicationUser_NotFound => {
+                    ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_::User_NotFound => {
                         ApplicationUser__Authorization___AuthorizeByLastStep___Precedent {
                             application_user__not_found: true,
                             ..Default::default()
@@ -987,13 +987,13 @@ pub extern "C" fn application_user___authorization____deauthorize_from_all_devic
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent_::ApplicationUserAccessToken_AlreadyExpired => {
+                    ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent_::UserAccessToken_AlreadyExpired => {
                         ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent {
                             application_user_access_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent_::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList => {
+                    ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent_::UserAccessToken_InUserAccessTokenBlackList => {
                         ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent {
                             application_user_access_token__in_application_user_access_token_black_list: true,
                             ..Default::default()
@@ -1074,13 +1074,13 @@ pub extern "C" fn application_user___authorization____deauthorize_from_one_devic
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent_::ApplicationUserAccessToken_AlreadyExpired => {
+                    ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent_::UserAccessToken_AlreadyExpired => {
                         ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent {
                             application_user_access_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent_::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList => {
+                    ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent_::UserAccessToken_InUserAccessTokenBlackList => {
                         ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent {
                             application_user_access_token__in_application_user_access_token_black_list: true,
                             ..Default::default()
@@ -1190,13 +1190,13 @@ pub extern "C" fn application_user___authorization____refresh_access_token____de
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    ApplicationUser__Authorization___RefreshAccessToken___Precedent_::ApplicationUserAccessRefreshToken_AlreadyExpired => {
+                    ApplicationUser__Authorization___RefreshAccessToken___Precedent_::UserAccessRefreshToken_AlreadyExpired => {
                         ApplicationUser__Authorization___RefreshAccessToken___Precedent {
                             application_user_access_refresh_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___RefreshAccessToken___Precedent_::ApplicationUserAccessRefreshToken_NotFound => {
+                    ApplicationUser__Authorization___RefreshAccessToken___Precedent_::UserAccessRefreshToken_NotFound => {
                         ApplicationUser__Authorization___RefreshAccessToken___Precedent {
                             application_user_access_refresh_token__not_found: true,
                             ..Default::default()
@@ -1309,7 +1309,7 @@ pub extern "C" fn application_user___authorization____register_by_first_step____
                 precedent,
             } => {
                 match precedent {
-                    ApplicationUser__Authorization___RegisterByFirstStep___Precedent_::ApplicationUser_EmailAlreadyExist => {}
+                    ApplicationUser__Authorization___RegisterByFirstStep___Precedent_::User_EmailAlreadyExist => {}
                 };
                 let precedent_ = ApplicationUser__Authorization___RegisterByFirstStep___Precedent {
                     application_user__email_already_exist: true,
@@ -1366,11 +1366,11 @@ pub struct ApplicationUser__Authorization___RegisterBySecondStep___Precedent {
     pub application_user_registration_token__not_found: bool,
     pub application_user_registration_token__already_expired: bool,
     pub application_user_registration_token__already_approved: bool,
-    pub application_user_registration_token__wrong_value: ApplicationUserRegistrationToken_WrongValue,
+    pub application_user_registration_token__wrong_value: UserRegistrationToken_WrongValue,
 }
 #[repr(C)]
 #[derive(Default)]
-pub struct ApplicationUserRegistrationToken_WrongValue {
+pub struct UserRegistrationToken_WrongValue {
     pub is_exist: bool,
     pub application_user_registration_token__wrong_enter_tries_quantity: c_short,
 }
@@ -1394,27 +1394,27 @@ pub extern "C" fn application_user___authorization____register_by_second_step___
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    ApplicationUser__Authorization___RegisterBySecondStep___Precedent_::ApplicationUserRegistrationToken_NotFound => {
+                    ApplicationUser__Authorization___RegisterBySecondStep___Precedent_::UserRegistrationToken_NotFound => {
                         ApplicationUser__Authorization___RegisterBySecondStep___Precedent {
                             application_user_registration_token__not_found: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___RegisterBySecondStep___Precedent_::ApplicationUserRegistrationToken_AlreadyExpired => {
+                    ApplicationUser__Authorization___RegisterBySecondStep___Precedent_::UserRegistrationToken_AlreadyExpired => {
                         ApplicationUser__Authorization___RegisterBySecondStep___Precedent {
                             application_user_registration_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___RegisterBySecondStep___Precedent_::ApplicationUserRegistrationToken_AlreadyApproved => {
+                    ApplicationUser__Authorization___RegisterBySecondStep___Precedent_::UserRegistrationToken_AlreadyApproved => {
                         ApplicationUser__Authorization___RegisterBySecondStep___Precedent {
                             application_user_registration_token__already_approved: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___RegisterBySecondStep___Precedent_::ApplicationUserRegistrationToken_WrongValue { application_user_registration_token__wrong_enter_tries_quantity } => {
+                    ApplicationUser__Authorization___RegisterBySecondStep___Precedent_::UserRegistrationToken_WrongValue { application_user_registration_token__wrong_enter_tries_quantity } => {
                         ApplicationUser__Authorization___RegisterBySecondStep___Precedent {
-                            application_user_registration_token__wrong_value: ApplicationUserRegistrationToken_WrongValue {
+                            application_user_registration_token__wrong_value: UserRegistrationToken_WrongValue {
                                 is_exist: true,
                                 application_user_registration_token__wrong_enter_tries_quantity: application_user_registration_token__wrong_enter_tries_quantity,
                             },
@@ -1530,37 +1530,37 @@ pub extern "C" fn application_user___authorization____register_by_last_step____d
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    ApplicationUser__Authorization___RegisterByLastStep___Precedent_::ApplicationUser_NicknameAlreadyExist => {
+                    ApplicationUser__Authorization___RegisterByLastStep___Precedent_::User_NicknameAlreadyExist => {
                         ApplicationUser__Authorization___RegisterByLastStep___Precedent {
                             application_user__nickname_already_exist: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___RegisterByLastStep___Precedent_::ApplicationUser_EmailAlreadyExist => {
+                    ApplicationUser__Authorization___RegisterByLastStep___Precedent_::User_EmailAlreadyExist => {
                         ApplicationUser__Authorization___RegisterByLastStep___Precedent {
                             application_user__email_already_exist: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___RegisterByLastStep___Precedent_::ApplicationUserRegistrationToken_NotFound => {
+                    ApplicationUser__Authorization___RegisterByLastStep___Precedent_::UserRegistrationToken_NotFound => {
                         ApplicationUser__Authorization___RegisterByLastStep___Precedent {
                             application_user_registration_token__not_found: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___RegisterByLastStep___Precedent_::ApplicationUserRegistrationToken_AlreadyExpired => {
+                    ApplicationUser__Authorization___RegisterByLastStep___Precedent_::UserRegistrationToken_AlreadyExpired => {
                         ApplicationUser__Authorization___RegisterByLastStep___Precedent {
                             application_user_registration_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___RegisterByLastStep___Precedent_::ApplicationUserRegistrationToken_IsNotApproved => {
+                    ApplicationUser__Authorization___RegisterByLastStep___Precedent_::UserRegistrationToken_IsNotApproved => {
                         ApplicationUser__Authorization___RegisterByLastStep___Precedent {
                             application_user_registration_token__is_not_approved: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___RegisterByLastStep___Precedent_::ApplicationUserRegistrationToken_WrongValue => {
+                    ApplicationUser__Authorization___RegisterByLastStep___Precedent_::UserRegistrationToken_WrongValue => {
                         ApplicationUser__Authorization___RegisterByLastStep___Precedent {
                             application_user_registration_token__wrong_value: true,
                             ..Default::default()
@@ -1675,7 +1675,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_first_st
                 precedent,
             } => {
                 match precedent {
-                    ApplicationUser__Authorization___ResetPasswordByFirstStep___Precedent_::ApplicationUser_NotFound => {}
+                    ApplicationUser__Authorization___ResetPasswordByFirstStep___Precedent_::User_NotFound => {}
                 };
                 let precedent_ = ApplicationUser__Authorization___ResetPasswordByFirstStep___Precedent {
                     application_user__not_found: true,
@@ -1733,11 +1733,11 @@ pub struct ApplicationUser__Authorization___ResetPasswordBySecondStep___Preceden
     pub application_user_reset_password_token__not_found: bool,
     pub application_user_reset_password_token__already_expired: bool,
     pub application_user_reset_password_token__already_approved: bool,
-    pub application_user_reset_password_token__wrong_value: ApplicationUserResetPasswordToken_WrongValue,
+    pub application_user_reset_password_token__wrong_value: UserResetPasswordToken_WrongValue,
 }
 #[repr(C)]
 #[derive(Default)]
-pub struct ApplicationUserResetPasswordToken_WrongValue {
+pub struct UserResetPasswordToken_WrongValue {
     pub is_exist: bool,
     pub application_user_reset_password_token__wrong_enter_tries_quantity: c_short,
 }
@@ -1761,27 +1761,27 @@ pub extern "C" fn application_user___authorization____reset_password_by_second_s
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_::ApplicationUserResetPasswordToken_NotFound => {
+                    ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_::UserResetPasswordToken_NotFound => {
                         ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent {
                             application_user_reset_password_token__not_found: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_::ApplicationUserResetPasswordToken_AlreadyExpired => {
+                    ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_::UserResetPasswordToken_AlreadyExpired => {
                         ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent {
                             application_user_reset_password_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_::ApplicationUserResetPasswordToken_AlreadyApproved => {
+                    ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_::UserResetPasswordToken_AlreadyApproved => {
                         ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent {
                             application_user_reset_password_token__already_approved: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_::ApplicationUserResetPasswordToken_WrongValue { application_user_reset_password_token__wrong_enter_tries_quantity } => {
+                    ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_::UserResetPasswordToken_WrongValue { application_user_reset_password_token__wrong_enter_tries_quantity } => {
                         ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent {
-                            application_user_reset_password_token__wrong_value: ApplicationUserResetPasswordToken_WrongValue {
+                            application_user_reset_password_token__wrong_value: UserResetPasswordToken_WrongValue {
                                 is_exist: true,
                                 application_user_reset_password_token__wrong_enter_tries_quantity: application_user_reset_password_token__wrong_enter_tries_quantity,
                             },
@@ -1868,31 +1868,31 @@ pub extern "C" fn application_user___authorization____reset_password_by_last_ste
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_::ApplicationUser_NotFound => {
+                    ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_::User_NotFound => {
                         ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent {
                             application_user__not_found: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_::ApplicationUserResetPasswordToken_NotFound => {
+                    ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_::UserResetPasswordToken_NotFound => {
                         ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent {
                             application_user_reset_password_token__not_found: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_::ApplicationUserResetPasswordToken_AlreadyExpired => {
+                    ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_::UserResetPasswordToken_AlreadyExpired => {
                         ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent {
                             application_user_reset_password_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_::ApplicationUserResetPasswordToken_IsNotApproved => {
+                    ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_::UserResetPasswordToken_IsNotApproved => {
                         ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent {
                             application_user_reset_password_token__is_not_approved: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_::ApplicationUserResetPasswordToken_WrongValue => {
+                    ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_::UserResetPasswordToken_WrongValue => {
                         ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent {
                             application_user_reset_password_token__wrong_value: true,
                             ..Default::default()
@@ -1992,25 +1992,25 @@ pub extern "C" fn application_user___authorization____send_email_for_register___
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    ApplicationUser__Authorization___SendEmailForRegister___Precedent_::ApplicationUserRegistrationToken_NotFound => {
+                    ApplicationUser__Authorization___SendEmailForRegister___Precedent_::UserRegistrationToken_NotFound => {
                         ApplicationUser__Authorization___SendEmailForRegister___Precedent {
                             application_user_registration_token__not_found: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___SendEmailForRegister___Precedent_::ApplicationUserRegistrationToken_AlreadyExpired => {
+                    ApplicationUser__Authorization___SendEmailForRegister___Precedent_::UserRegistrationToken_AlreadyExpired => {
                         ApplicationUser__Authorization___SendEmailForRegister___Precedent {
                             application_user_registration_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___SendEmailForRegister___Precedent_::ApplicationUserRegistrationToken_AlreadyApproved => {
+                    ApplicationUser__Authorization___SendEmailForRegister___Precedent_::UserRegistrationToken_AlreadyApproved => {
                         ApplicationUser__Authorization___SendEmailForRegister___Precedent {
                             application_user_registration_token__already_approved: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___SendEmailForRegister___Precedent_::ApplicationUserRegistrationToken_TimeToResendHasNotCome => {
+                    ApplicationUser__Authorization___SendEmailForRegister___Precedent_::UserRegistrationToken_TimeToResendHasNotCome => {
                         ApplicationUser__Authorization___SendEmailForRegister___Precedent {
                             application_user_registration_token__time_to_resend_has_not_come: true,
                             ..Default::default()
@@ -2108,25 +2108,25 @@ pub extern "C" fn application_user___authorization____send_email_for_authorize__
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    ApplicationUser__Authorization___SendEmailForAuthorize___Precedent_::ApplicationUser_NotFound => {
+                    ApplicationUser__Authorization___SendEmailForAuthorize___Precedent_::User_NotFound => {
                         ApplicationUser__Authorization___SendEmailForAuthorize___Precedent {
                             application_user__not_found: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___SendEmailForAuthorize___Precedent_::ApplicationUserAuthorizationToken_NotFound => {
+                    ApplicationUser__Authorization___SendEmailForAuthorize___Precedent_::UserAuthorizationToken_NotFound => {
                         ApplicationUser__Authorization___SendEmailForAuthorize___Precedent {
                             application_user_authorization_token__not_found: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___SendEmailForAuthorize___Precedent_::ApplicationUserAuthorizationToken_AlreadyExpired => {
+                    ApplicationUser__Authorization___SendEmailForAuthorize___Precedent_::UserAuthorizationToken_AlreadyExpired => {
                         ApplicationUser__Authorization___SendEmailForAuthorize___Precedent {
                             application_user_authorization_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___SendEmailForAuthorize___Precedent_::ApplicationUserAuthorizationToken_TimeToResendHasNotCome => {
+                    ApplicationUser__Authorization___SendEmailForAuthorize___Precedent_::UserAuthorizationToken_TimeToResendHasNotCome => {
                         ApplicationUser__Authorization___SendEmailForAuthorize___Precedent {
                             application_user_authorization_token__time_to_resend_has_not_come: true,
                             ..Default::default()
@@ -2225,31 +2225,31 @@ pub extern "C" fn application_user___authorization____send_email_for_reset_passw
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_::ApplicationUser_NotFound => {
+                    ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_::User_NotFound => {
                         ApplicationUser__Authorization___SendEmailForResetPassword___Precedent {
                             application_user__not_found: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_::ApplicationUserResetPasswordToken_NotFound => {
+                    ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_::UserResetPasswordToken_NotFound => {
                         ApplicationUser__Authorization___SendEmailForResetPassword___Precedent {
                             application_user_reset_password_token__not_found: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_::ApplicationUserResetPasswordToken_AlreadyExpired => {
+                    ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_::UserResetPasswordToken_AlreadyExpired => {
                         ApplicationUser__Authorization___SendEmailForResetPassword___Precedent {
                             application_user_reset_password_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_::ApplicationUserResetPasswordToken_AlreadyApproved => {
+                    ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_::UserResetPasswordToken_AlreadyApproved => {
                         ApplicationUser__Authorization___SendEmailForResetPassword___Precedent {
                             application_user_reset_password_token__already_approved: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_::ApplicationUserResetPasswordToken_TimeToResendHasNotCome => {
+                    ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_::UserResetPasswordToken_TimeToResendHasNotCome => {
                         ApplicationUser__Authorization___SendEmailForResetPassword___Precedent {
                             application_user_reset_password_token__time_to_resend_has_not_come: true,
                             ..Default::default()
@@ -2378,13 +2378,13 @@ pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____deseria
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    Channel__Base___GetManyByNameInSubscriptions___Precedent_::ApplicationUserAccessToken_AlreadyExpired => {
+                    Channel__Base___GetManyByNameInSubscriptions___Precedent_::UserAccessToken_AlreadyExpired => {
                         Channel__Base___GetManyByNameInSubscriptions___Precedent {
                             application_user_access_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    Channel__Base___GetManyByNameInSubscriptions___Precedent_::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList => {
+                    Channel__Base___GetManyByNameInSubscriptions___Precedent_::UserAccessToken_InUserAccessTokenBlackList => {
                         Channel__Base___GetManyByNameInSubscriptions___Precedent {
                             application_user_access_token__in_application_user_access_token_black_list: true,
                             ..Default::default()
@@ -2525,13 +2525,13 @@ pub extern "C" fn channel___base____get_many_by_subscription____deserialize____a
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    Channel__Base___GetManyBySubscription___Precedent_::ApplicationUserAccessToken_AlreadyExpired => {
+                    Channel__Base___GetManyBySubscription___Precedent_::UserAccessToken_AlreadyExpired => {
                         Channel__Base___GetManyBySubscription___Precedent {
                             application_user_access_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    Channel__Base___GetManyBySubscription___Precedent_::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList => {
+                    Channel__Base___GetManyBySubscription___Precedent_::UserAccessToken_InUserAccessTokenBlackList => {
                         Channel__Base___GetManyBySubscription___Precedent {
                             application_user_access_token__in_application_user_access_token_black_list: true,
                             ..Default::default()
@@ -2673,13 +2673,13 @@ pub extern "C" fn channel___base____get_many_public_by_name____deserialize____al
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    Channel__Base___GetManyPublicByName___Precedent_::ApplicationUserAccessToken_AlreadyExpired => {
+                    Channel__Base___GetManyPublicByName___Precedent_::UserAccessToken_AlreadyExpired => {
                         Channel__Base___GetManyPublicByName___Precedent {
                             application_user_access_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    Channel__Base___GetManyPublicByName___Precedent_::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList => {
+                    Channel__Base___GetManyPublicByName___Precedent_::UserAccessToken_InUserAccessTokenBlackList => {
                         Channel__Base___GetManyPublicByName___Precedent {
                             application_user_access_token__in_application_user_access_token_black_list: true,
                             ..Default::default()
@@ -2840,13 +2840,13 @@ pub extern "C" fn channel___base____get_one_by_id____deserialize____allocate(c_v
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    Channel__Base___GetOneById___Precedent_::ApplicationUserAccessToken_AlreadyExpired => {
+                    Channel__Base___GetOneById___Precedent_::UserAccessToken_AlreadyExpired => {
                         Channel__Base___GetOneById___Precedent {
                             application_user_access_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    Channel__Base___GetOneById___Precedent_::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList => {
+                    Channel__Base___GetOneById___Precedent_::UserAccessToken_InUserAccessTokenBlackList => {
                         Channel__Base___GetOneById___Precedent {
                             application_user_access_token__in_application_user_access_token_black_list: true,
                             ..Default::default()
@@ -2965,13 +2965,13 @@ pub extern "C" fn channel_subscription___base____create____deserialize____alloca
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    ChannelSubscription__Base___Create___Precedent_::ApplicationUserAccessToken_AlreadyExpired => {
+                    ChannelSubscription__Base___Create___Precedent_::UserAccessToken_AlreadyExpired => {
                         ChannelSubscription__Base___Create___Precedent {
                             application_user_access_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    ChannelSubscription__Base___Create___Precedent_::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList => {
+                    ChannelSubscription__Base___Create___Precedent_::UserAccessToken_InUserAccessTokenBlackList => {
                         ChannelSubscription__Base___Create___Precedent {
                             application_user_access_token__in_application_user_access_token_black_list: true,
                             ..Default::default()
@@ -2989,7 +2989,7 @@ pub extern "C" fn channel_subscription___base____create____deserialize____alloca
                             ..Default::default()
                         }
                     }
-                    ChannelSubscription__Base___Create___Precedent_::ApplicationUser_IsChannelOwner => {
+                    ChannelSubscription__Base___Create___Precedent_::User_IsChannelOwner => {
                         ChannelSubscription__Base___Create___Precedent {
                             application_user__is_channel__owner: true,
                             ..Default::default()
@@ -3134,7 +3134,7 @@ mod test {
                 }
                 #[test]
                 fn precedent____application_user___authorization____authorize_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
-                    let precedent = ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent_::ApplicationUser_WrongEmailOrNicknameOrPassword;
+                    let precedent = ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent_::User_WrongEmailOrNicknameOrPassword;
                     let unified_report = UnifiedReport::<
                         ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming_,
                         ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent_,
@@ -3224,14 +3224,14 @@ mod test {
                 #[test]
                 fn precedent____application_user___authorization____authorize_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
                     let mut precedent_registry: Vec<ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_> = vec![];
-                    precedent_registry.push(ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_::ApplicationUserAuthorizationToken_NotFound);
-                    precedent_registry.push(ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_::ApplicationUserAuthorizationToken_AlreadyExpired);
+                    precedent_registry.push(ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_::UserAuthorizationToken_NotFound);
+                    precedent_registry.push(ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_::UserAuthorizationToken_AlreadyExpired);
                     precedent_registry.push(
-                        ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_::ApplicationUserAuthorizationToken_WrongValue {
+                        ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_::UserAuthorizationToken_WrongValue {
                             application_user_authorization_token__wrong_enter_tries_quantity: 0,
                         },
                     );
-                    precedent_registry.push(ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_::ApplicationUser_NotFound);
+                    precedent_registry.push(ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_::User_NotFound);
                     '_a: for precedent in precedent_registry {
                         _precedent____application_user___authorization____authorize_by_last_step(precedent)?;
                     }
@@ -3361,9 +3361,9 @@ mod test {
                 #[test]
                 fn precedent____application_user___authorization____deauthorize_from_all_devices() -> Result<(), Box<dyn StdError + 'static>> {
                     let mut precedent_registry: Vec<ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent_> = vec![];
-                    precedent_registry.push(ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent_::ApplicationUserAccessToken_AlreadyExpired);
+                    precedent_registry.push(ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent_::UserAccessToken_AlreadyExpired);
                     precedent_registry
-                        .push(ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent_::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList);
+                        .push(ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent_::UserAccessToken_InUserAccessTokenBlackList);
                     '_a: for precedent in precedent_registry {
                         _precedent____application_user___authorization____deauthorize_from_all_devices(precedent)?;
                     }
@@ -3411,9 +3411,9 @@ mod test {
                 #[test]
                 fn precedent____application_user___authorization____deauthorize_from_one_device() -> Result<(), Box<dyn StdError + 'static>> {
                     let mut precedent_registry: Vec<ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent_> = vec![];
-                    precedent_registry.push(ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent_::ApplicationUserAccessToken_AlreadyExpired);
+                    precedent_registry.push(ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent_::UserAccessToken_AlreadyExpired);
                     precedent_registry
-                        .push(ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent_::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList);
+                        .push(ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent_::UserAccessToken_InUserAccessTokenBlackList);
                     '_a: for precedent in precedent_registry {
                         _precedent____application_user___authorization____deauthorize_from_one_device(precedent)?;
                     }
@@ -3490,8 +3490,8 @@ mod test {
                 #[test]
                 fn precedent____application_user___authorization____refresh_access_token() -> Result<(), Box<dyn StdError + 'static>> {
                     let mut precedent_registry: Vec<ApplicationUser__Authorization___RefreshAccessToken___Precedent_> = vec![];
-                    precedent_registry.push(ApplicationUser__Authorization___RefreshAccessToken___Precedent_::ApplicationUserAccessRefreshToken_NotFound);
-                    precedent_registry.push(ApplicationUser__Authorization___RefreshAccessToken___Precedent_::ApplicationUserAccessRefreshToken_AlreadyExpired);
+                    precedent_registry.push(ApplicationUser__Authorization___RefreshAccessToken___Precedent_::UserAccessRefreshToken_NotFound);
+                    precedent_registry.push(ApplicationUser__Authorization___RefreshAccessToken___Precedent_::UserAccessRefreshToken_AlreadyExpired);
                     '_a: for precedent in precedent_registry {
                         _precedent____application_user___authorization____refresh_access_token(precedent)?;
                     }
@@ -3545,7 +3545,7 @@ mod test {
                 }
                 #[test]
                 fn precedent____application_user___authorization____register_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
-                    let precedent = ApplicationUser__Authorization___RegisterByFirstStep___Precedent_::ApplicationUser_EmailAlreadyExist;
+                    let precedent = ApplicationUser__Authorization___RegisterByFirstStep___Precedent_::User_EmailAlreadyExist;
                     let unified_report = UnifiedReport::<
                         ApplicationUser__Authorization___RegisterByFirstStep___Outcoming_,
                         ApplicationUser__Authorization___RegisterByFirstStep___Precedent_,
@@ -3606,11 +3606,11 @@ mod test {
                 #[test]
                 fn precedent____application_user___authorization____register_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
                     let mut precedent_registry: Vec<ApplicationUser__Authorization___RegisterBySecondStep___Precedent_> = vec![];
-                    precedent_registry.push(ApplicationUser__Authorization___RegisterBySecondStep___Precedent_::ApplicationUserRegistrationToken_NotFound);
-                    precedent_registry.push(ApplicationUser__Authorization___RegisterBySecondStep___Precedent_::ApplicationUserRegistrationToken_AlreadyExpired);
-                    precedent_registry.push(ApplicationUser__Authorization___RegisterBySecondStep___Precedent_::ApplicationUserRegistrationToken_AlreadyApproved);
+                    precedent_registry.push(ApplicationUser__Authorization___RegisterBySecondStep___Precedent_::UserRegistrationToken_NotFound);
+                    precedent_registry.push(ApplicationUser__Authorization___RegisterBySecondStep___Precedent_::UserRegistrationToken_AlreadyExpired);
+                    precedent_registry.push(ApplicationUser__Authorization___RegisterBySecondStep___Precedent_::UserRegistrationToken_AlreadyApproved);
                     precedent_registry.push(
-                        ApplicationUser__Authorization___RegisterBySecondStep___Precedent_::ApplicationUserRegistrationToken_WrongValue {
+                        ApplicationUser__Authorization___RegisterBySecondStep___Precedent_::UserRegistrationToken_WrongValue {
                             application_user_registration_token__wrong_enter_tries_quantity: 0,
                         },
                     );
@@ -3690,12 +3690,12 @@ mod test {
                 #[test]
                 fn precedent____application_user___authorization____register_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
                     let mut precedent_registry: Vec<ApplicationUser__Authorization___RegisterByLastStep___Precedent_> = vec![];
-                    precedent_registry.push(ApplicationUser__Authorization___RegisterByLastStep___Precedent_::ApplicationUser_NicknameAlreadyExist);
-                    precedent_registry.push(ApplicationUser__Authorization___RegisterByLastStep___Precedent_::ApplicationUser_EmailAlreadyExist);
-                    precedent_registry.push(ApplicationUser__Authorization___RegisterByLastStep___Precedent_::ApplicationUserRegistrationToken_NotFound);
-                    precedent_registry.push(ApplicationUser__Authorization___RegisterByLastStep___Precedent_::ApplicationUserRegistrationToken_AlreadyExpired);
-                    precedent_registry.push(ApplicationUser__Authorization___RegisterByLastStep___Precedent_::ApplicationUserRegistrationToken_IsNotApproved);
-                    precedent_registry.push(ApplicationUser__Authorization___RegisterByLastStep___Precedent_::ApplicationUserRegistrationToken_WrongValue);
+                    precedent_registry.push(ApplicationUser__Authorization___RegisterByLastStep___Precedent_::User_NicknameAlreadyExist);
+                    precedent_registry.push(ApplicationUser__Authorization___RegisterByLastStep___Precedent_::User_EmailAlreadyExist);
+                    precedent_registry.push(ApplicationUser__Authorization___RegisterByLastStep___Precedent_::UserRegistrationToken_NotFound);
+                    precedent_registry.push(ApplicationUser__Authorization___RegisterByLastStep___Precedent_::UserRegistrationToken_AlreadyExpired);
+                    precedent_registry.push(ApplicationUser__Authorization___RegisterByLastStep___Precedent_::UserRegistrationToken_IsNotApproved);
+                    precedent_registry.push(ApplicationUser__Authorization___RegisterByLastStep___Precedent_::UserRegistrationToken_WrongValue);
                     '_a: for precedent in precedent_registry {
                         _precedent____application_user___authorization____register_by_last_step(precedent)?;
                     }
@@ -3750,7 +3750,7 @@ mod test {
                 }
                 #[test]
                 fn precedent____application_user___authorization____reset_password_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
-                    let precedent = ApplicationUser__Authorization___ResetPasswordByFirstStep___Precedent_::ApplicationUser_NotFound;
+                    let precedent = ApplicationUser__Authorization___ResetPasswordByFirstStep___Precedent_::User_NotFound;
                     let unified_report = UnifiedReport::<
                         ApplicationUser__Authorization___ResetPasswordByFirstStep___Outcoming_,
                         ApplicationUser__Authorization___ResetPasswordByFirstStep___Precedent_,
@@ -3811,11 +3811,11 @@ mod test {
                 #[test]
                 fn precedent____application_user___authorization____reset_password_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
                     let mut precedent_registry: Vec<ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_> = vec![];
-                    precedent_registry.push(ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_::ApplicationUserResetPasswordToken_NotFound);
-                    precedent_registry.push(ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_::ApplicationUserResetPasswordToken_AlreadyExpired);
-                    precedent_registry.push(ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_::ApplicationUserResetPasswordToken_AlreadyApproved);
+                    precedent_registry.push(ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_::UserResetPasswordToken_NotFound);
+                    precedent_registry.push(ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_::UserResetPasswordToken_AlreadyExpired);
+                    precedent_registry.push(ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_::UserResetPasswordToken_AlreadyApproved);
                     precedent_registry.push(
-                        ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_::ApplicationUserResetPasswordToken_WrongValue {
+                        ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_::UserResetPasswordToken_WrongValue {
                             application_user_reset_password_token__wrong_enter_tries_quantity: 0,
                         },
                     );
@@ -3866,11 +3866,11 @@ mod test {
                 #[test]
                 fn precedent____application_user___authorization____reset_password_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
                     let mut precedent_registry: Vec<ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_> = vec![];
-                    precedent_registry.push(ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_::ApplicationUser_NotFound);
-                    precedent_registry.push(ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_::ApplicationUserResetPasswordToken_NotFound);
-                    precedent_registry.push(ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_::ApplicationUserResetPasswordToken_AlreadyExpired);
-                    precedent_registry.push(ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_::ApplicationUserResetPasswordToken_IsNotApproved);
-                    precedent_registry.push(ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_::ApplicationUserResetPasswordToken_WrongValue);
+                    precedent_registry.push(ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_::User_NotFound);
+                    precedent_registry.push(ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_::UserResetPasswordToken_NotFound);
+                    precedent_registry.push(ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_::UserResetPasswordToken_AlreadyExpired);
+                    precedent_registry.push(ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_::UserResetPasswordToken_IsNotApproved);
+                    precedent_registry.push(ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_::UserResetPasswordToken_WrongValue);
                     '_a: for precedent in precedent_registry {
                         _precedent____application_user___authorization____reset_password_by_last_step(precedent)?;
                     }
@@ -3943,10 +3943,10 @@ mod test {
                 #[test]
                 fn precedent____application_user___authorization____send_email_for_register() -> Result<(), Box<dyn StdError + 'static>> {
                     let mut precedent_registry: Vec<ApplicationUser__Authorization___SendEmailForRegister___Precedent_> = vec![];
-                    precedent_registry.push(ApplicationUser__Authorization___SendEmailForRegister___Precedent_::ApplicationUserRegistrationToken_NotFound);
-                    precedent_registry.push(ApplicationUser__Authorization___SendEmailForRegister___Precedent_::ApplicationUserRegistrationToken_AlreadyExpired);
-                    precedent_registry.push(ApplicationUser__Authorization___SendEmailForRegister___Precedent_::ApplicationUserRegistrationToken_AlreadyApproved);
-                    precedent_registry.push(ApplicationUser__Authorization___SendEmailForRegister___Precedent_::ApplicationUserRegistrationToken_TimeToResendHasNotCome);
+                    precedent_registry.push(ApplicationUser__Authorization___SendEmailForRegister___Precedent_::UserRegistrationToken_NotFound);
+                    precedent_registry.push(ApplicationUser__Authorization___SendEmailForRegister___Precedent_::UserRegistrationToken_AlreadyExpired);
+                    precedent_registry.push(ApplicationUser__Authorization___SendEmailForRegister___Precedent_::UserRegistrationToken_AlreadyApproved);
+                    precedent_registry.push(ApplicationUser__Authorization___SendEmailForRegister___Precedent_::UserRegistrationToken_TimeToResendHasNotCome);
                     '_a: for precedent in precedent_registry {
                         _precedent____application_user___authorization____send_email_for_register(precedent)?;
                     }
@@ -4019,10 +4019,10 @@ mod test {
                 #[test]
                 fn precedent____application_user___authorization____send_email_for_authorize() -> Result<(), Box<dyn StdError + 'static>> {
                     let mut precedent_registry: Vec<ApplicationUser__Authorization___SendEmailForAuthorize___Precedent_> = vec![];
-                    precedent_registry.push(ApplicationUser__Authorization___SendEmailForAuthorize___Precedent_::ApplicationUser_NotFound);
-                    precedent_registry.push(ApplicationUser__Authorization___SendEmailForAuthorize___Precedent_::ApplicationUserAuthorizationToken_NotFound);
-                    precedent_registry.push(ApplicationUser__Authorization___SendEmailForAuthorize___Precedent_::ApplicationUserAuthorizationToken_AlreadyExpired);
-                    precedent_registry.push(ApplicationUser__Authorization___SendEmailForAuthorize___Precedent_::ApplicationUserAuthorizationToken_TimeToResendHasNotCome);
+                    precedent_registry.push(ApplicationUser__Authorization___SendEmailForAuthorize___Precedent_::User_NotFound);
+                    precedent_registry.push(ApplicationUser__Authorization___SendEmailForAuthorize___Precedent_::UserAuthorizationToken_NotFound);
+                    precedent_registry.push(ApplicationUser__Authorization___SendEmailForAuthorize___Precedent_::UserAuthorizationToken_AlreadyExpired);
+                    precedent_registry.push(ApplicationUser__Authorization___SendEmailForAuthorize___Precedent_::UserAuthorizationToken_TimeToResendHasNotCome);
                     '_a: for precedent in precedent_registry {
                         _precedent____application_user___authorization____send_email_for_authorize(precedent)?;
                     }
@@ -4095,11 +4095,11 @@ mod test {
                 #[test]
                 fn precedent____application_user___authorization____send_email_for_reset_password() -> Result<(), Box<dyn StdError + 'static>> {
                     let mut precedent_registry: Vec<ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_> = vec![];
-                    precedent_registry.push(ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_::ApplicationUser_NotFound);
-                    precedent_registry.push(ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_::ApplicationUserResetPasswordToken_NotFound);
-                    precedent_registry.push(ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_::ApplicationUserResetPasswordToken_AlreadyExpired);
-                    precedent_registry.push(ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_::ApplicationUserResetPasswordToken_AlreadyApproved);
-                    precedent_registry.push(ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_::ApplicationUserResetPasswordToken_TimeToResendHasNotCome);
+                    precedent_registry.push(ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_::User_NotFound);
+                    precedent_registry.push(ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_::UserResetPasswordToken_NotFound);
+                    precedent_registry.push(ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_::UserResetPasswordToken_AlreadyExpired);
+                    precedent_registry.push(ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_::UserResetPasswordToken_AlreadyApproved);
+                    precedent_registry.push(ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_::UserResetPasswordToken_TimeToResendHasNotCome);
                     '_a: for precedent in precedent_registry {
                         _precedent____application_user___authorization____send_email_for_reset_password(precedent)?;
                     }
@@ -4184,8 +4184,8 @@ mod test {
                 #[test]
                 fn precedent____channel___base____get_many_by_name_in_subscriptions() -> Result<(), Box<dyn StdError + 'static>> {
                     let mut precedent_registry: Vec<Channel__Base___GetManyByNameInSubscriptions___Precedent_> = vec![];
-                    precedent_registry.push(Channel__Base___GetManyByNameInSubscriptions___Precedent_::ApplicationUserAccessToken_AlreadyExpired);
-                    precedent_registry.push(Channel__Base___GetManyByNameInSubscriptions___Precedent_::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList);
+                    precedent_registry.push(Channel__Base___GetManyByNameInSubscriptions___Precedent_::UserAccessToken_AlreadyExpired);
+                    precedent_registry.push(Channel__Base___GetManyByNameInSubscriptions___Precedent_::UserAccessToken_InUserAccessTokenBlackList);
                     '_a: for precedent in precedent_registry {
                         _precedent____channel___base____get_many_by_name_in_subscriptions(precedent)?;
                     }
@@ -4267,8 +4267,8 @@ mod test {
                 #[test]
                 fn precedent____channel___base____get_many_by_subscription() -> Result<(), Box<dyn StdError + 'static>> {
                     let mut precedent_registry: Vec<Channel__Base___GetManyBySubscription___Precedent_> = vec![];
-                    precedent_registry.push(Channel__Base___GetManyBySubscription___Precedent_::ApplicationUserAccessToken_AlreadyExpired);
-                    precedent_registry.push(Channel__Base___GetManyBySubscription___Precedent_::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList);
+                    precedent_registry.push(Channel__Base___GetManyBySubscription___Precedent_::UserAccessToken_AlreadyExpired);
+                    precedent_registry.push(Channel__Base___GetManyBySubscription___Precedent_::UserAccessToken_InUserAccessTokenBlackList);
                     '_a: for precedent in precedent_registry {
                         _precedent____channel___base____get_many_by_subscription(precedent)?;
                     }
@@ -4347,8 +4347,8 @@ mod test {
                 #[test]
                 fn precedent____channel___base____get_many_public_by_name() -> Result<(), Box<dyn StdError + 'static>> {
                     let mut precedent_registry: Vec<Channel__Base___GetManyPublicByName___Precedent_> = vec![];
-                    precedent_registry.push(Channel__Base___GetManyPublicByName___Precedent_::ApplicationUserAccessToken_AlreadyExpired);
-                    precedent_registry.push(Channel__Base___GetManyPublicByName___Precedent_::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList);
+                    precedent_registry.push(Channel__Base___GetManyPublicByName___Precedent_::UserAccessToken_AlreadyExpired);
+                    precedent_registry.push(Channel__Base___GetManyPublicByName___Precedent_::UserAccessToken_InUserAccessTokenBlackList);
                     '_a: for precedent in precedent_registry {
                         _precedent____channel___base____get_many_public_by_name(precedent)?;
                     }
@@ -4441,8 +4441,8 @@ mod test {
                 #[test]
                 fn precedent____channel___base____get_one_by_id() -> Result<(), Box<dyn StdError + 'static>> {
                     let mut precedent_registry: Vec<Channel__Base___GetOneById___Precedent_> = vec![];
-                    precedent_registry.push(Channel__Base___GetOneById___Precedent_::ApplicationUserAccessToken_AlreadyExpired);
-                    precedent_registry.push(Channel__Base___GetOneById___Precedent_::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList);
+                    precedent_registry.push(Channel__Base___GetOneById___Precedent_::UserAccessToken_AlreadyExpired);
+                    precedent_registry.push(Channel__Base___GetOneById___Precedent_::UserAccessToken_InUserAccessTokenBlackList);
                     precedent_registry.push(Channel__Base___GetOneById___Precedent_::Channel_NotFound);
                     precedent_registry.push(Channel__Base___GetOneById___Precedent_::Channel_IsClose);
                     '_a: for precedent in precedent_registry {
@@ -4490,11 +4490,11 @@ mod test {
                 #[test]
                 fn precedent____channel_subscription___base____create() -> Result<(), Box<dyn StdError + 'static>> {
                     let mut precedent_registry: Vec<ChannelSubscription__Base___Create___Precedent_> = vec![];
-                    precedent_registry.push(ChannelSubscription__Base___Create___Precedent_::ApplicationUserAccessToken_AlreadyExpired);
-                    precedent_registry.push(ChannelSubscription__Base___Create___Precedent_::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList);
+                    precedent_registry.push(ChannelSubscription__Base___Create___Precedent_::UserAccessToken_AlreadyExpired);
+                    precedent_registry.push(ChannelSubscription__Base___Create___Precedent_::UserAccessToken_InUserAccessTokenBlackList);
                     precedent_registry.push(ChannelSubscription__Base___Create___Precedent_::Channel_NotFound);
                     precedent_registry.push(ChannelSubscription__Base___Create___Precedent_::Channel_IsClose);
-                    precedent_registry.push(ChannelSubscription__Base___Create___Precedent_::ApplicationUser_IsChannelOwner);
+                    precedent_registry.push(ChannelSubscription__Base___Create___Precedent_::User_IsChannelOwner);
                     '_a: for precedent in precedent_registry {
                         _precedent____channel_subscription___base____create(precedent)?;
                     }

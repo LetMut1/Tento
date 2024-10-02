@@ -21,11 +21,11 @@ pub struct Outcoming {
 }
 r#enum!(
     pub enum Precedent {
-        CommonPrecedent::ApplicationUser_NicknameAlreadyExist,
-        CommonPrecedent::ApplicationUser_EmailAlreadyExist,
-        CommonPrecedent::ApplicationUserRegistrationToken_NotFound,
-        CommonPrecedent::ApplicationUserRegistrationToken_AlreadyExpired,
-        CommonPrecedent::ApplicationUserRegistrationToken_IsNotApproved,
-        CommonPrecedent::ApplicationUserRegistrationToken_WrongValue,
+        CommonPrecedent::User_NicknameAlreadyExist,
+        CommonPrecedent::User_EmailAlreadyExist,
+        CommonPrecedent::UserRegistrationToken_NotFound,
+        CommonPrecedent::UserRegistrationToken_AlreadyExpired,
+        CommonPrecedent::UserRegistrationToken_IsNotApproved,
+        CommonPrecedent::UserRegistrationToken_WrongValue,
     }
 );

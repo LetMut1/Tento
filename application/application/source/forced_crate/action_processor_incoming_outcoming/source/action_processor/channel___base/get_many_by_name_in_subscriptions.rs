@@ -19,7 +19,7 @@ pub struct Outcoming {
 }
 r#enum!(
     pub enum Precedent {
-        CommonPrecedent::ApplicationUserAccessToken_AlreadyExpired,
-        CommonPrecedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList,
+        CommonPrecedent::UserAccessToken_AlreadyExpired,
+        CommonPrecedent::UserAccessToken_InUserAccessTokenBlackList,
     }
 );

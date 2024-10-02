@@ -150,7 +150,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
             let mut application_user_authorization_token_ = match application_user_authorization_token {
                 Option::Some(application_user_authorization_token__) => application_user_authorization_token__,
                 Option::None => {
-                    return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserAuthorizationToken_NotFound));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::UserAuthorizationToken_NotFound));
                 }
             };
             if Resolver::<Expiration>::is_expired(application_user_authorization_token_.expires_at) {
@@ -162,7 +162,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                     },
                 )
                 .await?;
-                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserAuthorizationToken_AlreadyExpired));
+                return Result::Ok(UnifiedReport::precedent(Precedent::UserAuthorizationToken_AlreadyExpired));
             }
             if application_user_authorization_token_.value != incoming.application_user_authorization_token__value {
                 application_user_authorization_token_.wrong_enter_tries_quantity =
@@ -196,7 +196,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                 }
                 return Result::Ok(
                     UnifiedReport::precedent(
-                        Precedent::ApplicationUserAuthorizationToken_WrongValue {
+                        Precedent::UserAuthorizationToken_WrongValue {
                             application_user_authorization_token__wrong_enter_tries_quantity: application_user_authorization_token_.wrong_enter_tries_quantity,
                         },
                     ),
@@ -212,7 +212,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
             )
             .await?
             {
-                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUser_NotFound));
+                return Result::Ok(UnifiedReport::precedent(Precedent::User_NotFound));
             }
             let application_user_access_token = UserAccessToken::new(
                 Generator::<UserAccessToken_Id>::generate(),

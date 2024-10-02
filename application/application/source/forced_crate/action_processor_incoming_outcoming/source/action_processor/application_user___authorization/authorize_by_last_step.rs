@@ -19,11 +19,11 @@ pub struct Outcoming {
 }
 r#enum!(
     pub enum Precedent {
-        CommonPrecedent::ApplicationUserAuthorizationToken_NotFound,
-        CommonPrecedent::ApplicationUserAuthorizationToken_AlreadyExpired,
-        CommonPrecedent::ApplicationUserAuthorizationToken_WrongValue {
+        CommonPrecedent::UserAuthorizationToken_NotFound,
+        CommonPrecedent::UserAuthorizationToken_AlreadyExpired,
+        CommonPrecedent::UserAuthorizationToken_WrongValue {
             application_user_authorization_token__wrong_enter_tries_quantity: i16,
         },
-        CommonPrecedent::ApplicationUser_NotFound,
+        CommonPrecedent::User_NotFound,
     }
 );

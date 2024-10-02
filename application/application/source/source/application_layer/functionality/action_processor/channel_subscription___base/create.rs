@@ -73,10 +73,10 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription__Base___Create> {
                     application_user_access_token: application_user_access_token_,
                 } => application_user_access_token_,
                 Extracted::ApplicationUserAccessTokenAlreadyExpired => {
-                    return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_AlreadyExpired));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired));
                 }
                 Extracted::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
-                    return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessToken_InApplicationUserAccessTokenBlackList));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_InUserAccessTokenBlackList));
                 }
             };
             if !Validator::<Channel_Id>::is_valid(incoming.channel__id) {
@@ -105,7 +105,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription__Base___Create> {
                 }
             };
             if channel.owner == application_user_access_token.application_user__id {
-                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUser_IsChannelOwner));
+                return Result::Ok(UnifiedReport::precedent(Precedent::User_IsChannelOwner));
             }
             if let Channel_AccessModifier::Close = Channel_AccessModifier::to_representation(channel.access_modifier) {
                 return Result::Ok(UnifiedReport::precedent(Precedent::Channel_IsClose));

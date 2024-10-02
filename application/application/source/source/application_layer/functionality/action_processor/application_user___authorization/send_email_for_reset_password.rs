@@ -112,7 +112,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
             {
                 Option::Some(application_user_) => application_user_,
                 Option::None => {
-                    return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUser_NotFound));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::User_NotFound));
                 }
             };
             let database_2_postgresql_pooled_connection = inner.get_database_2_postgresql_pooled_connection().await?;
@@ -128,7 +128,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
             {
                 Option::Some(application_user_reset_password_token_) => application_user_reset_password_token_,
                 Option::None => {
-                    return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_NotFound));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_NotFound));
                 }
             };
             if Resolver::<Expiration>::is_expired(application_user_reset_password_token.expires_at) {
@@ -140,13 +140,13 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
                     },
                 )
                 .await?;
-                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_AlreadyExpired));
+                return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_AlreadyExpired));
             }
             if application_user_reset_password_token.is_approved {
-                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_AlreadyApproved));
+                return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_AlreadyApproved));
             }
             if !Resolver::<Expiration>::is_expired(application_user_reset_password_token.can_be_resent_from) {
-                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_TimeToResendHasNotCome));
+                return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_TimeToResendHasNotCome));
             }
             application_user_reset_password_token.can_be_resent_from = Generator::<UserResetPasswordToken_CanBeResentFrom>::generate()?;
             PostgresqlRepository::<UserResetPasswordToken>::update_2(

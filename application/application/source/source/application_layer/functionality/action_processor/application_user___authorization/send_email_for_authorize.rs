@@ -112,7 +112,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
             {
                 Option::Some(application_user_) => application_user_,
                 Option::None => {
-                    return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUser_NotFound));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::User_NotFound));
                 }
             };
             let database_2_postgresql_pooled_connection = inner.get_database_2_postgresql_pooled_connection().await?;
@@ -128,7 +128,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
             {
                 Option::Some(application_user_authorization_token_) => application_user_authorization_token_,
                 Option::None => {
-                    return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserAuthorizationToken_NotFound));
+                    return Result::Ok(UnifiedReport::precedent(Precedent::UserAuthorizationToken_NotFound));
                 }
             };
             if Resolver::<Expiration>::is_expired(application_user_authorization_token.expires_at) {
@@ -140,10 +140,10 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
                     },
                 )
                 .await?;
-                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserAuthorizationToken_AlreadyExpired));
+                return Result::Ok(UnifiedReport::precedent(Precedent::UserAuthorizationToken_AlreadyExpired));
             }
             if !Resolver::<Expiration>::is_expired(application_user_authorization_token.can_be_resent_from) {
-                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserAuthorizationToken_TimeToResendHasNotCome));
+                return Result::Ok(UnifiedReport::precedent(Precedent::UserAuthorizationToken_TimeToResendHasNotCome));
             }
             application_user_authorization_token.can_be_resent_from = Generator::<UserAuthorizationToken_CanBeResentFrom>::generate()?;
             PostgresqlRepository::<UserAuthorizationToken>::update_3(

@@ -129,7 +129,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                     let application_user__ = match application_user_ {
                         Option::Some(application_user___) => application_user___,
                         Option::None => {
-                            return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUser_WrongEmailOrNicknameOrPassword));
+                            return Result::Ok(UnifiedReport::precedent(Precedent::User_WrongEmailOrNicknameOrPassword));
                         }
                     };
                     (
@@ -150,7 +150,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                         let application_user__ = match application_user_ {
                             Option::Some(application_user___) => application_user___,
                             Option::None => {
-                                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUser_WrongEmailOrNicknameOrPassword));
+                                return Result::Ok(UnifiedReport::precedent(Precedent::User_WrongEmailOrNicknameOrPassword));
                             }
                         };
                         (
@@ -198,7 +198,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                     file!(),
                 ),
             )?? {
-                return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUser_WrongEmailOrNicknameOrPassword));
+                return Result::Ok(UnifiedReport::precedent(Precedent::User_WrongEmailOrNicknameOrPassword));
             }
             let database_2_postgresql_pooled_connection = inner.get_database_2_postgresql_pooled_connection().await?;
             let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
