@@ -21,26 +21,26 @@ use user_access_refresh_token_encoded::UserAccessRefreshTokenEncoded;
 impl Encoder<UserAccessRefreshToken<'_>> {
     pub fn encode<'a>(
         environment_configuration: &'static EnvironmentConfiguration,
-        application_user_access_refresh_token: &'a UserAccessRefreshToken<'_>,
+        user_access_refresh_token: &'a UserAccessRefreshToken<'_>,
     ) -> Result<UserAccessRefreshTokenEncoded, AggregateError> {
         return Result::Ok(
             UserAccessRefreshTokenEncoded(
                 Encoder_::<HmacSha3_512>::encode(
                     environment_configuration.encryption.private_key.user_access_refresh_token.as_bytes(),
-                    Serializer::<MessagePack>::serialize(application_user_access_refresh_token)?.as_slice(), // TODO TODO TODO Serializer::<MessagePack> - Нужен любой фаст алгоритм сериализации.
+                    Serializer::<MessagePack>::serialize(user_access_refresh_token)?.as_slice(), // TODO TODO TODO Serializer::<MessagePack> - Нужен любой фаст алгоритм сериализации.
                 )?,
             ),
         );
     }
     pub fn is_valid<'a>(
         environment_configuration: &'static EnvironmentConfiguration,
-        application_user_access_refresh_token: &'a UserAccessRefreshToken<'_>,
-        application_user_access_refresh_token_encoded: &'a UserAccessRefreshTokenEncoded,
+        user_access_refresh_token: &'a UserAccessRefreshToken<'_>,
+        user_access_refresh_token_encoded: &'a UserAccessRefreshTokenEncoded,
     ) -> Result<bool, AggregateError> {
         return Encoder_::<HmacSha3_512>::is_valid(
             environment_configuration.encryption.private_key.user_access_refresh_token.as_bytes(),
-            Serializer::<MessagePack>::serialize(application_user_access_refresh_token)?.as_slice(),
-            application_user_access_refresh_token_encoded.0.as_slice(),
+            Serializer::<MessagePack>::serialize(user_access_refresh_token)?.as_slice(),
+            user_access_refresh_token_encoded.0.as_slice(),
         );
     }
 }
