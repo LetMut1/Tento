@@ -8,7 +8,7 @@ use crate::{
         data::entity::user_access_token::UserAccessToken,
         functionality::service::{
             extractor::{
-                application_user_access_token::Extracted,
+                user_access_token::Extracted,
                 Extractor,
             },
             validator::Validator,
@@ -62,10 +62,10 @@ impl ActionProcessor_ for ActionProcessor<Channel__Base___Create> {
         return async move {
             let application_user_access_token = match Extractor::<UserAccessToken<'_>>::extract(
                 inner.environment_configuration,
-                &incoming.application_user_access_token_encoded,
+                &incoming.user_access_token_encoded,
             )? {
                 Extracted::UserAccessToken {
-                    application_user_access_token: application_user_access_token_,
+                    user_access_token: application_user_access_token_,
                 } => application_user_access_token_,
                 Extracted::UserAccessTokenAlreadyExpired => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired));
@@ -116,7 +116,7 @@ impl ActionProcessor_ for ActionProcessor<Channel__Base___Create> {
             let channel = PostgresqlRepository::<Channel<'_>>::create_1(
                 database_1_postgresql_connection,
                 Insert1 {
-                    channel__owner: application_user_access_token.application_user__id,
+                    channel__owner: application_user_access_token.user__id,
                     channel__name: incoming.channel__name,
                     channel__linked_name: incoming.channel__linked_name,
                     channel__description: Option::None,

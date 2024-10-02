@@ -26,7 +26,7 @@ impl Encoder<UserAccessRefreshToken<'_>> {
         return Result::Ok(
             UserAccessRefreshTokenEncoded(
                 Encoder_::<HmacSha3_512>::encode(
-                    environment_configuration.encryption.private_key.application_user_access_refresh_token.as_bytes(),
+                    environment_configuration.encryption.private_key.user_access_refresh_token.as_bytes(),
                     Serializer::<MessagePack>::serialize(application_user_access_refresh_token)?.as_slice(), // TODO TODO TODO Serializer::<MessagePack> - Нужен любой фаст алгоритм сериализации.
                 )?,
             ),
@@ -38,7 +38,7 @@ impl Encoder<UserAccessRefreshToken<'_>> {
         application_user_access_refresh_token_encoded: &'a UserAccessRefreshTokenEncoded,
     ) -> Result<bool, AggregateError> {
         return Encoder_::<HmacSha3_512>::is_valid(
-            environment_configuration.encryption.private_key.application_user_access_refresh_token.as_bytes(),
+            environment_configuration.encryption.private_key.user_access_refresh_token.as_bytes(),
             Serializer::<MessagePack>::serialize(application_user_access_refresh_token)?.as_slice(),
             application_user_access_refresh_token_encoded.0.as_slice(),
         );

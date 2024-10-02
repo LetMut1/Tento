@@ -45,7 +45,7 @@ impl PostgresqlRepository<Common1> {
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
-                    &by_1.application_user__id,
+                    &by_1.user__id,
                     Type::INT8,
                 )
                 .add_parameter(
@@ -146,7 +146,7 @@ impl PostgresqlRepository<Common1> {
                         ),
                     )?,
                 };
-                let is_application_user_subscribed = match row.try_get::<'_, usize, Option<i64>>(6).into_logic(
+                let is_user_subscribed = match row.try_get::<'_, usize, Option<i64>>(6).into_logic(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -157,7 +157,7 @@ impl PostgresqlRepository<Common1> {
                 };
                 let common = Common1 {
                     channel,
-                    is_application_user_subscribed,
+                    is_user_subscribed,
                 };
                 common_registry.push(common);
             }
@@ -186,7 +186,7 @@ impl PostgresqlRepository<Common1> {
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
-                    &by_2.application_user__id,
+                    &by_2.user__id,
                     Type::INT8,
                 )
                 .add_parameter(
@@ -290,7 +290,7 @@ impl PostgresqlRepository<Common1> {
                 };
                 let common = Common1 {
                     channel,
-                    is_application_user_subscribed: true,
+                    is_user_subscribed: true,
                 };
                 common_registry.push(common);
             }
@@ -315,7 +315,7 @@ impl PostgresqlRepository<Common1> {
             );
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver.add_parameter(
-                &by_3.application_user__id,
+                &by_3.user__id,
                 Type::INT8,
             );
             let requery___channel__id: i64;
@@ -418,7 +418,7 @@ impl PostgresqlRepository<Common1> {
                 };
                 let common = Common1 {
                     channel,
-                    is_application_user_subscribed: true,
+                    is_user_subscribed: true,
                 };
                 common_registry.push(common);
             }
@@ -427,17 +427,17 @@ impl PostgresqlRepository<Common1> {
     }
 }
 pub struct By1<'a> {
-    pub application_user__id: i64,
+    pub user__id: i64,
     pub channel__name: &'a str,
     pub requery___channel__name: Option<&'a str>,
     pub channel__visability_modifier: i16,
 }
 pub struct By2<'a> {
-    pub application_user__id: i64,
+    pub user__id: i64,
     pub channel__name: &'a str,
     pub requery___channel__name: Option<&'a str>,
 }
 pub struct By3 {
-    pub application_user__id: i64,
+    pub user__id: i64,
     pub requery___channel__id: Option<i64>,
 }

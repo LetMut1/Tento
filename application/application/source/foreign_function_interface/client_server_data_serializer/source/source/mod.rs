@@ -540,8 +540,8 @@ pub struct ChannelOuterLink1 {
 }
 #[repr(C)]
 pub struct User__Authorization___AuthorizeByFirstStep___Incoming {
-    pub application_user_device__id: C_String,
-    pub application_user__email___or___application_user__nickname: C_String,
+    pub user_device__id: C_String,
+    pub user__email___or___application_user__nickname: C_String,
     pub application_user__password: C_String,
 }
 #[no_mangle]
@@ -550,8 +550,8 @@ pub extern "C" fn application_user___authorization____authorize_by_first_step___
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: &'_ User__Authorization___AuthorizeByFirstStep___Incoming| -> Result<User__Authorization___AuthorizeByFirstStep___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = User__Authorization___AuthorizeByFirstStep___Incoming_ {
-            application_user_device__id: incoming.application_user_device__id.clone_as_string()?,
-            application_user__email___or___application_user__nickname: incoming.application_user__email___or___application_user__nickname.clone_as_string()?,
+            user_device__id: incoming.user_device__id.clone_as_string()?,
+            user__email___or___application_user__nickname: incoming.user__email___or___application_user__nickname.clone_as_string()?,
             application_user__password: incoming.application_user__password.clone_as_string()?,
         };
         return Result::Ok(incoming_);
@@ -571,7 +571,7 @@ type User__Authorization___AuthorizeByFirstStep___C_Result =
 #[repr(C)]
 #[derive(Default)]
 pub struct User__Authorization___AuthorizeByFirstStep___Outcoming {
-    pub application_user__id: c_long,
+    pub user__id: c_long,
     pub verification_message_sent: bool,
     pub application_user_authorization_token__can_be_resent_from: c_long,
     pub application_user_authorization_token__wrong_enter_tries_quantity: c_short,
@@ -604,7 +604,7 @@ pub extern "C" fn application_user___authorization____authorize_by_first_step___
                         data: data__,
                     } => {
                         let outcoming = User__Authorization___AuthorizeByFirstStep___Outcoming {
-                            application_user__id: data__.application_user__id,
+                            user__id: data__.user__id,
                             verification_message_sent: data__.verification_message_sent,
                             application_user_authorization_token__can_be_resent_from: data__.application_user_authorization_token__can_be_resent_from,
                             application_user_authorization_token__wrong_enter_tries_quantity: data__.application_user_authorization_token__wrong_enter_tries_quantity,
@@ -643,8 +643,8 @@ pub extern "C" fn application_user___authorization____authorize_by_first_step___
 }
 #[repr(C)]
 pub struct User__Authorization___AuthorizeByLastStep___Incoming {
-    pub application_user__id: c_long,
-    pub application_user_device__id: C_String,
+    pub user__id: c_long,
+    pub user_device__id: C_String,
     pub application_user_authorization_token__value: C_String,
 }
 #[no_mangle]
@@ -653,8 +653,8 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: &'_ User__Authorization___AuthorizeByLastStep___Incoming| -> Result<User__Authorization___AuthorizeByLastStep___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = User__Authorization___AuthorizeByLastStep___Incoming_ {
-            application_user__id: incoming.application_user__id,
-            application_user_device__id: incoming.application_user_device__id.clone_as_string()?,
+            user__id: incoming.user__id,
+            user_device__id: incoming.user_device__id.clone_as_string()?,
             application_user_authorization_token__value: incoming.application_user_authorization_token__value.clone_as_string()?,
         };
         return Result::Ok(incoming_);
@@ -791,7 +791,7 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
 }
 #[repr(C)]
 pub struct User__Authorization___CheckEmailForExisting___Incoming {
-    pub application_user__email: C_String,
+    pub user__email: C_String,
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____check_email_for_existing____serialize____allocate(
@@ -799,7 +799,7 @@ pub extern "C" fn application_user___authorization____check_email_for_existing__
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: &'_ User__Authorization___CheckEmailForExisting___Incoming| -> Result<User__Authorization___CheckEmailForExisting___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = User__Authorization___CheckEmailForExisting___Incoming_ {
-            application_user__email: incoming.application_user__email.clone_as_string()?,
+            user__email: incoming.user__email.clone_as_string()?,
         };
         return Result::Ok(incoming_);
     };
@@ -1234,8 +1234,8 @@ pub extern "C" fn application_user___authorization____refresh_access_token____de
 }
 #[repr(C)]
 pub struct User__Authorization___RegisterByFirstStep___Incoming {
-    pub application_user__email: C_String,
-    pub application_user_device__id: C_String,
+    pub user__email: C_String,
+    pub user_device__id: C_String,
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____register_by_first_step____serialize____allocate(
@@ -1243,8 +1243,8 @@ pub extern "C" fn application_user___authorization____register_by_first_step____
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: &'_ User__Authorization___RegisterByFirstStep___Incoming| -> Result<User__Authorization___RegisterByFirstStep___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = User__Authorization___RegisterByFirstStep___Incoming_ {
-            application_user__email: incoming.application_user__email.clone_as_string()?,
-            application_user_device__id: incoming.application_user_device__id.clone_as_string()?,
+            user__email: incoming.user__email.clone_as_string()?,
+            user_device__id: incoming.user_device__id.clone_as_string()?,
         };
         return Result::Ok(incoming_);
     };
@@ -1264,14 +1264,14 @@ type User__Authorization___RegisterByFirstStep___C_Result =
 #[derive(Default)]
 pub struct User__Authorization___RegisterByFirstStep___Outcoming {
     pub verification_message_sent: bool,
-    pub application_user_registration_token__can_be_resent_from: c_long,
+    pub user_registration_token__can_be_resent_from: c_long,
     pub application_user_registration_token__wrong_enter_tries_quantity: c_short,
     pub application_user_registration_token__wrong_enter_tries_quantity_limit: c_short,
 }
 #[repr(C)]
 #[derive(Default)]
 pub struct User__Authorization___RegisterByFirstStep___Precedent {
-    pub application_user__email_already_exist: bool,
+    pub user__email_already_exist: bool,
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____register_by_first_step____deserialize____allocate(
@@ -1296,7 +1296,7 @@ pub extern "C" fn application_user___authorization____register_by_first_step____
                     } => {
                         let outcoming = User__Authorization___RegisterByFirstStep___Outcoming {
                             verification_message_sent: data__.verification_message_sent,
-                            application_user_registration_token__can_be_resent_from: data__.application_user_registration_token__can_be_resent_from,
+                            user_registration_token__can_be_resent_from: data__.user_registration_token__can_be_resent_from,
                             application_user_registration_token__wrong_enter_tries_quantity: data__.application_user_registration_token__wrong_enter_tries_quantity,
                             application_user_registration_token__wrong_enter_tries_quantity_limit: data__.application_user_registration_token__wrong_enter_tries_quantity_limit,
                         };
@@ -1312,7 +1312,7 @@ pub extern "C" fn application_user___authorization____register_by_first_step____
                     User__Authorization___RegisterByFirstStep___Precedent_::User_EmailAlreadyExist => {}
                 };
                 let precedent_ = User__Authorization___RegisterByFirstStep___Precedent {
-                    application_user__email_already_exist: true,
+                    user__email_already_exist: true,
                 };
                 C_UnifiedReport::precedent(precedent_)
             }
@@ -1333,8 +1333,8 @@ pub extern "C" fn application_user___authorization____register_by_first_step____
 }
 #[repr(C)]
 pub struct User__Authorization___RegisterBySecondStep___Incoming {
-    pub application_user__email: C_String,
-    pub application_user_device__id: C_String,
+    pub user__email: C_String,
+    pub user_device__id: C_String,
     pub application_user_registration_token__value: C_String,
 }
 #[no_mangle]
@@ -1343,8 +1343,8 @@ pub extern "C" fn application_user___authorization____register_by_second_step___
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: &'_ User__Authorization___RegisterBySecondStep___Incoming| -> Result<User__Authorization___RegisterBySecondStep___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = User__Authorization___RegisterBySecondStep___Incoming_ {
-            application_user__email: incoming.application_user__email.clone_as_string()?,
-            application_user_device__id: incoming.application_user_device__id.clone_as_string()?,
+            user__email: incoming.user__email.clone_as_string()?,
+            user_device__id: incoming.user_device__id.clone_as_string()?,
             application_user_registration_token__value: incoming.application_user_registration_token__value.clone_as_string()?,
         };
         return Result::Ok(incoming_);
@@ -1443,10 +1443,10 @@ pub extern "C" fn application_user___authorization____register_by_second_step___
 }
 #[repr(C)]
 pub struct User__Authorization___RegisterByLastStep___Incoming {
-    pub application_user_device__id: C_String,
+    pub user_device__id: C_String,
     pub application_user__nickname: C_String,
     pub application_user__password: C_String,
-    pub application_user__email: C_String,
+    pub user__email: C_String,
     pub application_user_registration_token__value: C_String,
 }
 #[no_mangle]
@@ -1455,8 +1455,8 @@ pub extern "C" fn application_user___authorization____register_by_last_step____s
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: &'_ User__Authorization___RegisterByLastStep___Incoming| -> Result<User__Authorization___RegisterByLastStep___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = User__Authorization___RegisterByLastStep___Incoming_ {
-            application_user_device__id: incoming.application_user_device__id.clone_as_string()?,
-            application_user__email: incoming.application_user__email.clone_as_string()?,
+            user_device__id: incoming.user_device__id.clone_as_string()?,
+            user__email: incoming.user__email.clone_as_string()?,
             application_user__nickname: incoming.application_user__nickname.clone_as_string()?,
             application_user__password: incoming.application_user__password.clone_as_string()?,
             application_user_registration_token__value: incoming.application_user_registration_token__value.clone_as_string()?,
@@ -1485,7 +1485,7 @@ pub struct User__Authorization___RegisterByLastStep___Outcoming {
 #[derive(Default)]
 pub struct User__Authorization___RegisterByLastStep___Precedent {
     pub application_user__nickname_already_exist: bool,
-    pub application_user__email_already_exist: bool,
+    pub user__email_already_exist: bool,
     pub application_user_registration_token__not_found: bool,
     pub application_user_registration_token__already_expired: bool,
     pub application_user_registration_token__is_not_approved: bool,
@@ -1538,7 +1538,7 @@ pub extern "C" fn application_user___authorization____register_by_last_step____d
                     }
                     User__Authorization___RegisterByLastStep___Precedent_::User_EmailAlreadyExist => {
                         User__Authorization___RegisterByLastStep___Precedent {
-                            application_user__email_already_exist: true,
+                            user__email_already_exist: true,
                             ..Default::default()
                         }
                     }
@@ -1598,8 +1598,8 @@ pub extern "C" fn application_user___authorization____register_by_last_step____d
 }
 #[repr(C)]
 pub struct User__Authorization___ResetPasswordByFirstStep___Incoming {
-    pub application_user__email: C_String,
-    pub application_user_device__id: C_String,
+    pub user__email: C_String,
+    pub user_device__id: C_String,
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____reset_password_by_first_step____serialize____allocate(
@@ -1607,8 +1607,8 @@ pub extern "C" fn application_user___authorization____reset_password_by_first_st
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: &'_ User__Authorization___ResetPasswordByFirstStep___Incoming| -> Result<User__Authorization___ResetPasswordByFirstStep___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = User__Authorization___ResetPasswordByFirstStep___Incoming_ {
-            application_user__email: incoming.application_user__email.clone_as_string()?,
-            application_user_device__id: incoming.application_user_device__id.clone_as_string()?,
+            user__email: incoming.user__email.clone_as_string()?,
+            user_device__id: incoming.user_device__id.clone_as_string()?,
         };
         return Result::Ok(incoming_);
     };
@@ -1627,9 +1627,9 @@ type User__Authorization___ResetPasswordByFirstStep___C_Result =
 #[repr(C)]
 #[derive(Default)]
 pub struct User__Authorization___ResetPasswordByFirstStep___Outcoming {
-    pub application_user__id: c_long,
+    pub user__id: c_long,
     pub verification_message_sent: bool,
-    pub application_user_reset_password_token__can_be_resent_from: c_long,
+    pub user_reset_password_token__can_be_resent_from: c_long,
     pub application_user_reset_password_token__wrong_enter_tries_quantity: c_short,
     pub application_user_reset_password_token__wrong_enter_tries_quantity_limit: c_short,
 }
@@ -1660,9 +1660,9 @@ pub extern "C" fn application_user___authorization____reset_password_by_first_st
                         data: data__,
                     } => {
                         let outcoming = User__Authorization___ResetPasswordByFirstStep___Outcoming {
-                            application_user__id: data__.application_user__id,
+                            user__id: data__.user__id,
                             verification_message_sent: data__.verification_message_sent,
-                            application_user_reset_password_token__can_be_resent_from: data__.application_user_reset_password_token__can_be_resent_from,
+                            user_reset_password_token__can_be_resent_from: data__.user_reset_password_token__can_be_resent_from,
                             application_user_reset_password_token__wrong_enter_tries_quantity: data__.application_user_reset_password_token__wrong_enter_tries_quantity,
                             application_user_reset_password_token__wrong_enter_tries_quantity_limit: data__.application_user_reset_password_token__wrong_enter_tries_quantity_limit,
                         };
@@ -1699,8 +1699,8 @@ pub extern "C" fn application_user___authorization____reset_password_by_first_st
 }
 #[repr(C)]
 pub struct User__Authorization___ResetPasswordBySecondStep___Incoming {
-    pub application_user__id: c_long,
-    pub application_user_device__id: C_String,
+    pub user__id: c_long,
+    pub user_device__id: C_String,
     pub application_user_reset_password_token__value: C_String,
 }
 #[no_mangle]
@@ -1709,8 +1709,8 @@ pub extern "C" fn application_user___authorization____reset_password_by_second_s
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: &'_ User__Authorization___ResetPasswordBySecondStep___Incoming| -> Result<User__Authorization___ResetPasswordBySecondStep___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = User__Authorization___ResetPasswordBySecondStep___Incoming_ {
-            application_user__id: incoming.application_user__id,
-            application_user_device__id: incoming.application_user_device__id.clone_as_string()?,
+            user__id: incoming.user__id,
+            user_device__id: incoming.user_device__id.clone_as_string()?,
             application_user_reset_password_token__value: incoming.application_user_reset_password_token__value.clone_as_string()?,
         };
         return Result::Ok(incoming_);
@@ -1810,8 +1810,8 @@ pub extern "C" fn application_user___authorization____reset_password_by_second_s
 }
 #[repr(C)]
 pub struct User__Authorization___ResetPasswordByLastStep___Incoming {
-    pub application_user__id: c_long,
-    pub application_user_device__id: C_String,
+    pub user__id: c_long,
+    pub user_device__id: C_String,
     pub application_user__password: C_String,
     pub application_user_reset_password_token__value: C_String,
 }
@@ -1821,8 +1821,8 @@ pub extern "C" fn application_user___authorization____reset_password_by_last_ste
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: &'_ User__Authorization___ResetPasswordByLastStep___Incoming| -> Result<User__Authorization___ResetPasswordByLastStep___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = User__Authorization___ResetPasswordByLastStep___Incoming_ {
-            application_user__id: incoming.application_user__id,
-            application_user_device__id: incoming.application_user_device__id.clone_as_string()?,
+            user__id: incoming.user__id,
+            user_device__id: incoming.user_device__id.clone_as_string()?,
             application_user__password: incoming.application_user__password.clone_as_string()?,
             application_user_reset_password_token__value: incoming.application_user_reset_password_token__value.clone_as_string()?,
         };
@@ -1920,8 +1920,8 @@ pub extern "C" fn application_user___authorization____reset_password_by_last_ste
 }
 #[repr(C)]
 pub struct User__Authorization___SendEmailForRegister___Incoming {
-    pub application_user__email: C_String,
-    pub application_user_device__id: C_String,
+    pub user__email: C_String,
+    pub user_device__id: C_String,
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____send_email_for_register____serialize____allocate(
@@ -1929,8 +1929,8 @@ pub extern "C" fn application_user___authorization____send_email_for_register___
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: &'_ User__Authorization___SendEmailForRegister___Incoming| -> Result<User__Authorization___SendEmailForRegister___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = User__Authorization___SendEmailForRegister___Incoming_ {
-            application_user__email: incoming.application_user__email.clone_as_string()?,
-            application_user_device__id: incoming.application_user_device__id.clone_as_string()?,
+            user__email: incoming.user__email.clone_as_string()?,
+            user_device__id: incoming.user_device__id.clone_as_string()?,
         };
         return Result::Ok(incoming_);
     };
@@ -1949,7 +1949,7 @@ type User__Authorization___SendEmailForRegister___C_Result =
 #[repr(C)]
 #[derive(Default)]
 pub struct User__Authorization___SendEmailForRegister___Outcoming {
-    pub application_user_registration_token__can_be_resent_from: c_long,
+    pub user_registration_token__can_be_resent_from: c_long,
 }
 #[repr(C)]
 #[derive(Default)]
@@ -1981,7 +1981,7 @@ pub extern "C" fn application_user___authorization____send_email_for_register___
                         data: data__,
                     } => {
                         let outcoming = User__Authorization___SendEmailForRegister___Outcoming {
-                            application_user_registration_token__can_be_resent_from: data__.application_user_registration_token__can_be_resent_from,
+                            user_registration_token__can_be_resent_from: data__.user_registration_token__can_be_resent_from,
                         };
                         C_Data::filled(outcoming)
                     }
@@ -2036,8 +2036,8 @@ pub extern "C" fn application_user___authorization____send_email_for_register___
 }
 #[repr(C)]
 pub struct User__Authorization___SendEmailForAuthorize___Incoming {
-    pub application_user_device__id: C_String,
-    pub application_user__id: c_long,
+    pub user_device__id: C_String,
+    pub user__id: c_long,
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____send_email_for_authorize____serialize____allocate(
@@ -2045,8 +2045,8 @@ pub extern "C" fn application_user___authorization____send_email_for_authorize__
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: &'_ User__Authorization___SendEmailForAuthorize___Incoming| -> Result<User__Authorization___SendEmailForAuthorize___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = User__Authorization___SendEmailForAuthorize___Incoming_ {
-            application_user_device__id: incoming.application_user_device__id.clone_as_string()?,
-            application_user__id: incoming.application_user__id,
+            user_device__id: incoming.user_device__id.clone_as_string()?,
+            user__id: incoming.user__id,
         };
         return Result::Ok(incoming_);
     };
@@ -2152,8 +2152,8 @@ pub extern "C" fn application_user___authorization____send_email_for_authorize__
 }
 #[repr(C)]
 pub struct User__Authorization___SendEmailForResetPassword___Incoming {
-    pub application_user__id: c_long,
-    pub application_user_device__id: C_String,
+    pub user__id: c_long,
+    pub user_device__id: C_String,
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____send_email_for_reset_password____serialize____allocate(
@@ -2161,8 +2161,8 @@ pub extern "C" fn application_user___authorization____send_email_for_reset_passw
 ) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: &'_ User__Authorization___SendEmailForResetPassword___Incoming| -> Result<User__Authorization___SendEmailForResetPassword___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = User__Authorization___SendEmailForResetPassword___Incoming_ {
-            application_user__id: incoming.application_user__id,
-            application_user_device__id: incoming.application_user_device__id.clone_as_string()?,
+            user__id: incoming.user__id,
+            user_device__id: incoming.user_device__id.clone_as_string()?,
         };
         return Result::Ok(incoming_);
     };
@@ -2214,7 +2214,7 @@ pub extern "C" fn application_user___authorization____send_email_for_reset_passw
                         data: data__,
                     } => {
                         let outcoming = User__Authorization___SendEmailForResetPassword___Outcoming {
-                            application_user_resep_password_token_can_be_resent_from: data__.application_user_reset_password_token__can_be_resent_from,
+                            application_user_resep_password_token_can_be_resent_from: data__.user_reset_password_token__can_be_resent_from,
                         };
                         C_Data::filled(outcoming)
                     }
@@ -3108,7 +3108,7 @@ mod test {
                 #[test]
                 fn target_filled____application_user___authorization____authorize_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
                     let outcoming = User__Authorization___AuthorizeByFirstStep___Outcoming_ {
-                        application_user__id: 0,
+                        user__id: 0,
                         verification_message_sent: false,
                         application_user_authorization_token__can_be_resent_from: 0,
                         application_user_authorization_token__wrong_enter_tries_quantity: 0,
@@ -3521,7 +3521,7 @@ mod test {
                 fn target_filled____application_user___authorization____register_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
                     let outcoming = User__Authorization___RegisterByFirstStep___Outcoming_ {
                         verification_message_sent: false,
-                        application_user_registration_token__can_be_resent_from: 0,
+                        user_registration_token__can_be_resent_from: 0,
                         application_user_registration_token__wrong_enter_tries_quantity: 0,
                         application_user_registration_token__wrong_enter_tries_quantity_limit: 0,
                     };
@@ -3724,9 +3724,9 @@ mod test {
                 #[test]
                 fn target_filled____application_user___authorization____reset_password_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
                     let outcoming = User__Authorization___ResetPasswordByFirstStep___Outcoming_ {
-                        application_user__id: 0,
+                        user__id: 0,
                         verification_message_sent: false,
-                        application_user_reset_password_token__can_be_resent_from: 0,
+                        user_reset_password_token__can_be_resent_from: 0,
                         application_user_reset_password_token__wrong_enter_tries_quantity: 0,
                         application_user_reset_password_token__wrong_enter_tries_quantity_limit: 0,
                     };
@@ -3899,7 +3899,7 @@ mod test {
                 #[test]
                 fn target_filled____application_user___authorization____send_email_for_register() -> Result<(), Box<dyn StdError + 'static>> {
                     let outcoming = User__Authorization___SendEmailForRegister___Outcoming_ {
-                        application_user_registration_token__can_be_resent_from: 0,
+                        user_registration_token__can_be_resent_from: 0,
                     };
                     let unified_report = UnifiedReport::<
                         User__Authorization___SendEmailForRegister___Outcoming_,
@@ -4051,7 +4051,7 @@ mod test {
                 #[test]
                 fn target_filled____application_user___authorization____send_email_for_reset_password() -> Result<(), Box<dyn StdError + 'static>> {
                     let outcoming = User__Authorization___SendEmailForResetPassword___Outcoming_ {
-                        application_user_reset_password_token__can_be_resent_from: 0,
+                        user_reset_password_token__can_be_resent_from: 0,
                     };
                     let unified_report = UnifiedReport::<
                         User__Authorization___SendEmailForResetPassword___Outcoming_,
@@ -4524,8 +4524,8 @@ mod test {
             #[test]
             fn application_user___authorization____authorize_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = User__Authorization___AuthorizeByFirstStep___Incoming {
-                    application_user_device__id: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                    application_user__email___or___application_user__nickname: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    user_device__id: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    user__email___or___application_user__nickname: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                     application_user__password: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
                 let allocator = move |incoming: *mut User__Authorization___AuthorizeByFirstStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
@@ -4540,16 +4540,16 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_String>::deallocate(&incoming.application_user_device__id);
-                Allocator::<C_String>::deallocate(&incoming.application_user__email___or___application_user__nickname);
+                Allocator::<C_String>::deallocate(&incoming.user_device__id);
+                Allocator::<C_String>::deallocate(&incoming.user__email___or___application_user__nickname);
                 Allocator::<C_String>::deallocate(&incoming.application_user__password);
                 return Result::Ok(());
             }
             #[test]
             fn application_user___authorization____authorize_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = User__Authorization___AuthorizeByLastStep___Incoming {
-                    application_user__id: 0,
-                    application_user_device__id: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    user__id: 0,
+                    user_device__id: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                     application_user_authorization_token__value: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
                 let allocator = move |incoming: *mut User__Authorization___AuthorizeByLastStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
@@ -4564,14 +4564,14 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_String>::deallocate(&incoming.application_user_device__id);
+                Allocator::<C_String>::deallocate(&incoming.user_device__id);
                 Allocator::<C_String>::deallocate(&incoming.application_user_authorization_token__value);
                 return Result::Ok(());
             }
             #[test]
             fn application_user___authorization____check_email_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = User__Authorization___CheckEmailForExisting___Incoming {
-                    application_user__email: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    user__email: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
                 let allocator = move |incoming: *mut User__Authorization___CheckEmailForExisting___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
                     return application_user___authorization____check_email_for_existing____serialize____allocate(incoming);
@@ -4585,7 +4585,7 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_String>::deallocate(&incoming.application_user__email);
+                Allocator::<C_String>::deallocate(&incoming.user__email);
                 return Result::Ok(());
             }
             #[test]
@@ -4687,8 +4687,8 @@ mod test {
             #[test]
             fn application_user___authorization____register_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = User__Authorization___RegisterByFirstStep___Incoming {
-                    application_user__email: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                    application_user_device__id: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    user__email: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    user_device__id: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
                 let allocator = move |incoming: *mut User__Authorization___RegisterByFirstStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
                     return application_user___authorization____register_by_first_step____serialize____allocate(incoming);
@@ -4702,15 +4702,15 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_String>::deallocate(&incoming.application_user__email);
-                Allocator::<C_String>::deallocate(&incoming.application_user_device__id);
+                Allocator::<C_String>::deallocate(&incoming.user__email);
+                Allocator::<C_String>::deallocate(&incoming.user_device__id);
                 return Result::Ok(());
             }
             #[test]
             fn application_user___authorization____register_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = User__Authorization___RegisterBySecondStep___Incoming {
-                    application_user__email: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                    application_user_device__id: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    user__email: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    user_device__id: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                     application_user_registration_token__value: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
                 let allocator = move |incoming: *mut User__Authorization___RegisterBySecondStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
@@ -4725,18 +4725,18 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_String>::deallocate(&incoming.application_user__email);
-                Allocator::<C_String>::deallocate(&incoming.application_user_device__id);
+                Allocator::<C_String>::deallocate(&incoming.user__email);
+                Allocator::<C_String>::deallocate(&incoming.user_device__id);
                 Allocator::<C_String>::deallocate(&incoming.application_user_registration_token__value);
                 return Result::Ok(());
             }
             #[test]
             fn application_user___authorization____register_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = User__Authorization___RegisterByLastStep___Incoming {
-                    application_user_device__id: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    user_device__id: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                     application_user__nickname: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                     application_user__password: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                    application_user__email: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    user__email: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                     application_user_registration_token__value: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
                 let allocator = move |incoming: *mut User__Authorization___RegisterByLastStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
@@ -4751,18 +4751,18 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_String>::deallocate(&incoming.application_user_device__id);
+                Allocator::<C_String>::deallocate(&incoming.user_device__id);
                 Allocator::<C_String>::deallocate(&incoming.application_user__nickname);
                 Allocator::<C_String>::deallocate(&incoming.application_user__password);
-                Allocator::<C_String>::deallocate(&incoming.application_user__email);
+                Allocator::<C_String>::deallocate(&incoming.user__email);
                 Allocator::<C_String>::deallocate(&incoming.application_user_registration_token__value);
                 return Result::Ok(());
             }
             #[test]
             fn application_user___authorization____reset_password_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = User__Authorization___ResetPasswordByFirstStep___Incoming {
-                    application_user__email: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                    application_user_device__id: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    user__email: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    user_device__id: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
                 let allocator = move |incoming: *mut User__Authorization___ResetPasswordByFirstStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
                     return application_user___authorization____reset_password_by_first_step____serialize____allocate(incoming);
@@ -4776,15 +4776,15 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_String>::deallocate(&incoming.application_user__email);
-                Allocator::<C_String>::deallocate(&incoming.application_user_device__id);
+                Allocator::<C_String>::deallocate(&incoming.user__email);
+                Allocator::<C_String>::deallocate(&incoming.user_device__id);
                 return Result::Ok(());
             }
             #[test]
             fn application_user___authorization____reset_password_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = User__Authorization___ResetPasswordBySecondStep___Incoming {
-                    application_user__id: 0,
-                    application_user_device__id: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    user__id: 0,
+                    user_device__id: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                     application_user_reset_password_token__value: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
                 let allocator = move |incoming: *mut User__Authorization___ResetPasswordBySecondStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
@@ -4799,15 +4799,15 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_String>::deallocate(&incoming.application_user_device__id);
+                Allocator::<C_String>::deallocate(&incoming.user_device__id);
                 Allocator::<C_String>::deallocate(&incoming.application_user_reset_password_token__value);
                 return Result::Ok(());
             }
             #[test]
             fn application_user___authorization____reset_password_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = User__Authorization___ResetPasswordByLastStep___Incoming {
-                    application_user__id: 0,
-                    application_user_device__id: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    user__id: 0,
+                    user_device__id: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                     application_user__password: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                     application_user_reset_password_token__value: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
@@ -4823,7 +4823,7 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_String>::deallocate(&incoming.application_user_device__id);
+                Allocator::<C_String>::deallocate(&incoming.user_device__id);
                 Allocator::<C_String>::deallocate(&incoming.application_user__password);
                 Allocator::<C_String>::deallocate(&incoming.application_user_reset_password_token__value);
                 return Result::Ok(());
@@ -4831,8 +4831,8 @@ mod test {
             #[test]
             fn application_user___authorization____send_email_for_register() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = User__Authorization___SendEmailForRegister___Incoming {
-                    application_user__email: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                    application_user_device__id: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    user__email: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    user_device__id: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
                 let allocator = move |incoming: *mut User__Authorization___SendEmailForRegister___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
                     return application_user___authorization____send_email_for_register____serialize____allocate(incoming);
@@ -4846,15 +4846,15 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_String>::deallocate(&incoming.application_user__email);
-                Allocator::<C_String>::deallocate(&incoming.application_user_device__id);
+                Allocator::<C_String>::deallocate(&incoming.user__email);
+                Allocator::<C_String>::deallocate(&incoming.user_device__id);
                 return Result::Ok(());
             }
             #[test]
             fn application_user___authorization____send_email_for_authorize() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = User__Authorization___SendEmailForAuthorize___Incoming {
-                    application_user_device__id: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
-                    application_user__id: 0,
+                    user_device__id: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    user__id: 0,
                 };
                 let allocator = move |incoming: *mut User__Authorization___SendEmailForAuthorize___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
                     return application_user___authorization____send_email_for_authorize____serialize____allocate(incoming);
@@ -4868,14 +4868,14 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_String>::deallocate(&incoming.application_user_device__id);
+                Allocator::<C_String>::deallocate(&incoming.user_device__id);
                 return Result::Ok(());
             }
             #[test]
             fn application_user___authorization____send_email_for_reset_password() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = User__Authorization___SendEmailForResetPassword___Incoming {
-                    application_user__id: 0,
-                    application_user_device__id: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
+                    user__id: 0,
+                    user_device__id: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
                 let allocator = move |incoming: *mut User__Authorization___SendEmailForResetPassword___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
                     return application_user___authorization____send_email_for_reset_password____serialize____allocate(incoming);
@@ -4889,7 +4889,7 @@ mod test {
                     allocator,
                     deallocator,
                 )?;
-                Allocator::<C_String>::deallocate(&incoming.application_user_device__id);
+                Allocator::<C_String>::deallocate(&incoming.user_device__id);
                 return Result::Ok(());
             }
             #[test]

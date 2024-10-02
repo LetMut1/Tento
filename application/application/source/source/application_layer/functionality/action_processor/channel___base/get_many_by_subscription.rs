@@ -11,7 +11,7 @@ use crate::{
         },
         functionality::service::{
             extractor::{
-                application_user_access_token::Extracted,
+                user_access_token::Extracted,
                 Extractor,
             },
             validator::Validator,
@@ -66,10 +66,10 @@ impl ActionProcessor_ for ActionProcessor<Channel__Base___GetManyBySubscription>
         return async move {
             let application_user_access_token = match Extractor::<UserAccessToken<'_>>::extract(
                 inner.environment_configuration,
-                &incoming.application_user_access_token_encoded,
+                &incoming.user_access_token_encoded,
             )? {
                 Extracted::UserAccessToken {
-                    application_user_access_token: application_user_access_token_,
+                    user_access_token: application_user_access_token_,
                 } => application_user_access_token_,
                 Extracted::UserAccessTokenAlreadyExpired => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired));
@@ -104,7 +104,7 @@ impl ActionProcessor_ for ActionProcessor<Channel__Base___GetManyBySubscription>
             let common_registry = PostgresqlRepository::<Common1>::find_3(
                 &*database_1_postgresql_pooled_connection,
                 By3 {
-                    application_user__id: application_user_access_token.application_user__id,
+                    user__id: application_user_access_token.user__id,
                     requery___channel__id: incoming.requery___channel__id,
                 },
                 incoming.limit,

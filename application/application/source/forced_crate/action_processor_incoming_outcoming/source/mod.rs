@@ -6,7 +6,7 @@ use serde::{
 #[derive(Serialize, Deserialize)]
 pub struct Common1 {
     pub channel: Channel1,
-    pub is_application_user_subscribed: bool,
+    pub is_user_subscribed: bool,
 }
 #[derive(Serialize, Deserialize)]
 pub struct Channel1 {

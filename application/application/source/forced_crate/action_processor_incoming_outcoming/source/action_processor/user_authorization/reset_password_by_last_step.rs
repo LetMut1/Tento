@@ -6,10 +6,10 @@ use serde::{
 };
 #[derive(Serialize, Deserialize)]
 pub struct Incoming {
-    pub application_user_device__id: String,
-    pub application_user__id: i64,
-    pub application_user__password: String,
-    pub application_user_reset_password_token__value: String,
+    pub user_device__id: String,
+    pub user__id: i64,
+    pub user__password: String,
+    pub user_reset_password_token__value: String,
 }
 r#enum!(
     pub enum Precedent {

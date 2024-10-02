@@ -8,16 +8,16 @@ use serde::{
 };
 #[derive(Serialize, Deserialize)]
 pub struct Incoming {
-    pub application_user_device__id: String,
-    pub application_user__nickname: String,
-    pub application_user__password: String,
-    pub application_user__email: String,
-    pub application_user_registration_token__value: String,
+    pub user_device__id: String,
+    pub user__nickname: String,
+    pub user__password: String,
+    pub user__email: String,
+    pub user_registration_token__value: String,
 }
 #[derive(Serialize, Deserialize)]
 pub struct Outcoming {
-    pub application_user_access_token_encoded: UserAccessTokenEncoded,
-    pub application_user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded,
+    pub user_access_token_encoded: UserAccessTokenEncoded,
+    pub user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded,
 }
 r#enum!(
     pub enum Precedent {

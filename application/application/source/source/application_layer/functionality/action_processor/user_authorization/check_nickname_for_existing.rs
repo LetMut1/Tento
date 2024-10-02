@@ -14,7 +14,7 @@ use crate::{
     infrastructure_layer::{
         data::capture::Capture,
         functionality::repository::postgresql::{
-            application_user::By1,
+            user::By1,
             PostgresqlRepository,
         },
     },
@@ -53,7 +53,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_CheckNicknameForExis
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
         return async move {
-            if !Validator::<User_Nickname>::is_valid(incoming.application_user__nickname.as_str()) {
+            if !Validator::<User_Nickname>::is_valid(incoming.user__nickname.as_str()) {
                 return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
@@ -67,7 +67,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_CheckNicknameForExis
             let is_exist = PostgresqlRepository::<User<'_>>::is_exist_1(
                 &*database_1_postgresql_pooled_connection,
                 By1 {
-                    application_user__nickname: incoming.application_user__nickname.as_str(),
+                    user__nickname: incoming.user__nickname.as_str(),
                 },
             )
             .await?;

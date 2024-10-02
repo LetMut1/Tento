@@ -6,9 +6,9 @@ use serde::{
 };
 #[derive(Serialize, Deserialize)]
 pub struct Incoming {
-    pub application_user__id: i64,
-    pub application_user_device__id: String,
-    pub application_user_reset_password_token__value: String,
+    pub user__id: i64,
+    pub user_device__id: String,
+    pub user_reset_password_token__value: String,
 }
 r#enum!(
     pub enum Precedent {
@@ -16,7 +16,7 @@ r#enum!(
         CommonPrecedent::UserResetPasswordToken_AlreadyExpired,
         CommonPrecedent::UserResetPasswordToken_AlreadyApproved,
         CommonPrecedent::UserResetPasswordToken_WrongValue {
-            application_user_reset_password_token__wrong_enter_tries_quantity: i16,
+            user_reset_password_token__wrong_enter_tries_quantity: i16,
         },
     }
 );

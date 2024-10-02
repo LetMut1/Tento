@@ -54,19 +54,19 @@ impl PostgresqlRepository<User<'_>> {
                 let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
-                    &insert_1.application_user__email,
+                    &insert_1.user__email,
                     Type::TEXT,
                 )
                 .add_parameter(
-                    &insert_1.application_user__nickname,
+                    &insert_1.user__nickname,
                     Type::TEXT,
                 )
                 .add_parameter(
-                    &insert_1.application_user__password_hash,
+                    &insert_1.user__password_hash,
                     Type::TEXT,
                 )
                 .add_parameter(
-                    &insert_1.application_user__created_at,
+                    &insert_1.user__created_at,
                     Type::INT8,
                 );
             let statement = database_1_connection
@@ -101,10 +101,10 @@ impl PostgresqlRepository<User<'_>> {
                             file!(),
                         ),
                     )?,
-                    insert_1.application_user__email,
-                    Cow::Owned(insert_1.application_user__nickname),
-                    insert_1.application_user__password_hash,
-                    insert_1.application_user__created_at,
+                    insert_1.user__email,
+                    Cow::Owned(insert_1.user__nickname),
+                    insert_1.user__password_hash,
+                    insert_1.user__created_at,
                 ),
             );
         };
@@ -124,11 +124,11 @@ impl PostgresqlRepository<User<'_>> {
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
-                    &update_1.application_user__password_hash,
+                    &update_1.user__password_hash,
                     Type::TEXT,
                 )
                 .add_parameter(
-                    &by_3.application_user__id,
+                    &by_3.user__id,
                     Type::INT8,
                 );
             let statement = database_1_connection
@@ -167,7 +167,7 @@ impl PostgresqlRepository<User<'_>> {
                 WHERE u.nickname = $1;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver.add_parameter(
-                &by_1.application_user__nickname,
+                &by_1.user__nickname,
                 Type::TEXT,
             );
             let statement = database_1_connection
@@ -209,7 +209,7 @@ impl PostgresqlRepository<User<'_>> {
                 WHERE u.email = $1;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver.add_parameter(
-                &by_2.application_user__email,
+                &by_2.user__email,
                 Type::TEXT,
             );
             let statement = database_1_connection
@@ -251,7 +251,7 @@ impl PostgresqlRepository<User<'_>> {
                 WHERE u.id = $1;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver.add_parameter(
-                &by_3.application_user__id,
+                &by_3.user__id,
                 Type::INT8,
             );
             let statement = database_1_connection
@@ -299,7 +299,7 @@ impl PostgresqlRepository<User<'_>> {
                 WHERE u.nickname = $1;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver.add_parameter(
-                &by_1.application_user__nickname,
+                &by_1.user__nickname,
                 Type::TEXT,
             );
             let statement = database_1_connection
@@ -344,7 +344,7 @@ impl PostgresqlRepository<User<'_>> {
                                 file!(),
                             ),
                         )?,
-                        Cow::Borrowed(by_1.application_user__nickname),
+                        Cow::Borrowed(by_1.user__nickname),
                         row_registry[0].try_get::<'_, usize, String>(2).into_logic(
                             Backtrace::new(
                                 line!(),
@@ -373,7 +373,7 @@ impl PostgresqlRepository<User<'_>> {
                 WHERE u.nickname = $1;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver.add_parameter(
-                &by_1.application_user__nickname,
+                &by_1.user__nickname,
                 Type::TEXT,
             );
             let statement = database_1_connection
@@ -440,7 +440,7 @@ impl PostgresqlRepository<User<'_>> {
                 WHERE u.email = $1;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver.add_parameter(
-                &by_2.application_user__email,
+                &by_2.user__email,
                 Type::TEXT,
             );
             let statement = database_1_connection
@@ -505,7 +505,7 @@ impl PostgresqlRepository<User<'_>> {
                 WHERE u.email = $1;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver.add_parameter(
-                &by_2.application_user__email,
+                &by_2.user__email,
                 Type::TEXT,
             );
             let statement = database_1_connection
@@ -560,7 +560,7 @@ impl PostgresqlRepository<User<'_>> {
                 WHERE u.id = $1;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver.add_parameter(
-                &by_3.application_user__id,
+                &by_3.user__id,
                 Type::INT8,
             );
             let statement = database_1_connection
@@ -625,7 +625,7 @@ impl PostgresqlRepository<User<'_>> {
                 WHERE u.id = $1;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver.add_parameter(
-                &by_3.application_user__id,
+                &by_3.user__id,
                 Type::INT8,
             );
             let statement = database_1_connection
@@ -671,20 +671,20 @@ impl PostgresqlRepository<User<'_>> {
     }
 }
 pub struct Insert1 {
-    pub application_user__email: String,
-    pub application_user__nickname: String,
-    pub application_user__password_hash: String,
-    pub application_user__created_at: i64,
+    pub user__email: String,
+    pub user__nickname: String,
+    pub user__password_hash: String,
+    pub user__created_at: i64,
 }
 pub struct Update1<'a> {
-    pub application_user__password_hash: &'a str,
+    pub user__password_hash: &'a str,
 }
 pub struct By1<'a> {
-    pub application_user__nickname: &'a str,
+    pub user__nickname: &'a str,
 }
 pub struct By2<'a> {
-    pub application_user__email: &'a str,
+    pub user__email: &'a str,
 }
 pub struct By3 {
-    pub application_user__id: i64,
+    pub user__id: i64,
 }

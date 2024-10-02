@@ -8,7 +8,7 @@ use crate::{
         data::entity::user_access_token::UserAccessToken,
         functionality::service::{
             extractor::{
-                application_user_access_token::Extracted,
+                user_access_token::Extracted,
                 Extractor,
             },
             validator::Validator,
@@ -57,10 +57,10 @@ impl ActionProcessor_ for ActionProcessor<Channel__Base___CheckLinkedNameForExis
         return async move {
             match Extractor::<UserAccessToken<'_>>::extract(
                 inner.environment_configuration,
-                &incoming.application_user_access_token_encoded,
+                &incoming.user_access_token_encoded,
             )? {
                 Extracted::UserAccessToken {
-                    application_user_access_token: _,
+                    user_access_token: _,
                 } => {},
                 Extracted::UserAccessTokenAlreadyExpired => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired));

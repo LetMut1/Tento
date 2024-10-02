@@ -188,8 +188,8 @@ impl Loader<EnvironmentConfiguration> {
                 },
                 encryption: Encryption {
                     private_key: PrivateKey {
-                        application_user_access_token: environment_configuration_file.encryption.private_key.application_user_access_token.value,
-                        application_user_access_refresh_token: environment_configuration_file.encryption.private_key.application_user_access_refresh_token.value,
+                        user_access_token: environment_configuration_file.encryption.private_key.user_access_token.value,
+                        user_access_refresh_token: environment_configuration_file.encryption.private_key.user_access_refresh_token.value,
                     },
                 },
             },

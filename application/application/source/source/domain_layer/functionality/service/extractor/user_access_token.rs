@@ -17,25 +17,25 @@ use user_access_token_encoded::UserAccessTokenEncoded;
 impl Extractor<UserAccessToken<'_>> {
     pub fn extract<'a>(
         environment_configuration: &'static EnvironmentConfiguration,
-        application_user_access_token_encoded: &'a UserAccessTokenEncoded,
+        user_access_token_encoded: &'a UserAccessTokenEncoded,
     ) -> Result<Extracted, AggregateError> {
-        let application_user_access_token = Encoder::<UserAccessToken<'_>>::decode(
+        let user_access_token = Encoder::<UserAccessToken<'_>>::decode(
             environment_configuration,
-            application_user_access_token_encoded,
+            user_access_token_encoded,
         )?;
-        if Resolver::<Expiration>::is_expired(application_user_access_token.expires_at) {
+        if Resolver::<Expiration>::is_expired(user_access_token.expires_at) {
             return Result::Ok(Extracted::UserAccessTokenAlreadyExpired);
         }
         return Result::Ok(
             Extracted::UserAccessToken {
-                application_user_access_token,
+                user_access_token,
             },
         );
     }
 }
 pub enum Extracted {
     UserAccessToken {
-        application_user_access_token: UserAccessToken<'static>,
+        user_access_token: UserAccessToken<'static>,
     },
     UserAccessTokenAlreadyExpired,
     // Not yet used due to the fact that there is no such flow yet. More

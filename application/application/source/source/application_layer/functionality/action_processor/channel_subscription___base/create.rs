@@ -16,7 +16,7 @@ use crate::{
         },
         functionality::service::{
             extractor::{
-                application_user_access_token::Extracted,
+                user_access_token::Extracted,
                 Extractor,
             },
             validator::Validator,
@@ -67,10 +67,10 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription__Base___Create> {
         return async move {
             let application_user_access_token = match Extractor::<UserAccessToken<'_>>::extract(
                 inner.environment_configuration,
-                &incoming.application_user_access_token_encoded,
+                &incoming.user_access_token_encoded,
             )? {
                 Extracted::UserAccessToken {
-                    application_user_access_token: application_user_access_token_,
+                    user_access_token: application_user_access_token_,
                 } => application_user_access_token_,
                 Extracted::UserAccessTokenAlreadyExpired => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired));
@@ -104,7 +104,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription__Base___Create> {
                     return Result::Ok(UnifiedReport::precedent(Precedent::Channel_NotFound));
                 }
             };
-            if channel.owner == application_user_access_token.application_user__id {
+            if channel.owner == application_user_access_token.user__id {
                 return Result::Ok(UnifiedReport::precedent(Precedent::User_IsChannelOwner));
             }
             if let Channel_AccessModifier::Close = Channel_AccessModifier::to_representation(channel.access_modifier) {
@@ -113,7 +113,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription__Base___Create> {
             PostgresqlRepository::<ChannelSubscription>::create_1(
                 database_1_postgresql_connection,
                 Insert1 {
-                    application_user__id: application_user_access_token.application_user__id,
+                    user__id: application_user_access_token.user__id,
                     channel__id: channel.id,
                     channel_subscription__created_at: Resolver::<UnixTime>::get_now(),
                 },

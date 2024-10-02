@@ -14,7 +14,7 @@ use crate::{
     infrastructure_layer::{
         data::capture::Capture,
         functionality::repository::postgresql::{
-            application_user::By2,
+            user::By2,
             PostgresqlRepository,
         },
     },
@@ -53,7 +53,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_CheckEmailForExistin
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
         return async move {
-            if !Validator::<User_Email>::is_valid(incoming.application_user__email.as_str())? {
+            if !Validator::<User_Email>::is_valid(incoming.user__email.as_str())? {
                 return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
@@ -67,7 +67,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_CheckEmailForExistin
             let is_exist = PostgresqlRepository::<User<'_>>::is_exist_2(
                 &*database_1_postgresql_pooled_connection,
                 By2 {
-                    application_user__email: incoming.application_user__email.as_str(),
+                    user__email: incoming.user__email.as_str(),
                 },
             )
             .await?;

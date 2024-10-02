@@ -23,7 +23,7 @@ use crate::{
         data::capture::Capture,
         functionality::{
             repository::postgresql::{
-                application_user_registration_token::{
+                user_registration_token::{
                     By1,
                     Update2,
                 },
@@ -77,7 +77,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
         return async move {
-            if !Validator::<User_Email>::is_valid(incoming.application_user__email.as_str())? {
+            if !Validator::<User_Email>::is_valid(incoming.user__email.as_str())? {
                 return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
@@ -87,7 +87,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
                     ),
                 );
             }
-            if !Validator::<UserDevice_Id>::is_valid(incoming.application_user_device__id.as_str()) {
+            if !Validator::<UserDevice_Id>::is_valid(incoming.user_device__id.as_str()) {
                 return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
@@ -102,8 +102,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
             let mut application_user_registration_token = match PostgresqlRepository::<UserRegistrationToken>::find_3(
                 database_2_postgresql_connection,
                 By1 {
-                    application_user__email: incoming.application_user__email.as_str(),
-                    application_user_device__id: incoming.application_user_device__id.as_str(),
+                    user__email: incoming.user__email.as_str(),
+                    user_device__id: incoming.user_device__id.as_str(),
                 },
             )
             .await?
@@ -117,8 +117,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
                 PostgresqlRepository::<UserRegistrationToken<'_>>::delete_2(
                     database_2_postgresql_connection,
                     By1 {
-                        application_user__email: incoming.application_user__email.as_str(),
-                        application_user_device__id: incoming.application_user_device__id.as_str(),
+                        user__email: incoming.user__email.as_str(),
+                        user_device__id: incoming.user_device__id.as_str(),
                     },
                 )
                 .await?;
@@ -134,11 +134,11 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
             PostgresqlRepository::<UserRegistrationToken>::update_2(
                 database_2_postgresql_connection,
                 Update2 {
-                    application_user_registration_token__can_be_resent_from: application_user_registration_token.can_be_resent_from,
+                    user_registration_token__can_be_resent_from: application_user_registration_token.can_be_resent_from,
                 },
                 By1 {
-                    application_user__email: incoming.application_user__email.as_str(),
-                    application_user_device__id: incoming.application_user_device__id.as_str(),
+                    user__email: incoming.user__email.as_str(),
+                    user_device__id: incoming.user_device__id.as_str(),
                 },
             )
             .await?;
@@ -148,15 +148,15 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
                     EmailSender::<UserRegistrationToken<'_>>::repeatable_send(
                         environment_configuration_,
                         application_user_registration_token.value.as_str(),
-                        incoming.application_user__email.as_str(),
-                        incoming.application_user_device__id.as_str(),
+                        incoming.user__email.as_str(),
+                        incoming.user_device__id.as_str(),
                     )
                     .await?;
                     return Result::Ok(());
                 },
             );
             let outcoming = Outcoming {
-                application_user_registration_token__can_be_resent_from: application_user_registration_token.can_be_resent_from,
+                user_registration_token__can_be_resent_from: application_user_registration_token.can_be_resent_from,
             };
             return Result::Ok(UnifiedReport::target_filled(outcoming));
         };

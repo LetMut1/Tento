@@ -323,7 +323,7 @@ Checks application user email for existing.
 ```
 Request data:
 struct Incoming {
-    application_user__email: String
+    user__email: String
 }
 ```
 ```
@@ -361,22 +361,22 @@ Registers application user for the first step and sends email to user.
 ```
 Request data:
 struct Incoming {
-    application_user__email: String,
-    application_user_device__id: String
+    user__email: String,
+    user_device__id: String
 }
 ```
 ```
 Result data:
 struct Outcoming {
     verification_message_sent: bool,
-    application_user_registration_token__can_be_resent_from: i64
+    user_registration_token__can_be_resent_from: i64
 }
 
 
 verification_message_sent - determines if a verification message has been sent. The value will be false only if the request was retried
 with unchanged parameters without waiting a certain amount of time.
 
-application_user_registration_token__can_be_resent_from - unixtime after wich it will be allowed to resend the verification message.
+user_registration_token__can_be_resent_from - unixtime after wich it will be allowed to resend the verification message.
 ```
 ```
 Communication codes:
@@ -389,8 +389,8 @@ Registers application user for the second step through token value approving.
 ```
 Request data:
 struct Incoming {
-    application_user__email: String,
-    application_user_device__id: String,
+    user__email: String,
+    user_device__id: String,
     application_user_registration_token__value: String
 }
 ```
@@ -412,10 +412,10 @@ Registers application user for the last step.
 ```
 Request data:
 struct Incoming {
-    application_user_device__id: String,
+    user_device__id: String,
     application_user__nickname: String,
     application_user__password: String,
-    application_user__email: String,
+    user__email: String,
     application_user_registration_token__value: String
 }
 ```
@@ -442,18 +442,18 @@ Sends email for register. (Should be used only if the user does not receive an e
 ```
 Request data:
 struct Incoming {
-    application_user__email: String,
-    application_user_device__id: String
+    user__email: String,
+    user_device__id: String
 }
 ```
 ```
 Result data:
 struct Outcoming {
-    application_user_registration_token__can_be_resent_from: i64
+    user_registration_token__can_be_resent_from: i64
 }
 
 
-application_user_registration_token__can_be_resent_from - unixtime after wich it will be allowed to resend the verification message.
+user_registration_token__can_be_resent_from - unixtime after wich it will be allowed to resend the verification message.
 ```
 ```
 Communication codes:
@@ -469,15 +469,15 @@ Authorizes application user for the firs step and send email to user.
 ```
 Request data:
 struct Incoming {
-    application_user_device__id: String,
-    application_user__email___or___application_user__nickname: String,
+    user_device__id: String,
+    user__email___or___application_user__nickname: String,
     application_user__password: String
 }
 ```
 ```
 Result data:
 struct Outcoming {
-    application_user__id: i64,
+    user__id: i64,
     verification_message_sent: bool,
     application_user_authorization_token__can_be_resent_from: i64
 }
@@ -495,8 +495,8 @@ Authorizes application user for the last step.
 ```
 Request data:
 struct Incoming {
-    application_user__id: i64,
-    application_user_device__id: String,
+    user__id: i64,
+    user_device__id: String,
     application_user_authorization_token__value: String
 }
 ```
@@ -521,8 +521,8 @@ Sends email for authorization. (Should be used only if the user does not receive
 ```
 Request data:
 struct Incoming {
-    application_user_device__id: String,
-    application_user__id: i64
+    user_device__id: String,
+    user__id: i64
 }
 ```
 ```
@@ -545,16 +545,16 @@ Resets application user password for the first step and send email to user.
 ```
 Request data:
 struct Incoming {
-    application_user__email: String,
-    application_user_device__id: String
+    user__email: String,
+    user_device__id: String
 }
 ```
 ```
 Result data:
 struct Outcoming {
-    application_user__id: i64,
+    user__id: i64,
     verification_message_sent: bool,
-    application_user_reset_password_token__can_be_resent_from: i64
+    user_reset_password_token__can_be_resent_from: i64
 }
 ```
 ```
@@ -568,8 +568,8 @@ Resets application user password for the second step through token value approvi
 ```
 Request data:
 struct Incoming {
-    application_user__id: i64,
-    application_user_device__id: String,
+    user__id: i64,
+    user_device__id: String,
     application_user_reset_password_token__value: String
 }
 ```
@@ -590,8 +590,8 @@ Resets application user password for the last step.
 ```
 Request data:
 struct Incoming {
-    application_user_device__id: String,
-    application_user__id: i64,
+    user_device__id: String,
+    user__id: i64,
     application_user__password: String,
     application_user_reset_password_token__value: String
 }
@@ -614,14 +614,14 @@ Sends email for reset password.  (Should be used only if the user does not recei
 ```
 Request data:
 struct Incoming {
-    application_user__id: i64,
-    application_user_device__id: String,
+    user__id: i64,
+    user_device__id: String,
 }
 ```
 ```
 Result data:
 struct Outcoming {
-    application_user_registration_token__can_be_resent_from: i64
+    user_registration_token__can_be_resent_from: i64
 }
 ```
 ```
@@ -668,11 +668,11 @@ Communication codes:
 ```
 ^[0-9]{6}$ - regular expression.
 ```
- - ## application_user__id
+ - ## user__id
 ```
 >= 0
 ```
- - ## application_user__email
+ - ## user__email
 ```
 (?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\]) - regular expression.
 
@@ -698,7 +698,7 @@ Can not be empty.
 
 Can not contain whitespace character.
 
-Can not be equal to application_user__email.
+Can not be equal to user__email.
 
 Can not be equal to application_user__nickname.
 ```

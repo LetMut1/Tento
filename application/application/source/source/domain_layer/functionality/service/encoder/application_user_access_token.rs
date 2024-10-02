@@ -24,28 +24,28 @@ use user_access_token_encoded::UserAccessTokenEncoded;
 impl Encoder<UserAccessToken<'_>> {
     pub fn encode<'a>(
         environment_configuration: &'static EnvironmentConfiguration,
-        application_user_access_token: &'a UserAccessToken<'_>,
+        user_access_token: &'a UserAccessToken<'_>,
     ) -> Result<UserAccessTokenEncoded, AggregateError> {
-        let application_user_access_token_serialized = Serializer::<MessagePack>::serialize(application_user_access_token)?; // TODO TODO TODO Serializer::<MessagePack> - Нужен любой фаст алгоритм сериализации.
-        let application_user_access_token_encoded = Encoder_::<HmacSha3_512>::encode(
-            environment_configuration.encryption.private_key.application_user_access_token.as_bytes(),
-            application_user_access_token_serialized.as_slice(),
+        let user_access_token_serialized = Serializer::<MessagePack>::serialize(user_access_token)?; // TODO TODO TODO Serializer::<MessagePack> - Нужен любой фаст алгоритм сериализации.
+        let user_access_token_encoded = Encoder_::<HmacSha3_512>::encode(
+            environment_configuration.encryption.private_key.user_access_token.as_bytes(),
+            user_access_token_serialized.as_slice(),
         )?;
         return Result::Ok(
             UserAccessTokenEncoded {
-                serialized: application_user_access_token_serialized,
-                encoded: application_user_access_token_encoded,
+                serialized: user_access_token_serialized,
+                encoded: user_access_token_encoded,
             },
         );
     }
     pub fn decode<'a>(
         environment_configuration: &'static EnvironmentConfiguration,
-        application_user_access_token_encoded: &'a UserAccessTokenEncoded,
+        user_access_token_encoded: &'a UserAccessTokenEncoded,
     ) -> Result<UserAccessToken<'static>, AggregateError> {
         if !Encoder_::<HmacSha3_512>::is_valid(
-            environment_configuration.encryption.private_key.application_user_access_token.as_bytes(),
-            application_user_access_token_encoded.serialized.as_slice(),
-            application_user_access_token_encoded.encoded.as_slice(),
+            environment_configuration.encryption.private_key.user_access_token.as_bytes(),
+            user_access_token_encoded.serialized.as_slice(),
+            user_access_token_encoded.encoded.as_slice(),
         )? {
             return Result::Err(
                 AggregateError::new_invalid_argument(
@@ -56,6 +56,6 @@ impl Encoder<UserAccessToken<'_>> {
                 ),
             );
         }
-        return Serializer::<MessagePack>::deserialize::<'_, UserAccessToken<'static>>(application_user_access_token_encoded.serialized.as_slice());
+        return Serializer::<MessagePack>::deserialize::<'_, UserAccessToken<'static>>(user_access_token_encoded.serialized.as_slice());
     }
 }

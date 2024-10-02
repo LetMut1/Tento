@@ -16,10 +16,10 @@ use std::{
     marker::PhantomData,
 };
 pub struct UserResetPasswordToken<'a> {
-    pub application_user__id: i64,
-    _application_user__id: PhantomData<User_Id>,
-    pub application_user_device__id: Cow<'a, str>,
-    _application_user_device__id: PhantomData<UserDevice_Id>,
+    pub user__id: i64,
+    _user__id: PhantomData<User_Id>,
+    pub user_device__id: Cow<'a, str>,
+    _user_device__id: PhantomData<UserDevice_Id>,
     pub value: String,
     _value: PhantomData<Value>,
     pub wrong_enter_tries_quantity: i16,
@@ -33,8 +33,8 @@ pub struct UserResetPasswordToken<'a> {
 }
 impl<'a> UserResetPasswordToken<'a> {
     pub fn new(
-        application_user__id: i64,
-        application_user_device__id: Cow<'a, str>,
+        user__id: i64,
+        user_device__id: Cow<'a, str>,
         value: String,
         wrong_enter_tries_quantity: i16,
         is_approved: bool,
@@ -42,10 +42,10 @@ impl<'a> UserResetPasswordToken<'a> {
         can_be_resent_from: i64,
     ) -> Self {
         return Self {
-            application_user__id,
-            _application_user__id: PhantomData,
-            application_user_device__id,
-            _application_user_device__id: PhantomData,
+            user__id,
+            _user__id: PhantomData,
+            user_device__id,
+            _user_device__id: PhantomData,
             value,
             _value: PhantomData,
             wrong_enter_tries_quantity,

@@ -11,7 +11,7 @@ use regex::Regex;
 use std::sync::OnceLock;
 static REGULAR_EXPRESSION: OnceLock<Regex> = OnceLock::new();
 impl Validator<User_Email> {
-    pub fn is_valid<'a>(application_user__email: &'a str) -> Result<bool, AggregateError> {
+    pub fn is_valid<'a>(user__email: &'a str) -> Result<bool, AggregateError> {
         let regular_expression = match REGULAR_EXPRESSION.get() {
             Option::Some(regular_expression_) => regular_expression_,
             Option::None => {
@@ -41,6 +41,6 @@ impl Validator<User_Email> {
                 )?
             }
         };
-        return Result::Ok(regular_expression.is_match(application_user__email) && application_user__email.chars().count() <= User_Email::MAXIMUM_LENGTH);
+        return Result::Ok(regular_expression.is_match(user__email) && user__email.chars().count() <= User_Email::MAXIMUM_LENGTH);
     }
 }

@@ -35,11 +35,11 @@ impl PostgresqlRepository<UserDevice> {
                 ON CONFLICT ON CONSTRAINT user_device2 DO NOTHING;";
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
-                    &insert_1.application_user_device__id,
+                    &insert_1.user_device__id,
                     Type::TEXT,
                 )
                 .add_parameter(
-                    &insert_1.application_user__id,
+                    &insert_1.user__id,
                     Type::INT8,
                 );
             let statement = database_1_connection
@@ -68,14 +68,14 @@ impl PostgresqlRepository<UserDevice> {
                 )?;
             return Result::Ok(
                 UserDevice::new(
-                    insert_1.application_user_device__id,
-                    insert_1.application_user__id,
+                    insert_1.user_device__id,
+                    insert_1.user__id,
                 ),
             );
         };
     }
 }
 pub struct Insert1 {
-    pub application_user_device__id: String,
-    pub application_user__id: i64,
+    pub user_device__id: String,
+    pub user__id: i64,
 }

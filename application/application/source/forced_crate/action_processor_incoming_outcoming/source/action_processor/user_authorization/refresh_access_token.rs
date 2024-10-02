@@ -8,13 +8,13 @@ use serde::{
 };
 #[derive(Serialize, Deserialize)]
 pub struct Incoming {
-    pub application_user_access_token_encoded: UserAccessTokenEncoded,
-    pub application_user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded,
+    pub user_access_token_encoded: UserAccessTokenEncoded,
+    pub user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded,
 }
 #[derive(Serialize, Deserialize)]
 pub struct Outcoming {
-    pub application_user_access_token_encoded: UserAccessTokenEncoded,
-    pub application_user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded,
+    pub user_access_token_encoded: UserAccessTokenEncoded,
+    pub user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded,
 }
 r#enum!(
     pub enum Precedent {

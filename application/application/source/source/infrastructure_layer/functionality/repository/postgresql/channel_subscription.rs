@@ -33,7 +33,7 @@ impl PostgresqlRepository<ChannelSubscription> {
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
-                    &insert_1.application_user__id,
+                    &insert_1.user__id,
                     Type::INT8,
                 )
                 .add_parameter(
@@ -69,7 +69,7 @@ impl PostgresqlRepository<ChannelSubscription> {
                     ),
                 )?;
             let channel_subscription = ChannelSubscription::new(
-                insert_1.application_user__id,
+                insert_1.user__id,
                 insert_1.channel__id,
                 insert_1.channel_subscription__created_at,
             );
@@ -86,7 +86,7 @@ impl PostgresqlRepository<ChannelSubscription> {
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
-                    &by_1.application_user__id,
+                    &by_1.user__id,
                     Type::INT8,
                 )
                 .add_parameter(
@@ -125,11 +125,11 @@ impl PostgresqlRepository<ChannelSubscription> {
     }
 }
 pub struct Insert1 {
-    pub application_user__id: i64,
+    pub user__id: i64,
     pub channel__id: i64,
     pub channel_subscription__created_at: i64
 }
 pub struct By1 {
-    pub application_user__id: i64,
+    pub user__id: i64,
     pub channel__id: i64,
 }

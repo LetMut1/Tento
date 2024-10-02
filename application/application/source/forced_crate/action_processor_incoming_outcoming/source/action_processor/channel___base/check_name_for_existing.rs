@@ -7,7 +7,7 @@ use common_precedent::CommonPrecedent;
 use macro_rules::r#enum;
 #[derive(Serialize, Deserialize)]
 pub struct Incoming {
-    pub application_user_access_token_encoded: UserAccessTokenEncoded,
+    pub user_access_token_encoded: UserAccessTokenEncoded,
     pub channel__name: String,
 }
 #[derive(Serialize, Deserialize)]

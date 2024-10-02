@@ -45,27 +45,27 @@ impl PostgresqlRepository<UserAccessRefreshToken<'_>> {
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
-                    &insert_1.application_user__id,
+                    &insert_1.user__id,
                     Type::INT8,
                 )
                 .add_parameter(
-                    &insert_1.application_user_device__id,
+                    &insert_1.user_device__id,
                     Type::TEXT,
                 )
                 .add_parameter(
-                    &insert_1.application_user_access_token__id,
+                    &insert_1.user_access_token__id,
                     Type::TEXT,
                 )
                 .add_parameter(
-                    &insert_1.application_user_access_refresh_token__obfuscation_value,
+                    &insert_1.user_access_refresh_token__obfuscation_value,
                     Type::TEXT,
                 )
                 .add_parameter(
-                    &insert_1.application_user_access_refresh_token__expires_at,
+                    &insert_1.user_access_refresh_token__expires_at,
                     Type::INT8,
                 )
                 .add_parameter(
-                    &insert_1.application_user_access_refresh_token__updated_at,
+                    &insert_1.user_access_refresh_token__updated_at,
                     Type::INT8,
                 );
             let statement = database_2_connection
@@ -94,12 +94,12 @@ impl PostgresqlRepository<UserAccessRefreshToken<'_>> {
                 )?;
             return Result::Ok(
                 UserAccessRefreshToken::new(
-                    insert_1.application_user__id,
-                    Cow::Borrowed(insert_1.application_user_device__id),
-                    Cow::Borrowed(insert_1.application_user_access_token__id),
-                    insert_1.application_user_access_refresh_token__obfuscation_value,
-                    insert_1.application_user_access_refresh_token__expires_at,
-                    insert_1.application_user_access_refresh_token__updated_at,
+                    insert_1.user__id,
+                    Cow::Borrowed(insert_1.user_device__id),
+                    Cow::Borrowed(insert_1.user_access_token__id),
+                    insert_1.user_access_refresh_token__obfuscation_value,
+                    insert_1.user_access_refresh_token__expires_at,
+                    insert_1.user_access_refresh_token__updated_at,
                 ),
             );
         };
@@ -127,27 +127,27 @@ impl PostgresqlRepository<UserAccessRefreshToken<'_>> {
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
-                    &update_1.application_user_access_token__id,
+                    &update_1.user_access_token__id,
                     Type::TEXT,
                 )
                 .add_parameter(
-                    &update_1.application_user_access_refresh_token__obfuscation_value,
+                    &update_1.user_access_refresh_token__obfuscation_value,
                     Type::TEXT,
                 )
                 .add_parameter(
-                    &update_1.application_user_access_refresh_token__expires_at,
+                    &update_1.user_access_refresh_token__expires_at,
                     Type::INT8,
                 )
                 .add_parameter(
-                    &update_1.application_user_access_refresh_token__updated_at,
+                    &update_1.user_access_refresh_token__updated_at,
                     Type::INT8,
                 )
                 .add_parameter(
-                    &by_2.application_user__id,
+                    &by_2.user__id,
                     Type::INT8,
                 )
                 .add_parameter(
-                    &by_2.application_user_device__id,
+                    &by_2.user_device__id,
                     Type::TEXT,
                 );
             let statement = database_2_connection
@@ -184,11 +184,11 @@ impl PostgresqlRepository<UserAccessRefreshToken<'_>> {
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
-                    &by_2.application_user__id,
+                    &by_2.user__id,
                     Type::INT8,
                 )
                 .add_parameter(
-                    &by_2.application_user_device__id,
+                    &by_2.user_device__id,
                     Type::TEXT,
                 );
             let statement = database_2_connection
@@ -225,7 +225,7 @@ impl PostgresqlRepository<UserAccessRefreshToken<'_>> {
                 WHERE uart.user__id = $1;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver.add_parameter(
-                &by_1.application_user__id,
+                &by_1.user__id,
                 Type::INT8,
             );
             let statement = database_2_connection
@@ -271,11 +271,11 @@ impl PostgresqlRepository<UserAccessRefreshToken<'_>> {
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
-                    &by_2.application_user__id,
+                    &by_2.user__id,
                     Type::INT8,
                 )
                 .add_parameter(
-                    &by_2.application_user_device__id,
+                    &by_2.user_device__id,
                     Type::TEXT,
                 );
             let statement = database_2_connection
@@ -308,8 +308,8 @@ impl PostgresqlRepository<UserAccessRefreshToken<'_>> {
             return Result::Ok(
                 Option::Some(
                     UserAccessRefreshToken::new(
-                        by_2.application_user__id,
-                        Cow::Borrowed(by_2.application_user_device__id),
+                        by_2.user__id,
+                        Cow::Borrowed(by_2.user_device__id),
                         Cow::Owned(
                             row_registry[0].try_get::<'_, usize, String>(0).into_logic(
                                 Backtrace::new(
@@ -343,23 +343,23 @@ impl PostgresqlRepository<UserAccessRefreshToken<'_>> {
     }
 }
 pub struct Insert1<'a> {
-    pub application_user__id: i64,
-    pub application_user_device__id: &'a str,
-    pub application_user_access_token__id: &'a str,
-    pub application_user_access_refresh_token__obfuscation_value: String,
-    pub application_user_access_refresh_token__expires_at: i64,
-    pub application_user_access_refresh_token__updated_at: i64,
+    pub user__id: i64,
+    pub user_device__id: &'a str,
+    pub user_access_token__id: &'a str,
+    pub user_access_refresh_token__obfuscation_value: String,
+    pub user_access_refresh_token__expires_at: i64,
+    pub user_access_refresh_token__updated_at: i64,
 }
 pub struct Update1<'a> {
-    pub application_user_access_token__id: &'a str,
-    pub application_user_access_refresh_token__obfuscation_value: &'a str,
-    pub application_user_access_refresh_token__expires_at: i64,
-    pub application_user_access_refresh_token__updated_at: i64,
+    pub user_access_token__id: &'a str,
+    pub user_access_refresh_token__obfuscation_value: &'a str,
+    pub user_access_refresh_token__expires_at: i64,
+    pub user_access_refresh_token__updated_at: i64,
 }
 pub struct By1 {
-    pub application_user__id: i64,
+    pub user__id: i64,
 }
 pub struct By2<'a> {
-    pub application_user__id: i64,
-    pub application_user_device__id: &'a str,
+    pub user__id: i64,
+    pub user_device__id: &'a str,
 }

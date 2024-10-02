@@ -27,7 +27,7 @@ use crate::{
         data::capture::Capture,
         functionality::{
             repository::postgresql::{
-                application_user_access_refresh_token::{
+                user_access_refresh_token::{
                     By2,
                     Update1,
                 },
@@ -80,15 +80,15 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
         return async move {
             let application_user_access_token = Encoder::<UserAccessToken<'_>>::decode(
                 inner.environment_configuration,
-                &incoming.application_user_access_token_encoded,
+                &incoming.user_access_token_encoded,
             )?;
             let database_2_postgresql_pooled_connection = inner.get_database_2_postgresql_pooled_connection().await?;
             let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
             let mut application_user_access_refresh_token = match PostgresqlRepository::<UserAccessRefreshToken<'_>>::find_1(
                 database_2_postgresql_connection,
                 By2 {
-                    application_user__id: application_user_access_token.application_user__id,
-                    application_user_device__id: application_user_access_token.application_user_device__id.as_ref(),
+                    user__id: application_user_access_token.user__id,
+                    user_device__id: application_user_access_token.user_device__id.as_ref(),
                 },
             )
             .await?
@@ -101,7 +101,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
             let is_valid = Encoder::<UserAccessRefreshToken<'_>>::is_valid(
                 inner.environment_configuration,
                 &application_user_access_refresh_token,
-                &incoming.application_user_access_refresh_token_encoded,
+                &incoming.user_access_refresh_token_encoded,
             )?;
             if !is_valid || application_user_access_token.id.as_str() != application_user_access_refresh_token.application_user_access_token__id.as_ref() {
                 return Result::Err(
@@ -117,8 +117,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
                 PostgresqlRepository::<UserAccessRefreshToken<'_>>::delete_1(
                     database_2_postgresql_connection,
                     By2 {
-                        application_user__id: application_user_access_token.application_user__id,
-                        application_user_device__id: application_user_access_token.application_user_device__id.as_ref(),
+                        user__id: application_user_access_token.user__id,
+                        user_device__id: application_user_access_token.user_device__id.as_ref(),
                     },
                 )
                 .await?;
@@ -126,8 +126,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
             }
             let application_user_access_token_new = UserAccessToken::new(
                 Generator::<UserAccessToken_Id>::generate(),
-                application_user_access_token.application_user__id,
-                Cow::Borrowed(application_user_access_token.application_user_device__id.as_ref()),
+                application_user_access_token.user__id,
+                Cow::Borrowed(application_user_access_token.user_device__id.as_ref()),
                 Generator::<UserAccessToken_ExpiresAt>::generate()?,
             );
             application_user_access_refresh_token.application_user_access_token__id = Cow::Borrowed(application_user_access_token_new.id.as_str());
@@ -137,23 +137,23 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
             PostgresqlRepository::<UserAccessRefreshToken>::update_1(
                 database_2_postgresql_connection,
                 Update1 {
-                    application_user_access_token__id: application_user_access_refresh_token.application_user_access_token__id.as_ref(),
-                    application_user_access_refresh_token__obfuscation_value: application_user_access_refresh_token.obfuscation_value.as_str(),
-                    application_user_access_refresh_token__expires_at: application_user_access_refresh_token.expires_at,
-                    application_user_access_refresh_token__updated_at: application_user_access_refresh_token.updated_at,
+                    user_access_token__id: application_user_access_refresh_token.application_user_access_token__id.as_ref(),
+                    user_access_refresh_token__obfuscation_value: application_user_access_refresh_token.obfuscation_value.as_str(),
+                    user_access_refresh_token__expires_at: application_user_access_refresh_token.expires_at,
+                    user_access_refresh_token__updated_at: application_user_access_refresh_token.updated_at,
                 },
                 By2 {
-                    application_user__id: application_user_access_token.application_user__id,
-                    application_user_device__id: application_user_access_token.application_user_device__id.as_ref(),
+                    user__id: application_user_access_token.user__id,
+                    user_device__id: application_user_access_token.user_device__id.as_ref(),
                 },
             )
             .await?;
             let outcoming = Outcoming {
-                application_user_access_token_encoded: Encoder::<UserAccessToken<'_>>::encode(
+                user_access_token_encoded: Encoder::<UserAccessToken<'_>>::encode(
                     inner.environment_configuration,
                     &application_user_access_token_new,
                 )?,
-                application_user_access_refresh_token_encoded: Encoder::<UserAccessRefreshToken<'_>>::encode(
+                user_access_refresh_token_encoded: Encoder::<UserAccessRefreshToken<'_>>::encode(
                     inner.environment_configuration,
                     &application_user_access_refresh_token,
                 )?,

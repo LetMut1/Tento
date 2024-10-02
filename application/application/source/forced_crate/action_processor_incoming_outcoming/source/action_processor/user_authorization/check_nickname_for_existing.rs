@@ -4,7 +4,7 @@ use serde::{
 };
 #[derive(Serialize, Deserialize)]
 pub struct Incoming {
-    pub application_user__nickname: String,
+    pub user__nickname: String,
 }
 #[derive(Serialize, Deserialize)]
 pub struct Outcoming {

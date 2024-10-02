@@ -81,8 +81,8 @@ pub struct Encryption {
 }
 #[derive(Deserialize)]
 pub struct PrivateKey {
-    pub application_user_access_token: Value<String>,
-    pub application_user_access_refresh_token: Value<String>,
+    pub user_access_token: Value<String>,
+    pub user_access_refresh_token: Value<String>,
 }
 #[derive(Deserialize)]
 pub struct Value<T> {

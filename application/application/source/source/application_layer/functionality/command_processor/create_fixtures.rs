@@ -34,11 +34,11 @@ use crate::{
         },
         functionality::{
             repository::postgresql::{
-                application_user::{
+                user::{
                     By1,
                     Insert1 as UserInsert1,
                 },
-                application_user_device::Insert1 as UserDeviceInsert1,
+                user_device::Insert1 as UserDeviceInsert1,
                 channel::{
                     By2,
                     Insert1 as ChannelInsert1,
@@ -150,8 +150,8 @@ impl CommandProcessor<CreateFixtures> {
                         ),
                     );
                 }
-                let application_user__email = format!("{}@fixture.com", application_user__nickname.as_str());
-                if !Validator::<User_Email>::is_valid(application_user__email.as_str())? {
+                let user__email = format!("{}@fixture.com", application_user__nickname.as_str());
+                if !Validator::<User_Email>::is_valid(user__email.as_str())? {
                     return Result::Err(
                         AggregateError::new_invalid_argument(
                             Backtrace::new(
@@ -163,7 +163,7 @@ impl CommandProcessor<CreateFixtures> {
                 }
                 if !Validator::<User_Password>::is_valid(
                     application_user__password.as_str(),
-                    application_user__email.as_str(),
+                    user__email.as_str(),
                     application_user__nickname.as_str(),
                 ) {
                     return Result::Err(
@@ -178,7 +178,7 @@ impl CommandProcessor<CreateFixtures> {
                 let application_user = match PostgresqlRepository::<User<'_>>::find_1(
                     database_1_postgresql_connection,
                     By1 {
-                        application_user__nickname: application_user__nickname.as_str(),
+                        user__nickname: application_user__nickname.as_str(),
                     },
                 )
                 .await?
@@ -188,21 +188,21 @@ impl CommandProcessor<CreateFixtures> {
                         PostgresqlRepository::<User<'_>>::create_1(
                             database_1_postgresql_connection,
                             UserInsert1 {
-                                application_user__email,
-                                application_user__nickname,
-                                application_user__password_hash: application_user__password_hash.clone(),
-                                application_user__created_at: Resolver::<UnixTime>::get_now(),
+                                user__email,
+                                user__nickname: application_user__nickname,
+                                user__password_hash: application_user__password_hash.clone(),
+                                user__created_at: Resolver::<UnixTime>::get_now(),
                             },
                         )
                         .await?
                     }
                 };
-                let application_user_device__id = format!(
+                let user_device__id = format!(
                     "{}_{}",
                     application_user.nickname.as_ref(),
                     Self::APPLICATION_USER_DEVICE__ID_PART
                 );
-                if !Validator::<UserDevice_Id>::is_valid(&application_user_device__id) {
+                if !Validator::<UserDevice_Id>::is_valid(&user_device__id) {
                     return Result::Err(
                         AggregateError::new_invalid_argument(
                             Backtrace::new(
@@ -215,8 +215,8 @@ impl CommandProcessor<CreateFixtures> {
                 PostgresqlRepository::<UserDevice>::create_1(
                     database_1_postgresql_connection,
                     UserDeviceInsert1 {
-                        application_user_device__id,
-                        application_user__id: application_user.id,
+                        user_device__id,
+                        user__id: application_user.id,
                     },
                 )
                 .await?;

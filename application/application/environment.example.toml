@@ -113,8 +113,8 @@ value = "mailhog:1025"
 
 [encryption.private_key]
 
-[encryption.private_key.application_user_access_token]
+[encryption.private_key.user_access_token]
 value = "JJJDffsFi3sc8Mz2udB0qRbz8zH12asu4S1ksSsZ6e2v8cs5fFm6dcfLksWeYY2i"
 
-[encryption.private_key.application_user_access_refresh_token]
+[encryption.private_key.user_access_refresh_token]
 value = "SSSDffsFi3sc8Mz2idB0qRbz8zH12asu4S1wsSsZ6e2v8cs5fFm6dcfLksWeYY0i"

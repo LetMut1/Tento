@@ -16,10 +16,10 @@ use std::{
     marker::PhantomData,
 };
 pub struct UserRegistrationToken<'a> {
-    pub application_user__email: Cow<'a, str>,
-    _application_user__email: PhantomData<User_Email>,
-    pub application_user_device__id: Cow<'a, str>,
-    _application_user_device__id: PhantomData<UserDevice_Id>,
+    pub user__email: Cow<'a, str>,
+    _user__email: PhantomData<User_Email>,
+    pub user_device__id: Cow<'a, str>,
+    _user_device__id: PhantomData<UserDevice_Id>,
     pub value: String,
     _value: PhantomData<Value>,
     pub wrong_enter_tries_quantity: i16,
@@ -33,8 +33,8 @@ pub struct UserRegistrationToken<'a> {
 }
 impl<'a> UserRegistrationToken<'a> {
     pub fn new(
-        application_user__email: Cow<'a, str>,
-        application_user_device__id: Cow<'a, str>,
+        user__email: Cow<'a, str>,
+        user_device__id: Cow<'a, str>,
         value: String,
         wrong_enter_tries_quantity: i16,
         is_approved: bool,
@@ -42,10 +42,10 @@ impl<'a> UserRegistrationToken<'a> {
         can_be_resent_from: i64,
     ) -> Self {
         return Self {
-            application_user__email,
-            _application_user__email: PhantomData,
-            application_user_device__id,
-            _application_user_device__id: PhantomData,
+            user__email,
+            _user__email: PhantomData,
+            user_device__id,
+            _user_device__id: PhantomData,
             value,
             _value: PhantomData,
             wrong_enter_tries_quantity,

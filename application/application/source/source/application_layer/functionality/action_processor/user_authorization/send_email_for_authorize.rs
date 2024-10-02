@@ -26,8 +26,8 @@ use crate::{
         data::capture::Capture,
         functionality::{
             repository::postgresql::{
-                application_user::By3,
-                application_user_authorization_token::{
+                user::By3,
+                user_authorization_token::{
                     By1,
                     Update3,
                 },
@@ -81,7 +81,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthoriz
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
         return async move {
-            if !Validator::<UserDevice_Id>::is_valid(incoming.application_user_device__id.as_str()) {
+            if !Validator::<UserDevice_Id>::is_valid(incoming.user_device__id.as_str()) {
                 return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
@@ -91,7 +91,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthoriz
                     ),
                 );
             }
-            if !Validator::<User_Id>::is_valid(incoming.application_user__id) {
+            if !Validator::<User_Id>::is_valid(incoming.user__id) {
                 return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
@@ -105,7 +105,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthoriz
             let application_user = match PostgresqlRepository::<User>::find_6(
                 &*database_1_postgresql_pooled_connection,
                 By3 {
-                    application_user__id: incoming.application_user__id,
+                    user__id: incoming.user__id,
                 },
             )
             .await?
@@ -120,8 +120,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthoriz
             let mut application_user_authorization_token = match PostgresqlRepository::<UserAuthorizationToken>::find_3(
                 database_2_postgresql_connection,
                 By1 {
-                    application_user__id: incoming.application_user__id,
-                    application_user_device__id: incoming.application_user_device__id.as_str(),
+                    user__id: incoming.user__id,
+                    user_device__id: incoming.user_device__id.as_str(),
                 },
             )
             .await?
@@ -135,8 +135,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthoriz
                 PostgresqlRepository::<UserAuthorizationToken<'_>>::delete_1(
                     database_2_postgresql_connection,
                     By1 {
-                        application_user__id: incoming.application_user__id,
-                        application_user_device__id: incoming.application_user_device__id.as_str(),
+                        user__id: incoming.user__id,
+                        user_device__id: incoming.user_device__id.as_str(),
                     },
                 )
                 .await?;
@@ -149,11 +149,11 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthoriz
             PostgresqlRepository::<UserAuthorizationToken>::update_3(
                 database_2_postgresql_connection,
                 Update3 {
-                    application_user_authorization_token__can_be_resent_from: application_user_authorization_token.can_be_resent_from,
+                    user_authorization_token__can_be_resent_from: application_user_authorization_token.can_be_resent_from,
                 },
                 By1 {
-                    application_user__id: incoming.application_user__id,
-                    application_user_device__id: incoming.application_user_device__id.as_str(),
+                    user__id: incoming.user__id,
+                    user_device__id: incoming.user_device__id.as_str(),
                 },
             )
             .await?;
@@ -164,14 +164,14 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthoriz
                         environment_configuration_,
                         application_user_authorization_token.value.as_str(),
                         application_user.email.as_str(),
-                        incoming.application_user_device__id.as_str(),
+                        incoming.user_device__id.as_str(),
                     )
                     .await?;
                     return Result::Ok(());
                 },
             );
             let outcoming = Outcoming {
-                application_user_authorization_token__can_be_resent_from: application_user_authorization_token.can_be_resent_from,
+                user_authorization_token__can_be_resent_from: application_user_authorization_token.can_be_resent_from,
             };
             return Result::Ok(UnifiedReport::target_filled(outcoming));
         };

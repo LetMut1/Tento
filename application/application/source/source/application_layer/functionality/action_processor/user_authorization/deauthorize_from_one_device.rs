@@ -10,14 +10,14 @@ use crate::{
             user_access_token::UserAccessToken,
         },
         functionality::service::extractor::{
-            application_user_access_token::Extracted,
+            user_access_token::Extracted,
             Extractor,
         },
     },
     infrastructure_layer::{
         data::capture::Capture,
         functionality::repository::postgresql::{
-            application_user_access_refresh_token::By2,
+            user_access_refresh_token::By2,
             PostgresqlRepository,
         },
     },
@@ -55,10 +55,10 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_DeauthorizeFromOneDe
         return async move {
             let application_user_access_token = match Extractor::<UserAccessToken<'_>>::extract(
                 inner.environment_configuration,
-                &incoming.application_user_access_token_encoded,
+                &incoming.user_access_token_encoded,
             )? {
                 Extracted::UserAccessToken {
-                    application_user_access_token: application_user_access_token_,
+                    user_access_token: application_user_access_token_,
                 } => application_user_access_token_,
                 Extracted::UserAccessTokenAlreadyExpired => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired));
@@ -71,8 +71,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_DeauthorizeFromOneDe
             PostgresqlRepository::<UserAccessRefreshToken<'_>>::delete_1(
                 &*database_2_postgresql_pooled_connection,
                 By2 {
-                    application_user__id: application_user_access_token.application_user__id,
-                    application_user_device__id: application_user_access_token.application_user_device__id.as_ref(),
+                    user__id: application_user_access_token.user__id,
+                    user_device__id: application_user_access_token.user_device__id.as_ref(),
                 },
             )
             .await?;
