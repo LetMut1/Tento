@@ -1,12 +1,12 @@
 use super::PostgresqlRepository;
 use crate::{
-    domain_layer::data::entity::application_user_authorization_token::{
+    domain_layer::data::entity::user_authorization_token::{
         derivative::{
-            ApplicationUserAuthorizationToken1,
-            ApplicationUserAuthorizationToken2,
-            ApplicationUserAuthorizationToken3,
+            UserAuthorizationToken1,
+            UserAuthorizationToken2,
+            UserAuthorizationToken3,
         },
-        ApplicationUserAuthorizationToken,
+        UserAuthorizationToken,
     },
     infrastructure_layer::{
         data::capture::Capture,
@@ -27,11 +27,11 @@ use tokio_postgres::{
     Client as Connection,
 };
 use void::Void;
-impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
+impl PostgresqlRepository<UserAuthorizationToken<'_>> {
     pub fn create_1<'a, 'b>(
         database_2_connection: &'a Connection,
         insert_1: Insert1<'b>,
-    ) -> impl Future<Output = Result<ApplicationUserAuthorizationToken<'b>, AggregateError>> + Send + Capture<&'a Void> {
+    ) -> impl Future<Output = Result<UserAuthorizationToken<'b>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 INSERT INTO public.user_authorization_token AS uat ( \
@@ -100,7 +100,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
                     ),
                 )?;
             return Result::Ok(
-                ApplicationUserAuthorizationToken::new(
+                UserAuthorizationToken::new(
                     insert_1.application_user__id,
                     Cow::Borrowed(insert_1.application_user_device__id),
                     insert_1.application_user_authorization_token__value,
@@ -398,7 +398,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
     pub fn find_1<'a>(
         database_2_connection: &'a Connection,
         by_1: By1<'a>,
-    ) -> impl Future<Output = Result<Option<ApplicationUserAuthorizationToken1>, AggregateError>> + Send + Capture<&'a Void> {
+    ) -> impl Future<Output = Result<Option<UserAuthorizationToken1>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 SELECT \
@@ -447,7 +447,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
             }
             return Result::Ok(
                 Option::Some(
-                    ApplicationUserAuthorizationToken1 {
+                    UserAuthorizationToken1 {
                         value: row_registry[0].try_get::<'_, usize, String>(0).into_logic(
                             Backtrace::new(
                                 line!(),
@@ -480,7 +480,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
     pub fn find_2<'a>(
         database_2_connection: &'a Connection,
         by_1: By1<'a>,
-    ) -> impl Future<Output = Result<Option<ApplicationUserAuthorizationToken2>, AggregateError>> + Send + Capture<&'a Void> {
+    ) -> impl Future<Output = Result<Option<UserAuthorizationToken2>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 SELECT \
@@ -528,7 +528,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
             }
             return Result::Ok(
                 Option::Some(
-                    ApplicationUserAuthorizationToken2 {
+                    UserAuthorizationToken2 {
                         value: row_registry[0].try_get::<'_, usize, String>(0).into_logic(
                             Backtrace::new(
                                 line!(),
@@ -555,7 +555,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
     pub fn find_3<'a>(
         database_2_connection: &'a Connection,
         by_1: By1<'a>,
-    ) -> impl Future<Output = Result<Option<ApplicationUserAuthorizationToken3>, AggregateError>> + Send + Capture<&'a Void> {
+    ) -> impl Future<Output = Result<Option<UserAuthorizationToken3>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 SELECT \
@@ -603,7 +603,7 @@ impl PostgresqlRepository<ApplicationUserAuthorizationToken<'_>> {
             }
             return Result::Ok(
                 Option::Some(
-                    ApplicationUserAuthorizationToken3 {
+                    UserAuthorizationToken3 {
                         value: row_registry[0].try_get::<'_, usize, String>(0).into_logic(
                             Backtrace::new(
                                 line!(),

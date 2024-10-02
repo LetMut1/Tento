@@ -6,8 +6,8 @@ use crate::{
     },
     domain_layer::{
         data::entity::{
-            application_user_access_refresh_token::ApplicationUserAccessRefreshToken,
-            application_user_access_token::ApplicationUserAccessToken,
+            user_access_refresh_token::UserAccessRefreshToken,
+            user_access_token::UserAccessToken,
         },
         functionality::service::extractor::{
             application_user_access_token::Extracted,
@@ -59,7 +59,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Deaut
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
         return async move {
-            let application_user_access_token = match Extractor::<ApplicationUserAccessToken<'_>>::extract(
+            let application_user_access_token = match Extractor::<UserAccessToken<'_>>::extract(
                 inner.environment_configuration,
                 &incoming.application_user_access_token_encoded,
             )? {
@@ -74,7 +74,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Deaut
                 }
             };
             let database_2_postgresql_pooled_connection = inner.get_database_2_postgresql_pooled_connection().await?;
-            PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::delete_2(
+            PostgresqlRepository::<UserAccessRefreshToken<'_>>::delete_2(
                 &*database_2_postgresql_pooled_connection,
                 By1 {
                     application_user__id: application_user_access_token.application_user__id,

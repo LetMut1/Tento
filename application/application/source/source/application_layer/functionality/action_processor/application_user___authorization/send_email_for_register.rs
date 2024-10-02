@@ -6,11 +6,11 @@ use crate::{
     },
     domain_layer::{
         data::entity::{
-            application_user::ApplicationUser_Email,
-            application_user_device::ApplicationUserDevice_Id,
-            application_user_registration_token::{
-                ApplicationUserRegistrationToken,
-                ApplicationUserRegistrationToken_CanBeResentFrom,
+            user::User_Email,
+            user_device::UserDevice_Id,
+            user_registration_token::{
+                UserRegistrationToken,
+                UserRegistrationToken_CanBeResentFrom,
             },
         },
         functionality::service::{
@@ -77,7 +77,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
         return async move {
-            if !Validator::<ApplicationUser_Email>::is_valid(incoming.application_user__email.as_str())? {
+            if !Validator::<User_Email>::is_valid(incoming.application_user__email.as_str())? {
                 return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
@@ -87,7 +87,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
                     ),
                 );
             }
-            if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming.application_user_device__id.as_str()) {
+            if !Validator::<UserDevice_Id>::is_valid(incoming.application_user_device__id.as_str()) {
                 return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
@@ -99,7 +99,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
             }
             let database_2_postgresql_pooled_connection = inner.get_database_2_postgresql_pooled_connection().await?;
             let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
-            let mut application_user_registration_token = match PostgresqlRepository::<ApplicationUserRegistrationToken>::find_3(
+            let mut application_user_registration_token = match PostgresqlRepository::<UserRegistrationToken>::find_3(
                 database_2_postgresql_connection,
                 By1 {
                     application_user__email: incoming.application_user__email.as_str(),
@@ -114,7 +114,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
                 }
             };
             if Resolver::<Expiration>::is_expired(application_user_registration_token.expires_at) {
-                PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete_2(
+                PostgresqlRepository::<UserRegistrationToken<'_>>::delete_2(
                     database_2_postgresql_connection,
                     By1 {
                         application_user__email: incoming.application_user__email.as_str(),
@@ -130,8 +130,8 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
             if !Resolver::<Expiration>::is_expired(application_user_registration_token.can_be_resent_from) {
                 return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserRegistrationToken_TimeToResendHasNotCome));
             }
-            application_user_registration_token.can_be_resent_from = Generator::<ApplicationUserRegistrationToken_CanBeResentFrom>::generate()?;
-            PostgresqlRepository::<ApplicationUserRegistrationToken>::update_2(
+            application_user_registration_token.can_be_resent_from = Generator::<UserRegistrationToken_CanBeResentFrom>::generate()?;
+            PostgresqlRepository::<UserRegistrationToken>::update_2(
                 database_2_postgresql_connection,
                 Update2 {
                     application_user_registration_token__can_be_resent_from: application_user_registration_token.can_be_resent_from,
@@ -145,7 +145,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
             let environment_configuration_ = inner.environment_configuration;
             Spawner::<TokioNonBlockingTask>::spawn_into_background(
                 async move {
-                    EmailSender::<ApplicationUserRegistrationToken<'_>>::repeatable_send(
+                    EmailSender::<UserRegistrationToken<'_>>::repeatable_send(
                         environment_configuration_,
                         application_user_registration_token.value.as_str(),
                         incoming.application_user__email.as_str(),

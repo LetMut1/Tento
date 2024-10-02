@@ -1,12 +1,12 @@
 use super::PostgresqlRepository;
 use crate::{
-    domain_layer::data::entity::application_user_reset_password_token::{
+    domain_layer::data::entity::user_reset_password_token::{
         derivative::{
             ApplicationUserResetPasswordToken1,
             ApplicationUserResetPasswordToken2,
             ApplicationUserResetPasswordToken3,
         },
-        ApplicationUserResetPasswordToken,
+        UserResetPasswordToken,
     },
     infrastructure_layer::{
         data::capture::Capture,
@@ -27,11 +27,11 @@ use tokio_postgres::{
     Client as Connection,
 };
 use void::Void;
-impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
+impl PostgresqlRepository<UserResetPasswordToken<'_>> {
     pub fn create_1<'a, 'b>(
         database_2_connection: &'a Connection,
         insert_1: Insert1<'b>,
-    ) -> impl Future<Output = Result<ApplicationUserResetPasswordToken<'b>, AggregateError>> + Send + Capture<&'a Void> {
+    ) -> impl Future<Output = Result<UserResetPasswordToken<'b>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 INSERT INTO public.user_reset_password_token AS urpt ( \
@@ -106,7 +106,7 @@ impl PostgresqlRepository<ApplicationUserResetPasswordToken<'_>> {
                     ),
                 )?;
             return Result::Ok(
-                ApplicationUserResetPasswordToken::new(
+                UserResetPasswordToken::new(
                     insert_1.application_user__id,
                     Cow::Borrowed(insert_1.application_user_device__id),
                     insert_1.application_user_reset_password_token__value,

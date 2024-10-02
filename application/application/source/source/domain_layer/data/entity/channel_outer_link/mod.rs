@@ -1,15 +1,18 @@
+mod field;
+use self::field::{
+    Address,
+    Alias,
+    CreatedAt,
+};
 use super::channel::Channel_Id;
 use std::marker::PhantomData;
 pub struct ChannelOuterLink {
     pub from: i64,
     _from: PhantomData<Channel_Id>,
-
     pub alias: String,
     _alias: PhantomData<Alias>,
-
     pub address: String,
     _address: PhantomData<Address>,
-
     pub created_at: i64,
     _created_at: PhantomData<CreatedAt>,
 }
@@ -28,6 +31,6 @@ impl ChannelOuterLink {
         };
     }
 }
-pub struct Alias;
-pub struct Address;
-pub struct CreatedAt;
+pub type ChannelOuterLink_Address = Address;
+pub type ChannelOuterLink_Alias = Alias;
+pub type ChannelOuterLink_CreatedAt = CreatedAt;

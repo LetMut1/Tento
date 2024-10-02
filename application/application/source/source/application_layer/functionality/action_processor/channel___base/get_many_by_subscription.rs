@@ -6,7 +6,7 @@ use crate::{
     },
     domain_layer::{
         data::entity::{
-            application_user_access_token::ApplicationUserAccessToken,
+            user_access_token::UserAccessToken,
             channel::Channel_Id,
         },
         functionality::service::{
@@ -64,7 +64,7 @@ impl ActionProcessor_ for ActionProcessor<Channel__Base___GetManyBySubscription>
     {
         const LIMIT: i16 = 100;
         return async move {
-            let application_user_access_token = match Extractor::<ApplicationUserAccessToken<'_>>::extract(
+            let application_user_access_token = match Extractor::<UserAccessToken<'_>>::extract(
                 inner.environment_configuration,
                 &incoming.application_user_access_token_encoded,
             )? {

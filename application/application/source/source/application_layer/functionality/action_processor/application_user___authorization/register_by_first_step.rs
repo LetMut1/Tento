@@ -6,17 +6,17 @@ use crate::{
     },
     domain_layer::{
         data::entity::{
-            application_user::{
-                ApplicationUser,
-                ApplicationUser_Email,
+            user::{
+                User,
+                User_Email,
             },
-            application_user_device::ApplicationUserDevice_Id,
-            application_user_registration_token::{
-                ApplicationUserRegistrationToken,
-                ApplicationUserRegistrationToken_CanBeResentFrom,
-                ApplicationUserRegistrationToken_ExpiresAt,
-                ApplicationUserRegistrationToken_Value,
-                ApplicationUserRegistrationToken_WrongEnterTriesQuantity,
+            user_device::UserDevice_Id,
+            user_registration_token::{
+                UserRegistrationToken,
+                UserRegistrationToken_CanBeResentFrom,
+                UserRegistrationToken_ExpiresAt,
+                UserRegistrationToken_Value,
+                UserRegistrationToken_WrongEnterTriesQuantity,
             },
         },
         functionality::service::{
@@ -87,7 +87,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
         return async move {
-            if !Validator::<ApplicationUser_Email>::is_valid(incoming.application_user__email.as_str())? {
+            if !Validator::<User_Email>::is_valid(incoming.application_user__email.as_str())? {
                 return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
@@ -97,7 +97,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
                     ),
                 );
             }
-            if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming.application_user_device__id.as_str()) {
+            if !Validator::<UserDevice_Id>::is_valid(incoming.application_user_device__id.as_str()) {
                 return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
@@ -108,7 +108,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
                 );
             }
             let database_1_postgresql_pooled_connection = inner.get_database_1_postgresql_pooled_connection().await?;
-            if PostgresqlRepository::<ApplicationUser<'_>>::is_exist_2(
+            if PostgresqlRepository::<User<'_>>::is_exist_2(
                 &*database_1_postgresql_pooled_connection,
                 By2 {
                     application_user__email: incoming.application_user__email.as_str(),
@@ -125,7 +125,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
                 application_user_registration_token__can_be_resent_from,
                 application_user_registration_token__wrong_enter_tries_quantity,
                 can_send,
-            ) = match PostgresqlRepository::<ApplicationUserRegistrationToken>::find_1(
+            ) = match PostgresqlRepository::<UserRegistrationToken>::find_1(
                 database_2_postgresql_connection,
                 By1 {
                     application_user__email: incoming.application_user__email.as_str(),
@@ -136,7 +136,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
             {
                 Option::Some(mut application_user_registration_token) => {
                     let (can_send_, need_to_update_1) = if Resolver::<Expiration>::is_expired(application_user_registration_token.can_be_resent_from) {
-                        application_user_registration_token.can_be_resent_from = Generator::<ApplicationUserRegistrationToken_CanBeResentFrom>::generate()?;
+                        application_user_registration_token.can_be_resent_from = Generator::<UserRegistrationToken_CanBeResentFrom>::generate()?;
                         (
                             true,
                             true,
@@ -149,16 +149,16 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
                     };
                     let need_to_update_2 = if Resolver::<Expiration>::is_expired(application_user_registration_token.expires_at) || application_user_registration_token.is_approved
                     {
-                        application_user_registration_token.value = Generator::<ApplicationUserRegistrationToken_Value>::generate();
+                        application_user_registration_token.value = Generator::<UserRegistrationToken_Value>::generate();
                         application_user_registration_token.wrong_enter_tries_quantity = 0;
                         application_user_registration_token.is_approved = false;
-                        application_user_registration_token.expires_at = Generator::<ApplicationUserRegistrationToken_ExpiresAt>::generate()?;
+                        application_user_registration_token.expires_at = Generator::<UserRegistrationToken_ExpiresAt>::generate()?;
                         true
                     } else {
                         false
                     };
                     if need_to_update_1 && need_to_update_2 {
-                        PostgresqlRepository::<ApplicationUserRegistrationToken>::update_1(
+                        PostgresqlRepository::<UserRegistrationToken>::update_1(
                             database_2_postgresql_connection,
                             Update1 {
                                 application_user_registration_token__value: application_user_registration_token.value.as_str(),
@@ -175,7 +175,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
                         .await?;
                     } else {
                         if need_to_update_1 {
-                            PostgresqlRepository::<ApplicationUserRegistrationToken>::update_2(
+                            PostgresqlRepository::<UserRegistrationToken>::update_2(
                                 database_2_postgresql_connection,
                                 Update2 {
                                     application_user_registration_token__can_be_resent_from: application_user_registration_token.can_be_resent_from,
@@ -188,7 +188,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
                             .await?;
                         }
                         if need_to_update_2 {
-                            PostgresqlRepository::<ApplicationUserRegistrationToken>::update_3(
+                            PostgresqlRepository::<UserRegistrationToken>::update_3(
                                 database_2_postgresql_connection,
                                 Update3 {
                                     application_user_registration_token__value: application_user_registration_token.value.as_str(),
@@ -212,16 +212,16 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
                     )
                 }
                 Option::None => {
-                    let application_user_registration_token = PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::create_1(
+                    let application_user_registration_token = PostgresqlRepository::<UserRegistrationToken<'_>>::create_1(
                         database_2_postgresql_connection,
                         Insert1 {
                             application_user__email: incoming.application_user__email.as_str(),
                             application_user_device__id: incoming.application_user_device__id.as_str(),
-                            application_user_registration_token__value: Generator::<ApplicationUserRegistrationToken_Value>::generate(),
+                            application_user_registration_token__value: Generator::<UserRegistrationToken_Value>::generate(),
                             application_user_registration_token__wrong_enter_tries_quantity: 0,
                             application_user_registration_token__is_approved: false,
-                            application_user_registration_token__expires_at: Generator::<ApplicationUserRegistrationToken_ExpiresAt>::generate()?,
-                            application_user_registration_token__can_be_resent_from: Generator::<ApplicationUserRegistrationToken_CanBeResentFrom>::generate()?,
+                            application_user_registration_token__expires_at: Generator::<UserRegistrationToken_ExpiresAt>::generate()?,
+                            application_user_registration_token__can_be_resent_from: Generator::<UserRegistrationToken_CanBeResentFrom>::generate()?,
                         },
                     )
                     .await?;
@@ -237,7 +237,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
                 let environment_configuration_ = inner.environment_configuration;
                 Spawner::<TokioNonBlockingTask>::spawn_into_background(
                     async move {
-                        EmailSender::<ApplicationUserRegistrationToken<'_>>::repeatable_send(
+                        EmailSender::<UserRegistrationToken<'_>>::repeatable_send(
                             environment_configuration_,
                             application_user_registration_token__value.as_str(),
                             incoming.application_user__email.as_str(),
@@ -252,7 +252,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
                 verification_message_sent: can_send,
                 application_user_registration_token__can_be_resent_from,
                 application_user_registration_token__wrong_enter_tries_quantity,
-                application_user_registration_token__wrong_enter_tries_quantity_limit: ApplicationUserRegistrationToken_WrongEnterTriesQuantity::LIMIT,
+                application_user_registration_token__wrong_enter_tries_quantity_limit: UserRegistrationToken_WrongEnterTriesQuantity::LIMIT,
             };
             return Result::Ok(UnifiedReport::target_filled(outcoming));
         };

@@ -1,6 +1,6 @@
 use super::EmailSender;
 use crate::{
-    domain_layer::data::entity::application_user_reset_password_token::ApplicationUserResetPasswordToken,
+    domain_layer::data::entity::user_reset_password_token::UserResetPasswordToken,
     infrastructure_layer::{
         data::{
             capture::Capture,
@@ -15,7 +15,7 @@ use crate::{
 use aggregate_error::AggregateError;
 use std::future::Future;
 use void::Void;
-impl EmailSender<ApplicationUserResetPasswordToken<'_>> {
+impl EmailSender<UserResetPasswordToken<'_>> {
     pub fn repeatable_send<'a>(
         environment_configuration: &'static EnvironmentConfiguration,
         application_user_reset_password_token__value: &'a str,

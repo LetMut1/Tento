@@ -1,6 +1,6 @@
 use super::EmailSender;
 use crate::{
-    domain_layer::data::entity::application_user_authorization_token::ApplicationUserAuthorizationToken,
+    domain_layer::data::entity::user_authorization_token::UserAuthorizationToken,
     infrastructure_layer::{
         data::{
             capture::Capture,
@@ -15,7 +15,7 @@ use crate::{
 use aggregate_error::AggregateError;
 use std::future::Future;
 use void::Void;
-impl EmailSender<ApplicationUserAuthorizationToken<'_>> {
+impl EmailSender<UserAuthorizationToken<'_>> {
     pub fn repeatable_send<'a>(
         environment_configuration: &'static EnvironmentConfiguration,
         application_user_authorization_token__value: &'a str,

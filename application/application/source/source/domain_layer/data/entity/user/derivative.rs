@@ -1,21 +1,21 @@
-pub struct ApplicationUser1 {
+pub struct User1 {
     pub id: i64,
     pub email: String,
     pub password_hash: String,
 }
-pub struct ApplicationUser2 {
+pub struct User2 {
     pub id: i64,
     pub nickname: String,
     pub password_hash: String,
 }
-pub struct ApplicationUser3 {
+pub struct User3 {
     pub id: i64,
 }
-pub struct ApplicationUser4 {
+pub struct User4 {
     pub email: String,
     pub nickname: String,
     pub password_hash: String,
 }
-pub struct ApplicationUser5 {
+pub struct User5 {
     pub email: String,
 }

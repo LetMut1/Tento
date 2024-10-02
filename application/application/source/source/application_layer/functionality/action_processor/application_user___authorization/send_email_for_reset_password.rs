@@ -6,14 +6,14 @@ use crate::{
     },
     domain_layer::{
         data::entity::{
-            application_user::{
-                ApplicationUser,
-                ApplicationUser_Id,
+            user::{
+                User,
+                User_Id,
             },
-            application_user_device::ApplicationUserDevice_Id,
-            application_user_reset_password_token::{
-                ApplicationUserResetPasswordToken,
-                ApplicationUserResetPasswordToken_CanBeResentFrom,
+            user_device::UserDevice_Id,
+            user_reset_password_token::{
+                UserResetPasswordToken,
+                UserResetPasswordToken_CanBeResentFrom,
             },
         },
         functionality::service::{
@@ -81,7 +81,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
         return async move {
-            if !Validator::<ApplicationUser_Id>::is_valid(incoming.application_user__id) {
+            if !Validator::<User_Id>::is_valid(incoming.application_user__id) {
                 return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
@@ -91,7 +91,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
                     ),
                 );
             }
-            if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming.application_user_device__id.as_str()) {
+            if !Validator::<UserDevice_Id>::is_valid(incoming.application_user_device__id.as_str()) {
                 return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
@@ -102,7 +102,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
                 );
             }
             let database_1_postgresql_pooled_connection = inner.get_database_1_postgresql_pooled_connection().await?;
-            let application_user = match PostgresqlRepository::<ApplicationUser>::find_6(
+            let application_user = match PostgresqlRepository::<User>::find_6(
                 &*database_1_postgresql_pooled_connection,
                 By3 {
                     application_user__id: incoming.application_user__id,
@@ -117,7 +117,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
             };
             let database_2_postgresql_pooled_connection = inner.get_database_2_postgresql_pooled_connection().await?;
             let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
-            let mut application_user_reset_password_token = match PostgresqlRepository::<ApplicationUserResetPasswordToken>::find_3(
+            let mut application_user_reset_password_token = match PostgresqlRepository::<UserResetPasswordToken>::find_3(
                 database_2_postgresql_connection,
                 By1 {
                     application_user__id: incoming.application_user__id,
@@ -132,7 +132,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
                 }
             };
             if Resolver::<Expiration>::is_expired(application_user_reset_password_token.expires_at) {
-                PostgresqlRepository::<ApplicationUserResetPasswordToken<'_>>::delete_2(
+                PostgresqlRepository::<UserResetPasswordToken<'_>>::delete_2(
                     database_2_postgresql_connection,
                     By1 {
                         application_user__id: incoming.application_user__id,
@@ -148,8 +148,8 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
             if !Resolver::<Expiration>::is_expired(application_user_reset_password_token.can_be_resent_from) {
                 return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserResetPasswordToken_TimeToResendHasNotCome));
             }
-            application_user_reset_password_token.can_be_resent_from = Generator::<ApplicationUserResetPasswordToken_CanBeResentFrom>::generate()?;
-            PostgresqlRepository::<ApplicationUserResetPasswordToken>::update_2(
+            application_user_reset_password_token.can_be_resent_from = Generator::<UserResetPasswordToken_CanBeResentFrom>::generate()?;
+            PostgresqlRepository::<UserResetPasswordToken>::update_2(
                 database_2_postgresql_connection,
                 Update2 {
                     application_user_reset_password_token__can_be_resent_from: application_user_reset_password_token.can_be_resent_from,
@@ -163,7 +163,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendE
             let environment_configuration_ = inner.environment_configuration;
             Spawner::<TokioNonBlockingTask>::spawn_into_background(
                 async move {
-                    EmailSender::<ApplicationUserResetPasswordToken<'_>>::repeatable_send(
+                    EmailSender::<UserResetPasswordToken<'_>>::repeatable_send(
                         environment_configuration_,
                         application_user_reset_password_token.value.as_str(),
                         application_user.email.as_str(),

@@ -1,5 +1,5 @@
 use super::Validator;
-use crate::domain_layer::data::entity::application_user::ApplicationUser_Email;
+use crate::domain_layer::data::entity::user::User_Email;
 use aggregate_error::{
     AggregateError,
     Backtrace,
@@ -10,13 +10,13 @@ use aggregate_error::{
 use regex::Regex;
 use std::sync::OnceLock;
 static REGULAR_EXPRESSION: OnceLock<Regex> = OnceLock::new();
-impl Validator<ApplicationUser_Email> {
+impl Validator<User_Email> {
     pub fn is_valid<'a>(application_user__email: &'a str) -> Result<bool, AggregateError> {
         let regular_expression = match REGULAR_EXPRESSION.get() {
             Option::Some(regular_expression_) => regular_expression_,
             Option::None => {
                 if let Result::Err(_) = REGULAR_EXPRESSION.set(
-                    Regex::new(ApplicationUser_Email::REGULAR_EXPRESSION).into_logic(
+                    Regex::new(User_Email::REGULAR_EXPRESSION).into_logic(
                         Backtrace::new(
                             line!(),
                             file!(),
@@ -41,6 +41,6 @@ impl Validator<ApplicationUser_Email> {
                 )?
             }
         };
-        return Result::Ok(regular_expression.is_match(application_user__email) && application_user__email.chars().count() <= ApplicationUser_Email::MAXIMUM_LENGTH);
+        return Result::Ok(regular_expression.is_match(application_user__email) && application_user__email.chars().count() <= User_Email::MAXIMUM_LENGTH);
     }
 }

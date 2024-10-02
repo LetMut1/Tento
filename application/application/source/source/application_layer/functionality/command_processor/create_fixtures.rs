@@ -2,15 +2,15 @@ use super::CommandProcessor;
 use crate::{
     domain_layer::{
         data::entity::{
-            application_user::{
-                ApplicationUser,
-                ApplicationUser_Email,
-                ApplicationUser_Nickname,
-                ApplicationUser_Password,
+            user::{
+                User,
+                User_Email,
+                User_Nickname,
+                User_Password,
             },
-            application_user_device::{
-                ApplicationUserDevice,
-                ApplicationUserDevice_Id,
+            user_device::{
+                UserDevice,
+                UserDevice_Id,
             },
             channel::{
                 Channel,
@@ -126,7 +126,7 @@ impl CommandProcessor<CreateFixtures> {
             let database_1_postgresql_connection_pool =
                 Creator::<Pool<PostgresConnectionManager<NoTls>>>::create(environment_configuration.resource.postgresql.database_1_url.as_str()).await?;
             let application_user__password = Self::APPLICATION_USER__PASSWORD.to_string();
-            let application_user__password_hash = Encoder::<ApplicationUser_Password>::encode(application_user__password.as_str())?;
+            let application_user__password_hash = Encoder::<User_Password>::encode(application_user__password.as_str())?;
             let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.into_runtime(
                 Backtrace::new(
                     line!(),
@@ -136,11 +136,11 @@ impl CommandProcessor<CreateFixtures> {
             let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
             '_a: for _ in 1..=Self::QUANTITY_OF_APPLICATION_USERS {
                 let mut application_user__nickname = String::new();
-                '_b: for _ in 1..=thread_rng().gen_range::<usize, _>(1..=ApplicationUser_Nickname::MAXIMUM_LENGTH) {
+                '_b: for _ in 1..=thread_rng().gen_range::<usize, _>(1..=User_Nickname::MAXIMUM_LENGTH) {
                     let character = Self::ASCII_CHARACTER_REGISTRY[thread_rng().gen_range::<usize, _>(0..Self::ASCII_CHARACTER_REGISTRY.len())];
                     application_user__nickname = format!("{}{}", application_user__nickname.as_str(), character);
                 }
-                if !Validator::<ApplicationUser_Nickname>::is_valid(application_user__nickname.as_str()) {
+                if !Validator::<User_Nickname>::is_valid(application_user__nickname.as_str()) {
                     return Result::Err(
                         AggregateError::new_invalid_argument(
                             Backtrace::new(
@@ -151,7 +151,7 @@ impl CommandProcessor<CreateFixtures> {
                     );
                 }
                 let application_user__email = format!("{}@fixture.com", application_user__nickname.as_str());
-                if !Validator::<ApplicationUser_Email>::is_valid(application_user__email.as_str())? {
+                if !Validator::<User_Email>::is_valid(application_user__email.as_str())? {
                     return Result::Err(
                         AggregateError::new_invalid_argument(
                             Backtrace::new(
@@ -161,7 +161,7 @@ impl CommandProcessor<CreateFixtures> {
                         ),
                     );
                 }
-                if !Validator::<ApplicationUser_Password>::is_valid(
+                if !Validator::<User_Password>::is_valid(
                     application_user__password.as_str(),
                     application_user__email.as_str(),
                     application_user__nickname.as_str(),
@@ -175,7 +175,7 @@ impl CommandProcessor<CreateFixtures> {
                         ),
                     );
                 }
-                let application_user = match PostgresqlRepository::<ApplicationUser<'_>>::find_1(
+                let application_user = match PostgresqlRepository::<User<'_>>::find_1(
                     database_1_postgresql_connection,
                     By1 {
                         application_user__nickname: application_user__nickname.as_str(),
@@ -185,7 +185,7 @@ impl CommandProcessor<CreateFixtures> {
                 {
                     Option::Some(application_user_) => application_user_,
                     Option::None => {
-                        PostgresqlRepository::<ApplicationUser<'_>>::create_1(
+                        PostgresqlRepository::<User<'_>>::create_1(
                             database_1_postgresql_connection,
                             ApplicationUserInsert1 {
                                 application_user__email,
@@ -202,7 +202,7 @@ impl CommandProcessor<CreateFixtures> {
                     application_user.nickname.as_ref(),
                     Self::APPLICATION_USER_DEVICE__ID_PART
                 );
-                if !Validator::<ApplicationUserDevice_Id>::is_valid(&application_user_device__id) {
+                if !Validator::<UserDevice_Id>::is_valid(&application_user_device__id) {
                     return Result::Err(
                         AggregateError::new_invalid_argument(
                             Backtrace::new(
@@ -212,7 +212,7 @@ impl CommandProcessor<CreateFixtures> {
                         ),
                     );
                 }
-                PostgresqlRepository::<ApplicationUserDevice>::create_1(
+                PostgresqlRepository::<UserDevice>::create_1(
                     database_1_postgresql_connection,
                     ApplicationUserDeviceInsert1 {
                         application_user_device__id,

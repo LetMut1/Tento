@@ -1,15 +1,15 @@
+mod field;
+use self::field::CreatedAt;
 use super::{
-    application_user::ApplicationUser_Id,
+    user::User_Id,
     channel::Channel_Id,
 };
 use std::marker::PhantomData;
 pub struct ChannelSubscription {
     pub application_user__id: i64,
-    _application_user__id: PhantomData<ApplicationUser_Id>,
-
+    _application_user__id: PhantomData<User_Id>,
     pub channel__id: i64,
     _channel__id: PhantomData<Channel_Id>,
-
     pub created_at: i64,
     _created_at: PhantomData<CreatedAt>,
 }
@@ -25,4 +25,4 @@ impl ChannelSubscription {
         };
     }
 }
-pub struct CreatedAt;
+pub type ChannelSubscription_CreatedAt = CreatedAt;

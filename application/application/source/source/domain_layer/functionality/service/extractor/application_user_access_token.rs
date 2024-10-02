@@ -1,7 +1,7 @@
 use super::Extractor;
 use crate::{
     domain_layer::{
-        data::entity::application_user_access_token::ApplicationUserAccessToken,
+        data::entity::user_access_token::UserAccessToken,
         functionality::service::encoder::Encoder,
     },
     infrastructure_layer::{
@@ -14,12 +14,12 @@ use crate::{
 };
 use aggregate_error::AggregateError;
 use application_user_access_token_encoded::ApplicationUserAccessTokenEncoded;
-impl Extractor<ApplicationUserAccessToken<'_>> {
+impl Extractor<UserAccessToken<'_>> {
     pub fn extract<'a>(
         environment_configuration: &'static EnvironmentConfiguration,
         application_user_access_token_encoded: &'a ApplicationUserAccessTokenEncoded,
     ) -> Result<Extracted, AggregateError> {
-        let application_user_access_token = Encoder::<ApplicationUserAccessToken<'_>>::decode(
+        let application_user_access_token = Encoder::<UserAccessToken<'_>>::decode(
             environment_configuration,
             application_user_access_token_encoded,
         )?;
@@ -35,7 +35,7 @@ impl Extractor<ApplicationUserAccessToken<'_>> {
 }
 pub enum Extracted {
     ApplicationUserAccessToken {
-        application_user_access_token: ApplicationUserAccessToken<'static>,
+        application_user_access_token: UserAccessToken<'static>,
     },
     ApplicationUserAccessTokenAlreadyExpired,
     // Not yet used due to the fact that there is no such flow yet. More

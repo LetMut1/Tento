@@ -6,20 +6,20 @@ use crate::{
     },
     domain_layer::{
         data::entity::{
-            application_user::{
-                ApplicationUser,
-                ApplicationUser_Email,
-                ApplicationUser_Nickname,
-                ApplicationUser_Password,
+            user::{
+                User,
+                User_Email,
+                User_Nickname,
+                User_Password,
             },
-            application_user_authorization_token::{
-                ApplicationUserAuthorizationToken,
-                ApplicationUserAuthorizationToken_CanBeResentFrom,
-                ApplicationUserAuthorizationToken_ExpiresAt,
-                ApplicationUserAuthorizationToken_Value,
-                ApplicationUserAuthorizationToken_WrongEnterTriesQuantity,
+            user_authorization_token::{
+                UserAuthorizationToken,
+                UserAuthorizationToken_CanBeResentFrom,
+                UserAuthorizationToken_ExpiresAt,
+                UserAuthorizationToken_Value,
+                UserAuthorizationToken_WrongEnterTriesQuantity,
             },
-            application_user_device::ApplicationUserDevice_Id,
+            user_device::UserDevice_Id,
         },
         functionality::service::{
             email_sender::EmailSender,
@@ -95,7 +95,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
         return async move {
-            if !Validator::<ApplicationUser_Password>::is_valid_part_1(incoming.application_user__password.as_str()) {
+            if !Validator::<User_Password>::is_valid_part_1(incoming.application_user__password.as_str()) {
                 return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
@@ -105,7 +105,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                     ),
                 );
             }
-            if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming.application_user_device__id.as_str()) {
+            if !Validator::<UserDevice_Id>::is_valid(incoming.application_user_device__id.as_str()) {
                 return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
@@ -118,8 +118,8 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
             let database_1_postgresql_pooled_connection = inner.get_database_1_postgresql_pooled_connection().await?;
             let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
             let (application_user__id, application_user__email, application_user__nickname, application_user__password_hash) =
-                if Validator::<ApplicationUser_Email>::is_valid(incoming.application_user__email___or___application_user__nickname.as_str())? {
-                    let application_user_ = PostgresqlRepository::<ApplicationUser>::find_3(
+                if Validator::<User_Email>::is_valid(incoming.application_user__email___or___application_user__nickname.as_str())? {
+                    let application_user_ = PostgresqlRepository::<User>::find_3(
                         database_1_postgresql_connection,
                         By2 {
                             application_user__email: incoming.application_user__email___or___application_user__nickname.as_str(),
@@ -139,8 +139,8 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                         application_user__.password_hash,
                     )
                 } else {
-                    if Validator::<ApplicationUser_Nickname>::is_valid(incoming.application_user__email___or___application_user__nickname.as_str()) {
-                        let application_user_ = PostgresqlRepository::<ApplicationUser>::find_2(
+                    if Validator::<User_Nickname>::is_valid(incoming.application_user__email___or___application_user__nickname.as_str()) {
+                        let application_user_ = PostgresqlRepository::<User>::find_2(
                             database_1_postgresql_connection,
                             By1 {
                                 application_user__nickname: incoming.application_user__email___or___application_user__nickname.as_str(),
@@ -170,7 +170,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                         );
                     }
                 };
-            if !Validator::<ApplicationUser_Password>::is_valid_part_2(
+            if !Validator::<User_Password>::is_valid_part_2(
                 incoming.application_user__password.as_str(),
                 application_user__email.as_str(),
                 application_user__nickname.as_str(),
@@ -186,7 +186,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
             }
             let is_valid_join_handle = Spawner::<TokioBlockingTask>::spawn_processed(
                 move || -> _ {
-                    return Encoder::<ApplicationUser_Password>::is_valid(
+                    return Encoder::<User_Password>::is_valid(
                         incoming.application_user__password.as_str(),
                         application_user__password_hash.as_str(),
                     );
@@ -207,7 +207,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                 application_user_authorization_token__can_be_resent_from,
                 application_user_authorization_token__wrong_enter_tries_quantity,
                 can_send,
-            ) = match PostgresqlRepository::<ApplicationUserAuthorizationToken>::find_1(
+            ) = match PostgresqlRepository::<UserAuthorizationToken>::find_1(
                 database_2_postgresql_connection,
                 By1_ {
                     application_user__id,
@@ -218,7 +218,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
             {
                 Option::Some(mut application_user_authorization_token) => {
                     let (can_send_, need_to_update_1) = if Resolver::<Expiration>::is_expired(application_user_authorization_token.can_be_resent_from) {
-                        application_user_authorization_token.can_be_resent_from = Generator::<ApplicationUserAuthorizationToken_CanBeResentFrom>::generate()?;
+                        application_user_authorization_token.can_be_resent_from = Generator::<UserAuthorizationToken_CanBeResentFrom>::generate()?;
                         (
                             true,
                             true,
@@ -230,15 +230,15 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                         )
                     };
                     let need_to_update_2 = if Resolver::<Expiration>::is_expired(application_user_authorization_token.expires_at) {
-                        application_user_authorization_token.value = Generator::<ApplicationUserAuthorizationToken_Value>::generate();
+                        application_user_authorization_token.value = Generator::<UserAuthorizationToken_Value>::generate();
                         application_user_authorization_token.wrong_enter_tries_quantity = 0;
-                        application_user_authorization_token.expires_at = Generator::<ApplicationUserAuthorizationToken_ExpiresAt>::generate()?;
+                        application_user_authorization_token.expires_at = Generator::<UserAuthorizationToken_ExpiresAt>::generate()?;
                         true
                     } else {
                         false
                     };
                     if need_to_update_1 && need_to_update_2 {
-                        PostgresqlRepository::<ApplicationUserAuthorizationToken>::update_1(
+                        PostgresqlRepository::<UserAuthorizationToken>::update_1(
                             database_2_postgresql_connection,
                             Update1 {
                                 application_user_authorization_token__value: application_user_authorization_token.value.as_str(),
@@ -254,7 +254,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                         .await?;
                     } else {
                         if need_to_update_1 {
-                            PostgresqlRepository::<ApplicationUserAuthorizationToken>::update_3(
+                            PostgresqlRepository::<UserAuthorizationToken>::update_3(
                                 database_2_postgresql_connection,
                                 Update3 {
                                     application_user_authorization_token__can_be_resent_from: application_user_authorization_token.can_be_resent_from,
@@ -267,7 +267,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                             .await?;
                         }
                         if need_to_update_2 {
-                            PostgresqlRepository::<ApplicationUserAuthorizationToken>::update_2(
+                            PostgresqlRepository::<UserAuthorizationToken>::update_2(
                                 database_2_postgresql_connection,
                                 Update2 {
                                     application_user_authorization_token__value: application_user_authorization_token.value.as_str(),
@@ -290,15 +290,15 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                     )
                 }
                 Option::None => {
-                    let application_user_authorization_token = PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::create_1(
+                    let application_user_authorization_token = PostgresqlRepository::<UserAuthorizationToken<'_>>::create_1(
                         database_2_postgresql_connection,
                         Insert1 {
                             application_user__id,
                             application_user_device__id: incoming.application_user_device__id.as_str(),
-                            application_user_authorization_token__value: Generator::<ApplicationUserAuthorizationToken_Value>::generate(),
+                            application_user_authorization_token__value: Generator::<UserAuthorizationToken_Value>::generate(),
                             application_user_authorization_token__wrong_enter_tries_quantity: 0,
-                            application_user_authorization_token__expires_at: Generator::<ApplicationUserAuthorizationToken_ExpiresAt>::generate()?,
-                            application_user_authorization_token__can_be_resent_from: Generator::<ApplicationUserAuthorizationToken_CanBeResentFrom>::generate()?,
+                            application_user_authorization_token__expires_at: Generator::<UserAuthorizationToken_ExpiresAt>::generate()?,
+                            application_user_authorization_token__can_be_resent_from: Generator::<UserAuthorizationToken_CanBeResentFrom>::generate()?,
                         },
                     )
                     .await?;
@@ -314,7 +314,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                 let environment_configuration_ = inner.environment_configuration;
                 Spawner::<TokioNonBlockingTask>::spawn_into_background(
                     async move {
-                        EmailSender::<ApplicationUserAuthorizationToken<'_>>::repeatable_send(
+                        EmailSender::<UserAuthorizationToken<'_>>::repeatable_send(
                             environment_configuration_,
                             application_user_authorization_token__value.as_str(),
                             application_user__email.as_str(),
@@ -330,7 +330,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                 verification_message_sent: can_send,
                 application_user_authorization_token__can_be_resent_from,
                 application_user_authorization_token__wrong_enter_tries_quantity,
-                application_user_authorization_token__wrong_enter_tries_quantity_limit: ApplicationUserAuthorizationToken_WrongEnterTriesQuantity::LIMIT,
+                application_user_authorization_token__wrong_enter_tries_quantity_limit: UserAuthorizationToken_WrongEnterTriesQuantity::LIMIT,
             };
             return Result::Ok(UnifiedReport::target_filled(outcoming));
         };

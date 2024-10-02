@@ -5,7 +5,7 @@ use crate::{
         Inner,
     },
     domain_layer::{
-        data::entity::application_user_access_token::ApplicationUserAccessToken,
+        data::entity::user_access_token::UserAccessToken,
         functionality::service::{
             extractor::{
                 application_user_access_token::Extracted,
@@ -55,7 +55,7 @@ impl ActionProcessor_ for ActionProcessor<Channel__Base___CheckLinkedNameForExis
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
         return async move {
-            match Extractor::<ApplicationUserAccessToken<'_>>::extract(
+            match Extractor::<UserAccessToken<'_>>::extract(
                 inner.environment_configuration,
                 &incoming.application_user_access_token_encoded,
             )? {

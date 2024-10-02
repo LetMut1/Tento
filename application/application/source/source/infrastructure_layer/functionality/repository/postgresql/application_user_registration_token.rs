@@ -1,12 +1,12 @@
 use super::PostgresqlRepository;
 use crate::{
-    domain_layer::data::entity::application_user_registration_token::{
+    domain_layer::data::entity::user_registration_token::{
         derivative::{
-            ApplicationUserRegistrationToken1,
-            ApplicationUserRegistrationToken2,
-            ApplicationUserRegistrationToken3,
+            UserRegistrationToken1,
+            UserRegistrationToken2,
+            UserRegistrationToken3,
         },
-        ApplicationUserRegistrationToken,
+        UserRegistrationToken,
     },
     infrastructure_layer::{
         data::capture::Capture,
@@ -27,11 +27,11 @@ use tokio_postgres::{
     Client as Connection,
 };
 use void::Void;
-impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
+impl PostgresqlRepository<UserRegistrationToken<'_>> {
     pub fn create_1<'a, 'b>(
         database_2_connection: &'a Connection,
         insert_1: Insert1<'b>,
-    ) -> impl Future<Output = Result<ApplicationUserRegistrationToken<'b>, AggregateError>> + Send + Capture<&'a Void> {
+    ) -> impl Future<Output = Result<UserRegistrationToken<'b>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 INSERT INTO public.user_registration_token AS urt ( \
@@ -106,7 +106,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
                     ),
                 )?;
             return Result::Ok(
-                ApplicationUserRegistrationToken::new(
+                UserRegistrationToken::new(
                     Cow::Borrowed(insert_1.application_user__email),
                     Cow::Borrowed(insert_1.application_user_device__id),
                     insert_1.application_user_registration_token__value,
@@ -468,7 +468,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
     pub fn find_1<'a>(
         database_2_connection: &'a Connection,
         by_1: By1<'a>,
-    ) -> impl Future<Output = Result<Option<ApplicationUserRegistrationToken1>, AggregateError>> + Send + Capture<&'a Void> {
+    ) -> impl Future<Output = Result<Option<UserRegistrationToken1>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 SELECT \
@@ -518,7 +518,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
             }
             return Result::Ok(
                 Option::Some(
-                    ApplicationUserRegistrationToken1 {
+                    UserRegistrationToken1 {
                         value: row_registry[0].try_get::<'_, usize, String>(0).into_logic(
                             Backtrace::new(
                                 line!(),
@@ -557,7 +557,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
     pub fn find_2<'a>(
         database_2_connection: &'a Connection,
         by_1: By1<'a>,
-    ) -> impl Future<Output = Result<Option<ApplicationUserRegistrationToken2>, AggregateError>> + Send + Capture<&'a Void> {
+    ) -> impl Future<Output = Result<Option<UserRegistrationToken2>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 SELECT \
@@ -606,7 +606,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
             }
             return Result::Ok(
                 Option::Some(
-                    ApplicationUserRegistrationToken2 {
+                    UserRegistrationToken2 {
                         value: row_registry[0].try_get::<'_, usize, String>(0).into_logic(
                             Backtrace::new(
                                 line!(),
@@ -639,7 +639,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
     pub fn find_3<'a>(
         database_2_connection: &'a Connection,
         by_1: By1<'a>,
-    ) -> impl Future<Output = Result<Option<ApplicationUserRegistrationToken3>, AggregateError>> + Send + Capture<&'a Void> {
+    ) -> impl Future<Output = Result<Option<UserRegistrationToken3>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 SELECT \
@@ -688,7 +688,7 @@ impl PostgresqlRepository<ApplicationUserRegistrationToken<'_>> {
             }
             return Result::Ok(
                 Option::Some(
-                    ApplicationUserRegistrationToken3 {
+                    UserRegistrationToken3 {
                         value: row_registry[0].try_get::<'_, usize, String>(0).into_logic(
                             Backtrace::new(
                                 line!(),

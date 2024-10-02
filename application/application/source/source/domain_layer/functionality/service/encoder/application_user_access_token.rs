@@ -1,6 +1,6 @@
 use super::Encoder;
 use crate::{
-    domain_layer::data::entity::application_user_access_token::ApplicationUserAccessToken,
+    domain_layer::data::entity::user_access_token::UserAccessToken,
     infrastructure_layer::{
         data::environment_configuration::environment_configuration::EnvironmentConfiguration,
         functionality::service::{
@@ -21,10 +21,10 @@ use aggregate_error::{
     Backtrace,
 };
 use application_user_access_token_encoded::ApplicationUserAccessTokenEncoded;
-impl Encoder<ApplicationUserAccessToken<'_>> {
+impl Encoder<UserAccessToken<'_>> {
     pub fn encode<'a>(
         environment_configuration: &'static EnvironmentConfiguration,
-        application_user_access_token: &'a ApplicationUserAccessToken<'_>,
+        application_user_access_token: &'a UserAccessToken<'_>,
     ) -> Result<ApplicationUserAccessTokenEncoded, AggregateError> {
         let application_user_access_token_serialized = Serializer::<MessagePack>::serialize(application_user_access_token)?; // TODO TODO TODO Serializer::<MessagePack> - Нужен любой фаст алгоритм сериализации.
         let application_user_access_token_encoded = Encoder_::<HmacSha3_512>::encode(
@@ -41,7 +41,7 @@ impl Encoder<ApplicationUserAccessToken<'_>> {
     pub fn decode<'a>(
         environment_configuration: &'static EnvironmentConfiguration,
         application_user_access_token_encoded: &'a ApplicationUserAccessTokenEncoded,
-    ) -> Result<ApplicationUserAccessToken<'static>, AggregateError> {
+    ) -> Result<UserAccessToken<'static>, AggregateError> {
         if !Encoder_::<HmacSha3_512>::is_valid(
             environment_configuration.encryption.private_key.application_user_access_token.as_bytes(),
             application_user_access_token_encoded.serialized.as_slice(),
@@ -56,6 +56,6 @@ impl Encoder<ApplicationUserAccessToken<'_>> {
                 ),
             );
         }
-        return Serializer::<MessagePack>::deserialize::<'_, ApplicationUserAccessToken<'static>>(application_user_access_token_encoded.serialized.as_slice());
+        return Serializer::<MessagePack>::deserialize::<'_, UserAccessToken<'static>>(application_user_access_token_encoded.serialized.as_slice());
     }
 }

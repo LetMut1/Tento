@@ -6,12 +6,12 @@ use crate::{
     },
     domain_layer::{
         data::entity::{
-            application_user::ApplicationUser_Email,
-            application_user_device::ApplicationUserDevice_Id,
-            application_user_registration_token::{
-                ApplicationUserRegistrationToken,
-                ApplicationUserRegistrationToken_Value,
-                ApplicationUserRegistrationToken_WrongEnterTriesQuantity,
+            user::User_Email,
+            user_device::UserDevice_Id,
+            user_registration_token::{
+                UserRegistrationToken,
+                UserRegistrationToken_Value,
+                UserRegistrationToken_WrongEnterTriesQuantity,
             },
         },
         functionality::service::validator::Validator,
@@ -69,7 +69,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
         return async move {
-            if !Validator::<ApplicationUser_Email>::is_valid(incoming.application_user__email.as_str())? {
+            if !Validator::<User_Email>::is_valid(incoming.application_user__email.as_str())? {
                 return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
@@ -79,7 +79,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
                     ),
                 );
             }
-            if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming.application_user_device__id.as_str()) {
+            if !Validator::<UserDevice_Id>::is_valid(incoming.application_user_device__id.as_str()) {
                 return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
@@ -89,7 +89,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
                     ),
                 );
             }
-            if !Validator::<ApplicationUserRegistrationToken_Value>::is_valid(incoming.application_user_registration_token__value.as_str())? {
+            if !Validator::<UserRegistrationToken_Value>::is_valid(incoming.application_user_registration_token__value.as_str())? {
                 return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
@@ -101,7 +101,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
             }
             let database_2_postgresql_pooled_connection = inner.get_database_2_postgresql_pooled_connection().await?;
             let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
-            let mut application_user_registration_token = match PostgresqlRepository::<ApplicationUserRegistrationToken>::find_2(
+            let mut application_user_registration_token = match PostgresqlRepository::<UserRegistrationToken>::find_2(
                 database_2_postgresql_connection,
                 By1 {
                     application_user__email: incoming.application_user__email.as_str(),
@@ -116,7 +116,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
                 }
             };
             if Resolver::<Expiration>::is_expired(application_user_registration_token.expires_at) {
-                PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete_2(
+                PostgresqlRepository::<UserRegistrationToken<'_>>::delete_2(
                     database_2_postgresql_connection,
                     By1 {
                         application_user__email: incoming.application_user__email.as_str(),
@@ -137,8 +137,8 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
                             file!(),
                         ),
                     )?;
-                if application_user_registration_token.wrong_enter_tries_quantity < ApplicationUserRegistrationToken_WrongEnterTriesQuantity::LIMIT {
-                    PostgresqlRepository::<ApplicationUserRegistrationToken>::update_4(
+                if application_user_registration_token.wrong_enter_tries_quantity < UserRegistrationToken_WrongEnterTriesQuantity::LIMIT {
+                    PostgresqlRepository::<UserRegistrationToken>::update_4(
                         database_2_postgresql_connection,
                         Update4 {
                             application_user_registration_token__wrong_enter_tries_quantity: application_user_registration_token.wrong_enter_tries_quantity,
@@ -150,7 +150,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
                     )
                     .await?;
                 } else {
-                    PostgresqlRepository::<ApplicationUserRegistrationToken<'_>>::delete_2(
+                    PostgresqlRepository::<UserRegistrationToken<'_>>::delete_2(
                         database_2_postgresql_connection,
                         By1 {
                             application_user__email: incoming.application_user__email.as_str(),
@@ -168,7 +168,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
                 );
             }
             application_user_registration_token.is_approved = true;
-            PostgresqlRepository::<ApplicationUserRegistrationToken>::update_5(
+            PostgresqlRepository::<UserRegistrationToken>::update_5(
                 database_2_postgresql_connection,
                 Update5 {
                     application_user_registration_token__is_approved: application_user_registration_token.is_approved,

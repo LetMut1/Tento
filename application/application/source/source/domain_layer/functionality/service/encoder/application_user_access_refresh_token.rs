@@ -1,6 +1,6 @@
 use super::Encoder;
 use crate::{
-    domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken,
+    domain_layer::data::entity::user_access_refresh_token::UserAccessRefreshToken,
     infrastructure_layer::{
         data::environment_configuration::environment_configuration::EnvironmentConfiguration,
         functionality::service::{
@@ -18,10 +18,10 @@ use crate::{
 };
 use aggregate_error::AggregateError;
 use application_user_access_refresh_token_encoded::ApplicationUserAccessRefreshTokenEncoded;
-impl Encoder<ApplicationUserAccessRefreshToken<'_>> {
+impl Encoder<UserAccessRefreshToken<'_>> {
     pub fn encode<'a>(
         environment_configuration: &'static EnvironmentConfiguration,
-        application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>,
+        application_user_access_refresh_token: &'a UserAccessRefreshToken<'_>,
     ) -> Result<ApplicationUserAccessRefreshTokenEncoded, AggregateError> {
         return Result::Ok(
             ApplicationUserAccessRefreshTokenEncoded(
@@ -34,7 +34,7 @@ impl Encoder<ApplicationUserAccessRefreshToken<'_>> {
     }
     pub fn is_valid<'a>(
         environment_configuration: &'static EnvironmentConfiguration,
-        application_user_access_refresh_token: &'a ApplicationUserAccessRefreshToken<'_>,
+        application_user_access_refresh_token: &'a UserAccessRefreshToken<'_>,
         application_user_access_refresh_token_encoded: &'a ApplicationUserAccessRefreshTokenEncoded,
     ) -> Result<bool, AggregateError> {
         return Encoder_::<HmacSha3_512>::is_valid(

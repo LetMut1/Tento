@@ -1,6 +1,6 @@
 use super::PostgresqlRepository;
 use crate::{
-    domain_layer::data::entity::application_user_access_refresh_token::ApplicationUserAccessRefreshToken,
+    domain_layer::data::entity::user_access_refresh_token::UserAccessRefreshToken,
     infrastructure_layer::{
         data::capture::Capture,
         functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver,
@@ -20,11 +20,11 @@ use tokio_postgres::{
     Client as Connection,
 };
 use void::Void;
-impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
+impl PostgresqlRepository<UserAccessRefreshToken<'_>> {
     pub fn create_1<'a, 'b>(
         database_2_connection: &'a Connection,
         insert_1: Insert1<'b>,
-    ) -> impl Future<Output = Result<ApplicationUserAccessRefreshToken<'b>, AggregateError>> + Send + Capture<&'a Void> {
+    ) -> impl Future<Output = Result<UserAccessRefreshToken<'b>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 INSERT INTO public.user_access_refresh_token AS uart ( \
@@ -93,7 +93,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
                     ),
                 )?;
             return Result::Ok(
-                ApplicationUserAccessRefreshToken::new(
+                UserAccessRefreshToken::new(
                     insert_1.application_user__id,
                     Cow::Borrowed(insert_1.application_user_device__id),
                     Cow::Borrowed(insert_1.application_user_access_token__id),
@@ -258,7 +258,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
     pub fn find_1<'a, 'b>(
         database_2_connection: &'a Connection,
         by_2: By2<'b>,
-    ) -> impl Future<Output = Result<Option<ApplicationUserAccessRefreshToken<'b>>, AggregateError>> + Send + Capture<&'a Void> {
+    ) -> impl Future<Output = Result<Option<UserAccessRefreshToken<'b>>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 SELECT \
@@ -307,7 +307,7 @@ impl PostgresqlRepository<ApplicationUserAccessRefreshToken<'_>> {
             }
             return Result::Ok(
                 Option::Some(
-                    ApplicationUserAccessRefreshToken::new(
+                    UserAccessRefreshToken::new(
                         by_2.application_user__id,
                         Cow::Borrowed(by_2.application_user_device__id),
                         Cow::Owned(

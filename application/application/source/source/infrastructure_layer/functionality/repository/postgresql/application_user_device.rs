@@ -1,6 +1,6 @@
 use super::PostgresqlRepository;
 use crate::{
-    domain_layer::data::entity::application_user_device::ApplicationUserDevice,
+    domain_layer::data::entity::user_device::UserDevice,
     infrastructure_layer::{
         data::capture::Capture,
         functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver,
@@ -17,11 +17,11 @@ use tokio_postgres::{
     Client as Connection,
 };
 use void::Void;
-impl PostgresqlRepository<ApplicationUserDevice> {
+impl PostgresqlRepository<UserDevice> {
     pub fn create_1<'a>(
         database_1_connection: &'a Connection,
         insert_1: Insert1,
-    ) -> impl Future<Output = Result<ApplicationUserDevice, AggregateError>> + Send + Capture<&'a Void> {
+    ) -> impl Future<Output = Result<UserDevice, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             let query = "\
@@ -67,7 +67,7 @@ impl PostgresqlRepository<ApplicationUserDevice> {
                     ),
                 )?;
             return Result::Ok(
-                ApplicationUserDevice::new(
+                UserDevice::new(
                     insert_1.application_user_device__id,
                     insert_1.application_user__id,
                 ),

@@ -5,9 +5,9 @@ use crate::{
         Inner,
     },
     domain_layer::{
-        data::entity::application_user::{
-            ApplicationUser,
-            ApplicationUser_Nickname,
+        data::entity::user::{
+            User,
+            User_Nickname,
         },
         functionality::service::validator::Validator,
     },
@@ -53,7 +53,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Check
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
         return async move {
-            if !Validator::<ApplicationUser_Nickname>::is_valid(incoming.application_user__nickname.as_str()) {
+            if !Validator::<User_Nickname>::is_valid(incoming.application_user__nickname.as_str()) {
                 return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
@@ -64,7 +64,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Check
                 );
             }
             let database_1_postgresql_pooled_connection = inner.get_database_1_postgresql_pooled_connection().await?;
-            let is_exist = PostgresqlRepository::<ApplicationUser<'_>>::is_exist_1(
+            let is_exist = PostgresqlRepository::<User<'_>>::is_exist_1(
                 &*database_1_postgresql_pooled_connection,
                 By1 {
                     application_user__nickname: incoming.application_user__nickname.as_str(),

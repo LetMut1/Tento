@@ -1,4 +1,4 @@
-use super::application_user_access_token::ApplicationUserAccessToken_Id;
+use super::user_access_token::UserAccessToken_Id;
 use std::marker::PhantomData;
 // This entity is not used yet, and we need to decide whether we will use this flow.
 //
@@ -8,7 +8,7 @@ use std::marker::PhantomData;
 // Therefore, those tokens that we delete for the user must be recorded in this entity.
 // Wherever the validity of a token is checked, you need to check if this token is in this
 // entity, and block the action if it is.
-pub struct ApplicationUserAccessTokenBlackList {
+pub struct UserAccessTokenBlackList {
     _application_user_access_token__id: String,
-    __application_user_access_token__id: PhantomData<ApplicationUserAccessToken_Id>,
+    __application_user_access_token__id: PhantomData<UserAccessToken_Id>,
 }

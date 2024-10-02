@@ -1,13 +1,13 @@
 use super::Encoder;
 use crate::{
-    domain_layer::data::entity::application_user::ApplicationUser_Password,
+    domain_layer::data::entity::user::User_Password,
     infrastructure_layer::functionality::service::encoder::{
         argon2id::Argon2Id,
         Encoder as Encoder_,
     },
 };
 use aggregate_error::AggregateError;
-impl Encoder<ApplicationUser_Password> {
+impl Encoder<User_Password> {
     pub fn encode<'a>(application_user__password: &'a str) -> Result<String, AggregateError> {
         return Encoder_::<Argon2Id>::encode(application_user__password.as_bytes());
     }

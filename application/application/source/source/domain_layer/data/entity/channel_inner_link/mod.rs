@@ -1,12 +1,12 @@
+mod field;
+use self::field::CreatedAt;
 use super::channel::Channel_Id;
 use std::marker::PhantomData;
 pub struct ChannelInnerLink {
     pub from: i64,
     _from: PhantomData<Channel_Id>,
-
     pub to: i64,
     _to: PhantomData<Channel_Id>,
-
     pub created_at: i64,
     _created_at: PhantomData<CreatedAt>,
 }
@@ -23,4 +23,4 @@ impl ChannelInnerLink {
         };
     }
 }
-pub struct CreatedAt;
+pub type ChannelInnerLink_CreatedAt = CreatedAt;

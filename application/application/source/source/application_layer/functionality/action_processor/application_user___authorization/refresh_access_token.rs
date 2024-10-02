@@ -6,16 +6,16 @@ use crate::{
     },
     domain_layer::{
         data::entity::{
-            application_user_access_refresh_token::{
-                ApplicationUserAccessRefreshToken,
-                ApplicationUserAccessRefreshToken_ExpiresAt,
-                ApplicationUserAccessRefreshToken_ObfuscationValue,
-                ApplicationUserAccessRefreshToken_UpdatedAt,
+            user_access_refresh_token::{
+                UserAccessRefreshToken,
+                UserAccessRefreshToken_ExpiresAt,
+                UserAccessRefreshToken_ObfuscationValue,
+                UserAccessRefreshToken_UpdatedAt,
             },
-            application_user_access_token::{
-                ApplicationUserAccessToken,
-                ApplicationUserAccessToken_ExpiresAt,
-                ApplicationUserAccessToken_Id,
+            user_access_token::{
+                UserAccessToken,
+                UserAccessToken_ExpiresAt,
+                UserAccessToken_Id,
             },
         },
         functionality::service::{
@@ -78,13 +78,13 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Refre
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
         return async move {
-            let application_user_access_token = Encoder::<ApplicationUserAccessToken<'_>>::decode(
+            let application_user_access_token = Encoder::<UserAccessToken<'_>>::decode(
                 inner.environment_configuration,
                 &incoming.application_user_access_token_encoded,
             )?;
             let database_2_postgresql_pooled_connection = inner.get_database_2_postgresql_pooled_connection().await?;
             let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
-            let mut application_user_access_refresh_token = match PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::find_1(
+            let mut application_user_access_refresh_token = match PostgresqlRepository::<UserAccessRefreshToken<'_>>::find_1(
                 database_2_postgresql_connection,
                 By2 {
                     application_user__id: application_user_access_token.application_user__id,
@@ -98,7 +98,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Refre
                     return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessRefreshToken_NotFound));
                 }
             };
-            let is_valid = Encoder::<ApplicationUserAccessRefreshToken<'_>>::is_valid(
+            let is_valid = Encoder::<UserAccessRefreshToken<'_>>::is_valid(
                 inner.environment_configuration,
                 &application_user_access_refresh_token,
                 &incoming.application_user_access_refresh_token_encoded,
@@ -114,7 +114,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Refre
                 );
             }
             if Resolver::<Expiration>::is_expired(application_user_access_refresh_token.expires_at) {
-                PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::delete_1(
+                PostgresqlRepository::<UserAccessRefreshToken<'_>>::delete_1(
                     database_2_postgresql_connection,
                     By2 {
                         application_user__id: application_user_access_token.application_user__id,
@@ -124,17 +124,17 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Refre
                 .await?;
                 return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUserAccessRefreshToken_AlreadyExpired));
             }
-            let application_user_access_token_new = ApplicationUserAccessToken::new(
-                Generator::<ApplicationUserAccessToken_Id>::generate(),
+            let application_user_access_token_new = UserAccessToken::new(
+                Generator::<UserAccessToken_Id>::generate(),
                 application_user_access_token.application_user__id,
                 Cow::Borrowed(application_user_access_token.application_user_device__id.as_ref()),
-                Generator::<ApplicationUserAccessToken_ExpiresAt>::generate()?,
+                Generator::<UserAccessToken_ExpiresAt>::generate()?,
             );
             application_user_access_refresh_token.application_user_access_token__id = Cow::Borrowed(application_user_access_token_new.id.as_str());
-            application_user_access_refresh_token.obfuscation_value = Generator::<ApplicationUserAccessRefreshToken_ObfuscationValue>::generate();
-            application_user_access_refresh_token.expires_at = Generator::<ApplicationUserAccessRefreshToken_ExpiresAt>::generate()?;
-            application_user_access_refresh_token.updated_at = Generator::<ApplicationUserAccessRefreshToken_UpdatedAt>::generate();
-            PostgresqlRepository::<ApplicationUserAccessRefreshToken>::update_1(
+            application_user_access_refresh_token.obfuscation_value = Generator::<UserAccessRefreshToken_ObfuscationValue>::generate();
+            application_user_access_refresh_token.expires_at = Generator::<UserAccessRefreshToken_ExpiresAt>::generate()?;
+            application_user_access_refresh_token.updated_at = Generator::<UserAccessRefreshToken_UpdatedAt>::generate();
+            PostgresqlRepository::<UserAccessRefreshToken>::update_1(
                 database_2_postgresql_connection,
                 Update1 {
                     application_user_access_token__id: application_user_access_refresh_token.application_user_access_token__id.as_ref(),
@@ -149,11 +149,11 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Refre
             )
             .await?;
             let outcoming = Outcoming {
-                application_user_access_token_encoded: Encoder::<ApplicationUserAccessToken<'_>>::encode(
+                application_user_access_token_encoded: Encoder::<UserAccessToken<'_>>::encode(
                     inner.environment_configuration,
                     &application_user_access_token_new,
                 )?,
-                application_user_access_refresh_token_encoded: Encoder::<ApplicationUserAccessRefreshToken<'_>>::encode(
+                application_user_access_refresh_token_encoded: Encoder::<UserAccessRefreshToken<'_>>::encode(
                     inner.environment_configuration,
                     &application_user_access_refresh_token,
                 )?,

@@ -1,13 +1,12 @@
-pub use self::{
-    ExpiresAt as ApplicationUserAccessRefreshToken_ExpiresAt,
-    ObfuscationValue as ApplicationUserAccessRefreshToken_ObfuscationValue,
-    UpdatedAt as ApplicationUserAccessRefreshToken_UpdatedAt,
+mod field;
+use self::field::{
+    ExpiresAt,
+    ObfuscationValue,
+    UpdatedAt,
 };
-use super::{
-    application_user::ApplicationUser_Id,
-    application_user_access_token::ApplicationUserAccessToken_Id,
-    application_user_device::ApplicationUserDevice_Id,
-};
+use super::user::User_Id;
+use super::user_device::UserDevice_Id;
+use super::user_access_token::UserAccessToken_Id;
 use serde::{
     Deserialize,
     Serialize,
@@ -17,26 +16,21 @@ use std::{
     marker::PhantomData,
 };
 #[derive(Serialize, Deserialize)]
-pub struct ApplicationUserAccessRefreshToken<'a> {
+pub struct UserAccessRefreshToken<'a> {
     pub application_user__id: i64,
-    _application_user__id: PhantomData<ApplicationUser_Id>,
-
+    _application_user__id: PhantomData<User_Id>,
     pub application_user_device__id: Cow<'a, str>,
-    _application_user_device__id: PhantomData<ApplicationUserDevice_Id>,
-
+    _application_user_device__id: PhantomData<UserDevice_Id>,
     pub application_user_access_token__id: Cow<'a, str>,
-    _application_user_access_token__id: PhantomData<ApplicationUserAccessToken_Id>,
-
+    _application_user_access_token__id: PhantomData<UserAccessToken_Id>,
     pub obfuscation_value: String,
     _obfuscation_value: PhantomData<ObfuscationValue>,
-
     pub expires_at: i64,
     _expires_at: PhantomData<ExpiresAt>,
-
     pub updated_at: i64,
     _updated_at: PhantomData<UpdatedAt>,
 }
-impl<'a> ApplicationUserAccessRefreshToken<'a> {
+impl<'a> UserAccessRefreshToken<'a> {
     pub fn new(
         application_user__id: i64,
         application_user_device__id: Cow<'a, str>,
@@ -61,9 +55,6 @@ impl<'a> ApplicationUserAccessRefreshToken<'a> {
         };
     }
 }
-pub struct ObfuscationValue;
-pub struct ExpiresAt;
-impl ExpiresAt {
-    pub const QUANTITY_OF_MINUTES_FOR_EXPIRATION: i64 = 60 * 24 * 30 * 3;
-}
-pub struct UpdatedAt;
+pub type UserAccessRefreshToken_ExpiresAt = ExpiresAt;
+pub type UserAccessRefreshToken_ObfuscationValue = ObfuscationValue;
+pub type UserAccessRefreshToken_UpdatedAt = UpdatedAt;

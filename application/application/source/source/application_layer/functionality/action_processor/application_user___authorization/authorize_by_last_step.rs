@@ -6,29 +6,29 @@ use crate::{
     },
     domain_layer::{
         data::entity::{
-            application_user::{
-                ApplicationUser,
-                ApplicationUser_Id,
+            user::{
+                User,
+                User_Id,
             },
-            application_user_access_refresh_token::{
-                ApplicationUserAccessRefreshToken,
-                ApplicationUserAccessRefreshToken_ExpiresAt,
-                ApplicationUserAccessRefreshToken_ObfuscationValue,
-                ApplicationUserAccessRefreshToken_UpdatedAt,
+            user_access_refresh_token::{
+                UserAccessRefreshToken,
+                UserAccessRefreshToken_ExpiresAt,
+                UserAccessRefreshToken_ObfuscationValue,
+                UserAccessRefreshToken_UpdatedAt,
             },
-            application_user_access_token::{
-                ApplicationUserAccessToken,
-                ApplicationUserAccessToken_ExpiresAt,
-                ApplicationUserAccessToken_Id,
+            user_access_token::{
+                UserAccessToken,
+                UserAccessToken_ExpiresAt,
+                UserAccessToken_Id,
             },
-            application_user_authorization_token::{
-                ApplicationUserAuthorizationToken,
-                ApplicationUserAuthorizationToken_Value,
-                ApplicationUserAuthorizationToken_WrongEnterTriesQuantity,
+            user_authorization_token::{
+                UserAuthorizationToken,
+                UserAuthorizationToken_Value,
+                UserAuthorizationToken_WrongEnterTriesQuantity,
             },
-            application_user_device::{
-                ApplicationUserDevice,
-                ApplicationUserDevice_Id,
+            user_device::{
+                UserDevice,
+                UserDevice_Id,
             },
         },
         functionality::service::{
@@ -107,7 +107,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
         return async move {
-            if !Validator::<ApplicationUser_Id>::is_valid(incoming.application_user__id) {
+            if !Validator::<User_Id>::is_valid(incoming.application_user__id) {
                 return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
@@ -117,7 +117,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                     ),
                 );
             }
-            if !Validator::<ApplicationUserAuthorizationToken_Value>::is_valid(incoming.application_user_authorization_token__value.as_str())? {
+            if !Validator::<UserAuthorizationToken_Value>::is_valid(incoming.application_user_authorization_token__value.as_str())? {
                 return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
@@ -127,7 +127,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                     ),
                 );
             }
-            if !Validator::<ApplicationUserDevice_Id>::is_valid(incoming.application_user_device__id.as_str()) {
+            if !Validator::<UserDevice_Id>::is_valid(incoming.application_user_device__id.as_str()) {
                 return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
@@ -139,7 +139,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
             }
             let database_2_postgresql_pooled_connection = inner.get_database_2_postgresql_pooled_connection().await?;
             let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
-            let application_user_authorization_token = PostgresqlRepository::<ApplicationUserAuthorizationToken>::find_2(
+            let application_user_authorization_token = PostgresqlRepository::<UserAuthorizationToken>::find_2(
                 database_2_postgresql_connection,
                 By1 {
                     application_user__id: incoming.application_user__id,
@@ -154,7 +154,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                 }
             };
             if Resolver::<Expiration>::is_expired(application_user_authorization_token_.expires_at) {
-                PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::delete_1(
+                PostgresqlRepository::<UserAuthorizationToken<'_>>::delete_1(
                     database_2_postgresql_connection,
                     By1 {
                         application_user__id: incoming.application_user__id,
@@ -172,8 +172,8 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                             file!(),
                         ),
                     )?;
-                if application_user_authorization_token_.wrong_enter_tries_quantity < ApplicationUserAuthorizationToken_WrongEnterTriesQuantity::LIMIT {
-                    PostgresqlRepository::<ApplicationUserAuthorizationToken>::update_4(
+                if application_user_authorization_token_.wrong_enter_tries_quantity < UserAuthorizationToken_WrongEnterTriesQuantity::LIMIT {
+                    PostgresqlRepository::<UserAuthorizationToken>::update_4(
                         database_2_postgresql_connection,
                         Update4 {
                             application_user_authorization_token__wrong_enter_tries_quantity: application_user_authorization_token_.wrong_enter_tries_quantity,
@@ -185,7 +185,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                     )
                     .await?;
                 } else {
-                    PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::delete_1(
+                    PostgresqlRepository::<UserAuthorizationToken<'_>>::delete_1(
                         database_2_postgresql_connection,
                         By1 {
                             application_user__id: incoming.application_user__id,
@@ -204,7 +204,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
             }
             let database_1_postgresql_pooled_connection = inner.get_database_1_postgresql_pooled_connection().await?;
             let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
-            if !PostgresqlRepository::<ApplicationUser<'_>>::is_exist_3(
+            if !PostgresqlRepository::<User<'_>>::is_exist_3(
                 database_1_postgresql_connection,
                 By3 {
                     application_user__id: incoming.application_user__id,
@@ -214,18 +214,18 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
             {
                 return Result::Ok(UnifiedReport::precedent(Precedent::ApplicationUser_NotFound));
             }
-            let application_user_access_token = ApplicationUserAccessToken::new(
-                Generator::<ApplicationUserAccessToken_Id>::generate(),
+            let application_user_access_token = UserAccessToken::new(
+                Generator::<UserAccessToken_Id>::generate(),
                 incoming.application_user__id,
                 Cow::Borrowed(incoming.application_user_device__id.as_str()),
-                Generator::<ApplicationUserAccessToken_ExpiresAt>::generate()?,
+                Generator::<UserAccessToken_ExpiresAt>::generate()?,
             );
             let application_user_access_token__id = application_user_access_token.id.as_str();
-            let application_user_access_refresh_token__obfuscation_value = Generator::<ApplicationUserAccessRefreshToken_ObfuscationValue>::generate();
-            let application_user_access_refresh_token__expires_at = Generator::<ApplicationUserAccessRefreshToken_ExpiresAt>::generate()?;
-            let application_user_access_refresh_token__updated_at = Generator::<ApplicationUserAccessRefreshToken_UpdatedAt>::generate();
+            let application_user_access_refresh_token__obfuscation_value = Generator::<UserAccessRefreshToken_ObfuscationValue>::generate();
+            let application_user_access_refresh_token__expires_at = Generator::<UserAccessRefreshToken_ExpiresAt>::generate()?;
+            let application_user_access_refresh_token__updated_at = Generator::<UserAccessRefreshToken_UpdatedAt>::generate();
             // TODO  TRANZACTION
-            let application_user_access_refresh_token = match PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::find_1(
+            let application_user_access_refresh_token = match PostgresqlRepository::<UserAccessRefreshToken<'_>>::find_1(
                 database_2_postgresql_connection,
                 By2 {
                     application_user__id: incoming.application_user__id,
@@ -239,7 +239,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                     application_user_access_refresh_token_.obfuscation_value = application_user_access_refresh_token__obfuscation_value;
                     application_user_access_refresh_token_.expires_at = application_user_access_refresh_token__expires_at;
                     application_user_access_refresh_token_.updated_at = application_user_access_refresh_token__updated_at;
-                    PostgresqlRepository::<ApplicationUserAccessRefreshToken>::update_1(
+                    PostgresqlRepository::<UserAccessRefreshToken>::update_1(
                         database_2_postgresql_connection,
                         Update1 {
                             application_user_access_token__id: application_user_access_refresh_token_.application_user_access_token__id.as_ref(),
@@ -256,7 +256,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                     application_user_access_refresh_token_
                 }
                 Option::None => {
-                    let application_user_access_refresh_token_ = PostgresqlRepository::<ApplicationUserAccessRefreshToken<'_>>::create_1(
+                    let application_user_access_refresh_token_ = PostgresqlRepository::<UserAccessRefreshToken<'_>>::create_1(
                         database_2_postgresql_connection,
                         ApplicationUserAccessRefreshTokenInsert1 {
                             application_user__id: incoming.application_user__id,
@@ -272,11 +272,11 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                 }
             };
             // TODO  TRANZACTION
-            let application_user_access_token_encoded = Encoder::<ApplicationUserAccessToken<'_>>::encode(
+            let application_user_access_token_encoded = Encoder::<UserAccessToken<'_>>::encode(
                 inner.environment_configuration,
                 &application_user_access_token,
             )?;
-            let application_user_access_refresh_token_encoded = Encoder::<ApplicationUserAccessRefreshToken<'_>>::encode(
+            let application_user_access_refresh_token_encoded = Encoder::<UserAccessRefreshToken<'_>>::encode(
                 inner.environment_configuration,
                 &application_user_access_refresh_token,
             )?;
@@ -290,7 +290,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                             file!(),
                         ),
                     )?;
-                    let application_user_device = PostgresqlRepository::<ApplicationUserDevice>::create_1(
+                    let application_user_device = PostgresqlRepository::<UserDevice>::create_1(
                         &*database_1_postgresql_pooled_connection,
                         ApplicationUserDeviceInsert1 {
                             application_user_device__id: incoming.application_user_device__id,
@@ -304,7 +304,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                             file!(),
                         ),
                     )?;
-                    PostgresqlRepository::<ApplicationUserAuthorizationToken<'_>>::delete_1(
+                    PostgresqlRepository::<UserAuthorizationToken<'_>>::delete_1(
                         &*database_2_postgresql_pooled_connection,
                         By1 {
                             application_user__id: application_user_device.application_user__id,

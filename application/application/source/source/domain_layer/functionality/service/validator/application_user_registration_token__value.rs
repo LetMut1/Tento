@@ -1,5 +1,5 @@
 use super::Validator;
-use crate::domain_layer::data::entity::application_user_registration_token::ApplicationUserRegistrationToken_Value;
+use crate::domain_layer::data::entity::user_registration_token::UserRegistrationToken_Value;
 use aggregate_error::{
     AggregateError,
     Backtrace,
@@ -10,13 +10,13 @@ use aggregate_error::{
 use regex::Regex;
 use std::sync::OnceLock;
 static REGULAR_EXPRESSION: OnceLock<Regex> = OnceLock::new();
-impl Validator<ApplicationUserRegistrationToken_Value> {
+impl Validator<UserRegistrationToken_Value> {
     pub fn is_valid<'a>(application_user_authorization_token__value: &'a str) -> Result<bool, AggregateError> {
         let regular_expression = match REGULAR_EXPRESSION.get() {
             Option::Some(regular_expression_) => regular_expression_,
             Option::None => {
                 if let Result::Err(_) = REGULAR_EXPRESSION.set(
-                    Regex::new(ApplicationUserRegistrationToken_Value::REGULAR_EXPRESSION).into_logic(
+                    Regex::new(UserRegistrationToken_Value::REGULAR_EXPRESSION).into_logic(
                         Backtrace::new(
                             line!(),
                             file!(),
