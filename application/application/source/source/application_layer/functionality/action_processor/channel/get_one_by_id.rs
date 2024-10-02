@@ -36,7 +36,7 @@ use crate::{
     },
 };
 use action_processor_incoming_outcoming::{
-    action_processor::channel___base::get_one_by_id::{
+    action_processor::channel::get_one_by_id::{
         Incoming,
         Outcoming,
         Precedent,
@@ -57,8 +57,8 @@ use tokio_postgres::{
 };
 use unified_report::UnifiedReport;
 use void::Void;
-pub struct Channel__Base___GetOneById;
-impl ActionProcessor_ for ActionProcessor<Channel__Base___GetOneById> {
+pub struct Channel_GetOneById;
+impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
     type Incoming = Incoming;
     type Outcoming = Outcoming;
     type Precedent = Precedent;

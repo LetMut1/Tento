@@ -18,13 +18,13 @@ use crate::{
             send_email_for_register::UserAuthorization_SendEmailForRegister,
             send_email_for_reset_password::UserAuthorization_SendEmailForResetPassword,
         },
-        channel___base::{
-            get_many_by_name_in_subscriptions::Channel__Base___GetManyByNameInSubscriptions,
-            get_many_by_subscription::Channel__Base___GetManyBySubscription,
-            get_many_public_by_name::Channel__Base___GetManyPublicByName,
-            get_one_by_id::Channel__Base___GetOneById,
+        channel::{
+            get_many_by_name_in_subscriptions::Channel_GetManyByNameInSubscriptions,
+            get_many_by_subscription::Channel_GetManyBySubscription,
+            get_many_public_by_name::Channel_GetManyPublicByName,
+            get_one_by_id::Channel_GetOneById,
         },
-        channel_subscription___base::create::ChannelSubscription__Base___Create,
+        channel_subscription::create::ChannelSubscription_Create,
         Inner as ActionProcessorInner,
     },
     infrastructure_layer::{
@@ -148,33 +148,33 @@ pub const ACTION_ROUTE: ActionRoute = ActionRoute {
         #[cfg(feature = "manual_testing")]
         deauthorize_from_all_devices_: UserAuthorization::DEAUTHORIZE_FROM_ALL_DEVICES_,
     },
-    channel___base: Channel__Base {
-        get_one_by_id: Channel__Base::GET_ONE_BY_ID,
-        get_many_by_name_in_subscription: Channel__Base::GET_MANY_BY_NAME_IN_SUBSCRIPTIONS,
-        get_many_by_subscription: Channel__Base::GET_MANY_BY_SUBSCRIPTION,
-        get_many_public_by_name: Channel__Base::GET_MANY_PUBLIC_BY_NAME,
-        create: Channel__Base::CREATE,
-        check_name_for_existing: Channel__Base::CHECK_NAME_FOR_EXISTING,
-        check_linked_name_for_existing: Channel__Base::CHECK_LINKED_NAME_FOR_EXISTING,
+    channel: Channel {
+        get_one_by_id: Channel::GET_ONE_BY_ID,
+        get_many_by_name_in_subscription: Channel::GET_MANY_BY_NAME_IN_SUBSCRIPTIONS,
+        get_many_by_subscription: Channel::GET_MANY_BY_SUBSCRIPTION,
+        get_many_public_by_name: Channel::GET_MANY_PUBLIC_BY_NAME,
+        create: Channel::CREATE,
+        check_name_for_existing: Channel::CHECK_NAME_FOR_EXISTING,
+        check_linked_name_for_existing: Channel::CHECK_LINKED_NAME_FOR_EXISTING,
         #[cfg(feature = "manual_testing")]
-        get_one_by_id_: Channel__Base::GET_ONE_BY_ID_,
+        get_one_by_id_: Channel::GET_ONE_BY_ID_,
         #[cfg(feature = "manual_testing")]
-        get_many_by_name_in_subscription_: Channel__Base::GET_MANY_BY_NAME_IN_SUBSCRIPTIONS_,
+        get_many_by_name_in_subscription_: Channel::GET_MANY_BY_NAME_IN_SUBSCRIPTIONS_,
         #[cfg(feature = "manual_testing")]
-        get_many_by_subscription_: Channel__Base::GET_MANY_BY_SUBSCRIPTION_,
+        get_many_by_subscription_: Channel::GET_MANY_BY_SUBSCRIPTION_,
         #[cfg(feature = "manual_testing")]
-        get_many_public_by_name_: Channel__Base::GET_MANY_PUBLIC_BY_NAME_,
+        get_many_public_by_name_: Channel::GET_MANY_PUBLIC_BY_NAME_,
         #[cfg(feature = "manual_testing")]
-        create_: Channel__Base::CREATE_,
+        create_: Channel::CREATE_,
         #[cfg(feature = "manual_testing")]
-        check_name_for_existing_: Channel__Base::CHECK_NAME_FOR_EXISTING_,
+        check_name_for_existing_: Channel::CHECK_NAME_FOR_EXISTING_,
         #[cfg(feature = "manual_testing")]
-        check_linked_name_for_existing_: Channel__Base::CHECK_LINKED_NAME_FOR_EXISTING_,
+        check_linked_name_for_existing_: Channel::CHECK_LINKED_NAME_FOR_EXISTING_,
     },
-    channel_subscription___base: ChannelSubscription__Base {
-        create: ChannelSubscription__Base::CREATE,
+    channel_subscription: ChannelSubscription {
+        create: ChannelSubscription::CREATE,
         #[cfg(feature = "manual_testing")]
-        create_: ChannelSubscription__Base::CREATE_,
+        create_: ChannelSubscription::CREATE_,
     },
 };
 static CONNECTION_QUANTITY: AtomicU64 = AtomicU64::new(0);
@@ -609,9 +609,9 @@ impl HttpServer {
             )?;
         router
             .insert(
-                ACTION_ROUTE.channel___base.get_one_by_id,
-                ActionRoute_::Channel__Base {
-                    channel___base: Channel__Base_::GetOneById,
+                ACTION_ROUTE.channel.get_one_by_id,
+                ActionRoute_::Channel {
+                    channel: Channel_::GetOneById,
                 },
             )
             .into_logic(
@@ -622,9 +622,9 @@ impl HttpServer {
             )?;
         router
             .insert(
-                ACTION_ROUTE.channel___base.get_many_by_name_in_subscription,
-                ActionRoute_::Channel__Base {
-                    channel___base: Channel__Base_::GetManyByNameInSubscriptions,
+                ACTION_ROUTE.channel.get_many_by_name_in_subscription,
+                ActionRoute_::Channel {
+                    channel: Channel_::GetManyByNameInSubscriptions,
                 },
             )
             .into_logic(
@@ -635,9 +635,9 @@ impl HttpServer {
             )?;
         router
             .insert(
-                ACTION_ROUTE.channel___base.get_many_by_subscription,
-                ActionRoute_::Channel__Base {
-                    channel___base: Channel__Base_::GetManyBySubscription,
+                ACTION_ROUTE.channel.get_many_by_subscription,
+                ActionRoute_::Channel {
+                    channel: Channel_::GetManyBySubscription,
                 },
             )
             .into_logic(
@@ -648,9 +648,9 @@ impl HttpServer {
             )?;
         router
             .insert(
-                ACTION_ROUTE.channel___base.get_many_public_by_name,
-                ActionRoute_::Channel__Base {
-                    channel___base: Channel__Base_::GetManyPublicByName,
+                ACTION_ROUTE.channel.get_many_public_by_name,
+                ActionRoute_::Channel {
+                    channel: Channel_::GetManyPublicByName,
                 },
             )
             .into_logic(
@@ -661,9 +661,9 @@ impl HttpServer {
             )?;
         router
             .insert(
-                ACTION_ROUTE.channel___base.create,
-                ActionRoute_::Channel__Base {
-                    channel___base: Channel__Base_::Create,
+                ACTION_ROUTE.channel.create,
+                ActionRoute_::Channel {
+                    channel: Channel_::Create,
                 },
             )
             .into_logic(
@@ -674,9 +674,9 @@ impl HttpServer {
             )?;
         router
             .insert(
-                ACTION_ROUTE.channel___base.check_name_for_existing,
-                ActionRoute_::Channel__Base {
-                    channel___base: Channel__Base_::CheckNameForExisting,
+                ACTION_ROUTE.channel.check_name_for_existing,
+                ActionRoute_::Channel {
+                    channel: Channel_::CheckNameForExisting,
                 },
             )
             .into_logic(
@@ -687,9 +687,9 @@ impl HttpServer {
             )?;
         router
             .insert(
-                ACTION_ROUTE.channel___base.check_linked_name_for_existing,
-                ActionRoute_::Channel__Base {
-                    channel___base: Channel__Base_::CheckLinkedNameForExisting,
+                ACTION_ROUTE.channel.check_linked_name_for_existing,
+                ActionRoute_::Channel {
+                    channel: Channel_::CheckLinkedNameForExisting,
                 },
             )
             .into_logic(
@@ -700,9 +700,9 @@ impl HttpServer {
             )?;
         router
             .insert(
-                ACTION_ROUTE.channel_subscription___base.create,
-                ActionRoute_::ChannelSubscription__Base {
-                    channel_subscription___base: ChannelSubscription__Base_::Create,
+                ACTION_ROUTE.channel_subscription.create,
+                ActionRoute_::ChannelSubscription {
+                    channel_subscription: ChannelSubscription_::Create,
                 },
             )
             .into_logic(
@@ -923,9 +923,9 @@ impl HttpServer {
                 )?;
             router
                 .insert(
-                    ACTION_ROUTE.channel___base.get_one_by_id_,
-                    ActionRoute_::Channel__Base {
-                        channel___base: Channel__Base_::GetOneById_,
+                    ACTION_ROUTE.channel.get_one_by_id_,
+                    ActionRoute_::Channel {
+                        channel: Channel_::GetOneById_,
                     },
                 )
                 .into_logic(
@@ -936,9 +936,9 @@ impl HttpServer {
                 )?;
             router
                 .insert(
-                    ACTION_ROUTE.channel___base.get_many_by_name_in_subscription_,
-                    ActionRoute_::Channel__Base {
-                        channel___base: Channel__Base_::GetManyByNameInSubscriptions_,
+                    ACTION_ROUTE.channel.get_many_by_name_in_subscription_,
+                    ActionRoute_::Channel {
+                        channel: Channel_::GetManyByNameInSubscriptions_,
                     },
                 )
                 .into_logic(
@@ -949,9 +949,9 @@ impl HttpServer {
                 )?;
             router
                 .insert(
-                    ACTION_ROUTE.channel___base.get_many_by_subscription_,
-                    ActionRoute_::Channel__Base {
-                        channel___base: Channel__Base_::GetManyBySubscription_,
+                    ACTION_ROUTE.channel.get_many_by_subscription_,
+                    ActionRoute_::Channel {
+                        channel: Channel_::GetManyBySubscription_,
                     },
                 )
                 .into_logic(
@@ -962,9 +962,9 @@ impl HttpServer {
                 )?;
             router
                 .insert(
-                    ACTION_ROUTE.channel___base.get_many_public_by_name_,
-                    ActionRoute_::Channel__Base {
-                        channel___base: Channel__Base_::GetManyPublicByName_,
+                    ACTION_ROUTE.channel.get_many_public_by_name_,
+                    ActionRoute_::Channel {
+                        channel: Channel_::GetManyPublicByName_,
                     },
                 )
                 .into_logic(
@@ -975,9 +975,9 @@ impl HttpServer {
                 )?;
             router
                 .insert(
-                    ACTION_ROUTE.channel___base.create_,
-                    ActionRoute_::Channel__Base {
-                        channel___base: Channel__Base_::Create_,
+                    ACTION_ROUTE.channel.create_,
+                    ActionRoute_::Channel {
+                        channel: Channel_::Create_,
                     },
                 )
                 .into_logic(
@@ -988,9 +988,9 @@ impl HttpServer {
                 )?;
             router
                 .insert(
-                    ACTION_ROUTE.channel___base.check_name_for_existing_,
-                    ActionRoute_::Channel__Base {
-                        channel___base: Channel__Base_::CheckNameForExisting_,
+                    ACTION_ROUTE.channel.check_name_for_existing_,
+                    ActionRoute_::Channel {
+                        channel: Channel_::CheckNameForExisting_,
                     },
                 )
                 .into_logic(
@@ -1001,9 +1001,9 @@ impl HttpServer {
                 )?;
             router
                 .insert(
-                    ACTION_ROUTE.channel___base.check_linked_name_for_existing_,
-                    ActionRoute_::Channel__Base {
-                        channel___base: Channel__Base_::CheckLinkedNameForExisting_,
+                    ACTION_ROUTE.channel.check_linked_name_for_existing_,
+                    ActionRoute_::Channel {
+                        channel: Channel_::CheckLinkedNameForExisting_,
                     },
                 )
                 .into_logic(
@@ -1014,9 +1014,9 @@ impl HttpServer {
                 )?;
             router
                 .insert(
-                    ACTION_ROUTE.channel_subscription___base.create_,
-                    ActionRoute_::ChannelSubscription__Base {
-                        channel_subscription___base: ChannelSubscription__Base_::Create_,
+                    ACTION_ROUTE.channel_subscription.create_,
+                    ActionRoute_::ChannelSubscription {
+                        channel_subscription: ChannelSubscription_::Create_,
                     },
                 )
                 .into_logic(
@@ -1332,40 +1332,40 @@ impl HttpServer {
                         }
                     }
                 }
-                &ActionRoute_::Channel__Base {
-                    ref channel___base,
+                &ActionRoute_::Channel {
+                    ref channel,
                 } => {
                     match (
-                        channel___base,
+                        channel,
                         &parts.method,
                     ) {
                         // Should be GET. But due to restrictions of third-party services, the method is put in Post.
-                        (&Channel__Base_::GetOneById, &Method::POST) => {
-                            return Action::<Channel__Base___GetOneById>::run(
+                        (&Channel_::GetOneById, &Method::POST) => {
+                            return Action::<Channel_GetOneById>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
                         // Should be GET. But due to restrictions of third-party services, the method is put in Post.
-                        (&Channel__Base_::GetManyByNameInSubscriptions, &Method::POST) => {
-                            return Action::<Channel__Base___GetManyByNameInSubscriptions>::run(
+                        (&Channel_::GetManyByNameInSubscriptions, &Method::POST) => {
+                            return Action::<Channel_GetManyByNameInSubscriptions>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
                         // Should be GET. But due to restrictions of third-party services, the method is put in Post.
-                        (&Channel__Base_::GetManyBySubscription, &Method::POST) => {
-                            return Action::<Channel__Base___GetManyBySubscription>::run(
+                        (&Channel_::GetManyBySubscription, &Method::POST) => {
+                            return Action::<Channel_GetManyBySubscription>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
                         // Should be GET. But due to restrictions of third-party services, the method is put in Post.
-                        (&Channel__Base_::GetManyPublicByName, &Method::POST) => {
-                            return Action::<Channel__Base___GetManyPublicByName>::run(
+                        (&Channel_::GetManyPublicByName, &Method::POST) => {
+                            return Action::<Channel_GetManyPublicByName>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
@@ -1375,36 +1375,36 @@ impl HttpServer {
                             #[cfg(feature = "manual_testing")]
                             {
                                 match (
-                                    channel___base,
+                                    channel,
                                     &parts.method,
                                 ) {
                                     // Should be GET. But due to restrictions of third-party services, the method is put in Post.
-                                    (&Channel__Base_::GetOneById_, &Method::POST) => {
-                                        return Action::<Channel__Base___GetOneById>::run_(
+                                    (&Channel_::GetOneById_, &Method::POST) => {
+                                        return Action::<Channel_GetOneById>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
                                     // Should be GET. But due to restrictions of third-party services, the method is put in Post.
-                                    (&Channel__Base_::GetManyByNameInSubscriptions_, &Method::POST) => {
-                                        return Action::<Channel__Base___GetManyByNameInSubscriptions>::run_(
+                                    (&Channel_::GetManyByNameInSubscriptions_, &Method::POST) => {
+                                        return Action::<Channel_GetManyByNameInSubscriptions>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
                                     // Should be GET. But due to restrictions of third-party services, the method is put in Post.
-                                    (&Channel__Base_::GetManyBySubscription_, &Method::POST) => {
-                                        return Action::<Channel__Base___GetManyBySubscription>::run_(
+                                    (&Channel_::GetManyBySubscription_, &Method::POST) => {
+                                        return Action::<Channel_GetManyBySubscription>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
                                     // Should be GET. But due to restrictions of third-party services, the method is put in Post.
-                                    (&Channel__Base_::GetManyPublicByName_, &Method::POST) => {
-                                        return Action::<Channel__Base___GetManyPublicByName>::run_(
+                                    (&Channel_::GetManyPublicByName_, &Method::POST) => {
+                                        return Action::<Channel_GetManyPublicByName>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
@@ -1416,15 +1416,15 @@ impl HttpServer {
                         }
                     }
                 }
-                &ActionRoute_::ChannelSubscription__Base {
-                    ref channel_subscription___base,
+                &ActionRoute_::ChannelSubscription {
+                    ref channel_subscription,
                 } => {
                     match (
-                        channel_subscription___base,
+                        channel_subscription,
                         &parts.method,
                     ) {
-                        (&ChannelSubscription__Base_::Create, &Method::POST) => {
-                            return Action::<ChannelSubscription__Base___Create>::run(
+                        (&ChannelSubscription_::Create, &Method::POST) => {
+                            return Action::<ChannelSubscription_Create>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
@@ -1434,11 +1434,11 @@ impl HttpServer {
                             #[cfg(feature = "manual_testing")]
                             {
                                 match (
-                                    channel_subscription___base,
+                                    channel_subscription,
                                     &parts.method,
                                 ) {
-                                    (&ChannelSubscription__Base_::Create_, &Method::POST) => {
-                                        return Action::<ChannelSubscription__Base___Create>::run_(
+                                    (&ChannelSubscription_::Create_, &Method::POST) => {
+                                        return Action::<ChannelSubscription_Create>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
@@ -1481,8 +1481,8 @@ where
 }
 pub struct ActionRoute {
     pub user_authorization: UserAuthorization,
-    pub channel___base: Channel__Base,
-    pub channel_subscription___base: ChannelSubscription__Base,
+    pub channel: Channel,
+    pub channel_subscription: ChannelSubscription,
 }
 #[cfg(feature = "manual_testing")]
 impl ActionRoute {
@@ -1623,7 +1623,7 @@ impl UserAuthorization {
         ActionRoute::CONCATENATING_PART
     );
 }
-pub struct Channel__Base {
+pub struct Channel {
     pub get_one_by_id: &'static str,
     pub get_many_by_name_in_subscription: &'static str,
     pub get_many_by_subscription: &'static str,
@@ -1646,7 +1646,7 @@ pub struct Channel__Base {
     #[cfg(feature = "manual_testing")]
     pub check_linked_name_for_existing_: &'static str,
 }
-impl Channel__Base {
+impl Channel {
     const GET_MANY_BY_NAME_IN_SUBSCRIPTIONS: &'static str = "/1/18";
     const GET_MANY_BY_SUBSCRIPTION: &'static str = "/1/19";
     const GET_MANY_PUBLIC_BY_NAME: &'static str = "/1/20";
@@ -1656,48 +1656,48 @@ impl Channel__Base {
     const CHECK_LINKED_NAME_FOR_EXISTING: &'static str = "/1/24";
 }
 #[cfg(feature = "manual_testing")]
-impl Channel__Base {
+impl Channel {
     const GET_MANY_BY_NAME_IN_SUBSCRIPTIONS_: &'static str = concatcp!(
-        Channel__Base::GET_MANY_BY_NAME_IN_SUBSCRIPTIONS,
+        Channel::GET_MANY_BY_NAME_IN_SUBSCRIPTIONS,
         ActionRoute::CONCATENATING_PART
     );
     const GET_MANY_BY_SUBSCRIPTION_: &'static str = concatcp!(
-        Channel__Base::GET_MANY_BY_SUBSCRIPTION,
+        Channel::GET_MANY_BY_SUBSCRIPTION,
         ActionRoute::CONCATENATING_PART
     );
     const GET_MANY_PUBLIC_BY_NAME_: &'static str = concatcp!(
-        Channel__Base::GET_MANY_PUBLIC_BY_NAME,
+        Channel::GET_MANY_PUBLIC_BY_NAME,
         ActionRoute::CONCATENATING_PART
     );
     const GET_ONE_BY_ID_: &'static str = concatcp!(
-        Channel__Base::GET_ONE_BY_ID,
+        Channel::GET_ONE_BY_ID,
         ActionRoute::CONCATENATING_PART
     );
     const CREATE_: &'static str = concatcp!(
-        Channel__Base::CREATE,
+        Channel::CREATE,
         ActionRoute::CONCATENATING_PART
     );
     const CHECK_NAME_FOR_EXISTING_: &'static str = concatcp!(
-        Channel__Base::CHECK_NAME_FOR_EXISTING,
+        Channel::CHECK_NAME_FOR_EXISTING,
         ActionRoute::CONCATENATING_PART
     );
     const CHECK_LINKED_NAME_FOR_EXISTING_: &'static str = concatcp!(
-        Channel__Base::CHECK_LINKED_NAME_FOR_EXISTING,
+        Channel::CHECK_LINKED_NAME_FOR_EXISTING,
         ActionRoute::CONCATENATING_PART
     );
 }
-pub struct ChannelSubscription__Base {
+pub struct ChannelSubscription {
     pub create: &'static str,
     #[cfg(feature = "manual_testing")]
     pub create_: &'static str,
 }
-impl ChannelSubscription__Base {
+impl ChannelSubscription {
     const CREATE: &'static str = "/1/21";
 }
 #[cfg(feature = "manual_testing")]
-impl ChannelSubscription__Base {
+impl ChannelSubscription {
     const CREATE_: &'static str = concatcp!(
-        ChannelSubscription__Base::CREATE,
+        ChannelSubscription::CREATE,
         ActionRoute::CONCATENATING_PART
     );
 }
@@ -1705,11 +1705,11 @@ pub enum ActionRoute_ {
     UserAuthorization {
         user_authorization: UserAuthorization_,
     },
-    Channel__Base {
-        channel___base: Channel__Base_,
+    Channel {
+        channel: Channel_,
     },
-    ChannelSubscription__Base {
-        channel_subscription___base: ChannelSubscription__Base_,
+    ChannelSubscription {
+        channel_subscription: ChannelSubscription_,
     },
 }
 pub enum UserAuthorization_ {
@@ -1762,7 +1762,7 @@ pub enum UserAuthorization_ {
     #[cfg(feature = "manual_testing")]
     DeauthorizeFromAllDevices_,
 }
-pub enum Channel__Base_ {
+pub enum Channel_ {
     GetOneById,
     GetManyByNameInSubscriptions,
     GetManyBySubscription,
@@ -1785,7 +1785,7 @@ pub enum Channel__Base_ {
     #[cfg(feature = "manual_testing")]
     CheckLinkedNameForExisting_,
 }
-pub enum ChannelSubscription__Base_ {
+pub enum ChannelSubscription_ {
     Create,
     #[cfg(feature = "manual_testing")]
     Create_,

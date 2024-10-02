@@ -19,7 +19,7 @@ use crate::{
         functionality::repository::postgresql::PostgresqlRepository,
     },
 };
-use action_processor_incoming_outcoming::action_processor::channel___base::check_linked_name_for_existing::{
+use action_processor_incoming_outcoming::action_processor::channel::check_name_for_existing::{
     Incoming,
     Outcoming,
     Precedent
@@ -35,12 +35,12 @@ use tokio_postgres::{
     },
     Socket,
 };
-use crate::domain_layer::data::entity::channel::Channel_LinkedName;
+use crate::domain_layer::data::entity::channel::Channel_Name;
 use crate::infrastructure_layer::functionality::repository::postgresql::channel::By2;
 use unified_report::UnifiedReport;
 use void::Void;
-pub struct Channel__Base___CheckLinkedNameForExisting;
-impl ActionProcessor_ for ActionProcessor<Channel__Base___CheckLinkedNameForExisting> {
+pub struct Channel_CheckNameForExisting;
+impl ActionProcessor_ for ActionProcessor<Channel_CheckNameForExisting> {
     type Incoming = Incoming;
     type Outcoming = Outcoming;
     type Precedent = Precedent;
@@ -69,7 +69,7 @@ impl ActionProcessor_ for ActionProcessor<Channel__Base___CheckLinkedNameForExis
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_InUserAccessTokenBlackList));
                 }
             };
-            if !Validator::<Channel_LinkedName>::is_valid(incoming.channel__linked_name.as_str()) {
+            if !Validator::<Channel_Name>::is_valid(incoming.channel__name.as_str()) {
                 return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
@@ -82,7 +82,7 @@ impl ActionProcessor_ for ActionProcessor<Channel__Base___CheckLinkedNameForExis
             let is_exist = PostgresqlRepository::<Channel<'_>>::is_exist_1(
                 &*inner.get_database_1_postgresql_pooled_connection().await?,
                 By2 {
-                    channel__name: incoming.channel__linked_name.as_str(),
+                    channel__name: incoming.channel__name.as_str(),
                 },
             ).await?;
             return Result::Ok(

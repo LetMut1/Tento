@@ -7,7 +7,7 @@ use crate::{
     domain_layer::{
         data::entity::{
             user_access_token::UserAccessToken,
-            channel::Channel_Name,
+            channel::Channel_Id,
         },
         functionality::service::{
             extractor::{
@@ -20,13 +20,13 @@ use crate::{
     infrastructure_layer::{
         data::capture::Capture,
         functionality::repository::postgresql::{
-            common::By2,
+            common::By3,
             PostgresqlRepository,
         },
     },
 };
 use action_processor_incoming_outcoming::{
-    action_processor::channel___base::get_many_by_name_in_subscriptions::{
+    action_processor::channel::get_many_by_subscription::{
         Incoming,
         Outcoming,
         Precedent,
@@ -47,8 +47,8 @@ use tokio_postgres::{
 };
 use unified_report::UnifiedReport;
 use void::Void;
-pub struct Channel__Base___GetManyByNameInSubscriptions;
-impl ActionProcessor_ for ActionProcessor<Channel__Base___GetManyByNameInSubscriptions> {
+pub struct Channel_GetManyBySubscription;
+impl ActionProcessor_ for ActionProcessor<Channel_GetManyBySubscription> {
     type Incoming = Incoming;
     type Outcoming = Outcoming;
     type Precedent = Precedent;
@@ -78,28 +78,8 @@ impl ActionProcessor_ for ActionProcessor<Channel__Base___GetManyByNameInSubscri
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_InUserAccessTokenBlackList));
                 }
             };
-            if incoming.limit <= 0 || incoming.limit > LIMIT {
-                return Result::Err(
-                    AggregateError::new_invalid_argument(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-            if !Validator::<Channel_Name>::is_valid(incoming.channel__name.as_str()) {
-                return Result::Err(
-                    AggregateError::new_invalid_argument(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    ),
-                );
-            }
-            if let Option::Some(ref requery___channel__name_) = incoming.requery___channel__name {
-                if !Validator::<Channel_Name>::is_valid(requery___channel__name_.as_str()) {
+            if let Option::Some(requery___channel__id_) = incoming.requery___channel__id {
+                if !Validator::<Channel_Id>::is_valid(requery___channel__id_) {
                     return Result::Err(
                         AggregateError::new_invalid_argument(
                             Backtrace::new(
@@ -110,13 +90,22 @@ impl ActionProcessor_ for ActionProcessor<Channel__Base___GetManyByNameInSubscri
                     );
                 }
             }
+            if incoming.limit <= 0 || incoming.limit > LIMIT {
+                return Result::Err(
+                    AggregateError::new_invalid_argument(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                );
+            }
             let database_1_postgresql_pooled_connection = inner.get_database_1_postgresql_pooled_connection().await?;
-            let common_registry = PostgresqlRepository::<Common1>::find_2(
+            let common_registry = PostgresqlRepository::<Common1>::find_3(
                 &*database_1_postgresql_pooled_connection,
-                By2 {
+                By3 {
                     user__id: user_access_token.user__id,
-                    channel__name: incoming.channel__name.as_str(),
-                    requery___channel__name: incoming.requery___channel__name.as_deref(),
+                    requery___channel__id: incoming.requery___channel__id,
                 },
                 incoming.limit,
             )

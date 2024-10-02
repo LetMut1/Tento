@@ -22,7 +22,7 @@ use crate::{
         }, service::resolver::{date_time::UnixTime, Resolver}},
     },
 };
-use action_processor_incoming_outcoming::action_processor::channel___base::create::{
+use action_processor_incoming_outcoming::action_processor::channel::create::{
     Incoming,
     Outcoming,
     Precedent,
@@ -44,8 +44,8 @@ use crate::infrastructure_layer::functionality::repository::postgresql::channel:
 use crate::infrastructure_layer::functionality::repository::postgresql::channel::By2;
 use unified_report::UnifiedReport;
 use void::Void;
-pub struct Channel__Base___Create;
-impl ActionProcessor_ for ActionProcessor<Channel__Base___Create> {
+pub struct Channel_Create;
+impl ActionProcessor_ for ActionProcessor<Channel_Create> {
     type Incoming = Incoming;
     type Outcoming = Outcoming;
     type Precedent = Precedent;

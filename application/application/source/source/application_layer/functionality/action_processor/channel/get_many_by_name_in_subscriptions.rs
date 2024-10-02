@@ -7,10 +7,7 @@ use crate::{
     domain_layer::{
         data::entity::{
             user_access_token::UserAccessToken,
-            channel::{
-                Channel_Name,
-                Channel_VisabilityModifier,
-            },
+            channel::Channel_Name,
         },
         functionality::service::{
             extractor::{
@@ -23,13 +20,13 @@ use crate::{
     infrastructure_layer::{
         data::capture::Capture,
         functionality::repository::postgresql::{
-            common::By1,
+            common::By2,
             PostgresqlRepository,
         },
     },
 };
 use action_processor_incoming_outcoming::{
-    action_processor::channel___base::get_many_public_by_name::{
+    action_processor::channel::get_many_by_name_in_subscriptions::{
         Incoming,
         Outcoming,
         Precedent,
@@ -50,8 +47,8 @@ use tokio_postgres::{
 };
 use unified_report::UnifiedReport;
 use void::Void;
-pub struct Channel__Base___GetManyPublicByName;
-impl ActionProcessor_ for ActionProcessor<Channel__Base___GetManyPublicByName> {
+pub struct Channel_GetManyByNameInSubscriptions;
+impl ActionProcessor_ for ActionProcessor<Channel_GetManyByNameInSubscriptions> {
     type Incoming = Incoming;
     type Outcoming = Outcoming;
     type Precedent = Precedent;
@@ -114,13 +111,12 @@ impl ActionProcessor_ for ActionProcessor<Channel__Base___GetManyPublicByName> {
                 }
             }
             let database_1_postgresql_pooled_connection = inner.get_database_1_postgresql_pooled_connection().await?;
-            let common_registry = PostgresqlRepository::<Common1>::find_1(
+            let common_registry = PostgresqlRepository::<Common1>::find_2(
                 &*database_1_postgresql_pooled_connection,
-                By1 {
+                By2 {
                     user__id: user_access_token.user__id,
                     channel__name: incoming.channel__name.as_str(),
                     requery___channel__name: incoming.requery___channel__name.as_deref(),
-                    channel__visability_modifier: Channel_VisabilityModifier::from_representation(Channel_VisabilityModifier::Public),
                 },
                 incoming.limit,
             )

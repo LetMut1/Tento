@@ -1,6 +1,6 @@
 pub mod user_authorization;
-pub mod channel___base;
-pub mod channel_subscription___base;
+pub mod channel;
+pub mod channel_subscription;
 use crate::infrastructure_layer::data::{
     capture::Capture,
     environment_configuration::environment_configuration::EnvironmentConfiguration,

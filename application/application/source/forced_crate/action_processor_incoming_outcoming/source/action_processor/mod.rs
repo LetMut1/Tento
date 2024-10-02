@@ -1,3 +1,3 @@
 pub mod user_authorization;
-pub mod channel___base;
-pub mod channel_subscription___base;
+pub mod channel;
+pub mod channel_subscription;

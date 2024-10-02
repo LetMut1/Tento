@@ -8,11 +8,9 @@ use crate::{
         data::entity::{
             user_access_token::UserAccessToken,
             channel::{
-                Channel,
-                Channel_AccessModifier,
-                Channel_Id,
+                Channel_Name,
+                Channel_VisabilityModifier,
             },
-            channel_subscription::ChannelSubscription,
         },
         functionality::service::{
             extractor::{
@@ -24,16 +22,19 @@ use crate::{
     },
     infrastructure_layer::{
         data::capture::Capture,
-        functionality::{repository::postgresql::{
-            channel::By1,
-            channel_subscription::Insert1,
+        functionality::repository::postgresql::{
+            common::By1,
             PostgresqlRepository,
-        }, service::resolver::{date_time::UnixTime, Resolver}},
+        },
     },
 };
-use action_processor_incoming_outcoming::action_processor::channel_subscription___base::create::{
-    Incoming,
-    Precedent,
+use action_processor_incoming_outcoming::{
+    action_processor::channel::get_many_public_by_name::{
+        Incoming,
+        Outcoming,
+        Precedent,
+    },
+    Common1,
 };
 use aggregate_error::{
     AggregateError,
@@ -49,10 +50,10 @@ use tokio_postgres::{
 };
 use unified_report::UnifiedReport;
 use void::Void;
-pub struct ChannelSubscription__Base___Create;
-impl ActionProcessor_ for ActionProcessor<ChannelSubscription__Base___Create> {
+pub struct Channel_GetManyPublicByName;
+impl ActionProcessor_ for ActionProcessor<Channel_GetManyPublicByName> {
     type Incoming = Incoming;
-    type Outcoming = Void;
+    type Outcoming = Outcoming;
     type Precedent = Precedent;
     fn process<'a, T>(
         inner: &'a Inner<'_, T>,
@@ -64,6 +65,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription__Base___Create> {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
+        const LIMIT: i16 = 100;
         return async move {
             let user_access_token = match Extractor::<UserAccessToken<'_>>::extract(
                 inner.environment_configuration,
@@ -79,7 +81,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription__Base___Create> {
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_InUserAccessTokenBlackList));
                 }
             };
-            if !Validator::<Channel_Id>::is_valid(incoming.channel__id) {
+            if incoming.limit <= 0 || incoming.limit > LIMIT {
                 return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
@@ -89,37 +91,44 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription__Base___Create> {
                     ),
                 );
             }
-            let database_1_postgresql_pooled_connection = inner.get_database_1_postgresql_pooled_connection().await?;
-            let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
-            let channel = match PostgresqlRepository::<Channel<'_>>::find_1(
-                database_1_postgresql_connection,
-                By1 {
-                    channel__id: incoming.channel__id,
-                },
-            )
-            .await?
-            {
-                Option::Some(channel_) => channel_,
-                Option::None => {
-                    return Result::Ok(UnifiedReport::precedent(Precedent::Channel_NotFound));
+            if !Validator::<Channel_Name>::is_valid(incoming.channel__name.as_str()) {
+                return Result::Err(
+                    AggregateError::new_invalid_argument(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    ),
+                );
+            }
+            if let Option::Some(ref requery___channel__name_) = incoming.requery___channel__name {
+                if !Validator::<Channel_Name>::is_valid(requery___channel__name_.as_str()) {
+                    return Result::Err(
+                        AggregateError::new_invalid_argument(
+                            Backtrace::new(
+                                line!(),
+                                file!(),
+                            ),
+                        ),
+                    );
                 }
-            };
-            if channel.owner == user_access_token.user__id {
-                return Result::Ok(UnifiedReport::precedent(Precedent::User_IsChannelOwner));
             }
-            if let Channel_AccessModifier::Close = Channel_AccessModifier::to_representation(channel.access_modifier) {
-                return Result::Ok(UnifiedReport::precedent(Precedent::Channel_IsClose));
-            }
-            PostgresqlRepository::<ChannelSubscription>::create_1(
-                database_1_postgresql_connection,
-                Insert1 {
+            let database_1_postgresql_pooled_connection = inner.get_database_1_postgresql_pooled_connection().await?;
+            let common_registry = PostgresqlRepository::<Common1>::find_1(
+                &*database_1_postgresql_pooled_connection,
+                By1 {
                     user__id: user_access_token.user__id,
-                    channel__id: channel.id,
-                    channel_subscription__created_at: Resolver::<UnixTime>::get_now(),
+                    channel__name: incoming.channel__name.as_str(),
+                    requery___channel__name: incoming.requery___channel__name.as_deref(),
+                    channel__visability_modifier: Channel_VisabilityModifier::from_representation(Channel_VisabilityModifier::Public),
                 },
+                incoming.limit,
             )
             .await?;
-            return Result::Ok(UnifiedReport::target_empty());
+            let outcoming = Outcoming {
+                common_registry,
+            };
+            return Result::Ok(UnifiedReport::target_filled(outcoming));
         };
     }
 }
