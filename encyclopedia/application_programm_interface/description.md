@@ -1,12 +1,12 @@
 # Data standards
-- `application_user_access_token_encoded`:
+- `user_access_token_encoded`:
 ```
 struct UserAccessTokenEncoded {
     serialized: Vec<u8>,
     encoded: Vec<u8>,
 }
 ```
-- `application_user_access_refresh_token_encoded`:
+- `user_access_refresh_token_encoded`:
 ```
 struct UserAccessRefreshTokenEncoded(Vec<u8>)
 ```
@@ -47,28 +47,20 @@ enum Data<D> {
 }
 ```
 - `Result data` structures written under each API endpoint will be nested in the `data` field in the `struct Data<S>`.
-- Existing `communication_code`s can be founded here:
-```
-/application/application/source/presentation_layer/data/communication_code_registry.rs
-```
-- Existing `http_route`s can be founded here:
-```
-/application/application/source/presentation_layer/data/http_route_registry.rs
-```
 - `HTTP status code` unequal to `200` (it is [`400`, `599`]) have not got `HTTP body`.
 
 <br/><br/>
 
-# API for authorized application user.
- Every endpoint at this area requires an existing of `application_user_access_token_encoded`.
+# API for authorized user.
+ Every endpoint at this area requires an existing of `user_access_token_encoded`.
  - ## APPLICATION_USER__DEAUTHORIZE_FROM_ONE_DEVICE POST
 ```
-Deauthorizes application user from one device.
+Deauthorizes user from one device.
 ```
 ```
 Request data:
 struct Incoming {
-    application_user_access_token_encoded: <Data standards>
+    user_access_token_encoded: <Data standards>
 }
 ```
 ```
@@ -81,12 +73,12 @@ Communication codes:
 ```
  - ## APPLICATION_USER__DEAUTHORIZE_FROM_ALL_DEVICE POST
 ```
-Deauthorizes application user from all devices.
+Deauthorizes user from all devices.
 ```
 ```
 Request data:
 struct Incoming {
-    application_user_access_token_encoded: <Data standards>
+    user_access_token_encoded: <Data standards>
 }
 ```
 ```
@@ -104,7 +96,7 @@ Returns channel data by id.
 ```
 Request data:
 struct Incoming {
-    application_user_access_token_encoded: <Data standards>
+    user_access_token_encoded: <Data standards>
     channel__id: i64
 }
 ```
@@ -155,7 +147,7 @@ Returns channels the user is subscribed to by name.
 ```
 Request data:
 struct Incoming {
-    application_user_access_token_encoded: <Data standards>
+    user_access_token_encoded: <Data standards>
     channel__name: String,
     requery___channel__name: Option<String>,
     limit: i16
@@ -178,7 +170,7 @@ struct Outcoming {
 
 struct Common1 {
     channel: Channel1,
-    is_application_user_subscribed: bool
+    is_user_subscribed: bool
 }
 
 struct Channel1 {
@@ -203,7 +195,7 @@ Returns channels the user is subscribed to.
 ```
 Request data:
 struct Incoming {
-    application_user_access_token_encoded: <Data standards>
+    user_access_token_encoded: <Data standards>
     requery___channel__id: Option<i64>,
     limit: i16
 }
@@ -225,7 +217,7 @@ struct Outcoming {
 
 struct Common1 {
     channel: Channel1,
-    is_application_user_subscribed: bool
+    is_user_subscribed: bool
 }
 
 struct Channel1 {
@@ -250,7 +242,7 @@ Returns public channels by name.
 ```
 Request data:
 struct Incoming {
-    application_user_access_token_encoded: <Data standards>
+    user_access_token_encoded: <Data standards>
     channel__name: String,
     requery___channel__name: Option<String>,
     limit: i16
@@ -273,7 +265,7 @@ struct Outcoming {
 
 struct Common1 {
     channel: Channel1,
-    is_application_user_subscribed: bool
+    is_user_subscribed: bool
 }
 
 struct Channel1 {
@@ -293,12 +285,12 @@ Communication codes:
 ```
  - ## CHANNEL_SUBSCRIPTION__CREATE POST (GET functional)
 ```
-Subscribes application user to channel.
+Subscribes user to channel.
 ```
 ```
 Request data:
 struct Incoming {
-    application_user_access_token_encoded: <Data standards>
+    user_access_token_encoded: <Data standards>
     channel__id: i64
 }
 ```
@@ -315,10 +307,10 @@ Communication codes:
 ```
 <br/><br/>
 
-# API for not authorized application user.
+# API for not authorized user.
  - ## APPLICATION_USER__CHECK_EMAIL_FOR_EXISTING POST (GET functional)
 ```
-Checks application user email for existing.
+Checks user email for existing.
 ```
 ```
 Request data:
@@ -337,12 +329,12 @@ Communication codes: absent.
 ```
  - ## APPLICATION_USER__CHECK_NICKNAME_FOR_EXISTING POST (GET functional)
 ```
-Checks application user nickname for existing.
+Checks user nickname for existing.
 ```
 ```
 Request data:
 struct Incoming {
-    application_user__nickname: String
+    user__nickname: String
 }
 ```
 ```
@@ -356,7 +348,7 @@ Communication codes: absent.
 ```
  - ## APPLICATION_USER__REGISTER_BY_FIRST_STEP POST
 ```
-Registers application user for the first step and sends email to user.
+Registers user for the first step and sends email to user.
 ```
 ```
 Request data:
@@ -384,14 +376,14 @@ Communication codes:
 ```
 - ## APPLICATION_USER__REGISTER_BY_SECOND_STEP POST
 ```
-Registers application user for the second step through token value approving.
+Registers user for the second step through token value approving.
 ```
 ```
 Request data:
 struct Incoming {
     user__email: String,
     user_device__id: String,
-    application_user_registration_token__value: String
+    user_registration_token__value: String
 }
 ```
 ```
@@ -407,23 +399,23 @@ Communication codes:
 
  - ## APPLICATION_USER__REGISTER_BY_LAST_STEP POST
 ```
-Registers application user for the last step.
+Registers user for the last step.
 ```
 ```
 Request data:
 struct Incoming {
     user_device__id: String,
-    application_user__nickname: String,
-    application_user__password: String,
+    user__nickname: String,
+    user__password: String,
     user__email: String,
-    application_user_registration_token__value: String
+    user_registration_token__value: String
 }
 ```
 ```
 Result data:
 struct Outcoming {
-    application_user_access_token_encoded: <Data standards>
-    application_user_access_refresh_token_encoded: <Data standards>
+    user_access_token_encoded: <Data standards>
+    user_access_refresh_token_encoded: <Data standards>
 }
 ```
 ```
@@ -464,14 +456,14 @@ Communication codes:
 ```
  - ## APPLICATION_USER__AUTHORIZE_BY_FIRST_STEP POST
 ```
-Authorizes application user for the firs step and send email to user.
+Authorizes user for the firs step and send email to user.
 ```
 ```
 Request data:
 struct Incoming {
     user_device__id: String,
-    user__email___or___application_user__nickname: String,
-    application_user__password: String
+    user__email___or___user__nickname: String,
+    user__password: String
 }
 ```
 ```
@@ -479,10 +471,10 @@ Result data:
 struct Outcoming {
     user__id: i64,
     verification_message_sent: bool,
-    application_user_authorization_token__can_be_resent_from: i64
+    user_authorization_token__can_be_resent_from: i64
 }
 
-application_user_authorization_token__can_be_resent_from - unixtime after wich it will be allowed to resend the verification message.
+user_authorization_token__can_be_resent_from - unixtime after wich it will be allowed to resend the verification message.
 ```
 ```
 Communication codes:
@@ -490,21 +482,21 @@ Communication codes:
 ```
  - ## APPLICATION_USER__AUTHORIZE_BY_LAST_STEP POST
 ```
-Authorizes application user for the last step.
+Authorizes user for the last step.
 ```
 ```
 Request data:
 struct Incoming {
     user__id: i64,
     user_device__id: String,
-    application_user_authorization_token__value: String
+    user_authorization_token__value: String
 }
 ```
 ```
 Result data:
 struct Outcoming {
-    application_user_access_token_encoded: <Data standards>
-    application_user_access_refresh_token_encoded: <Data standards>
+    user_access_token_encoded: <Data standards>
+    user_access_refresh_token_encoded: <Data standards>
 }
 ```
 ```
@@ -528,7 +520,7 @@ struct Incoming {
 ```
 Result data:
 struct Outcoming {
-    application_user_authorization_token__can_be_resent_from: i64
+    user_authorization_token__can_be_resent_from: i64
 }
 ```
 ```
@@ -540,7 +532,7 @@ Communication codes:
 ```
  - ## APPLICATION_USER__RESET_PASSWORD_BY_FIRST_STEP POST
 ```
-Resets application user password for the first step and send email to user.
+Resets user password for the first step and send email to user.
 ```
 ```
 Request data:
@@ -563,14 +555,14 @@ Communication codes:
 ```
  - ## APPLICATION_USER__RESET_PASSWORD_BY_SECOND_STEP POST
 ```
-Resets application user password for the second step through token value approving.
+Resets user password for the second step through token value approving.
 ```
 ```
 Request data:
 struct Incoming {
     user__id: i64,
     user_device__id: String,
-    application_user_reset_password_token__value: String
+    user_reset_password_token__value: String
 }
 ```
 ```
@@ -585,15 +577,15 @@ Communication codes:
 ```
  - ## APPLICATION_USER__RESET_PASSWORD_BY_LAST_STEP POST
 ```
-Resets application user password for the last step.
+Resets user password for the last step.
 ```
 ```
 Request data:
 struct Incoming {
     user_device__id: String,
     user__id: i64,
-    application_user__password: String,
-    application_user_reset_password_token__value: String
+    user__password: String,
+    user_reset_password_token__value: String
 }
 ```
 ```
@@ -634,20 +626,20 @@ Communication codes:
 ```
  - ## APPLICATION_USER__REFRESH_ACCESS_TOKEN POST
 ```
-Refreshs application user access token.
+Refreshs user access token.
 ```
 ```
 Request data:
 struct Incoming {
-    application_user_access_token_encoded: <Data standards>
-    application_user_access_refresh_token_encoded: <Data standards>
+    user_access_token_encoded: <Data standards>
+    user_access_refresh_token_encoded: <Data standards>
 }
 ```
 ```
 Result data:
 struct Outcoming {
-    application_user_access_token_encoded: <Data standards>
-    application_user_access_refresh_token_encoded: <Data standards>
+    user_access_token_encoded: <Data standards>
+    user_access_refresh_token_encoded: <Data standards>
 }
 ```
 ```
@@ -656,15 +648,15 @@ Communication codes:
 - APPLICATION_USER_ACCESS_REFRESH_TOKEN__NOT_FOUND
 ```
 # Parameters validation rule.
- - ## application_user_registration_token__value
+ - ## user_registration_token__value
 ```
 ^[0-9]{6}$ - regular expression.
 ```
- - ## application_user_reset_password_token__value
+ - ## user_reset_password_token__value
 ```
 ^[0-9]{6}$ - regular expression.
 ```
- - ## application_user_authorization_token__value
+ - ## user_authorization_token__value
 ```
 ^[0-9]{6}$ - regular expression.
 ```
@@ -679,7 +671,7 @@ Communication codes:
 320 - maximum number of characters.
 
 ```
- - ## application_user__nickname
+ - ## user__nickname
 ```
 55 - maximum number of characters.
 
@@ -690,7 +682,7 @@ Can not contain whitespace character.
 Can not be empty.
 
 ```
- - ## application_user__password
+ - ## user__password
 ```
 7 - minimum number of characters.
 
@@ -700,7 +692,7 @@ Can not contain whitespace character.
 
 Can not be equal to user__email.
 
-Can not be equal to application_user__nickname.
+Can not be equal to user__nickname.
 ```
  - ## channel__id
 ```
