@@ -20,7 +20,7 @@ use aggregate_error::{
     AggregateError,
     Backtrace,
 };
-use application_user_access_token_encoded::UserAccessTokenEncoded;
+use user_access_token_encoded::UserAccessTokenEncoded;
 impl Encoder<UserAccessToken<'_>> {
     pub fn encode<'a>(
         environment_configuration: &'static EnvironmentConfiguration,

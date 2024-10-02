@@ -1,5 +1,5 @@
 use crate::Common1;
-use application_user_access_token_encoded::UserAccessTokenEncoded;
+use user_access_token_encoded::UserAccessTokenEncoded;
 use common_precedent::CommonPrecedent;
 use macro_rules::r#enum;
 use serde::{

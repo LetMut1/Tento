@@ -1,4 +1,4 @@
-use application_user_access_token_encoded::UserAccessTokenEncoded;
+use user_access_token_encoded::UserAccessTokenEncoded;
 use serde::{
     Deserialize,
     Serialize,

@@ -101,8 +101,8 @@ use action_processor_incoming_outcoming::action_processor::{
         Precedent as ChannelSubscription__Base___Create___Precedent_,
     },
 };
-use application_user_access_refresh_token_encoded::UserAccessRefreshTokenEncoded as UserAccessRefreshTokenEncoded_;
-use application_user_access_token_encoded::UserAccessTokenEncoded as UserAccessTokenEncoded_;
+use user_access_refresh_token_encoded::UserAccessRefreshTokenEncoded as UserAccessRefreshTokenEncoded_;
+use user_access_token_encoded::UserAccessTokenEncoded as UserAccessTokenEncoded_;
 use libc::{
     c_char,
     c_long,

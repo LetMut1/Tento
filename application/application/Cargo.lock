@@ -6,11 +6,11 @@ version = 3
 name = "action_processor_incoming_outcoming"
 version = "1.0.0"
 dependencies = [
- "application_user_access_refresh_token_encoded",
- "application_user_access_token_encoded",
  "common_precedent",
  "macro_rules",
  "serde",
+ "user_access_refresh_token_encoded",
+ "user_access_token_encoded",
 ]
 
 [[package]]
@@ -129,8 +129,6 @@ version = "1.0.0"
 dependencies = [
  "action_processor_incoming_outcoming",
  "aggregate_error",
- "application_user_access_refresh_token_encoded",
- "application_user_access_token_encoded",
  "argon2",
  "base64",
  "bb8",
@@ -160,22 +158,10 @@ dependencies = [
  "tracing-appender",
  "tracing-subscriber",
  "unified_report",
+ "user_access_refresh_token_encoded",
+ "user_access_token_encoded",
  "uuid",
  "void",
-]
-
-[[package]]
-name = "application_user_access_refresh_token_encoded"
-version = "1.0.0"
-dependencies = [
- "serde",
-]
-
-[[package]]
-name = "application_user_access_token_encoded"
-version = "1.0.0"
-dependencies = [
- "serde",
 ]
 
 [[package]]
@@ -1970,6 +1956,20 @@ dependencies = [
  "form_urlencoded",
  "idna 0.5.0",
  "percent-encoding",
+]
+
+[[package]]
+name = "user_access_refresh_token_encoded"
+version = "1.0.0"
+dependencies = [
+ "serde",
+]
+
+[[package]]
+name = "user_access_token_encoded"
+version = "1.0.0"
+dependencies = [
+ "serde",
 ]
 
 [[package]]

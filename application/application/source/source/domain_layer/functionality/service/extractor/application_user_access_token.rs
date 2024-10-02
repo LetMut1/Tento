@@ -13,7 +13,7 @@ use crate::{
     },
 };
 use aggregate_error::AggregateError;
-use application_user_access_token_encoded::UserAccessTokenEncoded;
+use user_access_token_encoded::UserAccessTokenEncoded;
 impl Extractor<UserAccessToken<'_>> {
     pub fn extract<'a>(
         environment_configuration: &'static EnvironmentConfiguration,
