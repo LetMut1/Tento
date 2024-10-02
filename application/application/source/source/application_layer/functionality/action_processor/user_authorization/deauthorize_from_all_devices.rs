@@ -16,13 +16,19 @@ use crate::{
     },
     infrastructure_layer::{
         data::capture::Capture,
-        functionality::repository::postgresql::{
-            application_user_access_refresh_token::By2,
-            PostgresqlRepository,
+        functionality::{
+            repository::postgresql::{
+                application_user_access_refresh_token::By1,
+                PostgresqlRepository,
+            },
+            service::resolver::{
+                cloud_message::CloudMessage,
+                Resolver,
+            },
         },
     },
 };
-use action_processor_incoming_outcoming::action_processor::application_user___authorization::deauthorize_from_one_device::{
+use action_processor_incoming_outcoming::action_processor::user_authorization::deauthorize_from_all_devices::{
     Incoming,
     Precedent,
 };
@@ -37,8 +43,8 @@ use tokio_postgres::{
 };
 use unified_report::UnifiedReport;
 use void::Void;
-pub struct ApplicationUser__Authorization___DeauthorizeFromOneDevice;
-impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___DeauthorizeFromOneDevice> {
+pub struct UserAuthorization_DeauthorizeFromAllDevices;
+impl ActionProcessor_ for ActionProcessor<UserAuthorization_DeauthorizeFromAllDevices> {
     type Incoming = Incoming;
     type Outcoming = Void;
     type Precedent = Precedent;
@@ -57,25 +63,25 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Deaut
                 inner.environment_configuration,
                 &incoming.application_user_access_token_encoded,
             )? {
-                Extracted::ApplicationUserAccessToken {
+                Extracted::UserAccessToken {
                     application_user_access_token: application_user_access_token_,
                 } => application_user_access_token_,
-                Extracted::ApplicationUserAccessTokenAlreadyExpired => {
+                Extracted::UserAccessTokenAlreadyExpired => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired));
                 }
-                Extracted::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
+                Extracted::UserAccessTokenInUserAccessTokenBlackList => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_InUserAccessTokenBlackList));
                 }
             };
             let database_2_postgresql_pooled_connection = inner.get_database_2_postgresql_pooled_connection().await?;
-            PostgresqlRepository::<UserAccessRefreshToken<'_>>::delete_1(
+            PostgresqlRepository::<UserAccessRefreshToken<'_>>::delete_2(
                 &*database_2_postgresql_pooled_connection,
-                By2 {
+                By1 {
                     application_user__id: application_user_access_token.application_user__id,
-                    application_user_device__id: application_user_access_token.application_user_device__id.as_ref(),
                 },
             )
             .await?;
+            Resolver::<CloudMessage>::deauthorize_application_user_from_all_devices();
             return Result::Ok(UnifiedReport::target_empty());
         };
     }

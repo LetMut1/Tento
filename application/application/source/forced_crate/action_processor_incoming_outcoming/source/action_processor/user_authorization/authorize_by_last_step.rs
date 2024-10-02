@@ -1,5 +1,5 @@
-use application_user_access_refresh_token_encoded::ApplicationUserAccessRefreshTokenEncoded;
-use application_user_access_token_encoded::ApplicationUserAccessTokenEncoded;
+use application_user_access_refresh_token_encoded::UserAccessRefreshTokenEncoded;
+use application_user_access_token_encoded::UserAccessTokenEncoded;
 use common_precedent::CommonPrecedent;
 use macro_rules::r#enum;
 use serde::{
@@ -14,8 +14,8 @@ pub struct Incoming {
 }
 #[derive(Serialize, Deserialize)]
 pub struct Outcoming {
-    pub application_user_access_token_encoded: ApplicationUserAccessTokenEncoded,
-    pub application_user_access_refresh_token_encoded: ApplicationUserAccessRefreshTokenEncoded,
+    pub application_user_access_token_encoded: UserAccessTokenEncoded,
+    pub application_user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded,
 }
 r#enum!(
     pub enum Precedent {

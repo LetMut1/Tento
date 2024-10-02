@@ -1,14 +1,14 @@
 # Data standards
 - `application_user_access_token_encoded`:
 ```
-struct ApplicationUserAccessTokenEncoded {
+struct UserAccessTokenEncoded {
     serialized: Vec<u8>,
     encoded: Vec<u8>,
 }
 ```
 - `application_user_access_refresh_token_encoded`:
 ```
-struct ApplicationUserAccessRefreshTokenEncoded(Vec<u8>)
+struct UserAccessRefreshTokenEncoded(Vec<u8>)
 ```
 - `sort_order`:
 ```

@@ -1,77 +1,77 @@
 use action_processor_incoming_outcoming::action_processor::{
-    application_user___authorization::{
+    user_authorization::{
         authorize_by_first_step::{
-            Incoming as ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming_,
-            Outcoming as ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming_,
-            Precedent as ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent_,
+            Incoming as User__Authorization___AuthorizeByFirstStep___Incoming_,
+            Outcoming as User__Authorization___AuthorizeByFirstStep___Outcoming_,
+            Precedent as User__Authorization___AuthorizeByFirstStep___Precedent_,
         },
         authorize_by_last_step::{
-            Incoming as ApplicationUser__Authorization___AuthorizeByLastStep___Incoming_,
-            Outcoming as ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming_,
-            Precedent as ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_,
+            Incoming as User__Authorization___AuthorizeByLastStep___Incoming_,
+            Outcoming as User__Authorization___AuthorizeByLastStep___Outcoming_,
+            Precedent as User__Authorization___AuthorizeByLastStep___Precedent_,
         },
         check_email_for_existing::{
-            Incoming as ApplicationUser__Authorization___CheckEmailForExisting___Incoming_,
-            Outcoming as ApplicationUser__Authorization___CheckEmailForExisting___Outcoming_,
+            Incoming as User__Authorization___CheckEmailForExisting___Incoming_,
+            Outcoming as User__Authorization___CheckEmailForExisting___Outcoming_,
         },
         check_nickname_for_existing::{
-            Incoming as ApplicationUser__Authorization___CheckNicknameForExisting___Incoming_,
-            Outcoming as ApplicationUser__Authorization___CheckNicknameForExisting___Outcoming_,
+            Incoming as User__Authorization___CheckNicknameForExisting___Incoming_,
+            Outcoming as User__Authorization___CheckNicknameForExisting___Outcoming_,
         },
         deauthorize_from_all_devices::{
-            Incoming as ApplicationUser__Authorization___DeauthorizeFromAllDevices___Incoming_,
-            Precedent as ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent_,
+            Incoming as User__Authorization___DeauthorizeFromAllDevices___Incoming_,
+            Precedent as User__Authorization___DeauthorizeFromAllDevices___Precedent_,
         },
         deauthorize_from_one_device::{
-            Incoming as ApplicationUser__Authorization___DeauthorizeFromOneDevice___Incoming_,
-            Precedent as ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent_,
+            Incoming as User__Authorization___DeauthorizeFromOneDevice___Incoming_,
+            Precedent as User__Authorization___DeauthorizeFromOneDevice___Precedent_,
         },
         refresh_access_token::{
-            Incoming as ApplicationUser__Authorization___RefreshAccessToken___Incoming_,
-            Outcoming as ApplicationUser__Authorization___RefreshAccessToken___Outcoming_,
-            Precedent as ApplicationUser__Authorization___RefreshAccessToken___Precedent_,
+            Incoming as User__Authorization___RefreshAccessToken___Incoming_,
+            Outcoming as User__Authorization___RefreshAccessToken___Outcoming_,
+            Precedent as User__Authorization___RefreshAccessToken___Precedent_,
         },
         register_by_first_step::{
-            Incoming as ApplicationUser__Authorization___RegisterByFirstStep___Incoming_,
-            Outcoming as ApplicationUser__Authorization___RegisterByFirstStep___Outcoming_,
-            Precedent as ApplicationUser__Authorization___RegisterByFirstStep___Precedent_,
+            Incoming as User__Authorization___RegisterByFirstStep___Incoming_,
+            Outcoming as User__Authorization___RegisterByFirstStep___Outcoming_,
+            Precedent as User__Authorization___RegisterByFirstStep___Precedent_,
         },
         register_by_last_step::{
-            Incoming as ApplicationUser__Authorization___RegisterByLastStep___Incoming_,
-            Outcoming as ApplicationUser__Authorization___RegisterByLastStep___Outcoming_,
-            Precedent as ApplicationUser__Authorization___RegisterByLastStep___Precedent_,
+            Incoming as User__Authorization___RegisterByLastStep___Incoming_,
+            Outcoming as User__Authorization___RegisterByLastStep___Outcoming_,
+            Precedent as User__Authorization___RegisterByLastStep___Precedent_,
         },
         register_by_second_step::{
-            Incoming as ApplicationUser__Authorization___RegisterBySecondStep___Incoming_,
-            Precedent as ApplicationUser__Authorization___RegisterBySecondStep___Precedent_,
+            Incoming as User__Authorization___RegisterBySecondStep___Incoming_,
+            Precedent as User__Authorization___RegisterBySecondStep___Precedent_,
         },
         reset_password_by_first_step::{
-            Incoming as ApplicationUser__Authorization___ResetPasswordByFirstStep___Incoming_,
-            Outcoming as ApplicationUser__Authorization___ResetPasswordByFirstStep___Outcoming_,
-            Precedent as ApplicationUser__Authorization___ResetPasswordByFirstStep___Precedent_,
+            Incoming as User__Authorization___ResetPasswordByFirstStep___Incoming_,
+            Outcoming as User__Authorization___ResetPasswordByFirstStep___Outcoming_,
+            Precedent as User__Authorization___ResetPasswordByFirstStep___Precedent_,
         },
         reset_password_by_last_step::{
-            Incoming as ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming_,
-            Precedent as ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_,
+            Incoming as User__Authorization___ResetPasswordByLastStep___Incoming_,
+            Precedent as User__Authorization___ResetPasswordByLastStep___Precedent_,
         },
         reset_password_by_second_step::{
-            Incoming as ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming_,
-            Precedent as ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_,
+            Incoming as User__Authorization___ResetPasswordBySecondStep___Incoming_,
+            Precedent as User__Authorization___ResetPasswordBySecondStep___Precedent_,
         },
         send_email_for_authorize::{
-            Incoming as ApplicationUser__Authorization___SendEmailForAuthorize___Incoming_,
-            Outcoming as ApplicationUser__Authorization___SendEmailForAuthorize___Outcoming_,
-            Precedent as ApplicationUser__Authorization___SendEmailForAuthorize___Precedent_,
+            Incoming as User__Authorization___SendEmailForAuthorize___Incoming_,
+            Outcoming as User__Authorization___SendEmailForAuthorize___Outcoming_,
+            Precedent as User__Authorization___SendEmailForAuthorize___Precedent_,
         },
         send_email_for_register::{
-            Incoming as ApplicationUser__Authorization___SendEmailForRegister___Incoming_,
-            Outcoming as ApplicationUser__Authorization___SendEmailForRegister___Outcoming_,
-            Precedent as ApplicationUser__Authorization___SendEmailForRegister___Precedent_,
+            Incoming as User__Authorization___SendEmailForRegister___Incoming_,
+            Outcoming as User__Authorization___SendEmailForRegister___Outcoming_,
+            Precedent as User__Authorization___SendEmailForRegister___Precedent_,
         },
         send_email_for_reset_password::{
-            Incoming as ApplicationUser__Authorization___SendEmailForResetPassword___Incoming_,
-            Outcoming as ApplicationUser__Authorization___SendEmailForResetPassword___Outcoming_,
-            Precedent as ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_,
+            Incoming as User__Authorization___SendEmailForResetPassword___Incoming_,
+            Outcoming as User__Authorization___SendEmailForResetPassword___Outcoming_,
+            Precedent as User__Authorization___SendEmailForResetPassword___Precedent_,
         },
     },
     channel___base::{
@@ -101,8 +101,8 @@ use action_processor_incoming_outcoming::action_processor::{
         Precedent as ChannelSubscription__Base___Create___Precedent_,
     },
 };
-use application_user_access_refresh_token_encoded::ApplicationUserAccessRefreshTokenEncoded as ApplicationUserAccessRefreshTokenEncoded_;
-use application_user_access_token_encoded::ApplicationUserAccessTokenEncoded as ApplicationUserAccessTokenEncoded_;
+use application_user_access_refresh_token_encoded::UserAccessRefreshTokenEncoded as UserAccessRefreshTokenEncoded_;
+use application_user_access_token_encoded::UserAccessTokenEncoded as UserAccessTokenEncoded_;
 use libc::{
     c_char,
     c_long,
@@ -487,13 +487,13 @@ impl Transformer<ServerRequestData> {
 }
 #[repr(C)]
 #[derive(Default)]
-pub struct ApplicationUserAccessTokenEncoded {
+pub struct UserAccessTokenEncoded {
     pub serialized: C_Vector<c_uchar>,
     pub encoded: C_Vector<c_uchar>,
 }
 #[repr(C)]
 #[derive(Default)]
-pub struct ApplicationUserAccessRefreshTokenEncoded(pub C_Vector<c_uchar>);
+pub struct UserAccessRefreshTokenEncoded(pub C_Vector<c_uchar>);
 #[repr(C)]
 #[derive(Default)]
 pub struct Common1 {
@@ -539,17 +539,17 @@ pub struct ChannelOuterLink1 {
     pub channel_outer_link__address: C_String,
 }
 #[repr(C)]
-pub struct ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming {
+pub struct User__Authorization___AuthorizeByFirstStep___Incoming {
     pub application_user_device__id: C_String,
     pub application_user__email___or___application_user__nickname: C_String,
     pub application_user__password: C_String,
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____authorize_by_first_step____serialize____allocate(
-    incoming: *mut ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming,
+    incoming: *mut User__Authorization___AuthorizeByFirstStep___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
-    let converter = move |incoming: &'_ ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming| -> Result<ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming_, Box<dyn StdError + 'static>> {
-        let incoming_ = ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming_ {
+    let converter = move |incoming: &'_ User__Authorization___AuthorizeByFirstStep___Incoming| -> Result<User__Authorization___AuthorizeByFirstStep___Incoming_, Box<dyn StdError + 'static>> {
+        let incoming_ = User__Authorization___AuthorizeByFirstStep___Incoming_ {
             application_user_device__id: incoming.application_user_device__id.clone_as_string()?,
             application_user__email___or___application_user__nickname: incoming.application_user__email___or___application_user__nickname.clone_as_string()?,
             application_user__password: incoming.application_user__password.clone_as_string()?,
@@ -566,11 +566,11 @@ pub extern "C" fn application_user___authorization____authorize_by_first_step___
     Allocator::<C_Result<C_Vector<c_uchar>>>::deallocate(c_result);
     return ();
 }
-type ApplicationUser__Authorization___AuthorizeByFirstStep___C_Result =
-    C_Result<C_UnifiedReport<ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming, ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent>>;
+type User__Authorization___AuthorizeByFirstStep___C_Result =
+    C_Result<C_UnifiedReport<User__Authorization___AuthorizeByFirstStep___Outcoming, User__Authorization___AuthorizeByFirstStep___Precedent>>;
 #[repr(C)]
 #[derive(Default)]
-pub struct ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming {
+pub struct User__Authorization___AuthorizeByFirstStep___Outcoming {
     pub application_user__id: c_long,
     pub verification_message_sent: bool,
     pub application_user_authorization_token__can_be_resent_from: c_long,
@@ -579,19 +579,19 @@ pub struct ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming {
 }
 #[repr(C)]
 #[derive(Default)]
-pub struct ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent {
+pub struct User__Authorization___AuthorizeByFirstStep___Precedent {
     pub application_user__wrong_email_or_nickname_or_password: bool,
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____authorize_by_first_step____deserialize____allocate(
     c_vector_of_bytes: *mut C_Vector<c_uchar>,
-) -> *mut ApplicationUser__Authorization___AuthorizeByFirstStep___C_Result {
+) -> *mut User__Authorization___AuthorizeByFirstStep___C_Result {
     let converter = move |unified_report: UnifiedReport<
-        ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming_,
-        ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent_,
+        User__Authorization___AuthorizeByFirstStep___Outcoming_,
+        User__Authorization___AuthorizeByFirstStep___Precedent_,
     >|
           -> Result<
-        C_UnifiedReport<ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming, ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent>,
+        C_UnifiedReport<User__Authorization___AuthorizeByFirstStep___Outcoming, User__Authorization___AuthorizeByFirstStep___Precedent>,
         Box<dyn StdError + 'static>,
     > {
         let unified_report_ = match unified_report {
@@ -603,7 +603,7 @@ pub extern "C" fn application_user___authorization____authorize_by_first_step___
                     Data::Filled {
                         data: data__,
                     } => {
-                        let outcoming = ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming {
+                        let outcoming = User__Authorization___AuthorizeByFirstStep___Outcoming {
                             application_user__id: data__.application_user__id,
                             verification_message_sent: data__.verification_message_sent,
                             application_user_authorization_token__can_be_resent_from: data__.application_user_authorization_token__can_be_resent_from,
@@ -619,9 +619,9 @@ pub extern "C" fn application_user___authorization____authorize_by_first_step___
                 precedent,
             } => {
                 match precedent {
-                    ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent_::User_WrongEmailOrNicknameOrPassword => {}
+                    User__Authorization___AuthorizeByFirstStep___Precedent_::User_WrongEmailOrNicknameOrPassword => {}
                 };
-                let precedent_ = ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent {
+                let precedent_ = User__Authorization___AuthorizeByFirstStep___Precedent {
                     application_user__wrong_email_or_nickname_or_password: true,
                 };
                 C_UnifiedReport::precedent(precedent_)
@@ -636,23 +636,23 @@ pub extern "C" fn application_user___authorization____authorize_by_first_step___
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____authorize_by_first_step____deserialize____deallocate(
-    c_result: *mut ApplicationUser__Authorization___AuthorizeByFirstStep___C_Result,
+    c_result: *mut User__Authorization___AuthorizeByFirstStep___C_Result,
 ) -> () {
     Allocator::<C_Result<C_UnifiedReport<_, _>>>::deallocate(c_result);
     return ();
 }
 #[repr(C)]
-pub struct ApplicationUser__Authorization___AuthorizeByLastStep___Incoming {
+pub struct User__Authorization___AuthorizeByLastStep___Incoming {
     pub application_user__id: c_long,
     pub application_user_device__id: C_String,
     pub application_user_authorization_token__value: C_String,
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____authorize_by_last_step____serialize____allocate(
-    incoming: *mut ApplicationUser__Authorization___AuthorizeByLastStep___Incoming,
+    incoming: *mut User__Authorization___AuthorizeByLastStep___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
-    let converter = move |incoming: &'_ ApplicationUser__Authorization___AuthorizeByLastStep___Incoming| -> Result<ApplicationUser__Authorization___AuthorizeByLastStep___Incoming_, Box<dyn StdError + 'static>> {
-        let incoming_ = ApplicationUser__Authorization___AuthorizeByLastStep___Incoming_ {
+    let converter = move |incoming: &'_ User__Authorization___AuthorizeByLastStep___Incoming| -> Result<User__Authorization___AuthorizeByLastStep___Incoming_, Box<dyn StdError + 'static>> {
+        let incoming_ = User__Authorization___AuthorizeByLastStep___Incoming_ {
             application_user__id: incoming.application_user__id,
             application_user_device__id: incoming.application_user_device__id.clone_as_string()?,
             application_user_authorization_token__value: incoming.application_user_authorization_token__value.clone_as_string()?,
@@ -669,17 +669,17 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
     Allocator::<C_Result<C_Vector<c_uchar>>>::deallocate(c_result);
     return ();
 }
-type ApplicationUser__Authorization___AuthorizeByLastStep___C_Result =
-    C_Result<C_UnifiedReport<ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming, ApplicationUser__Authorization___AuthorizeByLastStep___Precedent>>;
+type User__Authorization___AuthorizeByLastStep___C_Result =
+    C_Result<C_UnifiedReport<User__Authorization___AuthorizeByLastStep___Outcoming, User__Authorization___AuthorizeByLastStep___Precedent>>;
 #[repr(C)]
 #[derive(Default)]
-pub struct ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming {
-    pub application_user_access_token_encoded: ApplicationUserAccessTokenEncoded,
-    pub application_user_access_refresh_token_encoded: ApplicationUserAccessRefreshTokenEncoded,
+pub struct User__Authorization___AuthorizeByLastStep___Outcoming {
+    pub application_user_access_token_encoded: UserAccessTokenEncoded,
+    pub application_user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded,
 }
 #[repr(C)]
 #[derive(Default)]
-pub struct ApplicationUser__Authorization___AuthorizeByLastStep___Precedent {
+pub struct User__Authorization___AuthorizeByLastStep___Precedent {
     pub application_user_authorization_token__not_found: bool,
     pub application_user_authorization_token__already_expired: bool,
     pub application_user_authorization_token__wrong_value: UserAuthorizationToken_WrongValue,
@@ -694,13 +694,13 @@ pub struct UserAuthorizationToken_WrongValue {
 #[no_mangle]
 pub extern "C" fn application_user___authorization____authorize_by_last_step____deserialize____allocate(
     c_vector_of_bytes: *mut C_Vector<c_uchar>,
-) -> *mut ApplicationUser__Authorization___AuthorizeByLastStep___C_Result {
+) -> *mut User__Authorization___AuthorizeByLastStep___C_Result {
     let converter = move |unified_report: UnifiedReport<
-        ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming_,
-        ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_,
+        User__Authorization___AuthorizeByLastStep___Outcoming_,
+        User__Authorization___AuthorizeByLastStep___Precedent_,
     >|
           -> Result<
-        C_UnifiedReport<ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming, ApplicationUser__Authorization___AuthorizeByLastStep___Precedent>,
+        C_UnifiedReport<User__Authorization___AuthorizeByLastStep___Outcoming, User__Authorization___AuthorizeByLastStep___Precedent>,
         Box<dyn StdError + 'static>,
     > {
         let unified_report_ = match unified_report {
@@ -712,12 +712,12 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
                     Data::Filled {
                         data: data__,
                     } => {
-                        let outcoming = ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming {
-                            application_user_access_token_encoded: ApplicationUserAccessTokenEncoded {
+                        let outcoming = User__Authorization___AuthorizeByLastStep___Outcoming {
+                            application_user_access_token_encoded: UserAccessTokenEncoded {
                                 serialized: Allocator::<C_Vector<_>>::allocate(data__.application_user_access_token_encoded.serialized),
                                 encoded: Allocator::<C_Vector<_>>::allocate(data__.application_user_access_token_encoded.encoded),
                             },
-                            application_user_access_refresh_token_encoded: ApplicationUserAccessRefreshTokenEncoded(
+                            application_user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded(
                                 Allocator::<C_Vector<_>>::allocate(data__.application_user_access_refresh_token_encoded.0),
                             ),
                         };
@@ -730,22 +730,22 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_::UserAuthorizationToken_AlreadyExpired => {
-                        ApplicationUser__Authorization___AuthorizeByLastStep___Precedent {
+                    User__Authorization___AuthorizeByLastStep___Precedent_::UserAuthorizationToken_AlreadyExpired => {
+                        User__Authorization___AuthorizeByLastStep___Precedent {
                             application_user_authorization_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_::UserAuthorizationToken_NotFound => {
-                        ApplicationUser__Authorization___AuthorizeByLastStep___Precedent {
+                    User__Authorization___AuthorizeByLastStep___Precedent_::UserAuthorizationToken_NotFound => {
+                        User__Authorization___AuthorizeByLastStep___Precedent {
                             application_user_authorization_token__not_found: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_::UserAuthorizationToken_WrongValue {
+                    User__Authorization___AuthorizeByLastStep___Precedent_::UserAuthorizationToken_WrongValue {
                         application_user_authorization_token__wrong_enter_tries_quantity,
                     } => {
-                        ApplicationUser__Authorization___AuthorizeByLastStep___Precedent {
+                        User__Authorization___AuthorizeByLastStep___Precedent {
                             application_user_authorization_token__wrong_value: UserAuthorizationToken_WrongValue {
                                 is_exist: true,
                                 application_user_authorization_token__wrong_enter_tries_quantity,
@@ -753,8 +753,8 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_::User_NotFound => {
-                        ApplicationUser__Authorization___AuthorizeByLastStep___Precedent {
+                    User__Authorization___AuthorizeByLastStep___Precedent_::User_NotFound => {
+                        User__Authorization___AuthorizeByLastStep___Precedent {
                             application_user__not_found: true,
                             ..Default::default()
                         }
@@ -772,7 +772,7 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____authorize_by_last_step____deserialize____deallocate(
-    c_result: *mut ApplicationUser__Authorization___AuthorizeByLastStep___C_Result,
+    c_result: *mut User__Authorization___AuthorizeByLastStep___C_Result,
 ) -> () {
     if c_result.is_null() {
         return ();
@@ -790,15 +790,15 @@ pub extern "C" fn application_user___authorization____authorize_by_last_step____
     return ();
 }
 #[repr(C)]
-pub struct ApplicationUser__Authorization___CheckEmailForExisting___Incoming {
+pub struct User__Authorization___CheckEmailForExisting___Incoming {
     pub application_user__email: C_String,
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____check_email_for_existing____serialize____allocate(
-    incoming: *mut ApplicationUser__Authorization___CheckEmailForExisting___Incoming,
+    incoming: *mut User__Authorization___CheckEmailForExisting___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
-    let converter = move |incoming: &'_ ApplicationUser__Authorization___CheckEmailForExisting___Incoming| -> Result<ApplicationUser__Authorization___CheckEmailForExisting___Incoming_, Box<dyn StdError + 'static>> {
-        let incoming_ = ApplicationUser__Authorization___CheckEmailForExisting___Incoming_ {
+    let converter = move |incoming: &'_ User__Authorization___CheckEmailForExisting___Incoming| -> Result<User__Authorization___CheckEmailForExisting___Incoming_, Box<dyn StdError + 'static>> {
+        let incoming_ = User__Authorization___CheckEmailForExisting___Incoming_ {
             application_user__email: incoming.application_user__email.clone_as_string()?,
         };
         return Result::Ok(incoming_);
@@ -813,17 +813,17 @@ pub extern "C" fn application_user___authorization____check_email_for_existing__
     Allocator::<C_Result<C_Vector<c_uchar>>>::deallocate(c_result);
     return ();
 }
-type ApplicationUser__Authorization___CheckEmailForExisting___C_Result = C_Result<C_UnifiedReport<ApplicationUser__Authorization___CheckEmailForExisting___Outcoming, C_Void>>;
+type User__Authorization___CheckEmailForExisting___C_Result = C_Result<C_UnifiedReport<User__Authorization___CheckEmailForExisting___Outcoming, C_Void>>;
 #[repr(C)]
 #[derive(Default)]
-pub struct ApplicationUser__Authorization___CheckEmailForExisting___Outcoming {
+pub struct User__Authorization___CheckEmailForExisting___Outcoming {
     pub result: bool,
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____check_email_for_existing____deserialize____allocate(
     c_vector_of_bytes: *mut C_Vector<c_uchar>,
-) -> *mut ApplicationUser__Authorization___CheckEmailForExisting___C_Result {
-    let converter = move |unified_report: UnifiedReport<ApplicationUser__Authorization___CheckEmailForExisting___Outcoming_, Void>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___CheckEmailForExisting___Outcoming, C_Void>, Box<dyn StdError + 'static>> {
+) -> *mut User__Authorization___CheckEmailForExisting___C_Result {
+    let converter = move |unified_report: UnifiedReport<User__Authorization___CheckEmailForExisting___Outcoming_, Void>| -> Result<C_UnifiedReport<User__Authorization___CheckEmailForExisting___Outcoming, C_Void>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
                 let data_ = match data {
@@ -831,7 +831,7 @@ pub extern "C" fn application_user___authorization____check_email_for_existing__
                         C_Data::empty()
                     }
                     Data::Filled { data: data__ } => {
-                        let outcoming = ApplicationUser__Authorization___CheckEmailForExisting___Outcoming {
+                        let outcoming = User__Authorization___CheckEmailForExisting___Outcoming {
                             result: data__.result,
                         };
 
@@ -855,21 +855,21 @@ pub extern "C" fn application_user___authorization____check_email_for_existing__
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____check_email_for_existing____deserialize____deallocate(
-    c_result: *mut ApplicationUser__Authorization___CheckEmailForExisting___C_Result,
+    c_result: *mut User__Authorization___CheckEmailForExisting___C_Result,
 ) -> () {
     Allocator::<C_Result<C_UnifiedReport<_, _>>>::deallocate(c_result);
     return ();
 }
 #[repr(C)]
-pub struct ApplicationUser__Authorization___CheckNicknameForExisting___Incoming {
+pub struct User__Authorization___CheckNicknameForExisting___Incoming {
     pub application_user__nickname: C_String,
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____check_nickname_for_existing____serialize____allocate(
-    incoming: *mut ApplicationUser__Authorization___CheckNicknameForExisting___Incoming,
+    incoming: *mut User__Authorization___CheckNicknameForExisting___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
-    let converter = move |incoming: &'_ ApplicationUser__Authorization___CheckNicknameForExisting___Incoming| -> Result<ApplicationUser__Authorization___CheckNicknameForExisting___Incoming_, Box<dyn StdError + 'static>> {
-        let incoming_ = ApplicationUser__Authorization___CheckNicknameForExisting___Incoming_ {
+    let converter = move |incoming: &'_ User__Authorization___CheckNicknameForExisting___Incoming| -> Result<User__Authorization___CheckNicknameForExisting___Incoming_, Box<dyn StdError + 'static>> {
+        let incoming_ = User__Authorization___CheckNicknameForExisting___Incoming_ {
             application_user__nickname: incoming.application_user__nickname.clone_as_string()?,
         };
         return Result::Ok(incoming_);
@@ -884,18 +884,18 @@ pub extern "C" fn application_user___authorization____check_nickname_for_existin
     Allocator::<C_Result<C_Vector<c_uchar>>>::deallocate(c_result);
     return ();
 }
-type ApplicationUser__Authorization___CheckNicknameForExisting___C_Result =
-    C_Result<C_UnifiedReport<ApplicationUser__Authorization___CheckNicknameForExisting___Outcoming, C_Void>>;
+type User__Authorization___CheckNicknameForExisting___C_Result =
+    C_Result<C_UnifiedReport<User__Authorization___CheckNicknameForExisting___Outcoming, C_Void>>;
 #[repr(C)]
 #[derive(Default)]
-pub struct ApplicationUser__Authorization___CheckNicknameForExisting___Outcoming {
+pub struct User__Authorization___CheckNicknameForExisting___Outcoming {
     pub result: bool,
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____check_nickname_for_existing____deserialize____allocate(
     c_vector_of_bytes: *mut C_Vector<c_uchar>,
-) -> *mut ApplicationUser__Authorization___CheckNicknameForExisting___C_Result {
-    let converter = move |unified_report: UnifiedReport<ApplicationUser__Authorization___CheckNicknameForExisting___Outcoming_, Void>| -> Result<C_UnifiedReport<ApplicationUser__Authorization___CheckNicknameForExisting___Outcoming, C_Void>, Box<dyn StdError + 'static>> {
+) -> *mut User__Authorization___CheckNicknameForExisting___C_Result {
+    let converter = move |unified_report: UnifiedReport<User__Authorization___CheckNicknameForExisting___Outcoming_, Void>| -> Result<C_UnifiedReport<User__Authorization___CheckNicknameForExisting___Outcoming, C_Void>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
                 let data_ = match data {
@@ -903,7 +903,7 @@ pub extern "C" fn application_user___authorization____check_nickname_for_existin
                         C_Data::empty()
                     }
                     Data::Filled { data: data__ } => {
-                        let outcoming = ApplicationUser__Authorization___CheckNicknameForExisting___Outcoming {
+                        let outcoming = User__Authorization___CheckNicknameForExisting___Outcoming {
                             result: data__.result,
                         };
 
@@ -927,22 +927,22 @@ pub extern "C" fn application_user___authorization____check_nickname_for_existin
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____check_nickname_for_existing____deserialize____deallocate(
-    c_result: *mut ApplicationUser__Authorization___CheckNicknameForExisting___C_Result,
+    c_result: *mut User__Authorization___CheckNicknameForExisting___C_Result,
 ) -> () {
     Allocator::<C_Result<C_UnifiedReport<_, _>>>::deallocate(c_result);
     return ();
 }
 #[repr(C)]
-pub struct ApplicationUser__Authorization___DeauthorizeFromAllDevices___Incoming {
-    pub application_user_access_token_encoded: ApplicationUserAccessTokenEncoded,
+pub struct User__Authorization___DeauthorizeFromAllDevices___Incoming {
+    pub application_user_access_token_encoded: UserAccessTokenEncoded,
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____deauthorize_from_all_devices____serialize____allocate(
-    incoming: *mut ApplicationUser__Authorization___DeauthorizeFromAllDevices___Incoming,
+    incoming: *mut User__Authorization___DeauthorizeFromAllDevices___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
-    let converter = move |incoming: &'_ ApplicationUser__Authorization___DeauthorizeFromAllDevices___Incoming| -> Result<ApplicationUser__Authorization___DeauthorizeFromAllDevices___Incoming_, Box<dyn StdError + 'static>> {
-        let incoming_ = ApplicationUser__Authorization___DeauthorizeFromAllDevices___Incoming_ {
-            application_user_access_token_encoded: ApplicationUserAccessTokenEncoded_ {
+    let converter = move |incoming: &'_ User__Authorization___DeauthorizeFromAllDevices___Incoming| -> Result<User__Authorization___DeauthorizeFromAllDevices___Incoming_, Box<dyn StdError + 'static>> {
+        let incoming_ = User__Authorization___DeauthorizeFromAllDevices___Incoming_ {
+            application_user_access_token_encoded: UserAccessTokenEncoded_ {
                 serialized: incoming.application_user_access_token_encoded.serialized.clone_as_vec()?,
                 encoded: incoming.application_user_access_token_encoded.encoded.clone_as_vec()?,
             }
@@ -959,19 +959,19 @@ pub extern "C" fn application_user___authorization____deauthorize_from_all_devic
     Allocator::<C_Result<C_Vector<c_uchar>>>::deallocate(c_result);
     return ();
 }
-type ApplicationUser__Authorization___DeauthorizeFromAllDevices___C_Result =
-    C_Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent>>;
+type User__Authorization___DeauthorizeFromAllDevices___C_Result =
+    C_Result<C_UnifiedReport<C_Void, User__Authorization___DeauthorizeFromAllDevices___Precedent>>;
 #[repr(C)]
 #[derive(Default)]
-pub struct ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent {
+pub struct User__Authorization___DeauthorizeFromAllDevices___Precedent {
     pub application_user_access_token__already_expired: bool,
     pub application_user_access_token__in_application_user_access_token_black_list: bool,
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____deauthorize_from_all_devices____deserialize____allocate(
     c_vector_of_bytes: *mut C_Vector<c_uchar>,
-) -> *mut ApplicationUser__Authorization___DeauthorizeFromAllDevices___C_Result {
-    let converter = move |unified_report: UnifiedReport<Void, ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent_>| -> Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent>, Box<dyn StdError + 'static>> {
+) -> *mut User__Authorization___DeauthorizeFromAllDevices___C_Result {
+    let converter = move |unified_report: UnifiedReport<Void, User__Authorization___DeauthorizeFromAllDevices___Precedent_>| -> Result<C_UnifiedReport<C_Void, User__Authorization___DeauthorizeFromAllDevices___Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
                 let data = match data {
@@ -987,14 +987,14 @@ pub extern "C" fn application_user___authorization____deauthorize_from_all_devic
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent_::UserAccessToken_AlreadyExpired => {
-                        ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent {
+                    User__Authorization___DeauthorizeFromAllDevices___Precedent_::UserAccessToken_AlreadyExpired => {
+                        User__Authorization___DeauthorizeFromAllDevices___Precedent {
                             application_user_access_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent_::UserAccessToken_InUserAccessTokenBlackList => {
-                        ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent {
+                    User__Authorization___DeauthorizeFromAllDevices___Precedent_::UserAccessToken_InUserAccessTokenBlackList => {
+                        User__Authorization___DeauthorizeFromAllDevices___Precedent {
                             application_user_access_token__in_application_user_access_token_black_list: true,
                             ..Default::default()
                         }
@@ -1014,30 +1014,30 @@ pub extern "C" fn application_user___authorization____deauthorize_from_all_devic
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____deauthorize_from_all_devices____deserialize____deallocate(
-    c_result: *mut ApplicationUser__Authorization___DeauthorizeFromAllDevices___C_Result,
+    c_result: *mut User__Authorization___DeauthorizeFromAllDevices___C_Result,
 ) -> () {
     Allocator::<C_Result<C_UnifiedReport<_, _>>>::deallocate(c_result);
     return ();
 }
-type ApplicationUser__Authorization___DeauthorizeFromOneDevice___C_Result =
-    C_Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent>>;
+type User__Authorization___DeauthorizeFromOneDevice___C_Result =
+    C_Result<C_UnifiedReport<C_Void, User__Authorization___DeauthorizeFromOneDevice___Precedent>>;
 #[repr(C)]
 #[derive(Default)]
-pub struct ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent {
+pub struct User__Authorization___DeauthorizeFromOneDevice___Precedent {
     pub application_user_access_token__already_expired: bool,
     pub application_user_access_token__in_application_user_access_token_black_list: bool,
 }
 #[repr(C)]
-pub struct ApplicationUser__Authorization___DeauthorizeFromOneDevice___Incoming {
-    pub application_user_access_token_encoded: ApplicationUserAccessTokenEncoded,
+pub struct User__Authorization___DeauthorizeFromOneDevice___Incoming {
+    pub application_user_access_token_encoded: UserAccessTokenEncoded,
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____deauthorize_from_one_device____serialize____allocate(
-    incoming: *mut ApplicationUser__Authorization___DeauthorizeFromOneDevice___Incoming,
+    incoming: *mut User__Authorization___DeauthorizeFromOneDevice___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
-    let converter = move |incoming: &'_ ApplicationUser__Authorization___DeauthorizeFromOneDevice___Incoming| -> Result<ApplicationUser__Authorization___DeauthorizeFromOneDevice___Incoming_, Box<dyn StdError + 'static>> {
-        let incoming_ = ApplicationUser__Authorization___DeauthorizeFromOneDevice___Incoming_ {
-            application_user_access_token_encoded: ApplicationUserAccessTokenEncoded_ {
+    let converter = move |incoming: &'_ User__Authorization___DeauthorizeFromOneDevice___Incoming| -> Result<User__Authorization___DeauthorizeFromOneDevice___Incoming_, Box<dyn StdError + 'static>> {
+        let incoming_ = User__Authorization___DeauthorizeFromOneDevice___Incoming_ {
+            application_user_access_token_encoded: UserAccessTokenEncoded_ {
                 serialized: incoming.application_user_access_token_encoded.serialized.clone_as_vec()?,
                 encoded: incoming.application_user_access_token_encoded.encoded.clone_as_vec()?,
             }
@@ -1057,8 +1057,8 @@ pub extern "C" fn application_user___authorization____deauthorize_from_one_devic
 #[no_mangle]
 pub extern "C" fn application_user___authorization____deauthorize_from_one_device____deserialize____allocate(
     c_vector_of_bytes: *mut C_Vector<c_uchar>,
-) -> *mut ApplicationUser__Authorization___DeauthorizeFromOneDevice___C_Result {
-    let converter = move |unified_report: UnifiedReport<Void, ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent_>| -> Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent>, Box<dyn StdError + 'static>> {
+) -> *mut User__Authorization___DeauthorizeFromOneDevice___C_Result {
+    let converter = move |unified_report: UnifiedReport<Void, User__Authorization___DeauthorizeFromOneDevice___Precedent_>| -> Result<C_UnifiedReport<C_Void, User__Authorization___DeauthorizeFromOneDevice___Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
                 let data = match data {
@@ -1074,14 +1074,14 @@ pub extern "C" fn application_user___authorization____deauthorize_from_one_devic
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent_::UserAccessToken_AlreadyExpired => {
-                        ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent {
+                    User__Authorization___DeauthorizeFromOneDevice___Precedent_::UserAccessToken_AlreadyExpired => {
+                        User__Authorization___DeauthorizeFromOneDevice___Precedent {
                             application_user_access_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent_::UserAccessToken_InUserAccessTokenBlackList => {
-                        ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent {
+                    User__Authorization___DeauthorizeFromOneDevice___Precedent_::UserAccessToken_InUserAccessTokenBlackList => {
+                        User__Authorization___DeauthorizeFromOneDevice___Precedent {
                             application_user_access_token__in_application_user_access_token_black_list: true,
                             ..Default::default()
                         }
@@ -1101,27 +1101,27 @@ pub extern "C" fn application_user___authorization____deauthorize_from_one_devic
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____deauthorize_from_one_device____deserialize____deallocate(
-    c_result: *mut ApplicationUser__Authorization___DeauthorizeFromOneDevice___C_Result,
+    c_result: *mut User__Authorization___DeauthorizeFromOneDevice___C_Result,
 ) -> () {
     Allocator::<C_Result<C_UnifiedReport<_, _>>>::deallocate(c_result);
     return ();
 }
 #[repr(C)]
-pub struct ApplicationUser__Authorization___RefreshAccessToken___Incoming {
-    pub application_user_access_token_encoded: ApplicationUserAccessTokenEncoded,
-    pub application_user_access_refresh_token_encoded: ApplicationUserAccessRefreshTokenEncoded,
+pub struct User__Authorization___RefreshAccessToken___Incoming {
+    pub application_user_access_token_encoded: UserAccessTokenEncoded,
+    pub application_user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded,
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____refresh_access_token____serialize____allocate(
-    incoming: *mut ApplicationUser__Authorization___RefreshAccessToken___Incoming,
+    incoming: *mut User__Authorization___RefreshAccessToken___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
-    let converter = move |incoming: &'_ ApplicationUser__Authorization___RefreshAccessToken___Incoming| -> Result<ApplicationUser__Authorization___RefreshAccessToken___Incoming_, Box<dyn StdError + 'static>> {
-        let incoming_ = ApplicationUser__Authorization___RefreshAccessToken___Incoming_ {
-            application_user_access_token_encoded: ApplicationUserAccessTokenEncoded_ {
+    let converter = move |incoming: &'_ User__Authorization___RefreshAccessToken___Incoming| -> Result<User__Authorization___RefreshAccessToken___Incoming_, Box<dyn StdError + 'static>> {
+        let incoming_ = User__Authorization___RefreshAccessToken___Incoming_ {
+            application_user_access_token_encoded: UserAccessTokenEncoded_ {
                 serialized: incoming.application_user_access_token_encoded.serialized.clone_as_vec()?,
                 encoded: incoming.application_user_access_token_encoded.encoded.clone_as_vec()?,
             },
-            application_user_access_refresh_token_encoded: ApplicationUserAccessRefreshTokenEncoded_(
+            application_user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded_(
                 incoming.application_user_access_refresh_token_encoded.0.clone_as_vec()?,
             ),
         };
@@ -1137,30 +1137,30 @@ pub extern "C" fn application_user___authorization____refresh_access_token____se
     Allocator::<C_Result<C_Vector<c_uchar>>>::deallocate(c_result);
     return ();
 }
-type ApplicationUser__Authorization___RefreshAccessToken___C_Result =
-    C_Result<C_UnifiedReport<ApplicationUser__Authorization___RefreshAccessToken___Outcoming, ApplicationUser__Authorization___RefreshAccessToken___Precedent>>;
+type User__Authorization___RefreshAccessToken___C_Result =
+    C_Result<C_UnifiedReport<User__Authorization___RefreshAccessToken___Outcoming, User__Authorization___RefreshAccessToken___Precedent>>;
 #[repr(C)]
 #[derive(Default)]
-pub struct ApplicationUser__Authorization___RefreshAccessToken___Outcoming {
-    pub application_user_access_token_encoded: ApplicationUserAccessTokenEncoded,
-    pub application_user_access_refresh_token_encoded: ApplicationUserAccessRefreshTokenEncoded,
+pub struct User__Authorization___RefreshAccessToken___Outcoming {
+    pub application_user_access_token_encoded: UserAccessTokenEncoded,
+    pub application_user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded,
 }
 #[repr(C)]
 #[derive(Default)]
-pub struct ApplicationUser__Authorization___RefreshAccessToken___Precedent {
+pub struct User__Authorization___RefreshAccessToken___Precedent {
     pub application_user_access_refresh_token__not_found: bool,
     pub application_user_access_refresh_token__already_expired: bool,
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____refresh_access_token____deserialize____allocate(
     c_vector_of_bytes: *mut C_Vector<c_uchar>,
-) -> *mut ApplicationUser__Authorization___RefreshAccessToken___C_Result {
+) -> *mut User__Authorization___RefreshAccessToken___C_Result {
     let converter = move |unified_report: UnifiedReport<
-        ApplicationUser__Authorization___RefreshAccessToken___Outcoming_,
-        ApplicationUser__Authorization___RefreshAccessToken___Precedent_,
+        User__Authorization___RefreshAccessToken___Outcoming_,
+        User__Authorization___RefreshAccessToken___Precedent_,
     >|
           -> Result<
-        C_UnifiedReport<ApplicationUser__Authorization___RefreshAccessToken___Outcoming, ApplicationUser__Authorization___RefreshAccessToken___Precedent>,
+        C_UnifiedReport<User__Authorization___RefreshAccessToken___Outcoming, User__Authorization___RefreshAccessToken___Precedent>,
         Box<dyn StdError + 'static>,
     > {
         let unified_report_ = match unified_report {
@@ -1172,12 +1172,12 @@ pub extern "C" fn application_user___authorization____refresh_access_token____de
                     Data::Filled {
                         data: data__,
                     } => {
-                        let outcoming = ApplicationUser__Authorization___RefreshAccessToken___Outcoming {
-                            application_user_access_token_encoded: ApplicationUserAccessTokenEncoded {
+                        let outcoming = User__Authorization___RefreshAccessToken___Outcoming {
+                            application_user_access_token_encoded: UserAccessTokenEncoded {
                                 serialized: Allocator::<C_Vector<_>>::allocate(data__.application_user_access_token_encoded.serialized),
                                 encoded: Allocator::<C_Vector<_>>::allocate(data__.application_user_access_token_encoded.encoded),
                             },
-                            application_user_access_refresh_token_encoded: ApplicationUserAccessRefreshTokenEncoded(
+                            application_user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded(
                                 Allocator::<C_Vector<_>>::allocate(data__.application_user_access_refresh_token_encoded.0),
                             ),
                         };
@@ -1190,14 +1190,14 @@ pub extern "C" fn application_user___authorization____refresh_access_token____de
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    ApplicationUser__Authorization___RefreshAccessToken___Precedent_::UserAccessRefreshToken_AlreadyExpired => {
-                        ApplicationUser__Authorization___RefreshAccessToken___Precedent {
+                    User__Authorization___RefreshAccessToken___Precedent_::UserAccessRefreshToken_AlreadyExpired => {
+                        User__Authorization___RefreshAccessToken___Precedent {
                             application_user_access_refresh_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___RefreshAccessToken___Precedent_::UserAccessRefreshToken_NotFound => {
-                        ApplicationUser__Authorization___RefreshAccessToken___Precedent {
+                    User__Authorization___RefreshAccessToken___Precedent_::UserAccessRefreshToken_NotFound => {
+                        User__Authorization___RefreshAccessToken___Precedent {
                             application_user_access_refresh_token__not_found: true,
                             ..Default::default()
                         }
@@ -1215,7 +1215,7 @@ pub extern "C" fn application_user___authorization____refresh_access_token____de
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____refresh_access_token____deserialize____deallocate(
-    c_result: *mut ApplicationUser__Authorization___RefreshAccessToken___C_Result,
+    c_result: *mut User__Authorization___RefreshAccessToken___C_Result,
 ) -> () {
     if c_result.is_null() {
         return ();
@@ -1233,16 +1233,16 @@ pub extern "C" fn application_user___authorization____refresh_access_token____de
     return ();
 }
 #[repr(C)]
-pub struct ApplicationUser__Authorization___RegisterByFirstStep___Incoming {
+pub struct User__Authorization___RegisterByFirstStep___Incoming {
     pub application_user__email: C_String,
     pub application_user_device__id: C_String,
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____register_by_first_step____serialize____allocate(
-    incoming: *mut ApplicationUser__Authorization___RegisterByFirstStep___Incoming,
+    incoming: *mut User__Authorization___RegisterByFirstStep___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
-    let converter = move |incoming: &'_ ApplicationUser__Authorization___RegisterByFirstStep___Incoming| -> Result<ApplicationUser__Authorization___RegisterByFirstStep___Incoming_, Box<dyn StdError + 'static>> {
-        let incoming_ = ApplicationUser__Authorization___RegisterByFirstStep___Incoming_ {
+    let converter = move |incoming: &'_ User__Authorization___RegisterByFirstStep___Incoming| -> Result<User__Authorization___RegisterByFirstStep___Incoming_, Box<dyn StdError + 'static>> {
+        let incoming_ = User__Authorization___RegisterByFirstStep___Incoming_ {
             application_user__email: incoming.application_user__email.clone_as_string()?,
             application_user_device__id: incoming.application_user_device__id.clone_as_string()?,
         };
@@ -1258,11 +1258,11 @@ pub extern "C" fn application_user___authorization____register_by_first_step____
     Allocator::<C_Result<C_Vector<c_uchar>>>::deallocate(c_result);
     return ();
 }
-type ApplicationUser__Authorization___RegisterByFirstStep___C_Result =
-    C_Result<C_UnifiedReport<ApplicationUser__Authorization___RegisterByFirstStep___Outcoming, ApplicationUser__Authorization___RegisterByFirstStep___Precedent>>;
+type User__Authorization___RegisterByFirstStep___C_Result =
+    C_Result<C_UnifiedReport<User__Authorization___RegisterByFirstStep___Outcoming, User__Authorization___RegisterByFirstStep___Precedent>>;
 #[repr(C)]
 #[derive(Default)]
-pub struct ApplicationUser__Authorization___RegisterByFirstStep___Outcoming {
+pub struct User__Authorization___RegisterByFirstStep___Outcoming {
     pub verification_message_sent: bool,
     pub application_user_registration_token__can_be_resent_from: c_long,
     pub application_user_registration_token__wrong_enter_tries_quantity: c_short,
@@ -1270,19 +1270,19 @@ pub struct ApplicationUser__Authorization___RegisterByFirstStep___Outcoming {
 }
 #[repr(C)]
 #[derive(Default)]
-pub struct ApplicationUser__Authorization___RegisterByFirstStep___Precedent {
+pub struct User__Authorization___RegisterByFirstStep___Precedent {
     pub application_user__email_already_exist: bool,
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____register_by_first_step____deserialize____allocate(
     c_vector_of_bytes: *mut C_Vector<c_uchar>,
-) -> *mut ApplicationUser__Authorization___RegisterByFirstStep___C_Result {
+) -> *mut User__Authorization___RegisterByFirstStep___C_Result {
     let converter = move |unified_report: UnifiedReport<
-        ApplicationUser__Authorization___RegisterByFirstStep___Outcoming_,
-        ApplicationUser__Authorization___RegisterByFirstStep___Precedent_,
+        User__Authorization___RegisterByFirstStep___Outcoming_,
+        User__Authorization___RegisterByFirstStep___Precedent_,
     >|
           -> Result<
-        C_UnifiedReport<ApplicationUser__Authorization___RegisterByFirstStep___Outcoming, ApplicationUser__Authorization___RegisterByFirstStep___Precedent>,
+        C_UnifiedReport<User__Authorization___RegisterByFirstStep___Outcoming, User__Authorization___RegisterByFirstStep___Precedent>,
         Box<dyn StdError + 'static>,
     > {
         let unified_report_ = match unified_report {
@@ -1294,7 +1294,7 @@ pub extern "C" fn application_user___authorization____register_by_first_step____
                     Data::Filled {
                         data: data__,
                     } => {
-                        let outcoming = ApplicationUser__Authorization___RegisterByFirstStep___Outcoming {
+                        let outcoming = User__Authorization___RegisterByFirstStep___Outcoming {
                             verification_message_sent: data__.verification_message_sent,
                             application_user_registration_token__can_be_resent_from: data__.application_user_registration_token__can_be_resent_from,
                             application_user_registration_token__wrong_enter_tries_quantity: data__.application_user_registration_token__wrong_enter_tries_quantity,
@@ -1309,9 +1309,9 @@ pub extern "C" fn application_user___authorization____register_by_first_step____
                 precedent,
             } => {
                 match precedent {
-                    ApplicationUser__Authorization___RegisterByFirstStep___Precedent_::User_EmailAlreadyExist => {}
+                    User__Authorization___RegisterByFirstStep___Precedent_::User_EmailAlreadyExist => {}
                 };
-                let precedent_ = ApplicationUser__Authorization___RegisterByFirstStep___Precedent {
+                let precedent_ = User__Authorization___RegisterByFirstStep___Precedent {
                     application_user__email_already_exist: true,
                 };
                 C_UnifiedReport::precedent(precedent_)
@@ -1326,23 +1326,23 @@ pub extern "C" fn application_user___authorization____register_by_first_step____
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____register_by_first_step____deserialize____deallocate(
-    c_result: *mut ApplicationUser__Authorization___RegisterByFirstStep___C_Result,
+    c_result: *mut User__Authorization___RegisterByFirstStep___C_Result,
 ) -> () {
     Allocator::<C_Result<C_UnifiedReport<_, _>>>::deallocate(c_result);
     return ();
 }
 #[repr(C)]
-pub struct ApplicationUser__Authorization___RegisterBySecondStep___Incoming {
+pub struct User__Authorization___RegisterBySecondStep___Incoming {
     pub application_user__email: C_String,
     pub application_user_device__id: C_String,
     pub application_user_registration_token__value: C_String,
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____register_by_second_step____serialize____allocate(
-    incoming: *mut ApplicationUser__Authorization___RegisterBySecondStep___Incoming,
+    incoming: *mut User__Authorization___RegisterBySecondStep___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
-    let converter = move |incoming: &'_ ApplicationUser__Authorization___RegisterBySecondStep___Incoming| -> Result<ApplicationUser__Authorization___RegisterBySecondStep___Incoming_, Box<dyn StdError + 'static>> {
-        let incoming_ = ApplicationUser__Authorization___RegisterBySecondStep___Incoming_ {
+    let converter = move |incoming: &'_ User__Authorization___RegisterBySecondStep___Incoming| -> Result<User__Authorization___RegisterBySecondStep___Incoming_, Box<dyn StdError + 'static>> {
+        let incoming_ = User__Authorization___RegisterBySecondStep___Incoming_ {
             application_user__email: incoming.application_user__email.clone_as_string()?,
             application_user_device__id: incoming.application_user_device__id.clone_as_string()?,
             application_user_registration_token__value: incoming.application_user_registration_token__value.clone_as_string()?,
@@ -1359,10 +1359,10 @@ pub extern "C" fn application_user___authorization____register_by_second_step___
     Allocator::<C_Result<C_Vector<c_uchar>>>::deallocate(c_result);
     return ();
 }
-type ApplicationUser__Authorization___RegisterBySecondStep___C_Result = C_Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___RegisterBySecondStep___Precedent>>;
+type User__Authorization___RegisterBySecondStep___C_Result = C_Result<C_UnifiedReport<C_Void, User__Authorization___RegisterBySecondStep___Precedent>>;
 #[repr(C)]
 #[derive(Default)]
-pub struct ApplicationUser__Authorization___RegisterBySecondStep___Precedent {
+pub struct User__Authorization___RegisterBySecondStep___Precedent {
     pub application_user_registration_token__not_found: bool,
     pub application_user_registration_token__already_expired: bool,
     pub application_user_registration_token__already_approved: bool,
@@ -1377,8 +1377,8 @@ pub struct UserRegistrationToken_WrongValue {
 #[no_mangle]
 pub extern "C" fn application_user___authorization____register_by_second_step____deserialize____allocate(
     c_vector_of_bytes: *mut C_Vector<c_uchar>,
-) -> *mut ApplicationUser__Authorization___RegisterBySecondStep___C_Result {
-    let converter = move |unified_report: UnifiedReport<Void, ApplicationUser__Authorization___RegisterBySecondStep___Precedent_>| -> Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___RegisterBySecondStep___Precedent>, Box<dyn StdError + 'static>> {
+) -> *mut User__Authorization___RegisterBySecondStep___C_Result {
+    let converter = move |unified_report: UnifiedReport<Void, User__Authorization___RegisterBySecondStep___Precedent_>| -> Result<C_UnifiedReport<C_Void, User__Authorization___RegisterBySecondStep___Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
                 let data = match data {
@@ -1394,26 +1394,26 @@ pub extern "C" fn application_user___authorization____register_by_second_step___
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    ApplicationUser__Authorization___RegisterBySecondStep___Precedent_::UserRegistrationToken_NotFound => {
-                        ApplicationUser__Authorization___RegisterBySecondStep___Precedent {
+                    User__Authorization___RegisterBySecondStep___Precedent_::UserRegistrationToken_NotFound => {
+                        User__Authorization___RegisterBySecondStep___Precedent {
                             application_user_registration_token__not_found: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___RegisterBySecondStep___Precedent_::UserRegistrationToken_AlreadyExpired => {
-                        ApplicationUser__Authorization___RegisterBySecondStep___Precedent {
+                    User__Authorization___RegisterBySecondStep___Precedent_::UserRegistrationToken_AlreadyExpired => {
+                        User__Authorization___RegisterBySecondStep___Precedent {
                             application_user_registration_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___RegisterBySecondStep___Precedent_::UserRegistrationToken_AlreadyApproved => {
-                        ApplicationUser__Authorization___RegisterBySecondStep___Precedent {
+                    User__Authorization___RegisterBySecondStep___Precedent_::UserRegistrationToken_AlreadyApproved => {
+                        User__Authorization___RegisterBySecondStep___Precedent {
                             application_user_registration_token__already_approved: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___RegisterBySecondStep___Precedent_::UserRegistrationToken_WrongValue { application_user_registration_token__wrong_enter_tries_quantity } => {
-                        ApplicationUser__Authorization___RegisterBySecondStep___Precedent {
+                    User__Authorization___RegisterBySecondStep___Precedent_::UserRegistrationToken_WrongValue { application_user_registration_token__wrong_enter_tries_quantity } => {
+                        User__Authorization___RegisterBySecondStep___Precedent {
                             application_user_registration_token__wrong_value: UserRegistrationToken_WrongValue {
                                 is_exist: true,
                                 application_user_registration_token__wrong_enter_tries_quantity: application_user_registration_token__wrong_enter_tries_quantity,
@@ -1436,13 +1436,13 @@ pub extern "C" fn application_user___authorization____register_by_second_step___
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____register_by_second_step____deserialize____deallocate(
-    c_result: *mut ApplicationUser__Authorization___RegisterBySecondStep___C_Result,
+    c_result: *mut User__Authorization___RegisterBySecondStep___C_Result,
 ) -> () {
     Allocator::<C_Result<C_UnifiedReport<_, _>>>::deallocate(c_result);
     return ();
 }
 #[repr(C)]
-pub struct ApplicationUser__Authorization___RegisterByLastStep___Incoming {
+pub struct User__Authorization___RegisterByLastStep___Incoming {
     pub application_user_device__id: C_String,
     pub application_user__nickname: C_String,
     pub application_user__password: C_String,
@@ -1451,10 +1451,10 @@ pub struct ApplicationUser__Authorization___RegisterByLastStep___Incoming {
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____register_by_last_step____serialize____allocate(
-    incoming: *mut ApplicationUser__Authorization___RegisterByLastStep___Incoming,
+    incoming: *mut User__Authorization___RegisterByLastStep___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
-    let converter = move |incoming: &'_ ApplicationUser__Authorization___RegisterByLastStep___Incoming| -> Result<ApplicationUser__Authorization___RegisterByLastStep___Incoming_, Box<dyn StdError + 'static>> {
-        let incoming_ = ApplicationUser__Authorization___RegisterByLastStep___Incoming_ {
+    let converter = move |incoming: &'_ User__Authorization___RegisterByLastStep___Incoming| -> Result<User__Authorization___RegisterByLastStep___Incoming_, Box<dyn StdError + 'static>> {
+        let incoming_ = User__Authorization___RegisterByLastStep___Incoming_ {
             application_user_device__id: incoming.application_user_device__id.clone_as_string()?,
             application_user__email: incoming.application_user__email.clone_as_string()?,
             application_user__nickname: incoming.application_user__nickname.clone_as_string()?,
@@ -1473,17 +1473,17 @@ pub extern "C" fn application_user___authorization____register_by_last_step____s
     Allocator::<C_Result<C_Vector<c_uchar>>>::deallocate(c_result);
     return ();
 }
-type ApplicationUser__Authorization___RegisterByLastStep___C_Result =
-    C_Result<C_UnifiedReport<ApplicationUser__Authorization___RegisterByLastStep___Outcoming, ApplicationUser__Authorization___RegisterByLastStep___Precedent>>;
+type User__Authorization___RegisterByLastStep___C_Result =
+    C_Result<C_UnifiedReport<User__Authorization___RegisterByLastStep___Outcoming, User__Authorization___RegisterByLastStep___Precedent>>;
 #[repr(C)]
 #[derive(Default)]
-pub struct ApplicationUser__Authorization___RegisterByLastStep___Outcoming {
-    pub application_user_access_token_encoded: ApplicationUserAccessTokenEncoded,
-    pub application_user_access_refresh_token_encoded: ApplicationUserAccessRefreshTokenEncoded,
+pub struct User__Authorization___RegisterByLastStep___Outcoming {
+    pub application_user_access_token_encoded: UserAccessTokenEncoded,
+    pub application_user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded,
 }
 #[repr(C)]
 #[derive(Default)]
-pub struct ApplicationUser__Authorization___RegisterByLastStep___Precedent {
+pub struct User__Authorization___RegisterByLastStep___Precedent {
     pub application_user__nickname_already_exist: bool,
     pub application_user__email_already_exist: bool,
     pub application_user_registration_token__not_found: bool,
@@ -1494,13 +1494,13 @@ pub struct ApplicationUser__Authorization___RegisterByLastStep___Precedent {
 #[no_mangle]
 pub extern "C" fn application_user___authorization____register_by_last_step____deserialize____allocate(
     c_vector_of_bytes: *mut C_Vector<c_uchar>,
-) -> *mut ApplicationUser__Authorization___RegisterByLastStep___C_Result {
+) -> *mut User__Authorization___RegisterByLastStep___C_Result {
     let converter = move |unified_report: UnifiedReport<
-        ApplicationUser__Authorization___RegisterByLastStep___Outcoming_,
-        ApplicationUser__Authorization___RegisterByLastStep___Precedent_,
+        User__Authorization___RegisterByLastStep___Outcoming_,
+        User__Authorization___RegisterByLastStep___Precedent_,
     >|
           -> Result<
-        C_UnifiedReport<ApplicationUser__Authorization___RegisterByLastStep___Outcoming, ApplicationUser__Authorization___RegisterByLastStep___Precedent>,
+        C_UnifiedReport<User__Authorization___RegisterByLastStep___Outcoming, User__Authorization___RegisterByLastStep___Precedent>,
         Box<dyn StdError + 'static>,
     > {
         let unified_report_ = match unified_report {
@@ -1512,12 +1512,12 @@ pub extern "C" fn application_user___authorization____register_by_last_step____d
                     Data::Filled {
                         data: data__,
                     } => {
-                        let outcoming = ApplicationUser__Authorization___RegisterByLastStep___Outcoming {
-                            application_user_access_token_encoded: ApplicationUserAccessTokenEncoded {
+                        let outcoming = User__Authorization___RegisterByLastStep___Outcoming {
+                            application_user_access_token_encoded: UserAccessTokenEncoded {
                                 serialized: Allocator::<C_Vector<_>>::allocate(data__.application_user_access_token_encoded.serialized),
                                 encoded: Allocator::<C_Vector<_>>::allocate(data__.application_user_access_token_encoded.encoded),
                             },
-                            application_user_access_refresh_token_encoded: ApplicationUserAccessRefreshTokenEncoded(
+                            application_user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded(
                                 Allocator::<C_Vector<_>>::allocate(data__.application_user_access_refresh_token_encoded.0),
                             ),
                         };
@@ -1530,38 +1530,38 @@ pub extern "C" fn application_user___authorization____register_by_last_step____d
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    ApplicationUser__Authorization___RegisterByLastStep___Precedent_::User_NicknameAlreadyExist => {
-                        ApplicationUser__Authorization___RegisterByLastStep___Precedent {
+                    User__Authorization___RegisterByLastStep___Precedent_::User_NicknameAlreadyExist => {
+                        User__Authorization___RegisterByLastStep___Precedent {
                             application_user__nickname_already_exist: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___RegisterByLastStep___Precedent_::User_EmailAlreadyExist => {
-                        ApplicationUser__Authorization___RegisterByLastStep___Precedent {
+                    User__Authorization___RegisterByLastStep___Precedent_::User_EmailAlreadyExist => {
+                        User__Authorization___RegisterByLastStep___Precedent {
                             application_user__email_already_exist: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___RegisterByLastStep___Precedent_::UserRegistrationToken_NotFound => {
-                        ApplicationUser__Authorization___RegisterByLastStep___Precedent {
+                    User__Authorization___RegisterByLastStep___Precedent_::UserRegistrationToken_NotFound => {
+                        User__Authorization___RegisterByLastStep___Precedent {
                             application_user_registration_token__not_found: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___RegisterByLastStep___Precedent_::UserRegistrationToken_AlreadyExpired => {
-                        ApplicationUser__Authorization___RegisterByLastStep___Precedent {
+                    User__Authorization___RegisterByLastStep___Precedent_::UserRegistrationToken_AlreadyExpired => {
+                        User__Authorization___RegisterByLastStep___Precedent {
                             application_user_registration_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___RegisterByLastStep___Precedent_::UserRegistrationToken_IsNotApproved => {
-                        ApplicationUser__Authorization___RegisterByLastStep___Precedent {
+                    User__Authorization___RegisterByLastStep___Precedent_::UserRegistrationToken_IsNotApproved => {
+                        User__Authorization___RegisterByLastStep___Precedent {
                             application_user_registration_token__is_not_approved: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___RegisterByLastStep___Precedent_::UserRegistrationToken_WrongValue => {
-                        ApplicationUser__Authorization___RegisterByLastStep___Precedent {
+                    User__Authorization___RegisterByLastStep___Precedent_::UserRegistrationToken_WrongValue => {
+                        User__Authorization___RegisterByLastStep___Precedent {
                             application_user_registration_token__wrong_value: true,
                             ..Default::default()
                         }
@@ -1579,7 +1579,7 @@ pub extern "C" fn application_user___authorization____register_by_last_step____d
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____register_by_last_step____deserialize____deallocate(
-    c_result: *mut ApplicationUser__Authorization___RegisterByLastStep___C_Result,
+    c_result: *mut User__Authorization___RegisterByLastStep___C_Result,
 ) -> () {
     if c_result.is_null() {
         return ();
@@ -1597,16 +1597,16 @@ pub extern "C" fn application_user___authorization____register_by_last_step____d
     return ();
 }
 #[repr(C)]
-pub struct ApplicationUser__Authorization___ResetPasswordByFirstStep___Incoming {
+pub struct User__Authorization___ResetPasswordByFirstStep___Incoming {
     pub application_user__email: C_String,
     pub application_user_device__id: C_String,
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____reset_password_by_first_step____serialize____allocate(
-    incoming: *mut ApplicationUser__Authorization___ResetPasswordByFirstStep___Incoming,
+    incoming: *mut User__Authorization___ResetPasswordByFirstStep___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
-    let converter = move |incoming: &'_ ApplicationUser__Authorization___ResetPasswordByFirstStep___Incoming| -> Result<ApplicationUser__Authorization___ResetPasswordByFirstStep___Incoming_, Box<dyn StdError + 'static>> {
-        let incoming_ = ApplicationUser__Authorization___ResetPasswordByFirstStep___Incoming_ {
+    let converter = move |incoming: &'_ User__Authorization___ResetPasswordByFirstStep___Incoming| -> Result<User__Authorization___ResetPasswordByFirstStep___Incoming_, Box<dyn StdError + 'static>> {
+        let incoming_ = User__Authorization___ResetPasswordByFirstStep___Incoming_ {
             application_user__email: incoming.application_user__email.clone_as_string()?,
             application_user_device__id: incoming.application_user_device__id.clone_as_string()?,
         };
@@ -1622,11 +1622,11 @@ pub extern "C" fn application_user___authorization____reset_password_by_first_st
     Allocator::<C_Result<C_Vector<c_uchar>>>::deallocate(c_result);
     return ();
 }
-type ApplicationUser__Authorization___ResetPasswordByFirstStep___C_Result =
-    C_Result<C_UnifiedReport<ApplicationUser__Authorization___ResetPasswordByFirstStep___Outcoming, ApplicationUser__Authorization___ResetPasswordByFirstStep___Precedent>>;
+type User__Authorization___ResetPasswordByFirstStep___C_Result =
+    C_Result<C_UnifiedReport<User__Authorization___ResetPasswordByFirstStep___Outcoming, User__Authorization___ResetPasswordByFirstStep___Precedent>>;
 #[repr(C)]
 #[derive(Default)]
-pub struct ApplicationUser__Authorization___ResetPasswordByFirstStep___Outcoming {
+pub struct User__Authorization___ResetPasswordByFirstStep___Outcoming {
     pub application_user__id: c_long,
     pub verification_message_sent: bool,
     pub application_user_reset_password_token__can_be_resent_from: c_long,
@@ -1635,19 +1635,19 @@ pub struct ApplicationUser__Authorization___ResetPasswordByFirstStep___Outcoming
 }
 #[repr(C)]
 #[derive(Default)]
-pub struct ApplicationUser__Authorization___ResetPasswordByFirstStep___Precedent {
+pub struct User__Authorization___ResetPasswordByFirstStep___Precedent {
     pub application_user__not_found: bool,
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____reset_password_by_first_step____deserialize____allocate(
     c_vector_of_bytes: *mut C_Vector<c_uchar>,
-) -> *mut ApplicationUser__Authorization___ResetPasswordByFirstStep___C_Result {
+) -> *mut User__Authorization___ResetPasswordByFirstStep___C_Result {
     let converter = move |unified_report: UnifiedReport<
-        ApplicationUser__Authorization___ResetPasswordByFirstStep___Outcoming_,
-        ApplicationUser__Authorization___ResetPasswordByFirstStep___Precedent_,
+        User__Authorization___ResetPasswordByFirstStep___Outcoming_,
+        User__Authorization___ResetPasswordByFirstStep___Precedent_,
     >|
           -> Result<
-        C_UnifiedReport<ApplicationUser__Authorization___ResetPasswordByFirstStep___Outcoming, ApplicationUser__Authorization___ResetPasswordByFirstStep___Precedent>,
+        C_UnifiedReport<User__Authorization___ResetPasswordByFirstStep___Outcoming, User__Authorization___ResetPasswordByFirstStep___Precedent>,
         Box<dyn StdError + 'static>,
     > {
         let unified_report_ = match unified_report {
@@ -1659,7 +1659,7 @@ pub extern "C" fn application_user___authorization____reset_password_by_first_st
                     Data::Filled {
                         data: data__,
                     } => {
-                        let outcoming = ApplicationUser__Authorization___ResetPasswordByFirstStep___Outcoming {
+                        let outcoming = User__Authorization___ResetPasswordByFirstStep___Outcoming {
                             application_user__id: data__.application_user__id,
                             verification_message_sent: data__.verification_message_sent,
                             application_user_reset_password_token__can_be_resent_from: data__.application_user_reset_password_token__can_be_resent_from,
@@ -1675,9 +1675,9 @@ pub extern "C" fn application_user___authorization____reset_password_by_first_st
                 precedent,
             } => {
                 match precedent {
-                    ApplicationUser__Authorization___ResetPasswordByFirstStep___Precedent_::User_NotFound => {}
+                    User__Authorization___ResetPasswordByFirstStep___Precedent_::User_NotFound => {}
                 };
-                let precedent_ = ApplicationUser__Authorization___ResetPasswordByFirstStep___Precedent {
+                let precedent_ = User__Authorization___ResetPasswordByFirstStep___Precedent {
                     application_user__not_found: true,
                 };
                 C_UnifiedReport::precedent(precedent_)
@@ -1692,23 +1692,23 @@ pub extern "C" fn application_user___authorization____reset_password_by_first_st
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____reset_password_by_first_step____deserialize____deallocate(
-    c_result: *mut ApplicationUser__Authorization___ResetPasswordByFirstStep___C_Result,
+    c_result: *mut User__Authorization___ResetPasswordByFirstStep___C_Result,
 ) -> () {
     Allocator::<C_Result<C_UnifiedReport<_, _>>>::deallocate(c_result);
     return ();
 }
 #[repr(C)]
-pub struct ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming {
+pub struct User__Authorization___ResetPasswordBySecondStep___Incoming {
     pub application_user__id: c_long,
     pub application_user_device__id: C_String,
     pub application_user_reset_password_token__value: C_String,
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____reset_password_by_second_step____serialize____allocate(
-    incoming: *mut ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming,
+    incoming: *mut User__Authorization___ResetPasswordBySecondStep___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
-    let converter = move |incoming: &'_ ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming| -> Result<ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming_, Box<dyn StdError + 'static>> {
-        let incoming_ = ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming_ {
+    let converter = move |incoming: &'_ User__Authorization___ResetPasswordBySecondStep___Incoming| -> Result<User__Authorization___ResetPasswordBySecondStep___Incoming_, Box<dyn StdError + 'static>> {
+        let incoming_ = User__Authorization___ResetPasswordBySecondStep___Incoming_ {
             application_user__id: incoming.application_user__id,
             application_user_device__id: incoming.application_user_device__id.clone_as_string()?,
             application_user_reset_password_token__value: incoming.application_user_reset_password_token__value.clone_as_string()?,
@@ -1725,11 +1725,11 @@ pub extern "C" fn application_user___authorization____reset_password_by_second_s
     Allocator::<C_Result<C_Vector<c_uchar>>>::deallocate(c_result);
     return ();
 }
-type ApplicationUser__Authorization___ResetPasswordBySecondStep___C_Result =
-    C_Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent>>;
+type User__Authorization___ResetPasswordBySecondStep___C_Result =
+    C_Result<C_UnifiedReport<C_Void, User__Authorization___ResetPasswordBySecondStep___Precedent>>;
 #[repr(C)]
 #[derive(Default)]
-pub struct ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent {
+pub struct User__Authorization___ResetPasswordBySecondStep___Precedent {
     pub application_user_reset_password_token__not_found: bool,
     pub application_user_reset_password_token__already_expired: bool,
     pub application_user_reset_password_token__already_approved: bool,
@@ -1744,8 +1744,8 @@ pub struct UserResetPasswordToken_WrongValue {
 #[no_mangle]
 pub extern "C" fn application_user___authorization____reset_password_by_second_step____deserialize____allocate(
     c_vector_of_bytes: *mut C_Vector<c_uchar>,
-) -> *mut ApplicationUser__Authorization___ResetPasswordBySecondStep___C_Result {
-    let converter = move |unified_report: UnifiedReport<Void, ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_>| -> Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent>, Box<dyn StdError + 'static>> {
+) -> *mut User__Authorization___ResetPasswordBySecondStep___C_Result {
+    let converter = move |unified_report: UnifiedReport<Void, User__Authorization___ResetPasswordBySecondStep___Precedent_>| -> Result<C_UnifiedReport<C_Void, User__Authorization___ResetPasswordBySecondStep___Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
                 let data = match data {
@@ -1761,26 +1761,26 @@ pub extern "C" fn application_user___authorization____reset_password_by_second_s
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_::UserResetPasswordToken_NotFound => {
-                        ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent {
+                    User__Authorization___ResetPasswordBySecondStep___Precedent_::UserResetPasswordToken_NotFound => {
+                        User__Authorization___ResetPasswordBySecondStep___Precedent {
                             application_user_reset_password_token__not_found: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_::UserResetPasswordToken_AlreadyExpired => {
-                        ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent {
+                    User__Authorization___ResetPasswordBySecondStep___Precedent_::UserResetPasswordToken_AlreadyExpired => {
+                        User__Authorization___ResetPasswordBySecondStep___Precedent {
                             application_user_reset_password_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_::UserResetPasswordToken_AlreadyApproved => {
-                        ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent {
+                    User__Authorization___ResetPasswordBySecondStep___Precedent_::UserResetPasswordToken_AlreadyApproved => {
+                        User__Authorization___ResetPasswordBySecondStep___Precedent {
                             application_user_reset_password_token__already_approved: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_::UserResetPasswordToken_WrongValue { application_user_reset_password_token__wrong_enter_tries_quantity } => {
-                        ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent {
+                    User__Authorization___ResetPasswordBySecondStep___Precedent_::UserResetPasswordToken_WrongValue { application_user_reset_password_token__wrong_enter_tries_quantity } => {
+                        User__Authorization___ResetPasswordBySecondStep___Precedent {
                             application_user_reset_password_token__wrong_value: UserResetPasswordToken_WrongValue {
                                 is_exist: true,
                                 application_user_reset_password_token__wrong_enter_tries_quantity: application_user_reset_password_token__wrong_enter_tries_quantity,
@@ -1803,13 +1803,13 @@ pub extern "C" fn application_user___authorization____reset_password_by_second_s
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____reset_password_by_second_step____deserialize____deallocate(
-    c_result: *mut ApplicationUser__Authorization___ResetPasswordBySecondStep___C_Result,
+    c_result: *mut User__Authorization___ResetPasswordBySecondStep___C_Result,
 ) -> () {
     Allocator::<C_Result<C_UnifiedReport<_, _>>>::deallocate(c_result);
     return ();
 }
 #[repr(C)]
-pub struct ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming {
+pub struct User__Authorization___ResetPasswordByLastStep___Incoming {
     pub application_user__id: c_long,
     pub application_user_device__id: C_String,
     pub application_user__password: C_String,
@@ -1817,10 +1817,10 @@ pub struct ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming {
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____reset_password_by_last_step____serialize____allocate(
-    incoming: *mut ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming,
+    incoming: *mut User__Authorization___ResetPasswordByLastStep___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
-    let converter = move |incoming: &'_ ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming| -> Result<ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming_, Box<dyn StdError + 'static>> {
-        let incoming_ = ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming_ {
+    let converter = move |incoming: &'_ User__Authorization___ResetPasswordByLastStep___Incoming| -> Result<User__Authorization___ResetPasswordByLastStep___Incoming_, Box<dyn StdError + 'static>> {
+        let incoming_ = User__Authorization___ResetPasswordByLastStep___Incoming_ {
             application_user__id: incoming.application_user__id,
             application_user_device__id: incoming.application_user_device__id.clone_as_string()?,
             application_user__password: incoming.application_user__password.clone_as_string()?,
@@ -1838,10 +1838,10 @@ pub extern "C" fn application_user___authorization____reset_password_by_last_ste
     Allocator::<C_Result<C_Vector<c_uchar>>>::deallocate(c_result);
     return ();
 }
-type ApplicationUser__Authorization___ResetPasswordByLastStep___C_Result = C_Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent>>;
+type User__Authorization___ResetPasswordByLastStep___C_Result = C_Result<C_UnifiedReport<C_Void, User__Authorization___ResetPasswordByLastStep___Precedent>>;
 #[repr(C)]
 #[derive(Default)]
-pub struct ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent {
+pub struct User__Authorization___ResetPasswordByLastStep___Precedent {
     pub application_user__not_found: bool,
     pub application_user_reset_password_token__not_found: bool,
     pub application_user_reset_password_token__already_expired: bool,
@@ -1851,8 +1851,8 @@ pub struct ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent 
 #[no_mangle]
 pub extern "C" fn application_user___authorization____reset_password_by_last_step____deserialize____allocate(
     c_vector_of_bytes: *mut C_Vector<c_uchar>,
-) -> *mut ApplicationUser__Authorization___ResetPasswordByLastStep___C_Result {
-    let converter = move |unified_report: UnifiedReport<Void, ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_>| -> Result<C_UnifiedReport<C_Void, ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent>, Box<dyn StdError + 'static>> {
+) -> *mut User__Authorization___ResetPasswordByLastStep___C_Result {
+    let converter = move |unified_report: UnifiedReport<Void, User__Authorization___ResetPasswordByLastStep___Precedent_>| -> Result<C_UnifiedReport<C_Void, User__Authorization___ResetPasswordByLastStep___Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
                 let data = match data {
@@ -1868,32 +1868,32 @@ pub extern "C" fn application_user___authorization____reset_password_by_last_ste
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
-                    ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_::User_NotFound => {
-                        ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent {
+                    User__Authorization___ResetPasswordByLastStep___Precedent_::User_NotFound => {
+                        User__Authorization___ResetPasswordByLastStep___Precedent {
                             application_user__not_found: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_::UserResetPasswordToken_NotFound => {
-                        ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent {
+                    User__Authorization___ResetPasswordByLastStep___Precedent_::UserResetPasswordToken_NotFound => {
+                        User__Authorization___ResetPasswordByLastStep___Precedent {
                             application_user_reset_password_token__not_found: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_::UserResetPasswordToken_AlreadyExpired => {
-                        ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent {
+                    User__Authorization___ResetPasswordByLastStep___Precedent_::UserResetPasswordToken_AlreadyExpired => {
+                        User__Authorization___ResetPasswordByLastStep___Precedent {
                             application_user_reset_password_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_::UserResetPasswordToken_IsNotApproved => {
-                        ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent {
+                    User__Authorization___ResetPasswordByLastStep___Precedent_::UserResetPasswordToken_IsNotApproved => {
+                        User__Authorization___ResetPasswordByLastStep___Precedent {
                             application_user_reset_password_token__is_not_approved: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_::UserResetPasswordToken_WrongValue => {
-                        ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent {
+                    User__Authorization___ResetPasswordByLastStep___Precedent_::UserResetPasswordToken_WrongValue => {
+                        User__Authorization___ResetPasswordByLastStep___Precedent {
                             application_user_reset_password_token__wrong_value: true,
                             ..Default::default()
                         }
@@ -1913,22 +1913,22 @@ pub extern "C" fn application_user___authorization____reset_password_by_last_ste
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____reset_password_by_last_step____deserialize____deallocate(
-    c_result: *mut ApplicationUser__Authorization___ResetPasswordByLastStep___C_Result,
+    c_result: *mut User__Authorization___ResetPasswordByLastStep___C_Result,
 ) -> () {
     Allocator::<C_Result<C_UnifiedReport<_, _>>>::deallocate(c_result);
     return ();
 }
 #[repr(C)]
-pub struct ApplicationUser__Authorization___SendEmailForRegister___Incoming {
+pub struct User__Authorization___SendEmailForRegister___Incoming {
     pub application_user__email: C_String,
     pub application_user_device__id: C_String,
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____send_email_for_register____serialize____allocate(
-    incoming: *mut ApplicationUser__Authorization___SendEmailForRegister___Incoming,
+    incoming: *mut User__Authorization___SendEmailForRegister___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
-    let converter = move |incoming: &'_ ApplicationUser__Authorization___SendEmailForRegister___Incoming| -> Result<ApplicationUser__Authorization___SendEmailForRegister___Incoming_, Box<dyn StdError + 'static>> {
-        let incoming_ = ApplicationUser__Authorization___SendEmailForRegister___Incoming_ {
+    let converter = move |incoming: &'_ User__Authorization___SendEmailForRegister___Incoming| -> Result<User__Authorization___SendEmailForRegister___Incoming_, Box<dyn StdError + 'static>> {
+        let incoming_ = User__Authorization___SendEmailForRegister___Incoming_ {
             application_user__email: incoming.application_user__email.clone_as_string()?,
             application_user_device__id: incoming.application_user_device__id.clone_as_string()?,
         };
@@ -1944,16 +1944,16 @@ pub extern "C" fn application_user___authorization____send_email_for_register___
     Allocator::<C_Result<C_Vector<c_uchar>>>::deallocate(c_result);
     return ();
 }
-type ApplicationUser__Authorization___SendEmailForRegister___C_Result =
-    C_Result<C_UnifiedReport<ApplicationUser__Authorization___SendEmailForRegister___Outcoming, ApplicationUser__Authorization___SendEmailForRegister___Precedent>>;
+type User__Authorization___SendEmailForRegister___C_Result =
+    C_Result<C_UnifiedReport<User__Authorization___SendEmailForRegister___Outcoming, User__Authorization___SendEmailForRegister___Precedent>>;
 #[repr(C)]
 #[derive(Default)]
-pub struct ApplicationUser__Authorization___SendEmailForRegister___Outcoming {
+pub struct User__Authorization___SendEmailForRegister___Outcoming {
     pub application_user_registration_token__can_be_resent_from: c_long,
 }
 #[repr(C)]
 #[derive(Default)]
-pub struct ApplicationUser__Authorization___SendEmailForRegister___Precedent {
+pub struct User__Authorization___SendEmailForRegister___Precedent {
     pub application_user_registration_token__not_found: bool,
     pub application_user_registration_token__already_expired: bool,
     pub application_user_registration_token__already_approved: bool,
@@ -1962,13 +1962,13 @@ pub struct ApplicationUser__Authorization___SendEmailForRegister___Precedent {
 #[no_mangle]
 pub extern "C" fn application_user___authorization____send_email_for_register____deserialize____allocate(
     c_vector_of_bytes: *mut C_Vector<c_uchar>,
-) -> *mut ApplicationUser__Authorization___SendEmailForRegister___C_Result {
+) -> *mut User__Authorization___SendEmailForRegister___C_Result {
     let converter = move |unified_report: UnifiedReport<
-        ApplicationUser__Authorization___SendEmailForRegister___Outcoming_,
-        ApplicationUser__Authorization___SendEmailForRegister___Precedent_,
+        User__Authorization___SendEmailForRegister___Outcoming_,
+        User__Authorization___SendEmailForRegister___Precedent_,
     >|
           -> Result<
-        C_UnifiedReport<ApplicationUser__Authorization___SendEmailForRegister___Outcoming, ApplicationUser__Authorization___SendEmailForRegister___Precedent>,
+        C_UnifiedReport<User__Authorization___SendEmailForRegister___Outcoming, User__Authorization___SendEmailForRegister___Precedent>,
         Box<dyn StdError + 'static>,
     > {
         let unified_report_ = match unified_report {
@@ -1980,7 +1980,7 @@ pub extern "C" fn application_user___authorization____send_email_for_register___
                     Data::Filled {
                         data: data__,
                     } => {
-                        let outcoming = ApplicationUser__Authorization___SendEmailForRegister___Outcoming {
+                        let outcoming = User__Authorization___SendEmailForRegister___Outcoming {
                             application_user_registration_token__can_be_resent_from: data__.application_user_registration_token__can_be_resent_from,
                         };
                         C_Data::filled(outcoming)
@@ -1992,26 +1992,26 @@ pub extern "C" fn application_user___authorization____send_email_for_register___
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    ApplicationUser__Authorization___SendEmailForRegister___Precedent_::UserRegistrationToken_NotFound => {
-                        ApplicationUser__Authorization___SendEmailForRegister___Precedent {
+                    User__Authorization___SendEmailForRegister___Precedent_::UserRegistrationToken_NotFound => {
+                        User__Authorization___SendEmailForRegister___Precedent {
                             application_user_registration_token__not_found: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___SendEmailForRegister___Precedent_::UserRegistrationToken_AlreadyExpired => {
-                        ApplicationUser__Authorization___SendEmailForRegister___Precedent {
+                    User__Authorization___SendEmailForRegister___Precedent_::UserRegistrationToken_AlreadyExpired => {
+                        User__Authorization___SendEmailForRegister___Precedent {
                             application_user_registration_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___SendEmailForRegister___Precedent_::UserRegistrationToken_AlreadyApproved => {
-                        ApplicationUser__Authorization___SendEmailForRegister___Precedent {
+                    User__Authorization___SendEmailForRegister___Precedent_::UserRegistrationToken_AlreadyApproved => {
+                        User__Authorization___SendEmailForRegister___Precedent {
                             application_user_registration_token__already_approved: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___SendEmailForRegister___Precedent_::UserRegistrationToken_TimeToResendHasNotCome => {
-                        ApplicationUser__Authorization___SendEmailForRegister___Precedent {
+                    User__Authorization___SendEmailForRegister___Precedent_::UserRegistrationToken_TimeToResendHasNotCome => {
+                        User__Authorization___SendEmailForRegister___Precedent {
                             application_user_registration_token__time_to_resend_has_not_come: true,
                             ..Default::default()
                         }
@@ -2029,22 +2029,22 @@ pub extern "C" fn application_user___authorization____send_email_for_register___
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____send_email_for_register____deserialize____deallocate(
-    c_result: *mut ApplicationUser__Authorization___SendEmailForRegister___C_Result,
+    c_result: *mut User__Authorization___SendEmailForRegister___C_Result,
 ) -> () {
     Allocator::<C_Result<C_UnifiedReport<_, _>>>::deallocate(c_result);
     return ();
 }
 #[repr(C)]
-pub struct ApplicationUser__Authorization___SendEmailForAuthorize___Incoming {
+pub struct User__Authorization___SendEmailForAuthorize___Incoming {
     pub application_user_device__id: C_String,
     pub application_user__id: c_long,
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____send_email_for_authorize____serialize____allocate(
-    incoming: *mut ApplicationUser__Authorization___SendEmailForAuthorize___Incoming,
+    incoming: *mut User__Authorization___SendEmailForAuthorize___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
-    let converter = move |incoming: &'_ ApplicationUser__Authorization___SendEmailForAuthorize___Incoming| -> Result<ApplicationUser__Authorization___SendEmailForAuthorize___Incoming_, Box<dyn StdError + 'static>> {
-        let incoming_ = ApplicationUser__Authorization___SendEmailForAuthorize___Incoming_ {
+    let converter = move |incoming: &'_ User__Authorization___SendEmailForAuthorize___Incoming| -> Result<User__Authorization___SendEmailForAuthorize___Incoming_, Box<dyn StdError + 'static>> {
+        let incoming_ = User__Authorization___SendEmailForAuthorize___Incoming_ {
             application_user_device__id: incoming.application_user_device__id.clone_as_string()?,
             application_user__id: incoming.application_user__id,
         };
@@ -2060,16 +2060,16 @@ pub extern "C" fn application_user___authorization____send_email_for_authorize__
     Allocator::<C_Result<C_Vector<c_uchar>>>::deallocate(c_result);
     return ();
 }
-type ApplicationUser__Authorization___SendEmailForAuthorize___C_Result =
-    C_Result<C_UnifiedReport<ApplicationUser__Authorization___SendEmailForAuthorize___Outcoming, ApplicationUser__Authorization___SendEmailForAuthorize___Precedent>>;
+type User__Authorization___SendEmailForAuthorize___C_Result =
+    C_Result<C_UnifiedReport<User__Authorization___SendEmailForAuthorize___Outcoming, User__Authorization___SendEmailForAuthorize___Precedent>>;
 #[repr(C)]
 #[derive(Default)]
-pub struct ApplicationUser__Authorization___SendEmailForAuthorize___Outcoming {
+pub struct User__Authorization___SendEmailForAuthorize___Outcoming {
     pub application_user_authorization_token__can_be_resent_from: c_long,
 }
 #[repr(C)]
 #[derive(Default)]
-pub struct ApplicationUser__Authorization___SendEmailForAuthorize___Precedent {
+pub struct User__Authorization___SendEmailForAuthorize___Precedent {
     pub application_user__not_found: bool,
     pub application_user_authorization_token__not_found: bool,
     pub application_user_authorization_token__already_expired: bool,
@@ -2078,13 +2078,13 @@ pub struct ApplicationUser__Authorization___SendEmailForAuthorize___Precedent {
 #[no_mangle]
 pub extern "C" fn application_user___authorization____send_email_for_authorize____deserialize____allocate(
     c_vector_of_bytes: *mut C_Vector<c_uchar>,
-) -> *mut ApplicationUser__Authorization___SendEmailForAuthorize___C_Result {
+) -> *mut User__Authorization___SendEmailForAuthorize___C_Result {
     let converter = move |unified_report: UnifiedReport<
-        ApplicationUser__Authorization___SendEmailForAuthorize___Outcoming_,
-        ApplicationUser__Authorization___SendEmailForAuthorize___Precedent_,
+        User__Authorization___SendEmailForAuthorize___Outcoming_,
+        User__Authorization___SendEmailForAuthorize___Precedent_,
     >|
           -> Result<
-        C_UnifiedReport<ApplicationUser__Authorization___SendEmailForAuthorize___Outcoming, ApplicationUser__Authorization___SendEmailForAuthorize___Precedent>,
+        C_UnifiedReport<User__Authorization___SendEmailForAuthorize___Outcoming, User__Authorization___SendEmailForAuthorize___Precedent>,
         Box<dyn StdError + 'static>,
     > {
         let unified_report_ = match unified_report {
@@ -2096,7 +2096,7 @@ pub extern "C" fn application_user___authorization____send_email_for_authorize__
                     Data::Filled {
                         data: data__,
                     } => {
-                        let outcoming = ApplicationUser__Authorization___SendEmailForAuthorize___Outcoming {
+                        let outcoming = User__Authorization___SendEmailForAuthorize___Outcoming {
                             application_user_authorization_token__can_be_resent_from: data__.application_user_authorization_token__can_be_resent_from,
                         };
                         C_Data::filled(outcoming)
@@ -2108,26 +2108,26 @@ pub extern "C" fn application_user___authorization____send_email_for_authorize__
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    ApplicationUser__Authorization___SendEmailForAuthorize___Precedent_::User_NotFound => {
-                        ApplicationUser__Authorization___SendEmailForAuthorize___Precedent {
+                    User__Authorization___SendEmailForAuthorize___Precedent_::User_NotFound => {
+                        User__Authorization___SendEmailForAuthorize___Precedent {
                             application_user__not_found: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___SendEmailForAuthorize___Precedent_::UserAuthorizationToken_NotFound => {
-                        ApplicationUser__Authorization___SendEmailForAuthorize___Precedent {
+                    User__Authorization___SendEmailForAuthorize___Precedent_::UserAuthorizationToken_NotFound => {
+                        User__Authorization___SendEmailForAuthorize___Precedent {
                             application_user_authorization_token__not_found: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___SendEmailForAuthorize___Precedent_::UserAuthorizationToken_AlreadyExpired => {
-                        ApplicationUser__Authorization___SendEmailForAuthorize___Precedent {
+                    User__Authorization___SendEmailForAuthorize___Precedent_::UserAuthorizationToken_AlreadyExpired => {
+                        User__Authorization___SendEmailForAuthorize___Precedent {
                             application_user_authorization_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___SendEmailForAuthorize___Precedent_::UserAuthorizationToken_TimeToResendHasNotCome => {
-                        ApplicationUser__Authorization___SendEmailForAuthorize___Precedent {
+                    User__Authorization___SendEmailForAuthorize___Precedent_::UserAuthorizationToken_TimeToResendHasNotCome => {
+                        User__Authorization___SendEmailForAuthorize___Precedent {
                             application_user_authorization_token__time_to_resend_has_not_come: true,
                             ..Default::default()
                         }
@@ -2145,22 +2145,22 @@ pub extern "C" fn application_user___authorization____send_email_for_authorize__
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____send_email_for_authorize____deserialize____deallocate(
-    c_result: *mut ApplicationUser__Authorization___SendEmailForAuthorize___C_Result,
+    c_result: *mut User__Authorization___SendEmailForAuthorize___C_Result,
 ) -> () {
     Allocator::<C_Result<C_UnifiedReport<_, _>>>::deallocate(c_result);
     return ();
 }
 #[repr(C)]
-pub struct ApplicationUser__Authorization___SendEmailForResetPassword___Incoming {
+pub struct User__Authorization___SendEmailForResetPassword___Incoming {
     pub application_user__id: c_long,
     pub application_user_device__id: C_String,
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____send_email_for_reset_password____serialize____allocate(
-    incoming: *mut ApplicationUser__Authorization___SendEmailForResetPassword___Incoming,
+    incoming: *mut User__Authorization___SendEmailForResetPassword___Incoming,
 ) -> *mut C_Result<C_Vector<c_uchar>> {
-    let converter = move |incoming: &'_ ApplicationUser__Authorization___SendEmailForResetPassword___Incoming| -> Result<ApplicationUser__Authorization___SendEmailForResetPassword___Incoming_, Box<dyn StdError + 'static>> {
-        let incoming_ = ApplicationUser__Authorization___SendEmailForResetPassword___Incoming_ {
+    let converter = move |incoming: &'_ User__Authorization___SendEmailForResetPassword___Incoming| -> Result<User__Authorization___SendEmailForResetPassword___Incoming_, Box<dyn StdError + 'static>> {
+        let incoming_ = User__Authorization___SendEmailForResetPassword___Incoming_ {
             application_user__id: incoming.application_user__id,
             application_user_device__id: incoming.application_user_device__id.clone_as_string()?,
         };
@@ -2176,16 +2176,16 @@ pub extern "C" fn application_user___authorization____send_email_for_reset_passw
     Allocator::<C_Result<C_Vector<c_uchar>>>::deallocate(c_result);
     return ();
 }
-type ApplicationUser__Authorization___SendEmailForResetPassword___C_Result =
-    C_Result<C_UnifiedReport<ApplicationUser__Authorization___SendEmailForResetPassword___Outcoming, ApplicationUser__Authorization___SendEmailForResetPassword___Precedent>>;
+type User__Authorization___SendEmailForResetPassword___C_Result =
+    C_Result<C_UnifiedReport<User__Authorization___SendEmailForResetPassword___Outcoming, User__Authorization___SendEmailForResetPassword___Precedent>>;
 #[repr(C)]
 #[derive(Default)]
-pub struct ApplicationUser__Authorization___SendEmailForResetPassword___Outcoming {
+pub struct User__Authorization___SendEmailForResetPassword___Outcoming {
     pub application_user_resep_password_token_can_be_resent_from: c_long,
 }
 #[repr(C)]
 #[derive(Default)]
-pub struct ApplicationUser__Authorization___SendEmailForResetPassword___Precedent {
+pub struct User__Authorization___SendEmailForResetPassword___Precedent {
     pub application_user__not_found: bool,
     pub application_user_reset_password_token__not_found: bool,
     pub application_user_reset_password_token__already_expired: bool,
@@ -2195,13 +2195,13 @@ pub struct ApplicationUser__Authorization___SendEmailForResetPassword___Preceden
 #[no_mangle]
 pub extern "C" fn application_user___authorization____send_email_for_reset_password____deserialize____allocate(
     c_vector_of_bytes: *mut C_Vector<c_uchar>,
-) -> *mut ApplicationUser__Authorization___SendEmailForResetPassword___C_Result {
+) -> *mut User__Authorization___SendEmailForResetPassword___C_Result {
     let converter = move |unified_report: UnifiedReport<
-        ApplicationUser__Authorization___SendEmailForResetPassword___Outcoming_,
-        ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_,
+        User__Authorization___SendEmailForResetPassword___Outcoming_,
+        User__Authorization___SendEmailForResetPassword___Precedent_,
     >|
           -> Result<
-        C_UnifiedReport<ApplicationUser__Authorization___SendEmailForResetPassword___Outcoming, ApplicationUser__Authorization___SendEmailForResetPassword___Precedent>,
+        C_UnifiedReport<User__Authorization___SendEmailForResetPassword___Outcoming, User__Authorization___SendEmailForResetPassword___Precedent>,
         Box<dyn StdError + 'static>,
     > {
         let unified_report_ = match unified_report {
@@ -2213,7 +2213,7 @@ pub extern "C" fn application_user___authorization____send_email_for_reset_passw
                     Data::Filled {
                         data: data__,
                     } => {
-                        let outcoming = ApplicationUser__Authorization___SendEmailForResetPassword___Outcoming {
+                        let outcoming = User__Authorization___SendEmailForResetPassword___Outcoming {
                             application_user_resep_password_token_can_be_resent_from: data__.application_user_reset_password_token__can_be_resent_from,
                         };
                         C_Data::filled(outcoming)
@@ -2225,32 +2225,32 @@ pub extern "C" fn application_user___authorization____send_email_for_reset_passw
                 precedent,
             } => {
                 let precedent_ = match precedent {
-                    ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_::User_NotFound => {
-                        ApplicationUser__Authorization___SendEmailForResetPassword___Precedent {
+                    User__Authorization___SendEmailForResetPassword___Precedent_::User_NotFound => {
+                        User__Authorization___SendEmailForResetPassword___Precedent {
                             application_user__not_found: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_::UserResetPasswordToken_NotFound => {
-                        ApplicationUser__Authorization___SendEmailForResetPassword___Precedent {
+                    User__Authorization___SendEmailForResetPassword___Precedent_::UserResetPasswordToken_NotFound => {
+                        User__Authorization___SendEmailForResetPassword___Precedent {
                             application_user_reset_password_token__not_found: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_::UserResetPasswordToken_AlreadyExpired => {
-                        ApplicationUser__Authorization___SendEmailForResetPassword___Precedent {
+                    User__Authorization___SendEmailForResetPassword___Precedent_::UserResetPasswordToken_AlreadyExpired => {
+                        User__Authorization___SendEmailForResetPassword___Precedent {
                             application_user_reset_password_token__already_expired: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_::UserResetPasswordToken_AlreadyApproved => {
-                        ApplicationUser__Authorization___SendEmailForResetPassword___Precedent {
+                    User__Authorization___SendEmailForResetPassword___Precedent_::UserResetPasswordToken_AlreadyApproved => {
+                        User__Authorization___SendEmailForResetPassword___Precedent {
                             application_user_reset_password_token__already_approved: true,
                             ..Default::default()
                         }
                     }
-                    ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_::UserResetPasswordToken_TimeToResendHasNotCome => {
-                        ApplicationUser__Authorization___SendEmailForResetPassword___Precedent {
+                    User__Authorization___SendEmailForResetPassword___Precedent_::UserResetPasswordToken_TimeToResendHasNotCome => {
+                        User__Authorization___SendEmailForResetPassword___Precedent {
                             application_user_reset_password_token__time_to_resend_has_not_come: true,
                             ..Default::default()
                         }
@@ -2268,14 +2268,14 @@ pub extern "C" fn application_user___authorization____send_email_for_reset_passw
 }
 #[no_mangle]
 pub extern "C" fn application_user___authorization____send_email_for_reset_password____deserialize____deallocate(
-    c_result: *mut ApplicationUser__Authorization___SendEmailForResetPassword___C_Result,
+    c_result: *mut User__Authorization___SendEmailForResetPassword___C_Result,
 ) -> () {
     Allocator::<C_Result<C_UnifiedReport<_, _>>>::deallocate(c_result);
     return ();
 }
 #[repr(C)]
 pub struct Channel__Base___GetManyByNameInSubscriptions___Incoming {
-    pub application_user_access_token_encoded: ApplicationUserAccessTokenEncoded,
+    pub application_user_access_token_encoded: UserAccessTokenEncoded,
     pub channel__name: C_String,
     pub requery___channel__name: C_Option<C_String>,
     pub limit: c_short,
@@ -2292,7 +2292,7 @@ pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____seriali
                 Option::None
             };
             let incoming_ = Channel__Base___GetManyByNameInSubscriptions___Incoming_ {
-                application_user_access_token_encoded: ApplicationUserAccessTokenEncoded_ {
+                application_user_access_token_encoded: UserAccessTokenEncoded_ {
                     serialized: incoming.application_user_access_token_encoded.serialized.clone_as_vec()?,
                     encoded: incoming.application_user_access_token_encoded.encoded.clone_as_vec()?,
                 },
@@ -2429,7 +2429,7 @@ pub extern "C" fn channel___base____get_many_by_name_in_subscriptions____deseria
 }
 #[repr(C)]
 pub struct Channel__Base___GetManyBySubscription___Incoming {
-    pub application_user_access_token_encoded: ApplicationUserAccessTokenEncoded,
+    pub application_user_access_token_encoded: UserAccessTokenEncoded,
     pub requery___channel__id: C_Option<c_long>,
     pub limit: c_short,
 }
@@ -2442,7 +2442,7 @@ pub extern "C" fn channel___base____get_many_by_subscription____serialize____all
             Option::None
         };
         let incoming_ = Channel__Base___GetManyBySubscription___Incoming_ {
-            application_user_access_token_encoded: ApplicationUserAccessTokenEncoded_ {
+            application_user_access_token_encoded: UserAccessTokenEncoded_ {
                 serialized: incoming.application_user_access_token_encoded.serialized.clone_as_vec()?,
                 encoded: incoming.application_user_access_token_encoded.encoded.clone_as_vec()?,
             },
@@ -2576,7 +2576,7 @@ pub extern "C" fn channel___base____get_many_by_subscription____deserialize____d
 }
 #[repr(C)]
 pub struct Channel__Base___GetManyPublicByName___Incoming {
-    pub application_user_access_token_encoded: ApplicationUserAccessTokenEncoded,
+    pub application_user_access_token_encoded: UserAccessTokenEncoded,
     pub channel__name: C_String,
     pub requery___channel__name: C_Option<C_String>,
     pub limit: c_short,
@@ -2590,7 +2590,7 @@ pub extern "C" fn channel___base____get_many_public_by_name____serialize____allo
             Option::None
         };
         let incoming_ = Channel__Base___GetManyPublicByName___Incoming_ {
-            application_user_access_token_encoded: ApplicationUserAccessTokenEncoded_ {
+            application_user_access_token_encoded: UserAccessTokenEncoded_ {
                 serialized: incoming.application_user_access_token_encoded.serialized.clone_as_vec()?,
                 encoded: incoming.application_user_access_token_encoded.encoded.clone_as_vec()?,
             },
@@ -2724,14 +2724,14 @@ pub extern "C" fn channel___base____get_many_public_by_name____deserialize____de
 }
 #[repr(C)]
 pub struct Channel__Base___GetOneById___Incoming {
-    pub application_user_access_token_encoded: ApplicationUserAccessTokenEncoded,
+    pub application_user_access_token_encoded: UserAccessTokenEncoded,
     pub channel__id: c_long,
 }
 #[no_mangle]
 pub extern "C" fn channel___base____get_one_by_id____serialize____allocate(incoming: *mut Channel__Base___GetOneById___Incoming) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: &'_ Channel__Base___GetOneById___Incoming| -> Result<Channel__Base___GetOneById___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = Channel__Base___GetOneById___Incoming_ {
-            application_user_access_token_encoded: ApplicationUserAccessTokenEncoded_ {
+            application_user_access_token_encoded: UserAccessTokenEncoded_ {
                 serialized: incoming.application_user_access_token_encoded.serialized.clone_as_vec()?,
                 encoded: incoming.application_user_access_token_encoded.encoded.clone_as_vec()?,
             },
@@ -2912,14 +2912,14 @@ pub extern "C" fn channel___base____get_one_by_id____deserialize____deallocate(c
 }
 #[repr(C)]
 pub struct ChannelSubscription__Base___Create___Incoming {
-    pub application_user_access_token_encoded: ApplicationUserAccessTokenEncoded,
+    pub application_user_access_token_encoded: UserAccessTokenEncoded,
     pub channel__id: c_long,
 }
 #[no_mangle]
 pub extern "C" fn channel_subscription___base____create____serialize____allocate(incoming: *mut ChannelSubscription__Base___Create___Incoming) -> *mut C_Result<C_Vector<c_uchar>> {
     let converter = move |incoming: &'_ ChannelSubscription__Base___Create___Incoming| -> Result<ChannelSubscription__Base___Create___Incoming_, Box<dyn StdError + 'static>> {
         let incoming_ = ChannelSubscription__Base___Create___Incoming_ {
-            application_user_access_token_encoded: ApplicationUserAccessTokenEncoded_ {
+            application_user_access_token_encoded: UserAccessTokenEncoded_ {
                 serialized: incoming.application_user_access_token_encoded.serialized.clone_as_vec()?,
                 encoded: incoming.application_user_access_token_encoded.encoded.clone_as_vec()?,
             },
@@ -3088,13 +3088,13 @@ mod test {
                 #[test]
                 fn target_empty____application_user___authorization____authorize_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
                     let unified_report = UnifiedReport::<
-                        ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming_,
-                        ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent_,
+                        User__Authorization___AuthorizeByFirstStep___Outcoming_,
+                        User__Authorization___AuthorizeByFirstStep___Precedent_,
                     >::target_empty();
-                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___AuthorizeByFirstStep___C_Result {
+                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut User__Authorization___AuthorizeByFirstStep___C_Result {
                         return application_user___authorization____authorize_by_first_step____deserialize____allocate(vector_of_bytes);
                     };
-                    let deallocator = move |c_result: *mut ApplicationUser__Authorization___AuthorizeByFirstStep___C_Result| -> () {
+                    let deallocator = move |c_result: *mut User__Authorization___AuthorizeByFirstStep___C_Result| -> () {
                         application_user___authorization____authorize_by_first_step____deserialize____deallocate(c_result);
                         return ();
                     };
@@ -3107,7 +3107,7 @@ mod test {
                 }
                 #[test]
                 fn target_filled____application_user___authorization____authorize_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
-                    let outcoming = ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming_ {
+                    let outcoming = User__Authorization___AuthorizeByFirstStep___Outcoming_ {
                         application_user__id: 0,
                         verification_message_sent: false,
                         application_user_authorization_token__can_be_resent_from: 0,
@@ -3115,13 +3115,13 @@ mod test {
                         application_user_authorization_token__wrong_enter_tries_quantity_limit: 0,
                     };
                     let unified_report = UnifiedReport::<
-                        ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming_,
-                        ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent_,
+                        User__Authorization___AuthorizeByFirstStep___Outcoming_,
+                        User__Authorization___AuthorizeByFirstStep___Precedent_,
                     >::target_filled(outcoming);
-                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___AuthorizeByFirstStep___C_Result {
+                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut User__Authorization___AuthorizeByFirstStep___C_Result {
                         return application_user___authorization____authorize_by_first_step____deserialize____allocate(vector_of_bytes);
                     };
-                    let deallocator = move |c_result: *mut ApplicationUser__Authorization___AuthorizeByFirstStep___C_Result| -> () {
+                    let deallocator = move |c_result: *mut User__Authorization___AuthorizeByFirstStep___C_Result| -> () {
                         application_user___authorization____authorize_by_first_step____deserialize____deallocate(c_result);
                         return ();
                     };
@@ -3134,15 +3134,15 @@ mod test {
                 }
                 #[test]
                 fn precedent____application_user___authorization____authorize_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
-                    let precedent = ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent_::User_WrongEmailOrNicknameOrPassword;
+                    let precedent = User__Authorization___AuthorizeByFirstStep___Precedent_::User_WrongEmailOrNicknameOrPassword;
                     let unified_report = UnifiedReport::<
-                        ApplicationUser__Authorization___AuthorizeByFirstStep___Outcoming_,
-                        ApplicationUser__Authorization___AuthorizeByFirstStep___Precedent_,
+                        User__Authorization___AuthorizeByFirstStep___Outcoming_,
+                        User__Authorization___AuthorizeByFirstStep___Precedent_,
                     >::precedent(precedent);
-                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___AuthorizeByFirstStep___C_Result {
+                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut User__Authorization___AuthorizeByFirstStep___C_Result {
                         return application_user___authorization____authorize_by_first_step____deserialize____allocate(vector_of_bytes);
                     };
-                    let deallocator = move |c_result: *mut ApplicationUser__Authorization___AuthorizeByFirstStep___C_Result| -> () {
+                    let deallocator = move |c_result: *mut User__Authorization___AuthorizeByFirstStep___C_Result| -> () {
                         application_user___authorization____authorize_by_first_step____deserialize____deallocate(c_result);
                         return ();
                     };
@@ -3156,13 +3156,13 @@ mod test {
                 #[test]
                 fn target_empty____application_user___authorization____authorize_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
                     let unified_report = UnifiedReport::<
-                        ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming_,
-                        ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_,
+                        User__Authorization___AuthorizeByLastStep___Outcoming_,
+                        User__Authorization___AuthorizeByLastStep___Precedent_,
                     >::target_empty();
-                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___AuthorizeByLastStep___C_Result {
+                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut User__Authorization___AuthorizeByLastStep___C_Result {
                         return application_user___authorization____authorize_by_last_step____deserialize____allocate(vector_of_bytes);
                     };
-                    let deallocator = move |c_result: *mut ApplicationUser__Authorization___AuthorizeByLastStep___C_Result| -> () {
+                    let deallocator = move |c_result: *mut User__Authorization___AuthorizeByLastStep___C_Result| -> () {
                         application_user___authorization____authorize_by_last_step____deserialize____deallocate(c_result);
                         return ();
                     };
@@ -3175,21 +3175,21 @@ mod test {
                 }
                 #[test]
                 fn target_filled____application_user___authorization____authorize_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
-                    let outcoming = ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming_ {
-                        application_user_access_token_encoded: ApplicationUserAccessTokenEncoded_ {
+                    let outcoming = User__Authorization___AuthorizeByLastStep___Outcoming_ {
+                        application_user_access_token_encoded: UserAccessTokenEncoded_ {
                             serialized: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
                             encoded: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
                         },
-                        application_user_access_refresh_token_encoded: ApplicationUserAccessRefreshTokenEncoded_(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+                        application_user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded_(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     };
                     let unified_report = UnifiedReport::<
-                        ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming_,
-                        ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_,
+                        User__Authorization___AuthorizeByLastStep___Outcoming_,
+                        User__Authorization___AuthorizeByLastStep___Precedent_,
                     >::target_filled(outcoming);
-                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___AuthorizeByLastStep___C_Result {
+                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut User__Authorization___AuthorizeByLastStep___C_Result {
                         return application_user___authorization____authorize_by_last_step____deserialize____allocate(vector_of_bytes);
                     };
-                    let deallocator = move |c_result: *mut ApplicationUser__Authorization___AuthorizeByLastStep___C_Result| -> () {
+                    let deallocator = move |c_result: *mut User__Authorization___AuthorizeByLastStep___C_Result| -> () {
                         application_user___authorization____authorize_by_last_step____deserialize____deallocate(c_result);
                         return ();
                     };
@@ -3201,16 +3201,16 @@ mod test {
                     return Result::Ok(());
                 }
                 fn _precedent____application_user___authorization____authorize_by_last_step(
-                    precedent: ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_,
+                    precedent: User__Authorization___AuthorizeByLastStep___Precedent_,
                 ) -> Result<(), Box<dyn StdError + 'static>> {
                     let unified_report = UnifiedReport::<
-                        ApplicationUser__Authorization___AuthorizeByLastStep___Outcoming_,
-                        ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_,
+                        User__Authorization___AuthorizeByLastStep___Outcoming_,
+                        User__Authorization___AuthorizeByLastStep___Precedent_,
                     >::precedent(precedent);
-                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___AuthorizeByLastStep___C_Result {
+                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut User__Authorization___AuthorizeByLastStep___C_Result {
                         return application_user___authorization____authorize_by_last_step____deserialize____allocate(vector_of_bytes);
                     };
-                    let deallocator = move |c_result: *mut ApplicationUser__Authorization___AuthorizeByLastStep___C_Result| -> () {
+                    let deallocator = move |c_result: *mut User__Authorization___AuthorizeByLastStep___C_Result| -> () {
                         application_user___authorization____authorize_by_last_step____deserialize____deallocate(c_result);
                         return ();
                     };
@@ -3223,15 +3223,15 @@ mod test {
                 }
                 #[test]
                 fn precedent____application_user___authorization____authorize_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
-                    let mut precedent_registry: Vec<ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_> = vec![];
-                    precedent_registry.push(ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_::UserAuthorizationToken_NotFound);
-                    precedent_registry.push(ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_::UserAuthorizationToken_AlreadyExpired);
+                    let mut precedent_registry: Vec<User__Authorization___AuthorizeByLastStep___Precedent_> = vec![];
+                    precedent_registry.push(User__Authorization___AuthorizeByLastStep___Precedent_::UserAuthorizationToken_NotFound);
+                    precedent_registry.push(User__Authorization___AuthorizeByLastStep___Precedent_::UserAuthorizationToken_AlreadyExpired);
                     precedent_registry.push(
-                        ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_::UserAuthorizationToken_WrongValue {
+                        User__Authorization___AuthorizeByLastStep___Precedent_::UserAuthorizationToken_WrongValue {
                             application_user_authorization_token__wrong_enter_tries_quantity: 0,
                         },
                     );
-                    precedent_registry.push(ApplicationUser__Authorization___AuthorizeByLastStep___Precedent_::User_NotFound);
+                    precedent_registry.push(User__Authorization___AuthorizeByLastStep___Precedent_::User_NotFound);
                     '_a: for precedent in precedent_registry {
                         _precedent____application_user___authorization____authorize_by_last_step(precedent)?;
                     }
@@ -3239,11 +3239,11 @@ mod test {
                 }
                 #[test]
                 fn target_empty____application_user___authorization____check_email_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report = UnifiedReport::<ApplicationUser__Authorization___CheckEmailForExisting___Outcoming_, Void>::target_empty();
-                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___CheckEmailForExisting___C_Result {
+                    let unified_report = UnifiedReport::<User__Authorization___CheckEmailForExisting___Outcoming_, Void>::target_empty();
+                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut User__Authorization___CheckEmailForExisting___C_Result {
                         return application_user___authorization____check_email_for_existing____deserialize____allocate(vector_of_bytes);
                     };
-                    let deallocator = move |c_result: *mut ApplicationUser__Authorization___CheckEmailForExisting___C_Result| -> () {
+                    let deallocator = move |c_result: *mut User__Authorization___CheckEmailForExisting___C_Result| -> () {
                         application_user___authorization____check_email_for_existing____deserialize____deallocate(c_result);
                         return ();
                     };
@@ -3256,14 +3256,14 @@ mod test {
                 }
                 #[test]
                 fn target_filled____application_user___authorization____check_email_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
-                    let outcoming = ApplicationUser__Authorization___CheckEmailForExisting___Outcoming_ {
+                    let outcoming = User__Authorization___CheckEmailForExisting___Outcoming_ {
                         result: false,
                     };
-                    let unified_report = UnifiedReport::<ApplicationUser__Authorization___CheckEmailForExisting___Outcoming_, Void>::target_filled(outcoming);
-                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___CheckEmailForExisting___C_Result {
+                    let unified_report = UnifiedReport::<User__Authorization___CheckEmailForExisting___Outcoming_, Void>::target_filled(outcoming);
+                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut User__Authorization___CheckEmailForExisting___C_Result {
                         return application_user___authorization____check_email_for_existing____deserialize____allocate(vector_of_bytes);
                     };
-                    let deallocator = move |c_result: *mut ApplicationUser__Authorization___CheckEmailForExisting___C_Result| -> () {
+                    let deallocator = move |c_result: *mut User__Authorization___CheckEmailForExisting___C_Result| -> () {
                         application_user___authorization____check_email_for_existing____deserialize____deallocate(c_result);
                         return ();
                     };
@@ -3280,11 +3280,11 @@ mod test {
                 }
                 #[test]
                 fn target_empty____application_user___authorization____check_nickname_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report = UnifiedReport::<ApplicationUser__Authorization___CheckNicknameForExisting___Outcoming_, Void>::target_empty();
-                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___CheckNicknameForExisting___C_Result {
+                    let unified_report = UnifiedReport::<User__Authorization___CheckNicknameForExisting___Outcoming_, Void>::target_empty();
+                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut User__Authorization___CheckNicknameForExisting___C_Result {
                         return application_user___authorization____check_nickname_for_existing____deserialize____allocate(vector_of_bytes);
                     };
-                    let deallocator = move |c_result: *mut ApplicationUser__Authorization___CheckNicknameForExisting___C_Result| -> () {
+                    let deallocator = move |c_result: *mut User__Authorization___CheckNicknameForExisting___C_Result| -> () {
                         application_user___authorization____check_nickname_for_existing____deserialize____deallocate(c_result);
                         return ();
                     };
@@ -3297,14 +3297,14 @@ mod test {
                 }
                 #[test]
                 fn target_filled____application_user___authorization____check_nickname_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
-                    let outcoming = ApplicationUser__Authorization___CheckNicknameForExisting___Outcoming_ {
+                    let outcoming = User__Authorization___CheckNicknameForExisting___Outcoming_ {
                         result: false,
                     };
-                    let unified_report = UnifiedReport::<ApplicationUser__Authorization___CheckNicknameForExisting___Outcoming_, Void>::target_filled(outcoming);
-                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___CheckNicknameForExisting___C_Result {
+                    let unified_report = UnifiedReport::<User__Authorization___CheckNicknameForExisting___Outcoming_, Void>::target_filled(outcoming);
+                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut User__Authorization___CheckNicknameForExisting___C_Result {
                         return application_user___authorization____check_nickname_for_existing____deserialize____allocate(vector_of_bytes);
                     };
-                    let deallocator = move |c_result: *mut ApplicationUser__Authorization___CheckNicknameForExisting___C_Result| -> () {
+                    let deallocator = move |c_result: *mut User__Authorization___CheckNicknameForExisting___C_Result| -> () {
                         application_user___authorization____check_nickname_for_existing____deserialize____deallocate(c_result);
                         return ();
                     };
@@ -3321,11 +3321,11 @@ mod test {
                 }
                 #[test]
                 fn target_empty____application_user___authorization____deauthorize_from_all_devices() -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report = UnifiedReport::<Void, ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent_>::target_empty();
-                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___DeauthorizeFromAllDevices___C_Result {
+                    let unified_report = UnifiedReport::<Void, User__Authorization___DeauthorizeFromAllDevices___Precedent_>::target_empty();
+                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut User__Authorization___DeauthorizeFromAllDevices___C_Result {
                         return application_user___authorization____deauthorize_from_all_devices____deserialize____allocate(vector_of_bytes);
                     };
-                    let deallocator = move |c_result: *mut ApplicationUser__Authorization___DeauthorizeFromAllDevices___C_Result| -> () {
+                    let deallocator = move |c_result: *mut User__Authorization___DeauthorizeFromAllDevices___C_Result| -> () {
                         application_user___authorization____deauthorize_from_all_devices____deserialize____deallocate(c_result);
                         return ();
                     };
@@ -3341,13 +3341,13 @@ mod test {
                     return Result::Ok(());
                 }
                 fn _precedent____application_user___authorization____deauthorize_from_all_devices(
-                    precedent: ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent_,
+                    precedent: User__Authorization___DeauthorizeFromAllDevices___Precedent_,
                 ) -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report = UnifiedReport::<Void, ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent_>::precedent(precedent);
-                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___DeauthorizeFromAllDevices___C_Result {
+                    let unified_report = UnifiedReport::<Void, User__Authorization___DeauthorizeFromAllDevices___Precedent_>::precedent(precedent);
+                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut User__Authorization___DeauthorizeFromAllDevices___C_Result {
                         return application_user___authorization____deauthorize_from_all_devices____deserialize____allocate(vector_of_bytes);
                     };
-                    let deallocator = move |c_result: *mut ApplicationUser__Authorization___DeauthorizeFromAllDevices___C_Result| -> () {
+                    let deallocator = move |c_result: *mut User__Authorization___DeauthorizeFromAllDevices___C_Result| -> () {
                         application_user___authorization____deauthorize_from_all_devices____deserialize____deallocate(c_result);
                         return ();
                     };
@@ -3360,10 +3360,10 @@ mod test {
                 }
                 #[test]
                 fn precedent____application_user___authorization____deauthorize_from_all_devices() -> Result<(), Box<dyn StdError + 'static>> {
-                    let mut precedent_registry: Vec<ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent_> = vec![];
-                    precedent_registry.push(ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent_::UserAccessToken_AlreadyExpired);
+                    let mut precedent_registry: Vec<User__Authorization___DeauthorizeFromAllDevices___Precedent_> = vec![];
+                    precedent_registry.push(User__Authorization___DeauthorizeFromAllDevices___Precedent_::UserAccessToken_AlreadyExpired);
                     precedent_registry
-                        .push(ApplicationUser__Authorization___DeauthorizeFromAllDevices___Precedent_::UserAccessToken_InUserAccessTokenBlackList);
+                        .push(User__Authorization___DeauthorizeFromAllDevices___Precedent_::UserAccessToken_InUserAccessTokenBlackList);
                     '_a: for precedent in precedent_registry {
                         _precedent____application_user___authorization____deauthorize_from_all_devices(precedent)?;
                     }
@@ -3371,11 +3371,11 @@ mod test {
                 }
                 #[test]
                 fn target_empty____application_user___authorization____deauthorize_from_one_device() -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report = UnifiedReport::<Void, ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent_>::target_empty();
-                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___DeauthorizeFromOneDevice___C_Result {
+                    let unified_report = UnifiedReport::<Void, User__Authorization___DeauthorizeFromOneDevice___Precedent_>::target_empty();
+                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut User__Authorization___DeauthorizeFromOneDevice___C_Result {
                         return application_user___authorization____deauthorize_from_one_device____deserialize____allocate(vector_of_bytes);
                     };
-                    let deallocator = move |c_result: *mut ApplicationUser__Authorization___DeauthorizeFromOneDevice___C_Result| -> () {
+                    let deallocator = move |c_result: *mut User__Authorization___DeauthorizeFromOneDevice___C_Result| -> () {
                         application_user___authorization____deauthorize_from_one_device____deserialize____deallocate(c_result);
                         return ();
                     };
@@ -3391,13 +3391,13 @@ mod test {
                     return Result::Ok(());
                 }
                 fn _precedent____application_user___authorization____deauthorize_from_one_device(
-                    precedent: ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent_,
+                    precedent: User__Authorization___DeauthorizeFromOneDevice___Precedent_,
                 ) -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report = UnifiedReport::<Void, ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent_>::precedent(precedent);
-                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___DeauthorizeFromOneDevice___C_Result {
+                    let unified_report = UnifiedReport::<Void, User__Authorization___DeauthorizeFromOneDevice___Precedent_>::precedent(precedent);
+                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut User__Authorization___DeauthorizeFromOneDevice___C_Result {
                         return application_user___authorization____deauthorize_from_one_device____deserialize____allocate(vector_of_bytes);
                     };
-                    let deallocator = move |c_result: *mut ApplicationUser__Authorization___DeauthorizeFromOneDevice___C_Result| -> () {
+                    let deallocator = move |c_result: *mut User__Authorization___DeauthorizeFromOneDevice___C_Result| -> () {
                         application_user___authorization____deauthorize_from_one_device____deserialize____deallocate(c_result);
                         return ();
                     };
@@ -3410,10 +3410,10 @@ mod test {
                 }
                 #[test]
                 fn precedent____application_user___authorization____deauthorize_from_one_device() -> Result<(), Box<dyn StdError + 'static>> {
-                    let mut precedent_registry: Vec<ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent_> = vec![];
-                    precedent_registry.push(ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent_::UserAccessToken_AlreadyExpired);
+                    let mut precedent_registry: Vec<User__Authorization___DeauthorizeFromOneDevice___Precedent_> = vec![];
+                    precedent_registry.push(User__Authorization___DeauthorizeFromOneDevice___Precedent_::UserAccessToken_AlreadyExpired);
                     precedent_registry
-                        .push(ApplicationUser__Authorization___DeauthorizeFromOneDevice___Precedent_::UserAccessToken_InUserAccessTokenBlackList);
+                        .push(User__Authorization___DeauthorizeFromOneDevice___Precedent_::UserAccessToken_InUserAccessTokenBlackList);
                     '_a: for precedent in precedent_registry {
                         _precedent____application_user___authorization____deauthorize_from_one_device(precedent)?;
                     }
@@ -3422,13 +3422,13 @@ mod test {
                 #[test]
                 fn target_empty____application_user___authorization____refresh_access_token() -> Result<(), Box<dyn StdError + 'static>> {
                     let unified_report = UnifiedReport::<
-                        ApplicationUser__Authorization___RefreshAccessToken___Outcoming_,
-                        ApplicationUser__Authorization___RefreshAccessToken___Precedent_,
+                        User__Authorization___RefreshAccessToken___Outcoming_,
+                        User__Authorization___RefreshAccessToken___Precedent_,
                     >::target_empty();
-                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___RefreshAccessToken___C_Result {
+                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut User__Authorization___RefreshAccessToken___C_Result {
                         return application_user___authorization____refresh_access_token____deserialize____allocate(vector_of_bytes);
                     };
-                    let deallocator = move |c_result: *mut ApplicationUser__Authorization___RefreshAccessToken___C_Result| -> () {
+                    let deallocator = move |c_result: *mut User__Authorization___RefreshAccessToken___C_Result| -> () {
                         application_user___authorization____refresh_access_token____deserialize____deallocate(c_result);
                         return ();
                     };
@@ -3441,21 +3441,21 @@ mod test {
                 }
                 #[test]
                 fn target_filled____application_user___authorization____refresh_access_token() -> Result<(), Box<dyn StdError + 'static>> {
-                    let outcoming = ApplicationUser__Authorization___RefreshAccessToken___Outcoming_ {
-                        application_user_access_token_encoded: ApplicationUserAccessTokenEncoded_ {
+                    let outcoming = User__Authorization___RefreshAccessToken___Outcoming_ {
+                        application_user_access_token_encoded: UserAccessTokenEncoded_ {
                             serialized: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
                             encoded: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
                         },
-                        application_user_access_refresh_token_encoded: ApplicationUserAccessRefreshTokenEncoded_(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+                        application_user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded_(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     };
                     let unified_report = UnifiedReport::<
-                        ApplicationUser__Authorization___RefreshAccessToken___Outcoming_,
-                        ApplicationUser__Authorization___RefreshAccessToken___Precedent_,
+                        User__Authorization___RefreshAccessToken___Outcoming_,
+                        User__Authorization___RefreshAccessToken___Precedent_,
                     >::target_filled(outcoming);
-                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___RefreshAccessToken___C_Result {
+                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut User__Authorization___RefreshAccessToken___C_Result {
                         return application_user___authorization____refresh_access_token____deserialize____allocate(vector_of_bytes);
                     };
-                    let deallocator = move |c_result: *mut ApplicationUser__Authorization___RefreshAccessToken___C_Result| -> () {
+                    let deallocator = move |c_result: *mut User__Authorization___RefreshAccessToken___C_Result| -> () {
                         application_user___authorization____refresh_access_token____deserialize____deallocate(c_result);
                         return ();
                     };
@@ -3467,16 +3467,16 @@ mod test {
                     return Result::Ok(());
                 }
                 fn _precedent____application_user___authorization____refresh_access_token(
-                    precedent: ApplicationUser__Authorization___RefreshAccessToken___Precedent_,
+                    precedent: User__Authorization___RefreshAccessToken___Precedent_,
                 ) -> Result<(), Box<dyn StdError + 'static>> {
                     let unified_report = UnifiedReport::<
-                        ApplicationUser__Authorization___RefreshAccessToken___Outcoming_,
-                        ApplicationUser__Authorization___RefreshAccessToken___Precedent_,
+                        User__Authorization___RefreshAccessToken___Outcoming_,
+                        User__Authorization___RefreshAccessToken___Precedent_,
                     >::precedent(precedent);
-                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___RefreshAccessToken___C_Result {
+                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut User__Authorization___RefreshAccessToken___C_Result {
                         return application_user___authorization____refresh_access_token____deserialize____allocate(vector_of_bytes);
                     };
-                    let deallocator = move |c_result: *mut ApplicationUser__Authorization___RefreshAccessToken___C_Result| -> () {
+                    let deallocator = move |c_result: *mut User__Authorization___RefreshAccessToken___C_Result| -> () {
                         application_user___authorization____refresh_access_token____deserialize____deallocate(c_result);
                         return ();
                     };
@@ -3489,9 +3489,9 @@ mod test {
                 }
                 #[test]
                 fn precedent____application_user___authorization____refresh_access_token() -> Result<(), Box<dyn StdError + 'static>> {
-                    let mut precedent_registry: Vec<ApplicationUser__Authorization___RefreshAccessToken___Precedent_> = vec![];
-                    precedent_registry.push(ApplicationUser__Authorization___RefreshAccessToken___Precedent_::UserAccessRefreshToken_NotFound);
-                    precedent_registry.push(ApplicationUser__Authorization___RefreshAccessToken___Precedent_::UserAccessRefreshToken_AlreadyExpired);
+                    let mut precedent_registry: Vec<User__Authorization___RefreshAccessToken___Precedent_> = vec![];
+                    precedent_registry.push(User__Authorization___RefreshAccessToken___Precedent_::UserAccessRefreshToken_NotFound);
+                    precedent_registry.push(User__Authorization___RefreshAccessToken___Precedent_::UserAccessRefreshToken_AlreadyExpired);
                     '_a: for precedent in precedent_registry {
                         _precedent____application_user___authorization____refresh_access_token(precedent)?;
                     }
@@ -3500,13 +3500,13 @@ mod test {
                 #[test]
                 fn target_empty____application_user___authorization____register_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
                     let unified_report = UnifiedReport::<
-                        ApplicationUser__Authorization___RegisterByFirstStep___Outcoming_,
-                        ApplicationUser__Authorization___RegisterByFirstStep___Precedent_,
+                        User__Authorization___RegisterByFirstStep___Outcoming_,
+                        User__Authorization___RegisterByFirstStep___Precedent_,
                     >::target_empty();
-                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___RegisterByFirstStep___C_Result {
+                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut User__Authorization___RegisterByFirstStep___C_Result {
                         return application_user___authorization____register_by_first_step____deserialize____allocate(vector_of_bytes);
                     };
-                    let deallocator = move |c_result: *mut ApplicationUser__Authorization___RegisterByFirstStep___C_Result| -> () {
+                    let deallocator = move |c_result: *mut User__Authorization___RegisterByFirstStep___C_Result| -> () {
                         application_user___authorization____register_by_first_step____deserialize____deallocate(c_result);
                         return ();
                     };
@@ -3519,20 +3519,20 @@ mod test {
                 }
                 #[test]
                 fn target_filled____application_user___authorization____register_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
-                    let outcoming = ApplicationUser__Authorization___RegisterByFirstStep___Outcoming_ {
+                    let outcoming = User__Authorization___RegisterByFirstStep___Outcoming_ {
                         verification_message_sent: false,
                         application_user_registration_token__can_be_resent_from: 0,
                         application_user_registration_token__wrong_enter_tries_quantity: 0,
                         application_user_registration_token__wrong_enter_tries_quantity_limit: 0,
                     };
                     let unified_report = UnifiedReport::<
-                        ApplicationUser__Authorization___RegisterByFirstStep___Outcoming_,
-                        ApplicationUser__Authorization___RegisterByFirstStep___Precedent_,
+                        User__Authorization___RegisterByFirstStep___Outcoming_,
+                        User__Authorization___RegisterByFirstStep___Precedent_,
                     >::target_filled(outcoming);
-                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___RegisterByFirstStep___C_Result {
+                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut User__Authorization___RegisterByFirstStep___C_Result {
                         return application_user___authorization____register_by_first_step____deserialize____allocate(vector_of_bytes);
                     };
-                    let deallocator = move |c_result: *mut ApplicationUser__Authorization___RegisterByFirstStep___C_Result| -> () {
+                    let deallocator = move |c_result: *mut User__Authorization___RegisterByFirstStep___C_Result| -> () {
                         application_user___authorization____register_by_first_step____deserialize____deallocate(c_result);
                         return ();
                     };
@@ -3545,15 +3545,15 @@ mod test {
                 }
                 #[test]
                 fn precedent____application_user___authorization____register_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
-                    let precedent = ApplicationUser__Authorization___RegisterByFirstStep___Precedent_::User_EmailAlreadyExist;
+                    let precedent = User__Authorization___RegisterByFirstStep___Precedent_::User_EmailAlreadyExist;
                     let unified_report = UnifiedReport::<
-                        ApplicationUser__Authorization___RegisterByFirstStep___Outcoming_,
-                        ApplicationUser__Authorization___RegisterByFirstStep___Precedent_,
+                        User__Authorization___RegisterByFirstStep___Outcoming_,
+                        User__Authorization___RegisterByFirstStep___Precedent_,
                     >::precedent(precedent);
-                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___RegisterByFirstStep___C_Result {
+                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut User__Authorization___RegisterByFirstStep___C_Result {
                         return application_user___authorization____register_by_first_step____deserialize____allocate(vector_of_bytes);
                     };
-                    let deallocator = move |c_result: *mut ApplicationUser__Authorization___RegisterByFirstStep___C_Result| -> () {
+                    let deallocator = move |c_result: *mut User__Authorization___RegisterByFirstStep___C_Result| -> () {
                         application_user___authorization____register_by_first_step____deserialize____deallocate(c_result);
                         return ();
                     };
@@ -3566,11 +3566,11 @@ mod test {
                 }
                 #[test]
                 fn target_empty____application_user___authorization____register_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report = UnifiedReport::<Void, ApplicationUser__Authorization___RegisterBySecondStep___Precedent_>::target_empty();
-                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___RegisterBySecondStep___C_Result {
+                    let unified_report = UnifiedReport::<Void, User__Authorization___RegisterBySecondStep___Precedent_>::target_empty();
+                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut User__Authorization___RegisterBySecondStep___C_Result {
                         return application_user___authorization____register_by_second_step____deserialize____allocate(vector_of_bytes);
                     };
-                    let deallocator = move |c_result: *mut ApplicationUser__Authorization___RegisterBySecondStep___C_Result| -> () {
+                    let deallocator = move |c_result: *mut User__Authorization___RegisterBySecondStep___C_Result| -> () {
                         application_user___authorization____register_by_second_step____deserialize____deallocate(c_result);
                         return ();
                     };
@@ -3586,13 +3586,13 @@ mod test {
                     return Result::Ok(());
                 }
                 fn _precedent____application_user___authorization____register_by_second_step(
-                    precedent: ApplicationUser__Authorization___RegisterBySecondStep___Precedent_,
+                    precedent: User__Authorization___RegisterBySecondStep___Precedent_,
                 ) -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report = UnifiedReport::<Void, ApplicationUser__Authorization___RegisterBySecondStep___Precedent_>::precedent(precedent);
-                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___RegisterBySecondStep___C_Result {
+                    let unified_report = UnifiedReport::<Void, User__Authorization___RegisterBySecondStep___Precedent_>::precedent(precedent);
+                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut User__Authorization___RegisterBySecondStep___C_Result {
                         return application_user___authorization____register_by_second_step____deserialize____allocate(vector_of_bytes);
                     };
-                    let deallocator = move |c_result: *mut ApplicationUser__Authorization___RegisterBySecondStep___C_Result| -> () {
+                    let deallocator = move |c_result: *mut User__Authorization___RegisterBySecondStep___C_Result| -> () {
                         application_user___authorization____register_by_second_step____deserialize____deallocate(c_result);
                         return ();
                     };
@@ -3605,12 +3605,12 @@ mod test {
                 }
                 #[test]
                 fn precedent____application_user___authorization____register_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
-                    let mut precedent_registry: Vec<ApplicationUser__Authorization___RegisterBySecondStep___Precedent_> = vec![];
-                    precedent_registry.push(ApplicationUser__Authorization___RegisterBySecondStep___Precedent_::UserRegistrationToken_NotFound);
-                    precedent_registry.push(ApplicationUser__Authorization___RegisterBySecondStep___Precedent_::UserRegistrationToken_AlreadyExpired);
-                    precedent_registry.push(ApplicationUser__Authorization___RegisterBySecondStep___Precedent_::UserRegistrationToken_AlreadyApproved);
+                    let mut precedent_registry: Vec<User__Authorization___RegisterBySecondStep___Precedent_> = vec![];
+                    precedent_registry.push(User__Authorization___RegisterBySecondStep___Precedent_::UserRegistrationToken_NotFound);
+                    precedent_registry.push(User__Authorization___RegisterBySecondStep___Precedent_::UserRegistrationToken_AlreadyExpired);
+                    precedent_registry.push(User__Authorization___RegisterBySecondStep___Precedent_::UserRegistrationToken_AlreadyApproved);
                     precedent_registry.push(
-                        ApplicationUser__Authorization___RegisterBySecondStep___Precedent_::UserRegistrationToken_WrongValue {
+                        User__Authorization___RegisterBySecondStep___Precedent_::UserRegistrationToken_WrongValue {
                             application_user_registration_token__wrong_enter_tries_quantity: 0,
                         },
                     );
@@ -3622,13 +3622,13 @@ mod test {
                 #[test]
                 fn target_empty____application_user___authorization____register_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
                     let unified_report = UnifiedReport::<
-                        ApplicationUser__Authorization___RegisterByLastStep___Outcoming_,
-                        ApplicationUser__Authorization___RegisterByLastStep___Precedent_,
+                        User__Authorization___RegisterByLastStep___Outcoming_,
+                        User__Authorization___RegisterByLastStep___Precedent_,
                     >::target_empty();
-                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___RegisterByLastStep___C_Result {
+                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut User__Authorization___RegisterByLastStep___C_Result {
                         return application_user___authorization____register_by_last_step____deserialize____allocate(vector_of_bytes);
                     };
-                    let deallocator = move |c_result: *mut ApplicationUser__Authorization___RegisterByLastStep___C_Result| -> () {
+                    let deallocator = move |c_result: *mut User__Authorization___RegisterByLastStep___C_Result| -> () {
                         application_user___authorization____register_by_last_step____deserialize____deallocate(c_result);
                         return ();
                     };
@@ -3641,21 +3641,21 @@ mod test {
                 }
                 #[test]
                 fn target_filled____application_user___authorization____register_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
-                    let outcoming = ApplicationUser__Authorization___RegisterByLastStep___Outcoming_ {
-                        application_user_access_token_encoded: ApplicationUserAccessTokenEncoded_ {
+                    let outcoming = User__Authorization___RegisterByLastStep___Outcoming_ {
+                        application_user_access_token_encoded: UserAccessTokenEncoded_ {
                             serialized: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
                             encoded: NOT_EMPTY_ARRAY_LITERAL.to_vec(),
                         },
-                        application_user_access_refresh_token_encoded: ApplicationUserAccessRefreshTokenEncoded_(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
+                        application_user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded_(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     };
                     let unified_report = UnifiedReport::<
-                        ApplicationUser__Authorization___RegisterByLastStep___Outcoming_,
-                        ApplicationUser__Authorization___RegisterByLastStep___Precedent_,
+                        User__Authorization___RegisterByLastStep___Outcoming_,
+                        User__Authorization___RegisterByLastStep___Precedent_,
                     >::target_filled(outcoming);
-                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___RegisterByLastStep___C_Result {
+                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut User__Authorization___RegisterByLastStep___C_Result {
                         return application_user___authorization____register_by_last_step____deserialize____allocate(vector_of_bytes);
                     };
-                    let deallocator = move |c_result: *mut ApplicationUser__Authorization___RegisterByLastStep___C_Result| -> () {
+                    let deallocator = move |c_result: *mut User__Authorization___RegisterByLastStep___C_Result| -> () {
                         application_user___authorization____register_by_last_step____deserialize____deallocate(c_result);
                         return ();
                     };
@@ -3667,16 +3667,16 @@ mod test {
                     return Result::Ok(());
                 }
                 fn _precedent____application_user___authorization____register_by_last_step(
-                    precedent: ApplicationUser__Authorization___RegisterByLastStep___Precedent_,
+                    precedent: User__Authorization___RegisterByLastStep___Precedent_,
                 ) -> Result<(), Box<dyn StdError + 'static>> {
                     let unified_report = UnifiedReport::<
-                        ApplicationUser__Authorization___RegisterByLastStep___Outcoming_,
-                        ApplicationUser__Authorization___RegisterByLastStep___Precedent_,
+                        User__Authorization___RegisterByLastStep___Outcoming_,
+                        User__Authorization___RegisterByLastStep___Precedent_,
                     >::precedent(precedent);
-                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___RegisterByLastStep___C_Result {
+                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut User__Authorization___RegisterByLastStep___C_Result {
                         return application_user___authorization____register_by_last_step____deserialize____allocate(vector_of_bytes);
                     };
-                    let deallocator = move |c_result: *mut ApplicationUser__Authorization___RegisterByLastStep___C_Result| -> () {
+                    let deallocator = move |c_result: *mut User__Authorization___RegisterByLastStep___C_Result| -> () {
                         application_user___authorization____register_by_last_step____deserialize____deallocate(c_result);
                         return ();
                     };
@@ -3689,13 +3689,13 @@ mod test {
                 }
                 #[test]
                 fn precedent____application_user___authorization____register_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
-                    let mut precedent_registry: Vec<ApplicationUser__Authorization___RegisterByLastStep___Precedent_> = vec![];
-                    precedent_registry.push(ApplicationUser__Authorization___RegisterByLastStep___Precedent_::User_NicknameAlreadyExist);
-                    precedent_registry.push(ApplicationUser__Authorization___RegisterByLastStep___Precedent_::User_EmailAlreadyExist);
-                    precedent_registry.push(ApplicationUser__Authorization___RegisterByLastStep___Precedent_::UserRegistrationToken_NotFound);
-                    precedent_registry.push(ApplicationUser__Authorization___RegisterByLastStep___Precedent_::UserRegistrationToken_AlreadyExpired);
-                    precedent_registry.push(ApplicationUser__Authorization___RegisterByLastStep___Precedent_::UserRegistrationToken_IsNotApproved);
-                    precedent_registry.push(ApplicationUser__Authorization___RegisterByLastStep___Precedent_::UserRegistrationToken_WrongValue);
+                    let mut precedent_registry: Vec<User__Authorization___RegisterByLastStep___Precedent_> = vec![];
+                    precedent_registry.push(User__Authorization___RegisterByLastStep___Precedent_::User_NicknameAlreadyExist);
+                    precedent_registry.push(User__Authorization___RegisterByLastStep___Precedent_::User_EmailAlreadyExist);
+                    precedent_registry.push(User__Authorization___RegisterByLastStep___Precedent_::UserRegistrationToken_NotFound);
+                    precedent_registry.push(User__Authorization___RegisterByLastStep___Precedent_::UserRegistrationToken_AlreadyExpired);
+                    precedent_registry.push(User__Authorization___RegisterByLastStep___Precedent_::UserRegistrationToken_IsNotApproved);
+                    precedent_registry.push(User__Authorization___RegisterByLastStep___Precedent_::UserRegistrationToken_WrongValue);
                     '_a: for precedent in precedent_registry {
                         _precedent____application_user___authorization____register_by_last_step(precedent)?;
                     }
@@ -3704,13 +3704,13 @@ mod test {
                 #[test]
                 fn target_empty____application_user___authorization____reset_password_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
                     let unified_report = UnifiedReport::<
-                        ApplicationUser__Authorization___ResetPasswordByFirstStep___Outcoming_,
-                        ApplicationUser__Authorization___ResetPasswordByFirstStep___Precedent_,
+                        User__Authorization___ResetPasswordByFirstStep___Outcoming_,
+                        User__Authorization___ResetPasswordByFirstStep___Precedent_,
                     >::target_empty();
-                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___ResetPasswordByFirstStep___C_Result {
+                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut User__Authorization___ResetPasswordByFirstStep___C_Result {
                         return application_user___authorization____reset_password_by_first_step____deserialize____allocate(vector_of_bytes);
                     };
-                    let deallocator = move |c_result: *mut ApplicationUser__Authorization___ResetPasswordByFirstStep___C_Result| -> () {
+                    let deallocator = move |c_result: *mut User__Authorization___ResetPasswordByFirstStep___C_Result| -> () {
                         application_user___authorization____reset_password_by_first_step____deserialize____deallocate(c_result);
                         return ();
                     };
@@ -3723,7 +3723,7 @@ mod test {
                 }
                 #[test]
                 fn target_filled____application_user___authorization____reset_password_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
-                    let outcoming = ApplicationUser__Authorization___ResetPasswordByFirstStep___Outcoming_ {
+                    let outcoming = User__Authorization___ResetPasswordByFirstStep___Outcoming_ {
                         application_user__id: 0,
                         verification_message_sent: false,
                         application_user_reset_password_token__can_be_resent_from: 0,
@@ -3731,13 +3731,13 @@ mod test {
                         application_user_reset_password_token__wrong_enter_tries_quantity_limit: 0,
                     };
                     let unified_report = UnifiedReport::<
-                        ApplicationUser__Authorization___ResetPasswordByFirstStep___Outcoming_,
-                        ApplicationUser__Authorization___ResetPasswordByFirstStep___Precedent_,
+                        User__Authorization___ResetPasswordByFirstStep___Outcoming_,
+                        User__Authorization___ResetPasswordByFirstStep___Precedent_,
                     >::target_filled(outcoming);
-                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___ResetPasswordByFirstStep___C_Result {
+                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut User__Authorization___ResetPasswordByFirstStep___C_Result {
                         return application_user___authorization____reset_password_by_first_step____deserialize____allocate(vector_of_bytes);
                     };
-                    let deallocator = move |c_result: *mut ApplicationUser__Authorization___ResetPasswordByFirstStep___C_Result| -> () {
+                    let deallocator = move |c_result: *mut User__Authorization___ResetPasswordByFirstStep___C_Result| -> () {
                         application_user___authorization____reset_password_by_first_step____deserialize____deallocate(c_result);
                         return ();
                     };
@@ -3750,15 +3750,15 @@ mod test {
                 }
                 #[test]
                 fn precedent____application_user___authorization____reset_password_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
-                    let precedent = ApplicationUser__Authorization___ResetPasswordByFirstStep___Precedent_::User_NotFound;
+                    let precedent = User__Authorization___ResetPasswordByFirstStep___Precedent_::User_NotFound;
                     let unified_report = UnifiedReport::<
-                        ApplicationUser__Authorization___ResetPasswordByFirstStep___Outcoming_,
-                        ApplicationUser__Authorization___ResetPasswordByFirstStep___Precedent_,
+                        User__Authorization___ResetPasswordByFirstStep___Outcoming_,
+                        User__Authorization___ResetPasswordByFirstStep___Precedent_,
                     >::precedent(precedent);
-                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___ResetPasswordByFirstStep___C_Result {
+                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut User__Authorization___ResetPasswordByFirstStep___C_Result {
                         return application_user___authorization____reset_password_by_first_step____deserialize____allocate(vector_of_bytes);
                     };
-                    let deallocator = move |c_result: *mut ApplicationUser__Authorization___ResetPasswordByFirstStep___C_Result| -> () {
+                    let deallocator = move |c_result: *mut User__Authorization___ResetPasswordByFirstStep___C_Result| -> () {
                         application_user___authorization____reset_password_by_first_step____deserialize____deallocate(c_result);
                         return ();
                     };
@@ -3771,11 +3771,11 @@ mod test {
                 }
                 #[test]
                 fn target_empty____application_user___authorization____reset_password_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report = UnifiedReport::<Void, ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_>::target_empty();
-                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___ResetPasswordBySecondStep___C_Result {
+                    let unified_report = UnifiedReport::<Void, User__Authorization___ResetPasswordBySecondStep___Precedent_>::target_empty();
+                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut User__Authorization___ResetPasswordBySecondStep___C_Result {
                         return application_user___authorization____reset_password_by_second_step____deserialize____allocate(vector_of_bytes);
                     };
-                    let deallocator = move |c_result: *mut ApplicationUser__Authorization___ResetPasswordBySecondStep___C_Result| -> () {
+                    let deallocator = move |c_result: *mut User__Authorization___ResetPasswordBySecondStep___C_Result| -> () {
                         application_user___authorization____reset_password_by_second_step____deserialize____deallocate(c_result);
                         return ();
                     };
@@ -3791,13 +3791,13 @@ mod test {
                     return Result::Ok(());
                 }
                 fn _precedent____application_user___authorization____reset_password_by_second_step(
-                    precedent: ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_,
+                    precedent: User__Authorization___ResetPasswordBySecondStep___Precedent_,
                 ) -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report = UnifiedReport::<Void, ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_>::precedent(precedent);
-                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___ResetPasswordBySecondStep___C_Result {
+                    let unified_report = UnifiedReport::<Void, User__Authorization___ResetPasswordBySecondStep___Precedent_>::precedent(precedent);
+                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut User__Authorization___ResetPasswordBySecondStep___C_Result {
                         return application_user___authorization____reset_password_by_second_step____deserialize____allocate(vector_of_bytes);
                     };
-                    let deallocator = move |c_result: *mut ApplicationUser__Authorization___ResetPasswordBySecondStep___C_Result| -> () {
+                    let deallocator = move |c_result: *mut User__Authorization___ResetPasswordBySecondStep___C_Result| -> () {
                         application_user___authorization____reset_password_by_second_step____deserialize____deallocate(c_result);
                         return ();
                     };
@@ -3810,12 +3810,12 @@ mod test {
                 }
                 #[test]
                 fn precedent____application_user___authorization____reset_password_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
-                    let mut precedent_registry: Vec<ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_> = vec![];
-                    precedent_registry.push(ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_::UserResetPasswordToken_NotFound);
-                    precedent_registry.push(ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_::UserResetPasswordToken_AlreadyExpired);
-                    precedent_registry.push(ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_::UserResetPasswordToken_AlreadyApproved);
+                    let mut precedent_registry: Vec<User__Authorization___ResetPasswordBySecondStep___Precedent_> = vec![];
+                    precedent_registry.push(User__Authorization___ResetPasswordBySecondStep___Precedent_::UserResetPasswordToken_NotFound);
+                    precedent_registry.push(User__Authorization___ResetPasswordBySecondStep___Precedent_::UserResetPasswordToken_AlreadyExpired);
+                    precedent_registry.push(User__Authorization___ResetPasswordBySecondStep___Precedent_::UserResetPasswordToken_AlreadyApproved);
                     precedent_registry.push(
-                        ApplicationUser__Authorization___ResetPasswordBySecondStep___Precedent_::UserResetPasswordToken_WrongValue {
+                        User__Authorization___ResetPasswordBySecondStep___Precedent_::UserResetPasswordToken_WrongValue {
                             application_user_reset_password_token__wrong_enter_tries_quantity: 0,
                         },
                     );
@@ -3826,11 +3826,11 @@ mod test {
                 }
                 #[test]
                 fn target_empty____application_user___authorization____reset_password_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report = UnifiedReport::<Void, ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_>::target_empty();
-                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___ResetPasswordByLastStep___C_Result {
+                    let unified_report = UnifiedReport::<Void, User__Authorization___ResetPasswordByLastStep___Precedent_>::target_empty();
+                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut User__Authorization___ResetPasswordByLastStep___C_Result {
                         return application_user___authorization____reset_password_by_last_step____deserialize____allocate(vector_of_bytes);
                     };
-                    let deallocator = move |c_result: *mut ApplicationUser__Authorization___ResetPasswordByLastStep___C_Result| -> () {
+                    let deallocator = move |c_result: *mut User__Authorization___ResetPasswordByLastStep___C_Result| -> () {
                         application_user___authorization____reset_password_by_last_step____deserialize____deallocate(c_result);
                         return ();
                     };
@@ -3846,13 +3846,13 @@ mod test {
                     return Result::Ok(());
                 }
                 fn _precedent____application_user___authorization____reset_password_by_last_step(
-                    precedent: ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_,
+                    precedent: User__Authorization___ResetPasswordByLastStep___Precedent_,
                 ) -> Result<(), Box<dyn StdError + 'static>> {
-                    let unified_report = UnifiedReport::<Void, ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_>::precedent(precedent);
-                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___ResetPasswordByLastStep___C_Result {
+                    let unified_report = UnifiedReport::<Void, User__Authorization___ResetPasswordByLastStep___Precedent_>::precedent(precedent);
+                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut User__Authorization___ResetPasswordByLastStep___C_Result {
                         return application_user___authorization____reset_password_by_last_step____deserialize____allocate(vector_of_bytes);
                     };
-                    let deallocator = move |c_result: *mut ApplicationUser__Authorization___ResetPasswordByLastStep___C_Result| -> () {
+                    let deallocator = move |c_result: *mut User__Authorization___ResetPasswordByLastStep___C_Result| -> () {
                         application_user___authorization____reset_password_by_last_step____deserialize____deallocate(c_result);
                         return ();
                     };
@@ -3865,12 +3865,12 @@ mod test {
                 }
                 #[test]
                 fn precedent____application_user___authorization____reset_password_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
-                    let mut precedent_registry: Vec<ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_> = vec![];
-                    precedent_registry.push(ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_::User_NotFound);
-                    precedent_registry.push(ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_::UserResetPasswordToken_NotFound);
-                    precedent_registry.push(ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_::UserResetPasswordToken_AlreadyExpired);
-                    precedent_registry.push(ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_::UserResetPasswordToken_IsNotApproved);
-                    precedent_registry.push(ApplicationUser__Authorization___ResetPasswordByLastStep___Precedent_::UserResetPasswordToken_WrongValue);
+                    let mut precedent_registry: Vec<User__Authorization___ResetPasswordByLastStep___Precedent_> = vec![];
+                    precedent_registry.push(User__Authorization___ResetPasswordByLastStep___Precedent_::User_NotFound);
+                    precedent_registry.push(User__Authorization___ResetPasswordByLastStep___Precedent_::UserResetPasswordToken_NotFound);
+                    precedent_registry.push(User__Authorization___ResetPasswordByLastStep___Precedent_::UserResetPasswordToken_AlreadyExpired);
+                    precedent_registry.push(User__Authorization___ResetPasswordByLastStep___Precedent_::UserResetPasswordToken_IsNotApproved);
+                    precedent_registry.push(User__Authorization___ResetPasswordByLastStep___Precedent_::UserResetPasswordToken_WrongValue);
                     '_a: for precedent in precedent_registry {
                         _precedent____application_user___authorization____reset_password_by_last_step(precedent)?;
                     }
@@ -3879,13 +3879,13 @@ mod test {
                 #[test]
                 fn target_empty____application_user___authorization____send_email_for_register() -> Result<(), Box<dyn StdError + 'static>> {
                     let unified_report = UnifiedReport::<
-                        ApplicationUser__Authorization___SendEmailForRegister___Outcoming_,
-                        ApplicationUser__Authorization___SendEmailForRegister___Precedent_,
+                        User__Authorization___SendEmailForRegister___Outcoming_,
+                        User__Authorization___SendEmailForRegister___Precedent_,
                     >::target_empty();
-                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___SendEmailForRegister___C_Result {
+                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut User__Authorization___SendEmailForRegister___C_Result {
                         return application_user___authorization____send_email_for_register____deserialize____allocate(vector_of_bytes);
                     };
-                    let deallocator = move |c_result: *mut ApplicationUser__Authorization___SendEmailForRegister___C_Result| -> () {
+                    let deallocator = move |c_result: *mut User__Authorization___SendEmailForRegister___C_Result| -> () {
                         application_user___authorization____send_email_for_register____deserialize____deallocate(c_result);
                         return ();
                     };
@@ -3898,17 +3898,17 @@ mod test {
                 }
                 #[test]
                 fn target_filled____application_user___authorization____send_email_for_register() -> Result<(), Box<dyn StdError + 'static>> {
-                    let outcoming = ApplicationUser__Authorization___SendEmailForRegister___Outcoming_ {
+                    let outcoming = User__Authorization___SendEmailForRegister___Outcoming_ {
                         application_user_registration_token__can_be_resent_from: 0,
                     };
                     let unified_report = UnifiedReport::<
-                        ApplicationUser__Authorization___SendEmailForRegister___Outcoming_,
-                        ApplicationUser__Authorization___SendEmailForRegister___Precedent_,
+                        User__Authorization___SendEmailForRegister___Outcoming_,
+                        User__Authorization___SendEmailForRegister___Precedent_,
                     >::target_filled(outcoming);
-                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___SendEmailForRegister___C_Result {
+                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut User__Authorization___SendEmailForRegister___C_Result {
                         return application_user___authorization____send_email_for_register____deserialize____allocate(vector_of_bytes);
                     };
-                    let deallocator = move |c_result: *mut ApplicationUser__Authorization___SendEmailForRegister___C_Result| -> () {
+                    let deallocator = move |c_result: *mut User__Authorization___SendEmailForRegister___C_Result| -> () {
                         application_user___authorization____send_email_for_register____deserialize____deallocate(c_result);
                         return ();
                     };
@@ -3920,16 +3920,16 @@ mod test {
                     return Result::Ok(());
                 }
                 fn _precedent____application_user___authorization____send_email_for_register(
-                    precedent: ApplicationUser__Authorization___SendEmailForRegister___Precedent_,
+                    precedent: User__Authorization___SendEmailForRegister___Precedent_,
                 ) -> Result<(), Box<dyn StdError + 'static>> {
                     let unified_report = UnifiedReport::<
-                        ApplicationUser__Authorization___SendEmailForRegister___Outcoming_,
-                        ApplicationUser__Authorization___SendEmailForRegister___Precedent_,
+                        User__Authorization___SendEmailForRegister___Outcoming_,
+                        User__Authorization___SendEmailForRegister___Precedent_,
                     >::precedent(precedent);
-                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___SendEmailForRegister___C_Result {
+                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut User__Authorization___SendEmailForRegister___C_Result {
                         return application_user___authorization____send_email_for_register____deserialize____allocate(vector_of_bytes);
                     };
-                    let deallocator = move |c_result: *mut ApplicationUser__Authorization___SendEmailForRegister___C_Result| -> () {
+                    let deallocator = move |c_result: *mut User__Authorization___SendEmailForRegister___C_Result| -> () {
                         application_user___authorization____send_email_for_register____deserialize____deallocate(c_result);
                         return ();
                     };
@@ -3942,11 +3942,11 @@ mod test {
                 }
                 #[test]
                 fn precedent____application_user___authorization____send_email_for_register() -> Result<(), Box<dyn StdError + 'static>> {
-                    let mut precedent_registry: Vec<ApplicationUser__Authorization___SendEmailForRegister___Precedent_> = vec![];
-                    precedent_registry.push(ApplicationUser__Authorization___SendEmailForRegister___Precedent_::UserRegistrationToken_NotFound);
-                    precedent_registry.push(ApplicationUser__Authorization___SendEmailForRegister___Precedent_::UserRegistrationToken_AlreadyExpired);
-                    precedent_registry.push(ApplicationUser__Authorization___SendEmailForRegister___Precedent_::UserRegistrationToken_AlreadyApproved);
-                    precedent_registry.push(ApplicationUser__Authorization___SendEmailForRegister___Precedent_::UserRegistrationToken_TimeToResendHasNotCome);
+                    let mut precedent_registry: Vec<User__Authorization___SendEmailForRegister___Precedent_> = vec![];
+                    precedent_registry.push(User__Authorization___SendEmailForRegister___Precedent_::UserRegistrationToken_NotFound);
+                    precedent_registry.push(User__Authorization___SendEmailForRegister___Precedent_::UserRegistrationToken_AlreadyExpired);
+                    precedent_registry.push(User__Authorization___SendEmailForRegister___Precedent_::UserRegistrationToken_AlreadyApproved);
+                    precedent_registry.push(User__Authorization___SendEmailForRegister___Precedent_::UserRegistrationToken_TimeToResendHasNotCome);
                     '_a: for precedent in precedent_registry {
                         _precedent____application_user___authorization____send_email_for_register(precedent)?;
                     }
@@ -3955,13 +3955,13 @@ mod test {
                 #[test]
                 fn target_empty____application_user___authorization____send_email_for_authorize() -> Result<(), Box<dyn StdError + 'static>> {
                     let unified_report = UnifiedReport::<
-                        ApplicationUser__Authorization___SendEmailForAuthorize___Outcoming_,
-                        ApplicationUser__Authorization___SendEmailForAuthorize___Precedent_,
+                        User__Authorization___SendEmailForAuthorize___Outcoming_,
+                        User__Authorization___SendEmailForAuthorize___Precedent_,
                     >::target_empty();
-                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___SendEmailForAuthorize___C_Result {
+                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut User__Authorization___SendEmailForAuthorize___C_Result {
                         return application_user___authorization____send_email_for_authorize____deserialize____allocate(vector_of_bytes);
                     };
-                    let deallocator = move |c_result: *mut ApplicationUser__Authorization___SendEmailForAuthorize___C_Result| -> () {
+                    let deallocator = move |c_result: *mut User__Authorization___SendEmailForAuthorize___C_Result| -> () {
                         application_user___authorization____send_email_for_authorize____deserialize____deallocate(c_result);
                         return ();
                     };
@@ -3974,17 +3974,17 @@ mod test {
                 }
                 #[test]
                 fn target_filled____application_user___authorization____send_email_for_authorize() -> Result<(), Box<dyn StdError + 'static>> {
-                    let outcoming = ApplicationUser__Authorization___SendEmailForAuthorize___Outcoming_ {
+                    let outcoming = User__Authorization___SendEmailForAuthorize___Outcoming_ {
                         application_user_authorization_token__can_be_resent_from: 0,
                     };
                     let unified_report = UnifiedReport::<
-                        ApplicationUser__Authorization___SendEmailForAuthorize___Outcoming_,
-                        ApplicationUser__Authorization___SendEmailForAuthorize___Precedent_,
+                        User__Authorization___SendEmailForAuthorize___Outcoming_,
+                        User__Authorization___SendEmailForAuthorize___Precedent_,
                     >::target_filled(outcoming);
-                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___SendEmailForAuthorize___C_Result {
+                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut User__Authorization___SendEmailForAuthorize___C_Result {
                         return application_user___authorization____send_email_for_authorize____deserialize____allocate(vector_of_bytes);
                     };
-                    let deallocator = move |c_result: *mut ApplicationUser__Authorization___SendEmailForAuthorize___C_Result| -> () {
+                    let deallocator = move |c_result: *mut User__Authorization___SendEmailForAuthorize___C_Result| -> () {
                         application_user___authorization____send_email_for_authorize____deserialize____deallocate(c_result);
                         return ();
                     };
@@ -3996,16 +3996,16 @@ mod test {
                     return Result::Ok(());
                 }
                 fn _precedent____application_user___authorization____send_email_for_authorize(
-                    precedent: ApplicationUser__Authorization___SendEmailForAuthorize___Precedent_,
+                    precedent: User__Authorization___SendEmailForAuthorize___Precedent_,
                 ) -> Result<(), Box<dyn StdError + 'static>> {
                     let unified_report = UnifiedReport::<
-                        ApplicationUser__Authorization___SendEmailForAuthorize___Outcoming_,
-                        ApplicationUser__Authorization___SendEmailForAuthorize___Precedent_,
+                        User__Authorization___SendEmailForAuthorize___Outcoming_,
+                        User__Authorization___SendEmailForAuthorize___Precedent_,
                     >::precedent(precedent);
-                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___SendEmailForAuthorize___C_Result {
+                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut User__Authorization___SendEmailForAuthorize___C_Result {
                         return application_user___authorization____send_email_for_authorize____deserialize____allocate(vector_of_bytes);
                     };
-                    let deallocator = move |c_result: *mut ApplicationUser__Authorization___SendEmailForAuthorize___C_Result| -> () {
+                    let deallocator = move |c_result: *mut User__Authorization___SendEmailForAuthorize___C_Result| -> () {
                         application_user___authorization____send_email_for_authorize____deserialize____deallocate(c_result);
                         return ();
                     };
@@ -4018,11 +4018,11 @@ mod test {
                 }
                 #[test]
                 fn precedent____application_user___authorization____send_email_for_authorize() -> Result<(), Box<dyn StdError + 'static>> {
-                    let mut precedent_registry: Vec<ApplicationUser__Authorization___SendEmailForAuthorize___Precedent_> = vec![];
-                    precedent_registry.push(ApplicationUser__Authorization___SendEmailForAuthorize___Precedent_::User_NotFound);
-                    precedent_registry.push(ApplicationUser__Authorization___SendEmailForAuthorize___Precedent_::UserAuthorizationToken_NotFound);
-                    precedent_registry.push(ApplicationUser__Authorization___SendEmailForAuthorize___Precedent_::UserAuthorizationToken_AlreadyExpired);
-                    precedent_registry.push(ApplicationUser__Authorization___SendEmailForAuthorize___Precedent_::UserAuthorizationToken_TimeToResendHasNotCome);
+                    let mut precedent_registry: Vec<User__Authorization___SendEmailForAuthorize___Precedent_> = vec![];
+                    precedent_registry.push(User__Authorization___SendEmailForAuthorize___Precedent_::User_NotFound);
+                    precedent_registry.push(User__Authorization___SendEmailForAuthorize___Precedent_::UserAuthorizationToken_NotFound);
+                    precedent_registry.push(User__Authorization___SendEmailForAuthorize___Precedent_::UserAuthorizationToken_AlreadyExpired);
+                    precedent_registry.push(User__Authorization___SendEmailForAuthorize___Precedent_::UserAuthorizationToken_TimeToResendHasNotCome);
                     '_a: for precedent in precedent_registry {
                         _precedent____application_user___authorization____send_email_for_authorize(precedent)?;
                     }
@@ -4031,13 +4031,13 @@ mod test {
                 #[test]
                 fn target_empty____application_user___authorization____send_email_for_reset_password() -> Result<(), Box<dyn StdError + 'static>> {
                     let unified_report = UnifiedReport::<
-                        ApplicationUser__Authorization___SendEmailForResetPassword___Outcoming_,
-                        ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_,
+                        User__Authorization___SendEmailForResetPassword___Outcoming_,
+                        User__Authorization___SendEmailForResetPassword___Precedent_,
                     >::target_empty();
-                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___SendEmailForResetPassword___C_Result {
+                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut User__Authorization___SendEmailForResetPassword___C_Result {
                         return application_user___authorization____send_email_for_reset_password____deserialize____allocate(vector_of_bytes);
                     };
-                    let deallocator = move |c_result: *mut ApplicationUser__Authorization___SendEmailForResetPassword___C_Result| -> () {
+                    let deallocator = move |c_result: *mut User__Authorization___SendEmailForResetPassword___C_Result| -> () {
                         application_user___authorization____send_email_for_reset_password____deserialize____deallocate(c_result);
                         return ();
                     };
@@ -4050,17 +4050,17 @@ mod test {
                 }
                 #[test]
                 fn target_filled____application_user___authorization____send_email_for_reset_password() -> Result<(), Box<dyn StdError + 'static>> {
-                    let outcoming = ApplicationUser__Authorization___SendEmailForResetPassword___Outcoming_ {
+                    let outcoming = User__Authorization___SendEmailForResetPassword___Outcoming_ {
                         application_user_reset_password_token__can_be_resent_from: 0,
                     };
                     let unified_report = UnifiedReport::<
-                        ApplicationUser__Authorization___SendEmailForResetPassword___Outcoming_,
-                        ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_,
+                        User__Authorization___SendEmailForResetPassword___Outcoming_,
+                        User__Authorization___SendEmailForResetPassword___Precedent_,
                     >::target_filled(outcoming);
-                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___SendEmailForResetPassword___C_Result {
+                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut User__Authorization___SendEmailForResetPassword___C_Result {
                         return application_user___authorization____send_email_for_reset_password____deserialize____allocate(vector_of_bytes);
                     };
-                    let deallocator = move |c_result: *mut ApplicationUser__Authorization___SendEmailForResetPassword___C_Result| -> () {
+                    let deallocator = move |c_result: *mut User__Authorization___SendEmailForResetPassword___C_Result| -> () {
                         application_user___authorization____send_email_for_reset_password____deserialize____deallocate(c_result);
                         return ();
                     };
@@ -4072,16 +4072,16 @@ mod test {
                     return Result::Ok(());
                 }
                 fn _precedent____application_user___authorization____send_email_for_reset_password(
-                    precedent: ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_,
+                    precedent: User__Authorization___SendEmailForResetPassword___Precedent_,
                 ) -> Result<(), Box<dyn StdError + 'static>> {
                     let unified_report = UnifiedReport::<
-                        ApplicationUser__Authorization___SendEmailForResetPassword___Outcoming_,
-                        ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_,
+                        User__Authorization___SendEmailForResetPassword___Outcoming_,
+                        User__Authorization___SendEmailForResetPassword___Precedent_,
                     >::precedent(precedent);
-                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut ApplicationUser__Authorization___SendEmailForResetPassword___C_Result {
+                    let allocator = move |vector_of_bytes: *mut C_Vector<c_uchar>| -> *mut User__Authorization___SendEmailForResetPassword___C_Result {
                         return application_user___authorization____send_email_for_reset_password____deserialize____allocate(vector_of_bytes);
                     };
-                    let deallocator = move |c_result: *mut ApplicationUser__Authorization___SendEmailForResetPassword___C_Result| -> () {
+                    let deallocator = move |c_result: *mut User__Authorization___SendEmailForResetPassword___C_Result| -> () {
                         application_user___authorization____send_email_for_reset_password____deserialize____deallocate(c_result);
                         return ();
                     };
@@ -4094,12 +4094,12 @@ mod test {
                 }
                 #[test]
                 fn precedent____application_user___authorization____send_email_for_reset_password() -> Result<(), Box<dyn StdError + 'static>> {
-                    let mut precedent_registry: Vec<ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_> = vec![];
-                    precedent_registry.push(ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_::User_NotFound);
-                    precedent_registry.push(ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_::UserResetPasswordToken_NotFound);
-                    precedent_registry.push(ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_::UserResetPasswordToken_AlreadyExpired);
-                    precedent_registry.push(ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_::UserResetPasswordToken_AlreadyApproved);
-                    precedent_registry.push(ApplicationUser__Authorization___SendEmailForResetPassword___Precedent_::UserResetPasswordToken_TimeToResendHasNotCome);
+                    let mut precedent_registry: Vec<User__Authorization___SendEmailForResetPassword___Precedent_> = vec![];
+                    precedent_registry.push(User__Authorization___SendEmailForResetPassword___Precedent_::User_NotFound);
+                    precedent_registry.push(User__Authorization___SendEmailForResetPassword___Precedent_::UserResetPasswordToken_NotFound);
+                    precedent_registry.push(User__Authorization___SendEmailForResetPassword___Precedent_::UserResetPasswordToken_AlreadyExpired);
+                    precedent_registry.push(User__Authorization___SendEmailForResetPassword___Precedent_::UserResetPasswordToken_AlreadyApproved);
+                    precedent_registry.push(User__Authorization___SendEmailForResetPassword___Precedent_::UserResetPasswordToken_TimeToResendHasNotCome);
                     '_a: for precedent in precedent_registry {
                         _precedent____application_user___authorization____send_email_for_reset_password(precedent)?;
                     }
@@ -4523,12 +4523,12 @@ mod test {
             }
             #[test]
             fn application_user___authorization____authorize_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
-                let incoming = ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming {
+                let incoming = User__Authorization___AuthorizeByFirstStep___Incoming {
                     application_user_device__id: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                     application_user__email___or___application_user__nickname: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                     application_user__password: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
-                let allocator = move |incoming: *mut ApplicationUser__Authorization___AuthorizeByFirstStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
+                let allocator = move |incoming: *mut User__Authorization___AuthorizeByFirstStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
                     return application_user___authorization____authorize_by_first_step____serialize____allocate(incoming);
                 };
                 let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
@@ -4547,12 +4547,12 @@ mod test {
             }
             #[test]
             fn application_user___authorization____authorize_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
-                let incoming = ApplicationUser__Authorization___AuthorizeByLastStep___Incoming {
+                let incoming = User__Authorization___AuthorizeByLastStep___Incoming {
                     application_user__id: 0,
                     application_user_device__id: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                     application_user_authorization_token__value: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
-                let allocator = move |incoming: *mut ApplicationUser__Authorization___AuthorizeByLastStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
+                let allocator = move |incoming: *mut User__Authorization___AuthorizeByLastStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
                     return application_user___authorization____authorize_by_last_step____serialize____allocate(incoming);
                 };
                 let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
@@ -4570,10 +4570,10 @@ mod test {
             }
             #[test]
             fn application_user___authorization____check_email_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
-                let incoming = ApplicationUser__Authorization___CheckEmailForExisting___Incoming {
+                let incoming = User__Authorization___CheckEmailForExisting___Incoming {
                     application_user__email: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
-                let allocator = move |incoming: *mut ApplicationUser__Authorization___CheckEmailForExisting___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
+                let allocator = move |incoming: *mut User__Authorization___CheckEmailForExisting___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
                     return application_user___authorization____check_email_for_existing____serialize____allocate(incoming);
                 };
                 let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
@@ -4590,10 +4590,10 @@ mod test {
             }
             #[test]
             fn application_user___authorization____check_nickname_for_existing() -> Result<(), Box<dyn StdError + 'static>> {
-                let incoming = ApplicationUser__Authorization___CheckNicknameForExisting___Incoming {
+                let incoming = User__Authorization___CheckNicknameForExisting___Incoming {
                     application_user__nickname: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
-                let allocator = move |incoming: *mut ApplicationUser__Authorization___CheckNicknameForExisting___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
+                let allocator = move |incoming: *mut User__Authorization___CheckNicknameForExisting___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
                     return application_user___authorization____check_nickname_for_existing____serialize____allocate(incoming);
                 };
                 let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
@@ -4610,13 +4610,13 @@ mod test {
             }
             #[test]
             fn application_user___authorization____deauthorize_from_all_devices() -> Result<(), Box<dyn StdError + 'static>> {
-                let incoming = ApplicationUser__Authorization___DeauthorizeFromAllDevices___Incoming {
-                    application_user_access_token_encoded: ApplicationUserAccessTokenEncoded {
+                let incoming = User__Authorization___DeauthorizeFromAllDevices___Incoming {
+                    application_user_access_token_encoded: UserAccessTokenEncoded {
                         serialized: Allocator::<C_Vector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                         encoded: Allocator::<C_Vector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     },
                 };
-                let allocator = move |incoming: *mut ApplicationUser__Authorization___DeauthorizeFromAllDevices___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
+                let allocator = move |incoming: *mut User__Authorization___DeauthorizeFromAllDevices___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
                     return application_user___authorization____deauthorize_from_all_devices____serialize____allocate(incoming);
                 };
                 let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
@@ -4634,13 +4634,13 @@ mod test {
             }
             #[test]
             fn application_user___authorization____deauthorize_from_one_device() -> Result<(), Box<dyn StdError + 'static>> {
-                let incoming = ApplicationUser__Authorization___DeauthorizeFromOneDevice___Incoming {
-                    application_user_access_token_encoded: ApplicationUserAccessTokenEncoded {
+                let incoming = User__Authorization___DeauthorizeFromOneDevice___Incoming {
+                    application_user_access_token_encoded: UserAccessTokenEncoded {
                         serialized: Allocator::<C_Vector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                         encoded: Allocator::<C_Vector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     },
                 };
-                let allocator = move |incoming: *mut ApplicationUser__Authorization___DeauthorizeFromOneDevice___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
+                let allocator = move |incoming: *mut User__Authorization___DeauthorizeFromOneDevice___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
                     return application_user___authorization____deauthorize_from_one_device____serialize____allocate(incoming);
                 };
                 let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
@@ -4658,16 +4658,16 @@ mod test {
             }
             #[test]
             fn application_user___authorization____refresh_access_token() -> Result<(), Box<dyn StdError + 'static>> {
-                let incoming = ApplicationUser__Authorization___RefreshAccessToken___Incoming {
-                    application_user_access_token_encoded: ApplicationUserAccessTokenEncoded {
+                let incoming = User__Authorization___RefreshAccessToken___Incoming {
+                    application_user_access_token_encoded: UserAccessTokenEncoded {
                         serialized: Allocator::<C_Vector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                         encoded: Allocator::<C_Vector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     },
-                    application_user_access_refresh_token_encoded: ApplicationUserAccessRefreshTokenEncoded(
+                    application_user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded(
                         Allocator::<C_Vector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec())
                     ),
                 };
-                let allocator = move |incoming: *mut ApplicationUser__Authorization___RefreshAccessToken___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
+                let allocator = move |incoming: *mut User__Authorization___RefreshAccessToken___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
                     return application_user___authorization____refresh_access_token____serialize____allocate(incoming);
                 };
                 let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
@@ -4686,11 +4686,11 @@ mod test {
             }
             #[test]
             fn application_user___authorization____register_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
-                let incoming = ApplicationUser__Authorization___RegisterByFirstStep___Incoming {
+                let incoming = User__Authorization___RegisterByFirstStep___Incoming {
                     application_user__email: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                     application_user_device__id: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
-                let allocator = move |incoming: *mut ApplicationUser__Authorization___RegisterByFirstStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
+                let allocator = move |incoming: *mut User__Authorization___RegisterByFirstStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
                     return application_user___authorization____register_by_first_step____serialize____allocate(incoming);
                 };
                 let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
@@ -4708,12 +4708,12 @@ mod test {
             }
             #[test]
             fn application_user___authorization____register_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
-                let incoming = ApplicationUser__Authorization___RegisterBySecondStep___Incoming {
+                let incoming = User__Authorization___RegisterBySecondStep___Incoming {
                     application_user__email: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                     application_user_device__id: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                     application_user_registration_token__value: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
-                let allocator = move |incoming: *mut ApplicationUser__Authorization___RegisterBySecondStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
+                let allocator = move |incoming: *mut User__Authorization___RegisterBySecondStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
                     return application_user___authorization____register_by_second_step____serialize____allocate(incoming);
                 };
                 let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
@@ -4732,14 +4732,14 @@ mod test {
             }
             #[test]
             fn application_user___authorization____register_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
-                let incoming = ApplicationUser__Authorization___RegisterByLastStep___Incoming {
+                let incoming = User__Authorization___RegisterByLastStep___Incoming {
                     application_user_device__id: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                     application_user__nickname: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                     application_user__password: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                     application_user__email: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                     application_user_registration_token__value: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
-                let allocator = move |incoming: *mut ApplicationUser__Authorization___RegisterByLastStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
+                let allocator = move |incoming: *mut User__Authorization___RegisterByLastStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
                     return application_user___authorization____register_by_last_step____serialize____allocate(incoming);
                 };
                 let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
@@ -4760,11 +4760,11 @@ mod test {
             }
             #[test]
             fn application_user___authorization____reset_password_by_first_step() -> Result<(), Box<dyn StdError + 'static>> {
-                let incoming = ApplicationUser__Authorization___ResetPasswordByFirstStep___Incoming {
+                let incoming = User__Authorization___ResetPasswordByFirstStep___Incoming {
                     application_user__email: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                     application_user_device__id: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
-                let allocator = move |incoming: *mut ApplicationUser__Authorization___ResetPasswordByFirstStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
+                let allocator = move |incoming: *mut User__Authorization___ResetPasswordByFirstStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
                     return application_user___authorization____reset_password_by_first_step____serialize____allocate(incoming);
                 };
                 let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
@@ -4782,12 +4782,12 @@ mod test {
             }
             #[test]
             fn application_user___authorization____reset_password_by_second_step() -> Result<(), Box<dyn StdError + 'static>> {
-                let incoming = ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming {
+                let incoming = User__Authorization___ResetPasswordBySecondStep___Incoming {
                     application_user__id: 0,
                     application_user_device__id: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                     application_user_reset_password_token__value: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
-                let allocator = move |incoming: *mut ApplicationUser__Authorization___ResetPasswordBySecondStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
+                let allocator = move |incoming: *mut User__Authorization___ResetPasswordBySecondStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
                     return application_user___authorization____reset_password_by_second_step____serialize____allocate(incoming);
                 };
                 let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
@@ -4805,13 +4805,13 @@ mod test {
             }
             #[test]
             fn application_user___authorization____reset_password_by_last_step() -> Result<(), Box<dyn StdError + 'static>> {
-                let incoming = ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming {
+                let incoming = User__Authorization___ResetPasswordByLastStep___Incoming {
                     application_user__id: 0,
                     application_user_device__id: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                     application_user__password: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                     application_user_reset_password_token__value: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
-                let allocator = move |incoming: *mut ApplicationUser__Authorization___ResetPasswordByLastStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
+                let allocator = move |incoming: *mut User__Authorization___ResetPasswordByLastStep___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
                     return application_user___authorization____reset_password_by_last_step____serialize____allocate(incoming);
                 };
                 let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
@@ -4830,11 +4830,11 @@ mod test {
             }
             #[test]
             fn application_user___authorization____send_email_for_register() -> Result<(), Box<dyn StdError + 'static>> {
-                let incoming = ApplicationUser__Authorization___SendEmailForRegister___Incoming {
+                let incoming = User__Authorization___SendEmailForRegister___Incoming {
                     application_user__email: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                     application_user_device__id: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
-                let allocator = move |incoming: *mut ApplicationUser__Authorization___SendEmailForRegister___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
+                let allocator = move |incoming: *mut User__Authorization___SendEmailForRegister___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
                     return application_user___authorization____send_email_for_register____serialize____allocate(incoming);
                 };
                 let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
@@ -4852,11 +4852,11 @@ mod test {
             }
             #[test]
             fn application_user___authorization____send_email_for_authorize() -> Result<(), Box<dyn StdError + 'static>> {
-                let incoming = ApplicationUser__Authorization___SendEmailForAuthorize___Incoming {
+                let incoming = User__Authorization___SendEmailForAuthorize___Incoming {
                     application_user_device__id: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                     application_user__id: 0,
                 };
-                let allocator = move |incoming: *mut ApplicationUser__Authorization___SendEmailForAuthorize___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
+                let allocator = move |incoming: *mut User__Authorization___SendEmailForAuthorize___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
                     return application_user___authorization____send_email_for_authorize____serialize____allocate(incoming);
                 };
                 let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
@@ -4873,11 +4873,11 @@ mod test {
             }
             #[test]
             fn application_user___authorization____send_email_for_reset_password() -> Result<(), Box<dyn StdError + 'static>> {
-                let incoming = ApplicationUser__Authorization___SendEmailForResetPassword___Incoming {
+                let incoming = User__Authorization___SendEmailForResetPassword___Incoming {
                     application_user__id: 0,
                     application_user_device__id: Allocator::<C_String>::allocate(NOT_EMPTY_STRING_LITERAL.to_string()),
                 };
-                let allocator = move |incoming: *mut ApplicationUser__Authorization___SendEmailForResetPassword___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
+                let allocator = move |incoming: *mut User__Authorization___SendEmailForResetPassword___Incoming| -> *mut C_Result<C_Vector<c_uchar>> {
                     return application_user___authorization____send_email_for_reset_password____serialize____allocate(incoming);
                 };
                 let deallocator = move |c_result: *mut C_Result<C_Vector<c_uchar>>| -> () {
@@ -4895,7 +4895,7 @@ mod test {
             #[test]
             fn channel___base____get_many_by_name_in_subscriptions() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = Channel__Base___GetManyByNameInSubscriptions___Incoming {
-                    application_user_access_token_encoded: ApplicationUserAccessTokenEncoded {
+                    application_user_access_token_encoded: UserAccessTokenEncoded {
                         serialized: Allocator::<C_Vector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                         encoded: Allocator::<C_Vector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     },
@@ -4924,7 +4924,7 @@ mod test {
             #[test]
             fn channel___base____get_many_by_subscription() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = Channel__Base___GetManyBySubscription___Incoming {
-                    application_user_access_token_encoded: ApplicationUserAccessTokenEncoded {
+                    application_user_access_token_encoded: UserAccessTokenEncoded {
                         serialized: Allocator::<C_Vector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                         encoded: Allocator::<C_Vector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     },
@@ -4950,7 +4950,7 @@ mod test {
             #[test]
             fn channel___base____get_many_public_by_name() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = Channel__Base___GetManyPublicByName___Incoming {
-                    application_user_access_token_encoded: ApplicationUserAccessTokenEncoded {
+                    application_user_access_token_encoded: UserAccessTokenEncoded {
                         serialized: Allocator::<C_Vector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                         encoded: Allocator::<C_Vector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     },
@@ -4979,7 +4979,7 @@ mod test {
             #[test]
             fn channel___base____get_one_by_id() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = Channel__Base___GetOneById___Incoming {
-                    application_user_access_token_encoded: ApplicationUserAccessTokenEncoded {
+                    application_user_access_token_encoded: UserAccessTokenEncoded {
                         serialized: Allocator::<C_Vector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                         encoded: Allocator::<C_Vector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     },
@@ -5004,7 +5004,7 @@ mod test {
             #[test]
             fn channel_subscription___base____create() -> Result<(), Box<dyn StdError + 'static>> {
                 let incoming = ChannelSubscription__Base___Create___Incoming {
-                    application_user_access_token_encoded: ApplicationUserAccessTokenEncoded {
+                    application_user_access_token_encoded: UserAccessTokenEncoded {
                         serialized: Allocator::<C_Vector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                         encoded: Allocator::<C_Vector<_>>::allocate(NOT_EMPTY_ARRAY_LITERAL.to_vec()),
                     },

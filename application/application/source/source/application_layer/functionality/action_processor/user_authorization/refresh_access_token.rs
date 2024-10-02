@@ -40,7 +40,7 @@ use crate::{
         },
     },
 };
-use action_processor_incoming_outcoming::action_processor::application_user___authorization::refresh_access_token::{
+use action_processor_incoming_outcoming::action_processor::user_authorization::refresh_access_token::{
     Incoming,
     Outcoming,
     Precedent,
@@ -62,8 +62,8 @@ use tokio_postgres::{
 };
 use unified_report::UnifiedReport;
 use void::Void;
-pub struct ApplicationUser__Authorization___RefreshAccessToken;
-impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___RefreshAccessToken> {
+pub struct UserAuthorization_RefreshAccessToken;
+impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> {
     type Incoming = Incoming;
     type Outcoming = Outcoming;
     type Precedent = Precedent;

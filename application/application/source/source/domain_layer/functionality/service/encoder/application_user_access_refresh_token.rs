@@ -17,14 +17,14 @@ use crate::{
     },
 };
 use aggregate_error::AggregateError;
-use application_user_access_refresh_token_encoded::ApplicationUserAccessRefreshTokenEncoded;
+use application_user_access_refresh_token_encoded::UserAccessRefreshTokenEncoded;
 impl Encoder<UserAccessRefreshToken<'_>> {
     pub fn encode<'a>(
         environment_configuration: &'static EnvironmentConfiguration,
         application_user_access_refresh_token: &'a UserAccessRefreshToken<'_>,
-    ) -> Result<ApplicationUserAccessRefreshTokenEncoded, AggregateError> {
+    ) -> Result<UserAccessRefreshTokenEncoded, AggregateError> {
         return Result::Ok(
-            ApplicationUserAccessRefreshTokenEncoded(
+            UserAccessRefreshTokenEncoded(
                 Encoder_::<HmacSha3_512>::encode(
                     environment_configuration.encryption.private_key.application_user_access_refresh_token.as_bytes(),
                     Serializer::<MessagePack>::serialize(application_user_access_refresh_token)?.as_slice(), // TODO TODO TODO Serializer::<MessagePack> - Нужен любой фаст алгоритм сериализации.
@@ -35,7 +35,7 @@ impl Encoder<UserAccessRefreshToken<'_>> {
     pub fn is_valid<'a>(
         environment_configuration: &'static EnvironmentConfiguration,
         application_user_access_refresh_token: &'a UserAccessRefreshToken<'_>,
-        application_user_access_refresh_token_encoded: &'a ApplicationUserAccessRefreshTokenEncoded,
+        application_user_access_refresh_token_encoded: &'a UserAccessRefreshTokenEncoded,
     ) -> Result<bool, AggregateError> {
         return Encoder_::<HmacSha3_512>::is_valid(
             environment_configuration.encryption.private_key.application_user_access_refresh_token.as_bytes(),

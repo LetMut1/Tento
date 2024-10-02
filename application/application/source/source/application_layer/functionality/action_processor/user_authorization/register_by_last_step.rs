@@ -46,9 +46,9 @@ use crate::{
                 application_user::{
                     By1,
                     By2,
-                    Insert1 as ApplicationUserInsert1,
+                    Insert1 as UserInsert1,
                 },
-                application_user_access_refresh_token::Insert1 as ApplicationUserAccessRefreshTokenInsert1,
+                application_user_access_refresh_token::Insert1 as UserAccessRefreshTokenInsert1,
                 application_user_device::Insert1,
                 application_user_registration_token::{
                     By1 as By1_,
@@ -69,7 +69,7 @@ use crate::{
         },
     },
 };
-use action_processor_incoming_outcoming::action_processor::application_user___authorization::register_by_last_step::{
+use action_processor_incoming_outcoming::action_processor::user_authorization::register_by_last_step::{
     Incoming,
     Outcoming,
     Precedent,
@@ -93,8 +93,8 @@ use tokio_postgres::{
 };
 use unified_report::UnifiedReport;
 use void::Void;
-pub struct ApplicationUser__Authorization___RegisterByLastStep;
-impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___RegisterByLastStep> {
+pub struct UserAuthorization_RegisterByLastStep;
+impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> {
     type Incoming = Incoming;
     type Outcoming = Outcoming;
     type Precedent = Precedent;
@@ -254,7 +254,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
             );
             let application_user = PostgresqlRepository::<User<'_>>::create_1(
                 database_1_postgresql_connection,
-                ApplicationUserInsert1 {
+                UserInsert1 {
                     application_user__email: incoming.application_user__email,
                     application_user__nickname: incoming.application_user__nickname,
                     application_user__password_hash: application_user__password_hash___join_handle.await.into_runtime(
@@ -276,7 +276,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Regis
             // TODO  TRANZACTION посмотреть, необходимо ли здесь сделать транзакцию
             let application_user_access_refresh_token = PostgresqlRepository::<UserAccessRefreshToken<'_>>::create_1(
                 database_2_postgresql_connection,
-                ApplicationUserAccessRefreshTokenInsert1 {
+                UserAccessRefreshTokenInsert1 {
                     application_user__id: application_user.id,
                     application_user_device__id: incoming.application_user_device__id.as_str(),
                     application_user_access_token__id: application_user_access_token.id.as_str(),

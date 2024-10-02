@@ -46,7 +46,7 @@ use crate::{
         },
     },
 };
-use action_processor_incoming_outcoming::action_processor::application_user___authorization::send_email_for_authorize::{
+use action_processor_incoming_outcoming::action_processor::user_authorization::send_email_for_authorize::{
     Incoming,
     Outcoming,
     Precedent,
@@ -65,8 +65,8 @@ use tokio_postgres::{
 };
 use unified_report::UnifiedReport;
 use void::Void;
-pub struct ApplicationUser__Authorization___SendEmailForAuthorize;
-impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___SendEmailForAuthorize> {
+pub struct UserAuthorization_SendEmailForAuthorize;
+impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthorize> {
     type Incoming = Incoming;
     type Outcoming = Outcoming;
     type Precedent = Precedent;

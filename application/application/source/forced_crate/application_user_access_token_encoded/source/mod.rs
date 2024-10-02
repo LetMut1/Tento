@@ -3,7 +3,7 @@ use serde::{
     Serialize,
 };
 #[derive(Serialize, Deserialize)]
-pub struct ApplicationUserAccessTokenEncoded {
+pub struct UserAccessTokenEncoded {
     pub serialized: Vec<u8>,
     pub encoded: Vec<u8>,
 }

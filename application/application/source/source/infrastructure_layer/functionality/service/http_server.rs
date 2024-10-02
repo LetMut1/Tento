@@ -1,22 +1,22 @@
 use crate::{
     application_layer::functionality::action_processor::{
-        application_user___authorization::{
-            authorize_by_first_step::ApplicationUser__Authorization___AuthorizeByFirstStep,
-            authorize_by_last_step::ApplicationUser__Authorization___AuthorizeByLastStep,
-            check_email_for_existing::ApplicationUser__Authorization___CheckEmailForExisting,
-            check_nickname_for_existing::ApplicationUser__Authorization___CheckNicknameForExisting,
-            deauthorize_from_all_devices::ApplicationUser__Authorization___DeauthorizeFromAllDevices,
-            deauthorize_from_one_device::ApplicationUser__Authorization___DeauthorizeFromOneDevice,
-            refresh_access_token::ApplicationUser__Authorization___RefreshAccessToken,
-            register_by_first_step::ApplicationUser__Authorization___RegisterByFirstStep,
-            register_by_last_step::ApplicationUser__Authorization___RegisterByLastStep,
-            register_by_second_step::ApplicationUser__Authorization___RegisterBySecondStep,
-            reset_password_by_first_step::ApplicationUser__Authorization___ResetPasswordByFirstStep,
-            reset_password_by_last_step::ApplicationUser__Authorization___ResetPasswordByLastStep,
-            reset_password_by_second_step::ApplicationUser__Authorization___ResetPasswordBySecondStep,
-            send_email_for_authorize::ApplicationUser__Authorization___SendEmailForAuthorize,
-            send_email_for_register::ApplicationUser__Authorization___SendEmailForRegister,
-            send_email_for_reset_password::ApplicationUser__Authorization___SendEmailForResetPassword,
+        user_authorization::{
+            authorize_by_first_step::UserAuthorization_AuthorizeByFirstStep,
+            authorize_by_last_step::UserAuthorization_AuthorizeByLastStep,
+            check_email_for_existing::UserAuthorization_CheckEmailForExisting,
+            check_nickname_for_existing::UserAuthorization_CheckNicknameForExisting,
+            deauthorize_from_all_devices::UserAuthorization_DeauthorizeFromAllDevices,
+            deauthorize_from_one_device::UserAuthorization_DeauthorizeFromOneDevice,
+            refresh_access_token::UserAuthorization_RefreshAccessToken,
+            register_by_first_step::UserAuthorization_RegisterByFirstStep,
+            register_by_last_step::UserAuthorization_RegisterByLastStep,
+            register_by_second_step::UserAuthorization_RegisterBySecondStep,
+            reset_password_by_first_step::UserAuthorization_ResetPasswordByFirstStep,
+            reset_password_by_last_step::UserAuthorization_ResetPasswordByLastStep,
+            reset_password_by_second_step::UserAuthorization_ResetPasswordBySecondStep,
+            send_email_for_authorize::UserAuthorization_SendEmailForAuthorize,
+            send_email_for_register::UserAuthorization_SendEmailForRegister,
+            send_email_for_reset_password::UserAuthorization_SendEmailForResetPassword,
         },
         channel___base::{
             get_many_by_name_in_subscriptions::Channel__Base___GetManyByNameInSubscriptions,
@@ -98,55 +98,55 @@ use void::Void;
 #[cfg(feature = "manual_testing")]
 use const_format::concatcp;
 pub const ACTION_ROUTE: ActionRoute = ActionRoute {
-    application_user___authorization: ApplicationUser__Authorization {
-        check_nickname_for_existing: ApplicationUser__Authorization::CHECK_NICKNAME_FOR_EXISTING,
-        check_email_for_existing: ApplicationUser__Authorization::CHECK_EMAIL_FOR_EXISTING,
-        regisgter_by_first_step: ApplicationUser__Authorization::REGISTER_BY_FIRST_STEP,
-        regisgter_by_second_step: ApplicationUser__Authorization::REGISTER_BY_SECOND_STEP,
-        regisgter_by_last_step: ApplicationUser__Authorization::REGISTER_BY_LAST_STEP,
-        send_email_for_register: ApplicationUser__Authorization::SEND_EMAIL_FOR_REGISTER,
-        authorize_by_first_step: ApplicationUser__Authorization::AUTHORIZE_BY_FIRST_STEP,
-        authorize_by_last_step: ApplicationUser__Authorization::AUTHORIZE_BY_LAST_STEP,
-        send_email_for_authorize: ApplicationUser__Authorization::SEND_EMAIL_FOR_AUTHORIZE,
-        reset_password_by_first_step: ApplicationUser__Authorization::RESET_PASSWORD_BY_FIRST_STEP,
-        reset_password_by_second_step: ApplicationUser__Authorization::RESET_PASSWORD_BY_SECOND_STEP,
-        reset_password_by_last_step: ApplicationUser__Authorization::RESET_PASSWORD_BY_LAST_STEP,
-        send_email_for_reset_password: ApplicationUser__Authorization::SEND_EMAIL_FOR_RESET_PASSWORD,
-        refresh_access_token: ApplicationUser__Authorization::REFRESH_ACCESS_TOKEN,
-        deauthorize_from_one_device: ApplicationUser__Authorization::DEAUTHORIZE_FROM_ONE_DEVICE,
-        deauthorize_from_all_devices: ApplicationUser__Authorization::DEAUTHORIZE_FROM_ALL_DEVICES,
+    application_user___authorization: UserAuthorization {
+        check_nickname_for_existing: UserAuthorization::CHECK_NICKNAME_FOR_EXISTING,
+        check_email_for_existing: UserAuthorization::CHECK_EMAIL_FOR_EXISTING,
+        regisgter_by_first_step: UserAuthorization::REGISTER_BY_FIRST_STEP,
+        regisgter_by_second_step: UserAuthorization::REGISTER_BY_SECOND_STEP,
+        regisgter_by_last_step: UserAuthorization::REGISTER_BY_LAST_STEP,
+        send_email_for_register: UserAuthorization::SEND_EMAIL_FOR_REGISTER,
+        authorize_by_first_step: UserAuthorization::AUTHORIZE_BY_FIRST_STEP,
+        authorize_by_last_step: UserAuthorization::AUTHORIZE_BY_LAST_STEP,
+        send_email_for_authorize: UserAuthorization::SEND_EMAIL_FOR_AUTHORIZE,
+        reset_password_by_first_step: UserAuthorization::RESET_PASSWORD_BY_FIRST_STEP,
+        reset_password_by_second_step: UserAuthorization::RESET_PASSWORD_BY_SECOND_STEP,
+        reset_password_by_last_step: UserAuthorization::RESET_PASSWORD_BY_LAST_STEP,
+        send_email_for_reset_password: UserAuthorization::SEND_EMAIL_FOR_RESET_PASSWORD,
+        refresh_access_token: UserAuthorization::REFRESH_ACCESS_TOKEN,
+        deauthorize_from_one_device: UserAuthorization::DEAUTHORIZE_FROM_ONE_DEVICE,
+        deauthorize_from_all_devices: UserAuthorization::DEAUTHORIZE_FROM_ALL_DEVICES,
         #[cfg(feature = "manual_testing")]
-        check_nickname_for_existing_: ApplicationUser__Authorization::CHECK_NICKNAME_FOR_EXISTING_,
+        check_nickname_for_existing_: UserAuthorization::CHECK_NICKNAME_FOR_EXISTING_,
         #[cfg(feature = "manual_testing")]
-        check_email_for_existing_: ApplicationUser__Authorization::CHECK_EMAIL_FOR_EXISTING_,
+        check_email_for_existing_: UserAuthorization::CHECK_EMAIL_FOR_EXISTING_,
         #[cfg(feature = "manual_testing")]
-        regisgter_by_first_step_: ApplicationUser__Authorization::REGISTER_BY_FIRST_STEP_,
+        regisgter_by_first_step_: UserAuthorization::REGISTER_BY_FIRST_STEP_,
         #[cfg(feature = "manual_testing")]
-        regisgter_by_second_step_: ApplicationUser__Authorization::REGISTER_BY_SECOND_STEP_,
+        regisgter_by_second_step_: UserAuthorization::REGISTER_BY_SECOND_STEP_,
         #[cfg(feature = "manual_testing")]
-        regisgter_by_last_step_: ApplicationUser__Authorization::REGISTER_BY_LAST_STEP_,
+        regisgter_by_last_step_: UserAuthorization::REGISTER_BY_LAST_STEP_,
         #[cfg(feature = "manual_testing")]
-        send_email_for_register_: ApplicationUser__Authorization::SEND_EMAIL_FOR_REGISTER_,
+        send_email_for_register_: UserAuthorization::SEND_EMAIL_FOR_REGISTER_,
         #[cfg(feature = "manual_testing")]
-        authorize_by_first_step_: ApplicationUser__Authorization::AUTHORIZE_BY_FIRST_STEP_,
+        authorize_by_first_step_: UserAuthorization::AUTHORIZE_BY_FIRST_STEP_,
         #[cfg(feature = "manual_testing")]
-        authorize_by_last_step_: ApplicationUser__Authorization::AUTHORIZE_BY_LAST_STEP_,
+        authorize_by_last_step_: UserAuthorization::AUTHORIZE_BY_LAST_STEP_,
         #[cfg(feature = "manual_testing")]
-        send_email_for_authorize_: ApplicationUser__Authorization::SEND_EMAIL_FOR_AUTHORIZE_,
+        send_email_for_authorize_: UserAuthorization::SEND_EMAIL_FOR_AUTHORIZE_,
         #[cfg(feature = "manual_testing")]
-        reset_password_by_first_step_: ApplicationUser__Authorization::RESET_PASSWORD_BY_FIRST_STEP_,
+        reset_password_by_first_step_: UserAuthorization::RESET_PASSWORD_BY_FIRST_STEP_,
         #[cfg(feature = "manual_testing")]
-        reset_password_by_second_step_: ApplicationUser__Authorization::RESET_PASSWORD_BY_SECOND_STEP_,
+        reset_password_by_second_step_: UserAuthorization::RESET_PASSWORD_BY_SECOND_STEP_,
         #[cfg(feature = "manual_testing")]
-        reset_password_by_last_step_: ApplicationUser__Authorization::RESET_PASSWORD_BY_LAST_STEP_,
+        reset_password_by_last_step_: UserAuthorization::RESET_PASSWORD_BY_LAST_STEP_,
         #[cfg(feature = "manual_testing")]
-        send_email_for_reset_password_: ApplicationUser__Authorization::SEND_EMAIL_FOR_RESET_PASSWORD_,
+        send_email_for_reset_password_: UserAuthorization::SEND_EMAIL_FOR_RESET_PASSWORD_,
         #[cfg(feature = "manual_testing")]
-        refresh_access_token_: ApplicationUser__Authorization::REFRESH_ACCESS_TOKEN_,
+        refresh_access_token_: UserAuthorization::REFRESH_ACCESS_TOKEN_,
         #[cfg(feature = "manual_testing")]
-        deauthorize_from_one_device_: ApplicationUser__Authorization::DEAUTHORIZE_FROM_ONE_DEVICE_,
+        deauthorize_from_one_device_: UserAuthorization::DEAUTHORIZE_FROM_ONE_DEVICE_,
         #[cfg(feature = "manual_testing")]
-        deauthorize_from_all_devices_: ApplicationUser__Authorization::DEAUTHORIZE_FROM_ALL_DEVICES_,
+        deauthorize_from_all_devices_: UserAuthorization::DEAUTHORIZE_FROM_ALL_DEVICES_,
     },
     channel___base: Channel__Base {
         get_one_by_id: Channel__Base::GET_ONE_BY_ID,
@@ -402,8 +402,8 @@ impl HttpServer {
         router
             .insert(
                 ACTION_ROUTE.application_user___authorization.check_nickname_for_existing,
-                ActionRoute_::ApplicationUser__Authorization {
-                    application_user___authorization: ApplicationUser__Authorization_::CheckNicknameForExisting,
+                ActionRoute_::UserAuthorization {
+                    application_user___authorization: UserAuthorization_::CheckNicknameForExisting,
                 },
             )
             .into_logic(
@@ -415,8 +415,8 @@ impl HttpServer {
         router
             .insert(
                 ACTION_ROUTE.application_user___authorization.check_email_for_existing,
-                ActionRoute_::ApplicationUser__Authorization {
-                    application_user___authorization: ApplicationUser__Authorization_::CheckEmailForExisting,
+                ActionRoute_::UserAuthorization {
+                    application_user___authorization: UserAuthorization_::CheckEmailForExisting,
                 },
             )
             .into_logic(
@@ -428,8 +428,8 @@ impl HttpServer {
         router
             .insert(
                 ACTION_ROUTE.application_user___authorization.regisgter_by_first_step,
-                ActionRoute_::ApplicationUser__Authorization {
-                    application_user___authorization: ApplicationUser__Authorization_::RegisterByFirstStep,
+                ActionRoute_::UserAuthorization {
+                    application_user___authorization: UserAuthorization_::RegisterByFirstStep,
                 },
             )
             .into_logic(
@@ -441,8 +441,8 @@ impl HttpServer {
         router
             .insert(
                 ACTION_ROUTE.application_user___authorization.regisgter_by_second_step,
-                ActionRoute_::ApplicationUser__Authorization {
-                    application_user___authorization: ApplicationUser__Authorization_::RegisterBySecondStep,
+                ActionRoute_::UserAuthorization {
+                    application_user___authorization: UserAuthorization_::RegisterBySecondStep,
                 },
             )
             .into_logic(
@@ -454,8 +454,8 @@ impl HttpServer {
         router
             .insert(
                 ACTION_ROUTE.application_user___authorization.regisgter_by_last_step,
-                ActionRoute_::ApplicationUser__Authorization {
-                    application_user___authorization: ApplicationUser__Authorization_::RegisterByLastStep,
+                ActionRoute_::UserAuthorization {
+                    application_user___authorization: UserAuthorization_::RegisterByLastStep,
                 },
             )
             .into_logic(
@@ -467,8 +467,8 @@ impl HttpServer {
         router
             .insert(
                 ACTION_ROUTE.application_user___authorization.send_email_for_register,
-                ActionRoute_::ApplicationUser__Authorization {
-                    application_user___authorization: ApplicationUser__Authorization_::SendEmailForRegister,
+                ActionRoute_::UserAuthorization {
+                    application_user___authorization: UserAuthorization_::SendEmailForRegister,
                 },
             )
             .into_logic(
@@ -480,8 +480,8 @@ impl HttpServer {
         router
             .insert(
                 ACTION_ROUTE.application_user___authorization.authorize_by_first_step,
-                ActionRoute_::ApplicationUser__Authorization {
-                    application_user___authorization: ApplicationUser__Authorization_::AuthorizeByFirstStep,
+                ActionRoute_::UserAuthorization {
+                    application_user___authorization: UserAuthorization_::AuthorizeByFirstStep,
                 },
             )
             .into_logic(
@@ -493,8 +493,8 @@ impl HttpServer {
         router
             .insert(
                 ACTION_ROUTE.application_user___authorization.authorize_by_last_step,
-                ActionRoute_::ApplicationUser__Authorization {
-                    application_user___authorization: ApplicationUser__Authorization_::AuthorizeByLastStep,
+                ActionRoute_::UserAuthorization {
+                    application_user___authorization: UserAuthorization_::AuthorizeByLastStep,
                 },
             )
             .into_logic(
@@ -506,8 +506,8 @@ impl HttpServer {
         router
             .insert(
                 ACTION_ROUTE.application_user___authorization.send_email_for_authorize,
-                ActionRoute_::ApplicationUser__Authorization {
-                    application_user___authorization: ApplicationUser__Authorization_::SendEmailForAuthorize,
+                ActionRoute_::UserAuthorization {
+                    application_user___authorization: UserAuthorization_::SendEmailForAuthorize,
                 },
             )
             .into_logic(
@@ -519,8 +519,8 @@ impl HttpServer {
         router
             .insert(
                 ACTION_ROUTE.application_user___authorization.reset_password_by_first_step,
-                ActionRoute_::ApplicationUser__Authorization {
-                    application_user___authorization: ApplicationUser__Authorization_::ResetPasswordByFirstStep,
+                ActionRoute_::UserAuthorization {
+                    application_user___authorization: UserAuthorization_::ResetPasswordByFirstStep,
                 },
             )
             .into_logic(
@@ -532,8 +532,8 @@ impl HttpServer {
         router
             .insert(
                 ACTION_ROUTE.application_user___authorization.reset_password_by_second_step,
-                ActionRoute_::ApplicationUser__Authorization {
-                    application_user___authorization: ApplicationUser__Authorization_::ResetPasswordBySecondStep,
+                ActionRoute_::UserAuthorization {
+                    application_user___authorization: UserAuthorization_::ResetPasswordBySecondStep,
                 },
             )
             .into_logic(
@@ -545,8 +545,8 @@ impl HttpServer {
         router
             .insert(
                 ACTION_ROUTE.application_user___authorization.reset_password_by_last_step,
-                ActionRoute_::ApplicationUser__Authorization {
-                    application_user___authorization: ApplicationUser__Authorization_::ResetPasswordByLastStep,
+                ActionRoute_::UserAuthorization {
+                    application_user___authorization: UserAuthorization_::ResetPasswordByLastStep,
                 },
             )
             .into_logic(
@@ -558,8 +558,8 @@ impl HttpServer {
         router
             .insert(
                 ACTION_ROUTE.application_user___authorization.send_email_for_reset_password,
-                ActionRoute_::ApplicationUser__Authorization {
-                    application_user___authorization: ApplicationUser__Authorization_::SendEmailForResetPassword,
+                ActionRoute_::UserAuthorization {
+                    application_user___authorization: UserAuthorization_::SendEmailForResetPassword,
                 },
             )
             .into_logic(
@@ -571,8 +571,8 @@ impl HttpServer {
         router
             .insert(
                 ACTION_ROUTE.application_user___authorization.refresh_access_token,
-                ActionRoute_::ApplicationUser__Authorization {
-                    application_user___authorization: ApplicationUser__Authorization_::RefreshAccessToken,
+                ActionRoute_::UserAuthorization {
+                    application_user___authorization: UserAuthorization_::RefreshAccessToken,
                 },
             )
             .into_logic(
@@ -584,8 +584,8 @@ impl HttpServer {
         router
             .insert(
                 ACTION_ROUTE.application_user___authorization.deauthorize_from_one_device,
-                ActionRoute_::ApplicationUser__Authorization {
-                    application_user___authorization: ApplicationUser__Authorization_::DeauthorizeFromOneDevice,
+                ActionRoute_::UserAuthorization {
+                    application_user___authorization: UserAuthorization_::DeauthorizeFromOneDevice,
                 },
             )
             .into_logic(
@@ -597,8 +597,8 @@ impl HttpServer {
         router
             .insert(
                 ACTION_ROUTE.application_user___authorization.deauthorize_from_all_devices,
-                ActionRoute_::ApplicationUser__Authorization {
-                    application_user___authorization: ApplicationUser__Authorization_::DeauthorizeFromAllDevices,
+                ActionRoute_::UserAuthorization {
+                    application_user___authorization: UserAuthorization_::DeauthorizeFromAllDevices,
                 },
             )
             .into_logic(
@@ -716,8 +716,8 @@ impl HttpServer {
             router
                 .insert(
                     ACTION_ROUTE.application_user___authorization.check_nickname_for_existing_,
-                    ActionRoute_::ApplicationUser__Authorization {
-                        application_user___authorization: ApplicationUser__Authorization_::CheckNicknameForExisting_,
+                    ActionRoute_::UserAuthorization {
+                        application_user___authorization: UserAuthorization_::CheckNicknameForExisting_,
                     },
                 )
                 .into_logic(
@@ -729,8 +729,8 @@ impl HttpServer {
             router
                 .insert(
                     ACTION_ROUTE.application_user___authorization.check_email_for_existing_,
-                    ActionRoute_::ApplicationUser__Authorization {
-                        application_user___authorization: ApplicationUser__Authorization_::CheckEmailForExisting_,
+                    ActionRoute_::UserAuthorization {
+                        application_user___authorization: UserAuthorization_::CheckEmailForExisting_,
                     },
                 )
                 .into_logic(
@@ -742,8 +742,8 @@ impl HttpServer {
             router
                 .insert(
                     ACTION_ROUTE.application_user___authorization.regisgter_by_first_step_,
-                    ActionRoute_::ApplicationUser__Authorization {
-                        application_user___authorization: ApplicationUser__Authorization_::RegisterByFirstStep_,
+                    ActionRoute_::UserAuthorization {
+                        application_user___authorization: UserAuthorization_::RegisterByFirstStep_,
                     },
                 )
                 .into_logic(
@@ -755,8 +755,8 @@ impl HttpServer {
             router
                 .insert(
                     ACTION_ROUTE.application_user___authorization.regisgter_by_second_step_,
-                    ActionRoute_::ApplicationUser__Authorization {
-                        application_user___authorization: ApplicationUser__Authorization_::RegisterBySecondStep_,
+                    ActionRoute_::UserAuthorization {
+                        application_user___authorization: UserAuthorization_::RegisterBySecondStep_,
                     },
                 )
                 .into_logic(
@@ -768,8 +768,8 @@ impl HttpServer {
             router
                 .insert(
                     ACTION_ROUTE.application_user___authorization.regisgter_by_last_step_,
-                    ActionRoute_::ApplicationUser__Authorization {
-                        application_user___authorization: ApplicationUser__Authorization_::RegisterByLastStep_,
+                    ActionRoute_::UserAuthorization {
+                        application_user___authorization: UserAuthorization_::RegisterByLastStep_,
                     },
                 )
                 .into_logic(
@@ -781,8 +781,8 @@ impl HttpServer {
             router
                 .insert(
                     ACTION_ROUTE.application_user___authorization.send_email_for_register_,
-                    ActionRoute_::ApplicationUser__Authorization {
-                        application_user___authorization: ApplicationUser__Authorization_::SendEmailForRegister_,
+                    ActionRoute_::UserAuthorization {
+                        application_user___authorization: UserAuthorization_::SendEmailForRegister_,
                     },
                 )
                 .into_logic(
@@ -794,8 +794,8 @@ impl HttpServer {
             router
                 .insert(
                     ACTION_ROUTE.application_user___authorization.authorize_by_first_step_,
-                    ActionRoute_::ApplicationUser__Authorization {
-                        application_user___authorization: ApplicationUser__Authorization_::AuthorizeByFirstStep_,
+                    ActionRoute_::UserAuthorization {
+                        application_user___authorization: UserAuthorization_::AuthorizeByFirstStep_,
                     },
                 )
                 .into_logic(
@@ -807,8 +807,8 @@ impl HttpServer {
             router
                 .insert(
                     ACTION_ROUTE.application_user___authorization.authorize_by_last_step_,
-                    ActionRoute_::ApplicationUser__Authorization {
-                        application_user___authorization: ApplicationUser__Authorization_::AuthorizeByLastStep_,
+                    ActionRoute_::UserAuthorization {
+                        application_user___authorization: UserAuthorization_::AuthorizeByLastStep_,
                     },
                 )
                 .into_logic(
@@ -820,8 +820,8 @@ impl HttpServer {
             router
                 .insert(
                     ACTION_ROUTE.application_user___authorization.send_email_for_authorize_,
-                    ActionRoute_::ApplicationUser__Authorization {
-                        application_user___authorization: ApplicationUser__Authorization_::SendEmailForAuthorize_,
+                    ActionRoute_::UserAuthorization {
+                        application_user___authorization: UserAuthorization_::SendEmailForAuthorize_,
                     },
                 )
                 .into_logic(
@@ -833,8 +833,8 @@ impl HttpServer {
             router
                 .insert(
                     ACTION_ROUTE.application_user___authorization.reset_password_by_first_step_,
-                    ActionRoute_::ApplicationUser__Authorization {
-                        application_user___authorization: ApplicationUser__Authorization_::ResetPasswordByFirstStep_,
+                    ActionRoute_::UserAuthorization {
+                        application_user___authorization: UserAuthorization_::ResetPasswordByFirstStep_,
                     },
                 )
                 .into_logic(
@@ -846,8 +846,8 @@ impl HttpServer {
             router
                 .insert(
                     ACTION_ROUTE.application_user___authorization.reset_password_by_second_step_,
-                    ActionRoute_::ApplicationUser__Authorization {
-                        application_user___authorization: ApplicationUser__Authorization_::ResetPasswordBySecondStep_,
+                    ActionRoute_::UserAuthorization {
+                        application_user___authorization: UserAuthorization_::ResetPasswordBySecondStep_,
                     },
                 )
                 .into_logic(
@@ -859,8 +859,8 @@ impl HttpServer {
             router
                 .insert(
                     ACTION_ROUTE.application_user___authorization.reset_password_by_last_step_,
-                    ActionRoute_::ApplicationUser__Authorization {
-                        application_user___authorization: ApplicationUser__Authorization_::ResetPasswordByLastStep_,
+                    ActionRoute_::UserAuthorization {
+                        application_user___authorization: UserAuthorization_::ResetPasswordByLastStep_,
                     },
                 )
                 .into_logic(
@@ -872,8 +872,8 @@ impl HttpServer {
             router
                 .insert(
                     ACTION_ROUTE.application_user___authorization.send_email_for_reset_password_,
-                    ActionRoute_::ApplicationUser__Authorization {
-                        application_user___authorization: ApplicationUser__Authorization_::SendEmailForResetPassword_,
+                    ActionRoute_::UserAuthorization {
+                        application_user___authorization: UserAuthorization_::SendEmailForResetPassword_,
                     },
                 )
                 .into_logic(
@@ -885,8 +885,8 @@ impl HttpServer {
             router
                 .insert(
                     ACTION_ROUTE.application_user___authorization.refresh_access_token_,
-                    ActionRoute_::ApplicationUser__Authorization {
-                        application_user___authorization: ApplicationUser__Authorization_::RefreshAccessToken_,
+                    ActionRoute_::UserAuthorization {
+                        application_user___authorization: UserAuthorization_::RefreshAccessToken_,
                     },
                 )
                 .into_logic(
@@ -898,8 +898,8 @@ impl HttpServer {
             router
                 .insert(
                     ACTION_ROUTE.application_user___authorization.deauthorize_from_one_device_,
-                    ActionRoute_::ApplicationUser__Authorization {
-                        application_user___authorization: ApplicationUser__Authorization_::DeauthorizeFromOneDevice_,
+                    ActionRoute_::UserAuthorization {
+                        application_user___authorization: UserAuthorization_::DeauthorizeFromOneDevice_,
                     },
                 )
                 .into_logic(
@@ -911,8 +911,8 @@ impl HttpServer {
             router
                 .insert(
                     ACTION_ROUTE.application_user___authorization.deauthorize_from_all_devices_,
-                    ActionRoute_::ApplicationUser__Authorization {
-                        application_user___authorization: ApplicationUser__Authorization_::DeauthorizeFromAllDevices_,
+                    ActionRoute_::UserAuthorization {
+                        application_user___authorization: UserAuthorization_::DeauthorizeFromAllDevices_,
                     },
                 )
                 .into_logic(
@@ -1084,7 +1084,7 @@ impl HttpServer {
                 database_2_postgresql_connection_pool: &cloned.database_2_postgresql_connection_pool,
             };
             match r#match.value {
-                &ActionRoute_::ApplicationUser__Authorization {
+                &ActionRoute_::UserAuthorization {
                     ref application_user___authorization,
                 } => {
                     match (
@@ -1092,114 +1092,114 @@ impl HttpServer {
                         &parts.method,
                     ) {
                         // Should be GET. But due to restrictions of third-party services, the method is put in Post.
-                        (&ApplicationUser__Authorization_::CheckNicknameForExisting, &Method::POST) => {
-                            return Action::<ApplicationUser__Authorization___CheckNicknameForExisting>::run(
+                        (&UserAuthorization_::CheckNicknameForExisting, &Method::POST) => {
+                            return Action::<UserAuthorization_CheckNicknameForExisting>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
                         // Should be GET. But due to restrictions of third-party services, the method is put in Post.
-                        (&ApplicationUser__Authorization_::CheckEmailForExisting, &Method::POST) => {
-                            return Action::<ApplicationUser__Authorization___CheckEmailForExisting>::run(
+                        (&UserAuthorization_::CheckEmailForExisting, &Method::POST) => {
+                            return Action::<UserAuthorization_CheckEmailForExisting>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
-                        (&ApplicationUser__Authorization_::RegisterByFirstStep, &Method::POST) => {
-                            return Action::<ApplicationUser__Authorization___RegisterByFirstStep>::run(
+                        (&UserAuthorization_::RegisterByFirstStep, &Method::POST) => {
+                            return Action::<UserAuthorization_RegisterByFirstStep>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
-                        (&ApplicationUser__Authorization_::RegisterBySecondStep, &Method::POST) => {
-                            return Action::<ApplicationUser__Authorization___RegisterBySecondStep>::run(
+                        (&UserAuthorization_::RegisterBySecondStep, &Method::POST) => {
+                            return Action::<UserAuthorization_RegisterBySecondStep>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
-                        (&ApplicationUser__Authorization_::RegisterByLastStep, &Method::POST) => {
-                            return Action::<ApplicationUser__Authorization___RegisterByLastStep>::run(
+                        (&UserAuthorization_::RegisterByLastStep, &Method::POST) => {
+                            return Action::<UserAuthorization_RegisterByLastStep>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
-                        (&ApplicationUser__Authorization_::SendEmailForRegister, &Method::POST) => {
-                            return Action::<ApplicationUser__Authorization___SendEmailForRegister>::run(
+                        (&UserAuthorization_::SendEmailForRegister, &Method::POST) => {
+                            return Action::<UserAuthorization_SendEmailForRegister>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
-                        (&ApplicationUser__Authorization_::AuthorizeByFirstStep, &Method::POST) => {
-                            return Action::<ApplicationUser__Authorization___AuthorizeByFirstStep>::run(
+                        (&UserAuthorization_::AuthorizeByFirstStep, &Method::POST) => {
+                            return Action::<UserAuthorization_AuthorizeByFirstStep>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
-                        (&ApplicationUser__Authorization_::AuthorizeByLastStep, &Method::POST) => {
-                            return Action::<ApplicationUser__Authorization___AuthorizeByLastStep>::run(
+                        (&UserAuthorization_::AuthorizeByLastStep, &Method::POST) => {
+                            return Action::<UserAuthorization_AuthorizeByLastStep>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
-                        (&ApplicationUser__Authorization_::SendEmailForAuthorize, &Method::POST) => {
-                            return Action::<ApplicationUser__Authorization___SendEmailForAuthorize>::run(
+                        (&UserAuthorization_::SendEmailForAuthorize, &Method::POST) => {
+                            return Action::<UserAuthorization_SendEmailForAuthorize>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
-                        (&ApplicationUser__Authorization_::ResetPasswordByFirstStep, &Method::POST) => {
-                            return Action::<ApplicationUser__Authorization___ResetPasswordByFirstStep>::run(
+                        (&UserAuthorization_::ResetPasswordByFirstStep, &Method::POST) => {
+                            return Action::<UserAuthorization_ResetPasswordByFirstStep>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
-                        (&ApplicationUser__Authorization_::ResetPasswordBySecondStep, &Method::POST) => {
-                            return Action::<ApplicationUser__Authorization___ResetPasswordBySecondStep>::run(
+                        (&UserAuthorization_::ResetPasswordBySecondStep, &Method::POST) => {
+                            return Action::<UserAuthorization_ResetPasswordBySecondStep>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
-                        (&ApplicationUser__Authorization_::ResetPasswordByLastStep, &Method::POST) => {
-                            return Action::<ApplicationUser__Authorization___ResetPasswordByLastStep>::run(
+                        (&UserAuthorization_::ResetPasswordByLastStep, &Method::POST) => {
+                            return Action::<UserAuthorization_ResetPasswordByLastStep>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
-                        (&ApplicationUser__Authorization_::SendEmailForResetPassword, &Method::POST) => {
-                            return Action::<ApplicationUser__Authorization___SendEmailForResetPassword>::run(
+                        (&UserAuthorization_::SendEmailForResetPassword, &Method::POST) => {
+                            return Action::<UserAuthorization_SendEmailForResetPassword>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
-                        (&ApplicationUser__Authorization_::RefreshAccessToken, &Method::POST) => {
-                            return Action::<ApplicationUser__Authorization___RefreshAccessToken>::run(
+                        (&UserAuthorization_::RefreshAccessToken, &Method::POST) => {
+                            return Action::<UserAuthorization_RefreshAccessToken>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
-                        (&ApplicationUser__Authorization_::DeauthorizeFromOneDevice, &Method::POST) => {
-                            return Action::<ApplicationUser__Authorization___DeauthorizeFromOneDevice>::run(
+                        (&UserAuthorization_::DeauthorizeFromOneDevice, &Method::POST) => {
+                            return Action::<UserAuthorization_DeauthorizeFromOneDevice>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
-                        (&ApplicationUser__Authorization_::DeauthorizeFromAllDevices, &Method::POST) => {
-                            return Action::<ApplicationUser__Authorization___DeauthorizeFromAllDevices>::run(
+                        (&UserAuthorization_::DeauthorizeFromAllDevices, &Method::POST) => {
+                            return Action::<UserAuthorization_DeauthorizeFromAllDevices>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
@@ -1213,114 +1213,114 @@ impl HttpServer {
                                     &parts.method,
                                 ) {
                                     // Should be GET. But due to restrictions of third-party services, the method is put in Post.
-                                    (&ApplicationUser__Authorization_::CheckNicknameForExisting_, &Method::POST) => {
-                                        return Action::<ApplicationUser__Authorization___CheckNicknameForExisting>::run_(
+                                    (&UserAuthorization_::CheckNicknameForExisting_, &Method::POST) => {
+                                        return Action::<UserAuthorization_CheckNicknameForExisting>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
                                     // Should be GET. But due to restrictions of third-party services, the method is put in Post.
-                                    (&ApplicationUser__Authorization_::CheckEmailForExisting_, &Method::POST) => {
-                                        return Action::<ApplicationUser__Authorization___CheckEmailForExisting>::run_(
+                                    (&UserAuthorization_::CheckEmailForExisting_, &Method::POST) => {
+                                        return Action::<UserAuthorization_CheckEmailForExisting>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
-                                    (&ApplicationUser__Authorization_::RegisterByFirstStep_, &Method::POST) => {
-                                        return Action::<ApplicationUser__Authorization___RegisterByFirstStep>::run_(
+                                    (&UserAuthorization_::RegisterByFirstStep_, &Method::POST) => {
+                                        return Action::<UserAuthorization_RegisterByFirstStep>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
-                                    (&ApplicationUser__Authorization_::RegisterBySecondStep_, &Method::POST) => {
-                                        return Action::<ApplicationUser__Authorization___RegisterBySecondStep>::run_(
+                                    (&UserAuthorization_::RegisterBySecondStep_, &Method::POST) => {
+                                        return Action::<UserAuthorization_RegisterBySecondStep>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
-                                    (&ApplicationUser__Authorization_::RegisterByLastStep_, &Method::POST) => {
-                                        return Action::<ApplicationUser__Authorization___RegisterByLastStep>::run_(
+                                    (&UserAuthorization_::RegisterByLastStep_, &Method::POST) => {
+                                        return Action::<UserAuthorization_RegisterByLastStep>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
-                                    (&ApplicationUser__Authorization_::SendEmailForRegister_, &Method::POST) => {
-                                        return Action::<ApplicationUser__Authorization___SendEmailForRegister>::run_(
+                                    (&UserAuthorization_::SendEmailForRegister_, &Method::POST) => {
+                                        return Action::<UserAuthorization_SendEmailForRegister>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
-                                    (&ApplicationUser__Authorization_::AuthorizeByFirstStep_, &Method::POST) => {
-                                        return Action::<ApplicationUser__Authorization___AuthorizeByFirstStep>::run_(
+                                    (&UserAuthorization_::AuthorizeByFirstStep_, &Method::POST) => {
+                                        return Action::<UserAuthorization_AuthorizeByFirstStep>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
-                                    (&ApplicationUser__Authorization_::AuthorizeByLastStep_, &Method::POST) => {
-                                        return Action::<ApplicationUser__Authorization___AuthorizeByLastStep>::run_(
+                                    (&UserAuthorization_::AuthorizeByLastStep_, &Method::POST) => {
+                                        return Action::<UserAuthorization_AuthorizeByLastStep>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
-                                    (&ApplicationUser__Authorization_::SendEmailForAuthorize_, &Method::POST) => {
-                                        return Action::<ApplicationUser__Authorization___SendEmailForAuthorize>::run_(
+                                    (&UserAuthorization_::SendEmailForAuthorize_, &Method::POST) => {
+                                        return Action::<UserAuthorization_SendEmailForAuthorize>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
-                                    (&ApplicationUser__Authorization_::ResetPasswordByFirstStep_, &Method::POST) => {
-                                        return Action::<ApplicationUser__Authorization___ResetPasswordByFirstStep>::run_(
+                                    (&UserAuthorization_::ResetPasswordByFirstStep_, &Method::POST) => {
+                                        return Action::<UserAuthorization_ResetPasswordByFirstStep>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
-                                    (&ApplicationUser__Authorization_::ResetPasswordBySecondStep_, &Method::POST) => {
-                                        return Action::<ApplicationUser__Authorization___ResetPasswordBySecondStep>::run_(
+                                    (&UserAuthorization_::ResetPasswordBySecondStep_, &Method::POST) => {
+                                        return Action::<UserAuthorization_ResetPasswordBySecondStep>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
-                                    (&ApplicationUser__Authorization_::ResetPasswordByLastStep_, &Method::POST) => {
-                                        return Action::<ApplicationUser__Authorization___ResetPasswordByLastStep>::run_(
+                                    (&UserAuthorization_::ResetPasswordByLastStep_, &Method::POST) => {
+                                        return Action::<UserAuthorization_ResetPasswordByLastStep>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
-                                    (&ApplicationUser__Authorization_::SendEmailForResetPassword_, &Method::POST) => {
-                                        return Action::<ApplicationUser__Authorization___SendEmailForResetPassword>::run_(
+                                    (&UserAuthorization_::SendEmailForResetPassword_, &Method::POST) => {
+                                        return Action::<UserAuthorization_SendEmailForResetPassword>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
-                                    (&ApplicationUser__Authorization_::RefreshAccessToken_, &Method::POST) => {
-                                        return Action::<ApplicationUser__Authorization___RefreshAccessToken>::run_(
+                                    (&UserAuthorization_::RefreshAccessToken_, &Method::POST) => {
+                                        return Action::<UserAuthorization_RefreshAccessToken>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
-                                    (&ApplicationUser__Authorization_::DeauthorizeFromOneDevice_, &Method::POST) => {
-                                        return Action::<ApplicationUser__Authorization___DeauthorizeFromOneDevice>::run_(
+                                    (&UserAuthorization_::DeauthorizeFromOneDevice_, &Method::POST) => {
+                                        return Action::<UserAuthorization_DeauthorizeFromOneDevice>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
-                                    (&ApplicationUser__Authorization_::DeauthorizeFromAllDevices_, &Method::POST) => {
-                                        return Action::<ApplicationUser__Authorization___DeauthorizeFromAllDevices>::run_(
+                                    (&UserAuthorization_::DeauthorizeFromAllDevices_, &Method::POST) => {
+                                        return Action::<UserAuthorization_DeauthorizeFromAllDevices>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
@@ -1480,7 +1480,7 @@ where
     database_2_postgresql_connection_pool: Pool<PostgresConnectionManager<T>>,
 }
 pub struct ActionRoute {
-    pub application_user___authorization: ApplicationUser__Authorization,
+    pub application_user___authorization: UserAuthorization,
     pub channel___base: Channel__Base,
     pub channel_subscription___base: ChannelSubscription__Base,
 }
@@ -1488,7 +1488,7 @@ pub struct ActionRoute {
 impl ActionRoute {
     const CONCATENATING_PART: &'static str = "_";
 }
-pub struct ApplicationUser__Authorization {
+pub struct UserAuthorization {
     pub check_nickname_for_existing: &'static str,
     pub check_email_for_existing: &'static str,
     pub regisgter_by_first_step: &'static str,
@@ -1538,7 +1538,7 @@ pub struct ApplicationUser__Authorization {
     #[cfg(feature = "manual_testing")]
     pub deauthorize_from_all_devices_: &'static str,
 }
-impl ApplicationUser__Authorization {
+impl UserAuthorization {
     const AUTHORIZE_BY_FIRST_STEP: &'static str = "/1/7";
     const AUTHORIZE_BY_LAST_STEP: &'static str = "/1/8";
     const CHECK_EMAIL_FOR_EXISTING: &'static str = "/1/2";
@@ -1557,69 +1557,69 @@ impl ApplicationUser__Authorization {
     const SEND_EMAIL_FOR_RESET_PASSWORD: &'static str = "/1/13";
 }
 #[cfg(feature = "manual_testing")]
-impl ApplicationUser__Authorization {
+impl UserAuthorization {
     const AUTHORIZE_BY_FIRST_STEP_: &'static str = concatcp!(
-        ApplicationUser__Authorization::AUTHORIZE_BY_FIRST_STEP,
+        UserAuthorization::AUTHORIZE_BY_FIRST_STEP,
         ActionRoute::CONCATENATING_PART
     );
     const AUTHORIZE_BY_LAST_STEP_: &'static str = concatcp!(
-        ApplicationUser__Authorization::AUTHORIZE_BY_LAST_STEP,
+        UserAuthorization::AUTHORIZE_BY_LAST_STEP,
         ActionRoute::CONCATENATING_PART
     );
     const CHECK_EMAIL_FOR_EXISTING_: &'static str = concatcp!(
-        ApplicationUser__Authorization::CHECK_EMAIL_FOR_EXISTING,
+        UserAuthorization::CHECK_EMAIL_FOR_EXISTING,
         ActionRoute::CONCATENATING_PART
     );
     const CHECK_NICKNAME_FOR_EXISTING_: &'static str = concatcp!(
-        ApplicationUser__Authorization::CHECK_NICKNAME_FOR_EXISTING,
+        UserAuthorization::CHECK_NICKNAME_FOR_EXISTING,
         ActionRoute::CONCATENATING_PART
     );
     const DEAUTHORIZE_FROM_ALL_DEVICES_: &'static str = concatcp!(
-        ApplicationUser__Authorization::DEAUTHORIZE_FROM_ALL_DEVICES,
+        UserAuthorization::DEAUTHORIZE_FROM_ALL_DEVICES,
         ActionRoute::CONCATENATING_PART
     );
     const DEAUTHORIZE_FROM_ONE_DEVICE_: &'static str = concatcp!(
-        ApplicationUser__Authorization::DEAUTHORIZE_FROM_ONE_DEVICE,
+        UserAuthorization::DEAUTHORIZE_FROM_ONE_DEVICE,
         ActionRoute::CONCATENATING_PART
     );
     const REFRESH_ACCESS_TOKEN_: &'static str = concatcp!(
-        ApplicationUser__Authorization::REFRESH_ACCESS_TOKEN,
+        UserAuthorization::REFRESH_ACCESS_TOKEN,
         ActionRoute::CONCATENATING_PART
     );
     const REGISTER_BY_FIRST_STEP_: &'static str = concatcp!(
-        ApplicationUser__Authorization::REGISTER_BY_FIRST_STEP,
+        UserAuthorization::REGISTER_BY_FIRST_STEP,
         ActionRoute::CONCATENATING_PART
     );
     const REGISTER_BY_LAST_STEP_: &'static str = concatcp!(
-        ApplicationUser__Authorization::REGISTER_BY_LAST_STEP,
+        UserAuthorization::REGISTER_BY_LAST_STEP,
         ActionRoute::CONCATENATING_PART
     );
     const REGISTER_BY_SECOND_STEP_: &'static str = concatcp!(
-        ApplicationUser__Authorization::REGISTER_BY_SECOND_STEP,
+        UserAuthorization::REGISTER_BY_SECOND_STEP,
         ActionRoute::CONCATENATING_PART
     );
     const RESET_PASSWORD_BY_FIRST_STEP_: &'static str = concatcp!(
-        ApplicationUser__Authorization::RESET_PASSWORD_BY_FIRST_STEP,
+        UserAuthorization::RESET_PASSWORD_BY_FIRST_STEP,
         ActionRoute::CONCATENATING_PART
     );
     const RESET_PASSWORD_BY_LAST_STEP_: &'static str = concatcp!(
-        ApplicationUser__Authorization::RESET_PASSWORD_BY_LAST_STEP,
+        UserAuthorization::RESET_PASSWORD_BY_LAST_STEP,
         ActionRoute::CONCATENATING_PART
     );
     const RESET_PASSWORD_BY_SECOND_STEP_: &'static str = concatcp!(
-        ApplicationUser__Authorization::RESET_PASSWORD_BY_SECOND_STEP,
+        UserAuthorization::RESET_PASSWORD_BY_SECOND_STEP,
         ActionRoute::CONCATENATING_PART
     );
     const SEND_EMAIL_FOR_AUTHORIZE_: &'static str = concatcp!(
-        ApplicationUser__Authorization::SEND_EMAIL_FOR_AUTHORIZE,
+        UserAuthorization::SEND_EMAIL_FOR_AUTHORIZE,
         ActionRoute::CONCATENATING_PART
     );
     const SEND_EMAIL_FOR_REGISTER_: &'static str = concatcp!(
-        ApplicationUser__Authorization::SEND_EMAIL_FOR_REGISTER,
+        UserAuthorization::SEND_EMAIL_FOR_REGISTER,
         ActionRoute::CONCATENATING_PART
     );
     const SEND_EMAIL_FOR_RESET_PASSWORD_: &'static str = concatcp!(
-        ApplicationUser__Authorization::SEND_EMAIL_FOR_RESET_PASSWORD,
+        UserAuthorization::SEND_EMAIL_FOR_RESET_PASSWORD,
         ActionRoute::CONCATENATING_PART
     );
 }
@@ -1702,8 +1702,8 @@ impl ChannelSubscription__Base {
     );
 }
 pub enum ActionRoute_ {
-    ApplicationUser__Authorization {
-        application_user___authorization: ApplicationUser__Authorization_,
+    UserAuthorization {
+        application_user___authorization: UserAuthorization_,
     },
     Channel__Base {
         channel___base: Channel__Base_,
@@ -1712,7 +1712,7 @@ pub enum ActionRoute_ {
         channel_subscription___base: ChannelSubscription__Base_,
     },
 }
-pub enum ApplicationUser__Authorization_ {
+pub enum UserAuthorization_ {
     CheckNicknameForExisting,
     CheckEmailForExisting,
     RegisterByFirstStep,

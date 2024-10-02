@@ -59,7 +59,7 @@ use crate::{
         },
     },
 };
-use action_processor_incoming_outcoming::action_processor::application_user___authorization::authorize_by_first_step::{
+use action_processor_incoming_outcoming::action_processor::user_authorization::authorize_by_first_step::{
     Incoming,
     Outcoming,
     Precedent,
@@ -79,8 +79,8 @@ use tokio_postgres::{
 };
 use unified_report::UnifiedReport;
 use void::Void;
-pub struct ApplicationUser__Authorization___AuthorizeByFirstStep;
-impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___AuthorizeByFirstStep> {
+pub struct UserAuthorization_AuthorizeByFirstStep;
+impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep> {
     type Incoming = Incoming;
     type Outcoming = Outcoming;
     type Precedent = Precedent;

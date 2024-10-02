@@ -44,14 +44,14 @@ use crate::{
                 application_user::By3,
                 application_user_access_refresh_token::{
                     By2,
-                    Insert1 as ApplicationUserAccessRefreshTokenInsert1,
+                    Insert1 as UserAccessRefreshTokenInsert1,
                     Update1,
                 },
                 application_user_authorization_token::{
                     By1,
                     Update4,
                 },
-                application_user_device::Insert1 as ApplicationUserDeviceInsert1,
+                application_user_device::Insert1 as UserDeviceInsert1,
                 PostgresqlRepository,
             },
             service::{
@@ -67,7 +67,7 @@ use crate::{
         },
     },
 };
-use action_processor_incoming_outcoming::action_processor::application_user___authorization::authorize_by_last_step::{
+use action_processor_incoming_outcoming::action_processor::user_authorization::authorize_by_last_step::{
     Incoming,
     Outcoming,
     Precedent,
@@ -91,8 +91,8 @@ use tokio_postgres::{
 };
 use unified_report::UnifiedReport;
 use void::Void;
-pub struct ApplicationUser__Authorization___AuthorizeByLastStep;
-impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___AuthorizeByLastStep> {
+pub struct UserAuthorization_AuthorizeByLastStep;
+impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep> {
     type Incoming = Incoming;
     type Outcoming = Outcoming;
     type Precedent = Precedent;
@@ -258,7 +258,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                 Option::None => {
                     let application_user_access_refresh_token_ = PostgresqlRepository::<UserAccessRefreshToken<'_>>::create_1(
                         database_2_postgresql_connection,
-                        ApplicationUserAccessRefreshTokenInsert1 {
+                        UserAccessRefreshTokenInsert1 {
                             application_user__id: incoming.application_user__id,
                             application_user_device__id: incoming.application_user_device__id.as_str(),
                             application_user_access_token__id,
@@ -292,7 +292,7 @@ impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___Autho
                     )?;
                     let application_user_device = PostgresqlRepository::<UserDevice>::create_1(
                         &*database_1_postgresql_pooled_connection,
-                        ApplicationUserDeviceInsert1 {
+                        UserDeviceInsert1 {
                             application_user_device__id: incoming.application_user_device__id,
                             application_user__id: incoming.application_user__id,
                         },

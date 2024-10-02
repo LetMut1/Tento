@@ -36,9 +36,9 @@ use crate::{
             repository::postgresql::{
                 application_user::{
                     By1,
-                    Insert1 as ApplicationUserInsert1,
+                    Insert1 as UserInsert1,
                 },
-                application_user_device::Insert1 as ApplicationUserDeviceInsert1,
+                application_user_device::Insert1 as UserDeviceInsert1,
                 channel::{
                     By2,
                     Insert1 as ChannelInsert1,
@@ -187,7 +187,7 @@ impl CommandProcessor<CreateFixtures> {
                     Option::None => {
                         PostgresqlRepository::<User<'_>>::create_1(
                             database_1_postgresql_connection,
-                            ApplicationUserInsert1 {
+                            UserInsert1 {
                                 application_user__email,
                                 application_user__nickname,
                                 application_user__password_hash: application_user__password_hash.clone(),
@@ -214,7 +214,7 @@ impl CommandProcessor<CreateFixtures> {
                 }
                 PostgresqlRepository::<UserDevice>::create_1(
                     database_1_postgresql_connection,
-                    ApplicationUserDeviceInsert1 {
+                    UserDeviceInsert1 {
                         application_user_device__id,
                         application_user__id: application_user.id,
                     },

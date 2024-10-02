@@ -34,7 +34,7 @@ use crate::{
         },
     },
 };
-use action_processor_incoming_outcoming::action_processor::application_user___authorization::register_by_second_step::{
+use action_processor_incoming_outcoming::action_processor::user_authorization::register_by_second_step::{
     Incoming,
     Precedent,
 };
@@ -53,8 +53,8 @@ use tokio_postgres::{
 };
 use unified_report::UnifiedReport;
 use void::Void;
-pub struct ApplicationUser__Authorization___RegisterBySecondStep;
-impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___RegisterBySecondStep> {
+pub struct UserAuthorization_RegisterBySecondStep;
+impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterBySecondStep> {
     type Incoming = Incoming;
     type Outcoming = Void;
     type Precedent = Precedent;

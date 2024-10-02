@@ -19,7 +19,7 @@ use crate::{
         },
     },
 };
-use action_processor_incoming_outcoming::action_processor::application_user___authorization::check_nickname_for_existing::{
+use action_processor_incoming_outcoming::action_processor::user_authorization::check_nickname_for_existing::{
     Incoming,
     Outcoming,
 };
@@ -37,8 +37,8 @@ use tokio_postgres::{
 };
 use unified_report::UnifiedReport;
 use void::Void;
-pub struct ApplicationUser__Authorization___CheckNicknameForExisting;
-impl ActionProcessor_ for ActionProcessor<ApplicationUser__Authorization___CheckNicknameForExisting> {
+pub struct UserAuthorization_CheckNicknameForExisting;
+impl ActionProcessor_ for ActionProcessor<UserAuthorization_CheckNicknameForExisting> {
     type Incoming = Incoming;
     type Outcoming = Outcoming;
     type Precedent = Void;

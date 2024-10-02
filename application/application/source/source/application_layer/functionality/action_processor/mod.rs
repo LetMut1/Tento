@@ -1,4 +1,4 @@
-pub mod application_user___authorization;
+pub mod user_authorization;
 pub mod channel___base;
 pub mod channel_subscription___base;
 use crate::infrastructure_layer::data::{

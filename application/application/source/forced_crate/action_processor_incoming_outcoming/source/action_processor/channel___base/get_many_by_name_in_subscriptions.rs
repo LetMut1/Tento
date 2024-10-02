@@ -1,5 +1,5 @@
 use crate::Common1;
-use application_user_access_token_encoded::ApplicationUserAccessTokenEncoded;
+use application_user_access_token_encoded::UserAccessTokenEncoded;
 use common_precedent::CommonPrecedent;
 use macro_rules::r#enum;
 use serde::{
@@ -8,7 +8,7 @@ use serde::{
 };
 #[derive(Serialize, Deserialize)]
 pub struct Incoming {
-    pub application_user_access_token_encoded: ApplicationUserAccessTokenEncoded,
+    pub application_user_access_token_encoded: UserAccessTokenEncoded,
     pub channel__name: String,
     pub requery___channel__name: Option<String>,
     pub limit: i16,

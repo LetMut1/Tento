@@ -69,13 +69,13 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription__Base___Create> {
                 inner.environment_configuration,
                 &incoming.application_user_access_token_encoded,
             )? {
-                Extracted::ApplicationUserAccessToken {
+                Extracted::UserAccessToken {
                     application_user_access_token: application_user_access_token_,
                 } => application_user_access_token_,
-                Extracted::ApplicationUserAccessTokenAlreadyExpired => {
+                Extracted::UserAccessTokenAlreadyExpired => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired));
                 }
-                Extracted::ApplicationUserAccessTokenInApplicationUserAccessTokenBlackList => {
+                Extracted::UserAccessTokenInUserAccessTokenBlackList => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_InUserAccessTokenBlackList));
                 }
             };
