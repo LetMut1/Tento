@@ -78,32 +78,32 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
         return async move {
-            let application_user_access_token = Encoder::<UserAccessToken<'_>>::decode(
+            let user_access_token = Encoder::<UserAccessToken<'_>>::decode(
                 inner.environment_configuration,
                 &incoming.user_access_token_encoded,
             )?;
             let database_2_postgresql_pooled_connection = inner.get_database_2_postgresql_pooled_connection().await?;
             let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
-            let mut application_user_access_refresh_token = match PostgresqlRepository::<UserAccessRefreshToken<'_>>::find_1(
+            let mut user_access_refresh_token = match PostgresqlRepository::<UserAccessRefreshToken<'_>>::find_1(
                 database_2_postgresql_connection,
                 By2 {
-                    user__id: application_user_access_token.user__id,
-                    user_device__id: application_user_access_token.user_device__id.as_ref(),
+                    user__id: user_access_token.user__id,
+                    user_device__id: user_access_token.user_device__id.as_ref(),
                 },
             )
             .await?
             {
-                Option::Some(application_user_access_refresh_token_) => application_user_access_refresh_token_,
+                Option::Some(user_access_refresh_token_) => user_access_refresh_token_,
                 Option::None => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessRefreshToken_NotFound));
                 }
             };
             let is_valid = Encoder::<UserAccessRefreshToken<'_>>::is_valid(
                 inner.environment_configuration,
-                &application_user_access_refresh_token,
+                &user_access_refresh_token,
                 &incoming.user_access_refresh_token_encoded,
             )?;
-            if !is_valid || application_user_access_token.id.as_str() != application_user_access_refresh_token.application_user_access_token__id.as_ref() {
+            if !is_valid || user_access_token.id.as_str() != user_access_refresh_token.user_access_token__id.as_ref() {
                 return Result::Err(
                     AggregateError::new_invalid_argument(
                         Backtrace::new(
@@ -113,49 +113,49 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
                     ),
                 );
             }
-            if Resolver::<Expiration>::is_expired(application_user_access_refresh_token.expires_at) {
+            if Resolver::<Expiration>::is_expired(user_access_refresh_token.expires_at) {
                 PostgresqlRepository::<UserAccessRefreshToken<'_>>::delete_1(
                     database_2_postgresql_connection,
                     By2 {
-                        user__id: application_user_access_token.user__id,
-                        user_device__id: application_user_access_token.user_device__id.as_ref(),
+                        user__id: user_access_token.user__id,
+                        user_device__id: user_access_token.user_device__id.as_ref(),
                     },
                 )
                 .await?;
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessRefreshToken_AlreadyExpired));
             }
-            let application_user_access_token_new = UserAccessToken::new(
+            let user_access_token_new = UserAccessToken::new(
                 Generator::<UserAccessToken_Id>::generate(),
-                application_user_access_token.user__id,
-                Cow::Borrowed(application_user_access_token.user_device__id.as_ref()),
+                user_access_token.user__id,
+                Cow::Borrowed(user_access_token.user_device__id.as_ref()),
                 Generator::<UserAccessToken_ExpiresAt>::generate()?,
             );
-            application_user_access_refresh_token.application_user_access_token__id = Cow::Borrowed(application_user_access_token_new.id.as_str());
-            application_user_access_refresh_token.obfuscation_value = Generator::<UserAccessRefreshToken_ObfuscationValue>::generate();
-            application_user_access_refresh_token.expires_at = Generator::<UserAccessRefreshToken_ExpiresAt>::generate()?;
-            application_user_access_refresh_token.updated_at = Generator::<UserAccessRefreshToken_UpdatedAt>::generate();
+            user_access_refresh_token.user_access_token__id = Cow::Borrowed(user_access_token_new.id.as_str());
+            user_access_refresh_token.obfuscation_value = Generator::<UserAccessRefreshToken_ObfuscationValue>::generate();
+            user_access_refresh_token.expires_at = Generator::<UserAccessRefreshToken_ExpiresAt>::generate()?;
+            user_access_refresh_token.updated_at = Generator::<UserAccessRefreshToken_UpdatedAt>::generate();
             PostgresqlRepository::<UserAccessRefreshToken>::update_1(
                 database_2_postgresql_connection,
                 Update1 {
-                    user_access_token__id: application_user_access_refresh_token.application_user_access_token__id.as_ref(),
-                    user_access_refresh_token__obfuscation_value: application_user_access_refresh_token.obfuscation_value.as_str(),
-                    user_access_refresh_token__expires_at: application_user_access_refresh_token.expires_at,
-                    user_access_refresh_token__updated_at: application_user_access_refresh_token.updated_at,
+                    user_access_token__id: user_access_refresh_token.user_access_token__id.as_ref(),
+                    user_access_refresh_token__obfuscation_value: user_access_refresh_token.obfuscation_value.as_str(),
+                    user_access_refresh_token__expires_at: user_access_refresh_token.expires_at,
+                    user_access_refresh_token__updated_at: user_access_refresh_token.updated_at,
                 },
                 By2 {
-                    user__id: application_user_access_token.user__id,
-                    user_device__id: application_user_access_token.user_device__id.as_ref(),
+                    user__id: user_access_token.user__id,
+                    user_device__id: user_access_token.user_device__id.as_ref(),
                 },
             )
             .await?;
             let outcoming = Outcoming {
                 user_access_token_encoded: Encoder::<UserAccessToken<'_>>::encode(
                     inner.environment_configuration,
-                    &application_user_access_token_new,
+                    &user_access_token_new,
                 )?,
                 user_access_refresh_token_encoded: Encoder::<UserAccessRefreshToken<'_>>::encode(
                     inner.environment_configuration,
-                    &application_user_access_refresh_token,
+                    &user_access_refresh_token,
                 )?,
             };
             return Result::Ok(UnifiedReport::target_filled(outcoming));

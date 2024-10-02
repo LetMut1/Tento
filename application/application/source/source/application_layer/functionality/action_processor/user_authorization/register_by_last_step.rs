@@ -187,7 +187,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
             }
             let database_2_postgresql_pooled_connection = inner.get_database_2_postgresql_pooled_connection().await?;
             let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
-            let mut application_user_registration_token = match PostgresqlRepository::<UserRegistrationToken>::find_2(
+            let mut user_registration_token = match PostgresqlRepository::<UserRegistrationToken>::find_2(
                 database_2_postgresql_connection,
                 By1_ {
                     user__email: incoming.user__email.as_str(),
@@ -196,12 +196,12 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
             )
             .await?
             {
-                Option::Some(application_user_registration_token_) => application_user_registration_token_,
+                Option::Some(user_registration_token_) => user_registration_token_,
                 Option::None => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_NotFound));
                 }
             };
-            if Resolver::<Expiration>::is_expired(application_user_registration_token.expires_at) {
+            if Resolver::<Expiration>::is_expired(user_registration_token.expires_at) {
                 PostgresqlRepository::<UserRegistrationToken<'_>>::delete_2(
                     database_2_postgresql_connection,
                     By1_ {
@@ -212,22 +212,22 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 .await?;
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_AlreadyExpired));
             }
-            if !application_user_registration_token.is_approved {
+            if !user_registration_token.is_approved {
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_IsNotApproved));
             }
-            if application_user_registration_token.value != incoming.user_registration_token__value {
-                application_user_registration_token.wrong_enter_tries_quantity =
-                    application_user_registration_token.wrong_enter_tries_quantity.checked_add(1).into_logic_out_of_range(
+            if user_registration_token.value != incoming.user_registration_token__value {
+                user_registration_token.wrong_enter_tries_quantity =
+                    user_registration_token.wrong_enter_tries_quantity.checked_add(1).into_logic_out_of_range(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?;
-                if application_user_registration_token.wrong_enter_tries_quantity < UserRegistrationToken_WrongEnterTriesQuantity::LIMIT {
+                if user_registration_token.wrong_enter_tries_quantity < UserRegistrationToken_WrongEnterTriesQuantity::LIMIT {
                     PostgresqlRepository::<UserRegistrationToken>::update_4(
                         database_2_postgresql_connection,
                         Update4 {
-                            user_registration_token__wrong_enter_tries_quantity: application_user_registration_token.wrong_enter_tries_quantity,
+                            user_registration_token__wrong_enter_tries_quantity: user_registration_token.wrong_enter_tries_quantity,
                         },
                         By1_ {
                             user__email: incoming.user__email.as_str(),
@@ -247,17 +247,17 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 }
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_WrongValue));
             }
-            let application_user__password_hash___join_handle = Spawner::<TokioBlockingTask>::spawn_processed(
+            let user__password_hash___join_handle = Spawner::<TokioBlockingTask>::spawn_processed(
                 move || -> _ {
                     return Encoder::<User_Password>::encode(incoming.user__password.as_str());
                 },
             );
-            let application_user = PostgresqlRepository::<User<'_>>::create_1(
+            let user = PostgresqlRepository::<User<'_>>::create_1(
                 database_1_postgresql_connection,
                 UserInsert1 {
                     user__email: incoming.user__email,
                     user__nickname: incoming.user__nickname,
-                    user__password_hash: application_user__password_hash___join_handle.await.into_runtime(
+                    user__password_hash: user__password_hash___join_handle.await.into_runtime(
                         Backtrace::new(
                             line!(),
                             file!(),
@@ -267,32 +267,32 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 },
             )
             .await?;
-            let application_user_access_token = UserAccessToken::new(
+            let user_access_token = UserAccessToken::new(
                 Generator::<UserAccessToken_Id>::generate(),
-                application_user.id,
+                user.id,
                 Cow::Borrowed(incoming.user_device__id.as_str()),
                 Generator::<UserAccessToken_ExpiresAt>::generate()?,
             );
             // TODO  TRANZACTION посмотреть, необходимо ли здесь сделать транзакцию
-            let application_user_access_refresh_token = PostgresqlRepository::<UserAccessRefreshToken<'_>>::create_1(
+            let user_access_refresh_token = PostgresqlRepository::<UserAccessRefreshToken<'_>>::create_1(
                 database_2_postgresql_connection,
                 UserAccessRefreshTokenInsert1 {
-                    user__id: application_user.id,
+                    user__id: user.id,
                     user_device__id: incoming.user_device__id.as_str(),
-                    user_access_token__id: application_user_access_token.id.as_str(),
+                    user_access_token__id: user_access_token.id.as_str(),
                     user_access_refresh_token__obfuscation_value: Generator::<UserAccessRefreshToken_ObfuscationValue>::generate(),
                     user_access_refresh_token__expires_at: Generator::<UserAccessRefreshToken_ExpiresAt>::generate()?,
                     user_access_refresh_token__updated_at: Generator::<UserAccessRefreshToken_UpdatedAt>::generate(),
                 },
             )
             .await?;
-            let application_user_access_token_encoded = Encoder::<UserAccessToken<'_>>::encode(
+            let user_access_token_encoded = Encoder::<UserAccessToken<'_>>::encode(
                 inner.environment_configuration,
-                &application_user_access_token,
+                &user_access_token,
             )?;
-            let application_user_access_refresh_token_encoded = Encoder::<UserAccessRefreshToken<'_>>::encode(
+            let user_access_refresh_token_encoded = Encoder::<UserAccessRefreshToken<'_>>::encode(
                 inner.environment_configuration,
-                &application_user_access_refresh_token,
+                &user_access_refresh_token,
             )?;
             let database_1_postgresql_connection_pool = inner.database_1_postgresql_connection_pool.clone();
             let database_2_postgresql_connection_pool = inner.database_2_postgresql_connection_pool.clone();
@@ -304,11 +304,11 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                             file!(),
                         ),
                     )?;
-                    let application_user_device = PostgresqlRepository::<UserDevice>::create_1(
+                    let user_device = PostgresqlRepository::<UserDevice>::create_1(
                         &*database_1_postgresql_pooled_connection,
                         Insert1 {
                             user_device__id: incoming.user_device__id,
-                            user__id: application_user.id,
+                            user__id: user.id,
                         },
                     )
                     .await?;
@@ -321,8 +321,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                     PostgresqlRepository::<UserRegistrationToken<'_>>::delete_2(
                         &*database_2_postgresql_pooled_connection,
                         By1_ {
-                            user__email: application_user.email.as_str(),
-                            user_device__id: application_user_device.id.as_str(),
+                            user__email: user.email.as_str(),
+                            user_device__id: user_device.id.as_str(),
                         },
                     )
                     .await?;
@@ -330,8 +330,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 },
             );
             let outcoming = Outcoming {
-                user_access_token_encoded: application_user_access_token_encoded,
-                user_access_refresh_token_encoded: application_user_access_refresh_token_encoded,
+                user_access_token_encoded: user_access_token_encoded,
+                user_access_refresh_token_encoded: user_access_refresh_token_encoded,
             };
             return Result::Ok(UnifiedReport::target_filled(outcoming));
         };

@@ -132,7 +132,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
             }
             let database_2_postgresql_pooled_connection = inner.get_database_2_postgresql_pooled_connection().await?;
             let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
-            let mut application_user_reset_password_token = match PostgresqlRepository::<UserResetPasswordToken>::find_2(
+            let mut user_reset_password_token = match PostgresqlRepository::<UserResetPasswordToken>::find_2(
                 database_2_postgresql_connection,
                 By1_ {
                     user__id: incoming.user__id,
@@ -141,12 +141,12 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
             )
             .await?
             {
-                Option::Some(application_user_reset_password_token_) => application_user_reset_password_token_,
+                Option::Some(user_reset_password_token_) => user_reset_password_token_,
                 Option::None => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_NotFound));
                 }
             };
-            if Resolver::<Expiration>::is_expired(application_user_reset_password_token.expires_at) {
+            if Resolver::<Expiration>::is_expired(user_reset_password_token.expires_at) {
                 PostgresqlRepository::<UserResetPasswordToken<'_>>::delete_2(
                     database_2_postgresql_connection,
                     By1_ {
@@ -157,22 +157,22 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                 .await?;
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_AlreadyExpired));
             }
-            if !application_user_reset_password_token.is_approved {
+            if !user_reset_password_token.is_approved {
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_IsNotApproved));
             }
-            if application_user_reset_password_token.value != incoming.user_reset_password_token__value {
-                application_user_reset_password_token.wrong_enter_tries_quantity =
-                    application_user_reset_password_token.wrong_enter_tries_quantity.checked_add(1).into_logic_out_of_range(
+            if user_reset_password_token.value != incoming.user_reset_password_token__value {
+                user_reset_password_token.wrong_enter_tries_quantity =
+                    user_reset_password_token.wrong_enter_tries_quantity.checked_add(1).into_logic_out_of_range(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?;
-                if application_user_reset_password_token.wrong_enter_tries_quantity < UserResetPasswordToken_WrongEnterTriesQuantity::LIMIT {
+                if user_reset_password_token.wrong_enter_tries_quantity < UserResetPasswordToken_WrongEnterTriesQuantity::LIMIT {
                     PostgresqlRepository::<UserResetPasswordToken>::update_4(
                         database_2_postgresql_connection,
                         Update4 {
-                            user_reset_password_token__wrong_enter_tries_quantity: application_user_reset_password_token.wrong_enter_tries_quantity,
+                            user_reset_password_token__wrong_enter_tries_quantity: user_reset_password_token.wrong_enter_tries_quantity,
                         },
                         By1_ {
                             user__id: incoming.user__id,
@@ -194,7 +194,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
             }
             let database_1_postgresql_pooled_connection = inner.get_database_1_postgresql_pooled_connection().await?;
             let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
-            let mut application_user = match PostgresqlRepository::<User>::find_5(
+            let mut user = match PostgresqlRepository::<User>::find_5(
                 database_1_postgresql_connection,
                 By3 {
                     user__id: incoming.user__id,
@@ -202,15 +202,15 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
             )
             .await?
             {
-                Option::Some(application_user_) => application_user_,
+                Option::Some(user_) => user_,
                 Option::None => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::User_NotFound));
                 }
             };
             if !Validator::<User_Password>::is_valid_part_2(
                 incoming.user__password.as_str(),
-                application_user.email.as_str(),
-                application_user.nickname.as_str(),
+                user.email.as_str(),
+                user.nickname.as_str(),
             ) {
                 return Result::Err(
                     AggregateError::new_invalid_argument(
@@ -221,12 +221,12 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                     ),
                 );
             }
-            let application_user__password_hash___join_handle = Spawner::<TokioBlockingTask>::spawn_processed(
+            let user__password_hash___join_handle = Spawner::<TokioBlockingTask>::spawn_processed(
                 move || -> _ {
                     return Encoder::<User_Password>::encode(incoming.user__password.as_str());
                 },
             );
-            application_user.password_hash = application_user__password_hash___join_handle.await.into_runtime(
+            user.password_hash = user__password_hash___join_handle.await.into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -235,7 +235,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
             PostgresqlRepository::<User>::update_1(
                 database_1_postgresql_connection,
                 Update1 {
-                    user__password_hash: application_user.password_hash.as_str(),
+                    user__password_hash: user.password_hash.as_str(),
                 },
                 By3 {
                     user__id: incoming.user__id,
@@ -249,7 +249,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                 },
             )
             .await?;
-            Resolver::<CloudMessage>::deauthorize_application_user_from_all_devices();
+            Resolver::<CloudMessage>::deauthorize_user_from_all_devices();
             let database_2_postgresql_connection_pool = inner.database_2_postgresql_connection_pool.clone();
             Spawner::<TokioNonBlockingTask>::spawn_into_background(
                 async move {

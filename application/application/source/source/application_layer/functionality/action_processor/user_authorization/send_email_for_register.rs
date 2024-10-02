@@ -99,7 +99,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
             }
             let database_2_postgresql_pooled_connection = inner.get_database_2_postgresql_pooled_connection().await?;
             let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
-            let mut application_user_registration_token = match PostgresqlRepository::<UserRegistrationToken>::find_3(
+            let mut user_registration_token = match PostgresqlRepository::<UserRegistrationToken>::find_3(
                 database_2_postgresql_connection,
                 By1 {
                     user__email: incoming.user__email.as_str(),
@@ -108,12 +108,12 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
             )
             .await?
             {
-                Option::Some(application_user_registration_token_) => application_user_registration_token_,
+                Option::Some(user_registration_token_) => user_registration_token_,
                 Option::None => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_NotFound));
                 }
             };
-            if Resolver::<Expiration>::is_expired(application_user_registration_token.expires_at) {
+            if Resolver::<Expiration>::is_expired(user_registration_token.expires_at) {
                 PostgresqlRepository::<UserRegistrationToken<'_>>::delete_2(
                     database_2_postgresql_connection,
                     By1 {
@@ -124,17 +124,17 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
                 .await?;
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_AlreadyExpired));
             }
-            if application_user_registration_token.is_approved {
+            if user_registration_token.is_approved {
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_AlreadyApproved));
             }
-            if !Resolver::<Expiration>::is_expired(application_user_registration_token.can_be_resent_from) {
+            if !Resolver::<Expiration>::is_expired(user_registration_token.can_be_resent_from) {
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_TimeToResendHasNotCome));
             }
-            application_user_registration_token.can_be_resent_from = Generator::<UserRegistrationToken_CanBeResentFrom>::generate()?;
+            user_registration_token.can_be_resent_from = Generator::<UserRegistrationToken_CanBeResentFrom>::generate()?;
             PostgresqlRepository::<UserRegistrationToken>::update_2(
                 database_2_postgresql_connection,
                 Update2 {
-                    user_registration_token__can_be_resent_from: application_user_registration_token.can_be_resent_from,
+                    user_registration_token__can_be_resent_from: user_registration_token.can_be_resent_from,
                 },
                 By1 {
                     user__email: incoming.user__email.as_str(),
@@ -147,7 +147,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
                 async move {
                     EmailSender::<UserRegistrationToken<'_>>::repeatable_send(
                         environment_configuration_,
-                        application_user_registration_token.value.as_str(),
+                        user_registration_token.value.as_str(),
                         incoming.user__email.as_str(),
                         incoming.user_device__id.as_str(),
                     )
@@ -156,7 +156,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
                 },
             );
             let outcoming = Outcoming {
-                user_registration_token__can_be_resent_from: application_user_registration_token.can_be_resent_from,
+                user_registration_token__can_be_resent_from: user_registration_token.can_be_resent_from,
             };
             return Result::Ok(UnifiedReport::target_filled(outcoming));
         };

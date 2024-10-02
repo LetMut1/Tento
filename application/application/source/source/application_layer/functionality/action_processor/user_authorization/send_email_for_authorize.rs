@@ -102,7 +102,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthoriz
                 );
             }
             let database_1_postgresql_pooled_connection = inner.get_database_1_postgresql_pooled_connection().await?;
-            let application_user = match PostgresqlRepository::<User>::find_6(
+            let user = match PostgresqlRepository::<User>::find_6(
                 &*database_1_postgresql_pooled_connection,
                 By3 {
                     user__id: incoming.user__id,
@@ -110,14 +110,14 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthoriz
             )
             .await?
             {
-                Option::Some(application_user_) => application_user_,
+                Option::Some(user_) => user_,
                 Option::None => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::User_NotFound));
                 }
             };
             let database_2_postgresql_pooled_connection = inner.get_database_2_postgresql_pooled_connection().await?;
             let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
-            let mut application_user_authorization_token = match PostgresqlRepository::<UserAuthorizationToken>::find_3(
+            let mut user_authorization_token = match PostgresqlRepository::<UserAuthorizationToken>::find_3(
                 database_2_postgresql_connection,
                 By1 {
                     user__id: incoming.user__id,
@@ -126,12 +126,12 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthoriz
             )
             .await?
             {
-                Option::Some(application_user_authorization_token_) => application_user_authorization_token_,
+                Option::Some(user_authorization_token_) => user_authorization_token_,
                 Option::None => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserAuthorizationToken_NotFound));
                 }
             };
-            if Resolver::<Expiration>::is_expired(application_user_authorization_token.expires_at) {
+            if Resolver::<Expiration>::is_expired(user_authorization_token.expires_at) {
                 PostgresqlRepository::<UserAuthorizationToken<'_>>::delete_1(
                     database_2_postgresql_connection,
                     By1 {
@@ -142,14 +142,14 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthoriz
                 .await?;
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserAuthorizationToken_AlreadyExpired));
             }
-            if !Resolver::<Expiration>::is_expired(application_user_authorization_token.can_be_resent_from) {
+            if !Resolver::<Expiration>::is_expired(user_authorization_token.can_be_resent_from) {
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserAuthorizationToken_TimeToResendHasNotCome));
             }
-            application_user_authorization_token.can_be_resent_from = Generator::<UserAuthorizationToken_CanBeResentFrom>::generate()?;
+            user_authorization_token.can_be_resent_from = Generator::<UserAuthorizationToken_CanBeResentFrom>::generate()?;
             PostgresqlRepository::<UserAuthorizationToken>::update_3(
                 database_2_postgresql_connection,
                 Update3 {
-                    user_authorization_token__can_be_resent_from: application_user_authorization_token.can_be_resent_from,
+                    user_authorization_token__can_be_resent_from: user_authorization_token.can_be_resent_from,
                 },
                 By1 {
                     user__id: incoming.user__id,
@@ -162,8 +162,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthoriz
                 async move {
                     EmailSender::<UserAuthorizationToken<'_>>::repeatable_send(
                         environment_configuration_,
-                        application_user_authorization_token.value.as_str(),
-                        application_user.email.as_str(),
+                        user_authorization_token.value.as_str(),
+                        user.email.as_str(),
                         incoming.user_device__id.as_str(),
                     )
                     .await?;
@@ -171,7 +171,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthoriz
                 },
             );
             let outcoming = Outcoming {
-                user_authorization_token__can_be_resent_from: application_user_authorization_token.can_be_resent_from,
+                user_authorization_token__can_be_resent_from: user_authorization_token.can_be_resent_from,
             };
             return Result::Ok(UnifiedReport::target_filled(outcoming));
         };

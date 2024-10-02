@@ -73,13 +73,13 @@ impl ActionProcessor_ for ActionProcessor<Channel__Base___GetOneById> {
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
         return async move {
-            let application_user_access_token = match Extractor::<UserAccessToken<'_>>::extract(
+            let user_access_token = match Extractor::<UserAccessToken<'_>>::extract(
                 inner.environment_configuration,
                 &incoming.user_access_token_encoded,
             )? {
                 Extracted::UserAccessToken {
-                    user_access_token: application_user_access_token_,
-                } => application_user_access_token_,
+                    user_access_token: user_access_token_,
+                } => user_access_token_,
                 Extracted::UserAccessTokenAlreadyExpired => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired));
                 }
@@ -115,12 +115,12 @@ impl ActionProcessor_ for ActionProcessor<Channel__Base___GetOneById> {
                 let is_exist = PostgresqlRepository::<ChannelSubscription>::is_exist_1(
                     &*database_1_postgresql_pooled_connection,
                     By1 {
-                        user__id: application_user_access_token.user__id,
+                        user__id: user_access_token.user__id,
                         channel__id: channel.id,
                     },
                 )
                 .await?;
-                if !is_exist && application_user_access_token.user__id != channel.owner {
+                if !is_exist && user_access_token.user__id != channel.owner {
                     return Result::Ok(UnifiedReport::precedent(Precedent::Channel_IsClose));
                 }
             }

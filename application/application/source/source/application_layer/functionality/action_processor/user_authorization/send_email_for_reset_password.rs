@@ -102,7 +102,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
                 );
             }
             let database_1_postgresql_pooled_connection = inner.get_database_1_postgresql_pooled_connection().await?;
-            let application_user = match PostgresqlRepository::<User>::find_6(
+            let user = match PostgresqlRepository::<User>::find_6(
                 &*database_1_postgresql_pooled_connection,
                 By3 {
                     user__id: incoming.user__id,
@@ -110,14 +110,14 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
             )
             .await?
             {
-                Option::Some(application_user_) => application_user_,
+                Option::Some(user_) => user_,
                 Option::None => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::User_NotFound));
                 }
             };
             let database_2_postgresql_pooled_connection = inner.get_database_2_postgresql_pooled_connection().await?;
             let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
-            let mut application_user_reset_password_token = match PostgresqlRepository::<UserResetPasswordToken>::find_3(
+            let mut user_reset_password_token = match PostgresqlRepository::<UserResetPasswordToken>::find_3(
                 database_2_postgresql_connection,
                 By1 {
                     user__id: incoming.user__id,
@@ -126,12 +126,12 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
             )
             .await?
             {
-                Option::Some(application_user_reset_password_token_) => application_user_reset_password_token_,
+                Option::Some(user_reset_password_token_) => user_reset_password_token_,
                 Option::None => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_NotFound));
                 }
             };
-            if Resolver::<Expiration>::is_expired(application_user_reset_password_token.expires_at) {
+            if Resolver::<Expiration>::is_expired(user_reset_password_token.expires_at) {
                 PostgresqlRepository::<UserResetPasswordToken<'_>>::delete_2(
                     database_2_postgresql_connection,
                     By1 {
@@ -142,17 +142,17 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
                 .await?;
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_AlreadyExpired));
             }
-            if application_user_reset_password_token.is_approved {
+            if user_reset_password_token.is_approved {
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_AlreadyApproved));
             }
-            if !Resolver::<Expiration>::is_expired(application_user_reset_password_token.can_be_resent_from) {
+            if !Resolver::<Expiration>::is_expired(user_reset_password_token.can_be_resent_from) {
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_TimeToResendHasNotCome));
             }
-            application_user_reset_password_token.can_be_resent_from = Generator::<UserResetPasswordToken_CanBeResentFrom>::generate()?;
+            user_reset_password_token.can_be_resent_from = Generator::<UserResetPasswordToken_CanBeResentFrom>::generate()?;
             PostgresqlRepository::<UserResetPasswordToken>::update_2(
                 database_2_postgresql_connection,
                 Update2 {
-                    user_reset_password_token__can_be_resent_from: application_user_reset_password_token.can_be_resent_from,
+                    user_reset_password_token__can_be_resent_from: user_reset_password_token.can_be_resent_from,
                 },
                 By1 {
                     user__id: incoming.user__id,
@@ -165,8 +165,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
                 async move {
                     EmailSender::<UserResetPasswordToken<'_>>::repeatable_send(
                         environment_configuration_,
-                        application_user_reset_password_token.value.as_str(),
-                        application_user.email.as_str(),
+                        user_reset_password_token.value.as_str(),
+                        user.email.as_str(),
                         incoming.user_device__id.as_str(),
                     )
                     .await?;
@@ -174,7 +174,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
                 },
             );
             let outcoming = Outcoming {
-                user_reset_password_token__can_be_resent_from: application_user_reset_password_token.can_be_resent_from,
+                user_reset_password_token__can_be_resent_from: user_reset_password_token.can_be_resent_from,
             };
             return Result::Ok(UnifiedReport::target_filled(outcoming));
         };

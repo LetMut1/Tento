@@ -53,13 +53,13 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_DeauthorizeFromOneDe
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
         return async move {
-            let application_user_access_token = match Extractor::<UserAccessToken<'_>>::extract(
+            let user_access_token = match Extractor::<UserAccessToken<'_>>::extract(
                 inner.environment_configuration,
                 &incoming.user_access_token_encoded,
             )? {
                 Extracted::UserAccessToken {
-                    user_access_token: application_user_access_token_,
-                } => application_user_access_token_,
+                    user_access_token: user_access_token_,
+                } => user_access_token_,
                 Extracted::UserAccessTokenAlreadyExpired => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired));
                 }
@@ -71,8 +71,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_DeauthorizeFromOneDe
             PostgresqlRepository::<UserAccessRefreshToken<'_>>::delete_1(
                 &*database_2_postgresql_pooled_connection,
                 By2 {
-                    user__id: application_user_access_token.user__id,
-                    user_device__id: application_user_access_token.user_device__id.as_ref(),
+                    user__id: user_access_token.user__id,
+                    user_device__id: user_access_token.user_device__id.as_ref(),
                 },
             )
             .await?;

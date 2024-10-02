@@ -139,7 +139,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
             }
             let database_2_postgresql_pooled_connection = inner.get_database_2_postgresql_pooled_connection().await?;
             let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
-            let application_user_authorization_token = PostgresqlRepository::<UserAuthorizationToken>::find_2(
+            let user_authorization_token = PostgresqlRepository::<UserAuthorizationToken>::find_2(
                 database_2_postgresql_connection,
                 By1 {
                     user__id: incoming.user__id,
@@ -147,13 +147,13 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                 },
             )
             .await?;
-            let mut application_user_authorization_token_ = match application_user_authorization_token {
-                Option::Some(application_user_authorization_token__) => application_user_authorization_token__,
+            let mut user_authorization_token_ = match user_authorization_token {
+                Option::Some(user_authorization_token__) => user_authorization_token__,
                 Option::None => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserAuthorizationToken_NotFound));
                 }
             };
-            if Resolver::<Expiration>::is_expired(application_user_authorization_token_.expires_at) {
+            if Resolver::<Expiration>::is_expired(user_authorization_token_.expires_at) {
                 PostgresqlRepository::<UserAuthorizationToken<'_>>::delete_1(
                     database_2_postgresql_connection,
                     By1 {
@@ -164,19 +164,19 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                 .await?;
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserAuthorizationToken_AlreadyExpired));
             }
-            if application_user_authorization_token_.value != incoming.user_authorization_token__value {
-                application_user_authorization_token_.wrong_enter_tries_quantity =
-                    application_user_authorization_token_.wrong_enter_tries_quantity.checked_add(1).into_logic_out_of_range(
+            if user_authorization_token_.value != incoming.user_authorization_token__value {
+                user_authorization_token_.wrong_enter_tries_quantity =
+                    user_authorization_token_.wrong_enter_tries_quantity.checked_add(1).into_logic_out_of_range(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?;
-                if application_user_authorization_token_.wrong_enter_tries_quantity < UserAuthorizationToken_WrongEnterTriesQuantity::LIMIT {
+                if user_authorization_token_.wrong_enter_tries_quantity < UserAuthorizationToken_WrongEnterTriesQuantity::LIMIT {
                     PostgresqlRepository::<UserAuthorizationToken>::update_4(
                         database_2_postgresql_connection,
                         Update4 {
-                            user_authorization_token__wrong_enter_tries_quantity: application_user_authorization_token_.wrong_enter_tries_quantity,
+                            user_authorization_token__wrong_enter_tries_quantity: user_authorization_token_.wrong_enter_tries_quantity,
                         },
                         By1 {
                             user__id: incoming.user__id,
@@ -197,7 +197,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                 return Result::Ok(
                     UnifiedReport::precedent(
                         Precedent::UserAuthorizationToken_WrongValue {
-                            user_authorization_token__wrong_enter_tries_quantity: application_user_authorization_token_.wrong_enter_tries_quantity,
+                            user_authorization_token__wrong_enter_tries_quantity: user_authorization_token_.wrong_enter_tries_quantity,
                         },
                     ),
                 );
@@ -214,18 +214,18 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
             {
                 return Result::Ok(UnifiedReport::precedent(Precedent::User_NotFound));
             }
-            let application_user_access_token = UserAccessToken::new(
+            let user_access_token = UserAccessToken::new(
                 Generator::<UserAccessToken_Id>::generate(),
                 incoming.user__id,
                 Cow::Borrowed(incoming.user_device__id.as_str()),
                 Generator::<UserAccessToken_ExpiresAt>::generate()?,
             );
-            let application_user_access_token__id = application_user_access_token.id.as_str();
-            let application_user_access_refresh_token__obfuscation_value = Generator::<UserAccessRefreshToken_ObfuscationValue>::generate();
-            let application_user_access_refresh_token__expires_at = Generator::<UserAccessRefreshToken_ExpiresAt>::generate()?;
-            let application_user_access_refresh_token__updated_at = Generator::<UserAccessRefreshToken_UpdatedAt>::generate();
+            let user_access_token__id = user_access_token.id.as_str();
+            let user_access_refresh_token__obfuscation_value = Generator::<UserAccessRefreshToken_ObfuscationValue>::generate();
+            let user_access_refresh_token__expires_at = Generator::<UserAccessRefreshToken_ExpiresAt>::generate()?;
+            let user_access_refresh_token__updated_at = Generator::<UserAccessRefreshToken_UpdatedAt>::generate();
             // TODO  TRANZACTION
-            let application_user_access_refresh_token = match PostgresqlRepository::<UserAccessRefreshToken<'_>>::find_1(
+            let user_access_refresh_token = match PostgresqlRepository::<UserAccessRefreshToken<'_>>::find_1(
                 database_2_postgresql_connection,
                 By2 {
                     user__id: incoming.user__id,
@@ -234,18 +234,18 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
             )
             .await?
             {
-                Option::Some(mut application_user_access_refresh_token_) => {
-                    application_user_access_refresh_token_.application_user_access_token__id = Cow::Borrowed(application_user_access_token__id);
-                    application_user_access_refresh_token_.obfuscation_value = application_user_access_refresh_token__obfuscation_value;
-                    application_user_access_refresh_token_.expires_at = application_user_access_refresh_token__expires_at;
-                    application_user_access_refresh_token_.updated_at = application_user_access_refresh_token__updated_at;
+                Option::Some(mut user_access_refresh_token_) => {
+                    user_access_refresh_token_.user_access_token__id = Cow::Borrowed(user_access_token__id);
+                    user_access_refresh_token_.obfuscation_value = user_access_refresh_token__obfuscation_value;
+                    user_access_refresh_token_.expires_at = user_access_refresh_token__expires_at;
+                    user_access_refresh_token_.updated_at = user_access_refresh_token__updated_at;
                     PostgresqlRepository::<UserAccessRefreshToken>::update_1(
                         database_2_postgresql_connection,
                         Update1 {
-                            user_access_token__id: application_user_access_refresh_token_.application_user_access_token__id.as_ref(),
-                            user_access_refresh_token__obfuscation_value: application_user_access_refresh_token_.obfuscation_value.as_str(),
-                            user_access_refresh_token__expires_at: application_user_access_refresh_token_.expires_at,
-                            user_access_refresh_token__updated_at: application_user_access_refresh_token_.updated_at,
+                            user_access_token__id: user_access_refresh_token_.user_access_token__id.as_ref(),
+                            user_access_refresh_token__obfuscation_value: user_access_refresh_token_.obfuscation_value.as_str(),
+                            user_access_refresh_token__expires_at: user_access_refresh_token_.expires_at,
+                            user_access_refresh_token__updated_at: user_access_refresh_token_.updated_at,
                         },
                         By2 {
                             user__id: incoming.user__id,
@@ -253,32 +253,32 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                         },
                     )
                     .await?;
-                    application_user_access_refresh_token_
+                    user_access_refresh_token_
                 }
                 Option::None => {
-                    let application_user_access_refresh_token_ = PostgresqlRepository::<UserAccessRefreshToken<'_>>::create_1(
+                    let user_access_refresh_token_ = PostgresqlRepository::<UserAccessRefreshToken<'_>>::create_1(
                         database_2_postgresql_connection,
                         UserAccessRefreshTokenInsert1 {
                             user__id: incoming.user__id,
                             user_device__id: incoming.user_device__id.as_str(),
-                            user_access_token__id: application_user_access_token__id,
-                            user_access_refresh_token__obfuscation_value: application_user_access_refresh_token__obfuscation_value,
-                            user_access_refresh_token__expires_at: application_user_access_refresh_token__expires_at,
-                            user_access_refresh_token__updated_at: application_user_access_refresh_token__updated_at,
+                            user_access_token__id: user_access_token__id,
+                            user_access_refresh_token__obfuscation_value: user_access_refresh_token__obfuscation_value,
+                            user_access_refresh_token__expires_at: user_access_refresh_token__expires_at,
+                            user_access_refresh_token__updated_at: user_access_refresh_token__updated_at,
                         },
                     )
                     .await?;
-                    application_user_access_refresh_token_
+                    user_access_refresh_token_
                 }
             };
             // TODO  TRANZACTION
-            let application_user_access_token_encoded = Encoder::<UserAccessToken<'_>>::encode(
+            let user_access_token_encoded = Encoder::<UserAccessToken<'_>>::encode(
                 inner.environment_configuration,
-                &application_user_access_token,
+                &user_access_token,
             )?;
-            let application_user_access_refresh_token_encoded = Encoder::<UserAccessRefreshToken<'_>>::encode(
+            let user_access_refresh_token_encoded = Encoder::<UserAccessRefreshToken<'_>>::encode(
                 inner.environment_configuration,
-                &application_user_access_refresh_token,
+                &user_access_refresh_token,
             )?;
             let database_1_postgresql_connection_pool = inner.database_1_postgresql_connection_pool.clone();
             let database_2_postgresql_connection_pool = inner.database_2_postgresql_connection_pool.clone();
@@ -290,7 +290,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                             file!(),
                         ),
                     )?;
-                    let application_user_device = PostgresqlRepository::<UserDevice>::create_1(
+                    let user_device = PostgresqlRepository::<UserDevice>::create_1(
                         &*database_1_postgresql_pooled_connection,
                         UserDeviceInsert1 {
                             user_device__id: incoming.user_device__id,
@@ -307,8 +307,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                     PostgresqlRepository::<UserAuthorizationToken<'_>>::delete_1(
                         &*database_2_postgresql_pooled_connection,
                         By1 {
-                            user__id: application_user_device.user__id,
-                            user_device__id: application_user_device.id.as_str(),
+                            user__id: user_device.user__id,
+                            user_device__id: user_device.id.as_str(),
                         },
                     )
                     .await?;
@@ -316,8 +316,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                 },
             );
             let outcoming = Outcoming {
-                user_access_token_encoded: application_user_access_token_encoded,
-                user_access_refresh_token_encoded: application_user_access_refresh_token_encoded,
+                user_access_token_encoded: user_access_token_encoded,
+                user_access_refresh_token_encoded: user_access_refresh_token_encoded,
             };
             return Result::Ok(UnifiedReport::target_filled(outcoming));
         };

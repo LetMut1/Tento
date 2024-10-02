@@ -101,7 +101,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterBySecondStep
             }
             let database_2_postgresql_pooled_connection = inner.get_database_2_postgresql_pooled_connection().await?;
             let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
-            let mut application_user_registration_token = match PostgresqlRepository::<UserRegistrationToken>::find_2(
+            let mut user_registration_token = match PostgresqlRepository::<UserRegistrationToken>::find_2(
                 database_2_postgresql_connection,
                 By1 {
                     user__email: incoming.user__email.as_str(),
@@ -110,12 +110,12 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterBySecondStep
             )
             .await?
             {
-                Option::Some(application_user_registration_token_) => application_user_registration_token_,
+                Option::Some(user_registration_token_) => user_registration_token_,
                 Option::None => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_NotFound));
                 }
             };
-            if Resolver::<Expiration>::is_expired(application_user_registration_token.expires_at) {
+            if Resolver::<Expiration>::is_expired(user_registration_token.expires_at) {
                 PostgresqlRepository::<UserRegistrationToken<'_>>::delete_2(
                     database_2_postgresql_connection,
                     By1 {
@@ -126,22 +126,22 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterBySecondStep
                 .await?;
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_AlreadyExpired));
             }
-            if application_user_registration_token.is_approved {
+            if user_registration_token.is_approved {
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_AlreadyApproved));
             }
-            if application_user_registration_token.value != incoming.user_registration_token__value {
-                application_user_registration_token.wrong_enter_tries_quantity =
-                    application_user_registration_token.wrong_enter_tries_quantity.checked_add(1).into_logic_out_of_range(
+            if user_registration_token.value != incoming.user_registration_token__value {
+                user_registration_token.wrong_enter_tries_quantity =
+                    user_registration_token.wrong_enter_tries_quantity.checked_add(1).into_logic_out_of_range(
                         Backtrace::new(
                             line!(),
                             file!(),
                         ),
                     )?;
-                if application_user_registration_token.wrong_enter_tries_quantity < UserRegistrationToken_WrongEnterTriesQuantity::LIMIT {
+                if user_registration_token.wrong_enter_tries_quantity < UserRegistrationToken_WrongEnterTriesQuantity::LIMIT {
                     PostgresqlRepository::<UserRegistrationToken>::update_4(
                         database_2_postgresql_connection,
                         Update4 {
-                            user_registration_token__wrong_enter_tries_quantity: application_user_registration_token.wrong_enter_tries_quantity,
+                            user_registration_token__wrong_enter_tries_quantity: user_registration_token.wrong_enter_tries_quantity,
                         },
                         By1 {
                             user__email: incoming.user__email.as_str(),
@@ -162,16 +162,16 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterBySecondStep
                 return Result::Ok(
                     UnifiedReport::precedent(
                         Precedent::UserRegistrationToken_WrongValue {
-                            user_registration_token__wrong_enter_tries_quantity: application_user_registration_token.wrong_enter_tries_quantity,
+                            user_registration_token__wrong_enter_tries_quantity: user_registration_token.wrong_enter_tries_quantity,
                         },
                     ),
                 );
             }
-            application_user_registration_token.is_approved = true;
+            user_registration_token.is_approved = true;
             PostgresqlRepository::<UserRegistrationToken>::update_5(
                 database_2_postgresql_connection,
                 Update5 {
-                    user_registration_token__is_approved: application_user_registration_token.is_approved,
+                    user_registration_token__is_approved: user_registration_token.is_approved,
                 },
                 By1 {
                     user__email: incoming.user__email.as_str(),

@@ -64,13 +64,13 @@ impl ActionProcessor_ for ActionProcessor<Channel__Base___GetManyBySubscription>
     {
         const LIMIT: i16 = 100;
         return async move {
-            let application_user_access_token = match Extractor::<UserAccessToken<'_>>::extract(
+            let user_access_token = match Extractor::<UserAccessToken<'_>>::extract(
                 inner.environment_configuration,
                 &incoming.user_access_token_encoded,
             )? {
                 Extracted::UserAccessToken {
-                    user_access_token: application_user_access_token_,
-                } => application_user_access_token_,
+                    user_access_token: user_access_token_,
+                } => user_access_token_,
                 Extracted::UserAccessTokenAlreadyExpired => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired));
                 }
@@ -104,7 +104,7 @@ impl ActionProcessor_ for ActionProcessor<Channel__Base___GetManyBySubscription>
             let common_registry = PostgresqlRepository::<Common1>::find_3(
                 &*database_1_postgresql_pooled_connection,
                 By3 {
-                    user__id: application_user_access_token.user__id,
+                    user__id: user_access_token.user__id,
                     requery___channel__id: incoming.requery___channel__id,
                 },
                 incoming.limit,

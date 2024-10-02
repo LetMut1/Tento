@@ -98,7 +98,7 @@ use void::Void;
 #[cfg(feature = "manual_testing")]
 use const_format::concatcp;
 pub const ACTION_ROUTE: ActionRoute = ActionRoute {
-    application_user___authorization: UserAuthorization {
+    user_authorization: UserAuthorization {
         check_nickname_for_existing: UserAuthorization::CHECK_NICKNAME_FOR_EXISTING,
         check_email_for_existing: UserAuthorization::CHECK_EMAIL_FOR_EXISTING,
         regisgter_by_first_step: UserAuthorization::REGISTER_BY_FIRST_STEP,
@@ -401,9 +401,9 @@ impl HttpServer {
         let mut router = Router::<ActionRoute_>::new();
         router
             .insert(
-                ACTION_ROUTE.application_user___authorization.check_nickname_for_existing,
+                ACTION_ROUTE.user_authorization.check_nickname_for_existing,
                 ActionRoute_::UserAuthorization {
-                    application_user___authorization: UserAuthorization_::CheckNicknameForExisting,
+                    user_authorization: UserAuthorization_::CheckNicknameForExisting,
                 },
             )
             .into_logic(
@@ -414,9 +414,9 @@ impl HttpServer {
             )?;
         router
             .insert(
-                ACTION_ROUTE.application_user___authorization.check_email_for_existing,
+                ACTION_ROUTE.user_authorization.check_email_for_existing,
                 ActionRoute_::UserAuthorization {
-                    application_user___authorization: UserAuthorization_::CheckEmailForExisting,
+                    user_authorization: UserAuthorization_::CheckEmailForExisting,
                 },
             )
             .into_logic(
@@ -427,9 +427,9 @@ impl HttpServer {
             )?;
         router
             .insert(
-                ACTION_ROUTE.application_user___authorization.regisgter_by_first_step,
+                ACTION_ROUTE.user_authorization.regisgter_by_first_step,
                 ActionRoute_::UserAuthorization {
-                    application_user___authorization: UserAuthorization_::RegisterByFirstStep,
+                    user_authorization: UserAuthorization_::RegisterByFirstStep,
                 },
             )
             .into_logic(
@@ -440,9 +440,9 @@ impl HttpServer {
             )?;
         router
             .insert(
-                ACTION_ROUTE.application_user___authorization.regisgter_by_second_step,
+                ACTION_ROUTE.user_authorization.regisgter_by_second_step,
                 ActionRoute_::UserAuthorization {
-                    application_user___authorization: UserAuthorization_::RegisterBySecondStep,
+                    user_authorization: UserAuthorization_::RegisterBySecondStep,
                 },
             )
             .into_logic(
@@ -453,9 +453,9 @@ impl HttpServer {
             )?;
         router
             .insert(
-                ACTION_ROUTE.application_user___authorization.regisgter_by_last_step,
+                ACTION_ROUTE.user_authorization.regisgter_by_last_step,
                 ActionRoute_::UserAuthorization {
-                    application_user___authorization: UserAuthorization_::RegisterByLastStep,
+                    user_authorization: UserAuthorization_::RegisterByLastStep,
                 },
             )
             .into_logic(
@@ -466,9 +466,9 @@ impl HttpServer {
             )?;
         router
             .insert(
-                ACTION_ROUTE.application_user___authorization.send_email_for_register,
+                ACTION_ROUTE.user_authorization.send_email_for_register,
                 ActionRoute_::UserAuthorization {
-                    application_user___authorization: UserAuthorization_::SendEmailForRegister,
+                    user_authorization: UserAuthorization_::SendEmailForRegister,
                 },
             )
             .into_logic(
@@ -479,9 +479,9 @@ impl HttpServer {
             )?;
         router
             .insert(
-                ACTION_ROUTE.application_user___authorization.authorize_by_first_step,
+                ACTION_ROUTE.user_authorization.authorize_by_first_step,
                 ActionRoute_::UserAuthorization {
-                    application_user___authorization: UserAuthorization_::AuthorizeByFirstStep,
+                    user_authorization: UserAuthorization_::AuthorizeByFirstStep,
                 },
             )
             .into_logic(
@@ -492,9 +492,9 @@ impl HttpServer {
             )?;
         router
             .insert(
-                ACTION_ROUTE.application_user___authorization.authorize_by_last_step,
+                ACTION_ROUTE.user_authorization.authorize_by_last_step,
                 ActionRoute_::UserAuthorization {
-                    application_user___authorization: UserAuthorization_::AuthorizeByLastStep,
+                    user_authorization: UserAuthorization_::AuthorizeByLastStep,
                 },
             )
             .into_logic(
@@ -505,9 +505,9 @@ impl HttpServer {
             )?;
         router
             .insert(
-                ACTION_ROUTE.application_user___authorization.send_email_for_authorize,
+                ACTION_ROUTE.user_authorization.send_email_for_authorize,
                 ActionRoute_::UserAuthorization {
-                    application_user___authorization: UserAuthorization_::SendEmailForAuthorize,
+                    user_authorization: UserAuthorization_::SendEmailForAuthorize,
                 },
             )
             .into_logic(
@@ -518,9 +518,9 @@ impl HttpServer {
             )?;
         router
             .insert(
-                ACTION_ROUTE.application_user___authorization.reset_password_by_first_step,
+                ACTION_ROUTE.user_authorization.reset_password_by_first_step,
                 ActionRoute_::UserAuthorization {
-                    application_user___authorization: UserAuthorization_::ResetPasswordByFirstStep,
+                    user_authorization: UserAuthorization_::ResetPasswordByFirstStep,
                 },
             )
             .into_logic(
@@ -531,9 +531,9 @@ impl HttpServer {
             )?;
         router
             .insert(
-                ACTION_ROUTE.application_user___authorization.reset_password_by_second_step,
+                ACTION_ROUTE.user_authorization.reset_password_by_second_step,
                 ActionRoute_::UserAuthorization {
-                    application_user___authorization: UserAuthorization_::ResetPasswordBySecondStep,
+                    user_authorization: UserAuthorization_::ResetPasswordBySecondStep,
                 },
             )
             .into_logic(
@@ -544,9 +544,9 @@ impl HttpServer {
             )?;
         router
             .insert(
-                ACTION_ROUTE.application_user___authorization.reset_password_by_last_step,
+                ACTION_ROUTE.user_authorization.reset_password_by_last_step,
                 ActionRoute_::UserAuthorization {
-                    application_user___authorization: UserAuthorization_::ResetPasswordByLastStep,
+                    user_authorization: UserAuthorization_::ResetPasswordByLastStep,
                 },
             )
             .into_logic(
@@ -557,9 +557,9 @@ impl HttpServer {
             )?;
         router
             .insert(
-                ACTION_ROUTE.application_user___authorization.send_email_for_reset_password,
+                ACTION_ROUTE.user_authorization.send_email_for_reset_password,
                 ActionRoute_::UserAuthorization {
-                    application_user___authorization: UserAuthorization_::SendEmailForResetPassword,
+                    user_authorization: UserAuthorization_::SendEmailForResetPassword,
                 },
             )
             .into_logic(
@@ -570,9 +570,9 @@ impl HttpServer {
             )?;
         router
             .insert(
-                ACTION_ROUTE.application_user___authorization.refresh_access_token,
+                ACTION_ROUTE.user_authorization.refresh_access_token,
                 ActionRoute_::UserAuthorization {
-                    application_user___authorization: UserAuthorization_::RefreshAccessToken,
+                    user_authorization: UserAuthorization_::RefreshAccessToken,
                 },
             )
             .into_logic(
@@ -583,9 +583,9 @@ impl HttpServer {
             )?;
         router
             .insert(
-                ACTION_ROUTE.application_user___authorization.deauthorize_from_one_device,
+                ACTION_ROUTE.user_authorization.deauthorize_from_one_device,
                 ActionRoute_::UserAuthorization {
-                    application_user___authorization: UserAuthorization_::DeauthorizeFromOneDevice,
+                    user_authorization: UserAuthorization_::DeauthorizeFromOneDevice,
                 },
             )
             .into_logic(
@@ -596,9 +596,9 @@ impl HttpServer {
             )?;
         router
             .insert(
-                ACTION_ROUTE.application_user___authorization.deauthorize_from_all_devices,
+                ACTION_ROUTE.user_authorization.deauthorize_from_all_devices,
                 ActionRoute_::UserAuthorization {
-                    application_user___authorization: UserAuthorization_::DeauthorizeFromAllDevices,
+                    user_authorization: UserAuthorization_::DeauthorizeFromAllDevices,
                 },
             )
             .into_logic(
@@ -715,9 +715,9 @@ impl HttpServer {
         {
             router
                 .insert(
-                    ACTION_ROUTE.application_user___authorization.check_nickname_for_existing_,
+                    ACTION_ROUTE.user_authorization.check_nickname_for_existing_,
                     ActionRoute_::UserAuthorization {
-                        application_user___authorization: UserAuthorization_::CheckNicknameForExisting_,
+                        user_authorization: UserAuthorization_::CheckNicknameForExisting_,
                     },
                 )
                 .into_logic(
@@ -728,9 +728,9 @@ impl HttpServer {
                 )?;
             router
                 .insert(
-                    ACTION_ROUTE.application_user___authorization.check_email_for_existing_,
+                    ACTION_ROUTE.user_authorization.check_email_for_existing_,
                     ActionRoute_::UserAuthorization {
-                        application_user___authorization: UserAuthorization_::CheckEmailForExisting_,
+                        user_authorization: UserAuthorization_::CheckEmailForExisting_,
                     },
                 )
                 .into_logic(
@@ -741,9 +741,9 @@ impl HttpServer {
                 )?;
             router
                 .insert(
-                    ACTION_ROUTE.application_user___authorization.regisgter_by_first_step_,
+                    ACTION_ROUTE.user_authorization.regisgter_by_first_step_,
                     ActionRoute_::UserAuthorization {
-                        application_user___authorization: UserAuthorization_::RegisterByFirstStep_,
+                        user_authorization: UserAuthorization_::RegisterByFirstStep_,
                     },
                 )
                 .into_logic(
@@ -754,9 +754,9 @@ impl HttpServer {
                 )?;
             router
                 .insert(
-                    ACTION_ROUTE.application_user___authorization.regisgter_by_second_step_,
+                    ACTION_ROUTE.user_authorization.regisgter_by_second_step_,
                     ActionRoute_::UserAuthorization {
-                        application_user___authorization: UserAuthorization_::RegisterBySecondStep_,
+                        user_authorization: UserAuthorization_::RegisterBySecondStep_,
                     },
                 )
                 .into_logic(
@@ -767,9 +767,9 @@ impl HttpServer {
                 )?;
             router
                 .insert(
-                    ACTION_ROUTE.application_user___authorization.regisgter_by_last_step_,
+                    ACTION_ROUTE.user_authorization.regisgter_by_last_step_,
                     ActionRoute_::UserAuthorization {
-                        application_user___authorization: UserAuthorization_::RegisterByLastStep_,
+                        user_authorization: UserAuthorization_::RegisterByLastStep_,
                     },
                 )
                 .into_logic(
@@ -780,9 +780,9 @@ impl HttpServer {
                 )?;
             router
                 .insert(
-                    ACTION_ROUTE.application_user___authorization.send_email_for_register_,
+                    ACTION_ROUTE.user_authorization.send_email_for_register_,
                     ActionRoute_::UserAuthorization {
-                        application_user___authorization: UserAuthorization_::SendEmailForRegister_,
+                        user_authorization: UserAuthorization_::SendEmailForRegister_,
                     },
                 )
                 .into_logic(
@@ -793,9 +793,9 @@ impl HttpServer {
                 )?;
             router
                 .insert(
-                    ACTION_ROUTE.application_user___authorization.authorize_by_first_step_,
+                    ACTION_ROUTE.user_authorization.authorize_by_first_step_,
                     ActionRoute_::UserAuthorization {
-                        application_user___authorization: UserAuthorization_::AuthorizeByFirstStep_,
+                        user_authorization: UserAuthorization_::AuthorizeByFirstStep_,
                     },
                 )
                 .into_logic(
@@ -806,9 +806,9 @@ impl HttpServer {
                 )?;
             router
                 .insert(
-                    ACTION_ROUTE.application_user___authorization.authorize_by_last_step_,
+                    ACTION_ROUTE.user_authorization.authorize_by_last_step_,
                     ActionRoute_::UserAuthorization {
-                        application_user___authorization: UserAuthorization_::AuthorizeByLastStep_,
+                        user_authorization: UserAuthorization_::AuthorizeByLastStep_,
                     },
                 )
                 .into_logic(
@@ -819,9 +819,9 @@ impl HttpServer {
                 )?;
             router
                 .insert(
-                    ACTION_ROUTE.application_user___authorization.send_email_for_authorize_,
+                    ACTION_ROUTE.user_authorization.send_email_for_authorize_,
                     ActionRoute_::UserAuthorization {
-                        application_user___authorization: UserAuthorization_::SendEmailForAuthorize_,
+                        user_authorization: UserAuthorization_::SendEmailForAuthorize_,
                     },
                 )
                 .into_logic(
@@ -832,9 +832,9 @@ impl HttpServer {
                 )?;
             router
                 .insert(
-                    ACTION_ROUTE.application_user___authorization.reset_password_by_first_step_,
+                    ACTION_ROUTE.user_authorization.reset_password_by_first_step_,
                     ActionRoute_::UserAuthorization {
-                        application_user___authorization: UserAuthorization_::ResetPasswordByFirstStep_,
+                        user_authorization: UserAuthorization_::ResetPasswordByFirstStep_,
                     },
                 )
                 .into_logic(
@@ -845,9 +845,9 @@ impl HttpServer {
                 )?;
             router
                 .insert(
-                    ACTION_ROUTE.application_user___authorization.reset_password_by_second_step_,
+                    ACTION_ROUTE.user_authorization.reset_password_by_second_step_,
                     ActionRoute_::UserAuthorization {
-                        application_user___authorization: UserAuthorization_::ResetPasswordBySecondStep_,
+                        user_authorization: UserAuthorization_::ResetPasswordBySecondStep_,
                     },
                 )
                 .into_logic(
@@ -858,9 +858,9 @@ impl HttpServer {
                 )?;
             router
                 .insert(
-                    ACTION_ROUTE.application_user___authorization.reset_password_by_last_step_,
+                    ACTION_ROUTE.user_authorization.reset_password_by_last_step_,
                     ActionRoute_::UserAuthorization {
-                        application_user___authorization: UserAuthorization_::ResetPasswordByLastStep_,
+                        user_authorization: UserAuthorization_::ResetPasswordByLastStep_,
                     },
                 )
                 .into_logic(
@@ -871,9 +871,9 @@ impl HttpServer {
                 )?;
             router
                 .insert(
-                    ACTION_ROUTE.application_user___authorization.send_email_for_reset_password_,
+                    ACTION_ROUTE.user_authorization.send_email_for_reset_password_,
                     ActionRoute_::UserAuthorization {
-                        application_user___authorization: UserAuthorization_::SendEmailForResetPassword_,
+                        user_authorization: UserAuthorization_::SendEmailForResetPassword_,
                     },
                 )
                 .into_logic(
@@ -884,9 +884,9 @@ impl HttpServer {
                 )?;
             router
                 .insert(
-                    ACTION_ROUTE.application_user___authorization.refresh_access_token_,
+                    ACTION_ROUTE.user_authorization.refresh_access_token_,
                     ActionRoute_::UserAuthorization {
-                        application_user___authorization: UserAuthorization_::RefreshAccessToken_,
+                        user_authorization: UserAuthorization_::RefreshAccessToken_,
                     },
                 )
                 .into_logic(
@@ -897,9 +897,9 @@ impl HttpServer {
                 )?;
             router
                 .insert(
-                    ACTION_ROUTE.application_user___authorization.deauthorize_from_one_device_,
+                    ACTION_ROUTE.user_authorization.deauthorize_from_one_device_,
                     ActionRoute_::UserAuthorization {
-                        application_user___authorization: UserAuthorization_::DeauthorizeFromOneDevice_,
+                        user_authorization: UserAuthorization_::DeauthorizeFromOneDevice_,
                     },
                 )
                 .into_logic(
@@ -910,9 +910,9 @@ impl HttpServer {
                 )?;
             router
                 .insert(
-                    ACTION_ROUTE.application_user___authorization.deauthorize_from_all_devices_,
+                    ACTION_ROUTE.user_authorization.deauthorize_from_all_devices_,
                     ActionRoute_::UserAuthorization {
-                        application_user___authorization: UserAuthorization_::DeauthorizeFromAllDevices_,
+                        user_authorization: UserAuthorization_::DeauthorizeFromAllDevices_,
                     },
                 )
                 .into_logic(
@@ -1085,10 +1085,10 @@ impl HttpServer {
             };
             match r#match.value {
                 &ActionRoute_::UserAuthorization {
-                    ref application_user___authorization,
+                    ref user_authorization,
                 } => {
                     match (
-                        application_user___authorization,
+                        user_authorization,
                         &parts.method,
                     ) {
                         // Should be GET. But due to restrictions of third-party services, the method is put in Post.
@@ -1209,7 +1209,7 @@ impl HttpServer {
                             #[cfg(feature = "manual_testing")]
                             {
                                 match (
-                                    application_user___authorization,
+                                    user_authorization,
                                     &parts.method,
                                 ) {
                                     // Should be GET. But due to restrictions of third-party services, the method is put in Post.
@@ -1480,7 +1480,7 @@ where
     database_2_postgresql_connection_pool: Pool<PostgresConnectionManager<T>>,
 }
 pub struct ActionRoute {
-    pub application_user___authorization: UserAuthorization,
+    pub user_authorization: UserAuthorization,
     pub channel___base: Channel__Base,
     pub channel_subscription___base: ChannelSubscription__Base,
 }
@@ -1703,7 +1703,7 @@ impl ChannelSubscription__Base {
 }
 pub enum ActionRoute_ {
     UserAuthorization {
-        application_user___authorization: UserAuthorization_,
+        user_authorization: UserAuthorization_,
     },
     Channel__Base {
         channel___base: Channel__Base_,

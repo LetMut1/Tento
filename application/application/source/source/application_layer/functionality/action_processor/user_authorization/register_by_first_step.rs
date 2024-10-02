@@ -121,9 +121,9 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
             let database_2_postgresql_pooled_connection = inner.get_database_2_postgresql_pooled_connection().await?;
             let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
             let (
-                application_user_registration_token__value,
+                user_registration_token__value,
                 user_registration_token__can_be_resent_from,
-                application_user_registration_token__wrong_enter_tries_quantity,
+                user_registration_token__wrong_enter_tries_quantity,
                 can_send,
             ) = match PostgresqlRepository::<UserRegistrationToken>::find_1(
                 database_2_postgresql_connection,
@@ -134,9 +134,9 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
             )
             .await?
             {
-                Option::Some(mut application_user_registration_token) => {
-                    let (can_send_, need_to_update_1) = if Resolver::<Expiration>::is_expired(application_user_registration_token.can_be_resent_from) {
-                        application_user_registration_token.can_be_resent_from = Generator::<UserRegistrationToken_CanBeResentFrom>::generate()?;
+                Option::Some(mut user_registration_token) => {
+                    let (can_send_, need_to_update_1) = if Resolver::<Expiration>::is_expired(user_registration_token.can_be_resent_from) {
+                        user_registration_token.can_be_resent_from = Generator::<UserRegistrationToken_CanBeResentFrom>::generate()?;
                         (
                             true,
                             true,
@@ -147,12 +147,12 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                             false,
                         )
                     };
-                    let need_to_update_2 = if Resolver::<Expiration>::is_expired(application_user_registration_token.expires_at) || application_user_registration_token.is_approved
+                    let need_to_update_2 = if Resolver::<Expiration>::is_expired(user_registration_token.expires_at) || user_registration_token.is_approved
                     {
-                        application_user_registration_token.value = Generator::<UserRegistrationToken_Value>::generate();
-                        application_user_registration_token.wrong_enter_tries_quantity = 0;
-                        application_user_registration_token.is_approved = false;
-                        application_user_registration_token.expires_at = Generator::<UserRegistrationToken_ExpiresAt>::generate()?;
+                        user_registration_token.value = Generator::<UserRegistrationToken_Value>::generate();
+                        user_registration_token.wrong_enter_tries_quantity = 0;
+                        user_registration_token.is_approved = false;
+                        user_registration_token.expires_at = Generator::<UserRegistrationToken_ExpiresAt>::generate()?;
                         true
                     } else {
                         false
@@ -161,11 +161,11 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                         PostgresqlRepository::<UserRegistrationToken>::update_1(
                             database_2_postgresql_connection,
                             Update1 {
-                                user_registration_token__value: application_user_registration_token.value.as_str(),
-                                user_registration_token__wrong_enter_tries_quantity: application_user_registration_token.wrong_enter_tries_quantity,
-                                user_registration_token__is_approved: application_user_registration_token.is_approved,
-                                user_registration_token__expires_at: application_user_registration_token.expires_at,
-                                user_registration_token__can_be_resent_from: application_user_registration_token.can_be_resent_from,
+                                user_registration_token__value: user_registration_token.value.as_str(),
+                                user_registration_token__wrong_enter_tries_quantity: user_registration_token.wrong_enter_tries_quantity,
+                                user_registration_token__is_approved: user_registration_token.is_approved,
+                                user_registration_token__expires_at: user_registration_token.expires_at,
+                                user_registration_token__can_be_resent_from: user_registration_token.can_be_resent_from,
                             },
                             By1 {
                                 user__email: incoming.user__email.as_str(),
@@ -178,7 +178,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                             PostgresqlRepository::<UserRegistrationToken>::update_2(
                                 database_2_postgresql_connection,
                                 Update2 {
-                                    user_registration_token__can_be_resent_from: application_user_registration_token.can_be_resent_from,
+                                    user_registration_token__can_be_resent_from: user_registration_token.can_be_resent_from,
                                 },
                                 By1 {
                                     user__email: incoming.user__email.as_str(),
@@ -191,10 +191,10 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                             PostgresqlRepository::<UserRegistrationToken>::update_3(
                                 database_2_postgresql_connection,
                                 Update3 {
-                                    user_registration_token__value: application_user_registration_token.value.as_str(),
-                                    user_registration_token__wrong_enter_tries_quantity: application_user_registration_token.wrong_enter_tries_quantity,
-                                    user_registration_token__is_approved: application_user_registration_token.is_approved,
-                                    user_registration_token__expires_at: application_user_registration_token.expires_at,
+                                    user_registration_token__value: user_registration_token.value.as_str(),
+                                    user_registration_token__wrong_enter_tries_quantity: user_registration_token.wrong_enter_tries_quantity,
+                                    user_registration_token__is_approved: user_registration_token.is_approved,
+                                    user_registration_token__expires_at: user_registration_token.expires_at,
                                 },
                                 By1 {
                                     user__email: incoming.user__email.as_str(),
@@ -205,14 +205,14 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                         }
                     }
                     (
-                        application_user_registration_token.value,
-                        application_user_registration_token.can_be_resent_from,
-                        application_user_registration_token.wrong_enter_tries_quantity,
+                        user_registration_token.value,
+                        user_registration_token.can_be_resent_from,
+                        user_registration_token.wrong_enter_tries_quantity,
                         can_send_,
                     )
                 }
                 Option::None => {
-                    let application_user_registration_token = PostgresqlRepository::<UserRegistrationToken<'_>>::create_1(
+                    let user_registration_token = PostgresqlRepository::<UserRegistrationToken<'_>>::create_1(
                         database_2_postgresql_connection,
                         Insert1 {
                             user__email: incoming.user__email.as_str(),
@@ -226,9 +226,9 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                     )
                     .await?;
                     (
-                        application_user_registration_token.value,
-                        application_user_registration_token.can_be_resent_from,
-                        application_user_registration_token.wrong_enter_tries_quantity,
+                        user_registration_token.value,
+                        user_registration_token.can_be_resent_from,
+                        user_registration_token.wrong_enter_tries_quantity,
                         true,
                     )
                 }
@@ -239,7 +239,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                     async move {
                         EmailSender::<UserRegistrationToken<'_>>::repeatable_send(
                             environment_configuration_,
-                            application_user_registration_token__value.as_str(),
+                            user_registration_token__value.as_str(),
                             incoming.user__email.as_str(),
                             incoming.user_device__id.as_str(),
                         )
@@ -251,7 +251,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
             let outcoming = Outcoming {
                 verification_message_sent: can_send,
                 user_registration_token__can_be_resent_from: user_registration_token__can_be_resent_from,
-                user_registration_token__wrong_enter_tries_quantity: application_user_registration_token__wrong_enter_tries_quantity,
+                user_registration_token__wrong_enter_tries_quantity: user_registration_token__wrong_enter_tries_quantity,
                 user_registration_token__wrong_enter_tries_quantity_limit: UserRegistrationToken_WrongEnterTriesQuantity::LIMIT,
             };
             return Result::Ok(UnifiedReport::target_filled(outcoming));
