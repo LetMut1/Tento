@@ -199,12 +199,8 @@ impl HttpServer {
             let signal_terminate_future = Self::create_signal(SignalKind::terminate())?;
             let graceful_shutdown_signal_future = async move {
                 tokio::select! {
-                    _ = signal_interrupt_future => {
-                        ()
-                    },
-                    _ = signal_terminate_future => {
-                        ()
-                    },
+                    _ = signal_interrupt_future => {},
+                    _ = signal_terminate_future => {},
                 }
                 return ();
             };
@@ -378,12 +374,8 @@ impl HttpServer {
                     let completion_by_timer_join_handle = Spawner::<TokioNonBlockingTask>::spawn_processed(completion_by_timer_future);
                     tokio::select! {
                         biased;
-                        _ = completion_by_connection_quantity_join_handle => {
-                            ()
-                        },
-                        _ = completion_by_timer_join_handle => {
-                            ()
-                        },
+                        _ = completion_by_connection_quantity_join_handle => {},
+                        _ = completion_by_timer_join_handle => {},
                     }
                     return Result::<_, AggregateError>::Ok(());
                 };
@@ -1075,7 +1067,7 @@ impl HttpServer {
             let r#match = match cloned.router.at(parts.uri.path()) {
                 Result::Ok(r#match_) => r#match_,
                 Result::Err(_) => {
-                    return Action::<RouteNotFound>::run(&mut action_inner);
+                    return Action::<RouteNotFound>::run(&action_inner);
                 }
             };
             let action_processor_inner = ActionProcessorInner {

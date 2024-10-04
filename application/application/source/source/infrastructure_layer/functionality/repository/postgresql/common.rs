@@ -146,15 +146,13 @@ impl PostgresqlRepository<Common1> {
                         ),
                     )?,
                 };
-                let is_user_subscribed = match row.try_get::<'_, usize, Option<i64>>(6).into_logic(
+                let is_user_subscribed = row.try_get::<'_, usize, Option<i64>>(6).into_logic(
                     Backtrace::new(
                         line!(),
                         file!(),
                     ),
-                )? {
-                    Option::Some(_) => true,
-                    Option::None => false,
-                };
+                )?
+                .is_some();
                 let common = Common1 {
                     channel,
                     is_user_subscribed,

@@ -58,19 +58,10 @@ impl PostgresqlRepository<Channel<'_>> {
                 RETURNING \
                     c.id AS i,
                     c.created_at::TEXT AS ca;";
-            let channel__description = match insert_1.channel__description {
-                Option::Some(ref channel__description_) => Option::Some(channel__description_.as_str()),
-                Option::None => Option::None,
-            };
+            let channel__description = insert_1.channel__description.as_ref();
             let channel__orientation = insert_1.channel__orientation.as_slice();
-            let channel__cover_image_path = match insert_1.channel__cover_image_path {
-                Option::Some(ref channel__cover_image_path_) => Option::Some(channel__cover_image_path_.as_str()),
-                Option::None => Option::None,
-            };
-            let channel__background_image_path = match insert_1.channel__background_image_path {
-                Option::Some(ref channel__background_image_path_) => Option::Some(channel__background_image_path_.as_str()),
-                Option::None => Option::None,
-            };
+            let channel__cover_image_path = insert_1.channel__cover_image_path.as_ref();
+            let channel__background_image_path = insert_1.channel__background_image_path.as_ref();
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
