@@ -1404,7 +1404,7 @@ pub enum ActionRoute {
 }
 #[cfg(feature = "manual_testing")]
 impl ActionRoute {
-    const CONCATENATING_PART: &'static str = "_";
+    const PART: &'static str = "_";
 }
 pub enum UserAuthorization {
     CheckNicknameForExisting,
@@ -1457,88 +1457,88 @@ pub enum UserAuthorization {
     DeauthorizeFromAllDevices_,
 }
 impl UserAuthorization {
-    pub const AUTHORIZE_BY_FIRST_STEP: &'static str = "/1/7";
-    pub const AUTHORIZE_BY_LAST_STEP: &'static str = "/1/8";
-    pub const CHECK_EMAIL_FOR_EXISTING: &'static str = "/1/2";
-    pub const CHECK_NICKNAME_FOR_EXISTING: &'static str = "/1/1";
-    pub const DEAUTHORIZE_FROM_ALL_DEVICES: &'static str = "/1/16";
-    pub const DEAUTHORIZE_FROM_ONE_DEVICE: &'static str = "/1/15";
-    pub const REFRESH_ACCESS_TOKEN: &'static str = "/1/14";
-    pub const REGISTER_BY_FIRST_STEP: &'static str = "/1/3";
-    pub const REGISTER_BY_LAST_STEP: &'static str = "/1/5";
-    pub const REGISTER_BY_SECOND_STEP: &'static str = "/1/4";
-    pub const RESET_PASSWORD_BY_FIRST_STEP: &'static str = "/1/10";
-    pub const RESET_PASSWORD_BY_LAST_STEP: &'static str = "/1/12";
-    pub const RESET_PASSWORD_BY_SECOND_STEP: &'static str = "/1/11";
-    pub const SEND_EMAIL_FOR_AUTHORIZE: &'static str = "/1/9";
-    pub const SEND_EMAIL_FOR_REGISTER: &'static str = "/1/6";
-    pub const SEND_EMAIL_FOR_RESET_PASSWORD: &'static str = "/1/13";
+    pub const AUTHORIZE_BY_FIRST_STEP: &'static str = "/user_authorization/authorize_by_first_step";
+    pub const AUTHORIZE_BY_LAST_STEP: &'static str = "/user_authorization/authorize_by_last_step";
+    pub const CHECK_EMAIL_FOR_EXISTING: &'static str = "/user_authorization/check_email_for_existing";
+    pub const CHECK_NICKNAME_FOR_EXISTING: &'static str = "/user_authorization/check_nickname_for_existing";
+    pub const DEAUTHORIZE_FROM_ALL_DEVICES: &'static str = "/user_authorization/deauthorize_from_all_devices";
+    pub const DEAUTHORIZE_FROM_ONE_DEVICE: &'static str = "/user_authorization/authorize_from_one_device";
+    pub const REFRESH_ACCESS_TOKEN: &'static str = "/user_authorization/refresh_access_token";
+    pub const REGISTER_BY_FIRST_STEP: &'static str = "/user_authorization/register_by_first_step";
+    pub const REGISTER_BY_LAST_STEP: &'static str = "/user_authorization/register_by_last_step";
+    pub const REGISTER_BY_SECOND_STEP: &'static str = "/user_authorization/register_by_second_step";
+    pub const RESET_PASSWORD_BY_FIRST_STEP: &'static str = "/user_authorization/reset_password_by_first_step";
+    pub const RESET_PASSWORD_BY_LAST_STEP: &'static str = "/user_authorization/reset_password_by_last_step";
+    pub const RESET_PASSWORD_BY_SECOND_STEP: &'static str = "/user_authorization/reset_password_by_second_step";
+    pub const SEND_EMAIL_FOR_AUTHORIZE: &'static str = "/user_authorization/send_email_for_authorize";
+    pub const SEND_EMAIL_FOR_REGISTER: &'static str = "/user_authorization/send_email_for_register";
+    pub const SEND_EMAIL_FOR_RESET_PASSWORD: &'static str = "/user_authorization/send_email_for_reset_password";
 }
 #[cfg(feature = "manual_testing")]
 impl UserAuthorization {
     pub const AUTHORIZE_BY_FIRST_STEP_: &'static str = concatcp!(
         UserAuthorization::AUTHORIZE_BY_FIRST_STEP,
-        ActionRoute::CONCATENATING_PART
+        ActionRoute::PART,
     );
     pub const AUTHORIZE_BY_LAST_STEP_: &'static str = concatcp!(
         UserAuthorization::AUTHORIZE_BY_LAST_STEP,
-        ActionRoute::CONCATENATING_PART
+        ActionRoute::PART,
     );
     pub const CHECK_EMAIL_FOR_EXISTING_: &'static str = concatcp!(
         UserAuthorization::CHECK_EMAIL_FOR_EXISTING,
-        ActionRoute::CONCATENATING_PART
+        ActionRoute::PART,
     );
     pub const CHECK_NICKNAME_FOR_EXISTING_: &'static str = concatcp!(
         UserAuthorization::CHECK_NICKNAME_FOR_EXISTING,
-        ActionRoute::CONCATENATING_PART
+        ActionRoute::PART,
     );
     pub const DEAUTHORIZE_FROM_ALL_DEVICES_: &'static str = concatcp!(
         UserAuthorization::DEAUTHORIZE_FROM_ALL_DEVICES,
-        ActionRoute::CONCATENATING_PART
+        ActionRoute::PART,
     );
     pub const DEAUTHORIZE_FROM_ONE_DEVICE_: &'static str = concatcp!(
         UserAuthorization::DEAUTHORIZE_FROM_ONE_DEVICE,
-        ActionRoute::CONCATENATING_PART
+        ActionRoute::PART,
     );
     pub const REFRESH_ACCESS_TOKEN_: &'static str = concatcp!(
         UserAuthorization::REFRESH_ACCESS_TOKEN,
-        ActionRoute::CONCATENATING_PART
+        ActionRoute::PART,
     );
     pub const REGISTER_BY_FIRST_STEP_: &'static str = concatcp!(
         UserAuthorization::REGISTER_BY_FIRST_STEP,
-        ActionRoute::CONCATENATING_PART
+        ActionRoute::PART,
     );
     pub const REGISTER_BY_LAST_STEP_: &'static str = concatcp!(
         UserAuthorization::REGISTER_BY_LAST_STEP,
-        ActionRoute::CONCATENATING_PART
+        ActionRoute::PART,
     );
     pub const REGISTER_BY_SECOND_STEP_: &'static str = concatcp!(
         UserAuthorization::REGISTER_BY_SECOND_STEP,
-        ActionRoute::CONCATENATING_PART
+        ActionRoute::PART,
     );
     pub const RESET_PASSWORD_BY_FIRST_STEP_: &'static str = concatcp!(
         UserAuthorization::RESET_PASSWORD_BY_FIRST_STEP,
-        ActionRoute::CONCATENATING_PART
+        ActionRoute::PART,
     );
     pub const RESET_PASSWORD_BY_LAST_STEP_: &'static str = concatcp!(
         UserAuthorization::RESET_PASSWORD_BY_LAST_STEP,
-        ActionRoute::CONCATENATING_PART
+        ActionRoute::PART,
     );
     pub const RESET_PASSWORD_BY_SECOND_STEP_: &'static str = concatcp!(
         UserAuthorization::RESET_PASSWORD_BY_SECOND_STEP,
-        ActionRoute::CONCATENATING_PART
+        ActionRoute::PART,
     );
     pub const SEND_EMAIL_FOR_AUTHORIZE_: &'static str = concatcp!(
         UserAuthorization::SEND_EMAIL_FOR_AUTHORIZE,
-        ActionRoute::CONCATENATING_PART
+        ActionRoute::PART,
     );
     pub const SEND_EMAIL_FOR_REGISTER_: &'static str = concatcp!(
         UserAuthorization::SEND_EMAIL_FOR_REGISTER,
-        ActionRoute::CONCATENATING_PART
+        ActionRoute::PART,
     );
     pub const SEND_EMAIL_FOR_RESET_PASSWORD_: &'static str = concatcp!(
         UserAuthorization::SEND_EMAIL_FOR_RESET_PASSWORD,
-        ActionRoute::CONCATENATING_PART
+        ActionRoute::PART,
     );
 }
 pub enum Channel {
@@ -1565,43 +1565,43 @@ pub enum Channel {
     CheckLinkedNameForExisting_,
 }
 impl Channel {
-    pub const GET_MANY_BY_NAME_IN_SUBSCRIPTIONS: &'static str = "/1/18";
-    pub const GET_MANY_BY_SUBSCRIPTION: &'static str = "/1/19";
-    pub const GET_MANY_PUBLIC_BY_NAME: &'static str = "/1/20";
-    pub const GET_ONE_BY_ID: &'static str = "/1/17";
-    pub const CREATE: &'static str = "/1/22";
-    pub const CHECK_NAME_FOR_EXISTING: &'static str = "/1/23";
-    pub const CHECK_LINKED_NAME_FOR_EXISTING: &'static str = "/1/24";
+    pub const CHECK_LINKED_NAME_FOR_EXISTING: &'static str = "/channel/check_linked_name_for_existing";
+    pub const CHECK_NAME_FOR_EXISTING: &'static str = "/channel/check_name_for_existing";
+    pub const CREATE: &'static str = "/channel/create";
+    pub const GET_MANY_BY_NAME_IN_SUBSCRIPTIONS: &'static str = "/channel/get_many_by_name_in_subscription";
+    pub const GET_MANY_BY_SUBSCRIPTION: &'static str = "/channel/get_many_by_subscription";
+    pub const GET_MANY_PUBLIC_BY_NAME: &'static str = "/channel/get_many_public_by_name";
+    pub const GET_ONE_BY_ID: &'static str = "/channel/get_one_by_id";
 }
 #[cfg(feature = "manual_testing")]
 impl Channel {
     pub const GET_MANY_BY_NAME_IN_SUBSCRIPTIONS_: &'static str = concatcp!(
         Channel::GET_MANY_BY_NAME_IN_SUBSCRIPTIONS,
-        ActionRoute::CONCATENATING_PART
+        ActionRoute::PART,
     );
     pub const GET_MANY_BY_SUBSCRIPTION_: &'static str = concatcp!(
         Channel::GET_MANY_BY_SUBSCRIPTION,
-        ActionRoute::CONCATENATING_PART
+        ActionRoute::PART,
     );
     pub const GET_MANY_PUBLIC_BY_NAME_: &'static str = concatcp!(
         Channel::GET_MANY_PUBLIC_BY_NAME,
-        ActionRoute::CONCATENATING_PART
+        ActionRoute::PART,
     );
     pub const GET_ONE_BY_ID_: &'static str = concatcp!(
         Channel::GET_ONE_BY_ID,
-        ActionRoute::CONCATENATING_PART
+        ActionRoute::PART,
     );
     pub const CREATE_: &'static str = concatcp!(
         Channel::CREATE,
-        ActionRoute::CONCATENATING_PART
+        ActionRoute::PART,
     );
     pub const CHECK_NAME_FOR_EXISTING_: &'static str = concatcp!(
         Channel::CHECK_NAME_FOR_EXISTING,
-        ActionRoute::CONCATENATING_PART
+        ActionRoute::PART,
     );
     pub const CHECK_LINKED_NAME_FOR_EXISTING_: &'static str = concatcp!(
         Channel::CHECK_LINKED_NAME_FOR_EXISTING,
-        ActionRoute::CONCATENATING_PART
+        ActionRoute::PART,
     );
 }
 pub enum ChannelSubscription {
@@ -1610,12 +1610,12 @@ pub enum ChannelSubscription {
     Create_,
 }
 impl ChannelSubscription {
-    pub const CREATE: &'static str = "/1/21";
+    pub const CREATE: &'static str = "/channel_subscription/create";
 }
 #[cfg(feature = "manual_testing")]
 impl ChannelSubscription {
     pub const CREATE_: &'static str = concatcp!(
         ChannelSubscription::CREATE,
-        ActionRoute::CONCATENATING_PART
+        ActionRoute::PART,
     );
 }
