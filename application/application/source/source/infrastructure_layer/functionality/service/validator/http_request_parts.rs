@@ -18,9 +18,6 @@ impl Validator<Parts> {
         if *header_value_content_type != Creator::<Response>::HEADER_VALUE_CONTENT_TYPE {
             return false;
         }
-        if let Option::None = parts.headers.get(header::CONTENT_LENGTH) {
-            return false; // TODO  TODO TODO Как понять, что значение хедера верное? Если значение больше, чем есть на самом желе, то процесс обработки будет ждать дополнительную дату, пока значение из хедера и значение по факту из Боди не сравняется
-        }
-        return true;
+        return parts.headers.get(header::CONTENT_LENGTH).is_some(); // TODO  TODO TODO Как понять, что значение хедера верное? Если значение больше, чем есть на самом желе, то процесс обработки будет ждать дополнительную дату, пока значение из хедера и значение по факту из Боди не сравняется
     }
 }

@@ -1451,7 +1451,7 @@ impl HttpServer {
                     }
                 }
             }
-            return Action::<RouteNotFound>::run(&mut action_inner);
+            return Action::<RouteNotFound>::run(&action_inner);
         };
     }
     fn create_signal(signal_kind: SignalKind) -> Result<impl Future<Output = ()> + Send, AggregateError> {

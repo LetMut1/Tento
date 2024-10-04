@@ -20,7 +20,7 @@ use crate::{
 };
 use aggregate_error::Auditor;
 impl Logger<ActionRound> {
-    pub fn log<'a>(row_data: RowData) -> () {
+    pub fn log(row_data: RowData) -> () {
         Spawner::<TokioNonBlockingTask>::spawn_into_background(
             async move {
                 tracing::info!(
@@ -32,7 +32,7 @@ impl Logger<ActionRound> {
         );
         return ();
     }
-    pub fn log_unresponsive_auditor<'a>(row_data: RowData, unresponsive_auditor: Auditor<Unresponsive>) -> () {
+    pub fn log_unresponsive_auditor(row_data: RowData, unresponsive_auditor: Auditor<Unresponsive>) -> () {
         Spawner::<TokioNonBlockingTask>::spawn_into_background(
             async move {
                 tracing::error!(
@@ -48,7 +48,7 @@ impl Logger<ActionRound> {
         );
         return ();
     }
-    pub fn log_responsive_auditor<'a>(row_data: RowData, responsive_auditor: Auditor<Responsive>) -> () {
+    pub fn log_responsive_auditor(row_data: RowData, responsive_auditor: Auditor<Responsive>) -> () {
         Spawner::<TokioNonBlockingTask>::spawn_into_background(
             async move {
                 tracing::info!(

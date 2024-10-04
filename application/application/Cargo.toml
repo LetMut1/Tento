@@ -68,6 +68,7 @@ invalid_upcast_comparisons = { level = "deny", priority = 0 }
 large_digit_groups = { level = "deny", priority = 0 }
 large_stack_arrays = { level = "deny", priority = 0 }
 large_types_passed_by_value = { level = "deny", priority = 0 }
+let_and_return = { level = "allow", priority = 0 }
 macro_use_imports = { level = "deny", priority = 0 }
 manual_range_contains = { level = "allow", priority = 0 }
 match_on_vec_items = { level = "deny", priority = 0 }
@@ -109,7 +110,8 @@ separated_literal_suffix = { level = "deny", priority = 0 }
 shadow_reuse = { level = "deny", priority = 0 }
 shadow_same = { level = "deny", priority = 0 }
 shadow_unrelated = { level = "deny", priority = 0 }
-single_match_else = { level = "deny", priority = 0 }
+single_match = { level = "allow", priority = 0 }
+single_match_else = { level = "allow", priority = 0 }
 string_add = { level = "deny", priority = 0 }
 string_lit_as_bytes = { level = "deny", priority = 0 }
 string_to_string = { level = "deny", priority = 0 }

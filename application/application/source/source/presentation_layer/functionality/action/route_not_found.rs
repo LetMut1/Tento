@@ -15,7 +15,7 @@ use crate::{
 };
 pub struct RouteNotFound;
 impl Action<RouteNotFound> {
-    pub fn run<'a>(inner: &'a mut Inner<'_>) -> Response {
+    pub fn run<'a>(inner: &'a Inner<'_>) -> Response {
         let response = Creator::<Response>::create_not_found();
         Logger::<ActionRound>::log(
             RowData {
