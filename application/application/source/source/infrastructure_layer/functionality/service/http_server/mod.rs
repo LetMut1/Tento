@@ -1,13 +1,9 @@
 mod action_route;
 use action_route::{
-    ACTION_ROUTE,
-    ActionRoute_,
-    UserAuthorization_,
-    ChannelSubscription_,
-    Channel_,
-    Channel,
-    ChannelSubscription,
+    ActionRoute,
     UserAuthorization,
+    ChannelSubscription,
+    Channel,
 };
 use crate::{
     application_layer::functionality::action_processor::{
@@ -318,13 +314,13 @@ impl HttpServer {
             return Result::Ok(());
         };
     }
-    fn create_router() -> Result<Router<ActionRoute_>, AggregateError> {
-        let mut router = Router::<ActionRoute_>::new();
+    fn create_router() -> Result<Router<ActionRoute>, AggregateError> {
+        let mut router = Router::<ActionRoute>::new();
         router
             .insert(
-                ACTION_ROUTE.user_authorization.check_nickname_for_existing,
-                ActionRoute_::UserAuthorization {
-                    user_authorization: UserAuthorization_::CheckNicknameForExisting,
+                UserAuthorization::CHECK_NICKNAME_FOR_EXISTING,
+                ActionRoute::UserAuthorization {
+                    user_authorization: UserAuthorization::CheckNicknameForExisting,
                 },
             )
             .into_logic(
@@ -335,9 +331,9 @@ impl HttpServer {
             )?;
         router
             .insert(
-                ACTION_ROUTE.user_authorization.check_email_for_existing,
-                ActionRoute_::UserAuthorization {
-                    user_authorization: UserAuthorization_::CheckEmailForExisting,
+                UserAuthorization::CHECK_EMAIL_FOR_EXISTING,
+                ActionRoute::UserAuthorization {
+                    user_authorization: UserAuthorization::CheckEmailForExisting,
                 },
             )
             .into_logic(
@@ -348,9 +344,9 @@ impl HttpServer {
             )?;
         router
             .insert(
-                ACTION_ROUTE.user_authorization.regisgter_by_first_step,
-                ActionRoute_::UserAuthorization {
-                    user_authorization: UserAuthorization_::RegisterByFirstStep,
+                UserAuthorization::REGISTER_BY_FIRST_STEP,
+                ActionRoute::UserAuthorization {
+                    user_authorization: UserAuthorization::RegisterByFirstStep,
                 },
             )
             .into_logic(
@@ -361,9 +357,9 @@ impl HttpServer {
             )?;
         router
             .insert(
-                ACTION_ROUTE.user_authorization.regisgter_by_second_step,
-                ActionRoute_::UserAuthorization {
-                    user_authorization: UserAuthorization_::RegisterBySecondStep,
+                UserAuthorization::REGISTER_BY_SECOND_STEP,
+                ActionRoute::UserAuthorization {
+                    user_authorization: UserAuthorization::RegisterBySecondStep,
                 },
             )
             .into_logic(
@@ -374,9 +370,9 @@ impl HttpServer {
             )?;
         router
             .insert(
-                ACTION_ROUTE.user_authorization.regisgter_by_last_step,
-                ActionRoute_::UserAuthorization {
-                    user_authorization: UserAuthorization_::RegisterByLastStep,
+                UserAuthorization::REGISTER_BY_LAST_STEP,
+                ActionRoute::UserAuthorization {
+                    user_authorization: UserAuthorization::RegisterByLastStep,
                 },
             )
             .into_logic(
@@ -387,9 +383,9 @@ impl HttpServer {
             )?;
         router
             .insert(
-                ACTION_ROUTE.user_authorization.send_email_for_register,
-                ActionRoute_::UserAuthorization {
-                    user_authorization: UserAuthorization_::SendEmailForRegister,
+                UserAuthorization::SEND_EMAIL_FOR_REGISTER,
+                ActionRoute::UserAuthorization {
+                    user_authorization: UserAuthorization::SendEmailForRegister,
                 },
             )
             .into_logic(
@@ -400,9 +396,9 @@ impl HttpServer {
             )?;
         router
             .insert(
-                ACTION_ROUTE.user_authorization.authorize_by_first_step,
-                ActionRoute_::UserAuthorization {
-                    user_authorization: UserAuthorization_::AuthorizeByFirstStep,
+                UserAuthorization::AUTHORIZE_BY_FIRST_STEP,
+                ActionRoute::UserAuthorization {
+                    user_authorization: UserAuthorization::AuthorizeByFirstStep,
                 },
             )
             .into_logic(
@@ -413,9 +409,9 @@ impl HttpServer {
             )?;
         router
             .insert(
-                ACTION_ROUTE.user_authorization.authorize_by_last_step,
-                ActionRoute_::UserAuthorization {
-                    user_authorization: UserAuthorization_::AuthorizeByLastStep,
+                UserAuthorization::AUTHORIZE_BY_LAST_STEP,
+                ActionRoute::UserAuthorization {
+                    user_authorization: UserAuthorization::AuthorizeByLastStep,
                 },
             )
             .into_logic(
@@ -426,9 +422,9 @@ impl HttpServer {
             )?;
         router
             .insert(
-                ACTION_ROUTE.user_authorization.send_email_for_authorize,
-                ActionRoute_::UserAuthorization {
-                    user_authorization: UserAuthorization_::SendEmailForAuthorize,
+                UserAuthorization::SEND_EMAIL_FOR_AUTHORIZE,
+                ActionRoute::UserAuthorization {
+                    user_authorization: UserAuthorization::SendEmailForAuthorize,
                 },
             )
             .into_logic(
@@ -439,9 +435,9 @@ impl HttpServer {
             )?;
         router
             .insert(
-                ACTION_ROUTE.user_authorization.reset_password_by_first_step,
-                ActionRoute_::UserAuthorization {
-                    user_authorization: UserAuthorization_::ResetPasswordByFirstStep,
+                UserAuthorization::RESET_PASSWORD_BY_FIRST_STEP,
+                ActionRoute::UserAuthorization {
+                    user_authorization: UserAuthorization::ResetPasswordByFirstStep,
                 },
             )
             .into_logic(
@@ -452,9 +448,9 @@ impl HttpServer {
             )?;
         router
             .insert(
-                ACTION_ROUTE.user_authorization.reset_password_by_second_step,
-                ActionRoute_::UserAuthorization {
-                    user_authorization: UserAuthorization_::ResetPasswordBySecondStep,
+                UserAuthorization::RESET_PASSWORD_BY_SECOND_STEP,
+                ActionRoute::UserAuthorization {
+                    user_authorization: UserAuthorization::ResetPasswordBySecondStep,
                 },
             )
             .into_logic(
@@ -465,9 +461,9 @@ impl HttpServer {
             )?;
         router
             .insert(
-                ACTION_ROUTE.user_authorization.reset_password_by_last_step,
-                ActionRoute_::UserAuthorization {
-                    user_authorization: UserAuthorization_::ResetPasswordByLastStep,
+                UserAuthorization::RESET_PASSWORD_BY_LAST_STEP,
+                ActionRoute::UserAuthorization {
+                    user_authorization: UserAuthorization::ResetPasswordByLastStep,
                 },
             )
             .into_logic(
@@ -478,9 +474,9 @@ impl HttpServer {
             )?;
         router
             .insert(
-                ACTION_ROUTE.user_authorization.send_email_for_reset_password,
-                ActionRoute_::UserAuthorization {
-                    user_authorization: UserAuthorization_::SendEmailForResetPassword,
+                UserAuthorization::SEND_EMAIL_FOR_RESET_PASSWORD,
+                ActionRoute::UserAuthorization {
+                    user_authorization: UserAuthorization::SendEmailForResetPassword,
                 },
             )
             .into_logic(
@@ -491,9 +487,9 @@ impl HttpServer {
             )?;
         router
             .insert(
-                ACTION_ROUTE.user_authorization.refresh_access_token,
-                ActionRoute_::UserAuthorization {
-                    user_authorization: UserAuthorization_::RefreshAccessToken,
+                UserAuthorization::REFRESH_ACCESS_TOKEN,
+                ActionRoute::UserAuthorization {
+                    user_authorization: UserAuthorization::RefreshAccessToken,
                 },
             )
             .into_logic(
@@ -504,9 +500,9 @@ impl HttpServer {
             )?;
         router
             .insert(
-                ACTION_ROUTE.user_authorization.deauthorize_from_one_device,
-                ActionRoute_::UserAuthorization {
-                    user_authorization: UserAuthorization_::DeauthorizeFromOneDevice,
+                UserAuthorization::DEAUTHORIZE_FROM_ONE_DEVICE,
+                ActionRoute::UserAuthorization {
+                    user_authorization: UserAuthorization::DeauthorizeFromOneDevice,
                 },
             )
             .into_logic(
@@ -517,9 +513,9 @@ impl HttpServer {
             )?;
         router
             .insert(
-                ACTION_ROUTE.user_authorization.deauthorize_from_all_devices,
-                ActionRoute_::UserAuthorization {
-                    user_authorization: UserAuthorization_::DeauthorizeFromAllDevices,
+                UserAuthorization::DEAUTHORIZE_FROM_ALL_DEVICES,
+                ActionRoute::UserAuthorization {
+                    user_authorization: UserAuthorization::DeauthorizeFromAllDevices,
                 },
             )
             .into_logic(
@@ -530,9 +526,9 @@ impl HttpServer {
             )?;
         router
             .insert(
-                ACTION_ROUTE.channel.get_one_by_id,
-                ActionRoute_::Channel {
-                    channel: Channel_::GetOneById,
+                Channel::GET_ONE_BY_ID,
+                ActionRoute::Channel {
+                    channel: Channel::GetOneById,
                 },
             )
             .into_logic(
@@ -543,9 +539,9 @@ impl HttpServer {
             )?;
         router
             .insert(
-                ACTION_ROUTE.channel.get_many_by_name_in_subscription,
-                ActionRoute_::Channel {
-                    channel: Channel_::GetManyByNameInSubscriptions,
+                Channel::GET_MANY_BY_NAME_IN_SUBSCRIPTIONS,
+                ActionRoute::Channel {
+                    channel: Channel::GetManyByNameInSubscriptions,
                 },
             )
             .into_logic(
@@ -556,9 +552,9 @@ impl HttpServer {
             )?;
         router
             .insert(
-                ACTION_ROUTE.channel.get_many_by_subscription,
-                ActionRoute_::Channel {
-                    channel: Channel_::GetManyBySubscription,
+                Channel::GET_MANY_BY_SUBSCRIPTION,
+                ActionRoute::Channel {
+                    channel: Channel::GetManyBySubscription,
                 },
             )
             .into_logic(
@@ -569,9 +565,9 @@ impl HttpServer {
             )?;
         router
             .insert(
-                ACTION_ROUTE.channel.get_many_public_by_name,
-                ActionRoute_::Channel {
-                    channel: Channel_::GetManyPublicByName,
+                Channel::GET_MANY_PUBLIC_BY_NAME,
+                ActionRoute::Channel {
+                    channel: Channel::GetManyPublicByName,
                 },
             )
             .into_logic(
@@ -582,9 +578,9 @@ impl HttpServer {
             )?;
         router
             .insert(
-                ACTION_ROUTE.channel.create,
-                ActionRoute_::Channel {
-                    channel: Channel_::Create,
+                Channel::CREATE,
+                ActionRoute::Channel {
+                    channel: Channel::Create,
                 },
             )
             .into_logic(
@@ -595,9 +591,9 @@ impl HttpServer {
             )?;
         router
             .insert(
-                ACTION_ROUTE.channel.check_name_for_existing,
-                ActionRoute_::Channel {
-                    channel: Channel_::CheckNameForExisting,
+                Channel::CHECK_NAME_FOR_EXISTING,
+                ActionRoute::Channel {
+                    channel: Channel::CheckNameForExisting,
                 },
             )
             .into_logic(
@@ -608,9 +604,9 @@ impl HttpServer {
             )?;
         router
             .insert(
-                ACTION_ROUTE.channel.check_linked_name_for_existing,
-                ActionRoute_::Channel {
-                    channel: Channel_::CheckLinkedNameForExisting,
+                Channel::CHECK_LINKED_NAME_FOR_EXISTING,
+                ActionRoute::Channel {
+                    channel: Channel::CheckLinkedNameForExisting,
                 },
             )
             .into_logic(
@@ -621,9 +617,9 @@ impl HttpServer {
             )?;
         router
             .insert(
-                ACTION_ROUTE.channel_subscription.create,
-                ActionRoute_::ChannelSubscription {
-                    channel_subscription: ChannelSubscription_::Create,
+                ChannelSubscription::CREATE,
+                ActionRoute::ChannelSubscription {
+                    channel_subscription: ChannelSubscription::Create,
                 },
             )
             .into_logic(
@@ -636,9 +632,9 @@ impl HttpServer {
         {
             router
                 .insert(
-                    ACTION_ROUTE.user_authorization.check_nickname_for_existing_,
-                    ActionRoute_::UserAuthorization {
-                        user_authorization: UserAuthorization_::CheckNicknameForExisting_,
+                    UserAuthorization::CHECK_NICKNAME_FOR_EXISTING_,
+                    ActionRoute::UserAuthorization {
+                        user_authorization: UserAuthorization::CheckNicknameForExisting_,
                     },
                 )
                 .into_logic(
@@ -649,9 +645,9 @@ impl HttpServer {
                 )?;
             router
                 .insert(
-                    ACTION_ROUTE.user_authorization.check_email_for_existing_,
-                    ActionRoute_::UserAuthorization {
-                        user_authorization: UserAuthorization_::CheckEmailForExisting_,
+                    UserAuthorization::CHECK_EMAIL_FOR_EXISTING_,
+                    ActionRoute::UserAuthorization {
+                        user_authorization: UserAuthorization::CheckEmailForExisting_,
                     },
                 )
                 .into_logic(
@@ -662,9 +658,9 @@ impl HttpServer {
                 )?;
             router
                 .insert(
-                    ACTION_ROUTE.user_authorization.regisgter_by_first_step_,
-                    ActionRoute_::UserAuthorization {
-                        user_authorization: UserAuthorization_::RegisterByFirstStep_,
+                    UserAuthorization::REGISTER_BY_FIRST_STEP_,
+                    ActionRoute::UserAuthorization {
+                        user_authorization: UserAuthorization::RegisterByFirstStep_,
                     },
                 )
                 .into_logic(
@@ -675,9 +671,9 @@ impl HttpServer {
                 )?;
             router
                 .insert(
-                    ACTION_ROUTE.user_authorization.regisgter_by_second_step_,
-                    ActionRoute_::UserAuthorization {
-                        user_authorization: UserAuthorization_::RegisterBySecondStep_,
+                    UserAuthorization::REGISTER_BY_SECOND_STEP_,
+                    ActionRoute::UserAuthorization {
+                        user_authorization: UserAuthorization::RegisterBySecondStep_,
                     },
                 )
                 .into_logic(
@@ -688,9 +684,9 @@ impl HttpServer {
                 )?;
             router
                 .insert(
-                    ACTION_ROUTE.user_authorization.regisgter_by_last_step_,
-                    ActionRoute_::UserAuthorization {
-                        user_authorization: UserAuthorization_::RegisterByLastStep_,
+                    UserAuthorization::REGISTER_BY_LAST_STEP_,
+                    ActionRoute::UserAuthorization {
+                        user_authorization: UserAuthorization::RegisterByLastStep_,
                     },
                 )
                 .into_logic(
@@ -701,9 +697,9 @@ impl HttpServer {
                 )?;
             router
                 .insert(
-                    ACTION_ROUTE.user_authorization.send_email_for_register_,
-                    ActionRoute_::UserAuthorization {
-                        user_authorization: UserAuthorization_::SendEmailForRegister_,
+                    UserAuthorization::SEND_EMAIL_FOR_REGISTER_,
+                    ActionRoute::UserAuthorization {
+                        user_authorization: UserAuthorization::SendEmailForRegister_,
                     },
                 )
                 .into_logic(
@@ -714,9 +710,9 @@ impl HttpServer {
                 )?;
             router
                 .insert(
-                    ACTION_ROUTE.user_authorization.authorize_by_first_step_,
-                    ActionRoute_::UserAuthorization {
-                        user_authorization: UserAuthorization_::AuthorizeByFirstStep_,
+                    UserAuthorization::AUTHORIZE_BY_FIRST_STEP_,
+                    ActionRoute::UserAuthorization {
+                        user_authorization: UserAuthorization::AuthorizeByFirstStep_,
                     },
                 )
                 .into_logic(
@@ -727,9 +723,9 @@ impl HttpServer {
                 )?;
             router
                 .insert(
-                    ACTION_ROUTE.user_authorization.authorize_by_last_step_,
-                    ActionRoute_::UserAuthorization {
-                        user_authorization: UserAuthorization_::AuthorizeByLastStep_,
+                    UserAuthorization::AUTHORIZE_BY_LAST_STEP_,
+                    ActionRoute::UserAuthorization {
+                        user_authorization: UserAuthorization::AuthorizeByLastStep_,
                     },
                 )
                 .into_logic(
@@ -740,9 +736,9 @@ impl HttpServer {
                 )?;
             router
                 .insert(
-                    ACTION_ROUTE.user_authorization.send_email_for_authorize_,
-                    ActionRoute_::UserAuthorization {
-                        user_authorization: UserAuthorization_::SendEmailForAuthorize_,
+                    UserAuthorization::SEND_EMAIL_FOR_AUTHORIZE_,
+                    ActionRoute::UserAuthorization {
+                        user_authorization: UserAuthorization::SendEmailForAuthorize_,
                     },
                 )
                 .into_logic(
@@ -753,9 +749,9 @@ impl HttpServer {
                 )?;
             router
                 .insert(
-                    ACTION_ROUTE.user_authorization.reset_password_by_first_step_,
-                    ActionRoute_::UserAuthorization {
-                        user_authorization: UserAuthorization_::ResetPasswordByFirstStep_,
+                    UserAuthorization::RESET_PASSWORD_BY_FIRST_STEP_,
+                    ActionRoute::UserAuthorization {
+                        user_authorization: UserAuthorization::ResetPasswordByFirstStep_,
                     },
                 )
                 .into_logic(
@@ -766,9 +762,9 @@ impl HttpServer {
                 )?;
             router
                 .insert(
-                    ACTION_ROUTE.user_authorization.reset_password_by_second_step_,
-                    ActionRoute_::UserAuthorization {
-                        user_authorization: UserAuthorization_::ResetPasswordBySecondStep_,
+                    UserAuthorization::RESET_PASSWORD_BY_SECOND_STEP_,
+                    ActionRoute::UserAuthorization {
+                        user_authorization: UserAuthorization::ResetPasswordBySecondStep_,
                     },
                 )
                 .into_logic(
@@ -779,9 +775,9 @@ impl HttpServer {
                 )?;
             router
                 .insert(
-                    ACTION_ROUTE.user_authorization.reset_password_by_last_step_,
-                    ActionRoute_::UserAuthorization {
-                        user_authorization: UserAuthorization_::ResetPasswordByLastStep_,
+                    UserAuthorization::RESET_PASSWORD_BY_LAST_STEP_,
+                    ActionRoute::UserAuthorization {
+                        user_authorization: UserAuthorization::ResetPasswordByLastStep_,
                     },
                 )
                 .into_logic(
@@ -792,9 +788,9 @@ impl HttpServer {
                 )?;
             router
                 .insert(
-                    ACTION_ROUTE.user_authorization.send_email_for_reset_password_,
-                    ActionRoute_::UserAuthorization {
-                        user_authorization: UserAuthorization_::SendEmailForResetPassword_,
+                    UserAuthorization::SEND_EMAIL_FOR_RESET_PASSWORD_,
+                    ActionRoute::UserAuthorization {
+                        user_authorization: UserAuthorization::SendEmailForResetPassword_,
                     },
                 )
                 .into_logic(
@@ -805,9 +801,9 @@ impl HttpServer {
                 )?;
             router
                 .insert(
-                    ACTION_ROUTE.user_authorization.refresh_access_token_,
-                    ActionRoute_::UserAuthorization {
-                        user_authorization: UserAuthorization_::RefreshAccessToken_,
+                    UserAuthorization::REFRESH_ACCESS_TOKEN_,
+                    ActionRoute::UserAuthorization {
+                        user_authorization: UserAuthorization::RefreshAccessToken_,
                     },
                 )
                 .into_logic(
@@ -818,9 +814,9 @@ impl HttpServer {
                 )?;
             router
                 .insert(
-                    ACTION_ROUTE.user_authorization.deauthorize_from_one_device_,
-                    ActionRoute_::UserAuthorization {
-                        user_authorization: UserAuthorization_::DeauthorizeFromOneDevice_,
+                    UserAuthorization::DEAUTHORIZE_FROM_ONE_DEVICE_,
+                    ActionRoute::UserAuthorization {
+                        user_authorization: UserAuthorization::DeauthorizeFromOneDevice_,
                     },
                 )
                 .into_logic(
@@ -831,9 +827,9 @@ impl HttpServer {
                 )?;
             router
                 .insert(
-                    ACTION_ROUTE.user_authorization.deauthorize_from_all_devices_,
-                    ActionRoute_::UserAuthorization {
-                        user_authorization: UserAuthorization_::DeauthorizeFromAllDevices_,
+                    UserAuthorization::DEAUTHORIZE_FROM_ALL_DEVICES_,
+                    ActionRoute::UserAuthorization {
+                        user_authorization: UserAuthorization::DeauthorizeFromAllDevices_,
                     },
                 )
                 .into_logic(
@@ -844,9 +840,9 @@ impl HttpServer {
                 )?;
             router
                 .insert(
-                    ACTION_ROUTE.channel.get_one_by_id_,
-                    ActionRoute_::Channel {
-                        channel: Channel_::GetOneById_,
+                    Channel::GET_ONE_BY_ID_,
+                    ActionRoute::Channel {
+                        channel: Channel::GetOneById_,
                     },
                 )
                 .into_logic(
@@ -857,9 +853,9 @@ impl HttpServer {
                 )?;
             router
                 .insert(
-                    ACTION_ROUTE.channel.get_many_by_name_in_subscription_,
-                    ActionRoute_::Channel {
-                        channel: Channel_::GetManyByNameInSubscriptions_,
+                    Channel::GET_MANY_BY_NAME_IN_SUBSCRIPTIONS_,
+                    ActionRoute::Channel {
+                        channel: Channel::GetManyByNameInSubscriptions_,
                     },
                 )
                 .into_logic(
@@ -870,9 +866,9 @@ impl HttpServer {
                 )?;
             router
                 .insert(
-                    ACTION_ROUTE.channel.get_many_by_subscription_,
-                    ActionRoute_::Channel {
-                        channel: Channel_::GetManyBySubscription_,
+                    Channel::GET_MANY_BY_SUBSCRIPTION_,
+                    ActionRoute::Channel {
+                        channel: Channel::GetManyBySubscription_,
                     },
                 )
                 .into_logic(
@@ -883,9 +879,9 @@ impl HttpServer {
                 )?;
             router
                 .insert(
-                    ACTION_ROUTE.channel.get_many_public_by_name_,
-                    ActionRoute_::Channel {
-                        channel: Channel_::GetManyPublicByName_,
+                    Channel::GET_MANY_PUBLIC_BY_NAME_,
+                    ActionRoute::Channel {
+                        channel: Channel::GetManyPublicByName_,
                     },
                 )
                 .into_logic(
@@ -896,9 +892,9 @@ impl HttpServer {
                 )?;
             router
                 .insert(
-                    ACTION_ROUTE.channel.create_,
-                    ActionRoute_::Channel {
-                        channel: Channel_::Create_,
+                    Channel::CREATE_,
+                    ActionRoute::Channel {
+                        channel: Channel::Create_,
                     },
                 )
                 .into_logic(
@@ -909,9 +905,9 @@ impl HttpServer {
                 )?;
             router
                 .insert(
-                    ACTION_ROUTE.channel.check_name_for_existing_,
-                    ActionRoute_::Channel {
-                        channel: Channel_::CheckNameForExisting_,
+                    Channel::CHECK_NAME_FOR_EXISTING_,
+                    ActionRoute::Channel {
+                        channel: Channel::CheckNameForExisting_,
                     },
                 )
                 .into_logic(
@@ -922,9 +918,9 @@ impl HttpServer {
                 )?;
             router
                 .insert(
-                    ACTION_ROUTE.channel.check_linked_name_for_existing_,
-                    ActionRoute_::Channel {
-                        channel: Channel_::CheckLinkedNameForExisting_,
+                    Channel::CHECK_LINKED_NAME_FOR_EXISTING_,
+                    ActionRoute::Channel {
+                        channel: Channel::CheckLinkedNameForExisting_,
                     },
                 )
                 .into_logic(
@@ -935,9 +931,9 @@ impl HttpServer {
                 )?;
             router
                 .insert(
-                    ACTION_ROUTE.channel_subscription.create_,
-                    ActionRoute_::ChannelSubscription {
-                        channel_subscription: ChannelSubscription_::Create_,
+                    ChannelSubscription::CREATE_,
+                    ActionRoute::ChannelSubscription {
+                        channel_subscription: ChannelSubscription::Create_,
                     },
                 )
                 .into_logic(
@@ -1005,7 +1001,7 @@ impl HttpServer {
                 database_2_postgresql_connection_pool: &cloned.database_2_postgresql_connection_pool,
             };
             match *r#match.value {
-                ActionRoute_::UserAuthorization {
+                ActionRoute::UserAuthorization {
                     ref user_authorization,
                 } => {
                     match (
@@ -1013,7 +1009,7 @@ impl HttpServer {
                         &parts.method,
                     ) {
                         // Should be GET. But due to restrictions of third-party services, the method is put in Post.
-                        (&UserAuthorization_::CheckNicknameForExisting, &Method::POST) => {
+                        (&UserAuthorization::CheckNicknameForExisting, &Method::POST) => {
                             return Action::<UserAuthorization_CheckNicknameForExisting>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
@@ -1021,105 +1017,105 @@ impl HttpServer {
                             .await;
                         }
                         // Should be GET. But due to restrictions of third-party services, the method is put in Post.
-                        (&UserAuthorization_::CheckEmailForExisting, &Method::POST) => {
+                        (&UserAuthorization::CheckEmailForExisting, &Method::POST) => {
                             return Action::<UserAuthorization_CheckEmailForExisting>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
-                        (&UserAuthorization_::RegisterByFirstStep, &Method::POST) => {
+                        (&UserAuthorization::RegisterByFirstStep, &Method::POST) => {
                             return Action::<UserAuthorization_RegisterByFirstStep>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
-                        (&UserAuthorization_::RegisterBySecondStep, &Method::POST) => {
+                        (&UserAuthorization::RegisterBySecondStep, &Method::POST) => {
                             return Action::<UserAuthorization_RegisterBySecondStep>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
-                        (&UserAuthorization_::RegisterByLastStep, &Method::POST) => {
+                        (&UserAuthorization::RegisterByLastStep, &Method::POST) => {
                             return Action::<UserAuthorization_RegisterByLastStep>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
-                        (&UserAuthorization_::SendEmailForRegister, &Method::POST) => {
+                        (&UserAuthorization::SendEmailForRegister, &Method::POST) => {
                             return Action::<UserAuthorization_SendEmailForRegister>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
-                        (&UserAuthorization_::AuthorizeByFirstStep, &Method::POST) => {
+                        (&UserAuthorization::AuthorizeByFirstStep, &Method::POST) => {
                             return Action::<UserAuthorization_AuthorizeByFirstStep>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
-                        (&UserAuthorization_::AuthorizeByLastStep, &Method::POST) => {
+                        (&UserAuthorization::AuthorizeByLastStep, &Method::POST) => {
                             return Action::<UserAuthorization_AuthorizeByLastStep>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
-                        (&UserAuthorization_::SendEmailForAuthorize, &Method::POST) => {
+                        (&UserAuthorization::SendEmailForAuthorize, &Method::POST) => {
                             return Action::<UserAuthorization_SendEmailForAuthorize>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
-                        (&UserAuthorization_::ResetPasswordByFirstStep, &Method::POST) => {
+                        (&UserAuthorization::ResetPasswordByFirstStep, &Method::POST) => {
                             return Action::<UserAuthorization_ResetPasswordByFirstStep>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
-                        (&UserAuthorization_::ResetPasswordBySecondStep, &Method::POST) => {
+                        (&UserAuthorization::ResetPasswordBySecondStep, &Method::POST) => {
                             return Action::<UserAuthorization_ResetPasswordBySecondStep>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
-                        (&UserAuthorization_::ResetPasswordByLastStep, &Method::POST) => {
+                        (&UserAuthorization::ResetPasswordByLastStep, &Method::POST) => {
                             return Action::<UserAuthorization_ResetPasswordByLastStep>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
-                        (&UserAuthorization_::SendEmailForResetPassword, &Method::POST) => {
+                        (&UserAuthorization::SendEmailForResetPassword, &Method::POST) => {
                             return Action::<UserAuthorization_SendEmailForResetPassword>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
-                        (&UserAuthorization_::RefreshAccessToken, &Method::POST) => {
+                        (&UserAuthorization::RefreshAccessToken, &Method::POST) => {
                             return Action::<UserAuthorization_RefreshAccessToken>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
-                        (&UserAuthorization_::DeauthorizeFromOneDevice, &Method::POST) => {
+                        (&UserAuthorization::DeauthorizeFromOneDevice, &Method::POST) => {
                             return Action::<UserAuthorization_DeauthorizeFromOneDevice>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
                             )
                             .await;
                         }
-                        (&UserAuthorization_::DeauthorizeFromAllDevices, &Method::POST) => {
+                        (&UserAuthorization::DeauthorizeFromAllDevices, &Method::POST) => {
                             return Action::<UserAuthorization_DeauthorizeFromAllDevices>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
@@ -1134,7 +1130,7 @@ impl HttpServer {
                                     &parts.method,
                                 ) {
                                     // Should be GET. But due to restrictions of third-party services, the method is put in Post.
-                                    (&UserAuthorization_::CheckNicknameForExisting_, &Method::POST) => {
+                                    (&UserAuthorization::CheckNicknameForExisting_, &Method::POST) => {
                                         return Action::<UserAuthorization_CheckNicknameForExisting>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
@@ -1142,105 +1138,105 @@ impl HttpServer {
                                         .await;
                                     }
                                     // Should be GET. But due to restrictions of third-party services, the method is put in Post.
-                                    (&UserAuthorization_::CheckEmailForExisting_, &Method::POST) => {
+                                    (&UserAuthorization::CheckEmailForExisting_, &Method::POST) => {
                                         return Action::<UserAuthorization_CheckEmailForExisting>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
-                                    (&UserAuthorization_::RegisterByFirstStep_, &Method::POST) => {
+                                    (&UserAuthorization::RegisterByFirstStep_, &Method::POST) => {
                                         return Action::<UserAuthorization_RegisterByFirstStep>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
-                                    (&UserAuthorization_::RegisterBySecondStep_, &Method::POST) => {
+                                    (&UserAuthorization::RegisterBySecondStep_, &Method::POST) => {
                                         return Action::<UserAuthorization_RegisterBySecondStep>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
-                                    (&UserAuthorization_::RegisterByLastStep_, &Method::POST) => {
+                                    (&UserAuthorization::RegisterByLastStep_, &Method::POST) => {
                                         return Action::<UserAuthorization_RegisterByLastStep>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
-                                    (&UserAuthorization_::SendEmailForRegister_, &Method::POST) => {
+                                    (&UserAuthorization::SendEmailForRegister_, &Method::POST) => {
                                         return Action::<UserAuthorization_SendEmailForRegister>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
-                                    (&UserAuthorization_::AuthorizeByFirstStep_, &Method::POST) => {
+                                    (&UserAuthorization::AuthorizeByFirstStep_, &Method::POST) => {
                                         return Action::<UserAuthorization_AuthorizeByFirstStep>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
-                                    (&UserAuthorization_::AuthorizeByLastStep_, &Method::POST) => {
+                                    (&UserAuthorization::AuthorizeByLastStep_, &Method::POST) => {
                                         return Action::<UserAuthorization_AuthorizeByLastStep>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
-                                    (&UserAuthorization_::SendEmailForAuthorize_, &Method::POST) => {
+                                    (&UserAuthorization::SendEmailForAuthorize_, &Method::POST) => {
                                         return Action::<UserAuthorization_SendEmailForAuthorize>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
-                                    (&UserAuthorization_::ResetPasswordByFirstStep_, &Method::POST) => {
+                                    (&UserAuthorization::ResetPasswordByFirstStep_, &Method::POST) => {
                                         return Action::<UserAuthorization_ResetPasswordByFirstStep>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
-                                    (&UserAuthorization_::ResetPasswordBySecondStep_, &Method::POST) => {
+                                    (&UserAuthorization::ResetPasswordBySecondStep_, &Method::POST) => {
                                         return Action::<UserAuthorization_ResetPasswordBySecondStep>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
-                                    (&UserAuthorization_::ResetPasswordByLastStep_, &Method::POST) => {
+                                    (&UserAuthorization::ResetPasswordByLastStep_, &Method::POST) => {
                                         return Action::<UserAuthorization_ResetPasswordByLastStep>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
-                                    (&UserAuthorization_::SendEmailForResetPassword_, &Method::POST) => {
+                                    (&UserAuthorization::SendEmailForResetPassword_, &Method::POST) => {
                                         return Action::<UserAuthorization_SendEmailForResetPassword>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
-                                    (&UserAuthorization_::RefreshAccessToken_, &Method::POST) => {
+                                    (&UserAuthorization::RefreshAccessToken_, &Method::POST) => {
                                         return Action::<UserAuthorization_RefreshAccessToken>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
-                                    (&UserAuthorization_::DeauthorizeFromOneDevice_, &Method::POST) => {
+                                    (&UserAuthorization::DeauthorizeFromOneDevice_, &Method::POST) => {
                                         return Action::<UserAuthorization_DeauthorizeFromOneDevice>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
                                         )
                                         .await;
                                     }
-                                    (&UserAuthorization_::DeauthorizeFromAllDevices_, &Method::POST) => {
+                                    (&UserAuthorization::DeauthorizeFromAllDevices_, &Method::POST) => {
                                         return Action::<UserAuthorization_DeauthorizeFromAllDevices>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
@@ -1253,7 +1249,7 @@ impl HttpServer {
                         }
                     }
                 }
-                ActionRoute_::Channel {
+                ActionRoute::Channel {
                     ref channel,
                 } => {
                     match (
@@ -1261,7 +1257,7 @@ impl HttpServer {
                         &parts.method,
                     ) {
                         // Should be GET. But due to restrictions of third-party services, the method is put in Post.
-                        (&Channel_::GetOneById, &Method::POST) => {
+                        (&Channel::GetOneById, &Method::POST) => {
                             return Action::<Channel_GetOneById>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
@@ -1269,7 +1265,7 @@ impl HttpServer {
                             .await;
                         }
                         // Should be GET. But due to restrictions of third-party services, the method is put in Post.
-                        (&Channel_::GetManyByNameInSubscriptions, &Method::POST) => {
+                        (&Channel::GetManyByNameInSubscriptions, &Method::POST) => {
                             return Action::<Channel_GetManyByNameInSubscriptions>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
@@ -1277,7 +1273,7 @@ impl HttpServer {
                             .await;
                         }
                         // Should be GET. But due to restrictions of third-party services, the method is put in Post.
-                        (&Channel_::GetManyBySubscription, &Method::POST) => {
+                        (&Channel::GetManyBySubscription, &Method::POST) => {
                             return Action::<Channel_GetManyBySubscription>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
@@ -1285,7 +1281,7 @@ impl HttpServer {
                             .await;
                         }
                         // Should be GET. But due to restrictions of third-party services, the method is put in Post.
-                        (&Channel_::GetManyPublicByName, &Method::POST) => {
+                        (&Channel::GetManyPublicByName, &Method::POST) => {
                             return Action::<Channel_GetManyPublicByName>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
@@ -1300,7 +1296,7 @@ impl HttpServer {
                                     &parts.method,
                                 ) {
                                     // Should be GET. But due to restrictions of third-party services, the method is put in Post.
-                                    (&Channel_::GetOneById_, &Method::POST) => {
+                                    (&Channel::GetOneById_, &Method::POST) => {
                                         return Action::<Channel_GetOneById>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
@@ -1308,7 +1304,7 @@ impl HttpServer {
                                         .await;
                                     }
                                     // Should be GET. But due to restrictions of third-party services, the method is put in Post.
-                                    (&Channel_::GetManyByNameInSubscriptions_, &Method::POST) => {
+                                    (&Channel::GetManyByNameInSubscriptions_, &Method::POST) => {
                                         return Action::<Channel_GetManyByNameInSubscriptions>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
@@ -1316,7 +1312,7 @@ impl HttpServer {
                                         .await;
                                     }
                                     // Should be GET. But due to restrictions of third-party services, the method is put in Post.
-                                    (&Channel_::GetManyBySubscription_, &Method::POST) => {
+                                    (&Channel::GetManyBySubscription_, &Method::POST) => {
                                         return Action::<Channel_GetManyBySubscription>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
@@ -1324,7 +1320,7 @@ impl HttpServer {
                                         .await;
                                     }
                                     // Should be GET. But due to restrictions of third-party services, the method is put in Post.
-                                    (&Channel_::GetManyPublicByName_, &Method::POST) => {
+                                    (&Channel::GetManyPublicByName_, &Method::POST) => {
                                         return Action::<Channel_GetManyPublicByName>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
@@ -1337,14 +1333,14 @@ impl HttpServer {
                         }
                     }
                 }
-                ActionRoute_::ChannelSubscription {
+                ActionRoute::ChannelSubscription {
                     ref channel_subscription,
                 } => {
                     match (
                         channel_subscription,
                         &parts.method,
                     ) {
-                        (&ChannelSubscription_::Create, &Method::POST) => {
+                        (&ChannelSubscription::Create, &Method::POST) => {
                             return Action::<ChannelSubscription_Create>::run(
                                 &mut action_inner,
                                 &action_processor_inner,
@@ -1358,7 +1354,7 @@ impl HttpServer {
                                     channel_subscription,
                                     &parts.method,
                                 ) {
-                                    (&ChannelSubscription_::Create_, &Method::POST) => {
+                                    (&ChannelSubscription::Create_, &Method::POST) => {
                                         return Action::<ChannelSubscription_Create>::run_(
                                             &mut action_inner,
                                             &action_processor_inner,
@@ -1396,7 +1392,7 @@ where
     <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
     <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
 {
-    router: Router<ActionRoute_>,
+    router: Router<ActionRoute>,
     database_1_postgresql_connection_pool: Pool<PostgresConnectionManager<T>>,
     database_2_postgresql_connection_pool: Pool<PostgresConnectionManager<T>>,
 }
