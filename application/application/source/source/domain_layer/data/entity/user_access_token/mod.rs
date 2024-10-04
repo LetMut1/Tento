@@ -19,13 +19,10 @@ use std::{
 pub struct UserAccessToken<'a> {
     pub id: String,
     _id: PhantomData<Id>,
-
     pub user__id: i64,
     _user__id: PhantomData<User_Id>,
-
     pub user_device__id: Cow<'a, str>,
     _user_device__id: PhantomData<UserDevice_Id>,
-
     pub expires_at: i64,
     _expires_at: PhantomData<ExpiresAt>,
 }
