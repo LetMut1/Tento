@@ -9,6 +9,6 @@ use crate::{
 use aggregate_error::AggregateError;
 impl Generator<UserAccessRefreshToken_ExpiresAt> {
     pub fn generate() -> Result<i64, AggregateError> {
-        return Result::Ok(Resolver::<UnixTime>::add_minutes_interval_from_now(UserAccessRefreshToken_ExpiresAt::QUANTITY_OF_MINUTES_FOR_EXPIRATION)?);
+        return Resolver::<UnixTime>::add_minutes_interval_from_now(UserAccessRefreshToken_ExpiresAt::QUANTITY_OF_MINUTES_FOR_EXPIRATION);
     }
 }

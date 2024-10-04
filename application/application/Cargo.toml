@@ -84,6 +84,7 @@ needless_continue = { level = "allow", priority = 0 }
 needless_for_each = { level = "deny", priority = 0 }
 needless_lifetimes = { level = "allow", priority = 0 }
 needless_pass_by_ref_mut = { level = "deny", priority = 0 }
+needless_question_mark = { level = "deny", priority = 0 }
 needless_return = { level = "allow", priority = 0 }
 new_without_default = { level = "allow", priority = 0 }
 option_as_ref_cloned = { level = "deny", priority = 0 }

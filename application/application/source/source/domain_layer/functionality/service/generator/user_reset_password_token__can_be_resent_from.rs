@@ -9,6 +9,6 @@ use crate::{
 use aggregate_error::AggregateError;
 impl Generator<UserResetPasswordToken_CanBeResentFrom> {
     pub fn generate() -> Result<i64, AggregateError> {
-        return Result::Ok(Resolver::<UnixTime>::add_minutes_interval_from_now(UserResetPasswordToken_CanBeResentFrom::QUANTITY_OF_MINUTES_BEFORE_RESENDING)?);
+        return Resolver::<UnixTime>::add_minutes_interval_from_now(UserResetPasswordToken_CanBeResentFrom::QUANTITY_OF_MINUTES_BEFORE_RESENDING);
     }
 }

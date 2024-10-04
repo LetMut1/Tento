@@ -123,7 +123,7 @@ impl CommandProcessor<RunServer> {
                 ),
             );
         }
-        return Result::Ok(
+        return
             RuntimeBuilder::new_multi_thread()
                 .max_blocking_threads(environment_configuration.tokio_runtime.maximum_blocking_threads_quantity)
                 .worker_threads(environment_configuration.tokio_runtime.worker_threads_quantity)
@@ -135,7 +135,6 @@ impl CommandProcessor<RunServer> {
                         line!(),
                         file!(),
                     ),
-                )?,
-        );
+                );
     }
 }
