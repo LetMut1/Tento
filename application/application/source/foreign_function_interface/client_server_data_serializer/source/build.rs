@@ -1,4 +1,3 @@
-use cargo_emit::rerun_if_changed;
 use cbindgen::{
     Builder,
     Language,
@@ -9,6 +8,7 @@ use std::{
     path::Path,
 };
 use uuid::Uuid;
+#[allow(clippy::panic)]
 fn main() -> () {
     if let Result::Err(error) = Processor::process() {
         panic!(
@@ -32,7 +32,7 @@ impl Processor {
             var("OUT_DIR")?.as_str(),
             file_name.as_str(),
         );
-        rerun_if_changed!(file_path.as_str());
+        cargo_emit::rerun_if_changed!(file_path.as_str());
         return Result::Ok(());
     }
     fn create_c_bindings() -> Result<(), Box<dyn Error + 'static>> {

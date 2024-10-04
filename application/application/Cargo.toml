@@ -53,6 +53,7 @@ cast_sign_loss = { level = "deny", priority = 0 }
 checked_conversions = { level = "deny", priority = 0}
 clear_with_drain = { level = "deny", priority = 0 }
 collapsible_else_if = { level = "allow", priority = 0 }
+collapsible_if = { level = "allow", priority = 0 }
 collapsible_match = { level = "allow", priority = 0 }
 default_numeric_fallback = { level = "deny", priority = 0 }
 default_trait_access = { level = "deny", priority = 0 }
@@ -97,6 +98,7 @@ range_minus_one = { level = "deny", priority = 0 }
 range_plus_one = { level = "deny", priority = 0 }
 rc_mutex = { level = "deny", priority = 0 }
 redundant_clone = { level = "deny", priority = 0 }
+redundant_field_names = { level = "deny", priority = 0 }
 redundant_pub_crate = { level = "deny", priority = 0 }
 redundant_static_lifetimes = { level = "allow", priority = 0 }
 ref_option_ref = { level = "deny", priority = 0 }
@@ -123,6 +125,7 @@ unnested_or_patterns = { level = "deny", priority = 0 }
 unreachable = { level = "deny", priority = 0 }
 unused_async = { level = "deny", priority = 0 }
 unused_self = { level = "deny", priority = 0 }
+unused_unit = { level = "allow", priority = 0 }
 unwrap_in_result = { level = "deny", priority = 0 }
 unwrap_used = { level = "deny", priority = 0 }
 verbose_file_reads = { level = "deny", priority = 0 }

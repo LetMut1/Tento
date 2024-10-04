@@ -542,13 +542,14 @@ pub struct UserAuthorization_AuthorizeByFirstStep_Incoming {
 pub extern "C" fn user_authorization__authorize_by_first_step__serialize_allocate(
     incoming: *mut UserAuthorization_AuthorizeByFirstStep_Incoming,
 ) -> *mut CResult<CVector<c_uchar>> {
-    let converter = move |incoming: &'_ UserAuthorization_AuthorizeByFirstStep_Incoming| -> Result<UserAuthorization_AuthorizeByFirstStep_Incoming_, Box<dyn StdError + 'static>> {
-        let incoming_ = UserAuthorization_AuthorizeByFirstStep_Incoming_ {
-            user_device__id: incoming.user_device__id.clone_as_string()?,
-            user__email___or___user__nickname: incoming.user__email___or___user__nickname.clone_as_string()?,
-            user__password: incoming.user__password.clone_as_string()?,
-        };
-        return Result::Ok(incoming_);
+    let converter = move |incoming_: &'_ UserAuthorization_AuthorizeByFirstStep_Incoming| -> Result<UserAuthorization_AuthorizeByFirstStep_Incoming_, Box<dyn StdError + 'static>> {
+        return Result::Ok(
+            UserAuthorization_AuthorizeByFirstStep_Incoming_ {
+                user_device__id: incoming_.user_device__id.clone_as_string()?,
+                user__email___or___user__nickname: incoming_.user__email___or___user__nickname.clone_as_string()?,
+                user__password: incoming_.user__password.clone_as_string()?,
+            }
+        );
     };
     return Transformer::<ServerRequestData>::transform(
         incoming,
@@ -636,13 +637,14 @@ pub struct UserAuthorization_AuthorizeByLastStep_Incoming {
 }
 #[no_mangle]
 pub extern "C" fn user_authorization__authorize_by_last_step__serialize_allocate(incoming: *mut UserAuthorization_AuthorizeByLastStep_Incoming) -> *mut CResult<CVector<c_uchar>> {
-    let converter = move |incoming: &'_ UserAuthorization_AuthorizeByLastStep_Incoming| -> Result<UserAuthorization_AuthorizeByLastStep_Incoming_, Box<dyn StdError + 'static>> {
-        let incoming_ = UserAuthorization_AuthorizeByLastStep_Incoming_ {
-            user__id: incoming.user__id,
-            user_device__id: incoming.user_device__id.clone_as_string()?,
-            user_authorization_token__value: incoming.user_authorization_token__value.clone_as_string()?,
-        };
-        return Result::Ok(incoming_);
+    let converter = move |incoming_: &'_ UserAuthorization_AuthorizeByLastStep_Incoming| -> Result<UserAuthorization_AuthorizeByLastStep_Incoming_, Box<dyn StdError + 'static>> {
+        return Result::Ok(
+            UserAuthorization_AuthorizeByLastStep_Incoming_ {
+                user__id: incoming_.user__id,
+                user_device__id: incoming_.user_device__id.clone_as_string()?,
+                user_authorization_token__value: incoming_.user_authorization_token__value.clone_as_string()?,
+            }
+        );
     };
     return Transformer::<ServerRequestData>::transform(
         incoming,
@@ -772,11 +774,12 @@ pub extern "C" fn user_authorization__check_email_for_existing__serialize_alloca
     incoming: *mut UserAuthorization_CheckEmailForExisting_Incoming,
 ) -> *mut CResult<CVector<c_uchar>> {
     let converter =
-        move |incoming: &'_ UserAuthorization_CheckEmailForExisting_Incoming| -> Result<UserAuthorization_CheckEmailForExisting_Incoming_, Box<dyn StdError + 'static>> {
-            let incoming_ = UserAuthorization_CheckEmailForExisting_Incoming_ {
-                user__email: incoming.user__email.clone_as_string()?,
-            };
-            return Result::Ok(incoming_);
+        move |incoming_: &'_ UserAuthorization_CheckEmailForExisting_Incoming| -> Result<UserAuthorization_CheckEmailForExisting_Incoming_, Box<dyn StdError + 'static>> {
+            return Result::Ok(
+                UserAuthorization_CheckEmailForExisting_Incoming_ {
+                    user__email: incoming_.user__email.clone_as_string()?,
+                }
+            );
         };
     return Transformer::<ServerRequestData>::transform(
         incoming,
@@ -839,11 +842,12 @@ pub extern "C" fn user_authorization__check_nickname_for_existing__serialize_all
     incoming: *mut UserAuthorization_CheckNicknameForExisting_Incoming,
 ) -> *mut CResult<CVector<c_uchar>> {
     let converter =
-        move |incoming: &'_ UserAuthorization_CheckNicknameForExisting_Incoming| -> Result<UserAuthorization_CheckNicknameForExisting_Incoming_, Box<dyn StdError + 'static>> {
-            let incoming_ = UserAuthorization_CheckNicknameForExisting_Incoming_ {
-                user__nickname: incoming.user__nickname.clone_as_string()?,
-            };
-            return Result::Ok(incoming_);
+        move |incoming_: &'_ UserAuthorization_CheckNicknameForExisting_Incoming| -> Result<UserAuthorization_CheckNicknameForExisting_Incoming_, Box<dyn StdError + 'static>> {
+            return Result::Ok(
+                UserAuthorization_CheckNicknameForExisting_Incoming_ {
+                    user__nickname: incoming_.user__nickname.clone_as_string()?,
+                }
+            );
         };
     return Transformer::<ServerRequestData>::transform(
         incoming,
@@ -906,14 +910,15 @@ pub extern "C" fn user_authorization__deauthorize_from_all_devices__serialize_al
     incoming: *mut UserAuthorization_DeauthorizeFromAllDevices_Incoming,
 ) -> *mut CResult<CVector<c_uchar>> {
     let converter =
-        move |incoming: &'_ UserAuthorization_DeauthorizeFromAllDevices_Incoming| -> Result<UserAuthorization_DeauthorizeFromAllDevices_Incoming_, Box<dyn StdError + 'static>> {
-            let incoming_ = UserAuthorization_DeauthorizeFromAllDevices_Incoming_ {
-                user_access_token_encoded: UserAccessTokenEncoded_ {
-                    serialized: incoming.user_access_token_encoded.serialized.clone_as_vec()?,
-                    encoded: incoming.user_access_token_encoded.encoded.clone_as_vec()?,
-                },
-            };
-            return Result::Ok(incoming_);
+        move |incoming_: &'_ UserAuthorization_DeauthorizeFromAllDevices_Incoming| -> Result<UserAuthorization_DeauthorizeFromAllDevices_Incoming_, Box<dyn StdError + 'static>> {
+            return Result::Ok(
+                UserAuthorization_DeauthorizeFromAllDevices_Incoming_ {
+                    user_access_token_encoded: UserAccessTokenEncoded_ {
+                        serialized: incoming_.user_access_token_encoded.serialized.clone_as_vec()?,
+                        encoded: incoming_.user_access_token_encoded.encoded.clone_as_vec()?,
+                    },
+                }
+            );
         };
     return Transformer::<ServerRequestData>::transform(
         incoming,
@@ -995,14 +1000,15 @@ pub extern "C" fn user_authorization__deauthorize_from_one_device__serialize_all
     incoming: *mut UserAuthorization_DeauthorizeFromOneDevice_Incoming,
 ) -> *mut CResult<CVector<c_uchar>> {
     let converter =
-        move |incoming: &'_ UserAuthorization_DeauthorizeFromOneDevice_Incoming| -> Result<UserAuthorization_DeauthorizeFromOneDevice_Incoming_, Box<dyn StdError + 'static>> {
-            let incoming_ = UserAuthorization_DeauthorizeFromOneDevice_Incoming_ {
-                user_access_token_encoded: UserAccessTokenEncoded_ {
-                    serialized: incoming.user_access_token_encoded.serialized.clone_as_vec()?,
-                    encoded: incoming.user_access_token_encoded.encoded.clone_as_vec()?,
-                },
-            };
-            return Result::Ok(incoming_);
+        move |incoming_: &'_ UserAuthorization_DeauthorizeFromOneDevice_Incoming| -> Result<UserAuthorization_DeauthorizeFromOneDevice_Incoming_, Box<dyn StdError + 'static>> {
+            return Result::Ok(
+                UserAuthorization_DeauthorizeFromOneDevice_Incoming_ {
+                    user_access_token_encoded: UserAccessTokenEncoded_ {
+                        serialized: incoming_.user_access_token_encoded.serialized.clone_as_vec()?,
+                        encoded: incoming_.user_access_token_encoded.encoded.clone_as_vec()?,
+                    },
+                }
+            );
         };
     return Transformer::<ServerRequestData>::transform(
         incoming,
@@ -1068,15 +1074,16 @@ pub struct UserAuthorization_RefreshAccessToken_Incoming {
 }
 #[no_mangle]
 pub extern "C" fn user_authorization__refresh_access_token__serialize_allocate(incoming: *mut UserAuthorization_RefreshAccessToken_Incoming) -> *mut CResult<CVector<c_uchar>> {
-    let converter = move |incoming: &'_ UserAuthorization_RefreshAccessToken_Incoming| -> Result<UserAuthorization_RefreshAccessToken_Incoming_, Box<dyn StdError + 'static>> {
-        let incoming_ = UserAuthorization_RefreshAccessToken_Incoming_ {
-            user_access_token_encoded: UserAccessTokenEncoded_ {
-                serialized: incoming.user_access_token_encoded.serialized.clone_as_vec()?,
-                encoded: incoming.user_access_token_encoded.encoded.clone_as_vec()?,
-            },
-            user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded_(incoming.user_access_refresh_token_encoded.0.clone_as_vec()?),
-        };
-        return Result::Ok(incoming_);
+    let converter = move |incoming_: &'_ UserAuthorization_RefreshAccessToken_Incoming| -> Result<UserAuthorization_RefreshAccessToken_Incoming_, Box<dyn StdError + 'static>> {
+        return Result::Ok(
+            UserAuthorization_RefreshAccessToken_Incoming_ {
+                user_access_token_encoded: UserAccessTokenEncoded_ {
+                    serialized: incoming_.user_access_token_encoded.serialized.clone_as_vec()?,
+                    encoded: incoming_.user_access_token_encoded.encoded.clone_as_vec()?,
+                },
+                user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded_(incoming_.user_access_refresh_token_encoded.0.clone_as_vec()?),
+            }
+        );
     };
     return Transformer::<ServerRequestData>::transform(
         incoming,
@@ -1179,12 +1186,13 @@ pub struct UserAuthorization_RegisterByFirstStep_Incoming {
 }
 #[no_mangle]
 pub extern "C" fn user_authorization__register_by_first_step__serialize_allocate(incoming: *mut UserAuthorization_RegisterByFirstStep_Incoming) -> *mut CResult<CVector<c_uchar>> {
-    let converter = move |incoming: &'_ UserAuthorization_RegisterByFirstStep_Incoming| -> Result<UserAuthorization_RegisterByFirstStep_Incoming_, Box<dyn StdError + 'static>> {
-        let incoming_ = UserAuthorization_RegisterByFirstStep_Incoming_ {
-            user__email: incoming.user__email.clone_as_string()?,
-            user_device__id: incoming.user_device__id.clone_as_string()?,
-        };
-        return Result::Ok(incoming_);
+    let converter = move |incoming_: &'_ UserAuthorization_RegisterByFirstStep_Incoming| -> Result<UserAuthorization_RegisterByFirstStep_Incoming_, Box<dyn StdError + 'static>> {
+        return Result::Ok(
+            UserAuthorization_RegisterByFirstStep_Incoming_ {
+                user__email: incoming_.user__email.clone_as_string()?,
+                user_device__id: incoming_.user_device__id.clone_as_string()?,
+            }
+        );
     };
     return Transformer::<ServerRequestData>::transform(
         incoming,
@@ -1270,13 +1278,14 @@ pub struct UserAuthorization_RegisterBySecondStep_Incoming {
 pub extern "C" fn user_authorization__register_by_second_step__serialize_allocate(
     incoming: *mut UserAuthorization_RegisterBySecondStep_Incoming,
 ) -> *mut CResult<CVector<c_uchar>> {
-    let converter = move |incoming: &'_ UserAuthorization_RegisterBySecondStep_Incoming| -> Result<UserAuthorization_RegisterBySecondStep_Incoming_, Box<dyn StdError + 'static>> {
-        let incoming_ = UserAuthorization_RegisterBySecondStep_Incoming_ {
-            user__email: incoming.user__email.clone_as_string()?,
-            user_device__id: incoming.user_device__id.clone_as_string()?,
-            user_registration_token__value: incoming.user_registration_token__value.clone_as_string()?,
-        };
-        return Result::Ok(incoming_);
+    let converter = move |incoming_: &'_ UserAuthorization_RegisterBySecondStep_Incoming| -> Result<UserAuthorization_RegisterBySecondStep_Incoming_, Box<dyn StdError + 'static>> {
+        return Result::Ok(
+            UserAuthorization_RegisterBySecondStep_Incoming_ {
+                user__email: incoming_.user__email.clone_as_string()?,
+                user_device__id: incoming_.user_device__id.clone_as_string()?,
+                user_registration_token__value: incoming_.user_registration_token__value.clone_as_string()?,
+            }
+        );
     };
     return Transformer::<ServerRequestData>::transform(
         incoming,
@@ -1375,15 +1384,16 @@ pub struct UserAuthorization_RegisterByLastStep_Incoming {
 }
 #[no_mangle]
 pub extern "C" fn user_authorization__register_by_last_step__serialize_allocate(incoming: *mut UserAuthorization_RegisterByLastStep_Incoming) -> *mut CResult<CVector<c_uchar>> {
-    let converter = move |incoming: &'_ UserAuthorization_RegisterByLastStep_Incoming| -> Result<UserAuthorization_RegisterByLastStep_Incoming_, Box<dyn StdError + 'static>> {
-        let incoming_ = UserAuthorization_RegisterByLastStep_Incoming_ {
-            user_device__id: incoming.user_device__id.clone_as_string()?,
-            user__email: incoming.user__email.clone_as_string()?,
-            user__nickname: incoming.user__nickname.clone_as_string()?,
-            user__password: incoming.user__password.clone_as_string()?,
-            user_registration_token__value: incoming.user_registration_token__value.clone_as_string()?,
-        };
-        return Result::Ok(incoming_);
+    let converter = move |incoming_: &'_ UserAuthorization_RegisterByLastStep_Incoming| -> Result<UserAuthorization_RegisterByLastStep_Incoming_, Box<dyn StdError + 'static>> {
+        return Result::Ok(
+            UserAuthorization_RegisterByLastStep_Incoming_ {
+                user_device__id: incoming_.user_device__id.clone_as_string()?,
+                user__email: incoming_.user__email.clone_as_string()?,
+                user__nickname: incoming_.user__nickname.clone_as_string()?,
+                user__password: incoming_.user__password.clone_as_string()?,
+                user_registration_token__value: incoming_.user_registration_token__value.clone_as_string()?,
+            }
+        );
     };
     return Transformer::<ServerRequestData>::transform(
         incoming,
@@ -1517,12 +1527,13 @@ pub extern "C" fn user_authorization__reset_password_by_first_step__serialize_al
     incoming: *mut UserAuthorization_ResetPasswordByFirstStep_Incoming,
 ) -> *mut CResult<CVector<c_uchar>> {
     let converter =
-        move |incoming: &'_ UserAuthorization_ResetPasswordByFirstStep_Incoming| -> Result<UserAuthorization_ResetPasswordByFirstStep_Incoming_, Box<dyn StdError + 'static>> {
-            let incoming_ = UserAuthorization_ResetPasswordByFirstStep_Incoming_ {
-                user__email: incoming.user__email.clone_as_string()?,
-                user_device__id: incoming.user_device__id.clone_as_string()?,
-            };
-            return Result::Ok(incoming_);
+        move |incoming_: &'_ UserAuthorization_ResetPasswordByFirstStep_Incoming| -> Result<UserAuthorization_ResetPasswordByFirstStep_Incoming_, Box<dyn StdError + 'static>> {
+            return Result::Ok(
+                UserAuthorization_ResetPasswordByFirstStep_Incoming_ {
+                    user__email: incoming_.user__email.clone_as_string()?,
+                    user_device__id: incoming_.user_device__id.clone_as_string()?,
+                }
+            );
         };
     return Transformer::<ServerRequestData>::transform(
         incoming,
@@ -1614,13 +1625,14 @@ pub extern "C" fn user_authorization__reset_password_by_second_step__serialize_a
     incoming: *mut UserAuthorization_ResetPasswordBySecondStep_Incoming,
 ) -> *mut CResult<CVector<c_uchar>> {
     let converter =
-        move |incoming: &'_ UserAuthorization_ResetPasswordBySecondStep_Incoming| -> Result<UserAuthorization_ResetPasswordBySecondStep_Incoming_, Box<dyn StdError + 'static>> {
-            let incoming_ = UserAuthorization_ResetPasswordBySecondStep_Incoming_ {
-                user__id: incoming.user__id,
-                user_device__id: incoming.user_device__id.clone_as_string()?,
-                user_reset_password_token__value: incoming.user_reset_password_token__value.clone_as_string()?,
-            };
-            return Result::Ok(incoming_);
+        move |incoming_: &'_ UserAuthorization_ResetPasswordBySecondStep_Incoming| -> Result<UserAuthorization_ResetPasswordBySecondStep_Incoming_, Box<dyn StdError + 'static>> {
+            return Result::Ok(
+                UserAuthorization_ResetPasswordBySecondStep_Incoming_ {
+                    user__id: incoming_.user__id,
+                    user_device__id: incoming_.user_device__id.clone_as_string()?,
+                    user_reset_password_token__value: incoming_.user_reset_password_token__value.clone_as_string()?,
+                }
+            );
         };
     return Transformer::<ServerRequestData>::transform(
         incoming,
@@ -1721,14 +1733,15 @@ pub extern "C" fn user_authorization__reset_password_by_last_step__serialize_all
     incoming: *mut UserAuthorization_ResetPasswordByLastStep_Incoming,
 ) -> *mut CResult<CVector<c_uchar>> {
     let converter =
-        move |incoming: &'_ UserAuthorization_ResetPasswordByLastStep_Incoming| -> Result<UserAuthorization_ResetPasswordByLastStep_Incoming_, Box<dyn StdError + 'static>> {
-            let incoming_ = UserAuthorization_ResetPasswordByLastStep_Incoming_ {
-                user__id: incoming.user__id,
-                user_device__id: incoming.user_device__id.clone_as_string()?,
-                user__password: incoming.user__password.clone_as_string()?,
-                user_reset_password_token__value: incoming.user_reset_password_token__value.clone_as_string()?,
-            };
-            return Result::Ok(incoming_);
+        move |incoming_: &'_ UserAuthorization_ResetPasswordByLastStep_Incoming| -> Result<UserAuthorization_ResetPasswordByLastStep_Incoming_, Box<dyn StdError + 'static>> {
+            return Result::Ok(
+                UserAuthorization_ResetPasswordByLastStep_Incoming_ {
+                    user__id: incoming_.user__id,
+                    user_device__id: incoming_.user_device__id.clone_as_string()?,
+                    user__password: incoming_.user__password.clone_as_string()?,
+                    user_reset_password_token__value: incoming_.user_reset_password_token__value.clone_as_string()?,
+                }
+            );
         };
     return Transformer::<ServerRequestData>::transform(
         incoming,
@@ -1824,12 +1837,13 @@ pub struct UserAuthorization_SendEmailForRegister_Incoming {
 pub extern "C" fn user_authorization__send_email_for_register__serialize_allocate(
     incoming: *mut UserAuthorization_SendEmailForRegister_Incoming,
 ) -> *mut CResult<CVector<c_uchar>> {
-    let converter = move |incoming: &'_ UserAuthorization_SendEmailForRegister_Incoming| -> Result<UserAuthorization_SendEmailForRegister_Incoming_, Box<dyn StdError + 'static>> {
-        let incoming_ = UserAuthorization_SendEmailForRegister_Incoming_ {
-            user__email: incoming.user__email.clone_as_string()?,
-            user_device__id: incoming.user_device__id.clone_as_string()?,
-        };
-        return Result::Ok(incoming_);
+    let converter = move |incoming_: &'_ UserAuthorization_SendEmailForRegister_Incoming| -> Result<UserAuthorization_SendEmailForRegister_Incoming_, Box<dyn StdError + 'static>> {
+        return Result::Ok(
+            UserAuthorization_SendEmailForRegister_Incoming_ {
+                user__email: incoming_.user__email.clone_as_string()?,
+                user_device__id: incoming_.user_device__id.clone_as_string()?,
+            }
+        );
     };
     return Transformer::<ServerRequestData>::transform(
         incoming,
@@ -1934,12 +1948,13 @@ pub extern "C" fn user_authorization__send_email_for_authorize__serialize_alloca
     incoming: *mut UserAuthorization_SendEmailForAuthorize_Incoming,
 ) -> *mut CResult<CVector<c_uchar>> {
     let converter =
-        move |incoming: &'_ UserAuthorization_SendEmailForAuthorize_Incoming| -> Result<UserAuthorization_SendEmailForAuthorize_Incoming_, Box<dyn StdError + 'static>> {
-            let incoming_ = UserAuthorization_SendEmailForAuthorize_Incoming_ {
-                user_device__id: incoming.user_device__id.clone_as_string()?,
-                user__id: incoming.user__id,
-            };
-            return Result::Ok(incoming_);
+        move |incoming_: &'_ UserAuthorization_SendEmailForAuthorize_Incoming| -> Result<UserAuthorization_SendEmailForAuthorize_Incoming_, Box<dyn StdError + 'static>> {
+            return Result::Ok(
+                UserAuthorization_SendEmailForAuthorize_Incoming_ {
+                    user_device__id: incoming_.user_device__id.clone_as_string()?,
+                    user__id: incoming_.user__id,
+                }
+            );
         };
     return Transformer::<ServerRequestData>::transform(
         incoming,
@@ -2045,12 +2060,13 @@ pub extern "C" fn user_authorization__send_email_for_reset_password__serialize_a
     incoming: *mut UserAuthorization_SendEmailForResetPassword_Incoming,
 ) -> *mut CResult<CVector<c_uchar>> {
     let converter =
-        move |incoming: &'_ UserAuthorization_SendEmailForResetPassword_Incoming| -> Result<UserAuthorization_SendEmailForResetPassword_Incoming_, Box<dyn StdError + 'static>> {
-            let incoming_ = UserAuthorization_SendEmailForResetPassword_Incoming_ {
-                user__id: incoming.user__id,
-                user_device__id: incoming.user_device__id.clone_as_string()?,
-            };
-            return Result::Ok(incoming_);
+        move |incoming_: &'_ UserAuthorization_SendEmailForResetPassword_Incoming| -> Result<UserAuthorization_SendEmailForResetPassword_Incoming_, Box<dyn StdError + 'static>> {
+            return Result::Ok(
+                UserAuthorization_SendEmailForResetPassword_Incoming_ {
+                    user__id: incoming_.user__id,
+                    user_device__id: incoming_.user_device__id.clone_as_string()?,
+                }
+            );
         };
     return Transformer::<ServerRequestData>::transform(
         incoming,
@@ -2162,22 +2178,23 @@ pub struct Channel_GetManyByNameInSubscriptions_Incoming {
 }
 #[no_mangle]
 pub extern "C" fn channel__get_many_by_name_in_subscriptions__serialize_allocate(incoming: *mut Channel_GetManyByNameInSubscriptions_Incoming) -> *mut CResult<CVector<c_uchar>> {
-    let converter = move |incoming: &'_ Channel_GetManyByNameInSubscriptions_Incoming| -> Result<Channel_GetManyByNameInSubscriptions_Incoming_, Box<dyn StdError + 'static>> {
-        let requery___channel__name = if incoming.requery___channel__name.is_data {
-            Option::Some(incoming.requery___channel__name.data.clone_as_string()?)
+    let converter = move |incoming_: &'_ Channel_GetManyByNameInSubscriptions_Incoming| -> Result<Channel_GetManyByNameInSubscriptions_Incoming_, Box<dyn StdError + 'static>> {
+        let requery___channel__name = if incoming_.requery___channel__name.is_data {
+            Option::Some(incoming_.requery___channel__name.data.clone_as_string()?)
         } else {
             Option::None
         };
-        let incoming_ = Channel_GetManyByNameInSubscriptions_Incoming_ {
-            user_access_token_encoded: UserAccessTokenEncoded_ {
-                serialized: incoming.user_access_token_encoded.serialized.clone_as_vec()?,
-                encoded: incoming.user_access_token_encoded.encoded.clone_as_vec()?,
-            },
-            channel__name: incoming.channel__name.clone_as_string()?,
-            requery___channel__name,
-            limit: incoming.limit,
-        };
-        return Result::Ok(incoming_);
+        return Result::Ok(
+            Channel_GetManyByNameInSubscriptions_Incoming_ {
+                user_access_token_encoded: UserAccessTokenEncoded_ {
+                    serialized: incoming_.user_access_token_encoded.serialized.clone_as_vec()?,
+                    encoded: incoming_.user_access_token_encoded.encoded.clone_as_vec()?,
+                },
+                channel__name: incoming_.channel__name.clone_as_string()?,
+                requery___channel__name,
+                limit: incoming_.limit,
+            }
+        );
     };
     return Transformer::<ServerRequestData>::transform(
         incoming,
@@ -2309,21 +2326,22 @@ pub struct Channel_GetManyBySubscription_Incoming {
 }
 #[no_mangle]
 pub extern "C" fn channel__get_many_by_subscription__serialize_allocate(incoming: *mut Channel_GetManyBySubscription_Incoming) -> *mut CResult<CVector<c_uchar>> {
-    let converter = move |incoming: &'_ Channel_GetManyBySubscription_Incoming| -> Result<Channel_GetManyBySubscription_Incoming_, Box<dyn StdError + 'static>> {
-        let requery___channel__id = if incoming.requery___channel__id.is_data {
-            Option::Some(incoming.requery___channel__id.data)
+    let converter = move |incoming_: &'_ Channel_GetManyBySubscription_Incoming| -> Result<Channel_GetManyBySubscription_Incoming_, Box<dyn StdError + 'static>> {
+        let requery___channel__id = if incoming_.requery___channel__id.is_data {
+            Option::Some(incoming_.requery___channel__id.data)
         } else {
             Option::None
         };
-        let incoming_ = Channel_GetManyBySubscription_Incoming_ {
-            user_access_token_encoded: UserAccessTokenEncoded_ {
-                serialized: incoming.user_access_token_encoded.serialized.clone_as_vec()?,
-                encoded: incoming.user_access_token_encoded.encoded.clone_as_vec()?,
-            },
-            requery___channel__id,
-            limit: incoming.limit,
-        };
-        return Result::Ok(incoming_);
+        return Result::Ok(
+            Channel_GetManyBySubscription_Incoming_ {
+                user_access_token_encoded: UserAccessTokenEncoded_ {
+                    serialized: incoming_.user_access_token_encoded.serialized.clone_as_vec()?,
+                    encoded: incoming_.user_access_token_encoded.encoded.clone_as_vec()?,
+                },
+                requery___channel__id,
+                limit: incoming_.limit,
+            }
+        );
     };
     return Transformer::<ServerRequestData>::transform(
         incoming,
@@ -2456,22 +2474,23 @@ pub struct Channel_GetManyPublicByName_Incoming {
 }
 #[no_mangle]
 pub extern "C" fn channel__get_many_public_by_name__serialize_allocate(incoming: *mut Channel_GetManyPublicByName_Incoming) -> *mut CResult<CVector<c_uchar>> {
-    let converter = move |incoming: &'_ Channel_GetManyPublicByName_Incoming| -> Result<Channel_GetManyPublicByName_Incoming_, Box<dyn StdError + 'static>> {
-        let requery___channel__name = if incoming.requery___channel__name.is_data {
-            Option::Some(incoming.requery___channel__name.data.clone_as_string()?)
+    let converter = move |incoming_: &'_ Channel_GetManyPublicByName_Incoming| -> Result<Channel_GetManyPublicByName_Incoming_, Box<dyn StdError + 'static>> {
+        let requery___channel__name = if incoming_.requery___channel__name.is_data {
+            Option::Some(incoming_.requery___channel__name.data.clone_as_string()?)
         } else {
             Option::None
         };
-        let incoming_ = Channel_GetManyPublicByName_Incoming_ {
-            user_access_token_encoded: UserAccessTokenEncoded_ {
-                serialized: incoming.user_access_token_encoded.serialized.clone_as_vec()?,
-                encoded: incoming.user_access_token_encoded.encoded.clone_as_vec()?,
-            },
-            channel__name: incoming.channel__name.clone_as_string()?,
-            requery___channel__name,
-            limit: incoming.limit,
-        };
-        return Result::Ok(incoming_);
+        return Result::Ok(
+            Channel_GetManyPublicByName_Incoming_ {
+                user_access_token_encoded: UserAccessTokenEncoded_ {
+                    serialized: incoming_.user_access_token_encoded.serialized.clone_as_vec()?,
+                    encoded: incoming_.user_access_token_encoded.encoded.clone_as_vec()?,
+                },
+                channel__name: incoming_.channel__name.clone_as_string()?,
+                requery___channel__name,
+                limit: incoming_.limit,
+            }
+        );
     };
     return Transformer::<ServerRequestData>::transform(
         incoming,
@@ -2602,15 +2621,16 @@ pub struct Channel_GetOneById_Incoming {
 }
 #[no_mangle]
 pub extern "C" fn channel__get_one_by_id__serialize_allocate(incoming: *mut Channel_GetOneById_Incoming) -> *mut CResult<CVector<c_uchar>> {
-    let converter = move |incoming: &'_ Channel_GetOneById_Incoming| -> Result<Channel_GetOneById_Incoming_, Box<dyn StdError + 'static>> {
-        let incoming_ = Channel_GetOneById_Incoming_ {
-            user_access_token_encoded: UserAccessTokenEncoded_ {
-                serialized: incoming.user_access_token_encoded.serialized.clone_as_vec()?,
-                encoded: incoming.user_access_token_encoded.encoded.clone_as_vec()?,
-            },
-            channel__id: incoming.channel__id,
-        };
-        return Result::Ok(incoming_);
+    let converter = move |incoming_: &'_ Channel_GetOneById_Incoming| -> Result<Channel_GetOneById_Incoming_, Box<dyn StdError + 'static>> {
+        return Result::Ok(
+            Channel_GetOneById_Incoming_ {
+                user_access_token_encoded: UserAccessTokenEncoded_ {
+                    serialized: incoming_.user_access_token_encoded.serialized.clone_as_vec()?,
+                    encoded: incoming_.user_access_token_encoded.encoded.clone_as_vec()?,
+                },
+                channel__id: incoming_.channel__id,
+            }
+        );
     };
     return Transformer::<ServerRequestData>::transform(
         incoming,
@@ -2776,15 +2796,16 @@ pub struct ChannelSubscription_Create_Incoming {
 }
 #[no_mangle]
 pub extern "C" fn channel_subscription__create__serialize_allocate(incoming: *mut ChannelSubscription_Create_Incoming) -> *mut CResult<CVector<c_uchar>> {
-    let converter = move |incoming: &'_ ChannelSubscription_Create_Incoming| -> Result<ChannelSubscription_Create_Incoming_, Box<dyn StdError + 'static>> {
-        let incoming_ = ChannelSubscription_Create_Incoming_ {
-            user_access_token_encoded: UserAccessTokenEncoded_ {
-                serialized: incoming.user_access_token_encoded.serialized.clone_as_vec()?,
-                encoded: incoming.user_access_token_encoded.encoded.clone_as_vec()?,
-            },
-            channel__id: incoming.channel__id,
-        };
-        return Result::Ok(incoming_);
+    let converter = move |incoming_: &'_ ChannelSubscription_Create_Incoming| -> Result<ChannelSubscription_Create_Incoming_, Box<dyn StdError + 'static>> {
+        return Result::Ok(
+            ChannelSubscription_Create_Incoming_ {
+                user_access_token_encoded: UserAccessTokenEncoded_ {
+                    serialized: incoming_.user_access_token_encoded.serialized.clone_as_vec()?,
+                    encoded: incoming_.user_access_token_encoded.encoded.clone_as_vec()?,
+                },
+                channel__id: incoming_.channel__id,
+            }
+        );
     };
     return Transformer::<ServerRequestData>::transform(
         incoming,
