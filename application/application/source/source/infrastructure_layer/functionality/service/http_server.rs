@@ -1462,7 +1462,7 @@ impl UserAuthorization {
     pub const CHECK_EMAIL_FOR_EXISTING: &'static str = "/user_authorization/check_email_for_existing";
     pub const CHECK_NICKNAME_FOR_EXISTING: &'static str = "/user_authorization/check_nickname_for_existing";
     pub const DEAUTHORIZE_FROM_ALL_DEVICES: &'static str = "/user_authorization/deauthorize_from_all_devices";
-    pub const DEAUTHORIZE_FROM_ONE_DEVICE: &'static str = "/user_authorization/authorize_from_one_device";
+    pub const DEAUTHORIZE_FROM_ONE_DEVICE: &'static str = "/user_authorization/deauthorize_from_one_device";
     pub const REFRESH_ACCESS_TOKEN: &'static str = "/user_authorization/refresh_access_token";
     pub const REGISTER_BY_FIRST_STEP: &'static str = "/user_authorization/register_by_first_step";
     pub const REGISTER_BY_LAST_STEP: &'static str = "/user_authorization/register_by_last_step";
@@ -1568,7 +1568,7 @@ impl Channel {
     pub const CHECK_LINKED_NAME_FOR_EXISTING: &'static str = "/channel/check_linked_name_for_existing";
     pub const CHECK_NAME_FOR_EXISTING: &'static str = "/channel/check_name_for_existing";
     pub const CREATE: &'static str = "/channel/create";
-    pub const GET_MANY_BY_NAME_IN_SUBSCRIPTIONS: &'static str = "/channel/get_many_by_name_in_subscription";
+    pub const GET_MANY_BY_NAME_IN_SUBSCRIPTIONS: &'static str = "/channel/get_many_by_name_in_subscriptions";
     pub const GET_MANY_BY_SUBSCRIPTION: &'static str = "/channel/get_many_by_subscription";
     pub const GET_MANY_PUBLIC_BY_NAME: &'static str = "/channel/get_many_public_by_name";
     pub const GET_ONE_BY_ID: &'static str = "/channel/get_one_by_id";

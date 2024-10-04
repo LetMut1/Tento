@@ -16,20 +16,20 @@ struct UserAccessRefreshTokenEncoded(Vec<u8>)
 1 - is equal to 'DESC'
 ```
 # Request standards
-- All data is transferred in `HTTP Body`
+- All payload data is transferred in `HTTP Body` and described under each API endpoint as `Incoming`.
 - Every request should contain this `HTTP Header`s:
 ```
 - content-type: application/octet-stream
 - content-length: <calculate>
 ```
 # Response standards
-- All data is transferred in `HTTP Body`
+- All payload data is transferred in `HTTP Body` and described under each API endpoint as `Outcoming` and `Precedent`.
 - Every response should contain this `HTTP Header`s:
 ```
 - content-type: application/octet-stream
 - content-length: <calculate>
 ```
- - The permanent general structure of the each response with `status code` equal to `200` looks like:
+ - The permanent general structure of the each response data with `HTTP Status code` equal to `200` looks like:
 ```
 enum UnifiedReport<T, P> {
     Target {
@@ -46,7 +46,8 @@ enum Data<D> {
     },
 }
 ```
-- `Outcoming` structures written under each API endpoint will be nested in the `Filled` variant of `enum Data<D>`.
+- `Outcoming` described under each API endpoint will be nested in the `Filled` variant of `Data<D>`, but in case `Outcoming` is not presented, it will be `Empty` variant of `Data<D>`
+- `Precedent` described under each API endpoint will be nested in the `Precedent` variant of `UnifiedReport<T, P>`.
 - `HTTP Status code` unequal to `200` have not got `HTTP Body`.
 
 <br/><br/>
@@ -58,51 +59,42 @@ enum Data<D> {
 Deauthorizes user from one device.
 ```
 ```
-Request data:
 struct Incoming {
     user_access_token_encoded: <Data standards>
 }
 ```
 ```
-Result data: absent.
-```
-```
-Communication codes:
-- APPLICATION_USER_ACCESS_TOKEN__ALREADY_EXPIRED
-- APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST
+enum Precedent {
+    UserAccessToken_AlreadyExpired,
+    UserAccessToken_InUserAccessTokenBlackList,
+}
 ```
  - ## UserAuthorization_DeauthorizeFromAllDevicec POST /user_authorization/deauthorize_from_all_devices
 ```
 Deauthorizes user from all devices.
 ```
 ```
-Request data:
 struct Incoming {
     user_access_token_encoded: <Data standards>
 }
 ```
 ```
-Result data: absent.
-```
-```
-Communication codes:
-- APPLICATION_USER_ACCESS_TOKEN__ALREADY_EXPIRED
-- APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST
+enum Precedent {
+    UserAccessToken_AlreadyExpired,
+    UserAccessToken_InUserAccessTokenBlackList,
+}
 ```
  - ## Channel_GetOneById POST (GET) /channel/get_one_by_id
 ```
 Returns channel data by id.
 ```
 ```
-Request data:
 struct Incoming {
     user_access_token_encoded: <Data standards>
     channel__id: i64
 }
 ```
 ```
-Result data:
-
 struct Outcoming {
     channel: Channel,
     channel_inner_link_registry: Vec<ChannelInnerLink>,
@@ -134,18 +126,18 @@ struct ChannelOuterLink {
 }
 ```
 ```
-Communication codes:
-- APPLICATION_USER_ACCESS_TOKEN__ALREADY_EXPIRED
-- APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST
-- Channel_NOT_FOUND
-- Channel_IS_CLOSED
+enum Precedent {
+    UserAccessToken_AlreadyExpired,
+    UserAccessToken_InUserAccessTokenBlackList,
+    Channel_NotFound,
+    Channel_IsClose,
+}
 ```
- - ## Channel_GetManyByNameInSubscription POST (GET) /channel/get_many_by_name_in_subscription
+ - ## Channel_GetManyByNameInSubscriptions POST (GET) /channel/get_many_by_name_in_subscriptions
 ```
 Returns channels the user is subscribed to by name.
 ```
 ```
-Request data:
 struct Incoming {
     user_access_token_encoded: <Data standards>
     channel__name: String,
@@ -163,7 +155,6 @@ Incoming parameters validation rule:
     -- [1, 100] values.
 ```
 ```
-Result data:
 struct Outcoming {
     common_registry: Vec<Common1>
 }
@@ -184,16 +175,16 @@ struct Channel1 {
 }
 ```
 ```
-Communication codes:
-- APPLICATION_USER_ACCESS_TOKEN__ALREADY_EXPIRED
-- APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST
+enum Precedent {
+    UserAccessToken_AlreadyExpired,
+    UserAccessToken_InUserAccessTokenBlackList,
+}
 ```
  - ## Channel_GetManyBySubscription POST (GET) /channel/get_many_by_subscription
 ```
 Returns channels the user is subscribed to.
 ```
 ```
-Request data:
 struct Incoming {
     user_access_token_encoded: <Data standards>
     requery___channel__id: Option<i64>,
@@ -210,7 +201,6 @@ Incoming parameters validation rule:
     -- [1, 100] values.
 ```
 ```
-Result data:
 struct Outcoming {
     common_registry: Vec<Common1>
 }
@@ -231,16 +221,16 @@ struct Channel1 {
 }
 ```
 ```
-Communication codes:
-- APPLICATION_USER_ACCESS_TOKEN__ALREADY_EXPIRED
-- APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST
+enum Precedent {
+    UserAccessToken_AlreadyExpired,
+    UserAccessToken_InUserAccessTokenBlackList,
+}
 ```
  - ## Channel_GetManyPublicByName POST (GET) /channel/get_many_public_by_name
 ```
 Returns public channels by name.
 ```
 ```
-Request data:
 struct Incoming {
     user_access_token_encoded: <Data standards>
     channel__name: String,
@@ -258,7 +248,6 @@ Incoming parameters validation rule:
     -- [1, 100] values.
 ```
 ```
-Result data:
 struct Outcoming {
     common_registry: Vec<Common1>
 }
@@ -279,31 +268,29 @@ struct Channel1 {
 }
 ```
 ```
-Communication codes:
-- APPLICATION_USER_ACCESS_TOKEN__ALREADY_EXPIRED
-- APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST
+enum Precedent {
+    UserAccessToken_AlreadyExpired,
+    UserAccessToken_InUserAccessTokenBlackList,
+}
 ```
  - ## ChannelSubscription_Create POST /channel_subscription/create
 ```
 Subscribes user to channel.
 ```
 ```
-Request data:
 struct Incoming {
     user_access_token_encoded: <Data standards>
     channel__id: i64
 }
 ```
 ```
-Result data: absent.
-```
-```
-Communication codes:
-- UserAuthorization_IS_CHANNEL_OWNER
-- APPLICATION_USER_ACCESS_TOKEN__ALREADY_EXPIRED
-- APPLICATION_USER_ACCESS_TOKEN__IN_APPLICATION_USER_ACCESS_TOKEN_BLACK_LIST
-- Channel_IS_CLOSED
-- Channel_NOT_FOUND
+enum Precedent {
+    UserAccessToken_AlreadyExpired,
+    UserAccessToken_InUserAccessTokenBlackList,
+    Channel_NotFound,
+    Channel_IsClose,
+    User_IsChannelOwner,
+}
 ```
 <br/><br/>
 
@@ -313,55 +300,45 @@ Communication codes:
 Checks user email for existing.
 ```
 ```
-Request data:
 struct Incoming {
     user__email: String
 }
 ```
 ```
-Result data:
 struct Outcoming {
     result: bool
 }
-```
-```
-Communication codes: absent.
 ```
  - ## UserAuthorization_CheckNicknameForExisting POST (GET) /user_authorization/check_nickname_for_existing
 ```
 Checks user nickname for existing.
 ```
 ```
-Request data:
 struct Incoming {
     user__nickname: String
 }
 ```
 ```
-Result data:
 struct Outcoming {
     result: bool
 }
-```
-```
-Communication codes: absent.
 ```
  - ## UserAuthorization_RegisterByFirstStep POST /user_authorization/register_by_first_step
 ```
 Registers user for the first step and sends email to user.
 ```
 ```
-Request data:
 struct Incoming {
     user__email: String,
     user_device__id: String
 }
 ```
 ```
-Result data:
 struct Outcoming {
     verification_message_sent: bool,
-    user_registration_token__can_be_resent_from: i64
+    user_registration_token__can_be_resent_from: i64,
+    user_registration_token__wrong_enter_tries_quantity: i16,
+    user_registration_token__wrong_enter_tries_quantity_limit: i16,
 }
 
 
@@ -371,15 +348,15 @@ with unchanged parameters without waiting a certain amount of time.
 user_registration_token__can_be_resent_from - unixtime after wich it will be allowed to resend the verification message.
 ```
 ```
-Communication codes:
-- UserAuthorization_EMAIL_ALREADY_EXIST
+Precedent {
+    User_EmailAlreadyExist,
+}
 ```
 - ## UserAuthorization_RegisterBySecondStep POST /user_authorization/register_by_second_step
 ```
 Registers user for the second step through token value approving.
 ```
 ```
-Request data:
 struct Incoming {
     user__email: String,
     user_device__id: String,
@@ -387,14 +364,14 @@ struct Incoming {
 }
 ```
 ```
-Result data: absent.
-```
-```
-Communication codes:
-- APPLICATION_USER_REGISTRATION_TOKEN__NOT_FOUND
-- APPLICATION_USER_REGISTRATION_TOKEN__ALREADY_APPROVED
-- APPLICATION_USER_REGISTRATION_TOKEN__ALREADY_EXPIRED
-- APPLICATION_USER_REGISTRATION_TOKEN__WRONG_VALUE
+enum Precedent {
+    UserRegistrationToken_NotFound,
+    UserRegistrationToken_AlreadyExpired,
+    UserRegistrationToken_AlreadyApproved,
+    UserRegistrationToken_WrongValue {
+        user_registration_token__wrong_enter_tries_quantity: i16,
+    },
+}
 ```
 
  - ## UserAuthorization_RegisterByLastStep POST /user_authorization/register_by_last_step
@@ -402,7 +379,6 @@ Communication codes:
 Registers user for the last step.
 ```
 ```
-Request data:
 struct Incoming {
     user_device__id: String,
     user__nickname: String,
@@ -412,34 +388,32 @@ struct Incoming {
 }
 ```
 ```
-Result data:
 struct Outcoming {
     user_access_token_encoded: <Data standards>
     user_access_refresh_token_encoded: <Data standards>
 }
 ```
 ```
-Communication codes:
-- UserAuthorization_NICKNAME_ALREADY_EXIST
-- UserAuthorization_EMAIL_ALREADY_EXIST
-- APPLICATION_USER_REGISTRATION_TOKEN__NOT_FOUND
-- APPLICATION_USER_REGISTRATION_TOKEN__IS_NOT_APPROVED
-- APPLICATION_USER_REGISTRATION_TOKEN__WRONG_VALUE
-- APPLICATION_USER_REGISTRATION_TOKEN__ALREADY_EXPIRED
+enum Precedent {
+    User_NicknameAlreadyExist,
+    User_EmailAlreadyExist,
+    UserRegistrationToken_NotFound,
+    UserRegistrationToken_AlreadyExpired,
+    UserRegistrationToken_IsNotApproved,
+    UserRegistrationToken_WrongValue,
+}
 ```
  - ## UserAuthorization_SendEmailForRegister POST /user_authorization/send_email_for_register
 ```
 Sends email for register. (Should be used only if the user does not receive an email.)
 ```
 ```
-Request data:
 struct Incoming {
     user__email: String,
     user_device__id: String
 }
 ```
 ```
-Result data:
 struct Outcoming {
     user_registration_token__can_be_resent_from: i64
 }
@@ -448,18 +422,18 @@ struct Outcoming {
 user_registration_token__can_be_resent_from - unixtime after wich it will be allowed to resend the verification message.
 ```
 ```
-Communication codes:
-- APPLICATION_USER_REGISTRATION_TOKEN__NOT_FOUND
-- APPLICATION_USER_REGISTRATION_TOKEN__ALREADY_APPROVED
-- APPLICATION_USER_REGISTRATION_TOKEN__ALREADY_EXPIRED
-- APPLICATION_USER_REGISTRATION_TOKEN__TIME_TO_RESEND_HAS_NOT_COME
+enum Precedent {
+    UserRegistrationToken_NotFound,
+    UserRegistrationToken_AlreadyExpired,
+    UserRegistrationToken_AlreadyApproved,
+    UserRegistrationToken_TimeToResendHasNotCome,
+}
 ```
  - ## UserAuthorization_AuthorizeByFirstStep POST /user_authorization/authorize_by_first_step
 ```
 Authorizes user for the first step and send email to user.
 ```
 ```
-Request data:
 struct Incoming {
     user_device__id: String,
     user__email___or___user__nickname: String,
@@ -467,25 +441,26 @@ struct Incoming {
 }
 ```
 ```
-Result data:
 struct Outcoming {
     user__id: i64,
     verification_message_sent: bool,
-    user_authorization_token__can_be_resent_from: i64
+    user_authorization_token__can_be_resent_from: i64,
+    user_authorization_token__wrong_enter_tries_quantity: i16,
+    user_authorization_token__wrong_enter_tries_quantity_limit: i16,
 }
 
 user_authorization_token__can_be_resent_from - unixtime after wich it will be allowed to resend the verification message.
 ```
 ```
-Communication codes:
-- UserAuthorization_WRONG_EMAIL_OR_NICKNAME_OR_PASSWORD
+enum Precedent {
+    User_WrongEmailOrNicknameOrPassword,
+}
 ```
  - ## UserAuthorization_AuthorizeByLastStep POST /user_authorization/authorize_by_last_step
 ```
 Authorizes user for the last step.
 ```
 ```
-Request data:
 struct Incoming {
     user__id: i64,
     user_device__id: String,
@@ -493,72 +468,73 @@ struct Incoming {
 }
 ```
 ```
-Result data:
 struct Outcoming {
     user_access_token_encoded: <Data standards>
     user_access_refresh_token_encoded: <Data standards>
 }
 ```
 ```
-Communication codes:
-- APPLICATION_USER_AUTHORIZATION_TOKEN__NOT_FOUND
-- APPLICATION_USER_AUTHORIZATION_TOKEN__ALREADY_EXPIRED
-- APPLICATION_USER_AUTHORIZATION_TOKEN__WRONG_VALUE
-- UserAuthorization_NOT_FOUND
+enum Precedent {
+    UserAuthorizationToken_NotFound,
+    UserAuthorizationToken_AlreadyExpired,
+    UserAuthorizationToken_WrongValue {
+        user_authorization_token__wrong_enter_tries_quantity: i16,
+    },
+    User_NotFound,
+}
 ```
  - ## UserAuthorization_SendEmailForAuthorize POST /user_authorization/send_email_for_authorize
 ```
 Sends email for authorization. (Should be used only if the user does not receive an email.)
 ```
 ```
-Request data:
 struct Incoming {
     user_device__id: String,
     user__id: i64
 }
 ```
 ```
-Result data:
 struct Outcoming {
     user_authorization_token__can_be_resent_from: i64
 }
 ```
 ```
-Communication codes:
-- UserAuthorization_NOT_FOUND
-- APPLICATION_USER_AUTHORIZATION_TOKEN__NOT_FOUND
-- APPLICATION_USER_AUTHORIZATION_TOKEN__ALREADY_EXPIRED
-- APPLICATION_USER_AUTHORIZATION_TOKEN__TIME_TO_RESEND_HAS_NOT_COME
+enum Precedent {
+    User_NotFound,
+    UserAuthorizationToken_NotFound,
+    UserAuthorizationToken_AlreadyExpired,
+    UserAuthorizationToken_TimeToResendHasNotCome,
+}
 ```
  - ## UserAuthorization_ResetPasswordByFirstStep POST /user_authorization/reset_password_by_first_step
 ```
 Resets user password for the first step and send email to user.
 ```
 ```
-Request data:
 struct Incoming {
     user__email: String,
-    user_device__id: String
+    user_device__id: String,
 }
 ```
 ```
-Result data:
 struct Outcoming {
     user__id: i64,
     verification_message_sent: bool,
-    user_reset_password_token__can_be_resent_from: i64
+    user_reset_password_token__can_be_resent_from: i64,
+    user_reset_password_token__wrong_enter_tries_quantity: i16,
+    user_reset_password_token__wrong_enter_tries_quantity_limit: i16,
 }
 ```
 ```
-Communication codes:
-- UserAuthorization_NOT_FOUND
+enum Precedent {
+    User_NotFound,
+}
 ```
  - ## UserAuthorization_ResetPasswordBySecondStep POST /user_authorization/reset_password_by_second_step
 ```
 Resets user password for the second step through token value approving.
 ```
 ```
-Request data:
 struct Incoming {
     user__id: i64,
     user_device__id: String,
@@ -566,21 +542,20 @@ struct Incoming {
 }
 ```
 ```
-Result data: absent.
-```
-```
-Communication codes:
-- APPLICATION_USER_RESET_PASSWORD_TOKEN__NOT_FOUND
-- APPLICATION_USER_RESET_PASSWORD_TOKEN__ALREADY_EXPIRED
-- APPLICATION_USER_RESET_PASSWORD_TOKEN__ALREADY_APPROVED
-- APPLICATION_USER_RESET_PASSWORD_TOKEN__WRONG_VALUE
+enum Precedent {
+    UserResetPasswordToken_NotFound,
+    UserResetPasswordToken_AlreadyExpired,
+    UserResetPasswordToken_AlreadyApproved,
+    UserResetPasswordToken_WrongValue {
+        user_reset_password_token__wrong_enter_tries_quantity: i16,
+    },
+}
 ```
  - ## UserAuthorization_ResetPasswordByLastStep POST /user_authorization/reset_password_by_last_step
 ```
 Resets user password for the last step.
 ```
 ```
-Request data:
 struct Incoming {
     user_device__id: String,
     user__id: i64,
@@ -589,63 +564,59 @@ struct Incoming {
 }
 ```
 ```
-Result data: absent.
-```
-```
-Communication codes:
-- UserAuthorization_NOT_FOUND
-- APPLICATION_USER_RESET_PASSWORD_TOKEN__NOT_FOUND
-- APPLICATION_USER_RESET_PASSWORD_TOKEN__ALREADY_EXPIRED
-- APPLICATION_USER_RESET_PASSWORD_TOKEN__IS_NOT_APPROVED
-- APPLICATION_USER_RESET_PASSWORD_TOKEN__WRONG_VALUE
+enum Precedent {
+    User_NotFound,
+    UserResetPasswordToken_NotFound,
+    UserResetPasswordToken_AlreadyExpired,
+    UserResetPasswordToken_IsNotApproved,
+    UserResetPasswordToken_WrongValue,
+}
 ```
  - ## UserAuthorization_SendEmailForResetPassword POST /user_authorization/send_email_for_reset_password
 ```
 Sends email for reset password.  (Should be used only if the user does not receive an email.)
 ```
 ```
-Request data:
 struct Incoming {
     user__id: i64,
     user_device__id: String,
 }
 ```
 ```
-Result data:
 struct Outcoming {
     user_registration_token__can_be_resent_from: i64
 }
 ```
 ```
-Communication codes:
-- UserAuthorization_NOT_FOUND
-- APPLICATION_USER_RESET_PASSWORD_TOKEN__NOT_FOUND
-- APPLICATION_USER_RESET_PASSWORD_TOKEN__ALREADY_APPROVED
-- APPLICATION_USER_RESET_PASSWORD_TOKEN__ALREADY_EXPIRED
-- APPLICATION_USER_RESET_PASSWORD_TOKEN__TIME_TO_RESEND_HAS_NOT_COME
+enum Precedent {
+    User_NotFound,
+    UserResetPasswordToken_NotFound,
+    UserResetPasswordToken_AlreadyExpired,
+    UserResetPasswordToken_AlreadyApproved,
+    UserResetPasswordToken_TimeToResendHasNotCome,
+}
 ```
  - ## UserAuthorization_RefreshAccessToken POST /user_authorization/refresh_access_token
 ```
 Refreshs user access token.
 ```
 ```
-Request data:
 struct Incoming {
     user_access_token_encoded: <Data standards>
     user_access_refresh_token_encoded: <Data standards>
 }
 ```
 ```
-Result data:
 struct Outcoming {
     user_access_token_encoded: <Data standards>
     user_access_refresh_token_encoded: <Data standards>
 }
 ```
 ```
-Communication codes:
-- APPLICATION_USER_ACCESS_REFRESH_TOKEN__ALREADY_EXPIRED
-- APPLICATION_USER_ACCESS_REFRESH_TOKEN__NOT_FOUND
+enum Precedent {
+    UserAccessRefreshToken_NotFound,
+    UserAccessRefreshToken_AlreadyExpired,
+}
 ```
 # Parameters validation rule.
  - ## user_registration_token__value
