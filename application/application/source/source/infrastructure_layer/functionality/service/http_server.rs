@@ -1083,8 +1083,8 @@ impl HttpServer {
                 database_1_postgresql_connection_pool: &cloned.database_1_postgresql_connection_pool,
                 database_2_postgresql_connection_pool: &cloned.database_2_postgresql_connection_pool,
             };
-            match r#match.value {
-                &ActionRoute_::UserAuthorization {
+            match *r#match.value {
+                ActionRoute_::UserAuthorization {
                     ref user_authorization,
                 } => {
                     match (
@@ -1332,7 +1332,7 @@ impl HttpServer {
                         }
                     }
                 }
-                &ActionRoute_::Channel {
+                ActionRoute_::Channel {
                     ref channel,
                 } => {
                     match (
@@ -1416,7 +1416,7 @@ impl HttpServer {
                         }
                     }
                 }
-                &ActionRoute_::ChannelSubscription {
+                ActionRoute_::ChannelSubscription {
                     ref channel_subscription,
                 } => {
                     match (
