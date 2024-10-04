@@ -1,6 +1,6 @@
 use super::CommandProcessor;
 use crate::infrastructure_layer::{
-    data::environment_configuration::environment_configuration::EnvironmentConfiguration,
+    data::environment_configuration::EnvironmentConfiguration,
     functionality::service::{
         http_server::HttpServer,
         loader::Loader,

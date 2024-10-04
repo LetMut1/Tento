@@ -33,7 +33,7 @@ use crate::{
                 Request,
                 Response,
             },
-            environment_configuration::environment_configuration::EnvironmentConfiguration,
+            environment_configuration::EnvironmentConfiguration,
         },
         functionality::service::{
             creator::Creator,

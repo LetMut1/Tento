@@ -5,7 +5,7 @@ use crate::{
         functionality::service::encoder::Encoder,
     },
     infrastructure_layer::{
-        data::environment_configuration::environment_configuration::EnvironmentConfiguration,
+        data::environment_configuration::EnvironmentConfiguration,
         functionality::service::resolver::{
             expiration::Expiration,
             Resolver,

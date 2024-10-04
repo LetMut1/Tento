@@ -2,7 +2,7 @@ use super::Encoder;
 use crate::{
     domain_layer::data::entity::user_access_token::UserAccessToken,
     infrastructure_layer::{
-        data::environment_configuration::environment_configuration::EnvironmentConfiguration,
+        data::environment_configuration::EnvironmentConfiguration,
         functionality::service::{
             encoder::{
                 hmac::HmacSha3_512,

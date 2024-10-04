@@ -104,7 +104,7 @@ impl PostgresqlRepository<UserAccessRefreshToken<'_>> {
             );
         };
     }
-    pub fn update_1<'a, 'b>(
+    pub fn update_1<'a>(
         database_2_connection: &'a Connection,
         update_1: Update1<'a>,
         by_2: By2<'a>,

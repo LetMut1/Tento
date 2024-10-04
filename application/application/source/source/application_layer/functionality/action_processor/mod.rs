@@ -3,7 +3,7 @@ pub mod channel;
 pub mod channel_subscription;
 use crate::infrastructure_layer::data::{
     capture::Capture,
-    environment_configuration::environment_configuration::EnvironmentConfiguration,
+    environment_configuration::EnvironmentConfiguration,
 };
 use aggregate_error::{
     AggregateError,
