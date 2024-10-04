@@ -112,13 +112,11 @@ impl CommandProcessor<CreateFixtures> {
         return Result::Ok(());
     }
     fn initialize_runtime() -> Result<Runtime, AggregateError> {
-        return Result::Ok(
-            Builder::new_current_thread().enable_all().build().into_runtime(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            )?,
+        return Builder::new_current_thread().enable_all().build().into_runtime(
+            Backtrace::new(
+                line!(),
+                file!(),
+            ),
         );
     }
     fn create_fixtures<'a>(environment_configuration: &'a EnvironmentConfiguration) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
@@ -189,7 +187,7 @@ impl CommandProcessor<CreateFixtures> {
                             database_1_postgresql_connection,
                             UserInsert1 {
                                 user__email,
-                                user__nickname: user__nickname,
+                                user__nickname,
                                 user__password_hash: user__password_hash.clone(),
                                 user__created_at: Resolver::<UnixTime>::get_now(),
                             },

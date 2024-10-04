@@ -53,7 +53,7 @@ impl CommandProcessor<RunServer> {
         return match ENVIRONMENT_CONFIGURATION.get() {
             Option::Some(environment_configuration__) => Result::Ok(environment_configuration__),
             Option::None => {
-                if let Result::Err(_) = ENVIRONMENT_CONFIGURATION.set(environment_configuration) {
+                if ENVIRONMENT_CONFIGURATION.set(environment_configuration).is_err() {
                     return Result::Err(
                         AggregateError::new_logic_(
                             Common::ValueAlreadyExist,
@@ -123,18 +123,17 @@ impl CommandProcessor<RunServer> {
                 ),
             );
         }
-        return
-            RuntimeBuilder::new_multi_thread()
-                .max_blocking_threads(environment_configuration.tokio_runtime.maximum_blocking_threads_quantity)
-                .worker_threads(environment_configuration.tokio_runtime.worker_threads_quantity)
-                .thread_stack_size(environment_configuration.tokio_runtime.worker_thread_stack_size)
-                .enable_all()
-                .build()
-                .into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
+        return RuntimeBuilder::new_multi_thread()
+            .max_blocking_threads(environment_configuration.tokio_runtime.maximum_blocking_threads_quantity)
+            .worker_threads(environment_configuration.tokio_runtime.worker_threads_quantity)
+            .thread_stack_size(environment_configuration.tokio_runtime.worker_thread_stack_size)
+            .enable_all()
+            .build()
+            .into_runtime(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            );
     }
 }

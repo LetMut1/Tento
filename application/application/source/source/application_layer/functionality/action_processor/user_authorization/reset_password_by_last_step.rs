@@ -253,14 +253,13 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
             let database_2_postgresql_connection_pool = inner.database_2_postgresql_connection_pool.clone();
             Spawner::<TokioNonBlockingTask>::spawn_into_background(
                 async move {
-                    let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.into_runtime(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    )?;
                     PostgresqlRepository::<UserResetPasswordToken<'_>>::delete_2(
-                        &*database_2_postgresql_pooled_connection,
+                        &*database_2_postgresql_connection_pool.get().await.into_runtime(
+                            Backtrace::new(
+                                line!(),
+                                file!(),
+                            ),
+                        )?,
                         By1_ {
                             user__id: incoming.user__id,
                             user_device__id: incoming.user_device__id.as_str(),

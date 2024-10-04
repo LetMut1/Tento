@@ -261,10 +261,10 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                         UserAccessRefreshTokenInsert1 {
                             user__id: incoming.user__id,
                             user_device__id: incoming.user_device__id.as_str(),
-                            user_access_token__id: user_access_token__id,
-                            user_access_refresh_token__obfuscation_value: user_access_refresh_token__obfuscation_value,
-                            user_access_refresh_token__expires_at: user_access_refresh_token__expires_at,
-                            user_access_refresh_token__updated_at: user_access_refresh_token__updated_at,
+                            user_access_token__id,
+                            user_access_refresh_token__obfuscation_value,
+                            user_access_refresh_token__expires_at,
+                            user_access_refresh_token__updated_at,
                         },
                     )
                     .await?;
@@ -284,28 +284,26 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
             let database_2_postgresql_connection_pool = inner.database_2_postgresql_connection_pool.clone();
             Spawner::<TokioNonBlockingTask>::spawn_into_background(
                 async move {
-                    let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.into_runtime(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    )?;
                     let user_device = PostgresqlRepository::<UserDevice>::create_1(
-                        &*database_1_postgresql_pooled_connection,
+                        &*database_1_postgresql_connection_pool.get().await.into_runtime(
+                            Backtrace::new(
+                                line!(),
+                                file!(),
+                            ),
+                        )?,
                         UserDeviceInsert1 {
                             user_device__id: incoming.user_device__id,
                             user__id: incoming.user__id,
                         },
                     )
                     .await?;
-                    let database_2_postgresql_pooled_connection = database_2_postgresql_connection_pool.get().await.into_runtime(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    )?;
                     PostgresqlRepository::<UserAuthorizationToken<'_>>::delete_1(
-                        &*database_2_postgresql_pooled_connection,
+                        &*database_2_postgresql_connection_pool.get().await.into_runtime(
+                            Backtrace::new(
+                                line!(),
+                                file!(),
+                            ),
+                        )?,
                         By1 {
                             user__id: user_device.user__id,
                             user_device__id: user_device.id.as_str(),
@@ -316,8 +314,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                 },
             );
             let outcoming = Outcoming {
-                user_access_token_encoded: user_access_token_encoded,
-                user_access_refresh_token_encoded: user_access_refresh_token_encoded,
+                user_access_token_encoded,
+                user_access_refresh_token_encoded,
             };
             return Result::Ok(UnifiedReport::target_filled(outcoming));
         };

@@ -254,8 +254,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
             let outcoming = Outcoming {
                 user__id: user_.id,
                 verification_message_sent: can_send,
-                user_reset_password_token__can_be_resent_from: user_reset_password_token__can_be_resent_from,
-                user_reset_password_token__wrong_enter_tries_quantity: user_reset_password_token__wrong_enter_tries_quantity,
+                user_reset_password_token__can_be_resent_from,
+                user_reset_password_token__wrong_enter_tries_quantity,
                 user_reset_password_token__wrong_enter_tries_quantity_limit: UserResetPasswordToken_WrongEnterTriesQuantity::LIMIT,
             };
             return Result::Ok(UnifiedReport::target_filled(outcoming));

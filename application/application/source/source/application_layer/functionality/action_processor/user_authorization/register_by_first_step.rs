@@ -250,8 +250,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
             }
             let outcoming = Outcoming {
                 verification_message_sent: can_send,
-                user_registration_token__can_be_resent_from: user_registration_token__can_be_resent_from,
-                user_registration_token__wrong_enter_tries_quantity: user_registration_token__wrong_enter_tries_quantity,
+                user_registration_token__can_be_resent_from,
+                user_registration_token__wrong_enter_tries_quantity,
                 user_registration_token__wrong_enter_tries_quantity_limit: UserRegistrationToken_WrongEnterTriesQuantity::LIMIT,
             };
             return Result::Ok(UnifiedReport::target_filled(outcoming));

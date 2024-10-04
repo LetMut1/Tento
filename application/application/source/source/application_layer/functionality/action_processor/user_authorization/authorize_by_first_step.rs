@@ -326,10 +326,10 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                 );
             }
             let outcoming = Outcoming {
-                user__id: user__id,
+                user__id,
                 verification_message_sent: can_send,
-                user_authorization_token__can_be_resent_from: user_authorization_token__can_be_resent_from,
-                user_authorization_token__wrong_enter_tries_quantity: user_authorization_token__wrong_enter_tries_quantity,
+                user_authorization_token__can_be_resent_from,
+                user_authorization_token__wrong_enter_tries_quantity,
                 user_authorization_token__wrong_enter_tries_quantity_limit: UserAuthorizationToken_WrongEnterTriesQuantity::LIMIT,
             };
             return Result::Ok(UnifiedReport::target_filled(outcoming));
