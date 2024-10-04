@@ -92,6 +92,7 @@ needless_lifetimes = { level = "allow", priority = 0 }
 needless_pass_by_ref_mut = { level = "deny", priority = 0 }
 needless_return = { level = "allow", priority = 0 }
 new_without_default = { level = "allow", priority = 0 }
+not_unsafe_ptr_arg_deref = { level = "allow", priority = 0 }
 option_as_ref_cloned = { level = "deny", priority = 0 }
 option_option = { level = "deny", priority = 0 }
 panic = { level = "deny", priority = 0 }

@@ -342,9 +342,7 @@ pub struct CVoid {
 }
 impl CVoid {
     fn new() -> Self {
-        return Self {
-            ..Default::default()
-        };
+        return Self::default();
     }
 }
 struct Allocator<S> {
@@ -367,6 +365,7 @@ impl Allocator<CString> {
     }
 }
 impl<T> Allocator<CVector<T>> {
+    #[allow(clippy::mem_forget)]
     fn allocate(vector: Vec<T>) -> CVector<T> {
         let mut boxed_slice = vector.into_boxed_slice();
         let c_vector = CVector {
@@ -944,7 +943,7 @@ pub extern "C" fn user_authorization__deauthorize_from_all_devices__deserialize_
     let converter = move |unified_report: UnifiedReport<Void, UserAuthorization_DeauthorizeFromAllDevices_Precedent_>| -> Result<CUnifiedReport<CVoid, UserAuthorization_DeauthorizeFromAllDevices_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
-                let data = match data {
+                let c_data = match data {
                     Data::Empty => {
                         CData::empty()
                     }
@@ -952,7 +951,7 @@ pub extern "C" fn user_authorization__deauthorize_from_all_devices__deserialize_
                         CData::filled(CVoid::new())
                     }
                 };
-                CUnifiedReport::target(data)
+                CUnifiedReport::target(c_data)
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
@@ -1027,7 +1026,7 @@ pub extern "C" fn user_authorization__deauthorize_from_one_device_deserialize_al
     let converter = move |unified_report: UnifiedReport<Void, UserAuthorization_DeauthorizeFromOneDevice_Precedent_>| -> Result<CUnifiedReport<CVoid, UserAuthorization_DeauthorizeFromOneDevice_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
-                let data = match data {
+                let c_data = match data {
                     Data::Empty => {
                         CData::empty()
                     }
@@ -1035,7 +1034,7 @@ pub extern "C" fn user_authorization__deauthorize_from_one_device_deserialize_al
                         CData::filled(CVoid::new())
                     }
                 };
-                CUnifiedReport::target(data)
+                CUnifiedReport::target(c_data)
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
@@ -1319,7 +1318,7 @@ pub extern "C" fn user_authorization__register_by_second_step__deserialize_alloc
     let converter = move |unified_report: UnifiedReport<Void, UserAuthorization_RegisterBySecondStep_Precedent_>| -> Result<CUnifiedReport<CVoid, UserAuthorization_RegisterBySecondStep_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
-                let data = match data {
+                let c_data = match data {
                     Data::Empty => {
                         CData::empty()
                     }
@@ -1327,7 +1326,7 @@ pub extern "C" fn user_authorization__register_by_second_step__deserialize_alloc
                         CData::filled(CVoid::new())
                     }
                 };
-                CUnifiedReport::target(data)
+                CUnifiedReport::target(c_data)
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
@@ -1353,7 +1352,7 @@ pub extern "C" fn user_authorization__register_by_second_step__deserialize_alloc
                         UserAuthorization_RegisterBySecondStep_Precedent {
                             user_registration_token__wrong_value: UserRegistrationToken_WrongValue {
                                 is_exist: true,
-                                user_registration_token__wrong_enter_tries_quantity: user_registration_token__wrong_enter_tries_quantity,
+                                user_registration_token__wrong_enter_tries_quantity,
                             },
                             ..Default::default()
                         }
@@ -1666,7 +1665,7 @@ pub extern "C" fn user_authorization__reset_password_by_second_step__deserialize
     let converter = move |unified_report: UnifiedReport<Void, UserAuthorization_ResetPasswordBySecondStep_Precedent_>| -> Result<CUnifiedReport<CVoid, UserAuthorization_ResetPasswordBySecondStep_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
-                let data = match data {
+                let c_data = match data {
                     Data::Empty => {
                         CData::empty()
                     }
@@ -1674,7 +1673,7 @@ pub extern "C" fn user_authorization__reset_password_by_second_step__deserialize
                         CData::filled(CVoid::new())
                     }
                 };
-                CUnifiedReport::target(data)
+                CUnifiedReport::target(c_data)
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
@@ -1700,7 +1699,7 @@ pub extern "C" fn user_authorization__reset_password_by_second_step__deserialize
                         UserAuthorization_ResetPasswordBySecondStep_Precedent {
                             user_reset_password_token__wrong_value: UserResetPasswordToken_WrongValue {
                                 is_exist: true,
-                                user_reset_password_token__wrong_enter_tries_quantity: user_reset_password_token__wrong_enter_tries_quantity,
+                                user_reset_password_token__wrong_enter_tries_quantity,
                             },
                             ..Default::default()
                         }
@@ -1770,7 +1769,7 @@ pub extern "C" fn user_authorization__reset_password_by_last_step__deserialize_a
     let converter = move |unified_report: UnifiedReport<Void, UserAuthorization_ResetPasswordByLastStep_Precedent_>| -> Result<CUnifiedReport<CVoid, UserAuthorization_ResetPasswordByLastStep_Precedent>, Box<dyn StdError + 'static>> {
         let unified_report_ = match unified_report {
             UnifiedReport::Target { data } => {
-                let data = match data {
+                let c_data = match data {
                     Data::Empty => {
                         CData::empty()
                     }
@@ -1778,7 +1777,7 @@ pub extern "C" fn user_authorization__reset_password_by_last_step__deserialize_a
                         CData::filled(CVoid::new())
                     }
                 };
-                CUnifiedReport::target(data)
+                CUnifiedReport::target(c_data)
             }
             UnifiedReport::Precedent { precedent } => {
                 let precedent_ = match precedent {
