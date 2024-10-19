@@ -9,8 +9,7 @@
 				"ms-azuretools.vscode-docker",
 				"tamasfe.even-better-toml",
 				"irongeek.vscode-env",
-				"ue.alphabetical-sorter",
-				"eamodio.gitlens"
+				"ue.alphabetical-sorter"
 			],
 			"settings": {
 				"terminal.integrated.profiles.linux": {"bash": {"path": "/bin/bash"}},
@@ -35,8 +34,7 @@
 				"rust-analyzer.inlayHints.parameterHints.enable": false,
 				"rust-analyzer.inlayHints.typeHints.enable": false,
 				"rust-analyzer.lru.capacity": 4096,
-				"rust-analyzer.inlayHints.closingBraceHints.minLines": 100000,
-				"gitlens.codeLens.enabled": false
+				"rust-analyzer.inlayHints.closingBraceHints.minLines": 100000
 			}
 		}
 	}
