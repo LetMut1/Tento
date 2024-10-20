@@ -1,4 +1,3 @@
-use cargo_emit::rerun_if_changed;
 use std::{
     env::var,
     error::Error,
@@ -23,7 +22,7 @@ impl Processor {
     fn create_rerun_instruction() -> Result<(), Box<dyn Error + 'static>> {
         let file_name = Uuid::new_v4().to_string();
         let file_path = format!("{}/{}.txt", var("OUT_DIR")?.as_str(), file_name.as_str(),);
-        rerun_if_changed!(file_path.as_str());
+        cargo_emit::rerun_if_changed!(file_path.as_str());
         return Result::Ok(());
     }
 }
