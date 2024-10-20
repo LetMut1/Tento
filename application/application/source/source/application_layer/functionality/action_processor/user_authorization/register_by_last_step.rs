@@ -80,10 +80,7 @@ use aggregate_error::{
     OptionConverter,
     ResultConverter,
 };
-use std::{
-    borrow::Cow,
-    future::Future,
-};
+use std::future::Future;
 use tokio_postgres::{
     tls::{
         MakeTlsConnect,
@@ -270,7 +267,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
             let user_access_token = UserAccessToken::new(
                 Generator::<UserAccessToken_Id>::generate(),
                 user.id,
-                Cow::Borrowed(incoming.user_device__id.as_str()),
+                incoming.user_device__id.as_str(),
                 Generator::<UserAccessToken_ExpiresAt>::generate()?,
             );
             // TODO  TRANZACTION посмотреть, необходимо ли здесь сделать транзакцию

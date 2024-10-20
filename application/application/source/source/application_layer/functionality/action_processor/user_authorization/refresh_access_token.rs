@@ -88,7 +88,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
                 database_2_postgresql_connection,
                 By2 {
                     user__id: user_access_token.user__id,
-                    user_device__id: user_access_token.user_device__id.as_ref(),
+                    user_device__id: user_access_token.user_device__id,
                 },
             )
             .await?
@@ -118,7 +118,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
                     database_2_postgresql_connection,
                     By2 {
                         user__id: user_access_token.user__id,
-                        user_device__id: user_access_token.user_device__id.as_ref(),
+                        user_device__id: user_access_token.user_device__id,
                     },
                 )
                 .await?;
@@ -127,7 +127,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
             let user_access_token_new = UserAccessToken::new(
                 Generator::<UserAccessToken_Id>::generate(),
                 user_access_token.user__id,
-                Cow::Borrowed(user_access_token.user_device__id.as_ref()),
+                user_access_token.user_device__id,
                 Generator::<UserAccessToken_ExpiresAt>::generate()?,
             );
             user_access_refresh_token.user_access_token__id = Cow::Borrowed(user_access_token_new.id.as_str());
@@ -144,7 +144,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
                 },
                 By2 {
                     user__id: user_access_token.user__id,
-                    user_device__id: user_access_token.user_device__id.as_ref(),
+                    user_device__id: user_access_token.user_device__id,
                 },
             )
             .await?;

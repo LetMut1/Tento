@@ -217,7 +217,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
             let user_access_token = UserAccessToken::new(
                 Generator::<UserAccessToken_Id>::generate(),
                 incoming.user__id,
-                Cow::Borrowed(incoming.user_device__id.as_str()),
+                incoming.user_device__id.as_str(),
                 Generator::<UserAccessToken_ExpiresAt>::generate()?,
             );
             let user_access_token__id = user_access_token.id.as_str();

@@ -72,7 +72,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_DeauthorizeFromOneDe
                 &*database_2_postgresql_pooled_connection,
                 By2 {
                     user__id: user_access_token.user__id,
-                    user_device__id: user_access_token.user_device__id.as_ref(),
+                    user_device__id: user_access_token.user_device__id,
                 },
             )
             .await?;

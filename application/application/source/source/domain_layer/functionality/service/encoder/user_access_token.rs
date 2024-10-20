@@ -40,7 +40,7 @@ impl Encoder<UserAccessToken<'_>> {
     pub fn decode<'a>(
         environment_configuration: &'static EnvironmentConfiguration,
         user_access_token_encoded: &'a UserAccessTokenEncoded,
-    ) -> Result<UserAccessToken<'static>, AggregateError> {
+    ) -> Result<UserAccessToken<'a>, AggregateError> {
         if !Encoder_::<HmacSha3_512>::is_valid(
             environment_configuration.encryption.private_key.user_access_token.as_bytes(),
             user_access_token_encoded.serialized.as_slice(),
@@ -55,6 +55,6 @@ impl Encoder<UserAccessToken<'_>> {
                 ),
             );
         }
-        return Serializer::<BitCode>::deserialize::<'_, UserAccessToken<'static>>(user_access_token_encoded.serialized.as_slice());
+        return Serializer::<BitCode>::deserialize::<'_, UserAccessToken<'a>>(user_access_token_encoded.serialized.as_slice());
     }
 }

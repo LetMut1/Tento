@@ -11,10 +11,7 @@ use serde::{
     Deserialize,
     Serialize,
 };
-use std::{
-    borrow::Cow,
-    marker::PhantomData,
-};
+use std::marker::PhantomData;
 use bitcode::{Encode, Decode};
 #[derive(Serialize, Deserialize)]
 #[derive(Encode, Decode, PartialEq, Debug)]
@@ -23,13 +20,13 @@ pub struct UserAccessToken<'a> {
     _id: PhantomData<Id>,
     pub user__id: i64,
     _user__id: PhantomData<User_Id>,
-    pub user_device__id: Cow<'a, str>,
+    pub user_device__id: &'a str,
     _user_device__id: PhantomData<UserDevice_Id>,
     pub expires_at: i64,
     _expires_at: PhantomData<ExpiresAt>,
 }
 impl<'a> UserAccessToken<'a> {
-    pub fn new(id: String, user__id: i64, user_device__id: Cow<'a, str>, expires_at: i64) -> Self {
+    pub fn new(id: String, user__id: i64, user_device__id: &'a str, expires_at: i64) -> Self {
         return Self {
             id,
             _id: PhantomData,
