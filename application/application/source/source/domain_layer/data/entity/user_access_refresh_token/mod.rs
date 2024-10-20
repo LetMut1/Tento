@@ -19,7 +19,7 @@ use std::{
 pub struct UserAccessRefreshToken<'a> {
     pub user__id: i64,
     _user__id: PhantomData<User_Id>,
-    pub user_device__id: Cow<'a, str>,
+    pub user_device__id: &'a str,
     _user_device__id: PhantomData<UserDevice_Id>,
     pub user_access_token__id: Cow<'a, str>,
     _user_access_token__id: PhantomData<UserAccessToken_Id>,
@@ -33,7 +33,7 @@ pub struct UserAccessRefreshToken<'a> {
 impl<'a> UserAccessRefreshToken<'a> {
     pub fn new(
         user__id: i64,
-        user_device__id: Cow<'a, str>,
+        user_device__id: &'a str,
         user_access_token__id: Cow<'a, str>,
         obfuscation_value: String,
         expires_at: i64,

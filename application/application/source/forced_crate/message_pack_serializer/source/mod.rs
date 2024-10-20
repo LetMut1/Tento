@@ -5,13 +5,13 @@ use aggregate_error::{
 };
 use serde::{
     Deserialize,
-    Serialize as SerdeSerialize,
+    Serialize,
 };
 pub struct Serializer;
 impl Serializer {
     pub fn serialize<'a, T>(subject: &'a T) -> Result<Vec<u8>, AggregateError>
     where
-        T: SerdeSerialize,
+        T: Serialize,
     {
         return rmp_serde::to_vec(subject).into_logic(
             Backtrace::new(

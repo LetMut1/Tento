@@ -95,7 +95,7 @@ impl PostgresqlRepository<UserAccessRefreshToken<'_>> {
             return Result::Ok(
                 UserAccessRefreshToken::new(
                     insert_1.user__id,
-                    Cow::Borrowed(insert_1.user_device__id),
+                    insert_1.user_device__id,
                     Cow::Borrowed(insert_1.user_access_token__id),
                     insert_1.user_access_refresh_token__obfuscation_value,
                     insert_1.user_access_refresh_token__expires_at,
@@ -309,7 +309,7 @@ impl PostgresqlRepository<UserAccessRefreshToken<'_>> {
                 Option::Some(
                     UserAccessRefreshToken::new(
                         by_2.user__id,
-                        Cow::Borrowed(by_2.user_device__id),
+                        by_2.user_device__id,
                         Cow::Owned(
                             row_registry[0].try_get::<'_, usize, String>(0).into_logic(
                                 Backtrace::new(
