@@ -1,7 +1,7 @@
 #[cfg(feature = "manual_testing")]
 pub use self::json::Json;
 #[cfg(feature = "manual_testing")]
-pub mod json {
+mod json {
     use crate::infrastructure_layer::functionality::service::serializer::{
         Serialize,
         Serializer,
@@ -15,7 +15,6 @@ pub mod json {
         Deserialize,
         Serialize as SerdeSerialize,
     };
-    use serde_json;
     pub struct Json;
     impl Serialize for Serializer<Json> {
         fn serialize<'a, T>(subject: &'a T) -> Result<Vec<u8>, AggregateError>

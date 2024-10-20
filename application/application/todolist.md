@@ -52,6 +52,7 @@ https://stackoverflow.com/questions/58819199/how-to-keep-long-connection-in-http
 // opt-lvl=3 slower opt-level=2 https://doc.rust-lang.org/cargo/reference/profiles.html https://doc.rust-lang.org/rustc/profile-guided-optimization.html
 // Проверить, что не нужно заново создавать коннекшн пул (то есть, не нужно заново перезапускать сервер), если Бд отключилась и потом включилась.
 // Как синхронизировать время на серверах в распределенной системе? Нужно ли для моих задач (не требуется микроточности).Если нужнн один источник правды, то создать 1 сервер, отдающий время - есть ли смысл?
+// Поменять MEssagePack для sdk
 
 БЭКЕНД todo:
 // Возможно ли не хранить Рефреш токен в Бд? Завязать его на Аксессе?  но как тогда делать разлогин на сервере принудительный?
@@ -94,6 +95,9 @@ https://stackoverflow.com/questions/58819199/how-to-keep-long-connection-in-http
 
 
 // Составить требования для пароля.
+
+
+// Сделать новую абстракцию для Serializer.
 
 
 

@@ -1,5 +1,6 @@
 pub mod json;
 pub mod message_pack;
+pub mod bit_code;
 use aggregate_error::AggregateError;
 use serde::{
     Deserialize,

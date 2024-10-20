@@ -15,7 +15,9 @@ use std::{
     borrow::Cow,
     marker::PhantomData,
 };
+use bitcode::{Encode, Decode};
 #[derive(Serialize, Deserialize)]
+#[derive(Encode, Decode, PartialEq, Debug)]
 pub struct UserAccessToken<'a> {
     pub id: String,
     _id: PhantomData<Id>,
