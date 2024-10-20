@@ -1,4 +1,4 @@
-use crate::infrastructure_layer::functionality::service::serializer::Serializer;
+use super::Serializer;
 use aggregate_error::{
     AggregateError,
     Backtrace,

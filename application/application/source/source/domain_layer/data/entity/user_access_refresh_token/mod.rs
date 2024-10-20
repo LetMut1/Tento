@@ -7,15 +7,10 @@ use self::field::{
 use super::user::User_Id;
 use super::user_device::UserDevice_Id;
 use super::user_access_token::UserAccessToken_Id;
-use serde::{
-    Deserialize,
-    Serialize,
-};
 use std::{
     borrow::Cow,
     marker::PhantomData,
 };
-#[derive(Serialize, Deserialize)]
 pub struct UserAccessRefreshToken<'a> {
     pub user__id: i64,
     _user__id: PhantomData<User_Id>,

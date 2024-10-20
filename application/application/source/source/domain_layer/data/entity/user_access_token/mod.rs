@@ -7,14 +7,9 @@ use super::{
     user::User_Id,
     user_device::UserDevice_Id,
 };
-use serde::{
-    Deserialize,
-    Serialize,
-};
 use std::marker::PhantomData;
 use bitcode::{Encode, Decode};
-#[derive(Serialize, Deserialize)]
-#[derive(Encode, Decode, PartialEq, Debug)]
+#[derive(Encode, Decode)]
 pub struct UserAccessToken<'a> {
     pub id: String,
     _id: PhantomData<Id>,

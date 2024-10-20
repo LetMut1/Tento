@@ -23,11 +23,11 @@ use std::sync::OnceLock;
 static ARGON2: OnceLock<Argon2<'static>> = OnceLock::new();
 pub struct Argon2Id;
 impl Encoder<Argon2Id> {
-    pub fn encode<'a>(data: &'a [u8]) -> Result<String, AggregateError> {
+    pub fn encode<'a>(data_for_encode: &'a [u8]) -> Result<String, AggregateError> {
         return Result::Ok(
             Self::get()?
                 .hash_password(
-                    data,
+                    data_for_encode,
                     &SaltString::generate(OsRng),
                 )
                 .into_indefinite_argument(
@@ -39,11 +39,11 @@ impl Encoder<Argon2Id> {
                 .to_string(),
         );
     }
-    pub fn is_valid<'a>(data: &'a [u8], encoded_data: &'a str) -> Result<bool, AggregateError> {
+    pub fn is_valid<'a>(data_for_encode: &'a [u8], encoded_data: &'a str) -> Result<bool, AggregateError> {
         return Result::Ok(
             Self::get()?
                 .verify_password(
-                    data,
+                    data_for_encode,
                     &PasswordHash::new(encoded_data).into_indefinite_argument(
                         Backtrace::new(
                             line!(),

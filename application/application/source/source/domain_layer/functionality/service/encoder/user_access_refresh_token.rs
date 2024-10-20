@@ -9,13 +9,13 @@ use crate::{
                 Encoder as Encoder_,
             },
             serializer::{
-                message_pack::MessagePack,
-                Serialize,
+                bit_code::BitCode,
                 Serializer,
             },
         },
     },
 };
+use bitcode::{Encode, Decode};
 use aggregate_error::AggregateError;
 use user_access_refresh_token_encoded::UserAccessRefreshTokenEncoded;
 impl Encoder<UserAccessRefreshToken<'_>> {
@@ -27,7 +27,16 @@ impl Encoder<UserAccessRefreshToken<'_>> {
             UserAccessRefreshTokenEncoded(
                 Encoder_::<HmacSha3_512>::encode(
                     environment_configuration.encryption.private_key.user_access_refresh_token.as_bytes(),
-                    Serializer::<MessagePack>::serialize(user_access_refresh_token)?.as_slice(), // TODO TODO TODO Serializer::<MessagePack> - Нужен любой фаст алгоритм сериализации.
+                    Serializer::<BitCode>::serialize(
+                        &Token {
+                            user__id: user_access_refresh_token.user__id,
+                            user_device__id: user_access_refresh_token.user_device__id,
+                            user_access_token__id: user_access_refresh_token.user_access_token__id.as_ref(),
+                            user_access_token__obfuscation_value: user_access_refresh_token.obfuscation_value.as_str(),
+                            user_access_token__expires_at: user_access_refresh_token.expires_at,
+                            user_access_token__updated_at: user_access_refresh_token.updated_at,
+                        },
+                    ).as_slice(),
                 )?,
             ),
         );
@@ -39,8 +48,26 @@ impl Encoder<UserAccessRefreshToken<'_>> {
     ) -> Result<bool, AggregateError> {
         return Encoder_::<HmacSha3_512>::is_valid(
             environment_configuration.encryption.private_key.user_access_refresh_token.as_bytes(),
-            Serializer::<MessagePack>::serialize(user_access_refresh_token)?.as_slice(),
+            Serializer::<BitCode>::serialize(
+                &Token {
+                    user__id: user_access_refresh_token.user__id,
+                    user_device__id: user_access_refresh_token.user_device__id,
+                    user_access_token__id: user_access_refresh_token.user_access_token__id.as_ref(),
+                    user_access_token__obfuscation_value: user_access_refresh_token.obfuscation_value.as_str(),
+                    user_access_token__expires_at: user_access_refresh_token.expires_at,
+                    user_access_token__updated_at: user_access_refresh_token.updated_at,
+                },
+            ).as_slice(),
             user_access_refresh_token_encoded.0.as_slice(),
         );
     }
+}
+#[derive(Encode, Decode)]
+struct Token<'a> {
+    user__id: i64,
+    user_device__id: &'a str,
+    user_access_token__id: &'a str,
+    user_access_token__obfuscation_value: &'a str,
+    user_access_token__expires_at: i64,
+    user_access_token__updated_at: i64,
 }
