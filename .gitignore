@@ -1,5 +1,9 @@
+# Not important. For developer:
 .vscode
+
+# Important. For application:
 00000000000000_diesel_initial_setup
 docker-compose.override.yaml
 environment.toml
 target
+/application/application/source/foreign_function_interface/client_server_data_serializer/source/Cargo.lock
