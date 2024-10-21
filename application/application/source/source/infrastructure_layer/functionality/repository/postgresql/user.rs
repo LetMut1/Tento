@@ -1,13 +1,11 @@
 use super::PostgresqlRepository;
 use crate::{
     domain_layer::data::entity::user::{
-        derivative::{
-            User1,
-            User2,
-            User3,
-            User4,
-            User5,
-        },
+        User_1,
+        User_2,
+        User_3,
+        User_4,
+        User_5,
         User,
     },
     infrastructure_layer::{
@@ -362,7 +360,7 @@ impl PostgresqlRepository<User<'_>> {
             );
         };
     }
-    pub fn find_2<'a>(database_1_connection: &'a Connection, by_1: By1<'a>) -> impl Future<Output = Result<Option<User1>, AggregateError>> + Send + Capture<&'a Void> {
+    pub fn find_2<'a>(database_1_connection: &'a Connection, by_1: By1<'a>) -> impl Future<Output = Result<Option<User_1>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 SELECT \
@@ -405,7 +403,7 @@ impl PostgresqlRepository<User<'_>> {
             }
             return Result::Ok(
                 Option::Some(
-                    User1 {
+                    User_1 {
                         id: row_registry[0].try_get::<'_, usize, i64>(0).into_logic(
                             Backtrace::new(
                                 line!(),
@@ -429,7 +427,7 @@ impl PostgresqlRepository<User<'_>> {
             );
         };
     }
-    pub fn find_3<'a>(database_1_connection: &'a Connection, by_2: By2<'a>) -> impl Future<Output = Result<Option<User2>, AggregateError>> + Send + Capture<&'a Void> {
+    pub fn find_3<'a>(database_1_connection: &'a Connection, by_2: By2<'a>) -> impl Future<Output = Result<Option<User_2>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 SELECT \
@@ -472,7 +470,7 @@ impl PostgresqlRepository<User<'_>> {
             }
             return Result::Ok(
                 Option::Some(
-                    User2 {
+                    User_2 {
                         id: row_registry[0].try_get::<'_, usize, i64>(0).into_logic(
                             Backtrace::new(
                                 line!(),
@@ -496,7 +494,7 @@ impl PostgresqlRepository<User<'_>> {
             );
         };
     }
-    pub fn find_4<'a>(database_1_connection: &'a Connection, by_2: By2<'a>) -> impl Future<Output = Result<Option<User3>, AggregateError>> + Send + Capture<&'a Void> {
+    pub fn find_4<'a>(database_1_connection: &'a Connection, by_2: By2<'a>) -> impl Future<Output = Result<Option<User_3>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 SELECT \
@@ -537,7 +535,7 @@ impl PostgresqlRepository<User<'_>> {
             }
             return Result::Ok(
                 Option::Some(
-                    User3 {
+                    User_3 {
                         id: row_registry[0].try_get::<'_, usize, i64>(0).into_logic(
                             Backtrace::new(
                                 line!(),
@@ -549,7 +547,7 @@ impl PostgresqlRepository<User<'_>> {
             );
         };
     }
-    pub fn find_5<'a>(database_1_connection: &'a Connection, by_3: By3) -> impl Future<Output = Result<Option<User4>, AggregateError>> + Send + Capture<&'a Void> {
+    pub fn find_5<'a>(database_1_connection: &'a Connection, by_3: By3) -> impl Future<Output = Result<Option<User_4>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 SELECT \
@@ -592,7 +590,7 @@ impl PostgresqlRepository<User<'_>> {
             }
             return Result::Ok(
                 Option::Some(
-                    User4 {
+                    User_4 {
                         email: row_registry[0].try_get::<'_, usize, String>(0).into_logic(
                             Backtrace::new(
                                 line!(),
@@ -616,7 +614,7 @@ impl PostgresqlRepository<User<'_>> {
             );
         };
     }
-    pub fn find_6<'a>(database_1_connection: &'a Connection, by_3: By3) -> impl Future<Output = Result<Option<User5>, AggregateError>> + Send + Capture<&'a Void> {
+    pub fn find_6<'a>(database_1_connection: &'a Connection, by_3: By3) -> impl Future<Output = Result<Option<User_5>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 SELECT \
@@ -657,7 +655,7 @@ impl PostgresqlRepository<User<'_>> {
             }
             return Result::Ok(
                 Option::Some(
-                    User5 {
+                    User_5 {
                         email: row_registry[0].try_get::<'_, usize, String>(0).into_logic(
                             Backtrace::new(
                                 line!(),

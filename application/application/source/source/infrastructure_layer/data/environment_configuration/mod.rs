@@ -1,4 +1,5 @@
-pub mod environment_configuration_file;
+mod environment_configuration_file;
+pub use self::environment_configuration_file::EnvironmentConfigurationFile;
 use std::net::SocketAddr;
 pub struct EnvironmentConfiguration {
     pub tokio_runtime: TokioRuntime,

@@ -1,11 +1,9 @@
 use super::PostgresqlRepository;
 use crate::{
     domain_layer::data::entity::user_reset_password_token::{
-        derivative::{
-            UserResetPasswordToken1,
-            UserResetPasswordToken2,
-            UserResetPasswordToken3,
-        },
+        UserResetPasswordToken_1,
+        UserResetPasswordToken_2,
+        UserResetPasswordToken_3,
         UserResetPasswordToken,
     },
     infrastructure_layer::{
@@ -468,7 +466,7 @@ impl PostgresqlRepository<UserResetPasswordToken<'_>> {
     pub fn find_1<'a>(
         database_2_connection: &'a Connection,
         by_1: By1<'a>,
-    ) -> impl Future<Output = Result<Option<UserResetPasswordToken1>, AggregateError>> + Send + Capture<&'a Void> {
+    ) -> impl Future<Output = Result<Option<UserResetPasswordToken_1>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 SELECT \
@@ -518,7 +516,7 @@ impl PostgresqlRepository<UserResetPasswordToken<'_>> {
             }
             return Result::Ok(
                 Option::Some(
-                    UserResetPasswordToken1 {
+                    UserResetPasswordToken_1 {
                         value: row_registry[0].try_get::<'_, usize, String>(0).into_logic(
                             Backtrace::new(
                                 line!(),
@@ -557,7 +555,7 @@ impl PostgresqlRepository<UserResetPasswordToken<'_>> {
     pub fn find_2<'a>(
         database_2_connection: &'a Connection,
         by_1: By1<'a>,
-    ) -> impl Future<Output = Result<Option<UserResetPasswordToken2>, AggregateError>> + Send + Capture<&'a Void> {
+    ) -> impl Future<Output = Result<Option<UserResetPasswordToken_2>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 SELECT \
@@ -606,7 +604,7 @@ impl PostgresqlRepository<UserResetPasswordToken<'_>> {
             }
             return Result::Ok(
                 Option::Some(
-                    UserResetPasswordToken2 {
+                    UserResetPasswordToken_2 {
                         value: row_registry[0].try_get::<'_, usize, String>(0).into_logic(
                             Backtrace::new(
                                 line!(),
@@ -639,7 +637,7 @@ impl PostgresqlRepository<UserResetPasswordToken<'_>> {
     pub fn find_3<'a>(
         database_2_connection: &'a Connection,
         by_1: By1<'a>,
-    ) -> impl Future<Output = Result<Option<UserResetPasswordToken3>, AggregateError>> + Send + Capture<&'a Void> {
+    ) -> impl Future<Output = Result<Option<UserResetPasswordToken_3>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 SELECT \
@@ -688,7 +686,7 @@ impl PostgresqlRepository<UserResetPasswordToken<'_>> {
             }
             return Result::Ok(
                 Option::Some(
-                    UserResetPasswordToken3 {
+                    UserResetPasswordToken_3 {
                         value: row_registry[0].try_get::<'_, usize, String>(0).into_logic(
                             Backtrace::new(
                                 line!(),

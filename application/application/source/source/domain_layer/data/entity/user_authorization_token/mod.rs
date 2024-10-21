@@ -1,4 +1,7 @@
-pub mod derivative;
+mod derivative;
+pub use self::derivative::UserAuthorizationToken_1;
+pub use self::derivative::UserAuthorizationToken_2;
+pub use self::derivative::UserAuthorizationToken_3;
 mod field;
 use super::{
     user::User_Id,

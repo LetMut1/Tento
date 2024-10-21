@@ -1,4 +1,7 @@
-pub mod derivative;
+mod derivative;
+pub use self::derivative::UserResetPasswordToken_1;
+pub use self::derivative::UserResetPasswordToken_2;
+pub use self::derivative::UserResetPasswordToken_3;
 mod field;
 use self::field::{
     CanBeResentFrom,
