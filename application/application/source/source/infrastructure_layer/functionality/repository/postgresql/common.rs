@@ -20,13 +20,13 @@ use tokio_postgres::{
     types::Type,
     Client as Connection,
 };
+use crate::infrastructure_layer::functionality::service::counter::Counter_;
 use void::Void;
 impl PostgresqlRepository<Common1> {
     pub fn find_1<'a>(database_1_connection: &'a Connection, by_1: By1<'a>, limit: i16) -> impl Future<Output = Result<Vec<Common1>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
-            let mut counter = Counter::<i16>::new_classic();
-            let mut query = format!(
-                "SELECT \
+            let mut query = "\
+                SELECT \
                     c.id AS i, \
                     c.name AS n, \
                     c.linked_name AS ln, \
@@ -35,12 +35,10 @@ impl PostgresqlRepository<Common1> {
                     c.background_image_path AS bip, \
                     cs.channel__id AS ca \
                 FROM public.channel c LEFT OUTER JOIN public.channel_subscription cs \
-                ON cs.user__id = ${} AND c.id = cs.channel__id \
-                WHERE c.visability_modifier = ${} AND c.name LIKE ${}",
-                counter.get_next_value()?,
-                counter.get_next_value()?,
-                counter.get_next_value()?,
-            );
+                ON cs.user__id = $1 AND c.id = cs.channel__id \
+                WHERE c.visability_modifier = $2 AND c.name LIKE $3"
+                .to_string();
+            let mut counter = Counter::<u8>::new(3, 1);
             let wildcard = format!("{}%", by_1.channel__name,);
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
@@ -60,7 +58,7 @@ impl PostgresqlRepository<Common1> {
                 query = format!(
                     "{} AND c.name > ${}",
                     query.as_str(),
-                    counter.get_next_value()?,
+                    counter.get_next_value_unchecked(),
                 );
                 prepared_statemant_parameter_convertation_resolver.add_parameter(
                     requery___channel__name,
@@ -72,7 +70,7 @@ impl PostgresqlRepository<Common1> {
                 ORDER BY c.name ASC \
                 LIMIT ${};",
                 query.as_str(),
-                counter.get_next_value()?
+                counter.get_next_value_unchecked(),
             );
             prepared_statemant_parameter_convertation_resolver.add_parameter(
                 &limit,
@@ -164,9 +162,8 @@ impl PostgresqlRepository<Common1> {
     }
     pub fn find_2<'a>(database_1_connection: &'a Connection, by_2: By2<'a>, limit: i16) -> impl Future<Output = Result<Vec<Common1>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
-            let mut counter = Counter::<i16>::new_classic();
-            let mut query = format!(
-                "SELECT \
+            let mut query = "\
+                SELECT \
                     c.id AS i, \
                     c.name AS n, \
                     c.linked_name AS ln, \
@@ -175,11 +172,10 @@ impl PostgresqlRepository<Common1> {
                     c.cover_image_path AS cip, \
                     c.background_image_path AS bip \
                 FROM public.channel c INNER JOIN public.channel_subscription cs \
-                ON cs.user__id = ${} AND c.id = cs.channel__id \
-                WHERE c.name LIKE ${}",
-                counter.get_next_value()?,
-                counter.get_next_value()?,
-            );
+                ON cs.user__id = $1 AND c.id = cs.channel__id \
+                WHERE c.name LIKE $2"
+                .to_string();
+            let mut counter = Counter::<u8>::new(2, 1);
             let wildcard = format!("{}%", by_2.channel__name,);
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
@@ -195,7 +191,7 @@ impl PostgresqlRepository<Common1> {
                 query = format!(
                     "{} AND c.name > ${}",
                     query.as_str(),
-                    counter.get_next_value()?,
+                    counter.get_next_value_unchecked(),
                 );
                 prepared_statemant_parameter_convertation_resolver.add_parameter(
                     requery___channel__name,
@@ -207,7 +203,7 @@ impl PostgresqlRepository<Common1> {
                 ORDER BY c.name ASC \
                 LIMIT ${};",
                 query.as_str(),
-                counter.get_next_value()?,
+                counter.get_next_value_unchecked(),
             );
             prepared_statemant_parameter_convertation_resolver.add_parameter(
                 &limit,
@@ -297,9 +293,8 @@ impl PostgresqlRepository<Common1> {
     }
     pub fn find_3<'a>(database_1_connection: &'a Connection, by_3: By3, limit: i16) -> impl Future<Output = Result<Vec<Common1>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
-            let mut counter = Counter::<i16>::new_classic();
-            let mut query = format!(
-                "SELECT \
+            let mut query = "\
+                SELECT \
                     c.id AS i, \
                     c.name AS n, \
                     c.linked_name AS ln, \
@@ -308,9 +303,9 @@ impl PostgresqlRepository<Common1> {
                     c.cover_image_path AS cip, \
                     c.background_image_path AS bip \
                 FROM public.channel c INNER JOIN public.channel_subscription cs \
-                ON cs.user__id = ${} AND c.id = cs.channel__id",
-                counter.get_next_value()?,
-            );
+                ON cs.user__id = $1 AND c.id = cs.channel__id"
+                .to_string();
+            let mut counter = Counter::<u8>::new(1, 1);
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver.add_parameter(
                 &by_3.user__id,
@@ -323,7 +318,7 @@ impl PostgresqlRepository<Common1> {
                     "{} \
                     WHERE cs.channel__id > ${}",
                     query.as_str(),
-                    counter.get_next_value()?,
+                    counter.get_next_value_unchecked(),
                 );
                 prepared_statemant_parameter_convertation_resolver.add_parameter(
                     &requery___channel__id,
@@ -335,7 +330,7 @@ impl PostgresqlRepository<Common1> {
                 ORDER BY cs.channel__id ASC \
                 LIMIT ${};",
                 query.as_str(),
-                counter.get_next_value()?,
+                counter.get_next_value_unchecked(),
             );
             prepared_statemant_parameter_convertation_resolver.add_parameter(
                 &limit,

@@ -32,6 +32,7 @@ bb8_postgres = { package = "bb8-postgres", version = "=0.8.1", default-features 
 bitcode = { package = "bitcode", version = "=0.6.3", default-features = true, features = [], optional = false }
 bytes = { package = "bytes", version = "=1.7.1", default-features = true, features = [], optional = false }
 chrono = { package = "chrono", version = "=0.4.38", default-features = true, features = [], optional = false }
+bit_code_serializer = { path = "./forced_crate/bit_code_serializer", package = "bit_code_serializer", version = "=1.0.0", default-features = true, features = [], optional = false }
 const_format = { package = "const_format", version = "=0.2.33", default-features = true, features = [], optional = true }
 formatter = { path = "./forced_crate/formatter", package = "formatter", version = "=1.0.0", default-features = true, features = [], optional = false }
 hmac = { package = "hmac", version = "=0.12.1", default-features = true, features = [], optional = false }
@@ -41,7 +42,7 @@ hyper = { package = "hyper", version = "=1.4.1", default-features = true, featur
 hyper_util = { package = "hyper-util", version = "=0.1.8", default-features = true, features = ["full"], optional = false }
 lettre = { package = "lettre", version = "=0.11.9", default-features = false, features = ["smtp-transport", "hostname", "builder", "tokio1"], optional = false }
 matchit = { package = "matchit", version = "=0.8.4", default-features = true, features = [], optional = false }
-message_pack_serializer = { path = "./forced_crate/message_pack_serializer", package = "message_pack_serializer", version = "=1.0.0", default-features = true, features = [], optional = false }
+num-integer = { package = "num-integer", version = "=0.1.46", default-features = true, features = [], optional = false }
 rand = { package = "rand", version = "=0.8.5", default-features = true, features = [], optional = false }
 regex = { package = "regex", version = "=1.10.6", default-features = true, features = [], optional = false }
 serde = { package = "serde", version = "=1.0.210", default-features = true, features = ["derive"], optional = false }

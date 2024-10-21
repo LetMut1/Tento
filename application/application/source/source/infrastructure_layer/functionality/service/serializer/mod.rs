@@ -1,7 +1,5 @@
 mod json;
-mod message_pack;
 mod bit_code;
-pub use self::message_pack::MessagePack;
 pub use self::bit_code::BitCode;
 #[cfg(feature = "manual_testing")]
 pub use self::json::Json;

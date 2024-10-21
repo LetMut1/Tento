@@ -3,13 +3,13 @@ use aggregate_error::{
     Backtrace,
     ResultConverter,
 };
-use core::marker::Sized;
+use num_integer::Integer;
 use std::convert::TryFrom;
 pub struct Converter;
 pub trait Convert<F, T>
 where
-    F: Sized,
-    T: Sized,
+    F: Integer,
+    T: Integer,
 {
     fn convert(subject: F) -> Result<T, AggregateError>;
 }
