@@ -110,3 +110,6 @@ https://stackoverflow.com/questions/58819199/how-to-keep-long-connection-in-http
 // let database_1_postgresql_connection = &*inner.get_database_1_postgresql_pooled_connection().await?;    можно сразу без промежуточной переменной.
 
 // Сервисы и документация для новых роутоы.
+
+
+// Еслт убрать у bit_code_encoder Зависимость Aggregate_error, то нужно ли ее размещать в forced_crate

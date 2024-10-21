@@ -6,13 +6,17 @@ use serde::{
     Deserialize,
     Serialize,
 };
-#[derive(Serialize, Deserialize)]
+use bitcode::{
+    Encode,
+    Decode,
+};
+#[derive(Serialize, Deserialize, Encode, Decode)]
 pub struct Incoming {
     pub user__id: i64,
     pub user_device__id: String,
     pub user_authorization_token__value: String,
 }
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Encode, Decode)]
 pub struct Outcoming {
     pub user_access_token_encoded: UserAccessTokenEncoded,
     pub user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded,

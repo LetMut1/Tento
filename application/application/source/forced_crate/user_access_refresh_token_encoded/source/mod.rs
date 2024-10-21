@@ -2,5 +2,9 @@ use serde::{
     Deserialize,
     Serialize,
 };
-#[derive(Serialize, Deserialize)]
+use bitcode::{
+    Encode,
+    Decode,
+};
+#[derive(Serialize, Deserialize, Encode, Decode)]
 pub struct UserAccessRefreshTokenEncoded(pub Vec<u8>);

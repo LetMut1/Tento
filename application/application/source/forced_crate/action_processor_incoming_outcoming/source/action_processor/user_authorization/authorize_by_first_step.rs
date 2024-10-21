@@ -4,13 +4,17 @@ use serde::{
     Deserialize,
     Serialize,
 };
-#[derive(Serialize, Deserialize)]
+use bitcode::{
+    Encode,
+    Decode,
+};
+#[derive(Serialize, Deserialize, Encode, Decode)]
 pub struct Incoming {
     pub user_device__id: String,
     pub user__email___or___user__nickname: String,
     pub user__password: String,
 }
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Encode, Decode)]
 pub struct Outcoming {
     pub user__id: i64,
     pub verification_message_sent: bool,

@@ -6,14 +6,18 @@ use serde::{
     Deserialize,
     Serialize,
 };
-#[derive(Serialize, Deserialize)]
+use bitcode::{
+    Encode,
+    Decode,
+};
+#[derive(Serialize, Deserialize, Encode, Decode)]
 pub struct Incoming {
     pub user_access_token_encoded: UserAccessTokenEncoded,
     pub channel__name: String,
     pub requery___channel__name: Option<String>,
     pub limit: i16,
 }
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Encode, Decode)]
 pub struct Outcoming {
     pub common_registry: Vec<Common1>,
 }

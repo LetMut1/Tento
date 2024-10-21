@@ -22,14 +22,12 @@ build = "./build.rs"
 
 [dependencies]
 action_processor_incoming_outcoming = { path = "./../../../forced_crate/action_processor_incoming_outcoming", package = "action_processor_incoming_outcoming", version = "=1.0.0", default-features = true, features = [], optional = false }
-aggregate_error = { path = "./../../../forced_crate/aggregate_error", package = "aggregate_error", version = "=1.0.0", default-features = true, features = [], optional = false }
+bit_code_serializer = { path = "./../../../forced_crate/bit_code_serializer", package = "bit_code_serializer", version = "=1.0.0", default-features = true, features = [], optional = false }
+bitcode = { package = "bitcode", version = "=0.6.3", default-features = true, features = [], optional = false }
+libc = { package = "libc", version = "=0.2.158", default-features = true, features = [], optional = false }
+unified_report = { path = "./../../../forced_crate/unified_report", package = "unified_report", version = "=1.0.0", default-features = true, features = [], optional = false }
 user_access_refresh_token_encoded = { path = "./../../../forced_crate/user_access_refresh_token_encoded", package = "user_access_refresh_token_encoded", version = "=1.0.0", default-features = true, features = [], optional = false }
 user_access_token_encoded = { path = "./../../../forced_crate/user_access_token_encoded", package = "user_access_token_encoded", version = "=1.0.0", default-features = true, features = [], optional = false }
-formatter = { path = "./../../../forced_crate/formatter", package = "formatter", version = "=1.0.0", default-features = true, features = [], optional = false }
-libc = { package = "libc", version = "=0.2.158", default-features = true, features = [], optional = false }
-message_pack_serializer = { path = "./../../../forced_crate/message_pack_serializer", package = "message_pack_serializer", version = "=1.0.0", default-features = true, features = [], optional = false }
-serde = { package = "serde", version = "=1.0.210", default-features = true, features = ["derive"], optional = false }
-unified_report = { path = "./../../../forced_crate/unified_report", package = "unified_report", version = "=1.0.0", default-features = true, features = [], optional = false }
 void = { path = "./../../../forced_crate/void", package = "void", version = "=1.0.0", default-features = true, features = [], optional = false }
 
 [build-dependencies]

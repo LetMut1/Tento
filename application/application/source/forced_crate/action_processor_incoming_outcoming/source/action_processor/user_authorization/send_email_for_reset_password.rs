@@ -4,12 +4,16 @@ use serde::{
     Deserialize,
     Serialize,
 };
-#[derive(Serialize, Deserialize)]
+use bitcode::{
+    Encode,
+    Decode,
+};
+#[derive(Serialize, Deserialize, Encode, Decode)]
 pub struct Incoming {
     pub user__id: i64,
     pub user_device__id: String,
 }
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Encode, Decode)]
 pub struct Outcoming {
     pub user_reset_password_token__can_be_resent_from: i64,
 }

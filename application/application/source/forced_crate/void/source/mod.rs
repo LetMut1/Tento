@@ -10,8 +10,12 @@ use std::{
         Formatter,
     },
 };
+use bitcode::{
+    Encode,
+    Decode,
+};
 // Empty type.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Encode, Decode)]
 pub enum Void {}
 impl Error for Void {}
 impl Display for Void {

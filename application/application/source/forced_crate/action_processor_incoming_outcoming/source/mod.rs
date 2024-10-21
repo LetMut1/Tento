@@ -3,12 +3,16 @@ use serde::{
     Deserialize,
     Serialize,
 };
-#[derive(Serialize, Deserialize)]
+use bitcode::{
+    Encode,
+    Decode,
+};
+#[derive(Serialize, Deserialize, Encode, Decode)]
 pub struct Common1 {
     pub channel: Channel1,
     pub is_user_subscribed: bool,
 }
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Encode, Decode)]
 pub struct Channel1 {
     pub channel__id: i64,
     pub channel__name: String,
@@ -18,7 +22,7 @@ pub struct Channel1 {
     pub channel__cover_image_path: Option<String>,
     pub channel__background_image_path: Option<String>,
 }
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Encode, Decode)]
 pub struct Channel2 {
     pub channel__owner: i64,
     pub channel__name: String,
@@ -33,11 +37,11 @@ pub struct Channel2 {
     pub channel__marks_quantity: i64,
     pub channel__viewing_quantity: i64,
 }
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Encode, Decode)]
 pub struct ChannelInnerLink1 {
     pub channel_inner_link__to: i64,
 }
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Encode, Decode)]
 pub struct ChannelOuterLink1 {
     pub channel_outer_link__alias: String,
     pub channel_outer_link__address: String,

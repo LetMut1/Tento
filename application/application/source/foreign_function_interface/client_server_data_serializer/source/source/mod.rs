@@ -108,10 +108,10 @@ use libc::{
     c_uchar,
     size_t,
 };
-use message_pack_serializer::Serializer;
-use serde::{
-    Deserialize,
-    Serialize,
+use bit_code_serializer::Serializer;
+use bitcode::{
+    Encode,
+    Decode,
 };
 use std::{
     boxed::Box,
@@ -423,8 +423,8 @@ impl Transformer<ServerResponseData> {
     fn transform<F, O1, P1, O2, P2>(c_vector_of_bytes: *mut CVector<c_uchar>, converter: F) -> *mut CResult<CUnifiedReport<O2, P2>>
     where
         F: FnOnce(UnifiedReport<O1, P1>) -> Result<CUnifiedReport<O2, P2>, Box<dyn StdError + 'static>>,
-        O1: for<'de> Deserialize<'de>,
-        P1: for<'de> Deserialize<'de>,
+        O1: for<'a> Decode<'a>,
+        P1: for<'a> Decode<'a>,
         O2: Default,
         P2: Default,
     {
@@ -435,7 +435,9 @@ impl Transformer<ServerResponseData> {
         if vector_of_bytes_.pointer.is_null() || vector_of_bytes_.length == 0 {
             return CResult::error().into_raw();
         }
-        let unified_report = match Serializer::deserialize::<'_, UnifiedReport<O1, P1>>(vector_of_bytes_.as_slice_unchecked()) {
+        let unified_report = match Serializer::deserialize::<'_, UnifiedReport<O1, P1>>(
+            vector_of_bytes_.as_slice_unchecked(),
+        ) {
             Result::Ok(unified_report_) => unified_report_,
             Result::Err(_) => {
                 return CResult::error().into_raw();
@@ -455,7 +457,7 @@ impl Transformer<ServerRequestData> {
     fn transform<I1, F, I2>(incoming: *mut I1, converter: F) -> *mut CResult<CVector<c_uchar>>
     where
         F: for<'a> FnOnce(&'a I1) -> Result<I2, Box<dyn StdError + 'static>>,
-        I2: Serialize,
+        I2: Encode,
     {
         if incoming.is_null() {
             return CResult::error().into_raw();
@@ -467,13 +469,9 @@ impl Transformer<ServerRequestData> {
                 return CResult::error().into_raw();
             }
         };
-        let data = match Serializer::serialize(&incoming__) {
-            Result::Ok(data_) => data_,
-            Result::Err(_) => {
-                return CResult::error().into_raw();
-            }
-        };
-        let c_vector = Allocator::<CVector<_>>::allocate(data);
+        let c_vector = Allocator::<CVector<_>>::allocate(
+            Serializer::serialize(&incoming__)
+        );
         let c_result = CResult::data(c_vector);
         return c_result.into_raw();
     }
@@ -2927,17 +2925,14 @@ mod test {
         }
         mod server_response_data_deserialization {
             use super::*;
-            use aggregate_error::AggregateError;
-            use formatter::Formatter;
             fn run_by_template<'a, T, E, A, D>(data: &'a T, allocator: A, deallocator: D) -> Result<(), Box<dyn StdError + 'static>>
             where
-                T: Serialize,
+                T: Encode,
                 A: FnOnce(*mut CVector<c_uchar>) -> *mut CResult<E>,
                 D: FnOnce(*mut CResult<E>) -> (),
             {
-                let registry = Serializer::serialize(data)
-                    .map_err(|aggregate_error: _| -> Box<dyn StdError + 'static> { return Formatter::<AggregateError>::format(&aggregate_error).into() })?;
-                let c_vector = Allocator::<CVector<_>>::allocate(registry);
+                let data = Serializer::serialize(data);
+                let c_vector = Allocator::<CVector<_>>::allocate(data);
                 let c_vector_ = ((&c_vector) as *const _) as *mut _;
                 let c_result = allocator(c_vector_);
                 let c_result_ = unsafe { &*c_result };

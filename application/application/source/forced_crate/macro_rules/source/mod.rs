@@ -12,7 +12,7 @@ macro_rules! r#enum {
             )*
             ()
         };
-        #[derive(serde::Serialize, serde::Deserialize)]
+        #[derive(serde::Serialize, serde::Deserialize, bitcode::Encode, bitcode::Decode)]
         $visability enum $enum_name {
             $($enum_variant $({ $($enum_variant_field: $enum_variant_field_type,)* })?,)*
         }

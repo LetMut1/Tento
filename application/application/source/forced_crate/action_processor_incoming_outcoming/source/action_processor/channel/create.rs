@@ -5,7 +5,11 @@ use serde::{
     Deserialize,
     Serialize,
 };
-#[derive(Serialize, Deserialize)]
+use bitcode::{
+    Encode,
+    Decode,
+};
+#[derive(Serialize, Deserialize, Encode, Decode)]
 pub struct Incoming {
     pub user_access_token_encoded: UserAccessTokenEncoded,
     pub channel__name: String,
@@ -13,7 +17,7 @@ pub struct Incoming {
     pub channel__access_modifier: i16,
     pub channel__visability_modifier: i16,
 }
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Encode, Decode)]
 pub struct Outcoming {
     pub channel__id: i64,
 }

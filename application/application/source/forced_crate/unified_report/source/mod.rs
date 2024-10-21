@@ -2,7 +2,11 @@ use serde::{
     Deserialize,
     Serialize,
 };
-#[derive(Serialize, Deserialize)]
+use bitcode::{
+    Encode,
+    Decode,
+};
+#[derive(Serialize, Deserialize, Encode, Decode)]
 pub enum UnifiedReport<T, P> {
     Target {
         data: Data<T>,
@@ -11,11 +15,7 @@ pub enum UnifiedReport<T, P> {
         precedent: P,
     },
 }
-impl<T, P> UnifiedReport<T, P>
-where
-    T: Serialize + for<'de> Deserialize<'de>,
-    P: Serialize + for<'de> Deserialize<'de>,
-{
+impl<T, P> UnifiedReport<T, P> {
     pub fn target_empty() -> Self {
         return Self::Target {
             data: Data::Empty,
@@ -34,7 +34,7 @@ where
         };
     }
 }
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Encode, Decode)]
 pub enum Data<D> {
     Empty,
     Filled {

@@ -6,6 +6,7 @@ version = 3
 name = "action_processor_incoming_outcoming"
 version = "1.0.0"
 dependencies = [
+ "bitcode",
  "common_precedent",
  "macro_rules",
  "serde",
@@ -255,6 +256,14 @@ dependencies = [
  "bb8",
  "tokio",
  "tokio-postgres",
+]
+
+[[package]]
+name = "bit_code_serializer"
+version = "1.0.0"
+dependencies = [
+ "aggregate_error",
+ "bitcode",
 ]
 
 [[package]]
@@ -1987,6 +1996,7 @@ checksum = "229730647fbc343e3a80e463c1db7f78f3855d3f3739bee0dda773c9a037c90a"
 name = "unified_report"
 version = "1.0.0"
 dependencies = [
+ "bitcode",
  "serde",
 ]
 
@@ -2005,6 +2015,7 @@ dependencies = [
 name = "user_access_refresh_token_encoded"
 version = "1.0.0"
 dependencies = [
+ "bitcode",
  "serde",
 ]
 
@@ -2012,6 +2023,7 @@ dependencies = [
 name = "user_access_token_encoded"
 version = "1.0.0"
 dependencies = [
+ "bitcode",
  "serde",
 ]
 
@@ -2058,6 +2070,7 @@ checksum = "0b928f33d975fc6ad9f86c8f283853ad26bdd5b10b7f1542aa2fa15e2289105a"
 name = "void"
 version = "1.0.0"
 dependencies = [
+ "bitcode",
  "serde",
 ]
 

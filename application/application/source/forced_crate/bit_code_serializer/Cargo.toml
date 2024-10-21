@@ -1,5 +1,5 @@
 [lib]
-name = "void"
+name = "bit_code_serializer"
 path = "./source/mod.rs"
 test = true
 doctest = true
@@ -12,7 +12,7 @@ crate-type = ["lib"]
 required-features = []
 
 [package]
-name = "void"
+name = "bit_code_serializer"
 version = "1.0.0"
 authors.workspace = true
 rust-version.workspace = true
@@ -22,7 +22,7 @@ edition = "2021"
 workspace = true
 
 [dependencies]
-serde = { package = "serde", version = "=1.0.210", default-features = true, features = ["derive"], optional = false }
+aggregate_error = { path = "./../aggregate_error", package = "aggregate_error", version = "=1.0.0", default-features = true, features = [], optional = false }
 bitcode = { package = "bitcode", version = "=0.6.3", default-features = true, features = [], optional = false }
 
 [features]
