@@ -22,7 +22,7 @@ use crate::{
                 PostgresqlRepository,
             },
             service::resolver::{
-                cloud_message::CloudMessage,
+                CloudMessage,
                 Resolver,
             },
         },

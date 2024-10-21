@@ -2,7 +2,7 @@ use super::Encoder;
 use crate::{
     domain_layer::data::entity::user::User_Password,
     infrastructure_layer::functionality::service::encoder::{
-        argon2id::Argon2Id,
+        Argon2Id,
         Encoder as Encoder_,
     },
 };

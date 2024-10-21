@@ -41,7 +41,7 @@ use crate::{
             creator::Creator,
             logger::Logger,
             spawner::{
-                tokio_non_blocking_task::TokioNonBlockingTask,
+                TokioNonBlockingTask,
                 Spawner,
             },
         },

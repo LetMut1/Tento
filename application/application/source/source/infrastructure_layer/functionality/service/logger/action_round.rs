@@ -7,11 +7,11 @@ use crate::{
         },
         functionality::service::{
             formatter::{
-                action_round::RowData,
+                RowData,
                 Formatter,
             },
             spawner::{
-                tokio_non_blocking_task::TokioNonBlockingTask,
+                TokioNonBlockingTask,
                 Spawner,
             },
         },

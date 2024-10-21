@@ -35,11 +35,11 @@ use crate::{
             },
             service::{
                 resolver::{
-                    expiration::Expiration,
+                    Expiration,
                     Resolver,
                 },
                 spawner::{
-                    tokio_non_blocking_task::TokioNonBlockingTask,
+                    TokioNonBlockingTask,
                     Spawner,
                 },
             },

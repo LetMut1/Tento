@@ -28,7 +28,7 @@ use crate::{
                 PostgresqlRepository,
             },
             service::resolver::{
-                expiration::Expiration,
+                Expiration,
                 Resolver,
             },
         },

@@ -1,7 +1,7 @@
 pub mod health_check;
 pub mod route_not_found;
 #[cfg(feature = "manual_testing")]
-use crate::infrastructure_layer::functionality::service::serializer::json::Json;
+use crate::infrastructure_layer::functionality::service::serializer::Json;
 use crate::{
     application_layer::functionality::action_processor::{
         ActionProcessor,
@@ -13,7 +13,7 @@ use crate::{
             capture::Capture,
             control_type::Response,
         },
-        functionality::service::serializer::message_pack::MessagePack,
+        functionality::service::serializer::MessagePack,
     },
     presentation_layer::functionality::service::processor::{
         action_round::ActionRound,

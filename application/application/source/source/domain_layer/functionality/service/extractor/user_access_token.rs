@@ -7,7 +7,7 @@ use crate::{
     infrastructure_layer::{
         data::environment_configuration::EnvironmentConfiguration,
         functionality::service::resolver::{
-            expiration::Expiration,
+            Expiration,
             Resolver,
         },
     },

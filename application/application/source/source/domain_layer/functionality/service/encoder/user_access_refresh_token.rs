@@ -5,11 +5,11 @@ use crate::{
         data::environment_configuration::EnvironmentConfiguration,
         functionality::service::{
             encoder::{
-                hmac::HmacSha3_512,
+                HmacSha3_512,
                 Encoder as Encoder_,
             },
             serializer::{
-                bit_code::BitCode,
+                BitCode,
                 Serializer,
             },
         },

@@ -41,13 +41,13 @@ use crate::{
             },
             service::{
                 resolver::{
-                    cloud_message::CloudMessage,
-                    expiration::Expiration,
+                    CloudMessage,
+                    Expiration,
                     Resolver,
                 },
                 spawner::{
-                    tokio_blocking_task::TokioBlockingTask,
-                    tokio_non_blocking_task::TokioNonBlockingTask,
+                    TokioBlockingTask,
+                    TokioNonBlockingTask,
                     Spawner,
                 },
             },

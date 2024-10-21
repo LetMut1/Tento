@@ -2,7 +2,7 @@ use super::Generator;
 use crate::{
     domain_layer::data::entity::user_authorization_token::UserAuthorizationToken_ExpiresAt,
     infrastructure_layer::functionality::service::resolver::{
-        date_time::UnixTime,
+        UnixTime,
         Resolver,
     },
 };

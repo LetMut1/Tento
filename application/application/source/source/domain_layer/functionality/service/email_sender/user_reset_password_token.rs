@@ -7,7 +7,7 @@ use crate::{
             environment_configuration::EnvironmentConfiguration,
         },
         functionality::service::sender::{
-            email::Email,
+            Email,
             Sender,
         },
     },

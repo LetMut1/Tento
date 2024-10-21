@@ -4,7 +4,7 @@ use crate::{
         data::control_type::Response,
         functionality::service::{
             creator::Creator,
-            formatter::action_round::RowData,
+            formatter::RowData,
             logger::Logger,
         },
     },

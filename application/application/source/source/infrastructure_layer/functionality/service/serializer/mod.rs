@@ -1,6 +1,10 @@
-pub mod json;
-pub mod message_pack;
-pub mod bit_code;
+mod json;
+mod message_pack;
+mod bit_code;
+pub use self::message_pack::MessagePack;
+pub use self::bit_code::BitCode;
+#[cfg(feature = "manual_testing")]
+pub use self::json::Json;
 use aggregate_error::AggregateError;
 use serde::{
     Deserialize,

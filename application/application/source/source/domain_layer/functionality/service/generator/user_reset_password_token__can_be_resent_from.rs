@@ -2,7 +2,7 @@ use super::Generator;
 use crate::{
     domain_layer::data::entity::user_reset_password_token::UserResetPasswordToken_CanBeResentFrom,
     infrastructure_layer::functionality::service::resolver::{
-        date_time::UnixTime,
+        UnixTime,
         Resolver,
     },
 };

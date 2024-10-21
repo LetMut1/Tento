@@ -13,7 +13,7 @@ use crate::{
         },
         functionality::service::{
             creator::Creator,
-            formatter::action_round::RowData,
+            formatter::RowData,
             logger::Logger,
             serializer::{
                 Serialize,
