@@ -1,5 +1,5 @@
-pub mod health_check;
-pub mod route_not_found;
+mod health_check;
+mod route_not_found;
 #[cfg(feature = "manual_testing")]
 use crate::infrastructure_layer::functionality::service::serializer::Json;
 use crate::{
@@ -21,6 +21,7 @@ use crate::{
     },
 };
 use http::request::Parts;
+pub use self::route_not_found::RouteNotFound;
 use hyper::body::Incoming;
 use serde::{
     Deserialize as SerdeDeserialize,

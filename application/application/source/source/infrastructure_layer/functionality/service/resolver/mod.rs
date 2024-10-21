@@ -6,8 +6,6 @@ use std::marker::PhantomData;
 pub use self::cloud_message::CloudMessage;
 pub use self::unix_time::UnixTime;
 pub use self::expiration::Expiration;
-pub use self::postgresql_transaction::PostgresqlTransaction;
-pub use self::postgresql_transaction::TransactionIsolationLevel;
 pub struct Resolver<S> {
     _subject: PhantomData<S>,
 }

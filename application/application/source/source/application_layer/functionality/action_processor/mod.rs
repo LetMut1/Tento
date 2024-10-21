@@ -1,6 +1,6 @@
-pub mod user_authorization;
-pub mod channel;
-pub mod channel_subscription;
+mod user_authorization;
+mod channel;
+mod channel_subscription;
 use crate::infrastructure_layer::data::{
     capture::Capture,
     environment_configuration::EnvironmentConfiguration,
@@ -28,6 +28,30 @@ use tokio_postgres::{
 };
 use unified_report::UnifiedReport;
 use void::Void;
+pub use self::channel_subscription::create::ChannelSubscription_Create;
+pub use self::channel::check_linked_name_for_existing::Channel_CheckLinkedNameForExisting;
+pub use self::channel::check_name_for_existing::Channel_CheckNameForExisting;
+pub use self::channel::create::Channel_Create;
+pub use self::channel::get_many_by_name_in_subscriptions::Channel_GetManyByNameInSubscriptions;
+pub use self::channel::get_many_by_subscription::Channel_GetManyBySubscription;
+pub use self::channel::get_many_public_by_name::Channel_GetManyPublicByName;
+pub use self::channel::get_one_by_id::Channel_GetOneById;
+pub use self::user_authorization::authorize_by_first_step::UserAuthorization_AuthorizeByFirstStep;
+pub use self::user_authorization::authorize_by_last_step::UserAuthorization_AuthorizeByLastStep;
+pub use self::user_authorization::check_email_for_existing::UserAuthorization_CheckEmailForExisting;
+pub use self::user_authorization::check_nickname_for_existing::UserAuthorization_CheckNicknameForExisting;
+pub use self::user_authorization::deauthorize_from_all_devices::UserAuthorization_DeauthorizeFromAllDevices;
+pub use self::user_authorization::deauthorize_from_one_device::UserAuthorization_DeauthorizeFromOneDevice;
+pub use self::user_authorization::refresh_access_token::UserAuthorization_RefreshAccessToken;
+pub use self::user_authorization::register_by_first_step::UserAuthorization_RegisterByFirstStep;
+pub use self::user_authorization::register_by_last_step::UserAuthorization_RegisterByLastStep;
+pub use self::user_authorization::register_by_second_step::UserAuthorization_RegisterBySecondStep;
+pub use self::user_authorization::reset_password_by_first_step::UserAuthorization_ResetPasswordByFirstStep;
+pub use self::user_authorization::reset_password_by_last_step::UserAuthorization_ResetPasswordByLastStep;
+pub use self::user_authorization::reset_password_by_second_step::UserAuthorization_ResetPasswordBySecondStep;
+pub use self::user_authorization::send_email_for_authorize::UserAuthorization_SendEmailForAuthorize;
+pub use self::user_authorization::send_email_for_register::UserAuthorization_SendEmailForRegister;
+pub use self::user_authorization::send_email_for_reset_password::UserAuthorization_SendEmailForResetPassword;
 pub struct ActionProcessor<S> {
     _subject: PhantomData<S>,
 }

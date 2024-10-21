@@ -108,7 +108,7 @@ use libc::{
     c_uchar,
     size_t,
 };
-use message_pack_serializer::Serializer as Serializer_;
+use message_pack_serializer::Serializer;
 use serde::{
     Deserialize,
     Serialize,
@@ -435,7 +435,7 @@ impl Transformer<ServerResponseData> {
         if vector_of_bytes_.pointer.is_null() || vector_of_bytes_.length == 0 {
             return CResult::error().into_raw();
         }
-        let unified_report = match Serializer_::deserialize::<'_, UnifiedReport<O1, P1>>(vector_of_bytes_.as_slice_unchecked()) {
+        let unified_report = match Serializer::deserialize::<'_, UnifiedReport<O1, P1>>(vector_of_bytes_.as_slice_unchecked()) {
             Result::Ok(unified_report_) => unified_report_,
             Result::Err(_) => {
                 return CResult::error().into_raw();
@@ -467,7 +467,7 @@ impl Transformer<ServerRequestData> {
                 return CResult::error().into_raw();
             }
         };
-        let data = match Serializer_::serialize(&incoming__) {
+        let data = match Serializer::serialize(&incoming__) {
             Result::Ok(data_) => data_,
             Result::Err(_) => {
                 return CResult::error().into_raw();
@@ -2935,7 +2935,7 @@ mod test {
                 A: FnOnce(*mut CVector<c_uchar>) -> *mut CResult<E>,
                 D: FnOnce(*mut CResult<E>) -> (),
             {
-                let registry = Serializer_::serialize(data)
+                let registry = Serializer::serialize(data)
                     .map_err(|aggregate_error: _| -> Box<dyn StdError + 'static> { return Formatter::<AggregateError>::format(&aggregate_error).into() })?;
                 let c_vector = Allocator::<CVector<_>>::allocate(registry);
                 let c_vector_ = ((&c_vector) as *const _) as *mut _;
