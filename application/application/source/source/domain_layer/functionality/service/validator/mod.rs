@@ -1,16 +1,16 @@
-pub mod user__email;
-pub mod user__id;
-pub mod user__nickname;
-pub mod user__password;
-pub mod user_authorization_token__value;
-pub mod user_device__id;
-pub mod user_registration_token__value;
-pub mod user_reset_password_token__value;
-pub mod channel__description;
-pub mod channel__id;
-pub mod channel__linked_name;
-pub mod channel__name;
-pub mod channel__orientation;
+mod user__email;
+mod user__id;
+mod user__nickname;
+mod user__password;
+mod user_authorization_token__value;
+mod user_device__id;
+mod user_registration_token__value;
+mod user_reset_password_token__value;
+mod channel__description;
+mod channel__id;
+mod channel__linked_name;
+mod channel__name;
+mod channel__orientation;
 use std::marker::PhantomData;
 pub struct Validator<S> {
     _subject: PhantomData<S>,

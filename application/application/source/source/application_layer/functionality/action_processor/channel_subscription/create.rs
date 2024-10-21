@@ -16,7 +16,7 @@ use crate::{
         },
         functionality::service::{
             extractor::{
-                user_access_token::Extracted,
+                Extracted,
                 Extractor,
             },
             validator::Validator,

@@ -10,7 +10,7 @@ use crate::{
             user_access_token::UserAccessToken,
         },
         functionality::service::extractor::{
-            user_access_token::Extracted,
+            Extracted,
             Extractor,
         },
     },
