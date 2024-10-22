@@ -1,27 +1,25 @@
-// use super::Serializer;
-// use aggregate_error::{
-//     AggregateError,
-//     Backtrace,
-//     ResultConverter,
-// };
-// use bitcode::{Encode, Decode};
-// pub struct BitCode;
-// impl Serializer<BitCode> {
-//     pub fn serialize<'a, T>(subject: &'a T) -> Vec<u8>
-//     where
-//         T: Encode,
-//     {
-//         return bitcode::encode(subject);
-//     }
-//     pub fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, AggregateError>
-//     where
-//         T: Decode<'a>,
-//     {
-//         return bitcode::decode::<'_, T>(data).into_indefinite_argument(
-//             Backtrace::new(
-//                 line!(),
-//                 file!(),
-//             ),
-//         );
-//     }
-// }
+use aggregate_error::AggregateError;
+use bit_code_serializer::Serializer as Serializer_;
+use super::{
+    Deserialize_,
+    Serialize_,
+    Serialize,
+    Serializer,
+};
+pub struct BitCode;
+impl Serialize for Serializer<BitCode> {
+    fn serialize<'a, T>(subject: &'a T) -> Result<Vec<u8>, AggregateError>
+    where
+        T: Serialize_,
+    {
+        return Result::Ok(
+            Serializer_::serialize(subject)
+        );
+    }
+    fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, AggregateError>
+    where
+        T: Deserialize_<'a>,
+    {
+        return Serializer_::deserialize::<'_, T>(data);
+    }
+}

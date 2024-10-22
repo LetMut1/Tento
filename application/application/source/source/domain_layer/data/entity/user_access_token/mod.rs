@@ -9,6 +9,7 @@ use super::{
 };
 use std::marker::PhantomData;
 use bitcode::{Encode, Decode};
+#[cfg_attr(feature = "manual_testing", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Encode, Decode)]
 pub struct UserAccessToken<'a> {
     pub id: String,

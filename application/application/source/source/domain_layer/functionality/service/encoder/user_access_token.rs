@@ -11,6 +11,7 @@ use crate::{
             serializer::{
                 BitCode,
                 Serializer,
+                Serialize,
             },
         },
     },
@@ -25,7 +26,7 @@ impl Encoder<UserAccessToken<'_>> {
         environment_configuration: &'static EnvironmentConfiguration,
         user_access_token: &'a UserAccessToken<'_>,
     ) -> Result<UserAccessTokenEncoded, AggregateError> {
-        let user_access_token_serialized = Serializer::<BitCode>::serialize(user_access_token);
+        let user_access_token_serialized = Serializer::<BitCode>::serialize(user_access_token)?;
         let user_access_token_encoded = Encoder_::<HmacSha3_512>::encode(
             environment_configuration.encryption.private_key.user_access_token.as_bytes(),
             user_access_token_serialized.as_slice(),
@@ -55,6 +56,8 @@ impl Encoder<UserAccessToken<'_>> {
                 ),
             );
         }
-        return Serializer::<BitCode>::deserialize::<'_, UserAccessToken<'a>>(user_access_token_encoded.serialized.as_slice());
+        return Serializer::<BitCode>::deserialize::<'_, UserAccessToken<'a>>(
+            user_access_token_encoded.serialized.as_slice()
+        );
     }
 }

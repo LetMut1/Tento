@@ -113,3 +113,15 @@ https://stackoverflow.com/questions/58819199/how-to-keep-long-connection-in-http
 
 
 // Еслт убрать у bit_code_encoder Зависимость Aggregate_error, то нужно ли ее размещать в forced_crate
+
+
+
+for<'de> -> for<'a> --- ?
+
+*[derive(serde::Serialize)]
+
+manual_testing на сериализациях привести к additional_serialization_platform
+
+
+
+в сервисе инкоминг-оуткоминг дто сделать серде как фичу выше

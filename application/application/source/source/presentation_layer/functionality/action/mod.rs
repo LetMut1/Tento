@@ -13,20 +13,18 @@ use crate::{
             capture::Capture,
             control_type::Response,
         },
-        functionality::service::serializer::MessagePack,
+        functionality::service::serializer::BitCode,
     },
     presentation_layer::functionality::service::processor::{
         action_round::ActionRound,
         Processor,
     },
 };
+use crate::infrastructure_layer::functionality::service::serializer::Serialize_;
+use crate::infrastructure_layer::functionality::service::serializer::Deserialize_;
 use http::request::Parts;
 pub use self::route_not_found::RouteNotFound;
 use hyper::body::Incoming;
-use serde::{
-    Deserialize as SerdeDeserialize,
-    Serialize as SerdeSerialize,
-};
 use std::{
     future::Future,
     marker::PhantomData,
@@ -45,9 +43,9 @@ pub struct Action<S> {
 impl<AP> Action<AP>
 where
     ActionProcessor<AP>: ActionProcessor_,
-    <ActionProcessor<AP> as ActionProcessor_>::Incoming: for<'de> SerdeDeserialize<'de>,
-    <ActionProcessor<AP> as ActionProcessor_>::Outcoming: SerdeSerialize,
-    <ActionProcessor<AP> as ActionProcessor_>::Precedent: SerdeSerialize,
+    <ActionProcessor<AP> as ActionProcessor_>::Incoming: for<'a> Deserialize_<'a>,
+    <ActionProcessor<AP> as ActionProcessor_>::Outcoming: Serialize_,
+    <ActionProcessor<AP> as ActionProcessor_>::Precedent: Serialize_,
 {
     pub fn run<'a, 'b, T>(
         inner: &'a mut Inner<'b>,
@@ -64,7 +62,7 @@ where
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        return Processor::<ActionRound>::process::<'_, '_, _, AP, MessagePack, MessagePack>(
+        return Processor::<ActionRound>::process::<'_, '_, _, AP, BitCode, BitCode>(
             inner,
             action_processor_inner,
         );
@@ -74,9 +72,9 @@ where
 impl<AP> Action<AP>
 where
     ActionProcessor<AP>: ActionProcessor_,
-    <ActionProcessor<AP> as ActionProcessor_>::Incoming: for<'de> SerdeDeserialize<'de>,
-    <ActionProcessor<AP> as ActionProcessor_>::Outcoming: SerdeSerialize,
-    <ActionProcessor<AP> as ActionProcessor_>::Precedent: SerdeSerialize,
+    <ActionProcessor<AP> as ActionProcessor_>::Incoming: for<'a> Deserialize_<'a>,
+    <ActionProcessor<AP> as ActionProcessor_>::Outcoming: Serialize_,
+    <ActionProcessor<AP> as ActionProcessor_>::Precedent: Serialize_,
 {
     pub fn run_<'a, 'b, T>(
         inner: &'a mut Inner<'b>,

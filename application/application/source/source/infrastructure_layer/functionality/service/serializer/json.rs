@@ -5,21 +5,19 @@ mod json {
     use crate::infrastructure_layer::functionality::service::serializer::{
         Serialize,
         Serializer,
+        Deserialize_,
+        Serialize_,
     };
     use aggregate_error::{
         AggregateError,
         Backtrace,
         ResultConverter,
     };
-    use serde::{
-        Deserialize,
-        Serialize as SerdeSerialize,
-    };
     pub struct Json;
     impl Serialize for Serializer<Json> {
         fn serialize<'a, T>(subject: &'a T) -> Result<Vec<u8>, AggregateError>
         where
-            T: SerdeSerialize,
+            T: Serialize_,
         {
             return serde_json::to_vec(subject).into_logic(
                 Backtrace::new(
@@ -30,7 +28,7 @@ mod json {
         }
         fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, AggregateError>
         where
-            T: Deserialize<'a>,
+            T: Deserialize_<'a>,
         {
             return serde_json::from_slice::<'_, T>(data).into_indefinite_argument(
                 Backtrace::new(

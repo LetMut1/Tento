@@ -11,6 +11,7 @@ use crate::{
             serializer::{
                 BitCode,
                 Serializer,
+                Serialize,
             },
         },
     },
@@ -36,7 +37,7 @@ impl Encoder<UserAccessRefreshToken<'_>> {
                             user_access_token__expires_at: user_access_refresh_token.expires_at,
                             user_access_token__updated_at: user_access_refresh_token.updated_at,
                         },
-                    ).as_slice(),
+                    )?.as_slice(),
                 )?,
             ),
         );
@@ -57,11 +58,12 @@ impl Encoder<UserAccessRefreshToken<'_>> {
                     user_access_token__expires_at: user_access_refresh_token.expires_at,
                     user_access_token__updated_at: user_access_refresh_token.updated_at,
                 },
-            ).as_slice(),
+            )?.as_slice(),
             user_access_refresh_token_encoded.0.as_slice(),
         );
     }
 }
+#[cfg_attr(feature = "manual_testing", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Encode, Decode)]
 struct Token<'a> {
     user__id: i64,

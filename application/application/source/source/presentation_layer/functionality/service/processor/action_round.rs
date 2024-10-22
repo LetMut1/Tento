@@ -18,6 +18,8 @@ use crate::{
             serializer::{
                 Serialize,
                 Serializer,
+                Serialize_,
+                Deserialize_,
             },
             validator::Validator,
         },
@@ -32,10 +34,6 @@ use aggregate_error::{
 use bytes::Buf;
 use http::request::Parts;
 use http_body_util::BodyExt;
-use serde::{
-    Deserialize as SerdeDeserialize,
-    Serialize as SerdeSerialize,
-};
 use std::future::Future;
 use tokio_postgres::{
     tls::{
@@ -62,9 +60,9 @@ impl Processor<ActionRound> {
         <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
         <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
         ActionProcessor<AP>: ActionProcessor_,
-        <ActionProcessor<AP> as ActionProcessor_>::Incoming: for<'de> SerdeDeserialize<'de>,
-        <ActionProcessor<AP> as ActionProcessor_>::Outcoming: SerdeSerialize,
-        <ActionProcessor<AP> as ActionProcessor_>::Precedent: SerdeSerialize,
+        <ActionProcessor<AP> as ActionProcessor_>::Incoming: for<'c> Deserialize_<'c>,
+        <ActionProcessor<AP> as ActionProcessor_>::Outcoming: Serialize_,
+        <ActionProcessor<AP> as ActionProcessor_>::Precedent: Serialize_,
         Serializer<SS>: Serialize,
         Serializer<SD>: Serialize,
         'b: 'a,
