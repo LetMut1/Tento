@@ -62,7 +62,7 @@ impl Encoder<UserAccessRefreshToken<'_>> {
         );
     }
 }
-#[cfg_attr(feature = "manual_testing", derive(serde::Serialize, serde::Deserialize))]
+#[cfg_attr(feature = "serde_for_manual_test", derive(serde::Serialize, serde::Deserialize))]
 #[derive(bitcode::Encode, bitcode::Decode)]
 struct Token<'a> {
     user__id: i64,

@@ -1,15 +1,15 @@
-#[cfg(feature = "manual_testing")]
+#[cfg(feature = "json_for_manual_test")]
 mod json;
 mod bit_code;
 pub use self::bit_code::BitCode;
-#[cfg(feature = "manual_testing")]
+#[cfg(feature = "json_for_manual_test")]
 pub use self::json::Json;
 use bitcode::{
     Encode,
     Decode,
 };
 use aggregate_error::AggregateError;
-#[cfg(feature = "manual_testing")]
+#[cfg(feature = "serde_for_manual_test")]
 use serde::{
     Deserialize as SerdeDeserialize,
     Serialize as SerdeSerialize,
@@ -18,30 +18,30 @@ use std::marker::PhantomData;
 pub struct Serializer<T> {
     _format: PhantomData<T>,
 }
-#[cfg(not(feature = "manual_testing"))]
+#[cfg(not(feature = "serde_for_manual_test"))]
 pub trait Serialize_: Encode {}
-#[cfg(not(feature = "manual_testing"))]
+#[cfg(not(feature = "serde_for_manual_test"))]
 impl<T> Serialize_ for T
 where
     T: Encode,
 {}
-#[cfg(feature = "manual_testing")]
+#[cfg(feature = "serde_for_manual_test")]
 pub trait Serialize_: Encode + SerdeSerialize {}
-#[cfg(feature = "manual_testing")]
+#[cfg(feature = "serde_for_manual_test")]
 impl<T> Serialize_ for T
 where
     T: Encode + SerdeSerialize,
 {}
-#[cfg(not(feature = "manual_testing"))]
+#[cfg(not(feature = "serde_for_manual_test"))]
 pub trait Deserialize_<'a>: Decode<'a> {}
-#[cfg(not(feature = "manual_testing"))]
+#[cfg(not(feature = "serde_for_manual_test"))]
 impl<'a, T> Deserialize_<'a> for T
 where
     T: Decode<'a>,
 {}
-#[cfg(feature = "manual_testing")]
+#[cfg(feature = "serde_for_manual_test")]
 pub trait Deserialize_<'a>: Decode<'a> + SerdeDeserialize<'a> {}
-#[cfg(feature = "manual_testing")]
+#[cfg(feature = "serde_for_manual_test")]
 impl<'a, T> Deserialize_<'a> for T
 where
     T: Decode<'a> + SerdeDeserialize<'a>,

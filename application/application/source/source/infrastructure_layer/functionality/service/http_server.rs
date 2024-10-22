@@ -1,4 +1,4 @@
-#[cfg(feature = "manual_testing")]
+#[cfg(feature = "action_for_manual_test")]
 use const_format::concatcp;
 use crate::{
     application_layer::functionality::action_processor::{
@@ -55,9 +55,9 @@ use aggregate_error::{
 };
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager;
-#[cfg(feature = "manual_testing")]
+#[cfg(feature = "action_for_manual_test")]
 use core::net::SocketAddr;
-#[cfg(feature = "manual_testing")]
+#[cfg(feature = "action_for_manual_test")]
 use hyper::server::conn::http1::Builder as Http1Builder;
 use hyper::{
     server::conn::http2::Builder as Http2Builder,
@@ -98,7 +98,7 @@ pub struct HttpServer;
 impl HttpServer {
     pub fn run(environment_configuration: &'static EnvironmentConfiguration) -> impl Future<Output = Result<(), AggregateError>> + Send {
         return async move {
-            #[cfg(feature = "manual_testing")]
+            #[cfg(feature = "action_for_manual_test")]
             let http1_socket_address = {
                 let mut http1_port_number = environment_configuration.application_server.tcp.socket_address.port();
                 if http1_port_number >= u16::MIN && http1_port_number < u16::MAX {
@@ -137,7 +137,7 @@ impl HttpServer {
             'a: loop {
                 let cloned_ = cloned.clone();
                 let mut graceful_shutdown_signal_future__ = graceful_shutdown_signal_future_.as_mut();
-                #[cfg(feature = "manual_testing")]
+                #[cfg(feature = "action_for_manual_test")]
                 let http1_tcp_listener = TcpListener::bind(&http1_socket_address).await.into_logic(
                     Backtrace::new(
                         line!(),
@@ -151,7 +151,7 @@ impl HttpServer {
                     ),
                 )?;
                 let future = async move {
-                    #[cfg(feature = "manual_testing")]
+                    #[cfg(feature = "action_for_manual_test")]
                     let http1_builder = Http1Builder::new();
                     let mut http2_builder = Http2Builder::new(TokioExecutor::new()).max_local_error_reset_streams(Option::Some(128));
                     http2_builder
@@ -182,9 +182,9 @@ impl HttpServer {
                         todo!("// TODO ssl_protocolsTLSv1 TLSv1.1 TLSv1.2 TLSv1.3;  ssl_ciphers HIGH:!aNULL:!MD5;")
                     }
                     'b: loop {
-                        #[cfg(not(feature = "manual_testing"))]
+                        #[cfg(not(feature = "action_for_manual_test"))]
                         let tcp_accepting_future = http2_tcp_listener.accept();
-                        #[cfg(feature = "manual_testing")]
+                        #[cfg(feature = "action_for_manual_test")]
                         let tcp_accepting_future = async {
                             return tokio::select! {
                                 result = http1_tcp_listener.accept() => {
@@ -236,7 +236,7 @@ impl HttpServer {
                                         };
                                     },
                                 );
-                                #[cfg(feature = "manual_testing")]
+                                #[cfg(feature = "action_for_manual_test")]
                                 {
                                     let socket_address_port = tcp_stream_.local_addr().into_logic(
                                         Backtrace::new(
@@ -260,7 +260,7 @@ impl HttpServer {
                                         );
                                     };
                                 }
-                                #[cfg(not(feature = "manual_testing"))]
+                                #[cfg(not(feature = "action_for_manual_test"))]
                                 Self::spawn_connection_serving(
                                     http2_builder.serve_connection(
                                         TokioIo::new(tcp_stream_),
@@ -619,7 +619,7 @@ impl HttpServer {
                     file!(),
                 ),
             )?;
-        #[cfg(feature = "manual_testing")]
+        #[cfg(feature = "action_for_manual_test")]
         {
             router
                 .insert(
@@ -1114,7 +1114,7 @@ impl HttpServer {
                             .await;
                         }
                         _ => {
-                            #[cfg(feature = "manual_testing")]
+                            #[cfg(feature = "action_for_manual_test")]
                             {
                                 match (
                                     user_authorization,
@@ -1280,7 +1280,7 @@ impl HttpServer {
                             .await;
                         }
                         _ => {
-                            #[cfg(feature = "manual_testing")]
+                            #[cfg(feature = "action_for_manual_test")]
                             {
                                 match (
                                     channel,
@@ -1339,7 +1339,7 @@ impl HttpServer {
                             .await;
                         }
                         _ => {
-                            #[cfg(feature = "manual_testing")]
+                            #[cfg(feature = "action_for_manual_test")]
                             {
                                 match (
                                     channel_subscription,
@@ -1398,7 +1398,7 @@ pub enum ActionRoute {
         channel_subscription: ChannelSubscription,
     },
 }
-#[cfg(feature = "manual_testing")]
+#[cfg(feature = "action_for_manual_test")]
 impl ActionRoute {
     const PART: &'static str = "_";
 }
@@ -1419,37 +1419,37 @@ pub enum UserAuthorization {
     RefreshAccessToken,
     DeauthorizeFromOneDevice,
     DeauthorizeFromAllDevices,
-    #[cfg(feature = "manual_testing")]
+    #[cfg(feature = "action_for_manual_test")]
     CheckNicknameForExisting_,
-    #[cfg(feature = "manual_testing")]
+    #[cfg(feature = "action_for_manual_test")]
     CheckEmailForExisting_,
-    #[cfg(feature = "manual_testing")]
+    #[cfg(feature = "action_for_manual_test")]
     RegisterByFirstStep_,
-    #[cfg(feature = "manual_testing")]
+    #[cfg(feature = "action_for_manual_test")]
     RegisterBySecondStep_,
-    #[cfg(feature = "manual_testing")]
+    #[cfg(feature = "action_for_manual_test")]
     RegisterByLastStep_,
-    #[cfg(feature = "manual_testing")]
+    #[cfg(feature = "action_for_manual_test")]
     SendEmailForRegister_,
-    #[cfg(feature = "manual_testing")]
+    #[cfg(feature = "action_for_manual_test")]
     AuthorizeByFirstStep_,
-    #[cfg(feature = "manual_testing")]
+    #[cfg(feature = "action_for_manual_test")]
     AuthorizeByLastStep_,
-    #[cfg(feature = "manual_testing")]
+    #[cfg(feature = "action_for_manual_test")]
     SendEmailForAuthorize_,
-    #[cfg(feature = "manual_testing")]
+    #[cfg(feature = "action_for_manual_test")]
     ResetPasswordByFirstStep_,
-    #[cfg(feature = "manual_testing")]
+    #[cfg(feature = "action_for_manual_test")]
     ResetPasswordBySecondStep_,
-    #[cfg(feature = "manual_testing")]
+    #[cfg(feature = "action_for_manual_test")]
     ResetPasswordByLastStep_,
-    #[cfg(feature = "manual_testing")]
+    #[cfg(feature = "action_for_manual_test")]
     SendEmailForResetPassword_,
-    #[cfg(feature = "manual_testing")]
+    #[cfg(feature = "action_for_manual_test")]
     RefreshAccessToken_,
-    #[cfg(feature = "manual_testing")]
+    #[cfg(feature = "action_for_manual_test")]
     DeauthorizeFromOneDevice_,
-    #[cfg(feature = "manual_testing")]
+    #[cfg(feature = "action_for_manual_test")]
     DeauthorizeFromAllDevices_,
 }
 impl UserAuthorization {
@@ -1470,7 +1470,7 @@ impl UserAuthorization {
     pub const SEND_EMAIL_FOR_REGISTER: &'static str = "/user_authorization/send_email_for_register";
     pub const SEND_EMAIL_FOR_RESET_PASSWORD: &'static str = "/user_authorization/send_email_for_reset_password";
 }
-#[cfg(feature = "manual_testing")]
+#[cfg(feature = "action_for_manual_test")]
 impl UserAuthorization {
     pub const AUTHORIZE_BY_FIRST_STEP_: &'static str = concatcp!(
         UserAuthorization::AUTHORIZE_BY_FIRST_STEP,
@@ -1545,19 +1545,19 @@ pub enum Channel {
     Create,
     CheckNameForExisting,
     CheckLinkedNameForExisting,
-    #[cfg(feature = "manual_testing")]
+    #[cfg(feature = "action_for_manual_test")]
     GetOneById_,
-    #[cfg(feature = "manual_testing")]
+    #[cfg(feature = "action_for_manual_test")]
     GetManyByNameInSubscriptions_,
-    #[cfg(feature = "manual_testing")]
+    #[cfg(feature = "action_for_manual_test")]
     GetManyBySubscription_,
-    #[cfg(feature = "manual_testing")]
+    #[cfg(feature = "action_for_manual_test")]
     GetManyPublicByName_,
-    #[cfg(feature = "manual_testing")]
+    #[cfg(feature = "action_for_manual_test")]
     Create_,
-    #[cfg(feature = "manual_testing")]
+    #[cfg(feature = "action_for_manual_test")]
     CheckNameForExisting_,
-    #[cfg(feature = "manual_testing")]
+    #[cfg(feature = "action_for_manual_test")]
     CheckLinkedNameForExisting_,
 }
 impl Channel {
@@ -1569,7 +1569,7 @@ impl Channel {
     pub const GET_MANY_PUBLIC_BY_NAME: &'static str = "/channel/get_many_public_by_name";
     pub const GET_ONE_BY_ID: &'static str = "/channel/get_one_by_id";
 }
-#[cfg(feature = "manual_testing")]
+#[cfg(feature = "action_for_manual_test")]
 impl Channel {
     pub const GET_MANY_BY_NAME_IN_SUBSCRIPTIONS_: &'static str = concatcp!(
         Channel::GET_MANY_BY_NAME_IN_SUBSCRIPTIONS,
@@ -1602,13 +1602,13 @@ impl Channel {
 }
 pub enum ChannelSubscription {
     Create,
-    #[cfg(feature = "manual_testing")]
+    #[cfg(feature = "action_for_manual_test")]
     Create_,
 }
 impl ChannelSubscription {
     pub const CREATE: &'static str = "/channel_subscription/create";
 }
-#[cfg(feature = "manual_testing")]
+#[cfg(feature = "action_for_manual_test")]
 impl ChannelSubscription {
     pub const CREATE_: &'static str = concatcp!(
         ChannelSubscription::CREATE,

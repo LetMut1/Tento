@@ -1,6 +1,6 @@
 mod health_check;
 mod route_not_found;
-#[cfg(feature = "manual_testing")]
+#[cfg(feature = "json_for_manual_test")]
 use crate::infrastructure_layer::functionality::service::serializer::Json;
 use crate::{
     application_layer::functionality::action_processor::{
@@ -68,7 +68,7 @@ where
         );
     }
 }
-#[cfg(feature = "manual_testing")]
+#[cfg(feature = "action_for_manual_test")]
 impl<AP> Action<AP>
 where
     ActionProcessor<AP>: ActionProcessor_,

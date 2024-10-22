@@ -1,6 +1,6 @@
-#[cfg(feature = "manual_testing")]
+#[cfg(feature = "json_for_manual_test")]
 pub use self::json::Json;
-#[cfg(feature = "manual_testing")]
+#[cfg(feature = "json_for_manual_test")]
 mod json {
     use crate::infrastructure_layer::functionality::service::serializer::{
         Serialize,

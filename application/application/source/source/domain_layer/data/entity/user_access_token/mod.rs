@@ -8,7 +8,7 @@ use super::{
     user_device::UserDevice_Id,
 };
 use std::marker::PhantomData;
-#[cfg_attr(feature = "manual_testing", derive(serde::Serialize, serde::Deserialize))]
+#[cfg_attr(feature = "serde_for_manual_test", derive(serde::Serialize, serde::Deserialize))]
 #[derive(bitcode::Encode, bitcode::Decode)]
 pub struct UserAccessToken<'a> {
     pub id: String,
