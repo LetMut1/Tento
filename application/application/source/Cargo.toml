@@ -66,7 +66,7 @@ uuid = { package = "uuid", version = "=1.10.0", default-features = true, feature
 
 [features]
 default = []
-file_log = []
+logging_to_file = []
 serde_for_manual_test = []
 json_for_manual_test = [
     "dep:serde_json",

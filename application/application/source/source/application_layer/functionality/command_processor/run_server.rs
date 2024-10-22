@@ -24,7 +24,7 @@ use tracing_appender::non_blocking::{
     NonBlockingBuilder,
     WorkerGuard,
 };
-#[cfg(feature = "file_log")]
+#[cfg(feature = "logging_to_file")]
 use tracing_appender::rolling::{
     RollingFileAppender,
     Rotation,
@@ -36,11 +36,11 @@ impl CommandProcessor<RunServer> {
     pub fn process<'a>(environment_configuration_file_directory: &'a str) -> Result<(), AggregateError> {
         let _worker_guard;
         let environment_configuration = Self::initialize_environment(environment_configuration_file_directory)?;
-        #[cfg(feature = "file_log")]
+        #[cfg(feature = "logging_to_file")]
         {
-            _worker_guard = Self::initialize_file_logger(environment_configuration)?;
+            _worker_guard = Self::initialize_logging_to_fileger(environment_configuration)?;
         }
-        #[cfg(not(feature = "file_log"))]
+        #[cfg(not(feature = "logging_to_file"))]
         {
             _worker_guard = Self::initialize_stdout_logger();
         }
@@ -73,8 +73,8 @@ impl CommandProcessor<RunServer> {
             }
         };
     }
-    #[cfg(feature = "file_log")]
-    fn initialize_file_logger<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<WorkerGuard, AggregateError> {
+    #[cfg(feature = "logging_to_file")]
+    fn initialize_logging_to_fileger<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<WorkerGuard, AggregateError> {
         let rolling_file_appender = RollingFileAppender::new(
             Rotation::DAILY,
             environment_configuration.logging.directory_path.as_str(),
@@ -84,7 +84,7 @@ impl CommandProcessor<RunServer> {
         Self::initialize_tracing_subscriber(non_blocking)?;
         return Result::Ok(worker_guard);
     }
-    #[cfg(not(feature = "file_log"))]
+    #[cfg(not(feature = "logging_to_file"))]
     fn initialize_stdout_logger() -> Result<WorkerGuard, AggregateError> {
         let (non_blocking, worker_guard) = NonBlockingBuilder::default().finish(std::io::stdout());
         Self::initialize_tracing_subscriber(non_blocking)?;
