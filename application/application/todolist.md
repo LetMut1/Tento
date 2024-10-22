@@ -120,6 +120,3 @@ https://stackoverflow.com/questions/58819199/how-to-keep-long-connection-in-http
 
 
 в сервисе инкоминг-оуткоминг enum_from! ---> macro_rules::enum_from!
-
-
-Сейчас фичи форседкрейтов включены сразу, а нужно сделать так, чтобы они подключались, если в серверному Карго дали команду.

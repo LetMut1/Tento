@@ -22,8 +22,8 @@ edition = "2021"
 workspace = true
 
 [dependencies]
-user_access_refresh_token_encoded = { path = "./../user_access_refresh_token_encoded", package = "user_access_refresh_token_encoded", version = "=1.0.0", default-features = true, features = ["serde_for_manual_test"], optional = false }
-user_access_token_encoded = { path = "./../user_access_token_encoded", package = "user_access_token_encoded", version = "=1.0.0", default-features = true, features = ["serde_for_manual_test"], optional = false }
+user_access_refresh_token_encoded = { path = "./../user_access_refresh_token_encoded", package = "user_access_refresh_token_encoded", version = "=1.0.0", default-features = true, features = [], optional = false }
+user_access_token_encoded = { path = "./../user_access_token_encoded", package = "user_access_token_encoded", version = "=1.0.0", default-features = true, features = [], optional = false }
 common_precedent = { path = "./../common_precedent", package = "common_precedent", version = "=1.0.0", default-features = true, features = [], optional = false }
 macro_rules = { path = "./../macro_rules", package = "macro_rules", version = "=1.0.0", default-features = true, features = [], optional = false }
 serde = { package = "serde", version = "=1.0.210", default-features = true, features = ["derive"], optional = true }
