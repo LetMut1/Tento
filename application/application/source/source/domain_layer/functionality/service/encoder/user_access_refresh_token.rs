@@ -16,7 +16,6 @@ use crate::{
         },
     },
 };
-use bitcode::{Encode, Decode};
 use aggregate_error::AggregateError;
 use user_access_refresh_token_encoded::UserAccessRefreshTokenEncoded;
 impl Encoder<UserAccessRefreshToken<'_>> {
@@ -64,7 +63,7 @@ impl Encoder<UserAccessRefreshToken<'_>> {
     }
 }
 #[cfg_attr(feature = "manual_testing", derive(serde::Serialize, serde::Deserialize))]
-#[derive(Encode, Decode)]
+#[derive(bitcode::Encode, bitcode::Decode)]
 struct Token<'a> {
     user__id: i64,
     user_device__id: &'a str,

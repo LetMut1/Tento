@@ -116,10 +116,6 @@ https://stackoverflow.com/questions/58819199/how-to-keep-long-connection-in-http
 
 
 
-for<'de> -> for<'a> --- ?
-
-*[derive(serde::Serialize)]
-
 manual_testing на сериализациях привести к additional_serialization_platform
 
 
