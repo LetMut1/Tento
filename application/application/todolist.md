@@ -1,4 +1,4 @@
-cargo run --features=action_for_manual_test --bin=core -- --environment_configuration_file_directory=/_tento/application/application/ run_server
+cargo run --features=port_for_manual_test --bin=core -- --environment_configuration_file_directory=/_tento/application/application/ run_server
 
 
 
@@ -116,7 +116,6 @@ https://stackoverflow.com/questions/58819199/how-to-keep-long-connection-in-http
 
 
 
-action_for_manual_test на сериализациях привести к additional_serialization_platform
 
 
 

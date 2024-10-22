@@ -1,5 +1,3 @@
-#[cfg(feature = "action_for_manual_test")]
-use const_format::concatcp;
 use crate::{
     application_layer::functionality::action_processor::{
         UserAuthorization_AuthorizeByFirstStep,
@@ -55,9 +53,9 @@ use aggregate_error::{
 };
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager;
-#[cfg(feature = "action_for_manual_test")]
+#[cfg(feature = "port_for_manual_test")]
 use core::net::SocketAddr;
-#[cfg(feature = "action_for_manual_test")]
+#[cfg(feature = "port_for_manual_test")]
 use hyper::server::conn::http1::Builder as Http1Builder;
 use hyper::{
     server::conn::http2::Builder as Http2Builder,
@@ -98,7 +96,7 @@ pub struct HttpServer;
 impl HttpServer {
     pub fn run(environment_configuration: &'static EnvironmentConfiguration) -> impl Future<Output = Result<(), AggregateError>> + Send {
         return async move {
-            #[cfg(feature = "action_for_manual_test")]
+            #[cfg(feature = "port_for_manual_test")]
             let http1_socket_address = {
                 let mut http1_port_number = environment_configuration.application_server.tcp.socket_address.port();
                 if http1_port_number >= u16::MIN && http1_port_number < u16::MAX {
@@ -137,7 +135,7 @@ impl HttpServer {
             'a: loop {
                 let cloned_ = cloned.clone();
                 let mut graceful_shutdown_signal_future__ = graceful_shutdown_signal_future_.as_mut();
-                #[cfg(feature = "action_for_manual_test")]
+                #[cfg(feature = "port_for_manual_test")]
                 let http1_tcp_listener = TcpListener::bind(&http1_socket_address).await.into_logic(
                     Backtrace::new(
                         line!(),
@@ -151,7 +149,7 @@ impl HttpServer {
                     ),
                 )?;
                 let future = async move {
-                    #[cfg(feature = "action_for_manual_test")]
+                    #[cfg(feature = "port_for_manual_test")]
                     let http1_builder = Http1Builder::new();
                     let mut http2_builder = Http2Builder::new(TokioExecutor::new()).max_local_error_reset_streams(Option::Some(128));
                     http2_builder
@@ -182,9 +180,9 @@ impl HttpServer {
                         todo!("// TODO ssl_protocolsTLSv1 TLSv1.1 TLSv1.2 TLSv1.3;  ssl_ciphers HIGH:!aNULL:!MD5;")
                     }
                     'b: loop {
-                        #[cfg(not(feature = "action_for_manual_test"))]
+                        #[cfg(not(feature = "port_for_manual_test"))]
                         let tcp_accepting_future = http2_tcp_listener.accept();
-                        #[cfg(feature = "action_for_manual_test")]
+                        #[cfg(feature = "port_for_manual_test")]
                         let tcp_accepting_future = async {
                             return tokio::select! {
                                 result = http1_tcp_listener.accept() => {
@@ -236,7 +234,7 @@ impl HttpServer {
                                         };
                                     },
                                 );
-                                #[cfg(feature = "action_for_manual_test")]
+                                #[cfg(feature = "port_for_manual_test")]
                                 {
                                     let socket_address_port = tcp_stream_.local_addr().into_logic(
                                         Backtrace::new(
@@ -260,7 +258,7 @@ impl HttpServer {
                                         );
                                     };
                                 }
-                                #[cfg(not(feature = "action_for_manual_test"))]
+                                #[cfg(not(feature = "port_for_manual_test"))]
                                 Self::spawn_connection_serving(
                                     http2_builder.serve_connection(
                                         TokioIo::new(tcp_stream_),
@@ -1472,67 +1470,67 @@ impl UserAuthorization {
 }
 #[cfg(feature = "action_for_manual_test")]
 impl UserAuthorization {
-    pub const AUTHORIZE_BY_FIRST_STEP_: &'static str = concatcp!(
+    pub const AUTHORIZE_BY_FIRST_STEP_: &'static str = const_format::concatcp!(
         UserAuthorization::AUTHORIZE_BY_FIRST_STEP,
         ActionRoute::PART,
     );
-    pub const AUTHORIZE_BY_LAST_STEP_: &'static str = concatcp!(
+    pub const AUTHORIZE_BY_LAST_STEP_: &'static str = const_format::concatcp!(
         UserAuthorization::AUTHORIZE_BY_LAST_STEP,
         ActionRoute::PART,
     );
-    pub const CHECK_EMAIL_FOR_EXISTING_: &'static str = concatcp!(
+    pub const CHECK_EMAIL_FOR_EXISTING_: &'static str = const_format::concatcp!(
         UserAuthorization::CHECK_EMAIL_FOR_EXISTING,
         ActionRoute::PART,
     );
-    pub const CHECK_NICKNAME_FOR_EXISTING_: &'static str = concatcp!(
+    pub const CHECK_NICKNAME_FOR_EXISTING_: &'static str = const_format::concatcp!(
         UserAuthorization::CHECK_NICKNAME_FOR_EXISTING,
         ActionRoute::PART,
     );
-    pub const DEAUTHORIZE_FROM_ALL_DEVICES_: &'static str = concatcp!(
+    pub const DEAUTHORIZE_FROM_ALL_DEVICES_: &'static str = const_format::concatcp!(
         UserAuthorization::DEAUTHORIZE_FROM_ALL_DEVICES,
         ActionRoute::PART,
     );
-    pub const DEAUTHORIZE_FROM_ONE_DEVICE_: &'static str = concatcp!(
+    pub const DEAUTHORIZE_FROM_ONE_DEVICE_: &'static str = const_format::concatcp!(
         UserAuthorization::DEAUTHORIZE_FROM_ONE_DEVICE,
         ActionRoute::PART,
     );
-    pub const REFRESH_ACCESS_TOKEN_: &'static str = concatcp!(
+    pub const REFRESH_ACCESS_TOKEN_: &'static str = const_format::concatcp!(
         UserAuthorization::REFRESH_ACCESS_TOKEN,
         ActionRoute::PART,
     );
-    pub const REGISTER_BY_FIRST_STEP_: &'static str = concatcp!(
+    pub const REGISTER_BY_FIRST_STEP_: &'static str = const_format::concatcp!(
         UserAuthorization::REGISTER_BY_FIRST_STEP,
         ActionRoute::PART,
     );
-    pub const REGISTER_BY_LAST_STEP_: &'static str = concatcp!(
+    pub const REGISTER_BY_LAST_STEP_: &'static str = const_format::concatcp!(
         UserAuthorization::REGISTER_BY_LAST_STEP,
         ActionRoute::PART,
     );
-    pub const REGISTER_BY_SECOND_STEP_: &'static str = concatcp!(
+    pub const REGISTER_BY_SECOND_STEP_: &'static str = const_format::concatcp!(
         UserAuthorization::REGISTER_BY_SECOND_STEP,
         ActionRoute::PART,
     );
-    pub const RESET_PASSWORD_BY_FIRST_STEP_: &'static str = concatcp!(
+    pub const RESET_PASSWORD_BY_FIRST_STEP_: &'static str = const_format::concatcp!(
         UserAuthorization::RESET_PASSWORD_BY_FIRST_STEP,
         ActionRoute::PART,
     );
-    pub const RESET_PASSWORD_BY_LAST_STEP_: &'static str = concatcp!(
+    pub const RESET_PASSWORD_BY_LAST_STEP_: &'static str = const_format::concatcp!(
         UserAuthorization::RESET_PASSWORD_BY_LAST_STEP,
         ActionRoute::PART,
     );
-    pub const RESET_PASSWORD_BY_SECOND_STEP_: &'static str = concatcp!(
+    pub const RESET_PASSWORD_BY_SECOND_STEP_: &'static str = const_format::concatcp!(
         UserAuthorization::RESET_PASSWORD_BY_SECOND_STEP,
         ActionRoute::PART,
     );
-    pub const SEND_EMAIL_FOR_AUTHORIZE_: &'static str = concatcp!(
+    pub const SEND_EMAIL_FOR_AUTHORIZE_: &'static str = const_format::concatcp!(
         UserAuthorization::SEND_EMAIL_FOR_AUTHORIZE,
         ActionRoute::PART,
     );
-    pub const SEND_EMAIL_FOR_REGISTER_: &'static str = concatcp!(
+    pub const SEND_EMAIL_FOR_REGISTER_: &'static str = const_format::concatcp!(
         UserAuthorization::SEND_EMAIL_FOR_REGISTER,
         ActionRoute::PART,
     );
-    pub const SEND_EMAIL_FOR_RESET_PASSWORD_: &'static str = concatcp!(
+    pub const SEND_EMAIL_FOR_RESET_PASSWORD_: &'static str = const_format::concatcp!(
         UserAuthorization::SEND_EMAIL_FOR_RESET_PASSWORD,
         ActionRoute::PART,
     );
@@ -1571,31 +1569,31 @@ impl Channel {
 }
 #[cfg(feature = "action_for_manual_test")]
 impl Channel {
-    pub const GET_MANY_BY_NAME_IN_SUBSCRIPTIONS_: &'static str = concatcp!(
+    pub const GET_MANY_BY_NAME_IN_SUBSCRIPTIONS_: &'static str = const_format::concatcp!(
         Channel::GET_MANY_BY_NAME_IN_SUBSCRIPTIONS,
         ActionRoute::PART,
     );
-    pub const GET_MANY_BY_SUBSCRIPTION_: &'static str = concatcp!(
+    pub const GET_MANY_BY_SUBSCRIPTION_: &'static str = const_format::concatcp!(
         Channel::GET_MANY_BY_SUBSCRIPTION,
         ActionRoute::PART,
     );
-    pub const GET_MANY_PUBLIC_BY_NAME_: &'static str = concatcp!(
+    pub const GET_MANY_PUBLIC_BY_NAME_: &'static str = const_format::concatcp!(
         Channel::GET_MANY_PUBLIC_BY_NAME,
         ActionRoute::PART,
     );
-    pub const GET_ONE_BY_ID_: &'static str = concatcp!(
+    pub const GET_ONE_BY_ID_: &'static str = const_format::concatcp!(
         Channel::GET_ONE_BY_ID,
         ActionRoute::PART,
     );
-    pub const CREATE_: &'static str = concatcp!(
+    pub const CREATE_: &'static str = const_format::concatcp!(
         Channel::CREATE,
         ActionRoute::PART,
     );
-    pub const CHECK_NAME_FOR_EXISTING_: &'static str = concatcp!(
+    pub const CHECK_NAME_FOR_EXISTING_: &'static str = const_format::concatcp!(
         Channel::CHECK_NAME_FOR_EXISTING,
         ActionRoute::PART,
     );
-    pub const CHECK_LINKED_NAME_FOR_EXISTING_: &'static str = concatcp!(
+    pub const CHECK_LINKED_NAME_FOR_EXISTING_: &'static str = const_format::concatcp!(
         Channel::CHECK_LINKED_NAME_FOR_EXISTING,
         ActionRoute::PART,
     );
@@ -1610,7 +1608,7 @@ impl ChannelSubscription {
 }
 #[cfg(feature = "action_for_manual_test")]
 impl ChannelSubscription {
-    pub const CREATE_: &'static str = concatcp!(
+    pub const CREATE_: &'static str = const_format::concatcp!(
         ChannelSubscription::CREATE,
         ActionRoute::PART,
     );

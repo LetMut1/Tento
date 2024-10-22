@@ -76,3 +76,6 @@ action_for_manual_test = [
     "dep:const_format",
     "json_for_manual_test",
 ]
+port_for_manual_test = [
+    "action_for_manual_test"
+]
