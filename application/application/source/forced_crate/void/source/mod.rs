@@ -1,7 +1,3 @@
-use serde::{
-    Deserialize,
-    Serialize,
-};
 use std::{
     error::Error,
     fmt::{
@@ -10,12 +6,9 @@ use std::{
         Formatter,
     },
 };
-use bitcode::{
-    Encode,
-    Decode,
-};
 // Empty type.
-#[derive(Debug, Serialize, Deserialize, Encode, Decode)]
+#[cfg_attr(feature = "serde_for_manual_test", derive(serde::Serialize, serde::Deserialize))]
+#[derive(Debug, bitcode::Encode, bitcode::Decode)]
 pub enum Void {}
 impl Error for Void {}
 impl Display for Void {

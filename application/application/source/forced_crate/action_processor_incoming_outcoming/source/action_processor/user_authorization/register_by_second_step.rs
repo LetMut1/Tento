@@ -1,20 +1,13 @@
 use common_precedent::CommonPrecedent;
-use macro_rules::r#enum;
-use serde::{
-    Deserialize,
-    Serialize,
-};
-use bitcode::{
-    Encode,
-    Decode,
-};
-#[derive(Serialize, Deserialize, Encode, Decode)]
+use macro_rules::enum_from;
+#[cfg_attr(feature = "serde_for_manual_test", derive(serde::Serialize, serde::Deserialize))]
+#[derive(bitcode::Encode, bitcode::Decode)]
 pub struct Incoming {
     pub user__email: String,
     pub user_device__id: String,
     pub user_registration_token__value: String,
 }
-r#enum!(
+enum_from!(
     pub enum Precedent {
         CommonPrecedent::UserRegistrationToken_NotFound,
         CommonPrecedent::UserRegistrationToken_AlreadyExpired,

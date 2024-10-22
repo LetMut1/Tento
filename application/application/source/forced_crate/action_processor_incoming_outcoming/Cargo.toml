@@ -22,12 +22,17 @@ edition = "2021"
 workspace = true
 
 [dependencies]
-user_access_refresh_token_encoded = { path = "./../user_access_refresh_token_encoded", package = "user_access_refresh_token_encoded", version = "=1.0.0", default-features = true, features = [], optional = false }
-user_access_token_encoded = { path = "./../user_access_token_encoded", package = "user_access_token_encoded", version = "=1.0.0", default-features = true, features = [], optional = false }
+user_access_refresh_token_encoded = { path = "./../user_access_refresh_token_encoded", package = "user_access_refresh_token_encoded", version = "=1.0.0", default-features = true, features = ["serde_for_manual_test"], optional = false }
+user_access_token_encoded = { path = "./../user_access_token_encoded", package = "user_access_token_encoded", version = "=1.0.0", default-features = true, features = ["serde_for_manual_test"], optional = false }
 common_precedent = { path = "./../common_precedent", package = "common_precedent", version = "=1.0.0", default-features = true, features = [], optional = false }
 macro_rules = { path = "./../macro_rules", package = "macro_rules", version = "=1.0.0", default-features = true, features = [], optional = false }
-serde = { package = "serde", version = "=1.0.210", default-features = true, features = ["derive"], optional = false }
+serde = { package = "serde", version = "=1.0.210", default-features = true, features = ["derive"], optional = true }
 bitcode = { package = "bitcode", version = "=0.6.3", default-features = true, features = [], optional = false }
 
 [features]
 default = []
+serde_for_manual_test = [
+    "dep:serde",
+    "user_access_refresh_token_encoded/serde_for_manual_test",
+    "user_access_token_encoded/serde_for_manual_test"
+]

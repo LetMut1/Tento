@@ -1,12 +1,5 @@
-use serde::{
-    Deserialize,
-    Serialize,
-};
-use bitcode::{
-    Encode,
-    Decode,
-};
-#[derive(Serialize, Deserialize, Encode, Decode)]
+#[cfg_attr(feature = "serde_for_manual_test", derive(serde::Serialize, serde::Deserialize))]
+#[derive(bitcode::Encode, bitcode::Decode)]
 pub enum UnifiedReport<T, P> {
     Target {
         data: Data<T>,
@@ -34,7 +27,8 @@ impl<T, P> UnifiedReport<T, P> {
         };
     }
 }
-#[derive(Serialize, Deserialize, Encode, Decode)]
+#[cfg_attr(feature = "serde_for_manual_test", derive(serde::Serialize, serde::Deserialize))]
+#[derive(bitcode::Encode, bitcode::Decode)]
 pub enum Data<D> {
     Empty,
     Filled {

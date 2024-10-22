@@ -1,20 +1,14 @@
 use common_precedent::CommonPrecedent;
-use macro_rules::r#enum;
-use serde::{
-    Deserialize,
-    Serialize,
-};
-use bitcode::{
-    Encode,
-    Decode,
-};
-#[derive(Serialize, Deserialize, Encode, Decode)]
+use macro_rules::enum_from;
+#[cfg_attr(feature = "serde_for_manual_test", derive(serde::Serialize, serde::Deserialize))]
+#[derive(bitcode::Encode, bitcode::Decode)]
 pub struct Incoming {
     pub user_device__id: String,
     pub user__email___or___user__nickname: String,
     pub user__password: String,
 }
-#[derive(Serialize, Deserialize, Encode, Decode)]
+#[cfg_attr(feature = "serde_for_manual_test", derive(serde::Serialize, serde::Deserialize))]
+#[derive(bitcode::Encode, bitcode::Decode)]
 pub struct Outcoming {
     pub user__id: i64,
     pub verification_message_sent: bool,
@@ -22,7 +16,7 @@ pub struct Outcoming {
     pub user_authorization_token__wrong_enter_tries_quantity: i16,
     pub user_authorization_token__wrong_enter_tries_quantity_limit: i16,
 }
-r#enum!(
+enum_from!(
     pub enum Precedent {
         CommonPrecedent::User_WrongEmailOrNicknameOrPassword,
     }

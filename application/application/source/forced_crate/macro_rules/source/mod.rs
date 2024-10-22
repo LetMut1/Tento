@@ -1,5 +1,5 @@
 #[macro_export]
-macro_rules! r#enum {
+macro_rules! enum_from {
     ($visability:vis enum $enum_name:ident { $($enum:ident :: $enum_variant:ident $({ $($enum_variant_field:ident : $enum_variant_field_type:ty),* $(,)? })?),* $(,)? }) => {
         const _: () = {
             $(
@@ -12,7 +12,8 @@ macro_rules! r#enum {
             )*
             ()
         };
-        #[derive(serde::Serialize, serde::Deserialize, bitcode::Encode, bitcode::Decode)]
+        #[cfg_attr(feature = "serde_for_manual_test", derive(serde::Serialize, serde::Deserialize))]
+        #[derive(bitcode::Encode, bitcode::Decode)]
         $visability enum $enum_name {
             $($enum_variant $({ $($enum_variant_field: $enum_variant_field_type,)* })?,)*
         }

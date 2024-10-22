@@ -1,26 +1,20 @@
 use crate::Common1;
 use user_access_token_encoded::UserAccessTokenEncoded;
 use common_precedent::CommonPrecedent;
-use macro_rules::r#enum;
-use serde::{
-    Deserialize,
-    Serialize,
-};
-use bitcode::{
-    Encode,
-    Decode,
-};
-#[derive(Serialize, Deserialize, Encode, Decode)]
+use macro_rules::enum_from;
+#[cfg_attr(feature = "serde_for_manual_test", derive(serde::Serialize, serde::Deserialize))]
+#[derive(bitcode::Encode, bitcode::Decode)]
 pub struct Incoming {
     pub user_access_token_encoded: UserAccessTokenEncoded,
     pub requery___channel__id: Option<i64>,
     pub limit: i16,
 }
-#[derive(Serialize, Deserialize, Encode, Decode)]
+#[cfg_attr(feature = "serde_for_manual_test", derive(serde::Serialize, serde::Deserialize))]
+#[derive(bitcode::Encode, bitcode::Decode)]
 pub struct Outcoming {
     pub common_registry: Vec<Common1>,
 }
-r#enum!(
+enum_from!(
     pub enum Precedent {
         CommonPrecedent::UserAccessToken_AlreadyExpired,
         CommonPrecedent::UserAccessToken_InUserAccessTokenBlackList,

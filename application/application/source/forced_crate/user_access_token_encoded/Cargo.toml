@@ -22,8 +22,11 @@ edition = "2021"
 workspace = true
 
 [dependencies]
-serde = { package = "serde", version = "=1.0.210", default-features = true, features = ["derive"], optional = false }
 bitcode = { package = "bitcode", version = "=0.6.3", default-features = true, features = [], optional = false }
+serde = { package = "serde", version = "=1.0.210", default-features = true, features = ["derive"], optional = true }
 
 [features]
 default = []
+serde_for_manual_test = [
+    "dep:serde",
+]
