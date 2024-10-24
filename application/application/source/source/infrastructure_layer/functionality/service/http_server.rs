@@ -90,7 +90,7 @@ use tokio_postgres::{
     NoTls,
     Socket,
 };
-use forced_crate::void::Void;
+use dedicated_crate::void::Void;
 static CONNECTION_QUANTITY: AtomicU64 = AtomicU64::new(0);
 pub struct HttpServer;
 impl HttpServer {

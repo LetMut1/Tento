@@ -2,12 +2,12 @@
 resolver = "2"
 members = [
     "./source",
-    "./source/forced_crate",
+    "./source/dedicated_crate",
     "./source/source/presentation_layer/functionality/command/core",
 ]
 default-members = [
     "./source",
-    "./source/forced_crate",
+    "./source/dedicated_crate",
     "./source/source/presentation_layer/functionality/command/core",
 ]
 

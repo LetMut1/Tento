@@ -22,7 +22,7 @@ use crate::{
         }, service::resolver::{UnixTime, Resolver}},
     },
 };
-use forced_crate::action_processor_incoming_outcoming::action_processor::channel::create::{
+use dedicated_crate::action_processor_incoming_outcoming::action_processor::channel::create::{
     Incoming,
     Outcoming,
     Precedent,
@@ -42,8 +42,8 @@ use crate::domain_layer::data::entity::channel::Channel_Name;
 use crate::domain_layer::data::entity::channel::Channel_LinkedName;
 use crate::infrastructure_layer::functionality::repository::postgresql::channel::By3;
 use crate::infrastructure_layer::functionality::repository::postgresql::channel::By2;
-use forced_crate::unified_report::UnifiedReport;
-use forced_crate::void::Void;
+use dedicated_crate::unified_report::UnifiedReport;
+use dedicated_crate::void::Void;
 pub struct Channel_Create;
 impl ActionProcessor_ for ActionProcessor<Channel_Create> {
     type Incoming = Incoming;

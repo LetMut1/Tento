@@ -22,7 +22,7 @@ build = "./build.rs"
 
 [dependencies]
 bitcode = { package = "bitcode", version = "=0.6.3", default-features = true, features = [], optional = false }
-forced_crate = { path = "./../../../forced_crate", package = "forced_crate", version = "=1.0.0", default-features = true, features = [], optional = false }
+dedicated_crate = { path = "./../../../dedicated_crate", package = "dedicated_crate", version = "=1.0.0", default-features = true, features = [], optional = false }
 libc = { package = "libc", version = "=0.2.158", default-features = true, features = [], optional = false }
 
 [build-dependencies]

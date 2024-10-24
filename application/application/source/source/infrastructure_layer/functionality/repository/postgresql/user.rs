@@ -26,7 +26,7 @@ use tokio_postgres::{
     types::Type,
     Client as Connection,
 };
-use forced_crate::void::Void;
+use dedicated_crate::void::Void;
 impl PostgresqlRepository<User<'_>> {
     pub fn create_1<'a>(
         database_1_connection: &'a Connection,

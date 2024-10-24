@@ -22,7 +22,7 @@ use crate::{
         },
     },
 };
-use forced_crate::action_processor_incoming_outcoming::action_processor::user_authorization::deauthorize_from_one_device::{
+use dedicated_crate::action_processor_incoming_outcoming::action_processor::user_authorization::deauthorize_from_one_device::{
     Incoming,
     Precedent,
 };
@@ -35,8 +35,8 @@ use tokio_postgres::{
     },
     Socket,
 };
-use forced_crate::unified_report::UnifiedReport;
-use forced_crate::void::Void;
+use dedicated_crate::unified_report::UnifiedReport;
+use dedicated_crate::void::Void;
 pub struct UserAuthorization_DeauthorizeFromOneDevice;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_DeauthorizeFromOneDevice> {
     type Incoming = Incoming;

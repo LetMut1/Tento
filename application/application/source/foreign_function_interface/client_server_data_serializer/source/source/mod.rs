@@ -2,7 +2,7 @@ use bitcode::{
     Decode,
     Encode,
 };
-use forced_crate::{
+use dedicated_crate::{
     action_processor_incoming_outcoming::action_processor::{
         channel::{
             get_many_by_name_in_subscriptions::{
@@ -2947,7 +2947,7 @@ mod test {
             // Needed to test all `unified_report::UnifiedReport` variants.
             mod unified_report {
                 use super::*;
-                use forced_crate::action_processor_incoming_outcoming::{
+                use dedicated_crate::action_processor_incoming_outcoming::{
                     Channel1 as Channel1_,
                     Channel2 as Channel2_,
                     ChannelInnerLink1 as ChannelInnerLink1_,

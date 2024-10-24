@@ -17,7 +17,7 @@ use crate::{
     },
 };
 use crate::infrastructure_layer::data::aggregate_error::AggregateError;
-use forced_crate::user_access_refresh_token_encoded::UserAccessRefreshTokenEncoded;
+use dedicated_crate::user_access_refresh_token_encoded::UserAccessRefreshTokenEncoded;
 impl Encoder<UserAccessRefreshToken<'_>> {
     pub fn encode<'a>(
         environment_configuration: &'static EnvironmentConfiguration,

@@ -9,7 +9,7 @@ use crate::infrastructure_layer::data::aggregate_error::{
     // ResultConverter,
 };
 use std::future::Future;
-use forced_crate::void::Void;
+use dedicated_crate::void::Void;
 // use lettre::{
 //     message::header::ContentType, transport::smtp::authentication::Credentials, AsyncSmtpTransport,
 //     AsyncTransport, Message, Tokio1Executor,

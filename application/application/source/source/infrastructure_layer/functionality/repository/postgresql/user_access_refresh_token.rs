@@ -19,7 +19,7 @@ use tokio_postgres::{
     types::Type,
     Client as Connection,
 };
-use forced_crate::void::Void;
+use dedicated_crate::void::Void;
 impl PostgresqlRepository<UserAccessRefreshToken<'_>> {
     pub fn create_1<'a, 'b>(
         database_2_connection: &'a Connection,

@@ -6,7 +6,7 @@ use crate::infrastructure_layer::{
         prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver,
     },
 };
-use forced_crate::action_processor_incoming_outcoming::{
+use dedicated_crate::action_processor_incoming_outcoming::{
     Channel1,
     Common1,
 };
@@ -21,7 +21,7 @@ use tokio_postgres::{
     Client as Connection,
 };
 use crate::infrastructure_layer::functionality::service::counter::Counter_;
-use forced_crate::void::Void;
+use dedicated_crate::void::Void;
 impl PostgresqlRepository<Common1> {
     pub fn find_1<'a>(database_1_connection: &'a Connection, by_1: By1<'a>, limit: i16) -> impl Future<Output = Result<Vec<Common1>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {

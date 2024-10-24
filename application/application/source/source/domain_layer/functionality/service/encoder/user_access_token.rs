@@ -20,7 +20,7 @@ use crate::infrastructure_layer::data::aggregate_error::{
     AggregateError,
     Backtrace,
 };
-use forced_crate::user_access_token_encoded::UserAccessTokenEncoded;
+use dedicated_crate::user_access_token_encoded::UserAccessTokenEncoded;
 impl Encoder<UserAccessToken<'_>> {
     pub fn encode<'a>(
         environment_configuration: &'static EnvironmentConfiguration,

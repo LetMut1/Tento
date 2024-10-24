@@ -6,7 +6,7 @@ use crate::{
         functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver,
     },
 };
-use forced_crate::action_processor_incoming_outcoming::ChannelInnerLink1;
+use dedicated_crate::action_processor_incoming_outcoming::ChannelInnerLink1;
 use crate::infrastructure_layer::data::aggregate_error::{
     AggregateError,
     Backtrace,
@@ -17,7 +17,7 @@ use tokio_postgres::{
     types::Type,
     Client as Connection,
 };
-use forced_crate::void::Void;
+use dedicated_crate::void::Void;
 impl PostgresqlRepository<ChannelInnerLink> {
     pub fn create_1<'a>(database_1_connection: &'a Connection, insert_1: Insert1) -> impl Future<Output = Result<ChannelInnerLink, AggregateError>> + Send + Capture<&'a Void> {
         return async move {

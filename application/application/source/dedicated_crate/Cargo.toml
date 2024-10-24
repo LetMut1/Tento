@@ -1,5 +1,5 @@
 [lib]
-name = "forced_crate"
+name = "dedicated_crate"
 path = "./source/mod.rs"
 test = true
 doctest = true
@@ -12,7 +12,7 @@ crate-type = ["lib"]
 required-features = []
 
 [package]
-name = "forced_crate"
+name = "dedicated_crate"
 version = "1.0.0"
 authors.workspace = true
 rust-version.workspace = true

@@ -40,7 +40,7 @@ use crate::{
         },
     },
 };
-use forced_crate::action_processor_incoming_outcoming::action_processor::user_authorization::refresh_access_token::{
+use dedicated_crate::action_processor_incoming_outcoming::action_processor::user_authorization::refresh_access_token::{
     Incoming,
     Outcoming,
     Precedent,
@@ -60,8 +60,8 @@ use tokio_postgres::{
     },
     Socket,
 };
-use forced_crate::unified_report::UnifiedReport;
-use forced_crate::void::Void;
+use dedicated_crate::unified_report::UnifiedReport;
+use dedicated_crate::void::Void;
 pub struct UserAuthorization_RefreshAccessToken;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> {
     type Incoming = Incoming;

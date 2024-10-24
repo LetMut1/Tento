@@ -19,7 +19,7 @@ use crate::{
         },
     },
 };
-use forced_crate::action_processor_incoming_outcoming::action_processor::user_authorization::check_nickname_for_existing::{
+use dedicated_crate::action_processor_incoming_outcoming::action_processor::user_authorization::check_nickname_for_existing::{
     Incoming,
     Outcoming,
 };
@@ -35,8 +35,8 @@ use tokio_postgres::{
     },
     Socket,
 };
-use forced_crate::unified_report::UnifiedReport;
-use forced_crate::void::Void;
+use dedicated_crate::unified_report::UnifiedReport;
+use dedicated_crate::void::Void;
 pub struct UserAuthorization_CheckNicknameForExisting;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_CheckNicknameForExisting> {
     type Incoming = Incoming;

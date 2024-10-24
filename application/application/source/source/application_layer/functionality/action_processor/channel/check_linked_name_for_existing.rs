@@ -19,7 +19,7 @@ use crate::{
         functionality::repository::postgresql::PostgresqlRepository,
     },
 };
-use forced_crate::action_processor_incoming_outcoming::action_processor::channel::check_linked_name_for_existing::{
+use dedicated_crate::action_processor_incoming_outcoming::action_processor::channel::check_linked_name_for_existing::{
     Incoming,
     Outcoming,
     Precedent
@@ -37,8 +37,8 @@ use tokio_postgres::{
 };
 use crate::domain_layer::data::entity::channel::Channel_LinkedName;
 use crate::infrastructure_layer::functionality::repository::postgresql::channel::By2;
-use forced_crate::unified_report::UnifiedReport;
-use forced_crate::void::Void;
+use dedicated_crate::unified_report::UnifiedReport;
+use dedicated_crate::void::Void;
 pub struct Channel_CheckLinkedNameForExisting;
 impl ActionProcessor_ for ActionProcessor<Channel_CheckLinkedNameForExisting> {
     type Incoming = Incoming;

@@ -31,7 +31,7 @@ bitcode = { package = "bitcode", version = "=0.6.3", default-features = true, fe
 bytes = { package = "bytes", version = "=1.7.1", default-features = true, features = [], optional = false }
 chrono = { package = "chrono", version = "=0.4.38", default-features = true, features = [], optional = false }
 const_format = { package = "const_format", version = "=0.2.33", default-features = true, features = [], optional = true }
-forced_crate = { path = "./forced_crate", package = "forced_crate", version = "=1.0.0", default-features = true, features = [], optional = false }
+dedicated_crate = { path = "./dedicated_crate", package = "dedicated_crate", version = "=1.0.0", default-features = true, features = [], optional = false }
 hmac = { package = "hmac", version = "=0.12.1", default-features = true, features = [], optional = false }
 http = { package = "http", version = "=1.1.0", default-features = true, features = [], optional = false }
 http-body-util = { package = "http-body-util", version = "=0.1.2", default-features = true, features = [], optional = false }
@@ -61,7 +61,7 @@ uuid = { package = "uuid", version = "=1.10.0", default-features = true, feature
 default = []
 logging_to_file = []
 serde_for_manual_test = [
-    "forced_crate/serde_for_manual_test",
+    "dedicated_crate/serde_for_manual_test",
 ]
 json_for_manual_test = [
     "dep:serde_json",

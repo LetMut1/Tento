@@ -25,7 +25,7 @@ use crate::{
         },
     },
 };
-use forced_crate::action_processor_incoming_outcoming::{
+use dedicated_crate::action_processor_incoming_outcoming::{
     action_processor::channel::get_many_by_subscription::{
         Incoming,
         Outcoming,
@@ -45,8 +45,8 @@ use tokio_postgres::{
     },
     Socket,
 };
-use forced_crate::unified_report::UnifiedReport;
-use forced_crate::void::Void;
+use dedicated_crate::unified_report::UnifiedReport;
+use dedicated_crate::void::Void;
 pub struct Channel_GetManyBySubscription;
 impl ActionProcessor_ for ActionProcessor<Channel_GetManyBySubscription> {
     type Incoming = Incoming;
