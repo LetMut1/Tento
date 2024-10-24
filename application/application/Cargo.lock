@@ -263,7 +263,6 @@ dependencies = [
 name = "bit_code_serializer"
 version = "1.0.0"
 dependencies = [
- "aggregate_error",
  "bitcode",
 ]
 

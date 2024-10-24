@@ -1,10 +1,14 @@
-use aggregate_error::AggregateError;
 use bit_code_serializer::Serializer as Serializer_;
 use super::{
     Deserialize_,
     Serialize_,
     Serialize,
     Serializer,
+};
+use aggregate_error::{
+    AggregateError,
+    Backtrace,
+    ResultConverter,
 };
 pub struct BitCode;
 impl Serialize for Serializer<BitCode> {
@@ -20,6 +24,11 @@ impl Serialize for Serializer<BitCode> {
     where
         T: Deserialize_<'a>,
     {
-        return Serializer_::deserialize::<'_, T>(data);
+        return Serializer_::deserialize::<'_, T>(data).into_indefinite_argument(
+            Backtrace::new(
+                line!(),
+                file!(),
+            ),
+        );
     }
 }

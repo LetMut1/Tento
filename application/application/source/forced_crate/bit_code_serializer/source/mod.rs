@@ -1,11 +1,7 @@
-use aggregate_error::{
-    AggregateError,
-    Backtrace,
-    ResultConverter,
-};
 use bitcode::{
     Encode,
     Decode,
+    Error,
 };
 pub struct Serializer;
 impl Serializer {
@@ -15,15 +11,10 @@ impl Serializer {
     {
         return bitcode::encode(subject);
     }
-    pub fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, AggregateError>
+    pub fn deserialize<'a, T>(data: &'a [u8]) -> Result<T, Error>
     where
         T: Decode<'a>,
     {
-        return bitcode::decode::<'_, T>(data).into_indefinite_argument(
-            Backtrace::new(
-                line!(),
-                file!(),
-            ),
-        );
+        return bitcode::decode::<'_, T>(data);
     }
 }

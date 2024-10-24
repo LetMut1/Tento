@@ -22,7 +22,6 @@ edition = "2021"
 workspace = true
 
 [dependencies]
-aggregate_error = { path = "./../aggregate_error", package = "aggregate_error", version = "=1.0.0", default-features = true, features = [], optional = false }
 bitcode = { package = "bitcode", version = "=0.6.3", default-features = true, features = [], optional = false }
 
 [features]
