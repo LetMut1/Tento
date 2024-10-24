@@ -12,7 +12,7 @@ use crate::{
         },
     },
 };
-use aggregate_error::AggregateError;
+use crate::infrastructure_layer::data::aggregate_error::AggregateError;
 use user_access_token_encoded::UserAccessTokenEncoded;
 impl Extractor<UserAccessToken<'_>> {
     pub fn extract<'a>(

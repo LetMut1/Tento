@@ -5,7 +5,7 @@ use crate::infrastructure_layer::data::{
     capture::Capture,
     environment_configuration::EnvironmentConfiguration,
 };
-use aggregate_error::{
+use crate::infrastructure_layer::data::aggregate_error::{
     AggregateError,
     Backtrace,
     ResultConverter,

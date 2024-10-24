@@ -35,7 +35,7 @@ use action_processor_incoming_outcoming::action_processor::channel_subscription:
     Incoming,
     Precedent,
 };
-use aggregate_error::{
+use crate::infrastructure_layer::data::aggregate_error::{
     AggregateError,
     Backtrace,
 };

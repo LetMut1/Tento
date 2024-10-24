@@ -8,7 +8,7 @@ use bitcode::{
     Encode,
     Decode,
 };
-use aggregate_error::AggregateError;
+use crate::infrastructure_layer::data::aggregate_error::AggregateError;
 #[cfg(feature = "serde_for_manual_test")]
 use serde::{
     Deserialize as SerdeDeserialize,

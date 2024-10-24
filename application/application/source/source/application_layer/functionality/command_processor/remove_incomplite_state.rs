@@ -1,5 +1,5 @@
 use super::CommandProcessor;
-use aggregate_error::AggregateError;
+use crate::infrastructure_layer::data::aggregate_error::AggregateError;
 pub struct RemoveIncompliteState;
 impl CommandProcessor<RemoveIncompliteState> {
     pub fn process() -> Result<(), AggregateError> {

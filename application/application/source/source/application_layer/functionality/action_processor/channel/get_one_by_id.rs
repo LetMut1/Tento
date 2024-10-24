@@ -43,7 +43,7 @@ use action_processor_incoming_outcoming::{
     },
     Channel2,
 };
-use aggregate_error::{
+use crate::infrastructure_layer::data::aggregate_error::{
     AggregateError,
     Backtrace,
 };

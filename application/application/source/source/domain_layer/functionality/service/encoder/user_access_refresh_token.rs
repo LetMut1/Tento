@@ -16,7 +16,7 @@ use crate::{
         },
     },
 };
-use aggregate_error::AggregateError;
+use crate::infrastructure_layer::data::aggregate_error::AggregateError;
 use user_access_refresh_token_encoded::UserAccessRefreshTokenEncoded;
 impl Encoder<UserAccessRefreshToken<'_>> {
     pub fn encode<'a>(

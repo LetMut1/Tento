@@ -1,6 +1,6 @@
 use super::Resolver;
 use crate::infrastructure_layer::data::capture::Capture;
-use aggregate_error::{
+use crate::infrastructure_layer::data::aggregate_error::{
     AggregateError,
     Backtrace,
     ResultConverter,

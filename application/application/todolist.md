@@ -116,3 +116,7 @@ https://stackoverflow.com/questions/58819199/how-to-keep-long-connection-in-http
 
 
 в application lib сделать все модули приватными, и сделать pub use
+
+
+
+pub trait Format<S> - нужен ли?

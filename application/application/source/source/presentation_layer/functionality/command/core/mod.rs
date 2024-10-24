@@ -1,18 +1,18 @@
-use aggregate_error::{
-    AggregateError,
-    Backtrace,
-    Common,
-    OptionConverter,
-};
-use application::application_layer::functionality::command_processor::{
+use application::{
     CreateFixtures,
     RemoveIncompliteState,
     RunServer,
     CommandProcessor,
+    AggregateError,
+    Backtrace,
+    Common,
+    OptionConverter,
+    Formatter,
 };
-use clap::Command;
-use clap::Arg;
-use formatter::Formatter;
+use clap::{
+    Command,
+    Arg,
+};
 // The type is 'Result<(), ()>' but not '()' to return a success/error exit code but not only success exit code.
 fn main() -> Result<(), ()> {
     if let Result::Err(aggregate_error) = Processor::process() {

@@ -2,7 +2,7 @@ use super::{
     report_variant_2,
     Formatter,
 };
-use aggregate_error::{
+use crate::infrastructure_layer::data::aggregate_error::{
     AggregateError,
     AggregateError_,
     Backtrace,

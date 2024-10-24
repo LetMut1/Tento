@@ -12,7 +12,7 @@ use crate::{
         },
     },
 };
-use aggregate_error::AggregateError;
+use crate::infrastructure_layer::data::aggregate_error::AggregateError;
 use std::future::Future;
 use void::Void;
 impl EmailSender<UserRegistrationToken<'_>> {

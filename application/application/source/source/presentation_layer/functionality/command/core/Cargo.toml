@@ -23,5 +23,3 @@ workspace = true
 [dependencies]
 application = { path = "./../../../../..", package = "application", version = "=1.0.0", default-features = true, features = [], optional = false }
 clap = { package = "clap", version = "=4.5.17", default-features = true, features = ["cargo"], optional = false }
-formatter = { path = "./../../../../../forced_crate/formatter", package = "formatter", version = "=1.0.0", default-features = true, features = [], optional = false }
-aggregate_error = { path = "./../../../../../forced_crate/aggregate_error", package = "aggregate_error", version = "=1.0.0", default-features = true, features = [], optional = false }

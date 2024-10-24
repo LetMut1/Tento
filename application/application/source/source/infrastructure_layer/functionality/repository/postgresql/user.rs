@@ -13,7 +13,7 @@ use crate::{
         functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver,
     },
 };
-use aggregate_error::{
+use crate::infrastructure_layer::data::aggregate_error::{
     AggregateError,
     Backtrace,
     ResultConverter,

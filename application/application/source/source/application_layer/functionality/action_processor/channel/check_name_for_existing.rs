@@ -25,8 +25,8 @@ use action_processor_incoming_outcoming::action_processor::channel::check_name_f
     Precedent
 };
 use crate::domain_layer::data::entity::channel::Channel;
-use aggregate_error::AggregateError;
-use aggregate_error::Backtrace;
+use crate::infrastructure_layer::data::aggregate_error::AggregateError;
+use crate::infrastructure_layer::data::aggregate_error::Backtrace;
 use std::future::Future;
 use tokio_postgres::{
     tls::{

@@ -1,6 +1,6 @@
 use super::Validator;
 use crate::domain_layer::data::entity::user_reset_password_token::UserResetPasswordToken_Value;
-use aggregate_error::{
+use crate::infrastructure_layer::data::aggregate_error::{
     AggregateError,
     Backtrace,
     Common,

@@ -6,7 +6,7 @@ use crate::{
         Encoder as Encoder_,
     },
 };
-use aggregate_error::AggregateError;
+use crate::infrastructure_layer::data::aggregate_error::AggregateError;
 impl Encoder<User_Password> {
     pub fn encode<'a>(user__password: &'a str) -> Result<String, AggregateError> {
         return Encoder_::<Argon2Id>::encode(user__password.as_bytes());

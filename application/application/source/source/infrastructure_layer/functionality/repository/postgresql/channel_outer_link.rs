@@ -7,7 +7,7 @@ use crate::{
     },
 };
 use action_processor_incoming_outcoming::ChannelOuterLink1;
-use aggregate_error::{
+use crate::infrastructure_layer::data::aggregate_error::{
     AggregateError,
     Backtrace,
     ResultConverter,

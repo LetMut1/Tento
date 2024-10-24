@@ -1,15 +1,12 @@
 use super::{
     Format,
     Formatter,
+    report_variant_2,
 };
 use crate::presentation_layer::functionality::service::processor::action_round::ActionRound;
-use aggregate_error::{
+use crate::infrastructure_layer::data::aggregate_error::{
     Auditor,
     Backtrace,
-};
-use formatter::{
-    report_variant_2,
-    Formatter as Formatter_,
 };
 use http::method::Method;
 impl Formatter<ActionRound> {
@@ -32,7 +29,7 @@ impl Formatter<ActionRound> {
                 Self::format(row_data).as_str(),
                 Formatter::<S>::format(&subject_auditor.subject).as_str(),
             ).as_str(),
-            Formatter_::<Backtrace>::format(&subject_auditor.backtrace),
+            Formatter::<Backtrace>::format(&subject_auditor.backtrace),
         );
     }
 }

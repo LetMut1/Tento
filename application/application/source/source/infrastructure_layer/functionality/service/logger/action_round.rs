@@ -18,7 +18,7 @@ use crate::{
     },
     presentation_layer::functionality::service::processor::action_round::ActionRound,
 };
-use aggregate_error::Auditor;
+use crate::infrastructure_layer::data::aggregate_error::Auditor;
 impl Logger<ActionRound> {
     pub fn log(row_data: RowData) -> () {
         Spawner::<TokioNonBlockingTask>::spawn_into_background(

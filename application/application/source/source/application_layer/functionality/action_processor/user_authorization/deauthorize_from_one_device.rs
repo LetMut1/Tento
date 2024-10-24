@@ -26,7 +26,7 @@ use action_processor_incoming_outcoming::action_processor::user_authorization::d
     Incoming,
     Precedent,
 };
-use aggregate_error::AggregateError;
+use crate::infrastructure_layer::data::aggregate_error::AggregateError;
 use std::future::Future;
 use tokio_postgres::{
     tls::{

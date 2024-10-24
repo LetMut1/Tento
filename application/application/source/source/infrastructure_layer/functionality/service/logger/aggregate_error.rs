@@ -1,6 +1,6 @@
 use super::Logger;
-use aggregate_error::AggregateError;
-use formatter::Formatter;
+use crate::infrastructure_layer::data::aggregate_error::AggregateError;
+use crate::infrastructure_layer::functionality::service::formatter::Formatter;
 impl Logger<AggregateError> {
     pub fn log<'a>(aggregate_error: &'a AggregateError) -> () {
         tracing::error!(

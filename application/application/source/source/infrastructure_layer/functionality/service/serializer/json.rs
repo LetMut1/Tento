@@ -8,7 +8,7 @@ mod json {
         Deserialize_,
         Serialize_,
     };
-    use aggregate_error::{
+    use crate::infrastructure_layer::data::aggregate_error::{
         AggregateError,
         Backtrace,
         ResultConverter,

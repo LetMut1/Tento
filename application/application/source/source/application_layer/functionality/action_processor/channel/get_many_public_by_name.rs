@@ -36,7 +36,7 @@ use action_processor_incoming_outcoming::{
     },
     Common1,
 };
-use aggregate_error::{
+use crate::infrastructure_layer::data::aggregate_error::{
     AggregateError,
     Backtrace,
 };
