@@ -1,13 +1,15 @@
 use super::Resolver;
-use crate::infrastructure_layer::data::capture::Capture;
-use crate::infrastructure_layer::data::aggregate_error::{
-    AggregateError,
-    Backtrace,
-    ResultConverter,
+use crate::infrastructure_layer::data::{
+    aggregate_error::{
+        AggregateError,
+        Backtrace,
+        ResultConverter,
+    },
+    capture::Capture,
 };
+use dedicated_crate::void::Void;
 use std::future::Future;
 use tokio_postgres::Client as Connection;
-use dedicated_crate::void::Void;
 pub struct PostgresqlTransaction;
 impl Resolver<PostgresqlTransaction> {
     pub fn start<'a>(

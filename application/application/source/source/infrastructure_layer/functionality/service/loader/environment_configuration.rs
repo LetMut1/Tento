@@ -1,26 +1,28 @@
 use super::Loader;
-use crate::infrastructure_layer::data::environment_configuration::{
-    ApplicationServer,
-    EmailServer,
-    Encryption,
-    EnvironmentConfiguration,
-    Http,
-    HttpKeepalive,
-    Logging,
-    Postgresql,
-    PrivateKey,
-    Resource,
-    Tcp,
-    TcpKeepalive,
-    Tls,
-    TokioRuntime,
-    EnvironmentConfigurationFile,
-};
-use crate::infrastructure_layer::data::aggregate_error::{
-    AggregateError,
-    Backtrace,
-    ResultConverter,
-    OptionConverter,
+use crate::infrastructure_layer::data::{
+    aggregate_error::{
+        AggregateError,
+        Backtrace,
+        OptionConverter,
+        ResultConverter,
+    },
+    environment_configuration::{
+        ApplicationServer,
+        EmailServer,
+        Encryption,
+        EnvironmentConfiguration,
+        EnvironmentConfigurationFile,
+        Http,
+        HttpKeepalive,
+        Logging,
+        Postgresql,
+        PrivateKey,
+        Resource,
+        Tcp,
+        TcpKeepalive,
+        Tls,
+        TokioRuntime,
+    },
 };
 use std::{
     net::ToSocketAddrs,
@@ -74,7 +76,7 @@ impl Loader<EnvironmentConfiguration> {
             Backtrace::new(
                 line!(),
                 file!(),
-            )
+            ),
         )?;
         let mut email_server_tcp_socket_address_registry = environment_configuration_file.resource.email_server.socket_address.value.to_socket_addrs().into_runtime(
             Backtrace::new(
@@ -86,7 +88,7 @@ impl Loader<EnvironmentConfiguration> {
             Backtrace::new(
                 line!(),
                 file!(),
-            )
+            ),
         )?;
         let application_server = {
             let tcp = {

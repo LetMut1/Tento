@@ -1,5 +1,6 @@
 mod health_check;
 mod route_not_found;
+pub use self::route_not_found::RouteNotFound;
 #[cfg(feature = "json_for_manual_test")]
 use crate::infrastructure_layer::functionality::service::serializer::Json;
 use crate::{
@@ -13,17 +14,19 @@ use crate::{
             capture::Capture,
             control_type::Response,
         },
-        functionality::service::serializer::BitCode,
+        functionality::service::serializer::{
+            BitCode,
+            Deserialize_,
+            Serialize_,
+        },
     },
     presentation_layer::functionality::service::processor::{
         action_round::ActionRound,
         Processor,
     },
 };
-use crate::infrastructure_layer::functionality::service::serializer::Serialize_;
-use crate::infrastructure_layer::functionality::service::serializer::Deserialize_;
+use dedicated_crate::void::Void;
 use http::request::Parts;
-pub use self::route_not_found::RouteNotFound;
 use hyper::body::Incoming;
 use std::{
     future::Future,
@@ -36,7 +39,6 @@ use tokio_postgres::{
     },
     Socket,
 };
-use dedicated_crate::void::Void;
 pub struct Action<S> {
     _subject: PhantomData<S>,
 }

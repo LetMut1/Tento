@@ -1,15 +1,15 @@
 use super::Sender;
-use crate::infrastructure_layer::data::{
-    capture::Capture,
-    environment_configuration::EnvironmentConfiguration,
-};
 use crate::infrastructure_layer::data::aggregate_error::{
     AggregateError,
     // Backtrace,
     // ResultConverter,
 };
-use std::future::Future;
+use crate::infrastructure_layer::data::{
+    capture::Capture,
+    environment_configuration::EnvironmentConfiguration,
+};
 use dedicated_crate::void::Void;
+use std::future::Future;
 // use lettre::{
 //     message::header::ContentType, transport::smtp::authentication::Credentials, AsyncSmtpTransport,
 //     AsyncTransport, Message, Tokio1Executor,

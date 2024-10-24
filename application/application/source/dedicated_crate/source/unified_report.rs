@@ -1,4 +1,10 @@
-#[cfg_attr(feature = "serde_for_manual_test", derive(serde::Serialize, serde::Deserialize))]
+#[cfg_attr(
+    feature = "serde_for_manual_test",
+    derive(
+        serde::Serialize,
+        serde::Deserialize
+    )
+)]
 #[derive(bitcode::Encode, bitcode::Decode)]
 pub enum UnifiedReport<T, P> {
     Target {
@@ -27,7 +33,13 @@ impl<T, P> UnifiedReport<T, P> {
         };
     }
 }
-#[cfg_attr(feature = "serde_for_manual_test", derive(serde::Serialize, serde::Deserialize))]
+#[cfg_attr(
+    feature = "serde_for_manual_test",
+    derive(
+        serde::Serialize,
+        serde::Deserialize
+    )
+)]
 #[derive(bitcode::Encode, bitcode::Decode)]
 pub enum Data<D> {
     Empty,

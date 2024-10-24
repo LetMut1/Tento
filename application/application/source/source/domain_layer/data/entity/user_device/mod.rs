@@ -1,7 +1,7 @@
 mod field;
+use self::field::Id;
 use super::user::User_Id;
 use std::marker::PhantomData;
-use self::field::Id;
 pub struct UserDevice {
     pub id: String,
     _id: PhantomData<Id>,

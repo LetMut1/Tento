@@ -5,7 +5,13 @@ use crate::{
         Inner,
     },
     domain_layer::{
-        data::entity::user_access_token::UserAccessToken,
+        data::entity::{
+            channel::{
+                Channel,
+                Channel_LinkedName,
+            },
+            user_access_token::UserAccessToken,
+        },
         functionality::service::{
             extractor::{
                 Extracted,
@@ -15,18 +21,28 @@ use crate::{
         },
     },
     infrastructure_layer::{
-        data::capture::Capture,
-        functionality::repository::postgresql::PostgresqlRepository,
+        data::{
+            aggregate_error::{
+                AggregateError,
+                Backtrace,
+            },
+            capture::Capture,
+        },
+        functionality::repository::postgresql::{
+            channel::By2,
+            PostgresqlRepository,
+        },
     },
 };
-use dedicated_crate::action_processor_incoming_outcoming::action_processor::channel::check_linked_name_for_existing::{
-    Incoming,
-    Outcoming,
-    Precedent
+use dedicated_crate::{
+    action_processor_incoming_outcoming::action_processor::channel::check_linked_name_for_existing::{
+        Incoming,
+        Outcoming,
+        Precedent,
+    },
+    unified_report::UnifiedReport,
+    void::Void,
 };
-use crate::domain_layer::data::entity::channel::Channel;
-use crate::infrastructure_layer::data::aggregate_error::AggregateError;
-use crate::infrastructure_layer::data::aggregate_error::Backtrace;
 use std::future::Future;
 use tokio_postgres::{
     tls::{
@@ -35,10 +51,6 @@ use tokio_postgres::{
     },
     Socket,
 };
-use crate::domain_layer::data::entity::channel::Channel_LinkedName;
-use crate::infrastructure_layer::functionality::repository::postgresql::channel::By2;
-use dedicated_crate::unified_report::UnifiedReport;
-use dedicated_crate::void::Void;
 pub struct Channel_CheckLinkedNameForExisting;
 impl ActionProcessor_ for ActionProcessor<Channel_CheckLinkedNameForExisting> {
     type Incoming = Incoming;
@@ -61,7 +73,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_CheckLinkedNameForExisting> {
             )? {
                 Extracted::UserAccessToken {
                     user_access_token: _,
-                } => {},
+                } => {}
                 Extracted::UserAccessTokenAlreadyExpired => {
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_AlreadyExpired));
                 }
@@ -84,7 +96,8 @@ impl ActionProcessor_ for ActionProcessor<Channel_CheckLinkedNameForExisting> {
                 By2 {
                     channel__name: incoming.channel__linked_name.as_str(),
                 },
-            ).await?;
+            )
+            .await?;
             return Result::Ok(
                 UnifiedReport::target_filled(
                     Outcoming {

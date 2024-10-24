@@ -1,23 +1,26 @@
 use super::PostgresqlRepository;
 use crate::{
     domain_layer::data::entity::user::{
+        User,
         User_1,
         User_2,
         User_3,
         User_4,
         User_5,
-        User,
     },
     infrastructure_layer::{
-        data::capture::Capture,
+        data::{
+            aggregate_error::{
+                AggregateError,
+                Backtrace,
+                ResultConverter,
+            },
+            capture::Capture,
+        },
         functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver,
     },
 };
-use crate::infrastructure_layer::data::aggregate_error::{
-    AggregateError,
-    Backtrace,
-    ResultConverter,
-};
+use dedicated_crate::void::Void;
 use std::{
     borrow::Cow,
     future::Future,
@@ -26,12 +29,8 @@ use tokio_postgres::{
     types::Type,
     Client as Connection,
 };
-use dedicated_crate::void::Void;
 impl PostgresqlRepository<User<'_>> {
-    pub fn create_1<'a>(
-        database_1_connection: &'a Connection,
-        insert_1: Insert1,
-    ) -> impl Future<Output = Result<User<'static>, AggregateError>> + Send + Capture<&'a Void> {
+    pub fn create_1<'a>(database_1_connection: &'a Connection, insert_1: Insert1) -> impl Future<Output = Result<User<'static>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 INSERT INTO public.user_ AS u ( \
@@ -49,7 +48,7 @@ impl PostgresqlRepository<User<'_>> {
                 ) \
                 RETURNING \
                     u.id AS i;";
-                let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
+            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
                     &insert_1.user__email,
@@ -282,10 +281,7 @@ impl PostgresqlRepository<User<'_>> {
             return Result::Ok(true);
         };
     }
-    pub fn find_1<'a, 'b>(
-        database_1_connection: &'a Connection,
-        by_1: By1<'b>,
-    ) -> impl Future<Output = Result<Option<User<'b>>, AggregateError>> + Send + Capture<&'a Void> {
+    pub fn find_1<'a, 'b>(database_1_connection: &'a Connection, by_1: By1<'b>) -> impl Future<Output = Result<Option<User<'b>>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 SELECT \

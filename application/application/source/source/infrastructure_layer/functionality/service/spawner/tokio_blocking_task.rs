@@ -1,6 +1,8 @@
 use super::Spawner;
-use crate::infrastructure_layer::functionality::service::logger::Logger;
-use crate::infrastructure_layer::data::aggregate_error::AggregateError;
+use crate::infrastructure_layer::{
+    data::aggregate_error::AggregateError,
+    functionality::service::logger::Logger,
+};
 use tokio::task::JoinHandle;
 pub struct TokioBlockingTask;
 impl Spawner<TokioBlockingTask> {

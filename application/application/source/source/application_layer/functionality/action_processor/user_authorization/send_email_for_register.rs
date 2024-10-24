@@ -20,7 +20,13 @@ use crate::{
         },
     },
     infrastructure_layer::{
-        data::capture::Capture,
+        data::{
+            aggregate_error::{
+                AggregateError,
+                Backtrace,
+            },
+            capture::Capture,
+        },
         functionality::{
             repository::postgresql::{
                 user_registration_token::{
@@ -35,21 +41,21 @@ use crate::{
                     Resolver,
                 },
                 spawner::{
-                    TokioNonBlockingTask,
                     Spawner,
+                    TokioNonBlockingTask,
                 },
             },
         },
     },
 };
-use dedicated_crate::action_processor_incoming_outcoming::action_processor::user_authorization::send_email_for_register::{
-    Incoming,
-    Outcoming,
-    Precedent,
-};
-use crate::infrastructure_layer::data::aggregate_error::{
-    AggregateError,
-    Backtrace,
+use dedicated_crate::{
+    action_processor_incoming_outcoming::action_processor::user_authorization::send_email_for_register::{
+        Incoming,
+        Outcoming,
+        Precedent,
+    },
+    unified_report::UnifiedReport,
+    void::Void,
 };
 use std::future::Future;
 use tokio_postgres::{
@@ -59,8 +65,6 @@ use tokio_postgres::{
     },
     Socket,
 };
-use dedicated_crate::unified_report::UnifiedReport;
-use dedicated_crate::void::Void;
 pub struct UserAuthorization_SendEmailForRegister;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister> {
     type Incoming = Incoming;

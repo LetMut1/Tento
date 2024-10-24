@@ -1,12 +1,14 @@
 use super::{
+    report_variant_2,
     Format,
     Formatter,
-    report_variant_2,
 };
-use crate::presentation_layer::functionality::service::processor::action_round::ActionRound;
-use crate::infrastructure_layer::data::aggregate_error::{
-    Auditor,
-    Backtrace,
+use crate::{
+    infrastructure_layer::data::aggregate_error::{
+        Auditor,
+        Backtrace,
+    },
+    presentation_layer::functionality::service::processor::action_round::ActionRound,
 };
 use http::method::Method;
 impl Formatter<ActionRound> {

@@ -15,18 +15,24 @@ use crate::{
         },
     },
     infrastructure_layer::{
-        data::capture::Capture,
+        data::{
+            aggregate_error::AggregateError,
+            capture::Capture,
+        },
         functionality::repository::postgresql::{
             user_access_refresh_token::By2,
             PostgresqlRepository,
         },
     },
 };
-use dedicated_crate::action_processor_incoming_outcoming::action_processor::user_authorization::deauthorize_from_one_device::{
-    Incoming,
-    Precedent,
+use dedicated_crate::{
+    action_processor_incoming_outcoming::action_processor::user_authorization::deauthorize_from_one_device::{
+        Incoming,
+        Precedent,
+    },
+    unified_report::UnifiedReport,
+    void::Void,
 };
-use crate::infrastructure_layer::data::aggregate_error::AggregateError;
 use std::future::Future;
 use tokio_postgres::{
     tls::{
@@ -35,8 +41,6 @@ use tokio_postgres::{
     },
     Socket,
 };
-use dedicated_crate::unified_report::UnifiedReport;
-use dedicated_crate::void::Void;
 pub struct UserAuthorization_DeauthorizeFromOneDevice;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_DeauthorizeFromOneDevice> {
     type Incoming = Incoming;

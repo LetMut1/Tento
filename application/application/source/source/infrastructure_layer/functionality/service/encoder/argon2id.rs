@@ -58,13 +58,16 @@ impl Encoder<Argon2Id> {
         return match ARGON2.get() {
             Option::Some(argon2) => Result::Ok(argon2),
             Option::None => {
-                if ARGON2.set(
-                    Argon2::new(
-                        Algorithm::Argon2id,
-                        Version::V0x13,
-                        Params::default(),
-                    ),
-                ).is_err() {
+                if ARGON2
+                    .set(
+                        Argon2::new(
+                            Algorithm::Argon2id,
+                            Version::V0x13,
+                            Params::default(),
+                        ),
+                    )
+                    .is_err()
+                {
                     return Result::Err(
                         AggregateError::new_logic_(
                             Common::ValueAlreadyExist,

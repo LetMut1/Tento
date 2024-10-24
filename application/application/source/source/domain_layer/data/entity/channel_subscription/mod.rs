@@ -1,8 +1,8 @@
 mod field;
 use self::field::CreatedAt;
 use super::{
-    user::User_Id,
     channel::Channel_Id,
+    user::User_Id,
 };
 use std::marker::PhantomData;
 pub struct ChannelSubscription {

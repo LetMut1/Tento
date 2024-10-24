@@ -1,5 +1,11 @@
 use crate::{
     application_layer::functionality::action_processor::{
+        ChannelSubscription_Create,
+        Channel_GetManyByNameInSubscriptions,
+        Channel_GetManyBySubscription,
+        Channel_GetManyPublicByName,
+        Channel_GetOneById,
+        Inner as ActionProcessorInner,
         UserAuthorization_AuthorizeByFirstStep,
         UserAuthorization_AuthorizeByLastStep,
         UserAuthorization_CheckEmailForExisting,
@@ -16,15 +22,14 @@ use crate::{
         UserAuthorization_SendEmailForAuthorize,
         UserAuthorization_SendEmailForRegister,
         UserAuthorization_SendEmailForResetPassword,
-        Channel_GetManyByNameInSubscriptions,
-        Channel_GetManyBySubscription,
-        Channel_GetManyPublicByName,
-        Channel_GetOneById,
-        ChannelSubscription_Create,
-        Inner as ActionProcessorInner,
     },
     infrastructure_layer::{
         data::{
+            aggregate_error::{
+                AggregateError,
+                Backtrace,
+                ResultConverter,
+            },
             control_type::{
                 Request,
                 Response,
@@ -35,26 +40,22 @@ use crate::{
             creator::Creator,
             logger::Logger,
             spawner::{
-                TokioNonBlockingTask,
                 Spawner,
+                TokioNonBlockingTask,
             },
         },
     },
     presentation_layer::functionality::action::{
-        RouteNotFound,
         Action,
         Inner as ActionInner,
+        RouteNotFound,
     },
-};
-use crate::infrastructure_layer::data::aggregate_error::{
-    AggregateError,
-    Backtrace,
-    ResultConverter,
 };
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager;
 #[cfg(feature = "port_for_manual_test")]
 use core::net::SocketAddr;
+use dedicated_crate::void::Void;
 #[cfg(feature = "port_for_manual_test")]
 use hyper::server::conn::http1::Builder as Http1Builder;
 use hyper::{
@@ -65,6 +66,7 @@ use hyper_util::rt::{
     tokio::TokioExecutor,
     TokioIo,
 };
+use matchit::Router;
 use std::{
     error::Error,
     future::Future,
@@ -77,7 +79,6 @@ use std::{
     },
     time::Duration,
 };
-use matchit::Router;
 use tokio::{
     net::TcpListener,
     signal::unix::SignalKind,
@@ -90,7 +91,6 @@ use tokio_postgres::{
     NoTls,
     Socket,
 };
-use dedicated_crate::void::Void;
 static CONNECTION_QUANTITY: AtomicU64 = AtomicU64::new(0);
 pub struct HttpServer;
 impl HttpServer {
@@ -961,11 +961,7 @@ impl HttpServer {
         );
         return ();
     }
-    fn process_request<T>(
-        request: Request,
-        environment_configuration: &'static EnvironmentConfiguration,
-        cloned: Arc<Cloned<T>>
-    ) -> impl Future<Output = Response> + Send
+    fn process_request<T>(request: Request, environment_configuration: &'static EnvironmentConfiguration, cloned: Arc<Cloned<T>>) -> impl Future<Output = Response> + Send
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,

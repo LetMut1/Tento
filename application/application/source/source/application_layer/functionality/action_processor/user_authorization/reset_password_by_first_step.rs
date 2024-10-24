@@ -26,7 +26,13 @@ use crate::{
         },
     },
     infrastructure_layer::{
-        data::capture::Capture,
+        data::{
+            aggregate_error::{
+                AggregateError,
+                Backtrace,
+            },
+            capture::Capture,
+        },
         functionality::{
             repository::postgresql::{
                 user::By2,
@@ -45,21 +51,21 @@ use crate::{
                     Resolver,
                 },
                 spawner::{
-                    TokioNonBlockingTask,
                     Spawner,
+                    TokioNonBlockingTask,
                 },
             },
         },
     },
 };
-use dedicated_crate::action_processor_incoming_outcoming::action_processor::user_authorization::reset_password_by_first_step::{
-    Incoming,
-    Outcoming,
-    Precedent,
-};
-use crate::infrastructure_layer::data::aggregate_error::{
-    AggregateError,
-    Backtrace,
+use dedicated_crate::{
+    action_processor_incoming_outcoming::action_processor::user_authorization::reset_password_by_first_step::{
+        Incoming,
+        Outcoming,
+        Precedent,
+    },
+    unified_report::UnifiedReport,
+    void::Void,
 };
 use std::future::Future;
 use tokio_postgres::{
@@ -69,8 +75,6 @@ use tokio_postgres::{
     },
     Socket,
 };
-use dedicated_crate::unified_report::UnifiedReport;
-use dedicated_crate::void::Void;
 pub struct UserAuthorization_ResetPasswordByFirstStep;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirstStep> {
     type Incoming = Incoming;
@@ -123,35 +127,30 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
             };
             let database_2_postgresql_pooled_connection = inner.get_database_2_postgresql_pooled_connection().await?;
             let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
-            let (
-                user_reset_password_token__value,
-                user_reset_password_token__can_be_resent_from,
-                user_reset_password_token__wrong_enter_tries_quantity,
-                can_send,
-            ) = match PostgresqlRepository::<UserResetPasswordToken>::find_1(
-                database_2_postgresql_connection,
-                By1 {
-                    user__id: user_.id,
-                    user_device__id: incoming.user_device__id.as_str(),
-                },
-            )
-            .await?
-            {
-                Option::Some(mut user_reset_password_token) => {
-                    let (can_send_, need_to_update_1) = if Resolver::<Expiration>::is_expired(user_reset_password_token.can_be_resent_from) {
-                        user_reset_password_token.can_be_resent_from = Generator::<UserResetPasswordToken_CanBeResentFrom>::generate()?;
-                        (
-                            true,
-                            true,
-                        )
-                    } else {
-                        (
-                            false,
-                            false,
-                        )
-                    };
-                    let need_to_update_2 =
-                        if Resolver::<Expiration>::is_expired(user_reset_password_token.expires_at) || user_reset_password_token.is_approved {
+            let (user_reset_password_token__value, user_reset_password_token__can_be_resent_from, user_reset_password_token__wrong_enter_tries_quantity, can_send) =
+                match PostgresqlRepository::<UserResetPasswordToken>::find_1(
+                    database_2_postgresql_connection,
+                    By1 {
+                        user__id: user_.id,
+                        user_device__id: incoming.user_device__id.as_str(),
+                    },
+                )
+                .await?
+                {
+                    Option::Some(mut user_reset_password_token) => {
+                        let (can_send_, need_to_update_1) = if Resolver::<Expiration>::is_expired(user_reset_password_token.can_be_resent_from) {
+                            user_reset_password_token.can_be_resent_from = Generator::<UserResetPasswordToken_CanBeResentFrom>::generate()?;
+                            (
+                                true,
+                                true,
+                            )
+                        } else {
+                            (
+                                false,
+                                false,
+                            )
+                        };
+                        let need_to_update_2 = if Resolver::<Expiration>::is_expired(user_reset_password_token.expires_at) || user_reset_password_token.is_approved {
                             user_reset_password_token.value = Generator::<UserResetPasswordToken_Value>::generate();
                             user_reset_password_token.wrong_enter_tries_quantity = 0;
                             user_reset_password_token.is_approved = false;
@@ -160,27 +159,14 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
                         } else {
                             false
                         };
-                    if need_to_update_1 && need_to_update_2 {
-                        PostgresqlRepository::<UserResetPasswordToken>::update_1(
-                            database_2_postgresql_connection,
-                            Update1 {
-                                user_reset_password_token__value: user_reset_password_token.value.as_str(),
-                                user_reset_password_token__wrong_enter_tries_quantity: user_reset_password_token.wrong_enter_tries_quantity,
-                                user_reset_password_token__is_approved: user_reset_password_token.is_approved,
-                                user_reset_password_token__expires_at: user_reset_password_token.expires_at,
-                                user_reset_password_token__can_be_resent_from: user_reset_password_token.can_be_resent_from,
-                            },
-                            By1 {
-                                user__id: user_.id,
-                                user_device__id: incoming.user_device__id.as_str(),
-                            },
-                        )
-                        .await?;
-                    } else {
-                        if need_to_update_1 {
-                            PostgresqlRepository::<UserResetPasswordToken>::update_2(
+                        if need_to_update_1 && need_to_update_2 {
+                            PostgresqlRepository::<UserResetPasswordToken>::update_1(
                                 database_2_postgresql_connection,
-                                Update2 {
+                                Update1 {
+                                    user_reset_password_token__value: user_reset_password_token.value.as_str(),
+                                    user_reset_password_token__wrong_enter_tries_quantity: user_reset_password_token.wrong_enter_tries_quantity,
+                                    user_reset_password_token__is_approved: user_reset_password_token.is_approved,
+                                    user_reset_password_token__expires_at: user_reset_password_token.expires_at,
                                     user_reset_password_token__can_be_resent_from: user_reset_password_token.can_be_resent_from,
                                 },
                                 By1 {
@@ -189,53 +175,66 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
                                 },
                             )
                             .await?;
+                        } else {
+                            if need_to_update_1 {
+                                PostgresqlRepository::<UserResetPasswordToken>::update_2(
+                                    database_2_postgresql_connection,
+                                    Update2 {
+                                        user_reset_password_token__can_be_resent_from: user_reset_password_token.can_be_resent_from,
+                                    },
+                                    By1 {
+                                        user__id: user_.id,
+                                        user_device__id: incoming.user_device__id.as_str(),
+                                    },
+                                )
+                                .await?;
+                            }
+                            if need_to_update_2 {
+                                PostgresqlRepository::<UserResetPasswordToken>::update_3(
+                                    database_2_postgresql_connection,
+                                    Update3 {
+                                        user_reset_password_token__value: user_reset_password_token.value.as_str(),
+                                        user_reset_password_token__wrong_enter_tries_quantity: user_reset_password_token.wrong_enter_tries_quantity,
+                                        user_reset_password_token__is_approved: user_reset_password_token.is_approved,
+                                        user_reset_password_token__expires_at: user_reset_password_token.expires_at,
+                                    },
+                                    By1 {
+                                        user__id: user_.id,
+                                        user_device__id: incoming.user_device__id.as_str(),
+                                    },
+                                )
+                                .await?;
+                            }
                         }
-                        if need_to_update_2 {
-                            PostgresqlRepository::<UserResetPasswordToken>::update_3(
-                                database_2_postgresql_connection,
-                                Update3 {
-                                    user_reset_password_token__value: user_reset_password_token.value.as_str(),
-                                    user_reset_password_token__wrong_enter_tries_quantity: user_reset_password_token.wrong_enter_tries_quantity,
-                                    user_reset_password_token__is_approved: user_reset_password_token.is_approved,
-                                    user_reset_password_token__expires_at: user_reset_password_token.expires_at,
-                                },
-                                By1 {
-                                    user__id: user_.id,
-                                    user_device__id: incoming.user_device__id.as_str(),
-                                },
-                            )
-                            .await?;
-                        }
+                        (
+                            user_reset_password_token.value,
+                            user_reset_password_token.can_be_resent_from,
+                            user_reset_password_token.wrong_enter_tries_quantity,
+                            can_send_,
+                        )
                     }
-                    (
-                        user_reset_password_token.value,
-                        user_reset_password_token.can_be_resent_from,
-                        user_reset_password_token.wrong_enter_tries_quantity,
-                        can_send_,
-                    )
-                }
-                Option::None => {
-                    let user_reset_password_token = PostgresqlRepository::<UserResetPasswordToken<'_>>::create_1(
-                        database_2_postgresql_connection,
-                        Insert1 {
-                            user__id: user_.id,
-                            user_device__id: incoming.user_device__id.as_str(),
-                            user_reset_password_token__value: Generator::<UserResetPasswordToken_Value>::generate(),
-                            user_reset_password_token__wrong_enter_tries_quantity: 0,
-                            user_reset_password_token__is_approved: false,
-                            user_reset_password_token__expires_at: Generator::<UserResetPasswordToken_ExpiresAt>::generate()?,
-                            user_reset_password_token__can_be_resent_from: Generator::<UserResetPasswordToken_CanBeResentFrom>::generate()?,
-                        },
-                    )
-                    .await?;
-                    (
-                        user_reset_password_token.value,
-                        user_reset_password_token.can_be_resent_from,
-                        user_reset_password_token.wrong_enter_tries_quantity,
-                        true,
-                    )
-                }
-            };
+                    Option::None => {
+                        let user_reset_password_token = PostgresqlRepository::<UserResetPasswordToken<'_>>::create_1(
+                            database_2_postgresql_connection,
+                            Insert1 {
+                                user__id: user_.id,
+                                user_device__id: incoming.user_device__id.as_str(),
+                                user_reset_password_token__value: Generator::<UserResetPasswordToken_Value>::generate(),
+                                user_reset_password_token__wrong_enter_tries_quantity: 0,
+                                user_reset_password_token__is_approved: false,
+                                user_reset_password_token__expires_at: Generator::<UserResetPasswordToken_ExpiresAt>::generate()?,
+                                user_reset_password_token__can_be_resent_from: Generator::<UserResetPasswordToken_CanBeResentFrom>::generate()?,
+                            },
+                        )
+                        .await?;
+                        (
+                            user_reset_password_token.value,
+                            user_reset_password_token.can_be_resent_from,
+                            user_reset_password_token.wrong_enter_tries_quantity,
+                            true,
+                        )
+                    }
+                };
             if can_send {
                 let environment_configuration_ = inner.environment_configuration;
                 Spawner::<TokioNonBlockingTask>::spawn_into_background(

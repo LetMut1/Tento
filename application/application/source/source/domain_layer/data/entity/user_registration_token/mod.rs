@@ -1,7 +1,9 @@
 mod derivative;
-pub use self::derivative::UserRegistrationToken_1;
-pub use self::derivative::UserRegistrationToken_2;
-pub use self::derivative::UserRegistrationToken_3;
+pub use self::derivative::{
+    UserRegistrationToken_1,
+    UserRegistrationToken_2,
+    UserRegistrationToken_3,
+};
 mod field;
 use self::field::{
     CanBeResentFrom,

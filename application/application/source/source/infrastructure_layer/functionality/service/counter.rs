@@ -1,10 +1,10 @@
-use std::fmt::Display;
 use crate::infrastructure_layer::data::aggregate_error::{
     AggregateError,
     Backtrace,
     OptionConverter,
 };
 use num_integer::Integer;
+use std::fmt::Display;
 pub struct Counter<T>
 where
     T: Integer + Display,
@@ -29,7 +29,10 @@ pub trait Counter_ {
 }
 impl Counter<u8> {
     pub fn new_classic() -> Self {
-        return Self::new(0, 1);
+        return Self::new(
+            0,
+            1,
+        );
     }
 }
 impl Counter_ for Counter<u8> {

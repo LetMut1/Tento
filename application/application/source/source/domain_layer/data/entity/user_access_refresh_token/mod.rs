@@ -4,9 +4,11 @@ use self::field::{
     ObfuscationValue,
     UpdatedAt,
 };
-use super::user::User_Id;
-use super::user_device::UserDevice_Id;
-use super::user_access_token::UserAccessToken_Id;
+use super::{
+    user::User_Id,
+    user_access_token::UserAccessToken_Id,
+    user_device::UserDevice_Id,
+};
 use std::{
     borrow::Cow,
     marker::PhantomData,
@@ -26,14 +28,7 @@ pub struct UserAccessRefreshToken<'a> {
     _updated_at: PhantomData<UpdatedAt>,
 }
 impl<'a> UserAccessRefreshToken<'a> {
-    pub fn new(
-        user__id: i64,
-        user_device__id: &'a str,
-        user_access_token__id: Cow<'a, str>,
-        obfuscation_value: String,
-        expires_at: i64,
-        updated_at: i64,
-    ) -> Self {
+    pub fn new(user__id: i64, user_device__id: &'a str, user_access_token__id: Cow<'a, str>, obfuscation_value: String, expires_at: i64, updated_at: i64) -> Self {
         return Self {
             user__id,
             _user__id: PhantomData,

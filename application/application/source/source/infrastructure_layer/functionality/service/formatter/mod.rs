@@ -1,14 +1,14 @@
 mod action_round;
-mod responsive;
-mod unresponsive;
 mod aggregate_error;
 mod backtrace;
 mod indefinite_argument_context;
 mod invalid_argument;
 mod logic_context;
+mod responsive;
 mod runtime_context;
-use std::marker::PhantomData;
+mod unresponsive;
 pub use self::action_round::RowData;
+use std::marker::PhantomData;
 pub struct Formatter<S> {
     _subject: PhantomData<S>,
 }

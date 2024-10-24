@@ -1,11 +1,13 @@
 use super::Validator;
-use crate::domain_layer::data::entity::user_reset_password_token::UserResetPasswordToken_Value;
-use crate::infrastructure_layer::data::aggregate_error::{
-    AggregateError,
-    Backtrace,
-    Common,
-    OptionConverter,
-    ResultConverter,
+use crate::{
+    domain_layer::data::entity::user_reset_password_token::UserResetPasswordToken_Value,
+    infrastructure_layer::data::aggregate_error::{
+        AggregateError,
+        Backtrace,
+        Common,
+        OptionConverter,
+        ResultConverter,
+    },
 };
 use regex::Regex;
 use std::sync::OnceLock;
@@ -15,14 +17,17 @@ impl Validator<UserResetPasswordToken_Value> {
         let regular_expression = match REGULAR_EXPRESSION.get() {
             Option::Some(regular_expression_) => regular_expression_,
             Option::None => {
-                if REGULAR_EXPRESSION.set(
-                    Regex::new(UserResetPasswordToken_Value::REGULAR_EXPRESSION).into_logic(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    )?,
-                ).is_err() {
+                if REGULAR_EXPRESSION
+                    .set(
+                        Regex::new(UserResetPasswordToken_Value::REGULAR_EXPRESSION).into_logic(
+                            Backtrace::new(
+                                line!(),
+                                file!(),
+                            ),
+                        )?,
+                    )
+                    .is_err()
+                {
                     return Result::Err(
                         AggregateError::new_logic_(
                             Common::ValueAlreadyExist,

@@ -5,14 +5,16 @@ use crate::{
         functionality::service::encoder::Encoder,
     },
     infrastructure_layer::{
-        data::environment_configuration::EnvironmentConfiguration,
+        data::{
+            aggregate_error::AggregateError,
+            environment_configuration::EnvironmentConfiguration,
+        },
         functionality::service::resolver::{
             Expiration,
             Resolver,
         },
     },
 };
-use crate::infrastructure_layer::data::aggregate_error::AggregateError;
 use dedicated_crate::user_access_token_encoded::UserAccessTokenEncoded;
 impl Extractor<UserAccessToken<'_>> {
     pub fn extract<'a>(

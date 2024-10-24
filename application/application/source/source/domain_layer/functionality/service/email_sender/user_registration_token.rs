@@ -3,6 +3,7 @@ use crate::{
     domain_layer::data::entity::user_registration_token::UserRegistrationToken,
     infrastructure_layer::{
         data::{
+            aggregate_error::AggregateError,
             capture::Capture,
             environment_configuration::EnvironmentConfiguration,
         },
@@ -12,9 +13,8 @@ use crate::{
         },
     },
 };
-use crate::infrastructure_layer::data::aggregate_error::AggregateError;
-use std::future::Future;
 use dedicated_crate::void::Void;
+use std::future::Future;
 impl EmailSender<UserRegistrationToken<'_>> {
     pub fn repeatable_send<'a>(
         environment_configuration: &'static EnvironmentConfiguration,

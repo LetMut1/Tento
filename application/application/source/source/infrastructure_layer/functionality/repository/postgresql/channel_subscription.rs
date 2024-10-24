@@ -2,21 +2,23 @@ use super::PostgresqlRepository;
 use crate::{
     domain_layer::data::entity::channel_subscription::ChannelSubscription,
     infrastructure_layer::{
-        data::capture::Capture,
+        data::{
+            aggregate_error::{
+                AggregateError,
+                Backtrace,
+                ResultConverter,
+            },
+            capture::Capture,
+        },
         functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver,
     },
 };
-use crate::infrastructure_layer::data::aggregate_error::{
-    AggregateError,
-    Backtrace,
-    ResultConverter,
-};
+use dedicated_crate::void::Void;
 use std::future::Future;
 use tokio_postgres::{
     types::Type,
     Client as Connection,
 };
-use dedicated_crate::void::Void;
 impl PostgresqlRepository<ChannelSubscription> {
     pub fn create_1<'a>(database_1_connection: &'a Connection, insert_1: Insert1) -> impl Future<Output = Result<ChannelSubscription, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
@@ -127,7 +129,7 @@ impl PostgresqlRepository<ChannelSubscription> {
 pub struct Insert1 {
     pub user__id: i64,
     pub channel__id: i64,
-    pub channel_subscription__created_at: i64
+    pub channel_subscription__created_at: i64,
 }
 pub struct By1 {
     pub user__id: i64,

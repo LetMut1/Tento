@@ -1,6 +1,6 @@
 use bitcode::{
-    Encode,
     Decode,
+    Encode,
     Error,
 };
 pub struct Serializer;

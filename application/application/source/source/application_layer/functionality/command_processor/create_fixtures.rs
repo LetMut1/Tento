@@ -2,6 +2,15 @@ use super::CommandProcessor;
 use crate::{
     domain_layer::{
         data::entity::{
+            channel::{
+                Channel,
+                Channel_AccessModifier,
+                Channel_Description,
+                Channel_LinkedName,
+                Channel_Name,
+                Channel_Orientation,
+                Channel_VisabilityModifier,
+            },
             user::{
                 User,
                 User_Email,
@@ -12,15 +21,6 @@ use crate::{
                 UserDevice,
                 UserDevice_Id,
             },
-            channel::{
-                Channel,
-                Channel_AccessModifier,
-                Channel_Description,
-                Channel_LinkedName,
-                Channel_Name,
-                Channel_Orientation,
-                Channel_VisabilityModifier,
-            },
         },
         functionality::service::{
             encoder::Encoder,
@@ -29,36 +29,41 @@ use crate::{
     },
     infrastructure_layer::{
         data::{
+            aggregate_error::{
+                AggregateError,
+                Backtrace,
+                ResultConverter,
+            },
             capture::Capture,
             environment_configuration::EnvironmentConfiguration,
         },
         functionality::{
             repository::postgresql::{
+                channel::{
+                    By2,
+                    Insert1 as ChannelInsert1,
+                },
                 user::{
                     By1,
                     Insert1 as UserInsert1,
                 },
                 user_device::Insert1 as UserDeviceInsert1,
-                channel::{
-                    By2,
-                    Insert1 as ChannelInsert1,
-                },
                 PostgresqlRepository,
             },
             service::{
                 creator::Creator,
-                loader::Loader, resolver::{UnixTime, Resolver},
+                loader::Loader,
+                resolver::{
+                    Resolver,
+                    UnixTime,
+                },
             },
         },
     },
 };
-use crate::infrastructure_layer::data::aggregate_error::{
-    AggregateError,
-    Backtrace,
-    ResultConverter,
-};
 use bb8::Pool;
 use bb8_postgres::PostgresConnectionManager;
+use dedicated_crate::void::Void;
 use rand::{
     thread_rng,
     Rng,
@@ -69,7 +74,6 @@ use tokio::runtime::{
     Runtime,
 };
 use tokio_postgres::NoTls;
-use dedicated_crate::void::Void;
 pub struct CreateFixtures;
 impl CommandProcessor<CreateFixtures> {
     const APPLICATION_USER_DEVICE__ID_PART: &'static str = "device";

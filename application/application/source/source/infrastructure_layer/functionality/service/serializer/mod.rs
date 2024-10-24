@@ -1,14 +1,14 @@
+mod bit_code;
 #[cfg(feature = "json_for_manual_test")]
 mod json;
-mod bit_code;
 pub use self::bit_code::BitCode;
 #[cfg(feature = "json_for_manual_test")]
 pub use self::json::Json;
-use bitcode::{
-    Encode,
-    Decode,
-};
 use crate::infrastructure_layer::data::aggregate_error::AggregateError;
+use bitcode::{
+    Decode,
+    Encode,
+};
 #[cfg(feature = "serde_for_manual_test")]
 use serde::{
     Deserialize as SerdeDeserialize,
@@ -21,31 +21,19 @@ pub struct Serializer<T> {
 #[cfg(not(feature = "serde_for_manual_test"))]
 pub trait Serialize_: Encode {}
 #[cfg(not(feature = "serde_for_manual_test"))]
-impl<T> Serialize_ for T
-where
-    T: Encode,
-{}
+impl<T> Serialize_ for T where T: Encode {}
 #[cfg(feature = "serde_for_manual_test")]
 pub trait Serialize_: Encode + SerdeSerialize {}
 #[cfg(feature = "serde_for_manual_test")]
-impl<T> Serialize_ for T
-where
-    T: Encode + SerdeSerialize,
-{}
+impl<T> Serialize_ for T where T: Encode + SerdeSerialize {}
 #[cfg(not(feature = "serde_for_manual_test"))]
 pub trait Deserialize_<'a>: Decode<'a> {}
 #[cfg(not(feature = "serde_for_manual_test"))]
-impl<'a, T> Deserialize_<'a> for T
-where
-    T: Decode<'a>,
-{}
+impl<'a, T> Deserialize_<'a> for T where T: Decode<'a> {}
 #[cfg(feature = "serde_for_manual_test")]
 pub trait Deserialize_<'a>: Decode<'a> + SerdeDeserialize<'a> {}
 #[cfg(feature = "serde_for_manual_test")]
-impl<'a, T> Deserialize_<'a> for T
-where
-    T: Decode<'a> + SerdeDeserialize<'a>,
-{}
+impl<'a, T> Deserialize_<'a> for T where T: Decode<'a> + SerdeDeserialize<'a> {}
 pub trait Serialize {
     fn serialize<'a, T>(subject: &'a T) -> Result<Vec<u8>, AggregateError>
     where

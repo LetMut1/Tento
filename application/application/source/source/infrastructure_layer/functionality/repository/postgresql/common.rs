@@ -1,27 +1,33 @@
 use super::PostgresqlRepository;
 use crate::infrastructure_layer::{
-    data::capture::Capture,
+    data::{
+        aggregate_error::{
+            AggregateError,
+            Backtrace,
+            ResultConverter,
+        },
+        capture::Capture,
+    },
     functionality::service::{
-        counter::Counter,
+        counter::{
+            Counter,
+            Counter_,
+        },
         prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver,
     },
 };
-use dedicated_crate::action_processor_incoming_outcoming::{
-    Channel1,
-    Common1,
-};
-use crate::infrastructure_layer::data::aggregate_error::{
-    AggregateError,
-    Backtrace,
-    ResultConverter,
+use dedicated_crate::{
+    action_processor_incoming_outcoming::{
+        Channel1,
+        Common1,
+    },
+    void::Void,
 };
 use std::future::Future;
 use tokio_postgres::{
     types::Type,
     Client as Connection,
 };
-use crate::infrastructure_layer::functionality::service::counter::Counter_;
-use dedicated_crate::void::Void;
 impl PostgresqlRepository<Common1> {
     pub fn find_1<'a>(database_1_connection: &'a Connection, by_1: By1<'a>, limit: i16) -> impl Future<Output = Result<Vec<Common1>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
@@ -38,7 +44,10 @@ impl PostgresqlRepository<Common1> {
                 ON cs.user__id = $1 AND c.id = cs.channel__id \
                 WHERE c.visability_modifier = $2 AND c.name LIKE $3"
                 .to_string();
-            let mut counter = Counter::<u8>::new(3, 1);
+            let mut counter = Counter::<u8>::new(
+                3,
+                1,
+            );
             let wildcard = format!("{}%", by_1.channel__name,);
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
@@ -144,13 +153,15 @@ impl PostgresqlRepository<Common1> {
                         ),
                     )?,
                 };
-                let is_user_subscribed = row.try_get::<'_, usize, Option<i64>>(6).into_logic(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?
-                .is_some();
+                let is_user_subscribed = row
+                    .try_get::<'_, usize, Option<i64>>(6)
+                    .into_logic(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )?
+                    .is_some();
                 let common = Common1 {
                     channel,
                     is_user_subscribed,
@@ -175,7 +186,10 @@ impl PostgresqlRepository<Common1> {
                 ON cs.user__id = $1 AND c.id = cs.channel__id \
                 WHERE c.name LIKE $2"
                 .to_string();
-            let mut counter = Counter::<u8>::new(2, 1);
+            let mut counter = Counter::<u8>::new(
+                2,
+                1,
+            );
             let wildcard = format!("{}%", by_2.channel__name,);
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
@@ -305,7 +319,10 @@ impl PostgresqlRepository<Common1> {
                 FROM public.channel c INNER JOIN public.channel_subscription cs \
                 ON cs.user__id = $1 AND c.id = cs.channel__id"
                 .to_string();
-            let mut counter = Counter::<u8>::new(1, 1);
+            let mut counter = Counter::<u8>::new(
+                1,
+                1,
+            );
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver.add_parameter(
                 &by_3.user__id,

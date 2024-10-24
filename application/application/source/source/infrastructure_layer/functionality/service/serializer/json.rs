@@ -2,16 +2,18 @@
 pub use self::json::Json;
 #[cfg(feature = "json_for_manual_test")]
 mod json {
-    use crate::infrastructure_layer::functionality::service::serializer::{
-        Serialize,
-        Serializer,
-        Deserialize_,
-        Serialize_,
-    };
-    use crate::infrastructure_layer::data::aggregate_error::{
-        AggregateError,
-        Backtrace,
-        ResultConverter,
+    use crate::infrastructure_layer::{
+        data::aggregate_error::{
+            AggregateError,
+            Backtrace,
+            ResultConverter,
+        },
+        functionality::service::serializer::{
+            Deserialize_,
+            Serialize,
+            Serialize_,
+            Serializer,
+        },
     };
     pub struct Json;
     impl Serialize for Serializer<Json> {

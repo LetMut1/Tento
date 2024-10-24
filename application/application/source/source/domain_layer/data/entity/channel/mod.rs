@@ -1,17 +1,17 @@
 mod field;
 use self::field::{
+    AccessModifier,
     BackgroundImagePath,
     CoverImagePath,
     CreatedAt,
-    MarksQuantity,
-    Orientation,
-    SubscribersQuantity,
-    ViewingQuantity,
-    AccessModifier,
     Description,
     Id,
     LinkedName,
+    MarksQuantity,
     Name,
+    Orientation,
+    SubscribersQuantity,
+    ViewingQuantity,
     VisabilityModifier,
 };
 use super::user::User_Id;
@@ -101,7 +101,7 @@ impl<'a> Channel<'a> {
 pub type Channel_BackgroundImagePath = BackgroundImagePath;
 pub type Channel_CoverImagePath = CoverImagePath;
 pub type Channel_CreatedAt = CreatedAt;
-pub type Channel_MarksQuantity= MarksQuantity;
+pub type Channel_MarksQuantity = MarksQuantity;
 pub type Channel_Orientation = Orientation;
 pub type Channel_SubscribersQuantity = SubscribersQuantity;
 pub type Channel_ViewingQuantity = ViewingQuantity;

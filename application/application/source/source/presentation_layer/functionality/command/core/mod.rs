@@ -1,17 +1,17 @@
 use application::{
-    CreateFixtures,
-    RemoveIncompliteState,
-    RunServer,
-    CommandProcessor,
     AggregateError,
     Backtrace,
+    CommandProcessor,
     Common,
-    OptionConverter,
+    CreateFixtures,
     Formatter,
+    OptionConverter,
+    RemoveIncompliteState,
+    RunServer,
 };
 use clap::{
-    Command,
     Arg,
+    Command,
 };
 // The type is 'Result<(), ()>' but not '()' to return a success/error exit code but not only success exit code.
 fn main() -> Result<(), ()> {
@@ -30,11 +30,7 @@ impl Processor {
         const ARGUMENT_ENVIRONMENT_FILE_DIRECTORY: &'static str = "environment_configuration_file_directory";
         let arg_matches = clap::command!()
             .arg_required_else_help(true)
-            .arg(
-                Arg::new(ARGUMENT_ENVIRONMENT_FILE_DIRECTORY)
-                .required(true)
-                .long(ARGUMENT_ENVIRONMENT_FILE_DIRECTORY),
-            )
+            .arg(Arg::new(ARGUMENT_ENVIRONMENT_FILE_DIRECTORY).required(true).long(ARGUMENT_ENVIRONMENT_FILE_DIRECTORY))
             .subcommand_required(true)
             .subcommand(Command::new(COMMAND_RUN_SERVER))
             .subcommand(Command::new(COMMAND_CREATE_FIXTURES))
@@ -44,13 +40,13 @@ impl Processor {
             Backtrace::new(
                 line!(),
                 file!(),
-            )
+            ),
         )?;
         let subcommand_arg_matches = arg_matches.subcommand().into_logic_unreachable_state(
             Backtrace::new(
                 line!(),
                 file!(),
-            )
+            ),
         )?;
         return match subcommand_arg_matches {
             (COMMAND_RUN_SERVER, _) => CommandProcessor::<RunServer>::process(environment_configuration_file_directory.as_str()),

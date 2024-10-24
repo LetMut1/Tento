@@ -1,21 +1,23 @@
 mod derivative;
-pub use self::derivative::User_1;
-pub use self::derivative::User_2;
-pub use self::derivative::User_3;
-pub use self::derivative::User_4;
-pub use self::derivative::User_5;
+pub use self::derivative::{
+    User_1,
+    User_2,
+    User_3,
+    User_4,
+    User_5,
+};
 mod field;
+use self::field::{
+    CreatedAt,
+    Email,
+    Id,
+    Nickname,
+    Password,
+    PasswordHash,
+};
 use std::{
     borrow::Cow,
     marker::PhantomData,
-};
-use self::field::{
-    Id,
-    Password,
-    Email,
-    Nickname,
-    PasswordHash,
-    CreatedAt,
 };
 pub struct User<'a> {
     pub id: i64,

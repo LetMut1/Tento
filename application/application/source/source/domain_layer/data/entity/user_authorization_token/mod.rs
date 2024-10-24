@@ -1,8 +1,16 @@
 mod derivative;
-pub use self::derivative::UserAuthorizationToken_1;
-pub use self::derivative::UserAuthorizationToken_2;
-pub use self::derivative::UserAuthorizationToken_3;
+pub use self::derivative::{
+    UserAuthorizationToken_1,
+    UserAuthorizationToken_2,
+    UserAuthorizationToken_3,
+};
 mod field;
+use self::field::{
+    CanBeResentFrom,
+    ExpiresAt,
+    Value,
+    WrongEnterTriesQuantity,
+};
 use super::{
     user::User_Id,
     user_device::UserDevice_Id,
@@ -10,12 +18,6 @@ use super::{
 use std::{
     borrow::Cow,
     marker::PhantomData,
-};
-use self::field::{
-    CanBeResentFrom,
-    ExpiresAt,
-    Value,
-    WrongEnterTriesQuantity,
 };
 pub struct UserAuthorizationToken<'a> {
     pub user__id: i64,
@@ -32,14 +34,7 @@ pub struct UserAuthorizationToken<'a> {
     _can_be_resent_from: PhantomData<CanBeResentFrom>,
 }
 impl<'a> UserAuthorizationToken<'a> {
-    pub fn new(
-        user__id: i64,
-        user_device__id: Cow<'a, str>,
-        value: String,
-        wrong_enter_tries_quantity: i16,
-        expires_at: i64,
-        can_be_resent_from: i64,
-    ) -> Self {
+    pub fn new(user__id: i64, user_device__id: Cow<'a, str>, value: String, wrong_enter_tries_quantity: i16, expires_at: i64, can_be_resent_from: i64) -> Self {
         return Self {
             user__id,
             _user__id: PhantomData,

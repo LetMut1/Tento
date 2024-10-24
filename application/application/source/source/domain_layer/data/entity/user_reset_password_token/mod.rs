@@ -1,7 +1,9 @@
 mod derivative;
-pub use self::derivative::UserResetPasswordToken_1;
-pub use self::derivative::UserResetPasswordToken_2;
-pub use self::derivative::UserResetPasswordToken_3;
+pub use self::derivative::{
+    UserResetPasswordToken_1,
+    UserResetPasswordToken_2,
+    UserResetPasswordToken_3,
+};
 mod field;
 use self::field::{
     CanBeResentFrom,
@@ -35,15 +37,7 @@ pub struct UserResetPasswordToken<'a> {
     _can_be_resent_from: PhantomData<CanBeResentFrom>,
 }
 impl<'a> UserResetPasswordToken<'a> {
-    pub fn new(
-        user__id: i64,
-        user_device__id: Cow<'a, str>,
-        value: String,
-        wrong_enter_tries_quantity: i16,
-        is_approved: bool,
-        expires_at: i64,
-        can_be_resent_from: i64,
-    ) -> Self {
+    pub fn new(user__id: i64, user_device__id: Cow<'a, str>, value: String, wrong_enter_tries_quantity: i16, is_approved: bool, expires_at: i64, can_be_resent_from: i64) -> Self {
         return Self {
             user__id,
             _user__id: PhantomData,

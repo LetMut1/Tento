@@ -6,7 +6,6 @@ use crate::{
     },
     domain_layer::{
         data::entity::{
-            user_access_token::UserAccessToken,
             channel::{
                 Channel as EntityChannel,
                 Channel_AccessModifier,
@@ -15,6 +14,7 @@ use crate::{
             channel_inner_link::ChannelInnerLink,
             channel_outer_link::ChannelOuterLink,
             channel_subscription::ChannelSubscription,
+            user_access_token::UserAccessToken,
         },
         functionality::service::{
             extractor::{
@@ -25,7 +25,13 @@ use crate::{
         },
     },
     infrastructure_layer::{
-        data::capture::Capture,
+        data::{
+            aggregate_error::{
+                AggregateError,
+                Backtrace,
+            },
+            capture::Capture,
+        },
         functionality::repository::postgresql::{
             channel::By1 as By1___,
             channel_inner_link::By1 as By1__,
@@ -35,17 +41,17 @@ use crate::{
         },
     },
 };
-use dedicated_crate::action_processor_incoming_outcoming::{
-    action_processor::channel::get_one_by_id::{
-        Incoming,
-        Outcoming,
-        Precedent,
+use dedicated_crate::{
+    action_processor_incoming_outcoming::{
+        action_processor::channel::get_one_by_id::{
+            Incoming,
+            Outcoming,
+            Precedent,
+        },
+        Channel2,
     },
-    Channel2,
-};
-use crate::infrastructure_layer::data::aggregate_error::{
-    AggregateError,
-    Backtrace,
+    unified_report::UnifiedReport,
+    void::Void,
 };
 use std::future::Future;
 use tokio_postgres::{
@@ -55,8 +61,6 @@ use tokio_postgres::{
     },
     Socket,
 };
-use dedicated_crate::unified_report::UnifiedReport;
-use dedicated_crate::void::Void;
 pub struct Channel_GetOneById;
 impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
     type Incoming = Incoming;

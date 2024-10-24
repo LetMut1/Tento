@@ -38,7 +38,15 @@ use crate::{
         },
     },
     infrastructure_layer::{
-        data::capture::Capture,
+        data::{
+            aggregate_error::{
+                AggregateError,
+                Backtrace,
+                OptionConverter,
+                ResultConverter,
+            },
+            capture::Capture,
+        },
         functionality::{
             repository::postgresql::{
                 user::By3,
@@ -60,23 +68,21 @@ use crate::{
                     Resolver,
                 },
                 spawner::{
-                    TokioNonBlockingTask,
                     Spawner,
+                    TokioNonBlockingTask,
                 },
             },
         },
     },
 };
-use dedicated_crate::action_processor_incoming_outcoming::action_processor::user_authorization::authorize_by_last_step::{
-    Incoming,
-    Outcoming,
-    Precedent,
-};
-use crate::infrastructure_layer::data::aggregate_error::{
-    AggregateError,
-    Backtrace,
-    OptionConverter,
-    ResultConverter,
+use dedicated_crate::{
+    action_processor_incoming_outcoming::action_processor::user_authorization::authorize_by_last_step::{
+        Incoming,
+        Outcoming,
+        Precedent,
+    },
+    unified_report::UnifiedReport,
+    void::Void,
 };
 use std::{
     borrow::Cow,
@@ -89,8 +95,6 @@ use tokio_postgres::{
     },
     Socket,
 };
-use dedicated_crate::unified_report::UnifiedReport;
-use dedicated_crate::void::Void;
 pub struct UserAuthorization_AuthorizeByLastStep;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep> {
     type Incoming = Incoming;
@@ -165,13 +169,12 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserAuthorizationToken_AlreadyExpired));
             }
             if user_authorization_token_.value != incoming.user_authorization_token__value {
-                user_authorization_token_.wrong_enter_tries_quantity =
-                    user_authorization_token_.wrong_enter_tries_quantity.checked_add(1).into_logic_out_of_range(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    )?;
+                user_authorization_token_.wrong_enter_tries_quantity = user_authorization_token_.wrong_enter_tries_quantity.checked_add(1).into_logic_out_of_range(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?;
                 if user_authorization_token_.wrong_enter_tries_quantity < UserAuthorizationToken_WrongEnterTriesQuantity::LIMIT {
                     PostgresqlRepository::<UserAuthorizationToken>::update_4(
                         database_2_postgresql_connection,

@@ -2,11 +2,13 @@ use super::{
     Format,
     Formatter,
 };
-use crate::infrastructure_layer::data::server_workflow_error::Responsive;
-use crate::infrastructure_layer::data::aggregate_error::{
-    Context,
-    IndefiniteArgument,
-    InvalidArgument,
+use crate::infrastructure_layer::data::{
+    aggregate_error::{
+        Context,
+        IndefiniteArgument,
+        InvalidArgument,
+    },
+    server_workflow_error::Responsive,
 };
 use std::marker::PhantomData;
 impl Format<Responsive> for Formatter<Responsive> {

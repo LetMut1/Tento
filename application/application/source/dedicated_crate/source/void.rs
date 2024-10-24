@@ -7,7 +7,13 @@ use std::{
     },
 };
 // Empty type.
-#[cfg_attr(feature = "serde_for_manual_test", derive(serde::Serialize, serde::Deserialize))]
+#[cfg_attr(
+    feature = "serde_for_manual_test",
+    derive(
+        serde::Serialize,
+        serde::Deserialize
+    )
+)]
 #[derive(Debug, bitcode::Encode, bitcode::Decode)]
 pub enum Void {}
 impl Error for Void {}

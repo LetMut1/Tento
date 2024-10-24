@@ -2,26 +2,25 @@ use super::PostgresqlRepository;
 use crate::{
     domain_layer::data::entity::user_device::UserDevice,
     infrastructure_layer::{
-        data::capture::Capture,
+        data::{
+            aggregate_error::{
+                AggregateError,
+                Backtrace,
+                ResultConverter,
+            },
+            capture::Capture,
+        },
         functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver,
     },
 };
-use crate::infrastructure_layer::data::aggregate_error::{
-    AggregateError,
-    Backtrace,
-    ResultConverter,
-};
+use dedicated_crate::void::Void;
 use std::future::Future;
 use tokio_postgres::{
     types::Type,
     Client as Connection,
 };
-use dedicated_crate::void::Void;
 impl PostgresqlRepository<UserDevice> {
-    pub fn create_1<'a>(
-        database_1_connection: &'a Connection,
-        insert_1: Insert1,
-    ) -> impl Future<Output = Result<UserDevice, AggregateError>> + Send + Capture<&'a Void> {
+    pub fn create_1<'a>(database_1_connection: &'a Connection, insert_1: Insert1) -> impl Future<Output = Result<UserDevice, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             let query = "\

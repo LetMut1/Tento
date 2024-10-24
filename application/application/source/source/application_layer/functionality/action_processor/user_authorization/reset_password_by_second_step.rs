@@ -17,7 +17,14 @@ use crate::{
         functionality::service::validator::Validator,
     },
     infrastructure_layer::{
-        data::capture::Capture,
+        data::{
+            aggregate_error::{
+                AggregateError,
+                Backtrace,
+                OptionConverter,
+            },
+            capture::Capture,
+        },
         functionality::{
             repository::postgresql::{
                 user_reset_password_token::{
@@ -34,14 +41,13 @@ use crate::{
         },
     },
 };
-use dedicated_crate::action_processor_incoming_outcoming::action_processor::user_authorization::reset_password_by_second_step::{
-    Incoming,
-    Precedent,
-};
-use crate::infrastructure_layer::data::aggregate_error::{
-    AggregateError,
-    Backtrace,
-    OptionConverter,
+use dedicated_crate::{
+    action_processor_incoming_outcoming::action_processor::user_authorization::reset_password_by_second_step::{
+        Incoming,
+        Precedent,
+    },
+    unified_report::UnifiedReport,
+    void::Void,
 };
 use std::future::Future;
 use tokio_postgres::{
@@ -51,8 +57,6 @@ use tokio_postgres::{
     },
     Socket,
 };
-use dedicated_crate::unified_report::UnifiedReport;
-use dedicated_crate::void::Void;
 pub struct UserAuthorization_ResetPasswordBySecondStep;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordBySecondStep> {
     type Incoming = Incoming;
@@ -130,13 +134,12 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordBySecon
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_AlreadyApproved));
             }
             if user_reset_password_token.value != incoming.user_reset_password_token__value {
-                user_reset_password_token.wrong_enter_tries_quantity =
-                    user_reset_password_token.wrong_enter_tries_quantity.checked_add(1).into_logic_out_of_range(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    )?;
+                user_reset_password_token.wrong_enter_tries_quantity = user_reset_password_token.wrong_enter_tries_quantity.checked_add(1).into_logic_out_of_range(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?;
                 if user_reset_password_token.wrong_enter_tries_quantity < UserResetPasswordToken_WrongEnterTriesQuantity::LIMIT {
                     PostgresqlRepository::<UserResetPasswordToken>::update_4(
                         database_2_postgresql_connection,

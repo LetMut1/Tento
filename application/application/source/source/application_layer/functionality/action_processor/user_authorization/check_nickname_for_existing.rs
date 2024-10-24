@@ -12,20 +12,26 @@ use crate::{
         functionality::service::validator::Validator,
     },
     infrastructure_layer::{
-        data::capture::Capture,
+        data::{
+            aggregate_error::{
+                AggregateError,
+                Backtrace,
+            },
+            capture::Capture,
+        },
         functionality::repository::postgresql::{
             user::By1,
             PostgresqlRepository,
         },
     },
 };
-use dedicated_crate::action_processor_incoming_outcoming::action_processor::user_authorization::check_nickname_for_existing::{
-    Incoming,
-    Outcoming,
-};
-use crate::infrastructure_layer::data::aggregate_error::{
-    AggregateError,
-    Backtrace,
+use dedicated_crate::{
+    action_processor_incoming_outcoming::action_processor::user_authorization::check_nickname_for_existing::{
+        Incoming,
+        Outcoming,
+    },
+    unified_report::UnifiedReport,
+    void::Void,
 };
 use std::future::Future;
 use tokio_postgres::{
@@ -35,8 +41,6 @@ use tokio_postgres::{
     },
     Socket,
 };
-use dedicated_crate::unified_report::UnifiedReport;
-use dedicated_crate::void::Void;
 pub struct UserAuthorization_CheckNicknameForExisting;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_CheckNicknameForExisting> {
     type Incoming = Incoming;

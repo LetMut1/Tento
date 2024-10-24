@@ -1,24 +1,26 @@
 use super::Logger;
 use crate::{
     infrastructure_layer::{
-        data::server_workflow_error::{
-            Responsive,
-            Unresponsive,
+        data::{
+            aggregate_error::Auditor,
+            server_workflow_error::{
+                Responsive,
+                Unresponsive,
+            },
         },
         functionality::service::{
             formatter::{
-                RowData,
                 Formatter,
+                RowData,
             },
             spawner::{
-                TokioNonBlockingTask,
                 Spawner,
+                TokioNonBlockingTask,
             },
         },
     },
     presentation_layer::functionality::service::processor::action_round::ActionRound,
 };
-use crate::infrastructure_layer::data::aggregate_error::Auditor;
 impl Logger<ActionRound> {
     pub fn log(row_data: RowData) -> () {
         Spawner::<TokioNonBlockingTask>::spawn_into_background(

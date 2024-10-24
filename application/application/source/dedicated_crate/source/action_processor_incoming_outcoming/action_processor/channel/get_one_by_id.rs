@@ -1,17 +1,31 @@
-use crate::action_processor_incoming_outcoming::{
-    Channel2,
-    ChannelInnerLink1,
-    ChannelOuterLink1,
+use crate::{
+    action_processor_incoming_outcoming::{
+        Channel2,
+        ChannelInnerLink1,
+        ChannelOuterLink1,
+    },
+    common_precedent::CommonPrecedent,
+    user_access_token_encoded::UserAccessTokenEncoded,
 };
-use crate::user_access_token_encoded::UserAccessTokenEncoded;
-use crate::common_precedent::CommonPrecedent;
-#[cfg_attr(feature = "serde_for_manual_test", derive(serde::Serialize, serde::Deserialize))]
+#[cfg_attr(
+    feature = "serde_for_manual_test",
+    derive(
+        serde::Serialize,
+        serde::Deserialize
+    )
+)]
 #[derive(bitcode::Encode, bitcode::Decode)]
 pub struct Incoming {
     pub user_access_token_encoded: UserAccessTokenEncoded,
     pub channel__id: i64,
 }
-#[cfg_attr(feature = "serde_for_manual_test", derive(serde::Serialize, serde::Deserialize))]
+#[cfg_attr(
+    feature = "serde_for_manual_test",
+    derive(
+        serde::Serialize,
+        serde::Deserialize
+    )
+)]
 #[derive(bitcode::Encode, bitcode::Decode)]
 pub struct Outcoming {
     pub channel: Channel2,
