@@ -46,7 +46,7 @@ use crate::{
         },
     },
 };
-use action_processor_incoming_outcoming::action_processor::user_authorization::send_email_for_authorize::{
+use forced_crate::action_processor_incoming_outcoming::action_processor::user_authorization::send_email_for_authorize::{
     Incoming,
     Outcoming,
     Precedent,
@@ -63,8 +63,8 @@ use tokio_postgres::{
     },
     Socket,
 };
-use unified_report::UnifiedReport;
-use void::Void;
+use forced_crate::unified_report::UnifiedReport;
+use forced_crate::void::Void;
 pub struct UserAuthorization_SendEmailForAuthorize;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthorize> {
     type Incoming = Incoming;

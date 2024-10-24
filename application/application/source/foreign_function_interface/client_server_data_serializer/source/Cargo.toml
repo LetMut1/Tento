@@ -21,14 +21,9 @@ resolver = "2"
 build = "./build.rs"
 
 [dependencies]
-action_processor_incoming_outcoming = { path = "./../../../forced_crate/action_processor_incoming_outcoming", package = "action_processor_incoming_outcoming", version = "=1.0.0", default-features = true, features = [], optional = false }
-bit_code_serializer = { path = "./../../../forced_crate/bit_code_serializer", package = "bit_code_serializer", version = "=1.0.0", default-features = true, features = [], optional = false }
 bitcode = { package = "bitcode", version = "=0.6.3", default-features = true, features = [], optional = false }
+forced_crate = { path = "./../../../forced_crate", package = "forced_crate", version = "=1.0.0", default-features = true, features = [], optional = false }
 libc = { package = "libc", version = "=0.2.158", default-features = true, features = [], optional = false }
-unified_report = { path = "./../../../forced_crate/unified_report", package = "unified_report", version = "=1.0.0", default-features = true, features = [], optional = false }
-user_access_refresh_token_encoded = { path = "./../../../forced_crate/user_access_refresh_token_encoded", package = "user_access_refresh_token_encoded", version = "=1.0.0", default-features = true, features = [], optional = false }
-user_access_token_encoded = { path = "./../../../forced_crate/user_access_token_encoded", package = "user_access_token_encoded", version = "=1.0.0", default-features = true, features = [], optional = false }
-void = { path = "./../../../forced_crate/void", package = "void", version = "=1.0.0", default-features = true, features = [], optional = false }
 
 [build-dependencies]
 cargo-emit = { package = "cargo-emit", version = "=0.2.1", default-features = true, features = [], optional = false }

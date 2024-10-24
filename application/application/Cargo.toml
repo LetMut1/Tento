@@ -2,26 +2,12 @@
 resolver = "2"
 members = [
     "./source",
-    "./source/forced_crate/action_processor_incoming_outcoming",
-    "./source/forced_crate/bit_code_serializer",
-    "./source/forced_crate/common_precedent",
-    "./source/forced_crate/macro_rules",
-    "./source/forced_crate/unified_report",
-    "./source/forced_crate/user_access_refresh_token_encoded",
-    "./source/forced_crate/user_access_token_encoded",
-    "./source/forced_crate/void",
+    "./source/forced_crate",
     "./source/source/presentation_layer/functionality/command/core",
 ]
 default-members = [
     "./source",
-    "./source/forced_crate/action_processor_incoming_outcoming",
-    "./source/forced_crate/bit_code_serializer",
-    "./source/forced_crate/common_precedent",
-    "./source/forced_crate/macro_rules",
-    "./source/forced_crate/unified_report",
-    "./source/forced_crate/user_access_refresh_token_encoded",
-    "./source/forced_crate/user_access_token_encoded",
-    "./source/forced_crate/void",
+    "./source/forced_crate",
     "./source/source/presentation_layer/functionality/command/core",
 ]
 

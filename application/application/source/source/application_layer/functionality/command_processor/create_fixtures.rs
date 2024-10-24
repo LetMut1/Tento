@@ -69,7 +69,7 @@ use tokio::runtime::{
     Runtime,
 };
 use tokio_postgres::NoTls;
-use void::Void;
+use forced_crate::void::Void;
 pub struct CreateFixtures;
 impl CommandProcessor<CreateFixtures> {
     const APPLICATION_USER_DEVICE__ID_PART: &'static str = "device";

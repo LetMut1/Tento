@@ -1,4 +1,4 @@
-use bit_code_serializer::Serializer as Serializer_;
+use forced_crate::bit_code_serializer::Serializer as Serializer_;
 use super::{
     Deserialize_,
     Serialize_,

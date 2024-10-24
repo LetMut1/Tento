@@ -1,105 +1,119 @@
-use action_processor_incoming_outcoming::action_processor::{
-    channel::{
-        get_many_by_name_in_subscriptions::{
-            Incoming as Channel_GetManyByNameInSubscriptions_Incoming_,
-            Outcoming as Channel_GetManyByNameInSubscriptions_Outcoming_,
-            Precedent as Channel_GetManyByNameInSubscriptions_Precedent_,
+use bitcode::{
+    Decode,
+    Encode,
+};
+use forced_crate::{
+    action_processor_incoming_outcoming::action_processor::{
+        channel::{
+            get_many_by_name_in_subscriptions::{
+                Incoming as Channel_GetManyByNameInSubscriptions_Incoming_,
+                Outcoming as Channel_GetManyByNameInSubscriptions_Outcoming_,
+                Precedent as Channel_GetManyByNameInSubscriptions_Precedent_,
+            },
+            get_many_by_subscription::{
+                Incoming as Channel_GetManyBySubscription_Incoming_,
+                Outcoming as Channel_GetManyBySubscription_Outcoming_,
+                Precedent as Channel_GetManyBySubscription_Precedent_,
+            },
+            get_many_public_by_name::{
+                Incoming as Channel_GetManyPublicByName_Incoming_,
+                Outcoming as Channel_GetManyPublicByName_Outcoming_,
+                Precedent as Channel_GetManyPublicByName_Precedent_,
+            },
+            get_one_by_id::{
+                Incoming as Channel_GetOneById_Incoming_,
+                Outcoming as Channel_GetOneById_Outcoming_,
+                Precedent as Channel_GetOneById_Precedent_,
+            },
         },
-        get_many_by_subscription::{
-            Incoming as Channel_GetManyBySubscription_Incoming_,
-            Outcoming as Channel_GetManyBySubscription_Outcoming_,
-            Precedent as Channel_GetManyBySubscription_Precedent_,
+        channel_subscription::create::{
+            Incoming as ChannelSubscription_Create_Incoming_,
+            Precedent as ChannelSubscription_Create_Precedent_,
         },
-        get_many_public_by_name::{
-            Incoming as Channel_GetManyPublicByName_Incoming_,
-            Outcoming as Channel_GetManyPublicByName_Outcoming_,
-            Precedent as Channel_GetManyPublicByName_Precedent_,
-        },
-        get_one_by_id::{
-            Incoming as Channel_GetOneById_Incoming_,
-            Outcoming as Channel_GetOneById_Outcoming_,
-            Precedent as Channel_GetOneById_Precedent_,
+        user_authorization::{
+            authorize_by_first_step::{
+                Incoming as UserAuthorization_AuthorizeByFirstStep_Incoming_,
+                Outcoming as UserAuthorization_AuthorizeByFirstStep_Outcoming_,
+                Precedent as UserAuthorization_AuthorizeByFirstStep_Precedent_,
+            },
+            authorize_by_last_step::{
+                Incoming as UserAuthorization_AuthorizeByLastStep_Incoming_,
+                Outcoming as UserAuthorization_AuthorizeByLastStep_Outcoming_,
+                Precedent as UserAuthorization_AuthorizeByLastStep_Precedent_,
+            },
+            check_email_for_existing::{
+                Incoming as UserAuthorization_CheckEmailForExisting_Incoming_,
+                Outcoming as UserAuthorization_CheckEmailForExisting_Outcoming_,
+            },
+            check_nickname_for_existing::{
+                Incoming as UserAuthorization_CheckNicknameForExisting_Incoming_,
+                Outcoming as UserAuthorization_CheckNicknameForExisting_Outcoming_,
+            },
+            deauthorize_from_all_devices::{
+                Incoming as UserAuthorization_DeauthorizeFromAllDevices_Incoming_,
+                Precedent as UserAuthorization_DeauthorizeFromAllDevices_Precedent_,
+            },
+            deauthorize_from_one_device::{
+                Incoming as UserAuthorization_DeauthorizeFromOneDevice_Incoming_,
+                Precedent as UserAuthorization_DeauthorizeFromOneDevice_Precedent_,
+            },
+            refresh_access_token::{
+                Incoming as UserAuthorization_RefreshAccessToken_Incoming_,
+                Outcoming as UserAuthorization_RefreshAccessToken_Outcoming_,
+                Precedent as UserAuthorization_RefreshAccessToken_Precedent_,
+            },
+            register_by_first_step::{
+                Incoming as UserAuthorization_RegisterByFirstStep_Incoming_,
+                Outcoming as UserAuthorization_RegisterByFirstStep_Outcoming_,
+                Precedent as UserAuthorization_RegisterByFirstStep_Precedent_,
+            },
+            register_by_last_step::{
+                Incoming as UserAuthorization_RegisterByLastStep_Incoming_,
+                Outcoming as UserAuthorization_RegisterByLastStep_Outcoming_,
+                Precedent as UserAuthorization_RegisterByLastStep_Precedent_,
+            },
+            register_by_second_step::{
+                Incoming as UserAuthorization_RegisterBySecondStep_Incoming_,
+                Precedent as UserAuthorization_RegisterBySecondStep_Precedent_,
+            },
+            reset_password_by_first_step::{
+                Incoming as UserAuthorization_ResetPasswordByFirstStep_Incoming_,
+                Outcoming as UserAuthorization_ResetPasswordByFirstStep_Outcoming_,
+                Precedent as UserAuthorization_ResetPasswordByFirstStep_Precedent_,
+            },
+            reset_password_by_last_step::{
+                Incoming as UserAuthorization_ResetPasswordByLastStep_Incoming_,
+                Precedent as UserAuthorization_ResetPasswordByLastStep_Precedent_,
+            },
+            reset_password_by_second_step::{
+                Incoming as UserAuthorization_ResetPasswordBySecondStep_Incoming_,
+                Precedent as UserAuthorization_ResetPasswordBySecondStep_Precedent_,
+            },
+            send_email_for_authorize::{
+                Incoming as UserAuthorization_SendEmailForAuthorize_Incoming_,
+                Outcoming as UserAuthorization_SendEmailForAuthorize_Outcoming_,
+                Precedent as UserAuthorization_SendEmailForAuthorize_Precedent_,
+            },
+            send_email_for_register::{
+                Incoming as UserAuthorization_SendEmailForRegister_Incoming_,
+                Outcoming as UserAuthorization_SendEmailForRegister_Outcoming_,
+                Precedent as UserAuthorization_SendEmailForRegister_Precedent_,
+            },
+            send_email_for_reset_password::{
+                Incoming as UserAuthorization_SendEmailForResetPassword_Incoming_,
+                Outcoming as UserAuthorization_SendEmailForResetPassword_Outcoming_,
+                Precedent as UserAuthorization_SendEmailForResetPassword_Precedent_,
+            },
         },
     },
-    channel_subscription::create::{
-        Incoming as ChannelSubscription_Create_Incoming_,
-        Precedent as ChannelSubscription_Create_Precedent_,
+    bit_code_serializer::Serializer,
+    unified_report::{
+        Data,
+        UnifiedReport,
     },
-    user_authorization::{
-        authorize_by_first_step::{
-            Incoming as UserAuthorization_AuthorizeByFirstStep_Incoming_,
-            Outcoming as UserAuthorization_AuthorizeByFirstStep_Outcoming_,
-            Precedent as UserAuthorization_AuthorizeByFirstStep_Precedent_,
-        },
-        authorize_by_last_step::{
-            Incoming as UserAuthorization_AuthorizeByLastStep_Incoming_,
-            Outcoming as UserAuthorization_AuthorizeByLastStep_Outcoming_,
-            Precedent as UserAuthorization_AuthorizeByLastStep_Precedent_,
-        },
-        check_email_for_existing::{
-            Incoming as UserAuthorization_CheckEmailForExisting_Incoming_,
-            Outcoming as UserAuthorization_CheckEmailForExisting_Outcoming_,
-        },
-        check_nickname_for_existing::{
-            Incoming as UserAuthorization_CheckNicknameForExisting_Incoming_,
-            Outcoming as UserAuthorization_CheckNicknameForExisting_Outcoming_,
-        },
-        deauthorize_from_all_devices::{
-            Incoming as UserAuthorization_DeauthorizeFromAllDevices_Incoming_,
-            Precedent as UserAuthorization_DeauthorizeFromAllDevices_Precedent_,
-        },
-        deauthorize_from_one_device::{
-            Incoming as UserAuthorization_DeauthorizeFromOneDevice_Incoming_,
-            Precedent as UserAuthorization_DeauthorizeFromOneDevice_Precedent_,
-        },
-        refresh_access_token::{
-            Incoming as UserAuthorization_RefreshAccessToken_Incoming_,
-            Outcoming as UserAuthorization_RefreshAccessToken_Outcoming_,
-            Precedent as UserAuthorization_RefreshAccessToken_Precedent_,
-        },
-        register_by_first_step::{
-            Incoming as UserAuthorization_RegisterByFirstStep_Incoming_,
-            Outcoming as UserAuthorization_RegisterByFirstStep_Outcoming_,
-            Precedent as UserAuthorization_RegisterByFirstStep_Precedent_,
-        },
-        register_by_last_step::{
-            Incoming as UserAuthorization_RegisterByLastStep_Incoming_,
-            Outcoming as UserAuthorization_RegisterByLastStep_Outcoming_,
-            Precedent as UserAuthorization_RegisterByLastStep_Precedent_,
-        },
-        register_by_second_step::{
-            Incoming as UserAuthorization_RegisterBySecondStep_Incoming_,
-            Precedent as UserAuthorization_RegisterBySecondStep_Precedent_,
-        },
-        reset_password_by_first_step::{
-            Incoming as UserAuthorization_ResetPasswordByFirstStep_Incoming_,
-            Outcoming as UserAuthorization_ResetPasswordByFirstStep_Outcoming_,
-            Precedent as UserAuthorization_ResetPasswordByFirstStep_Precedent_,
-        },
-        reset_password_by_last_step::{
-            Incoming as UserAuthorization_ResetPasswordByLastStep_Incoming_,
-            Precedent as UserAuthorization_ResetPasswordByLastStep_Precedent_,
-        },
-        reset_password_by_second_step::{
-            Incoming as UserAuthorization_ResetPasswordBySecondStep_Incoming_,
-            Precedent as UserAuthorization_ResetPasswordBySecondStep_Precedent_,
-        },
-        send_email_for_authorize::{
-            Incoming as UserAuthorization_SendEmailForAuthorize_Incoming_,
-            Outcoming as UserAuthorization_SendEmailForAuthorize_Outcoming_,
-            Precedent as UserAuthorization_SendEmailForAuthorize_Precedent_,
-        },
-        send_email_for_register::{
-            Incoming as UserAuthorization_SendEmailForRegister_Incoming_,
-            Outcoming as UserAuthorization_SendEmailForRegister_Outcoming_,
-            Precedent as UserAuthorization_SendEmailForRegister_Precedent_,
-        },
-        send_email_for_reset_password::{
-            Incoming as UserAuthorization_SendEmailForResetPassword_Incoming_,
-            Outcoming as UserAuthorization_SendEmailForResetPassword_Outcoming_,
-            Precedent as UserAuthorization_SendEmailForResetPassword_Precedent_,
-        },
-    },
+    user_access_refresh_token_encoded::UserAccessRefreshTokenEncoded as UserAccessRefreshTokenEncoded_,
+    user_access_token_encoded::UserAccessTokenEncoded as UserAccessTokenEncoded_,
+    void::Void,
 };
 use libc::{
     c_char,
@@ -107,11 +121,6 @@ use libc::{
     c_short,
     c_uchar,
     size_t,
-};
-use bit_code_serializer::Serializer;
-use bitcode::{
-    Encode,
-    Decode,
 };
 use std::{
     boxed::Box,
@@ -124,13 +133,6 @@ use std::{
     marker::PhantomData,
     result::Result,
 };
-use unified_report::{
-    Data,
-    UnifiedReport,
-};
-use user_access_refresh_token_encoded::UserAccessRefreshTokenEncoded as UserAccessRefreshTokenEncoded_;
-use user_access_token_encoded::UserAccessTokenEncoded as UserAccessTokenEncoded_;
-use void::Void;
 // TODO -------------------------------------------------------------------------------------------------------------------------------------------
 // TODO-------------------------------------------------------------------------------------------------------------------------------------------
 // TODO-------------------------------------------------------------------------------------------------------------------------------------------
@@ -435,9 +437,7 @@ impl Transformer<ServerResponseData> {
         if vector_of_bytes_.pointer.is_null() || vector_of_bytes_.length == 0 {
             return CResult::error().into_raw();
         }
-        let unified_report = match Serializer::deserialize::<'_, UnifiedReport<O1, P1>>(
-            vector_of_bytes_.as_slice_unchecked(),
-        ) {
+        let unified_report = match Serializer::deserialize::<'_, UnifiedReport<O1, P1>>(vector_of_bytes_.as_slice_unchecked()) {
             Result::Ok(unified_report_) => unified_report_,
             Result::Err(_) => {
                 return CResult::error().into_raw();
@@ -469,9 +469,7 @@ impl Transformer<ServerRequestData> {
                 return CResult::error().into_raw();
             }
         };
-        let c_vector = Allocator::<CVector<_>>::allocate(
-            Serializer::serialize(&incoming__)
-        );
+        let c_vector = Allocator::<CVector<_>>::allocate(Serializer::serialize(&incoming__));
         let c_result = CResult::data(c_vector);
         return c_result.into_raw();
     }
@@ -545,7 +543,7 @@ pub extern "C" fn user_authorization__authorize_by_first_step__serialize_allocat
                 user_device__id: incoming_.user_device__id.clone_as_string()?,
                 user__email___or___user__nickname: incoming_.user__email___or___user__nickname.clone_as_string()?,
                 user__password: incoming_.user__password.clone_as_string()?,
-            }
+            },
         );
     };
     return Transformer::<ServerRequestData>::transform(
@@ -640,7 +638,7 @@ pub extern "C" fn user_authorization__authorize_by_last_step__serialize_allocate
                 user__id: incoming_.user__id,
                 user_device__id: incoming_.user_device__id.clone_as_string()?,
                 user_authorization_token__value: incoming_.user_authorization_token__value.clone_as_string()?,
-            }
+            },
         );
     };
     return Transformer::<ServerRequestData>::transform(
@@ -775,7 +773,7 @@ pub extern "C" fn user_authorization__check_email_for_existing__serialize_alloca
             return Result::Ok(
                 UserAuthorization_CheckEmailForExisting_Incoming_ {
                     user__email: incoming_.user__email.clone_as_string()?,
-                }
+                },
             );
         };
     return Transformer::<ServerRequestData>::transform(
@@ -843,7 +841,7 @@ pub extern "C" fn user_authorization__check_nickname_for_existing__serialize_all
             return Result::Ok(
                 UserAuthorization_CheckNicknameForExisting_Incoming_ {
                     user__nickname: incoming_.user__nickname.clone_as_string()?,
-                }
+                },
             );
         };
     return Transformer::<ServerRequestData>::transform(
@@ -914,7 +912,7 @@ pub extern "C" fn user_authorization__deauthorize_from_all_devices__serialize_al
                         serialized: incoming_.user_access_token_encoded.serialized.clone_as_vec()?,
                         encoded: incoming_.user_access_token_encoded.encoded.clone_as_vec()?,
                     },
-                }
+                },
             );
         };
     return Transformer::<ServerRequestData>::transform(
@@ -1004,7 +1002,7 @@ pub extern "C" fn user_authorization__deauthorize_from_one_device__serialize_all
                         serialized: incoming_.user_access_token_encoded.serialized.clone_as_vec()?,
                         encoded: incoming_.user_access_token_encoded.encoded.clone_as_vec()?,
                     },
-                }
+                },
             );
         };
     return Transformer::<ServerRequestData>::transform(
@@ -1079,7 +1077,7 @@ pub extern "C" fn user_authorization__refresh_access_token__serialize_allocate(i
                     encoded: incoming_.user_access_token_encoded.encoded.clone_as_vec()?,
                 },
                 user_access_refresh_token_encoded: UserAccessRefreshTokenEncoded_(incoming_.user_access_refresh_token_encoded.0.clone_as_vec()?),
-            }
+            },
         );
     };
     return Transformer::<ServerRequestData>::transform(
@@ -1188,7 +1186,7 @@ pub extern "C" fn user_authorization__register_by_first_step__serialize_allocate
             UserAuthorization_RegisterByFirstStep_Incoming_ {
                 user__email: incoming_.user__email.clone_as_string()?,
                 user_device__id: incoming_.user_device__id.clone_as_string()?,
-            }
+            },
         );
     };
     return Transformer::<ServerRequestData>::transform(
@@ -1281,7 +1279,7 @@ pub extern "C" fn user_authorization__register_by_second_step__serialize_allocat
                 user__email: incoming_.user__email.clone_as_string()?,
                 user_device__id: incoming_.user_device__id.clone_as_string()?,
                 user_registration_token__value: incoming_.user_registration_token__value.clone_as_string()?,
-            }
+            },
         );
     };
     return Transformer::<ServerRequestData>::transform(
@@ -1389,7 +1387,7 @@ pub extern "C" fn user_authorization__register_by_last_step__serialize_allocate(
                 user__nickname: incoming_.user__nickname.clone_as_string()?,
                 user__password: incoming_.user__password.clone_as_string()?,
                 user_registration_token__value: incoming_.user_registration_token__value.clone_as_string()?,
-            }
+            },
         );
     };
     return Transformer::<ServerRequestData>::transform(
@@ -1529,7 +1527,7 @@ pub extern "C" fn user_authorization__reset_password_by_first_step__serialize_al
                 UserAuthorization_ResetPasswordByFirstStep_Incoming_ {
                     user__email: incoming_.user__email.clone_as_string()?,
                     user_device__id: incoming_.user_device__id.clone_as_string()?,
-                }
+                },
             );
         };
     return Transformer::<ServerRequestData>::transform(
@@ -1628,7 +1626,7 @@ pub extern "C" fn user_authorization__reset_password_by_second_step__serialize_a
                     user__id: incoming_.user__id,
                     user_device__id: incoming_.user_device__id.clone_as_string()?,
                     user_reset_password_token__value: incoming_.user_reset_password_token__value.clone_as_string()?,
-                }
+                },
             );
         };
     return Transformer::<ServerRequestData>::transform(
@@ -1737,7 +1735,7 @@ pub extern "C" fn user_authorization__reset_password_by_last_step__serialize_all
                     user_device__id: incoming_.user_device__id.clone_as_string()?,
                     user__password: incoming_.user__password.clone_as_string()?,
                     user_reset_password_token__value: incoming_.user_reset_password_token__value.clone_as_string()?,
-                }
+                },
             );
         };
     return Transformer::<ServerRequestData>::transform(
@@ -1839,7 +1837,7 @@ pub extern "C" fn user_authorization__send_email_for_register__serialize_allocat
             UserAuthorization_SendEmailForRegister_Incoming_ {
                 user__email: incoming_.user__email.clone_as_string()?,
                 user_device__id: incoming_.user_device__id.clone_as_string()?,
-            }
+            },
         );
     };
     return Transformer::<ServerRequestData>::transform(
@@ -1950,7 +1948,7 @@ pub extern "C" fn user_authorization__send_email_for_authorize__serialize_alloca
                 UserAuthorization_SendEmailForAuthorize_Incoming_ {
                     user_device__id: incoming_.user_device__id.clone_as_string()?,
                     user__id: incoming_.user__id,
-                }
+                },
             );
         };
     return Transformer::<ServerRequestData>::transform(
@@ -2062,7 +2060,7 @@ pub extern "C" fn user_authorization__send_email_for_reset_password__serialize_a
                 UserAuthorization_SendEmailForResetPassword_Incoming_ {
                     user__id: incoming_.user__id,
                     user_device__id: incoming_.user_device__id.clone_as_string()?,
-                }
+                },
             );
         };
     return Transformer::<ServerRequestData>::transform(
@@ -2190,7 +2188,7 @@ pub extern "C" fn channel__get_many_by_name_in_subscriptions__serialize_allocate
                 channel__name: incoming_.channel__name.clone_as_string()?,
                 requery___channel__name,
                 limit: incoming_.limit,
-            }
+            },
         );
     };
     return Transformer::<ServerRequestData>::transform(
@@ -2337,7 +2335,7 @@ pub extern "C" fn channel__get_many_by_subscription__serialize_allocate(incoming
                 },
                 requery___channel__id,
                 limit: incoming_.limit,
-            }
+            },
         );
     };
     return Transformer::<ServerRequestData>::transform(
@@ -2486,7 +2484,7 @@ pub extern "C" fn channel__get_many_public_by_name__serialize_allocate(incoming:
                 channel__name: incoming_.channel__name.clone_as_string()?,
                 requery___channel__name,
                 limit: incoming_.limit,
-            }
+            },
         );
     };
     return Transformer::<ServerRequestData>::transform(
@@ -2626,7 +2624,7 @@ pub extern "C" fn channel__get_one_by_id__serialize_allocate(incoming: *mut Chan
                     encoded: incoming_.user_access_token_encoded.encoded.clone_as_vec()?,
                 },
                 channel__id: incoming_.channel__id,
-            }
+            },
         );
     };
     return Transformer::<ServerRequestData>::transform(
@@ -2801,7 +2799,7 @@ pub extern "C" fn channel_subscription__create__serialize_allocate(incoming: *mu
                     encoded: incoming_.user_access_token_encoded.encoded.clone_as_vec()?,
                 },
                 channel__id: incoming_.channel__id,
-            }
+            },
         );
     };
     return Transformer::<ServerRequestData>::transform(
@@ -2949,7 +2947,7 @@ mod test {
             // Needed to test all `unified_report::UnifiedReport` variants.
             mod unified_report {
                 use super::*;
-                use action_processor_incoming_outcoming::{
+                use forced_crate::action_processor_incoming_outcoming::{
                     Channel1 as Channel1_,
                     Channel2 as Channel2_,
                     ChannelInnerLink1 as ChannelInnerLink1_,

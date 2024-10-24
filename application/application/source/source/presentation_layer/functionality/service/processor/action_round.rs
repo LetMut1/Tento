@@ -42,7 +42,7 @@ use tokio_postgres::{
     },
     Socket,
 };
-use void::Void;
+use forced_crate::void::Void;
 pub struct ActionRound;
 impl Processor<ActionRound> {
     pub fn process<'a, 'b, T, AP, SS, SD>(

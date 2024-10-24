@@ -36,7 +36,7 @@ use tokio_postgres::{
     },
     Socket,
 };
-use void::Void;
+use forced_crate::void::Void;
 pub struct Action<S> {
     _subject: PhantomData<S>,
 }

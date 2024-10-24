@@ -46,7 +46,7 @@ use crate::{
         },
     },
 };
-use action_processor_incoming_outcoming::action_processor::user_authorization::send_email_for_reset_password::{
+use forced_crate::action_processor_incoming_outcoming::action_processor::user_authorization::send_email_for_reset_password::{
     Incoming,
     Outcoming,
     Precedent,
@@ -63,8 +63,8 @@ use tokio_postgres::{
     },
     Socket,
 };
-use unified_report::UnifiedReport;
-use void::Void;
+use forced_crate::unified_report::UnifiedReport;
+use forced_crate::void::Void;
 pub struct UserAuthorization_SendEmailForResetPassword;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPassword> {
     type Incoming = Incoming;

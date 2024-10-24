@@ -52,7 +52,7 @@ use crate::{
         },
     },
 };
-use action_processor_incoming_outcoming::action_processor::user_authorization::register_by_first_step::{
+use forced_crate::action_processor_incoming_outcoming::action_processor::user_authorization::register_by_first_step::{
     Incoming,
     Outcoming,
     Precedent,
@@ -69,8 +69,8 @@ use tokio_postgres::{
     },
     Socket,
 };
-use unified_report::UnifiedReport;
-use void::Void;
+use forced_crate::unified_report::UnifiedReport;
+use forced_crate::void::Void;
 pub struct UserAuthorization_RegisterByFirstStep;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep> {
     type Incoming = Incoming;

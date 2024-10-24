@@ -7,7 +7,7 @@ use crate::infrastructure_layer::data::aggregate_error::{
 };
 use std::future::Future;
 use tokio_postgres::Client as Connection;
-use void::Void;
+use forced_crate::void::Void;
 pub struct PostgresqlTransaction;
 impl Resolver<PostgresqlTransaction> {
     pub fn start<'a>(

@@ -14,7 +14,7 @@ use crate::{
 };
 use crate::infrastructure_layer::data::aggregate_error::AggregateError;
 use std::future::Future;
-use void::Void;
+use forced_crate::void::Void;
 impl EmailSender<UserAuthorizationToken<'_>> {
     pub fn repeatable_send<'a>(
         environment_configuration: &'static EnvironmentConfiguration,

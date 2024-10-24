@@ -16,7 +16,7 @@ use tokio_postgres::{
     types::Type,
     Client as Connection,
 };
-use void::Void;
+use forced_crate::void::Void;
 impl PostgresqlRepository<ChannelSubscription> {
     pub fn create_1<'a>(database_1_connection: &'a Connection, insert_1: Insert1) -> impl Future<Output = Result<ChannelSubscription, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
