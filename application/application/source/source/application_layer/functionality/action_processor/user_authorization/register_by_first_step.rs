@@ -125,7 +125,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
             let database_2_postgresql_pooled_connection = inner.get_database_2_postgresql_pooled_connection().await?;
             let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
             let (user_registration_token__value, user_registration_token__can_be_resent_from, user_registration_token__wrong_enter_tries_quantity, can_send) =
-                match PostgresqlRepository::<UserRegistrationToken>::find_1(
+                match PostgresqlRepository::<UserRegistrationToken<'_>>::find_1(
                     database_2_postgresql_connection,
                     By1 {
                         user__email: incoming.user__email.as_str(),
@@ -157,7 +157,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                             false
                         };
                         if need_to_update_1 && need_to_update_2 {
-                            PostgresqlRepository::<UserRegistrationToken>::update_1(
+                            PostgresqlRepository::<UserRegistrationToken<'_>>::update_1(
                                 database_2_postgresql_connection,
                                 Update1 {
                                     user_registration_token__value: user_registration_token.value.as_str(),
@@ -174,7 +174,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                             .await?;
                         } else {
                             if need_to_update_1 {
-                                PostgresqlRepository::<UserRegistrationToken>::update_2(
+                                PostgresqlRepository::<UserRegistrationToken<'_>>::update_2(
                                     database_2_postgresql_connection,
                                     Update2 {
                                         user_registration_token__can_be_resent_from: user_registration_token.can_be_resent_from,
@@ -187,7 +187,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                                 .await?;
                             }
                             if need_to_update_2 {
-                                PostgresqlRepository::<UserRegistrationToken>::update_3(
+                                PostgresqlRepository::<UserRegistrationToken<'_>>::update_3(
                                     database_2_postgresql_connection,
                                     Update3 {
                                         user_registration_token__value: user_registration_token.value.as_str(),

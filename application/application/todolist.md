@@ -104,12 +104,6 @@ https://stackoverflow.com/questions/58819199/how-to-keep-long-connection-in-http
 // PostgresqlRepository<ChannelSubscription>::create_1  В подобных местах нужно делать в парадигме апсерта/ Do Nothing?
 
 
-// PostgresqlRepository::< - найти и проставить <'_>
-
-
 // let database_1_postgresql_connection = &*inner.get_database_1_postgresql_pooled_connection().await?;    можно сразу без промежуточной переменной.
 
 // Сервисы и документация для новых роутоы.
-
-
-pub trait Format<S> - нужен ли?

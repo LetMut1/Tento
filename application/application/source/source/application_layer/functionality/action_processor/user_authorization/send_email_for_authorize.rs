@@ -106,7 +106,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthoriz
                 );
             }
             let database_1_postgresql_pooled_connection = inner.get_database_1_postgresql_pooled_connection().await?;
-            let user = match PostgresqlRepository::<User>::find_6(
+            let user = match PostgresqlRepository::<User<'_>>::find_6(
                 &*database_1_postgresql_pooled_connection,
                 By3 {
                     user__id: incoming.user__id,
@@ -121,7 +121,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthoriz
             };
             let database_2_postgresql_pooled_connection = inner.get_database_2_postgresql_pooled_connection().await?;
             let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
-            let mut user_authorization_token = match PostgresqlRepository::<UserAuthorizationToken>::find_3(
+            let mut user_authorization_token = match PostgresqlRepository::<UserAuthorizationToken<'_>>::find_3(
                 database_2_postgresql_connection,
                 By1 {
                     user__id: incoming.user__id,
@@ -150,7 +150,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthoriz
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserAuthorizationToken_TimeToResendHasNotCome));
             }
             user_authorization_token.can_be_resent_from = Generator::<UserAuthorizationToken_CanBeResentFrom>::generate()?;
-            PostgresqlRepository::<UserAuthorizationToken>::update_3(
+            PostgresqlRepository::<UserAuthorizationToken<'_>>::update_3(
                 database_2_postgresql_connection,
                 Update3 {
                     user_authorization_token__can_be_resent_from: user_authorization_token.can_be_resent_from,

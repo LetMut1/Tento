@@ -122,7 +122,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
             let database_1_postgresql_pooled_connection = inner.get_database_1_postgresql_pooled_connection().await?;
             let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
             let (user__id, user__email, user__nickname, user__password_hash) = if Validator::<User_Email>::is_valid(incoming.user__email___or___user__nickname.as_str())? {
-                let user_ = PostgresqlRepository::<User>::find_3(
+                let user_ = PostgresqlRepository::<User<'_>>::find_3(
                     database_1_postgresql_connection,
                     By2 {
                         user__email: incoming.user__email___or___user__nickname.as_str(),
@@ -143,7 +143,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                 )
             } else {
                 if Validator::<User_Nickname>::is_valid(incoming.user__email___or___user__nickname.as_str()) {
-                    let user_ = PostgresqlRepository::<User>::find_2(
+                    let user_ = PostgresqlRepository::<User<'_>>::find_2(
                         database_1_postgresql_connection,
                         By1 {
                             user__nickname: incoming.user__email___or___user__nickname.as_str(),
@@ -206,7 +206,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
             let database_2_postgresql_pooled_connection = inner.get_database_2_postgresql_pooled_connection().await?;
             let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
             let (user_authorization_token__value, user_authorization_token__can_be_resent_from, user_authorization_token__wrong_enter_tries_quantity, can_send) =
-                match PostgresqlRepository::<UserAuthorizationToken>::find_1(
+                match PostgresqlRepository::<UserAuthorizationToken<'_>>::find_1(
                     database_2_postgresql_connection,
                     By1_ {
                         user__id,
@@ -237,7 +237,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                             false
                         };
                         if need_to_update_1 && need_to_update_2 {
-                            PostgresqlRepository::<UserAuthorizationToken>::update_1(
+                            PostgresqlRepository::<UserAuthorizationToken<'_>>::update_1(
                                 database_2_postgresql_connection,
                                 Update1 {
                                     user_authorization_token__value: user_authorization_token.value.as_str(),
@@ -253,7 +253,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                             .await?;
                         } else {
                             if need_to_update_1 {
-                                PostgresqlRepository::<UserAuthorizationToken>::update_3(
+                                PostgresqlRepository::<UserAuthorizationToken<'_>>::update_3(
                                     database_2_postgresql_connection,
                                     Update3 {
                                         user_authorization_token__can_be_resent_from: user_authorization_token.can_be_resent_from,
@@ -266,7 +266,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                                 .await?;
                             }
                             if need_to_update_2 {
-                                PostgresqlRepository::<UserAuthorizationToken>::update_2(
+                                PostgresqlRepository::<UserAuthorizationToken<'_>>::update_2(
                                     database_2_postgresql_connection,
                                     Update2 {
                                         user_authorization_token__value: user_authorization_token.value.as_str(),

@@ -105,7 +105,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordBySecon
             }
             let database_2_postgresql_pooled_connection = inner.get_database_2_postgresql_pooled_connection().await?;
             let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
-            let mut user_reset_password_token = match PostgresqlRepository::<UserResetPasswordToken>::find_2(
+            let mut user_reset_password_token = match PostgresqlRepository::<UserResetPasswordToken<'_>>::find_2(
                 database_2_postgresql_connection,
                 By1 {
                     user__id: incoming.user__id,
@@ -141,7 +141,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordBySecon
                     ),
                 )?;
                 if user_reset_password_token.wrong_enter_tries_quantity < UserResetPasswordToken_WrongEnterTriesQuantity::LIMIT {
-                    PostgresqlRepository::<UserResetPasswordToken>::update_4(
+                    PostgresqlRepository::<UserResetPasswordToken<'_>>::update_4(
                         database_2_postgresql_connection,
                         Update4 {
                             user_reset_password_token__wrong_enter_tries_quantity: user_reset_password_token.wrong_enter_tries_quantity,
@@ -171,7 +171,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordBySecon
                 );
             }
             user_reset_password_token.is_approved = true;
-            PostgresqlRepository::<UserResetPasswordToken>::update_5(
+            PostgresqlRepository::<UserResetPasswordToken<'_>>::update_5(
                 database_2_postgresql_connection,
                 Update5 {
                     user_reset_password_token__is_approved: user_reset_password_token.is_approved,

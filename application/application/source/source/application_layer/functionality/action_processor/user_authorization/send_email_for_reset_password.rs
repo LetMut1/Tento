@@ -106,7 +106,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
                 );
             }
             let database_1_postgresql_pooled_connection = inner.get_database_1_postgresql_pooled_connection().await?;
-            let user = match PostgresqlRepository::<User>::find_6(
+            let user = match PostgresqlRepository::<User<'_>>::find_6(
                 &*database_1_postgresql_pooled_connection,
                 By3 {
                     user__id: incoming.user__id,
@@ -121,7 +121,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
             };
             let database_2_postgresql_pooled_connection = inner.get_database_2_postgresql_pooled_connection().await?;
             let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
-            let mut user_reset_password_token = match PostgresqlRepository::<UserResetPasswordToken>::find_3(
+            let mut user_reset_password_token = match PostgresqlRepository::<UserResetPasswordToken<'_>>::find_3(
                 database_2_postgresql_connection,
                 By1 {
                     user__id: incoming.user__id,
@@ -153,7 +153,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_TimeToResendHasNotCome));
             }
             user_reset_password_token.can_be_resent_from = Generator::<UserResetPasswordToken_CanBeResentFrom>::generate()?;
-            PostgresqlRepository::<UserResetPasswordToken>::update_2(
+            PostgresqlRepository::<UserResetPasswordToken<'_>>::update_2(
                 database_2_postgresql_connection,
                 Update2 {
                     user_reset_password_token__can_be_resent_from: user_reset_password_token.can_be_resent_from,

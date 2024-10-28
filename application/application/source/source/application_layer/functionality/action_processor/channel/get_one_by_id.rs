@@ -7,7 +7,7 @@ use crate::{
     domain_layer::{
         data::entity::{
             channel::{
-                Channel as EntityChannel,
+                Channel,
                 Channel_AccessModifier,
                 Channel_Id,
             },
@@ -102,7 +102,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                 );
             }
             let database_1_postgresql_pooled_connection = inner.get_database_1_postgresql_pooled_connection().await?;
-            let channel = match PostgresqlRepository::<EntityChannel<'_>>::find_1(
+            let channel = match PostgresqlRepository::<Channel<'_>>::find_1(
                 &*database_1_postgresql_pooled_connection,
                 By1___ {
                     channel__id: incoming.channel__id,

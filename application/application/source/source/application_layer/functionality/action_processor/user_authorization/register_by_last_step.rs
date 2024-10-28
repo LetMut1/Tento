@@ -190,7 +190,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
             }
             let database_2_postgresql_pooled_connection = inner.get_database_2_postgresql_pooled_connection().await?;
             let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
-            let mut user_registration_token = match PostgresqlRepository::<UserRegistrationToken>::find_2(
+            let mut user_registration_token = match PostgresqlRepository::<UserRegistrationToken<'_>>::find_2(
                 database_2_postgresql_connection,
                 By1_ {
                     user__email: incoming.user__email.as_str(),
@@ -226,7 +226,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                     ),
                 )?;
                 if user_registration_token.wrong_enter_tries_quantity < UserRegistrationToken_WrongEnterTriesQuantity::LIMIT {
-                    PostgresqlRepository::<UserRegistrationToken>::update_4(
+                    PostgresqlRepository::<UserRegistrationToken<'_>>::update_4(
                         database_2_postgresql_connection,
                         Update4 {
                             user_registration_token__wrong_enter_tries_quantity: user_registration_token.wrong_enter_tries_quantity,

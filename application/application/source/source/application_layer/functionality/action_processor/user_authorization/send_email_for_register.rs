@@ -103,7 +103,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
             }
             let database_2_postgresql_pooled_connection = inner.get_database_2_postgresql_pooled_connection().await?;
             let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
-            let mut user_registration_token = match PostgresqlRepository::<UserRegistrationToken>::find_3(
+            let mut user_registration_token = match PostgresqlRepository::<UserRegistrationToken<'_>>::find_3(
                 database_2_postgresql_connection,
                 By1 {
                     user__email: incoming.user__email.as_str(),
@@ -135,7 +135,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_TimeToResendHasNotCome));
             }
             user_registration_token.can_be_resent_from = Generator::<UserRegistrationToken_CanBeResentFrom>::generate()?;
-            PostgresqlRepository::<UserRegistrationToken>::update_2(
+            PostgresqlRepository::<UserRegistrationToken<'_>>::update_2(
                 database_2_postgresql_connection,
                 Update2 {
                     user_registration_token__can_be_resent_from: user_registration_token.can_be_resent_from,

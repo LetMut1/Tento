@@ -138,7 +138,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
             user_access_refresh_token.obfuscation_value = Generator::<UserAccessRefreshToken_ObfuscationValue>::generate();
             user_access_refresh_token.expires_at = Generator::<UserAccessRefreshToken_ExpiresAt>::generate()?;
             user_access_refresh_token.updated_at = Generator::<UserAccessRefreshToken_UpdatedAt>::generate();
-            PostgresqlRepository::<UserAccessRefreshToken>::update_1(
+            PostgresqlRepository::<UserAccessRefreshToken<'_>>::update_1(
                 database_2_postgresql_connection,
                 Update1 {
                     user_access_token__id: user_access_refresh_token.user_access_token__id.as_ref(),

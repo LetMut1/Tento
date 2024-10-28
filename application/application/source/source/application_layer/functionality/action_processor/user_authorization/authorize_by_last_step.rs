@@ -143,7 +143,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
             }
             let database_2_postgresql_pooled_connection = inner.get_database_2_postgresql_pooled_connection().await?;
             let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
-            let user_authorization_token = PostgresqlRepository::<UserAuthorizationToken>::find_2(
+            let user_authorization_token = PostgresqlRepository::<UserAuthorizationToken<'_>>::find_2(
                 database_2_postgresql_connection,
                 By1 {
                     user__id: incoming.user__id,
@@ -176,7 +176,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                     ),
                 )?;
                 if user_authorization_token_.wrong_enter_tries_quantity < UserAuthorizationToken_WrongEnterTriesQuantity::LIMIT {
-                    PostgresqlRepository::<UserAuthorizationToken>::update_4(
+                    PostgresqlRepository::<UserAuthorizationToken<'_>>::update_4(
                         database_2_postgresql_connection,
                         Update4 {
                             user_authorization_token__wrong_enter_tries_quantity: user_authorization_token_.wrong_enter_tries_quantity,
@@ -242,7 +242,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                     user_access_refresh_token_.obfuscation_value = user_access_refresh_token__obfuscation_value;
                     user_access_refresh_token_.expires_at = user_access_refresh_token__expires_at;
                     user_access_refresh_token_.updated_at = user_access_refresh_token__updated_at;
-                    PostgresqlRepository::<UserAccessRefreshToken>::update_1(
+                    PostgresqlRepository::<UserAccessRefreshToken<'_>>::update_1(
                         database_2_postgresql_connection,
                         Update1 {
                             user_access_token__id: user_access_refresh_token_.user_access_token__id.as_ref(),
