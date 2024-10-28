@@ -117,7 +117,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
             if channel.owner == user_access_token.user__id {
                 return Result::Ok(UnifiedReport::precedent(Precedent::User_IsChannelOwner));
             }
-            if let Channel_AccessModifier::Close = Channel_AccessModifier::to_representation(channel.access_modifier) {
+            if const { Channel_AccessModifier::Close as i16 } == channel.access_modifier {
                 return Result::Ok(UnifiedReport::precedent(Precedent::Channel_IsClose));
             }
             PostgresqlRepository::<ChannelSubscription>::create_1(
@@ -133,3 +133,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
         };
     }
 }
+// TODO TODO TODO: qkwmdjndsicjpewem,lskdncyebchsdnjnsuhv[fo[sdccn]]
+// Канал приватный, то есть, его не видно в поиске, но открытый, то есть, можно подписываться без одобрения.
+// Значит, на него можно будет подписаться перебором со скрипта. А значит нужнг объединять приватность и закрытость в одно понятие.
+// Разделять на 2 понятия бессмысленно. Для чего видеть в поиске закрытый канал?

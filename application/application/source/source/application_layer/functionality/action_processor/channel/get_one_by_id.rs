@@ -115,7 +115,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                     return Result::Ok(UnifiedReport::precedent(Precedent::Channel_NotFound));
                 }
             };
-            if let Channel_AccessModifier::Close = Channel_AccessModifier::to_representation(channel.access_modifier) {
+            if const { Channel_AccessModifier::Close as i16 } == channel.access_modifier {
                 let is_exist = PostgresqlRepository::<ChannelSubscription>::is_exist_1(
                     &*database_1_postgresql_pooled_connection,
                     By1 {

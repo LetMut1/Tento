@@ -93,6 +93,7 @@ https://stackoverflow.com/questions/58819199/how-to-keep-long-connection-in-http
 // проставить инлайнинг
 // в Бд различать ConstraintException и недоступность базы данных.
 
+// TODO TODO TODO: qkwmdjndsicjpewem,lskdncyebchsdnjnsuhv[fo[sdccn]]
 
 // Составить требования для пароля.
 
@@ -107,3 +108,6 @@ https://stackoverflow.com/questions/58819199/how-to-keep-long-connection-in-http
 // let database_1_postgresql_connection = &*inner.get_database_1_postgresql_pooled_connection().await?;    можно сразу без промежуточной переменной.
 
 // Сервисы и документация для новых роутоы.
+
+
+Заменить ли modifier c i16 на u8/bool

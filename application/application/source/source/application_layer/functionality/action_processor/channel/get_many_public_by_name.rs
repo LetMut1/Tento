@@ -124,7 +124,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyPublicByName> {
                     user__id: user_access_token.user__id,
                     channel__name: incoming.channel__name.as_str(),
                     requery___channel__name: incoming.requery___channel__name.as_deref(),
-                    channel__visability_modifier: Channel_VisabilityModifier::from_representation(Channel_VisabilityModifier::Public),
+                    channel__visability_modifier: const { Channel_VisabilityModifier::Public as i16 },
                 },
                 incoming.limit,
             )
