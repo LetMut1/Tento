@@ -33,16 +33,23 @@ impl PostgresqlRepository<Common1> {
         return async move {
             let mut query = "\
                 SELECT \
-                    c.id AS i, \
-                    c.name AS n, \
-                    c.linked_name AS ln, \
-                    c.access_modifier AS am, \
-                    c.cover_image_path AS cip, \
-                    c.background_image_path AS bip, \
+                    c.id AS i,\
+                    c.name AS n,\
+                    c.linked_name AS ln,\
+                    c.access_modifier AS am,\
+                    c.cover_image_path AS cip,\
+                    c.background_image_path AS bip,\
                     cs.channel__id AS ca \
-                FROM public.channel c LEFT OUTER JOIN public.channel_subscription cs \
-                ON cs.user__id = $1 AND c.id = cs.channel__id \
-                WHERE c.visability_modifier = $2 AND c.name LIKE $3"
+                FROM \
+                    public.channel c \
+                LEFT OUTER JOIN \
+                    public.channel_subscription cs \
+                ON \
+                    cs.user__id = $1 \
+                    AND c.id = cs.channel__id \
+                WHERE \
+                    c.visability_modifier = $2 \
+                    AND c.name LIKE $3"
                 .to_string();
             let mut counter = Counter::<u8>::new(
                 3,
@@ -65,7 +72,8 @@ impl PostgresqlRepository<Common1> {
                 );
             if let Option::Some(ref requery___channel__name) = by_1.requery___channel__name {
                 query = format!(
-                    "{} AND c.name > ${}",
+                    "{} \
+                    AND c.name > ${}",
                     query.as_str(),
                     counter.get_next_value_unchecked(),
                 );
@@ -175,15 +183,20 @@ impl PostgresqlRepository<Common1> {
         return async move {
             let mut query = "\
                 SELECT \
-                    c.id AS i, \
-                    c.name AS n, \
-                    c.linked_name AS ln, \
-                    c.access_modifier AS am, \
-                    c.visability_modifier AS vm, \
-                    c.cover_image_path AS cip, \
-                    c.background_image_path AS bip \
-                FROM public.channel c INNER JOIN public.channel_subscription cs \
-                ON cs.user__id = $1 AND c.id = cs.channel__id \
+                    c.id AS i,\
+                    c.name AS n,\
+                    c.linked_name AS ln,\
+                    c.access_modifier AS am,\
+                    c.visability_modifier AS vm,\
+                    c.cover_image_path AS cip,\
+                    c.background_image_path AS bip\
+                FROM \
+                    public.channel c \
+                INNER JOIN \
+                    public.channel_subscription cs \
+                ON \
+                    cs.user__id = $1 \
+                    AND c.id = cs.channel__id \
                 WHERE c.name LIKE $2"
                 .to_string();
             let mut counter = Counter::<u8>::new(
@@ -203,7 +216,8 @@ impl PostgresqlRepository<Common1> {
                 );
             if let Option::Some(ref requery___channel__name) = by_2.requery___channel__name {
                 query = format!(
-                    "{} AND c.name > ${}",
+                    "{} \
+                    AND c.name > ${}",
                     query.as_str(),
                     counter.get_next_value_unchecked(),
                 );
@@ -309,15 +323,20 @@ impl PostgresqlRepository<Common1> {
         return async move {
             let mut query = "\
                 SELECT \
-                    c.id AS i, \
-                    c.name AS n, \
-                    c.linked_name AS ln, \
-                    c.access_modifier AS am, \
-                    c.visability_modifier AS vm, \
-                    c.cover_image_path AS cip, \
+                    c.id AS i,\
+                    c.name AS n,\
+                    c.linked_name AS ln,\
+                    c.access_modifier AS am,\
+                    c.visability_modifier AS vm,\
+                    c.cover_image_path AS cip,\
                     c.background_image_path AS bip \
-                FROM public.channel c INNER JOIN public.channel_subscription cs \
-                ON cs.user__id = $1 AND c.id = cs.channel__id"
+                FROM \
+                    public.channel c \
+                INNER JOIN \
+                    public.channel_subscription cs \
+                ON \
+                    cs.user__id = $1 \
+                    AND c.id = cs.channel__id"
                 .to_string();
             let mut counter = Counter::<u8>::new(
                 1,

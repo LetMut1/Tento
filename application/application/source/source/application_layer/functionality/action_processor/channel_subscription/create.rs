@@ -120,7 +120,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
             if const { Channel_AccessModifier::Close as i16 } == channel.access_modifier {
                 return Result::Ok(UnifiedReport::precedent(Precedent::Channel_IsClose));
             }
-            PostgresqlRepository::<ChannelSubscription>::create_1(
+            PostgresqlRepository::<ChannelSubscription>::create_transactional_1(
                 database_1_postgresql_connection,
                 Insert1 {
                     user__id: user_access_token.user__id,

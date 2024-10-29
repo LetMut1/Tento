@@ -1,10 +1,10 @@
 mod derivative;
+mod field;
 pub use self::derivative::{
     UserAuthorizationToken_1,
     UserAuthorizationToken_2,
     UserAuthorizationToken_3,
 };
-mod field;
 use self::field::{
     CanBeResentFrom,
     ExpiresAt,

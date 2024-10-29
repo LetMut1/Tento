@@ -34,22 +34,23 @@ impl PostgresqlRepository<UserRegistrationToken<'_>> {
     ) -> impl Future<Output = Result<UserRegistrationToken<'b>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
-                INSERT INTO public.user_registration_token AS urt ( \
-                    user__email, \
-                    user_device__id, \
-                    value, \
-                    wrong_enter_tries_quantity, \
-                    is_approved, \
-                    expires_at, \
-                    can_be_resent_from \
-                ) VALUES ( \
-                    $1, \
-                    $2, \
-                    $3, \
-                    $4, \
-                    $5, \
-                    $6, \
-                    $7 \
+                INSERT INTO \
+                    public.user_registration_token AS urt (\
+                    user__email,\
+                    user_device__id,\
+                    value,\
+                    wrong_enter_tries_quantity,\
+                    is_approved,\
+                    expires_at,\
+                    can_be_resent_from\
+                ) VALUES (\
+                    $1,\
+                    $2,\
+                    $3,\
+                    $4,\
+                    $5,\
+                    $6,\
+                    $7\
                 );";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
@@ -121,8 +122,11 @@ impl PostgresqlRepository<UserRegistrationToken<'_>> {
     pub fn delete_2<'a>(database_2_connection: &'a Connection, by_1: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
-                DELETE FROM ONLY public.user_registration_token AS urt \
-                WHERE urt.user__email = $1 AND urt.user_device__id = $2;";
+                DELETE FROM ONLY \
+                    public.user_registration_token AS urt \
+                WHERE \
+                    urt.user__email = $1 \
+                    AND urt.user_device__id = $2;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
@@ -167,21 +171,24 @@ impl PostgresqlRepository<UserRegistrationToken<'_>> {
     ) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
-                UPDATE ONLY public.user_registration_token AS urt
-                SET ( \
-                    value, \
-                    wrong_enter_tries_quantity, \
-                    is_approved, \
-                    can_be_resent_from, \
-                    expires_at \
-                ) = ROW( \
-                    $1, \
-                    $2, \
-                    $3, \
-                    $4, \
-                    $5 \
+                UPDATE ONLY \
+                    public.user_registration_token AS urt \
+                SET (\
+                    value,\
+                    wrong_enter_tries_quantity,\
+                    is_approved,\
+                    can_be_resent_from,\
+                    expires_at\
+                ) = ROW(\
+                    $1,\
+                    $2,\
+                    $3,\
+                    $4,\
+                    $5\
                 ) \
-                WHERE urt.user__email = $6 AND urt.user_device__id = $7;";
+                WHERE \
+                    urt.user__email = $6 \
+                    AND urt.user_device__id = $7;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
@@ -242,13 +249,16 @@ impl PostgresqlRepository<UserRegistrationToken<'_>> {
     pub fn update_2<'a>(database_2_connection: &'a Connection, update_2: Update2, by_1: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
-                UPDATE ONLY public.user_registration_token AS urt
-                SET ( \
-                    can_be_resent_from \
-                ) = ROW( \
-                    $1 \
+                UPDATE ONLY \
+                    public.user_registration_token AS urt \
+                SET (\
+                    can_be_resent_from\
+                ) = ROW(\
+                    $1\
                 ) \
-                WHERE urt.user__email = $2 AND urt.user_device__id = $3;";
+                WHERE \
+                    urt.user__email = $2 \
+                    AND urt.user_device__id = $3;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
@@ -297,19 +307,22 @@ impl PostgresqlRepository<UserRegistrationToken<'_>> {
     ) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
-                UPDATE ONLY public.user_registration_token AS urt
-                SET ( \
-                    value, \
-                    wrong_enter_tries_quantity, \
-                    is_approved, \
-                    expires_at \
-                ) = ROW( \
-                    $1, \
-                    $2, \
-                    $3, \
-                    $4 \
+                UPDATE ONLY \
+                    public.user_registration_token AS urt \
+                SET (\
+                    value,\
+                    wrong_enter_tries_quantity,\
+                    is_approved,\
+                    expires_at\
+                ) = ROW(\
+                    $1,\
+                    $2,\
+                    $3,\
+                    $4\
                 ) \
-                WHERE urt.user__email = $5 AND urt.user_device__id = $6;";
+                WHERE \
+                    urt.user__email = $5 AND \
+                    urt.user_device__id = $6;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
@@ -366,13 +379,16 @@ impl PostgresqlRepository<UserRegistrationToken<'_>> {
     pub fn update_4<'a>(database_2_connection: &'a Connection, update_4: Update4, by_1: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
-                UPDATE ONLY public.user_registration_token AS urt
-                SET ( \
-                    wrong_enter_tries_quantity \
-                ) = ROW( \
-                    $1 \
+                UPDATE ONLY \
+                    public.user_registration_token AS urt \
+                SET (\
+                    wrong_enter_tries_quantity\
+                ) = ROW(\
+                    $1\
                 ) \
-                WHERE urt.user__email = $2 AND urt.user_device__id = $3;";
+                WHERE \
+                    urt.user__email = $2 \
+                    AND urt.user_device__id = $3;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
@@ -417,13 +433,16 @@ impl PostgresqlRepository<UserRegistrationToken<'_>> {
     pub fn update_5<'a>(database_2_connection: &'a Connection, update_5: Update5, by_1: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
-                UPDATE ONLY public.user_registration_token AS urt
-                SET ( \
-                    is_approved \
-                ) = ROW( \
-                    $1 \
+                UPDATE ONLY \
+                    public.user_registration_token AS urt \
+                SET (\
+                    is_approved\
+                ) = ROW(\
+                    $1\
                 ) \
-                WHERE urt.user__email = $2 AND urt.user_device__id = $3;";
+                WHERE \
+                    urt.user__email = $2 \
+                    AND urt.user_device__id = $3;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
@@ -472,13 +491,16 @@ impl PostgresqlRepository<UserRegistrationToken<'_>> {
         return async move {
             let query = "\
                 SELECT \
-                    urt.value AS v, \
-                    urt.wrong_enter_tries_quantity AS wetq, \
-                    urt.is_approved AS ia, \
-                    urt.expires_at AS ea, \
+                    urt.value AS v,\
+                    urt.wrong_enter_tries_quantity AS wetq,\
+                    urt.is_approved AS ia,\
+                    urt.expires_at AS ea,\
                     urt.can_be_resent_from as cbrf \
-                FROM public.user_registration_token urt \
-                WHERE urt.user__email = $1 AND urt.user_device__id = $2;";
+                FROM \
+                    public.user_registration_token urt \
+                WHERE \
+                    urt.user__email = $1 \
+                    AND urt.user_device__id = $2;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
@@ -561,12 +583,15 @@ impl PostgresqlRepository<UserRegistrationToken<'_>> {
         return async move {
             let query = "\
                 SELECT \
-                    urt.value AS v, \
-                    urt.wrong_enter_tries_quantity AS wetq, \
-                    urt.is_approved AS ia, \
+                    urt.value AS v,\
+                    urt.wrong_enter_tries_quantity AS wetq,\
+                    urt.is_approved AS ia,\
                     urt.expires_at AS ea \
-                FROM public.user_registration_token urt \
-                WHERE urt.user__email = $1 AND urt.user_device__id = $2;";
+                FROM \
+                    public.user_registration_token urt \
+                WHERE \
+                    urt.user__email = $1 \
+                    AND urt.user_device__id = $2;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
@@ -643,12 +668,15 @@ impl PostgresqlRepository<UserRegistrationToken<'_>> {
         return async move {
             let query = "\
                 SELECT \
-                    urt.value AS v, \
-                    urt.is_approved AS ia, \
-                    urt.expires_at AS ea, \
+                    urt.value AS v,\
+                    urt.is_approved AS ia,\
+                    urt.expires_at AS ea,\
                     urt.can_be_resent_from as cbrf \
-                FROM public.user_registration_token urt \
-                WHERE urt.user__email = $1 AND urt.user_device__id = $2;";
+                FROM \
+                    public.user_registration_token urt \
+                WHERE \
+                    urt.user__email = $1 \
+                    AND urt.user_device__id = $2;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(

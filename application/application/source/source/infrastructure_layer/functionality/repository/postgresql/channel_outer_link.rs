@@ -26,17 +26,18 @@ impl PostgresqlRepository<ChannelOuterLink> {
     pub fn create_1<'a>(database_1_connection: &'a Connection, insert_1: Insert1) -> impl Future<Output = Result<ChannelOuterLink, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
-                INSERT INTO public.channel_inner_link AS cil ( \
-                    from_, \
-                    alias, \
-                    address, \
-                    created_at \
-                ) VALUES ( \
-                    $1, \
-                    $2, \
-                    $3, \
-                    $4 \
-                );";
+                INSERT INTO \
+                    public.channel_inner_link AS cil (\
+                        from_,\
+                        alias,\
+                        address,\
+                        created_at\
+                    ) VALUES (\
+                        $1,\
+                        $2,\
+                        $3,\
+                        $4\
+                    );";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
@@ -96,10 +97,12 @@ impl PostgresqlRepository<ChannelOuterLink> {
         return async move {
             let query = "\
                 SELECT \
-                    col.alias AS al, \
+                    col.alias AS al,\
                     col.address AS ad \
-                FROM public.channel_outer_link col \
-                WHERE col.from_ = $1 \
+                FROM \
+                    public.channel_outer_link col \
+                WHERE \
+                    col.from_ = $1 \
                 LIMIT $2";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver

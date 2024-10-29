@@ -26,40 +26,40 @@ impl PostgresqlRepository<Channel<'_>> {
     pub fn create_1<'a>(database_1_connection: &'a Connection, insert_1: Insert1) -> impl Future<Output = Result<Channel<'static>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
-                INSERT INTO public.channel AS c ( \
-                    id, \
-                    owner, \
-                    name, \
-                    linked_name, \
-                    description, \
-                    access_modifier, \
-                    visability_modifier, \
-                    orientation, \
-                    cover_image_path, \
-                    background_image_path, \
-                    subscribers_quantity, \
-                    marks_quantity, \
-                    viewing_quantity, \
-                    created_at \
-                ) VALUES ( \
-                    nextval('public.channel1'), \
-                    $1, \
-                    $2, \
-                    $3, \
-                    $4, \
-                    $5, \
-                    $6, \
-                    $7, \
-                    $8, \
-                    $9, \
-                    $10, \
-                    $11, \
-                    $12, \
-                    $13 \
-                ) \
+                INSERT INTO \
+                    public.channel AS c (\
+                        id,\
+                        owner,\
+                        name,\
+                        linked_name,\
+                        description,\
+                        access_modifier,\
+                        visability_modifier,\
+                        orientation,\
+                        cover_image_path,\
+                        background_image_path,\
+                        subscribers_quantity,\
+                        marks_quantity,\
+                        viewing_quantity,\
+                        created_at\
+                    ) VALUES (\
+                        nextval('public.channel1'), \
+                        $1,\
+                        $2,\
+                        $3,\
+                        $4,\
+                        $5,\
+                        $6,\
+                        $7,\
+                        $8,\
+                        $9,\
+                        $10,\
+                        $11,\
+                        $12,\
+                        $13\
+                    ) \
                 RETURNING \
-                    c.id AS i,
-                    c.created_at::TEXT AS ca;";
+                    c.id AS i;";
             let channel__description = insert_1.channel__description.as_ref();
             let channel__orientation = insert_1.channel__orientation.as_slice();
             let channel__cover_image_path = insert_1.channel__cover_image_path.as_ref();
@@ -171,21 +171,23 @@ impl PostgresqlRepository<Channel<'_>> {
         return async move {
             let query = "\
                 SELECT \
-                    c.owner AS ow, \
-                    c.name AS n, \
-                    c.linked_name AS ln, \
-                    c.description AS d, \
-                    c.access_modifier AS am, \
-                    c.visability_modifier AS vm, \
-                    c.orientation AS or, \
-                    c.cover_image_path AS cip, \
-                    c.background_image_path AS bip, \
-                    c.subscribers_quantity, \
-                    c.marks_quantity AS mq, \
-                    c.viewing_quantity AS vq, \
+                    c.owner AS ow,\
+                    c.name AS n,\
+                    c.linked_name AS ln,\
+                    c.description AS d,\
+                    c.access_modifier AS am,\
+                    c.visability_modifier AS vm,\
+                    c.orientation AS or,\
+                    c.cover_image_path AS cip,\
+                    c.background_image_path AS bip,\
+                    c.subscribers_quantity,\
+                    c.marks_quantity AS mq,\
+                    c.viewing_quantity AS vq,\
                     c.created_at AS ca \
-                FROM public.channel c \
-                WHERE c.id = $1;";
+                FROM \
+                    public.channel c \
+                WHERE \
+                    c.id = $1;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver.add_parameter(
                 &by_1.channel__id,
@@ -311,21 +313,23 @@ impl PostgresqlRepository<Channel<'_>> {
         return async move {
             let query = "\
                 SELECT \
-                    c.id AS i, \
-                    c.owner AS ow, \
-                    c.linked_name AS ln, \
-                    c.description AS d, \
-                    c.access_modifier AS am, \
-                    c.visability_modifier AS vm, \
-                    c.orientation AS or, \
-                    c.cover_image_path AS cip, \
-                    c.background_image_path AS bip, \
-                    c.subscribers_quantity, \
-                    c.marks_quantity AS mq, \
-                    c.viewing_quantity AS vq, \
+                    c.id AS i,\
+                    c.owner AS ow,\
+                    c.linked_name AS ln,\
+                    c.description AS d,\
+                    c.access_modifier AS am,\
+                    c.visability_modifier AS vm,\
+                    c.orientation AS or,\
+                    c.cover_image_path AS cip,\
+                    c.background_image_path AS bip,\
+                    c.subscribers_quantity,\
+                    c.marks_quantity AS mq,\
+                    c.viewing_quantity AS vq,\
                     c.created_at AS ca \
-                FROM public.channel c \
-                WHERE c.name = $1;";
+                FROM \
+                    public.channel c \
+                WHERE \
+                    c.name = $1;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver.add_parameter(
                 &by_2.channel__name,
@@ -450,8 +454,10 @@ impl PostgresqlRepository<Channel<'_>> {
             let query = "\
                 SELECT \
                     c.id AS i \
-                FROM public.channel c \
-                WHERE c.name = $1;";
+                FROM \
+                    public.channel c \
+                WHERE \
+                    c.name = $1;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver.add_parameter(
                 &by_2.channel__name,
@@ -492,8 +498,10 @@ impl PostgresqlRepository<Channel<'_>> {
             let query = "\
                 SELECT \
                     c.id AS i \
-                FROM public.channel c \
-                WHERE c.linked_name = $1;";
+                FROM \
+                    public.channel c \
+                WHERE \
+                    c.linked_name = $1;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver.add_parameter(
                 &by_3.channel__linked_name,

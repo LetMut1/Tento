@@ -34,21 +34,22 @@ impl PostgresqlRepository<UserAuthorizationToken<'_>> {
     ) -> impl Future<Output = Result<UserAuthorizationToken<'b>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
-                INSERT INTO public.user_authorization_token AS uat ( \
-                    user__id, \
-                    user_device__id, \
-                    value, \
-                    wrong_enter_tries_quantity, \
-                    expires_at, \
-                    can_be_resent_from \
-                ) VALUES ( \
-                    $1, \
-                    $2, \
-                    $3, \
-                    $4, \
-                    $5, \
-                    $6 \
-                );";
+                INSERT INTO \
+                    public.user_authorization_token AS uat (\
+                        user__id,\
+                        user_device__id,\
+                        value,\
+                        wrong_enter_tries_quantity,\
+                        expires_at,\
+                        can_be_resent_from\
+                    ) VALUES (\
+                        $1,\
+                        $2,\
+                        $3,\
+                        $4,\
+                        $5,\
+                        $6\
+                    );";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
@@ -114,8 +115,11 @@ impl PostgresqlRepository<UserAuthorizationToken<'_>> {
     pub fn delete_1<'a>(database_2_connection: &'a Connection, by_1: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
-                DELETE FROM ONLY public.user_authorization_token AS uat \
-                WHERE uat.user__id = $1 AND uat.user_device__id = $2;";
+                DELETE FROM ONLY \
+                    public.user_authorization_token AS uat \
+                WHERE \
+                    uat.user__id = $1 \
+                    AND uat.user_device__id = $2;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
@@ -160,19 +164,22 @@ impl PostgresqlRepository<UserAuthorizationToken<'_>> {
     ) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
-                UPDATE ONLY public.user_authorization_token AS uat \
-                SET ( \
-                    value, \
-                    wrong_enter_tries_quantity, \
-                    expires_at, \
-                    can_be_resent_from \
-                ) = ROW( \
-                    $1, \
-                    $2, \
-                    $3, \
-                    $4 \
+                UPDATE ONLY \
+                    public.user_authorization_token AS uat \
+                SET (\
+                    value,\
+                    wrong_enter_tries_quantity,\
+                    expires_at,\
+                    can_be_resent_from\
+                ) = ROW(\
+                    $1,\
+                    $2,\
+                    $3,\
+                    $4\
                 ) \
-                WHERE uat.user__id = $5 AND uat.user_device__id = $6;";
+                WHERE \
+                    uat.user__id = $5 \
+                    AND uat.user_device__id = $6;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
@@ -233,17 +240,20 @@ impl PostgresqlRepository<UserAuthorizationToken<'_>> {
     ) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
-                UPDATE ONLY public.user_authorization_token AS uat \
-                SET ( \
-                    value, \
-                    wrong_enter_tries_quantity, \
-                    expires_at \
-                ) = ROW( \
-                    $1, \
-                    $2, \
-                    $3 \
+                UPDATE ONLY \
+                    public.user_authorization_token AS uat \
+                SET (\
+                    value,\
+                    wrong_enter_tries_quantity,\
+                    expires_at\
+                ) = ROW(\
+                    $1,\
+                    $2,\
+                    $3\
                 ) \
-                WHERE uat.user__id = $4 AND uat.user_device__id = $5;";
+                WHERE \
+                    uat.user__id = $4 \
+                    AND uat.user_device__id = $5;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
@@ -296,13 +306,16 @@ impl PostgresqlRepository<UserAuthorizationToken<'_>> {
     pub fn update_3<'a>(database_2_connection: &'a Connection, update_3: Update3, by_1: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
-                UPDATE ONLY public.user_authorization_token AS uat \
-                SET ( \
-                    can_be_resent_from \
-                ) = ROW( \
-                    $1 \
+                UPDATE ONLY \
+                    public.user_authorization_token AS uat \
+                SET (\
+                    can_be_resent_from\
+                ) = ROW(\
+                    $1\
                 ) \
-                WHERE uat.user__id = $2 AND uat.user_device__id = $3;";
+                WHERE \
+                    uat.user__id = $2 \
+                    AND uat.user_device__id = $3;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
@@ -347,13 +360,16 @@ impl PostgresqlRepository<UserAuthorizationToken<'_>> {
     pub fn update_4<'a>(database_2_connection: &'a Connection, update_4: Update4, by_1: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
-                UPDATE ONLY public.user_authorization_token AS uat \
-                SET ( \
-                    wrong_enter_tries_quantity \
-                ) = ROW( \
-                    $1 \
+                UPDATE ONLY \
+                    public.user_authorization_token AS uat \
+                SET (\
+                    wrong_enter_tries_quantity\
+                ) = ROW(\
+                    $1\
                 ) \
-                WHERE uat.user__id = $2 AND uat.user_device__id = $3;";
+                WHERE \
+                    uat.user__id = $2 \
+                    AND uat.user_device__id = $3;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
@@ -402,12 +418,15 @@ impl PostgresqlRepository<UserAuthorizationToken<'_>> {
         return async move {
             let query = "\
                 SELECT \
-                    uat.value AS v, \
-                    uat.wrong_enter_tries_quantity AS wetq, \
-                    uat.expires_at AS ea, \
+                    uat.value AS v,\
+                    uat.wrong_enter_tries_quantity AS wetq,\
+                    uat.expires_at AS ea,\
                     uat.can_be_resent_from AS cbrf \
-                FROM public.user_authorization_token uat \
-                WHERE uat.user__id = $1 AND uat.user_device__id = $2;";
+                FROM \
+                    public.user_authorization_token uat \
+                WHERE \
+                    uat.user__id = $1 \
+                    AND uat.user_device__id = $2;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
@@ -484,11 +503,14 @@ impl PostgresqlRepository<UserAuthorizationToken<'_>> {
         return async move {
             let query = "\
                 SELECT \
-                    uat.value AS v, \
-                    uat.wrong_enter_tries_quantity AS wetq, \
-                    uat.expires_at AS ea \
-                FROM public.user_authorization_token uat \
-                WHERE uat.user__id = $1 AND uat.user_device__id = $2;";
+                    uat.value AS v,\
+                    uat.wrong_enter_tries_quantity AS wetq,\
+                    uat.expires_at AS ea\
+                FROM \
+                    public.user_authorization_token uat \
+                WHERE \
+                    uat.user__id = $1 \
+                    AND uat.user_device__id = $2;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
@@ -559,11 +581,14 @@ impl PostgresqlRepository<UserAuthorizationToken<'_>> {
         return async move {
             let query = "\
                 SELECT \
-                    uat.value AS v, \
-                    uat.expires_at AS ea, \
+                    uat.value AS v,\
+                    uat.expires_at AS ea,\
                     uat.can_be_resent_from AS cbrf \
-                FROM public.user_authorization_token uat \
-                WHERE uat.user__id = $1 AND uat.user_device__id = $2;";
+                FROM \
+                    public.user_authorization_token uat \
+                WHERE \
+                    uat.user__id = $1 \
+                    AND uat.user_device__id = $2;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(

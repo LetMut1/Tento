@@ -29,21 +29,22 @@ impl PostgresqlRepository<UserAccessRefreshToken<'_>> {
     ) -> impl Future<Output = Result<UserAccessRefreshToken<'b>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
-                INSERT INTO public.user_access_refresh_token AS uart ( \
-                    user__id, \
-                    user_device__id, \
-                    user_access_token__id, \
-                    obfuscation_value, \
-                    expires_at, \
-                    updated_at \
-                ) VALUES ( \
-                    $1, \
-                    $2, \
-                    $3, \
-                    $4, \
-                    $5, \
-                    $6 \
-                );";
+                INSERT INTO \
+                    public.user_access_refresh_token AS uart (\
+                        user__id,\
+                        user_device__id,\
+                        user_access_token__id,\
+                        obfuscation_value,\
+                        expires_at,\
+                        updated_at\
+                    ) VALUES (\
+                        $1,\
+                        $2,\
+                        $3,\
+                        $4,\
+                        $5,\
+                        $6\
+                    );";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
@@ -113,19 +114,22 @@ impl PostgresqlRepository<UserAccessRefreshToken<'_>> {
     ) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
-                UPDATE ONLY public.user_access_refresh_token AS uart \
-                SET ( \
-                    user_access_token__id, \
-                    obfuscation_value, \
-                    expires_at, \
-                    updated_at
-                ) = ROW( \
-                    $1, \
-                    $2, \
-                    $3, \
-                    $4 \
+                UPDATE ONLY \
+                    public.user_access_refresh_token AS uart \
+                SET (\
+                    user_access_token__id,\
+                    obfuscation_value,\
+                    expires_at,\
+                    updated_at\
+                ) = ROW(\
+                    $1,\
+                    $2,\
+                    $3,\
+                    $4\
                 ) \
-                WHERE uart.user__id = $5 AND uart.user_device__id = $6;";
+                WHERE \
+                    uart.user__id = $5 \
+                    AND uart.user_device__id = $6;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
@@ -181,8 +185,12 @@ impl PostgresqlRepository<UserAccessRefreshToken<'_>> {
     }
     pub fn delete_1<'a>(database_2_connection: &'a Connection, by_2: By2<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
-            let query = "DELETE FROM ONLY public.user_access_refresh_token AS uart  \
-                WHERE uart.user__id = $1 AND uart.user_device__id = $2;";
+            let query = "\
+            DELETE FROM ONLY \
+                public.user_access_refresh_token AS uart \
+            WHERE \
+                uart.user__id = $1 \
+                AND uart.user_device__id = $2;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
@@ -223,8 +231,10 @@ impl PostgresqlRepository<UserAccessRefreshToken<'_>> {
     pub fn delete_2<'a>(database_2_connection: &'a Connection, by_1: By1) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
-                DELETE FROM ONLY public.user_access_refresh_token AS uart  \
-                WHERE uart.user__id = $1;";
+                DELETE FROM ONLY \
+                    public.user_access_refresh_token AS uart \
+                WHERE \
+                    uart.user__id = $1;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver.add_parameter(
                 &by_1.user__id,
@@ -264,12 +274,15 @@ impl PostgresqlRepository<UserAccessRefreshToken<'_>> {
         return async move {
             let query = "\
                 SELECT \
-                    uart.user_access_token__id AS uati, \
-                    uart.obfuscation_value AS ov, \
-                    uart.expires_at AS ea, \
+                    uart.user_access_token__id AS uati,\
+                    uart.obfuscation_value AS ov,\
+                    uart.expires_at AS ea,\
                     uart.updated_at AS ua \
-                FROM public.user_access_refresh_token uart \
-                WHERE uart.user__id = $1 AND uart.user_device__id = $2;";
+                FROM \
+                    public.user_access_refresh_token uart \
+                WHERE \
+                    uart.user__id = $1 \
+                    AND uart.user_device__id = $2;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(

@@ -20,18 +20,27 @@ use tokio_postgres::{
     Client as Connection,
 };
 impl PostgresqlRepository<ChannelSubscription> {
-    pub fn create_1<'a>(database_1_connection: &'a Connection, insert_1: Insert1) -> impl Future<Output = Result<ChannelSubscription, AggregateError>> + Send + Capture<&'a Void> {
+    pub fn create_transactional_1<'a>(database_1_connection: &'a Connection, insert_1: Insert1) -> impl Future<Output = Result<ChannelSubscription, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
-                INSERT INTO public.channel_subscription AS cs ( \
-                    user__id, \
-                    channel__id, \
-                    created_at \
-                ) VALUES ( \
-                    $1, \
-                    $2, \
-                    $3 \
-                );";
+                BEGIN;\
+                INSERT INTO \
+                    public.channel_subscription AS cs (\
+                        user__id,\
+                        channel__id,\
+                        created_at\
+                    ) VALUES (\
+                        $1,\
+                        $2,\
+                        $3\
+                    );\
+                UPDATE ONLY \
+                    public.channel AS c \
+                SET \
+                    subscribers_quantity = subscribers_quantity + 1 \
+                WHERE \
+                    c.id = $2;\
+                COMMIT;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
@@ -83,8 +92,11 @@ impl PostgresqlRepository<ChannelSubscription> {
             let query = "\
                 SELECT \
                     cs.user__id AS ui \
-                FROM public.channel_subscription cs \
-                WHERE cs.user__id = $1 AND cs.channel__id = $2;";
+                FROM \
+                    public.channel_subscription cs \
+                WHERE \
+                    cs.user__id = $1 \
+                    AND cs.channel__id = $2;";
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
