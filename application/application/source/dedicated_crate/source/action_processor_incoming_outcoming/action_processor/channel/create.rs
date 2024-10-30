@@ -33,6 +33,6 @@ crate::macro_rules::enum_from!(
         CommonPrecedent::UserAccessToken_AlreadyExpired,
         CommonPrecedent::UserAccessToken_InUserAccessTokenBlackList,
         CommonPrecedent::Channel_NameAlreadyExist,
-        CommonPrecedent::Channel_LinkedNameAlreadyExist
+        CommonPrecedent::Channel_LinkedNameAlreadyExist,
     }
 );

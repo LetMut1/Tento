@@ -1,10 +1,13 @@
 use crate::{
     application_layer::functionality::action_processor::{
-        ChannelSubscription_Create,
+        Channel_CheckLinkedNameForExisting,
+        Channel_CheckNameForExisting,
+        Channel_Create,
         Channel_GetManyByNameInSubscriptions,
         Channel_GetManyBySubscription,
         Channel_GetManyPublicByName,
         Channel_GetOneById,
+        ChannelSubscription_Create,
         Inner as ActionProcessorInner,
         UserAuthorization_AuthorizeByFirstStep,
         UserAuthorization_AuthorizeByLastStep,
@@ -993,7 +996,7 @@ impl HttpServer {
                         user_authorization,
                         &parts.method,
                     ) {
-                        // Should be GET. But due to restrictions of third-party services, the method is put in Post.
+                        // Should be GET.
                         (&UserAuthorization::CheckNicknameForExisting, &Method::POST) => {
                             return Action::<UserAuthorization_CheckNicknameForExisting>::run(
                                 &mut action_inner,
@@ -1001,7 +1004,7 @@ impl HttpServer {
                             )
                             .await;
                         }
-                        // Should be GET. But due to restrictions of third-party services, the method is put in Post.
+                        // Should be GET.
                         (&UserAuthorization::CheckEmailForExisting, &Method::POST) => {
                             return Action::<UserAuthorization_CheckEmailForExisting>::run(
                                 &mut action_inner,
@@ -1114,7 +1117,7 @@ impl HttpServer {
                                     user_authorization,
                                     &parts.method,
                                 ) {
-                                    // Should be GET. But due to restrictions of third-party services, the method is put in Post.
+                                    // Should be GET.
                                     (&UserAuthorization::CheckNicknameForExisting_, &Method::POST) => {
                                         return Action::<UserAuthorization_CheckNicknameForExisting>::run_(
                                             &mut action_inner,
@@ -1122,7 +1125,7 @@ impl HttpServer {
                                         )
                                         .await;
                                     }
-                                    // Should be GET. But due to restrictions of third-party services, the method is put in Post.
+                                    // Should be GET.
                                     (&UserAuthorization::CheckEmailForExisting_, &Method::POST) => {
                                         return Action::<UserAuthorization_CheckEmailForExisting>::run_(
                                             &mut action_inner,
@@ -1241,7 +1244,30 @@ impl HttpServer {
                         channel,
                         &parts.method,
                     ) {
-                        // Should be GET. But due to restrictions of third-party services, the method is put in Post.
+                        // Should be GET.
+                        (&Channel::CheckLinkedNameForExisting, &Method::POST) => {
+                            return Action::<Channel_CheckLinkedNameForExisting>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
+                        // Should be GET.
+                        (&Channel::CheckNameForExisting, &Method::POST) => {
+                            return Action::<Channel_CheckNameForExisting>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
+                        (&Channel::Create, &Method::POST) => {
+                            return Action::<Channel_Create>::run(
+                                &mut action_inner,
+                                &action_processor_inner,
+                            )
+                            .await;
+                        }
+                        // Should be GET.
                         (&Channel::GetOneById, &Method::POST) => {
                             return Action::<Channel_GetOneById>::run(
                                 &mut action_inner,
@@ -1249,7 +1275,7 @@ impl HttpServer {
                             )
                             .await;
                         }
-                        // Should be GET. But due to restrictions of third-party services, the method is put in Post.
+                        // Should be GET.
                         (&Channel::GetManyByNameInSubscriptions, &Method::POST) => {
                             return Action::<Channel_GetManyByNameInSubscriptions>::run(
                                 &mut action_inner,
@@ -1257,7 +1283,7 @@ impl HttpServer {
                             )
                             .await;
                         }
-                        // Should be GET. But due to restrictions of third-party services, the method is put in Post.
+                        // Should be GET.
                         (&Channel::GetManyBySubscription, &Method::POST) => {
                             return Action::<Channel_GetManyBySubscription>::run(
                                 &mut action_inner,
@@ -1265,7 +1291,7 @@ impl HttpServer {
                             )
                             .await;
                         }
-                        // Should be GET. But due to restrictions of third-party services, the method is put in Post.
+                        // Should be GET.
                         (&Channel::GetManyPublicByName, &Method::POST) => {
                             return Action::<Channel_GetManyPublicByName>::run(
                                 &mut action_inner,
@@ -1280,7 +1306,30 @@ impl HttpServer {
                                     channel,
                                     &parts.method,
                                 ) {
-                                    // Should be GET. But due to restrictions of third-party services, the method is put in Post.
+                                    // Should be GET.
+                                    (&Channel::CheckLinkedNameForExisting_, &Method::POST) => {
+                                        return Action::<Channel_CheckLinkedNameForExisting>::run_(
+                                            &mut action_inner,
+                                            &action_processor_inner,
+                                        )
+                                        .await;
+                                    }
+                                    // Should be GET.
+                                    (&Channel::CheckNameForExisting_, &Method::POST) => {
+                                        return Action::<Channel_CheckNameForExisting>::run_(
+                                            &mut action_inner,
+                                            &action_processor_inner,
+                                        )
+                                        .await;
+                                    }
+                                    (&Channel::Create_, &Method::POST) => {
+                                        return Action::<Channel_Create>::run_(
+                                            &mut action_inner,
+                                            &action_processor_inner,
+                                        )
+                                        .await;
+                                    }
+                                    // Should be GET.
                                     (&Channel::GetOneById_, &Method::POST) => {
                                         return Action::<Channel_GetOneById>::run_(
                                             &mut action_inner,
@@ -1288,7 +1337,7 @@ impl HttpServer {
                                         )
                                         .await;
                                     }
-                                    // Should be GET. But due to restrictions of third-party services, the method is put in Post.
+                                    // Should be GET.
                                     (&Channel::GetManyByNameInSubscriptions_, &Method::POST) => {
                                         return Action::<Channel_GetManyByNameInSubscriptions>::run_(
                                             &mut action_inner,
@@ -1296,7 +1345,7 @@ impl HttpServer {
                                         )
                                         .await;
                                     }
-                                    // Should be GET. But due to restrictions of third-party services, the method is put in Post.
+                                    // Should be GET.
                                     (&Channel::GetManyBySubscription_, &Method::POST) => {
                                         return Action::<Channel_GetManyBySubscription>::run_(
                                             &mut action_inner,
@@ -1304,7 +1353,7 @@ impl HttpServer {
                                         )
                                         .await;
                                     }
-                                    // Should be GET. But due to restrictions of third-party services, the method is put in Post.
+                                    // Should be GET.
                                     (&Channel::GetManyPublicByName_, &Method::POST) => {
                                         return Action::<Channel_GetManyPublicByName>::run_(
                                             &mut action_inner,

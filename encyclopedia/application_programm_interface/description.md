@@ -69,7 +69,7 @@ enum Precedent {
     UserAccessToken_InUserAccessTokenBlackList,
 }
 ```
- - ## UserAuthorization_DeauthorizeFromAllDevicec POST /user_authorization/deauthorize_from_all_devices
+ - ## UserAuthorization_DeauthorizeFromAllDevices POST /user_authorization/deauthorize_from_all_devices
 ```
 Deauthorizes user from all devices.
 ```
@@ -82,6 +82,74 @@ struct Incoming {
 enum Precedent {
     UserAccessToken_AlreadyExpired,
     UserAccessToken_InUserAccessTokenBlackList,
+}
+```
+ - ## Channel_CheckLinkedNameForExisting POST /channel/check_linked_name_for_existing
+```
+Checks linked name for existing.
+```
+```
+struct Incoming {
+    user_access_token_encoded: <Data standards>,
+    channel__linked_name: String,
+}
+```
+```
+enum Precedent {
+    UserAccessToken_AlreadyExpired,
+    UserAccessToken_InUserAccessTokenBlackList,
+}
+```
+```
+struct Outcoming {
+    result: bool,
+}
+```
+ - ## Channel_CheckNameForExisting POST /channel/check_name_for_existing
+```
+Checks name for existing.
+```
+```
+struct Incoming {
+    user_access_token_encoded: <Data standards>,
+    channel__name: String,
+}
+```
+```
+enum Precedent {
+    UserAccessToken_AlreadyExpired,
+    UserAccessToken_InUserAccessTokenBlackList,
+}
+```
+```
+struct Outcoming {
+    result: bool,
+}
+```
+ - ## Channel_Create POST /channel/create
+```
+Creates channel.
+```
+```
+struct Incoming {
+    user_access_token_encoded: <Data standards>,
+    channel__name: String,
+    channel__linked_name: String,
+    channel__access_modifier: i16,
+    channel__visability_modifier: i16,
+}
+```
+```
+enum Precedent {
+    UserAccessToken_AlreadyExpired,
+    UserAccessToken_InUserAccessTokenBlackList,
+    Channel_NameAlreadyExist,
+    Channel_LinkedNameAlreadyExist,
+}
+```
+```
+struct Outcoming {
+    pub channel__id: i64,
 }
 ```
  - ## Channel_GetOneById POST (GET) /channel/get_one_by_id
