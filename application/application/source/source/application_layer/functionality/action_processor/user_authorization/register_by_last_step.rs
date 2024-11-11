@@ -153,7 +153,12 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                     ),
                 );
             }
-            let database_1_postgresql_client = inner.get_database_1_postgresql_client().await?;
+            let database_1_postgresql_client = inner.database_1_postgresql_connection_pool.get().await.into_runtime(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
             if PostgresqlRepository::<User<'_>>::is_exist_1(
                 &database_1_postgresql_client,
                 By1 {
@@ -174,7 +179,12 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
             {
                 return Result::Ok(UnifiedReport::precedent(Precedent::User_EmailAlreadyExist));
             }
-            let database_2_postgresql_client = inner.get_database_2_postgresql_client().await?;
+            let database_2_postgresql_client = inner.database_2_postgresql_connection_pool.get().await.into_runtime(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
             let mut user_registration_token = match PostgresqlRepository::<UserRegistrationToken<'_>>::find_2(
                 &database_2_postgresql_client,
                 By1_ {

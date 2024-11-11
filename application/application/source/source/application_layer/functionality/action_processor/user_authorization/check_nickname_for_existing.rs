@@ -16,6 +16,7 @@ use crate::{
             aggregate_error::{
                 AggregateError,
                 Backtrace,
+                ResultConverter,
             },
             capture::Capture,
         },
@@ -55,7 +56,12 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_CheckNicknameForExis
                 );
             }
             let is_exist = PostgresqlRepository::<User<'_>>::is_exist_1(
-                &inner.get_database_1_postgresql_client().await?,
+                &inner.database_1_postgresql_connection_pool.get().await.into_runtime(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?,
                 By1 {
                     user__nickname: incoming.user__nickname.as_str(),
                 },

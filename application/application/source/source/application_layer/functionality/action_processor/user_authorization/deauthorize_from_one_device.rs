@@ -16,7 +16,11 @@ use crate::{
     },
     infrastructure_layer::{
         data::{
-            aggregate_error::AggregateError,
+            aggregate_error::{
+                AggregateError,
+                Backtrace,
+                ResultConverter,
+            },
             capture::Capture,
         },
         functionality::repository::postgresql::{
@@ -59,7 +63,12 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_DeauthorizeFromOneDe
                 }
             };
             PostgresqlRepository::<UserAccessRefreshToken<'_>>::delete_1(
-                &inner.get_database_2_postgresql_client().await?,
+                &inner.database_2_postgresql_connection_pool.get().await.into_runtime(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?,
                 By2 {
                     user__id: user_access_token.user__id,
                     user_device__id: user_access_token.user_device__id,

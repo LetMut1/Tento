@@ -27,6 +27,7 @@ use crate::{
             aggregate_error::{
                 AggregateError,
                 Backtrace,
+                ResultConverter,
             },
             capture::Capture,
         },
@@ -93,7 +94,12 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthoriz
                 );
             }
             let user = match PostgresqlRepository::<User<'_>>::find_6(
-                &inner.get_database_1_postgresql_client().await?,
+                &inner.database_1_postgresql_connection_pool.get().await.into_runtime(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?,
                 By3 {
                     user__id: incoming.user__id,
                 },
@@ -105,7 +111,12 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthoriz
                     return Result::Ok(UnifiedReport::precedent(Precedent::User_NotFound));
                 }
             };
-            let database_2_postgresql_client = inner.get_database_2_postgresql_client().await?;
+            let database_2_postgresql_client = inner.database_2_postgresql_connection_pool.get().await.into_runtime(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
             let mut user_authorization_token = match PostgresqlRepository::<UserAuthorizationToken<'_>>::find_3(
                 &database_2_postgresql_client,
                 By1 {

@@ -22,6 +22,7 @@ use crate::{
                 AggregateError,
                 Backtrace,
                 OptionConverter,
+                ResultConverter,
             },
             capture::Capture,
         },
@@ -90,7 +91,12 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordBySecon
                     ),
                 );
             }
-            let database_2_postgresql_client = inner.get_database_2_postgresql_client().await?;
+            let database_2_postgresql_client = inner.database_2_postgresql_connection_pool.get().await.into_runtime(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
             let mut user_reset_password_token = match PostgresqlRepository::<UserResetPasswordToken<'_>>::find_2(
                 &database_2_postgresql_client,
                 By1 {

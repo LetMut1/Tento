@@ -26,6 +26,7 @@ use crate::{
             aggregate_error::{
                 AggregateError,
                 Backtrace,
+                ResultConverter,
             },
             capture::Capture,
         },
@@ -99,7 +100,12 @@ impl ActionProcessor_ for ActionProcessor<Channel_Create> {
                     ),
                 );
             }
-            let database_1_postgresql_client = inner.get_database_1_postgresql_client().await?;
+            let database_1_postgresql_client = inner.database_1_postgresql_connection_pool.get().await.into_runtime(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
             if PostgresqlRepository::<Channel<'_>>::is_exist_1(
                 &database_1_postgresql_client,
                 By2 {

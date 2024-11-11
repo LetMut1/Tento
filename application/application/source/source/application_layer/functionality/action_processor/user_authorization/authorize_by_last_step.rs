@@ -128,7 +128,12 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                     ),
                 );
             }
-            let database_2_postgresql_client = inner.get_database_2_postgresql_client().await?;
+            let database_2_postgresql_client = inner.database_2_postgresql_connection_pool.get().await.into_runtime(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
             let user_authorization_token = PostgresqlRepository::<UserAuthorizationToken<'_>>::find_2(
                 &database_2_postgresql_client,
                 By1 {
@@ -191,7 +196,12 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                     ),
                 );
             }
-            let database_1_postgresql_client = inner.get_database_1_postgresql_client().await?;
+            let database_1_postgresql_client = inner.database_1_postgresql_connection_pool.get().await.into_runtime(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
             if !PostgresqlRepository::<User<'_>>::is_exist_3(
                 &database_1_postgresql_client,
                 By3 {

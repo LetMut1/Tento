@@ -121,7 +121,12 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                     ),
                 );
             }
-            let database_2_postgresql_client = inner.get_database_2_postgresql_client().await?;
+            let database_2_postgresql_client = inner.database_2_postgresql_connection_pool.get().await.into_runtime(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
             let mut user_reset_password_token = match PostgresqlRepository::<UserResetPasswordToken<'_>>::find_2(
                 &database_2_postgresql_client,
                 By1_ {
@@ -181,7 +186,12 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                 }
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_WrongValue));
             }
-            let database_1_postgresql_client = inner.get_database_1_postgresql_client().await?;
+            let database_1_postgresql_client = inner.database_1_postgresql_connection_pool.get().await.into_runtime(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
             let mut user = match PostgresqlRepository::<User<'_>>::find_5(
                 &database_1_postgresql_client,
                 By3 {

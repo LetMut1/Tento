@@ -98,11 +98,6 @@ https://stackoverflow.com/questions/58819199/how-to-keep-long-connection-in-http
 
 // Как синхронизировать время на серверах в распределенной системе? Нужно ли для моих задач (не требуется микроточности).Если нужнн один источник правды, то создать 1 сервер, отдающий время - есть ли смысл?
 
-// Postgresql PreparedStatement.  Стейтмент существует per-connection. tokio_postgreq::...::prepare_typed() возвращает и Statement, который нужно сохранить и переиспользовать. Проблема в том, что Client не дает connection_id, чтобы можно было создать хранилище.
-В идеальном варианте, это нужно использовать.
-
-
-
 
 
 БЭКЕНД todo:
@@ -153,9 +148,6 @@ https://stackoverflow.com/questions/58819199/how-to-keep-long-connection-in-http
 // PostgresqlRepository<ChannelSubscription>::create_1  В подобных местах нужно делать в парадигме апсерта/ Do Nothing?
 
 
-// let database_1_postgresql_connection = &*inner.get_database_1_postgresql_pooled_connection().await?;    можно сразу без промежуточной переменной.
-
-
 // Сервис для новых роутов:
 Channel_CheckLinkedNameForExisting
 Channel_CheckNameForExisting
@@ -172,10 +164,3 @@ Channel_Create
 ЗАменитьь имена полей в бд на a,b,c,d... чтобы максимально оптимизировать.
 
 и Апперкейст запросов. Что быстрее lower/upper?
-
-
-
-
-
-connection_pool, connection - > client
-.get_database в Inner - удалить

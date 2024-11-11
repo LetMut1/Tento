@@ -32,11 +32,7 @@ pub use self::{
     },
 };
 use crate::infrastructure_layer::data::{
-    aggregate_error::{
-        AggregateError,
-        Backtrace,
-        ResultConverter,
-    },
+    aggregate_error::AggregateError,
     capture::Capture,
     environment_configuration::EnvironmentConfiguration,
 };
@@ -49,7 +45,6 @@ use std::{
     future::Future,
     marker::PhantomData,
 };
-use deadpool_postgres::Client;
 pub struct ActionProcessor<S> {
     _subject: PhantomData<S>,
 }
@@ -66,26 +61,4 @@ pub struct Inner<'a> {
     pub environment_configuration: &'static EnvironmentConfiguration,
     pub database_1_postgresql_connection_pool: &'a PostgresqlConnectionPool,
     pub database_2_postgresql_connection_pool: &'a PostgresqlConnectionPool,
-}
-impl<'a> Inner<'a> {
-    pub fn get_database_1_postgresql_client<'b>(&'b self) -> impl Future<Output = Result<Client, AggregateError>> + Send + Capture<&'b Void> {
-        return async move {
-            return self.database_1_postgresql_connection_pool.get().await.into_runtime(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            );
-        };
-    }
-    pub fn get_database_2_postgresql_client<'b>(&'b self) -> impl Future<Output = Result<Client, AggregateError>> + Send + Capture<&'b Void>{
-        return async move {
-            return self.database_2_postgresql_connection_pool.get().await.into_runtime(
-                Backtrace::new(
-                    line!(),
-                    file!(),
-                ),
-            );
-        };
-    }
 }

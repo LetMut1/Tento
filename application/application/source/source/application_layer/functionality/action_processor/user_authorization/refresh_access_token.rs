@@ -28,6 +28,7 @@ use crate::{
             aggregate_error::{
                 AggregateError,
                 Backtrace,
+                ResultConverter,
             },
             capture::Capture,
         },
@@ -73,7 +74,12 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
                 inner.environment_configuration,
                 &incoming.user_access_token_encoded,
             )?;
-            let database_2_postgresql_client = inner.get_database_2_postgresql_client().await?;
+            let database_2_postgresql_client = inner.database_2_postgresql_connection_pool.get().await.into_runtime(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
             let mut user_access_refresh_token = match PostgresqlRepository::<UserAccessRefreshToken<'_>>::find_1(
                 &database_2_postgresql_client,
                 By2 {

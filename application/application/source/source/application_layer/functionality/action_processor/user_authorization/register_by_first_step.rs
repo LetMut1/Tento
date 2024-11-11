@@ -30,6 +30,7 @@ use crate::{
             aggregate_error::{
                 AggregateError,
                 Backtrace,
+                ResultConverter,
             },
             capture::Capture,
         },
@@ -99,7 +100,12 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                 );
             }
             if PostgresqlRepository::<User<'_>>::is_exist_2(
-                &inner.get_database_1_postgresql_client().await?,
+                &inner.database_1_postgresql_connection_pool.get().await.into_runtime(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?,
                 By2 {
                     user__email: incoming.user__email.as_str(),
                 },
@@ -108,7 +114,12 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
             {
                 return Result::Ok(UnifiedReport::precedent(Precedent::User_EmailAlreadyExist));
             }
-            let database_2_postgresql_client = inner.get_database_2_postgresql_client().await?;
+            let database_2_postgresql_client = inner.database_2_postgresql_connection_pool.get().await.into_runtime(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
             let (user_registration_token__value, user_registration_token__can_be_resent_from, user_registration_token__wrong_enter_tries_quantity, can_send) =
                 match PostgresqlRepository::<UserRegistrationToken<'_>>::find_1(
                     &database_2_postgresql_client,

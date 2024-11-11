@@ -24,6 +24,7 @@ use crate::{
             aggregate_error::{
                 AggregateError,
                 Backtrace,
+                ResultConverter,
             },
             capture::Capture,
         },
@@ -88,7 +89,12 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
                     ),
                 );
             }
-            let database_2_postgresql_client = inner.get_database_2_postgresql_client().await?;
+            let database_2_postgresql_client = inner.database_2_postgresql_connection_pool.get().await.into_runtime(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
             let mut user_registration_token = match PostgresqlRepository::<UserRegistrationToken<'_>>::find_3(
                 &database_2_postgresql_client,
                 By1 {

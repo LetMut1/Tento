@@ -106,7 +106,12 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                     ),
                 );
             }
-            let database_1_postgresql_client = inner.get_database_1_postgresql_client().await?;
+            let database_1_postgresql_client = inner.database_1_postgresql_connection_pool.get().await.into_runtime(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
             let (user__id, user__email, user__nickname, user__password_hash) = if Validator::<User_Email>::is_valid(incoming.user__email___or___user__nickname.as_str())? {
                 let user_ = PostgresqlRepository::<User<'_>>::find_3(
                     &database_1_postgresql_client,
@@ -189,7 +194,12 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
             )?? {
                 return Result::Ok(UnifiedReport::precedent(Precedent::User_WrongEmailOrNicknameOrPassword));
             }
-            let database_2_postgresql_client = inner.get_database_2_postgresql_client().await?;
+            let database_2_postgresql_client = inner.database_2_postgresql_connection_pool.get().await.into_runtime(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
             let (user_authorization_token__value, user_authorization_token__can_be_resent_from, user_authorization_token__wrong_enter_tries_quantity, can_send) =
                 match PostgresqlRepository::<UserAuthorizationToken<'_>>::find_1(
                     &database_2_postgresql_client,
