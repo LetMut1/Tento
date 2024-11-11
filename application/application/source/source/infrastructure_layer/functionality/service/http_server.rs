@@ -40,7 +40,6 @@ use crate::{
             environment_configuration::EnvironmentConfiguration,
         },
         functionality::service::{
-            creator::Creator,
             logger::Logger,
             spawner::{
                 Spawner,
@@ -87,6 +86,8 @@ use tokio::{
 };
 #[cfg(not(feature = "postgresql_connection_with_tls"))]
 use tokio_postgres::NoTls;
+#[cfg(not(feature = "postgresql_connection_with_tls"))]
+use crate::infrastructure_layer::functionality::service::creator::Creator;
 static CONNECTION_QUANTITY: AtomicU64 = AtomicU64::new(0);
 pub struct HttpServer;
 impl HttpServer {
