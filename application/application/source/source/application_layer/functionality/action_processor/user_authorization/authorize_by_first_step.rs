@@ -106,10 +106,10 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                     ),
                 );
             }
-            let database_1_postgresql_connection = inner.get_database_1_postgresql_client().await?;
+            let database_1_postgresql_client = inner.get_database_1_postgresql_client().await?;
             let (user__id, user__email, user__nickname, user__password_hash) = if Validator::<User_Email>::is_valid(incoming.user__email___or___user__nickname.as_str())? {
                 let user_ = PostgresqlRepository::<User<'_>>::find_3(
-                    &database_1_postgresql_connection,
+                    &database_1_postgresql_client,
                     By2 {
                         user__email: incoming.user__email___or___user__nickname.as_str(),
                     },
@@ -130,7 +130,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
             } else {
                 if Validator::<User_Nickname>::is_valid(incoming.user__email___or___user__nickname.as_str()) {
                     let user_ = PostgresqlRepository::<User<'_>>::find_2(
-                        &database_1_postgresql_connection,
+                        &database_1_postgresql_client,
                         By1 {
                             user__nickname: incoming.user__email___or___user__nickname.as_str(),
                         },
@@ -189,10 +189,10 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
             )?? {
                 return Result::Ok(UnifiedReport::precedent(Precedent::User_WrongEmailOrNicknameOrPassword));
             }
-            let database_2_postgresql_connection = inner.get_database_2_postgresql_client().await?;
+            let database_2_postgresql_client = inner.get_database_2_postgresql_client().await?;
             let (user_authorization_token__value, user_authorization_token__can_be_resent_from, user_authorization_token__wrong_enter_tries_quantity, can_send) =
                 match PostgresqlRepository::<UserAuthorizationToken<'_>>::find_1(
-                    &database_2_postgresql_connection,
+                    &database_2_postgresql_client,
                     By1_ {
                         user__id,
                         user_device__id: incoming.user_device__id.as_str(),
@@ -223,7 +223,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                         };
                         if need_to_update_1 && need_to_update_2 {
                             PostgresqlRepository::<UserAuthorizationToken<'_>>::update_1(
-                                &database_2_postgresql_connection,
+                                &database_2_postgresql_client,
                                 Update1 {
                                     user_authorization_token__value: user_authorization_token.value.as_str(),
                                     user_authorization_token__wrong_enter_tries_quantity: user_authorization_token.wrong_enter_tries_quantity,
@@ -239,7 +239,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                         } else {
                             if need_to_update_1 {
                                 PostgresqlRepository::<UserAuthorizationToken<'_>>::update_3(
-                                    &database_2_postgresql_connection,
+                                    &database_2_postgresql_client,
                                     Update3 {
                                         user_authorization_token__can_be_resent_from: user_authorization_token.can_be_resent_from,
                                     },
@@ -252,7 +252,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                             }
                             if need_to_update_2 {
                                 PostgresqlRepository::<UserAuthorizationToken<'_>>::update_2(
-                                    &database_2_postgresql_connection,
+                                    &database_2_postgresql_client,
                                     Update2 {
                                         user_authorization_token__value: user_authorization_token.value.as_str(),
                                         user_authorization_token__wrong_enter_tries_quantity: user_authorization_token.wrong_enter_tries_quantity,
@@ -275,7 +275,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                     }
                     Option::None => {
                         let user_authorization_token = PostgresqlRepository::<UserAuthorizationToken<'_>>::create_1(
-                            &database_2_postgresql_connection,
+                            &database_2_postgresql_client,
                             Insert1 {
                                 user__id,
                                 user_device__id: incoming.user_device__id.as_str(),

@@ -99,9 +99,9 @@ impl ActionProcessor_ for ActionProcessor<Channel_Create> {
                     ),
                 );
             }
-            let database_1_postgresql_connection = inner.get_database_1_postgresql_client().await?;
+            let database_1_postgresql_client = inner.get_database_1_postgresql_client().await?;
             if PostgresqlRepository::<Channel<'_>>::is_exist_1(
-                &database_1_postgresql_connection,
+                &database_1_postgresql_client,
                 By2 {
                     channel__name: incoming.channel__name.as_str(),
                 },
@@ -111,7 +111,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_Create> {
                 return Result::Ok(UnifiedReport::precedent(Precedent::Channel_NameAlreadyExist));
             }
             if PostgresqlRepository::<Channel<'_>>::is_exist_2(
-                &database_1_postgresql_connection,
+                &database_1_postgresql_client,
                 By3 {
                     channel__linked_name: incoming.channel__linked_name.as_str(),
                 },
@@ -121,7 +121,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_Create> {
                 return Result::Ok(UnifiedReport::precedent(Precedent::Channel_LinkedNameAlreadyExist));
             }
             let channel = PostgresqlRepository::<Channel<'_>>::create_1(
-                &database_1_postgresql_connection,
+                &database_1_postgresql_client,
                 Insert1 {
                     channel__owner: user_access_token.user__id,
                     channel__name: incoming.channel__name,

@@ -27,7 +27,7 @@ use std::future::Future;
 use tokio_postgres::types::Type;
 use deadpool_postgres::Client;
 impl PostgresqlRepository<Common1> {
-    pub fn find_1<'a>(database_1_connection: &'a Client, by_1: By1<'a>, limit: i16) -> impl Future<Output = Result<Vec<Common1>, AggregateError>> + Send + Capture<&'a Void> {
+    pub fn find_1<'a>(database_1_client: &'a Client, by_1: By1<'a>, limit: i16) -> impl Future<Output = Result<Vec<Common1>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let mut query = "\
                 SELECT \
@@ -91,7 +91,7 @@ impl PostgresqlRepository<Common1> {
                 &limit,
                 Type::INT2,
             );
-            let statement = database_1_connection
+            let statement = database_1_client
                 .prepare_typed_cached(
                     query.as_str(),
                     prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
@@ -103,7 +103,7 @@ impl PostgresqlRepository<Common1> {
                         file!(),
                     ),
                 )?;
-            let row_registry = database_1_connection
+            let row_registry = database_1_client
                 .query(
                     &statement,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
@@ -177,7 +177,7 @@ impl PostgresqlRepository<Common1> {
             return Result::Ok(common_registry);
         };
     }
-    pub fn find_2<'a>(database_1_connection: &'a Client, by_2: By2<'a>, limit: i16) -> impl Future<Output = Result<Vec<Common1>, AggregateError>> + Send + Capture<&'a Void> {
+    pub fn find_2<'a>(database_1_client: &'a Client, by_2: By2<'a>, limit: i16) -> impl Future<Output = Result<Vec<Common1>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let mut query = "\
                 SELECT \
@@ -235,7 +235,7 @@ impl PostgresqlRepository<Common1> {
                 &limit,
                 Type::INT2,
             );
-            let statement = database_1_connection
+            let statement = database_1_client
                 .prepare_typed_cached(
                     query.as_str(),
                     prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
@@ -247,7 +247,7 @@ impl PostgresqlRepository<Common1> {
                         file!(),
                     ),
                 )?;
-            let row_registry = database_1_connection
+            let row_registry = database_1_client
                 .query(
                     &statement,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
@@ -317,7 +317,7 @@ impl PostgresqlRepository<Common1> {
             return Result::Ok(common_registry);
         };
     }
-    pub fn find_3<'a>(database_1_connection: &'a Client, by_3: By3, limit: i16) -> impl Future<Output = Result<Vec<Common1>, AggregateError>> + Send + Capture<&'a Void> {
+    pub fn find_3<'a>(database_1_client: &'a Client, by_3: By3, limit: i16) -> impl Future<Output = Result<Vec<Common1>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let mut query = "\
                 SELECT \
@@ -370,7 +370,7 @@ impl PostgresqlRepository<Common1> {
                 &limit,
                 Type::INT2,
             );
-            let statement = database_1_connection
+            let statement = database_1_client
                 .prepare_typed_cached(
                     query.as_str(),
                     prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
@@ -382,7 +382,7 @@ impl PostgresqlRepository<Common1> {
                         file!(),
                     ),
                 )?;
-            let row_registry = database_1_connection
+            let row_registry = database_1_client
                 .query(
                     &statement,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),

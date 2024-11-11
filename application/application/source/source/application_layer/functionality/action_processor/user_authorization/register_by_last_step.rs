@@ -153,9 +153,9 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                     ),
                 );
             }
-            let database_1_postgresql_connection = inner.get_database_1_postgresql_client().await?;
+            let database_1_postgresql_client = inner.get_database_1_postgresql_client().await?;
             if PostgresqlRepository::<User<'_>>::is_exist_1(
-                &database_1_postgresql_connection,
+                &database_1_postgresql_client,
                 By1 {
                     user__nickname: incoming.user__nickname.as_str(),
                 },
@@ -165,7 +165,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 return Result::Ok(UnifiedReport::precedent(Precedent::User_NicknameAlreadyExist));
             }
             if PostgresqlRepository::<User<'_>>::is_exist_2(
-                &database_1_postgresql_connection,
+                &database_1_postgresql_client,
                 By2 {
                     user__email: incoming.user__email.as_str(),
                 },
@@ -174,9 +174,9 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
             {
                 return Result::Ok(UnifiedReport::precedent(Precedent::User_EmailAlreadyExist));
             }
-            let database_2_postgresql_connection = inner.get_database_2_postgresql_client().await?;
+            let database_2_postgresql_client = inner.get_database_2_postgresql_client().await?;
             let mut user_registration_token = match PostgresqlRepository::<UserRegistrationToken<'_>>::find_2(
-                &database_2_postgresql_connection,
+                &database_2_postgresql_client,
                 By1_ {
                     user__email: incoming.user__email.as_str(),
                     user_device__id: incoming.user_device__id.as_str(),
@@ -191,7 +191,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
             };
             if Resolver::<Expiration>::is_expired(user_registration_token.expires_at) {
                 PostgresqlRepository::<UserRegistrationToken<'_>>::delete_2(
-                    &database_2_postgresql_connection,
+                    &database_2_postgresql_client,
                     By1_ {
                         user__email: incoming.user__email.as_str(),
                         user_device__id: incoming.user_device__id.as_str(),
@@ -212,7 +212,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 )?;
                 if user_registration_token.wrong_enter_tries_quantity < UserRegistrationToken_WrongEnterTriesQuantity::LIMIT {
                     PostgresqlRepository::<UserRegistrationToken<'_>>::update_4(
-                        &database_2_postgresql_connection,
+                        &database_2_postgresql_client,
                         Update4 {
                             user_registration_token__wrong_enter_tries_quantity: user_registration_token.wrong_enter_tries_quantity,
                         },
@@ -224,7 +224,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                     .await?;
                 } else {
                     PostgresqlRepository::<UserRegistrationToken<'_>>::delete_2(
-                        &database_2_postgresql_connection,
+                        &database_2_postgresql_client,
                         By1_ {
                             user__email: incoming.user__email.as_str(),
                             user_device__id: incoming.user_device__id.as_str(),
@@ -240,7 +240,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 },
             );
             let user = PostgresqlRepository::<User<'_>>::create_1(
-                &database_1_postgresql_connection,
+                &database_1_postgresql_client,
                 UserInsert1 {
                     user__email: incoming.user__email,
                     user__nickname: incoming.user__nickname,
@@ -262,7 +262,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
             );
             // TODO  TRANZACTION посмотреть, необходимо ли здесь сделать транзакцию
             let user_access_refresh_token = PostgresqlRepository::<UserAccessRefreshToken<'_>>::create_1(
-                &database_2_postgresql_connection,
+                &database_2_postgresql_client,
                 UserAccessRefreshTokenInsert1 {
                     user__id: user.id,
                     user_device__id: incoming.user_device__id.as_str(),

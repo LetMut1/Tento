@@ -18,7 +18,7 @@ use std::future::Future;
 use tokio_postgres::types::Type;
 use deadpool_postgres::Client;
 impl PostgresqlRepository<ChannelSubscription> {
-    pub fn create_transactional_1<'a>(database_1_connection: &'a Client, insert_1: Insert1) -> impl Future<Output = Result<ChannelSubscription, AggregateError>> + Send + Capture<&'a Void> {
+    pub fn create_transactional_1<'a>(database_1_client: &'a Client, insert_1: Insert1) -> impl Future<Output = Result<ChannelSubscription, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
 
 
@@ -57,7 +57,7 @@ impl PostgresqlRepository<ChannelSubscription> {
                     &insert_1.channel_subscription__created_at,
                     Type::INT8,
                 );
-            let statement = database_1_connection
+            let statement = database_1_client
                 .prepare_typed_cached(
                     query,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
@@ -69,7 +69,7 @@ impl PostgresqlRepository<ChannelSubscription> {
                         file!(),
                     ),
                 )?;
-            database_1_connection
+            database_1_client
                 .query(
                     &statement,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
@@ -89,7 +89,7 @@ impl PostgresqlRepository<ChannelSubscription> {
             return Result::Ok(channel_subscription);
         };
     }
-    pub fn is_exist_1<'a>(database_1_connection: &'a Client, by_1: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + Capture<&'a Void> {
+    pub fn is_exist_1<'a>(database_1_client: &'a Client, by_1: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 SELECT \
@@ -109,7 +109,7 @@ impl PostgresqlRepository<ChannelSubscription> {
                     &by_1.channel__id,
                     Type::INT8,
                 );
-            let statement = database_1_connection
+            let statement = database_1_client
                 .prepare_typed_cached(
                     query,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
@@ -121,7 +121,7 @@ impl PostgresqlRepository<ChannelSubscription> {
                         file!(),
                     ),
                 )?;
-            let row_registry = database_1_connection
+            let row_registry = database_1_client
                 .query(
                     &statement,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),

@@ -88,9 +88,9 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                     ),
                 );
             }
-            let database_1_postgresql_pooled_connection = inner.get_database_1_postgresql_client().await?;
+            let database_1_postgresql_client = inner.get_database_1_postgresql_client().await?;
             let channel = match PostgresqlRepository::<Channel<'_>>::find_1(
-                &database_1_postgresql_pooled_connection,
+                &database_1_postgresql_client,
                 By1___ {
                     channel__id: incoming.channel__id,
                 },
@@ -104,7 +104,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
             };
             if const { Channel_AccessModifier::Close as i16 } == channel.access_modifier {
                 let is_exist = PostgresqlRepository::<ChannelSubscription>::is_exist_1(
-                    &database_1_postgresql_pooled_connection,
+                    &database_1_postgresql_client,
                     By1 {
                         user__id: user_access_token.user__id,
                         channel__id: channel.id,
@@ -116,7 +116,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                 }
             }
             let channel_inner_link_registry = PostgresqlRepository::<ChannelInnerLink>::find_1(
-                &database_1_postgresql_pooled_connection,
+                &database_1_postgresql_client,
                 By1__ {
                     channel_inner_link__from: channel.id,
                 },
@@ -124,7 +124,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
             )
             .await?;
             let channel_outer_link_registry = PostgresqlRepository::<ChannelOuterLink>::find_1(
-                &database_1_postgresql_pooled_connection,
+                &database_1_postgresql_client,
                 By1_ {
                     channel_outer_link__from: channel.id,
                 },

@@ -22,7 +22,7 @@ use tokio_postgres::types::Type;
 use deadpool_postgres::Client;
 impl PostgresqlRepository<UserAccessRefreshToken<'_>> {
     pub fn create_1<'a, 'b>(
-        database_2_connection: &'a Client,
+        database_2_client: &'a Client,
         insert_1: Insert1<'b>,
     ) -> impl Future<Output = Result<UserAccessRefreshToken<'b>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
@@ -69,7 +69,7 @@ impl PostgresqlRepository<UserAccessRefreshToken<'_>> {
                     &insert_1.user_access_refresh_token__updated_at,
                     Type::INT8,
                 );
-            let statement = database_2_connection
+            let statement = database_2_client
                 .prepare_typed_cached(
                     query,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
@@ -81,7 +81,7 @@ impl PostgresqlRepository<UserAccessRefreshToken<'_>> {
                         file!(),
                     ),
                 )?;
-            database_2_connection
+            database_2_client
                 .query(
                     &statement,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
@@ -106,7 +106,7 @@ impl PostgresqlRepository<UserAccessRefreshToken<'_>> {
         };
     }
     pub fn update_1<'a>(
-        database_2_connection: &'a Client,
+        database_2_client: &'a Client,
         update_1: Update1<'a>,
         by_2: By2<'a>,
     ) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
@@ -154,7 +154,7 @@ impl PostgresqlRepository<UserAccessRefreshToken<'_>> {
                     &by_2.user_device__id,
                     Type::TEXT,
                 );
-            let statement = database_2_connection
+            let statement = database_2_client
                 .prepare_typed_cached(
                     query,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
@@ -166,7 +166,7 @@ impl PostgresqlRepository<UserAccessRefreshToken<'_>> {
                         file!(),
                     ),
                 )?;
-            database_2_connection
+            database_2_client
                 .query(
                     &statement,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
@@ -181,7 +181,7 @@ impl PostgresqlRepository<UserAccessRefreshToken<'_>> {
             return Result::Ok(());
         };
     }
-    pub fn delete_1<'a>(database_2_connection: &'a Client, by_2: By2<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
+    pub fn delete_1<'a>(database_2_client: &'a Client, by_2: By2<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
             DELETE FROM ONLY \
@@ -199,7 +199,7 @@ impl PostgresqlRepository<UserAccessRefreshToken<'_>> {
                     &by_2.user_device__id,
                     Type::TEXT,
                 );
-            let statement = database_2_connection
+            let statement = database_2_client
                 .prepare_typed_cached(
                     query,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
@@ -211,7 +211,7 @@ impl PostgresqlRepository<UserAccessRefreshToken<'_>> {
                         file!(),
                     ),
                 )?;
-            database_2_connection
+            database_2_client
                 .query(
                     &statement,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
@@ -226,7 +226,7 @@ impl PostgresqlRepository<UserAccessRefreshToken<'_>> {
             return Result::Ok(());
         };
     }
-    pub fn delete_2<'a>(database_2_connection: &'a Client, by_1: By1) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
+    pub fn delete_2<'a>(database_2_client: &'a Client, by_1: By1) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 DELETE FROM ONLY \
@@ -238,7 +238,7 @@ impl PostgresqlRepository<UserAccessRefreshToken<'_>> {
                 &by_1.user__id,
                 Type::INT8,
             );
-            let statement = database_2_connection
+            let statement = database_2_client
                 .prepare_typed_cached(
                     query,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
@@ -250,7 +250,7 @@ impl PostgresqlRepository<UserAccessRefreshToken<'_>> {
                         file!(),
                     ),
                 )?;
-            database_2_connection
+            database_2_client
                 .query(
                     &statement,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
@@ -266,7 +266,7 @@ impl PostgresqlRepository<UserAccessRefreshToken<'_>> {
         };
     }
     pub fn find_1<'a, 'b>(
-        database_2_connection: &'a Client,
+        database_2_client: &'a Client,
         by_2: By2<'b>,
     ) -> impl Future<Output = Result<Option<UserAccessRefreshToken<'b>>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
@@ -291,7 +291,7 @@ impl PostgresqlRepository<UserAccessRefreshToken<'_>> {
                     &by_2.user_device__id,
                     Type::TEXT,
                 );
-            let statement = database_2_connection
+            let statement = database_2_client
                 .prepare_typed_cached(
                     query,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
@@ -303,7 +303,7 @@ impl PostgresqlRepository<UserAccessRefreshToken<'_>> {
                         file!(),
                     ),
                 )?;
-            let row_registry = database_2_connection
+            let row_registry = database_2_client
                 .query(
                     &statement,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),

@@ -18,7 +18,7 @@ use std::future::Future;
 use tokio_postgres::types::Type;
 use deadpool_postgres::Client;
 impl PostgresqlRepository<UserDevice> {
-    pub fn create_1<'a>(database_1_connection: &'a Client, insert_1: Insert1) -> impl Future<Output = Result<UserDevice, AggregateError>> + Send + Capture<&'a Void> {
+    pub fn create_1<'a>(database_1_client: &'a Client, insert_1: Insert1) -> impl Future<Output = Result<UserDevice, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
             let query = "\
@@ -42,7 +42,7 @@ impl PostgresqlRepository<UserDevice> {
                     &insert_1.user__id,
                     Type::INT8,
                 );
-            let statement = database_1_connection
+            let statement = database_1_client
                 .prepare_typed_cached(
                     query,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
@@ -54,7 +54,7 @@ impl PostgresqlRepository<UserDevice> {
                         file!(),
                     ),
                 )?;
-            database_1_connection
+            database_1_client
                 .query(
                     &statement,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),

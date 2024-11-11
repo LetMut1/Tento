@@ -88,9 +88,9 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
                     ),
                 );
             }
-            let database_2_postgresql_connection = inner.get_database_2_postgresql_client().await?;
+            let database_2_postgresql_client = inner.get_database_2_postgresql_client().await?;
             let mut user_registration_token = match PostgresqlRepository::<UserRegistrationToken<'_>>::find_3(
-                &database_2_postgresql_connection,
+                &database_2_postgresql_client,
                 By1 {
                     user__email: incoming.user__email.as_str(),
                     user_device__id: incoming.user_device__id.as_str(),
@@ -105,7 +105,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
             };
             if Resolver::<Expiration>::is_expired(user_registration_token.expires_at) {
                 PostgresqlRepository::<UserRegistrationToken<'_>>::delete_2(
-                    &database_2_postgresql_connection,
+                    &database_2_postgresql_client,
                     By1 {
                         user__email: incoming.user__email.as_str(),
                         user_device__id: incoming.user_device__id.as_str(),
@@ -122,7 +122,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
             }
             user_registration_token.can_be_resent_from = Generator::<UserRegistrationToken_CanBeResentFrom>::generate()?;
             PostgresqlRepository::<UserRegistrationToken<'_>>::update_2(
-                &database_2_postgresql_connection,
+                &database_2_postgresql_client,
                 Update2 {
                     user_registration_token__can_be_resent_from: user_registration_token.can_be_resent_from,
                 },

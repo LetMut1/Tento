@@ -27,7 +27,7 @@ use tokio_postgres::types::Type;
 use deadpool_postgres::Client;
 impl PostgresqlRepository<UserAuthorizationToken<'_>> {
     pub fn create_1<'a, 'b>(
-        database_2_connection: &'a Client,
+        database_2_client: &'a Client,
         insert_1: Insert1<'b>,
     ) -> impl Future<Output = Result<UserAuthorizationToken<'b>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
@@ -74,7 +74,7 @@ impl PostgresqlRepository<UserAuthorizationToken<'_>> {
                     &insert_1.user_authorization_token__can_be_resent_from,
                     Type::INT8,
                 );
-            let statement = database_2_connection
+            let statement = database_2_client
                 .prepare_typed_cached(
                     query,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
@@ -86,7 +86,7 @@ impl PostgresqlRepository<UserAuthorizationToken<'_>> {
                         file!(),
                     ),
                 )?;
-            database_2_connection
+            database_2_client
                 .query(
                     &statement,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
@@ -110,7 +110,7 @@ impl PostgresqlRepository<UserAuthorizationToken<'_>> {
             );
         };
     }
-    pub fn delete_1<'a>(database_2_connection: &'a Client, by_1: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
+    pub fn delete_1<'a>(database_2_client: &'a Client, by_1: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 DELETE FROM ONLY \
@@ -128,7 +128,7 @@ impl PostgresqlRepository<UserAuthorizationToken<'_>> {
                     &by_1.user_device__id,
                     Type::TEXT,
                 );
-            let statement = database_2_connection
+            let statement = database_2_client
                 .prepare_typed_cached(
                     query,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
@@ -140,7 +140,7 @@ impl PostgresqlRepository<UserAuthorizationToken<'_>> {
                         file!(),
                     ),
                 )?;
-            database_2_connection
+            database_2_client
                 .query(
                     &statement,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
@@ -156,7 +156,7 @@ impl PostgresqlRepository<UserAuthorizationToken<'_>> {
         };
     }
     pub fn update_1<'a>(
-        database_2_connection: &'a Client,
+        database_2_client: &'a Client,
         update_1: Update1<'a>,
         by_1: By1<'a>,
     ) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
@@ -204,7 +204,7 @@ impl PostgresqlRepository<UserAuthorizationToken<'_>> {
                     &by_1.user_device__id,
                     Type::TEXT,
                 );
-            let statement = database_2_connection
+            let statement = database_2_client
                 .prepare_typed_cached(
                     query,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
@@ -216,7 +216,7 @@ impl PostgresqlRepository<UserAuthorizationToken<'_>> {
                         file!(),
                     ),
                 )?;
-            database_2_connection
+            database_2_client
                 .query(
                     &statement,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
@@ -232,7 +232,7 @@ impl PostgresqlRepository<UserAuthorizationToken<'_>> {
         };
     }
     pub fn update_2<'a>(
-        database_2_connection: &'a Client,
+        database_2_client: &'a Client,
         update_2: Update2<'a>,
         by_1: By1<'a>,
     ) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
@@ -274,7 +274,7 @@ impl PostgresqlRepository<UserAuthorizationToken<'_>> {
                     &by_1.user_device__id,
                     Type::TEXT,
                 );
-            let statement = database_2_connection
+            let statement = database_2_client
                 .prepare_typed_cached(
                     query,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
@@ -286,7 +286,7 @@ impl PostgresqlRepository<UserAuthorizationToken<'_>> {
                         file!(),
                     ),
                 )?;
-            database_2_connection
+            database_2_client
                 .query(
                     &statement,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
@@ -301,7 +301,7 @@ impl PostgresqlRepository<UserAuthorizationToken<'_>> {
             return Result::Ok(());
         };
     }
-    pub fn update_3<'a>(database_2_connection: &'a Client, update_3: Update3, by_1: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
+    pub fn update_3<'a>(database_2_client: &'a Client, update_3: Update3, by_1: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 UPDATE ONLY \
@@ -328,7 +328,7 @@ impl PostgresqlRepository<UserAuthorizationToken<'_>> {
                     &by_1.user_device__id,
                     Type::TEXT,
                 );
-            let statement = database_2_connection
+            let statement = database_2_client
                 .prepare_typed_cached(
                     query,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
@@ -340,7 +340,7 @@ impl PostgresqlRepository<UserAuthorizationToken<'_>> {
                         file!(),
                     ),
                 )?;
-            database_2_connection
+            database_2_client
                 .query(
                     &statement,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
@@ -355,7 +355,7 @@ impl PostgresqlRepository<UserAuthorizationToken<'_>> {
             return Result::Ok(());
         };
     }
-    pub fn update_4<'a>(database_2_connection: &'a Client, update_4: Update4, by_1: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
+    pub fn update_4<'a>(database_2_client: &'a Client, update_4: Update4, by_1: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 UPDATE ONLY \
@@ -382,7 +382,7 @@ impl PostgresqlRepository<UserAuthorizationToken<'_>> {
                     &by_1.user_device__id,
                     Type::TEXT,
                 );
-            let statement = database_2_connection
+            let statement = database_2_client
                 .prepare_typed_cached(
                     query,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
@@ -394,7 +394,7 @@ impl PostgresqlRepository<UserAuthorizationToken<'_>> {
                         file!(),
                     ),
                 )?;
-            database_2_connection
+            database_2_client
                 .query(
                     &statement,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
@@ -410,7 +410,7 @@ impl PostgresqlRepository<UserAuthorizationToken<'_>> {
         };
     }
     pub fn find_1<'a>(
-        database_2_connection: &'a Client,
+        database_2_client: &'a Client,
         by_1: By1<'a>,
     ) -> impl Future<Output = Result<Option<UserAuthorizationToken_1>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
@@ -435,7 +435,7 @@ impl PostgresqlRepository<UserAuthorizationToken<'_>> {
                     &by_1.user_device__id,
                     Type::TEXT,
                 );
-            let statement = database_2_connection
+            let statement = database_2_client
                 .prepare_typed_cached(
                     query,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
@@ -447,7 +447,7 @@ impl PostgresqlRepository<UserAuthorizationToken<'_>> {
                         file!(),
                     ),
                 )?;
-            let row_registry = database_2_connection
+            let row_registry = database_2_client
                 .query(
                     &statement,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
@@ -495,7 +495,7 @@ impl PostgresqlRepository<UserAuthorizationToken<'_>> {
         };
     }
     pub fn find_2<'a>(
-        database_2_connection: &'a Client,
+        database_2_client: &'a Client,
         by_1: By1<'a>,
     ) -> impl Future<Output = Result<Option<UserAuthorizationToken_2>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
@@ -519,7 +519,7 @@ impl PostgresqlRepository<UserAuthorizationToken<'_>> {
                     &by_1.user_device__id,
                     Type::TEXT,
                 );
-            let statement = database_2_connection
+            let statement = database_2_client
                 .prepare_typed_cached(
                     query,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
@@ -531,7 +531,7 @@ impl PostgresqlRepository<UserAuthorizationToken<'_>> {
                         file!(),
                     ),
                 )?;
-            let row_registry = database_2_connection
+            let row_registry = database_2_client
                 .query(
                     &statement,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
@@ -573,7 +573,7 @@ impl PostgresqlRepository<UserAuthorizationToken<'_>> {
         };
     }
     pub fn find_3<'a>(
-        database_2_connection: &'a Client,
+        database_2_client: &'a Client,
         by_1: By1<'a>,
     ) -> impl Future<Output = Result<Option<UserAuthorizationToken_3>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
@@ -597,7 +597,7 @@ impl PostgresqlRepository<UserAuthorizationToken<'_>> {
                     &by_1.user_device__id,
                     Type::TEXT,
                 );
-            let statement = database_2_connection
+            let statement = database_2_client
                 .prepare_typed_cached(
                     query,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
@@ -609,7 +609,7 @@ impl PostgresqlRepository<UserAuthorizationToken<'_>> {
                         file!(),
                     ),
                 )?;
-            let row_registry = database_2_connection
+            let row_registry = database_2_client
                 .query(
                     &statement,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),

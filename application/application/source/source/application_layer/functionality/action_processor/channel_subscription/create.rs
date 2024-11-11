@@ -86,9 +86,9 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
                     ),
                 );
             }
-            let database_1_postgresql_pooled_connection = inner.get_database_1_postgresql_client().await?;
+            let database_1_postgresql_client = inner.get_database_1_postgresql_client().await?;
             let channel = match PostgresqlRepository::<Channel<'_>>::find_1(
-                &database_1_postgresql_pooled_connection,
+                &database_1_postgresql_client,
                 By1 {
                     channel__id: incoming.channel__id,
                 },
@@ -107,7 +107,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
                 return Result::Ok(UnifiedReport::precedent(Precedent::Channel_IsClose));
             }
             PostgresqlRepository::<ChannelSubscription>::create_transactional_1(
-                &database_1_postgresql_pooled_connection,
+                &database_1_postgresql_client,
                 Insert1 {
                     user__id: user_access_token.user__id,
                     channel__id: channel.id,

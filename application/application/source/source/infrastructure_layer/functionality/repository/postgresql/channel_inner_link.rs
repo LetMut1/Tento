@@ -21,7 +21,7 @@ use std::future::Future;
 use tokio_postgres::types::Type;
 use deadpool_postgres::Client;
 impl PostgresqlRepository<ChannelInnerLink> {
-    pub fn create_1<'a>(database_1_connection: &'a Client, insert_1: Insert1) -> impl Future<Output = Result<ChannelInnerLink, AggregateError>> + Send + Capture<&'a Void> {
+    pub fn create_1<'a>(database_1_client: &'a Client, insert_1: Insert1) -> impl Future<Output = Result<ChannelInnerLink, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 INSERT INTO \
@@ -48,7 +48,7 @@ impl PostgresqlRepository<ChannelInnerLink> {
                     &insert_1.channel_inner_link__created_at,
                     Type::INT8,
                 );
-            let statement = database_1_connection
+            let statement = database_1_client
                 .prepare_typed_cached(
                     query,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
@@ -60,7 +60,7 @@ impl PostgresqlRepository<ChannelInnerLink> {
                         file!(),
                     ),
                 )?;
-            database_1_connection
+            database_1_client
                 .query(
                     &statement,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
@@ -82,7 +82,7 @@ impl PostgresqlRepository<ChannelInnerLink> {
         };
     }
     pub fn find_1<'a>(
-        database_1_connection: &'a Client,
+        database_1_client: &'a Client,
         by_1: By1,
         limit: i16,
     ) -> impl Future<Output = Result<Vec<ChannelInnerLink1>, AggregateError>> + Send + Capture<&'a Void> {
@@ -105,7 +105,7 @@ impl PostgresqlRepository<ChannelInnerLink> {
                     &limit,
                     Type::INT2,
                 );
-            let statement = database_1_connection
+            let statement = database_1_client
                 .prepare_typed_cached(
                     query,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
@@ -117,7 +117,7 @@ impl PostgresqlRepository<ChannelInnerLink> {
                         file!(),
                     ),
                 )?;
-            let row_registry = database_1_connection
+            let row_registry = database_1_client
                 .query(
                     &statement,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),

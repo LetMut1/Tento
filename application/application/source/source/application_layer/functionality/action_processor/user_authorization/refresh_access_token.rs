@@ -73,9 +73,9 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
                 inner.environment_configuration,
                 &incoming.user_access_token_encoded,
             )?;
-            let database_2_postgresql_connection = inner.get_database_2_postgresql_client().await?;
+            let database_2_postgresql_client = inner.get_database_2_postgresql_client().await?;
             let mut user_access_refresh_token = match PostgresqlRepository::<UserAccessRefreshToken<'_>>::find_1(
-                &database_2_postgresql_connection,
+                &database_2_postgresql_client,
                 By2 {
                     user__id: user_access_token.user__id,
                     user_device__id: user_access_token.user_device__id,
@@ -105,7 +105,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
             }
             if Resolver::<Expiration>::is_expired(user_access_refresh_token.expires_at) {
                 PostgresqlRepository::<UserAccessRefreshToken<'_>>::delete_1(
-                    &database_2_postgresql_connection,
+                    &database_2_postgresql_client,
                     By2 {
                         user__id: user_access_token.user__id,
                         user_device__id: user_access_token.user_device__id,
@@ -125,7 +125,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
             user_access_refresh_token.expires_at = Generator::<UserAccessRefreshToken_ExpiresAt>::generate()?;
             user_access_refresh_token.updated_at = Generator::<UserAccessRefreshToken_UpdatedAt>::generate();
             PostgresqlRepository::<UserAccessRefreshToken<'_>>::update_1(
-                &database_2_postgresql_connection,
+                &database_2_postgresql_client,
                 Update1 {
                     user_access_token__id: user_access_refresh_token.user_access_token__id.as_ref(),
                     user_access_refresh_token__obfuscation_value: user_access_refresh_token.obfuscation_value.as_str(),

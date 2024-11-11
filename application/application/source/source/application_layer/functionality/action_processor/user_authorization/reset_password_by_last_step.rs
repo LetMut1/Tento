@@ -121,9 +121,9 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                     ),
                 );
             }
-            let database_2_postgresql_connection = inner.get_database_2_postgresql_client().await?;
+            let database_2_postgresql_client = inner.get_database_2_postgresql_client().await?;
             let mut user_reset_password_token = match PostgresqlRepository::<UserResetPasswordToken<'_>>::find_2(
-                &database_2_postgresql_connection,
+                &database_2_postgresql_client,
                 By1_ {
                     user__id: incoming.user__id,
                     user_device__id: incoming.user_device__id.as_str(),
@@ -138,7 +138,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
             };
             if Resolver::<Expiration>::is_expired(user_reset_password_token.expires_at) {
                 PostgresqlRepository::<UserResetPasswordToken<'_>>::delete_2(
-                    &database_2_postgresql_connection,
+                    &database_2_postgresql_client,
                     By1_ {
                         user__id: incoming.user__id,
                         user_device__id: incoming.user_device__id.as_str(),
@@ -159,7 +159,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                 )?;
                 if user_reset_password_token.wrong_enter_tries_quantity < UserResetPasswordToken_WrongEnterTriesQuantity::LIMIT {
                     PostgresqlRepository::<UserResetPasswordToken<'_>>::update_4(
-                        &database_2_postgresql_connection,
+                        &database_2_postgresql_client,
                         Update4 {
                             user_reset_password_token__wrong_enter_tries_quantity: user_reset_password_token.wrong_enter_tries_quantity,
                         },
@@ -171,7 +171,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                     .await?;
                 } else {
                     PostgresqlRepository::<UserResetPasswordToken<'_>>::delete_2(
-                        &database_2_postgresql_connection,
+                        &database_2_postgresql_client,
                         By1_ {
                             user__id: incoming.user__id,
                             user_device__id: incoming.user_device__id.as_str(),
@@ -181,9 +181,9 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                 }
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_WrongValue));
             }
-            let database_1_postgresql_connection = inner.get_database_1_postgresql_client().await?;
+            let database_1_postgresql_client = inner.get_database_1_postgresql_client().await?;
             let mut user = match PostgresqlRepository::<User<'_>>::find_5(
-                &database_1_postgresql_connection,
+                &database_1_postgresql_client,
                 By3 {
                     user__id: incoming.user__id,
                 },
@@ -221,7 +221,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                 ),
             )??;
             PostgresqlRepository::<User<'_>>::update_1(
-                &database_1_postgresql_connection,
+                &database_1_postgresql_client,
                 Update1 {
                     user__password_hash: user.password_hash.as_str(),
                 },
@@ -231,7 +231,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
             )
             .await?;
             PostgresqlRepository::<UserAccessRefreshToken<'_>>::delete_2(
-                &database_2_postgresql_connection,
+                &database_2_postgresql_client,
                 By1 {
                     user__id: incoming.user__id,
                 },

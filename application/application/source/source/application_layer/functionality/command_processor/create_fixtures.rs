@@ -131,7 +131,7 @@ impl CommandProcessor<CreateFixtures> {
                 ).await?;
             let user__password = Self::APPLICATION_USER__PASSWORD.to_string();
             let user__password_hash = Encoder::<User_Password>::encode(user__password.as_str())?;
-            let database_1_postgresql_connection = database_1_postgresql_connection_pool.get().await.into_runtime(
+            let database_1_postgresql_client = database_1_postgresql_connection_pool.get().await.into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -179,7 +179,7 @@ impl CommandProcessor<CreateFixtures> {
                     );
                 }
                 let user = match PostgresqlRepository::<User<'_>>::find_1(
-                    &database_1_postgresql_connection,
+                    &database_1_postgresql_client,
                     By1 {
                         user__nickname: user__nickname.as_str(),
                     },
@@ -189,7 +189,7 @@ impl CommandProcessor<CreateFixtures> {
                     Option::Some(user_) => user_,
                     Option::None => {
                         PostgresqlRepository::<User<'_>>::create_1(
-                            &database_1_postgresql_connection,
+                            &database_1_postgresql_client,
                             UserInsert1 {
                                 user__email,
                                 user__nickname,
@@ -216,7 +216,7 @@ impl CommandProcessor<CreateFixtures> {
                     );
                 }
                 PostgresqlRepository::<UserDevice>::create_1(
-                    &database_1_postgresql_connection,
+                    &database_1_postgresql_client,
                     UserDeviceInsert1 {
                         user_device__id,
                         user__id: user.id,
@@ -284,7 +284,7 @@ impl CommandProcessor<CreateFixtures> {
                         );
                     }
                     let channel = PostgresqlRepository::<Channel<'_>>::find_2(
-                        &database_1_postgresql_connection,
+                        &database_1_postgresql_client,
                         By2 {
                             channel__name: channel__name.as_str(),
                         },
@@ -296,7 +296,7 @@ impl CommandProcessor<CreateFixtures> {
                         }
                         Option::None => {
                             PostgresqlRepository::<Channel<'_>>::create_1(
-                                &database_1_postgresql_connection,
+                                &database_1_postgresql_client,
                                 ChannelInsert1 {
                                     channel__owner: user.id,
                                     channel__name,
