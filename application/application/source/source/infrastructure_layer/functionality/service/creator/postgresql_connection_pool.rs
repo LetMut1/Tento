@@ -7,39 +7,59 @@ use crate::infrastructure_layer::data::{
     },
     capture::Capture,
 };
-use bb8::Pool;
-use bb8_postgres::PostgresConnectionManager;
+use deadpool_postgres::{
+    Manager,
+    ManagerConfig,
+    RecyclingMethod
+};
+use tokio_postgres::{
+    tls::{
+        MakeTlsConnect,
+        TlsConnect,
+    },
+    Socket,
+};
 use dedicated_crate::void::Void;
 use std::{
     future::Future,
     str::FromStr,
 };
-use tokio_postgres::{
-    config::Config,
-    NoTls,
-};
-impl Creator<Pool<PostgresConnectionManager<NoTls>>> {
-    pub fn create<'a>(database_url: &'a str) -> impl Future<Output = Result<Pool<PostgresConnectionManager<NoTls>>, AggregateError>> + Send + Capture<&'a Void> {
+use tokio_postgres::config::Config;
+pub use deadpool_postgres::Pool as PostgresqlConnectionPool;
+impl Creator<PostgresqlConnectionPool> {
+    pub fn create<'a, T>(
+        database_url: &'a str,
+        tls_type: T,
+    ) -> impl Future<Output = Result<PostgresqlConnectionPool, AggregateError>> + Send + Capture<&'a Void>
+    where
+        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
+        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
+        <T as MakeTlsConnect<Socket>>::TlsConnect: Send + Sync,
+        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
+    {
         return async move {
-            return Pool::builder()
-                .build(
-                    PostgresConnectionManager::new(
-                        Config::from_str(database_url).into_logic(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
-                        NoTls,
-                    ),
+            return PostgresqlConnectionPool::builder(
+                Manager::from_config(
+                    Config::from_str(database_url).into_logic(
+                        Backtrace::new(
+                            line!(),
+                            file!(),
+                        ),
+                    )?,
+                    tls_type,
+                    ManagerConfig {
+                        recycling_method: RecyclingMethod::Fast,
+                    },
                 )
-                .await
-                .into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                );
+            )
+            .max_size(2)
+            .build()
+            .into_runtime(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            );
         };
     }
 }

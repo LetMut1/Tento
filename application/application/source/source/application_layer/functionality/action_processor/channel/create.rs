@@ -55,28 +55,15 @@ use dedicated_crate::{
     void::Void,
 };
 use std::future::Future;
-use tokio_postgres::{
-    tls::{
-        MakeTlsConnect,
-        TlsConnect,
-    },
-    Socket,
-};
 pub struct Channel_Create;
 impl ActionProcessor_ for ActionProcessor<Channel_Create> {
     type Incoming = Incoming;
     type Outcoming = Outcoming;
     type Precedent = Precedent;
-    fn process<'a, T>(
-        inner: &'a Inner<'_, T>,
+    fn process<'a>(
+        inner: &'a Inner<'_>,
         incoming: Self::Incoming,
-    ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send + Capture<&'a Void>
-    where
-        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
-        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
-        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
-        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
-    {
+    ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let user_access_token = match Extractor::<UserAccessToken<'_>>::extract(
                 inner.environment_configuration,
@@ -112,9 +99,9 @@ impl ActionProcessor_ for ActionProcessor<Channel_Create> {
                     ),
                 );
             }
-            let database_1_postgresql_connection = &*inner.get_database_1_postgresql_pooled_connection().await?;
+            let database_1_postgresql_connection = inner.get_database_1_postgresql_client().await?;
             if PostgresqlRepository::<Channel<'_>>::is_exist_1(
-                database_1_postgresql_connection,
+                &database_1_postgresql_connection,
                 By2 {
                     channel__name: incoming.channel__name.as_str(),
                 },
@@ -124,7 +111,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_Create> {
                 return Result::Ok(UnifiedReport::precedent(Precedent::Channel_NameAlreadyExist));
             }
             if PostgresqlRepository::<Channel<'_>>::is_exist_2(
-                database_1_postgresql_connection,
+                &database_1_postgresql_connection,
                 By3 {
                     channel__linked_name: incoming.channel__linked_name.as_str(),
                 },
@@ -134,7 +121,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_Create> {
                 return Result::Ok(UnifiedReport::precedent(Precedent::Channel_LinkedNameAlreadyExist));
             }
             let channel = PostgresqlRepository::<Channel<'_>>::create_1(
-                database_1_postgresql_connection,
+                &database_1_postgresql_connection,
                 Insert1 {
                     channel__owner: user_access_token.user__id,
                     channel__name: incoming.channel__name,

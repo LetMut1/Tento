@@ -34,28 +34,15 @@ use dedicated_crate::{
     void::Void,
 };
 use std::future::Future;
-use tokio_postgres::{
-    tls::{
-        MakeTlsConnect,
-        TlsConnect,
-    },
-    Socket,
-};
 pub struct UserAuthorization_CheckNicknameForExisting;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_CheckNicknameForExisting> {
     type Incoming = Incoming;
     type Outcoming = Outcoming;
     type Precedent = Void;
-    fn process<'a, T>(
-        inner: &'a Inner<'_, T>,
+    fn process<'a>(
+        inner: &'a Inner<'_>,
         incoming: Self::Incoming,
-    ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send + Capture<&'a Void>
-    where
-        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
-        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
-        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
-        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
-    {
+    ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             if !Validator::<User_Nickname>::is_valid(incoming.user__nickname.as_str()) {
                 return Result::Err(
@@ -67,9 +54,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_CheckNicknameForExis
                     ),
                 );
             }
-            let database_1_postgresql_pooled_connection = inner.get_database_1_postgresql_pooled_connection().await?;
             let is_exist = PostgresqlRepository::<User<'_>>::is_exist_1(
-                &*database_1_postgresql_pooled_connection,
+                &inner.get_database_1_postgresql_client().await?,
                 By1 {
                     user__nickname: incoming.user__nickname.as_str(),
                 },

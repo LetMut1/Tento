@@ -36,18 +36,11 @@ use dedicated_crate::void::Void;
 use http::request::Parts;
 use http_body_util::BodyExt;
 use std::future::Future;
-use tokio_postgres::{
-    tls::{
-        MakeTlsConnect,
-        TlsConnect,
-    },
-    Socket,
-};
 pub struct ActionRound;
 impl Processor<ActionRound> {
-    pub fn process<'a, 'b, T, AP, SS, SD>(
+    pub fn process<'a, 'b, AP, SS, SD>(
         inner: &'a mut Inner<'b>,
-        action_processor_inner: &'a ActionProcessorInner<'b, T>,
+        action_processor_inner: &'a ActionProcessorInner<'b>,
     ) -> impl Future<Output = Response>
            + Send
            + Capture<(
@@ -55,10 +48,6 @@ impl Processor<ActionRound> {
         &'b Void,
     )>
     where
-        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
-        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
-        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
-        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
         ActionProcessor<AP>: ActionProcessor_,
         <ActionProcessor<AP> as ActionProcessor_>::Incoming: for<'c> Deserialize_<'c>,
         <ActionProcessor<AP> as ActionProcessor_>::Outcoming: Serialize_,

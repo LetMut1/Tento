@@ -44,28 +44,15 @@ use dedicated_crate::{
     void::Void,
 };
 use std::future::Future;
-use tokio_postgres::{
-    tls::{
-        MakeTlsConnect,
-        TlsConnect,
-    },
-    Socket,
-};
 pub struct Channel_CheckLinkedNameForExisting;
 impl ActionProcessor_ for ActionProcessor<Channel_CheckLinkedNameForExisting> {
     type Incoming = Incoming;
     type Outcoming = Outcoming;
     type Precedent = Precedent;
-    fn process<'a, T>(
-        inner: &'a Inner<'_, T>,
+    fn process<'a>(
+        inner: &'a Inner<'_>,
         incoming: Self::Incoming,
-    ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send + Capture<&'a Void>
-    where
-        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
-        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
-        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
-        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
-    {
+    ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             match Extractor::<UserAccessToken<'_>>::extract(
                 inner.environment_configuration,
@@ -92,7 +79,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_CheckLinkedNameForExisting> {
                 );
             }
             let is_exist = PostgresqlRepository::<Channel<'_>>::is_exist_1(
-                &*inner.get_database_1_postgresql_pooled_connection().await?,
+                &inner.get_database_1_postgresql_client().await?,
                 By2 {
                     channel__name: incoming.channel__linked_name.as_str(),
                 },

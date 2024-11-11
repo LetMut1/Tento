@@ -18,12 +18,10 @@ use dedicated_crate::{
     void::Void,
 };
 use std::future::Future;
-use tokio_postgres::{
-    types::Type,
-    Client as Connection,
-};
+use tokio_postgres::types::Type;
+use deadpool_postgres::Client;
 impl PostgresqlRepository<ChannelInnerLink> {
-    pub fn create_1<'a>(database_1_connection: &'a Connection, insert_1: Insert1) -> impl Future<Output = Result<ChannelInnerLink, AggregateError>> + Send + Capture<&'a Void> {
+    pub fn create_1<'a>(database_1_connection: &'a Client, insert_1: Insert1) -> impl Future<Output = Result<ChannelInnerLink, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 INSERT INTO \
@@ -51,7 +49,7 @@ impl PostgresqlRepository<ChannelInnerLink> {
                     Type::INT8,
                 );
             let statement = database_1_connection
-                .prepare_typed(
+                .prepare_typed_cached(
                     query,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
                 )
@@ -84,7 +82,7 @@ impl PostgresqlRepository<ChannelInnerLink> {
         };
     }
     pub fn find_1<'a>(
-        database_1_connection: &'a Connection,
+        database_1_connection: &'a Client,
         by_1: By1,
         limit: i16,
     ) -> impl Future<Output = Result<Vec<ChannelInnerLink1>, AggregateError>> + Send + Capture<&'a Void> {
@@ -108,7 +106,7 @@ impl PostgresqlRepository<ChannelInnerLink> {
                     Type::INT2,
                 );
             let statement = database_1_connection
-                .prepare_typed(
+                .prepare_typed_cached(
                     query,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
                 )

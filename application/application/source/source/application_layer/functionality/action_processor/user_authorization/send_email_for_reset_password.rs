@@ -62,28 +62,15 @@ use dedicated_crate::{
     void::Void,
 };
 use std::future::Future;
-use tokio_postgres::{
-    tls::{
-        MakeTlsConnect,
-        TlsConnect,
-    },
-    Socket,
-};
 pub struct UserAuthorization_SendEmailForResetPassword;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPassword> {
     type Incoming = Incoming;
     type Outcoming = Outcoming;
     type Precedent = Precedent;
-    fn process<'a, T>(
-        inner: &'a Inner<'_, T>,
+    fn process<'a>(
+        inner: &'a Inner<'_>,
         incoming: Self::Incoming,
-    ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send + Capture<&'a Void>
-    where
-        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
-        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
-        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
-        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
-    {
+    ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             if !Validator::<User_Id>::is_valid(incoming.user__id) {
                 return Result::Err(
@@ -105,9 +92,8 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
                     ),
                 );
             }
-            let database_1_postgresql_pooled_connection = inner.get_database_1_postgresql_pooled_connection().await?;
             let user = match PostgresqlRepository::<User<'_>>::find_6(
-                &*database_1_postgresql_pooled_connection,
+                &inner.get_database_1_postgresql_client().await?,
                 By3 {
                     user__id: incoming.user__id,
                 },
@@ -119,10 +105,9 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
                     return Result::Ok(UnifiedReport::precedent(Precedent::User_NotFound));
                 }
             };
-            let database_2_postgresql_pooled_connection = inner.get_database_2_postgresql_pooled_connection().await?;
-            let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
+            let database_2_postgresql_connection = inner.get_database_2_postgresql_client().await?;
             let mut user_reset_password_token = match PostgresqlRepository::<UserResetPasswordToken<'_>>::find_3(
-                database_2_postgresql_connection,
+                &database_2_postgresql_connection,
                 By1 {
                     user__id: incoming.user__id,
                     user_device__id: incoming.user_device__id.as_str(),
@@ -137,7 +122,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
             };
             if Resolver::<Expiration>::is_expired(user_reset_password_token.expires_at) {
                 PostgresqlRepository::<UserResetPasswordToken<'_>>::delete_2(
-                    database_2_postgresql_connection,
+                    &database_2_postgresql_connection,
                     By1 {
                         user__id: incoming.user__id,
                         user_device__id: incoming.user_device__id.as_str(),
@@ -154,7 +139,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
             }
             user_reset_password_token.can_be_resent_from = Generator::<UserResetPasswordToken_CanBeResentFrom>::generate()?;
             PostgresqlRepository::<UserResetPasswordToken<'_>>::update_2(
-                database_2_postgresql_connection,
+                &database_2_postgresql_connection,
                 Update2 {
                     user_reset_password_token__can_be_resent_from: user_reset_password_token.can_be_resent_from,
                 },

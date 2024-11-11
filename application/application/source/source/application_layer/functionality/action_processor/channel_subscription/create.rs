@@ -52,28 +52,15 @@ use dedicated_crate::{
     void::Void,
 };
 use std::future::Future;
-use tokio_postgres::{
-    tls::{
-        MakeTlsConnect,
-        TlsConnect,
-    },
-    Socket,
-};
 pub struct ChannelSubscription_Create;
 impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
     type Incoming = Incoming;
     type Outcoming = Void;
     type Precedent = Precedent;
-    fn process<'a, T>(
-        inner: &'a Inner<'_, T>,
+    fn process<'a>(
+        inner: &'a Inner<'_>,
         incoming: Self::Incoming,
-    ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send + Capture<&'a Void>
-    where
-        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
-        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
-        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
-        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
-    {
+    ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let user_access_token = match Extractor::<UserAccessToken<'_>>::extract(
                 inner.environment_configuration,
@@ -99,10 +86,9 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
                     ),
                 );
             }
-            let database_1_postgresql_pooled_connection = inner.get_database_1_postgresql_pooled_connection().await?;
-            let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
+            let database_1_postgresql_pooled_connection = inner.get_database_1_postgresql_client().await?;
             let channel = match PostgresqlRepository::<Channel<'_>>::find_1(
-                database_1_postgresql_connection,
+                &database_1_postgresql_pooled_connection,
                 By1 {
                     channel__id: incoming.channel__id,
                 },
@@ -121,7 +107,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
                 return Result::Ok(UnifiedReport::precedent(Precedent::Channel_IsClose));
             }
             PostgresqlRepository::<ChannelSubscription>::create_transactional_1(
-                database_1_postgresql_connection,
+                &database_1_postgresql_pooled_connection,
                 Insert1 {
                     user__id: user_access_token.user__id,
                     channel__id: channel.id,

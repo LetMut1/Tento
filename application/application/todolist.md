@@ -13,6 +13,11 @@ https://stackoverflow.com/questions/58819199/how-to-keep-long-connection-in-http
 
 
 БЭКЕНД бэклог:
+// - PostgresqlCOnnectionPool настраивать через env.
+
+// Нужно ли возвращать коннекшн в пул, если далее в Экшне коннекшн нужно использоват ьеще раз, но переде этим есть немного кода для процессора. То есть, будет ли взятие и возврат
+коннекшна в пул работать быстрее в целом на асинке и многом количестве запросов  быстрее, чем возврат в пулл только после окончания всез запросов.
+
 // - TLS, Connection Pool for Lettre.
 
 // - Hyper TCP/HTTp connection pool. Есть ли коннекшн пул Тсп на сервере?
@@ -156,6 +161,8 @@ Channel_CheckLinkedNameForExisting
 Channel_CheckNameForExisting
 Channel_Create
 
+// IMPORTANT! Нужно ли возвращать коннекшн в пул, если далее в Экшне коннекшн нужно использоват ьеще раз, но переде этим есть немного кода для процессора. То есть, будет ли взятие и возврат
+
 
 Заменить ли modifier c i16 на u8/bool
 
@@ -165,3 +172,10 @@ Channel_Create
 ЗАменитьь имена полей в бд на a,b,c,d... чтобы максимально оптимизировать.
 
 и Апперкейст запросов. Что быстрее lower/upper?
+
+
+
+
+
+connection_pool, connection - > client
+.get_database в Inner - удалить

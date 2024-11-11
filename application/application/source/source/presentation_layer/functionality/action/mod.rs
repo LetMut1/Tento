@@ -32,13 +32,6 @@ use std::{
     future::Future,
     marker::PhantomData,
 };
-use tokio_postgres::{
-    tls::{
-        MakeTlsConnect,
-        TlsConnect,
-    },
-    Socket,
-};
 pub struct Action<S> {
     _subject: PhantomData<S>,
 }
@@ -49,22 +42,17 @@ where
     <ActionProcessor<AP> as ActionProcessor_>::Outcoming: Serialize_,
     <ActionProcessor<AP> as ActionProcessor_>::Precedent: Serialize_,
 {
-    pub fn run<'a, 'b, T>(
+    pub fn run<'a, 'b>(
         inner: &'a mut Inner<'b>,
-        action_processor_inner: &'a ActionProcessorInner<'b, T>,
+        action_processor_inner: &'a ActionProcessorInner<'b>,
     ) -> impl Future<Output = Response>
            + Send
            + Capture<(
         &'a Void,
         &'b Void,
     )>
-    where
-        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
-        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
-        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
-        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        return Processor::<ActionRound>::process::<'_, '_, _, AP, BitCode, BitCode>(
+        return Processor::<ActionRound>::process::<'_, '_, AP, BitCode, BitCode>(
             inner,
             action_processor_inner,
         );
@@ -78,22 +66,17 @@ where
     <ActionProcessor<AP> as ActionProcessor_>::Outcoming: Serialize_,
     <ActionProcessor<AP> as ActionProcessor_>::Precedent: Serialize_,
 {
-    pub fn run_<'a, 'b, T>(
+    pub fn run_<'a, 'b>(
         inner: &'a mut Inner<'b>,
-        action_processor_inner: &'a ActionProcessorInner<'b, T>,
+        action_processor_inner: &'a ActionProcessorInner<'b>,
     ) -> impl Future<Output = Response>
            + Send
            + Capture<(
         &'a Void,
         &'b Void,
     )>
-    where
-        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
-        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
-        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
-        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
     {
-        return Processor::<ActionRound>::process::<'_, '_, _, AP, Json, Json>(
+        return Processor::<ActionRound>::process::<'_, '_, AP, Json, Json>(
             inner,
             action_processor_inner,
         );

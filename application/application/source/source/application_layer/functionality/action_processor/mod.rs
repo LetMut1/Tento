@@ -40,11 +40,7 @@ use crate::infrastructure_layer::data::{
     capture::Capture,
     environment_configuration::EnvironmentConfiguration,
 };
-use bb8::{
-    Pool,
-    PooledConnection,
-};
-use bb8_postgres::PostgresConnectionManager;
+use crate::infrastructure_layer::functionality::service::creator::PostgresqlConnectionPool;
 use dedicated_crate::{
     unified_report::UnifiedReport,
     void::Void,
@@ -53,13 +49,7 @@ use std::{
     future::Future,
     marker::PhantomData,
 };
-use tokio_postgres::{
-    tls::{
-        MakeTlsConnect,
-        TlsConnect,
-    },
-    Socket,
-};
+use deadpool_postgres::Client;
 pub struct ActionProcessor<S> {
     _subject: PhantomData<S>,
 }
@@ -67,35 +57,18 @@ pub trait ActionProcessor_ {
     type Incoming;
     type Outcoming;
     type Precedent;
-    fn process<'a, T>(
-        inner: &'a Inner<'_, T>,
+    fn process<'a>(
+        inner: &'a Inner<'_>,
         incoming: Self::Incoming,
-    ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send + Capture<&'a Void>
-    where
-        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
-        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
-        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
-        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send;
+    ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send + Capture<&'a Void>;
 }
-pub struct Inner<'a, T>
-where
-    T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
-    <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
-    <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
-    <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
-{
+pub struct Inner<'a> {
     pub environment_configuration: &'static EnvironmentConfiguration,
-    pub database_1_postgresql_connection_pool: &'a Pool<PostgresConnectionManager<T>>,
-    pub database_2_postgresql_connection_pool: &'a Pool<PostgresConnectionManager<T>>,
+    pub database_1_postgresql_connection_pool: &'a PostgresqlConnectionPool,
+    pub database_2_postgresql_connection_pool: &'a PostgresqlConnectionPool,
 }
-impl<'a, T> Inner<'a, T>
-where
-    T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
-    <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
-    <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
-    <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
-{
-    pub fn get_database_1_postgresql_pooled_connection<'b>(&'b self) -> impl Future<Output = Result<PooledConnection<PostgresConnectionManager<T>>, AggregateError>> + Send {
+impl<'a> Inner<'a> {
+    pub fn get_database_1_postgresql_client<'b>(&'b self) -> impl Future<Output = Result<Client, AggregateError>> + Send + Capture<&'b Void> {
         return async move {
             return self.database_1_postgresql_connection_pool.get().await.into_runtime(
                 Backtrace::new(
@@ -105,7 +78,7 @@ where
             );
         };
     }
-    pub fn get_database_2_postgresql_pooled_connection<'b>(&'b self) -> impl Future<Output = Result<PooledConnection<PostgresConnectionManager<T>>, AggregateError>> + Send {
+    pub fn get_database_2_postgresql_client<'b>(&'b self) -> impl Future<Output = Result<Client, AggregateError>> + Send + Capture<&'b Void>{
         return async move {
             return self.database_2_postgresql_connection_pool.get().await.into_runtime(
                 Backtrace::new(

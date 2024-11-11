@@ -23,13 +23,11 @@ use std::{
     borrow::Cow,
     future::Future,
 };
-use tokio_postgres::{
-    types::Type,
-    Client as Connection,
-};
+use tokio_postgres::types::Type;
+use deadpool_postgres::Client;
 impl PostgresqlRepository<UserRegistrationToken<'_>> {
     pub fn create_1<'a, 'b>(
-        database_2_connection: &'a Connection,
+        database_2_connection: &'a Client,
         insert_1: Insert1<'b>,
     ) -> impl Future<Output = Result<UserRegistrationToken<'b>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
@@ -83,7 +81,7 @@ impl PostgresqlRepository<UserRegistrationToken<'_>> {
                     Type::INT8,
                 );
             let statement = database_2_connection
-                .prepare_typed(
+                .prepare_typed_cached(
                     query,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
                 )
@@ -119,7 +117,7 @@ impl PostgresqlRepository<UserRegistrationToken<'_>> {
             );
         };
     }
-    pub fn delete_2<'a>(database_2_connection: &'a Connection, by_1: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
+    pub fn delete_2<'a>(database_2_connection: &'a Client, by_1: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 DELETE FROM ONLY \
@@ -138,7 +136,7 @@ impl PostgresqlRepository<UserRegistrationToken<'_>> {
                     Type::TEXT,
                 );
             let statement = database_2_connection
-                .prepare_typed(
+                .prepare_typed_cached(
                     query,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
                 )
@@ -165,7 +163,7 @@ impl PostgresqlRepository<UserRegistrationToken<'_>> {
         };
     }
     pub fn update_1<'a>(
-        database_2_connection: &'a Connection,
+        database_2_connection: &'a Client,
         update_1: Update1<'a>,
         by_1: By1<'a>,
     ) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
@@ -220,7 +218,7 @@ impl PostgresqlRepository<UserRegistrationToken<'_>> {
                     Type::TEXT,
                 );
             let statement = database_2_connection
-                .prepare_typed(
+                .prepare_typed_cached(
                     query,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
                 )
@@ -246,7 +244,7 @@ impl PostgresqlRepository<UserRegistrationToken<'_>> {
             return Result::Ok(());
         };
     }
-    pub fn update_2<'a>(database_2_connection: &'a Connection, update_2: Update2, by_1: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
+    pub fn update_2<'a>(database_2_connection: &'a Client, update_2: Update2, by_1: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 UPDATE ONLY \
@@ -274,7 +272,7 @@ impl PostgresqlRepository<UserRegistrationToken<'_>> {
                     Type::TEXT,
                 );
             let statement = database_2_connection
-                .prepare_typed(
+                .prepare_typed_cached(
                     query,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
                 )
@@ -301,7 +299,7 @@ impl PostgresqlRepository<UserRegistrationToken<'_>> {
         };
     }
     pub fn update_3<'a>(
-        database_2_connection: &'a Connection,
+        database_2_connection: &'a Client,
         update_3: Update3<'a>,
         by_1: By1<'a>,
     ) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
@@ -350,7 +348,7 @@ impl PostgresqlRepository<UserRegistrationToken<'_>> {
                     Type::TEXT,
                 );
             let statement = database_2_connection
-                .prepare_typed(
+                .prepare_typed_cached(
                     query,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
                 )
@@ -376,7 +374,7 @@ impl PostgresqlRepository<UserRegistrationToken<'_>> {
             return Result::Ok(());
         };
     }
-    pub fn update_4<'a>(database_2_connection: &'a Connection, update_4: Update4, by_1: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
+    pub fn update_4<'a>(database_2_connection: &'a Client, update_4: Update4, by_1: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 UPDATE ONLY \
@@ -404,7 +402,7 @@ impl PostgresqlRepository<UserRegistrationToken<'_>> {
                     Type::TEXT,
                 );
             let statement = database_2_connection
-                .prepare_typed(
+                .prepare_typed_cached(
                     query,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
                 )
@@ -430,7 +428,7 @@ impl PostgresqlRepository<UserRegistrationToken<'_>> {
             return Result::Ok(());
         };
     }
-    pub fn update_5<'a>(database_2_connection: &'a Connection, update_5: Update5, by_1: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
+    pub fn update_5<'a>(database_2_connection: &'a Client, update_5: Update5, by_1: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 UPDATE ONLY \
@@ -458,7 +456,7 @@ impl PostgresqlRepository<UserRegistrationToken<'_>> {
                     Type::TEXT,
                 );
             let statement = database_2_connection
-                .prepare_typed(
+                .prepare_typed_cached(
                     query,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
                 )
@@ -485,7 +483,7 @@ impl PostgresqlRepository<UserRegistrationToken<'_>> {
         };
     }
     pub fn find_1<'a>(
-        database_2_connection: &'a Connection,
+        database_2_connection: &'a Client,
         by_1: By1<'a>,
     ) -> impl Future<Output = Result<Option<UserRegistrationToken_1>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
@@ -512,7 +510,7 @@ impl PostgresqlRepository<UserRegistrationToken<'_>> {
                     Type::TEXT,
                 );
             let statement = database_2_connection
-                .prepare_typed(
+                .prepare_typed_cached(
                     query,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
                 )
@@ -577,7 +575,7 @@ impl PostgresqlRepository<UserRegistrationToken<'_>> {
         };
     }
     pub fn find_2<'a>(
-        database_2_connection: &'a Connection,
+        database_2_connection: &'a Client,
         by_1: By1<'a>,
     ) -> impl Future<Output = Result<Option<UserRegistrationToken_2>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
@@ -603,7 +601,7 @@ impl PostgresqlRepository<UserRegistrationToken<'_>> {
                     Type::TEXT,
                 );
             let statement = database_2_connection
-                .prepare_typed(
+                .prepare_typed_cached(
                     query,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
                 )
@@ -662,7 +660,7 @@ impl PostgresqlRepository<UserRegistrationToken<'_>> {
         };
     }
     pub fn find_3<'a>(
-        database_2_connection: &'a Connection,
+        database_2_connection: &'a Client,
         by_1: By1<'a>,
     ) -> impl Future<Output = Result<Option<UserRegistrationToken_3>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
@@ -688,7 +686,7 @@ impl PostgresqlRepository<UserRegistrationToken<'_>> {
                     Type::TEXT,
                 );
             let statement = database_2_connection
-                .prepare_typed(
+                .prepare_typed_cached(
                     query,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
                 )

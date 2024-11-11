@@ -61,8 +61,7 @@ use crate::{
         },
     },
 };
-use bb8::Pool;
-use bb8_postgres::PostgresConnectionManager;
+use crate::infrastructure_layer::functionality::service::creator::PostgresqlConnectionPool;
 use dedicated_crate::void::Void;
 use rand::{
     thread_rng,
@@ -126,16 +125,18 @@ impl CommandProcessor<CreateFixtures> {
     fn create_fixtures<'a>(environment_configuration: &'a EnvironmentConfiguration) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let database_1_postgresql_connection_pool =
-                Creator::<Pool<PostgresConnectionManager<NoTls>>>::create(environment_configuration.resource.postgresql.database_1_url.as_str()).await?;
+                Creator::<PostgresqlConnectionPool>::create(
+                    environment_configuration.resource.postgresql.database_1_url.as_str(),
+                    NoTls,
+                ).await?;
             let user__password = Self::APPLICATION_USER__PASSWORD.to_string();
             let user__password_hash = Encoder::<User_Password>::encode(user__password.as_str())?;
-            let database_1_postgresql_pooled_connection = database_1_postgresql_connection_pool.get().await.into_runtime(
+            let database_1_postgresql_connection = database_1_postgresql_connection_pool.get().await.into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
                 ),
             )?;
-            let database_1_postgresql_connection = &*database_1_postgresql_pooled_connection;
             '_a: for _ in 1..=Self::QUANTITY_OF_APPLICATION_USERS {
                 let mut user__nickname = String::new();
                 '_b: for _ in 1..=thread_rng().gen_range::<usize, _>(1..=User_Nickname::MAXIMUM_LENGTH) {
@@ -178,7 +179,7 @@ impl CommandProcessor<CreateFixtures> {
                     );
                 }
                 let user = match PostgresqlRepository::<User<'_>>::find_1(
-                    database_1_postgresql_connection,
+                    &database_1_postgresql_connection,
                     By1 {
                         user__nickname: user__nickname.as_str(),
                     },
@@ -188,7 +189,7 @@ impl CommandProcessor<CreateFixtures> {
                     Option::Some(user_) => user_,
                     Option::None => {
                         PostgresqlRepository::<User<'_>>::create_1(
-                            database_1_postgresql_connection,
+                            &database_1_postgresql_connection,
                             UserInsert1 {
                                 user__email,
                                 user__nickname,
@@ -215,7 +216,7 @@ impl CommandProcessor<CreateFixtures> {
                     );
                 }
                 PostgresqlRepository::<UserDevice>::create_1(
-                    database_1_postgresql_connection,
+                    &database_1_postgresql_connection,
                     UserDeviceInsert1 {
                         user_device__id,
                         user__id: user.id,
@@ -283,7 +284,7 @@ impl CommandProcessor<CreateFixtures> {
                         );
                     }
                     let channel = PostgresqlRepository::<Channel<'_>>::find_2(
-                        database_1_postgresql_connection,
+                        &database_1_postgresql_connection,
                         By2 {
                             channel__name: channel__name.as_str(),
                         },
@@ -295,7 +296,7 @@ impl CommandProcessor<CreateFixtures> {
                         }
                         Option::None => {
                             PostgresqlRepository::<Channel<'_>>::create_1(
-                                database_1_postgresql_connection,
+                                &database_1_postgresql_connection,
                                 ChannelInsert1 {
                                     channel__owner: user.id,
                                     channel__name,

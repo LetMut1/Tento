@@ -59,37 +59,23 @@ use std::{
     borrow::Cow,
     future::Future,
 };
-use tokio_postgres::{
-    tls::{
-        MakeTlsConnect,
-        TlsConnect,
-    },
-    Socket,
-};
 pub struct UserAuthorization_RefreshAccessToken;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> {
     type Incoming = Incoming;
     type Outcoming = Outcoming;
     type Precedent = Precedent;
-    fn process<'a, T>(
-        inner: &'a Inner<'_, T>,
+    fn process<'a>(
+        inner: &'a Inner<'_>,
         incoming: Self::Incoming,
-    ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send + Capture<&'a Void>
-    where
-        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
-        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
-        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
-        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
-    {
+    ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let user_access_token = Encoder::<UserAccessToken<'_>>::decode(
                 inner.environment_configuration,
                 &incoming.user_access_token_encoded,
             )?;
-            let database_2_postgresql_pooled_connection = inner.get_database_2_postgresql_pooled_connection().await?;
-            let database_2_postgresql_connection = &*database_2_postgresql_pooled_connection;
+            let database_2_postgresql_connection = inner.get_database_2_postgresql_client().await?;
             let mut user_access_refresh_token = match PostgresqlRepository::<UserAccessRefreshToken<'_>>::find_1(
-                database_2_postgresql_connection,
+                &database_2_postgresql_connection,
                 By2 {
                     user__id: user_access_token.user__id,
                     user_device__id: user_access_token.user_device__id,
@@ -119,7 +105,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
             }
             if Resolver::<Expiration>::is_expired(user_access_refresh_token.expires_at) {
                 PostgresqlRepository::<UserAccessRefreshToken<'_>>::delete_1(
-                    database_2_postgresql_connection,
+                    &database_2_postgresql_connection,
                     By2 {
                         user__id: user_access_token.user__id,
                         user_device__id: user_access_token.user_device__id,
@@ -139,7 +125,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
             user_access_refresh_token.expires_at = Generator::<UserAccessRefreshToken_ExpiresAt>::generate()?;
             user_access_refresh_token.updated_at = Generator::<UserAccessRefreshToken_UpdatedAt>::generate();
             PostgresqlRepository::<UserAccessRefreshToken<'_>>::update_1(
-                database_2_postgresql_connection,
+                &database_2_postgresql_connection,
                 Update1 {
                     user_access_token__id: user_access_refresh_token.user_access_token__id.as_ref(),
                     user_access_refresh_token__obfuscation_value: user_access_refresh_token.obfuscation_value.as_str(),

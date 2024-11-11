@@ -54,8 +54,7 @@ use crate::{
         RouteNotFound,
     },
 };
-use bb8::Pool;
-use bb8_postgres::PostgresConnectionManager;
+use crate::infrastructure_layer::functionality::service::creator::PostgresqlConnectionPool;
 #[cfg(feature = "port_for_manual_test")]
 use core::net::SocketAddr;
 use dedicated_crate::void::Void;
@@ -86,14 +85,8 @@ use tokio::{
     net::TcpListener,
     signal::unix::SignalKind,
 };
-use tokio_postgres::{
-    tls::{
-        MakeTlsConnect,
-        TlsConnect,
-    },
-    NoTls,
-    Socket,
-};
+#[cfg(not(feature = "postgresql_connection_with_tls"))]
+use tokio_postgres::NoTls;
 static CONNECTION_QUANTITY: AtomicU64 = AtomicU64::new(0);
 pub struct HttpServer;
 impl HttpServer {
@@ -122,17 +115,30 @@ impl HttpServer {
                 return ();
             };
             let mut graceful_shutdown_signal_future_ = std::pin::pin!(graceful_shutdown_signal_future);
+            let database_1_postgresql_connection_pool;
+            let database_2_postgresql_connection_pool;
+            #[cfg(feature = "postgresql_connection_with_tls")]
+            {
+                todo!();
+            }
+            #[cfg(not(feature = "postgresql_connection_with_tls"))]
+            {
+                database_1_postgresql_connection_pool = Creator::<PostgresqlConnectionPool>::create(
+                    environment_configuration.resource.postgresql.database_1_url.as_str(),
+                    NoTls,
+                )
+                .await?;
+                database_2_postgresql_connection_pool = Creator::<PostgresqlConnectionPool>::create(
+                    environment_configuration.resource.postgresql.database_2_url.as_str(),
+                    NoTls,
+                )
+                .await?;
+            }
             let cloned = Arc::new(
                 Cloned {
                     router: Self::create_router()?,
-                    database_1_postgresql_connection_pool: Creator::<Pool<PostgresConnectionManager<NoTls>>>::create(
-                        environment_configuration.resource.postgresql.database_1_url.as_str(),
-                    )
-                    .await?,
-                    database_2_postgresql_connection_pool: Creator::<Pool<PostgresConnectionManager<NoTls>>>::create(
-                        environment_configuration.resource.postgresql.database_2_url.as_str(),
-                    )
-                    .await?,
+                    database_1_postgresql_connection_pool,
+                    database_2_postgresql_connection_pool,
                 },
             );
             'a: loop {
@@ -964,13 +970,7 @@ impl HttpServer {
         );
         return ();
     }
-    fn process_request<T>(request: Request, environment_configuration: &'static EnvironmentConfiguration, cloned: Arc<Cloned<T>>) -> impl Future<Output = Response> + Send
-    where
-        T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
-        <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
-        <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
-        <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
-    {
+    fn process_request(request: Request, environment_configuration: &'static EnvironmentConfiguration, cloned: Arc<Cloned>) -> impl Future<Output = Response> + Send {
         return async move {
             let (parts, mut incoming) = request.into_parts();
             let mut action_inner = ActionInner {
@@ -1419,16 +1419,10 @@ impl HttpServer {
         return Result::Ok(signal_future);
     }
 }
-struct Cloned<T>
-where
-    T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
-    <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
-    <T as MakeTlsConnect<Socket>>::TlsConnect: Send,
-    <<T as MakeTlsConnect<Socket>>::TlsConnect as TlsConnect<Socket>>::Future: Send,
-{
+struct Cloned {
     router: Router<ActionRoute>,
-    database_1_postgresql_connection_pool: Pool<PostgresConnectionManager<T>>,
-    database_2_postgresql_connection_pool: Pool<PostgresConnectionManager<T>>,
+    database_1_postgresql_connection_pool: PostgresqlConnectionPool,
+    database_2_postgresql_connection_pool: PostgresqlConnectionPool,
 }
 pub enum ActionRoute {
     UserAuthorization {

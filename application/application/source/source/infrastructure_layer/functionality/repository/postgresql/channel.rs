@@ -18,12 +18,10 @@ use std::{
     borrow::Cow,
     future::Future,
 };
-use tokio_postgres::{
-    types::Type,
-    Client as Connection,
-};
+use tokio_postgres::types::Type;
+use deadpool_postgres::Client;
 impl PostgresqlRepository<Channel<'_>> {
-    pub fn create_1<'a>(database_1_connection: &'a Connection, insert_1: Insert1) -> impl Future<Output = Result<Channel<'static>, AggregateError>> + Send + Capture<&'a Void> {
+    pub fn create_1<'a>(database_1_connection: &'a Client, insert_1: Insert1) -> impl Future<Output = Result<Channel<'static>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 INSERT INTO \
@@ -119,7 +117,7 @@ impl PostgresqlRepository<Channel<'_>> {
                     Type::INT8,
                 );
             let statement = database_1_connection
-                .prepare_typed(
+                .prepare_typed_cached(
                     query,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
                 )
@@ -167,7 +165,7 @@ impl PostgresqlRepository<Channel<'_>> {
             );
         };
     }
-    pub fn find_1<'a>(database_1_connection: &'a Connection, by_1: By1) -> impl Future<Output = Result<Option<Channel<'static>>, AggregateError>> + Send + Capture<&'a Void> {
+    pub fn find_1<'a>(database_1_connection: &'a Client, by_1: By1) -> impl Future<Output = Result<Option<Channel<'static>>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 SELECT \
@@ -194,7 +192,7 @@ impl PostgresqlRepository<Channel<'_>> {
                 Type::INT8,
             );
             let statement = database_1_connection
-                .prepare_typed(
+                .prepare_typed_cached(
                     query,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
                 )
@@ -309,7 +307,7 @@ impl PostgresqlRepository<Channel<'_>> {
             );
         };
     }
-    pub fn find_2<'a, 'b>(database_1_connection: &'a Connection, by_2: By2<'b>) -> impl Future<Output = Result<Option<Channel<'b>>, AggregateError>> + Send + Capture<&'a Void> {
+    pub fn find_2<'a, 'b>(database_1_connection: &'a Client, by_2: By2<'b>) -> impl Future<Output = Result<Option<Channel<'b>>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 SELECT \
@@ -336,7 +334,7 @@ impl PostgresqlRepository<Channel<'_>> {
                 Type::TEXT,
             );
             let statement = database_1_connection
-                .prepare_typed(
+                .prepare_typed_cached(
                     query,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
                 )
@@ -449,7 +447,7 @@ impl PostgresqlRepository<Channel<'_>> {
             );
         };
     }
-    pub fn is_exist_1<'a>(database_1_connection: &'a Connection, by_2: By2<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + Capture<&'a Void> {
+    pub fn is_exist_1<'a>(database_1_connection: &'a Client, by_2: By2<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 SELECT \
@@ -464,7 +462,7 @@ impl PostgresqlRepository<Channel<'_>> {
                 Type::TEXT,
             );
             let statement = database_1_connection
-                .prepare_typed(
+                .prepare_typed_cached(
                     query,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
                 )
@@ -493,7 +491,7 @@ impl PostgresqlRepository<Channel<'_>> {
             return Result::Ok(true);
         };
     }
-    pub fn is_exist_2<'a>(database_1_connection: &'a Connection, by_3: By3<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + Capture<&'a Void> {
+    pub fn is_exist_2<'a>(database_1_connection: &'a Client, by_3: By3<'a>) -> impl Future<Output = Result<bool, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 SELECT \
@@ -508,7 +506,7 @@ impl PostgresqlRepository<Channel<'_>> {
                 Type::TEXT,
             );
             let statement = database_1_connection
-                .prepare_typed(
+                .prepare_typed_cached(
                     query,
                     prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
                 )
