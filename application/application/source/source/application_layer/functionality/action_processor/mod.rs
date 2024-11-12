@@ -31,12 +31,14 @@ pub use self::{
         send_email_for_reset_password::UserAuthorization_SendEmailForResetPassword,
     },
 };
-use crate::infrastructure_layer::data::{
-    aggregate_error::AggregateError,
-    capture::Capture,
-    environment_configuration::EnvironmentConfiguration,
+use crate::infrastructure_layer::{
+    data::{
+        aggregate_error::AggregateError,
+        capture::Capture,
+        environment_configuration::EnvironmentConfiguration,
+    },
+    functionality::service::creator::PostgresqlConnectionPool,
 };
-use crate::infrastructure_layer::functionality::service::creator::PostgresqlConnectionPool;
 use dedicated_crate::{
     unified_report::UnifiedReport,
     void::Void,

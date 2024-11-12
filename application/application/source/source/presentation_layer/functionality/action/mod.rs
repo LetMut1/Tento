@@ -50,8 +50,7 @@ where
            + Capture<(
         &'a Void,
         &'b Void,
-    )>
-    {
+    )> {
         return Processor::<ActionRound>::process::<'_, '_, AP, BitCode, BitCode>(
             inner,
             action_processor_inner,
@@ -74,8 +73,7 @@ where
            + Capture<(
         &'a Void,
         &'b Void,
-    )>
-    {
+    )> {
         return Processor::<ActionRound>::process::<'_, '_, AP, Json, Json>(
             inner,
             action_processor_inner,

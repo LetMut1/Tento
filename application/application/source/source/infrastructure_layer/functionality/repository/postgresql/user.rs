@@ -1,5 +1,7 @@
-use super::Postgresql;
-use crate::infrastructure_layer::functionality::repository::Repository;
+use super::{
+    Postgresql,
+    PostgresqlPreparedStatementParameterStorage,
+};
 use crate::{
     domain_layer::data::entity::user::{
         User,
@@ -18,16 +20,16 @@ use crate::{
             },
             capture::Capture,
         },
+        functionality::repository::Repository,
     },
 };
-use super::PostgresqlPreparedStatementParameterStorage;
+use deadpool_postgres::Client;
 use dedicated_crate::void::Void;
 use std::{
     borrow::Cow,
     future::Future,
 };
 use tokio_postgres::types::Type;
-use deadpool_postgres::Client;
 impl Repository<Postgresql<User<'_>>> {
     pub fn create_1<'a>(database_1_client: &'a Client, insert_1: Insert1) -> impl Future<Output = Result<User<'static>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {

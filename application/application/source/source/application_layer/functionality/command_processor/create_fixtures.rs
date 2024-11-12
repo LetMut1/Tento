@@ -38,16 +38,22 @@ use crate::{
             environment_configuration::EnvironmentConfiguration,
         },
         functionality::{
-            repository::postgresql::{
-                ChannelBy2,
-                ChannelInsert1,
-                UserBy1,
-                UserInsert1,
-                UserDeviceInsert1,
-                Postgresql,
+            repository::{
+                postgresql::{
+                    ChannelBy2,
+                    ChannelInsert1,
+                    Postgresql,
+                    UserBy1,
+                    UserDeviceInsert1,
+                    UserInsert1,
+                },
+                Repository,
             },
             service::{
-                creator::Creator,
+                creator::{
+                    Creator,
+                    PostgresqlConnectionPool,
+                },
                 loader::Loader,
                 resolver::{
                     Resolver,
@@ -57,8 +63,6 @@ use crate::{
         },
     },
 };
-use crate::infrastructure_layer::functionality::repository::Repository;
-use crate::infrastructure_layer::functionality::service::creator::PostgresqlConnectionPool;
 use dedicated_crate::void::Void;
 use rand::{
     thread_rng,
@@ -121,11 +125,11 @@ impl CommandProcessor<CreateFixtures> {
     }
     fn create_fixtures<'a>(environment_configuration: &'a EnvironmentConfiguration) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
-            let database_1_postgresql_connection_pool =
-                Creator::<PostgresqlConnectionPool>::create(
-                    environment_configuration.resource.postgresql.database_1_url.as_str(),
-                    NoTls,
-                ).await?;
+            let database_1_postgresql_connection_pool = Creator::<PostgresqlConnectionPool>::create(
+                environment_configuration.resource.postgresql.database_1_url.as_str(),
+                NoTls,
+            )
+            .await?;
             let user__password = Self::APPLICATION_USER__PASSWORD.to_string();
             let user__password_hash = Encoder::<User_Password>::encode(user__password.as_str())?;
             let database_1_postgresql_client = database_1_postgresql_connection_pool.get().await.into_runtime(

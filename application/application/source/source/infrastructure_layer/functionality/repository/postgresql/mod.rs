@@ -9,10 +9,6 @@ mod user_authorization_token;
 mod user_device;
 mod user_registration_token;
 mod user_reset_password_token;
-use tokio_postgres::types::{
-    ToSql,
-    Type,
-};
 pub use self::{
     channel::{
         By1 as ChannelBy1,
@@ -76,9 +72,13 @@ pub use self::{
         Update3 as UserResetPasswordTokenUpdate3,
         Update4 as UserResetPasswordTokenUpdate4,
         Update5 as UserResetPasswordTokenUpdate5,
-    }
+    },
 };
 use std::marker::PhantomData;
+use tokio_postgres::types::{
+    ToSql,
+    Type,
+};
 pub struct Postgresql<E> {
     _entity: PhantomData<E>,
 }

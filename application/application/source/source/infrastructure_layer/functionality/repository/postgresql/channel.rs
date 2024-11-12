@@ -1,5 +1,7 @@
-use super::Postgresql;
-use crate::infrastructure_layer::functionality::repository::Repository;
+use super::{
+    Postgresql,
+    PostgresqlPreparedStatementParameterStorage,
+};
 use crate::{
     domain_layer::data::entity::channel::Channel,
     infrastructure_layer::{
@@ -11,16 +13,16 @@ use crate::{
             },
             capture::Capture,
         },
+        functionality::repository::Repository,
     },
 };
-use super::PostgresqlPreparedStatementParameterStorage;
+use deadpool_postgres::Client;
 use dedicated_crate::void::Void;
 use std::{
     borrow::Cow,
     future::Future,
 };
 use tokio_postgres::types::Type;
-use deadpool_postgres::Client;
 impl Repository<Postgresql<Channel<'_>>> {
     pub fn create_1<'a>(database_1_client: &'a Client, insert_1: Insert1) -> impl Future<Output = Result<Channel<'static>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
@@ -176,11 +178,10 @@ impl Repository<Postgresql<Channel<'_>>> {
                 WHERE \
                     c.id = $1;";
             let mut postgresql_prepared_statemant_parameter_storage = PostgresqlPreparedStatementParameterStorage::new();
-            postgresql_prepared_statemant_parameter_storage
-                .add(
-                    &by_1.channel__id,
-                    Type::INT8,
-                );
+            postgresql_prepared_statemant_parameter_storage.add(
+                &by_1.channel__id,
+                Type::INT8,
+            );
             let statement = database_1_client
                 .prepare_typed_cached(
                     query,

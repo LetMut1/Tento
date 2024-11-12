@@ -23,13 +23,15 @@ use crate::{
             },
             capture::Capture,
         },
-        functionality::repository::postgresql::{
-            UserAccessRefreshTokenBy2,
-            Postgresql,
+        functionality::repository::{
+            postgresql::{
+                Postgresql,
+                UserAccessRefreshTokenBy2,
+            },
+            Repository,
         },
     },
 };
-use crate::infrastructure_layer::functionality::repository::Repository;
 use dedicated_crate::{
     action_processor_incoming_outcoming::action_processor::user_authorization::deauthorize_from_one_device::{
         Incoming,

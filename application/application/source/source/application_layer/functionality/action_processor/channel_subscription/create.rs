@@ -32,21 +32,23 @@ use crate::{
             capture::Capture,
         },
         functionality::{
-            repository::postgresql::{
-                ChannelBy1,
-                ChannelSubscriptionInsert1,
-                Postgresql,
+            repository::{
+                postgresql::{
+                    ChannelBy1,
+                    ChannelSubscriptionInsert1,
+                    Postgresql,
+                },
+                Repository,
             },
             service::resolver::{
-                    PostgresqlTransaction,
-                    Resolver,
-                    TransactionIsolationLevel,
-                    UnixTime,
-                },
+                PostgresqlTransaction,
+                Resolver,
+                TransactionIsolationLevel,
+                UnixTime,
+            },
         },
     },
 };
-use crate::infrastructure_layer::functionality::repository::Repository;
 use dedicated_crate::{
     action_processor_incoming_outcoming::action_processor::channel_subscription::create::{
         Incoming,

@@ -27,11 +27,14 @@ use crate::{
             capture::Capture,
         },
         functionality::{
-            repository::postgresql::{
-                UserResetPasswordTokenBy1,
-                UserResetPasswordTokenUpdate4,
-                UserResetPasswordTokenUpdate5,
-                Postgresql,
+            repository::{
+                postgresql::{
+                    Postgresql,
+                    UserResetPasswordTokenBy1,
+                    UserResetPasswordTokenUpdate4,
+                    UserResetPasswordTokenUpdate5,
+                },
+                Repository,
             },
             service::resolver::{
                 Expiration,
@@ -40,7 +43,6 @@ use crate::{
         },
     },
 };
-use crate::infrastructure_layer::functionality::repository::Repository;
 use dedicated_crate::{
     action_processor_incoming_outcoming::action_processor::user_authorization::reset_password_by_second_step::{
         Incoming,

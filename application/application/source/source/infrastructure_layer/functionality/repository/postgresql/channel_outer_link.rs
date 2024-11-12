@@ -1,5 +1,7 @@
-use super::Postgresql;
-use crate::infrastructure_layer::functionality::repository::Repository;
+use super::{
+    Postgresql,
+    PostgresqlPreparedStatementParameterStorage,
+};
 use crate::{
     domain_layer::data::entity::channel_outer_link::ChannelOuterLink,
     infrastructure_layer::{
@@ -11,16 +13,16 @@ use crate::{
             },
             capture::Capture,
         },
+        functionality::repository::Repository,
     },
 };
-use super::PostgresqlPreparedStatementParameterStorage;
+use deadpool_postgres::Client;
 use dedicated_crate::{
     action_processor_incoming_outcoming::ChannelOuterLink1,
     void::Void,
 };
 use std::future::Future;
 use tokio_postgres::types::Type;
-use deadpool_postgres::Client;
 impl Repository<Postgresql<ChannelOuterLink>> {
     pub fn create_1<'a>(database_1_client: &'a Client, insert_1: Insert1) -> impl Future<Output = Result<ChannelOuterLink, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
@@ -88,11 +90,7 @@ impl Repository<Postgresql<ChannelOuterLink>> {
             return Result::Ok(channel_outer_link);
         };
     }
-    pub fn find_1<'a>(
-        database_1_client: &'a Client,
-        by_1: By1,
-        limit: i16,
-    ) -> impl Future<Output = Result<Vec<ChannelOuterLink1>, AggregateError>> + Send + Capture<&'a Void> {
+    pub fn find_1<'a>(database_1_client: &'a Client, by_1: By1, limit: i16) -> impl Future<Output = Result<Vec<ChannelOuterLink1>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 SELECT \

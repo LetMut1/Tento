@@ -26,9 +26,12 @@ use crate::{
             },
             capture::Capture,
         },
-        functionality::repository::postgresql::{
-            CommonBy2,
-            Postgresql,
+        functionality::repository::{
+            postgresql::{
+                CommonBy2,
+                Postgresql,
+            },
+            Repository,
         },
     },
 };
@@ -44,7 +47,6 @@ use dedicated_crate::{
     unified_report::UnifiedReport,
     void::Void,
 };
-use crate::infrastructure_layer::functionality::repository::Repository;
 use std::future::Future;
 pub struct Channel_GetManyByNameInSubscriptions;
 impl ActionProcessor_ for ActionProcessor<Channel_GetManyByNameInSubscriptions> {

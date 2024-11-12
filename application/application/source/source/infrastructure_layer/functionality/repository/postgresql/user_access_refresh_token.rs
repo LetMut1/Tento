@@ -1,5 +1,7 @@
-use super::Postgresql;
-use crate::infrastructure_layer::functionality::repository::Repository;
+use super::{
+    Postgresql,
+    PostgresqlPreparedStatementParameterStorage,
+};
 use crate::{
     domain_layer::data::entity::user_access_refresh_token::UserAccessRefreshToken,
     infrastructure_layer::{
@@ -11,16 +13,16 @@ use crate::{
             },
             capture::Capture,
         },
+        functionality::repository::Repository,
     },
 };
-use super::PostgresqlPreparedStatementParameterStorage;
+use deadpool_postgres::Client;
 use dedicated_crate::void::Void;
 use std::{
     borrow::Cow,
     future::Future,
 };
 use tokio_postgres::types::Type;
-use deadpool_postgres::Client;
 impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
     pub fn create_1<'a, 'b>(
         database_2_client: &'a Client,
@@ -106,11 +108,7 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
             );
         };
     }
-    pub fn update_1<'a>(
-        database_2_client: &'a Client,
-        update_1: Update1<'a>,
-        by_2: By2<'a>,
-    ) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
+    pub fn update_1<'a>(database_2_client: &'a Client, update_1: Update1<'a>, by_2: By2<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 UPDATE ONLY \

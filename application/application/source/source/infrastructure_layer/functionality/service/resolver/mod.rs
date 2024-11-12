@@ -1,15 +1,15 @@
 mod cloud_message;
 mod expiration;
-mod unix_time;
 mod postgresql_transaction;
+mod unix_time;
 pub use self::{
     cloud_message::CloudMessage,
     expiration::Expiration,
-    unix_time::UnixTime,
     postgresql_transaction::{
         PostgresqlTransaction,
         TransactionIsolationLevel,
     },
+    unix_time::UnixTime,
 };
 use std::marker::PhantomData;
 pub struct Resolver<S> {

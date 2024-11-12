@@ -1,5 +1,7 @@
-use super::Postgresql;
-use crate::infrastructure_layer::functionality::repository::Repository;
+use super::{
+    Postgresql,
+    PostgresqlPreparedStatementParameterStorage,
+};
 use crate::infrastructure_layer::{
     data::{
         aggregate_error::{
@@ -9,12 +11,15 @@ use crate::infrastructure_layer::{
         },
         capture::Capture,
     },
-    functionality::service::counter::{
-        Counter,
-        Counter_,
+    functionality::{
+        repository::Repository,
+        service::counter::{
+            Counter,
+            Counter_,
+        },
     },
 };
-use super::PostgresqlPreparedStatementParameterStorage;
+use deadpool_postgres::Client;
 use dedicated_crate::{
     action_processor_incoming_outcoming::{
         Channel1,
@@ -24,7 +29,6 @@ use dedicated_crate::{
 };
 use std::future::Future;
 use tokio_postgres::types::Type;
-use deadpool_postgres::Client;
 impl Repository<Postgresql<Common1>> {
     pub fn find_1<'a>(database_1_client: &'a Client, by_1: By1<'a>, limit: i16) -> impl Future<Output = Result<Vec<Common1>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {

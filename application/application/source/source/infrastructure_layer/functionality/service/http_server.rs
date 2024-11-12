@@ -1,5 +1,8 @@
+#[cfg(not(feature = "postgresql_connection_with_tls"))]
+use crate::infrastructure_layer::functionality::service::creator::Creator;
 use crate::{
     application_layer::functionality::action_processor::{
+        ChannelSubscription_Create,
         Channel_CheckLinkedNameForExisting,
         Channel_CheckNameForExisting,
         Channel_Create,
@@ -7,7 +10,6 @@ use crate::{
         Channel_GetManyBySubscription,
         Channel_GetManyPublicByName,
         Channel_GetOneById,
-        ChannelSubscription_Create,
         Inner as ActionProcessorInner,
         UserAuthorization_AuthorizeByFirstStep,
         UserAuthorization_AuthorizeByLastStep,
@@ -40,6 +42,7 @@ use crate::{
             environment_configuration::EnvironmentConfiguration,
         },
         functionality::service::{
+            creator::PostgresqlConnectionPool,
             logger::Logger,
             spawner::{
                 Spawner,
@@ -53,7 +56,6 @@ use crate::{
         RouteNotFound,
     },
 };
-use crate::infrastructure_layer::functionality::service::creator::PostgresqlConnectionPool;
 #[cfg(feature = "port_for_manual_test")]
 use core::net::SocketAddr;
 use dedicated_crate::void::Void;
@@ -86,8 +88,6 @@ use tokio::{
 };
 #[cfg(not(feature = "postgresql_connection_with_tls"))]
 use tokio_postgres::NoTls;
-#[cfg(not(feature = "postgresql_connection_with_tls"))]
-use crate::infrastructure_layer::functionality::service::creator::Creator;
 static CONNECTION_QUANTITY: AtomicU64 = AtomicU64::new(0);
 pub struct HttpServer;
 impl HttpServer {

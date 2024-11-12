@@ -1,5 +1,7 @@
-use super::Postgresql;
-use crate::infrastructure_layer::functionality::repository::Repository;
+use super::{
+    Postgresql,
+    PostgresqlPreparedStatementParameterStorage,
+};
 use crate::{
     domain_layer::data::entity::user_authorization_token::{
         UserAuthorizationToken,
@@ -16,16 +18,16 @@ use crate::{
             },
             capture::Capture,
         },
+        functionality::repository::Repository,
     },
 };
-use super::PostgresqlPreparedStatementParameterStorage;
+use deadpool_postgres::Client;
 use dedicated_crate::void::Void;
 use std::{
     borrow::Cow,
     future::Future,
 };
 use tokio_postgres::types::Type;
-use deadpool_postgres::Client;
 impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
     pub fn create_1<'a, 'b>(
         database_2_client: &'a Client,
@@ -156,11 +158,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
             return Result::Ok(());
         };
     }
-    pub fn update_1<'a>(
-        database_2_client: &'a Client,
-        update_1: Update1<'a>,
-        by_1: By1<'a>,
-    ) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
+    pub fn update_1<'a>(database_2_client: &'a Client, update_1: Update1<'a>, by_1: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 UPDATE ONLY \
@@ -232,11 +230,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
             return Result::Ok(());
         };
     }
-    pub fn update_2<'a>(
-        database_2_client: &'a Client,
-        update_2: Update2<'a>,
-        by_1: By1<'a>,
-    ) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
+    pub fn update_2<'a>(database_2_client: &'a Client, update_2: Update2<'a>, by_1: By1<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 UPDATE ONLY \
@@ -410,10 +404,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
             return Result::Ok(());
         };
     }
-    pub fn find_1<'a>(
-        database_2_client: &'a Client,
-        by_1: By1<'a>,
-    ) -> impl Future<Output = Result<Option<UserAuthorizationToken_1>, AggregateError>> + Send + Capture<&'a Void> {
+    pub fn find_1<'a>(database_2_client: &'a Client, by_1: By1<'a>) -> impl Future<Output = Result<Option<UserAuthorizationToken_1>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 SELECT \
@@ -495,10 +486,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
             );
         };
     }
-    pub fn find_2<'a>(
-        database_2_client: &'a Client,
-        by_1: By1<'a>,
-    ) -> impl Future<Output = Result<Option<UserAuthorizationToken_2>, AggregateError>> + Send + Capture<&'a Void> {
+    pub fn find_2<'a>(database_2_client: &'a Client, by_1: By1<'a>) -> impl Future<Output = Result<Option<UserAuthorizationToken_2>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 SELECT \
@@ -573,10 +561,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
             );
         };
     }
-    pub fn find_3<'a>(
-        database_2_client: &'a Client,
-        by_1: By1<'a>,
-    ) -> impl Future<Output = Result<Option<UserAuthorizationToken_3>, AggregateError>> + Send + Capture<&'a Void> {
+    pub fn find_3<'a>(database_2_client: &'a Client, by_1: By1<'a>) -> impl Future<Output = Result<Option<UserAuthorizationToken_3>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 SELECT \

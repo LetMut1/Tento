@@ -50,15 +50,18 @@ use crate::{
             capture::Capture,
         },
         functionality::{
-            repository::postgresql::{
-                UserBy1,
-                UserBy2,
-                UserInsert1,
-                UserAccessRefreshTokenInsert1,
-                UserDeviceInsert1,
-                UserRegistrationTokenBy1,
-                UserRegistrationTokenUpdate4,
-                Postgresql,
+            repository::{
+                postgresql::{
+                    Postgresql,
+                    UserAccessRefreshTokenInsert1,
+                    UserBy1,
+                    UserBy2,
+                    UserDeviceInsert1,
+                    UserInsert1,
+                    UserRegistrationTokenBy1,
+                    UserRegistrationTokenUpdate4,
+                },
+                Repository,
             },
             service::{
                 resolver::{
@@ -75,7 +78,6 @@ use crate::{
         },
     },
 };
-use crate::infrastructure_layer::functionality::repository::Repository;
 use dedicated_crate::{
     action_processor_incoming_outcoming::action_processor::user_authorization::register_by_last_step::{
         Incoming,

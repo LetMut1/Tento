@@ -1,3 +1,4 @@
+use super::Resolver;
 use crate::infrastructure_layer::data::{
     aggregate_error::{
         AggregateError,
@@ -6,10 +7,9 @@ use crate::infrastructure_layer::data::{
     },
     capture::Capture,
 };
+use deadpool_postgres::Client;
 use dedicated_crate::void::Void;
 use std::future::Future;
-use deadpool_postgres::Client;
-use super::Resolver;
 pub struct PostgresqlTransaction<'a> {
     // Should be &'_ mut for outer requirement.
     client: &'a mut Client,
@@ -69,19 +69,13 @@ impl Resolver<PostgresqlTransaction<'_>> {
                     }
                 }
             }
-            if let Result::Err(aggregate_error) = client
-            .simple_query(query.as_str())
-            .await
-            .into_runtime(
+            if let Result::Err(aggregate_error) = client.simple_query(query.as_str()).await.into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
                 ),
-            )
-            {
-                let _ = client
-                .simple_query("ROLLBACK;")
-                .await;
+            ) {
+                let _ = client.simple_query("ROLLBACK;").await;
                 return Result::Err(aggregate_error);
             }
             return Result::Ok(
@@ -93,20 +87,13 @@ impl Resolver<PostgresqlTransaction<'_>> {
     }
     pub fn commit<'a>(postgresql_transaction: PostgresqlTransaction<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
-            if let Result::Err(aggregate_error) = postgresql_transaction
-            .client
-            .simple_query("COMMIT;")
-            .await
-            .into_runtime(
+            if let Result::Err(aggregate_error) = postgresql_transaction.client.simple_query("COMMIT;").await.into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
                 ),
-            )
-            {
-                let _ = postgresql_transaction.client
-                .simple_query("ROLLBACK;")
-                .await;
+            ) {
+                let _ = postgresql_transaction.client.simple_query("ROLLBACK;").await;
                 return Result::Err(aggregate_error);
             }
             return Result::Ok(());
@@ -114,11 +101,7 @@ impl Resolver<PostgresqlTransaction<'_>> {
     }
     pub fn rollback<'a>(postgresql_transaction: PostgresqlTransaction<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
-            postgresql_transaction
-            .client
-            .simple_query("ROLLBACK;")
-            .await
-            .into_runtime(
+            postgresql_transaction.client.simple_query("ROLLBACK;").await.into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),

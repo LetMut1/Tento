@@ -24,9 +24,12 @@ use crate::{
             capture::Capture,
         },
         functionality::{
-            repository::postgresql::{
-                UserAccessRefreshTokenBy1,
-                Postgresql,
+            repository::{
+                postgresql::{
+                    Postgresql,
+                    UserAccessRefreshTokenBy1,
+                },
+                Repository,
             },
             service::resolver::{
                 CloudMessage,
@@ -35,7 +38,6 @@ use crate::{
         },
     },
 };
-use crate::infrastructure_layer::functionality::repository::Repository;
 use dedicated_crate::{
     action_processor_incoming_outcoming::action_processor::user_authorization::deauthorize_from_all_devices::{
         Incoming,

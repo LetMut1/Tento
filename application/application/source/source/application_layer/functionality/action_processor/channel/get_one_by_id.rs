@@ -33,16 +33,18 @@ use crate::{
             },
             capture::Capture,
         },
-        functionality::repository::postgresql::{
-            ChannelBy1,
-            ChannelInnerLinkBy1,
-            ChannelOuterLinkBy1,
-            ChannelSubscriptionBy1,
-            Postgresql,
+        functionality::repository::{
+            postgresql::{
+                ChannelBy1,
+                ChannelInnerLinkBy1,
+                ChannelOuterLinkBy1,
+                ChannelSubscriptionBy1,
+                Postgresql,
+            },
+            Repository,
         },
     },
 };
-use crate::infrastructure_layer::functionality::repository::Repository;
 use dedicated_crate::{
     action_processor_incoming_outcoming::{
         action_processor::channel::get_one_by_id::{

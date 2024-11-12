@@ -32,11 +32,14 @@ use crate::{
             capture::Capture,
         },
         functionality::{
-            repository::postgresql::{
-                UserBy3,
-                UserResetPasswordTokenBy1,
-                UserResetPasswordTokenUpdate2,
-                Postgresql,
+            repository::{
+                postgresql::{
+                    Postgresql,
+                    UserBy3,
+                    UserResetPasswordTokenBy1,
+                    UserResetPasswordTokenUpdate2,
+                },
+                Repository,
             },
             service::{
                 resolver::{
@@ -51,7 +54,6 @@ use crate::{
         },
     },
 };
-use crate::infrastructure_layer::functionality::repository::Repository;
 use dedicated_crate::{
     action_processor_incoming_outcoming::action_processor::user_authorization::send_email_for_reset_password::{
         Incoming,

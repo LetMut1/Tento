@@ -38,15 +38,18 @@ use crate::{
             capture::Capture,
         },
         functionality::{
-            repository::postgresql::{
-                UserBy1,
-                UserBy2,
-                UserAuthorizationTokenBy1,
-                UserAuthorizationTokenInsert1,
-                UserAuthorizationTokenUpdate1,
-                UserAuthorizationTokenUpdate2,
-                UserAuthorizationTokenUpdate3,
-                Postgresql,
+            repository::{
+                postgresql::{
+                    Postgresql,
+                    UserAuthorizationTokenBy1,
+                    UserAuthorizationTokenInsert1,
+                    UserAuthorizationTokenUpdate1,
+                    UserAuthorizationTokenUpdate2,
+                    UserAuthorizationTokenUpdate3,
+                    UserBy1,
+                    UserBy2,
+                },
+                Repository,
             },
             service::{
                 resolver::{
@@ -62,7 +65,6 @@ use crate::{
         },
     },
 };
-use crate::infrastructure_layer::functionality::repository::Repository;
 use dedicated_crate::{
     action_processor_incoming_outcoming::action_processor::user_authorization::authorize_by_first_step::{
         Incoming,

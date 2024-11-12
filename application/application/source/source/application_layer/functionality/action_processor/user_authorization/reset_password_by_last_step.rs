@@ -35,13 +35,16 @@ use crate::{
             capture::Capture,
         },
         functionality::{
-            repository::postgresql::{
-                UserBy3,
-                UserUpdate1,
-                UserAccessRefreshTokenBy1,
-                UserResetPasswordTokenBy1,
-                UserResetPasswordTokenUpdate4,
-                Postgresql,
+            repository::{
+                postgresql::{
+                    Postgresql,
+                    UserAccessRefreshTokenBy1,
+                    UserBy3,
+                    UserResetPasswordTokenBy1,
+                    UserResetPasswordTokenUpdate4,
+                    UserUpdate1,
+                },
+                Repository,
             },
             service::{
                 resolver::{
@@ -66,7 +69,6 @@ use dedicated_crate::{
     unified_report::UnifiedReport,
     void::Void,
 };
-use crate::infrastructure_layer::functionality::repository::Repository;
 use std::future::Future;
 pub struct UserAuthorization_ResetPasswordByLastStep;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastStep> {

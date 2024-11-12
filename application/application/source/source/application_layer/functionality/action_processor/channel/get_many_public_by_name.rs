@@ -29,13 +29,15 @@ use crate::{
             },
             capture::Capture,
         },
-        functionality::repository::postgresql::{
-            CommonBy1,
-            Postgresql,
+        functionality::repository::{
+            postgresql::{
+                CommonBy1,
+                Postgresql,
+            },
+            Repository,
         },
     },
 };
-use crate::infrastructure_layer::functionality::repository::Repository;
 use dedicated_crate::{
     action_processor_incoming_outcoming::{
         action_processor::channel::get_many_public_by_name::{

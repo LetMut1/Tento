@@ -20,13 +20,15 @@ use crate::{
             },
             capture::Capture,
         },
-        functionality::repository::postgresql::{
-            UserBy1,
-            Postgresql,
+        functionality::repository::{
+            postgresql::{
+                Postgresql,
+                UserBy1,
+            },
+            Repository,
         },
     },
 };
-use crate::infrastructure_layer::functionality::repository::Repository;
 use dedicated_crate::{
     action_processor_incoming_outcoming::action_processor::user_authorization::check_nickname_for_existing::{
         Incoming,

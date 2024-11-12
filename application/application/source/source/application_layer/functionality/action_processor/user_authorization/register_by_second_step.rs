@@ -27,11 +27,14 @@ use crate::{
             capture::Capture,
         },
         functionality::{
-            repository::postgresql::{
-                UserRegistrationTokenBy1,
-                UserRegistrationTokenUpdate4,
-                UserRegistrationTokenUpdate5,
-                Postgresql,
+            repository::{
+                postgresql::{
+                    Postgresql,
+                    UserRegistrationTokenBy1,
+                    UserRegistrationTokenUpdate4,
+                    UserRegistrationTokenUpdate5,
+                },
+                Repository,
             },
             service::resolver::{
                 Expiration,
@@ -40,7 +43,6 @@ use crate::{
         },
     },
 };
-use crate::infrastructure_layer::functionality::repository::Repository;
 use dedicated_crate::{
     action_processor_incoming_outcoming::action_processor::user_authorization::register_by_second_step::{
         Incoming,
