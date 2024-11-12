@@ -62,7 +62,7 @@ use crate::{
                     By1 as By1_,
                     Update4,
                 },
-                PostgresqlRepository,
+                Postgresql,
             },
             service::{
                 resolver::{
@@ -79,6 +79,7 @@ use crate::{
         },
     },
 };
+use crate::infrastructure_layer::functionality::repository::Repository;
 use dedicated_crate::{
     action_processor_incoming_outcoming::action_processor::user_authorization::register_by_last_step::{
         Incoming,
@@ -159,7 +160,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                     file!(),
                 ),
             )?;
-            if PostgresqlRepository::<User<'_>>::is_exist_1(
+            if Repository::<Postgresql<User<'_>>>::is_exist_1(
                 &database_1_postgresql_client,
                 By1 {
                     user__nickname: incoming.user__nickname.as_str(),
@@ -169,7 +170,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
             {
                 return Result::Ok(UnifiedReport::precedent(Precedent::User_NicknameAlreadyExist));
             }
-            if PostgresqlRepository::<User<'_>>::is_exist_2(
+            if Repository::<Postgresql<User<'_>>>::is_exist_2(
                 &database_1_postgresql_client,
                 By2 {
                     user__email: incoming.user__email.as_str(),
@@ -185,7 +186,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                     file!(),
                 ),
             )?;
-            let mut user_registration_token = match PostgresqlRepository::<UserRegistrationToken<'_>>::find_2(
+            let mut user_registration_token = match Repository::<Postgresql<UserRegistrationToken<'_>>>::find_2(
                 &database_2_postgresql_client,
                 By1_ {
                     user__email: incoming.user__email.as_str(),
@@ -200,7 +201,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 }
             };
             if Resolver::<Expiration>::is_expired(user_registration_token.expires_at) {
-                PostgresqlRepository::<UserRegistrationToken<'_>>::delete_2(
+                Repository::<Postgresql<UserRegistrationToken<'_>>>::delete_2(
                     &database_2_postgresql_client,
                     By1_ {
                         user__email: incoming.user__email.as_str(),
@@ -221,7 +222,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                     ),
                 )?;
                 if user_registration_token.wrong_enter_tries_quantity < UserRegistrationToken_WrongEnterTriesQuantity::LIMIT {
-                    PostgresqlRepository::<UserRegistrationToken<'_>>::update_4(
+                    Repository::<Postgresql<UserRegistrationToken<'_>>>::update_4(
                         &database_2_postgresql_client,
                         Update4 {
                             user_registration_token__wrong_enter_tries_quantity: user_registration_token.wrong_enter_tries_quantity,
@@ -233,7 +234,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                     )
                     .await?;
                 } else {
-                    PostgresqlRepository::<UserRegistrationToken<'_>>::delete_2(
+                    Repository::<Postgresql<UserRegistrationToken<'_>>>::delete_2(
                         &database_2_postgresql_client,
                         By1_ {
                             user__email: incoming.user__email.as_str(),
@@ -249,7 +250,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                     return Encoder::<User_Password>::encode(incoming.user__password.as_str());
                 },
             );
-            let user = PostgresqlRepository::<User<'_>>::create_1(
+            let user = Repository::<Postgresql<User<'_>>>::create_1(
                 &database_1_postgresql_client,
                 UserInsert1 {
                     user__email: incoming.user__email,
@@ -271,7 +272,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 Generator::<UserAccessToken_ExpiresAt>::generate()?,
             );
             // TODO  TRANZACTION посмотреть, необходимо ли здесь сделать транзакцию
-            let user_access_refresh_token = PostgresqlRepository::<UserAccessRefreshToken<'_>>::create_1(
+            let user_access_refresh_token = Repository::<Postgresql<UserAccessRefreshToken<'_>>>::create_1(
                 &database_2_postgresql_client,
                 UserAccessRefreshTokenInsert1 {
                     user__id: user.id,
@@ -295,7 +296,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
             let database_2_postgresql_connection_pool = inner.database_2_postgresql_connection_pool.clone();
             Spawner::<TokioNonBlockingTask>::spawn_into_background(
                 async move {
-                    let user_device = PostgresqlRepository::<UserDevice>::create_1(
+                    let user_device = Repository::<Postgresql<UserDevice>>::create_1(
                         &database_1_postgresql_connection_pool.get().await.into_runtime(
                             Backtrace::new(
                                 line!(),
@@ -308,7 +309,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                         },
                     )
                     .await?;
-                    PostgresqlRepository::<UserRegistrationToken<'_>>::delete_2(
+                    Repository::<Postgresql<UserRegistrationToken<'_>>>::delete_2(
                         &database_2_postgresql_connection_pool.get().await.into_runtime(
                             Backtrace::new(
                                 line!(),

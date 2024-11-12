@@ -37,7 +37,7 @@ use crate::{
                     By3,
                     Insert1,
                 },
-                PostgresqlRepository,
+                Postgresql,
             },
             service::resolver::{
                 Resolver,
@@ -46,6 +46,7 @@ use crate::{
         },
     },
 };
+use crate::infrastructure_layer::functionality::repository::Repository;
 use dedicated_crate::{
     action_processor_incoming_outcoming::action_processor::channel::create::{
         Incoming,
@@ -106,7 +107,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_Create> {
                     file!(),
                 ),
             )?;
-            if PostgresqlRepository::<Channel<'_>>::is_exist_1(
+            if Repository::<Postgresql<Channel<'_>>>::is_exist_1(
                 &database_1_postgresql_client,
                 By2 {
                     channel__name: incoming.channel__name.as_str(),
@@ -116,7 +117,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_Create> {
             {
                 return Result::Ok(UnifiedReport::precedent(Precedent::Channel_NameAlreadyExist));
             }
-            if PostgresqlRepository::<Channel<'_>>::is_exist_2(
+            if Repository::<Postgresql<Channel<'_>>>::is_exist_2(
                 &database_1_postgresql_client,
                 By3 {
                     channel__linked_name: incoming.channel__linked_name.as_str(),
@@ -126,7 +127,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_Create> {
             {
                 return Result::Ok(UnifiedReport::precedent(Precedent::Channel_LinkedNameAlreadyExist));
             }
-            let channel = PostgresqlRepository::<Channel<'_>>::create_1(
+            let channel = Repository::<Postgresql<Channel<'_>>>::create_1(
                 &database_1_postgresql_client,
                 Insert1 {
                     channel__owner: user_access_token.user__id,

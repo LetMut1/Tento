@@ -28,10 +28,11 @@ use crate::{
         },
         functionality::repository::postgresql::{
             common::By3,
-            PostgresqlRepository,
+            Postgresql,
         },
     },
 };
+use crate::infrastructure_layer::functionality::repository::Repository;
 use dedicated_crate::{
     action_processor_incoming_outcoming::{
         action_processor::channel::get_many_by_subscription::{
@@ -92,7 +93,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyBySubscription> {
                     ),
                 );
             }
-            let common_registry = PostgresqlRepository::<Common1>::find_3(
+            let common_registry = Repository::<Postgresql<Common1>>::find_3(
                 &inner.database_1_postgresql_connection_pool.get().await.into_runtime(
                     Backtrace::new(
                         line!(),

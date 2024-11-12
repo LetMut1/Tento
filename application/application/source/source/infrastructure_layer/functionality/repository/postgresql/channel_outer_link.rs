@@ -1,4 +1,5 @@
-use super::PostgresqlRepository;
+use super::Postgresql;
+use crate::infrastructure_layer::functionality::repository::Repository;
 use crate::{
     domain_layer::data::entity::channel_outer_link::ChannelOuterLink,
     infrastructure_layer::{
@@ -20,7 +21,7 @@ use dedicated_crate::{
 use std::future::Future;
 use tokio_postgres::types::Type;
 use deadpool_postgres::Client;
-impl PostgresqlRepository<ChannelOuterLink> {
+impl Repository<Postgresql<ChannelOuterLink>> {
     pub fn create_1<'a>(database_1_client: &'a Client, insert_1: Insert1) -> impl Future<Output = Result<ChannelOuterLink, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\

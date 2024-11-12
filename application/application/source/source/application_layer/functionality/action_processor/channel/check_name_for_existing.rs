@@ -31,7 +31,7 @@ use crate::{
         },
         functionality::repository::postgresql::{
             channel::By2,
-            PostgresqlRepository,
+            Postgresql,
         },
     },
 };
@@ -44,6 +44,7 @@ use dedicated_crate::{
     unified_report::UnifiedReport,
     void::Void,
 };
+use crate::infrastructure_layer::functionality::repository::Repository;
 use std::future::Future;
 pub struct Channel_CheckNameForExisting;
 impl ActionProcessor_ for ActionProcessor<Channel_CheckNameForExisting> {
@@ -79,7 +80,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_CheckNameForExisting> {
                     ),
                 );
             }
-            let is_exist = PostgresqlRepository::<Channel<'_>>::is_exist_1(
+            let is_exist = Repository::<Postgresql<Channel<'_>>>::is_exist_1(
                 &inner.database_1_postgresql_connection_pool.get().await.into_runtime(
                     Backtrace::new(
                         line!(),

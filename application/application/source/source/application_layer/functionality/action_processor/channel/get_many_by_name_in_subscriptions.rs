@@ -28,7 +28,7 @@ use crate::{
         },
         functionality::repository::postgresql::{
             common::By2,
-            PostgresqlRepository,
+            Postgresql,
         },
     },
 };
@@ -44,6 +44,7 @@ use dedicated_crate::{
     unified_report::UnifiedReport,
     void::Void,
 };
+use crate::infrastructure_layer::functionality::repository::Repository;
 use std::future::Future;
 pub struct Channel_GetManyByNameInSubscriptions;
 impl ActionProcessor_ for ActionProcessor<Channel_GetManyByNameInSubscriptions> {
@@ -102,7 +103,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyByNameInSubscriptions> 
                     );
                 }
             }
-            let common_registry = PostgresqlRepository::<Common1>::find_2(
+            let common_registry = Repository::<Postgresql<Common1>>::find_2(
                 &inner.database_1_postgresql_connection_pool.get().await.into_runtime(
                     Backtrace::new(
                         line!(),

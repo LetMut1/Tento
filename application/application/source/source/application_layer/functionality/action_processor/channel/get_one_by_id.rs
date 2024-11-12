@@ -38,10 +38,11 @@ use crate::{
             channel_inner_link::By1 as By1__,
             channel_outer_link::By1 as By1_,
             channel_subscription::By1,
-            PostgresqlRepository,
+            Postgresql,
         },
     },
 };
+use crate::infrastructure_layer::functionality::repository::Repository;
 use dedicated_crate::{
     action_processor_incoming_outcoming::{
         action_processor::channel::get_one_by_id::{
@@ -95,7 +96,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                     file!(),
                 ),
             )?;
-            let channel = match PostgresqlRepository::<Channel<'_>>::find_1(
+            let channel = match Repository::<Postgresql<Channel<'_>>>::find_1(
                 &database_1_postgresql_client,
                 By1___ {
                     channel__id: incoming.channel__id,
@@ -109,7 +110,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                 }
             };
             if const { Channel_AccessModifier::Close as i16 } == channel.access_modifier {
-                let is_exist = PostgresqlRepository::<ChannelSubscription>::is_exist_1(
+                let is_exist = Repository::<Postgresql<ChannelSubscription>>::is_exist_1(
                     &database_1_postgresql_client,
                     By1 {
                         user__id: user_access_token.user__id,
@@ -121,7 +122,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                     return Result::Ok(UnifiedReport::precedent(Precedent::Channel_IsClose));
                 }
             }
-            let channel_inner_link_registry = PostgresqlRepository::<ChannelInnerLink>::find_1(
+            let channel_inner_link_registry = Repository::<Postgresql<ChannelInnerLink>>::find_1(
                 &database_1_postgresql_client,
                 By1__ {
                     channel_inner_link__from: channel.id,
@@ -129,7 +130,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                 ChannelInnerLink::MAXIMUM_QUANTITY,
             )
             .await?;
-            let channel_outer_link_registry = PostgresqlRepository::<ChannelOuterLink>::find_1(
+            let channel_outer_link_registry = Repository::<Postgresql<ChannelOuterLink>>::find_1(
                 &database_1_postgresql_client,
                 By1_ {
                     channel_outer_link__from: channel.id,

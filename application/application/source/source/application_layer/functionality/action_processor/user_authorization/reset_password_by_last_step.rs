@@ -45,7 +45,7 @@ use crate::{
                     By1 as By1_,
                     Update4,
                 },
-                PostgresqlRepository,
+                Postgresql,
             },
             service::{
                 resolver::{
@@ -70,6 +70,7 @@ use dedicated_crate::{
     unified_report::UnifiedReport,
     void::Void,
 };
+use crate::infrastructure_layer::functionality::repository::Repository;
 use std::future::Future;
 pub struct UserAuthorization_ResetPasswordByLastStep;
 impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastStep> {
@@ -127,7 +128,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                     file!(),
                 ),
             )?;
-            let mut user_reset_password_token = match PostgresqlRepository::<UserResetPasswordToken<'_>>::find_2(
+            let mut user_reset_password_token = match Repository::<Postgresql<UserResetPasswordToken<'_>>>::find_2(
                 &database_2_postgresql_client,
                 By1_ {
                     user__id: incoming.user__id,
@@ -142,7 +143,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                 }
             };
             if Resolver::<Expiration>::is_expired(user_reset_password_token.expires_at) {
-                PostgresqlRepository::<UserResetPasswordToken<'_>>::delete_2(
+                Repository::<Postgresql<UserResetPasswordToken<'_>>>::delete_2(
                     &database_2_postgresql_client,
                     By1_ {
                         user__id: incoming.user__id,
@@ -163,7 +164,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                     ),
                 )?;
                 if user_reset_password_token.wrong_enter_tries_quantity < UserResetPasswordToken_WrongEnterTriesQuantity::LIMIT {
-                    PostgresqlRepository::<UserResetPasswordToken<'_>>::update_4(
+                    Repository::<Postgresql<UserResetPasswordToken<'_>>>::update_4(
                         &database_2_postgresql_client,
                         Update4 {
                             user_reset_password_token__wrong_enter_tries_quantity: user_reset_password_token.wrong_enter_tries_quantity,
@@ -175,7 +176,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                     )
                     .await?;
                 } else {
-                    PostgresqlRepository::<UserResetPasswordToken<'_>>::delete_2(
+                    Repository::<Postgresql<UserResetPasswordToken<'_>>>::delete_2(
                         &database_2_postgresql_client,
                         By1_ {
                             user__id: incoming.user__id,
@@ -192,7 +193,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                     file!(),
                 ),
             )?;
-            let mut user = match PostgresqlRepository::<User<'_>>::find_5(
+            let mut user = match Repository::<Postgresql<User<'_>>>::find_5(
                 &database_1_postgresql_client,
                 By3 {
                     user__id: incoming.user__id,
@@ -230,7 +231,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                     file!(),
                 ),
             )??;
-            PostgresqlRepository::<User<'_>>::update_1(
+            Repository::<Postgresql<User<'_>>>::update_1(
                 &database_1_postgresql_client,
                 Update1 {
                     user__password_hash: user.password_hash.as_str(),
@@ -240,7 +241,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                 },
             )
             .await?;
-            PostgresqlRepository::<UserAccessRefreshToken<'_>>::delete_2(
+            Repository::<Postgresql<UserAccessRefreshToken<'_>>>::delete_2(
                 &database_2_postgresql_client,
                 By1 {
                     user__id: incoming.user__id,
@@ -251,7 +252,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
             let database_2_postgresql_connection_pool = inner.database_2_postgresql_connection_pool.clone();
             Spawner::<TokioNonBlockingTask>::spawn_into_background(
                 async move {
-                    PostgresqlRepository::<UserResetPasswordToken<'_>>::delete_2(
+                    Repository::<Postgresql<UserResetPasswordToken<'_>>>::delete_2(
                         &database_2_postgresql_connection_pool.get().await.into_runtime(
                             Backtrace::new(
                                 line!(),

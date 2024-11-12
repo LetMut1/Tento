@@ -60,7 +60,7 @@ use crate::{
                     Update4,
                 },
                 user_device::Insert1 as UserDeviceInsert1,
-                PostgresqlRepository,
+                Postgresql,
             },
             service::{
                 resolver::{
@@ -75,6 +75,7 @@ use crate::{
         },
     },
 };
+use crate::infrastructure_layer::functionality::repository::Repository;
 use dedicated_crate::{
     action_processor_incoming_outcoming::action_processor::user_authorization::authorize_by_last_step::{
         Incoming,
@@ -134,7 +135,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                     file!(),
                 ),
             )?;
-            let user_authorization_token = PostgresqlRepository::<UserAuthorizationToken<'_>>::find_2(
+            let user_authorization_token = Repository::<Postgresql<UserAuthorizationToken<'_>>>::find_2(
                 &database_2_postgresql_client,
                 By1 {
                     user__id: incoming.user__id,
@@ -149,7 +150,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                 }
             };
             if Resolver::<Expiration>::is_expired(user_authorization_token_.expires_at) {
-                PostgresqlRepository::<UserAuthorizationToken<'_>>::delete_1(
+                Repository::<Postgresql<UserAuthorizationToken<'_>>>::delete_1(
                     &database_2_postgresql_client,
                     By1 {
                         user__id: incoming.user__id,
@@ -167,7 +168,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                     ),
                 )?;
                 if user_authorization_token_.wrong_enter_tries_quantity < UserAuthorizationToken_WrongEnterTriesQuantity::LIMIT {
-                    PostgresqlRepository::<UserAuthorizationToken<'_>>::update_4(
+                    Repository::<Postgresql<UserAuthorizationToken<'_>>>::update_4(
                         &database_2_postgresql_client,
                         Update4 {
                             user_authorization_token__wrong_enter_tries_quantity: user_authorization_token_.wrong_enter_tries_quantity,
@@ -179,7 +180,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                     )
                     .await?;
                 } else {
-                    PostgresqlRepository::<UserAuthorizationToken<'_>>::delete_1(
+                    Repository::<Postgresql<UserAuthorizationToken<'_>>>::delete_1(
                         &database_2_postgresql_client,
                         By1 {
                             user__id: incoming.user__id,
@@ -202,7 +203,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                     file!(),
                 ),
             )?;
-            if !PostgresqlRepository::<User<'_>>::is_exist_3(
+            if !Repository::<Postgresql<User<'_>>>::is_exist_3(
                 &database_1_postgresql_client,
                 By3 {
                     user__id: incoming.user__id,
@@ -223,7 +224,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
             let user_access_refresh_token__expires_at = Generator::<UserAccessRefreshToken_ExpiresAt>::generate()?;
             let user_access_refresh_token__updated_at = Generator::<UserAccessRefreshToken_UpdatedAt>::generate();
             // TODO  TRANZACTION
-            let user_access_refresh_token = match PostgresqlRepository::<UserAccessRefreshToken<'_>>::find_1(
+            let user_access_refresh_token = match Repository::<Postgresql<UserAccessRefreshToken<'_>>>::find_1(
                 &database_2_postgresql_client,
                 By2 {
                     user__id: incoming.user__id,
@@ -237,7 +238,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                     user_access_refresh_token_.obfuscation_value = user_access_refresh_token__obfuscation_value;
                     user_access_refresh_token_.expires_at = user_access_refresh_token__expires_at;
                     user_access_refresh_token_.updated_at = user_access_refresh_token__updated_at;
-                    PostgresqlRepository::<UserAccessRefreshToken<'_>>::update_1(
+                    Repository::<Postgresql<UserAccessRefreshToken<'_>>>::update_1(
                         &database_2_postgresql_client,
                         Update1 {
                             user_access_token__id: user_access_refresh_token_.user_access_token__id.as_ref(),
@@ -254,7 +255,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                     user_access_refresh_token_
                 }
                 Option::None => {
-                    let user_access_refresh_token_ = PostgresqlRepository::<UserAccessRefreshToken<'_>>::create_1(
+                    let user_access_refresh_token_ = Repository::<Postgresql<UserAccessRefreshToken<'_>>>::create_1(
                         &database_2_postgresql_client,
                         UserAccessRefreshTokenInsert1 {
                             user__id: incoming.user__id,
@@ -282,7 +283,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
             let database_2_postgresql_connection_pool = inner.database_2_postgresql_connection_pool.clone();
             Spawner::<TokioNonBlockingTask>::spawn_into_background(
                 async move {
-                    let user_device = PostgresqlRepository::<UserDevice>::create_1(
+                    let user_device = Repository::<Postgresql<UserDevice>>::create_1(
                         &database_1_postgresql_connection_pool.get().await.into_runtime(
                             Backtrace::new(
                                 line!(),
@@ -295,7 +296,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                         },
                     )
                     .await?;
-                    PostgresqlRepository::<UserAuthorizationToken<'_>>::delete_1(
+                    Repository::<Postgresql<UserAuthorizationToken<'_>>>::delete_1(
                         &database_2_postgresql_connection_pool.get().await.into_runtime(
                             Backtrace::new(
                                 line!(),

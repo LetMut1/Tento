@@ -44,7 +44,7 @@ use crate::{
                     Update2,
                     Update3,
                 },
-                PostgresqlRepository,
+                Postgresql,
             },
             service::{
                 resolver::{
@@ -59,6 +59,7 @@ use crate::{
         },
     },
 };
+use crate::infrastructure_layer::functionality::repository::Repository;
 use dedicated_crate::{
     action_processor_incoming_outcoming::action_processor::user_authorization::reset_password_by_first_step::{
         Incoming,
@@ -99,7 +100,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
                     ),
                 );
             }
-            let user = PostgresqlRepository::<User<'_>>::find_4(
+            let user = Repository::<Postgresql<User<'_>>>::find_4(
                 &inner.database_1_postgresql_connection_pool.get().await.into_runtime(
                     Backtrace::new(
                         line!(),
@@ -124,7 +125,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
                 ),
             )?;
             let (user_reset_password_token__value, user_reset_password_token__can_be_resent_from, user_reset_password_token__wrong_enter_tries_quantity, can_send) =
-                match PostgresqlRepository::<UserResetPasswordToken<'_>>::find_1(
+                match Repository::<Postgresql<UserResetPasswordToken<'_>>>::find_1(
                     &database_2_postgresql_client,
                     By1 {
                         user__id: user_.id,
@@ -156,7 +157,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
                             false
                         };
                         if need_to_update_1 && need_to_update_2 {
-                            PostgresqlRepository::<UserResetPasswordToken<'_>>::update_1(
+                            Repository::<Postgresql<UserResetPasswordToken<'_>>>::update_1(
                                 &database_2_postgresql_client,
                                 Update1 {
                                     user_reset_password_token__value: user_reset_password_token.value.as_str(),
@@ -173,7 +174,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
                             .await?;
                         } else {
                             if need_to_update_1 {
-                                PostgresqlRepository::<UserResetPasswordToken<'_>>::update_2(
+                                Repository::<Postgresql<UserResetPasswordToken<'_>>>::update_2(
                                     &database_2_postgresql_client,
                                     Update2 {
                                         user_reset_password_token__can_be_resent_from: user_reset_password_token.can_be_resent_from,
@@ -186,7 +187,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
                                 .await?;
                             }
                             if need_to_update_2 {
-                                PostgresqlRepository::<UserResetPasswordToken<'_>>::update_3(
+                                Repository::<Postgresql<UserResetPasswordToken<'_>>>::update_3(
                                     &database_2_postgresql_client,
                                     Update3 {
                                         user_reset_password_token__value: user_reset_password_token.value.as_str(),
@@ -210,7 +211,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
                         )
                     }
                     Option::None => {
-                        let user_reset_password_token = PostgresqlRepository::<UserResetPasswordToken<'_>>::create_1(
+                        let user_reset_password_token = Repository::<Postgresql<UserResetPasswordToken<'_>>>::create_1(
                             &database_2_postgresql_client,
                             Insert1 {
                                 user__id: user_.id,

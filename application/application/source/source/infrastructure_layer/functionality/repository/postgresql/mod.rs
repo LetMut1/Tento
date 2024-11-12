@@ -10,6 +10,6 @@ pub mod user_device;
 pub mod user_registration_token;
 pub mod user_reset_password_token;
 use std::marker::PhantomData;
-pub struct PostgresqlRepository<E> {
+pub struct Postgresql<E> {
     _entity: PhantomData<E>,
 }

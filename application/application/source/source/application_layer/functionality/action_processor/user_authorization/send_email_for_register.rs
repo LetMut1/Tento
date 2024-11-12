@@ -34,7 +34,7 @@ use crate::{
                     By1,
                     Update2,
                 },
-                PostgresqlRepository,
+                Postgresql,
             },
             service::{
                 resolver::{
@@ -49,6 +49,7 @@ use crate::{
         },
     },
 };
+use crate::infrastructure_layer::functionality::repository::Repository;
 use dedicated_crate::{
     action_processor_incoming_outcoming::action_processor::user_authorization::send_email_for_register::{
         Incoming,
@@ -95,7 +96,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
                     file!(),
                 ),
             )?;
-            let mut user_registration_token = match PostgresqlRepository::<UserRegistrationToken<'_>>::find_3(
+            let mut user_registration_token = match Repository::<Postgresql<UserRegistrationToken<'_>>>::find_3(
                 &database_2_postgresql_client,
                 By1 {
                     user__email: incoming.user__email.as_str(),
@@ -110,7 +111,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
                 }
             };
             if Resolver::<Expiration>::is_expired(user_registration_token.expires_at) {
-                PostgresqlRepository::<UserRegistrationToken<'_>>::delete_2(
+                Repository::<Postgresql<UserRegistrationToken<'_>>>::delete_2(
                     &database_2_postgresql_client,
                     By1 {
                         user__email: incoming.user__email.as_str(),
@@ -127,7 +128,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserRegistrationToken_TimeToResendHasNotCome));
             }
             user_registration_token.can_be_resent_from = Generator::<UserRegistrationToken_CanBeResentFrom>::generate()?;
-            PostgresqlRepository::<UserRegistrationToken<'_>>::update_2(
+            Repository::<Postgresql<UserRegistrationToken<'_>>>::update_2(
                 &database_2_postgresql_client,
                 Update2 {
                     user_registration_token__can_be_resent_from: user_registration_token.can_be_resent_from,

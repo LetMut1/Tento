@@ -1,4 +1,5 @@
-use super::PostgresqlRepository;
+use super::Postgresql;
+use crate::infrastructure_layer::functionality::repository::Repository;
 use crate::{
     domain_layer::data::entity::user_access_refresh_token::UserAccessRefreshToken,
     infrastructure_layer::{
@@ -20,7 +21,7 @@ use std::{
 };
 use tokio_postgres::types::Type;
 use deadpool_postgres::Client;
-impl PostgresqlRepository<UserAccessRefreshToken<'_>> {
+impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
     pub fn create_1<'a, 'b>(
         database_2_client: &'a Client,
         insert_1: Insert1<'b>,

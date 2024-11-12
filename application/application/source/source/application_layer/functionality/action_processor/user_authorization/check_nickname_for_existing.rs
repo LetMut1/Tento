@@ -22,10 +22,11 @@ use crate::{
         },
         functionality::repository::postgresql::{
             user::By1,
-            PostgresqlRepository,
+            Postgresql,
         },
     },
 };
+use crate::infrastructure_layer::functionality::repository::Repository;
 use dedicated_crate::{
     action_processor_incoming_outcoming::action_processor::user_authorization::check_nickname_for_existing::{
         Incoming,
@@ -55,7 +56,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_CheckNicknameForExis
                     ),
                 );
             }
-            let is_exist = PostgresqlRepository::<User<'_>>::is_exist_1(
+            let is_exist = Repository::<Postgresql<User<'_>>>::is_exist_1(
                 &inner.database_1_postgresql_connection_pool.get().await.into_runtime(
                     Backtrace::new(
                         line!(),

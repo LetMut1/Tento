@@ -1,4 +1,5 @@
-use super::PostgresqlRepository;
+use super::Postgresql;
+use crate::infrastructure_layer::functionality::repository::Repository;
 use crate::{
     domain_layer::data::entity::user_reset_password_token::{
         UserResetPasswordToken,
@@ -25,7 +26,7 @@ use std::{
 };
 use tokio_postgres::types::Type;
 use deadpool_postgres::Client;
-impl PostgresqlRepository<UserResetPasswordToken<'_>> {
+impl Repository<Postgresql<UserResetPasswordToken<'_>>> {
     pub fn create_1<'a, 'b>(
         database_2_client: &'a Client,
         insert_1: Insert1<'b>,

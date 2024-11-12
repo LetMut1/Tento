@@ -25,10 +25,11 @@ use crate::{
         },
         functionality::repository::postgresql::{
             user_access_refresh_token::By2,
-            PostgresqlRepository,
+            Postgresql,
         },
     },
 };
+use crate::infrastructure_layer::functionality::repository::Repository;
 use dedicated_crate::{
     action_processor_incoming_outcoming::action_processor::user_authorization::deauthorize_from_one_device::{
         Incoming,
@@ -62,7 +63,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_DeauthorizeFromOneDe
                     return Result::Ok(UnifiedReport::precedent(Precedent::UserAccessToken_InUserAccessTokenBlackList));
                 }
             };
-            PostgresqlRepository::<UserAccessRefreshToken<'_>>::delete_1(
+            Repository::<Postgresql<UserAccessRefreshToken<'_>>>::delete_1(
                 &inner.database_2_postgresql_connection_pool.get().await.into_runtime(
                     Backtrace::new(
                         line!(),

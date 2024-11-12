@@ -44,7 +44,7 @@ use crate::{
                     Update2,
                     Update3,
                 },
-                PostgresqlRepository,
+                Postgresql,
             },
             service::{
                 resolver::{
@@ -59,6 +59,7 @@ use crate::{
         },
     },
 };
+use crate::infrastructure_layer::functionality::repository::Repository;
 use dedicated_crate::{
     action_processor_incoming_outcoming::action_processor::user_authorization::register_by_first_step::{
         Incoming,
@@ -99,7 +100,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                     ),
                 );
             }
-            if PostgresqlRepository::<User<'_>>::is_exist_2(
+            if Repository::<Postgresql<User<'_>>>::is_exist_2(
                 &inner.database_1_postgresql_connection_pool.get().await.into_runtime(
                     Backtrace::new(
                         line!(),
@@ -121,7 +122,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                 ),
             )?;
             let (user_registration_token__value, user_registration_token__can_be_resent_from, user_registration_token__wrong_enter_tries_quantity, can_send) =
-                match PostgresqlRepository::<UserRegistrationToken<'_>>::find_1(
+                match Repository::<Postgresql<UserRegistrationToken<'_>>>::find_1(
                     &database_2_postgresql_client,
                     By1 {
                         user__email: incoming.user__email.as_str(),
@@ -153,7 +154,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                             false
                         };
                         if need_to_update_1 && need_to_update_2 {
-                            PostgresqlRepository::<UserRegistrationToken<'_>>::update_1(
+                            Repository::<Postgresql<UserRegistrationToken<'_>>>::update_1(
                                 &database_2_postgresql_client,
                                 Update1 {
                                     user_registration_token__value: user_registration_token.value.as_str(),
@@ -170,7 +171,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                             .await?;
                         } else {
                             if need_to_update_1 {
-                                PostgresqlRepository::<UserRegistrationToken<'_>>::update_2(
+                                Repository::<Postgresql<UserRegistrationToken<'_>>>::update_2(
                                     &database_2_postgresql_client,
                                     Update2 {
                                         user_registration_token__can_be_resent_from: user_registration_token.can_be_resent_from,
@@ -183,7 +184,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                                 .await?;
                             }
                             if need_to_update_2 {
-                                PostgresqlRepository::<UserRegistrationToken<'_>>::update_3(
+                                Repository::<Postgresql<UserRegistrationToken<'_>>>::update_3(
                                     &database_2_postgresql_client,
                                     Update3 {
                                         user_registration_token__value: user_registration_token.value.as_str(),
@@ -207,7 +208,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                         )
                     }
                     Option::None => {
-                        let user_registration_token = PostgresqlRepository::<UserRegistrationToken<'_>>::create_1(
+                        let user_registration_token = Repository::<Postgresql<UserRegistrationToken<'_>>>::create_1(
                             &database_2_postgresql_client,
                             Insert1 {
                                 user__email: incoming.user__email.as_str(),

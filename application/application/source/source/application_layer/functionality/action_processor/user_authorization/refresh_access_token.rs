@@ -38,7 +38,7 @@ use crate::{
                     By2,
                     Update1,
                 },
-                PostgresqlRepository,
+                Postgresql,
             },
             service::resolver::{
                 Expiration,
@@ -47,6 +47,7 @@ use crate::{
         },
     },
 };
+use crate::infrastructure_layer::functionality::repository::Repository;
 use dedicated_crate::{
     action_processor_incoming_outcoming::action_processor::user_authorization::refresh_access_token::{
         Incoming,
@@ -80,7 +81,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
                     file!(),
                 ),
             )?;
-            let mut user_access_refresh_token = match PostgresqlRepository::<UserAccessRefreshToken<'_>>::find_1(
+            let mut user_access_refresh_token = match Repository::<Postgresql<UserAccessRefreshToken<'_>>>::find_1(
                 &database_2_postgresql_client,
                 By2 {
                     user__id: user_access_token.user__id,
@@ -110,7 +111,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
                 );
             }
             if Resolver::<Expiration>::is_expired(user_access_refresh_token.expires_at) {
-                PostgresqlRepository::<UserAccessRefreshToken<'_>>::delete_1(
+                Repository::<Postgresql<UserAccessRefreshToken<'_>>>::delete_1(
                     &database_2_postgresql_client,
                     By2 {
                         user__id: user_access_token.user__id,
@@ -130,7 +131,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
             user_access_refresh_token.obfuscation_value = Generator::<UserAccessRefreshToken_ObfuscationValue>::generate();
             user_access_refresh_token.expires_at = Generator::<UserAccessRefreshToken_ExpiresAt>::generate()?;
             user_access_refresh_token.updated_at = Generator::<UserAccessRefreshToken_UpdatedAt>::generate();
-            PostgresqlRepository::<UserAccessRefreshToken<'_>>::update_1(
+            Repository::<Postgresql<UserAccessRefreshToken<'_>>>::update_1(
                 &database_2_postgresql_client,
                 Update1 {
                     user_access_token__id: user_access_refresh_token.user_access_token__id.as_ref(),

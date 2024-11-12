@@ -1,4 +1,5 @@
-use super::PostgresqlRepository;
+use super::Postgresql;
+use crate::infrastructure_layer::functionality::repository::Repository;
 use crate::infrastructure_layer::{
     data::{
         aggregate_error::{
@@ -26,7 +27,7 @@ use dedicated_crate::{
 use std::future::Future;
 use tokio_postgres::types::Type;
 use deadpool_postgres::Client;
-impl PostgresqlRepository<Common1> {
+impl Repository<Postgresql<Common1>> {
     pub fn find_1<'a>(database_1_client: &'a Client, by_1: By1<'a>, limit: i16) -> impl Future<Output = Result<Vec<Common1>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let mut query = "\

@@ -38,7 +38,7 @@ use crate::{
                     By1,
                     Update2,
                 },
-                PostgresqlRepository,
+                Postgresql,
             },
             service::{
                 resolver::{
@@ -53,6 +53,7 @@ use crate::{
         },
     },
 };
+use crate::infrastructure_layer::functionality::repository::Repository;
 use dedicated_crate::{
     action_processor_incoming_outcoming::action_processor::user_authorization::send_email_for_reset_password::{
         Incoming,
@@ -93,7 +94,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
                     ),
                 );
             }
-            let user = match PostgresqlRepository::<User<'_>>::find_6(
+            let user = match Repository::<Postgresql<User<'_>>>::find_6(
                 &inner.database_1_postgresql_connection_pool.get().await.into_runtime(
                     Backtrace::new(
                         line!(),
@@ -117,7 +118,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
                     file!(),
                 ),
             )?;
-            let mut user_reset_password_token = match PostgresqlRepository::<UserResetPasswordToken<'_>>::find_3(
+            let mut user_reset_password_token = match Repository::<Postgresql<UserResetPasswordToken<'_>>>::find_3(
                 &database_2_postgresql_client,
                 By1 {
                     user__id: incoming.user__id,
@@ -132,7 +133,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
                 }
             };
             if Resolver::<Expiration>::is_expired(user_reset_password_token.expires_at) {
-                PostgresqlRepository::<UserResetPasswordToken<'_>>::delete_2(
+                Repository::<Postgresql<UserResetPasswordToken<'_>>>::delete_2(
                     &database_2_postgresql_client,
                     By1 {
                         user__id: incoming.user__id,
@@ -149,7 +150,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_TimeToResendHasNotCome));
             }
             user_reset_password_token.can_be_resent_from = Generator::<UserResetPasswordToken_CanBeResentFrom>::generate()?;
-            PostgresqlRepository::<UserResetPasswordToken<'_>>::update_2(
+            Repository::<Postgresql<UserResetPasswordToken<'_>>>::update_2(
                 &database_2_postgresql_client,
                 Update2 {
                     user_reset_password_token__can_be_resent_from: user_reset_password_token.can_be_resent_from,

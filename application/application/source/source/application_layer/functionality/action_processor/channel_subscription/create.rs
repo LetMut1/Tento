@@ -35,7 +35,7 @@ use crate::{
             repository::postgresql::{
                 channel::By1,
                 channel_subscription::Insert1,
-                PostgresqlRepository,
+                Postgresql,
             },
             service::resolver::{
                     PostgresqlTransaction,
@@ -46,6 +46,7 @@ use crate::{
         },
     },
 };
+use crate::infrastructure_layer::functionality::repository::Repository;
 use dedicated_crate::{
     action_processor_incoming_outcoming::action_processor::channel_subscription::create::{
         Incoming,
@@ -95,7 +96,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
                     file!(),
                 ),
             )?;
-            let channel = match PostgresqlRepository::<Channel<'_>>::find_1(
+            let channel = match Repository::<Postgresql<Channel<'_>>>::find_1(
                 &database_1_postgresql_client,
                 By1 {
                     channel__id: incoming.channel__id,
@@ -119,7 +120,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
                 TransactionIsolationLevel::ReadCommitted,
             )
             .await?;
-            if let Result::Err(aggregate_error) = PostgresqlRepository::<ChannelSubscription>::create_1(
+            if let Result::Err(aggregate_error) = Repository::<Postgresql<ChannelSubscription>>::create_1(
                 postgresql_transaction.get_client(),
                 Insert1 {
                     user__id: user_access_token.user__id,
@@ -132,7 +133,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
                 Resolver::<PostgresqlTransaction<'_>>::rollback(postgresql_transaction).await?;
                 return Result::Err(aggregate_error);
             }
-            if let Result::Err(aggregate_error) = PostgresqlRepository::<Channel<'_>>::update_1(
+            if let Result::Err(aggregate_error) = Repository::<Postgresql<Channel<'_>>>::update_1(
                 postgresql_transaction.get_client(),
                 By1 {
                     channel__id: incoming.channel__id,
