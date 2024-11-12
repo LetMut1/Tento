@@ -10,7 +10,7 @@ use crate::{
             },
             capture::Capture,
         },
-        functionality::service::postgresql_prepared_statemant_parameter_convertation_resolver::PostgresqlPreparedStatementParameterConvertationResolver,
+        functionality::service::postgresql_prepared_statemant_parameter_storage::PostgresqlPreparedStatementParameterStorage,
     },
 };
 use dedicated_crate::{
@@ -36,28 +36,28 @@ impl PostgresqlRepository<ChannelOuterLink> {
                         $3,\
                         $4\
                     );";
-            let mut postgresql_prepared_statemant_parameter_convertation_resolver = PostgresqlPreparedStatementParameterConvertationResolver::new();
-            postgresql_prepared_statemant_parameter_convertation_resolver
-                .add_parameter(
+            let mut postgresql_prepared_statemant_parameter_storage = PostgresqlPreparedStatementParameterStorage::new();
+            postgresql_prepared_statemant_parameter_storage
+                .add(
                     &insert_1.channel_outer_link__from,
                     Type::INT8,
                 )
-                .add_parameter(
+                .add(
                     &insert_1.channel_outer_link__alias,
                     Type::TEXT,
                 )
-                .add_parameter(
+                .add(
                     &insert_1.channel_outer_link__address,
                     Type::TEXT,
                 )
-                .add_parameter(
+                .add(
                     &insert_1.channel_outer_link__created_at,
                     Type::INT8,
                 );
             let statement = database_1_client
                 .prepare_typed_cached(
                     query,
-                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
+                    postgresql_prepared_statemant_parameter_storage.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -69,7 +69,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
             database_1_client
                 .query(
                     &statement,
-                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
+                    postgresql_prepared_statemant_parameter_storage.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -102,20 +102,20 @@ impl PostgresqlRepository<ChannelOuterLink> {
                 WHERE \
                     col.from_ = $1 \
                 LIMIT $2";
-            let mut postgresql_prepared_statemant_parameter_convertation_resolver = PostgresqlPreparedStatementParameterConvertationResolver::new();
-            postgresql_prepared_statemant_parameter_convertation_resolver
-                .add_parameter(
+            let mut postgresql_prepared_statemant_parameter_storage = PostgresqlPreparedStatementParameterStorage::new();
+            postgresql_prepared_statemant_parameter_storage
+                .add(
                     &by_1.channel_outer_link__from,
                     Type::INT8,
                 )
-                .add_parameter(
+                .add(
                     &limit,
                     Type::INT2,
                 );
             let statement = database_1_client
                 .prepare_typed_cached(
                     query,
-                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
+                    postgresql_prepared_statemant_parameter_storage.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -127,7 +127,7 @@ impl PostgresqlRepository<ChannelOuterLink> {
             let row_registry = database_1_client
                 .query(
                     &statement,
-                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
+                    postgresql_prepared_statemant_parameter_storage.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(

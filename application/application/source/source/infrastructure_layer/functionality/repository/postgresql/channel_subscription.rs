@@ -10,7 +10,7 @@ use crate::{
             },
             capture::Capture,
         },
-        functionality::service::postgresql_prepared_statemant_parameter_convertation_resolver::PostgresqlPreparedStatementParameterConvertationResolver,
+        functionality::service::postgresql_prepared_statemant_parameter_storage::PostgresqlPreparedStatementParameterStorage,
     },
 };
 use dedicated_crate::void::Void;
@@ -31,24 +31,24 @@ impl PostgresqlRepository<ChannelSubscription> {
                         $2,\
                         $3\
                     );";
-            let mut postgresql_prepared_statemant_parameter_convertation_resolver = PostgresqlPreparedStatementParameterConvertationResolver::new();
-            postgresql_prepared_statemant_parameter_convertation_resolver
-                .add_parameter(
+            let mut postgresql_prepared_statemant_parameter_storage = PostgresqlPreparedStatementParameterStorage::new();
+            postgresql_prepared_statemant_parameter_storage
+                .add(
                     &insert_1.user__id,
                     Type::INT8,
                 )
-                .add_parameter(
+                .add(
                     &insert_1.channel__id,
                     Type::INT8,
                 )
-                .add_parameter(
+                .add(
                     &insert_1.channel_subscription__created_at,
                     Type::INT8,
                 );
             let statement = database_1_client
                 .prepare_typed_cached(
                     query,
-                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
+                    postgresql_prepared_statemant_parameter_storage.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -60,7 +60,7 @@ impl PostgresqlRepository<ChannelSubscription> {
             database_1_client
                 .query(
                     &statement,
-                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
+                    postgresql_prepared_statemant_parameter_storage.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -87,20 +87,20 @@ impl PostgresqlRepository<ChannelSubscription> {
                 WHERE \
                     cs.user__id = $1 \
                     AND cs.channel__id = $2;";
-            let mut postgresql_prepared_statemant_parameter_convertation_resolver = PostgresqlPreparedStatementParameterConvertationResolver::new();
-            postgresql_prepared_statemant_parameter_convertation_resolver
-                .add_parameter(
+            let mut postgresql_prepared_statemant_parameter_storage = PostgresqlPreparedStatementParameterStorage::new();
+            postgresql_prepared_statemant_parameter_storage
+                .add(
                     &by_1.user__id,
                     Type::INT8,
                 )
-                .add_parameter(
+                .add(
                     &by_1.channel__id,
                     Type::INT8,
                 );
             let statement = database_1_client
                 .prepare_typed_cached(
                     query,
-                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
+                    postgresql_prepared_statemant_parameter_storage.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -112,7 +112,7 @@ impl PostgresqlRepository<ChannelSubscription> {
             let row_registry = database_1_client
                 .query(
                     &statement,
-                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
+                    postgresql_prepared_statemant_parameter_storage.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(

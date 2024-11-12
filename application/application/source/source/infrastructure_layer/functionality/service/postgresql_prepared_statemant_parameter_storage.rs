@@ -2,18 +2,18 @@ use tokio_postgres::types::{
     ToSql,
     Type,
 };
-pub struct PostgresqlPreparedStatementParameterConvertationResolver<'a, 'b> {
+pub struct PostgresqlPreparedStatementParameterStorage<'a, 'b> {
     parameter_registry: Vec<&'a (dyn ToSql + Sync + 'b)>,
     parameter_type_registry: Vec<Type>,
 }
-impl<'a, 'b> PostgresqlPreparedStatementParameterConvertationResolver<'a, 'b> {
+impl<'a, 'b> PostgresqlPreparedStatementParameterStorage<'a, 'b> {
     pub fn new() -> Self {
         return Self {
             parameter_registry: vec![],
             parameter_type_registry: vec![],
         };
     }
-    pub fn add_parameter<'c>(&'c mut self, parameter_value: &'a (dyn ToSql + Sync + 'b), patameter_type: Type) -> &'c mut Self {
+    pub fn add<'c>(&'c mut self, parameter_value: &'a (dyn ToSql + Sync + 'b), patameter_type: Type) -> &'c mut Self {
         self.parameter_registry.push(parameter_value);
         self.parameter_type_registry.push(patameter_type);
         return self;
