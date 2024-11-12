@@ -9,14 +9,12 @@ use crate::infrastructure_layer::{
         },
         capture::Capture,
     },
-    functionality::service::{
-        counter::{
-            Counter,
-            Counter_,
-        },
-        postgresql_prepared_statemant_parameter_storage::PostgresqlPreparedStatementParameterStorage,
+    functionality::service::counter::{
+        Counter,
+        Counter_,
     },
 };
+use super::PostgresqlPreparedStatementParameterStorage;
 use dedicated_crate::{
     action_processor_incoming_outcoming::{
         Channel1,

@@ -11,9 +11,9 @@ use crate::{
             },
             capture::Capture,
         },
-        functionality::service::postgresql_prepared_statemant_parameter_storage::PostgresqlPreparedStatementParameterStorage,
     },
 };
+use super::PostgresqlPreparedStatementParameterStorage;
 use dedicated_crate::{
     action_processor_incoming_outcoming::ChannelOuterLink1,
     void::Void,

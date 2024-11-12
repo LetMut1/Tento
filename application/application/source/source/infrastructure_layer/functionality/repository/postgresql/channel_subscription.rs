@@ -11,9 +11,9 @@ use crate::{
             },
             capture::Capture,
         },
-        functionality::service::postgresql_prepared_statemant_parameter_storage::PostgresqlPreparedStatementParameterStorage,
     },
 };
+use super::PostgresqlPreparedStatementParameterStorage;
 use dedicated_crate::void::Void;
 use std::future::Future;
 use tokio_postgres::types::Type;
