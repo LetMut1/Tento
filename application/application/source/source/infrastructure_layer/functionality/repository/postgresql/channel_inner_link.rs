@@ -1,6 +1,6 @@
 use super::{
     Postgresql,
-    PostgresqlPreparedStatementParameterStorage,
+    PreparedStatementParameterStorage,
 };
 use crate::{
     domain_layer::data::entity::channel_inner_link::ChannelInnerLink,
@@ -37,8 +37,8 @@ impl Repository<Postgresql<ChannelInnerLink>> {
                         $2,\
                         $3\
                     );";
-            let mut postgresql_prepared_statemant_parameter_storage = PostgresqlPreparedStatementParameterStorage::new();
-            postgresql_prepared_statemant_parameter_storage
+            let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
+            prepared_statemant_parameter_storage
                 .add(
                     &insert_1.channel_inner_link__from,
                     Type::INT8,
@@ -54,7 +54,7 @@ impl Repository<Postgresql<ChannelInnerLink>> {
             let statement = database_1_client
                 .prepare_typed_cached(
                     query,
-                    postgresql_prepared_statemant_parameter_storage.get_parameter_type_registry(),
+                    prepared_statemant_parameter_storage.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -66,7 +66,7 @@ impl Repository<Postgresql<ChannelInnerLink>> {
             database_1_client
                 .query(
                     &statement,
-                    postgresql_prepared_statemant_parameter_storage.get_parameter_registry(),
+                    prepared_statemant_parameter_storage.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -94,8 +94,8 @@ impl Repository<Postgresql<ChannelInnerLink>> {
                 WHERE \
                     cil.from_ = $1 \
                 LIMIT $2";
-            let mut postgresql_prepared_statemant_parameter_storage = PostgresqlPreparedStatementParameterStorage::new();
-            postgresql_prepared_statemant_parameter_storage
+            let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
+            prepared_statemant_parameter_storage
                 .add(
                     &by_1.channel_inner_link__from,
                     Type::INT8,
@@ -107,7 +107,7 @@ impl Repository<Postgresql<ChannelInnerLink>> {
             let statement = database_1_client
                 .prepare_typed_cached(
                     query,
-                    postgresql_prepared_statemant_parameter_storage.get_parameter_type_registry(),
+                    prepared_statemant_parameter_storage.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -119,7 +119,7 @@ impl Repository<Postgresql<ChannelInnerLink>> {
             let row_registry = database_1_client
                 .query(
                     &statement,
-                    postgresql_prepared_statemant_parameter_storage.get_parameter_registry(),
+                    prepared_statemant_parameter_storage.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(

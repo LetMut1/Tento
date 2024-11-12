@@ -1,6 +1,6 @@
 use super::{
     Postgresql,
-    PostgresqlPreparedStatementParameterStorage,
+    PreparedStatementParameterStorage,
 };
 use crate::infrastructure_layer::{
     data::{
@@ -57,8 +57,8 @@ impl Repository<Postgresql<Common1>> {
                 1,
             );
             let wildcard = format!("{}%", by_1.channel__name,);
-            let mut postgresql_prepared_statemant_parameter_storage = PostgresqlPreparedStatementParameterStorage::new();
-            postgresql_prepared_statemant_parameter_storage
+            let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
+            prepared_statemant_parameter_storage
                 .add(
                     &by_1.user__id,
                     Type::INT8,
@@ -78,7 +78,7 @@ impl Repository<Postgresql<Common1>> {
                     query.as_str(),
                     counter.get_next_value_unchecked(),
                 );
-                postgresql_prepared_statemant_parameter_storage.add(
+                prepared_statemant_parameter_storage.add(
                     requery___channel__name,
                     Type::TEXT,
                 );
@@ -90,14 +90,14 @@ impl Repository<Postgresql<Common1>> {
                 query.as_str(),
                 counter.get_next_value_unchecked(),
             );
-            postgresql_prepared_statemant_parameter_storage.add(
+            prepared_statemant_parameter_storage.add(
                 &limit,
                 Type::INT2,
             );
             let statement = database_1_client
                 .prepare_typed_cached(
                     query.as_str(),
-                    postgresql_prepared_statemant_parameter_storage.get_parameter_type_registry(),
+                    prepared_statemant_parameter_storage.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -109,7 +109,7 @@ impl Repository<Postgresql<Common1>> {
             let row_registry = database_1_client
                 .query(
                     &statement,
-                    postgresql_prepared_statemant_parameter_storage.get_parameter_registry(),
+                    prepared_statemant_parameter_storage.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -205,8 +205,8 @@ impl Repository<Postgresql<Common1>> {
                 1,
             );
             let wildcard = format!("{}%", by_2.channel__name,);
-            let mut postgresql_prepared_statemant_parameter_storage = PostgresqlPreparedStatementParameterStorage::new();
-            postgresql_prepared_statemant_parameter_storage
+            let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
+            prepared_statemant_parameter_storage
                 .add(
                     &by_2.user__id,
                     Type::INT8,
@@ -222,7 +222,7 @@ impl Repository<Postgresql<Common1>> {
                     query.as_str(),
                     counter.get_next_value_unchecked(),
                 );
-                postgresql_prepared_statemant_parameter_storage.add(
+                prepared_statemant_parameter_storage.add(
                     requery___channel__name,
                     Type::TEXT,
                 );
@@ -234,14 +234,14 @@ impl Repository<Postgresql<Common1>> {
                 query.as_str(),
                 counter.get_next_value_unchecked(),
             );
-            postgresql_prepared_statemant_parameter_storage.add(
+            prepared_statemant_parameter_storage.add(
                 &limit,
                 Type::INT2,
             );
             let statement = database_1_client
                 .prepare_typed_cached(
                     query.as_str(),
-                    postgresql_prepared_statemant_parameter_storage.get_parameter_type_registry(),
+                    prepared_statemant_parameter_storage.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -253,7 +253,7 @@ impl Repository<Postgresql<Common1>> {
             let row_registry = database_1_client
                 .query(
                     &statement,
-                    postgresql_prepared_statemant_parameter_storage.get_parameter_registry(),
+                    prepared_statemant_parameter_storage.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -343,8 +343,8 @@ impl Repository<Postgresql<Common1>> {
                 1,
                 1,
             );
-            let mut postgresql_prepared_statemant_parameter_storage = PostgresqlPreparedStatementParameterStorage::new();
-            postgresql_prepared_statemant_parameter_storage.add(
+            let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
+            prepared_statemant_parameter_storage.add(
                 &by_3.user__id,
                 Type::INT8,
             );
@@ -357,7 +357,7 @@ impl Repository<Postgresql<Common1>> {
                     query.as_str(),
                     counter.get_next_value_unchecked(),
                 );
-                postgresql_prepared_statemant_parameter_storage.add(
+                prepared_statemant_parameter_storage.add(
                     &requery___channel__id,
                     Type::INT8,
                 );
@@ -369,14 +369,14 @@ impl Repository<Postgresql<Common1>> {
                 query.as_str(),
                 counter.get_next_value_unchecked(),
             );
-            postgresql_prepared_statemant_parameter_storage.add(
+            prepared_statemant_parameter_storage.add(
                 &limit,
                 Type::INT2,
             );
             let statement = database_1_client
                 .prepare_typed_cached(
                     query.as_str(),
-                    postgresql_prepared_statemant_parameter_storage.get_parameter_type_registry(),
+                    prepared_statemant_parameter_storage.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -388,7 +388,7 @@ impl Repository<Postgresql<Common1>> {
             let row_registry = database_1_client
                 .query(
                     &statement,
-                    postgresql_prepared_statemant_parameter_storage.get_parameter_registry(),
+                    prepared_statemant_parameter_storage.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(

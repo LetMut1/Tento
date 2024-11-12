@@ -1,6 +1,6 @@
 use super::{
     Postgresql,
-    PostgresqlPreparedStatementParameterStorage,
+    PreparedStatementParameterStorage,
 };
 use crate::{
     domain_layer::data::entity::user::{
@@ -50,8 +50,8 @@ impl Repository<Postgresql<User<'_>>> {
                 ) \
                 RETURNING \
                     u.id AS i;";
-            let mut postgresql_prepared_statemant_parameter_storage = PostgresqlPreparedStatementParameterStorage::new();
-            postgresql_prepared_statemant_parameter_storage
+            let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
+            prepared_statemant_parameter_storage
                 .add(
                     &insert_1.user__email,
                     Type::TEXT,
@@ -71,7 +71,7 @@ impl Repository<Postgresql<User<'_>>> {
             let statement = database_1_client
                 .prepare_typed_cached(
                     query,
-                    postgresql_prepared_statemant_parameter_storage.get_parameter_type_registry(),
+                    prepared_statemant_parameter_storage.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -83,7 +83,7 @@ impl Repository<Postgresql<User<'_>>> {
             let row_registry = database_1_client
                 .query(
                     &statement,
-                    postgresql_prepared_statemant_parameter_storage.get_parameter_registry(),
+                    prepared_statemant_parameter_storage.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -122,8 +122,8 @@ impl Repository<Postgresql<User<'_>>> {
                     u.id = $2 \
                 RETURNING \
                     u.id AS i;";
-            let mut postgresql_prepared_statemant_parameter_storage = PostgresqlPreparedStatementParameterStorage::new();
-            postgresql_prepared_statemant_parameter_storage
+            let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
+            prepared_statemant_parameter_storage
                 .add(
                     &update_1.user__password_hash,
                     Type::TEXT,
@@ -135,7 +135,7 @@ impl Repository<Postgresql<User<'_>>> {
             let statement = database_1_client
                 .prepare_typed_cached(
                     query,
-                    postgresql_prepared_statemant_parameter_storage.get_parameter_type_registry(),
+                    prepared_statemant_parameter_storage.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -147,7 +147,7 @@ impl Repository<Postgresql<User<'_>>> {
             database_1_client
                 .query(
                     &statement,
-                    postgresql_prepared_statemant_parameter_storage.get_parameter_registry(),
+                    prepared_statemant_parameter_storage.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -168,15 +168,15 @@ impl Repository<Postgresql<User<'_>>> {
                     public.user_ u \
                 WHERE \
                     u.nickname = $1;";
-            let mut postgresql_prepared_statemant_parameter_storage = PostgresqlPreparedStatementParameterStorage::new();
-            postgresql_prepared_statemant_parameter_storage.add(
+            let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
+            prepared_statemant_parameter_storage.add(
                 &by_1.user__nickname,
                 Type::TEXT,
             );
             let statement = database_1_client
                 .prepare_typed_cached(
                     query,
-                    postgresql_prepared_statemant_parameter_storage.get_parameter_type_registry(),
+                    prepared_statemant_parameter_storage.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -188,7 +188,7 @@ impl Repository<Postgresql<User<'_>>> {
             let row_registry = database_1_client
                 .query(
                     &statement,
-                    postgresql_prepared_statemant_parameter_storage.get_parameter_registry(),
+                    prepared_statemant_parameter_storage.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -212,15 +212,15 @@ impl Repository<Postgresql<User<'_>>> {
                     public.user_ u \
                 WHERE \
                     u.email = $1;";
-            let mut postgresql_prepared_statemant_parameter_storage = PostgresqlPreparedStatementParameterStorage::new();
-            postgresql_prepared_statemant_parameter_storage.add(
+            let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
+            prepared_statemant_parameter_storage.add(
                 &by_2.user__email,
                 Type::TEXT,
             );
             let statement = database_1_client
                 .prepare_typed_cached(
                     query,
-                    postgresql_prepared_statemant_parameter_storage.get_parameter_type_registry(),
+                    prepared_statemant_parameter_storage.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -232,7 +232,7 @@ impl Repository<Postgresql<User<'_>>> {
             let row_registry = database_1_client
                 .query(
                     &statement,
-                    postgresql_prepared_statemant_parameter_storage.get_parameter_registry(),
+                    prepared_statemant_parameter_storage.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -256,15 +256,15 @@ impl Repository<Postgresql<User<'_>>> {
                     public.user_ u \
                 WHERE \
                     u.id = $1;";
-            let mut postgresql_prepared_statemant_parameter_storage = PostgresqlPreparedStatementParameterStorage::new();
-            postgresql_prepared_statemant_parameter_storage.add(
+            let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
+            prepared_statemant_parameter_storage.add(
                 &by_3.user__id,
                 Type::INT8,
             );
             let statement = database_1_client
                 .prepare_typed_cached(
                     query,
-                    postgresql_prepared_statemant_parameter_storage.get_parameter_type_registry(),
+                    prepared_statemant_parameter_storage.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -276,7 +276,7 @@ impl Repository<Postgresql<User<'_>>> {
             let row_registry = database_1_client
                 .query(
                     &statement,
-                    postgresql_prepared_statemant_parameter_storage.get_parameter_registry(),
+                    prepared_statemant_parameter_storage.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -303,15 +303,15 @@ impl Repository<Postgresql<User<'_>>> {
                     public.user_ u \
                 WHERE \
                     u.nickname = $1;";
-            let mut postgresql_prepared_statemant_parameter_storage = PostgresqlPreparedStatementParameterStorage::new();
-            postgresql_prepared_statemant_parameter_storage.add(
+            let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
+            prepared_statemant_parameter_storage.add(
                 &by_1.user__nickname,
                 Type::TEXT,
             );
             let statement = database_1_client
                 .prepare_typed_cached(
                     query,
-                    postgresql_prepared_statemant_parameter_storage.get_parameter_type_registry(),
+                    prepared_statemant_parameter_storage.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -323,7 +323,7 @@ impl Repository<Postgresql<User<'_>>> {
             let row_registry = database_1_client
                 .query(
                     &statement,
-                    postgresql_prepared_statemant_parameter_storage.get_parameter_registry(),
+                    prepared_statemant_parameter_storage.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -379,15 +379,15 @@ impl Repository<Postgresql<User<'_>>> {
                     public.user_ u \
                 WHERE \
                     u.nickname = $1;";
-            let mut postgresql_prepared_statemant_parameter_storage = PostgresqlPreparedStatementParameterStorage::new();
-            postgresql_prepared_statemant_parameter_storage.add(
+            let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
+            prepared_statemant_parameter_storage.add(
                 &by_1.user__nickname,
                 Type::TEXT,
             );
             let statement = database_1_client
                 .prepare_typed_cached(
                     query,
-                    postgresql_prepared_statemant_parameter_storage.get_parameter_type_registry(),
+                    prepared_statemant_parameter_storage.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -399,7 +399,7 @@ impl Repository<Postgresql<User<'_>>> {
             let row_registry = database_1_client
                 .query(
                     &statement,
-                    postgresql_prepared_statemant_parameter_storage.get_parameter_registry(),
+                    prepared_statemant_parameter_storage.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -448,15 +448,15 @@ impl Repository<Postgresql<User<'_>>> {
                     public.user_ u \
                 WHERE \
                     u.email = $1;";
-            let mut postgresql_prepared_statemant_parameter_storage = PostgresqlPreparedStatementParameterStorage::new();
-            postgresql_prepared_statemant_parameter_storage.add(
+            let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
+            prepared_statemant_parameter_storage.add(
                 &by_2.user__email,
                 Type::TEXT,
             );
             let statement = database_1_client
                 .prepare_typed_cached(
                     query,
-                    postgresql_prepared_statemant_parameter_storage.get_parameter_type_registry(),
+                    prepared_statemant_parameter_storage.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -468,7 +468,7 @@ impl Repository<Postgresql<User<'_>>> {
             let row_registry = database_1_client
                 .query(
                     &statement,
-                    postgresql_prepared_statemant_parameter_storage.get_parameter_registry(),
+                    prepared_statemant_parameter_storage.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -515,15 +515,15 @@ impl Repository<Postgresql<User<'_>>> {
                     public.user_ u \
                 WHERE \
                     u.email = $1;";
-            let mut postgresql_prepared_statemant_parameter_storage = PostgresqlPreparedStatementParameterStorage::new();
-            postgresql_prepared_statemant_parameter_storage.add(
+            let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
+            prepared_statemant_parameter_storage.add(
                 &by_2.user__email,
                 Type::TEXT,
             );
             let statement = database_1_client
                 .prepare_typed_cached(
                     query,
-                    postgresql_prepared_statemant_parameter_storage.get_parameter_type_registry(),
+                    prepared_statemant_parameter_storage.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -535,7 +535,7 @@ impl Repository<Postgresql<User<'_>>> {
             let row_registry = database_1_client
                 .query(
                     &statement,
-                    postgresql_prepared_statemant_parameter_storage.get_parameter_registry(),
+                    prepared_statemant_parameter_storage.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -572,15 +572,15 @@ impl Repository<Postgresql<User<'_>>> {
                     public.user_ u \
                 WHERE \
                     u.id = $1;";
-            let mut postgresql_prepared_statemant_parameter_storage = PostgresqlPreparedStatementParameterStorage::new();
-            postgresql_prepared_statemant_parameter_storage.add(
+            let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
+            prepared_statemant_parameter_storage.add(
                 &by_3.user__id,
                 Type::INT8,
             );
             let statement = database_1_client
                 .prepare_typed_cached(
                     query,
-                    postgresql_prepared_statemant_parameter_storage.get_parameter_type_registry(),
+                    prepared_statemant_parameter_storage.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -592,7 +592,7 @@ impl Repository<Postgresql<User<'_>>> {
             let row_registry = database_1_client
                 .query(
                     &statement,
-                    postgresql_prepared_statemant_parameter_storage.get_parameter_registry(),
+                    prepared_statemant_parameter_storage.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -639,15 +639,15 @@ impl Repository<Postgresql<User<'_>>> {
                     public.user_ u \
                 WHERE \
                     u.id = $1;";
-            let mut postgresql_prepared_statemant_parameter_storage = PostgresqlPreparedStatementParameterStorage::new();
-            postgresql_prepared_statemant_parameter_storage.add(
+            let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
+            prepared_statemant_parameter_storage.add(
                 &by_3.user__id,
                 Type::INT8,
             );
             let statement = database_1_client
                 .prepare_typed_cached(
                     query,
-                    postgresql_prepared_statemant_parameter_storage.get_parameter_type_registry(),
+                    prepared_statemant_parameter_storage.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -659,7 +659,7 @@ impl Repository<Postgresql<User<'_>>> {
             let row_registry = database_1_client
                 .query(
                     &statement,
-                    postgresql_prepared_statemant_parameter_storage.get_parameter_registry(),
+                    prepared_statemant_parameter_storage.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(

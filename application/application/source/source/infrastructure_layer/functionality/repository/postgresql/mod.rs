@@ -74,6 +74,17 @@ pub use self::{
         Update5 as UserResetPasswordTokenUpdate5,
     },
 };
+use crate::infrastructure_layer::data::{
+    aggregate_error::{
+        AggregateError,
+        Backtrace,
+        ResultConverter,
+    },
+    capture::Capture,
+};
+use deadpool_postgres::Client;
+use dedicated_crate::void::Void;
+use std::future::Future;
 use std::marker::PhantomData;
 use tokio_postgres::types::{
     ToSql,
@@ -82,11 +93,11 @@ use tokio_postgres::types::{
 pub struct Postgresql<E> {
     _entity: PhantomData<E>,
 }
-pub struct PostgresqlPreparedStatementParameterStorage<'a, 'b> {
+struct PreparedStatementParameterStorage<'a, 'b> {
     parameter_registry: Vec<&'a (dyn ToSql + Sync + 'b)>,
     parameter_type_registry: Vec<Type>,
 }
-impl<'a, 'b> PostgresqlPreparedStatementParameterStorage<'a, 'b> {
+impl<'a, 'b> PreparedStatementParameterStorage<'a, 'b> {
     pub fn new() -> Self {
         return Self {
             parameter_registry: vec![],
@@ -104,4 +115,116 @@ impl<'a, 'b> PostgresqlPreparedStatementParameterStorage<'a, 'b> {
     pub fn get_parameter_type_registry<'c>(&'c self) -> &'c [Type] {
         return &self.parameter_type_registry;
     }
+}
+pub struct Resolver<E> {
+    _entity: PhantomData<E>,
+}
+pub struct Transaction<'a> {
+    // Should be &'_ mut for outer requirement.
+    client: &'a mut Client,
+}
+impl<'a> Transaction<'a> {
+    pub fn get_client<'b>(&'b self) -> &'b Client {
+        return &*self.client;
+    }
+}
+impl Resolver<Transaction<'_>> {
+    pub fn start<'a>(
+        client: &'a mut Client,
+        transaction_isolation_level: TransactionIsolationLevel,
+    ) -> impl Future<Output = Result<Transaction<'a>, AggregateError>> + Send {
+        return async move {
+            let mut query = "START TRANSACTION ISOLATION LEVEL".to_string();
+            match transaction_isolation_level {
+                TransactionIsolationLevel::ReadCommitted => {
+                    query = format!(
+                        "{} READ COMMITTED,READ WRITE,NOT DEFERRABLE;",
+                        query.as_str(),
+                    );
+                }
+                TransactionIsolationLevel::RepeatableRead => {
+                    query = format!(
+                        "{} REPEATABLE READ,READ WRITE,NOT DEFERRABLE;",
+                        query.as_str(),
+                    );
+                }
+                TransactionIsolationLevel::Serializable {
+                    read_only,
+                    deferrable,
+                } => {
+                    if read_only && deferrable {
+                        query = format!(
+                            "{} SERIALIZABLE,READ ONLY,DEFERRABLE;",
+                            query.as_str(),
+                        );
+                    }
+                    if read_only && !deferrable {
+                        query = format!(
+                            "{} SERIALIZABLE,READ ONLY,NOT DEFERRABLE;",
+                            query.as_str(),
+                        );
+                    }
+                    if !read_only && deferrable {
+                        query = format!(
+                            "{} SERIALIZABLE,READ WRITE,DEFERRABLE;",
+                            query.as_str(),
+                        );
+                    }
+                    if !read_only && !deferrable {
+                        query = format!(
+                            "{} SERIALIZABLE,READ WRITE,NOT DEFERRABLE;",
+                            query.as_str(),
+                        );
+                    }
+                }
+            }
+            if let Result::Err(aggregate_error) = client.simple_query(query.as_str()).await.into_runtime(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            ) {
+                let _ = client.simple_query("ROLLBACK;").await;
+                return Result::Err(aggregate_error);
+            }
+            return Result::Ok(
+                Transaction {
+                    client,
+                },
+            );
+        };
+    }
+    pub fn commit<'a>(postgresql_transaction: Transaction<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
+        return async move {
+            if let Result::Err(aggregate_error) = postgresql_transaction.client.simple_query("COMMIT;").await.into_runtime(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            ) {
+                let _ = postgresql_transaction.client.simple_query("ROLLBACK;").await;
+                return Result::Err(aggregate_error);
+            }
+            return Result::Ok(());
+        };
+    }
+    pub fn rollback<'a>(postgresql_transaction: Transaction<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
+        return async move {
+            postgresql_transaction.client.simple_query("ROLLBACK;").await.into_runtime(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
+            return Result::Ok(());
+        };
+    }
+}
+pub enum TransactionIsolationLevel {
+    ReadCommitted,
+    RepeatableRead,
+    Serializable {
+        read_only: bool,
+        deferrable: bool,
+    },
 }
