@@ -1,4 +1,3 @@
-use super::Resolver;
 use crate::infrastructure_layer::data::{
     aggregate_error::{
         AggregateError,
@@ -9,13 +8,22 @@ use crate::infrastructure_layer::data::{
 };
 use dedicated_crate::void::Void;
 use std::future::Future;
-use tokio_postgres::Client as Connection;
-pub struct PostgresqlTransaction;
-impl Resolver<PostgresqlTransaction> {
+use deadpool_postgres::Client;
+use super::Resolver;
+pub struct PostgresqlTransaction<'a> {
+    // Should be &'_ mut for outer requirement.
+    client: &'a mut Client,
+}
+impl<'a> PostgresqlTransaction<'a> {
+    pub fn get_client<'b>(&'b self) -> &'b Client {
+        return &*self.client;
+    }
+}
+impl Resolver<PostgresqlTransaction<'_>> {
     pub fn start<'a>(
-        connection: &'a Connection,
+        client: &'a mut Client,
         transaction_isolation_level: TransactionIsolationLevel,
-    ) -> impl Future<Output = Result<Self, AggregateError>> + Send + Capture<&'a Void> {
+    ) -> impl Future<Output = Result<PostgresqlTransaction<'a>, AggregateError>> + Send {
         return async move {
             let mut query = "START TRANSACTION ISOLATION LEVEL".to_string();
             match transaction_isolation_level {
@@ -42,54 +50,61 @@ impl Resolver<PostgresqlTransaction> {
                     }
                 }
             }
-            connection
-                .execute(
-                    query.as_str(),
-                    &[],
-                )
-                .await
-                .into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
-            return Result::Ok(Self::new());
+            if let Result::Err(aggregate_error) = client
+            .simple_query(query.as_str())
+            .await
+            .into_runtime(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )
+            {
+                let _ = client
+                .simple_query("ROLLBACK;")
+                .await;
+                return Result::Err(aggregate_error);
+            }
+            return Result::Ok(
+                PostgresqlTransaction {
+                    client,
+                },
+            );
         };
     }
-    pub fn commit<'a>(self, connection: &'a Connection) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
+    pub fn commit<'a>(postgresql_transaction: PostgresqlTransaction<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
-            let query = "COMMIT;";
-            connection
-                .execute(
-                    query,
-                    &[],
-                )
-                .await
-                .into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
+            if let Result::Err(aggregate_error) = postgresql_transaction
+            .client
+            .simple_query("COMMIT;")
+            .await
+            .into_runtime(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )
+            {
+                let _ = postgresql_transaction.client
+                .simple_query("ROLLBACK;")
+                .await;
+                return Result::Err(aggregate_error);
+            }
             return Result::Ok(());
         };
     }
-    pub fn rollback<'a>(self, connection: &'a Connection) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
+    pub fn rollback<'a>(postgresql_transaction: PostgresqlTransaction<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
-            let query = "ROLLBACK;";
-            connection
-                .execute(
-                    query,
-                    &[],
-                )
-                .await
-                .into_runtime(
-                    Backtrace::new(
-                        line!(),
-                        file!(),
-                    ),
-                )?;
+            postgresql_transaction
+            .client
+            .simple_query("ROLLBACK;")
+            .await
+            .into_runtime(
+                Backtrace::new(
+                    line!(),
+                    file!(),
+                ),
+            )?;
             return Result::Ok(());
         };
     }

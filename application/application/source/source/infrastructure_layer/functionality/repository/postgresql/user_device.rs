@@ -10,7 +10,7 @@ use crate::{
             },
             capture::Capture,
         },
-        functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver,
+        functionality::service::postgresql_prepared_statemant_parameter_convertation_resolver::PostgresqlPreparedStatementParameterConvertationResolver,
     },
 };
 use dedicated_crate::void::Void;
@@ -20,7 +20,7 @@ use deadpool_postgres::Client;
 impl PostgresqlRepository<UserDevice> {
     pub fn create_1<'a>(database_1_client: &'a Client, insert_1: Insert1) -> impl Future<Output = Result<UserDevice, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
-            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
+            let mut postgresql_prepared_statemant_parameter_convertation_resolver = PostgresqlPreparedStatementParameterConvertationResolver::new();
             let query = "\
                 INSERT INTO \
                     public.user_device AS ud (\
@@ -33,7 +33,7 @@ impl PostgresqlRepository<UserDevice> {
                 ON CONFLICT ON CONSTRAINT \
                     user_device2 \
                 DO NOTHING;";
-            prepared_statemant_parameter_convertation_resolver
+            postgresql_prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
                     &insert_1.user_device__id,
                     Type::TEXT,
@@ -45,7 +45,7 @@ impl PostgresqlRepository<UserDevice> {
             let statement = database_1_client
                 .prepare_typed_cached(
                     query,
-                    prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
+                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -57,7 +57,7 @@ impl PostgresqlRepository<UserDevice> {
             database_1_client
                 .query(
                     &statement,
-                    prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
+                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(

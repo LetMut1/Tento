@@ -13,7 +13,7 @@ use crate::infrastructure_layer::{
             Counter,
             Counter_,
         },
-        prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver,
+        postgresql_prepared_statemant_parameter_convertation_resolver::PostgresqlPreparedStatementParameterConvertationResolver,
     },
 };
 use dedicated_crate::{
@@ -54,8 +54,8 @@ impl PostgresqlRepository<Common1> {
                 1,
             );
             let wildcard = format!("{}%", by_1.channel__name,);
-            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-            prepared_statemant_parameter_convertation_resolver
+            let mut postgresql_prepared_statemant_parameter_convertation_resolver = PostgresqlPreparedStatementParameterConvertationResolver::new();
+            postgresql_prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
                     &by_1.user__id,
                     Type::INT8,
@@ -75,7 +75,7 @@ impl PostgresqlRepository<Common1> {
                     query.as_str(),
                     counter.get_next_value_unchecked(),
                 );
-                prepared_statemant_parameter_convertation_resolver.add_parameter(
+                postgresql_prepared_statemant_parameter_convertation_resolver.add_parameter(
                     requery___channel__name,
                     Type::TEXT,
                 );
@@ -87,14 +87,14 @@ impl PostgresqlRepository<Common1> {
                 query.as_str(),
                 counter.get_next_value_unchecked(),
             );
-            prepared_statemant_parameter_convertation_resolver.add_parameter(
+            postgresql_prepared_statemant_parameter_convertation_resolver.add_parameter(
                 &limit,
                 Type::INT2,
             );
             let statement = database_1_client
                 .prepare_typed_cached(
                     query.as_str(),
-                    prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
+                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -106,7 +106,7 @@ impl PostgresqlRepository<Common1> {
             let row_registry = database_1_client
                 .query(
                     &statement,
-                    prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
+                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -202,8 +202,8 @@ impl PostgresqlRepository<Common1> {
                 1,
             );
             let wildcard = format!("{}%", by_2.channel__name,);
-            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-            prepared_statemant_parameter_convertation_resolver
+            let mut postgresql_prepared_statemant_parameter_convertation_resolver = PostgresqlPreparedStatementParameterConvertationResolver::new();
+            postgresql_prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
                     &by_2.user__id,
                     Type::INT8,
@@ -219,7 +219,7 @@ impl PostgresqlRepository<Common1> {
                     query.as_str(),
                     counter.get_next_value_unchecked(),
                 );
-                prepared_statemant_parameter_convertation_resolver.add_parameter(
+                postgresql_prepared_statemant_parameter_convertation_resolver.add_parameter(
                     requery___channel__name,
                     Type::TEXT,
                 );
@@ -231,14 +231,14 @@ impl PostgresqlRepository<Common1> {
                 query.as_str(),
                 counter.get_next_value_unchecked(),
             );
-            prepared_statemant_parameter_convertation_resolver.add_parameter(
+            postgresql_prepared_statemant_parameter_convertation_resolver.add_parameter(
                 &limit,
                 Type::INT2,
             );
             let statement = database_1_client
                 .prepare_typed_cached(
                     query.as_str(),
-                    prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
+                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -250,7 +250,7 @@ impl PostgresqlRepository<Common1> {
             let row_registry = database_1_client
                 .query(
                     &statement,
-                    prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
+                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -340,8 +340,8 @@ impl PostgresqlRepository<Common1> {
                 1,
                 1,
             );
-            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-            prepared_statemant_parameter_convertation_resolver.add_parameter(
+            let mut postgresql_prepared_statemant_parameter_convertation_resolver = PostgresqlPreparedStatementParameterConvertationResolver::new();
+            postgresql_prepared_statemant_parameter_convertation_resolver.add_parameter(
                 &by_3.user__id,
                 Type::INT8,
             );
@@ -354,7 +354,7 @@ impl PostgresqlRepository<Common1> {
                     query.as_str(),
                     counter.get_next_value_unchecked(),
                 );
-                prepared_statemant_parameter_convertation_resolver.add_parameter(
+                postgresql_prepared_statemant_parameter_convertation_resolver.add_parameter(
                     &requery___channel__id,
                     Type::INT8,
                 );
@@ -366,14 +366,14 @@ impl PostgresqlRepository<Common1> {
                 query.as_str(),
                 counter.get_next_value_unchecked(),
             );
-            prepared_statemant_parameter_convertation_resolver.add_parameter(
+            postgresql_prepared_statemant_parameter_convertation_resolver.add_parameter(
                 &limit,
                 Type::INT2,
             );
             let statement = database_1_client
                 .prepare_typed_cached(
                     query.as_str(),
-                    prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
+                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -385,7 +385,7 @@ impl PostgresqlRepository<Common1> {
             let row_registry = database_1_client
                 .query(
                     &statement,
-                    prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
+                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(

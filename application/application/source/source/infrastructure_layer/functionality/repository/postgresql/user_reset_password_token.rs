@@ -15,7 +15,7 @@ use crate::{
             },
             capture::Capture,
         },
-        functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver,
+        functionality::service::postgresql_prepared_statemant_parameter_convertation_resolver::PostgresqlPreparedStatementParameterConvertationResolver,
     },
 };
 use dedicated_crate::void::Void;
@@ -50,8 +50,8 @@ impl PostgresqlRepository<UserResetPasswordToken<'_>> {
                         $6,\
                         $7\
                     );";
-            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-            prepared_statemant_parameter_convertation_resolver
+            let mut postgresql_prepared_statemant_parameter_convertation_resolver = PostgresqlPreparedStatementParameterConvertationResolver::new();
+            postgresql_prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
                     &insert_1.user__id,
                     Type::INT8,
@@ -83,7 +83,7 @@ impl PostgresqlRepository<UserResetPasswordToken<'_>> {
             let statement = database_2_client
                 .prepare_typed_cached(
                     query,
-                    prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
+                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -95,7 +95,7 @@ impl PostgresqlRepository<UserResetPasswordToken<'_>> {
             database_2_client
                 .query(
                     &statement,
-                    prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
+                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -125,8 +125,8 @@ impl PostgresqlRepository<UserResetPasswordToken<'_>> {
                 WHERE \
                     urpt.user__id = $1 \
                     AND urpt.user_device__id = $2;";
-            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-            prepared_statemant_parameter_convertation_resolver
+            let mut postgresql_prepared_statemant_parameter_convertation_resolver = PostgresqlPreparedStatementParameterConvertationResolver::new();
+            postgresql_prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
                     &by_1.user__id,
                     Type::INT8,
@@ -138,7 +138,7 @@ impl PostgresqlRepository<UserResetPasswordToken<'_>> {
             let statement = database_2_client
                 .prepare_typed_cached(
                     query,
-                    prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
+                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -150,7 +150,7 @@ impl PostgresqlRepository<UserResetPasswordToken<'_>> {
             database_2_client
                 .query(
                     &statement,
-                    prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
+                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -187,8 +187,8 @@ impl PostgresqlRepository<UserResetPasswordToken<'_>> {
                 WHERE \
                     urpt.user__id = $6 \
                     AND urpt.user_device__id = $7;";
-            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-            prepared_statemant_parameter_convertation_resolver
+            let mut postgresql_prepared_statemant_parameter_convertation_resolver = PostgresqlPreparedStatementParameterConvertationResolver::new();
+            postgresql_prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
                     &update_1.user_reset_password_token__value,
                     Type::TEXT,
@@ -220,7 +220,7 @@ impl PostgresqlRepository<UserResetPasswordToken<'_>> {
             let statement = database_2_client
                 .prepare_typed_cached(
                     query,
-                    prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
+                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -232,7 +232,7 @@ impl PostgresqlRepository<UserResetPasswordToken<'_>> {
             database_2_client
                 .query(
                     &statement,
-                    prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
+                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -257,8 +257,8 @@ impl PostgresqlRepository<UserResetPasswordToken<'_>> {
                 WHERE \
                     urpt.user__id = $2 \
                     AND urpt.user_device__id = $3;";
-            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-            prepared_statemant_parameter_convertation_resolver
+            let mut postgresql_prepared_statemant_parameter_convertation_resolver = PostgresqlPreparedStatementParameterConvertationResolver::new();
+            postgresql_prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
                     &update_2.user_reset_password_token__can_be_resent_from,
                     Type::INT8,
@@ -274,7 +274,7 @@ impl PostgresqlRepository<UserResetPasswordToken<'_>> {
             let statement = database_2_client
                 .prepare_typed_cached(
                     query,
-                    prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
+                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -286,7 +286,7 @@ impl PostgresqlRepository<UserResetPasswordToken<'_>> {
             database_2_client
                 .query(
                     &statement,
-                    prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
+                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -321,8 +321,8 @@ impl PostgresqlRepository<UserResetPasswordToken<'_>> {
                 WHERE \
                     urpt.user__id = $5 \
                     AND urpt.user_device__id = $6;";
-            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-            prepared_statemant_parameter_convertation_resolver
+            let mut postgresql_prepared_statemant_parameter_convertation_resolver = PostgresqlPreparedStatementParameterConvertationResolver::new();
+            postgresql_prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
                     &update_3.user_reset_password_token__value,
                     Type::TEXT,
@@ -350,7 +350,7 @@ impl PostgresqlRepository<UserResetPasswordToken<'_>> {
             let statement = database_2_client
                 .prepare_typed_cached(
                     query,
-                    prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
+                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -362,7 +362,7 @@ impl PostgresqlRepository<UserResetPasswordToken<'_>> {
             database_2_client
                 .query(
                     &statement,
-                    prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
+                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -387,8 +387,8 @@ impl PostgresqlRepository<UserResetPasswordToken<'_>> {
                 WHERE \
                     urpt.user__id = $2 \
                     AND urpt.user_device__id = $3;";
-            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-            prepared_statemant_parameter_convertation_resolver
+            let mut postgresql_prepared_statemant_parameter_convertation_resolver = PostgresqlPreparedStatementParameterConvertationResolver::new();
+            postgresql_prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
                     &update_4.user_reset_password_token__wrong_enter_tries_quantity,
                     Type::INT2,
@@ -404,7 +404,7 @@ impl PostgresqlRepository<UserResetPasswordToken<'_>> {
             let statement = database_2_client
                 .prepare_typed_cached(
                     query,
-                    prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
+                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -416,7 +416,7 @@ impl PostgresqlRepository<UserResetPasswordToken<'_>> {
             database_2_client
                 .query(
                     &statement,
-                    prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
+                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -441,8 +441,8 @@ impl PostgresqlRepository<UserResetPasswordToken<'_>> {
                 WHERE \
                     urpt.user__id = $2 \
                     AND urpt.user_device__id = $3;";
-            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-            prepared_statemant_parameter_convertation_resolver
+            let mut postgresql_prepared_statemant_parameter_convertation_resolver = PostgresqlPreparedStatementParameterConvertationResolver::new();
+            postgresql_prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
                     &update_5.user_reset_password_token__is_approved,
                     Type::BOOL,
@@ -458,7 +458,7 @@ impl PostgresqlRepository<UserResetPasswordToken<'_>> {
             let statement = database_2_client
                 .prepare_typed_cached(
                     query,
-                    prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
+                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -470,7 +470,7 @@ impl PostgresqlRepository<UserResetPasswordToken<'_>> {
             database_2_client
                 .query(
                     &statement,
-                    prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
+                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -499,8 +499,8 @@ impl PostgresqlRepository<UserResetPasswordToken<'_>> {
                 WHERE \
                     urpt.user__id = $1 \
                     AND urpt.user_device__id = $2;";
-            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-            prepared_statemant_parameter_convertation_resolver
+            let mut postgresql_prepared_statemant_parameter_convertation_resolver = PostgresqlPreparedStatementParameterConvertationResolver::new();
+            postgresql_prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
                     &by_1.user__id,
                     Type::INT8,
@@ -512,7 +512,7 @@ impl PostgresqlRepository<UserResetPasswordToken<'_>> {
             let statement = database_2_client
                 .prepare_typed_cached(
                     query,
-                    prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
+                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -524,7 +524,7 @@ impl PostgresqlRepository<UserResetPasswordToken<'_>> {
             let row_registry = database_2_client
                 .query(
                     &statement,
-                    prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
+                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -590,8 +590,8 @@ impl PostgresqlRepository<UserResetPasswordToken<'_>> {
                 WHERE \
                     urpt.user__id = $1 \
                     AND urpt.user_device__id = $2;";
-            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-            prepared_statemant_parameter_convertation_resolver
+            let mut postgresql_prepared_statemant_parameter_convertation_resolver = PostgresqlPreparedStatementParameterConvertationResolver::new();
+            postgresql_prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
                     &by_1.user__id,
                     Type::INT8,
@@ -603,7 +603,7 @@ impl PostgresqlRepository<UserResetPasswordToken<'_>> {
             let statement = database_2_client
                 .prepare_typed_cached(
                     query,
-                    prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
+                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -615,7 +615,7 @@ impl PostgresqlRepository<UserResetPasswordToken<'_>> {
             let row_registry = database_2_client
                 .query(
                     &statement,
-                    prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
+                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -675,8 +675,8 @@ impl PostgresqlRepository<UserResetPasswordToken<'_>> {
                 WHERE \
                     urpt.user__id = $1 \
                     AND urpt.user_device__id = $2;";
-            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-            prepared_statemant_parameter_convertation_resolver
+            let mut postgresql_prepared_statemant_parameter_convertation_resolver = PostgresqlPreparedStatementParameterConvertationResolver::new();
+            postgresql_prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
                     &by_1.user__id,
                     Type::INT8,
@@ -688,7 +688,7 @@ impl PostgresqlRepository<UserResetPasswordToken<'_>> {
             let statement = database_2_client
                 .prepare_typed_cached(
                     query,
-                    prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
+                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -700,7 +700,7 @@ impl PostgresqlRepository<UserResetPasswordToken<'_>> {
             let row_registry = database_2_client
                 .query(
                     &statement,
-                    prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
+                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(

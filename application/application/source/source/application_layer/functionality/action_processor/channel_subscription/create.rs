@@ -38,9 +38,11 @@ use crate::{
                 PostgresqlRepository,
             },
             service::resolver::{
-                Resolver,
-                UnixTime,
-            },
+                    PostgresqlTransaction,
+                    Resolver,
+                    TransactionIsolationLevel,
+                    UnixTime,
+                },
         },
     },
 };
@@ -87,7 +89,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
                     ),
                 );
             }
-            let database_1_postgresql_client = inner.database_1_postgresql_connection_pool.get().await.into_runtime(
+            let mut database_1_postgresql_client = inner.database_1_postgresql_connection_pool.get().await.into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -112,15 +114,36 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
             if const { Channel_AccessModifier::Close as i16 } == channel.access_modifier {
                 return Result::Ok(UnifiedReport::precedent(Precedent::Channel_IsClose));
             }
-            PostgresqlRepository::<ChannelSubscription>::create_transactional_1(
-                &database_1_postgresql_client,
+            let postgresql_transaction = Resolver::<PostgresqlTransaction<'_>>::start(
+                &mut database_1_postgresql_client,
+                TransactionIsolationLevel::ReadCommitted,
+            )
+            .await?;
+            if let Result::Err(aggregate_error) = PostgresqlRepository::<ChannelSubscription>::create_1(
+                postgresql_transaction.get_client(),
                 Insert1 {
                     user__id: user_access_token.user__id,
                     channel__id: channel.id,
                     channel_subscription__created_at: Resolver::<UnixTime>::get_now(),
                 },
             )
-            .await?;
+            .await
+            {
+                Resolver::<PostgresqlTransaction<'_>>::rollback(postgresql_transaction).await?;
+                return Result::Err(aggregate_error);
+            }
+            if let Result::Err(aggregate_error) = PostgresqlRepository::<Channel<'_>>::update_1(
+                postgresql_transaction.get_client(),
+                By1 {
+                    channel__id: incoming.channel__id,
+                },
+            )
+            .await
+            {
+                Resolver::<PostgresqlTransaction<'_>>::rollback(postgresql_transaction).await?;
+                return Result::Err(aggregate_error);
+            }
+            Resolver::<PostgresqlTransaction<'_>>::commit(postgresql_transaction).await?;
             return Result::Ok(UnifiedReport::target_empty());
         };
     }

@@ -10,7 +10,7 @@ use crate::{
             },
             capture::Capture,
         },
-        functionality::service::prepared_statemant_parameter_convertation_resolver::PreparedStatementParameterConvertationResolver,
+        functionality::service::postgresql_prepared_statemant_parameter_convertation_resolver::PostgresqlPreparedStatementParameterConvertationResolver,
     },
 };
 use dedicated_crate::void::Void;
@@ -62,8 +62,8 @@ impl PostgresqlRepository<Channel<'_>> {
             let channel__orientation = insert_1.channel__orientation.as_slice();
             let channel__cover_image_path = insert_1.channel__cover_image_path.as_ref();
             let channel__background_image_path = insert_1.channel__background_image_path.as_ref();
-            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-            prepared_statemant_parameter_convertation_resolver
+            let mut postgresql_prepared_statemant_parameter_convertation_resolver = PostgresqlPreparedStatementParameterConvertationResolver::new();
+            postgresql_prepared_statemant_parameter_convertation_resolver
                 .add_parameter(
                     &insert_1.channel__owner,
                     Type::INT8,
@@ -119,7 +119,7 @@ impl PostgresqlRepository<Channel<'_>> {
             let statement = database_1_client
                 .prepare_typed_cached(
                     query,
-                    prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
+                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -131,7 +131,7 @@ impl PostgresqlRepository<Channel<'_>> {
             let row_registry = database_1_client
                 .query(
                     &statement,
-                    prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
+                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -165,6 +165,48 @@ impl PostgresqlRepository<Channel<'_>> {
             );
         };
     }
+    pub fn update_1<'a>(database_1_client: &'a Client, by_1: By1) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
+        return async move {
+            let query = "\
+                UPDATE ONLY \
+                    public.channel AS c \
+                SET \
+                    subscribers_quantity = subscribers_quantity + 1 \
+                WHERE \
+                    c.id = $1;";
+            let mut postgresql_prepared_statemant_parameter_convertation_resolver = PostgresqlPreparedStatementParameterConvertationResolver::new();
+            postgresql_prepared_statemant_parameter_convertation_resolver
+                .add_parameter(
+                    &by_1.channel__id,
+                    Type::INT8,
+                );
+            let statement = database_1_client
+                .prepare_typed_cached(
+                    query,
+                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
+                )
+                .await
+                .into_logic(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?;
+            database_1_client
+                .query(
+                    &statement,
+                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
+                )
+                .await
+                .into_runtime(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?;
+            return Result::Ok(());
+        };
+    }
     pub fn find_1<'a>(database_1_client: &'a Client, by_1: By1) -> impl Future<Output = Result<Option<Channel<'static>>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
@@ -186,15 +228,15 @@ impl PostgresqlRepository<Channel<'_>> {
                     public.channel c \
                 WHERE \
                     c.id = $1;";
-            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-            prepared_statemant_parameter_convertation_resolver.add_parameter(
+            let mut postgresql_prepared_statemant_parameter_convertation_resolver = PostgresqlPreparedStatementParameterConvertationResolver::new();
+            postgresql_prepared_statemant_parameter_convertation_resolver.add_parameter(
                 &by_1.channel__id,
                 Type::INT8,
             );
             let statement = database_1_client
                 .prepare_typed_cached(
                     query,
-                    prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
+                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -206,7 +248,7 @@ impl PostgresqlRepository<Channel<'_>> {
             let row_registry = database_1_client
                 .query(
                     &statement,
-                    prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
+                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -328,15 +370,15 @@ impl PostgresqlRepository<Channel<'_>> {
                     public.channel c \
                 WHERE \
                     c.name = $1;";
-            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-            prepared_statemant_parameter_convertation_resolver.add_parameter(
+            let mut postgresql_prepared_statemant_parameter_convertation_resolver = PostgresqlPreparedStatementParameterConvertationResolver::new();
+            postgresql_prepared_statemant_parameter_convertation_resolver.add_parameter(
                 &by_2.channel__name,
                 Type::TEXT,
             );
             let statement = database_1_client
                 .prepare_typed_cached(
                     query,
-                    prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
+                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -348,7 +390,7 @@ impl PostgresqlRepository<Channel<'_>> {
             let row_registry = database_1_client
                 .query(
                     &statement,
-                    prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
+                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -456,15 +498,15 @@ impl PostgresqlRepository<Channel<'_>> {
                     public.channel c \
                 WHERE \
                     c.name = $1;";
-            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-            prepared_statemant_parameter_convertation_resolver.add_parameter(
+            let mut postgresql_prepared_statemant_parameter_convertation_resolver = PostgresqlPreparedStatementParameterConvertationResolver::new();
+            postgresql_prepared_statemant_parameter_convertation_resolver.add_parameter(
                 &by_2.channel__name,
                 Type::TEXT,
             );
             let statement = database_1_client
                 .prepare_typed_cached(
                     query,
-                    prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
+                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -476,7 +518,7 @@ impl PostgresqlRepository<Channel<'_>> {
             let row_registry = database_1_client
                 .query(
                     &statement,
-                    prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
+                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(
@@ -500,15 +542,15 @@ impl PostgresqlRepository<Channel<'_>> {
                     public.channel c \
                 WHERE \
                     c.linked_name = $1;";
-            let mut prepared_statemant_parameter_convertation_resolver = PreparedStatementParameterConvertationResolver::new();
-            prepared_statemant_parameter_convertation_resolver.add_parameter(
+            let mut postgresql_prepared_statemant_parameter_convertation_resolver = PostgresqlPreparedStatementParameterConvertationResolver::new();
+            postgresql_prepared_statemant_parameter_convertation_resolver.add_parameter(
                 &by_3.channel__linked_name,
                 Type::TEXT,
             );
             let statement = database_1_client
                 .prepare_typed_cached(
                     query,
-                    prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
+                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_type_registry(),
                 )
                 .await
                 .into_logic(
@@ -520,7 +562,7 @@ impl PostgresqlRepository<Channel<'_>> {
             let row_registry = database_1_client
                 .query(
                     &statement,
-                    prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
+                    postgresql_prepared_statemant_parameter_convertation_resolver.get_parameter_registry(),
                 )
                 .await
                 .into_runtime(

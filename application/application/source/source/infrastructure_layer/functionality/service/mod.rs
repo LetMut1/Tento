@@ -7,7 +7,7 @@ pub mod generator;
 pub mod http_server;
 pub mod loader;
 pub mod logger;
-pub mod prepared_statemant_parameter_convertation_resolver;
+pub mod postgresql_prepared_statemant_parameter_convertation_resolver;
 pub mod resolver;
 pub mod sender;
 pub mod serializer;
