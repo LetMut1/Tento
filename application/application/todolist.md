@@ -165,7 +165,6 @@ Channel_Create
 Обработать ошибки Postgresql? для понимания того, что случилось с транзакцией?
 
 
-PostgresqlTransactionResolver - String += -> format or .push_str;
 
 Update-  Нужно ли проверять количество вернувшихся строк
 

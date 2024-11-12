@@ -28,25 +28,44 @@ impl Resolver<PostgresqlTransaction<'_>> {
             let mut query = "START TRANSACTION ISOLATION LEVEL".to_string();
             match transaction_isolation_level {
                 TransactionIsolationLevel::ReadCommitted => {
-                    query += " READ COMMITTED, READ WRITE, NOT DEFERRABLE;";
+                    query = format!(
+                        "{} READ COMMITTED,READ WRITE,NOT DEFERRABLE;",
+                        query.as_str(),
+                    );
                 }
                 TransactionIsolationLevel::RepeatableRead => {
-                    query += " REPEATABLE READ, READ WRITE, NOT DEFERRABLE;";
+                    query = format!(
+                        "{} REPEATABLE READ,READ WRITE,NOT DEFERRABLE;",
+                        query.as_str(),
+                    );
                 }
                 TransactionIsolationLevel::Serializable {
                     read_only,
                     deferrable,
                 } => {
-                    query += " SERIALIZABLE,";
-                    if read_only {
-                        query += " READ ONLY,";
-                    } else {
-                        query += " READ WRITE,";
+                    if read_only && deferrable {
+                        query = format!(
+                            "{} SERIALIZABLE,READ ONLY,DEFERRABLE;",
+                            query.as_str(),
+                        );
                     }
-                    if deferrable {
-                        query += " DEFERRABLE;";
-                    } else {
-                        query += " NOT DEFERRABLE;";
+                    if read_only && !deferrable {
+                        query = format!(
+                            "{} SERIALIZABLE,READ ONLY,NOT DEFERRABLE;",
+                            query.as_str(),
+                        );
+                    }
+                    if !read_only && deferrable {
+                        query = format!(
+                            "{} SERIALIZABLE,READ WRITE,DEFERRABLE;",
+                            query.as_str(),
+                        );
+                    }
+                    if !read_only && !deferrable {
+                        query = format!(
+                            "{} SERIALIZABLE,READ WRITE,NOT DEFERRABLE;",
+                            query.as_str(),
+                        );
                     }
                 }
             }
