@@ -28,11 +28,9 @@ use crate::{
         },
         functionality::{
             repository::postgresql::{
-                user_registration_token::{
-                    By1,
-                    Update4,
-                    Update5,
-                },
+                UserRegistrationTokenBy1,
+                UserRegistrationTokenUpdate4,
+                UserRegistrationTokenUpdate5,
                 Postgresql,
             },
             service::resolver::{
@@ -100,7 +98,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterBySecondStep
             )?;
             let mut user_registration_token = match Repository::<Postgresql<UserRegistrationToken<'_>>>::find_2(
                 &database_2_postgresql_client,
-                By1 {
+                UserRegistrationTokenBy1 {
                     user__email: incoming.user__email.as_str(),
                     user_device__id: incoming.user_device__id.as_str(),
                 },
@@ -115,7 +113,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterBySecondStep
             if Resolver::<Expiration>::is_expired(user_registration_token.expires_at) {
                 Repository::<Postgresql<UserRegistrationToken<'_>>>::delete_2(
                     &database_2_postgresql_client,
-                    By1 {
+                    UserRegistrationTokenBy1 {
                         user__email: incoming.user__email.as_str(),
                         user_device__id: incoming.user_device__id.as_str(),
                     },
@@ -136,10 +134,10 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterBySecondStep
                 if user_registration_token.wrong_enter_tries_quantity < UserRegistrationToken_WrongEnterTriesQuantity::LIMIT {
                     Repository::<Postgresql<UserRegistrationToken<'_>>>::update_4(
                         &database_2_postgresql_client,
-                        Update4 {
+                        UserRegistrationTokenUpdate4 {
                             user_registration_token__wrong_enter_tries_quantity: user_registration_token.wrong_enter_tries_quantity,
                         },
-                        By1 {
+                        UserRegistrationTokenBy1 {
                             user__email: incoming.user__email.as_str(),
                             user_device__id: incoming.user_device__id.as_str(),
                         },
@@ -148,7 +146,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterBySecondStep
                 } else {
                     Repository::<Postgresql<UserRegistrationToken<'_>>>::delete_2(
                         &database_2_postgresql_client,
-                        By1 {
+                        UserRegistrationTokenBy1 {
                             user__email: incoming.user__email.as_str(),
                             user_device__id: incoming.user_device__id.as_str(),
                         },
@@ -166,10 +164,10 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterBySecondStep
             user_registration_token.is_approved = true;
             Repository::<Postgresql<UserRegistrationToken<'_>>>::update_5(
                 &database_2_postgresql_client,
-                Update5 {
+                UserRegistrationTokenUpdate5 {
                     user_registration_token__is_approved: user_registration_token.is_approved,
                 },
-                By1 {
+                UserRegistrationTokenBy1 {
                     user__email: incoming.user__email.as_str(),
                     user_device__id: incoming.user_device__id.as_str(),
                 },

@@ -34,10 +34,8 @@ use crate::{
         },
         functionality::{
             repository::postgresql::{
-                user_access_refresh_token::{
-                    By2,
-                    Update1,
-                },
+                UserAccessRefreshTokenBy2,
+                UserAccessRefreshTokenUpdate1,
                 Postgresql,
             },
             service::resolver::{
@@ -83,7 +81,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
             )?;
             let mut user_access_refresh_token = match Repository::<Postgresql<UserAccessRefreshToken<'_>>>::find_1(
                 &database_2_postgresql_client,
-                By2 {
+                UserAccessRefreshTokenBy2 {
                     user__id: user_access_token.user__id,
                     user_device__id: user_access_token.user_device__id,
                 },
@@ -113,7 +111,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
             if Resolver::<Expiration>::is_expired(user_access_refresh_token.expires_at) {
                 Repository::<Postgresql<UserAccessRefreshToken<'_>>>::delete_1(
                     &database_2_postgresql_client,
-                    By2 {
+                    UserAccessRefreshTokenBy2 {
                         user__id: user_access_token.user__id,
                         user_device__id: user_access_token.user_device__id,
                     },
@@ -133,13 +131,13 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
             user_access_refresh_token.updated_at = Generator::<UserAccessRefreshToken_UpdatedAt>::generate();
             Repository::<Postgresql<UserAccessRefreshToken<'_>>>::update_1(
                 &database_2_postgresql_client,
-                Update1 {
+                UserAccessRefreshTokenUpdate1 {
                     user_access_token__id: user_access_refresh_token.user_access_token__id.as_ref(),
                     user_access_refresh_token__obfuscation_value: user_access_refresh_token.obfuscation_value.as_str(),
                     user_access_refresh_token__expires_at: user_access_refresh_token.expires_at,
                     user_access_refresh_token__updated_at: user_access_refresh_token.updated_at,
                 },
-                By2 {
+                UserAccessRefreshTokenBy2 {
                     user__id: user_access_token.user__id,
                     user_device__id: user_access_token.user_device__id,
                 },

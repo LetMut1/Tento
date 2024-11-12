@@ -33,11 +33,9 @@ use crate::{
         },
         functionality::{
             repository::postgresql::{
-                user::By3,
-                user_reset_password_token::{
-                    By1,
-                    Update2,
-                },
+                UserBy3,
+                UserResetPasswordTokenBy1,
+                UserResetPasswordTokenUpdate2,
                 Postgresql,
             },
             service::{
@@ -101,7 +99,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
                         file!(),
                     ),
                 )?,
-                By3 {
+                UserBy3 {
                     user__id: incoming.user__id,
                 },
             )
@@ -120,7 +118,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
             )?;
             let mut user_reset_password_token = match Repository::<Postgresql<UserResetPasswordToken<'_>>>::find_3(
                 &database_2_postgresql_client,
-                By1 {
+                UserResetPasswordTokenBy1 {
                     user__id: incoming.user__id,
                     user_device__id: incoming.user_device__id.as_str(),
                 },
@@ -135,7 +133,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
             if Resolver::<Expiration>::is_expired(user_reset_password_token.expires_at) {
                 Repository::<Postgresql<UserResetPasswordToken<'_>>>::delete_2(
                     &database_2_postgresql_client,
-                    By1 {
+                    UserResetPasswordTokenBy1 {
                         user__id: incoming.user__id,
                         user_device__id: incoming.user_device__id.as_str(),
                     },
@@ -152,10 +150,10 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForResetPas
             user_reset_password_token.can_be_resent_from = Generator::<UserResetPasswordToken_CanBeResentFrom>::generate()?;
             Repository::<Postgresql<UserResetPasswordToken<'_>>>::update_2(
                 &database_2_postgresql_client,
-                Update2 {
+                UserResetPasswordTokenUpdate2 {
                     user_reset_password_token__can_be_resent_from: user_reset_password_token.can_be_resent_from,
                 },
-                By1 {
+                UserResetPasswordTokenBy1 {
                     user__id: incoming.user__id,
                     user_device__id: incoming.user_device__id.as_str(),
                 },

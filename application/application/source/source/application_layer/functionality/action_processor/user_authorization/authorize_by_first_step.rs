@@ -39,17 +39,13 @@ use crate::{
         },
         functionality::{
             repository::postgresql::{
-                user::{
-                    By1,
-                    By2,
-                },
-                user_authorization_token::{
-                    By1 as By1_,
-                    Insert1,
-                    Update1,
-                    Update2,
-                    Update3,
-                },
+                UserBy1,
+                UserBy2,
+                UserAuthorizationTokenBy1,
+                UserAuthorizationTokenInsert1,
+                UserAuthorizationTokenUpdate1,
+                UserAuthorizationTokenUpdate2,
+                UserAuthorizationTokenUpdate3,
                 Postgresql,
             },
             service::{
@@ -116,7 +112,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
             let (user__id, user__email, user__nickname, user__password_hash) = if Validator::<User_Email>::is_valid(incoming.user__email___or___user__nickname.as_str())? {
                 let user_ = Repository::<Postgresql<User<'_>>>::find_3(
                     &database_1_postgresql_client,
-                    By2 {
+                    UserBy2 {
                         user__email: incoming.user__email___or___user__nickname.as_str(),
                     },
                 )
@@ -137,7 +133,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                 if Validator::<User_Nickname>::is_valid(incoming.user__email___or___user__nickname.as_str()) {
                     let user_ = Repository::<Postgresql<User<'_>>>::find_2(
                         &database_1_postgresql_client,
-                        By1 {
+                        UserBy1 {
                             user__nickname: incoming.user__email___or___user__nickname.as_str(),
                         },
                     )
@@ -204,7 +200,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
             let (user_authorization_token__value, user_authorization_token__can_be_resent_from, user_authorization_token__wrong_enter_tries_quantity, can_send) =
                 match Repository::<Postgresql<UserAuthorizationToken<'_>>>::find_1(
                     &database_2_postgresql_client,
-                    By1_ {
+                    UserAuthorizationTokenBy1 {
                         user__id,
                         user_device__id: incoming.user_device__id.as_str(),
                     },
@@ -235,13 +231,13 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                         if need_to_update_1 && need_to_update_2 {
                             Repository::<Postgresql<UserAuthorizationToken<'_>>>::update_1(
                                 &database_2_postgresql_client,
-                                Update1 {
+                                UserAuthorizationTokenUpdate1 {
                                     user_authorization_token__value: user_authorization_token.value.as_str(),
                                     user_authorization_token__wrong_enter_tries_quantity: user_authorization_token.wrong_enter_tries_quantity,
                                     user_authorization_token__expires_at: user_authorization_token.expires_at,
                                     user_authorization_token__can_be_resent_from: user_authorization_token.can_be_resent_from,
                                 },
-                                By1_ {
+                                UserAuthorizationTokenBy1 {
                                     user__id,
                                     user_device__id: incoming.user_device__id.as_str(),
                                 },
@@ -251,10 +247,10 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                             if need_to_update_1 {
                                 Repository::<Postgresql<UserAuthorizationToken<'_>>>::update_3(
                                     &database_2_postgresql_client,
-                                    Update3 {
+                                    UserAuthorizationTokenUpdate3 {
                                         user_authorization_token__can_be_resent_from: user_authorization_token.can_be_resent_from,
                                     },
-                                    By1_ {
+                                    UserAuthorizationTokenBy1 {
                                         user__id,
                                         user_device__id: incoming.user_device__id.as_str(),
                                     },
@@ -264,12 +260,12 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                             if need_to_update_2 {
                                 Repository::<Postgresql<UserAuthorizationToken<'_>>>::update_2(
                                     &database_2_postgresql_client,
-                                    Update2 {
+                                    UserAuthorizationTokenUpdate2 {
                                         user_authorization_token__value: user_authorization_token.value.as_str(),
                                         user_authorization_token__wrong_enter_tries_quantity: user_authorization_token.wrong_enter_tries_quantity,
                                         user_authorization_token__expires_at: user_authorization_token.expires_at,
                                     },
-                                    By1_ {
+                                    UserAuthorizationTokenBy1 {
                                         user__id,
                                         user_device__id: incoming.user_device__id.as_str(),
                                     },
@@ -287,7 +283,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByFirstStep
                     Option::None => {
                         let user_authorization_token = Repository::<Postgresql<UserAuthorizationToken<'_>>>::create_1(
                             &database_2_postgresql_client,
-                            Insert1 {
+                            UserAuthorizationTokenInsert1 {
                                 user__id,
                                 user_device__id: incoming.user_device__id.as_str(),
                                 user_authorization_token__value: Generator::<UserAuthorizationToken_Value>::generate(),

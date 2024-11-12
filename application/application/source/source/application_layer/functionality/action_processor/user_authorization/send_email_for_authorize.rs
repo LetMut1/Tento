@@ -33,11 +33,9 @@ use crate::{
         },
         functionality::{
             repository::postgresql::{
-                user::By3,
-                user_authorization_token::{
-                    By1,
-                    Update3,
-                },
+                UserBy3,
+                UserAuthorizationTokenBy1,
+                UserAuthorizationTokenUpdate3,
                 Postgresql,
             },
             service::{
@@ -101,7 +99,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthoriz
                         file!(),
                     ),
                 )?,
-                By3 {
+                UserBy3 {
                     user__id: incoming.user__id,
                 },
             )
@@ -120,7 +118,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthoriz
             )?;
             let mut user_authorization_token = match Repository::<Postgresql<UserAuthorizationToken<'_>>>::find_3(
                 &database_2_postgresql_client,
-                By1 {
+                UserAuthorizationTokenBy1 {
                     user__id: incoming.user__id,
                     user_device__id: incoming.user_device__id.as_str(),
                 },
@@ -135,7 +133,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthoriz
             if Resolver::<Expiration>::is_expired(user_authorization_token.expires_at) {
                 Repository::<Postgresql<UserAuthorizationToken<'_>>>::delete_1(
                     &database_2_postgresql_client,
-                    By1 {
+                    UserAuthorizationTokenBy1 {
                         user__id: incoming.user__id,
                         user_device__id: incoming.user_device__id.as_str(),
                     },
@@ -149,10 +147,10 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthoriz
             user_authorization_token.can_be_resent_from = Generator::<UserAuthorizationToken_CanBeResentFrom>::generate()?;
             Repository::<Postgresql<UserAuthorizationToken<'_>>>::update_3(
                 &database_2_postgresql_client,
-                Update3 {
+                UserAuthorizationTokenUpdate3 {
                     user_authorization_token__can_be_resent_from: user_authorization_token.can_be_resent_from,
                 },
-                By1 {
+                UserAuthorizationTokenBy1 {
                     user__id: incoming.user__id,
                     user_device__id: incoming.user_device__id.as_str(),
                 },

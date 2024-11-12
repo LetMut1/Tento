@@ -51,17 +51,13 @@ use crate::{
         },
         functionality::{
             repository::postgresql::{
-                user::{
-                    By1,
-                    By2,
-                    Insert1 as UserInsert1,
-                },
-                user_access_refresh_token::Insert1 as UserAccessRefreshTokenInsert1,
-                user_device::Insert1,
-                user_registration_token::{
-                    By1 as By1_,
-                    Update4,
-                },
+                UserBy1,
+                UserBy2,
+                UserInsert1,
+                UserAccessRefreshTokenInsert1,
+                UserDeviceInsert1,
+                UserRegistrationTokenBy1,
+                UserRegistrationTokenUpdate4,
                 Postgresql,
             },
             service::{
@@ -162,7 +158,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
             )?;
             if Repository::<Postgresql<User<'_>>>::is_exist_1(
                 &database_1_postgresql_client,
-                By1 {
+                UserBy1 {
                     user__nickname: incoming.user__nickname.as_str(),
                 },
             )
@@ -172,7 +168,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
             }
             if Repository::<Postgresql<User<'_>>>::is_exist_2(
                 &database_1_postgresql_client,
-                By2 {
+                UserBy2 {
                     user__email: incoming.user__email.as_str(),
                 },
             )
@@ -188,7 +184,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
             )?;
             let mut user_registration_token = match Repository::<Postgresql<UserRegistrationToken<'_>>>::find_2(
                 &database_2_postgresql_client,
-                By1_ {
+                UserRegistrationTokenBy1 {
                     user__email: incoming.user__email.as_str(),
                     user_device__id: incoming.user_device__id.as_str(),
                 },
@@ -203,7 +199,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
             if Resolver::<Expiration>::is_expired(user_registration_token.expires_at) {
                 Repository::<Postgresql<UserRegistrationToken<'_>>>::delete_2(
                     &database_2_postgresql_client,
-                    By1_ {
+                    UserRegistrationTokenBy1 {
                         user__email: incoming.user__email.as_str(),
                         user_device__id: incoming.user_device__id.as_str(),
                     },
@@ -224,10 +220,10 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 if user_registration_token.wrong_enter_tries_quantity < UserRegistrationToken_WrongEnterTriesQuantity::LIMIT {
                     Repository::<Postgresql<UserRegistrationToken<'_>>>::update_4(
                         &database_2_postgresql_client,
-                        Update4 {
+                        UserRegistrationTokenUpdate4 {
                             user_registration_token__wrong_enter_tries_quantity: user_registration_token.wrong_enter_tries_quantity,
                         },
-                        By1_ {
+                        UserRegistrationTokenBy1 {
                             user__email: incoming.user__email.as_str(),
                             user_device__id: incoming.user_device__id.as_str(),
                         },
@@ -236,7 +232,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 } else {
                     Repository::<Postgresql<UserRegistrationToken<'_>>>::delete_2(
                         &database_2_postgresql_client,
-                        By1_ {
+                        UserRegistrationTokenBy1 {
                             user__email: incoming.user__email.as_str(),
                             user_device__id: incoming.user_device__id.as_str(),
                         },
@@ -303,7 +299,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                                 file!(),
                             ),
                         )?,
-                        Insert1 {
+                        UserDeviceInsert1 {
                             user_device__id: incoming.user_device__id,
                             user__id: user.id,
                         },
@@ -316,7 +312,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                                 file!(),
                             ),
                         )?,
-                        By1_ {
+                        UserRegistrationTokenBy1 {
                             user__email: user.email.as_str(),
                             user_device__id: user_device.id.as_str(),
                         },

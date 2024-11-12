@@ -24,7 +24,7 @@ use crate::{
             capture::Capture,
         },
         functionality::repository::postgresql::{
-            user_access_refresh_token::By2,
+            UserAccessRefreshTokenBy2,
             Postgresql,
         },
     },
@@ -70,7 +70,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_DeauthorizeFromOneDe
                         file!(),
                     ),
                 )?,
-                By2 {
+                UserAccessRefreshTokenBy2 {
                     user__id: user_access_token.user__id,
                     user_device__id: user_access_token.user_device__id,
                 },

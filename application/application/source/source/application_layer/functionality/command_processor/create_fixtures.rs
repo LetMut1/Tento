@@ -39,15 +39,11 @@ use crate::{
         },
         functionality::{
             repository::postgresql::{
-                channel::{
-                    By2,
-                    Insert1 as ChannelInsert1,
-                },
-                user::{
-                    By1,
-                    Insert1 as UserInsert1,
-                },
-                user_device::Insert1 as UserDeviceInsert1,
+                ChannelBy2,
+                ChannelInsert1,
+                UserBy1,
+                UserInsert1,
+                UserDeviceInsert1,
                 Postgresql,
             },
             service::{
@@ -181,7 +177,7 @@ impl CommandProcessor<CreateFixtures> {
                 }
                 let user = match Repository::<Postgresql<User<'_>>>::find_1(
                     &database_1_postgresql_client,
-                    By1 {
+                    UserBy1 {
                         user__nickname: user__nickname.as_str(),
                     },
                 )
@@ -286,7 +282,7 @@ impl CommandProcessor<CreateFixtures> {
                     }
                     let channel = Repository::<Postgresql<Channel<'_>>>::find_2(
                         &database_1_postgresql_client,
-                        By2 {
+                        ChannelBy2 {
                             channel__name: channel__name.as_str(),
                         },
                     )

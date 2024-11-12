@@ -32,11 +32,9 @@ use crate::{
         },
         functionality::{
             repository::postgresql::{
-                channel::{
-                    By2,
-                    By3,
-                    Insert1,
-                },
+                ChannelBy2,
+                ChannelBy3,
+                ChannelInsert1,
                 Postgresql,
             },
             service::resolver::{
@@ -109,7 +107,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_Create> {
             )?;
             if Repository::<Postgresql<Channel<'_>>>::is_exist_1(
                 &database_1_postgresql_client,
-                By2 {
+                ChannelBy2 {
                     channel__name: incoming.channel__name.as_str(),
                 },
             )
@@ -119,7 +117,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_Create> {
             }
             if Repository::<Postgresql<Channel<'_>>>::is_exist_2(
                 &database_1_postgresql_client,
-                By3 {
+                ChannelBy3 {
                     channel__linked_name: incoming.channel__linked_name.as_str(),
                 },
             )
@@ -129,7 +127,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_Create> {
             }
             let channel = Repository::<Postgresql<Channel<'_>>>::create_1(
                 &database_1_postgresql_client,
-                Insert1 {
+                ChannelInsert1 {
                     channel__owner: user_access_token.user__id,
                     channel__name: incoming.channel__name,
                     channel__linked_name: incoming.channel__linked_name,

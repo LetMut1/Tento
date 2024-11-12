@@ -36,14 +36,12 @@ use crate::{
         },
         functionality::{
             repository::postgresql::{
-                user::By2,
-                user_registration_token::{
-                    By1,
-                    Insert1,
-                    Update1,
-                    Update2,
-                    Update3,
-                },
+                UserBy2,
+                UserRegistrationTokenBy1,
+                UserRegistrationTokenInsert1,
+                UserRegistrationTokenUpdate1,
+                UserRegistrationTokenUpdate2,
+                UserRegistrationTokenUpdate3,
                 Postgresql,
             },
             service::{
@@ -107,7 +105,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                         file!(),
                     ),
                 )?,
-                By2 {
+                UserBy2 {
                     user__email: incoming.user__email.as_str(),
                 },
             )
@@ -124,7 +122,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
             let (user_registration_token__value, user_registration_token__can_be_resent_from, user_registration_token__wrong_enter_tries_quantity, can_send) =
                 match Repository::<Postgresql<UserRegistrationToken<'_>>>::find_1(
                     &database_2_postgresql_client,
-                    By1 {
+                    UserRegistrationTokenBy1 {
                         user__email: incoming.user__email.as_str(),
                         user_device__id: incoming.user_device__id.as_str(),
                     },
@@ -156,14 +154,14 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                         if need_to_update_1 && need_to_update_2 {
                             Repository::<Postgresql<UserRegistrationToken<'_>>>::update_1(
                                 &database_2_postgresql_client,
-                                Update1 {
+                                UserRegistrationTokenUpdate1 {
                                     user_registration_token__value: user_registration_token.value.as_str(),
                                     user_registration_token__wrong_enter_tries_quantity: user_registration_token.wrong_enter_tries_quantity,
                                     user_registration_token__is_approved: user_registration_token.is_approved,
                                     user_registration_token__expires_at: user_registration_token.expires_at,
                                     user_registration_token__can_be_resent_from: user_registration_token.can_be_resent_from,
                                 },
-                                By1 {
+                                UserRegistrationTokenBy1 {
                                     user__email: incoming.user__email.as_str(),
                                     user_device__id: incoming.user_device__id.as_str(),
                                 },
@@ -173,10 +171,10 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                             if need_to_update_1 {
                                 Repository::<Postgresql<UserRegistrationToken<'_>>>::update_2(
                                     &database_2_postgresql_client,
-                                    Update2 {
+                                    UserRegistrationTokenUpdate2 {
                                         user_registration_token__can_be_resent_from: user_registration_token.can_be_resent_from,
                                     },
-                                    By1 {
+                                    UserRegistrationTokenBy1 {
                                         user__email: incoming.user__email.as_str(),
                                         user_device__id: incoming.user_device__id.as_str(),
                                     },
@@ -186,13 +184,13 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                             if need_to_update_2 {
                                 Repository::<Postgresql<UserRegistrationToken<'_>>>::update_3(
                                     &database_2_postgresql_client,
-                                    Update3 {
+                                    UserRegistrationTokenUpdate3 {
                                         user_registration_token__value: user_registration_token.value.as_str(),
                                         user_registration_token__wrong_enter_tries_quantity: user_registration_token.wrong_enter_tries_quantity,
                                         user_registration_token__is_approved: user_registration_token.is_approved,
                                         user_registration_token__expires_at: user_registration_token.expires_at,
                                     },
-                                    By1 {
+                                    UserRegistrationTokenBy1 {
                                         user__email: incoming.user__email.as_str(),
                                         user_device__id: incoming.user_device__id.as_str(),
                                     },
@@ -210,7 +208,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                     Option::None => {
                         let user_registration_token = Repository::<Postgresql<UserRegistrationToken<'_>>>::create_1(
                             &database_2_postgresql_client,
-                            Insert1 {
+                            UserRegistrationTokenInsert1 {
                                 user__email: incoming.user__email.as_str(),
                                 user_device__id: incoming.user_device__id.as_str(),
                                 user_registration_token__value: Generator::<UserRegistrationToken_Value>::generate(),

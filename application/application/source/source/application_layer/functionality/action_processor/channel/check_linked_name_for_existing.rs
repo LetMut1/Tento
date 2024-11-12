@@ -30,7 +30,7 @@ use crate::{
             capture::Capture,
         },
         functionality::repository::postgresql::{
-            channel::By2,
+            ChannelBy2,
             Postgresql,
         },
     },
@@ -87,7 +87,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_CheckLinkedNameForExisting> {
                         file!(),
                     ),
                 )?,
-                By2 {
+                ChannelBy2 {
                     channel__name: incoming.channel__linked_name.as_str(),
                 },
             )

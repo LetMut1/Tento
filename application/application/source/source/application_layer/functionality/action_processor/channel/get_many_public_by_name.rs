@@ -30,7 +30,7 @@ use crate::{
             capture::Capture,
         },
         functionality::repository::postgresql::{
-            common::By1,
+            CommonBy1,
             Postgresql,
         },
     },
@@ -113,7 +113,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyPublicByName> {
                         file!(),
                     ),
                 )?,
-                By1 {
+                CommonBy1 {
                     user__id: user_access_token.user__id,
                     channel__name: incoming.channel__name.as_str(),
                     requery___channel__name: incoming.requery___channel__name.as_deref(),

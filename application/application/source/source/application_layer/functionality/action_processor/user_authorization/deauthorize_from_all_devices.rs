@@ -25,7 +25,7 @@ use crate::{
         },
         functionality::{
             repository::postgresql::{
-                user_access_refresh_token::By1,
+                UserAccessRefreshTokenBy1,
                 Postgresql,
             },
             service::resolver::{
@@ -76,7 +76,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_DeauthorizeFromAllDe
                         file!(),
                     ),
                 )?,
-                By1 {
+                UserAccessRefreshTokenBy1 {
                     user__id: user_access_token.user__id,
                 },
             )

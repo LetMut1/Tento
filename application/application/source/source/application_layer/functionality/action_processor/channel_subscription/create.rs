@@ -33,8 +33,8 @@ use crate::{
         },
         functionality::{
             repository::postgresql::{
-                channel::By1,
-                channel_subscription::Insert1,
+                ChannelBy1,
+                ChannelSubscriptionInsert1,
                 Postgresql,
             },
             service::resolver::{
@@ -98,7 +98,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
             )?;
             let channel = match Repository::<Postgresql<Channel<'_>>>::find_1(
                 &database_1_postgresql_client,
-                By1 {
+                ChannelBy1 {
                     channel__id: incoming.channel__id,
                 },
             )
@@ -122,7 +122,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
             .await?;
             if let Result::Err(aggregate_error) = Repository::<Postgresql<ChannelSubscription>>::create_1(
                 postgresql_transaction.get_client(),
-                Insert1 {
+                ChannelSubscriptionInsert1 {
                     user__id: user_access_token.user__id,
                     channel__id: channel.id,
                     channel_subscription__created_at: Resolver::<UnixTime>::get_now(),
@@ -135,7 +135,7 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
             }
             if let Result::Err(aggregate_error) = Repository::<Postgresql<Channel<'_>>>::update_1(
                 postgresql_transaction.get_client(),
-                By1 {
+                ChannelBy1 {
                     channel__id: incoming.channel__id,
                 },
             )

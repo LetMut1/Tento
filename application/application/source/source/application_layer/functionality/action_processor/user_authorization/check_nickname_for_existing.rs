@@ -21,7 +21,7 @@ use crate::{
             capture::Capture,
         },
         functionality::repository::postgresql::{
-            user::By1,
+            UserBy1,
             Postgresql,
         },
     },
@@ -63,7 +63,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_CheckNicknameForExis
                         file!(),
                     ),
                 )?,
-                By1 {
+                UserBy1 {
                     user__nickname: incoming.user__nickname.as_str(),
                 },
             )

@@ -34,10 +34,10 @@ use crate::{
             capture::Capture,
         },
         functionality::repository::postgresql::{
-            channel::By1 as By1___,
-            channel_inner_link::By1 as By1__,
-            channel_outer_link::By1 as By1_,
-            channel_subscription::By1,
+            ChannelBy1,
+            ChannelInnerLinkBy1,
+            ChannelOuterLinkBy1,
+            ChannelSubscriptionBy1,
             Postgresql,
         },
     },
@@ -98,7 +98,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
             )?;
             let channel = match Repository::<Postgresql<Channel<'_>>>::find_1(
                 &database_1_postgresql_client,
-                By1___ {
+                ChannelBy1 {
                     channel__id: incoming.channel__id,
                 },
             )
@@ -112,7 +112,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
             if const { Channel_AccessModifier::Close as i16 } == channel.access_modifier {
                 let is_exist = Repository::<Postgresql<ChannelSubscription>>::is_exist_1(
                     &database_1_postgresql_client,
-                    By1 {
+                    ChannelSubscriptionBy1 {
                         user__id: user_access_token.user__id,
                         channel__id: channel.id,
                     },
@@ -124,7 +124,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
             }
             let channel_inner_link_registry = Repository::<Postgresql<ChannelInnerLink>>::find_1(
                 &database_1_postgresql_client,
-                By1__ {
+                ChannelInnerLinkBy1 {
                     channel_inner_link__from: channel.id,
                 },
                 ChannelInnerLink::MAXIMUM_QUANTITY,
@@ -132,7 +132,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
             .await?;
             let channel_outer_link_registry = Repository::<Postgresql<ChannelOuterLink>>::find_1(
                 &database_1_postgresql_client,
-                By1_ {
+                ChannelOuterLinkBy1 {
                     channel_outer_link__from: channel.id,
                 },
                 ChannelOuterLink::MAXIMUM_QUANTITY,

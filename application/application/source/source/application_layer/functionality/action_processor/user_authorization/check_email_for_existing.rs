@@ -21,7 +21,7 @@ use crate::{
             capture::Capture,
         },
         functionality::repository::postgresql::{
-            user::By2,
+            UserBy2,
             Postgresql,
         },
     },
@@ -63,7 +63,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_CheckEmailForExistin
                         file!(),
                     ),
                 )?,
-                By2 {
+                UserBy2 {
                     user__email: incoming.user__email.as_str(),
                 },
             )
