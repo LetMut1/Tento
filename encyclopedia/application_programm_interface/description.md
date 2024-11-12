@@ -10,11 +10,6 @@ struct UserAccessTokenEncoded {
 ```
 struct UserAccessRefreshTokenEncoded(Vec<u8>)
 ```
-- `sort_order`:
-```
-0 - is equal to 'ASC'
-1 - is equal to 'DESC'
-```
 # Request standards
 - All payload data is transferred in `HTTP Body` and described under each API endpoint as `Incoming`.
 - Every request should contain this `HTTP Header`s:
