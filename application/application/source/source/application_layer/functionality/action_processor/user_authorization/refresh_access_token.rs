@@ -75,14 +75,14 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
                 inner.environment_configuration,
                 &incoming.user_access_token_encoded,
             )?;
-            let database_2_postgresql_client = inner.database_2_postgresql_connection_pool.get().await.into_runtime(
+            let postgresql_database_2_client = inner.postgresql_connection_pool_database_2.get().await.into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
                 ),
             )?;
             let mut user_access_refresh_token = match Repository::<Postgresql<UserAccessRefreshToken<'_>>>::find_1(
-                &database_2_postgresql_client,
+                &postgresql_database_2_client,
                 UserAccessRefreshTokenBy2 {
                     user__id: user_access_token.user__id,
                     user_device__id: user_access_token.user_device__id,
@@ -112,7 +112,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
             }
             if Resolver::<Expiration>::is_expired(user_access_refresh_token.expires_at) {
                 Repository::<Postgresql<UserAccessRefreshToken<'_>>>::delete_1(
-                    &database_2_postgresql_client,
+                    &postgresql_database_2_client,
                     UserAccessRefreshTokenBy2 {
                         user__id: user_access_token.user__id,
                         user_device__id: user_access_token.user_device__id,
@@ -132,7 +132,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
             user_access_refresh_token.expires_at = Generator::<UserAccessRefreshToken_ExpiresAt>::generate()?;
             user_access_refresh_token.updated_at = Generator::<UserAccessRefreshToken_UpdatedAt>::generate();
             Repository::<Postgresql<UserAccessRefreshToken<'_>>>::update_1(
-                &database_2_postgresql_client,
+                &postgresql_database_2_client,
                 UserAccessRefreshTokenUpdate1 {
                     user_access_token__id: user_access_refresh_token.user_access_token__id.as_ref(),
                     user_access_refresh_token__obfuscation_value: user_access_refresh_token.obfuscation_value.as_str(),

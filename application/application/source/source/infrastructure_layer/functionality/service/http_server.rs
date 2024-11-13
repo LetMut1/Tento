@@ -116,20 +116,20 @@ impl HttpServer {
                 return ();
             };
             let mut graceful_shutdown_signal_future_ = std::pin::pin!(graceful_shutdown_signal_future);
-            let database_1_postgresql_connection_pool;
-            let database_2_postgresql_connection_pool;
+            let postgresql_connection_pool_database_1;
+            let postgresql_connection_pool_database_2;
             #[cfg(feature = "postgresql_connection_with_tls")]
             {
                 todo!();
             }
             #[cfg(not(feature = "postgresql_connection_with_tls"))]
             {
-                database_1_postgresql_connection_pool = Creator::<PostgresqlConnectionPool>::create(
+                postgresql_connection_pool_database_1 = Creator::<PostgresqlConnectionPool>::create(
                     &environment_configuration.resource.postgresql.database_1,
                     NoTls,
                 )
                 .await?;
-                database_2_postgresql_connection_pool = Creator::<PostgresqlConnectionPool>::create(
+                postgresql_connection_pool_database_2 = Creator::<PostgresqlConnectionPool>::create(
                     &environment_configuration.resource.postgresql.database_2,
                     NoTls,
                 )
@@ -138,8 +138,8 @@ impl HttpServer {
             let cloned = Arc::new(
                 Cloned {
                     router: Self::create_router()?,
-                    database_1_postgresql_connection_pool,
-                    database_2_postgresql_connection_pool,
+                    postgresql_connection_pool_database_1,
+                    postgresql_connection_pool_database_2,
                 },
             );
             'a: loop {
@@ -986,8 +986,8 @@ impl HttpServer {
             };
             let action_processor_inner = ActionProcessorInner {
                 environment_configuration,
-                database_1_postgresql_connection_pool: &cloned.database_1_postgresql_connection_pool,
-                database_2_postgresql_connection_pool: &cloned.database_2_postgresql_connection_pool,
+                postgresql_connection_pool_database_1: &cloned.postgresql_connection_pool_database_1,
+                postgresql_connection_pool_database_2: &cloned.postgresql_connection_pool_database_2,
             };
             match *r#match.value {
                 ActionRoute::UserAuthorization {
@@ -1422,8 +1422,8 @@ impl HttpServer {
 }
 struct Cloned {
     router: Router<ActionRoute>,
-    database_1_postgresql_connection_pool: PostgresqlConnectionPool,
-    database_2_postgresql_connection_pool: PostgresqlConnectionPool,
+    postgresql_connection_pool_database_1: PostgresqlConnectionPool,
+    postgresql_connection_pool_database_2: PostgresqlConnectionPool,
 }
 pub enum ActionRoute {
     UserAuthorization {

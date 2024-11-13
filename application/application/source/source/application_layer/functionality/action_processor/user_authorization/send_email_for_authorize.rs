@@ -95,7 +95,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthoriz
                 );
             }
             let user = match Repository::<Postgresql<User<'_>>>::find_6(
-                &inner.database_1_postgresql_connection_pool.get().await.into_runtime(
+                &inner.postgresql_connection_pool_database_1.get().await.into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -112,14 +112,14 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthoriz
                     return Result::Ok(UnifiedReport::precedent(Precedent::User_NotFound));
                 }
             };
-            let database_2_postgresql_client = inner.database_2_postgresql_connection_pool.get().await.into_runtime(
+            let postgresql_database_2_client = inner.postgresql_connection_pool_database_2.get().await.into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
                 ),
             )?;
             let mut user_authorization_token = match Repository::<Postgresql<UserAuthorizationToken<'_>>>::find_3(
-                &database_2_postgresql_client,
+                &postgresql_database_2_client,
                 UserAuthorizationTokenBy1 {
                     user__id: incoming.user__id,
                     user_device__id: incoming.user_device__id.as_str(),
@@ -134,7 +134,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthoriz
             };
             if Resolver::<Expiration>::is_expired(user_authorization_token.expires_at) {
                 Repository::<Postgresql<UserAuthorizationToken<'_>>>::delete_1(
-                    &database_2_postgresql_client,
+                    &postgresql_database_2_client,
                     UserAuthorizationTokenBy1 {
                         user__id: incoming.user__id,
                         user_device__id: incoming.user_device__id.as_str(),
@@ -148,7 +148,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthoriz
             }
             user_authorization_token.can_be_resent_from = Generator::<UserAuthorizationToken_CanBeResentFrom>::generate()?;
             Repository::<Postgresql<UserAuthorizationToken<'_>>>::update_3(
-                &database_2_postgresql_client,
+                &postgresql_database_2_client,
                 UserAuthorizationTokenUpdate3 {
                     user_authorization_token__can_be_resent_from: user_authorization_token.can_be_resent_from,
                 },

@@ -59,7 +59,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_CheckEmailForExistin
                 );
             }
             let is_exist = Repository::<Postgresql<User<'_>>>::is_exist_2(
-                &inner.database_1_postgresql_connection_pool.get().await.into_runtime(
+                &inner.postgresql_connection_pool_database_1.get().await.into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),

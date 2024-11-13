@@ -109,7 +109,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetManyPublicByName> {
                 }
             }
             let common_registry = Repository::<Postgresql<Common1>>::find_1(
-                &inner.database_1_postgresql_connection_pool.get().await.into_runtime(
+                &inner.postgresql_connection_pool_database_1.get().await.into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),

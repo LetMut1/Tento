@@ -101,7 +101,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                 );
             }
             if Repository::<Postgresql<User<'_>>>::is_exist_2(
-                &inner.database_1_postgresql_connection_pool.get().await.into_runtime(
+                &inner.postgresql_connection_pool_database_1.get().await.into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -115,7 +115,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
             {
                 return Result::Ok(UnifiedReport::precedent(Precedent::User_EmailAlreadyExist));
             }
-            let database_2_postgresql_client = inner.database_2_postgresql_connection_pool.get().await.into_runtime(
+            let postgresql_database_2_client = inner.postgresql_connection_pool_database_2.get().await.into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -123,7 +123,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
             )?;
             let (user_registration_token__value, user_registration_token__can_be_resent_from, user_registration_token__wrong_enter_tries_quantity, can_send) =
                 match Repository::<Postgresql<UserRegistrationToken<'_>>>::find_1(
-                    &database_2_postgresql_client,
+                    &postgresql_database_2_client,
                     UserRegistrationTokenBy1 {
                         user__email: incoming.user__email.as_str(),
                         user_device__id: incoming.user_device__id.as_str(),
@@ -155,7 +155,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                         };
                         if need_to_update_1 && need_to_update_2 {
                             Repository::<Postgresql<UserRegistrationToken<'_>>>::update_1(
-                                &database_2_postgresql_client,
+                                &postgresql_database_2_client,
                                 UserRegistrationTokenUpdate1 {
                                     user_registration_token__value: user_registration_token.value.as_str(),
                                     user_registration_token__wrong_enter_tries_quantity: user_registration_token.wrong_enter_tries_quantity,
@@ -172,7 +172,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                         } else {
                             if need_to_update_1 {
                                 Repository::<Postgresql<UserRegistrationToken<'_>>>::update_2(
-                                    &database_2_postgresql_client,
+                                    &postgresql_database_2_client,
                                     UserRegistrationTokenUpdate2 {
                                         user_registration_token__can_be_resent_from: user_registration_token.can_be_resent_from,
                                     },
@@ -185,7 +185,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                             }
                             if need_to_update_2 {
                                 Repository::<Postgresql<UserRegistrationToken<'_>>>::update_3(
-                                    &database_2_postgresql_client,
+                                    &postgresql_database_2_client,
                                     UserRegistrationTokenUpdate3 {
                                         user_registration_token__value: user_registration_token.value.as_str(),
                                         user_registration_token__wrong_enter_tries_quantity: user_registration_token.wrong_enter_tries_quantity,
@@ -209,7 +209,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByFirstStep>
                     }
                     Option::None => {
                         let user_registration_token = Repository::<Postgresql<UserRegistrationToken<'_>>>::create_1(
-                            &database_2_postgresql_client,
+                            &postgresql_database_2_client,
                             UserRegistrationTokenInsert1 {
                                 user__email: incoming.user__email.as_str(),
                                 user_device__id: incoming.user_device__id.as_str(),

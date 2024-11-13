@@ -61,6 +61,6 @@ pub trait ActionProcessor_ {
 }
 pub struct Inner<'a> {
     pub environment_configuration: &'static EnvironmentConfiguration,
-    pub database_1_postgresql_connection_pool: &'a PostgresqlConnectionPool,
-    pub database_2_postgresql_connection_pool: &'a PostgresqlConnectionPool,
+    pub postgresql_connection_pool_database_1: &'a PostgresqlConnectionPool,
+    pub postgresql_connection_pool_database_2: &'a PostgresqlConnectionPool,
 }

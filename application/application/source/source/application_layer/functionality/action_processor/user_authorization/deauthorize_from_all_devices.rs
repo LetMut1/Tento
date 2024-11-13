@@ -72,7 +72,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_DeauthorizeFromAllDe
                 }
             };
             Repository::<Postgresql<UserAccessRefreshToken<'_>>>::delete_2(
-                &inner.database_2_postgresql_connection_pool.get().await.into_runtime(
+                &inner.postgresql_connection_pool_database_2.get().await.into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),

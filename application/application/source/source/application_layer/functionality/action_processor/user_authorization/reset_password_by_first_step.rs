@@ -101,7 +101,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
                 );
             }
             let user = Repository::<Postgresql<User<'_>>>::find_4(
-                &inner.database_1_postgresql_connection_pool.get().await.into_runtime(
+                &inner.postgresql_connection_pool_database_1.get().await.into_runtime(
                     Backtrace::new(
                         line!(),
                         file!(),
@@ -118,7 +118,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
                     return Result::Ok(UnifiedReport::precedent(Precedent::User_NotFound));
                 }
             };
-            let database_2_postgresql_client = inner.database_2_postgresql_connection_pool.get().await.into_runtime(
+            let postgresql_database_2_client = inner.postgresql_connection_pool_database_2.get().await.into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -126,7 +126,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
             )?;
             let (user_reset_password_token__value, user_reset_password_token__can_be_resent_from, user_reset_password_token__wrong_enter_tries_quantity, can_send) =
                 match Repository::<Postgresql<UserResetPasswordToken<'_>>>::find_1(
-                    &database_2_postgresql_client,
+                    &postgresql_database_2_client,
                     UserResetPasswordTokenBy1 {
                         user__id: user_.id,
                         user_device__id: incoming.user_device__id.as_str(),
@@ -158,7 +158,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
                         };
                         if need_to_update_1 && need_to_update_2 {
                             Repository::<Postgresql<UserResetPasswordToken<'_>>>::update_1(
-                                &database_2_postgresql_client,
+                                &postgresql_database_2_client,
                                 UserResetPasswordTokenUpdate1 {
                                     user_reset_password_token__value: user_reset_password_token.value.as_str(),
                                     user_reset_password_token__wrong_enter_tries_quantity: user_reset_password_token.wrong_enter_tries_quantity,
@@ -175,7 +175,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
                         } else {
                             if need_to_update_1 {
                                 Repository::<Postgresql<UserResetPasswordToken<'_>>>::update_2(
-                                    &database_2_postgresql_client,
+                                    &postgresql_database_2_client,
                                     UserResetPasswordTokenUpdate2 {
                                         user_reset_password_token__can_be_resent_from: user_reset_password_token.can_be_resent_from,
                                     },
@@ -188,7 +188,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
                             }
                             if need_to_update_2 {
                                 Repository::<Postgresql<UserResetPasswordToken<'_>>>::update_3(
-                                    &database_2_postgresql_client,
+                                    &postgresql_database_2_client,
                                     UserResetPasswordTokenUpdate3 {
                                         user_reset_password_token__value: user_reset_password_token.value.as_str(),
                                         user_reset_password_token__wrong_enter_tries_quantity: user_reset_password_token.wrong_enter_tries_quantity,
@@ -212,7 +212,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
                     }
                     Option::None => {
                         let user_reset_password_token = Repository::<Postgresql<UserResetPasswordToken<'_>>>::create_1(
-                            &database_2_postgresql_client,
+                            &postgresql_database_2_client,
                             UserResetPasswordTokenInsert1 {
                                 user__id: user_.id,
                                 user_device__id: incoming.user_device__id.as_str(),

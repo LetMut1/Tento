@@ -90,14 +90,14 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
                     ),
                 );
             }
-            let database_2_postgresql_client = inner.database_2_postgresql_connection_pool.get().await.into_runtime(
+            let postgresql_database_2_client = inner.postgresql_connection_pool_database_2.get().await.into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
                 ),
             )?;
             let mut user_registration_token = match Repository::<Postgresql<UserRegistrationToken<'_>>>::find_3(
-                &database_2_postgresql_client,
+                &postgresql_database_2_client,
                 UserRegistrationTokenBy1 {
                     user__email: incoming.user__email.as_str(),
                     user_device__id: incoming.user_device__id.as_str(),
@@ -112,7 +112,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
             };
             if Resolver::<Expiration>::is_expired(user_registration_token.expires_at) {
                 Repository::<Postgresql<UserRegistrationToken<'_>>>::delete_2(
-                    &database_2_postgresql_client,
+                    &postgresql_database_2_client,
                     UserRegistrationTokenBy1 {
                         user__email: incoming.user__email.as_str(),
                         user_device__id: incoming.user_device__id.as_str(),
@@ -129,7 +129,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForRegister
             }
             user_registration_token.can_be_resent_from = Generator::<UserRegistrationToken_CanBeResentFrom>::generate()?;
             Repository::<Postgresql<UserRegistrationToken<'_>>>::update_2(
-                &database_2_postgresql_client,
+                &postgresql_database_2_client,
                 UserRegistrationTokenUpdate2 {
                     user_registration_token__can_be_resent_from: user_registration_token.can_be_resent_from,
                 },

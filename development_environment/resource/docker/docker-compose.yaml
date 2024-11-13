@@ -1,6 +1,6 @@
 services:
-    database_1_postgresql:
-        container_name: tento_database_1_postgresql
+    postgresql_database_1:
+        container_name: tento_postgresql_database_1
         build:
             context: ./service/postgresql
             dockerfile: dockerfile
@@ -11,18 +11,18 @@ services:
             POSTGRES_PASSWORD: 'password'
             POSTGRES_DB: 'tento'
         volumes:
-            - database_1_postgresql_data:/var/lib/postgresql/data
+            - postgresql_database_1_data:/var/lib/postgresql/data
         restart: always
-    database_1_postgresql_client:
-        container_name: tento_database_1_postgresql_client
+    postgresql_database_1_client:
+        container_name: tento_postgresql_database_1_client
         build:
             context: ./service/postgresql_client
             dockerfile: dockerfile
         ports:
         - 8081:8080
         restart: always
-    database_2_postgresql:
-        container_name: tento_database_2_postgresql
+    postgresql_database_2:
+        container_name: tento_postgresql_database_2
         build:
             context: ./service/postgresql
             dockerfile: dockerfile
@@ -33,10 +33,10 @@ services:
             POSTGRES_PASSWORD: 'password'
             POSTGRES_DB: 'tento'
         volumes:
-            - database_2_postgresql_data:/var/lib/postgresql/data
+            - postgresql_database_2_data:/var/lib/postgresql/data
         restart: always
-    database_2_postgresql_client:
-        container_name: tento_database_2_postgresql_client
+    postgresql_database_2_client:
+        container_name: tento_postgresql_database_2_client
         build:
             context: ./service/postgresql_client
             dockerfile: dockerfile
@@ -62,9 +62,9 @@ services:
         - 8025:8025
         restart: always
 volumes:
-    database_1_postgresql_data:
+    postgresql_database_1_data:
         driver: local
-    database_2_postgresql_data:
+    postgresql_database_2_data:
         driver: local
 networks:
     default:

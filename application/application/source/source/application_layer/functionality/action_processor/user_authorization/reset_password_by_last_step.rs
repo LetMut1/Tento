@@ -120,14 +120,14 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                     ),
                 );
             }
-            let database_2_postgresql_client = inner.database_2_postgresql_connection_pool.get().await.into_runtime(
+            let postgresql_database_2_client = inner.postgresql_connection_pool_database_2.get().await.into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
                 ),
             )?;
             let mut user_reset_password_token = match Repository::<Postgresql<UserResetPasswordToken<'_>>>::find_2(
-                &database_2_postgresql_client,
+                &postgresql_database_2_client,
                 UserResetPasswordTokenBy1 {
                     user__id: incoming.user__id,
                     user_device__id: incoming.user_device__id.as_str(),
@@ -142,7 +142,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
             };
             if Resolver::<Expiration>::is_expired(user_reset_password_token.expires_at) {
                 Repository::<Postgresql<UserResetPasswordToken<'_>>>::delete_2(
-                    &database_2_postgresql_client,
+                    &postgresql_database_2_client,
                     UserResetPasswordTokenBy1 {
                         user__id: incoming.user__id,
                         user_device__id: incoming.user_device__id.as_str(),
@@ -163,7 +163,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                 )?;
                 if user_reset_password_token.wrong_enter_tries_quantity < UserResetPasswordToken_WrongEnterTriesQuantity::LIMIT {
                     Repository::<Postgresql<UserResetPasswordToken<'_>>>::update_4(
-                        &database_2_postgresql_client,
+                        &postgresql_database_2_client,
                         UserResetPasswordTokenUpdate4 {
                             user_reset_password_token__wrong_enter_tries_quantity: user_reset_password_token.wrong_enter_tries_quantity,
                         },
@@ -175,7 +175,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                     .await?;
                 } else {
                     Repository::<Postgresql<UserResetPasswordToken<'_>>>::delete_2(
-                        &database_2_postgresql_client,
+                        &postgresql_database_2_client,
                         UserResetPasswordTokenBy1 {
                             user__id: incoming.user__id,
                             user_device__id: incoming.user_device__id.as_str(),
@@ -185,14 +185,14 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                 }
                 return Result::Ok(UnifiedReport::precedent(Precedent::UserResetPasswordToken_WrongValue));
             }
-            let database_1_postgresql_client = inner.database_1_postgresql_connection_pool.get().await.into_runtime(
+            let postgresql_database_1_client = inner.postgresql_connection_pool_database_1.get().await.into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
                 ),
             )?;
             let mut user = match Repository::<Postgresql<User<'_>>>::find_5(
-                &database_1_postgresql_client,
+                &postgresql_database_1_client,
                 UserBy3 {
                     user__id: incoming.user__id,
                 },
@@ -230,7 +230,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
                 ),
             )??;
             Repository::<Postgresql<User<'_>>>::update_1(
-                &database_1_postgresql_client,
+                &postgresql_database_1_client,
                 UserUpdate1 {
                     user__password_hash: user.password_hash.as_str(),
                 },
@@ -240,18 +240,18 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByLastS
             )
             .await?;
             Repository::<Postgresql<UserAccessRefreshToken<'_>>>::delete_2(
-                &database_2_postgresql_client,
+                &postgresql_database_2_client,
                 UserAccessRefreshTokenBy1 {
                     user__id: incoming.user__id,
                 },
             )
             .await?;
             Resolver::<CloudMessage>::deauthorize_user_from_all_devices();
-            let database_2_postgresql_connection_pool = inner.database_2_postgresql_connection_pool.clone();
+            let postgresql_connection_pool_database_2 = inner.postgresql_connection_pool_database_2.clone();
             Spawner::<TokioNonBlockingTask>::spawn_into_background(
                 async move {
                     Repository::<Postgresql<UserResetPasswordToken<'_>>>::delete_2(
-                        &database_2_postgresql_connection_pool.get().await.into_runtime(
+                        &postgresql_connection_pool_database_2.get().await.into_runtime(
                             Backtrace::new(
                                 line!(),
                                 file!(),

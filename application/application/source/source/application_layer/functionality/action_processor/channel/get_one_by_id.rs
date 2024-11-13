@@ -92,14 +92,14 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                     ),
                 );
             }
-            let database_1_postgresql_client = inner.database_1_postgresql_connection_pool.get().await.into_runtime(
+            let postgresql_database_1_client = inner.postgresql_connection_pool_database_1.get().await.into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
                 ),
             )?;
             let channel = match Repository::<Postgresql<Channel<'_>>>::find_1(
-                &database_1_postgresql_client,
+                &postgresql_database_1_client,
                 ChannelBy1 {
                     channel__id: incoming.channel__id,
                 },
@@ -113,7 +113,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
             };
             if const { Channel_AccessModifier::Close as i16 } == channel.access_modifier {
                 let is_exist = Repository::<Postgresql<ChannelSubscription>>::is_exist_1(
-                    &database_1_postgresql_client,
+                    &postgresql_database_1_client,
                     ChannelSubscriptionBy1 {
                         user__id: user_access_token.user__id,
                         channel__id: channel.id,
@@ -125,7 +125,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
                 }
             }
             let channel_inner_link_registry = Repository::<Postgresql<ChannelInnerLink>>::find_1(
-                &database_1_postgresql_client,
+                &postgresql_database_1_client,
                 ChannelInnerLinkBy1 {
                     channel_inner_link__from: channel.id,
                 },
@@ -133,7 +133,7 @@ impl ActionProcessor_ for ActionProcessor<Channel_GetOneById> {
             )
             .await?;
             let channel_outer_link_registry = Repository::<Postgresql<ChannelOuterLink>>::find_1(
-                &database_1_postgresql_client,
+                &postgresql_database_1_client,
                 ChannelOuterLinkBy1 {
                     channel_outer_link__from: channel.id,
                 },
