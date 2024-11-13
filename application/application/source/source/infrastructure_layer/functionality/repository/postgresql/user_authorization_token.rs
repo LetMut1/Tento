@@ -492,7 +492,7 @@ impl Repository<Postgresql<UserAuthorizationToken<'_>>> {
                 SELECT \
                     uat.value AS v,\
                     uat.wrong_enter_tries_quantity AS wetq,\
-                    uat.expires_at AS ea\
+                    uat.expires_at AS ea \
                 FROM \
                     public.user_authorization_token uat \
                 WHERE \

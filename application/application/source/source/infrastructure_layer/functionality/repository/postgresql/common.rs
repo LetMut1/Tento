@@ -190,7 +190,7 @@ impl Repository<Postgresql<Common1>> {
                     c.access_modifier AS am,\
                     c.visability_modifier AS vm,\
                     c.cover_image_path AS cip,\
-                    c.background_image_path AS bip\
+                    c.background_image_path AS bip \
                 FROM \
                     public.channel c \
                 INNER JOIN \

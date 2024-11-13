@@ -374,7 +374,7 @@ impl Repository<Postgresql<User<'_>>> {
                 SELECT \
                     u.id AS i,\
                     u.email AS e,\
-                    u.password_hash AS ph\
+                    u.password_hash AS ph \
                 FROM \
                     public.user_ u \
                 WHERE \
