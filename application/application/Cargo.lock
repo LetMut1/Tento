@@ -119,6 +119,7 @@ dependencies = [
  "cargo-emit",
  "chrono",
  "const_format",
+ "deadpool",
  "deadpool-postgres",
  "dedicated_crate",
  "hmac",

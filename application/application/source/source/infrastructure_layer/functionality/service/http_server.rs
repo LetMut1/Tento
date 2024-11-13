@@ -125,12 +125,12 @@ impl HttpServer {
             #[cfg(not(feature = "postgresql_connection_with_tls"))]
             {
                 database_1_postgresql_connection_pool = Creator::<PostgresqlConnectionPool>::create(
-                    environment_configuration.resource.postgresql.database_1_url.as_str(),
+                    &environment_configuration.resource.postgresql.database_1,
                     NoTls,
                 )
                 .await?;
                 database_2_postgresql_connection_pool = Creator::<PostgresqlConnectionPool>::create(
-                    environment_configuration.resource.postgresql.database_2_url.as_str(),
+                    &environment_configuration.resource.postgresql.database_2,
                     NoTls,
                 )
                 .await?;

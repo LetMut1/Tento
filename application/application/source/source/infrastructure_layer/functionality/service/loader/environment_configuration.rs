@@ -22,12 +22,15 @@ use crate::infrastructure_layer::data::{
         TcpKeepalive,
         Tls,
         TokioRuntime,
+        PostgresqlInner,
     },
 };
 use std::{
     net::ToSocketAddrs,
     path::Path,
+    str::FromStr,
 };
+use tokio_postgres::config::Config;
 impl Loader<EnvironmentConfiguration> {
     const ENVIRONMENT_FILE_NAME: &'static str = "environment.toml";
     pub fn load_from_file<'a>(environment_configuration_file_directory: &'a str) -> Result<EnvironmentConfiguration, AggregateError> {
@@ -85,6 +88,20 @@ impl Loader<EnvironmentConfiguration> {
             ),
         )?;
         let email_server_tcp_socket_address = email_server_tcp_socket_address_registry.next().into_logic_invalid_socket_address(
+            Backtrace::new(
+                line!(),
+                file!(),
+            ),
+        )?;
+        let postgreql_database_1_configuration = Config::from_str(environment_configuration_file.resource.postgresql.database_1.url.value.as_str())
+        .into_logic(
+            Backtrace::new(
+                line!(),
+                file!(),
+            ),
+        )?;
+        let postgreql_database_2_configuration = Config::from_str(environment_configuration_file.resource.postgresql.database_2.url.value.as_str())
+        .into_logic(
             Backtrace::new(
                 line!(),
                 file!(),
@@ -179,8 +196,16 @@ impl Loader<EnvironmentConfiguration> {
                 },
                 resource: Resource {
                     postgresql: Postgresql {
-                        database_1_url: environment_configuration_file.resource.postgresql.database_1_url.value,
-                        database_2_url: environment_configuration_file.resource.postgresql.database_2_url.value,
+                        database_1: PostgresqlInner {
+                            configuration: postgreql_database_1_configuration,
+                            maximum_connection_pool_size: environment_configuration_file.resource.postgresql.database_1.maximum_connection_pool_size.value,
+                            connection_pool_waiting_timeout_duration: environment_configuration_file.resource.postgresql.database_1.connection_pool_waiting_timeout_duration.value,
+                        },
+                        database_2: PostgresqlInner {
+                            configuration: postgreql_database_2_configuration,
+                            maximum_connection_pool_size: environment_configuration_file.resource.postgresql.database_2.maximum_connection_pool_size.value,
+                            connection_pool_waiting_timeout_duration: environment_configuration_file.resource.postgresql.database_2.connection_pool_waiting_timeout_duration.value,
+                        },
                     },
                     email_server: EmailServer {
                         socket_address: email_server_tcp_socket_address,

@@ -126,7 +126,7 @@ impl CommandProcessor<CreateFixtures> {
     fn create_fixtures<'a>(environment_configuration: &'a EnvironmentConfiguration) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let database_1_postgresql_connection_pool = Creator::<PostgresqlConnectionPool>::create(
-                environment_configuration.resource.postgresql.database_1_url.as_str(),
+                &environment_configuration.resource.postgresql.database_1,
                 NoTls,
             )
             .await?;

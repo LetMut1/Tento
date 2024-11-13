@@ -29,7 +29,8 @@ bitcode = { package = "bitcode", version = "=0.6.3", default-features = true, fe
 bytes = { package = "bytes", version = "=1.7.1", default-features = true, features = [], optional = false }
 chrono = { package = "chrono", version = "=0.4.38", default-features = true, features = [], optional = false }
 const_format = { package = "const_format", version = "=0.2.33", default-features = true, features = [], optional = true }
-deadpool_postgres = { package = "deadpool-postgres", version = "=0.14.0", default-features = true, features = [], optional = false }
+deadpool = { package = "deadpool", version = "=0.12.1", default-features = true, features = ["rt_tokio_1"], optional = false }
+deadpool_postgres = { package = "deadpool-postgres", version = "=0.14.0", default-features = true, features = ["rt_tokio_1"], optional = false }
 dedicated_crate = { path = "./dedicated_crate", package = "dedicated_crate", version = "=1.0.0", default-features = true, features = [], optional = false }
 hmac = { package = "hmac", version = "=0.12.1", default-features = true, features = [], optional = false }
 http = { package = "http", version = "=1.1.0", default-features = true, features = [], optional = false }

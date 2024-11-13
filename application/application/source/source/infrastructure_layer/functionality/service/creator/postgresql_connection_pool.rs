@@ -7,27 +7,36 @@ use crate::infrastructure_layer::data::{
     },
     capture::Capture,
 };
+use deadpool::{
+    managed::QueueMode,
+    Runtime,
+};
 pub use deadpool_postgres::Pool as PostgresqlConnectionPool;
 use deadpool_postgres::{
     Manager,
     ManagerConfig,
+    PoolConfig,
     RecyclingMethod,
+    Timeouts,
 };
 use dedicated_crate::void::Void;
 use std::{
     future::Future,
-    str::FromStr,
+    time::Duration,
 };
 use tokio_postgres::{
-    config::Config,
     tls::{
         MakeTlsConnect,
         TlsConnect,
     },
     Socket,
 };
+use crate::infrastructure_layer::data::environment_configuration::PostgresqlInner;
 impl Creator<PostgresqlConnectionPool> {
-    pub fn create<'a, T>(database_url: &'a str, tls_type: T) -> impl Future<Output = Result<PostgresqlConnectionPool, AggregateError>> + Send + Capture<&'a Void>
+    pub fn create<'a, T>(
+        postgresql_inner: &'a PostgresqlInner,
+        tls_type: T
+    ) -> impl Future<Output = Result<PostgresqlConnectionPool, AggregateError>> + Send + Capture<&'a Void>
     where
         T: MakeTlsConnect<Socket> + Clone + Send + Sync + 'static,
         <T as MakeTlsConnect<Socket>>::Stream: Send + Sync,
@@ -37,19 +46,25 @@ impl Creator<PostgresqlConnectionPool> {
         return async move {
             return PostgresqlConnectionPool::builder(
                 Manager::from_config(
-                    Config::from_str(database_url).into_logic(
-                        Backtrace::new(
-                            line!(),
-                            file!(),
-                        ),
-                    )?,
+                    postgresql_inner.configuration.clone(),
                     tls_type,
                     ManagerConfig {
                         recycling_method: RecyclingMethod::Fast,
                     },
                 ),
             )
-            .max_size(2)
+            .config(
+                PoolConfig {
+                    max_size: postgresql_inner.maximum_connection_pool_size,
+                    timeouts: Timeouts {
+                        wait: Option::Some(Duration::from_millis(postgresql_inner.connection_pool_waiting_timeout_duration)),
+                        create: Option::None,
+                        recycle: Option::None,
+                    },
+                    queue_mode: QueueMode::Fifo,
+                }
+            )
+            .runtime(Runtime::Tokio1)
             .build()
             .into_runtime(
                 Backtrace::new(

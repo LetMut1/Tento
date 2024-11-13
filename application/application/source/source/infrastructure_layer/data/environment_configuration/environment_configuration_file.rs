@@ -67,8 +67,14 @@ pub struct Resource {
 }
 #[derive(serde::Deserialize)]
 pub struct Postgresql {
-    pub database_1_url: Value<String>,
-    pub database_2_url: Value<String>,
+    pub database_1: PostgresqlInner,
+    pub database_2: PostgresqlInner,
+}
+#[derive(serde::Deserialize)]
+pub struct PostgresqlInner {
+    pub url: Value<String>,
+    pub maximum_connection_pool_size: Value<usize>,
+    pub connection_pool_waiting_timeout_duration: Value<u64>,
 }
 #[derive(serde::Deserialize)]
 pub struct EmailServer {

@@ -1,6 +1,7 @@
 mod environment_configuration_file;
 pub use self::environment_configuration_file::EnvironmentConfigurationFile;
 use std::net::SocketAddr;
+use tokio_postgres::config::Config;
 pub struct EnvironmentConfiguration {
     pub tokio_runtime: TokioRuntime,
     pub application_server: ApplicationServer,
@@ -57,8 +58,13 @@ pub struct Resource {
     pub email_server: EmailServer,
 }
 pub struct Postgresql {
-    pub database_1_url: String,
-    pub database_2_url: String,
+    pub database_1: PostgresqlInner,
+    pub database_2: PostgresqlInner,
+}
+pub struct PostgresqlInner {
+    pub configuration: Config,
+    pub maximum_connection_pool_size: usize,
+    pub connection_pool_waiting_timeout_duration: u64,
 }
 pub struct EmailServer {
     pub socket_address: SocketAddr,
