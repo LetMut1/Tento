@@ -51,6 +51,9 @@ use crate::{
             repository::{
                 postgresql::{
                     Postgresql,
+                    Resolver as Resolver_,
+                    Transaction,
+                    TransactionIsolationLevel,
                     UserAccessRefreshTokenBy2,
                     UserAccessRefreshTokenInsert1,
                     UserAccessRefreshTokenUpdate1,
@@ -127,7 +130,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                     ),
                 );
             }
-            let postgresql_database_2_client = inner.postgresql_connection_pool_database_2.get().await.into_runtime(
+            let mut postgresql_database_2_client = inner.postgresql_connection_pool_database_2.get().await.into_runtime(
                 Backtrace::new(
                     line!(),
                     file!(),
@@ -221,40 +224,48 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
             let user_access_refresh_token__obfuscation_value = Generator::<UserAccessRefreshToken_ObfuscationValue>::generate();
             let user_access_refresh_token__expires_at = Generator::<UserAccessRefreshToken_ExpiresAt>::generate()?;
             let user_access_refresh_token__updated_at = Generator::<UserAccessRefreshToken_UpdatedAt>::generate();
-            // TODO  TRANZACTION
-            let user_access_refresh_token = match Repository::<Postgresql<UserAccessRefreshToken<'_>>>::find_1(
+            let user_access_refresh_token = Repository::<Postgresql<UserAccessRefreshToken<'_>>>::find_1(
                 &postgresql_database_2_client,
                 UserAccessRefreshTokenBy2 {
                     user__id: incoming.user__id,
                     user_device__id: incoming.user_device__id.as_str(),
                 },
             )
-            .await?
-            {
-                Option::Some(mut user_access_refresh_token_) => {
-                    user_access_refresh_token_.user_access_token__id = Cow::Borrowed(user_access_token__id);
-                    user_access_refresh_token_.obfuscation_value = user_access_refresh_token__obfuscation_value;
-                    user_access_refresh_token_.expires_at = user_access_refresh_token__expires_at;
-                    user_access_refresh_token_.updated_at = user_access_refresh_token__updated_at;
-                    Repository::<Postgresql<UserAccessRefreshToken<'_>>>::update_1(
-                        &postgresql_database_2_client,
+            .await?;
+            let transaction = Resolver_::<Transaction<'_>>::start(
+                &mut postgresql_database_2_client,
+                TransactionIsolationLevel::ReadCommitted,
+            )
+            .await?;
+            let user_access_refresh_token_ = match user_access_refresh_token {
+                Option::Some(mut user_access_refresh_token__) => {
+                    user_access_refresh_token__.user_access_token__id = Cow::Borrowed(user_access_token__id);
+                    user_access_refresh_token__.obfuscation_value = user_access_refresh_token__obfuscation_value;
+                    user_access_refresh_token__.expires_at = user_access_refresh_token__expires_at;
+                    user_access_refresh_token__.updated_at = user_access_refresh_token__updated_at;
+                    if let Result::Err(aggregate_error) = Repository::<Postgresql<UserAccessRefreshToken<'_>>>::update_1(
+                        transaction.get_client(),
                         UserAccessRefreshTokenUpdate1 {
-                            user_access_token__id: user_access_refresh_token_.user_access_token__id.as_ref(),
-                            user_access_refresh_token__obfuscation_value: user_access_refresh_token_.obfuscation_value.as_str(),
-                            user_access_refresh_token__expires_at: user_access_refresh_token_.expires_at,
-                            user_access_refresh_token__updated_at: user_access_refresh_token_.updated_at,
+                            user_access_token__id: user_access_refresh_token__.user_access_token__id.as_ref(),
+                            user_access_refresh_token__obfuscation_value: user_access_refresh_token__.obfuscation_value.as_str(),
+                            user_access_refresh_token__expires_at: user_access_refresh_token__.expires_at,
+                            user_access_refresh_token__updated_at: user_access_refresh_token__.updated_at,
                         },
                         UserAccessRefreshTokenBy2 {
                             user__id: incoming.user__id,
                             user_device__id: incoming.user_device__id.as_str(),
                         },
                     )
-                    .await?;
-                    user_access_refresh_token_
+                    .await
+                    {
+                        Resolver_::<Transaction<'_>>::rollback(transaction).await?;
+                        return Result::Err(aggregate_error);
+                    }
+                    user_access_refresh_token__
                 }
                 Option::None => {
-                    let user_access_refresh_token_ = Repository::<Postgresql<UserAccessRefreshToken<'_>>>::create_1(
-                        &postgresql_database_2_client,
+                    let user_access_refresh_token__ = match Repository::<Postgresql<UserAccessRefreshToken<'_>>>::create_1(
+                        transaction.get_client(),
                         UserAccessRefreshTokenInsert1 {
                             user__id: incoming.user__id,
                             user_device__id: incoming.user_device__id.as_str(),
@@ -264,21 +275,35 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                             user_access_refresh_token__updated_at,
                         },
                     )
-                    .await?;
-                    user_access_refresh_token_
+                    .await
+                    {
+                        Result::Ok(user_access_refresh_token___) => user_access_refresh_token___,
+                        Result::Err(aggregate_error) => {
+                            Resolver_::<Transaction<'_>>::rollback(transaction).await?;
+                            return Result::Err(aggregate_error);
+                        }
+                    };
+                    user_access_refresh_token__
                 }
             };
-            // TODO  TRANZACTION
+            Repository::<Postgresql<UserAuthorizationToken<'_>>>::delete_1(
+                transaction.get_client(),
+                UserAuthorizationTokenBy1 {
+                    user__id: incoming.user__id,
+                    user_device__id: incoming.user_device__id.as_str(),
+                },
+            )
+            .await?;
+            Resolver_::<Transaction<'_>>::commit(transaction).await?;
             let user_access_token_encoded = Encoder::<UserAccessToken<'_>>::encode(
                 &inner.environment_configuration.encryption.private_key,
                 &user_access_token,
             )?;
             let user_access_refresh_token_encoded = Encoder::<UserAccessRefreshToken<'_>>::encode(
                 &inner.environment_configuration.encryption.private_key,
-                &user_access_refresh_token,
+                &user_access_refresh_token_,
             )?;
             let postgresql_connection_pool_database_1 = inner.postgresql_connection_pool_database_1.clone();
-            let postgresql_connection_pool_database_2 = inner.postgresql_connection_pool_database_2.clone();
             Spawner::<TokioNonBlockingTask>::spawn_into_background(
                 async move {
                     let user_device = Repository::<Postgresql<UserDevice>>::create_1(
@@ -291,19 +316,6 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                         UserDeviceInsert1 {
                             user_device__id: incoming.user_device__id,
                             user__id: incoming.user__id,
-                        },
-                    )
-                    .await?;
-                    Repository::<Postgresql<UserAuthorizationToken<'_>>>::delete_1(
-                        &postgresql_connection_pool_database_2.get().await.into_runtime(
-                            Backtrace::new(
-                                line!(),
-                                file!(),
-                            ),
-                        )?,
-                        UserAuthorizationTokenBy1 {
-                            user__id: user_device.user__id,
-                            user_device__id: user_device.id.as_str(),
                         },
                     )
                     .await?;
