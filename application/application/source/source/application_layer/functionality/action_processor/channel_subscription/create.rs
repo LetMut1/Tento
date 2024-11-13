@@ -35,10 +35,9 @@ use crate::{
             repository::{
                 postgresql::{
                     ChannelBy1,
-                    ChannelSubscriptionInsert1,
                     Postgresql,
                     Resolver as Resolver_,
-                    TransactionIsolationLevel,
+                    IsolationLevel,
                     Transaction,
                 },
                 Repository,
@@ -120,16 +119,16 @@ impl ActionProcessor_ for ActionProcessor<ChannelSubscription_Create> {
             }
             let transaction = Resolver_::<Transaction<'_>>::start(
                 &mut postgresql_database_1_client,
-                TransactionIsolationLevel::ReadCommitted,
+                IsolationLevel::ReadCommitted,
             )
             .await?;
             if let Result::Err(aggregate_error) = Repository::<Postgresql<ChannelSubscription>>::create_1(
                 transaction.get_client(),
-                ChannelSubscriptionInsert1 {
-                    user__id: user_access_token.user__id,
-                    channel__id: channel.id,
-                    channel_subscription__created_at: Resolver::<UnixTime>::get_now(),
-                },
+                &ChannelSubscription::new(
+                    user_access_token.user__id,
+                    channel.id,
+                    Resolver::<UnixTime>::get_now(),
+                ),
             )
             .await
             {

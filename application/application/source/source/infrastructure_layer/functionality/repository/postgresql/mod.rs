@@ -26,7 +26,6 @@ pub use self::{
     },
     channel_subscription::{
         By1 as ChannelSubscriptionBy1,
-        Insert1 as ChannelSubscriptionInsert1,
     },
     common::{
         By1 as CommonBy1,
@@ -131,24 +130,24 @@ impl<'a> Transaction<'a> {
 impl Resolver<Transaction<'_>> {
     pub fn start<'a>(
         client: &'a mut Client,
-        transaction_isolation_level: TransactionIsolationLevel,
+        transaction_isolation_level: IsolationLevel,
     ) -> impl Future<Output = Result<Transaction<'a>, AggregateError>> + Send {
         return async move {
             let mut query = "START TRANSACTION ISOLATION LEVEL".to_string();
             match transaction_isolation_level {
-                TransactionIsolationLevel::ReadCommitted => {
+                IsolationLevel::ReadCommitted => {
                     query = format!(
                         "{} READ COMMITTED,READ WRITE,NOT DEFERRABLE;",
                         query.as_str(),
                     );
                 }
-                TransactionIsolationLevel::RepeatableRead => {
+                IsolationLevel::RepeatableRead => {
                     query = format!(
                         "{} REPEATABLE READ,READ WRITE,NOT DEFERRABLE;",
                         query.as_str(),
                     );
                 }
-                TransactionIsolationLevel::Serializable {
+                IsolationLevel::Serializable {
                     read_only,
                     deferrable,
                 } => {
@@ -220,7 +219,7 @@ impl Resolver<Transaction<'_>> {
         };
     }
 }
-pub enum TransactionIsolationLevel {
+pub enum IsolationLevel {
     ReadCommitted,
     RepeatableRead,
     Serializable {

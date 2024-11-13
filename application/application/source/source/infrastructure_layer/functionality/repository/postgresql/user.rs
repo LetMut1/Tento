@@ -36,18 +36,18 @@ impl Repository<Postgresql<User<'_>>> {
             let query = "\
                 INSERT INTO \
                     public.user_ AS u (\
-                    id,\
-                    email,\
-                    nickname,\
-                    password_hash,\
-                    created_at\
-                ) VALUES (\
-                    nextval('public.user_1'),\
-                    $1,\
-                    $2,\
-                    $3,\
-                    $4 \
-                ) \
+                        id,\
+                        email,\
+                        nickname,\
+                        password_hash,\
+                        created_at\
+                    ) VALUES (\
+                        nextval('public.user_1'),\
+                        $1,\
+                        $2,\
+                        $3,\
+                        $4\
+                    ) \
                 RETURNING \
                     u.id AS i;";
             let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
@@ -108,6 +108,73 @@ impl Repository<Postgresql<User<'_>>> {
             );
         };
     }
+    pub fn create_2<'a, 'b>(database_1_client: &'a Client, user: &'a User<'b>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
+        return async move {
+            let user__nickname = user.nickname.as_ref();
+            let query = "\
+                INSERT INTO \
+                    public.user_ AS u (\
+                        id,\
+                        email,\
+                        nickname,\
+                        password_hash,\
+                        created_at\
+                    ) VALUES (\
+                        $1,\
+                        $2,\
+                        $3,\
+                        $4,\
+                        $5\
+                    );";
+            let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
+            prepared_statemant_parameter_storage
+                .add(
+                    &user.id,
+                    Type::INT8,
+                )
+                .add(
+                    &user.email,
+                    Type::TEXT,
+                )
+                .add(
+                    &user__nickname,
+                    Type::TEXT,
+                )
+                .add(
+                    &user.password_hash,
+                    Type::TEXT,
+                )
+                .add(
+                    &user.created_at,
+                    Type::INT8,
+                );
+            let statement = database_1_client
+                .prepare_typed_cached(
+                    query,
+                    prepared_statemant_parameter_storage.get_parameter_type_registry(),
+                )
+                .await
+                .into_logic(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?;
+            let row_registry = database_1_client
+                .query(
+                    &statement,
+                    prepared_statemant_parameter_storage.get_parameter_registry(),
+                )
+                .await
+                .into_runtime(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?;
+            return Result::Ok(());
+        };
+    }
     pub fn update_1<'a>(database_1_client: &'a Client, update_1: Update1<'a>, by_3: By3) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
@@ -131,6 +198,46 @@ impl Repository<Postgresql<User<'_>>> {
                 .add(
                     &by_3.user__id,
                     Type::INT8,
+                );
+            let statement = database_1_client
+                .prepare_typed_cached(
+                    query,
+                    prepared_statemant_parameter_storage.get_parameter_type_registry(),
+                )
+                .await
+                .into_logic(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?;
+            database_1_client
+                .query(
+                    &statement,
+                    prepared_statemant_parameter_storage.get_parameter_registry(),
+                )
+                .await
+                .into_runtime(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?;
+            return Result::Ok(());
+        };
+    }
+    pub fn delete_1<'a>(database_1_client: &'a Client, by_3: By3) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
+        return async move {
+            let query = "\
+                DELETE FROM ONLY \
+                    public.user_ AS u \
+                WHERE \
+                    u.id = $1;";
+            let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
+            prepared_statemant_parameter_storage
+                .add(
+                    &by_3.user__id,
+                    Type::TEXT,
                 );
             let statement = database_1_client
                 .prepare_typed_cached(
@@ -682,6 +789,44 @@ impl Repository<Postgresql<User<'_>>> {
                         )?,
                     },
                 ),
+            );
+        };
+    }
+    pub fn get_user_id<'a>(database_1_client: &'a Client) -> impl Future<Output = Result<i64, AggregateError>> + Send + Capture<&'a Void> {
+        return async move {
+            let query = "\
+                SELECT nextval('public.user_1') AS n";
+            let statement = database_1_client
+                .prepare_typed_cached(
+                    query,
+                    [].as_slice(),
+                )
+                .await
+                .into_logic(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?;
+            let row_registry = database_1_client
+                .query(
+                    &statement,
+                    [].as_slice(),
+                )
+                .await
+                .into_runtime(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?;
+            return Result::Ok(
+                row_registry[0].try_get::<'_, usize, i64>(0).into_logic(
+                    Backtrace::new(
+                        line!(),
+                        file!(),
+                    ),
+                )?,
             );
         };
     }

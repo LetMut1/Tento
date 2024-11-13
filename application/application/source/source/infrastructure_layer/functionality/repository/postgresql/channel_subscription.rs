@@ -21,7 +21,7 @@ use dedicated_crate::void::Void;
 use std::future::Future;
 use tokio_postgres::types::Type;
 impl Repository<Postgresql<ChannelSubscription>> {
-    pub fn create_1<'a>(database_1_client: &'a Client, insert_1: Insert1) -> impl Future<Output = Result<ChannelSubscription, AggregateError>> + Send + Capture<&'a Void> {
+    pub fn create_1<'a>(database_1_client: &'a Client, channel_subscription: &'a ChannelSubscription) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let query = "\
                 INSERT INTO \
@@ -37,15 +37,15 @@ impl Repository<Postgresql<ChannelSubscription>> {
             let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
             prepared_statemant_parameter_storage
                 .add(
-                    &insert_1.user__id,
+                    &channel_subscription.user__id,
                     Type::INT8,
                 )
                 .add(
-                    &insert_1.channel__id,
+                    &channel_subscription.channel__id,
                     Type::INT8,
                 )
                 .add(
-                    &insert_1.channel_subscription__created_at,
+                    &channel_subscription.created_at,
                     Type::INT8,
                 );
             let statement = database_1_client
@@ -72,12 +72,7 @@ impl Repository<Postgresql<ChannelSubscription>> {
                         file!(),
                     ),
                 )?;
-            let channel_subscription = ChannelSubscription::new(
-                insert_1.user__id,
-                insert_1.channel__id,
-                insert_1.channel_subscription__created_at,
-            );
-            return Result::Ok(channel_subscription);
+            return Result::Ok(());
         };
     }
     pub fn is_exist_1<'a>(database_1_client: &'a Client, by_1: By1) -> impl Future<Output = Result<bool, AggregateError>> + Send + Capture<&'a Void> {
@@ -130,11 +125,6 @@ impl Repository<Postgresql<ChannelSubscription>> {
             return Result::Ok(true);
         };
     }
-}
-pub struct Insert1 {
-    pub user__id: i64,
-    pub channel__id: i64,
-    pub channel_subscription__created_at: i64,
 }
 pub struct By1 {
     pub user__id: i64,

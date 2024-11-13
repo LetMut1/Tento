@@ -53,7 +53,7 @@ use crate::{
                     Postgresql,
                     Resolver as Resolver_,
                     Transaction,
-                    TransactionIsolationLevel,
+                    IsolationLevel,
                     UserAccessRefreshTokenBy2,
                     UserAccessRefreshTokenInsert1,
                     UserAccessRefreshTokenUpdate1,
@@ -234,7 +234,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
             .await?;
             let transaction = Resolver_::<Transaction<'_>>::start(
                 &mut postgresql_database_2_client,
-                TransactionIsolationLevel::ReadCommitted,
+                IsolationLevel::ReadCommitted,
             )
             .await?;
             let user_access_refresh_token_ = match user_access_refresh_token {
@@ -286,14 +286,18 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                     user_access_refresh_token__
                 }
             };
-            Repository::<Postgresql<UserAuthorizationToken<'_>>>::delete_1(
+            if let Result::Err(aggregate_error) = Repository::<Postgresql<UserAuthorizationToken<'_>>>::delete_1(
                 transaction.get_client(),
                 UserAuthorizationTokenBy1 {
                     user__id: incoming.user__id,
                     user_device__id: incoming.user_device__id.as_str(),
                 },
             )
-            .await?;
+            .await
+            {
+                Resolver_::<Transaction<'_>>::rollback(transaction).await?;
+                return Result::Err(aggregate_error);
+            }
             Resolver_::<Transaction<'_>>::commit(transaction).await?;
             let user_access_token_encoded = Encoder::<UserAccessToken<'_>>::encode(
                 &inner.environment_configuration.encryption.private_key,

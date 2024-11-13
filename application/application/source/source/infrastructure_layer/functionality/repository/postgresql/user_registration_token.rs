@@ -37,22 +37,22 @@ impl Repository<Postgresql<UserRegistrationToken<'_>>> {
             let query = "\
                 INSERT INTO \
                     public.user_registration_token AS urt (\
-                    user__email,\
-                    user_device__id,\
-                    value,\
-                    wrong_enter_tries_quantity,\
-                    is_approved,\
-                    expires_at,\
-                    can_be_resent_from\
-                ) VALUES (\
-                    $1,\
-                    $2,\
-                    $3,\
-                    $4,\
-                    $5,\
-                    $6,\
-                    $7\
-                );";
+                        user__email,\
+                        user_device__id,\
+                        value,\
+                        wrong_enter_tries_quantity,\
+                        is_approved,\
+                        expires_at,\
+                        can_be_resent_from\
+                    ) VALUES (\
+                        $1,\
+                        $2,\
+                        $3,\
+                        $4,\
+                        $5,\
+                        $6,\
+                        $7\
+                    );";
             let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
             prepared_statemant_parameter_storage
                 .add(
