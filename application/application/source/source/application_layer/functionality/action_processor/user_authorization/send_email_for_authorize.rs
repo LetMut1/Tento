@@ -158,11 +158,11 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_SendEmailForAuthoriz
                 },
             )
             .await?;
-            let environment_configuration_ = inner.environment_configuration;
+            let environment_configuration = inner.environment_configuration;
             Spawner::<TokioNonBlockingTask>::spawn_into_background(
                 async move {
                     EmailSender::<UserAuthorizationToken<'_>>::repeatable_send(
-                        environment_configuration_,
+                        &environment_configuration.resource.email_server,
                         user_authorization_token.value.as_str(),
                         user.email.as_str(),
                         incoming.user_device__id.as_str(),

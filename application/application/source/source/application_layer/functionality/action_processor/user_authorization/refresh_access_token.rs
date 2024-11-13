@@ -72,7 +72,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
     ) -> impl Future<Output = Result<UnifiedReport<Self::Outcoming, Self::Precedent>, AggregateError>> + Send + Capture<&'a Void> {
         return async move {
             let user_access_token = Encoder::<UserAccessToken<'_>>::decode(
-                inner.environment_configuration,
+                &inner.environment_configuration.encryption.private_key,
                 &incoming.user_access_token_encoded,
             )?;
             let postgresql_database_2_client = inner.postgresql_connection_pool_database_2.get().await.into_runtime(
@@ -96,7 +96,7 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
                 }
             };
             let is_valid = Encoder::<UserAccessRefreshToken<'_>>::is_valid(
-                inner.environment_configuration,
+                &inner.environment_configuration.encryption.private_key,
                 &user_access_refresh_token,
                 &incoming.user_access_refresh_token_encoded,
             )?;
@@ -147,11 +147,11 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RefreshAccessToken> 
             .await?;
             let outcoming = Outcoming {
                 user_access_token_encoded: Encoder::<UserAccessToken<'_>>::encode(
-                    inner.environment_configuration,
+                    &inner.environment_configuration.encryption.private_key,
                     &user_access_token_new,
                 )?,
                 user_access_refresh_token_encoded: Encoder::<UserAccessRefreshToken<'_>>::encode(
-                    inner.environment_configuration,
+                    &inner.environment_configuration.encryption.private_key,
                     &user_access_refresh_token,
                 )?,
             };

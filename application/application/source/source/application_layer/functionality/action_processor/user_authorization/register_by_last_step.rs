@@ -283,11 +283,11 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
             )
             .await?;
             let user_access_token_encoded = Encoder::<UserAccessToken<'_>>::encode(
-                inner.environment_configuration,
+                &inner.environment_configuration.encryption.private_key,
                 &user_access_token,
             )?;
             let user_access_refresh_token_encoded = Encoder::<UserAccessRefreshToken<'_>>::encode(
-                inner.environment_configuration,
+                &inner.environment_configuration.encryption.private_key,
                 &user_access_refresh_token,
             )?;
             let postgresql_connection_pool_database_1 = inner.postgresql_connection_pool_database_1.clone();

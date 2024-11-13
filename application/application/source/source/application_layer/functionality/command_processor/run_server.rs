@@ -110,7 +110,7 @@ impl CommandProcessor<RunServer> {
         )?;
         return Result::Ok(());
     }
-    fn initialize_runtime(environment_configuration: &'static EnvironmentConfiguration) -> Result<Runtime, AggregateError> {
+    fn initialize_runtime<'a>(environment_configuration: &'a EnvironmentConfiguration) -> Result<Runtime, AggregateError> {
         if environment_configuration.tokio_runtime.maximum_blocking_threads_quantity == 0
             || environment_configuration.tokio_runtime.worker_threads_quantity == 0
             || environment_configuration.tokio_runtime.worker_thread_stack_size < (1024 * 1024)

@@ -6,7 +6,7 @@ use crate::infrastructure_layer::data::aggregate_error::{
 };
 use crate::infrastructure_layer::data::{
     capture::Capture,
-    environment_configuration::EnvironmentConfiguration,
+    environment_configuration::EmailServer,
 };
 use dedicated_crate::void::Void;
 use std::future::Future;
@@ -18,7 +18,7 @@ use std::future::Future;
 pub struct Email;
 impl Sender<Email> {
     pub fn repeatable_send<'a>(
-        _environment_configuration: &'static EnvironmentConfiguration,
+        _email_server: &'static EmailServer,
         _subject: &'a str,
         _body: String,
         _to: &'a str,

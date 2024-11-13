@@ -7,7 +7,7 @@ use crate::{
                 AggregateError,
                 Backtrace,
             },
-            environment_configuration::EnvironmentConfiguration,
+            environment_configuration::PrivateKey,
         },
         functionality::service::{
             encoder::{
@@ -24,10 +24,13 @@ use crate::{
 };
 use dedicated_crate::user_access_token_encoded::UserAccessTokenEncoded;
 impl Encoder<UserAccessToken<'_>> {
-    pub fn encode<'a>(environment_configuration: &'static EnvironmentConfiguration, user_access_token: &'a UserAccessToken<'_>) -> Result<UserAccessTokenEncoded, AggregateError> {
+    pub fn encode<'a>(
+        private_key: &'static PrivateKey,
+        user_access_token: &'a UserAccessToken<'_>
+    ) -> Result<UserAccessTokenEncoded, AggregateError> {
         let user_access_token_serialized = Serializer::<BitCode>::serialize(user_access_token)?;
         let user_access_token_encoded = Encoder_::<HmacSha3_512>::encode(
-            environment_configuration.encryption.private_key.user_access_token.as_bytes(),
+            private_key.user_access_token.as_bytes(),
             user_access_token_serialized.as_slice(),
         )?;
         return Result::Ok(
@@ -38,11 +41,11 @@ impl Encoder<UserAccessToken<'_>> {
         );
     }
     pub fn decode<'a>(
-        environment_configuration: &'static EnvironmentConfiguration,
+        private_key: &'static PrivateKey,
         user_access_token_encoded: &'a UserAccessTokenEncoded,
     ) -> Result<UserAccessToken<'a>, AggregateError> {
         if !Encoder_::<HmacSha3_512>::is_valid(
-            environment_configuration.encryption.private_key.user_access_token.as_bytes(),
+            private_key.user_access_token.as_bytes(),
             user_access_token_encoded.serialized.as_slice(),
             user_access_token_encoded.encoded.as_slice(),
         )? {

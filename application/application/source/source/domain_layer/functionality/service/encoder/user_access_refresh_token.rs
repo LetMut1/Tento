@@ -4,7 +4,7 @@ use crate::{
     infrastructure_layer::{
         data::{
             aggregate_error::AggregateError,
-            environment_configuration::EnvironmentConfiguration,
+            environment_configuration::PrivateKey,
         },
         functionality::service::{
             encoder::{
@@ -22,13 +22,13 @@ use crate::{
 use dedicated_crate::user_access_refresh_token_encoded::UserAccessRefreshTokenEncoded;
 impl Encoder<UserAccessRefreshToken<'_>> {
     pub fn encode<'a>(
-        environment_configuration: &'static EnvironmentConfiguration,
+        private_key: &'static PrivateKey,
         user_access_refresh_token: &'a UserAccessRefreshToken<'_>,
     ) -> Result<UserAccessRefreshTokenEncoded, AggregateError> {
         return Result::Ok(
             UserAccessRefreshTokenEncoded(
                 Encoder_::<HmacSha3_512>::encode(
-                    environment_configuration.encryption.private_key.user_access_refresh_token.as_bytes(),
+                    private_key.user_access_refresh_token.as_bytes(),
                     Serializer::<BitCode>::serialize(
                         &Token {
                             user__id: user_access_refresh_token.user__id,
@@ -45,12 +45,12 @@ impl Encoder<UserAccessRefreshToken<'_>> {
         );
     }
     pub fn is_valid<'a>(
-        environment_configuration: &'static EnvironmentConfiguration,
+        private_key: &'static PrivateKey,
         user_access_refresh_token: &'a UserAccessRefreshToken<'_>,
         user_access_refresh_token_encoded: &'a UserAccessRefreshTokenEncoded,
     ) -> Result<bool, AggregateError> {
         return Encoder_::<HmacSha3_512>::is_valid(
-            environment_configuration.encryption.private_key.user_access_refresh_token.as_bytes(),
+            private_key.user_access_refresh_token.as_bytes(),
             Serializer::<BitCode>::serialize(
                 &Token {
                     user__id: user_access_refresh_token.user__id,

@@ -233,11 +233,11 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_ResetPasswordByFirst
                     }
                 };
             if can_send {
-                let environment_configuration_ = inner.environment_configuration;
+                let environment_configuration = inner.environment_configuration;
                 Spawner::<TokioNonBlockingTask>::spawn_into_background(
                     async move {
                         EmailSender::<UserResetPasswordToken<'_>>::repeatable_send(
-                            environment_configuration_,
+                            &environment_configuration.resource.email_server,
                             user_reset_password_token__value.as_str(),
                             incoming.user__email.as_str(),
                             incoming.user_device__id.as_str(),

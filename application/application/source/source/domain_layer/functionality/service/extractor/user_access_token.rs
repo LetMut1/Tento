@@ -7,7 +7,7 @@ use crate::{
     infrastructure_layer::{
         data::{
             aggregate_error::AggregateError,
-            environment_configuration::EnvironmentConfiguration,
+            environment_configuration::PrivateKey,
         },
         functionality::service::resolver::{
             Expiration,
@@ -18,11 +18,11 @@ use crate::{
 use dedicated_crate::user_access_token_encoded::UserAccessTokenEncoded;
 impl Extractor<UserAccessToken<'_>> {
     pub fn extract<'a>(
-        environment_configuration: &'static EnvironmentConfiguration,
+        private_key: &'static PrivateKey,
         user_access_token_encoded: &'a UserAccessTokenEncoded,
     ) -> Result<Extracted<'a>, AggregateError> {
         let user_access_token = Encoder::<UserAccessToken<'_>>::decode(
-            environment_configuration,
+            private_key,
             user_access_token_encoded,
         )?;
         if Resolver::<Expiration>::is_expired(user_access_token.expires_at) {

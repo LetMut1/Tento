@@ -5,7 +5,7 @@ use crate::{
         data::{
             aggregate_error::AggregateError,
             capture::Capture,
-            environment_configuration::EnvironmentConfiguration,
+            environment_configuration::EmailServer,
         },
         functionality::service::sender::{
             Email,
@@ -17,7 +17,7 @@ use dedicated_crate::void::Void;
 use std::future::Future;
 impl EmailSender<UserResetPasswordToken<'_>> {
     pub fn repeatable_send<'a>(
-        environment_configuration: &'static EnvironmentConfiguration,
+        email_server: &'static EmailServer,
         user_reset_password_token__value: &'a str,
         user__email: &'a str,
         user_device__id: &'a str,
@@ -29,7 +29,7 @@ impl EmailSender<UserResetPasswordToken<'_>> {
                 user_device__id,
             );
             Sender::<Email>::repeatable_send(
-                environment_configuration,
+                email_server,
                 "Reset password confirmation",
                 message_body,
                 user__email,
