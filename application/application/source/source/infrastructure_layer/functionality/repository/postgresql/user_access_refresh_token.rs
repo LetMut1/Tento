@@ -26,9 +26,10 @@ use tokio_postgres::types::Type;
 impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
     pub fn create_1<'a, 'b>(
         database_2_client: &'a Client,
-        insert_1: Insert1<'b>,
-    ) -> impl Future<Output = Result<UserAccessRefreshToken<'b>, AggregateError>> + Send + Capture<&'a Void> {
+        user_access_refresh_token: &'a UserAccessRefreshToken<'b>,
+    ) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
         return async move {
+            let user_access_token__id = user_access_refresh_token.user_access_token__id.as_ref();
             let query = "\
                 INSERT INTO \
                     public.user_access_refresh_token AS uart (\
@@ -49,27 +50,27 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
             let mut prepared_statemant_parameter_storage = PreparedStatementParameterStorage::new();
             prepared_statemant_parameter_storage
                 .add(
-                    &insert_1.user__id,
+                    &user_access_refresh_token.user__id,
                     Type::INT8,
                 )
                 .add(
-                    &insert_1.user_device__id,
+                    &user_access_refresh_token.user_device__id,
                     Type::TEXT,
                 )
                 .add(
-                    &insert_1.user_access_token__id,
+                    &user_access_token__id,
                     Type::TEXT,
                 )
                 .add(
-                    &insert_1.user_access_refresh_token__obfuscation_value,
+                    &user_access_refresh_token.obfuscation_value,
                     Type::TEXT,
                 )
                 .add(
-                    &insert_1.user_access_refresh_token__expires_at,
+                    &user_access_refresh_token.expires_at,
                     Type::INT8,
                 )
                 .add(
-                    &insert_1.user_access_refresh_token__updated_at,
+                    &user_access_refresh_token.updated_at,
                     Type::INT8,
                 );
             let statement = database_2_client
@@ -96,16 +97,7 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
                         file!(),
                     ),
                 )?;
-            return Result::Ok(
-                UserAccessRefreshToken::new(
-                    insert_1.user__id,
-                    insert_1.user_device__id,
-                    Cow::Borrowed(insert_1.user_access_token__id),
-                    insert_1.user_access_refresh_token__obfuscation_value,
-                    insert_1.user_access_refresh_token__expires_at,
-                    insert_1.user_access_refresh_token__updated_at,
-                ),
-            );
+            return Result::Ok(());
         };
     }
     pub fn update_1<'a>(database_2_client: &'a Client, update_1: Update1<'a>, by_2: By2<'a>) -> impl Future<Output = Result<(), AggregateError>> + Send + Capture<&'a Void> {
@@ -353,14 +345,6 @@ impl Repository<Postgresql<UserAccessRefreshToken<'_>>> {
             );
         };
     }
-}
-pub struct Insert1<'a> {
-    pub user__id: i64,
-    pub user_device__id: &'a str,
-    pub user_access_token__id: &'a str,
-    pub user_access_refresh_token__obfuscation_value: String,
-    pub user_access_refresh_token__expires_at: i64,
-    pub user_access_refresh_token__updated_at: i64,
 }
 pub struct Update1<'a> {
     pub user_access_token__id: &'a str,

@@ -53,7 +53,6 @@ use crate::{
             repository::{
                 postgresql::{
                     Postgresql,
-                    UserAccessRefreshTokenInsert1,
                     UserBy1,
                     UserBy2,
                     UserBy3,
@@ -285,14 +284,14 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 incoming.user_device__id.as_str(),
                 Generator::<UserAccessToken_ExpiresAt>::generate()?,
             );
-            let user_access_refresh_token_insert_1 = UserAccessRefreshTokenInsert1 {
-                user__id: user.id,
-                user_device__id: incoming.user_device__id.as_str(),
-                user_access_token__id: user_access_token.id.as_str(),
-                user_access_refresh_token__obfuscation_value: Generator::<UserAccessRefreshToken_ObfuscationValue>::generate(),
-                user_access_refresh_token__expires_at: Generator::<UserAccessRefreshToken_ExpiresAt>::generate()?,
-                user_access_refresh_token__updated_at: Generator::<UserAccessRefreshToken_UpdatedAt>::generate(),
-            };
+            let user_access_refresh_token = UserAccessRefreshToken::new(
+                user.id,
+                incoming.user_device__id.as_str(),
+                Cow::Borrowed(user_access_token.id.as_str()),
+                Generator::<UserAccessRefreshToken_ObfuscationValue>::generate(),
+                Generator::<UserAccessRefreshToken_ExpiresAt>::generate()?,
+                Generator::<UserAccessRefreshToken_UpdatedAt>::generate()
+            );
             let mut postgresql_database_2_client = inner.postgresql_connection_pool_database_2.get().await.into_runtime(
                 Backtrace::new(
                     line!(),
@@ -304,17 +303,14 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_RegisterByLastStep> 
                 IsolationLevel::ReadCommitted,
             )
             .await?;
-            let user_access_refresh_token = match Repository::<Postgresql<UserAccessRefreshToken<'_>>>::create_1(
+            if let Result::Err(aggregate_error) = Repository::<Postgresql<UserAccessRefreshToken<'_>>>::create_1(
                 transaction.get_client(),
-                user_access_refresh_token_insert_1,
+                &user_access_refresh_token,
             )
             .await
             {
-                Result::Ok(user_access_refresh_token_) => user_access_refresh_token_,
-                Result::Err(aggregate_error) => {
-                    Resolver_::<Transaction<'_>>::rollback(transaction).await?;
-                    return Result::Err(aggregate_error);
-                }
+                Resolver_::<Transaction<'_>>::rollback(transaction).await?;
+                return Result::Err(aggregate_error);
             };
             if let Result::Err(aggregate_error) = Repository::<Postgresql<UserRegistrationToken<'_>>>::delete_2(
                 transaction.get_client(),

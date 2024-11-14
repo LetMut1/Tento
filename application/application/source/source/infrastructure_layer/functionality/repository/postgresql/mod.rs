@@ -24,9 +24,7 @@ pub use self::{
         By1 as ChannelOuterLinkBy1,
         Insert1 as ChannelOuterLinkInsert1,
     },
-    channel_subscription::{
-        By1 as ChannelSubscriptionBy1,
-    },
+    channel_subscription::By1 as ChannelSubscriptionBy1,
     common::{
         By1 as CommonBy1,
         By2 as CommonBy2,
@@ -42,7 +40,6 @@ pub use self::{
     user_access_refresh_token::{
         By1 as UserAccessRefreshTokenBy1,
         By2 as UserAccessRefreshTokenBy2,
-        Insert1 as UserAccessRefreshTokenInsert1,
         Update1 as UserAccessRefreshTokenUpdate1,
     },
     user_authorization_token::{

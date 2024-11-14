@@ -55,7 +55,6 @@ use crate::{
                     Transaction,
                     IsolationLevel,
                     UserAccessRefreshTokenBy2,
-                    UserAccessRefreshTokenInsert1,
                     UserAccessRefreshTokenUpdate1,
                     UserAuthorizationTokenBy1,
                     UserAuthorizationTokenUpdate4,
@@ -264,24 +263,22 @@ impl ActionProcessor_ for ActionProcessor<UserAuthorization_AuthorizeByLastStep>
                     user_access_refresh_token__
                 }
                 Option::None => {
-                    let user_access_refresh_token__ = match Repository::<Postgresql<UserAccessRefreshToken<'_>>>::create_1(
+                    let user_access_refresh_token__ = UserAccessRefreshToken::new(
+                        incoming.user__id,
+                        incoming.user_device__id.as_str(),
+                        Cow::Borrowed(user_access_token__id),
+                        user_access_refresh_token__obfuscation_value,
+                        user_access_refresh_token__expires_at,
+                        user_access_refresh_token__updated_at,
+                    );
+                    if let Result::Err(aggregate_error) = Repository::<Postgresql<UserAccessRefreshToken<'_>>>::create_1(
                         transaction.get_client(),
-                        UserAccessRefreshTokenInsert1 {
-                            user__id: incoming.user__id,
-                            user_device__id: incoming.user_device__id.as_str(),
-                            user_access_token__id,
-                            user_access_refresh_token__obfuscation_value,
-                            user_access_refresh_token__expires_at,
-                            user_access_refresh_token__updated_at,
-                        },
+                        &user_access_refresh_token__,
                     )
                     .await
                     {
-                        Result::Ok(user_access_refresh_token___) => user_access_refresh_token___,
-                        Result::Err(aggregate_error) => {
-                            Resolver_::<Transaction<'_>>::rollback(transaction).await?;
-                            return Result::Err(aggregate_error);
-                        }
+                        Resolver_::<Transaction<'_>>::rollback(transaction).await?;
+                        return Result::Err(aggregate_error);
                     };
                     user_access_refresh_token__
                 }
